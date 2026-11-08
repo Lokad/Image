@@ -1,0 +1,172 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TCR642",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allProductionBuilds": 0,
+  "privateProbeBuilds": 1,
+  "newInputs": 0,
+  "newProfiles": 0,
+  "current": {
+    "managedUs": 571.3568894628099,
+    "nativeUs": 417.78101692708333,
+    "ratio": 1.3675989724600883,
+    "lower": 1.3568975298615322,
+    "upper": 1.381529243431882,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "69e4a0bc732403633d4c4254d516eac8fd2fc0095b31d14edea7c133bbbc85f6",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": 667660,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "caseId": "TightDown8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 256,
+    "outputHeight": 129,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "currentDriver": {
+    "project": "Lokad.Image",
+    "stage": "TCR642",
+    "productionChanged": false,
+    "statisticalTiming": false,
+    "currentColumnDriverAcceptsFrozenControl": true,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "rootPeakBytes": 4096,
+    "rootBytesAfter": 0,
+    "rootBorrowedAndAlive": true,
+    "remainingLocalWorkingBytes": 4096,
+    "librarySha256": "69e4a0bc732403633d4c4254d516eac8fd2fc0095b31d14edea7c133bbbc85f6",
+    "meaning": "Actual qualified driver selection/pixels/admission cleanup only; model counts are not measured phase times or a proposed speedup."
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "TCR642",
+    "productionChanged": false,
+    "measuredCurrent": "tmp/tcr642-candidate-TightDown8-confirm-observation.json",
+    "sourceGeometry": {
+      "width": 513,
+      "height": 259,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "scaleX": 2.00390625,
+      "scaleY": 2.007751937984496,
+      "rowSlots": 9,
+      "preparedGeometryPrefixColumns": 232
+    },
+    "current": {
+      "strips": 32,
+      "driverRows": 4128,
+      "sourcePixels": 181300,
+      "horizontalFilteredPixels": 66304,
+      "outputPairs": 16512,
+      "unpreparedGeometryStrips": 3
+    },
+    "proposed": {
+      "strips": 26,
+      "driverRows": 3354,
+      "sourcePixels": 171976,
+      "horizontalFilteredPixels": 66304,
+      "outputPairs": 16512,
+      "unpreparedGeometryStrips": 3
+    },
+    "driverRowReduction": 0.1875,
+    "sourceConversionReduction": 0.05142857142857138,
+    "hypothesis": "Keep one current column arithmetic/range source. Borrow nine admitted unpublished output-row tails for a16-column cache, with vector-index stride equal output stride/32; old8column suffix retains existing stack cache. The prefix larger strip uses at most3232B stack payload, within existing4096B reservation, including45 decoded sources for the full old<=10tap family. Retire strided bank before overlapping suffix columns.",
+    "storage": {
+      "borrowedCachePayloadBytes": 4608,
+      "borrowedCacheStartByteInEachRow": 416,
+      "cacheEndInEachRow": 928,
+      "geometryStartInEachRow": 928,
+      "safePrefixColumns": 96,
+      "largeStackPayloadBytes": 3232,
+      "rootReservationBytes": 4096,
+      "newOwnedCapacityBytes": 0,
+      "newRetainedStateBytes": 0
+    },
+    "invariants": "Same horizontal taps/sum order, vertical geometry/normalizers, paired companions/certificates/quotients, OriginalByte/tiny-alpha fallback, input/result/borrowed-root ownership and bounded polls. Geometry suffix count3 remains. No prediction of CPU time from counts; model not implementation or merge approval.",
+    "risks": "Changing cache row stride and driver factoring may add address/register overhead. If stride is not vector-aligned, geometry cannot fit, width/height too small, keep old bounded fallback. No per-pixel virtual abstraction, cache/pool/newowner or128row/width grid. First prove actual frozen current driver acceptance."
+  },
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "b43fbef4daaf7ea44db700deead2fb4b0d48d4c965c5d69152dfd5cbc6db227b",
+    "symbolsSha256": "5ebdb0a897de7a4af5aabc82a75e57942ac21c93b2f1a8a7bef52daf03742baa",
+    "bytes": 434764,
+    "librarySha256": "69e4a0bc732403633d4c4254d516eac8fd2fc0095b31d14edea7c133bbbc85f6",
+    "actualConsumerPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "reusedQualification": {
+    "provider": "bicubic-byte-result-bands-evidence.json",
+    "fullChecksEachOs": 5964,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "newTestOrPackageRuns": 0
+  },
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "0a2c88654eb09be6a88d975ef23e3b4800dcf7c0702daa181903fdd16616fbb1",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "03b262b8586b2f8cbaa1616e9cfefaf3dc970e27642bf98f835539246e58125b",
+    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
+  },
+  "storage": {
+    "totalAllocatedBytes": 113,
+    "retainedResultBytes": 132096,
+    "localWorkingCeilingBytes": 667660,
+    "primitiveObservedRootPeakBytes": 4096,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "physicalAndNativePeaksMeasured": false
+  },
+  "decision": "Confirmed current gap153.58us on exact qualified package DLL, not causal gain against old617.43/456.16us clocks. One12actual confirmation with one retained high actual; no favorable repeat. Source-valid package/full qualification reused. Actual driver returns true, exact frame/source and4KiB admission cleanup pass.",
+  "next": "One current column range source with16column strided borrowed-output cache prefix and original8/6column stack suffix. Preserve current geometry/reciprocal-certificate/tap order/repair and real portable fallbacks. Model counts remove18.75percent driver iterations and5.14percent converted source samples, not projected CPU. Prototype/focused exact/generalization/admission tests before one complete short; do not retune passing cached/word paths.",
+  "raw": {
+    "file": "tight-byte-bicubic-current-package.tar.xz",
+    "sha256": "ee384e5d6b1ce1450bdac21d1283ad9a09573b33c0e03a0852037d0f9980d4b0",
+    "bytes": 6225548,
+    "members": 188,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-byte-result-bands-qualified.tar.xz",
+        "sha256": "c376dfbdbfacede3b61bf10b10f81972dec59f7acadde04ad96fdf66859fa05a",
+        "bytes": 13722916,
+        "members": 363
+      }
+    ]
+  }
+}

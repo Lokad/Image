@@ -1,0 +1,141 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JPA638/JPC639/JPS640/JVP641",
+  "date": "2026-11-09",
+  "productionAccepted": false,
+  "qualifiedProductionRestored": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "cases": {
+    "Qualified original": {
+      "managedUs": 3554.557484375,
+      "nativeUs": 3353.2836458333336,
+      "ratio": 1.0600229088260285,
+      "lower": 0.9940260475408952,
+      "upper": 1.125832297025659,
+      "allocatedBytes": 169664,
+      "librarySha256": "69e4a0bc732403633d4c4254d516eac8fd2fc0095b31d14edea7c133bbbc85f6",
+      "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/jpc639-baseline-ProgressiveCancelable444-short-receipt.json",
+      "statistics": "tmp/jpc639-baseline-ProgressiveCancelable444-short-statistics.json"
+    },
+    "A: scalar fusion + paired inverse": {
+      "managedUs": 3662.2993958333336,
+      "nativeUs": 3351.8190625,
+      "ratio": 1.0926303978657361,
+      "lower": 1.029575835963695,
+      "upper": 1.1570066352043669,
+      "allocatedBytes": 169664,
+      "librarySha256": "63a9827b48de1ffc288ed57453a611f384b3d70cd015c0cdff59e40adcdba766",
+      "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/jpc639-candidate-ProgressiveCancelable444-short-receipt.json",
+      "statistics": "tmp/jpc639-candidate-ProgressiveCancelable444-short-statistics.json"
+    },
+    "B: prepared scales + SIMD dequantization": {
+      "managedUs": 3668.1463802083335,
+      "nativeUs": 3353.1686041666667,
+      "ratio": 1.0939343687192686,
+      "lower": 1.0509654394604169,
+      "upper": 1.1347461280925308,
+      "allocatedBytes": 169664,
+      "librarySha256": "d78f253a9c0aecb7f0430471910ea990fb627491d7992174023b51fd7c418207",
+      "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/jps640-candidate-ProgressiveCancelable444-short-receipt.json",
+      "statistics": "tmp/jps640-candidate-ProgressiveCancelable444-short-statistics.json"
+    },
+    "C: vector layout conversion + paired inverse": {
+      "managedUs": 3546.2619921875,
+      "nativeUs": 3354.3490416666664,
+      "ratio": 1.0572131725520961,
+      "lower": 0.9872766357695364,
+      "upper": 1.1252413815414635,
+      "allocatedBytes": 169664,
+      "librarySha256": "aeb31f3a365cac857c3927ec8c99100c4d25af2c239c672a59d15817896c2431",
+      "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/jvp641-candidate-ProgressiveCancelable444-short-receipt.json",
+      "statistics": "tmp/jvp641-candidate-ProgressiveCancelable444-short-statistics.json"
+    }
+  },
+  "actualIterations": 3,
+  "independentConfirmations": 0,
+  "causalGainEstablished": false,
+  "regressionEstablished": false,
+  "eligibility": {
+    "BlocksPerComponent": 2210,
+    "ChromaPairs": 2210,
+    "DcBlocks": [
+      65,
+      65,
+      65
+    ],
+    "BothNonDc": 2145,
+    "OneDc": 0,
+    "BothDc": 65,
+    "PairedAcRows": 15719,
+    "UnpairedAcRows": 910,
+    "pairedAcRowCoverage": 0.971868430814888,
+    "naturalIntCopiesAcrossThreeComponents": 424320,
+    "chromaNaturalIntCopies": 282880
+  },
+  "focusedNormalScalarEachStageEachOs": {
+    "internal": 437,
+    "public": 375
+  },
+  "productionVersionsEachOs": 3,
+  "embeddedTestVersionsEachOs": 4,
+  "allExistingNumericalBodiesPreserved": true,
+  "testCorrection": "Initial A cancellation test canceled before OperationContext construction; Linux constructor threw before target checkpoint. Corrected setup then rebuilt only embedded tests. All437/375 normal/scalar checks passed bothOS. Production modules were reused. No production correctness failure.",
+  "storage": {
+    "allStagesAllocatedBytes": 169664,
+    "newOwnedImageOrScratchCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "stageAStaticBytes": 0,
+    "stageBStaticBytes": 0,
+    "stageCImmutableFormatVectorBytes": 256,
+    "physicalAndNativePeaksMeasured": false
+  },
+  "decision": "Do not select these implementations. A/B adverse points and C0.23percent raw point improvement do not establish useful complete-operation gain; broad short confidence is inconclusive, not proven regression/equivalence. No extra confirmation, ordinary444 measurement, broad qualification or package work. Entire paired implementation and dedicated tests removed; exact qualified originals restored.",
+  "reuse": "Matched intended Windows-produced artifacts; same frozen packet/settings/owned pixels and complete public live-token decode with original retained-native-context/cancellation asymmetry. Existing workers/selectors/input/qualification reused; zero profiles/newfixtures/harness/native builds. Actual package unchanged. No all283path parity claim.",
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "fromLibrarySha256": "aeb31f3a365cac857c3927ec8c99100c4d25af2c239c672a59d15817896c2431",
+      "restoredLibrarySha256": "69e4a0bc732403633d4c4254d516eac8fd2fc0095b31d14edea7c133bbbc85f6",
+      "allOriginalSourcesAndEmbeddedTestsRestored": true,
+      "newPairSourceAndDedicatedTestsRemoved": true,
+      "packageUnchanged": true,
+      "productionBuilds": 0,
+      "qualificationReused": "MBQ635/MBW637 full5964checks eachOS, affected scalar/ISA and same actual package/allthreeexamples. Exact original hashes restored; no repeated qualification."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "fromLibrarySha256": "f92f3adfc329fdc45fa748be1b759239cd10466bba73d2089688f69cdc7f2db5",
+      "restoredLibrarySha256": "6d0398a1449de17fa881827f8003704e6333049fba05db7a594958b116b66b65",
+      "allOriginalSourcesAndEmbeddedTestsRestored": true,
+      "newPairSourceAndDedicatedTestsRemoved": true,
+      "packageUnchanged": true,
+      "productionBuilds": 0,
+      "qualificationReused": "MBQ635/MBW637 full5964checks eachOS, affected scalar/ISA and same actual package/allthreeexamples. Exact original hashes restored; no repeated qualification."
+    }
+  },
+  "raw": {
+    "file": "jpeg-paired-component-preparation-unselected.tar.xz",
+    "sha256": "97d744e96cccef6f09c8a5fc2c7c932fac3de3affe8105c0df17351c72c78ec0",
+    "bytes": 16484972,
+    "members": 351,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Continue independent material tight-byte bicubic reduction preparation/ownership attribution; these failed implementations do not permanently close revised JPEG work."
+}

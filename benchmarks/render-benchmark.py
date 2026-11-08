@@ -1380,13 +1380,16 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
-    current = column['cases']['TightDown8']
-    assert column['productionAccepted'] and current['actualIterations'] == 12
-    assert current['managedExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-    assert current['librarySha256'] == column['producers']['linuxSha256']
-    assert column['qualification']['actualPackage']['sha256'] == column['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in column['independentComparison']['views'])
+    column = json.loads((ROOT / 'benchmarks/tight-byte-bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
+    current = column['current']
+    assert not column['productionChanged'] and column['allProductionBuilds'] == 0
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedRationalReferenceExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+    assert current['status'] == 'gap' and current['lower'] > 1
+    assert current['librarySha256'] == column['actualPackage']['librarySha256']
+    assert column['reusedQualification']['sameActualPackageBothOs'] and column['reusedQualification']['fullChecksEachOs'] == 5964
+    assert column['currentDriver']['currentColumnDriverAcceptsFrozenControl'] and column['currentDriver']['rootBytesAfter'] == 0
+    assert column['raw']['mirrored'] and column['raw']['allMembersVerified']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
                  and '→ 256×129 |' in row]
@@ -1685,7 +1688,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-08. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-09. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -1781,7 +1784,13 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
+- **Resizing:** [Current tight-byte reduction](../benchmarks/TIGHT-BYTE-BICUBIC-CURRENT-PACKAGE.md)
+  confirms571.36/zimg417.78µs,upper1.382,113B/op: about154µs remains. This uses
+  the exact already-qualified package DLL; no production build or repeated
+  qualification. Earlier617.43/456.16µs clocks are not a causal comparison.
+  The actual column driver/pixel/admission probe passes; strided output-row-tail
+  cache reuse is the next bounded preparation hypothesis, not a claimed gain.
+  [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
   with separated filtered/all-actual raw/normalized confidence. Current exact
   package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
@@ -1842,6 +1851,10 @@ Current scope and remaining work:
   {jpeg_scan['statusCounts']['confirmed-pass-stop']}pass/{jpeg_scan['statusCounts']['confirmed-gap']}gaps/{jpeg_scan['statusCounts']['confirmed-confidence-open']}uncertain. Owned gray now passes (602.47/native681.27µs,upper.891);
   stream420restart is uncertain (upper1.002); stop passing cases and resolve
   uncertainty before tuning. Live444 remains an independent201.57µs gap.
+  [Paired component preparation](../benchmarks/JPEG-PAIRED-COMPONENT-PREPARATION.md)
+  has no useful gain across three exact short stages; all qualified originals
+  and package identities are restored. Its reports retain adverse/inconclusive
+  evidence without adding rejected-stage checks to renderer dependencies.
   [Paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md) retain earlier causal
   RGB/CMYK gains, unchanged RGB1530.34/native1450.52µs upper1.065 and its574,069B
   governed peak. Current scan tables/owner/cancellation contracts remain intact.

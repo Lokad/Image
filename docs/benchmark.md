@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-08. These **126 selected comparisons** combine qualified
+Updated 2026-11-09. These **126 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -96,7 +96,13 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
+- **Resizing:** [Current tight-byte reduction](../benchmarks/TIGHT-BYTE-BICUBIC-CURRENT-PACKAGE.md)
+  confirms571.36/zimg417.78µs,upper1.382,113B/op: about154µs remains. This uses
+  the exact already-qualified package DLL; no production build or repeated
+  qualification. Earlier617.43/456.16µs clocks are not a causal comparison.
+  The actual column driver/pixel/admission probe passes; strided output-row-tail
+  cache reuse is the next bounded preparation hypothesis, not a claimed gain.
+  [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
   with separated filtered/all-actual raw/normalized confidence. Current exact
   package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
@@ -157,6 +163,10 @@ Current scope and remaining work:
   16pass/12gaps/1uncertain. Owned gray now passes (602.47/native681.27µs,upper.891);
   stream420restart is uncertain (upper1.002); stop passing cases and resolve
   uncertainty before tuning. Live444 remains an independent201.57µs gap.
+  [Paired component preparation](../benchmarks/JPEG-PAIRED-COMPONENT-PREPARATION.md)
+  has no useful gain across three exact short stages; all qualified originals
+  and package identities are restored. Its reports retain adverse/inconclusive
+  evidence without adding rejected-stage checks to renderer dependencies.
   [Paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md) retain earlier causal
   RGB/CMYK gains, unchanged RGB1530.34/native1450.52µs upper1.065 and its574,069B
   governed peak. Current scan tables/owner/cancellation contracts remain intact.
@@ -323,7 +333,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 571.36 | 417.78 | 1.368 / 1.382 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
