@@ -1271,13 +1271,14 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
-    raster = json.loads((ROOT / 'benchmarks/text-clipping-workspace-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-interior-coverage-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 5909
+    assert raster['qualification']['fullChecksEachOs'] == 5911
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert raster['decision']['cpuGainInconclusive']
-    assert raster['sourceProof']['unchangedRasterSourceOutsideScratchPlacementAndArea']
-    assert raster['sourceProof']['unchangedClippingIntersectionsSortGeometryEventsBlendOwnersLimitsAndPolls']
+    assert raster['sourceProof']['onlyBandCoverageLoopAndTwoInteriorHelpersChanged']
+    assert raster['sourceProof']['clippingAreaOrderGeometryEventsSortBlendAdmissionAndPublicBoundaryUnchanged']
+    assert raster['sourceProof']['sameSequentialPerPixelAdditionsAndPolls']
     assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
     for case_id, previous in text_current['observations'].items():
         case = (font_load['current'] if case_id == 'FontLoadRegular'
@@ -1294,7 +1295,7 @@ def render():
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
         status = 'pass' if case['status'] == 'Confirmed pass' else 'gap' if case['status'] == 'Confirmed gap' else 'confidence open'
-        mark = ' †' if case_id == 'FontLoadRegular' else ''
+        mark = ' †' if case_id == 'FontLoadRegular' or case_id in raster['cases'] else ''
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
@@ -1914,8 +1915,8 @@ Current scope and remaining work:
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
-- **Text/drawing:** [band clipping workspace](../benchmarks/TEXT-CLIPPING-WORKSPACE.md)
-  reuses scratch and skips no-op copies. Current136.57/137.43µs means are7.6%/8.5%
+- **Text/drawing:** [exact interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
+  reuses one exact area across fully covered pixels. Current130.55/132.38µs means are5.94%/6.49%
   lower than the contemporaneous original; intervals overlap, so a causal CPUgain
   remains inconclusive. Both reference gaps remain. Allocation67,368B/draw,
   exactframes,48,544B admitted Latin workspace and zero retainedscratch are unchanged.
@@ -1928,7 +1929,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{prepared_model['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

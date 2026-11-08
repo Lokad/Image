@@ -142,14 +142,57 @@ internal sealed partial class TextRasterizer : IDisposable
                 var c = edge.X(bottom) + dx; var d = start.X(bottom) + dx;
                 var first = Math.Max(left, Math.Floor(Math.Min(a, d))); var last = Math.Min(right, Math.Ceiling(Math.Max(b, c)));
                 if (first >= last) continue;
-                for (var px = (int)first; px < last; px++)
+                var y0 = top + dy; var y1 = bottom + dy;
+                InteriorRun(a, b, c, d, y0, y1, first, last, out var insideFirst, out var insideLast);
+                var px = (int)first;
+                for (; px < insideFirst; px++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    row[px - left] += Area(a - px, b - px, c - px, d - px, top + dy, bottom + dy, firstPolygon, secondPolygon);
+                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
+                }
+                if (px < insideLast)
+                {
+                    var area = InteriorArea(y0, y1);
+                    for (; px < insideLast; px++)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        row[px - left] += area;
+                    }
+                }
+                for (; px < last; px++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
                 }
             }
         }
         if (winding != 0) throw new ImageDataException("Unclosed text contour.");
+    }
+
+    private static void InteriorRun(double a, double b, double c, double d, double top, double bottom,
+        double first, double last, out int start, out int end)
+    {
+        start = end = (int)first;
+        if (!(double.IsFinite(a) && double.IsFinite(b) && double.IsFinite(c) && double.IsFinite(d)
+            && double.IsFinite(top) && double.IsFinite(bottom))) return;
+        // Strict inequalities keep equality/duplicate-vertex rounding on the
+        // original clipping path. Clamp in double before converting to canvas x.
+        var low = Math.Max(first, Math.Floor(Math.Max(a, d)) + 1);
+        var high = Math.Min(last, Math.Ceiling(Math.Min(b, c)) - 1);
+        if (low < high) { start = (int)low; end = (int)high; }
+    }
+
+    private static double InteriorArea(double top, double bottom)
+    {
+        // Exactly the clipped rectangle's ordered shoelace terms, including
+        // signed-zero canonicalization at the horizontal intersections.
+        top += 0d; bottom += 0d;
+        double result = 0;
+        result += 0d * top - 0d * bottom;
+        result += 0d * top - top;
+        result += bottom - top;
+        result += bottom - 0d * bottom;
+        return Math.Abs(result) * .5;
     }
 
     // Polygon clipping happens in pixel-local coordinates before the area sum.

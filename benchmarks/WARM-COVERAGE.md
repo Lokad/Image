@@ -32,17 +32,16 @@ Historical experiments remain linked separately, with raw evidence retained.
 | Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
 | Complete bicubic enlargement and small-support word publication | [Shared word preparation](BICUBIC-SHARED-WORD-PREPARATION.md) removes repeated divisor/margin setup across pair/quartet/cached writers. Fourteen unchanged costs combine with [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md):15controls,7pass/8gaps. Full/bounded enlargement and default horizontal/vertical enlargement pass; stop them. Existing division, certified rounding/repair and rational pixels remain. DefaultRGBA8 [unchanged-build confirmation](bicubic-byte-enlargement-current-evidence.json) resolves old uncertainty:3,108.21/native3,037.83µs,upper1.026/116Bop,70.38µs gap; no causal historical gain. Larger codec gaps take priority. No owned capacity/retention change. [Publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md) retains earlier scoped gains/history. |
 | Mixed-axis RGBA16 bicubic | [Shared bounded bands](BICUBIC-BOUNDED-BAND-EXECUTION.md) save159.23us/14.79%raw/15.40%normalized on defaultMixed16 and86.23us/8.03%raw/8.71%normalized at4KiB, with separated filtered/allactual raw/normalized confidence. Current917.38/native851.87us upper1.079 and987.47/native851.08us upper1.164 remain gaps; [Identity-axis geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) now refreshes tightvertical:458.51/native589.46us upper0.779 passes/stop, saving271.81us/37.22%raw/36.98%normalized with separated intervals;113B/op unchanged. GC114/114/113Bop unchanged. One source loop has entry-selected constant capacities; sixteen-row scratch7596B/admitted8192B, bounded3992/4096B, retainedscratch0 and mixedoutput1059864B until disposal. Exact pixels, certificates, repair, terminal admission and bounded cancellation remain. The vertical result owns529416B; current fifteen-word inventory7pass/8gaps with14other costs reused. Initial dynamic-capacity regression is retained as history; the revised complete costs resolve it. |
-| Text and drawing | [Band clipping workspace](TEXT-CLIPPING-WORKSPACE.md) reuses256B scratch and removes no-op copies with exact intersections/area/blend/polls. Current136.57/137.43us vs labeledImageSharp.Drawing45.17/46.74us, uppers4.678/4.136: both gaps. Contemporaneous means7.6%/8.5% lower, allactual5.4%/7.5%; raw/normalized intervals overlap, no proven causalCPUgain or favorable repeats. Allocation67,368B/draw,48,544BadmittedLatinworkspace andretained0scratch unchanged; physical/native peaks unmeasured. [Shared sorting](TEXT-RASTER-SHARED-SORT.md) retains earlier27.08%allocationcut/history. Eight-frame Arabic/wrapping/fitting controls qualify correctness, not broaderCPUclaims. [Layout/fitting and RGBA16composition](TEXT-DRAWING-CURRENT.md) pass/stop. [Ownedfontstorage](FONT-OWNED-STORAGE.md) remains31.86/nativeFreeType13.42us,upper2.396gap,176B/op with separate757076Bidleretention in existing2slot/4MiBpool; governed loads bypassit. Larger codec/resize gaps remain independent priorities. |
+| Text and drawing | [Exact interior coverage](TEXT-INTERIOR-COVERAGE.md) reuses one exact area per fully covered run, preserving clipping at boundaries, pixel additions and cancellation. Current130.55/132.38us vs labeledImageSharp.Drawing45.72/45.83us, uppers4.456/4.174: both gaps. Contemporaneous filtered pointmeans5.94%/6.49% lower, allactual4.05%/5.80%; intervals overlap, CPUgain inconclusive. Allocation67,368B/draw,48,544BadmittedLatinworkspace, retainedscratch0 unchanged; physical/native peaks unmeasured. Eight-frame Latin/Arabic/wrapping/fitting correctness does not establish broaderCPUclaims. [Earlier clipping](TEXT-CLIPPING-WORKSPACE.md) and [shared sorting](TEXT-RASTER-SHARED-SORT.md) retain history. [Layout/fitting and RGBA16composition](TEXT-DRAWING-CURRENT.md) pass/stop. [Font loading](FONT-OWNED-STORAGE.md) remains31.86/nativeFreeType13.42us,upper2.396gap,176B/op and757076Bidleretention in the existing2slot/4MiBpool; governed loads bypass it. Independent codec/resize work continues. |
 
-The latest [model-row preparation](VP8-MODEL-ROW-STRIDE.md) refreshes all six
-affected pixel/validation controls, reusing their frozen inputs/settings and
-source-valid original confirmations. No new required grid;126displayed comparisons
-still summarize283paths. Windows/Linux each pass5,909full/live checks, affected
-14internal/239public pernormal/scalar andthe SAMEactualReleasepackage/threeexamples.
-Exact packets/pixels, shared admission, cancellationcleanup and independent outputs
-remain. [Text clipping](TEXT-CLIPPING-WORKSPACE.md) retains current source-valid
-drawing costs with inconclusive CPUgain. Other unchanged paths reuse evidence;
-this is not a full126comparison actual-package release refresh.
+The latest [interior coverage reuse](TEXT-INTERIOR-COVERAGE.md) refreshes the two
+complete drawing costs with contemporaneous original/candidate confirmations.
+No new required workload/settings/input;126displayed comparisons summarize283paths.
+Windows/Linux each pass5,911full/live checks, affected162internal/185public per
+normal/scalar andthe SAMEactualReleasepackage/threeexamples. Exact packets/pixels,
+shared admission, cancellationcleanup and independent outputs remain. Other
+source-valid paths reuse evidence. CPUgain remains inconclusive; this is not a
+full126comparison actual-package release refresh or fullparity.
 
 Earlier unselected [immutable JPEG geometry](JPEG-IMMUTABLE-MAP-EXPERIMENT.md),
 [JPEG input preparation](JPEG-PREPARED-INPUT-EXPERIMENT.md),
@@ -223,7 +222,8 @@ Current evidence ownership and invalidation:
 - [TAP604](TEXT-CURRENT-RASTER-ATTRIBUTION.md) retains one current drawing sample
   capture and strict-interior numerical model; no production or displayed cost
   changes. Actual C# exactness and complete-operation evidence are required next.
-- TCR587 owns the two prepared drawing costs after band clipping reuse. TSC573's
+- TIR605 owns the two prepared drawing costs after exact interior coverage reuse.
+  TCR587 retains the earlier clipping costs. TSC573's
   earlier allocation savings remain history; font/layout/fitting and compositing
   evidence are unaffected. Drawing CPU gains remain inconclusive.
 - Other current owners and their precise source scopes are linked in the family

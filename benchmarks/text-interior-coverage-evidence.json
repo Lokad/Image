@@ -1,0 +1,1640 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TIR605",
+  "productionAccepted": true,
+  "independentQuietConfirmation": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+    "linuxSha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+    "sources": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "16ed6a8e7435fe92cddb686d751d5d1cca460c8beea6a787e014ddd723d0cc86",
+      "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b"
+    }
+  },
+  "cases": {
+    "DrawText8": {
+      "caseId": "DrawText8",
+      "runId": "tir605-confirm-candidate-DrawText8",
+      "label": "Prepared text RGBA8 / ImageSharp.Drawing",
+      "managed": {
+        "statistics": {
+          "N": 10,
+          "Min": 122791,
+          "LowerFence": 115947.625,
+          "Q1": 126507.25,
+          "Median": 129390.5,
+          "Mean": 130551.7,
+          "Q3": 133547,
+          "UpperFence": 144106.625,
+          "Max": 143542,
+          "InterquartileRange": 7039.75,
+          "StandardError": 2075.4541727856417,
+          "Variance": 43075100.23333333,
+          "StandardDeviation": 6563.162365303278,
+          "Skewness": 0.5355597661175246,
+          "Kurtosis": 2.0820441311075473,
+          "ConfidenceInterval": {
+            "N": 10,
+            "Mean": 130551.7,
+            "StandardError": 2075.4541727856417,
+            "Level": 12,
+            "Margin": 9922.564973467523,
+            "Lower": 120629.13502653247,
+            "Upper": 140474.2649734675
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Min": 122826,
+          "LowerFence": 108557.75,
+          "Q1": 126842.75,
+          "Median": 131659.5,
+          "Mean": 138200.91666666666,
+          "Q3": 139032.75,
+          "UpperFence": 157317.75,
+          "Max": 187494,
+          "InterquartileRange": 12190,
+          "StandardError": 5585.506268877668,
+          "Variance": 374374563.3560607,
+          "StandardDeviation": 19348.76128738118,
+          "Skewness": 1.4653179967906078,
+          "Kurtosis": 3.9150404795818714,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 138200.91666666666,
+            "StandardError": 5585.506268877668,
+            "Level": 12,
+            "Margin": 24782.77590251433,
+            "Lower": 113418.14076415233,
+            "Upper": 162983.69256918097
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 1,
+            "Nanoseconds": 187494
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 1,
+            "Nanoseconds": 165050
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 1,
+            "Nanoseconds": 143577
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 4,
+            "Operations": 1,
+            "Nanoseconds": 137518
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 5,
+            "Operations": 1,
+            "Nanoseconds": 133132
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 6,
+            "Operations": 1,
+            "Nanoseconds": 133732
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 7,
+            "Operations": 1,
+            "Nanoseconds": 130187
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 8,
+            "Operations": 1,
+            "Nanoseconds": 128664
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 9,
+            "Operations": 1,
+            "Nanoseconds": 126993
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 10,
+            "Operations": 1,
+            "Nanoseconds": 126392
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 11,
+            "Operations": 1,
+            "Nanoseconds": 122826
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 12,
+            "Operations": 1,
+            "Nanoseconds": 122846
+          }
+        ],
+        "rawGc": null,
+        "rawThreading": null,
+        "extraStatsRecorded": false
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 49244.554158283034,
+          "standardError": 2854.4229723004228,
+          "sampleCount": 12
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 45715.531690140844,
+          "standardError": 271.62843934074493,
+          "sampleCount": 12
+        }
+      ],
+      "worstBracketRatio": 2.8557406022285243,
+      "conservativeRatioLower": 1.831996909954657,
+      "conservativeRatioUpper": 4.455597299758896,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 67368,
+        "source": "Complete allocation diagnostic; three16-operation samples, exactcheck/reset outside counter."
+      },
+      "admittedWorkspacePeak": 48544,
+      "retainedDrawingWorkspace": 0,
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+      "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+      "approvedScopeDate": "2026-11-02",
+      "allOriginalGatesPassed": true,
+      "validation": {
+        "project": "Lokad.Image",
+        "caseId": "DrawText8",
+        "runId": "tir605-confirm-candidate-DrawText8",
+        "mode": "confirm",
+        "correctnessOnly": false,
+        "timingClaim": true,
+        "productionChanged": false,
+        "sourceUnchanged": true,
+        "frozenManagedObservationsExact": true,
+        "completeOperationAndDisposalIncluded": true,
+        "resetExcludedBeforeEveryDraw": true,
+        "managedInvocationsPerDrawingIteration": 1,
+        "cpu": 0,
+        "processorCount": 1,
+        "runtime": ".NET 10.0.8",
+        "librarySha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+        "referenceReady": {
+          "state": "ready",
+          "caseId": "DrawText8",
+          "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+          "processorCount": 1,
+          "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+          "performanceBaselineApproved": false,
+          "libraries": {
+            "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+            "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+            "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+          }
+        },
+        "nativeCheck": {
+          "state": "checked",
+          "caseId": "DrawText8",
+          "corpus": "LatinKerning",
+          "completeOperations": 3,
+          "observed": [
+            0,
+            0,
+            0
+          ],
+          "observation": {
+            "FontSize": 18,
+            "LineCount": 1,
+            "LineAdvance": 20.953125,
+            "Logical": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "Ink": {
+              "X": 0.140625,
+              "Y": 3.5859375,
+              "Width": 47.021484375,
+              "Height": 13.376953125
+            },
+            "Bounds": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "glyphIds": [
+              36,
+              57,
+              3,
+              55,
+              82
+            ],
+            "clusters": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "pixelSha256": "43f01c8bf61e59f8d610a89b5791e1d04eec3f937433d1445ff9a004571b5956",
+          "borrowedCanvasStoragePreserved": true,
+          "independentRetainedLayouts": true,
+          "inputUnchanged": true,
+          "timingClaim": false
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 25,
+          "inputUnchanged": true,
+          "operationResultsDisposed": true
+        },
+        "boundary": "Borrowed resident font/options; complete owned layout+disposal, or all fitting trials+retained winner+disposal. Prepared-layout drawing includes raster/composite into borrowed canvas, per-operation reset outside BOTH timers. Four public reference calls for retained layout; reference fitting includes winner reconstruction. Drawing managed job must use invocationCount1/unroll1/iteration setup; reference uses per-operation clock reads, not reset time. Scoped baseline/word visual approvals required before timing.",
+        "nativeBeforeCount": 12,
+        "nativeAfterCount": 12
+      }
+    },
+    "DrawText16": {
+      "caseId": "DrawText16",
+      "runId": "tir605-confirm-candidate-DrawText16",
+      "label": "Prepared text RGBA16 / ImageSharp.Drawing",
+      "managed": {
+        "statistics": {
+          "N": 11,
+          "Min": 116626,
+          "LowerFence": 101482.25,
+          "Q1": 125054,
+          "Median": 130537,
+          "Mean": 132381.18181818182,
+          "Q3": 140768.5,
+          "UpperFence": 164340.25,
+          "Max": 152782,
+          "InterquartileRange": 15714.5,
+          "StandardError": 3473.831504832516,
+          "Variance": 132742558.56363638,
+          "StandardDeviation": 11521.395686445127,
+          "Skewness": 0.1560195869263859,
+          "Kurtosis": 1.6882667009632708,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 132381.18181818182,
+            "StandardError": 3473.831504832516,
+            "Level": 12,
+            "Margin": 15934.096390943236,
+            "Lower": 116447.08542723859,
+            "Upper": 148315.27820912507
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Min": 116676,
+          "LowerFence": 101194.25,
+          "Q1": 126008,
+          "Median": 133496.5,
+          "Mean": 137804.25,
+          "Q3": 142550.5,
+          "UpperFence": 167364.25,
+          "Max": 196908,
+          "InterquartileRange": 16542.5,
+          "StandardError": 6239.0797496991545,
+          "Variance": 467113393.47727275,
+          "StandardDeviation": 21612.806237906098,
+          "Skewness": 1.5351999454197385,
+          "Kurtosis": 4.8552692261699555,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 137804.25,
+            "StandardError": 6239.0797496991545,
+            "Level": 12,
+            "Margin": 27682.6679322264,
+            "Lower": 110121.5820677736,
+            "Upper": 165486.9179322264
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 1,
+            "Nanoseconds": 196908
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 1,
+            "Nanoseconds": 152832
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 1,
+            "Nanoseconds": 143647
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 4,
+            "Operations": 1,
+            "Nanoseconds": 139452
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 5,
+            "Operations": 1,
+            "Nanoseconds": 142185
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 6,
+            "Operations": 1,
+            "Nanoseconds": 130587
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 7,
+            "Operations": 1,
+            "Nanoseconds": 136406
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 8,
+            "Operations": 1,
+            "Nanoseconds": 123296
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 9,
+            "Operations": 1,
+            "Nanoseconds": 127733
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 10,
+            "Operations": 1,
+            "Nanoseconds": 117017
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 11,
+            "Operations": 1,
+            "Nanoseconds": 126912
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 12,
+            "Operations": 1,
+            "Nanoseconds": 116676
+          }
+        ],
+        "rawGc": null,
+        "rawThreading": null,
+        "extraStatsRecorded": false
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 48239.790935672514,
+          "standardError": 1936.8142157522427,
+          "sampleCount": 12
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 45829.61483253588,
+          "standardError": 255.08135778835276,
+          "sampleCount": 12
+        }
+      ],
+      "worstBracketRatio": 2.8885510450373735,
+      "conservativeRatioLower": 1.9376210223393437,
+      "conservativeRatioUpper": 4.174094243553338,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 67368,
+        "source": "Complete allocation diagnostic; three16-operation samples, exactcheck/reset outside counter."
+      },
+      "admittedWorkspacePeak": 48544,
+      "retainedDrawingWorkspace": 0,
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+      "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+      "approvedScopeDate": "2026-11-02",
+      "allOriginalGatesPassed": true,
+      "validation": {
+        "project": "Lokad.Image",
+        "caseId": "DrawText16",
+        "runId": "tir605-confirm-candidate-DrawText16",
+        "mode": "confirm",
+        "correctnessOnly": false,
+        "timingClaim": true,
+        "productionChanged": false,
+        "sourceUnchanged": true,
+        "frozenManagedObservationsExact": true,
+        "completeOperationAndDisposalIncluded": true,
+        "resetExcludedBeforeEveryDraw": true,
+        "managedInvocationsPerDrawingIteration": 1,
+        "cpu": 0,
+        "processorCount": 1,
+        "runtime": ".NET 10.0.8",
+        "librarySha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+        "referenceReady": {
+          "state": "ready",
+          "caseId": "DrawText16",
+          "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+          "processorCount": 1,
+          "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+          "performanceBaselineApproved": false,
+          "libraries": {
+            "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+            "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+            "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+          }
+        },
+        "nativeCheck": {
+          "state": "checked",
+          "caseId": "DrawText16",
+          "corpus": "LatinKerning",
+          "completeOperations": 3,
+          "observed": [
+            14,
+            14,
+            14
+          ],
+          "observation": {
+            "FontSize": 18,
+            "LineCount": 1,
+            "LineAdvance": 20.953125,
+            "Logical": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "Ink": {
+              "X": 0.140625,
+              "Y": 3.5859375,
+              "Width": 47.021484375,
+              "Height": 13.376953125
+            },
+            "Bounds": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "glyphIds": [
+              36,
+              57,
+              3,
+              55,
+              82
+            ],
+            "clusters": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "pixelSha256": "3c5055a341c94fc72c5cd617da5a29162ee559ab1d67f1e654cf8000d0e8f189",
+          "borrowedCanvasStoragePreserved": true,
+          "independentRetainedLayouts": true,
+          "inputUnchanged": true,
+          "timingClaim": false
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 25,
+          "inputUnchanged": true,
+          "operationResultsDisposed": true
+        },
+        "boundary": "Borrowed resident font/options; complete owned layout+disposal, or all fitting trials+retained winner+disposal. Prepared-layout drawing includes raster/composite into borrowed canvas, per-operation reset outside BOTH timers. Four public reference calls for retained layout; reference fitting includes winner reconstruction. Drawing managed job must use invocationCount1/unroll1/iteration setup; reference uses per-operation clock reads, not reset time. Scoped baseline/word visual approvals required before timing.",
+        "nativeBeforeCount": 12,
+        "nativeAfterCount": 12
+      }
+    }
+  },
+  "comparison": [
+    {
+      "caseId": "DrawText8",
+      "absoluteMicroseconds": 8.244118181818179,
+      "rawGain": 0.0593974536827806,
+      "normalizedGain": 0.07286269872175544,
+      "rawGainConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": false,
+          "candidateMean": 130551.7,
+          "baselineMean": 138795.81818181818,
+          "rawGain": 0.0593974536827806
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": false,
+          "candidateMean": 138200.91666666666,
+          "baselineMean": 144029.83333333334,
+          "rawGain": 0.04047020351107833
+        }
+      }
+    },
+    {
+      "caseId": "DrawText16",
+      "absoluteMicroseconds": 9.18854545454544,
+      "rawGain": 0.06490473374186945,
+      "normalizedGain": 0.06888959621048263,
+      "rawGainConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": false,
+          "candidateMean": 132381.18181818182,
+          "baselineMean": 141569.72727272726,
+          "rawGain": 0.06490473374186945
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": false,
+          "candidateMean": 137804.25,
+          "baselineMean": 146289.75,
+          "rawGain": 0.05800474742762218
+        }
+      }
+    }
+  ],
+  "decision": {
+    "cpuGainInconclusive": true,
+    "reason": "Bounded exact full-coverage work reuse; filtered8.24/9.19us (5.94/6.49percent) and allactual4.05/5.80percent lower contemporaneous pointmeans, normalized7.29/6.89percent. Both raw/normalized intervals overlap: no provenCPUgain. No favorable repeats, further variants, storage, pool, cache or numericalpolicy. Exactframes/oracle and unchangedownership support coherent stage; both reference gaps remain open.",
+    "accepted": true,
+    "qualificationPassed": true
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "round": "TIR605",
+    "paths": [
+      "src/Lokad.Image/Internal/TextRasterizer.cs",
+      "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs"
+    ],
+    "baseline": {
+      "windowsSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "linuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21"
+    },
+    "transitionFromLinuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "827d81a69194d3ee334b2cd824c821ffd1f97e6c2a890409b152268366d19764",
+      "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "e3597659f986f8607cf70512e4b39cd7db342b27a38a7988a465114bf68eb282"
+    },
+    "hypothesis": "Current TAP604 sampled locations include432 Area/Clip and262 Band. Repeated clipping/shoelace on strictly covered pixels repeats the same exact four-term calculation; do not equate locations with phase times.",
+    "endState": "One full-coverage value per strict interior run; original clipping at equality, nonfinite coordinates and boundaries. Same sequential additions and cancellation per pixel. No new heap, geometry, cache, owner or prepared API.",
+    "proof": "TAP604 numerical model is a lead only. Actual C# area-bit oracle over enumerated/random/extreme coordinates plus selection containment and all eight frozen frames required before timing; preserve signedzero canonicalization and original shoelace term order.",
+    "workloads": [
+      "DrawText8",
+      "DrawText16"
+    ],
+    "boundaries": "Existing complete prepared-layout DrawText includes geometry, events, integration, composition and disposal. Font/layout prepared on both sides. Approved ImageSharp.Drawing2.1.7/Fonts2.1.3 integration and visual gates, exact managed frames/full16-bit samples.",
+    "acceptance": "Focused W/L normal/scalar text/font/drawing/shared-admission tests, eight exact frozen frames first. Two existing complete short screens, independent confirmation only if useful; accepted stage full W/L/live, affected scalar, SAME actual Release package/allthreeexamples. No fixed gain threshold.",
+    "invalidation": "Text raster only: refresh two drawing costs and any complete pipeline executing drawing. Layout/fitting/font/composition-only, codecs, resizing and all other production paths remain unchanged.",
+    "tradeoffs": "Extra finite/range setup and code size may outweigh interior reuse in small glyphs. Preserve adverse evidence; restore exact qualified modules/sources if no useful lead. No precision change, no new matrix.",
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "productionAccepted": false,
+    "confirmationReason": "Existing three-actual screens152.51/163.77us have native51.47/51.51us versus qualified136.57/137.43us and45.17/46.74us. Mixed point directions and material nativeclock shift make historical raw comparison uncertain. One contemporaneous12actual original/candidate perdepth using saved unchanged original/source and exact same worker/input/boundary; then stop this epoch, no favorable repeats/variants.",
+    "decisionBeforeBroadQualification": {
+      "retainSubjectToQualification": true,
+      "cpuGainInconclusive": true,
+      "reason": "Bounded exact full-coverage work reuse; filtered8.24/9.19us (5.94/6.49percent) and allactual4.05/5.80percent lower contemporaneous pointmeans, normalized7.29/6.89percent. Both raw/normalized intervals overlap: no provenCPUgain. No favorable repeats, further variants, storage, pool, cache or numericalpolicy. Exactframes/oracle and unchangedownership support coherent stage; both reference gaps remain open."
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "TIR605",
+    "sources": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "16ed6a8e7435fe92cddb686d751d5d1cca460c8beea6a787e014ddd723d0cc86",
+      "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b"
+    },
+    "originalRasterSha256": "827d81a69194d3ee334b2cd824c821ffd1f97e6c2a890409b152268366d19764",
+    "onlyBandCoverageLoopAndTwoInteriorHelpersChanged": true,
+    "clippingAreaOrderGeometryEventsSortBlendAdmissionAndPublicBoundaryUnchanged": true,
+    "sameSequentialPerPixelAdditionsAndPolls": true,
+    "noNewHeapOrRetainedState": true,
+    "scratchBytes": 256,
+    "frameAllowanceBytes": 4096,
+    "physicalStackAndNativePeaksMeasured": false,
+    "actualCSharpChecks": {
+      "finiteGeneratedTrapezoids": 40800,
+      "specialTrapezoids": 4096,
+      "pixelsPerTrapezoid": 8,
+      "comparison": "Exact IEEE754bits, anyNaN matchesNaN; original Area independently already qualified against alwaysclip oracle. Selection asserts all four strict bounds. Existing eight fullframes exact inbothdepths."
+    },
+    "publicBoundarySha256": "c1f6927dccc8ad7534e6dbeafe452c376b16ccb7e5c3784b2aa3ba919b4653df"
+  },
+  "originalAttribution": {
+    "provider": "text-current-raster-attribution-evidence.json",
+    "scope": "TAP604 current pre-stage sample locations, not phase times. Band changes here; old capture is attribution for removed work, not new phase costs."
+  },
+  "storage": {
+    "totalAllocatedBytesPerDraw": 67368,
+    "baselineAllocatedBytesPerDraw": 67368,
+    "allocationOnlyControls": {
+      "record": {
+        "project": "Lokad.Image",
+        "timingClaim": false,
+        "librarySha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "allEightFrozenFramesExact": true,
+        "sourceUnchanged": true,
+        "cases": [
+          {
+            "name": "NarrowLongWord",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "NarrowLongWord",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 67368,
+            "allocationSamples": [
+              67368,
+              67368,
+              67368
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 67368,
+            "allocationSamples": [
+              67368,
+              67368,
+              67368
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          }
+        ],
+        "scope": "Existing frozen layout/fit/Arabic frames. Latin drawing allocations:4warmups+3x16 complete draws, reset/check outside counter. Separate draw-only admission root measures owned raster capacity; borrowed font/layout/canvas owned elsewhere. No elapsed samples."
+      },
+      "hashes": {
+        "Lokad.Image.pdb": "eb9d5c4b104d5790e3f89d9f1a2687cb0ff48b2874c8871bb16b21abae69cd1e",
+        "Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "Resources.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Resources.pdb": "1f097c3c4a605b02e9c38642d2a54e99ec767bf7a35ea6db81074b7aa50c6b5b",
+        "Resources.deps.json": "ede8e2dee0f69654ae1af88b105e92193a7da15c8942ecc6c3cba9da369fb995",
+        "Lokad.Image.dll": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "Resources.dll": "315969e46969f550e22fb9707dcec3a3c41d534bbc003f253e5251252c509cba"
+      },
+      "quietGuardsPassed": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/tir605-resources-candidate/Resources.dll",
+        "."
+      ]
+    },
+    "admittedLatinWorkspacePeak": 48544,
+    "scratchRetainedAfterOperation": 0,
+    "ownership": "Same256B band scratch and4096B bounded frame allowance, unchanged geometry/event/crossing arrays and ink-width row. All eight admitted peaks unchanged/released; no heap/pool/cache/newretainedstate, borrowed font/layout/canvas unchanged. No physical peak reduction claim.",
+    "physicalAndNativePeaksMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+      "full": [
+        2646,
+        2317,
+        948
+      ],
+      "total": 5911,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 162,
+        "internal-scalar": 162,
+        "public-normal": 185,
+        "public-scalar": 185
+      },
+      "affectedTextScalarEachOs": 347,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "99b7a1648cb891258d2991584ddb9a6aab5063b5f84d982736c5a53570bfa95e",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\TextRasterSort.cs": "d53e0bce733777d0b81cfb54c1e635a34a5853940769dbe03deb2172aebfb3dd"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+      "full": [
+        2646,
+        2317,
+        948
+      ],
+      "total": 5911,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 162,
+        "internal-scalar": 162,
+        "public-normal": 185,
+        "public-scalar": 185
+      },
+      "affectedTextScalarEachOs": 347,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "566fd417d2124c6776006961a17b32c46878bfcf0d1ed92fcac9083b866c1a16",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "d5175f168fc4095bee92bc7f12ad88aca8a96f15f524d2f70227dedd1cca5d83",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "d53e0bce733777d0b81cfb54c1e635a34a5853940769dbe03deb2172aebfb3dd"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5911,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "34ce8dc7d0eded3cec04f1d125ef1708eb1049d23fdfd3f943370e49e21c6815",
+      "symbolsSha256": "cb4ac309b7620a41d79be3bad04fcb67bcfd87e0c7da410f8f1979f29a00fed5",
+      "bytes": 431034,
+      "librarySha256": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "34ce8dc7d0eded3cec04f1d125ef1708eb1049d23fdfd3f943370e49e21c6815",
+      "librarySha256": "36923a82c84f9b7cef2ed96c67f7e9c8f6a60b0b961e77a0191ab74721e5e430",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOS": true
+  },
+  "workflow": {
+    "coreEmbeddedBuildsEachOS": 1,
+    "publicHarnessNativeSelectorFixtureResourceBuilds": 0,
+    "additionalBaselineConfirmations": 2,
+    "shortActuals": 3,
+    "independentActuals": 12,
+    "favorableMeasurementRepeats": 0,
+    "confirmationReason": "Existing three-actual screens152.51/163.77us have native51.47/51.51us versus qualified136.57/137.43us and45.17/46.74us. Mixed point directions and material nativeclock shift make historical raw comparison uncertain. One contemporaneous12actual original/candidate perdepth using saved unchanged original/source and exact same worker/input/boundary; then stop this epoch, no favorable repeats/variants.",
+    "failures": "No build/test/quality failure. Short raw/native clock contradiction resolved by one contemporaneous original/candidate confirmation per depth. All adverse shorts/outliers retained. Confidence still overlaps; no repeat for favorable confidence."
+  },
+  "retainedEvidence": {
+    "provider": "text-raster-shared-sort-evidence.json",
+    "reason": "Original drawing control sources unchanged through intervening codec-only edits. New contemporaneous original confirmation resolves nativeclock shift; all historical/short evidence remains. Four layout/fitting cases call Create/TryFit only, not DrawText; font load, composition, codecs and resizing unchanged."
+  },
+  "next": "Stop this bounded drawing stage without a provenCPUgain claim. Audit current progressiveJPEG gray/live444 gaps187.59/201.57us and prior source-valid attribution before the next architectural hypothesis; preserve independent resize/VP8 leads. Full283path objective remains open.",
+  "contemporaneousOriginal": {
+    "DrawText8": {
+      "caseId": "DrawText8",
+      "runId": "tir605-confirm-baseline-DrawText8",
+      "label": "Prepared text RGBA8 / ImageSharp.Drawing",
+      "managed": {
+        "statistics": {
+          "N": 11,
+          "Min": 126883,
+          "LowerFence": 104061.75,
+          "Q1": 128895,
+          "Median": 138360,
+          "Mean": 138795.81818181818,
+          "Q3": 145450.5,
+          "UpperFence": 170283.75,
+          "Max": 160113,
+          "InterquartileRange": 16555.5,
+          "StandardError": 3284.2932014450007,
+          "Variance": 118652400.16363636,
+          "StandardDeviation": 10892.76825070819,
+          "Skewness": 0.455542824133213,
+          "Kurtosis": 1.8507366919891015,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 138795.81818181818,
+            "StandardError": 3284.2932014450007,
+            "Level": 12,
+            "Margin": 15064.704311404788,
+            "Lower": 123731.11387041339,
+            "Upper": 153860.52249322296
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Min": 126943,
+          "LowerFence": 99602.125,
+          "Q1": 129025,
+          "Median": 140483,
+          "Mean": 144029.83333333334,
+          "Q3": 148640.25,
+          "UpperFence": 178063.125,
+          "Max": 200944,
+          "InterquartileRange": 19615.25,
+          "StandardError": 5979.903927516164,
+          "Variance": 429111011.7878788,
+          "StandardDeviation": 20714.994853677345,
+          "Skewness": 1.6020977939890806,
+          "Kurtosis": 4.9074164638646645,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 144029.83333333334,
+            "StandardError": 5979.903927516164,
+            "Level": 12,
+            "Margin": 26532.710164512428,
+            "Lower": 117497.12316882092,
+            "Upper": 170562.54349784576
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 1,
+            "Nanoseconds": 200944
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 1,
+            "Nanoseconds": 160173
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 1,
+            "Nanoseconds": 149466
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 4,
+            "Operations": 1,
+            "Nanoseconds": 148365
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 5,
+            "Operations": 1,
+            "Nanoseconds": 142656
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 6,
+            "Operations": 1,
+            "Nanoseconds": 142546
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 7,
+            "Operations": 1,
+            "Nanoseconds": 138420
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 8,
+            "Operations": 1,
+            "Nanoseconds": 133793
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 9,
+            "Operations": 1,
+            "Nanoseconds": 126943
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 10,
+            "Operations": 1,
+            "Nanoseconds": 129095
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 11,
+            "Operations": 1,
+            "Nanoseconds": 127142
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 12,
+            "Operations": 1,
+            "Nanoseconds": 128815
+          }
+        ],
+        "rawGc": null,
+        "rawThreading": null,
+        "extraStatsRecorded": false
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 48146.089681253376,
+          "standardError": 2145.888629624587,
+          "sampleCount": 12
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 45061.088600756346,
+          "standardError": 234.06718190413034,
+          "sampleCount": 12
+        }
+      ],
+      "worstBracketRatio": 3.0801701088838875,
+      "conservativeRatioLower": 2.0374981105901884,
+      "conservativeRatioUpper": 4.415878604585525,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 67368,
+        "source": "Complete allocation diagnostic; three16-operation samples, exactcheck/reset outside counter."
+      },
+      "admittedWorkspacePeak": 48544,
+      "retainedDrawingWorkspace": 0,
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+      "approvedScopeDate": "2026-11-02",
+      "allOriginalGatesPassed": true,
+      "validation": {
+        "project": "Lokad.Image",
+        "caseId": "DrawText8",
+        "runId": "tir605-confirm-baseline-DrawText8",
+        "mode": "confirm",
+        "correctnessOnly": false,
+        "timingClaim": true,
+        "productionChanged": false,
+        "sourceUnchanged": true,
+        "frozenManagedObservationsExact": true,
+        "completeOperationAndDisposalIncluded": true,
+        "resetExcludedBeforeEveryDraw": true,
+        "managedInvocationsPerDrawingIteration": 1,
+        "cpu": 0,
+        "processorCount": 1,
+        "runtime": ".NET 10.0.8",
+        "librarySha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+        "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+        "referenceReady": {
+          "state": "ready",
+          "caseId": "DrawText8",
+          "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+          "processorCount": 1,
+          "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+          "performanceBaselineApproved": false,
+          "libraries": {
+            "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+            "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+            "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+          }
+        },
+        "nativeCheck": {
+          "state": "checked",
+          "caseId": "DrawText8",
+          "corpus": "LatinKerning",
+          "completeOperations": 3,
+          "observed": [
+            0,
+            0,
+            0
+          ],
+          "observation": {
+            "FontSize": 18,
+            "LineCount": 1,
+            "LineAdvance": 20.953125,
+            "Logical": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "Ink": {
+              "X": 0.140625,
+              "Y": 3.5859375,
+              "Width": 47.021484375,
+              "Height": 13.376953125
+            },
+            "Bounds": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "glyphIds": [
+              36,
+              57,
+              3,
+              55,
+              82
+            ],
+            "clusters": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "pixelSha256": "43f01c8bf61e59f8d610a89b5791e1d04eec3f937433d1445ff9a004571b5956",
+          "borrowedCanvasStoragePreserved": true,
+          "independentRetainedLayouts": true,
+          "inputUnchanged": true,
+          "timingClaim": false
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 25,
+          "inputUnchanged": true,
+          "operationResultsDisposed": true
+        },
+        "boundary": "Borrowed resident font/options; complete owned layout+disposal, or all fitting trials+retained winner+disposal. Prepared-layout drawing includes raster/composite into borrowed canvas, per-operation reset outside BOTH timers. Four public reference calls for retained layout; reference fitting includes winner reconstruction. Drawing managed job must use invocationCount1/unroll1/iteration setup; reference uses per-operation clock reads, not reset time. Scoped baseline/word visual approvals required before timing.",
+        "nativeBeforeCount": 12,
+        "nativeAfterCount": 12
+      }
+    },
+    "DrawText16": {
+      "caseId": "DrawText16",
+      "runId": "tir605-confirm-baseline-DrawText16",
+      "label": "Prepared text RGBA16 / ImageSharp.Drawing",
+      "managed": {
+        "statistics": {
+          "N": 11,
+          "Min": 130558,
+          "LowerFence": 113144.75,
+          "Q1": 132750.5,
+          "Median": 138630,
+          "Mean": 141569.72727272726,
+          "Q3": 145821,
+          "UpperFence": 165426.75,
+          "Max": 164729,
+          "InterquartileRange": 13070.5,
+          "StandardError": 3251.919942240861,
+          "Variance": 116324816.41818182,
+          "StandardDeviation": 10785.398296687139,
+          "Skewness": 0.8365317045429281,
+          "Kurtosis": 2.4181014578750637,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 141569.72727272726,
+            "StandardError": 3251.919942240861,
+            "Level": 12,
+            "Margin": 14916.21160761931,
+            "Lower": 126653.51566510796,
+            "Upper": 156485.93888034657
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Min": 130598,
+          "LowerFence": 106644.75,
+          "Q1": 132840.75,
+          "Median": 139781.5,
+          "Mean": 146289.75,
+          "Q3": 150304.75,
+          "UpperFence": 176500.75,
+          "Max": 197770,
+          "InterquartileRange": 17464,
+          "StandardError": 5542.120426341868,
+          "Variance": 368581185.84090906,
+          "StandardDeviation": 19198.468320178803,
+          "Skewness": 1.5370654116301536,
+          "Kurtosis": 4.493611515357075,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 146289.75,
+            "StandardError": 5542.120426341868,
+            "Level": 12,
+            "Margin": 24590.27381565828,
+            "Lower": 121699.47618434172,
+            "Upper": 170880.0238156583
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 1,
+            "Nanoseconds": 197770
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 1,
+            "Nanoseconds": 164769
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 1,
+            "Nanoseconds": 155134
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 4,
+            "Operations": 1,
+            "Nanoseconds": 148695
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 5,
+            "Operations": 1,
+            "Nanoseconds": 140893
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 6,
+            "Operations": 1,
+            "Nanoseconds": 143027
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 7,
+            "Operations": 1,
+            "Nanoseconds": 138550
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 8,
+            "Operations": 1,
+            "Nanoseconds": 138670
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 9,
+            "Operations": 1,
+            "Nanoseconds": 131790
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 10,
+            "Operations": 1,
+            "Nanoseconds": 132891
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 11,
+            "Operations": 1,
+            "Nanoseconds": 132690
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 12,
+            "Operations": 1,
+            "Nanoseconds": 130598
+          }
+        ],
+        "rawGc": null,
+        "rawThreading": null,
+        "extraStatsRecorded": false
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 48659.22768092974,
+          "standardError": 1972.0176946369488,
+          "sampleCount": 12
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 45634.31418383518,
+          "standardError": 267.40988105130924,
+          "sampleCount": 12
+        }
+      ],
+      "worstBracketRatio": 3.102264815516277,
+      "conservativeRatioLower": 2.119866462852295,
+      "conservativeRatioUpper": 4.281695862265553,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 67368,
+        "source": "Complete allocation diagnostic; three16-operation samples, exactcheck/reset outside counter."
+      },
+      "admittedWorkspacePeak": 48544,
+      "retainedDrawingWorkspace": 0,
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+      "approvedScopeDate": "2026-11-02",
+      "allOriginalGatesPassed": true,
+      "validation": {
+        "project": "Lokad.Image",
+        "caseId": "DrawText16",
+        "runId": "tir605-confirm-baseline-DrawText16",
+        "mode": "confirm",
+        "correctnessOnly": false,
+        "timingClaim": true,
+        "productionChanged": false,
+        "sourceUnchanged": true,
+        "frozenManagedObservationsExact": true,
+        "completeOperationAndDisposalIncluded": true,
+        "resetExcludedBeforeEveryDraw": true,
+        "managedInvocationsPerDrawingIteration": 1,
+        "cpu": 0,
+        "processorCount": 1,
+        "runtime": ".NET 10.0.8",
+        "librarySha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+        "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+        "referenceReady": {
+          "state": "ready",
+          "caseId": "DrawText16",
+          "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+          "processorCount": 1,
+          "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+          "performanceBaselineApproved": false,
+          "libraries": {
+            "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+            "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+            "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+          }
+        },
+        "nativeCheck": {
+          "state": "checked",
+          "caseId": "DrawText16",
+          "corpus": "LatinKerning",
+          "completeOperations": 3,
+          "observed": [
+            14,
+            14,
+            14
+          ],
+          "observation": {
+            "FontSize": 18,
+            "LineCount": 1,
+            "LineAdvance": 20.953125,
+            "Logical": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "Ink": {
+              "X": 0.140625,
+              "Y": 3.5859375,
+              "Width": 47.021484375,
+              "Height": 13.376953125
+            },
+            "Bounds": {
+              "X": 0,
+              "Y": 0,
+              "Width": 48.146484375,
+              "Height": 20.953125
+            },
+            "glyphIds": [
+              36,
+              57,
+              3,
+              55,
+              82
+            ],
+            "clusters": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "pixelSha256": "3c5055a341c94fc72c5cd617da5a29162ee559ab1d67f1e654cf8000d0e8f189",
+          "borrowedCanvasStoragePreserved": true,
+          "independentRetainedLayouts": true,
+          "inputUnchanged": true,
+          "timingClaim": false
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 25,
+          "inputUnchanged": true,
+          "operationResultsDisposed": true
+        },
+        "boundary": "Borrowed resident font/options; complete owned layout+disposal, or all fitting trials+retained winner+disposal. Prepared-layout drawing includes raster/composite into borrowed canvas, per-operation reset outside BOTH timers. Four public reference calls for retained layout; reference fitting includes winner reconstruction. Drawing managed job must use invocationCount1/unroll1/iteration setup; reference uses per-operation clock reads, not reset time. Scoped baseline/word visual approvals required before timing.",
+        "nativeBeforeCount": 12,
+        "nativeAfterCount": 12
+      }
+    }
+  },
+  "rawArchive": {
+    "path": "tmp/text-interior-coverage-qualified.tar.xz",
+    "sha256": "eea1e4fd85537a25536a43232290135e3cdabcedeebc85615abc391e6104c379",
+    "bytes": 5972544,
+    "members": 147,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "text-current-raster-attribution-tap604.tar.xz",
+        "sha256": "8856a627784b21fedeb1574cf941a0f40107d51da683756d536c110a65d66a18",
+        "bytes": 110428,
+        "members": 25,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "path": "tmp/text-clipping-workspace-qualified.tar.xz",
+            "sha256": "3ab0d954235be6477b98b583c4dde5e239203d00ce860e927e3f67cdc06d5434",
+            "bytes": 5955596,
+            "members": 148,
+            "mirrored": true,
+            "allMembersVerified": true,
+            "dependencies": [
+              {
+                "path": "tmp/text-raster-shared-sort-qualified.tar.xz",
+                "sha256": "3466972acb78aac80d60f235fed85aa4164284631e76e804f7cc606cb609148d",
+                "bytes": 6133272,
+                "members": 148,
+                "mirrored": true,
+                "allMembersVerified": true,
+                "dependencies": [
+                  {
+                    "path": "tmp/text-active-edge-scheduling-qualified.tar.xz",
+                    "sha256": "7ed3f9fae89a499de9ca22727af3b60f58ce0170ea29728d0c108bde4ec135c0"
+                  },
+                  {
+                    "path": "tmp/png-live-prepared-cursor-qualified.tar.xz",
+                    "sha256": "53bd9a1ab340a0f8ebbe7076c840d18e868016b3bd8e8e9a2c5f943d229f3cb"
+                  }
+                ],
+                "scope": "Frozen current drawing CPUprofile/map/stacks/JIT; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; eight exactframe allocation/admission controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+              },
+              {
+                "file": "png-length-classification-qualified.tar.xz",
+                "sha256": "4358bf7b5a731d9daa43d7023e5e186a04fc150a73bf9ae1dabaf07b91a569fb",
+                "bytes": 15382356,
+                "members": 377,
+                "mirrored": true,
+                "allMembersVerified": true,
+                "receiptIdentitiesVerified": 1349,
+                "dependencies": [
+                  {
+                    "file": "png-streaming-token-frequencies-qualified.tar.xz",
+                    "sha256": "f01517e50ed3f7b3c5d5ea7da2c9cd48194a89da77a130d2ed3301f42b2ee8ad"
+                  },
+                  {
+                    "file": "png-normal-cursor-publication-qualified.tar.xz",
+                    "sha256": "a22235f789fcbb8de23cfce7f819d58b78327561f264c565d8b3b7a6d40ed9b9"
+                  },
+                  {
+                    "file": "png-private-parser-publication-experiment.tar.xz",
+                    "sha256": "58be25b15fb5c4f0f33a7959f0e7122141c40cc0d331118f8af155367e4dcf44"
+                  }
+                ]
+              }
+            ],
+            "scope": "Retained source-valid drawing profile dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; eight exactframe allocation/admission controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+          },
+          {
+            "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+            "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+            "bytes": 6012200,
+            "members": 147,
+            "mirrored": true,
+            "allMembersVerified": true,
+            "dependencies": [
+              {
+                "path": "tmp/text-clipping-workspace-qualified.tar.xz",
+                "sha256": "3ab0d954235be6477b98b583c4dde5e239203d00ce860e927e3f67cdc06d5434",
+                "bytes": 5955596,
+                "members": 148,
+                "mirrored": true,
+                "allMembersVerified": true
+              },
+              {
+                "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+                "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1",
+                "bytes": 10813884,
+                "members": 356,
+                "mirrored": true,
+                "allMembersVerified": true
+              },
+              {
+                "file": "webp-horizontal-alpha-publication-qualified.tar.xz",
+                "sha256": "cfbfd93f72c02d9094452726314d8268d493719efe2d281e276ba1834516b9fe",
+                "bytes": 15884220,
+                "members": 261,
+                "mirrored": true,
+                "allMembersVerified": true
+              }
+            ],
+            "scope": "Retained source-valid VP8 profile dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; six exact complete VP8 pixel/validation controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+          }
+        ]
+      }
+    ],
+    "scope": "Current pre-stage TAP604 profile/model dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; eight exactframe allocation/admission controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+  },
+  "evidenceScope": "Concise current summary; complete native samples, managed distributions, immutable modules, all receipts and reproduction retained in mirrored raw/dependencies."
+}

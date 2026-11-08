@@ -1,5 +1,8 @@
 # Band-owned text clipping workspace
 
+Drawing costs are superseded by [interior coverage reuse](TEXT-INTERIOR-COVERAGE.md).
+The evidence below records this earlier stage.
+
 Text scan conversion now reuses two 128B polygon buffers throughout a band.
 Half-plane clipping is skipped only when it would copy every vertex unchanged.
 The remaining intersection calculations, vertex order, shoelace sum, winding,
