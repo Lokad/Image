@@ -130,7 +130,7 @@ var index = start; var increment = 1 << low;
                 {
                     if (cancellation.IsCancellationRequested)
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);
+                        PublishLookahead(cache, pending, cursor);
                         cancellation.ThrowIfCancellationRequested();
                     }
                     var codeLength = (int)(instruction & 15); pending -= codeLength;
@@ -138,7 +138,7 @@ var index = start; var increment = 1 << low;
                     {
                         if (cancellation.IsCancellationRequested)
                         {
-                            PublishRefinementLookahead(cache, pending, cursor);
+                            PublishLookahead(cache, pending, cursor);
                             cancellation.ThrowIfCancellationRequested();
                         }
                         pending -= (int)((instruction >> 4) & 31) - codeLength;
@@ -156,20 +156,20 @@ var index = start; var increment = 1 << low;
                     {
                         if (cancellation.IsCancellationRequested)
                         {
-                            PublishRefinementLookahead(cache, pending, cursor);
+                            PublishLookahead(cache, pending, cursor);
                             cancellation.ThrowIfCancellationRequested();
                         }
     pending -= length; symbol = packed >> 4;
                     }
                     else
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
+                        PublishLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
                         cache = bits; pending = available; cursor = position;
                     }
                     run = symbol >> 4; var size = symbol & 15;
                     if (size != 0 && size != 1)
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);
+                        PublishLookahead(cache, pending, cursor);
                         throw new ImageDataException("Invalid JPEG refinement symbol.");
                     }
                     if (size != 0 || run != 15)
@@ -185,14 +185,14 @@ var index = start; var increment = 1 << low;
                         {
                             if (cancellation.IsCancellationRequested)
                             {
-                                PublishRefinementLookahead(cache, pending, cursor);
+                                PublishLookahead(cache, pending, cursor);
                                 cancellation.ThrowIfCancellationRequested();
                             }
     pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
                         }
                         else
                         {
-                            PublishRefinementLookahead(cache, pending, cursor);                         field = ReadBits(count);
+                            PublishLookahead(cache, pending, cursor);                         field = ReadBits(count);
                             cache = bits; pending = available; cursor = position;
                         }
                         if (size != 0) inserted = field == 0 ? -increment : increment;
@@ -224,14 +224,14 @@ var index = start; var increment = 1 << low;
                 {
                     if (cancellation.IsCancellationRequested)
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);
+                        PublishLookahead(cache, pending, cursor);
                         cancellation.ThrowIfCancellationRequested();
                     }
 bit = (int)((cache >> --pending) & 1);
                 }
                 else
                 {
-                    PublishRefinementLookahead(cache, pending, cursor);                     bit = ReadBits(1);
+                    PublishLookahead(cache, pending, cursor);                     bit = ReadBits(1);
                     cache = bits; pending = available; cursor = position;
                 }
                 // The nonzero UInt64 mask proves the index is0..63. Keep
@@ -240,7 +240,7 @@ bit = (int)((cache >> --pending) & 1);
                 var value = block[coefficientIndex];
                 if (value == int.MinValue && bit != 0)
                 {
-                    PublishRefinementLookahead(cache, pending, cursor);
+                    PublishLookahead(cache, pending, cursor);
                     _ = Math.Abs(value); // Preserve the already-consumed bit.
                 }
                 // T.81 G.1.2: only a set bit whose magnitude bit is missing
@@ -255,21 +255,21 @@ bit = (int)((cache >> --pending) & 1);
             }
             if (finish)
             {
-                eobRun--; PublishRefinementLookahead(cache, pending, cursor); return true;
+                eobRun--; PublishLookahead(cache, pending, cursor); return true;
             }
             run -= BitOperations.PopCount(zeroPrefix); index = stop;
             if (run != 0 || (inserted != 0 && index > end))
             {
-                PublishRefinementLookahead(cache, pending, cursor);
+                PublishLookahead(cache, pending, cursor);
                 throw new ImageDataException("JPEG refinement run exceeds band.");
             }
             if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
         }
-        PublishRefinementLookahead(cache, pending, cursor); return true;
+        PublishLookahead(cache, pending, cursor); return true;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void PublishRefinementLookahead(ulong cache, int pending, int cursor)
+    private void PublishLookahead(ulong cache, int pending, int cursor)
     {
         var wholeBytes = pending >> 3;
         bits = unchecked((uint)(cache >> (wholeBytes * 8))); available = pending & 7;
@@ -453,14 +453,14 @@ cache = candidateCache; pending = candidatePending - length;
                     { pending -= length; symbol = packed >> 4; }
                     else
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);
+                        PublishLookahead(cache, pending, cursor);
                         symbol = ac.Read(ref this);
                         cache = bits; pending = available; cursor = position;
                     }
                     run = symbol >> 4; var size = symbol & 15;
                     if (size != 0 && size != 1)
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);
+                        PublishLookahead(cache, pending, cursor);
                         throw new ImageDataException("Invalid JPEG refinement symbol.");
                     }
                     if (size != 0 || run != 15)
@@ -472,7 +472,7 @@ cache = candidateCache; pending = candidatePending - length;
                         {
                             // The slow reader owns any partially consumed required
                             // bytes on failure, including an EOB field's whole byte.
-                            PublishRefinementLookahead(cache, pending, cursor);
+                            PublishLookahead(cache, pending, cursor);
                             field = ReadRefinementBits(input, ref position, ref bits, ref available, count);
                             cache = bits; pending = available; cursor = position;
                         }
@@ -509,7 +509,7 @@ cache = candidateCache; pending = candidatePending - length;
                 { pending -= count; rawField = (int)((cache >> pending) & ((1u << count) - 1)); }
                 else
                 {
-                    PublishRefinementLookahead(cache, pending, cursor);
+                    PublishLookahead(cache, pending, cursor);
                     complete = TryReadRefinementField(input, ref position, ref bits, ref available, count, out rawField);
                     cache = bits; pending = available; cursor = position;
                 }
@@ -523,14 +523,14 @@ cache = candidateCache; pending = candidatePending - length;
                         if (pending != 0) bit = (int)((cache >> --pending) & 1);
                         else
                         {
-                            PublishRefinementLookahead(cache, pending, cursor);
+                            PublishLookahead(cache, pending, cursor);
                             bit = ReadRefinementBits(input, ref position, ref bits, ref available, 1);
                             cache = bits; pending = available; cursor = position;
                         }
                         if (bit != 0)
                         {
                             ref var value = ref block[BitOperations.TrailingZeroCount(scalar)];
-                            if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
+                            if (value == int.MinValue) PublishLookahead(cache, pending, cursor);
                             JpegDecoder.ApplyCorrection(ref value, increment);
                         }
                     }
@@ -559,7 +559,7 @@ cache = candidateCache; pending = candidatePending - length;
                     while (corrections != 0)
                     {
                         ref var value = ref block[BitOperations.TrailingZeroCount(corrections)];
-                        if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
+                        if (value == int.MinValue) PublishLookahead(cache, pending, cursor);
                         JpegDecoder.ApplyCorrection(ref value, increment);
                         corrections &= corrections - 1;
                     }
@@ -568,17 +568,17 @@ cache = candidateCache; pending = candidatePending - length;
             }
             if (finish)
             {
-                eobRun--; PublishRefinementLookahead(cache, pending, cursor); return true;
+                eobRun--; PublishLookahead(cache, pending, cursor); return true;
             }
             run -= BitOperations.PopCount(zeroPrefix); index = stop;
             if (run != 0 || (inserted != 0 && index > end))
             {
-                PublishRefinementLookahead(cache, pending, cursor);
+                PublishLookahead(cache, pending, cursor);
                 throw new ImageDataException("JPEG refinement run exceeds band.");
             }
             if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
         }
-        PublishRefinementLookahead(cache, pending, cursor); return true;
+        PublishLookahead(cache, pending, cursor); return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

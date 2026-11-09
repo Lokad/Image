@@ -454,6 +454,11 @@ internal ref partial struct JpegDecoder
             var k = ss;
             while (k <= se)
             {
+                if (progressive)
+                {
+                    ac!.ReadSpectralAcWindow(ref reader, block, ref k, se, al);
+                    if (k > se) return;
+                }
                 var symbol = ac!.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
                 if (size == 0)
                 {

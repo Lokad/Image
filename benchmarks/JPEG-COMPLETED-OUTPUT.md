@@ -1,5 +1,9 @@
 # Completed JPEG output storage
 
+[Initial spectral AC](JPEG-SPECTRAL-AC-WINDOW.md) supersedes six progressive
+costs below and carries the current29-read status; allocation/ownership evidence
+and the other23 costs remain source-valid.
+
 JGO607 uses the existing complete-overwrite allocator in the generic completed-plane
 renderer. All grayscale, subsampled RGB/YCbCr and quarter-width writers fill every
 visible RGBA sample. Parsing, coefficients, numerical kernels, row cancellation,
