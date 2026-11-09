@@ -7,8 +7,9 @@ namespace Lokad.Image.Tests;
 
 public sealed class BilinearByteIntegerTests
 {
-    private delegate Vector512<int> Horizontal(Vector128<uint> left, Vector128<uint> right,
+    private delegate Vector512<int> Horizontal(Vector512<int> left, Vector512<int> right,
         Vector512<int> leftWeights, Vector512<int> rightWeights);
+    private delegate Vector512<int> Premultiply(Vector128<uint> pixels);
     private delegate void Tap(ref Vector512<long> first, ref Vector512<long> second,
         Vector128<uint> pixels, int w0, int w1, int w2, int w3);
 
@@ -18,6 +19,7 @@ public sealed class BilinearByteIntegerTests
         if (!Avx512F.IsSupported || !Avx512DQ.IsSupported) return;
         var type = typeof(BilinearUpsample);
         var horizontal = type.GetMethod("Horizontal", BindingFlags.NonPublic | BindingFlags.Static)!.CreateDelegate<Horizontal>();
+        var premultiply = type.GetMethod("Premultiply", BindingFlags.NonPublic | BindingFlags.Static)!.CreateDelegate<Premultiply>();
         var tap = type.GetMethod("Tap", BindingFlags.NonPublic | BindingFlags.Static)!.CreateDelegate<Tap>();
         uint[][] samples = [[0xffffffff, 0x00ffffff, 0x0100ffff, 0xffabcdef],
             [0, 0xff000000, 0x80808080, 0xffffffff], [0x01010101, 0xfeff00ff, 0x7f00ff00, 0xffffffff]];
@@ -33,7 +35,8 @@ public sealed class BilinearByteIntegerTests
                 w[2], w[2], w[2], w[2], w[3], w[3], w[3], w[3]);
             var fractions = Vector512.Create(f[0], f[0], f[0], f[0], f[1], f[1], f[1], f[1],
                 f[2], f[2], f[2], f[2], f[3], f[3], f[3], f[3]);
-            var top = horizontal(a, b, weights, fractions); var bottom = horizontal(b, a, weights, fractions);
+            var top = horizontal(premultiply(a), premultiply(b), weights, fractions);
+            var bottom = horizontal(premultiply(b), premultiply(a), weights, fractions);
             var oldFirst = Vector512<long>.Zero; var oldSecond = Vector512<long>.Zero; var wy = dy - fy;
             tap(ref oldFirst, ref oldSecond, a, w[0] * wy, w[1] * wy, w[2] * wy, w[3] * wy);
             tap(ref oldFirst, ref oldSecond, b, f[0] * wy, f[1] * wy, f[2] * wy, f[3] * wy);

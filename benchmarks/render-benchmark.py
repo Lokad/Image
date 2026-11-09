@@ -1421,15 +1421,22 @@ def render():
     bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
     current = bilinear['current']
     bilinear_up8 = current
-    assert not bilinear['productionChanged'] and bilinear['allBuilds'] == 0
+    assert bilinear['productionAccepted'] and bilinear['productionChanged']
+    bq = bilinear['qualification']
+    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 6036
+    assert bq['sameActualPackageBothOS']
+    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
     assert bilinear['raw']['mirrored'] and bilinear['raw']['allMembersVerified']
     assert current['librarySha256'] == current['receipt']['librarySha256']
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['receipt']['managedRationalReferenceExact'] and current['receipt']['independentOwnedOutput']
-    assert current['lower'] > 1 and current['status'] == 'gap'
+    assert current['upper'] <= 1 and current['status'] == 'pass'
+    assert current['librarySha256'] == bq['actualPackage']['librarySha256']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in bilinear['comparison']['views'].values())
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| Bilinear upscale RGBA8 ')]
     assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
+    rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     column = json.loads((ROOT / 'benchmarks/bicubic-shared-byte-word-columns-evidence.json').read_text(encoding='utf-8'))
     assert column['productionAccepted'] and column['requiredMaterialPaths'] == 283
@@ -1931,15 +1938,17 @@ Current scope and remaining work:
   retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
-  3,108.21/native3,037.83µs,upper1.026/116Bop. [Current complete bilinear
-  confidence](../benchmarks/BILINEAR-CURRENT-CONFIDENCE.md) resolves prior uncertainty:
+  3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
+  save201.65µs/9.05% raw on complete public RGBA8 enlargement, with separated
+  filtered/all-actual raw and normalized confidence. Current
   {bilinear_up8['managedUs']:,.2f}/native{bilinear_up8['nativeUs']:,.2f}µs,
   lower{bilinear_up8['lower']:.3f}/upper{bilinear_up8['upper']:.3f},
-  {bilinear_up8['allocatedBytes']:,}Bop, a demonstrated gap. One unchanged-build
-  twelve-actual observation, no source/worker/native build or causal CPUgain claim.
-  Geometry/output ownership stay timed; native graph/context preparation stays
-  retained and labeled. Preserve exact Q30/rational/certified pixels versus native
-  float; historical gains stay in linked reports.
+  {bilinear_up8['allocatedBytes']:,}Bop passes this control. Existing admitted
+  capacity and output pool are unchanged; no new cross-operation retention.
+  Exact pixels,6,036full/live eachOS, normal/scalar/AVX512off and SAMEactualpackage
+  pass. Geometry/output ownership stay timed; native graph/context preparation
+  stays retained and labeled. Preserve exact Q30/rational/certified pixels versus
+  native float; historical gains stay in linked reports.
 - **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
   saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
   allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,

@@ -24,10 +24,43 @@ OperationContext context)
         // before widening preserves every integer lane, with four rather than
         // eight wide multiplies per group. Larger outputs retain the old path.
         var factorHorizontal = dx <= int.MaxValue / 65025;
-        // Triangle enlargement uses at most three of each eight weights. Its
-        // last four doubles hold two exact RGBA Int32 rows in the same admitted
-        // storage. Original-order replay reads only the original weight cells.
-        var rowCache = factorHorizontal ? MemoryMarshal.Cast<double, int>(weights) : default;
+        // Preserve the original at-most-three bilinear weight cells, then use
+        // the already-admitted remainder for contiguous filtered rows. Moving
+        // columns left cannot overwrite a future eight-cell source column.
+        var weightStride = factorHorizontal ? 3 : 8;
+        Span<int> rowCache = default;
+        Span<int> decodedRow = default;
+        var firstScratchRow = 0;
+        if (factorHorizontal)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                weights.Slice(x * 8, counts[x]).CopyTo(weights.Slice(x * 3, counts[x]));
+            }
+            var spare = MemoryMarshal.Cast<double, int>(weights[(width * 3)..]);
+            rowCache = spare[..(width * 8)];
+            if (width >= 4 && spare.Length - rowCache.Length >= stride)
+            {
+                decodedRow = spare.Slice(rowCache.Length, stride);
+                firstScratchRow = height;
+            }
+            else
+            {
+                // Smaller workspace may borrow only still-unwritten output
+                // rows. Retire that loan before publishing its first row.
+                var decodedBytes = source.Width * 16L;
+                if (width >= 4 && decodedBytes <= output.Length)
+                {
+                    var rows = (int)((decodedBytes + result.Stride - 1) / result.Stride);
+                    if (rows < height)
+                    {
+                        firstScratchRow = height - rows;
+                        decodedRow = MemoryMarshal.Cast<byte, int>(output.Slice(firstScratchRow * result.Stride, (int)decodedBytes));
+                    }
+                }
+            }
+        }
         var cachedEven = -1;
         var cachedOdd = -1;
         // Output array admission bounds 4*width*height below Int32.MaxValue.
@@ -54,10 +87,11 @@ OperationContext context)
             var row1 = y1 * stride;
             if (factorHorizontal)
             {
+                var decoded = y < firstScratchRow ? decodedRow : default;
                 PrepareRow(input, rowCache, offsets, width, (int)dx, row0, y0 & 1,
-                    ref cachedEven, ref cachedOdd, context);
+                    ref cachedEven, ref cachedOdd, decoded, context);
                 PrepareRow(input, rowCache, offsets, width, (int)dx, row1, y1 & 1,
-                    ref cachedEven, ref cachedOdd, context);
+                    ref cachedEven, ref cachedOdd, decoded, context);
             }
             var x = 0;
             for (; x + 3 < width; x += 4)
@@ -67,8 +101,8 @@ OperationContext context)
                 var second = Vector512<long>.Zero;
                 if (factorHorizontal)
                 {
-                    var top = CachedRow(rowCache, x, y0 & 1);
-                    var bottom = CachedRow(rowCache, x, y1 & 1);
+                    var top = CachedRow(rowCache, x, width, y0 & 1);
+                    var bottom = CachedRow(rowCache, x, width, y1 & 1);
                     var topWeight = Vector512.Create((long)wy0); var bottomWeight = Vector512.Create((long)fy);
                     first = Avx512F.Add(Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(top.GetLower()), topWeight),
                         Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(bottom.GetLower()), bottomWeight));
@@ -118,23 +152,24 @@ OperationContext context)
                 var words23 = Sse41.PackUnsignedSaturate(rounded23.GetLower(), rounded23.GetUpper());
                 var pixels = Sse2.PackUnsignedSaturate(words01.AsInt16(), words23.AsInt16());
                 MemoryMarshal.Write(output.Slice((y * width + x) * 4, 16), in pixels);
-                if ((mask01 & 15) != 0) Scalar(source, output, weights, offsets, counts, x, y, width, height, context);
-                if ((mask01 & 240) != 0) Scalar(source, output, weights, offsets, counts, x + 1, y, width, height, context);
-                if ((mask23 & 15) != 0) Scalar(source, output, weights, offsets, counts, x + 2, y, width, height, context);
-                if ((mask23 & 240) != 0) Scalar(source, output, weights, offsets, counts, x + 3, y, width, height, context);
+                if ((mask01 & 15) != 0) Scalar(source, output, weights, offsets, counts, x, y, width, height, weightStride, context);
+                if ((mask01 & 240) != 0) Scalar(source, output, weights, offsets, counts, x + 1, y, width, height, weightStride, context);
+                if ((mask23 & 15) != 0) Scalar(source, output, weights, offsets, counts, x + 2, y, width, height, weightStride, context);
+                if ((mask23 & 240) != 0) Scalar(source, output, weights, offsets, counts, x + 3, y, width, height, weightStride, context);
             }
             for (; x < width; x++)
-                Scalar(source, output, weights, offsets, counts, x, y, width, height, context);
+                Scalar(source, output, weights, offsets, counts, x, y, width, height, weightStride, context);
         }
         return true;
     }
 
     private static void PrepareRow(ReadOnlySpan<byte> input, Span<int> cache,
         ReadOnlySpan<int> offsets, int width, int dx, int row, int slot,
-        ref int cachedEven, ref int cachedOdd, OperationContext context)
+        ref int cachedEven, ref int cachedOdd, Span<int> decoded, OperationContext context)
     {
         ref var cached = ref (slot == 0 ? ref cachedEven : ref cachedOdd);
         if (cached == row) return;
+        if (!decoded.IsEmpty) DecodeRow(input.Slice(row, decoded.Length), decoded, context.Cancellation);
         for (var x = 0; x + 3 < width; x += 4)
         {
             context.Cancellation.ThrowIfCancellationRequested();
@@ -143,28 +178,50 @@ OperationContext context)
             var f2 = offsets[at + 19]; var f3 = offsets[at + 27];
             var w0 = dx - f0; var w1 = dx - f1;
             var w2 = dx - f2; var w3 = dx - f3;
-            var left = Gather(input, row, offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]);
-            var right = Gather(input, row, offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]);
+            var left = decoded.IsEmpty
+                ? Premultiply(Gather(input, row, offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]))
+                : GatherDecoded(decoded, offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]);
+            var right = decoded.IsEmpty
+                ? Premultiply(Gather(input, row, offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]))
+                : GatherDecoded(decoded, offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]);
             var values = Horizontal(left, right,
                 Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1, w2, w2, w2, w2, w3, w3, w3, w3),
                 Vector512.Create(f0, f0, f0, f0, f1, f1, f1, f1, f2, f2, f2, f2, f3, f3, f3, f3));
-            var target = x * 16 + 8 + slot * 4;
-            values.GetLower().GetLower().CopyTo(cache.Slice(target, 4));
-            values.GetLower().GetUpper().CopyTo(cache.Slice(target + 16, 4));
-            values.GetUpper().GetLower().CopyTo(cache.Slice(target + 32, 4));
-            values.GetUpper().GetUpper().CopyTo(cache.Slice(target + 48, 4));
+            var target = (slot * width + x) * 4;
+            values.CopyTo(cache.Slice(target, 16));
         }
         cached = row;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Vector512<int> CachedRow(ReadOnlySpan<int> cache, int x, int slot)
+    private static void DecodeRow(ReadOnlySpan<byte> input, Span<int> decoded, CancellationToken cancellation)
     {
-        var at = x * 16 + 8 + slot * 4;
-        return Vector512.Create(
-            Vector256.Create(Vector128.Create(cache.Slice(at, 4)), Vector128.Create(cache.Slice(at + 16, 4))),
-            Vector256.Create(Vector128.Create(cache.Slice(at + 32, 4)), Vector128.Create(cache.Slice(at + 48, 4))));
+        var at = 0;
+        for (; at + 8 <= input.Length; at += 8)
+        {
+            if ((at & 255) == 0) cancellation.ThrowIfCancellationRequested();
+            var packed = BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(at, 8));
+            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
+            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+            Avx2.MultiplyLow(samples, factors).CopyTo(decoded.Slice(at, 8));
+        }
+        if (at < input.Length)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var alpha = input[at + 3];
+            decoded[at] = input[at] * alpha; decoded[at + 1] = input[at + 1] * alpha;
+            decoded[at + 2] = input[at + 2] * alpha; decoded[at + 3] = alpha;
+        }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> GatherDecoded(ReadOnlySpan<int> decoded, int x0, int x1, int x2, int x3)
+        => Vector512.Create(
+            Vector256.Create(Vector128.Create(decoded.Slice(x0, 4)), Vector128.Create(decoded.Slice(x1, 4))),
+            Vector256.Create(Vector128.Create(decoded.Slice(x2, 4)), Vector128.Create(decoded.Slice(x3, 4))));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> CachedRow(ReadOnlySpan<int> cache, int x, int width, int slot)
+        => Vector512.Create(cache.Slice((slot * width + x) * 4, 16));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector128<uint> Gather(ReadOnlySpan<byte> input, int row, int x0, int x1, int x2, int x3)
@@ -191,10 +248,10 @@ OperationContext context)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Vector512<int> Horizontal(Vector128<uint> left, Vector128<uint> right,
+    private static Vector512<int> Horizontal(Vector512<int> left, Vector512<int> right,
         Vector512<int> leftWeights, Vector512<int> rightWeights)
-        => Avx512F.Add(Avx512F.MultiplyLow(Premultiply(left), leftWeights),
-            Avx512F.MultiplyLow(Premultiply(right), rightWeights));
+        => Avx512F.Add(Avx512F.MultiplyLow(left, leftWeights),
+            Avx512F.MultiplyLow(right, rightWeights));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector512<int> Premultiply(Vector128<uint> pixels)
@@ -220,7 +277,7 @@ OperationContext context)
 
     private static void Scalar(ImageBuffer source, Span<byte> output,
         ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
-        int x, int y, int width, int height, OperationContext context)
+        int x, int y, int width, int height, int weightStride, OperationContext context)
     {
         var center = (y + 0.5) * source.Height / height - 0.5;
         var first = (int)Math.Ceiling(center - 1);
@@ -234,7 +291,7 @@ OperationContext context)
             var row = source.GetRow8(Math.Clamp(sy, 0, source.Height - 1));
             for (var tap = 0; tap < counts[x]; tap++)
             {
-                var weight = wy * weights[x * 8 + tap];
+                var weight = wy * weights[x * weightStride + tap];
                 if (weight == 0) continue;
                 var pixel = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(offsets[x * 8 + tap], 4));
                 var weighted = weight * (pixel >> 24);

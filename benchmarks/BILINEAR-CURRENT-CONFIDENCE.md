@@ -1,5 +1,8 @@
 # Current complete bilinear enlargement
 
+Historical gap confirmation. [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md)
+now owns the current Up8 cost and its passing evidence.
+
 BUC685 resolves the existing RGBA8 513×259→1027×519 uncertainty on the unchanged
 qualified actual-package DLL13016616. One independent twelve-actual observation
 measures **2222.69µs / FFmpeg1993.50µs**, ratio1.115, conservative interval

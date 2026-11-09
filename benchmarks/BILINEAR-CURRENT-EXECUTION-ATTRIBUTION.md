@@ -1,5 +1,8 @@
 # Current bilinear enlargement execution
 
+This pre-change capture led to [packed row storage](BILINEAR-PACKED-ROW-STORAGE.md).
+That report owns current execution costs; this capture remains attribution.
+
 BDA686 captures the complete frozen Up8 workload once for two seconds, using the
 qualified actual-package DLL13016616 and existing worker/fixtures/reference.
 All exact managed/native/source/ownership checks and idle-v2 guards pass. CPU0
