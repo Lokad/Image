@@ -944,19 +944,24 @@ def render():
                          f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_preparation = json.loads((ROOT / 'benchmarks/bicubic-wide-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert wide_preparation['productionAccepted'] and wide_preparation['requiredMaterialPaths'] == 282
+    wide_preparation = json.loads((ROOT / 'benchmarks/bicubic-shared-wide-columns-evidence.json').read_text(encoding='utf-8'))
+    assert wide_preparation['productionAccepted'] and wide_preparation['requiredMaterialPaths'] == 283
     assert set(wide_preparation['cases']) == {'TightWide8', 'TightWide16'}
-    assert wide_preparation['design']['workspaceAdmissionBytes'] == 4096
-    assert wide_preparation['design']['addedOwnedCapacityBytes'] == 0
-    assert wide_preparation['qualification']['fullChecksEachOs'] == 5696
+    assert wide_preparation['storage']['workspaceAdmissionBytes'] == 4096
+    assert wide_preparation['storage']['newOwnedHeapCapacityBytes'] == 0
+    assert wide_preparation['qualification']['fullChecksEachOs'] == 6004
     assert wide_preparation['qualification']['actualPackage']['sha256'] == wide_preparation['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert wide_preparation['qualification']['actualPackage']['wideColumnBothDepthsSharedSurvivorPassed']
-    for case, cost in wide_preparation['cases'].items():
-        assert cost['actualIterations'] == 12 and cost['managedExact'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == wide_preparation['producers']['linuxSha256']
+    assert wide_preparation['qualification']['sharedWideByteWordColumnOwnershipBothOs']
+    assert wide_preparation['raw']['mirrored'] and wide_preparation['raw']['allMembersVerified']
+    assert wide_preparation['sourceProof']['oneSharedByteWordWidthDepthPreparationOwnershipAndScheduler']
+    assert wide_preparation['sourceProof']['originalWord20TapErrorRetainedIn17SlotMode']
+    assert wide_preparation['sourceProof']['deletedDuplicateDriverAbsent']
+    for case in ('TightWide8', 'TightWide16'):
+        cost = wide_preparation['cases'][case]
+        assert cost['actualIterations'] == 12 and cost['managedRationalReferenceExact'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['librarySha256'] == wide_preparation['producers']['windowsSha256'] == wide_preparation['actualPackage']['librarySha256']
         assert cost['status'] == 'gap' and cost['lower'] > 1 and cost['allocatedBytes'] == 113
-        assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in wide_preparation['independentComparisons'][case]['views'])
+        assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_preparation['comparisons'][case]['views'].values())
         depth = 8 if case == 'TightWide8' else 16
         rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 128×64 | '
                      f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
@@ -1279,6 +1284,8 @@ def render():
     for label, current in [
         ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['current']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', wide_preparation['cases']['TightWide8']),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', wide_preparation['cases']['TightWide16']),
     ]:
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                      and row.split('|')[1].strip().replace(' H ', ' ') == label]
@@ -1839,6 +1846,13 @@ Current scope and remaining work:
   leave normalized intervals overlapping. Byte effect remains inconclusive;
   the adverse confirmation stays visible rather than the favorable535.70µs short.
   Earlier751.02word/552.17byte points are history, not contemporary causal baselines.
+  [Shared wider columns](../benchmarks/BICUBIC-SHARED-WIDE-COLUMNS.md) save
+  **89.87/23.58µs /16.75%/4.97% raw** on word/byte128×64; normalized16.46%/5.17%.
+  Both filtered/allactual raw/normalized confidence views separate. Current
+  word446.58/zimg413.05µs upper1.090 and byte451.12/zimg347.95µs upper1.302 remain
+  34/103µs gaps. One scheduler replaces two,477→373production lines;4KiB admission,
+  113B/op and exact certificates/repair remain. No added owned heap/retention.
+  The independent small-byte adverse comparison above remains unchanged.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -1967,7 +1981,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{column['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{wide_preparation['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

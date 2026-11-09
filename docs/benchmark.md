@@ -106,6 +106,13 @@ Current scope and remaining work:
   leave normalized intervals overlapping. Byte effect remains inconclusive;
   the adverse confirmation stays visible rather than the favorable535.70µs short.
   Earlier751.02word/552.17byte points are history, not contemporary causal baselines.
+  [Shared wider columns](../benchmarks/BICUBIC-SHARED-WIDE-COLUMNS.md) save
+  **89.87/23.58µs /16.75%/4.97% raw** on word/byte128×64; normalized16.46%/5.17%.
+  Both filtered/allactual raw/normalized confidence views separate. Current
+  word446.58/zimg413.05µs upper1.090 and byte451.12/zimg347.95µs upper1.302 remain
+  34/103µs gaps. One scheduler replaces two,477→373production lines;4KiB admission,
+  113B/op and exact certificates/repair remain. No added owned heap/retention.
+  The independent small-byte adverse comparison above remains unchanged.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -234,7 +241,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,994 full/live checks per OS**, affected
+The current production build passes **6,004 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -374,8 +381,8 @@ settings do not establish matched quality.
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 451.12 | 347.95 | 1.296 / 1.302 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 446.58 | 413.05 | 1.081 / 1.090 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 816.23 | 840.52 | 0.971 / 0.979 | 199,943 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 790.79 | 820.20 | 0.964 / 0.983 | 199,891 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |

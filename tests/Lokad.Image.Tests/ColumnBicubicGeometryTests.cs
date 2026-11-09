@@ -36,6 +36,7 @@ public sealed class ColumnBicubicGeometryTests
     [InlineData(8, 4, 128, 17)]
     [InlineData(8, 3, 75, 20)]
     [InlineData(16, 3, 128, 20)]
+    [InlineData(16, 4, 128, 17)]
     public void UnwrittenTailsSurvivePrefixPublicationAndRetireBeforeTailWrites(int depth, int strip, int width, int maximumTaps = 10)
     {
         using var root = new TestMemoryBudget(300_000);

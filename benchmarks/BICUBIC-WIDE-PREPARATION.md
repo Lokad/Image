@@ -1,5 +1,8 @@
 # Shared wide bicubic preparation
 
+Retained stage history. [Shared wider columns](BICUBIC-SHARED-WIDE-COLUMNS.md)
+own current production costs and qualification for the two controls below.
+
 Wide byte/word column drivers now reuse the existing small-column geometry
 helper. Vertical coefficients and their ordered normalizer are prepared once in
 already owned, unpublished output-row tails. Prefix strips finish before those
