@@ -784,12 +784,16 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-pixel-preparation-evidence.json').read_text(encoding='utf-8'))
+    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-prepared-geometry-evidence.json').read_text(encoding='utf-8'))
     current = wide_byte['current']
-    assert wide_byte['productionAccepted'] and wide_byte['selectedStage'] == 2
-    assert wide_byte['qualification']['fullChecksEachOs'] == 5985
+    assert wide_byte['productionAccepted'] and wide_byte['stage'] == 'CGP706'
+    assert wide_byte['qualification']['fullChecksEachOs'] == 6096
     assert wide_byte['actualPackage']['sha256'] == wide_byte['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert wide_byte['sourceProof']['onlyWideHorizontalViewsAndPreparedIndexUnitsChanged']
+    assert wide_byte['sourceProof']['onlyOneWidePreparationCallAdded']
+    assert wide_byte['sourceProof']['indexedFallbackArithmeticVerbatim']
+    assert wide_byte['storage']['newOwnedCapacityBytes'] == 0
+    assert wide_byte['storage']['newRetainedOperationStorageBytes'] == 0
+    assert wide_byte['statusCounts'] == {state: sum(c['status'] == state for c in wide_byte['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_byte['comparison']['views'].values())
     assert current['librarySha256'] == wide_byte['actualPackage']['librarySha256']
     assert current['managedRationalReferenceExact'] and current['managedMaxWorkingBytes'] is None
@@ -1875,15 +1879,20 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Shared wide pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md)
-  saves **498.26→463.92µs /34.35µs/6.89%raw/6.84%normalized** on default128×64byte.
-  Filtered/allactual raw/normalized confidence separates; native347.09→346.90µs
-  stays stable. Upper1.344 leaves117µs;198,450B/op, no added owned capacity or
-  retained scratch. Checked pixel views share prepared pixel indexes and exact
-  arithmetic/certificates. Eight existing affected controls now5pass/1gap/2uncertain;
-  64×32byte/word are uncertain, not passes. Seven companion native means move
-  −8–10%, so their raw changes are not causal gain claims. Current32×16byte
-  321.06/zimg376.18µs, upper.857,197,299B/op passes/stops; no new workload grid.
+  [Prepared wider-cache geometry](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md)
+  proves contiguous windows once in existing dead padding and removes per-tap
+  indexes/checks from eligible rows. Complete128×64byte saves
+  **{wide_byte['comparison']['savedUs']:.2f}µs/{100*wide_byte['comparison']['rawReduction']:.2f}% raw/{100*wide_byte['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual confidence after one targeted original-only
+  confirmation resolves its observed native-before transient. The completed
+  candidate and every earlier bracket remain; no exclusion or favorable repeat.
+  Current{wide_byte['current']['managedUs']:.2f}/zimg{wide_byte['current']['nativeUs']:.2f}µs upper{wide_byte['current']['upper']:.3f}
+  remains a gap;198,450B/op and198,432B admitted workspace are unchanged.
+  All8existing support/depth costs refresh: **7pass/1gap/0uncertain**; both64×32
+  uncertainties pass/stop. No new image/grid, capacity, owner or retained scratch.
+  Exact arithmetic/repair and native bounds stay unchanged. Physical/native peaks
+  are unmeasured; historical companion point differences are not causal gains.
+  [Pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md) retains prior history.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -2020,14 +2029,15 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{wide_byte['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-JPEG paths pass448 internal/375 public checks per normal/scalar/disabled-AVX2/AVX512 mode
+Wider-cache paths pass265 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Unchanged JPEG paths retain448 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,

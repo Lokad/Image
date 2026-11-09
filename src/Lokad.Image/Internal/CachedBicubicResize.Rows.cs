@@ -156,6 +156,29 @@ internal static partial class CachedBicubicResize
 
     // Keep the previously measured wide tap kernel. A vector-index view is
     // arithmetically equivalent but regressed the complete wide control.
+    private static void PrepareWideHorizontalPairs(Span<int> offsets,ReadOnlySpan<int> counts,
+        int width,int sourceWidth,int capacity,OperationContext context)
+    {
+        for(var x=0;x+1<width;x+=2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var n=counts[x];
+            if(n<=0 || n>=capacity || n!=counts[x+1] || n>sourceWidth)continue;
+            var base0=x*capacity;var base1=base0+capacity;
+            var first0=offsets[base0];var first1=offsets[base1];
+            if((uint)first0>(uint)(sourceWidth-n) || (uint)first1>(uint)(sourceWidth-n))continue;
+            var contiguous=true;
+            for(var tap=0;tap<n;tap++)
+                contiguous &= offsets[base0+tap]==first0+tap && offsets[base1+tap]==first1+tap;
+            // Both horizontal max-count reads and original-result repair stop
+            // before this padding slot. Full/unequal pairs and odd tails keep
+            // their original offsets. The proof is shared by every cached row.
+            // Valid clamped pixel indexes are nonnegative, so the marker cannot
+            // be confused with a live last tap in a full-capacity pair.
+            if(contiguous)offsets[base0+capacity-1]=-1;
+        }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void FilterWideHorizontal(ReadOnlySpan<double> decoded,Span<double> cached,
         ReadOnlySpan<double> weights,ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,
@@ -179,12 +202,25 @@ internal static partial class CachedBicubicResize
             var weights1=weights.Slice((x+1)*capacity,n);
             var offsets0=offsets.Slice(x*capacity,n);
             var offsets1=offsets.Slice((x+1)*capacity,n);
-            for(var tx=0;tx<n;tx++)
+            if(offsets[x*capacity+capacity-1]<0)
             {
-                var p0=decodedPixels[offsets0[tx]];
-                var p1=decodedPixels[offsets1[tx]];
-                sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights0[tx])));
-                sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights1[tx])));
+                var pixels0=decodedPixels.Slice(offsets0[0],n);
+                var pixels1=decodedPixels.Slice(offsets1[0],n);
+                for(var tx=0;tx<n;tx++)
+                {
+                    sum0=Avx.Add(sum0,Avx.Multiply(pixels0[tx],Vector256.Create(weights0[tx])));
+                    sum1=Avx.Add(sum1,Avx.Multiply(pixels1[tx],Vector256.Create(weights1[tx])));
+                }
+            }
+            else
+            {
+                for(var tx=0;tx<n;tx++)
+                {
+                    var p0=decodedPixels[offsets0[tx]];
+                    var p1=decodedPixels[offsets1[tx]];
+                    sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights0[tx])));
+                    sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights1[tx])));
+                }
             }
             cachedPixels[x]=sum0;
             cachedPixels[x+1]=sum1;

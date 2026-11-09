@@ -1,5 +1,8 @@
 # Shared wide pixel preparation
 
+[Prepared geometry](CACHED-WIDE-PREPARED-GEOMETRY.md) supersedes all eight costs
+and owns the current scope. Earlier gain, storage and raw evidence remain below.
+
 CPP657 removes repeated channel-to-pixel interpretation in the shared cached
 wide bicubic filter. Checked pixel-vector views are formed once per row; wide
 geometry prepares pixel indexes directly. Only original-order repair restores

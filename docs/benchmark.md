@@ -116,15 +116,20 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Shared wide pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md)
-  saves **498.26→463.92µs /34.35µs/6.89%raw/6.84%normalized** on default128×64byte.
-  Filtered/allactual raw/normalized confidence separates; native347.09→346.90µs
-  stays stable. Upper1.344 leaves117µs;198,450B/op, no added owned capacity or
-  retained scratch. Checked pixel views share prepared pixel indexes and exact
-  arithmetic/certificates. Eight existing affected controls now5pass/1gap/2uncertain;
-  64×32byte/word are uncertain, not passes. Seven companion native means move
-  −8–10%, so their raw changes are not causal gain claims. Current32×16byte
-  321.06/zimg376.18µs, upper.857,197,299B/op passes/stops; no new workload grid.
+  [Prepared wider-cache geometry](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md)
+  proves contiguous windows once in existing dead padding and removes per-tap
+  indexes/checks from eligible rows. Complete128×64byte saves
+  **19.33µs/4.15% raw/3.32% normalized**,
+  with separated filtered/all-actual confidence after one targeted original-only
+  confirmation resolves its observed native-before transient. The completed
+  candidate and every earlier bracket remain; no exclusion or favorable repeat.
+  Current446.07/zimg346.46µs upper1.292
+  remains a gap;198,450B/op and198,432B admitted workspace are unchanged.
+  All8existing support/depth costs refresh: **7pass/1gap/0uncertain**; both64×32
+  uncertainties pass/stop. No new image/grid, capacity, owner or retained scratch.
+  Exact arithmetic/repair and native bounds stay unchanged. Physical/native peaks
+  are unmeasured; historical companion point differences are not causal gains.
+  [Pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md) retains prior history.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -261,14 +266,15 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,077 full/live checks per OS**, affected
+The current production build passes **6,096 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-JPEG paths pass448 internal/375 public checks per normal/scalar/disabled-AVX2/AVX512 mode
+Wider-cache paths pass265 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Unchanged JPEG paths retain448 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,
@@ -391,13 +397,13 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 321.06 | 376.18 | 0.853 / 0.857 | 197,299 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 332.79 | 412.11 | 0.808 / 0.817 | 197,298 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 542.51 | 417.07 | 1.301 / 1.321 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 590.84 | 572.81 | 1.031 / 1.033 | 113 |
-| Bicubic RGBA8 wider-support reduction † → 128×64 | 463.92 | 346.90 | 1.337 / 1.344 | 198,450 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 446.07 | 346.46 | 1.288 / 1.292 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
