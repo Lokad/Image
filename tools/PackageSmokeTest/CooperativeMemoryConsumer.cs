@@ -787,7 +787,7 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged live baseline JPEG window preserves exact samples and admitted sync/async ownership.");
     }
 
-    private static async Task VerifyGroupedJpegResult()
+    private static async Task VerifyGroupedJpegResult(bool cancelable)
     {
         // Original T.81 stream: RGB, zero DC, two signed AC coefficients and EOB
         // perblock. Frozen on the qualified PFC554 decoder before this change.
@@ -823,16 +823,18 @@ internal static class CooperativeMemoryConsumer
         if (!root.TryReserve(data.Length, out var input)) throw new Exception("Cannot admit paired JPEG input.");
         using var inputOwner = input;
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
-        using var first = ImageCodec.Decode(data, options);
+        using var live = new CancellationTokenSource();
+        var token = cancelable ? live.Token : default;
+        using var first = ImageCodec.Decode(data, options, token);
         using var stream = new MemoryStream(data, writable: false);
-        using var second = await ImageCodec.DecodeAsync(stream, options);
+        using var second = await ImageCodec.DecodeAsync(stream, options, token);
         if (root.Bytes != data.Length + 2L * bytes || !stream.CanRead || root.IsDisposed)
             throw new Exception("Packaged JPEG pair scratch or borrowed ownership differs.");
-        try { using var unexpected = ImageCodec.Decode(data, options); throw new Exception("JPEG pair aggregate refusal ignored."); }
+        try { using var unexpected = ImageCodec.Decode(data, options, token); throw new Exception("JPEG pair aggregate refusal ignored."); }
         catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
         if (root.Refusals != 1 || root.Bytes != data.Length + 2L * bytes)
             throw new Exception("Packaged JPEG pair refusal was retried or leaked.");
-        first.Dispose(); using var recovered = ImageCodec.Decode(data, options); data.AsSpan().Clear();
+        first.Dispose(); using var recovered = ImageCodec.Decode(data, options, token); data.AsSpan().Clear();
         foreach (var image in new[] { second, recovered })
         {
             using var hash = System.Security.Cryptography.IncrementalHash.CreateHash(System.Security.Cryptography.HashAlgorithmName.SHA256);
@@ -843,7 +845,7 @@ internal static class CooperativeMemoryConsumer
         }
         recovered.Dispose(); second.Dispose(); inputOwner?.Dispose();
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged JPEG pair storage leaked.");
-        Console.WriteLine("Packaged grouped JPEG entropy preserves frozen pixels, sync/async, scan storage and shared admission.");
+        Console.WriteLine($"Packaged grouped JPEG entropy preserves frozen pixels, sync/async, scan storage and shared admission: live={cancelable}.");
     }
 
     private static void VerifyTranspose(int depth)
@@ -1100,7 +1102,8 @@ internal static class CooperativeMemoryConsumer
         await VerifyLanczosPlans();
         await VerifyCompactPngDictionary(budget, limits);
         await VerifyDirectRgbResult();
-        await VerifyGroupedJpegResult();
+        await VerifyGroupedJpegResult(false);
+        await VerifyGroupedJpegResult(true);
         using var empty = new TestMemoryBudget(0);
         try
         {

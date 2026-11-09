@@ -23,7 +23,7 @@ internal ref partial struct JpegDecoder
         scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged)
     {
         var tables = 0;
-        if (writePixels && !context.Cancellation.CanBeCanceled && (long)columns * rows >= 64)
+        if (writePixels && (long)columns * rows >= 64)
         {
             var used = 0;
             for (var i = 0; i < indexes.Length; i++) used |= 1 << ac[i];

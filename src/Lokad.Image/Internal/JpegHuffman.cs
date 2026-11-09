@@ -105,7 +105,7 @@ internal sealed partial class JpegHuffman
         => reader.TryReadBaselineAc(shortCodes, remainingCoefficients, out symbol, out value);
 
     internal void ReadPlainCancelableAc(ref JpegEntropyReader reader, scoped Span<int> block, ref int coefficient)
-        => reader.ReadPlainCancelableAc(shortCodes, block, ref coefficient);
+        => reader.ReadPlainCancelableAc(this, block, ref coefficient);
 
     internal void ReadPlainBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, ref int coefficient)
         => reader.ReadPlainBaselineAc(this, block, ref coefficient);
@@ -119,9 +119,9 @@ internal sealed partial class JpegHuffman
 
     internal bool TryReadCancelableBaselineBlock(ref JpegEntropyReader reader, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)
-        => reader.TryReadCancelableBaselineBlock(shortCodes, ac.shortCodes, block, ref predictor, ref coefficient);
+        => reader.TryReadCancelableBaselineBlock(shortCodes, ac, block, ref predictor, ref coefficient);
 
-    // Reuse the encoded table's existing nine/ten-bit lookup in an ordinary
+    // Reuse the encoded table's existing nine/ten-bit lookup in a baseline
     // bounded entropy window. No additional table preparation or capacity.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal int LookupBaselinePrefix(ulong cache, int pending)
@@ -129,7 +129,7 @@ internal sealed partial class JpegHuffman
         var packed = shortCodes[(int)(cache >> 56)];
         if (packed != 0 || longCodes is null) return packed;
         packed = longCodes[(int)(cache >> 54)];
-        // Ordinary windows guarantee18bits. A long prefix plus its amplitude
+        // Baseline windows guarantee18bits. A long prefix plus its amplitude
         // can require20; leave an incomplete field entirely unconsumed.
         return (packed & 15) + ((packed >> 4) & 15) <= pending ? packed : 0;
     }

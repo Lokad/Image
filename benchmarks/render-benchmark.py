@@ -1054,18 +1054,18 @@ def render():
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     # Current owners include explicitly reused costs for unchanged paths.
-    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-paired-tile-packing-evidence.json').read_text(encoding='utf-8'))
+    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-live-prepared-huffman-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_read['productionAccepted'] and jpeg_read['requiredMaterialPaths'] == 283
-    assert jpeg_read['qualification']['fullChecksEachOs'] == 6096
+    assert jpeg_read['qualification']['fullChecksEachOs'] == 6100
     assert jpeg_read['qualification']['sameActualPackageBothOS']
     assert jpeg_read['raw']['mirrored'] and jpeg_read['raw']['allMembersVerified']
-    assert jpeg_read['sourceProof']['originalEntryValidationBeforeWritesVerbatim']
-    assert jpeg_read['sourceProof']['otherComponentBlockStoreVerbatim']
-    assert jpeg_read['sourceProof']['jit']['directBoundedVectorLoads']
-    assert jpeg_read['sourceProof']['jit']['vectorStackConversionRemoved']
-    assert jpeg_read['storage']['newOwnedHeapCapacityBytes'] == 0
+    assert jpeg_read['sourceProof']['ordinaryFusedKernelVerbatim']
+    assert jpeg_read['sourceProof']['otherReaderMethodsVerbatim']
+    assert jpeg_read['sourceProof']['scanOwnersSelectionAndFinallyVerbatimExceptLiveEligibility']
+    assert jpeg_read['sourceProof']['sharedLookupAndPairBuilderReusedWithoutChanges']
+    assert jpeg_read['storage']['newOwnedHeapCapacityBytes'] == 32816
     assert jpeg_read['storage']['newRetainedOperationStorageBytes'] == 0
-    assert len(jpeg_read['refreshedCases']) == 8 and len(jpeg_read['reusedCases']) == 21
+    assert len(jpeg_read['refreshedCases']) == 23 and len(jpeg_read['reusedCases']) == 6
     assert len(jpeg_read['cases']) == 29
     assert jpeg_read['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_read['cases'].values())
                                         for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
@@ -1966,23 +1966,27 @@ Current scope and remaining work:
   pass. Geometry/output ownership stay timed; native graph/context preparation
   stays retained and labeled. Preserve exact Q30/rational/certified pixels versus
   native float; historical gains stay in linked reports.
-- **JPEG and reading:** [paired tile packing](../benchmarks/JPEG-PAIRED-TILE-PACKING.md)
-  shares bounded component views across row pairs and keeps raw components private
-  until final metadata interpretation. Complete sparse CMYK saves
+- **JPEG and reading:** [live prepared Huffman decoding](../benchmarks/JPEG-LIVE-PREPARED-HUFFMAN.md)
+  shares existing long-prefix lookup and scan-owned pair descriptors, preserving
+  every logical cancellation checkpoint. Complete live baseline444 saves
   **{jpeg_read['comparison']['savedUs']:.2f}µs/{100*jpeg_read['comparison']['rawReduction']:.2f}% raw**,
   {100*jpeg_read['comparison']['normalizedReduction']:.2f}% normalized; filtered/all-actual confidence separates.
-  Current{jpeg_read['cases']['CmykAdobeSparse2D']['managedMicroseconds']:.2f}/FFmpeg{jpeg_read['cases']['CmykAdobeSparse2D']['nativeMicroseconds']:.2f}µs,
-  upper{jpeg_read['cases']['CmykAdobeSparse2D']['upper']:.3f} remains a gap;20,944B/op unchanged.
-  Eight affected costs refresh and21unchanged paths reuse evidence:
+  Current{jpeg_read['cases']['NativeDecodeCancelable8']['managedMicroseconds']:.2f}/FFmpeg{jpeg_read['cases']['NativeDecodeCancelable8']['nativeMicroseconds']:.2f}µs,
+  upper{jpeg_read['cases']['NativeDecodeCancelable8']['upper']:.3f} passes/stops.
+  GC10,120→42,936B/op; governed peak541,253→574,069B; result531,468B until disposal,
+  retained scratch0. Physical/native peaks are unmeasured; no new pool/session.
+  All23 affected baseline costs refresh; six unchanged progressive paths reuse evidence:
   **{jpeg_read['statusCounts']['confirmed-pass-stop']}pass/{jpeg_read['statusCounts']['confirmed-gap']}gaps/{jpeg_read['statusCounts']['confirmed-confidence-open']}uncertain**.
-  RGB generalization is inconclusive. Horizontal-AC CMYK records a separated
-  raw slowdown24.65µs/5.15% while native moves+8.25%; normalized bounds overlap,
-  so no causal regression, nonregression or broader gain is claimed. Completed
-  candidates are reused; adverse stages/results remain linked. Exact frames,
-  capacity/ownership and private post-EOI interpretation remain unchanged.
+  No previously passing affected control becomes a gap. RGB422 is now a gap;
+  resident/stream restart420 and progressive live444 remain uncertain. Companion
+  historical points establish no causal gain, nonregression or equivalence.
+  The adverse4:1:1 point remains without favorable remeasurement. Exact frames,
+  admission/ownership and private post-EOI interpretation remain unchanged.
+  [Paired tile packing](../benchmarks/JPEG-PAIRED-TILE-PACKING.md) retains its scoped
+  sparse-CMYK gain, inconclusive RGB comparison and adverse horizontal-AC evidence.
   [Narrow scan preparation](../benchmarks/JPEG-NARROW-SCAN-PREPARATION.md) retains
-  progressive gains and source-valid costs; live444, RGB422 and restart420 remain
-  uncertain. No new images/settings or repeated candidate confirmations.
+  progressive gains and source-valid costs. No new images/settings or repeated
+  candidate confirmations. FFmpeg retains its contexts without an equivalent live token.
   [Grayscale tile preparation](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) shares
   row setup across up to eight MCUs, preserving exact normalization and gray samples.
   Complete RGBA→gray saves **{jpeg_tiles['comparison']['savedUs']:.2f}µs/{100*jpeg_tiles['comparison']['rawReduction']:.2f}% raw**,
@@ -2037,14 +2041,14 @@ sync/async consumers, plus bounded main validation and exact method2 residual st
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
 Unchanged wider-cache paths retain265 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
-Current JPEG paths pass448 internal/375 public checks per those modes
+Current JPEG paths pass452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,
 terminal refusal, cancellation cleanup/recovery and independent survivors, plus
 frozen Fastest8/16 sync/async packets,
 shared admission and independent ownership. The current package also exercises
-authored grouped-AC JPEG pixels, sync/async scan storage, terminal refusal and
+authored grouped-AC JPEG pixels in ordinary/live-token sync/async scans, terminal refusal and
 independent survivors. Its live baseline witnesses also pass. Unchanged
 alpha prefix/border/tail/palette, compressed horizontal-alpha package and other
 coefficient/decoder/word/ISA evidence is reused.

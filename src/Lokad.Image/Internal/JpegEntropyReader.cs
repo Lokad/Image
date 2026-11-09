@@ -716,18 +716,19 @@ cache = candidateCache; pending = candidatePending - length;
         position = localPosition - wholeBytes; coefficient = k;
     }
 
-    internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
+    internal void ReadPlainCancelableAc(JpegHuffman ac, scoped Span<int> block, ref int coefficient)
     {
         var predictor = 0;
-        _ = ReadCancelableBaselineWindow(default, shortCodes, block, ref predictor, ref coefficient);
+        _ = ReadCancelableBaselineWindow(default, ac, block, ref predictor, ref coefficient);
     }
 
-    private bool ReadCancelableBaselineWindow(ReadOnlySpan<ushort> dcCodes, ReadOnlySpan<ushort> shortCodes,
+    private bool ReadCancelableBaselineWindow(ReadOnlySpan<ushort> dcCodes, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)
     {
         var localBits = ((ulong)bits << 32) << (32 - available);
         var localAvailable = available; var localPosition = position;
         var cancellation = context.Cancellation; var k = coefficient;
+        var pairs = ac.BaselinePairs;
         if (!dcCodes.IsEmpty)
         {
             if (data.Length - localPosition < 4) return false;
@@ -752,7 +753,8 @@ cache = candidateCache; pending = candidatePending - length;
         // failure/cancellation cleanup without resuming this private window.
         while (k <= 63)
         {
-            // At most eight prefix and ten amplitude bits are needed.
+            // The shared lookup declines an incomplete long field. Keep the
+            // existing eighteen-bit refill boundary and logical checkpoints.
             // Keep ordinary lookahead across symbols; every exit returns
             // unused whole bytes before publishing the reader state.
             if (localAvailable < 18)
@@ -762,7 +764,32 @@ cache = candidateCache; pending = candidatePending - length;
                 if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
                 localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
             }
-            var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
+            if (pairs is not null)
+            {
+                var pair = pairs[(int)(localBits >> 52)];
+                var secondIndex = k + (int)((pair >> 8) & 31);
+                if (pair != 0 && secondIndex <= 63)
+                {
+                    var firstIndex = k + (int)((pair >> 4) & 15);
+                    // Both fields are already validated. Preserve a checkpoint
+                    // for each logical prefix and nonempty amplitude before its
+                    // store. Failed state remains private to this operation.
+                    cancellation.ThrowIfCancellationRequested();
+                    cancellation.ThrowIfCancellationRequested();
+                    block[JpegTransform.Zigzag[firstIndex]] = unchecked((sbyte)(pair >> 16));
+                    cancellation.ThrowIfCancellationRequested();
+                    var second = unchecked((int)pair) >> 24;
+                    if (second != 0)
+                    {
+                        cancellation.ThrowIfCancellationRequested();
+                        block[JpegTransform.Zigzag[secondIndex]] = second;
+                    }
+                    var consumed = (int)(pair & 15); localBits <<= consumed; localAvailable -= consumed;
+                    k = second == 0 ? 64 : secondIndex + 1;
+                    continue;
+                }
+            }
+            var packed = ac.LookupBaselinePrefix(localBits, localAvailable); var count = packed & 15;
             var token = packed >> 4; var size = token & 15; var run = token >> 4;
             if (count == 0) break;
             if (token == 0)

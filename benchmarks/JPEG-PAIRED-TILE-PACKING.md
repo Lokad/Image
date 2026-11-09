@@ -1,5 +1,10 @@
 # Paired JPEG tile packing
 
+The scoped packing gain and raw evidence below remain valid. Current JPEG read
+costs and whole-build qualification are owned by
+[live prepared Huffman decoding](JPEG-LIVE-PREPARED-HUFFMAN.md); its change affects
+23 baseline costs and reuses six unchanged progressive comparisons.
+
 JPT711 shares bounded component views across two rows and keeps samples packed
 through byte/word interleaves. Complete sparse-CMYK decode saves **30.48 µs /
 5.46% raw / 5.50% reference-normalized**, 558.00→527.52 µs.

@@ -4,9 +4,9 @@ namespace Lokad.Image.Internal;
 
 internal ref partial struct JpegEntropyReader
 {
-    internal bool TryReadCancelableBaselineBlock(ReadOnlySpan<ushort> dcCodes, ReadOnlySpan<ushort> acCodes,
+    internal bool TryReadCancelableBaselineBlock(ReadOnlySpan<ushort> dcCodes, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)
-        => ReadCancelableBaselineWindow(dcCodes, acCodes, block, ref predictor, ref coefficient);
+        => ReadCancelableBaselineWindow(dcCodes, ac, block, ref predictor, ref coefficient);
 
     internal bool TryReadPlainBaselineBlock(ReadOnlySpan<ushort> dcCodes, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)

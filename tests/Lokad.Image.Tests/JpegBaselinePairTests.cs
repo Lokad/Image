@@ -36,8 +36,9 @@ public sealed partial class JpegBaselineBlockTests
         Assert.Null(table.BaselinePairs); Assert.Equal(before, context.RemainingWorkingBytes);
     }
 
-    [Fact]
-    public void PreparedPairsPreserveActualBlocksFollowingReadsAndMalformedTails()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void PreparedPairsPreserveActualBlocksFollowingReadsAndMalformedTails(bool cancelable)
     {
         using var tablesContext = Context();
         var dcCounts = new byte[16]; dcCounts[0] = 1;
@@ -62,7 +63,9 @@ public sealed partial class JpegBaselineBlockTests
 
                     (Type? Error, string? Message, int Predictor, int[] Block, int Position, int Tail) Run(bool scalar)
                     {
-                        using var context = Context(); var reader = new JpegEntropyReader(input, 0, context);
+                        using var cancellation = new CancellationTokenSource();
+                        using var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
+                        var reader = new JpegEntropyReader(input, 0, context);
                         var block = Enumerable.Repeat(12345, 66).ToArray(); var predictor = 17; var tail = -1;
                         Exception? error = null;
                         try
