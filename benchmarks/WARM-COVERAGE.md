@@ -288,6 +288,10 @@ workspace lifetimes, shared resize execution and further codec work selected fro
 attribution. Keep passing cases stopped. Text/drawing proceeds independently;
 pending references never block justified codec/resizing work. PLAN.md stays ignored.
 
+[Current cached-wide attribution](CACHED-WIDE-CURRENT-PREPARATION-ATTRIBUTION.md)
+locates the remaining horizontal tap work after pixel preparation. It supplies
+a bounded safe-window hypothesis, with no new displayed cost or renderer dependency.
+
 [Pre-bank grayscale attribution](JPEG-GRAYSCALE-CURRENT-ATTRIBUTION.md) led to the
 accepted replay stage. Its old replay locations/shares are historical; unchanged
 preparation locations remain leads, not current isolated phase costs. It adds no
