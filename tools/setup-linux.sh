@@ -31,16 +31,18 @@ PY
 
 download() {
     local name=$1 path url algorithm digest actual
+    local -a headers=()
     path="$repo_root/external/downloads/$(value "linuxBootstrap.$name.file")"
     url=$(value "linuxBootstrap.$name.url")
     algorithm=sha256
     [[ $name != dotnet ]] || algorithm=sha512
     digest=$(value "linuxBootstrap.$name.$algorithm")
+    [[ $name != powershell ]] || headers=(--header 'Accept: application/octet-stream')
     if [[ ! -f $path ]]; then
-        curl --fail --location --retry 3 --output "$path.part" "$url"
-        mv -- "$path.part" "$path"
+        curl --fail --location --retry 3 --output "$path.part" "${headers[@]}" "$url" || return 1
+        mv -- "$path.part" "$path" || return 1
     fi
-    actual=$("${algorithm}sum" "$path")
+    actual=$("${algorithm}sum" "$path") || return 1
     [[ ${actual%% *} == "$digest" ]] || { echo "Archive identity differs: $name" >&2; exit 1; }
     printf '%s\n' "$path"
 }
