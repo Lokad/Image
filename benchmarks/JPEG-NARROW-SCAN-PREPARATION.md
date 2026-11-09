@@ -78,3 +78,6 @@ Private package: 439,043 B, SHA256
 `096496456574d01b6f75a647d6ae425bf4cd4a00c27c1d76bd30060f2b1b1c40`.
 Published packages remain immutable; publication is postponed. The full 283-path
 objective remains open, with independent resizing work next.
+
+[Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) supplies later affected JPEG costs
+and current qualification; this report retains valid unchanged progressive paths.

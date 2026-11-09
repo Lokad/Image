@@ -12,15 +12,14 @@ The [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md) owns eight affected
 lossless/alpha encode costs. [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md)
 owns effort2; six unchanged lossy costs reuse [four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md);
 the alpha pair uses the current storage handoff.
-[Narrow scan preparation](JPEG-NARROW-SCAN-PREPARATION.md) owns 27 affected read
-costs; two pixel-free coding-validation costs reuse unchanged evidence. Current
-29-read scope is18pass/7gap/4uncertain, with no all-JPEG parity claim.
-
-[Current bounded attribution](ARCHITECTURAL-CURRENT-ATTRIBUTION.md) retains a
-source/arithmetic resize audit and one current sparse-CMYK capture, without new
-cost claims or builds. The next hypothesis removes repeated component-row
-preparation in JPEG's generic tile packer; exact raw samples and final metadata
-interpretation remain required. Earlier FP32 replay is not a justified next step.
+[Paired JPEG tile packing](JPEG-PAIRED-TILE-PACKING.md) owns eight affected
+equal-grid reads and reuses21unchanged paths:29-read scope18pass/7gap/4uncertain.
+Sparse-CMYK complete decode saves30.48µs/5.46%raw/5.50%normalized. RGB comparison
+is inconclusive; horizontal-AC raw slowdown24.65µs/5.15% accompanies native+8.25%
+and overlapping normalized bounds. No broader gain/nonregression is claimed.
+The [bounded resize/CMYK audit](ARCHITECTURAL-CURRENT-ATTRIBUTION.md) retains the
+motivating historical capture/model. Next inspect live-token baseline444's
+current preparation/cancellation boundary (~140µs gap), with no new workload grid.
 
 ## Current family status
 
@@ -54,14 +53,14 @@ strided/word-column clocks are retained in their reports, not renderer inputs.
 3114.50/zimg3041.43us upper1.030,116B/op,73usgap. Existing preparation is present;
 larger current column/codec gaps take priority. Full283-path objective unchanged.
 
-[Prepared wider-cache geometry](CACHED-WIDE-PREPARED-GEOMETRY.md) qualifies the
-current immutable build:6096full/live eachOS,265internal/729public per normal/scalar/
-disabledAVX2/AVX512, SAMEactualReleasepackage/allthreeexamples. Eight affected
-wider-cache costs refresh; other resizing, codec, text/drawing and ownership paths
-reuse unchanged evidence. JPEG's current [scan preparation](JPEG-NARROW-SCAN-PREPARATION.md)
-retains29read costs. Historical experiments keep their own reports. This is scoped
-development qualification; the full127-row actual-package release refresh remains
-separate. Publication is postponed and all283paths remain required.
+[Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) qualifies the current immutable
+build:6096full/live eachOS,448internal/375public pernormal/scalar/disabledAVX2/AVX512,
+SAMEactualReleasepackage/allthreeexamples. Eight affected JPEG costs refresh;
+21unchanged reads and other codec/resize/text/ownership paths reuse valid evidence.
+Unchanged [wider-cache geometry](CACHED-WIDE-PREPARED-GEOMETRY.md) retains its eight
+costs and265internal/729public scalar/ISA qualification. Historical reports retain
+their raw proof. The full127-row actual-package release refresh remains separate.
+Publication stays postponed and all283paths remain required.
 
 Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
 [validated progression](JPEG-VALIDATED-PROGRESSION-EXPERIMENT.md),

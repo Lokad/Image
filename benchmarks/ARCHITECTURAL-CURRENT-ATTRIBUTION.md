@@ -67,3 +67,6 @@ Mirrored/member-verified raw `architectural-current-attribution.tar.xz`:
 142,644 bytes / 35 members, SHA256
 `196ce5b7563808bbabfc3b4df8116a971554f6a237e212a621c809d514c9822b`.
 Publication is postponed and the full 283-path objective remains open.
+
+[Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) supplies later affected JPEG costs
+and qualification; this pre-change packing capture remains motivating history.

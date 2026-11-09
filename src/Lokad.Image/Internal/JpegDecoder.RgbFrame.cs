@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -24,6 +25,13 @@ internal ref partial struct JpegDecoder
             var left = bx * 8; var top = by * 8;
             var visibleWidth = Math.Min(8, width - left); var visibleHeight = Math.Min(8, height - top);
             if (visibleWidth <= 0 || visibleHeight <= 0) continue;
+            if (visibleWidth == 8 && Sse2.IsSupported)
+            {
+                StoreComponentRows(blocks, rgba.Slice(top * stride + left * 4,
+                    (visibleHeight - 1) * stride + 32), groupBytes, stride, visibleHeight,
+                    (by * horizontal + bx) * 64, channels);
+                continue;
+            }
             for (var line = 0; line < visibleHeight; line++)
             {
                 var offset = (by * horizontal + bx) * 64 + line * 8;
@@ -31,15 +39,47 @@ internal ref partial struct JpegDecoder
                 var green = blocks.Slice(groupBytes + offset, visibleWidth);
                 var blue = blocks.Slice(groupBytes * 2 + offset, visibleWidth);
                 var output = rgba.Slice((top + line) * stride + left * 4, visibleWidth * 4);
-                if (visibleWidth == 8 && Avx2.IsSupported)
-                {
-                    var fourth = channels == 3 ? Vector256.Create(0xff000000u)
-                        : Avx2.ShiftLeftLogical(WidenSamples8(blocks.Slice(groupBytes * 3 + offset, 8)).AsUInt32(), 24);
-                    WriteComponents8(red, green, blue, fourth, output);
-                }
-                else if (channels == 3) RenderRgbRow(red, green, blue, output);
+                if (channels == 3) RenderRgbRow(red, green, blue, output);
                 else PackCmykSamples(red, green, blue, blocks.Slice(groupBytes * 3 + offset, visibleWidth), false, output);
             }
+        }
+    }
+
+    // Validate and prepare each component view once per tile, keeping its bytes
+    // packed through publication. The caller has admitted the disjoint stack
+    // staging; raw K remains data until complete container interpretation.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void StoreComponentRows(ReadOnlySpan<byte> blocks, Span<byte> rgba,
+        int groupBytes, int stride, int height, int offset, int channels)
+    {
+        // IDCT initializes the entire tile, including rows outside the visible
+        // bottom edge. Read two bounded rows together; publish only visible rows.
+        var pairs = (height + 1) / 2;
+        var red = MemoryMarshal.Cast<byte, Vector128<byte>>(blocks.Slice(offset, 64)).Slice(0, pairs);
+        var green = MemoryMarshal.Cast<byte, Vector128<byte>>(blocks.Slice(groupBytes + offset, 64)).Slice(0, pairs);
+        var blue = MemoryMarshal.Cast<byte, Vector128<byte>>(blocks.Slice(groupBytes * 2 + offset, 64)).Slice(0, pairs);
+        var fourth = channels == 4
+            ? MemoryMarshal.Cast<byte, Vector128<byte>>(blocks.Slice(groupBytes * 3 + offset, 64)).Slice(0, pairs) : red;
+        for (var pair = 0; pair < red.Length; pair++)
+        {
+            var r = red[pair]; var g = green[pair]; var b = blue[pair];
+            var alpha = channels == 4 ? fourth[pair] : Vector128.Create(byte.MaxValue);
+            var rg = Sse2.UnpackLow(r, g).AsUInt16();
+            var ba = Sse2.UnpackLow(b, alpha).AsUInt16();
+            var low = Sse2.UnpackLow(rg, ba).AsByte();
+            var high = Sse2.UnpackHigh(rg, ba).AsByte();
+            var line = pair * 2;
+            var output = rgba.Slice(line * stride, 32);
+            MemoryMarshal.Write(output, in low);
+            MemoryMarshal.Write(output.Slice(16), in high);
+            if (line + 1 == height) break;
+            rg = Sse2.UnpackHigh(r, g).AsUInt16();
+            ba = Sse2.UnpackHigh(b, alpha).AsUInt16();
+            low = Sse2.UnpackLow(rg, ba).AsByte();
+            high = Sse2.UnpackHigh(rg, ba).AsByte();
+            output = rgba.Slice((line + 1) * stride, 32);
+            MemoryMarshal.Write(output, in low);
+            MemoryMarshal.Write(output.Slice(16), in high);
         }
     }
 
