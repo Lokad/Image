@@ -1,0 +1,87 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CDG663/CFA664",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "productionBuilds": 0,
+  "diagnosticBuilds": 1,
+  "failedInitialDiagnosticCompile": true,
+  "repeatedSuitesOrPackages": 0,
+  "newRasters": 1,
+  "managedOnly": true,
+  "nativeParityClaim": false,
+  "qualifiedPackageSha256": "c2c3d20940c8e0dcf36b2293bb9e2c810e6d995b64078a62365d8e65edee6290",
+  "librarySha256": "6618549731725ad7a3b40c8f89ee903a9460b4253f6352110a8b45d4a88939b3",
+  "scope": "Original deterministic asymmetric-v1 phase0 resident RGBA8 4097x2051 to1024x512. Two existing complete public Resize modes on the SAME qualified package DLL. All preparation/workspace/independent result/disposal timed; compact MaxWorkingBytes=input+output+4096; default unchanged. BDN0.15.6 InProcessEmit ShortRun3actuals, singleCPU/tieringoff/workstation nonconcurrentGC and idle-v2. No native timing; no added advertised comparison or broad shape claim.",
+  "source": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+  "output": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+  "allNormalAndScalarPixelsExact": true,
+  "sourceAndIndependentOwnershipPassed": true,
+  "points": {
+    "default": {
+      "meanMs": 26.158828083333333,
+      "confidenceIntervalMs": {
+        "Lower": 21.61924058669327,
+        "Upper": 30.698415579973396
+      },
+      "actualMs": [
+        26.020689,
+        26.009726375,
+        26.4460895
+      ],
+      "allocatedBytes": 1585375,
+      "mode": "default",
+      "peakAdmittedBytes": 3682592,
+      "retainedBytes": 2097152,
+      "workspaceAtPeakBytes": 1585440
+    },
+    "compact": {
+      "meanMs": 643.4141183333334,
+      "confidenceIntervalMs": {
+        "Lower": 642.8330413224719,
+        "Upper": 643.9951953441949
+      },
+      "actualMs": [
+        643.44051725,
+        643.37875,
+        643.42312525
+      ],
+      "allocatedBytes": 174,
+      "mode": "compact",
+      "peakAdmittedBytes": 2101248,
+      "retainedBytes": 2097152,
+      "workspaceAtPeakBytes": 4096
+    }
+  },
+  "compactSlowdown": 24.596442787254453,
+  "scratchRetainedBytes": 0,
+  "physicalPeaksAndIdlePoolUnmeasured": true,
+  "profiling": {
+    "totalSamples": 1371,
+    "genericResizeSamples": 910,
+    "kernelSamples": 302,
+    "wideStripSamples": 27,
+    "completedCaptureRecoveredWithoutRepeat": true,
+    "collectorExit": -15,
+    "afterGuardDelayed": true
+  },
+  "finding": "Do not promote the current compact driver globally from a small-control allocation/timing advantage. Large control is24.60x slower despite smaller storage. Profile/source inspection identifies ordinary whole-frame fall-through after a declined byte certificate, not a demonstrated stride/cache cause. Samples are not phase times and do not identify the first declined pixel. Preserve this adverse screen; no timing confirmation or default production change.",
+  "next": "Investigate reusing existing ColumnBicubicResize.OriginalByte in shared BicubicMath for wide uncertain byte pairs/singletons. Preserve original ty/tx order and rounding; normalized alpha in(0,1) still retires4KiB before rational replay. Word/default cached numerical paths unchanged. This removes repeated whole-frame work, not exactness. Candidate must pass frozen/direct/ownership/terminal-refusal/cancel and small unchanged-boundary checks before any default dispatch proposal. No relaxed certificate, fixture dispatch or blanket compact preference.",
+  "raw": {
+    "file": "compact-bicubic-boundary-attribution.tar.xz",
+    "sha256": "994a791ebbea29d5aad67acc0c00d70900477782eb7b2b929ab533249b6fd411",
+    "bytes": 10982340,
+    "members": 40,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-shared-wide-columns-qualified.tar.xz",
+        "sha256": "94eefda9adf1e4876aa1f0f395183907d7e011192e4cc03427d225bc1d47f40e",
+        "bytes": 12826244,
+        "members": 295
+      }
+    ]
+  }
+}

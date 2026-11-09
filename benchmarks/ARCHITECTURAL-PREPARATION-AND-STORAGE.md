@@ -64,3 +64,42 @@ It retains the audit tool and existing fixture/reference receipts. No full/packa
 qualification is repeated for unchanged production. The raw archive identity and
 qualified-build dependencies are recorded there. This audit adds no benchmark
 renderer dependency or displayed timing claim. Publication remains postponed.
+
+## Compact wider bicubic follow-up
+
+CDG663 compares existing complete public Resize modes on the same qualified
+package DLL, using one original RGBA8 4097×2051→1024×512 raster. Preparation,
+workspace, independent result ownership and disposal are timed. This is a
+managed-only generalization screen, with no native comparison or parity claim.
+
+| Existing mode | Elapsed ms | Allocated B/op | Admitted workspace B |
+| --- | ---: | ---: | ---: |
+| Default cached execution | 26.159 | 1,585,375 | 1,585,440 |
+| Compact execution, input + output + 4096 working limit | 643.414 | 174 | 4,096 |
+
+Both retain a separately owned 2,097,152-byte result until disposal and no scratch
+afterward. Governed peaks are 3,682,592 / 2,101,248 bytes; these exclude borrowed
+input and differ from physical heap or idle pool capacity, which are unmeasured.
+Three actuals per mode have separated intervals. Normal/default/compact and
+scalar full-frame pixels agree exactly; source and independent ownership pass.
+One diagnostic build reuses the immutable library; no production, native,
+correctness-suite or package rebuild occurs.
+
+The 24.60× slowdown rejects promoting this compact implementation globally from
+its small-control allocation advantage. A bounded profile finds 910 samples in
+general Resize and 302 in Kernel, versus 27 in the wide strip, out of 1,371 total.
+Together with the source's certificate-decline boundary, this identifies full-frame
+fall-through as the material lead; it does not establish cache/stride causality or
+identify the first uncertain pixel. Samples are not phase times. The completed
+capture was recovered after collector termination, without replay; its after-guard
+is delayed. The separate statistical screen has both immediate guards.
+
+The next design reuses existing original-order byte repair for uncertain wide
+pixels, retaining tiny-alpha workspace retirement before rational replay. Default
+dispatch stays unchanged. This is a revised hypothesis, without merge authority
+or weaker numerical policy. [Evidence](compact-bicubic-boundary-evidence.json)
+pins all actuals, identities, ownership, the profile and reproduction. Mirrored,
+member-verified raw archive `compact-bicubic-boundary-attribution.tar.xz` has
+10,982,340 bytes / 40 members, SHA256
+`994a791ebbea29d5aad67acc0c00d70900477782eb7b2b929ab533249b6fd411`.
+It adds no renderer dependency or advertised workload.
