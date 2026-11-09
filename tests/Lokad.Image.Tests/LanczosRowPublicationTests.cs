@@ -8,7 +8,7 @@ public sealed class LanczosRowPublicationTests
 {
     [Theory]
     [InlineData(8)] [InlineData(16)]
-    public void ExactRowsAndSupportedFloatingConversionKeepPrecisionAndOwnership(int depth)
+    public void ExactRowsAndSupportedFloatingProducerKeepPrecisionAndOwnership(int depth)
     {
         var roundedWords = 0;
         foreach (var (width, target) in new[] { (31, 9), (1031, 2), (7, 13), (1, 5) })
@@ -45,7 +45,12 @@ public sealed class LanczosRowPublicationTests
                     for (var i = 0; i < width; i++) sum += (BigInteger)source.Sample(i, y, 3) * (c == 3 ? 1 : source.Sample(i, y, c)) * expected[x][i];
                     var exact = checked((long)sum); var at = 1 + x * 4 + c;
                     Assert.Equal(exact, integers[at]);
-                    if (floatingSupported) Assert.Equal(BitConverter.DoubleToUInt64Bits((double)exact), BitConverter.DoubleToUInt64Bits(floating[at]));
+                    if (floatingSupported)
+                    {
+                        if (depth == 8 || c == 3)
+                            Assert.Equal(BitConverter.DoubleToUInt64Bits((double)exact), BitConverter.DoubleToUInt64Bits(floating[at]));
+                        else Assert.True(BigInteger.Abs((BigInteger)floating[at] - sum) <= (horizontal.MaximumCount + 3L) * 512);
+                    }
                     if (depth == 16 && (BigInteger)(double)exact != sum) roundedWords++;
                 }
             }

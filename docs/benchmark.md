@@ -178,9 +178,16 @@ Current scope and remaining work:
   package/three examples. Fifteen word controls now
   10pass/4gap/1uncertain;
   twelve unchanged paths are reused. Historical bands/geometry stay in linked reports.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
-  passes/three prepared gaps; plans retain139,800–333,396B and equivalent
-  one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  [Certified Lanczos word rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  reuse existingUInt32 products and remove integer filtering/conversion in the
+  accelerated producer. Prepared word reduction saves25.02µs/4.34%raw/4.99%normalized,
+  with separated filtered/allactual confidence. Enlargement's+14.87µs point has
+  overlapping intervals; no uniform gain claim. All eight costs refresh on the
+  actual-package DLL: fivepasses/three preparedgaps; retention139,800–333,396B
+  unchanged, equivalent one-shot setup timed. Exact Q30 pixels/strict certificate/
+  repair remain;6,017full/live eachOS, normal/scalar/AVX512off and SAMEpackage pass.
+  [Earlier certificate preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
+  retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is
@@ -358,14 +365,14 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 711.35 | 1,588.55 | 0.448 / 0.457 | 138,647 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 563.84 | 489.93 | 1.151 / 1.158 | 139 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 752.13 | 1,946.83 | 0.386 / 0.391 | 146,864 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 558.34 | 512.94 | 1.089 / 1.097 | 139 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,016.44 | 5,281.52 | 0.760 / 0.783 | 319,224 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,775.71 | 4,085.82 | 0.924 / 0.946 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,337.24 | 5,079.02 | 0.854 / 0.860 | 4,592,777 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,375.20 | 4,239.10 | 1.032 / 1.052 | 4,265,302 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 707.72 | 1,567.51 | 0.451 / 0.457 | 138,643 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 625.69 | 532.52 | 1.175 / 1.186 | 139 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 693.04 | 1,807.17 | 0.383 / 0.387 | 146,869 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 551.39 | 513.71 | 1.073 / 1.084 | 139 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,085.56 | 5,715.79 | 0.715 / 0.720 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,492.08 | 4,067.38 | 0.859 / 0.865 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,699.03 | 5,223.49 | 0.900 / 0.940 | 4,592,777 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,021.02 | 3,903.37 | 1.030 / 1.043 | 4,265,332 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † → 1027×519 | 2,357.04 | 2,155.92 | 1.093 / 1.134 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |

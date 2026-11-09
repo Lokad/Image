@@ -64,14 +64,15 @@ internal static class LanczosFmaResize
         }
     }
 
-    // B=sum(abs(Q30 weights))<=2^31 and M<=65535. The original horizontal
-    // kernel is exact: RGB magnitude <2^63 and alpha <2^47. One conversion
-    // to double contributes ERH<=2^9; horizontal alpha remains exact. Vertical
-    // FMA prefixes are <2^94 RGB/<2^78 alpha with errors <=2^41/2^25 per tap.
-    // Thus ER=(1+2*nV)*2^40 and EA=nV*2^25. Int32.MaxValue tap counts still
-    // leave approximate prefixes strictly inside the certified exponent bounds.
-    internal static (double Rgb, double Alpha) Errors(int verticalCount)
-        => ((1 + 2L * verticalCount) * 1099511627776d, verticalCount * 33554432d);
+    // B=sum(abs(Q30 weights))<=2^31 and M<=65535. Horizontal RGB prefixes
+    // stay below2^63; four word FMA chains and three recombination adds have
+    // ERH<=(nH+3)*512. Alpha prefixes are exactly represented integers <2^47.
+    // Byte rows retain the exact integer producer and ERH<=512 conversion.
+    // Vertical FMA adds <=2^41RGB/2^25alpha per tap. Even Int32.MaxValue counts
+    // keep approximate prefixes <2^94/2^78; the original certificate is strict.
+    internal static (double Rgb, double Alpha) Errors(int verticalCount, int horizontalCount)
+        => (((horizontalCount == 0 ? 1L : horizontalCount + 3L) + 2L * verticalCount) * 1099511627776d,
+            verticalCount * 33554432d);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool TryNormalize(Vector256<double> value, double numeratorError, double alphaError,
@@ -132,7 +133,12 @@ internal static class LanczosFmaResize
     internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<double> output,
         Span<uint> products, OperationContext context)
     {
-
+        if (source.BitDepth == 16)
+        {
+            LanczosResize.PrepareWordProducts(source.GetRow16(y), products, context);
+            HorizontalWord(products, plan, output, context);
+            context.Cancellation.ThrowIfCancellationRequested(); return;
+        }
         // Reuse one admitted backing store through two private views. No full
         // frame or extra row copy: exact signed sums are converted in place.
         var integer = MemoryMarshal.Cast<double, long>(output);
@@ -148,6 +154,38 @@ internal static class LanczosFmaResize
         {
             context.Cancellation.ThrowIfCancellationRequested();
             Avx512DQ.VL.ConvertToVector256Double(Vector256.Create(integer.Slice(i, 4))).CopyTo(output.Slice(i, 4));
+        }
+    }
+
+    private static void HorizontalWord(ReadOnlySpan<uint> input, LanczosPlan plan,
+        Span<double> output, OperationContext context)
+    {
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
+        for (var x = 0; x < plan.Windows.Length; x++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var window = plan.Windows[x];
+            var first = Vector512<double>.Zero; var second = Vector512<double>.Zero; var i = 0;
+            for (; i <= window.Count - 4; i += 4)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var products = Vector512.Create(input.Slice((window.First + i) * 4, 16));
+                var coefficients = Avx.ConvertToVector256Double(Vector128.Create(plan.Weights.AsSpan(window.Offset + i, 4)));
+                var wide = Vector512.Create(coefficients, coefficients).AsInt64();
+                var weights01 = Avx512F.PermuteVar8x64(wide, replicate01).AsDouble();
+                var weights23 = Avx512F.PermuteVar8x64(wide, replicate23).AsDouble();
+                first = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(products.GetLower()), weights01, first);
+                second = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(products.GetUpper()), weights23, second);
+            }
+            var pair = Avx512F.Add(first, second); var sum = Avx.Add(pair.GetLower(), pair.GetUpper());
+            for (; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var products = Vector256.Create(Vector128.Create(input.Slice((window.First + i) * 4, 4)), Vector128<uint>.Zero);
+                var values = Avx512F.ConvertToVector512Double(products).GetLower();
+                sum = Fma.MultiplyAdd(values, Vector256.Create((double)plan.Weights[window.Offset + i]), sum);
+            }
+            sum.CopyTo(output.Slice(x * 4, 4));
         }
     }
 

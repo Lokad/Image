@@ -1185,10 +1185,12 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-certificate-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert lanczos_current['productionAccepted'] and lanczos_current['selectedStage'] == 1
-    assert lanczos_current['pairedComparison']['pairs'] == 12 and lanczos_current['pairedComparison']['ratioConfidence'][1] < 1
-    assert lanczos_current['qualification']['fullChecksEachOs'] == 5631
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-word-certified-rows-evidence.json').read_text(encoding='utf-8'))
+    assert lanczos_current['productionAccepted'] and lanczos_current['storage']['capacityUnchanged']
+    assert lanczos_current['comparisons']['Repeated16']['rawGainSeparatedBothViews']
+    assert lanczos_current['comparisons']['Repeated16']['normalizedGainSeparated']
+    assert lanczos_current['sourceProof']['certificateDivisionRoundingGuardMasksAndExactRepairBodiesVerbatim']
+    assert lanczos_current['qualification']['fullChecksEachOs'] == 6017
     assert lanczos_current['qualification']['actualPackage']['sha256'] == lanczos_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert len(lanczos_current['cases']) == 8
     assert sum(c['status'] == 'pass' for c in lanczos_current['cases'].values()) == 5
@@ -1205,7 +1207,7 @@ def render():
             ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
         observation = lanczos_current['cases'][case]
         assert observation['managedExact'] and observation['allOriginalGatesPassed'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == lanczos_current['producers']['linuxSha256']
+        assert observation['librarySha256'] == lanczos_current['producers']['timedArtifactSha256']
         assert observation['actualIterations'] == 12
         current_resize_rows.append(('editing', f'| {label} † → {size} | {observation["managedUs"]:,.2f} | '
                                     f'{observation["nativeUs"]:,.2f} | {observation["ratio"]:.3f} / '
@@ -1914,9 +1916,16 @@ Current scope and remaining work:
   package/three examples. Fifteen word controls now
   {result_bands['mergedWordStatusCounts']['pass']}pass/{result_bands['mergedWordStatusCounts']['gap']}gap/{result_bands['mergedWordStatusCounts']['uncertain']}uncertain;
   twelve unchanged paths are reused. Historical bands/geometry stay in linked reports.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
-  passes/three prepared gaps; plans retain139,800–333,396B and equivalent
-  one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  [Certified Lanczos word rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  reuse existingUInt32 products and remove integer filtering/conversion in the
+  accelerated producer. Prepared word reduction saves25.02µs/4.34%raw/4.99%normalized,
+  with separated filtered/allactual confidence. Enlargement's+14.87µs point has
+  overlapping intervals; no uniform gain claim. All eight costs refresh on the
+  actual-package DLL: fivepasses/three preparedgaps; retention139,800–333,396B
+  unchanged, equivalent one-shot setup timed. Exact Q30 pixels/strict certificate/
+  repair remain;6,017full/live eachOS, normal/scalar/AVX512off and SAMEpackage pass.
+  [Earlier certificate preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
+  retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is

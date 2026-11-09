@@ -56,7 +56,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
                 source.SetSample(x, y, 0, (x + y) % 2 == 0 ? maximum : 1);
                 source.SetSample(x, y, 1, (x + y) % 3 == 0 ? maximum - 1 : maximum / 2);
                 source.SetSample(x, y, 2, (x + y) % 5 == 0 ? maximum : 3);
-                source.SetSample(x, y, 3, (x + y) % 5 switch { 0 => 0, 1 => 1, 2 => 16, _ => maximum });
+                source.SetSample(x, y, 3, ((x + y) % 5) switch { 0 => 0, 1 => 1, 2 => 16, _ => maximum });
             }
             var original = source.Pixels.ToArray();
             using var context = new OperationContext(ImageLimits.Default, default);
@@ -75,10 +75,10 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
                             * (c == 3 ? 1 : source.Sample(window.First + i, y, c)) * h.Weights[window.Offset + i];
                     exact[y][x * 4 + c] = expected;
                     Assert.True(BigInteger.Abs((BigInteger)rows[y][x * 4 + c] - expected)
-                        <= (c == 3 ? 0 : (BigInteger)512));
+                        <= (c == 3 ? 0 : (BigInteger)512 * (depth == 16 ? h.MaximumCount + 3L : 1)));
                 }
             }
-            var errors = LanczosFmaResize.Errors(v.MaximumCount);
+            var errors = LanczosFmaResize.Errors(v.MaximumCount, depth == 16 ? h.MaximumCount : 0);
             for (var y = 0; y < 5; y++)
             {
                 var sums = new double[dw * 4]; var integer = new BigInteger[dw * 4]; var window = v.Windows[y];
@@ -124,7 +124,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
     {
         if (!Supported) return;
         const double q = 1152921504606846976d;
-        var e = LanczosFmaResize.Errors(1); var numerator = e.Rgb + 65535d * e.Alpha;
+        var e = LanczosFmaResize.Errors(1, maximum == 65535 ? 6 : 0); var numerator = e.Rgb + 65535d * e.Alpha;
         var safe = Vector256.Create(21 * q, 35 * q, 49 * q, 7 * q);
         var expected = Vector128.Create(3, 5, 7, 7);
         foreach (var uncertain in new[] { Vector256.Create(0d, 0, 0, q / 2), Vector256.Create(10.5 * q, 35 * q, 49 * q, 7 * q) })
@@ -148,7 +148,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
         for (var i = 0; i < 4096; i++)
         {
             var taps = (i & 3) switch { 0 => 1, 1 => 6, 2 => 17, _ => int.MaxValue };
-            var e = LanczosFmaResize.Errors(taps); var numerator = e.Rgb + 65535d * e.Alpha;
+            var e = LanczosFmaResize.Errors(taps, maximum == 65535 ? taps : 0); var numerator = e.Rgb + 65535d * e.Alpha;
             var first = Value(i); var second = Value(i * 73 + 19);
             var safeFirst = LanczosFmaResize.TryNormalize(first, numerator, e.Alpha, maximum, out var p0);
             var safeSecond = LanczosFmaResize.TryNormalize(second, numerator, e.Alpha, maximum, out var p1);
@@ -179,7 +179,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
     public void ErrorEnvelopeKeepsAllInt32TapPrefixesInsideItsExponentBounds()
     {
         BigInteger m = 65535, b = BigInteger.One << 31, n = int.MaxValue;
-        var e = LanczosFmaResize.Errors(int.MaxValue);
+        var e = LanczosFmaResize.Errors(int.MaxValue, 0);
         Assert.Equal((1 + 2 * n) << 40, (BigInteger)e.Rgb);
         Assert.Equal(n << 25, (BigInteger)e.Alpha);
         Assert.True(512 < (BigInteger.One << 63) - m * m * b);
@@ -193,7 +193,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
     public void PerturbedCertificatesCannotMoveClippedHalfOrAlphaBins(int maximum)
     {
         if (!Supported) return;
-        Int128 one = (Int128)1 << 60; var e = LanczosFmaResize.Errors(1);
+        Int128 one = (Int128)1 << 60; var e = LanczosFmaResize.Errors(1, maximum == 65535 ? 6 : 0);
         foreach (var d in new[] { -one, (Int128)0, one / 2 - 1, one / 2, one / 2 + 1, one, 7 * one + 123, maximum * one + 1 })
         foreach (var q in new[] { -1, 0, 1, maximum / 2, maximum - 1, maximum, maximum + 1 })
         foreach (var delta in new[] { -1, 0, 1 })

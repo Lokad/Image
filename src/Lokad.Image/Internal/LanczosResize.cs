@@ -27,7 +27,8 @@ internal static class LanczosResize
         try
         {
             var maximum = source.BitDepth == 8 ? 255 : 65535;
-            var errors = workspace.Fast ? LanczosFmaResize.Errors(vertical.MaximumCount) : default;
+            var errors = workspace.Fast ? LanczosFmaResize.Errors(vertical.MaximumCount,
+                source.BitDepth == 16 ? horizontal.MaximumCount : 0) : default;
             var numeratorError = errors.Rgb + 65535d * errors.Alpha;
             for (var y = 0; y < height; y++)
             {
@@ -258,7 +259,7 @@ internal static class LanczosResize
 
     // Source pixels are shared by overlapping output windows. Form their exact
     // unsigned word alpha products once, then borrow them for the entire row.
-    private static void PrepareWordProducts(ReadOnlySpan<ushort> input, Span<uint> products,
+    internal static void PrepareWordProducts(ReadOnlySpan<ushort> input, Span<uint> products,
         OperationContext context)
     {
         var at = 0;
