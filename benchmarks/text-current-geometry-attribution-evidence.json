@@ -1,0 +1,308 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TRP704",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+  "sources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "cdae6f567de6186743fc5b686c744566c155c462c7272e42a8395883482e53f9",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "d53e0bce733777d0b81cfb54c1e635a34a5853940769dbe03deb2172aebfb3dd",
+    "src/Lokad.Image/ImageDrawing.Text.cs": "c1f6927dccc8ad7534e6dbeafe452c376b16ccb7e5c3784b2aa3ba919b4653df"
+  },
+  "methods": [
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&)[Optimized]",
+      377
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::Partition(valuetype [System.Runtime]System.Span`1<!!0>,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      319
+    ],
+    [
+      "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+      210
+    ],
+    [
+      "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+      170
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[])[Optimized]",
+      136
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+      129
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,class Lokad.Image.TextLayout,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32)[Optimized]",
+      75
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+      67
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEdges(class Lokad.Image.Internal.FontOutline,float64)[Optimized]",
+      61
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+      39
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendByte(valuetype [System.Runtime]System.Span`1<uint8>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+      25
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::ReorderEdges(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Crossing>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      25
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Grow(!!0[]&,int32,int32,int64&)[Optimized]",
+      21
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      20
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Add(valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype Lokad.Image.Internal.TextRasterizer/Point)[Optimized]",
+      18
+    ],
+    [
+      "instance void [TextHarness] WarmText::ValidateCanvas()[Optimized]",
+      18
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      15
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.FontSegmentEnumerator::Next(valuetype Lokad.Image.Internal.FontSegment&)[Optimized]",
+      10
+    ],
+    [
+      "instance void [TextHarness] WarmText::ResetBeforeOperation()[Optimized]",
+      8
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::.ctor(class Lokad.Image.TextLayout,class Lokad.Image.Internal.OperationContext,int32)[Optimized]",
+      3
+    ],
+    [
+      "stub ReportStubBlock<MethodCallThunk>",
+      3
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Admit(int64)[Optimized]",
+      3
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.ImageDrawing::DrawText(class Lokad.Image.ImageBuffer,class Lokad.Image.TextLayout,float64,float64,valuetype Lokad.Image.RgbaColor,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      2
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.TextLayout+Shape::GetHashCode()[Optimized]",
+      1
+    ],
+    [
+      "instance valuetype Lokad.Image.TextBounds [Lokad.Image] Lokad.Image.TextBounds::Translate(float64,float64)[Optimized]",
+      1
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Dispose()[Optimized]",
+      1
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+      1
+    ],
+    [
+      "instance void [TextProfileRunner] Program+<<Main>$>d__0::MoveNext()[Optimized]",
+      1
+    ]
+  ],
+  "typedSorts": [
+    {
+      "type": "Lokad.Image.Internal.TextRasterSort:Partition[Lokad.Image.Internal.TextRasterizer+Crossing,Lokad.Image.Internal.TextRasterizer+CrossingOrder](System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],int,System.Threading.CancellationToken) (FullOpts)",
+      "codeBytes": 1956,
+      "address": "0x7e9c39eaaa20",
+      "samples": 238,
+      "hotBlocks": [
+        {
+          "block": "G_M000_IG62",
+          "samples": 36,
+          "code": "G_M000_IG62:                ;; offset=0x0467\n       3B55D0               cmp      edx, dword ptr [rbp-0x30]\n       0F832E030000         jae      G_M000_IG142\n       4C8B4DC8             mov      r9, bword ptr [rbp-0x38]\n       48C1E204             shl      rdx, 4\n       3B75D0               cmp      esi, dword ptr [rbp-0x30]\n       0F831D030000         jae      G_M000_IG142\n       4C8B55C8             mov      r10, bword ptr [rbp-0x38]\n       C48178100C02         vmovups  xmm1, xmmword ptr [r10+r8]\n       C4C178110C11         vmovups  xmmword ptr [r9+rdx], xmm1\n       8BD6                 mov      edx, esi\n \n"
+        },
+        {
+          "block": "G_M000_IG43",
+          "samples": 28,
+          "code": "G_M000_IG43:                ;; offset=0x0331\n       3B55D0               cmp      edx, dword ptr [rbp-0x30]\n       0F8364040000         jae      G_M000_IG142\n       8BCA                 mov      ecx, edx\n       48C1E104             shl      rcx, 4\n       48034DC8             add      rcx, bword ptr [rbp-0x38]\n       48895DA0             mov      gword ptr [rbp-0x60], rbx\n       48837DA000           cmp      gword ptr [rbp-0x60], 0\n       0F85F9010000         jne      G_M000_IG80\n \n"
+        },
+        {
+          "block": "G_M000_IG32",
+          "samples": 16,
+          "code": "G_M000_IG32:                ;; offset=0x0276\n       8BCE                 mov      ecx, esi\n       8D7101               lea      esi, [rcx+0x01]\n       8BC2                 mov      eax, edx\n       8D50FF               lea      edx, [rax-0x01]\n       4C8B45C8             mov      r8, bword ptr [rbp-0x38]\n       448B4DD0             mov      r9d, dword ptr [rbp-0x30]\n       413BC9               cmp      ecx, r9d\n       0F830D050000         jae      G_M000_IG142\n       48C1E104             shl      rcx, 4\n       4903C8               add      rcx, r8\n       4C8BD1               mov      r10, rcx\n       C4C17B100A           vmovsd   xmm1, qword ptr [r10]\n       458B5A08             mov      r11d, dword ptr [r10+0x08]\n       458B520C             mov      r10d, dword ptr [r10+0x0C]\n       413BC1               cmp      eax, r9d\n       0F83ED040000         jae      G_M000_IG142\n       48C1E004             shl      rax, 4\n       4903C0               add      rax, r8\n       C5F81010             vmovups  xmm2, xmmword ptr [rax]\n       C5F81111             vmovups  xmmword ptr [rcx], xmm2\n       C5FB1108             vmovsd   qword ptr [rax], xmm1\n       44895808             mov      dword ptr [rax+0x08], r11d\n       4489500C             mov      dword ptr [rax+0x0C], r10d\n \n"
+        }
+      ]
+    },
+    {
+      "type": "Lokad.Image.Internal.TextRasterSort:Partition[double,Lokad.Image.Internal.TextRasterizer+EventOrder](System.Span`1[double],int,System.Threading.CancellationToken) (FullOpts)",
+      "codeBytes": 1481,
+      "address": "0x7e9c39eab240",
+      "samples": 81,
+      "hotBlocks": [
+        {
+          "block": "G_M000_IG30",
+          "samples": 9,
+          "code": "G_M000_IG30:                ;; offset=0x02A7\n       8D48FF               lea      ecx, [rax-0x01]\n       3B4DD0               cmp      ecx, dword ptr [rbp-0x30]\n       0F8310030000         jae      G_M000_IG67\n       488B55C8             mov      rdx, bword ptr [rbp-0x38]\n       8BF1                 mov      esi, ecx\n       488D14F2             lea      rdx, bword ptr [rdx+8*rsi]\n       48895D98             mov      gword ptr [rbp-0x68], rbx\n       48837D9800           cmp      gword ptr [rbp-0x68], 0\n       7569                 jne      SHORT G_M000_IG36\n \n"
+        },
+        {
+          "block": "G_M000_IG32",
+          "samples": 9,
+          "code": "G_M000_IG32:                ;; offset=0x02D6\n       3B45D0               cmp      eax, dword ptr [rbp-0x30]\n       0F83E4020000         jae      G_M000_IG67\n       488B55C8             mov      rdx, bword ptr [rbp-0x38]\n       8BC0                 mov      eax, eax\n       3B4DD0               cmp      ecx, dword ptr [rbp-0x30]\n       0F83D5020000         jae      G_M000_IG67\n       4C8B45C8             mov      r8, bword ptr [rbp-0x38]\n       C4C17B100CF0         vmovsd   xmm1, qword ptr [r8+8*rsi]\n       C5FB110CC2           vmovsd   qword ptr [rdx+8*rax], xmm1\n       8BC1                 mov      eax, ecx\n       85C0                 test     eax, eax\n       75A4                 jne      SHORT G_M000_IG30\n \n"
+        },
+        {
+          "block": "G_M000_IG31",
+          "samples": 8,
+          "code": "G_M000_IG31:                ;; offset=0x02C8\n       C5FB100A             vmovsd   xmm1, qword ptr [rdx]\n       C5F92EC8             vucomisd xmm1, xmm0\n       0F86B1020000         jbe      G_M000_IG63\n \n"
+        }
+      ]
+    }
+  ],
+  "sortCallerLocations": {
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[])[Optimized]": 261,
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,class Lokad.Image.TextLayout,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32)[Optimized]": 3,
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&)[Optimized]": 55
+  },
+  "finding": "Strict interior coverage is already implemented. Current Draw method contributes75of1993sample locations; whole-row clear/quantization is not the dominant demonstrated cost. Band377, Area210, Clip129 and Edge.X170 dominate alongside319generic-sort locations. Generic types resolved from this same capture; no phase-time, call-count or speedup inference. Shapes already deduplicate by shape within each draw. No production change selected; independent codec work remains eligible.",
+  "scope": "One2second DrawText8 current JGT702-package CPU attribution. This is source/profile attribution, not a statistical phase-time measurement or optimization proof. Reused prepared frozenfont/layout harness and existingprofile runner; complete publicDrawText/rasterprep/scan/composite/disposal. Reset and exactcanvas validation occur betweenoperations and samples must distinguish them. Profileelapsed discarded; no timing/CPUgain claim. ImageSharp2.1.7/Fonts2.1.3 publicpipeline approval alreadygranted; staleapprovalfalse flag is not a new gate. Exactframe/visual/ownership checks remain. No newbuild/fixture/settings.",
+  "validation": {
+    "project": "Lokad.Image",
+    "caseId": "DrawText8",
+    "runId": "trp704-draw8-profile",
+    "mode": "check",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "productionChanged": false,
+    "sourceUnchanged": true,
+    "frozenManagedObservationsExact": true,
+    "completeOperationAndDisposalIncluded": true,
+    "resetExcludedBeforeEveryDraw": true,
+    "managedInvocationsPerDrawingIteration": 1,
+    "cpu": 0,
+    "processorCount": 1,
+    "runtime": ".NET 10.0.8",
+    "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+    "harnessSha256": "13d2cbb908e5cf1bf6105587ca9394e6165fad309fba046aaea397b6f38ee845",
+    "referenceReady": {
+      "state": "ready",
+      "caseId": "DrawText8",
+      "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "processorCount": 1,
+      "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+      "performanceBaselineApproved": false,
+      "libraries": {
+        "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+        "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+        "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+      }
+    },
+    "nativeBefore": [],
+    "nativeAfter": [],
+    "nativeCheck": {
+      "state": "checked",
+      "caseId": "DrawText8",
+      "corpus": "LatinKerning",
+      "completeOperations": 3,
+      "observed": [
+        0,
+        0,
+        0
+      ],
+      "observation": {
+        "FontSize": 18,
+        "LineCount": 1,
+        "LineAdvance": 20.953125,
+        "Logical": {
+          "X": 0,
+          "Y": 0,
+          "Width": 48.146484375,
+          "Height": 20.953125
+        },
+        "Ink": {
+          "X": 0.140625,
+          "Y": 3.5859375,
+          "Width": 47.021484375,
+          "Height": 13.376953125
+        },
+        "Bounds": {
+          "X": 0,
+          "Y": 0,
+          "Width": 48.146484375,
+          "Height": 20.953125
+        },
+        "glyphIds": [
+          36,
+          57,
+          3,
+          55,
+          82
+        ],
+        "clusters": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "pixelSha256": "43f01c8bf61e59f8d610a89b5791e1d04eec3f937433d1445ff9a004571b5956",
+      "borrowedCanvasStoragePreserved": true,
+      "independentRetainedLayouts": true,
+      "inputUnchanged": true,
+      "timingClaim": false
+    },
+    "nativeStopped": {
+      "state": "stopped",
+      "timedSamples": 0,
+      "inputUnchanged": true,
+      "operationResultsDisposed": true
+    },
+    "boundary": "Borrowed resident font/options; complete owned layout+disposal, or all fitting trials+retained winner+disposal. Prepared-layout drawing includes raster/composite into borrowed canvas, per-operation reset outside BOTH timers. Four public reference calls for retained layout; reference fitting includes winner reconstruction. Drawing managed job must use invocationCount1/unroll1/iteration setup; reference uses per-operation clock reads, not reset time. Scoped baseline/word visual approvals required before timing."
+  },
+  "quietGuardsPassed": true,
+  "interpretation": "Exclusive sampled locations, with skid and inlining. This is not phase-time, stall or projected-speedup proof. Draw75 includes row clear/quantization plus other work; no complete row-method phase is isolated. Band/coverage and sort dominate these observed locations. Each shape is already prepared once per draw; no duplicate-shape preparation was found.",
+  "next": "Do not replay marginal row-range/transparent-destination variants. Keep source-valid text reference gaps visible and current geometry lead available. Resume an independent material JPEG decoder gap from existing attribution, without another whole-library audit.",
+  "qualificationReuse": {
+    "fullChecksEachOs": 6073,
+    "normalScalarAffectedIsaAndSameActualPackageBothOs": true,
+    "packageSha256": "05074b8f42120252df42a06ae4243a0687c203f53945b8e9a8237720da74154f",
+    "reason": "Unchanged qualified actual production; no rebuild, new timing confirmation or full/package repetition. Selected costs unchanged; no renderer dependency."
+  },
+  "raw": {
+    "file": "text-current-geometry-attribution.tar.xz",
+    "sha256": "c68c5997dd9e7c0e0ffd778ab6768b0c8107d643c7da1788979e83283d5501e6",
+    "bytes": 109536,
+    "members": 25,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "text-endpoint-storage-qualified.tar.xz",
+        "sha256": "2b0939e933183cd40aa9e9d847f1de199c1d85d065801876c67449ba46b67a90"
+      },
+      {
+        "file": "jpeg-gray-tile-preparation-qualified.tar.xz",
+        "sha256": "5355192b13417330513082d3f8d06dee70ac3bf208abaeab9b42c8255b29069d"
+      }
+    ]
+  }
+}
