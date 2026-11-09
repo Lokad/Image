@@ -1,0 +1,1023 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RGS680",
+  "productionAccepted": false,
+  "productionRestoredExactly": true,
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "RGS680",
+    "paths": [
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs",
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs",
+      "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs",
+      "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs"
+    ],
+    "newPaths": [],
+    "baseline": {
+      "windowsSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "linuxSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+      "timedArtifactSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "4f5bef92277ae92c5f9780a5de080806e0c90eaa8dc7354a01e6f556a61ec902",
+        "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": "dbd00383c2ed53e92b1166a94f2dea03ed6819880678cd329be291a7744bed96",
+        "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "4ba260aba23a38c16f2949cf9cfff44697412b24be55521973fa0a801bddad2b",
+        "src/Lokad.Image/Internal/Vp8lImageCode.cs": "194dbc517b09b40428060e2dfc6dd52f51d2d3c1324dbe067e4b4e58b00be7eb",
+        "src/Lokad.Image/Internal/Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4",
+        "tests/Lokad.Image.Tests/Vp8lHuffmanWorkspaceTests.cs": "c62dadda0e466404fc11c5485e1a4950dcf4ce1f891ebab3faa154ed07141b22"
+      }
+    },
+    "transitionFromLinuxSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7405133427afb214b7bc5cdd94486c1b34ff6c3f611d2183a708d389b56deefb",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "af574eb71730cbe26d7dd37d21ab8393692df1e52337fc91b90548e18b1b477a",
+      "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs": "8b0bf7921aec897c4dd94735d0e1bd315eac9aab498428d7397b6aa6c8a82753",
+      "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "660ccef58b887d5420470018c673e6bfdfb3ab59618e742455715126d0fca5ad"
+    },
+    "productionAccepted": false,
+    "hypothesis": "Remove per-strip copying of already prepared vertical weights. Shared geometry returns an exact readonly result-footer view only when all publications/repairs in that strip end before its protected footer; other prepared boundary strips keep a copy, and unprepared tails retain the original stack-built Kernel path.",
+    "intendedEndState": "One geometry read/preparation path shared by small/wide column drivers, without another cache/session or general pixel-loop abstraction. Preserve bit-identical weight doubles, counts/first/normalizer, Multiply/Add and repair order. No new owned capacity or weaker numerical policy.",
+    "lifetime": "Footer initialized before strips; borrowed view stays inside current synchronous row. Prove column+length<=PrefixColumns before borrowing, so every pair/single/repair write is disjoint from that footer. Existing result owner and4KiB reservation outlive all users; release/failure/cancellation paths unchanged. Cache rows and geometry footer are already disjoint. No returned object retains the view.",
+    "boundaryCounterexample": {
+      "source": [
+        324,
+        128
+      ],
+      "output": [
+        144,
+        64
+      ],
+      "depth": 16,
+      "taps": [
+        10,
+        9
+      ],
+      "rowSlots": 10,
+      "suffixStrip": 6,
+      "geometryPrefixColumns": 132,
+      "resultCachePrefixColumns": 64,
+      "lastPreparedColumn": 130,
+      "weightsOffsetBytes": 1072,
+      "stripOutputEndBytes": 1088,
+      "overlapBytes": 16,
+      "consequence": "Testing only tile<PrefixColumns is insufficient for a borrowed view. The out-of-phase final prepared suffix strip can overwrite footer weights; a subsequent exact repair can still read them. Keep a copy for this boundary rather than weakening the exact repair contract."
+    },
+    "potentialSetback": "Borrowed heap views can change JIT alias/bounds behavior despite removing copy work. Preserve complete-operation adverse/uncertain results and revise or abandon if useful elapsed gains/simplification do not materialize. No allocation reduction is assumed; all stack capacity remains admitted.",
+    "checks": "Prepared exact-bit views, crossing-strip copy, retired-footer direct construction, cancellation/root lifetime, existing frozen small/wide byte/word and exact2.25 alias boundary. Existing wide-byte complete short first, small affected generalization if useful; independent confirmation and W/L full/live/scalar/sameactualpackage only at coherent acceptance."
+  },
+  "candidateSourceProof": {
+    "project": "Lokad.Image",
+    "stage": "RGS680",
+    "drivers": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": {
+        "onlyReadAndSelectedSpanUseChanged": true,
+        "allArithmeticSchedulingStorageAdmissionAndRepairTextVerbatim": true
+      },
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": {
+        "onlyReadAndSelectedSpanUseChanged": true,
+        "allArithmeticSchedulingStorageAdmissionAndRepairTextVerbatim": true
+      }
+    },
+    "geometryPrepareAndBuildVerbatim": true,
+    "storageAdmissionAndOwnersUnchanged": true,
+    "newOwnedCapacityBytes": 0,
+    "crossOperationRetentionBytes": 0,
+    "numericalPolicy": "Identical prepared double bit patterns and stack Kernel arithmetic, normalizers, tap Multiply/Add order, exact repair and certificates. No broader numerical relaxation.",
+    "lifetimeProof": "Borrow only when column+columns<=PrefixColumns. Prepare aligns PrefixColumns before footer start; output in that strip cannot overlap borrowed samples through any pair/single/repair. A prepared crossing strip copies to the existing stack workspace. Tail builds original weights without reading retired result bytes. Existing owner/admission outlive all synchronous users.",
+    "counterexample": {
+      "source": [
+        324,
+        128
+      ],
+      "output": [
+        144,
+        64
+      ],
+      "depth": 16,
+      "taps": [
+        10,
+        9
+      ],
+      "rowSlots": 10,
+      "suffixStrip": 6,
+      "geometryPrefixColumns": 132,
+      "resultCachePrefixColumns": 64,
+      "lastPreparedColumn": 130,
+      "weightsOffsetBytes": 1072,
+      "stripOutputEndBytes": 1088,
+      "overlapBytes": 16,
+      "consequence": "Testing only tile<PrefixColumns is insufficient for a borrowed view. The out-of-phase final prepared suffix strip can overwrite footer weights; a subsequent exact repair can still read them. Keep a copy for this boundary rather than weakening the exact repair contract."
+    },
+    "paths": {
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ec3379709acf3f4cf9bfaa67a13e18f2a6d31591157a46e5b87cd4733de3d10a",
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "758b7599ffeec27b7dc084e9f4ad2bfc85dec4f1f5c9516e7d089c3556653cde",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "fb9ce3004835b10cd6dfa3f1cfb7247248e66f58403fc67e181320470815a579",
+      "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs": "a2cb26d8f17b80ba165e5a04716f3690e56d3ed1d65981b8d5a18fa6597644ee",
+      "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "3d2e26d7c959bf8b12a83fc2abf9de88f38038b7b5fe7e31f1c36b0a0a6af7bb"
+    }
+  },
+  "candidateFocused": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "candidateSha256": "0e4d04572fa67bc50f953582e6d02b1948a767a253c7bb4a03a8262b68255cbb",
+      "internalTestAssemblySha256": "f7f77972154f0ee2b94cf5be099606b360a3b566d4a328173e01640e0bc1c5db",
+      "focused": {
+        "internal-normal": 231,
+        "internal-scalar": 231,
+        "public-normal": 703,
+        "public-scalar": 703
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ec3379709acf3f4cf9bfaa67a13e18f2a6d31591157a46e5b87cd4733de3d10a",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "758b7599ffeec27b7dc084e9f4ad2bfc85dec4f1f5c9516e7d089c3556653cde",
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "fb9ce3004835b10cd6dfa3f1cfb7247248e66f58403fc67e181320470815a579",
+        "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs": "a2cb26d8f17b80ba165e5a04716f3690e56d3ed1d65981b8d5a18fa6597644ee",
+        "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "3d2e26d7c959bf8b12a83fc2abf9de88f38038b7b5fe7e31f1c36b0a0a6af7bb"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+      "candidateSha256": "63682b77389e0b6f2d8deb106d8150854a98059a7da365970c14e5ec9fa6ff76",
+      "internalTestAssemblySha256": "6394853910f852c76a02c07a0e1570a1dd76356705aca16aa46647ef7461f52d",
+      "focused": {
+        "internal-normal": 231,
+        "internal-scalar": 231,
+        "public-normal": 703,
+        "public-scalar": 703
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ec3379709acf3f4cf9bfaa67a13e18f2a6d31591157a46e5b87cd4733de3d10a",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "758b7599ffeec27b7dc084e9f4ad2bfc85dec4f1f5c9516e7d089c3556653cde",
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "fb9ce3004835b10cd6dfa3f1cfb7247248e66f58403fc67e181320470815a579",
+        "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs": "a2cb26d8f17b80ba165e5a04716f3690e56d3ed1d65981b8d5a18fa6597644ee",
+        "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "3d2e26d7c959bf8b12a83fc2abf9de88f38038b7b5fe7e31f1c36b0a0a6af7bb"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RGS680",
+      "system": "windows",
+      "productionRestoredExactly": true,
+      "productionSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "productionSources": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7405133427afb214b7bc5cdd94486c1b34ff6c3f611d2183a708d389b56deefb",
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "af574eb71730cbe26d7dd37d21ab8393692df1e52337fc91b90548e18b1b477a"
+      },
+      "restoredEmbeddedAssemblySha256": "76dad83b7e7f2eeaa31860f4b2f3e3331b5ad835f0a1304e04f191d6530a3330",
+      "candidateSavedIndependently": true,
+      "retainedActualPixelBoundaryTest": true,
+      "viewOnlyTestRemoved": true,
+      "additionalProductionBuilds": 0,
+      "additionalEmbeddedBuilds": 1,
+      "unchangedFullLiveAndActualPackageQualificationReused": "webp-huffman-workspace-evidence.json;6026checks eachOS, sameactualprivateReleasepackage70a0a631. No changed production input or API.",
+      "retainedTestSourceSha256": "3d2e26d7c959bf8b12a83fc2abf9de88f38038b7b5fe7e31f1c36b0a0a6af7bb"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RGS680",
+      "system": "linux",
+      "productionRestoredExactly": true,
+      "productionSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+      "productionSources": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7405133427afb214b7bc5cdd94486c1b34ff6c3f611d2183a708d389b56deefb",
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "af574eb71730cbe26d7dd37d21ab8393692df1e52337fc91b90548e18b1b477a"
+      },
+      "restoredEmbeddedAssemblySha256": "55ea18816e03b84dded61ca7e9aa7b8a4556c99a532977d63e0bcef4fc91838c",
+      "candidateSavedIndependently": true,
+      "retainedActualPixelBoundaryTest": true,
+      "viewOnlyTestRemoved": true,
+      "additionalProductionBuilds": 0,
+      "additionalEmbeddedBuilds": 1,
+      "unchangedFullLiveAndActualPackageQualificationReused": "webp-huffman-workspace-evidence.json;6026checks eachOS, sameactualprivateReleasepackage70a0a631. No changed production input or API.",
+      "retainedTestSourceSha256": "3d2e26d7c959bf8b12a83fc2abf9de88f38038b7b5fe7e31f1c36b0a0a6af7bb"
+    }
+  },
+  "completeWideByteShorts": {
+    "baseline": {
+      "project": "Lokad.Image",
+      "caseId": "TightWide8",
+      "subject": "baseline",
+      "mode": "short",
+      "runId": "rgs680-baseline-TightWide8-short",
+      "managed": {
+        "statistics": {
+          "OriginalValues": [
+            465528.203125,
+            461401.75223214284,
+            462882.34375
+          ],
+          "N": 3,
+          "Min": 461401.75223214284,
+          "LowerFence": 459047.2098214285,
+          "Q1": 462142.0479910714,
+          "Median": 462882.34375,
+          "Mean": 463270.7663690476,
+          "Q3": 464205.2734375,
+          "UpperFence": 467300.11160714284,
+          "Max": 465528.203125,
+          "InterquartileRange": 2063.2254464285797,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 1206.931831965013,
+          "Variance": 4370053.341031267,
+          "StandardDeviation": 2090.467254235585,
+          "Skewness": 0.17939179836254449,
+          "Kurtosis": 0.6666666666666802,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 463270.7663690476,
+            "StandardError": 1206.931831965013,
+            "Level": 12,
+            "Margin": 38137.90467397685,
+            "Lower": 425132.86169507075,
+            "Upper": 501408.6710430244
+          },
+          "Percentiles": {
+            "P0": 461401.75223214284,
+            "P25": 462142.0479910714,
+            "P50": 462882.34375,
+            "P67": 463781.9359375,
+            "P80": 464469.859375,
+            "P85": 464734.4453125,
+            "P90": 464999.03125,
+            "P95": 465263.6171875,
+            "P100": 465528.203125
+          }
+        },
+        "unfilteredActualStatistics": {
+          "OriginalValues": [
+            465529.58928571426,
+            461403.13839285716,
+            462883.72991071426
+          ],
+          "N": 3,
+          "Min": 461403.13839285716,
+          "LowerFence": 459048.59598214284,
+          "Q1": 462143.4341517857,
+          "Median": 462883.72991071426,
+          "Mean": 463272.1525297619,
+          "Q3": 464206.65959821426,
+          "UpperFence": 467301.49776785716,
+          "Max": 465529.58928571426,
+          "InterquartileRange": 2063.2254464285797,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 1206.931831964998,
+          "Variance": 4370053.341031159,
+          "StandardDeviation": 2090.4672542355593,
+          "Skewness": 0.17939179836251767,
+          "Kurtosis": 0.6666666666666665,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 463272.1525297619,
+            "StandardError": 1206.931831964998,
+            "Level": 12,
+            "Margin": 38137.90467397638,
+            "Lower": 425134.24785578554,
+            "Upper": 501410.05720373825
+          },
+          "Percentiles": {
+            "P0": 461403.13839285716,
+            "P25": 462143.4341517857,
+            "P50": 462883.72991071426,
+            "P67": 463783.3220982143,
+            "P80": 464471.24553571426,
+            "P85": 464735.8314732143,
+            "P90": 465000.41741071426,
+            "P95": 465265.00334821426,
+            "P100": 465529.58928571426
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 448,
+            "Nanoseconds": 208557256
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 448,
+            "Nanoseconds": 206708606
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 448,
+            "Nanoseconds": 207371911
+          }
+        ],
+        "results": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 448,
+            "Nanoseconds": 208556635
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 448,
+            "Nanoseconds": 206707985
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 448,
+            "Nanoseconds": 207371290
+          }
+        ],
+        "rawGc": "// GC:  0 0 0 50424 448",
+        "rawThreading": "// Threading:  0 0 448",
+        "extraStatsRecorded": true
+      },
+      "nativeBrackets": [
+        {
+          "mean": 353219.4036458333,
+          "standardError": 2527.3112867553127,
+          "confidenceLower": 273358.7566871623,
+          "confidenceUpper": 433080.0506045043,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89486514,
+              "CompletedOperations": 1539,
+              "Observed": 218538,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 349556.6953125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 90120725,
+              "CompletedOperations": 1795,
+              "Observed": 254890,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 352034.08203125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 91665263,
+              "CompletedOperations": 2051,
+              "Observed": 291242,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 358067.43359375
+            }
+          ]
+        },
+        {
+          "mean": 351314.6692708333,
+          "standardError": 821.6505348205632,
+          "confidenceLower": 325351.2892833403,
+          "confidenceUpper": 377278.04925832635,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 90125251,
+              "CompletedOperations": 3075,
+              "Observed": 436650,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 352051.76171875
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 90167826,
+              "CompletedOperations": 3331,
+              "Observed": 473002,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 352218.0703125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89516589,
+              "CompletedOperations": 3587,
+              "Observed": 509354,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 349674.17578125
+            }
+          ]
+        }
+      ],
+      "managedUs": 463.2707663690476,
+      "nativeUs": 351.3146692708333,
+      "ratio": 1.318677547198878,
+      "lower": 0.9816496075071095,
+      "upper": 1.8342564301957327,
+      "allocatedBytes": 113,
+      "packetBytes": 32768,
+      "packetSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "uncertain"
+    },
+    "candidate": {
+      "project": "Lokad.Image",
+      "caseId": "TightWide8",
+      "subject": "candidate",
+      "mode": "short",
+      "runId": "rgs680-candidate-TightWide8-short",
+      "managed": {
+        "statistics": {
+          "OriginalValues": [
+            454142.20758928574,
+            456447.484375,
+            456310.2901785714
+          ],
+          "N": 3,
+          "Min": 454142.20758928574,
+          "LowerFence": 453497.29129464296,
+          "Q1": 455226.2488839286,
+          "Median": 456310.2901785714,
+          "Mean": 455633.32738095237,
+          "Q3": 456378.8872767857,
+          "UpperFence": 458107.84486607136,
+          "Max": 456447.484375,
+          "InterquartileRange": 1152.6383928571013,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 746.611062671056,
+          "Variance": 1672284.23670841,
+          "StandardDeviation": 1293.16829403926,
+          "Skewness": -0.38003216115019595,
+          "Kurtosis": 0.6666666666666439,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 455633.32738095237,
+            "StandardError": 746.611062671056,
+            "Level": 12,
+            "Margin": 23592.203621248682,
+            "Lower": 432041.1237597037,
+            "Upper": 479225.531002201
+          },
+          "Percentiles": {
+            "P0": 454142.20758928574,
+            "P25": 455226.2488839286,
+            "P50": 456310.2901785714,
+            "P67": 456356.9362053572,
+            "P80": 456392.60669642856,
+            "P85": 456406.32611607143,
+            "P90": 456420.0455357143,
+            "P95": 456433.7649553571,
+            "P100": 456447.484375
+          }
+        },
+        "unfilteredActualStatistics": {
+          "OriginalValues": [
+            454143.60491071426,
+            456448.8816964286,
+            456311.6875
+          ],
+          "N": 3,
+          "Min": 454143.60491071426,
+          "LowerFence": 453498.6886160714,
+          "Q1": 455227.64620535716,
+          "Median": 456311.6875,
+          "Mean": 455634.7247023809,
+          "Q3": 456380.2845982143,
+          "UpperFence": 458109.24218750006,
+          "Max": 456448.8816964286,
+          "InterquartileRange": 1152.6383928571595,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 746.6110626710754,
+          "Variance": 1672284.236708497,
+          "StandardDeviation": 1293.1682940392936,
+          "Skewness": -0.38003216115013616,
+          "Kurtosis": 0.6666666666665982,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 455634.7247023809,
+            "StandardError": 746.6110626710754,
+            "Level": 12,
+            "Margin": 23592.203621249297,
+            "Lower": 432042.5210811316,
+            "Upper": 479226.9283236302
+          },
+          "Percentiles": {
+            "P0": 454143.60491071426,
+            "P25": 455227.64620535716,
+            "P50": 456311.6875,
+            "P67": 456358.3335267857,
+            "P80": 456394.00401785714,
+            "P85": 456407.7234375,
+            "P90": 456421.4428571429,
+            "P95": 456435.1622767857,
+            "P100": 456448.8816964286
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 448,
+            "Nanoseconds": 203456335
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 448,
+            "Nanoseconds": 204489099
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 448,
+            "Nanoseconds": 204427636
+          }
+        ],
+        "results": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 448,
+            "Nanoseconds": 203455709
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 448,
+            "Nanoseconds": 204488473
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 448,
+            "Nanoseconds": 204427010
+          }
+        ],
+        "rawGc": "// GC:  0 0 0 50424 448",
+        "rawThreading": "// Threading:  0 0 448",
+        "extraStatsRecorded": true
+      },
+      "nativeBrackets": [
+        {
+          "mean": 349847.5638020833,
+          "standardError": 1102.605339876493,
+          "confidenceLower": 315006.2776320401,
+          "confidenceUpper": 384688.84997212654,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 90120230,
+              "CompletedOperations": 1539,
+              "Observed": 218538,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 352032.1484375
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89348061,
+              "CompletedOperations": 1795,
+              "Observed": 254890,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 349015.86328125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89214638,
+              "CompletedOperations": 2051,
+              "Observed": 291242,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 348494.6796875
+            }
+          ]
+        },
+        {
+          "mean": 349202.1888020833,
+          "standardError": 113.99088149011455,
+          "confidenceLower": 345600.1847312365,
+          "confidenceUpper": 352804.19287293014,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89427892,
+              "CompletedOperations": 3075,
+              "Observed": 436650,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 349327.703125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89421889,
+              "CompletedOperations": 3331,
+              "Observed": 473002,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 349304.25390625
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 89337500,
+              "CompletedOperations": 3587,
+              "Observed": 509354,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 348974.609375
+            }
+          ]
+        }
+      ],
+      "managedUs": 455.6333273809524,
+      "nativeUs": 349.2021888020833,
+      "ratio": 1.3047837098157218,
+      "lower": 1.1230923999773017,
+      "upper": 1.5213250095397044,
+      "allocatedBytes": 113,
+      "packetBytes": 32768,
+      "packetSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "librarySha256": "0e4d04572fa67bc50f953582e6d02b1948a767a253c7bb4a03a8262b68255cbb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "gap"
+    }
+  },
+  "existingLargeGeneralization": {
+    "baseline": {
+      "receipt": {
+        "project": "Lokad.Image",
+        "stage": "RGS680",
+        "subject": "baseline",
+        "allBuilds": 0,
+        "actualsPerMode": 3,
+        "managedOnly": true,
+        "nativeParityClaim": false,
+        "quietGuardsPassed": true,
+        "validation": {
+          "project": "Lokad.Image",
+          "stage": "WBR665",
+          "productionChanged": true,
+          "managedOnly": true,
+          "parityClaim": false,
+          "libraryHash": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+          "sourceHash": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+          "outputHash": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+          "width": 4097,
+          "height": 2051,
+          "outputWidth": 1024,
+          "outputHeight": 512,
+          "depth": 8,
+          "generator": "tools/Shared/OriginalPixels.cs asymmetric-v1 phase0 RGBA",
+          "scalar": false,
+          "avx512": true,
+          "avx2": true,
+          "completePublicOperations": true,
+          "exactOutputs": true,
+          "independentOwners": true,
+          "sourceUnchanged": true,
+          "admission": [
+            {
+              "mode": "default",
+              "peakAdmittedBytes": 3682592,
+              "retainedBytes": 2097152,
+              "workspaceAtPeakBytes": 1585440
+            },
+            {
+              "mode": "compact",
+              "peakAdmittedBytes": 2101248,
+              "retainedBytes": 2097152,
+              "workspaceAtPeakBytes": 4096
+            }
+          ]
+        },
+        "scalarProofReused": "Unchanged scalar resize path; exact existing full-frame scalar/source hashes from WBR665. Current normal/scalar focused suites pass, no repeated large scalar operation.",
+        "identities": {
+          "tmp/rgs680-large-baseline-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+          "tmp/rgs680-large-baseline-runtime/Lokad.Image.pdb": "9cd7424b9929e00f49ebb570e00e1e7cf23735c875dc9aee409d66d34d5a2c52",
+          "tmp/rgs680-large-baseline-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+          "tmp/rgs680-large-baseline-runtime/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+          "tmp/rgs680-large-baseline-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+          "tmp/rgs680-large-baseline-runtime/LargeWide.deps.json": "120bcff6aab2123e5a1c43f9f6bc8382b1d315509a45ffb1913d00188ae80f79",
+          "tmp/rgs680-large-baseline-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+          "tmp/rgs680-large-baseline-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+          "tmp/rgs680-large-baseline-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+          "tmp/rgs680-large-baseline-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+          "tmp/rgs680-large-baseline-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+          "tmp/rgs680-large-baseline-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+          "tmp/rgs680-large-baseline-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+          "tmp/rgs680-large-baseline-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+          "tmp/rgs680-large-baseline-runtime/LargeWide.dll": "1fa5f660a7840be5e59162e2284d0adab1c77665fffabe3290461332281a39d2",
+          "tmp/rgs680-large-baseline-runtime/LargeWide.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "tmp/rgs680-large-baseline-runtime/Lokad.Image.dll": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+          "tmp/rgs680-large-baseline-runtime/LargeWide.pdb": "0d9386c395694d265e0da42a2efdaaf17ce82ef3ca9c7904cc53e2bda8a85a03",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+          "tmp/rgs680-large-baseline-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+        },
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/rgs680-large-baseline-runtime/LargeWide.dll",
+          "--artifacts",
+          "tmp/rgs680-large-baseline-bdn"
+        ],
+        "boundaries": "Existing original4097x2051RGBA8 to independent1024x512 result; complete public default and input+output+4KiB compact operations include all preparation/workspace/output/disposal. Existing benchmark and generator verbatim. No new control or native baseline; default unchanged path supplies contemporary context, not a reference-parity claim."
+      },
+      "statistics": {
+        "default": {
+          "meanMs": 26.126185333333332,
+          "filteredConfidenceIntervalMs": {
+            "Lower": 24.37841687843065,
+            "Upper": 27.873953788236015
+          },
+          "allActualMeanMs": 26.126199083333333,
+          "allActualConfidenceIntervalMs": {
+            "Lower": 24.37843062843065,
+            "Upper": 27.873967538236016
+          },
+          "rawGc": "// GC:  0 0 0 12683000 8"
+        },
+        "compact": {
+          "meanMs": 31.81629119047619,
+          "filteredConfidenceIntervalMs": {
+            "Lower": 11.059367337092675,
+            "Upper": 52.573215043859705
+          },
+          "allActualMeanMs": 31.816304047619045,
+          "allActualConfidenceIntervalMs": {
+            "Lower": 11.059380194235526,
+            "Upper": 52.57322790100256
+          },
+          "rawGc": "// GC:  0 0 0 1032 7"
+        }
+      }
+    },
+    "candidate": {
+      "receipt": {
+        "project": "Lokad.Image",
+        "stage": "RGS680",
+        "subject": "candidate",
+        "allBuilds": 0,
+        "actualsPerMode": 3,
+        "managedOnly": true,
+        "nativeParityClaim": false,
+        "quietGuardsPassed": true,
+        "validation": {
+          "project": "Lokad.Image",
+          "stage": "WBR665",
+          "productionChanged": true,
+          "managedOnly": true,
+          "parityClaim": false,
+          "libraryHash": "0e4d04572fa67bc50f953582e6d02b1948a767a253c7bb4a03a8262b68255cbb",
+          "sourceHash": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+          "outputHash": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+          "width": 4097,
+          "height": 2051,
+          "outputWidth": 1024,
+          "outputHeight": 512,
+          "depth": 8,
+          "generator": "tools/Shared/OriginalPixels.cs asymmetric-v1 phase0 RGBA",
+          "scalar": false,
+          "avx512": true,
+          "avx2": true,
+          "completePublicOperations": true,
+          "exactOutputs": true,
+          "independentOwners": true,
+          "sourceUnchanged": true,
+          "admission": [
+            {
+              "mode": "default",
+              "peakAdmittedBytes": 3682592,
+              "retainedBytes": 2097152,
+              "workspaceAtPeakBytes": 1585440
+            },
+            {
+              "mode": "compact",
+              "peakAdmittedBytes": 2101248,
+              "retainedBytes": 2097152,
+              "workspaceAtPeakBytes": 4096
+            }
+          ]
+        },
+        "scalarProofReused": "Unchanged scalar resize path; exact existing full-frame scalar/source hashes from WBR665. Current normal/scalar focused suites pass, no repeated large scalar operation.",
+        "identities": {
+          "tmp/rgs680-large-candidate-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+          "tmp/rgs680-large-candidate-runtime/Lokad.Image.pdb": "1b1bf504c4b39e51127f3bd93759061af1569eb0e2d4c3fd54d39f7e71e771ba",
+          "tmp/rgs680-large-candidate-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+          "tmp/rgs680-large-candidate-runtime/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+          "tmp/rgs680-large-candidate-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+          "tmp/rgs680-large-candidate-runtime/LargeWide.deps.json": "120bcff6aab2123e5a1c43f9f6bc8382b1d315509a45ffb1913d00188ae80f79",
+          "tmp/rgs680-large-candidate-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+          "tmp/rgs680-large-candidate-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+          "tmp/rgs680-large-candidate-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+          "tmp/rgs680-large-candidate-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+          "tmp/rgs680-large-candidate-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+          "tmp/rgs680-large-candidate-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+          "tmp/rgs680-large-candidate-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+          "tmp/rgs680-large-candidate-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+          "tmp/rgs680-large-candidate-runtime/LargeWide.dll": "1fa5f660a7840be5e59162e2284d0adab1c77665fffabe3290461332281a39d2",
+          "tmp/rgs680-large-candidate-runtime/LargeWide.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "tmp/rgs680-large-candidate-runtime/Lokad.Image.dll": "0e4d04572fa67bc50f953582e6d02b1948a767a253c7bb4a03a8262b68255cbb",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+          "tmp/rgs680-large-candidate-runtime/LargeWide.pdb": "0d9386c395694d265e0da42a2efdaaf17ce82ef3ca9c7904cc53e2bda8a85a03",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+          "tmp/rgs680-large-candidate-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+        },
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/rgs680-large-candidate-runtime/LargeWide.dll",
+          "--artifacts",
+          "tmp/rgs680-large-candidate-bdn"
+        ],
+        "boundaries": "Existing original4097x2051RGBA8 to independent1024x512 result; complete public default and input+output+4KiB compact operations include all preparation/workspace/output/disposal. Existing benchmark and generator verbatim. No new control or native baseline; default unchanged path supplies contemporary context, not a reference-parity claim."
+      },
+      "statistics": {
+        "default": {
+          "meanMs": 25.977065666666668,
+          "filteredConfidenceIntervalMs": {
+            "Lower": 23.35089282990129,
+            "Upper": 28.603238503432046
+          },
+          "allActualMeanMs": 25.977074416666667,
+          "allActualConfidenceIntervalMs": {
+            "Lower": 23.35090157990129,
+            "Upper": 28.60324725343205
+          },
+          "rawGc": "// GC:  0 0 0 12683000 8"
+        },
+        "compact": {
+          "meanMs": 31.5405295,
+          "filteredConfidenceIntervalMs": {
+            "Lower": 28.62368129909822,
+            "Upper": 34.45737770090177
+          },
+          "allActualMeanMs": 31.54053783333333,
+          "allActualConfidenceIntervalMs": {
+            "Lower": 28.623689632431518,
+            "Upper": 34.45738603423515
+          },
+          "rawGc": "// GC:  0 0 0 920 6"
+        }
+      }
+    }
+  },
+  "pointComparisons": {
+    "wideSavedUs": 7.637438988095198,
+    "wideRawReduction": 0.016485907470386585,
+    "wideNormalizedPointReduction": 0.010536190149494473,
+    "largeCompactSavedMs": 0.2757616904761875,
+    "largeDefaultSavedMs": 0.14911966666666387
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "workingAdmissionBytes": 4096,
+    "retainedScratchBytes": 0,
+    "wideAllocatedBytesPerOperation": 113,
+    "largeCompactGovernedPeakBytes": 2101248,
+    "largeDefaultGovernedPeakBytes": 3682592,
+    "largeIndependentResultBytes": 2097152,
+    "physicalPeaksMeasured": false,
+    "note": "All existing admission/ownership peaks preserved by complete normal validation. Minor aggregate allocation amortization is not intrinsic capacity saving."
+  },
+  "decision": "Inconclusive lead, production restored. Complete small point saves7.64us/1.65percent raw; native-normalized point about1.05percent. Existing large compact point saves0.276ms/.87percent while unchanged default saves.149ms/.57percent. No robust CPU gain/regression/equivalence or reference pass established; no independent confirmation, broad qualification, repack or favorable repeat. Retain real crossing-strip exact pixel test, remove view-only test/API. A materially revised design remains eligible; prefer larger attributable execution costs next.",
+  "qualificationReuse": "Unchanged production source/modules and published/development packages reuse WHS6776026W/L full/live, scalar and SAMEactual0.2.1package70a0a631/all3examples. Candidate had231internal/703public normal+scalar eachOS. Restored build retains one meaningful new actual geometry case and passes33focused tests pernormal/scalar eachOS; only embedded test assembly rebuilt.",
+  "workflow": {
+    "candidateMainBuildsEachOs": 1,
+    "candidateEmbeddedBuildsEachOs": 1,
+    "restoredEmbeddedBuildsEachOs": 1,
+    "restoredMainBuilds": 0,
+    "workerNativeFixtureBuilds": 0,
+    "actualsPerScreen": 3,
+    "independentConfirmations": 0,
+    "newProfiles": 0,
+    "favorableRepeats": 0
+  },
+  "raw": {
+    "file": "bicubic-guarded-geometry-views-experiment.tar.xz",
+    "sha256": "ed43a65e88f8a76a1d52633f923048da5d098fd02edcea7753155b45304505ef",
+    "bytes": 12308428,
+    "members": 230,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-huffman-workspace-qualified.tar.xz",
+        "sha256": "83757ae5ab3160e288d61f6fc70168a643ec8f7541152275526f3edc10fc0fc1"
+      },
+      {
+        "file": "bicubic-shared-byte-repair-qualified.tar.xz",
+        "sha256": "62b95267dcca616931caa99b5920d40c3e63ec89da2feabdf4c11eccba010422"
+      }
+    ]
+  },
+  "next": "Inspect actual horizontal/vertical execution attribution before another redesign; four-column scheduling may expose independent accumulators, but earlier pair-view trials are not replay authority. Keep exact pixels, shared admission and complete workload boundaries; no global blocking or narrowed objective."
+}

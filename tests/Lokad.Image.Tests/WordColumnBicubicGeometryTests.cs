@@ -28,6 +28,7 @@ public sealed class WordColumnBicubicGeometryTests
     [Theory]
     [InlineData(151, 83, 75, 41)] // Eight-column path and a partial final strip.
     [InlineData(225, 99, 100, 44)] // Exact2.25 scale retains six-column scheduling.
+    [InlineData(324, 128, 144, 64)] // Cached prefix leaves the last prepared strip out of phase.
     public void WordReductionAndSlotBoundaryMatchTheIndependentDirectPath(int width, int height, int outputWidth, int outputHeight)
     {
         if (!Avx512F.IsSupported) return;

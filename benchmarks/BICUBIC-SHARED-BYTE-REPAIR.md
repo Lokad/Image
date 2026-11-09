@@ -64,3 +64,7 @@ and [earlier wider consolidation](BICUBIC-SHARED-WIDE-COLUMNS.md) as dependencie
 Three displayed costs refresh; other unchanged paths reuse evidence. The full
 283-path objective remains open; this is not a release timing refresh. Publication
 is postponed.
+
+The subsequent [guarded geometry-view experiment](BICUBIC-GUARDED-GEOMETRY-VIEWS.md)
+finds no useful robust complete-operation lead and restores production exactly.
+It retains one real crossing-strip pixel case; current costs above are unchanged.
