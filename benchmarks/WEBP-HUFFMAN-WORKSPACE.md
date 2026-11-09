@@ -1,5 +1,8 @@
 # WebP Huffman construction workspace
 
+[A subsequent current-package photograph confirmation](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
+also remains uncertain. The stage comparisons below remain source-valid.
+
 WHS677 replaces fresh tree-building arrays and a priority queue per alphabet with
 one admitted operation-owned workspace across an image's five alphabets and
 histogram groups. Integer regions share one array; protected-run flags are cleared

@@ -1,5 +1,8 @@
 # Certified Lanczos word rows
 
+[Current enlargement attribution](LANCZOS-CURRENT-ENLARGEMENT-ATTRIBUTION.md)
+examines the remaining prepared gap without changing the costs below.
+
 LHF675 forms certified double rows directly from the existing admitted UInt32
 word products. Four FMA chains replace signed64 horizontal products and the
 conversion pass. No buffer, capacity, owner, cache, session or public API is added.

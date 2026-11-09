@@ -1,0 +1,103 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LPH690",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newStatisticalMeasurements": 0,
+  "profiledElapsedDiscarded": true,
+  "publicationPostponed": true,
+  "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+  "sources": {
+    "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+    "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf",
+    "src/Lokad.Image/Internal/LanczosPlan.cs": "7f1ae5cfe7844f0cca49041e797ccfd2c9a77d09976e30987315eca86ad016b4",
+    "src/Lokad.Image/Internal/LanczosWorkspace.cs": "cb34ab31a0172a6dbd5159f2e0560f8784f4825b78b5ecf35dd7f04c6c8c930b",
+    "src/Lokad.Image/Lanczos3ResizePlan.cs": "30b0008137a64a229a278141420e7e22491eaa72b26aa6c324ade971e7f8b62d",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "b1655b394b895b901f8dc249d04b301f76f271f05aa812bd45ae8b4512c467e7",
+    "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f"
+  },
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "totalSampledLocations": 1671,
+  "managedLocations": 1600,
+  "methods": [
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::WriteRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,float64,float64,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      563
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::HorizontalWord(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<float64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      518
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Accumulate(valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.Span`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      479
+    ],
+    [
+      "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.LanczosResize::Execute(class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosWorkspace,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      22
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::PrepareWordProducts(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      10
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      6
+    ],
+    [
+      "stub ReportStubBlock<MethodCallThunk>",
+      1
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      1
+    ]
+  ],
+  "ownershipAudit": {
+    "outputBytes": 4264104,
+    "existingDefaultIdlePoolCeiling": 4194304,
+    "retainedPreparedBytes": 333396,
+    "existingAggregateAllocatedBytes": 4265332,
+    "nativeOutput": "Existing adapter allocates float output planes and independent packed output inside each apply, then frees them. Retained graph/input/scratch only in prepared boundary.",
+    "decision": "Output size explains allocation volume, not allocator elapsed cost. No pool ceiling or ownership policy change is justified from this capture alone."
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "LFV691 proposed",
+    "removedWork": "Fast execution clears one full sum row, then rereads and rewrites it once per nonzero vertical tap, before separate exact-certified publication. Fuse eligible ordered vertical sums in registers after all required horizontal rows are prepared.",
+    "endState": "One shared byte/word fast-row preparation/scheduling path and one vector sum traversal, preserving original per-lane ordered FMA. Store sums once for unchanged WriteRow/certificate/repair. Reuse existing rows, sums, row IDs and admitted products; no new owner/cache/session/pool capacity or numerical policy.",
+    "eligibility": "Window.Count<=16 and Window.Count<=workspace.RowIds.Length. Consecutive source rows then have distinct modulo slots, so preparing all cannot evict an earlier required row. Larger supports retain existing streaming accumulation; workspace has at most64slots. Skip identical zero coefficients before reading offsets.",
+    "ownership": "Use a fixed16int stack offset list (64B minor preparation) for eligible rows, reused per output row. Existing rowIDs reset on every execution. Keep output owner and plan executing-state through all synchronous users; preserve failure cleanup and borrowed root. No material owned allocation or retained storage added.",
+    "precision": "For every sample use identical row doubles, exact Q30 coefficient converted to double and ordered FMA from positive zero, skipping the same zero taps. Interleave independent columns only. Existing certified bounds, guard/rounding, WriteRow and exact Int128 repair remain. Native float never weakens managed pixels.",
+    "cancellation": "Keep preparation/tap/output checkpoints. Sum-loop checkpoints every64sample lanes bound each interval to at most16*8=128 AVX512 FMAs, no longer than old4096lane per-tap interval. No fuel/counter quota or refusal fallback.",
+    "workloads": "Start existing complete prepared word enlargement and word reduction shorts; no image/quality grid. Existing exact BigInteger/frozen sample, zero/tiny alpha, cancellation, ring boundary, refusal and surviving owner checks. Small byte behavior/generalization when useful. If accepted all8affected one-shot/prepared costs need current qualification, with setup/independent output included on declared sides.",
+    "risks": "Dynamic inner-tap array/span checks, row pointer reloads, loop branches and register pressure can offset saved stores. Earlier bicubic quartet is adverse evidence, not a ban. No projected speedup from sampled locations. Temporary shared-loop/fallback duplication must remain justified by long supports and portable execution.",
+    "continuation": "One coherent implementation first, exact focused checks and complete shorts. Useful lead gets independent confirmation; revise from concrete JIT/complete evidence or restore unchanged production. No fixed percentage, favorable resampling or automatic merge. Broad W/L/scalar/actualpackage only at acceptance."
+  },
+  "qualificationReuse": {
+    "evidence": "bilinear-current-boundary-evidence.json",
+    "sameActualPackageSha256": "8252c82125475150be77d2847f695a83fe8315b8cbb942028770aa9733908979",
+    "fullLiveEachOs": 6036,
+    "scope": "Current affected-code pins and immutable artifact verified. No production changes, repeated full checks or package proof."
+  },
+  "raw": {
+    "file": "lanczos-current-enlargement-attribution.tar.xz",
+    "sha256": "e5fc490280c52351dad16d56022f726cd6bb0e0dff409ecbce7bb9da487f1e77",
+    "bytes": 79092,
+    "members": 24,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-certified-rows-qualified.tar.xz",
+        "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+      },
+      {
+        "file": "bilinear-packed-row-storage-qualified.tar.xz",
+        "sha256": "609a6c38bdca563b234cab251d7767023308b41212ee2e2eedbfab30569f19fc"
+      }
+    ]
+  },
+  "next": "LFV691 ordered fused vertical traversal, only after focused preparation/lifetime proof. No kernel change or speed claim is accepted by this attribution. Current standalone costs remain those of LHF675."
+}

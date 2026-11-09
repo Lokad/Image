@@ -56,7 +56,9 @@ Current scope and remaining work:
   Four admitted peaks remain3,470,059/3,251,328/3,656,309/312,716B; retained scratch0.
   All eight affected costs refresh on the actual-package DLL:4pass/4uncertain.
   Photograph, opaque and both alpha cases remain uncertain; prior photo/alpha16
-  passes are superseded. No causal CPU-gain/regression/equivalence or physical-peak
+  passes are superseded. A [current-package photograph confirmation](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
+  also remains uncertain; the selected table retains the source-valid workspace
+  stage comparison. No causal CPU-gain/regression/equivalence or physical-peak
   claim; adverse short points and later bracket variation remain retained.
   Normal/scalar and6,026full/live eachOS plus SAMEactualpackage/threeexamples pass.
   No worker/native rebuild or completed actual is repeated. [Earlier clustering](../benchmarks/WEBP-CLUSTERING-STORAGE.md)
