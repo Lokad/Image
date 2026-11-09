@@ -47,5 +47,6 @@ It adds no renderer dependency; [qualified current costs](LANCZOS-WORD-CERTIFIED
 remain unchanged. A different lead is using preparation staging to borrow the
 sum row for exact source-word conversion, then retaining the existing vertical
 kernel. This requires its own lifetime proof and complete measurements.
-Compression correctness and the full performance objective remain; publication
-is postponed.
+The subsequent [source-conversion experiment](LANCZOS-SOURCE-CONVERSION-EXPERIMENT.md)
+records that different implementation and its restoration. Compression correctness
+and the full performance objective remain; publication is postponed.

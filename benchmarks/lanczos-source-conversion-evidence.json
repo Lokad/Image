@@ -1,0 +1,167 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LDP693",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "cases": {
+    "RepeatedEnlarge16": {
+      "baseline": {
+        "managedUs": 4121.057729166667,
+        "nativeUs": 3905.1220256410256,
+        "ratio": 1.0552955073126544,
+        "lower": 0.9797205076814623,
+        "upper": 1.137399612065964,
+        "allocatedBytes": 4265332,
+        "retainedBytes": 333396,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 4141.910229166667,
+        "nativeUs": 3900.9911794871796,
+        "ratio": 1.0617584194874181,
+        "lower": 0.726501772475327,
+        "upper": 1.728900314307368,
+        "allocatedBytes": 4265302,
+        "retainedBytes": 333396,
+        "librarySha256": "f307f8f7c0dc8b313c9af71f6e87fd2c6e6ca32d47d448c22cd901eb25619688"
+      }
+    },
+    "Repeated16": {
+      "baseline": {
+        "managedUs": 550.8446874999998,
+        "nativeUs": 512.0089528619529,
+        "ratio": 1.075849717902331,
+        "lower": 0.9691799551716309,
+        "upper": 1.191921126885407,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 561.4757869318182,
+        "nativeUs": 511.18789898989894,
+        "ratio": 1.0983745664584148,
+        "lower": 1.0206815531947815,
+        "upper": 1.182664995045102,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "f307f8f7c0dc8b313c9af71f6e87fd2c6e6ca32d47d448c22cd901eb25619688"
+      }
+    }
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "LDP693 preimplementation",
+    "productionAccepted": false,
+    "baseline": {
+      "windowsSha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+      "linuxSha256": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815"
+    },
+    "transitionFromLinuxSha256": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf"
+    },
+    "paths": [
+      "src/Lokad.Image/Internal/LanczosResize.cs",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs",
+      "tests/Lokad.Image.Tests/LanczosPreparedWordProductsTests.cs"
+    ],
+    "newPaths": [
+      "tests/Lokad.Image.Tests/LanczosPreparedWordProductsTests.cs"
+    ],
+    "hypothesis": "Stage horizontal preparation to reuse exact source UInt32-to-double conversion. Keep the original vertical Accumulate kernel; do not replay the failed fused inner loop. Current horizontal windows repeatedly convert the same already-premultiplied source components. Prepare them once per source-row cache miss into a loan of existing FastSums, then consume them in the same horizontal FMA grouping.",
+    "endState": "One typed HorizontalWord<T> kernel for UInt32/direct and Double/prepared input, with compile-time type branches and identical coefficient/order/tail arithmetic. Existing Horizontal remains the real byte/UInt32 fallback entry; a real prepared-word entry is used by production staging, not an obsolete forwarding wrapper. Shared geometry/cache/output driver, original vertical kernel, unchanged certified WriteRow/repair.",
+    "eligibility": "workspace.Fast && source.BitDepth==16 && window.Count<=workspace.RowIds.Length && FastSums.Length>=source.Width*4. Select by physical geometry/capacity before work, never shared availability or refusal. No fixed fixture dimensions. Count larger than owned ring or insufficient sum capacity keeps original streaming UInt32 path.",
+    "storage": "Existing UInt32 Products retains exact source products. During the all-row preparation phase, borrow only FastSums[..source.Width*4] as Double source storage. Each HorizontalPreparedWord finishes before the next row overwrites it; filtered FastRows own their values independently. After the final preparer, clear FastSums and run original ordered Accumulate per tap. No double-source view is used after clear; no new heap/stack/admitted/retained capacity, owner, pool or session.",
+    "ringProof": "LanczosPlan.Window covers consecutive clamped source rows. Count<=slots implies no equal residues modulo slots within that window, so preparing all rows cannot evict an earlier required row. Skip the same zero coefficients. Reset all RowIds on every execution; future image edits and cancellation recovery reread source.",
+    "precision": "UInt32 components are nonnegative integers <=65535^2 and therefore exactly representable as binary64. Moving conversion out of overlapping windows adds no rounding. Keep the existing four-tap FMA chains, horizontal reduction/tail order, exact alpha and Q30 bounds. Original vertical FMA order/certificates/strict guard/rounding/Int128 repair stay unchanged. No new numerical policy/native tolerance.",
+    "boundaries": "All source-product/double preparation and workspace clearing stay inside complete timed Resize. Existing prepared native graph/input/scratch and independently allocated/packed/freed output remain labeled; one-shot includes setup on both sides. Root admission, terminal refusal, output owner cleanup and actual synchronous users unchanged.",
+    "cancellation": "Preserve original tap/row/output polls. New source conversion polls before and at bounded256component intervals. The plan execution state protects its borrowed mutable workspace until all users finish. No fuel, fallback after refusal, independent allowance or async lifetime change.",
+    "risks": "Double source traffic is twice UInt32 traffic, increasing cache pressure; preparation phase can cost more than avoided conversions. Generic kernel codegen or additional span state may spill/register-check. Prior fused-row points are adverse evidence, not a prediction of this design. No CPU gain from logical counts alone.",
+    "acceptance": "Before editing preserve qualified originals and actual embedded test version. Test actual prepared producer against current UInt32 producer/BigInteger across unsigned extremes, tails/guards and no allocation; actual staging/mixed-support/independent ownership/cancel/refusal/recovery. Start complete existing prepared word enlargement and reduction shorts. Reduction should stay original path; meaningful lead gets independent confirmation plus small justified byte/generalization check. Accepted production requires all8affected one-shot/prepared costs and broadW/L/live/scalar/ISA/SAMEactualpackage qualification. No unchanged favorable repeat or expanded matrix.",
+    "priorEvidence": "LANCZOS-CURRENT-ENLARGEMENT-ATTRIBUTION.md and LANCZOS-FUSED-VERTICAL-EXPERIMENT.md; all source/main/public bindings restored. Current BPC6886036W/L full/live/package proof plus6retained normal/scalar/AVX512off cases eachOS reuse unchanged production."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "ba8589e69fed9f6d7e9123f07b3ada1ad1f69485b36c778a704385d384b689db",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "600f4c0a857fe793f51450e9ca548deff9769e3c484f56a7d1d9ef824f3f5c5a",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "2fd3f5b3a01c2286e436109a6cb43bdfddca9646f2a13d4495a83f4994fb7338"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "ba8589e69fed9f6d7e9123f07b3ada1ad1f69485b36c778a704385d384b689db",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "ba8589e69fed9f6d7e9123f07b3ada1ad1f69485b36c778a704385d384b689db",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "ba8589e69fed9f6d7e9123f07b3ada1ad1f69485b36c778a704385d384b689db",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8"
+      },
+      "allBuilds": 0,
+      "packageSha256": "8252c82125475150be77d2847f695a83fe8315b8cbb942028770aa9733908979",
+      "qualificationReuse": "UnchangedBPC6886036W/L full/live and SAMEactualReleasepackage8252c821/threeexamples, retained6normal/scalar/AVX512off cases eachOS, CI98e16233allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "070f28501120305afcf3ba7b1be20ab0bb7197af5a348dec4f64e9430a7b3c7c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "4bc9ec50905592fae426f05f61d8f5c79bebb0354f70fa0aedfad2ca75060cfa",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "cc85c9f54edcdac1dcc70ce31b7136ba90d1c6041401ef7993f9a82d12ee5b52"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "070f28501120305afcf3ba7b1be20ab0bb7197af5a348dec4f64e9430a7b3c7c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "070f28501120305afcf3ba7b1be20ab0bb7197af5a348dec4f64e9430a7b3c7c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "070f28501120305afcf3ba7b1be20ab0bb7197af5a348dec4f64e9430a7b3c7c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91"
+      },
+      "allBuilds": 0,
+      "packageSha256": "8252c82125475150be77d2847f695a83fe8315b8cbb942028770aa9733908979",
+      "qualificationReuse": "UnchangedBPC6886036W/L full/live and SAMEactualReleasepackage8252c821/threeexamples, retained6normal/scalar/AVX512off cases eachOS, CI98e16233allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    }
+  },
+  "correctness": "One typed UInt32/Double horizontal kernel; new prepared producer matches every original FMA bit across unsigned extremes, guard/tail/long-support inputs, no allocation. Public staged/mixed/long-ring outputs match exact integer execution; terminal refusal/cancellation cleanup and independent plan survivors pass.",
+  "workflow": "One immutable main/embedded candidate eachOS.254internal/729public checks pernormal/scalar eachOS; no harness/native/selector/fixture builds. Four complete3actual jobs (two original/candidate controls), all original/native/source/owner/idle gates. No useful complete point lead, independent confirmation, favorable repeat, full suite or package rebuild. Candidate-specific tests archived/removed; all qualified sources/main/embedded/public bindings restored exactly, including retained6cache-boundary tests. Existing qualification reused.",
+  "decision": "Not selected. Enlargement4141.91 vs4121.06us; reduction561.48 vs550.84us. Broad short intervals prove no causal gain, regression or equivalence. Total allocations largely unchanged; enlargement30B/op difference is amortized aggregate accounting, not an intrinsic saving. No added admitted/retained capacity or measured physical-peak claim. Current standaloneLHF675 costs remain unchanged. This outcome does not ban materially revised preparation/storage designs.",
+  "next": "Move to larger demonstrated JPEG refinement gap. Reuse JPR608 attribution after scoped source proof; inspect local FFmpeg algorithm strategies, without copying sources. Validate any proposed bit-plane invariant against scan progression before changing correction arithmetic.",
+  "raw": {
+    "file": "lanczos-source-conversion-experiment.tar.xz",
+    "sha256": "a049ce1bedae9d041725aa4b01aff00865ff1411ee1e0bb7ab7db48610779af9",
+    "bytes": 11512372,
+    "members": 93,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-certified-rows-qualified.tar.xz",
+        "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+      },
+      {
+        "file": "bilinear-packed-row-storage-qualified.tar.xz",
+        "sha256": "609a6c38bdca563b234cab251d7767023308b41212ee2e2eedbfab30569f19fc"
+      }
+    ]
+  }
+}
