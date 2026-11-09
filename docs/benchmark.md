@@ -96,12 +96,15 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Current tight-byte reduction](../benchmarks/TIGHT-BYTE-BICUBIC-CURRENT-PACKAGE.md)
-  confirms571.36/zimg417.78µs,upper1.382,113B/op: about154µs remains. This uses
-  the exact already-qualified package DLL; no production build or repeated
-  qualification. Earlier617.43/456.16µs clocks are not a causal comparison.
-  The actual column driver/pixel/admission probe passes; strided output-row-tail
-  cache reuse is the next bounded preparation hypothesis, not a claimed gain.
+- **Resizing:** [Strided column workspace](../benchmarks/BICUBIC-STRIDED-COLUMN-CACHE.md)
+  saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
+  filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
+  remains a gap;113B/op, no added owned capacity/retained scratch. One numeric
+  range serves a16column borrowed-output prefix and original8/6column suffix;
+  separate non-inlined stack frames share one4KiB allowance and retire before
+  overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
+  column ownership checks and allthree examples. Other source-valid paths reuse
+  evidence; this is one scoped control, not all-path parity.
   [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
   with separated filtered/all-actual raw/normalized confidence. Current exact
@@ -333,7 +336,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 571.36 | 417.78 | 1.368 / 1.382 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 552.17 | 417.53 | 1.322 / 1.337 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |

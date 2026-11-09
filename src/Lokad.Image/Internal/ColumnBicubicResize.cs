@@ -11,6 +11,10 @@ internal static class ColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
+    private readonly struct SmallStrip { }
+    private readonly struct LargeStrip { }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
@@ -21,170 +25,216 @@ internal static class ColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 4,080 bytes within the admitted charge. This
-            // frame unwinds before direct replay can need tiny-alpha scratch.
-            Span<Vector256<double>> cache = stackalloc Vector256<double>[9 * 8];
-            Span<int> rowIds = stackalloc int[10];
-            Span<Vector256<double>> decoded = stackalloc Vector256<double>[25];
-            Span<double> weights = stackalloc double[8 * 10];
-            Span<byte> offsets = stackalloc byte[8 * 10];
-            Span<int> counts = stackalloc int[8];
-            Span<double> normalizers = stackalloc double[8];
-            Span<double> vertical = stackalloc double[10];
-            Span<int> rows = stackalloc int[10];
-            var input = source.Pixels;
-            // Below this scale, nine slots hold every active vertical tap.
-            // Larger supports retain six-column strips with ten row slots.
             var rowSlots = scaleY < 2.25 ? 9 : 10;
             var stripColumns = rowSlots == 9 ? 8 : 6;
             var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 10,
                 stripColumns, context.Cancellation);
-            for (var tile = 0; tile < result.Width; tile += stripColumns)
+            var firstColumn = 0;
+            if (geometry.PrefixColumns != 0
+                && TryLocateResultCache(result, rowSlots, out var start, out var prefixColumns))
             {
-                var length = Math.Min(stripColumns, result.Width - tile);
-                var firstCenter = (tile + .5) * source.Width / result.Width - .5;
-                var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleX), 0, source.Width - 1);
-                for (var x = 0; x < length; x++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (tile + x + .5) * source.Width / result.Width - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleX);
-                    var count = (int)Math.Floor(center + 2 * scaleX) - first + 1;
-                    counts[x] = count;
-                    double normalizer = 0;
-                    for (var t = 0; t < count; t++)
-                    {
-                        var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
-                        weights[x * 10 + t] = w; normalizer += w;
-                        var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
-                        if ((uint)relative >= 25) return false;
-                        offsets[x * 10 + t] = (byte)relative;
-                    }
-                    normalizers[x] = normalizer;
-                }
-                var sourceCount = offsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
-                rowIds.Fill(-1);
-                for (var y = 0; y < result.Height; y++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    geometry.Read(y, tile < geometry.PrefixColumns, vertical,
-                        out var first, out var count, out var normalizerY);
-                    if (count > rowSlots) return false;
-                    for (var t = 0; t < count; t++)
-                    {
-                        var sy = Math.Clamp(first + t, 0, source.Height - 1);
-                        var slot = sy % rowSlots; rows[t] = slot * stripColumns;
-                        if (rowIds[slot] == sy) continue;
-                        rowIds[slot] = sy;
-                        var row = input.Slice(sy * source.Stride + sourceFirst * 4, sourceCount * 4);
-                        var px = 0;
-                        for (; px + 1 < sourceCount; px += 2)
-                        {
-                            var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(px * 4, 8));
-                            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
-                            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-                            var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
-                            decoded[px] = products.GetLower(); decoded[px + 1] = products.GetUpper();
-                        }
-                        if (px < sourceCount)
-                        {
-                            var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(px * 4, 4));
-                            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
-                            var factors = Vector128.Create((int)(packed >> 24), (int)(packed >> 24), (int)(packed >> 24), 1);
-                            decoded[px] = Avx.ConvertToVector256Double(Sse41.MultiplyLow(samples, factors));
-                        }
-                        var x = 0;
-                        for (; x + 1 < length; x += 2)
-                        {
-                            var count0 = counts[x]; var count1 = counts[x + 1];
-                            var offsets0 = offsets.Slice(x * 10, count0);
-                            var offsets1 = offsets.Slice((x + 1) * 10, count1);
-                            var weights0 = weights.Slice(x * 10, count0);
-                            var weights1 = weights.Slice((x + 1) * 10, count1);
-                            var shared = Math.Min(count0, count1);
-                            var sum = Vector512<double>.Zero;
-                            for (var tx = 0; tx < shared; tx++)
-                            {
-                                // Each half retains its column's original tap order.
-                                var samples = Avx512F.InsertVector256(decoded[offsets0[tx]].ToVector512Unsafe(), decoded[offsets1[tx]], 1);
-                                var coefficients = Avx512F.InsertVector256(Vector512.Create(weights0[tx]), Vector256.Create(weights1[tx]), 1);
-                                sum = Avx512F.Add(sum, Avx512F.Multiply(samples, coefficients));
-                            }
-                            var sum0 = sum.GetLower(); var sum1 = sum.GetUpper();
-                            for (var tx = shared; tx < count0; tx++)
-                                sum0 = Avx.Add(sum0, Avx.Multiply(decoded[offsets0[tx]], Vector256.Create(weights0[tx])));
-                            for (var tx = shared; tx < count1; tx++)
-                                sum1 = Avx.Add(sum1, Avx.Multiply(decoded[offsets1[tx]], Vector256.Create(weights1[tx])));
-                            cache[slot * stripColumns + x] = sum0; cache[slot * stripColumns + x + 1] = sum1;
-                        }
-                        if (x < length)
-                        {
-                            var sum = Vector256<double>.Zero;
-                            for (var tx = 0; tx < counts[x]; tx++)
-                                sum = Avx.Add(sum, Avx.Multiply(decoded[offsets[x * 10 + tx]], Vector256.Create(weights[x * 10 + tx])));
-                            cache[slot * stripColumns + x] = sum;
-                        }
-                    }
-                    var destination = result.GetRow8(y);
-                    var outputX = 0;
-                    for (; outputX + 1 < length; outputX += 2)
-                    {
-                        var sum = Vector512<double>.Zero;
-                        for (var t = 0; t < count; t++)
-                        {
-                            var pair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 2)));
-                            sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
-                        }
-                        if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
-                            destination.Slice((tile + outputX) * 4, 8)))
-                        {
-                            // Repair only uncertain pixels, preserving original tap order.
-                            // Tiny-alpha replay still unwinds this workspace first.
-                            for (var repair = outputX; repair < outputX + 2; repair++)
-                                if (!OriginalByte(source, result, tile + repair, y,
-                                    weights.Slice(repair * 10, counts[repair]), offsets.Slice(repair * 10, counts[repair]),
-                                    sourceFirst, vertical.Slice(0, count), first, context)) return false;
-                        }
-                    }
-                    for (var x = outputX; x < length; x++)
-                    {
-                        var sum = Vector256<double>.Zero;
-                        for (var t = 0; t < count; t++)
-                            sum = Avx.Add(sum, Avx.Multiply(cache[rows[t] + x], Vector256.Create(vertical[t])));
-                        var normalizer = normalizers[x] * normalizerY;
-                        var alpha = sum.GetElement(3);
-                        // Each coefficient is bounded by one, with at most 256
-                        // two-axis terms. The existing 2^-40 * 16^2 absolute-error
-                        // budget covers both orders and normalization sums.
-                        const double unitError = 2.3283064365386963e-10;
-                        const double alphaError = unitError * 255;
-                        if (!(normalizer >= .5 && alpha > alphaError)) return false;
-                        var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
-                        var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
-                            Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
-                        var colorMargin = 2 * (alphaError * 255 + magnitude * alphaError) / (alpha - alphaError);
-                        var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
-                        if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
-                        for (var c = 0; c < 4; c++)
-                        {
-                            var value = values.GetElement(c);
-                            if (value >= 0 && value <= 255
-                                && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
-                        }
-                        var clipped = Avx.Min(Vector256.Create(255d), Avx.Max(Vector256<double>.Zero, values));
-                        var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
-                        var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
-                        var pixel = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
-                        BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice((tile + x) * 4, 4), pixel);
-                    }
-                }
+                var cache = MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels[start..]);
+                if (!ApplyRange<LargeStrip>(source, result, scaleX, scaleY, rowSlots,
+                    geometry, cache, result.Stride / 32, 0, prefixColumns, context)) return false;
+                firstColumn = prefixColumns;
             }
-            // Admission bounds complete original tap cost. Failed speculative
-            // strips leave the counter untouched for original-order replay.
-            context.Cancellation.ThrowIfCancellationRequested();
-            return true;
+            // The large stack/cache users have returned before suffix writes.
+            return ApplyRange<SmallStrip>(source, result, scaleX, scaleY, rowSlots,
+                geometry, default, 0, firstColumn, result.Width, context);
         }
         finally { context.Release(WorkspaceBytes); }
+    }
+
+    internal static bool TryLocateResultCache(ImageBuffer result, int rowSlots,
+        out int start, out int prefixColumns)
+    {
+        start = prefixColumns = 0;
+        if (result.BitDepth != 8 || result.Stride % 32 != 0 || result.Height < rowSlots) return false;
+        // Existing geometry occupies96B at the end of every visible row.
+        // Each cache slot occupies512B in a distinct, still-unwritten row tail.
+        var candidate = (result.Width * 4 - 96 - 16 * 32) & ~31;
+        if (candidate < 0) return false;
+        var prefix = candidate / 4 / 16 * 16;
+        if (prefix < 32) return false;
+        start = candidate; prefixColumns = prefix;
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Span<T> Take<T>(ref Span<byte> workspace, int count) where T : unmanaged
+    {
+        var bytes = count * Unsafe.SizeOf<T>();
+        var result = MemoryMarshal.Cast<byte, T>(workspace[..bytes]);
+        workspace = workspace[bytes..];
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool ApplyRange<TStrip>(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, int rowSlots, ColumnBicubicGeometry geometry,
+        scoped Span<Vector256<double>> cache, int cacheStride, int firstColumn, int endColumn,
+        OperationContext context) where TStrip : struct
+    {
+        // These physically separate frames retire between prefix and suffix.
+        // Small retains the original4080B payload; large uses3232B plus a loan
+        // from the independently admitted result. Neither owns additional capacity.
+        var large = typeof(TStrip) == typeof(LargeStrip);
+        Span<byte> workspace = stackalloc byte[large ? 3232 : 4080];
+        var capacity = large ? 16 : 8;
+        var sourceCapacity = large ? 45 : 25;
+        if (!large) { cache = Take<Vector256<double>>(ref workspace, 9 * 8); cacheStride = rowSlots == 9 ? 8 : 6; }
+        var rowIds = Take<int>(ref workspace, 10);
+        var decoded = Take<Vector256<double>>(ref workspace, sourceCapacity);
+        var weights = Take<double>(ref workspace, capacity * 10);
+        var offsets = Take<byte>(ref workspace, capacity * 10);
+        var counts = Take<int>(ref workspace, capacity);
+        var normalizers = Take<double>(ref workspace, capacity);
+        var vertical = Take<double>(ref workspace, 10);
+        var rows = Take<int>(ref workspace, 10);
+        var input = source.Pixels;
+        var stripColumns = large ? 16 : rowSlots == 9 ? 8 : 6;
+        for (var tile = firstColumn; tile < endColumn; tile += stripColumns)
+        {
+            var length = Math.Min(stripColumns, endColumn - tile);
+            var firstCenter = (tile + .5) * source.Width / result.Width - .5;
+            var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleX), 0, source.Width - 1);
+            for (var x = 0; x < length; x++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var center = (tile + x + .5) * source.Width / result.Width - .5;
+                var first = (int)Math.Ceiling(center - 2 * scaleX);
+                var count = (int)Math.Floor(center + 2 * scaleX) - first + 1;
+                counts[x] = count;
+                double normalizer = 0;
+                for (var t = 0; t < count; t++)
+                {
+                    var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
+                    weights[x * 10 + t] = w; normalizer += w;
+                    var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
+                    if ((uint)relative >= (uint)sourceCapacity) return false;
+                    offsets[x * 10 + t] = (byte)relative;
+                }
+                normalizers[x] = normalizer;
+            }
+            var sourceCount = offsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
+            rowIds.Fill(-1);
+            for (var y = 0; y < result.Height; y++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                geometry.Read(y, tile < geometry.PrefixColumns, vertical,
+                    out var first, out var count, out var normalizerY);
+                if (count > rowSlots) return false;
+                for (var t = 0; t < count; t++)
+                {
+                    var sy = Math.Clamp(first + t, 0, source.Height - 1);
+                    var slot = sy % rowSlots; rows[t] = slot * cacheStride;
+                    if (rowIds[slot] == sy) continue;
+                    rowIds[slot] = sy;
+                    var row = input.Slice(sy * source.Stride + sourceFirst * 4, sourceCount * 4);
+                    var px = 0;
+                    for (; px + 1 < sourceCount; px += 2)
+                    {
+                        var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(px * 4, 8));
+                        var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
+                        var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+                        var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+                        decoded[px] = products.GetLower(); decoded[px + 1] = products.GetUpper();
+                    }
+                    if (px < sourceCount)
+                    {
+                        var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(px * 4, 4));
+                        var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
+                        var factors = Vector128.Create((int)(packed >> 24), (int)(packed >> 24), (int)(packed >> 24), 1);
+                        decoded[px] = Avx.ConvertToVector256Double(Sse41.MultiplyLow(samples, factors));
+                    }
+                    var x = 0;
+                    for (; x + 1 < length; x += 2)
+                    {
+                        var count0 = counts[x]; var count1 = counts[x + 1];
+                        var offsets0 = offsets.Slice(x * 10, count0);
+                        var offsets1 = offsets.Slice((x + 1) * 10, count1);
+                        var weights0 = weights.Slice(x * 10, count0);
+                        var weights1 = weights.Slice((x + 1) * 10, count1);
+                        var shared = Math.Min(count0, count1);
+                        var sum = Vector512<double>.Zero;
+                        for (var tx = 0; tx < shared; tx++)
+                        {
+                            // Each half retains its column's original tap order.
+                            var samples = Avx512F.InsertVector256(decoded[offsets0[tx]].ToVector512Unsafe(), decoded[offsets1[tx]], 1);
+                            var coefficients = Avx512F.InsertVector256(Vector512.Create(weights0[tx]), Vector256.Create(weights1[tx]), 1);
+                            sum = Avx512F.Add(sum, Avx512F.Multiply(samples, coefficients));
+                        }
+                        var sum0 = sum.GetLower(); var sum1 = sum.GetUpper();
+                        for (var tx = shared; tx < count0; tx++)
+                            sum0 = Avx.Add(sum0, Avx.Multiply(decoded[offsets0[tx]], Vector256.Create(weights0[tx])));
+                        for (var tx = shared; tx < count1; tx++)
+                            sum1 = Avx.Add(sum1, Avx.Multiply(decoded[offsets1[tx]], Vector256.Create(weights1[tx])));
+                        cache[slot * cacheStride + x] = sum0; cache[slot * cacheStride + x + 1] = sum1;
+                    }
+                    if (x < length)
+                    {
+                        var sum = Vector256<double>.Zero;
+                        for (var tx = 0; tx < counts[x]; tx++)
+                            sum = Avx.Add(sum, Avx.Multiply(decoded[offsets[x * 10 + tx]], Vector256.Create(weights[x * 10 + tx])));
+                        cache[slot * cacheStride + x] = sum;
+                    }
+                }
+                var destination = result.GetRow8(y);
+                var outputX = 0;
+                for (; outputX + 1 < length; outputX += 2)
+                {
+                    var sum = Vector512<double>.Zero;
+                    for (var t = 0; t < count; t++)
+                    {
+                        var pair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 2)));
+                        sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
+                    }
+                    if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
+                        destination.Slice((tile + outputX) * 4, 8)))
+                    {
+                        // Repair only uncertain pixels, preserving original tap order.
+                        // Tiny-alpha replay still unwinds this workspace first.
+                        for (var repair = outputX; repair < outputX + 2; repair++)
+                            if (!OriginalByte(source, result, tile + repair, y,
+                                weights.Slice(repair * 10, counts[repair]), offsets.Slice(repair * 10, counts[repair]),
+                                sourceFirst, vertical.Slice(0, count), first, context)) return false;
+                    }
+                }
+                for (var x = outputX; x < length; x++)
+                {
+                    var sum = Vector256<double>.Zero;
+                    for (var t = 0; t < count; t++)
+                        sum = Avx.Add(sum, Avx.Multiply(cache[rows[t] + x], Vector256.Create(vertical[t])));
+                    var normalizer = normalizers[x] * normalizerY;
+                    var alpha = sum.GetElement(3);
+                    // Each coefficient is bounded by one, with at most 256
+                    // two-axis terms. The existing 2^-40 * 16^2 absolute-error
+                    // budget covers both orders and normalization sums.
+                    const double unitError = 2.3283064365386963e-10;
+                    const double alphaError = unitError * 255;
+                    if (!(normalizer >= .5 && alpha > alphaError)) return false;
+                    var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
+                    var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
+                        Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
+                    var colorMargin = 2 * (alphaError * 255 + magnitude * alphaError) / (alpha - alphaError);
+                    var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
+                    if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
+                    for (var c = 0; c < 4; c++)
+                    {
+                        var value = values.GetElement(c);
+                        if (value >= 0 && value <= 255
+                            && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
+                    }
+                    var clipped = Avx.Min(Vector256.Create(255d), Avx.Max(Vector256<double>.Zero, values));
+                    var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
+                    var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
+                    var pixel = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
+                    BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice((tile + x) * 4, 4), pixel);
+                }
+            }
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
+        return true;
     }
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
         ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,

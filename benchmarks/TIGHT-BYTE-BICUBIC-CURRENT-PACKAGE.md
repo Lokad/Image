@@ -1,5 +1,7 @@
 # Current tight byte bicubic reduction
 
+This retained pre-change baseline is superseded by [strided column workspace](BICUBIC-STRIDED-COLUMN-CACHE.md).
+
 The exact already-qualified package DLL confirms **571.36 /
 zimg417.78 µs**, ratio1.368, lower1.357 /
 upper1.382: **153.58 µs remains**.

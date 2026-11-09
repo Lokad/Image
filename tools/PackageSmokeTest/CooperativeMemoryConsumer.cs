@@ -2,9 +2,9 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
-    private static void VerifyMixedSchedule(int workspaceBytes, bool vertical = false, int depth = 16)
+    private static void VerifyBicubicSchedule(int workspaceBytes, bool vertical = false, int depth = 16, bool reduction = false)
     {
-        var width = vertical ? 513 : 1027;
+        var width = reduction ? 256 : vertical ? 513 : 1027;
         const int height = 129;
         var outputBytes = width * height * (depth / 2);
         using var source = OriginalPixels.Buffer(513, 259, depth);
@@ -22,9 +22,10 @@ internal static class CooperativeMemoryConsumer
         var vectorBands = System.Runtime.Intrinsics.X86.Avx512F.IsSupported
             && System.Runtime.Intrinsics.X86.Avx2.IsSupported && System.Runtime.Intrinsics.X86.Avx.IsSupported
             && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
-        // Both hashes are frozen by the existing independently checked complete
+        // Hashes are frozen by the existing independently checked complete
         // bicubic controls on this exact original raster, before this change.
-        var expectedHash = depth == 8 ? (vertical
+        var expectedHash = reduction ? "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+            : depth == 8 ? (vertical
             ? "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697"
             : "1ca9938539ba1421fe4f1540055be5d0675ac8ddc1ea87df5932a93ca35a0356")
             : vertical ? "275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd"
@@ -61,7 +62,9 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged mixed-word recovery changed pixels.");
         if (root.Bytes != 0 || root.IsDisposed || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
             throw new Exception("Packaged mixed-word rows lost source or borrowed-root ownership.");
-        Console.WriteLine(depth == 8
+        Console.WriteLine(reduction
+            ? "Packaged byte column strips preserve frozen pixels, aggregate admission, cancellation and independent survivors."
+            : depth == 8
             ? "Packaged byte bands preserve frozen pixels, aggregate admission, cancellation and independent survivors."
             : vertical
             ? "Packaged vertical word geometry preserves frozen pixels, aggregate admission, cancellation and independent survivors."
@@ -1002,12 +1005,13 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
-        VerifyMixedSchedule(4096);
-        VerifyMixedSchedule(8192);
-        VerifyMixedSchedule(4096, vertical: true);
-        VerifyMixedSchedule(8192, vertical: true);
-        VerifyMixedSchedule(4096, depth: 8);
-        VerifyMixedSchedule(4096, vertical: true, depth: 8);
+        VerifyBicubicSchedule(4096);
+        VerifyBicubicSchedule(8192);
+        VerifyBicubicSchedule(4096, vertical: true);
+        VerifyBicubicSchedule(8192, vertical: true);
+        VerifyBicubicSchedule(4096, depth: 8);
+        VerifyBicubicSchedule(4096, vertical: true, depth: 8);
+        VerifyBicubicSchedule(4096, depth: 8, reduction: true);
         await VerifyPngCursors(cancellable: true);
         await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();

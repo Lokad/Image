@@ -1380,15 +1380,21 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    column = json.loads((ROOT / 'benchmarks/tight-byte-bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
+    column = json.loads((ROOT / 'benchmarks/bicubic-strided-column-cache-evidence.json').read_text(encoding='utf-8'))
     current = column['current']
-    assert not column['productionChanged'] and column['allProductionBuilds'] == 0
+    assert column['productionAccepted'] and column['requiredMaterialPaths'] == 283
     assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
     assert current['managedRationalReferenceExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
     assert current['status'] == 'gap' and current['lower'] > 1
-    assert current['librarySha256'] == column['actualPackage']['librarySha256']
-    assert column['reusedQualification']['sameActualPackageBothOs'] and column['reusedQualification']['fullChecksEachOs'] == 5964
-    assert column['currentDriver']['currentColumnDriverAcceptsFrozenControl'] and column['currentDriver']['rootBytesAfter'] == 0
+    cq = column['qualification']
+    assert current['librarySha256'] == cq['actualPackage']['librarySha256'] == column['producers']['windowsSha256']
+    assert cq['actualPackage']['sha256'] == cq['samePackageLinux']['sameActualPackageSha256']
+    assert cq['fullChecksEachOs'] == cq['windows']['total'] == cq['linux']['total'] == 5973
+    assert cq['allThreeExamplesBothOs'] and cq['byteColumnStripsOwnershipBothOs']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in column['comparison']['views'].values())
+    assert column['sourceProof']['oneOriginalNumericLoopExactAfterRangeStrideCapacitySubstitution']
+    assert column['sourceProof']['originalByteAndReciprocalCertificateVerbatim']
+    assert column['storage']['rootWorkspaceBytes'] == 4096 and column['storage']['newOwnedCapacityBytes'] == 0
     assert column['raw']['mirrored'] and column['raw']['allMembersVerified']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -1784,12 +1790,15 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Current tight-byte reduction](../benchmarks/TIGHT-BYTE-BICUBIC-CURRENT-PACKAGE.md)
-  confirms571.36/zimg417.78µs,upper1.382,113B/op: about154µs remains. This uses
-  the exact already-qualified package DLL; no production build or repeated
-  qualification. Earlier617.43/456.16µs clocks are not a causal comparison.
-  The actual column driver/pixel/admission probe passes; strided output-row-tail
-  cache reuse is the next bounded preparation hypothesis, not a claimed gain.
+- **Resizing:** [Strided column workspace](../benchmarks/BICUBIC-STRIDED-COLUMN-CACHE.md)
+  saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
+  filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
+  remains a gap;113B/op, no added owned capacity/retained scratch. One numeric
+  range serves a16column borrowed-output prefix and original8/6column suffix;
+  separate non-inlined stack frames share one4KiB allowance and retire before
+  overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
+  column ownership checks and allthree examples. Other source-valid paths reuse
+  evidence; this is one scoped control, not all-path parity.
   [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
   with separated filtered/all-actual raw/normalized confidence. Current exact
