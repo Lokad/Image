@@ -107,15 +107,15 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Current default wider-support byte resize](../benchmarks/CACHED-WIDE-BYTE-CURRENT-PACKAGE.md)
-  confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
-  Its old allocation/scheduler epoch is superseded, without a causal historical
-  CPU claim. Same qualified immutable package; no new builds or qualification runs.
-  [Current shared-wide family](../benchmarks/CACHED-WIDE-CURRENT-FAMILY.md) resolves
-  seven affected companions: four pass/four gaps overall, no uncertainty.
-  Default32×16 byte now392.69/zimg414.33µs, upper.952,197,298B/op passes/stops.
-  Two original byte/word rasters, no new workload grid; passing companions receive
-  only regression qualification when the shared helper changes.
+  [Shared wide pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md)
+  saves **498.26→463.92µs /34.35µs/6.89%raw/6.84%normalized** on default128×64byte.
+  Filtered/allactual raw/normalized confidence separates; native347.09→346.90µs
+  stays stable. Upper1.344 leaves117µs;198,450B/op, no added owned capacity or
+  retained scratch. Checked pixel views share prepared pixel indexes and exact
+  arithmetic/certificates. Eight existing affected controls now5pass/1gap/2uncertain;
+  64×32byte/word are uncertain, not passes. Seven companion native means move
+  −8–10%, so their raw changes are not causal gain claims. Current32×16byte
+  321.06/zimg376.18µs, upper.857,197,299B/op passes/stops; no new workload grid.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -360,13 +360,13 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 356.88 | 375.09 | 0.951 / 0.956 | 197,300 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 321.06 | 376.18 | 0.853 / 0.857 | 197,299 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 552.17 | 417.53 | 1.322 / 1.337 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
-| Bicubic RGBA8 wider-support reduction † → 128×64 | 498.26 | 347.09 | 1.436 / 1.444 | 198,449 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 463.92 | 346.90 | 1.337 / 1.344 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |

@@ -161,6 +161,10 @@ internal static partial class CachedBicubicResize
         ReadOnlySpan<double> weights,ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,
         int width,int capacity,OperationContext context)
     {
+        // Wide plans store clamped pixel indexes. Form checked pixel views
+        // once here; Original restores channel offsets at its own boundary.
+        var decodedPixels=MemoryMarshal.Cast<double,Vector256<double>>(decoded);
+        var cachedPixels=MemoryMarshal.Cast<double,Vector256<double>>(cached);
         var x=0;
         for(;x+1<width;x+=2)
         {
@@ -177,20 +181,20 @@ internal static partial class CachedBicubicResize
             var offsets1=offsets.Slice((x+1)*capacity,n);
             for(var tx=0;tx<n;tx++)
             {
-                var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets0[tx],4)));
-                var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets1[tx],4)));
+                var p0=decodedPixels[offsets0[tx]];
+                var p1=decodedPixels[offsets1[tx]];
                 sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights0[tx])));
                 sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights1[tx])));
             }
-            MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum0);
-            MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice((x+1)*4,4)),in sum1);
+            cachedPixels[x]=sum0;
+            cachedPixels[x+1]=sum1;
         }
         if(x<width)
         {
             var sum=Vector256<double>.Zero;
             for(var tx=0;tx<counts[x];tx++)
-                sum=Avx.Add(sum,Avx.Multiply(MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*capacity+tx],4))),Vector256.Create(weights[x*capacity+tx])));
-            MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum);
+                sum=Avx.Add(sum,Avx.Multiply(decodedPixels[offsets[x*capacity+tx]],Vector256.Create(weights[x*capacity+tx])));
+            cachedPixels[x]=sum;
         }
     }
 

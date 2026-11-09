@@ -1,5 +1,9 @@
 # Current cached wide-family baselines
 
+Retained pre-change baseline. [Shared pixel preparation](CACHED-WIDE-PIXEL-PREPARATION.md)
+owns current production costs and qualification; the measurements below remain
+the immutable comparison baseline.
+
 WFB655 resolves seven missing current confirmations before changing the shared
 horizontal filter. Together with the unchanged-build Wide8 confirmation, the
 eight already-required controls have **four passes, four gaps and no uncertain

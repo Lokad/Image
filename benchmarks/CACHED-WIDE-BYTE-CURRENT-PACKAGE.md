@@ -1,5 +1,8 @@
 # Current cached wider-support byte resize
 
+Retained pre-change baseline. [Shared pixel preparation](CACHED-WIDE-PIXEL-PREPARATION.md)
+owns current production costs and qualification.
+
 WCR653 confirms the existing default 513×259 → 128×64 RGBA8 bicubic control on
 the actual qualified package: **498.26 / zimg 347.09 µs**, ratio **1.436**,
 conservative interval **1.356–1.444**, a **151.17 µs** gap. Allocation is

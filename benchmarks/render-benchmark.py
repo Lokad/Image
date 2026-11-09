@@ -789,10 +789,13 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-byte-current-package-evidence.json').read_text(encoding='utf-8'))
+    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-pixel-preparation-evidence.json').read_text(encoding='utf-8'))
     current = wide_byte['current']
-    assert not wide_byte['productionChanged'] and wide_byte['allProductionBuilds'] == 0
-    assert wide_byte['reusedQualification']['sameActualPackageBothOs']
+    assert wide_byte['productionAccepted'] and wide_byte['selectedStage'] == 2
+    assert wide_byte['qualification']['fullChecksEachOs'] == 5985
+    assert wide_byte['actualPackage']['sha256'] == wide_byte['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert wide_byte['sourceProof']['onlyWideHorizontalViewsAndPreparedIndexUnitsChanged']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_byte['comparison']['views'].values())
     assert current['librarySha256'] == wide_byte['actualPackage']['librarySha256']
     assert current['managedRationalReferenceExact'] and current['managedMaxWorkingBytes'] is None
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
@@ -1315,9 +1318,8 @@ def render():
         else:
             assert len(positions) == 1, label
             rows[positions[0]] = row
-    wide_family = json.loads((ROOT / 'benchmarks/cached-wide-current-family-evidence.json').read_text(encoding='utf-8'))
+    wide_family = wide_byte
     current = wide_family['cases']['Down32x16_8']
-    assert not wide_family['productionChanged'] and wide_family['allBuilds'] == 0
     assert wide_family['raw']['mirrored'] and wide_family['raw']['allMembersVerified']
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['managedRationalReferenceExact'] and current['independentOwnedOutput']
@@ -1587,8 +1589,9 @@ def render():
     merged_word.update({case: cost for case, cost in overlap['cases'].items() if case in merged_word})
     assert result_bands['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
                                                     for state in ('pass', 'gap', 'uncertain')}
+    # The shared-wide provider above owns Down32x16_8; this older identity
+    # overlay supplies only the unchanged narrow/identity paths it still owns.
     overlap_labels = {'Down8': 'Bicubic resize RGBA8',
-                      'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
                       'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
                       'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, current in overlap['cases'].items():
@@ -1837,15 +1840,15 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Current default wider-support byte resize](../benchmarks/CACHED-WIDE-BYTE-CURRENT-PACKAGE.md)
-  confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
-  Its old allocation/scheduler epoch is superseded, without a causal historical
-  CPU claim. Same qualified immutable package; no new builds or qualification runs.
-  [Current shared-wide family](../benchmarks/CACHED-WIDE-CURRENT-FAMILY.md) resolves
-  seven affected companions: four pass/four gaps overall, no uncertainty.
-  Default32×16 byte now392.69/zimg414.33µs, upper.952,197,298B/op passes/stops.
-  Two original byte/word rasters, no new workload grid; passing companions receive
-  only regression qualification when the shared helper changes.
+  [Shared wide pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md)
+  saves **498.26→463.92µs /34.35µs/6.89%raw/6.84%normalized** on default128×64byte.
+  Filtered/allactual raw/normalized confidence separates; native347.09→346.90µs
+  stays stable. Upper1.344 leaves117µs;198,450B/op, no added owned capacity or
+  retained scratch. Checked pixel views share prepared pixel indexes and exact
+  arithmetic/certificates. Eight existing affected controls now5pass/1gap/2uncertain;
+  64×32byte/word are uncertain, not passes. Seven companion native means move
+  −8–10%, so their raw changes are not causal gain claims. Current32×16byte
+  321.06/zimg376.18µs, upper.857,197,299B/op passes/stops; no new workload grid.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -1961,7 +1964,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{packed_byte_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{wide_byte['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

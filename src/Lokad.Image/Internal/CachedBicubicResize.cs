@@ -64,7 +64,9 @@ internal static partial class CachedBicubicResize
                 {
                     var w=ImageTransforms.Kernel((first+t-center)/scaleX,ResizeFilter.Bicubic);
                     weights[x*capacity+t]=w;normalizers[x]+=w;
-                    offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*4;
+                    // Wide rows consume pixel vectors directly. Narrow rows
+                    // retain channel offsets and their prepared overlap marker.
+                    offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*(wide?1:4);
                 }
             }
             if(!wide && !identityHorizontal)PrepareOverlappingHorizontalPairs(offsets,counts,width,source.Width,context);
@@ -275,6 +277,8 @@ internal static partial class CachedBicubicResize
             for(var tx=0;tx<counts[x];tx++)
             {
                 var w=wy*weights[x*capacity+tx];if(w==0)continue;var offset=offsets[x*capacity+tx];
+                // Restore a channel offset only at the original-order boundary.
+                if(capacity>16)offset*=4;
                 var alpha=wide16?row16[offset+3]:row8[offset+3];
                 var red=wide16?row16[offset]:row8[offset];var green=wide16?row16[offset+1]:row8[offset+1];var blue=wide16?row16[offset+2]:row8[offset+2];
                 r+=w*alpha*red;g+=w*alpha*green;b+=w*alpha*blue;a+=w*alpha;n+=w;
