@@ -106,13 +106,7 @@ internal ref partial struct JpegDecoder
     private void InverseSampleBlock(Component component, int index, scoped Span<byte> block)
     {
         ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan(index * 64, 64);
-        if (progressive)
-        {
-            var natural = component.Approximation.AsSpan();
-            for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
-            coefficients = natural;
-        }
-        JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+        JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context, scanOrder: progressive);
     }
 
     private static void StoreSampleBlock(ReadOnlySpan<byte> block, Span<byte> plane, int stride, int x, int y)

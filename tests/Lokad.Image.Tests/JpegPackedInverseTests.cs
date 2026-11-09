@@ -6,14 +6,15 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegPackedInverseTests
 {
-    [Fact]
-    public void EveryBasisAtSignedWordBoundariesKeepsIndependentMatrixPixelsAndGuards()
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void EveryBasisAtSignedWordBoundariesKeepsIndependentMatrixPixelsAndGuards(bool scanOrder)
     {
         int[] values = [-32768, -32767, -4096, -1024, -1, 1, 1023, 4095, 32766, 32767];
         var coefficients = new int[66];
         coefficients[0] = 1234567; coefficients[^1] = -7654321;
         var quantizers = Enumerable.Repeat((ushort)1, 66).ToArray();
         var output = Enumerable.Repeat((byte)165, 70).ToArray();
+        var scan = new int[64];
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         using var root = new TestMemoryBudget(0);
         using var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root, MaxWorkingBytes = 1 }, default);
@@ -23,7 +24,10 @@ public sealed class JpegPackedInverseTests
             Array.Clear(coefficients, 1, 64);
             coefficients[1] = -1024;
             coefficients[lane + 1] = lane == 0 ? value - 1024 : value;
-            JpegInverseTransform.Inverse(coefficients.AsSpan(1, 64), quantizers.AsSpan(1, 64), output.AsSpan(3, 64), context);
+            for (var k = 0; k < 64; k++) scan[k] = coefficients[1 + JpegTransform.Zigzag[k]];
+            var before = scan.ToArray();
+            JpegInverseTransform.Inverse(scanOrder ? scan : coefficients.AsSpan(1, 64), quantizers.AsSpan(1, 64), output.AsSpan(3, 64), context, scanOrder);
+            Assert.Equal(before, scan);
             hash.AppendData(output.AsSpan(3, 64));
             Assert.Equal(lane == 0 ? value - 1024 : value, coefficients[lane + 1]);
         }
@@ -35,10 +39,11 @@ public sealed class JpegPackedInverseTests
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void FullWidthProductsAndDenseRowsKeepIndependentFrozenMatrixPixels()
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void FullWidthProductsAndDenseRowsKeepIndependentFrozenMatrixPixels(bool scanOrder)
     {
         var coefficients = new int[64]; var quantizers = new ushort[64]; var output = new byte[64];
+        var scan = new int[64];
         uint state = 0x3c1b52a9;
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         using var root = new TestMemoryBudget(0);
@@ -50,11 +55,53 @@ public sealed class JpegPackedInverseTests
                 state ^= state << 13; state ^= state >> 17; state ^= state << 5;
                 coefficients[k] = unchecked((int)state); quantizers[k] = (ushort)(1 + state % 65535);
             }
-            JpegInverseTransform.Inverse(coefficients, quantizers, output, context);
+            for (var k = 0; k < 64; k++) scan[k] = coefficients[JpegTransform.Zigzag[k]];
+            JpegInverseTransform.Inverse(scanOrder ? scan : coefficients, quantizers, output, context, scanOrder);
             hash.AppendData(output);
         }
         // Full scalar matrix with original word wrap, bias and saturation.
         Assert.Equal("5eb412caf31da56383787d927082bf0561c9bb6c7d71f46cc6dac0334f5720a2", Convert.ToHexStringLower(hash.GetHashAndReset()));
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void ScanOrderDequantizationKeepsFullWidthProductsAndCapacityGuards()
+    {
+        int[] extremes = [int.MinValue, int.MaxValue, -65537, -65536, -32769, -1, 0, 1, 32767, 65535, 65536];
+        ushort[] scales = [0, 1, 255, 32767, 32768, 65534, 65535];
+        var scan = new int[64]; var natural = new int[64]; var quantizers = new ushort[64];
+        var expected = new short[64]; var guarded = Enumerable.Repeat((short)12345, 68).ToArray();
+        for (var sample = 0; sample < extremes.Length * scales.Length; sample++)
+        {
+            for (var k = 0; k < 64; k++)
+            {
+                scan[k] = extremes[(sample + k) % extremes.Length];
+                natural[JpegTransform.Zigzag[k]] = scan[k];
+                quantizers[k] = scales[(sample / extremes.Length + k) % scales.Length];
+            }
+            var before = scan.ToArray(); var beforeQuantizers = quantizers.ToArray();
+            JpegInverseTransform.Dequantize(natural, quantizers, expected);
+            JpegInverseTransform.DequantizeScanOrder(scan, quantizers, guarded.AsSpan(2, 64));
+            Assert.Equal(expected, guarded.AsSpan(2, 64).ToArray());
+            Assert.All(guarded.Take(2).Concat(guarded.Skip(66)), value => Assert.Equal((short)12345, value));
+            Assert.Equal(before, scan); Assert.Equal(beforeQuantizers, quantizers);
+        }
+    }
+
+    [Fact]
+    public void ScanOrderUsesNoHeapOrAdmissionAndCancelsBeforePixelMutation()
+    {
+        var scan = new int[64]; var quantizers = Enumerable.Repeat((ushort)1, 64).ToArray(); var pixels = new byte[64];
+        scan[0] = -1024; scan[17] = -32769;
+        using var canceled = new CancellationTokenSource(); using var root = new TestMemoryBudget(0);
+        using var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root, MaxWorkingBytes = 1 }, canceled.Token);
+        JpegInverseTransform.Inverse(scan, quantizers, pixels, context, scanOrder: true);
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 128; i++) JpegInverseTransform.Inverse(scan, quantizers, pixels, context, scanOrder: true);
+        Assert.Equal(before, GC.GetAllocatedBytesForCurrentThread());
+        canceled.Cancel(); Array.Fill(pixels, (byte)165);
+        var exception = Assert.Throws<OperationCanceledException>(() => JpegInverseTransform.Inverse(scan, quantizers, pixels, context, scanOrder: true));
+        Assert.Equal(canceled.Token, exception.CancellationToken); Assert.All(pixels, value => Assert.Equal(165, value));
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
     }
 }

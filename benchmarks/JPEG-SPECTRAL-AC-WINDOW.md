@@ -1,5 +1,9 @@
 # Initial JPEG spectral AC window
 
+[Narrow scan preparation](JPEG-NARROW-SCAN-PREPARATION.md) supersedes 27 decoder
+costs and owns the current 29-read scope. Two unchanged coding-validation costs
+and this stage's exact entropy/gain evidence remain valid.
+
 JSA694 keeps the existing bit cache and coefficient index local across short
 Huffman symbol/amplitude pairs in an initial progressive AC scan. Ordinary and
 live-token calls share this path. Every original logical cancellation check,

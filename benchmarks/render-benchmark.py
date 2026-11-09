@@ -1050,16 +1050,16 @@ def render():
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     # Current owners include explicitly reused costs for unchanged paths.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-spectral-ac-window-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-narrow-scan-preparation-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
-    assert jpeg_scan['qualification']['fullChecksEachOs'] == 6050
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 6077
     assert jpeg_scan['qualification']['sameActualPackageBothOS']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['onlyInitialSpectralAcCallAdded']
-    assert jpeg_scan['sourceProof']['readerPublisherIdentifierOnlyRenamed']
-    assert jpeg_scan['storage']['allocationCountsUnchanged']
-    assert set(jpeg_scan['refreshedCases']) == set(jpeg_scan['sourceProof']['invalidatesPrecisely'])
-    assert len(jpeg_scan['refreshedCases']) == 6 and len(jpeg_scan['reusedCases']) == 23
+    assert jpeg_scan['sourceProof']['originalInverseKernelAndValidationCancellationVerbatim']
+    assert jpeg_scan['sourceProof']['formatInversePermutationMatchesIndependentGeometry']
+    assert jpeg_scan['storage']['newOwnedHeapCapacityBytes'] == 0
+    assert jpeg_scan['storage']['newRetainedOperationStorageBytes'] == 0
+    assert len(jpeg_scan['refreshedCases']) == 27 and len(jpeg_scan['reusedCases']) == 2
     assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
                                         for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
@@ -1071,7 +1071,7 @@ def render():
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in jpeg_scan['comparison']['ProgressiveGray']['views'].values())
+               for v in jpeg_scan['comparison']['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
                      ('Progressive420', 'JPEG progressive420, resident decode'),
@@ -1955,31 +1955,25 @@ Current scope and remaining work:
   pass. Geometry/output ownership stay timed; native graph/context preparation
   stays retained and labeled. Preserve exact Q30/rational/certified pixels versus
   native float; historical gains stay in linked reports.
-- **JPEG and reading:** [initial spectral AC windows](../benchmarks/JPEG-SPECTRAL-AC-WINDOW.md)
-  save **132.88µs/7.40% raw/7.26% normalized** on complete progressive grayscale,
-  with separated filtered/all-actual raw and normalized confidence. Current
-  1,663.11/native1,711.72µs, upper0.997 passes; ordinary444 and coding validation
-  also pass. Six affected costs refresh;23 unchanged paths reuse valid evidence:
-  {jpeg_scan['statusCounts']['confirmed-pass-stop']}pass/{jpeg_scan['statusCounts']['confirmed-gap']}gaps/{jpeg_scan['statusCounts']['confirmed-confidence-open']}uncertain. Live444 remains a gap (3,470.52/native3,366.73µs,
-  upper1.059); its incremental normalized effect is uncertain. Adverse short raw
-  evidence remains; no causal live speedup/regression/equivalence claim.
-  GC is unchanged (gray151,432B/op); no new capacity, owner, pool or retained state.
-  Source-valid gray admission699,834B/output531,468B and idlecoefficients549,120B
-  remain separate from physical/native peaks, which are unmeasured. Governed calls
-  bypass existing pools. Exact outputs/polls,6,050full/live per OS, normal/scalar/
-  AVX2off and SAMEactualpackage/threeexamples pass. Stop passing cases; resolve
-  stream420restart uncertainty before tuning. [Completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
-  retains the preceding allocation/gain milestone and unchanged cost providers.
-  [Paired component preparation](../benchmarks/JPEG-PAIRED-COMPONENT-PREPARATION.md)
-  has no useful gain across three exact short stages; all qualified originals
-  and package identities are restored. Its reports retain adverse/inconclusive
-  evidence without adding rejected-stage checks to renderer dependencies.
-  [Paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md) retain earlier causal
-  RGB/CMYK gains, unchanged RGB1530.34/native1450.52µs upper1.065 and its574,069B
-  governed peak. Current scan tables/owner/cancellation contracts remain intact.
-  Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
-  [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
-  [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
+- **JPEG and reading:** [narrow scan preparation](../benchmarks/JPEG-NARROW-SCAN-PREPARATION.md)
+  narrows AC before permutation and dequantization, retaining the shared existing
+  inverse kernel and full-width DC product. Complete live444 saves
+  **{jpeg_scan['comparison']['savedUs']:.2f}µs/{100*jpeg_scan['comparison']['rawReduction']:.2f}% raw**,
+  {100*jpeg_scan['comparison']['normalizedReduction']:.2f}% normalized, with separated filtered/all-actual confidence.
+  Its upper{jpeg_scan['cases']['ProgressiveCancelable444']['upper']:.3f} remains uncertain.
+  All27 affected decoder costs refresh;2pixel-free validation paths reuse evidence:
+  **{jpeg_scan['statusCounts']['confirmed-pass-stop']}pass/{jpeg_scan['statusCounts']['confirmed-gap']}gaps/{jpeg_scan['statusCounts']['confirmed-confidence-open']}uncertain**.
+  Raw RGB422, resident/stream restart420 and live444 stay uncertain. Contemporary
+  sparseCMYK/restart originals have overlapping raw/normalized bounds against the
+  completed candidates; preserve adverse points without causal regression or
+  nonregression claims, or favorable repeats. GC remains169,664B/live444 operation.
+  No new heap owner, capacity, pool or retained operation scratch;128B format module
+  data and the captured64B helper frame are separate from source-valid admission/
+  output retention. Physical/native peaks are unmeasured. Exact pixels,6,077full/live
+  eachOS, normal/scalar/AVX2off/AVX512off and SAMEactualpackage/threeexamples pass.
+  Stop passing cases. [Initial spectral AC](../benchmarks/JPEG-SPECTRAL-AC-WINDOW.md),
+  [completed output](../benchmarks/JPEG-COMPLETED-OUTPUT.md) and
+  [paired AC](../benchmarks/JPEG-PAIRED-AC-WINDOW.md) retain prior gains and storage evidence.
   [Grayscale tile preparation](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) shares
   row setup across up to eight MCUs, preserving exact normalization and gray samples.
   Complete RGBA→gray saves **{jpeg_tiles['comparison']['savedUs']:.2f}µs/{100*jpeg_tiles['comparison']['rawReduction']:.2f}% raw**,
@@ -2026,14 +2020,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_tiles['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-JPEG paths pass407 internal/375 public checks per normal/scalar mode
+JPEG paths pass448 internal/375 public checks per normal/scalar/disabled-AVX2/AVX512 mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,

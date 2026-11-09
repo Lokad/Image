@@ -18,13 +18,7 @@ internal ref partial struct JpegDecoder
             for (var x = 0; x < component.BlockColumns; x++)
             {
                 ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan((y * component.BlockColumns + x) * 64, 64);
-                if (progressive)
-                {
-                    var natural = component.Approximation.AsSpan();
-                    for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
-                    coefficients = natural;
-                }
-                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context, scanOrder: progressive);
                 for (var by = 0; by < 8; by++)
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }

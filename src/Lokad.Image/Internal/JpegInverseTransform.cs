@@ -45,14 +45,15 @@ internal static class JpegInverseTransform
     }
 
     internal static void Inverse(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization,
-        Span<byte> pixels, OperationContext context)
+        Span<byte> pixels, OperationContext context, bool scanOrder = false)
     {
         if (coefficients.Length != 64 || quantization.Length != 64 || pixels.Length != 64)
             throw new ArgumentException("JPEG transforms operate on complete 8x8 blocks.");
         context.Cancellation.ThrowIfCancellationRequested();
         Span<short> input = stackalloc short[64];
         Span<short> rows = stackalloc short[64];
-        Dequantize(coefficients, quantization, input);
+        if (scanOrder) DequantizeScanOrder(coefficients, quantization, input);
+        else Dequantize(coefficients, quantization, input);
         if (!input[1..].ContainsAnyExcept((short)0))
         {
             // Both matrix passes are constant. Preserve the row word wrap
@@ -117,6 +118,40 @@ internal static class JpegInverseTransform
                 input[i] = unchecked((short)((long)coefficients[i] * quantization[i]));
         // DC saturates after the original full-width product and level shift;
         // a previously narrowed product cannot replace this calculation.
+        input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
+    }
+
+    // Inverse of the T.81 diagonal geometry generated in JpegTransform.
+    // Compiled format data, without a heap table or image-specific state.
+    private static ReadOnlySpan<short> NaturalToScan => [
+        0, 1, 5, 6, 14, 15, 27, 28, 2, 4, 7, 13, 16, 26, 29, 42,
+        3, 8, 12, 17, 25, 30, 41, 43, 9, 11, 18, 24, 31, 40, 44, 53,
+        10, 19, 23, 32, 39, 45, 52, 54, 20, 22, 33, 38, 46, 51, 55, 60,
+        21, 34, 37, 47, 50, 56, 59, 61, 35, 36, 48, 49, 57, 58, 62, 63];
+
+    internal static void DequantizeScanOrder(ReadOnlySpan<int> coefficients,
+        ReadOnlySpan<ushort> quantization, Span<short> input)
+    {
+        if (Avx512BW.IsSupported)
+        {
+            // AC retains only the product's low word. Narrowing commutes with
+            // permutation and multiplication, so two word permutations replace
+            // a natural-order Int32 copy followed by another full-block read.
+            var low = Vector512.Narrow(Vector512.Create(coefficients), Vector512.Create(coefficients[16..]));
+            var high = Vector512.Narrow(Vector512.Create(coefficients[32..]), Vector512.Create(coefficients[48..]));
+            var first = Avx512BW.PermuteVar32x16x2(low, Vector512.Create(NaturalToScan), high);
+            var last = Avx512BW.PermuteVar32x16x2(low, Vector512.Create(NaturalToScan[32..]), high);
+            Avx512BW.MultiplyLow(first, Vector512.Create(quantization).AsInt16()).CopyTo(input);
+            Avx512BW.MultiplyLow(last, Vector512.Create(quantization[32..]).AsInt16()).CopyTo(input[32..]);
+        }
+        else
+            for (var k = 0; k < 64; k++)
+            {
+                var at = JpegTransform.Zigzag[k];
+                input[at] = unchecked((short)((long)coefficients[k] * quantization[at]));
+            }
+        // DC uses the original full-width coefficient and unsigned quantizer;
+        // it saturates after the level shift, independently of AC narrowing.
         input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
     }
 
