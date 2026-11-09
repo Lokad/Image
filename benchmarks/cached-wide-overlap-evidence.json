@@ -1,0 +1,497 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CWO697",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 283,
+  "cases": {
+    "baseline": {
+      "managedUs": 502.46911666666665,
+      "nativeUs": 375.2515299479167,
+      "ratio": 1.33901950176301,
+      "lower": 1.1805863506641532,
+      "upper": 1.4896844712120707,
+      "allocatedBytes": 198448,
+      "librarySha256": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19"
+    },
+    "candidate": {
+      "managedUs": 511.06299416666667,
+      "nativeUs": 366.3589622395833,
+      "ratio": 1.3949788236174034,
+      "lower": 1.10411399938349,
+      "upper": 1.8431465014492805,
+      "allocatedBytes": 198448,
+      "librarySha256": "73a0028349becc8f013333be80eb84ecae1ae2857abf54a25ea022add8403cc1"
+    }
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "CWO697",
+    "status": "candidate-built-focused-passed",
+    "productionChanged": true,
+    "allBuilds": 0,
+    "automaticMergeAuthorized": false,
+    "hypothesis": "Wide horizontal pairs currently load2*n decoded pixel vectors even when their contiguous supports overlap by n-shift. Prepare eligibility from clamped private pixel indexes once, then share each overlapping load across two independent sums, retaining exactly original tap order per sum.",
+    "intendedEndState": "Bounded prepared overlap marker in otherwise unread geometry padding, ordered first-only/overlap/second-only loops, and existing kernel for unequal counts/edge clamps/insufficient padding. No source conversion buffer, new array/admission, pool/cache/session/API, numerical-policy change or upstream material.",
+    "removableWork": "For equal n taps and contiguous starts separated by shift(0<shift<n), decoded pixel-vector loads reduce2*n to n+shift. Multiply/add/weight order remains2*n and independent per output; no elapsed-time gain inferred from counts.",
+    "eligibility": "Both counts equal and less than capacity so final offset slot is unread by filtering and Original. Every offset contiguous and unclamped, second start shifted forward within n. Prepare marker once per column pair; do not scan eligibility inside every source row. Existing scalar and irregular/edge cases retained.",
+    "boundaries": "Complete existing cached Wide8 513x259\u2192128x64, contemporary original/candidate short. Wide16 shares kernel and remains a regression control, not an optimization target. Accepted design refreshes only affected members of the existing eight-control support32/64/128/256 family; no new image/grid. A generalization control only if this leaves a distinct required path unproved.",
+    "correctness": "Original ordered binary64 horizontal sums bit preserved; vertical normalizers/certificates/repair unchanged. Channel offsets restored only at Original, padding marker cannot be read as a real tap, exact byte/word pixels/alpha/hiddenRGB. Same cancellation per output pair, local/shared admission/old-new lifetimes and portable fallback.",
+    "risks": "Fewer L1 source loads may not dominate; split-loop branches, index arithmetic/register pressure can offset benefit. Do not infer speed from load counts. Preserve old fallback until correctness and complete evidence justify consolidation. No fixed continuation threshold/permanent family ban.",
+    "sourceAudit": "Conversion already once per source row/cache ID; no extra full-row copy found on Wide8. Geometry shared across rows; old CGA654 Kernel20/1847locations and horizontal868locations predate accepted CPP657 and subsequent row changes, so are diagnostic leads, not current phase costs or mapped-current proof. No new profile performed.",
+    "baseline": {
+      "windowsSha256": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19",
+      "linuxSha256": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+      "packageSha256": "66f8ce58f93d8e6561b49b494e2bf9125f4356c1efc9b7741856032b6c10b6f6",
+      "fullChecksEachOs": 6058
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9"
+    },
+    "next": "Preserve verified originals before edits; establish geometry eligibility/order/padding tests against the existing kernel, then one immutable candidate perOS and focused normal/scalar checks. Complete original/candidate screen first; independent confirmation if useful, broad qualification at accepted coherent milestone.",
+    "publicationPostponed": true,
+    "requiredMaterialPaths": 283,
+    "paths": [
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs",
+      "tests/Lokad.Image.Tests/CachedWideOverlapTests.cs"
+    ],
+    "newPaths": [
+      "tests/Lokad.Image.Tests/CachedWideOverlapTests.cs"
+    ],
+    "transitionFromLinuxSha256": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9"
+    },
+    "productionAccepted": false,
+    "candidateMainEachOs": {
+      "windows": "73a0028349becc8f013333be80eb84ecae1ae2857abf54a25ea022add8403cc1",
+      "linux": "f8bad9319c487dc04045175405562e77c0f9613abd9cdcc4b69edf64230bd42e"
+    },
+    "newTests": 9,
+    "focused": {
+      "internal-normal": 255,
+      "internal-scalar": 255,
+      "public-normal": 729,
+      "public-scalar": 729
+    },
+    "preparation": "Fresh unread final offset slot carries positive source shift only for equal contiguous supports, both counts<capacity; full/unequal/clamped supports decline. No capacity change.",
+    "sumProof": "First-only sum0 in order0..shift-1; overlap sums0 shift..n-1 andsum1 0..n-shift-1 from shared source; final sum1 n-shift..n-1. Every original multiply/add order per lane preserved. Neighbor order interleaves without shared arithmetic state."
+  },
+  "geometryAudit": {
+    "project": "Lokad.Image",
+    "sourceDerivedGeometryOnly": true,
+    "executedHitCounter": false,
+    "width": 513,
+    "targetWidth": 128,
+    "capacity": 32,
+    "totalPairs": 64,
+    "eligiblePairs": 62,
+    "originalDecodedPixelLoadsPerSourceRow": 2052,
+    "preparedDecodedPixelLoadsPerSourceRow": 1306,
+    "eligible": [
+      {
+        "x": 2,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 4,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 6,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 8,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 10,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 12,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 14,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 16,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 18,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 20,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 22,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 24,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 26,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 28,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 30,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 32,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 34,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 36,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 38,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 40,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 42,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 44,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 46,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 48,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 50,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 52,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 54,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 56,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 58,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 60,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 62,
+        "taps": 17,
+        "shift": 4
+      },
+      {
+        "x": 64,
+        "taps": 17,
+        "shift": 4
+      },
+      {
+        "x": 66,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 68,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 70,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 72,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 74,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 76,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 78,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 80,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 82,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 84,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 86,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 88,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 90,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 92,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 94,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 96,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 98,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 100,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 102,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 104,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 106,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 108,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 110,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 112,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 114,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 116,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 118,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 120,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 122,
+        "taps": 16,
+        "shift": 4
+      },
+      {
+        "x": 124,
+        "taps": 16,
+        "shift": 4
+      }
+    ],
+    "note": "Independent source-derived exact dyadic center/support geometry for the frozen control. Not a sampled phase time or claimed CPU gain. Production source call and geometry/kernel tests establish eligibility behavior."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "9e57adc0753f071c3988cb9b7226377b59625d5ff47987f50e4e739e2693d96c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "f5726a643833779aa8035a7e7c194b2095c9d20385caf3d548083f1b50da94b7",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "60f90a6b184c682c440cde9f510f9b7e7eb50154ccc40f753c0a1e95957f2c42"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "9e57adc0753f071c3988cb9b7226377b59625d5ff47987f50e4e739e2693d96c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "9e57adc0753f071c3988cb9b7226377b59625d5ff47987f50e4e739e2693d96c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "65493f622524f23da2dab602e2b8177265a6b89e89e3e7d553a1b2d149ff3d19",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "9e57adc0753f071c3988cb9b7226377b59625d5ff47987f50e4e739e2693d96c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8"
+      },
+      "allBuilds": 0,
+      "packageSha256": "66f8ce58f93d8e6561b49b494e2bf9125f4356c1efc9b7741856032b6c10b6f6",
+      "qualificationReuse": "UnchangedWPP6956058W/L full/live, normal/scalar and SAMEactualReleasepackage66f8ce58/paletteconsumers/threeexamples; CIac94b7ad andd82e5773allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "741bc9fd48677bc59c0e57afab4e92687814462a66ad24a10985d49835a1880a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "5f37f77e566fdcae224c06a8e6b196fd864d14657b61c466b88fa626a666d64d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "a4ea94c2a2a72e479d4739b89de970f6e92ac0de727f87fd9be9632dfc062d66"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "741bc9fd48677bc59c0e57afab4e92687814462a66ad24a10985d49835a1880a",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "741bc9fd48677bc59c0e57afab4e92687814462a66ad24a10985d49835a1880a",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "7e015caecb10759055e6869249f72caf1f6617deab972a9f724b98f067a93c06",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "741bc9fd48677bc59c0e57afab4e92687814462a66ad24a10985d49835a1880a",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91"
+      },
+      "allBuilds": 0,
+      "packageSha256": "66f8ce58f93d8e6561b49b494e2bf9125f4356c1efc9b7741856032b6c10b6f6",
+      "qualificationReuse": "UnchangedWPP6956058W/L full/live, normal/scalar and SAMEactualReleasepackage66f8ce58/paletteconsumers/threeexamples; CIac94b7ad andd82e5773allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    }
+  },
+  "correctness": "Prepared padding eligibility preserves real offsets; both actual production kernels yield bit-identical ordered sums including odd, clamped, unequal/full-capacity cases and canaries, no helper allocation. Public exact/rational/refusal/cancellation/ownership controls pass normal/scalar eachOS. Nine candidate-only cases archived and removed with the candidate; existing coverage unchanged.",
+  "workflow": "One immutable main/embedded candidate eachOS,255internal/729public checks pernormal/scalar eachOS. Two complete3actual original/candidate Wide8 jobs, same frozen packets/pixels/native/source/owner/idle-v2 gates. No useful complete point lead, independent confirmation, favorable repeat, full suite or package rebuild. Production source/main/embedded/public bindings restored byte-for-byte; current6058full/live/SAMEactualpackage66f8ce58 proof reused.",
+  "storage": {
+    "allocatedBytesBoth": 198448,
+    "admissionBytesUnchanged": 198432,
+    "retainedResultBytes": 32768,
+    "newRetainedScratchBytes": 0,
+    "physicalAndNativePeaksMeasured": false
+  },
+  "decision": "Not selected: complete Wide8 candidate511.06us versus original502.47us; native366.36 versus375.25us. Short intervals establish no causal gain, regression or equivalence. Source-derived geometry has62/64eligible pairs and2052\u21921306decoded pixel loads per source row, not an executed-hit or phase-time measurement. No elapsed gain follows from those counts. Completed design has no useful lead; no repeat/confirmation. Existing standalone CPP657 costs remain valid. Outcome does not ban materially revised reuse designs.",
+  "next": "Inspect independent text drawing/raster workspace scheduling and current attribution, without monopolizing the roadmap. Approved references/gates remain; identify a concrete redundant cost before any new production trial. Keep all283-path objective, encoder byte exactness and exact managed pixels.",
+  "raw": {
+    "file": "cached-wide-overlap-experiment.tar.xz",
+    "sha256": "a91445c50eb234d87094c42eefefae2a3b6126055c790ed2e654b655a2007dae",
+    "bytes": 4742352,
+    "members": 82,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "cached-wide-pixel-preparation-qualified.tar.xz",
+        "sha256": "c09c3ab9d61ba9082b430cc73611d8de15661ac3f1c92dfc2953d8ed440f1608"
+      },
+      {
+        "file": "webp-palette-output-qualified.tar.xz",
+        "sha256": "9827d07098a84952fad67d9a2a4f5a3471036bbc0b437708714cc9aa9ab5cf9c"
+      }
+    ]
+  }
+}

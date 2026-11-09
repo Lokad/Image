@@ -65,3 +65,7 @@ cached-wide-pixel-preparation-qualified.tar.xz. It depends on the retained
 The attribution design JSON's invalid literal suffix is preserved with its
 preflight recovery; no build or profile is replayed. Full 283-path parity remains
 open; publication is postponed. Passing cases stop.
+
+A later [overlap-load experiment](CACHED-WIDE-OVERLAP-EXPERIMENT.md) supplies no
+useful complete lead. Original sources/modules are restored exactly; the accepted
+costs above retain valid evidence. Its raw observations remain separate.
