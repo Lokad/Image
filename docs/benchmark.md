@@ -100,10 +100,14 @@ Current scope and remaining work:
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
   remains a gap;113B/op, no added owned capacity/retained scratch.
+  [Current packed64×32 byte reduction](../benchmarks/PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md)
+  is544.63/zimg373.78µs, upper1.499 and113B/op. The old8,329B allocation predates
+  complete-overwrite allocation. Repeated geometry is a lead; a row-batch model
+  also repeats56.37%more source work, so it establishes no speed gain.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
-  is claimed. The reduction's shared numeric range serves a16column borrowed-
+  is claimed. The strided reduction's shared numeric range serves a16column borrowed-
   output prefix and original8/6column suffix;
   separate non-inlined stack frames share one4KiB allowance and retire before
   overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
@@ -353,7 +357,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 544.63 | 373.78 | 1.457 / 1.499 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |

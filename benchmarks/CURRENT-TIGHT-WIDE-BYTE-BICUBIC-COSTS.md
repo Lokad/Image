@@ -1,5 +1,10 @@
 # Current tight wider-support byte bicubic costs
 
+The 64×32 row below is superseded by the
+[current actual-package measurement](PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md),
+544.63/373.78 µs and 113 B/op. This report retains the earlier producer's scope
+and raw evidence; current 128×64 costs come from shared preparation.
+
 Both required tight-workspace controls are confirmed CPU gaps on the qualified
 MGP1 producer. Older costs do not establish a causal gain or regression.
 

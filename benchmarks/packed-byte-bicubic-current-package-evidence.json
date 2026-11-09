@@ -1,0 +1,203 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TDR647",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allProductionBuilds": 0,
+  "privateProbeBuilds": 0,
+  "newInputs": 0,
+  "newProfiles": 0,
+  "current": {
+    "managedUs": 544.6283371829711,
+    "nativeUs": 373.7757233072917,
+    "ratio": 1.4570992796533673,
+    "lower": 1.337663253092101,
+    "upper": 1.4989075072262066,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+    "nativeOutputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 64x32 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 543756 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixteen-pixel clamped halo (19.364% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": 543756,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "caseId": "Tight64x32_8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 64,
+    "outputHeight": 32,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "3507899d05a62f3bcb303a6baf4748cb605860f0187c1aede46a94d266e4fe77",
+    "symbolsSha256": "a1c35e550f69650db14814d30640b3edc6e351181da57af50de2cf26146d931f",
+    "bytes": 435939,
+    "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+    "actualConsumerPassed": true,
+    "byteColumnStripsOwnershipPassed": true,
+    "byteCompositingVectorAndTailPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "reusedQualification": {
+    "provider": "byte-composite-exact-vector-evidence.json",
+    "fullChecksEachOs": 5975,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "newTestOrPackageRuns": 0
+  },
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "ae1bd2776a372265dce8b110a7472270daf6dbe2463bc0187ec058add220b8d2",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
+  },
+  "storage": {
+    "totalAllocatedBytes": 113,
+    "retainedResultBytes": 8192,
+    "localWorkingCeilingBytes": 543756,
+    "rootWorkspaceBytes": 4096,
+    "existingStackPayloadBytes": 3992,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "physicalAndNativePeaksMeasured": false,
+    "existingIdlePoolCapacityMeasured": false
+  },
+  "decision": "Current tight64x32byte remains a confirmed170.85us gap544.63/zimg373.78us,lower1.338/upper1.499,113Bop. SAME actual immutable package70bb. One12actual confirmation, no favorable repeats, production/fixture/worker builds, profiling or qualification repetition. Older545.55/370.06us clocks are not a causal gain. Earlier8329B allocation evidence predates d7fcbd41 complete-overwrite resize allocation and cannot describe current storage.",
+  "attribution": "Packed two-column/36slot source-row cache rebuilds vertical geometry for every tile. Count-only frozen-case model observes33152vertical weight evaluations,8288source-row visits and325822decoded pixels. A result-tail row-batch model reduces geometry to3020but increases row visits12960 and decoded pixels509490(+56.37percent). No CPU attribution or selected implementation; first examine a design that amortizes geometry without losing this much row reuse.",
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "TDR647",
+    "productionChanged": false,
+    "purpose": "Count-only geometry and lifetime model, not CPU attribution or candidate acceptance. Existing sole frozen tight64x32 byte control.",
+    "geometry": {
+      "sourceWidth": 513,
+      "sourceHeight": 259,
+      "width": 64,
+      "height": 32,
+      "columns": 2,
+      "cacheSlots": 36
+    },
+    "original": {
+      "verticalWeightEvaluations": 33152,
+      "driverRows": 1024,
+      "sourceRowVisits": 8288,
+      "decodedSourcePixels": 325822
+    },
+    "proposed": {
+      "batches": [
+        {
+          "start": 0,
+          "end": 8,
+          "prepared": true,
+          "geometryStart": 5760,
+          "sourceRowVisits": 77,
+          "weightEvaluations": 260
+        },
+        {
+          "start": 8,
+          "end": 16,
+          "prepared": true,
+          "geometryStart": 5760,
+          "sourceRowVisits": 89,
+          "weightEvaluations": 258
+        },
+        {
+          "start": 16,
+          "end": 23,
+          "prepared": true,
+          "geometryStart": 6064,
+          "sourceRowVisits": 81,
+          "weightEvaluations": 226
+        },
+        {
+          "start": 23,
+          "end": 27,
+          "prepared": true,
+          "geometryStart": 6976,
+          "sourceRowVisits": 57,
+          "weightEvaluations": 130
+        },
+        {
+          "start": 27,
+          "end": 29,
+          "prepared": true,
+          "geometryStart": 7584,
+          "sourceRowVisits": 41,
+          "weightEvaluations": 66
+        },
+        {
+          "start": 29,
+          "end": 30,
+          "prepared": true,
+          "geometryStart": 7888,
+          "sourceRowVisits": 32,
+          "weightEvaluations": 32
+        },
+        {
+          "start": 30,
+          "end": 32,
+          "prepared": false,
+          "geometryStart": null,
+          "sourceRowVisits": 28,
+          "weightEvaluations": 2048
+        }
+      ],
+      "verticalWeightEvaluations": 3020,
+      "driverRows": 1024,
+      "sourceRowVisits": 12960,
+      "decodedSourcePixels": 509490
+    },
+    "hypothesis": "Batch vertical geometry in safely disjoint unpublished result-tail capacity; reuse across all column strips within a row batch. Preserve exact weight evaluation, tap order, repair and original scalar/ISA fallbacks. Common geometry owner should serve existing wider-column families rather than adding generic pixel kernels. Max8row batches are an illustrative lifetime model, not a tuned threshold or selected design.",
+    "cost": "Retiring cache between row batches repeats horizontal filtering/conversion. Must attribute this tradeoff or revise storage design before production experiment; no speed prediction from fewer kernel evaluations.",
+    "memory": "Old3992B stack payload stays within existing4096B local/root reservation. Geometry borrows already admitted result; never reaches published output or survives operation. No new pool/cache/session/owner. All geometry must retire before fallback/repair. Physical/native peaks unmeasured."
+  },
+  "observerRecovery": "Initial postprocessor whitelist omitted existing Tight64x32_8case. Add sole case and process completed12actuals; no timing replay.",
+  "next": "Revise geometry/storage scheduling or attribute its tradeoff before a production experiment. Preserve exact tap/normalizer order, Q30/rational/certified repair, local/root4096admission, terminal refusal, cancellation and independently owned result. Shared geometry lifetime should consolidate wider kernels; no general cache, fixed-fixture specialization or new grid.",
+  "raw": {
+    "file": "packed-byte-bicubic-current-package.tar.xz",
+    "sha256": "034f9177d4e230ebbe8d34d7ac4465739e04d5f1b509d0346f80314033cd2f9c",
+    "bytes": 6142340,
+    "members": 118,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "byte-composite-exact-vector-qualified.tar.xz",
+        "sha256": "789bd43e763effe85a5c35bf4342aac5d996192288605c7ddcb384d83eba11ae",
+        "bytes": 13435888,
+        "members": 191
+      }
+    ]
+  }
+}

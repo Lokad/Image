@@ -928,7 +928,18 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    for depth, name in [(8, 'byte'), (16, 'word')]:
+    packed_byte_current = json.loads((ROOT / 'benchmarks/packed-byte-bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
+    current = packed_byte_current['current']
+    assert not packed_byte_current['productionChanged'] and packed_byte_current['allProductionBuilds'] == 0
+    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['managedRationalReferenceExact'] and current['independentOwnedOutput'] and current['sourceUnchanged']
+    assert current['librarySha256'] == packed_byte_current['actualPackage']['librarySha256']
+    assert packed_byte_current['raw']['mirrored'] and packed_byte_current['raw']['allMembersVerified']
+    assert current['status'] == 'gap' and current['allocatedBytes'] == 113
+    rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | '
+                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    for depth, name in [(16, 'word')]:
         tight_wide = json.loads((ROOT / f'benchmarks/current-tight-wide-{name}-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
         assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
         assert tight_wide['workflow']['allBuilds'] == tight_wide['workflow']['newInputs'] == tight_wide['workflow']['newProfiles'] == 0
@@ -1815,10 +1826,14 @@ Current scope and remaining work:
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
   remains a gap;113B/op, no added owned capacity/retained scratch.
+  [Current packed64×32 byte reduction](../benchmarks/PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md)
+  is544.63/zimg373.78µs, upper1.499 and113B/op. The old8,329B allocation predates
+  complete-overwrite allocation. Repeated geometry is a lead; a row-batch model
+  also repeats56.37%more source work, so it establishes no speed gain.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
-  is claimed. The reduction's shared numeric range serves a16column borrowed-
+  is claimed. The strided reduction's shared numeric range serves a16column borrowed-
   output prefix and original8/6column suffix;
   separate non-inlined stack frames share one4KiB allowance and retire before
   overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
