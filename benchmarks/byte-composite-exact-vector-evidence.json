@@ -1,0 +1,310 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CCR645/BCS646",
+  "date": "2026-11-09",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+    "linuxSha256": "d684e14a9f32cc95b6c41584ae05ad863349643bc319ee684c0613e0041c4b84"
+  },
+  "current": {
+    "managedUs": 65.62960000000001,
+    "nativeUs": 451.35609015151516,
+    "ratio": 0.14540537157251804,
+    "lower": 0.13948629295762535,
+    "upper": 0.15715441724556636,
+    "allocatedBytes": 56,
+    "status": "pass",
+    "exactManagedPixels": true,
+    "referenceScope": "FFmpeg RGBA8 overlay; approved native-only RGB<=1/RMSE<=.5, exact alpha/untouched/zero-source-alpha, exact managed rational pixels. Complete in-place public operation; reset excluded before every operation on both sides, invocation/unroll1. No dependency or numerical-policy change.",
+    "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "8aafe9cc6bdbd7b747c23772b398796fc7b681b3705d42714f5afbd1eac366cd",
+    "boundary": "Complete Composite into borrowed canvas at17,19 with separate immutable source, default local limits/admission/cancellation/context cleanup. Original513x259 pixels; reset excluded before EVERY operation BOTH subjects. Native uses per-operation clock reads; managed invocation/unroll1 with iteration reset. Source/canvas setup and validation excluded. Scoped native bounds/reference approvals required before scoring.",
+    "sourceUnchanged": true,
+    "borrowedCanvas": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "3507899d05a62f3bcb303a6baf4748cb605860f0187c1aede46a94d266e4fe77",
+    "symbolsSha256": "a1c35e550f69650db14814d30640b3edc6e351181da57af50de2cf26146d931f",
+    "bytes": 435939,
+    "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+    "actualConsumerPassed": true,
+    "byteColumnStripsOwnershipPassed": true,
+    "byteCompositingVectorAndTailPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "comparison": {
+    "baselineProvider": "rgba8-composite-current-package-evidence.json",
+    "baselineUs": 558.0188181818182,
+    "candidateUs": 65.62960000000001,
+    "savedUs": 492.38921818181825,
+    "rawReduction": 0.8823881957711756,
+    "normalizedReduction": 0.8822118579768982,
+    "nativePointChange": -0.0014970759471084616,
+    "views": {
+      "statistics": {
+        "baselineUs": 558.0188181818182,
+        "candidateUs": 65.62960000000001,
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "baselineNormalizedInterval": [
+          1.21342126050992,
+          1.2545975047688362
+        ],
+        "candidateNormalizedInterval": [
+          0.14345672972497872,
+          0.14724751025427865
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 559.8186666666667,
+        "candidateUs": 66.96475,
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "baselineNormalizedInterval": [
+          1.210892152076003,
+          1.2651345989061418
+        ],
+        "candidateNormalizedInterval": [
+          0.13948629295762535,
+          0.15715441724556636
+        ]
+      }
+    }
+  },
+  "sourceProof": {
+    "genericMixedWordScalarAdmissionClipAndExtentVerbatim": true,
+    "onlyByteDispatchAndNewVectorRowsChanged": true,
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": "ab985c5d12c44ca3772016a19efd8ce53772dd181381a00eacfb2b861ebcb5f9",
+      "src/Lokad.Image/ImageDrawing.Composite8.cs": "118f458ddf55c8a669ea2e4454f1d154e9e8762a9e3f7e398965921a45da323a",
+      "tests/Lokad.Image.Tests/ByteCompositeVectorTests.cs": "095ed3372dc58d21c0f3575686d7657c12f909867b72204846e514f48b3b6ec1"
+    },
+    "consumerSha256": "af2a65376d7650eb1b3ae82cf07ec4e84a9216903f2e469887d5d20d912d19a4",
+    "integerDomain": "d<=65025; rounded numerator<=16613887<2^24. Float inputs exact; quotient<=255.5 has ULP<=2^-16<1/65025. Correctly-rounded division/truncation cannot cross an integer; exact integer quotients are representable. Zero source alpha selects original complete pixel. Alpha uses exact rounded divide255.",
+    "generalization": "Every denominator1..65025, byte quotient0..255 and adjacent integer numerators:49,939,200 lane comparisons. Every source/destination alpha pair with4distinct channel patterns. Existing public exact BigInteger oracle covers all depth pairs, wide/clipped odd shapes, all alpha pairs, forward/backward self overlap, tails, local limits, cancellation and survivors. CPU claim remains the one frozen control."
+  },
+  "allocation": {
+    "bytesPerOperation": 56,
+    "refreshedOnActualTimedDll": true,
+    "threeSamples": [
+      56,
+      56,
+      56
+    ],
+    "operationsPerSample": 16,
+    "completeOperationAndDisposalIncluded": true,
+    "canvasResetExcluded": true,
+    "extraBdnStatisticsDisabled": true,
+    "harnessSha256": "83de1dea037fcbfa74b034cef28eac99566f2cab4bdb1b6f63f560955616e574",
+    "preparedDiagnosticDependency": "compositing-shared-rows.tar.xz"
+  },
+  "storage": {
+    "totalAllocatedBytes": 56,
+    "additionalOwnedCapacityBytes": 0,
+    "additionalSharedAdmissionBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "retainedStateBytes": 0,
+    "borrowedPixelBytes": 1062936,
+    "physicalAndNativePeaksMeasured": false,
+    "note": "Caller-owned source and canvas each531468 logical bytes. Existing admission borrows both; no new frame, scratch, owner, pool or retained state. SIMD temporaries are values/registers.56B is total allocated, not a peak measurement."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+      "full": [
+        2710,
+        2317,
+        948
+      ],
+      "total": 5975,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 76,
+        "public-scalar": 76
+      },
+      "affectedDrawingScalarEachOs": 78,
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "d684e14a9f32cc95b6c41584ae05ad863349643bc319ee684c0613e0041c4b84",
+      "full": [
+        2710,
+        2317,
+        948
+      ],
+      "total": 5975,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 76,
+        "public-scalar": 76
+      },
+      "affectedDrawingScalarEachOs": 78,
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5975,
+    "windowsIsa": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "results": {
+        "internal-no-avx512": 2,
+        "public-no-avx512": 76,
+        "internal-no-avx2": 2,
+        "public-no-avx2": 76
+      },
+      "coreSha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+      "allBuilds": 0
+    },
+    "linuxIsa": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "results": {
+        "internal-no-avx512": 2,
+        "public-no-avx512": 76,
+        "internal-no-avx2": 2,
+        "public-no-avx2": 76
+      },
+      "coreSha256": "d684e14a9f32cc95b6c41584ae05ad863349643bc319ee684c0613e0041c4b84",
+      "allBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "3507899d05a62f3bcb303a6baf4748cb605860f0187c1aede46a94d266e4fe77",
+      "symbolsSha256": "a1c35e550f69650db14814d30640b3edc6e351181da57af50de2cf26146d931f",
+      "bytes": 435939,
+      "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "byteCompositingVectorAndTailPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "3507899d05a62f3bcb303a6baf4748cb605860f0187c1aede46a94d266e4fe77",
+      "librarySha256": "70bb690a48458d055f221151d3fcc9cc34ac795f65c969e217aa0643b885136e",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "byteCompositingVectorAndTailPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "allThreeExamplesBothOs": true,
+    "byteCompositingVectorAndTailBothOs": true,
+    "mainVersionsEachOs": 1,
+    "embeddedVersionsEachOs": 1,
+    "publicHarnessNativeSelectorFixtureBuilds": 0
+  },
+  "reuse": "Only8to8Composite dispatch changes. Mixed-depth,16bit and unsupported-hardware scalar paths remain verbatim; clipping/admission/ownership/cancellation/direction remain shared. Codecs, text raster/layout, resizing and memory owners unchanged; their valid evidence is reused. No new fixture or settings grid. Old CCR645 sole current8row provider becomes baseline history, not renderer dependency.",
+  "workflow": {
+    "shortActuals": 3,
+    "independentConfirmationActuals": 12,
+    "filteredActuals": 10,
+    "allActualsRetained": 12,
+    "baselineReused": "CCR645 qualified actual8baf DLL,12actuals, same fixture/reference/complete boundary.",
+    "favorableRepeats": 0,
+    "allocationOnlyPreparedDiagnosticReused": true
+  },
+  "decision": "Accept492.39us/88.24percent raw complete-operation saving,88.22percent normalized; filtered/allactual raw and normalized intervals separate. Current65.63/FFmpeg451.36us upper.157 passes frozen RGBA8 control. Exact managed pixels, approved native-only bounds, independent borrowed lifetimes and zero new workspace. No general all-input or all283-path parity claim.",
+  "next": "Stop confirmed RGBA8 control. Select a substantive codec/resize task by current attribution; live progressive444JPEG~202us, byte/word tight reductions~135/132us remain. Preserve unselected paired-JPEG adverse study; no blind replay or permanent family ban. Full283-path objective/compression priority/publication postponement retained.",
+  "raw": {
+    "file": "byte-composite-exact-vector-qualified.tar.xz",
+    "sha256": "789bd43e763effe85a5c35bf4342aac5d996192288605c7ddcb384d83eba11ae",
+    "bytes": 13435888,
+    "members": 191,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "rgba8-composite-current-package.tar.xz",
+        "sha256": "b506782e643515b3c1c46e954332d6e44be6587bb1fab609192d469bad2596a2",
+        "bytes": 6862904,
+        "members": 66
+      },
+      {
+        "file": "bicubic-strided-column-cache-qualified.tar.xz",
+        "sha256": "d293d2a0d8618b0144f601f0d22a53fe79600ffa8dc00235ce2e13c0ec764ebc",
+        "bytes": 13953032,
+        "members": 244
+      },
+      {
+        "file": "compositing-shared-rows.tar.xz",
+        "sha256": "32819eb8a3892d233c7bc134ae10b28cf0aa1d81a1c3f0878c8cff2f1b5c35a2",
+        "bytes": 7023260,
+        "members": 153
+      }
+    ]
+  }
+}

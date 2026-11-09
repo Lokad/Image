@@ -1141,12 +1141,15 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
-    composite8_current = json.loads((ROOT / 'benchmarks/rgba8-composite-current-package-evidence.json').read_text(encoding='utf-8'))
-    assert not composite8_current['productionChanged']
+    composite8_current = json.loads((ROOT / 'benchmarks/byte-composite-exact-vector-evidence.json').read_text(encoding='utf-8'))
+    assert composite8_current['productionAccepted']
     assert composite8_current['current']['allOriginalGatesPassed'] and composite8_current['current']['quietGuardsPassed']
     assert composite8_current['current']['actualIterations'] == 12
     assert composite8_current['current']['librarySha256'] == composite8_current['actualPackage']['librarySha256']
-    assert composite8_current['allocation']['sameImageDrawingSourceAsAllocationEvidence']
+    assert composite8_current['allocation']['refreshedOnActualTimedDll']
+    assert composite8_current['current']['upper'] < 1
+    assert composite8_current['qualification']['fullChecksEachOs'] == 5975
+    assert composite8_current['actualPackage']['sha256'] == composite8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
     raster = json.loads((ROOT / 'benchmarks/text-interior-coverage-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
@@ -1160,7 +1163,7 @@ def render():
     for case_id, previous in text_current['observations'].items():
         if case_id == 'DrawingComposite8':
             current = composite8_current['current']
-            rows.append(('editing', f'| {composites["cases"][case_id]["label"]} (gap) † | {current["managedUs"]:,.2f} | '
+            rows.append(('editing', f'| {composites["cases"][case_id]["label"]} (pass) † | {current["managedUs"]:,.2f} | '
                          f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                          f'{current["allocatedBytes"]:,} |'))
             continue
@@ -1913,18 +1916,21 @@ Current scope and remaining work:
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
-  [Current package RGBA8 composition](../benchmarks/RGBA8-COMPOSITE-CURRENT-PACKAGE.md)
-  is558.02/FFmpeg452.03µs, upper1.265: a105.99µs gap. Allocation56B/op is reused
-  from unchanged shared-row code; this refresh measures no new allocation or
-  physical peak. Borrowed-canvas reset is excluded before every operation on
-  both sides, invocation/unroll1, with exact managed and approved native gates.
+  [Exact byte-vector composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md)
+  saves492.39µs/88.24%raw (88.22%normalized):65.63/FFmpeg451.36µs, upper0.157
+  passes the frozen RGBA8 control. Integer weights and a proven exact float
+  division replace three scalar divisions per pixel. Allocation56B/op is refreshed
+  on the actual package DLL, with no new owned workspace or retained scratch.
+  Borrowed-canvas reset is excluded before every operation on both sides,
+  invocation/unroll1, with exact managed and approved native gates. This is a
+  scoped control result, not all-input parity; physical/native peaks are unmeasured.
   [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
   on complete loading:31.86µs versus labeledFreeType13.42µs, upper2.396 still a gap.
   Allocation falls757,597→176B/op; fullcopy/eager checks remain timed. The isolated
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_bank['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{composite8_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

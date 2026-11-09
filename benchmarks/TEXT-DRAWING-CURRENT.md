@@ -1,7 +1,7 @@
 # Current text and drawing comparisons
 
 The RGBA8 compositing row below is superseded by the
-[current package refresh](RGBA8-COMPOSITE-CURRENT-PACKAGE.md), 558.02/452.03 µs.
+[exact byte-vector stage](BYTE-COMPOSITE-EXACT-VECTOR.md), 65.63/451.36 µs.
 The two raster costs are superseded by
 [interior coverage](TEXT-INTERIOR-COVERAGE.md). Current consolidated costs belong
 in [the benchmark summary](../docs/benchmark.md); this report retains its stage's

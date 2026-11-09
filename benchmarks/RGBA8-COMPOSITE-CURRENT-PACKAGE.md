@@ -1,5 +1,9 @@
 # RGBA8 compositing on the current package
 
+This pre-optimization baseline is retained for the accepted
+[exact byte-vector stage](BYTE-COMPOSITE-EXACT-VECTOR.md), which owns current
+RGBA8 costs. The qualification and observations below describe CCR645.
+
 CCR645 refreshes the complete in-place RGBA8 Composite operation on the already
 qualified private Release 0.2.1 package. Twelve actual iterations and bracketing
 FFmpeg measurements pass the quiet-VM guards: **558.02 / 452.03 µs**, ratio

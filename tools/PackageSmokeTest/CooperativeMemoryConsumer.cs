@@ -489,25 +489,27 @@ internal static class CooperativeMemoryConsumer
 
     private static void VerifyCompositingRows()
     {
+        const int width = 7; // A complete four-pixel vector and scalar suffix.
         foreach (var sourceDepth in new[] { 8, 16 })
         foreach (var canvasDepth in new[] { 8, 16 })
         {
             using var root = new TestMemoryBudget(4096); var limits = new ImageLimits { MemoryBudget = root };
-            using var source = ImageBuffer.Create(3, 1, sourceDepth, limits);
-            using var canvas = ImageBuffer.Create(3, 1, canvasDepth, limits);
+            using var source = ImageBuffer.Create(width, 1, sourceDepth, limits);
+            using var canvas = ImageBuffer.Create(width, 1, canvasDepth, limits);
             var sourceMax = sourceDepth == 8 ? 255 : 65535; var canvasMax = canvasDepth == 8 ? 255 : 65535;
-            for (var x = 0; x < 3; x++)
+            for (var x = 0; x < width; x++)
             {
+                var pixel = x % 3;
                 for (var c = 0; c < 3; c++)
                 {
-                    Set(source, x, c, (37 + x * 47 + c * 59) * (sourceDepth == 8 ? 1 : 257));
-                    Set(canvas, x, c, (229 - x * 43 - c * 67) * (canvasDepth == 8 ? 1 : 257));
+                    Set(source, x, c, (37 + pixel * 47 + c * 59) * (sourceDepth == 8 ? 1 : 257));
+                    Set(canvas, x, c, (229 - pixel * 43 - c * 67) * (canvasDepth == 8 ? 1 : 257));
                 }
-                Set(source, x, 3, x == 0 ? 0 : x == 1 ? sourceMax / 3 : sourceMax);
-                Set(canvas, x, 3, x == 0 ? canvasMax : x == 1 ? canvasMax / 2 : 1);
+                Set(source, x, 3, pixel == 0 ? 0 : pixel == 1 ? sourceMax / 3 : sourceMax);
+                Set(canvas, x, 3, pixel == 0 ? canvasMax : pixel == 1 ? canvasMax / 2 : 1);
             }
-            var expected = new int[12]; var original = OriginalPixels.Bytes(source);
-            for (var x = 0; x < 3; x++)
+            var expected = new int[width * 4]; var original = OriginalPixels.Bytes(source);
+            for (var x = 0; x < width; x++)
             {
                 var sa = (System.Numerics.BigInteger)Sample(source, x, 3) * (sourceDepth == 8 ? 257 : 1);
                 var da = (System.Numerics.BigInteger)Sample(canvas, x, 3) * (canvasDepth == 8 ? 257 : 1);
@@ -523,7 +525,7 @@ internal static class CooperativeMemoryConsumer
             }
             var ownedBytes = source.Stride + canvas.Stride;
             ImageDrawing.Composite(canvas, source, 0, 0, limits);
-            for (var x = 0; x < 3; x++) for (var c = 0; c < 4; c++)
+            for (var x = 0; x < width; x++) for (var c = 0; c < 4; c++)
                 if (Sample(canvas, x, c) != expected[x * 4 + c]) throw new Exception("Packaged compositing changed exact rational samples.");
             if (root.Bytes != ownedBytes || !original.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
                 throw new Exception("Packaged compositing changed source or borrowed ownership.");

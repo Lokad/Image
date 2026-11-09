@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image;
@@ -111,7 +112,11 @@ public static partial class ImageDrawing
         var backwardsX = ReferenceEquals(source, canvas) && region.DestinationX > region.SourceX;
         if (source.BitDepth == 8)
         {
-            if (canvas.BitDepth == 8) CompositeRows<byte, byte>(canvas, source, region, backwardsX, backwardsY, context);
+            if (canvas.BitDepth == 8)
+            {
+                if (Avx512F.IsSupported) CompositeRows8(canvas, source, region, backwardsX, backwardsY, context);
+                else CompositeRows<byte, byte>(canvas, source, region, backwardsX, backwardsY, context);
+            }
             else CompositeRows<byte, ushort>(canvas, source, region, backwardsX, backwardsY, context);
         }
         else if (canvas.BitDepth == 8) CompositeRows<ushort, byte>(canvas, source, region, backwardsX, backwardsY, context);
