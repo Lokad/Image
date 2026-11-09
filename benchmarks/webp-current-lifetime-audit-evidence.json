@@ -1,0 +1,277 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAL672",
+  "productionChanged": false,
+  "productionHarnessNativeBuilds": 0,
+  "timingClaim": false,
+  "allocationClaim": false,
+  "librarySha256": "77096519bcac21bc4117d920e1bf01937cf2897bfe163e19e4f5b3c9380d3d82",
+  "harnessSha256": "236df179cd9aba694284d2042af2d41a584da6efb1ea2e369a6b883f2cee3883",
+  "quietGuardsPassed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/WebpLosslessEncoder.cs": "84eec5fba3cd7ab9b1ae8d56071e041206cd52536d07689f2ec11ff20c0bf5c0",
+    "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "71e625b0b6135ead4be54eea1ff332b136a365a8eed8eff7384ce8fad725bdb7",
+    "src/Lokad.Image/Internal/Vp8lImageCode.cs": "83d6b858cdd061a1dd37d611588ba01a3783381b0e91b01dd046d22e7b20211b",
+    "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "e336d7fe24be94072efa05d0c2e53095fb6eb904ec14c13fc11f10160f369a7b",
+    "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "61bb8d6d7484f06b2d1476715f2e9d65d8140bdc55104f5f51288a37a4005185",
+    "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "62f7dd05db8734789eb858998c36151b8129f3eef0c70ddc71f9b9989316a788",
+    "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+    "src/Lokad.Image/Internal/Vp8lPopulationWorkspace.cs": "3165c3130173b4deb7ddb17a9059a8ff1b2809aeb106376c5fbf9529626f931e",
+    "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "277e7eaf5b36762cfb20bb8dbcba15875d8da725fc80b0e8424bccbabf973524",
+    "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "8355e5cc3cb98629392284fd75192380325ce69aebf368f3162a05842b8446f4",
+    "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "d790180240297c5fe9766918637d5e26bc3aeadc9e79943e464ca8d13a647306",
+    "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "25a3bb59ae9f76211eaf24edae87ca4aa69c8a1d50337fd015ec08b72597b804",
+    "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "9699e9c3c57e7e539a7f718eff2d67ee8f2a8f98f371d443fa3188e07ae31956",
+    "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "9ad9614cfaf8370d6498f72b3686a676b3a836651bba6ba5b0b9cb0edbad8390",
+    "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": "2cb8a0e11d77010d7c8614e934308637f64aac8250f4381f8822f9c0f9c6223f",
+    "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "85630c64b29e5f4044a0899d8217525d16f9b5c73f3d26315cde62a9dd2eb4c6",
+    "src/Lokad.Image/Internal/Vp8lReferenceFrame.cs": "98daf5372857eb0fade6c69f580d551ab8ec4897172e2f6dd3b93e66986fb838",
+    "src/Lokad.Image/Internal/Vp8lReferenceEntropy.Prepared.cs": "a071992eb1b2d1ab4f46389395c648a47278434034c11b35bf5ea9f45f70b0db"
+  },
+  "cases": [
+    {
+      "caseId": "photograph",
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "events": 1128,
+      "admittedPeakOwnedBytes": 3470059,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 262144,
+      "largestDirectPositiveAdmissionVolumes": [
+        {
+          "site": "Vp8lTokenBuffer..ctor",
+          "bytes": 2228832,
+          "calls": 8
+        },
+        {
+          "site": "Vp8lHuffmanLengths.Build",
+          "bytes": 844208,
+          "calls": 140
+        },
+        {
+          "site": "Vp8lMatchIndex..ctor",
+          "bytes": 557208,
+          "calls": 4
+        },
+        {
+          "site": "WebpLosslessEncoder.Encode",
+          "bytes": 531468,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lReferenceClustering.Build",
+          "bytes": 530688,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lPopulationWorkspace.Prepare",
+          "bytes": 321276,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lReferenceCache.TryBestBitsWithHistory",
+          "bytes": 238227,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lReferenceMatcher.FillCore",
+          "bytes": 207456,
+          "calls": 3
+        }
+      ],
+      "clusteringStateAdmissions": [
+        {
+          "sequence": 103,
+          "bytes": 530688,
+          "live": 3066768
+        }
+      ],
+      "huffmanScratchAdmissionVolume": 844208
+    },
+    {
+      "caseId": "diagram",
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "packetBytes": 7234,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "events": 162,
+      "admittedPeakOwnedBytes": 3251328,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 8192,
+      "largestDirectPositiveAdmissionVolumes": [
+        {
+          "site": "Vp8lTokenBuffer..ctor",
+          "bytes": 2125872,
+          "calls": 2
+        },
+        {
+          "site": "WebpLosslessEncoder.Encode",
+          "bytes": 531468,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lMatchIndex..ctor",
+          "bytes": 531468,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lReferenceClustering.Build",
+          "bytes": 530688,
+          "calls": 1
+        },
+        {
+          "site": "Vp8lHuffmanLengths.Build",
+          "bytes": 126648,
+          "calls": 13
+        },
+        {
+          "site": "Vp8lPopulationWorkspace.TakeDenseSlot",
+          "bytes": 120896,
+          "calls": 16
+        },
+        {
+          "site": "Vp8lPopulationWorkspace.SumGreenLeaf",
+          "bytes": 100000,
+          "calls": 18
+        },
+        {
+          "site": "TraceState..ctor",
+          "bytes": 62520,
+          "calls": 1
+        }
+      ],
+      "clusteringStateAdmissions": [
+        {
+          "sequence": 23,
+          "bytes": 530688,
+          "live": 2735088
+        }
+      ],
+      "huffmanScratchAdmissionVolume": 126648
+    },
+    {
+      "caseId": "alpha",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "events": 804,
+      "admittedPeakOwnedBytes": 3656309,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 197178,
+      "largestDirectPositiveAdmissionVolumes": [
+        {
+          "site": "Vp8lTokenBuffer..ctor",
+          "bytes": 3196152,
+          "calls": 9
+        },
+        {
+          "site": "Vp8lHuffmanLengths.Build",
+          "bytes": 981214,
+          "calls": 84
+        },
+        {
+          "site": "Vp8AlphaEncoding.Create",
+          "bytes": 622914,
+          "calls": 4
+        },
+        {
+          "site": "Vp8lMatchIndex.ResetStorage",
+          "bytes": 531468,
+          "calls": 1
+        },
+        {
+          "site": "Vp8PreparedInput.Create",
+          "bytes": 352515,
+          "calls": 2
+        },
+        {
+          "site": "Vp8PartitionWriter.Grow",
+          "bytes": 272640,
+          "calls": 19
+        },
+        {
+          "site": "Vp8lPopulationWorkspace.TakeDenseSlot",
+          "bytes": 116744,
+          "calls": 21
+        },
+        {
+          "site": "TraceState..ctor",
+          "bytes": 109168,
+          "calls": 2
+        }
+      ],
+      "clusteringStateAdmissions": [
+        {
+          "sequence": 67,
+          "bytes": 30912,
+          "live": 2584727
+        },
+        {
+          "sequence": 634,
+          "bytes": 30912,
+          "live": 2598997
+        }
+      ],
+      "huffmanScratchAdmissionVolume": 981214
+    }
+  ],
+  "interpretation": "Positive admission volume is the sum of coarse root increases at each immediate library caller. It is neither totalGC allocation nor a live peak; no object-lifetime pairing is inferred from aggregated root deltas. Exact complete packets/source/root cleanup checked on all three controls. Physical/native peaks unmeasured.",
+  "lifetimeMap": [
+    {
+      "storage": "Two input-capacity token arrays",
+      "lifetime": "Greedy and repeat candidates overlap through cache scoring; the rejected buffer later becomes trace output. Selected candidate remains independent.",
+      "decision": "Do not merge live candidates or shrink their capacity without accounting for their matching/history/trace scratch users. Not a free reuse opportunity."
+    },
+    {
+      "storage": "Matching index then population row indexes",
+      "lifetime": "Final matching/box readers finish before TakeMain lends the still-charged index. Population Prepare returns after both row-index passes; no row span escapes.",
+      "decision": "WP500 already reuses these phases; keep its ownership and alias safeguards."
+    },
+    {
+      "storage": "Clustering slots, original/current statistics and pair queue",
+      "lifetime": "Allocated after population preparation. No later matching/row-index reader runs; state dies after Finish copies populations and mapping into a separate histogram owner.",
+      "decision": "Next coherent candidate: operation-local typed spans over dead matching capacity, with portable allocated fallback selected by physical capacity before admission. Selected tokens/maps/codes stay independent."
+    },
+    {
+      "storage": "Huffman construction scratch",
+      "lifetime": "Weights, protected runs, node arrays and priority queue die before each Build returns; returned lengths/words remain independent. Repeated calls total844208/126648/981214coarse scratch bytes on photo/diagram/alpha.",
+      "decision": "Useful later lead: reuse within a bounded code-group construction. Do not retain returned lengths or introduce a general operation cache. No proven CPU benefit."
+    }
+  ],
+  "candidate": {
+    "stage": "WCS673",
+    "removedWorkStorage": "Four clustering arrays and temporary State object when dead matching capacity covers typed workspace; no new owned storage.",
+    "endState": "One stack-confined execution state with borrowed or allocated Span views. Reuse storage sequentially after row preparation. Clear required default statistics before use; preserve all arithmetic/order/ties/cancellation. Existing match owner keeps full capacity charged.",
+    "eligibility": "For frozen513x259 photo/diagram,2145tiles and1849pairs: aligned slots+two80-byteStats arrays+64-bytePair array need470120bytes, fitting531468-byte matching index. Existing coarse530688-byte clustering reservation is separate from physical capacity. Alpha has two30912-byte coarse states; do not predict saving without checking eligibility.",
+    "boundaries": "Existing photograph, diagram, alpha and authored-bar exact packets; complete encode including normalization/candidate selection/output/disposal. Actual clustering tests must cover initialized nonzero scratch, guards, undersized fallback, alias rejection, cancellation/refusal and independent retained plans.",
+    "temporaryRegressionPolicy": "Ref-struct execution may change JIT code or timing. Inspect complete costs; preserve adverse results and revise/abandon if elapsed/ownership costs outweigh storage benefit. No fixed gain threshold or automatic merge.",
+    "newProductionBuildsAuthorizedByEvidence": true
+  },
+  "qualificationReuse": "TRP671 full6011W/L, normal/scalar and SAMEactualpackage/all3examples reused: this audit changes no production or test source. Current compression/performance providers remain unchanged; no renderer dependency.",
+  "raw": {
+    "file": "webp-current-lifetime-audit.tar.xz",
+    "sha256": "6c39b732294b0e04d38605f0ae5273b2c4df86cfee386fd51c08ec9583ea6377",
+    "bytes": 82424,
+    "members": 29,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "text-prepared-pixels-and-order-qualified.tar.xz",
+        "sha256": "d5508445020fe2065983823f8054a8c66935266781f36de1f764e2d5b3449f71"
+      },
+      {
+        "file": "architectural-preparation-storage-audit.tar.xz",
+        "sha256": "0d92947e30049a241de7bc5b4b5622b735d5fb5fb67e0233f1076a3e5aa94344",
+        "bytes": 1202364,
+        "members": 75
+      }
+    ]
+  }
+}

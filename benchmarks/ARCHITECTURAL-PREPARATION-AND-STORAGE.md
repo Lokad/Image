@@ -108,3 +108,36 @@ The subsequent [shared byte repair](BICUBIC-SHARED-BYTE-REPAIR.md) qualifies thi
 revised design: large compact execution now30.78 ms, with exact pixels and the
 same admission. It also records a small-wide regression; default selection stays
 unchanged. The original adverse screen above remains retained attribution.
+
+## Current WebP lifetime follow-up
+
+WAL672 reuses the prepared audit tool with the qualified TRP671 package DLL.
+Three complete photograph/diagram/transparent-alpha encodes preserve exact
+160,032 / 7,234 / 98,590-byte packets and source/root cleanup. All 2,094 admission
+events are retained; admitted peaks remain 3,470,059 / 3,251,328 / 3,656,309 B.
+No production/harness build, performance measurement or GC-allocation claim occurs.
+
+The two largest token buffers overlap through independent candidate scoring;
+the rejected buffer later serves tracing. Their apparent duplication is not free
+scratch. The matching index already serves population row preparation afterward.
+Those row readers finish before clustering allocates its slots, original/current
+statistics and pair queue. For the frozen photo/diagram, their aligned typed
+capacity needs 470,120 B, fitting the still-charged 531,468-byte matching index.
+The existing separate coarse clustering reservation is 530,688 B. Two alpha
+states reserve 30,912 B each; their actual reuse eligibility remains to be checked.
+
+The next bounded design uses stack-confined execution views over this dead index,
+with the allocated path selected by physical capacity before admission. Required
+default statistics must be cleared; live tokens and surviving histogram owners
+must remain independent. A ref-struct transition may change JIT costs, so neither
+allocation nor CPU benefits are accepted before complete-operation checks.
+Repeated Huffman construction is a later lead: its direct positive scratch
+admission volumes total 844,208 / 126,648 / 981,214 B across the three controls.
+Admission volume is neither total allocation nor peak live capacity.
+
+[Evidence](webp-current-lifetime-audit-evidence.json) records the bounded lifetime
+map, source pins, current ownership observations and next hypothesis. Mirrored,
+member-verified raw `webp-current-lifetime-audit.tar.xz` is 82,424 B / 29 members,
+SHA256 `6c39b732294b0e04d38605f0ae5273b2c4df86cfee386fd51c08ec9583ea6377`.
+Unchanged full Windows/Linux and actual-package qualification is reused. No
+displayed benchmark cost or renderer dependency is added.
