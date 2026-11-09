@@ -761,10 +761,15 @@ def render():
               'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
               'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
     assert set(labels) <= set(enlargement['cases'])
+    enlargement_byte_current = json.loads((ROOT / 'benchmarks/byte-bicubic-enlargement-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert not enlargement_byte_current['productionChanged'] and enlargement_byte_current['allProductionBuilds'] == 0
+    assert enlargement_byte_current['raw']['mirrored'] and enlargement_byte_current['raw']['allMembersVerified']
+    assert enlargement_byte_current['reusedQualification']['fullChecksEachOs'] == 5973
     for case, label in labels.items():
-        current = enlargement['cases'][case]
+        current = enlargement_byte_current['current'] if case == 'TightUp8' else enlargement['cases'][case]
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['actualIterations'] == 12
-        assert current['librarySha256'] == enlargement['producers']['linuxSha256']
+        expected_library = enlargement_byte_current['actualPackage']['librarySha256'] if case == 'TightUp8' else enlargement['producers']['linuxSha256']
+        assert current['librarySha256'] == expected_library
         assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         rows.append(('editing', f'| {label} input+output+4 KiB † → {current["outputWidth"]}×{current["outputHeight"]} | '
@@ -1793,8 +1798,12 @@ Current scope and remaining work:
 - **Resizing:** [Strided column workspace](../benchmarks/BICUBIC-STRIDED-COLUMN-CACHE.md)
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
-  remains a gap;113B/op, no added owned capacity/retained scratch. One numeric
-  range serves a16column borrowed-output prefix and original8/6column suffix;
+  remains a gap;113B/op, no added owned capacity/retained scratch.
+  [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
+  is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
+  qualified package and frozen workload are reused; no causal historical gain
+  is claimed. The reduction's shared numeric range serves a16column borrowed-
+  output prefix and original8/6column suffix;
   separate non-inlined stack frames share one4KiB allowance and retire before
   overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
   column ownership checks and allthree examples. Other source-valid paths reuse

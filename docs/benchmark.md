@@ -99,8 +99,12 @@ Current scope and remaining work:
 - **Resizing:** [Strided column workspace](../benchmarks/BICUBIC-STRIDED-COLUMN-CACHE.md)
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
-  remains a gap;113B/op, no added owned capacity/retained scratch. One numeric
-  range serves a16column borrowed-output prefix and original8/6column suffix;
+  remains a gap;113B/op, no added owned capacity/retained scratch.
+  [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
+  is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
+  qualified package and frozen workload are reused; no causal historical gain
+  is claimed. The reduction's shared numeric range serves a16column borrowed-
+  output prefix and original8/6column suffix;
   separate non-inlined stack frames share one4KiB allowance and retire before
   overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
   column ownership checks and allthree examples. Other source-valid paths reuse
@@ -333,7 +337,7 @@ settings do not establish matched quality.
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 356.88 | 375.09 | 0.951 / 0.956 | 197,300 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 552.17 | 417.53 | 1.322 / 1.337 | 113 |

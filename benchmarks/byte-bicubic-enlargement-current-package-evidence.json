@@ -1,0 +1,110 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TCU644",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allProductionBuilds": 0,
+  "privateProbeBuilds": 0,
+  "newInputs": 0,
+  "newProfiles": 0,
+  "current": {
+    "managedUs": 3114.5021106770837,
+    "nativeUs": 3041.4293671875,
+    "ratio": 1.0240257900702643,
+    "lower": 1.0166692428011623,
+    "upper": 1.030117135395017,
+    "allocatedBytes": 116,
+    "status": "gap",
+    "librarySha256": "8baf7021159a78bf0f2c2524c9ccb3ec33537b41776c3f977c8c8605697aae1a",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94",
+    "nativeOutputSha256": "42c00d0a2ac75c3915d1bf2b0596469b8607ba5f15bd23ff93be005d00ebe7ad",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 1027x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2667616 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": 2667616,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "caseId": "TightUp8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 1027,
+    "outputHeight": 519,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "1b010016f3d17117ecf476660041322d28411bce03fea43cdc210ac731d4a9eb",
+    "symbolsSha256": "57a32a62cae339b4d66352bcb49d044ae2278dcc1639bc8a7ecce69d270c01f7",
+    "bytes": 435284,
+    "librarySha256": "8baf7021159a78bf0f2c2524c9ccb3ec33537b41776c3f977c8c8605697aae1a",
+    "actualConsumerPassed": true,
+    "byteColumnStripsOwnershipPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "reusedQualification": {
+    "provider": "bicubic-strided-column-cache-evidence.json",
+    "fullChecksEachOs": 5973,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "newTestOrPackageRuns": 0
+  },
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/EnlargingBicubicResize.cs": "03eefe56a6af5e51ddfb3bbdea1ffaf039d430086d72b383bcc92093c0de7023",
+    "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": "231822d5b1ee0741747b07d8848ae96ba60475e8df711f40c97e7353ffbb04b7",
+    "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "376a184a3f42bdb4ff9081da23e147dfadfc2107b03f2f3806ae76617082716e"
+  },
+  "storage": {
+    "totalAllocatedBytes": 116,
+    "retainedResultBytes": 2132052,
+    "localWorkingCeilingBytes": 2667616,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "physicalAndNativePeaksMeasured": false
+  },
+  "decision": "Current TightUp8 remains a confirmed73.07us gap,3114.50/zimg3041.43us,lower1.017/upper1.030,116Bop. Same actual immutable package8baf. One12actual confirmation, no favorable repeats, production/fixture/worker builds, profiling or qualification repetition. Earlier3212.58/3052.03us clocks are not a causal gain on unchanged relevant code.",
+  "attribution": "Existing shared enlargement prefix already prepares complete horizontal weights/offsets/cache in unpublished output and then4KiB strips; exact tiny-alpha replay follows frame retirement. No claim this preparation is absent. Source review finds scalar per-output FilterHorizontal and depth-specific publication, but no stage timings or proof these are current best targets.",
+  "next": "Deprioritize this73us gap behind larger credible independent opportunities. Refresh Composite8 on same actual package before optimization; source ImageDrawing.CompositeRows<byte,byte> still uses three per-pixel UInt64 divisions. Consider exact SIMD only with integer/float-domain proof and unchanged pixels; no numerical-policy relaxation. Passing16bit/layout/fitting work remains stopped.",
+  "raw": {
+    "file": "byte-bicubic-enlargement-current-package.tar.xz",
+    "sha256": "4110d0262f64903d2818033123b2e2dfcdc461c3b69cbd32847ace15ecb36d8f",
+    "bytes": 6136792,
+    "members": 116,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-strided-column-cache-qualified.tar.xz",
+        "sha256": "d293d2a0d8618b0144f601f0d22a53fe79600ffa8dc00235ce2e13c0ec764ebc",
+        "bytes": 13953032,
+        "members": 244
+      }
+    ]
+  }
+}

@@ -51,6 +51,12 @@ actual package/column ownership/allthreeexamples pass. Six functional shapes,
 including the frozen control, do not establish broader CPU scope. EarlierTCR642 and byte
 column preparation costs remain linked history, removed as renderer inputs once
 their sole displayed results are superseded. Full283-path objective unchanged.
+[Current tight-byte enlargement](BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
+is3114.50/zimg3041.43us,lower1.017/upper1.030,116Bop:73.07usgap on SAME actual
+package, smaller than the old point suggested. One12actual job reuses5973/package
+qualification with zero builds/input/profile changes; no historical causal gain.
+Existing preparation is present. Prefer larger credible independent opportunities,
+starting with refreshing RGBA8 compositing before a justified exact-SIMD design.
 
 The latest [Huffman replay stage](JPEG-PREPARED-HUFFMAN-BANK.md) refreshes17costs
 and seven displayed rows, preserving126comparisons/283requiredpaths. Windows/Linux
