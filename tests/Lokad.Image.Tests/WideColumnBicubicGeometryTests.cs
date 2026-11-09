@@ -8,6 +8,37 @@ namespace Lokad.Image.Tests;
 public sealed class WideColumnBicubicGeometryTests
 {
     [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void UncertainBytePixelsRepairLocallyIncludingSingletonTail(bool transparent)
+    {
+        if (!Avx512F.IsSupported) return;
+        using var source = ImageBuffer.Create(68, 68, 8);
+        for (var y = 0; y < source.Height; y++) for (var x = 0; x < source.Width; x++)
+        {
+            var pixel = source.GetRow8(y).Slice(x * 4, 4);
+            pixel[0] = (byte)(x & 1); pixel[1] = (byte)(y & 1);
+            pixel[2] = (byte)((x + y) & 1); pixel[3] = transparent ? (byte)0 : byte.MaxValue;
+        }
+        var input = OriginalPixels.Bytes(source);
+        // Exact fourfold reduction creates interior half ties. Width17 also
+        // exercises a singleton after paired strips. With no scratch allowance,
+        // the public reference uses direct source-order evaluation.
+        using var expected = ImageTransforms.Resize(source, 17, 17, limits:
+            new() { MaxWorkingBytes = source.ByteLength + 17 * 17 * 4 });
+        using var result = ImageBuffer.Create(17, 17, 8);
+        result.Pixels.Fill(0xa5);
+        using var root = new TestMemoryBudget(4096);
+        using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, default);
+        Assert.True(Apply(source, result, context));
+        Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Equal(0, root.Bytes); Assert.Equal(4096, root.Peak);
+        Assert.Equal(4096, context.RemainingWorkingBytes); Assert.False(root.IsDisposed);
+        if (transparent) Assert.Equal(-1, result.Pixels.IndexOfAnyExcept((byte)0));
+    }
+
+    [Theory]
     [InlineData(8, 513, 259, 128, 64)] // Four-column preparation and tail retirement.
     [InlineData(16, 513, 259, 128, 64)] // Four-column word preparation.
     [InlineData(16, 385, 193, 96, 48)] // A second eligible word shape.

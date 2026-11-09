@@ -1,5 +1,9 @@
 # Shared byte/word bicubic columns
 
+The subsequent [shared byte repair](BICUBIC-SHARED-BYTE-REPAIR.md) owns the current
+small-byte cost. The unchanged small-word path retains this report's evidence;
+earlier byte observations and adverse results remain history.
+
 CWS659 replaces two small-support column drivers with one preparation, ownership
 and row scheduler. Constant pixel-depth/strip specializations keep typed kernels;
 word pixels gain the existing16-column result-backed prefix and retain their

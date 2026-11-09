@@ -103,3 +103,8 @@ member-verified raw archive `compact-bicubic-boundary-attribution.tar.xz` has
 10,982,340 bytes / 40 members, SHA256
 `994a791ebbea29d5aad67acc0c00d70900477782eb7b2b929ab533249b6fd411`.
 It adds no renderer dependency or advertised workload.
+
+The subsequent [shared byte repair](BICUBIC-SHARED-BYTE-REPAIR.md) qualifies this
+revised design: large compact execution now30.78 ms, with exact pixels and the
+same admission. It also records a small-wide regression; default selection stays
+unchanged. The original adverse screen above remains retained attribution.

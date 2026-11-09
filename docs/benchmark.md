@@ -96,23 +96,18 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Shared byte/word columns](../benchmarks/BICUBIC-SHARED-BYTE-WORD-COLUMNS.md)
-  save **689.43→590.84µs /98.59µs/14.30%raw/14.50%normalized** on word256×129.
-  Matched filtered/allactual raw/normalized confidence separates; zimg572.81µs,
-  upper1.033 leaves18µs. One driver replaces two,493→395production lines; exact
-  products/certificates/repair,4KiB admission and113B/op remain. No added owned
-  capacity or retained scratch. Byte confirmation is574.56/zimg422.95µs,upper1.410:
-  raw+32.74µs/6.04% against matched541.82µs, but native brackets422.95/445.90µs
-  leave normalized intervals overlapping. Byte effect remains inconclusive;
-  the adverse confirmation stays visible rather than the favorable535.70µs short.
-  Earlier751.02word/552.17byte points are history, not contemporary causal baselines.
-  [Shared wider columns](../benchmarks/BICUBIC-SHARED-WIDE-COLUMNS.md) save
-  **89.87/23.58µs /16.75%/4.97% raw** on word/byte128×64; normalized16.46%/5.17%.
-  Both filtered/allactual raw/normalized confidence views separate. Current
-  word446.58/zimg413.05µs upper1.090 and byte451.12/zimg347.95µs upper1.302 remain
-  34/103µs gaps. One scheduler replaces two,477→373production lines;4KiB admission,
-  113B/op and exact certificates/repair remain. No added owned heap/retention.
-  The independent small-byte adverse comparison above remains unchanged.
+- **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
+  removes whole-frame replay for ordinary uncertain wide byte pixels. One existing
+  large managed-only compact control falls **643.41→30.78ms /20.90×**, exact pixels
+  and4KiB admission; this is no native parity claim. Existing default25.87ms remains
+  faster, so dispatch stays unchanged. Frozen wide-byte476.04/zimg348.99µs,
+  upper1.378 **regresses24.93µs/5.53%raw** versus451.12; keep the adverse result.
+  Small-byte542.51/zimg417.07µs upper1.321 and wide-word453.66/zimg403.32µs
+  upper1.134 remain gaps, all113B/op. Prior small-byte and current word native
+  drift preclude causal companion gain claims. The unchanged small-word590.84/
+  zimg572.81µs upper1.033 retains its [shared-driver evidence](../benchmarks/BICUBIC-SHARED-BYTE-WORD-COLUMNS.md).
+  Earlier [wider consolidation](../benchmarks/BICUBIC-SHARED-WIDE-COLUMNS.md) remains
+  history; exact certificates, tiny-alpha retirement and independent owners remain.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -133,7 +128,7 @@ Current scope and remaining work:
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
   is claimed. Shared column prefix/suffix frames retire before overlap/replay;
-  current5,994full/live and SAME actual-package qualification covers both depths.
+  current cross-platform and SAME actual-package checks cover both depths.
   Other source-valid paths reuse evidence; scoped costs do not prove all-path parity.
   [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
@@ -241,7 +236,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,004 full/live checks per OS**, affected
+The current production build passes **6,006 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -374,15 +369,15 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 574.56 | 422.95 | 1.358 / 1.410 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 542.51 | 417.07 | 1.301 / 1.321 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 590.84 | 572.81 | 1.031 / 1.033 | 113 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 463.92 | 346.90 | 1.337 / 1.344 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 451.12 | 347.95 | 1.296 / 1.302 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 446.58 | 413.05 | 1.081 / 1.090 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 476.04 | 348.99 | 1.364 / 1.378 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 453.66 | 403.32 | 1.125 / 1.134 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 816.23 | 840.52 | 0.971 / 0.979 | 199,943 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 790.79 | 820.20 | 0.964 / 0.983 | 199,891 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |

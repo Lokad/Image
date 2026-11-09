@@ -195,7 +195,13 @@ internal static class WideColumnBicubicResize
                         }
                     }
                     else if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
-                        destination.Slice((tile + outputX) * 4, 8))) return false;
+                        destination.Slice((tile + outputX) * 4, 8)))
+                    {
+                        for (var repair = outputX; repair < outputX + 2; repair++)
+                            if (!BicubicMath.TryWriteOriginalByte(source, result, tile + repair, y,
+                                weights.Slice(repair * taps, counts[repair]), offsets.Slice(repair * taps, counts[repair]),
+                                sourceFirst, vertical[..count], first, context)) return false;
+                    }
                 }
                 for (var x = outputX; x < length; x++)
                 {
@@ -213,34 +219,43 @@ internal static class WideColumnBicubicResize
                         }
                         continue;
                     }
-                    var alpha = sum.GetElement(3);
-                    // Each coefficient is bounded by one, with at most 400
-                    // two-axis terms. The existing 2^-40 * 20^2 absolute-error
-                    // budget covers both orders and normalization sums.
-                    const double unitError = 3.637978807091713e-10;
-                    const double alphaError = unitError * 255;
-                    if (!(normalizer >= .5 && alpha > alphaError)) return false;
-                    var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
-                    var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
-                        Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
-                    var colorMargin = 2 * (alphaError * 255 + magnitude * alphaError) / (alpha - alphaError);
-                    var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
-                    if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
-                    for (var c = 0; c < 4; c++)
-                    {
-                        var value = values.GetElement(c);
-                        if (value >= 0 && value <= 255
-                            && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
-                    }
-                    var clipped = Avx.Min(Vector256.Create(255d), Avx.Max(Vector256<double>.Zero, values));
-                    var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
-                    var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
-                    var pixel = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
-                    BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice((tile + x) * 4, 4), pixel);
+                    if (!TryWriteSingle(sum, normalizer, destination.Slice((tile + x) * 4, 4))
+                        && !BicubicMath.TryWriteOriginalByte(source, result, tile + x, y,
+                            weights.Slice(x * taps, counts[x]), offsets.Slice(x * taps, counts[x]),
+                            sourceFirst, vertical[..count], first, context)) return false;
                 }
             }
         }
         context.Cancellation.ThrowIfCancellationRequested();
+        return true;
+    }
+
+    private static bool TryWriteSingle(Vector256<double> sum, double normalizer, Span<byte> output)
+    {
+        var alpha = sum.GetElement(3);
+        // Each coefficient is bounded by one, with at most 400
+        // two-axis terms. The existing 2^-40 * 20^2 absolute-error
+        // budget covers both orders and normalization sums.
+        const double unitError = 3.637978807091713e-10;
+        const double alphaError = unitError * 255;
+        if (!(normalizer >= .5 && alpha > alphaError)) return false;
+        var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
+        var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
+            Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
+        var colorMargin = 2 * (alphaError * 255 + magnitude * alphaError) / (alpha - alphaError);
+        var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
+        if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
+        for (var c = 0; c < 4; c++)
+        {
+            var value = values.GetElement(c);
+            if (value >= 0 && value <= 255
+                && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
+        }
+        var clipped = Avx.Min(Vector256.Create(255d), Avx.Max(Vector256<double>.Zero, values));
+        var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
+        var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
+        var pixel = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
+        BinaryPrimitives.WriteUInt32LittleEndian(output, pixel);
         return true;
     }
 

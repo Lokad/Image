@@ -244,7 +244,7 @@ internal static class ColumnBicubicResize
                         // Repair only uncertain pixels, preserving original tap order.
                         // Tiny-alpha replay still unwinds this workspace first.
                         for (var repair = outputX; repair < outputX + 2; repair++)
-                            if (!OriginalByte(source, result, tile + repair, y,
+                            if (!BicubicMath.TryWriteOriginalByte(source, result, tile + repair, y,
                                 weights.Slice(repair * 10, counts[repair]), offsets.Slice(repair * 10, counts[repair]),
                                 sourceFirst, vertical.Slice(0, count), first, context)) return false;
                     }
@@ -321,40 +321,6 @@ internal static class ColumnBicubicResize
         destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
         destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
-        return true;
-    }
-
-    private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
-        ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,
-        ReadOnlySpan<double> vertical, int firstY, OperationContext context)
-    {
-        double red = 0, green = 0, blue = 0, alpha = 0, normalizer = 0;
-        for (var ty = 0; ty < vertical.Length; ty++)
-        {
-            context.Cancellation.ThrowIfCancellationRequested();
-            var wy = vertical[ty]; if (wy == 0) continue;
-            var row = source.GetRow8(Math.Clamp(firstY + ty, 0, source.Height - 1));
-            for (var tx = 0; tx < weights.Length; tx++)
-            {
-                var weight = wy * weights[tx]; if (weight == 0) continue;
-                var offset = (sourceFirst + offsets[tx]) * 4;
-                var a = row[offset + 3];
-                red += weight * a * row[offset];
-                green += weight * a * row[offset + 1];
-                blue += weight * a * row[offset + 2];
-                alpha += weight * a; normalizer += weight;
-            }
-        }
-        var normalized = alpha / normalizer;
-        // Exact tiny-alpha arithmetic needs this same 4-KiB allowance after unwind.
-        if (normalized > 0 && normalized < 1) return false;
-        var aOut = BicubicMath.RoundByte(normalized);
-        var color = aOut > 0 && alpha > 0;
-        var output = result.GetRow8(y).Slice(x * 4, 4);
-        output[0] = BicubicMath.RoundByte(color ? red / alpha : 0);
-        output[1] = BicubicMath.RoundByte(color ? green / alpha : 0);
-        output[2] = BicubicMath.RoundByte(color ? blue / alpha : 0);
-        output[3] = aOut;
         return true;
     }
 

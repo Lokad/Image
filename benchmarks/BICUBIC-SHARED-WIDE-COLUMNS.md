@@ -1,5 +1,9 @@
 # Shared wider bicubic columns
 
+The subsequent [shared byte repair](BICUBIC-SHARED-BYTE-REPAIR.md) owns current
+wide-byte and word costs. This report retains the CWW661 consolidation evidence;
+its timing points are the earlier baseline, not current package costs.
+
 CWW661 shares preparation, ownership and row scheduling across wider byte/word
 reductions. Constant width/depth modes retain specialized kernels. Eligible word
 images gain the existing four-column/17-slot strategy; three-column/20-slot
