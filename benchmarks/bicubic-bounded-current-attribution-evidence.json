@@ -1,0 +1,153 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CTA714",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "allBuilds": 0,
+  "newBenchmarkImagesOrSettings": 0,
+  "statisticalTiming": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sourceSha256": "1320363ccb7c86c8a14b5353c82bace31fe1206cedc056435efca67d1005e663",
+  "librarySha256": "d10b289f443c499c6a0f2e9447060a59c4693c92e7b3149fb3c0df46411b228e",
+  "sources": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7405133427afb214b7bc5cdd94486c1b34ff6c3f611d2183a708d389b56deefb",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "2fe65b899558b6faf580d85bf401599dfdf47eb389b144de6c04392e834fc2cd",
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "4bdd27caf52dd8d34e867988357805bb71a0f2ef0c688680b34bcd6a1d7dd65c",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "1fe555fa5daef6054776545d9cd7a12caa5a903a68e820d223bc41765074dd03",
+    "src/Lokad.Image/ImageTransforms.cs": "3f2b8e16bc233dce0dd7f28acc33a1125ddaadfd6fea5445c3cc9ba3a01ac283"
+  },
+  "currentCost": {
+    "owner": "bicubic-shared-byte-repair-evidence.json",
+    "case": "TightDown8",
+    "managedUs": 542.5130857213438,
+    "nativeUs": 417.0651158854167,
+    "ratio": 1.300787491108205,
+    "lower": 1.285577837239103,
+    "upper": 1.3212841746785458,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "0d460313ad99dcb78824ae7496ee532180d6f0e45dde2a3ef5a6ffb56928363d",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": 667660,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "caseId": "TightDown8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 256,
+    "outputHeight": 129,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "sampleLocations": {
+    "total": 1996,
+    "largeDriver": 673,
+    "smallDriver": 1185,
+    "pairedHorizontalIndexedBlocks": 555,
+    "sourceConversionBlocks": 258,
+    "pairedVerticalBlocks": 225,
+    "publicationBlocks": 442,
+    "originalByteRepair": 2,
+    "scope": "Exclusive locations in named source/JIT groups, including inlining/skid. These selected groups do not exhaust all samples or constitute phase costs/removable percentages. Generic names repeat: the mapper uses absolute addresses and unique5433/5545B code lengths."
+  },
+  "geometryModel": {
+    "file": "cta714-geometry.json",
+    "sha256": "056514f58072d94f1db8bc2e6494155da20c9432cf14b5d4ad4524d305dce16e",
+    "models": [
+      {
+        "depth": 8,
+        "source": [
+          513,
+          259
+        ],
+        "result": [
+          256,
+          129
+        ],
+        "rowSlots": 9,
+        "resultCachePrefixColumns": 96,
+        "pairs": {
+          "edge-or-stride": 2,
+          "eligible": 124,
+          "different-count": 2
+        }
+      },
+      {
+        "depth": 16,
+        "source": [
+          513,
+          259
+        ],
+        "result": [
+          256,
+          129
+        ],
+        "rowSlots": 9,
+        "resultCachePrefixColumns": 176,
+        "pairs": {
+          "edge-or-stride": 2,
+          "eligible": 124,
+          "different-count": 2
+        }
+      }
+    ],
+    "intendedSharedKernel": "Extract existing cached eight-tap overlapping two-output body into a fixed ordered kernel. Five bounded512bit source windows supply ten pixels instead of sixteen independent256bit source loads; two sums keep each lane tap order0..7. Column preparation proves applicability once per strip using dead byte padding. Cached/narrow and bounded column paths call the same arithmetic; irregular geometry retains actual indexed kernels.",
+    "limitations": "Eligibility and source/JIT structure are leads, not causal phase costs, instruction throughput proof, speedup forecasts or production acceptance. No change to binary64/rational/certificates/repair. No stale marker, active tap or borrowed-output geometry may alias a live store."
+  },
+  "storage": {
+    "workspaceReservation": 4096,
+    "smallExplicitArrayPayload": 4080,
+    "largeExplicitArrayPayload": 3232,
+    "resultLoan": "Existing large-strip cache borrows512B in each of nine separately admitted output rows; geometry borrows96B per output-row footer. Prefix/suffix ownership retires loans before publication.",
+    "proposedAdditionalOwnedBytes": 0,
+    "proposedRetainedScratchBytes": 0,
+    "physicalAndNativePeaksMeasured": false
+  },
+  "hypothesis": "Share the existing cached eight-tap/+2 overlapping-source pair kernel with bounded columns. Prepare geometry applicability once per strip, reducing per-row source loads, byte-index checks and variable-half insert construction while keeping each output lane tap order. Existing clamped/unequal/full-capacity/odd paths remain.",
+  "endState": "One fixed ordered two-output overlap kernel serves both existing cached and bounded schedules; specialized geometry and ownership stay at their natural boundaries. Reuse dead padding only after explicit eligibility, reset markers per strip, and never overwrite live taps or aliased geometry. No new generic cache/session/API/budget/retention.",
+  "acceptance": "First direct bitwise ordered-sum and actual-column edge/stale-padding/unequal/crossing-footer tests; preserve binary64 operation order, certificates, tiny-alpha unwind/rational replay, cancellation and ownership. CompleteTightDown8 short screen then independent reversed confirmation if useful. ExistingDown8 andTightDown16 provide affected/generalization controls; finish precise affected-cost audit before acceptance. One immutable candidate perOS, focused checks during development, broadW/L/scalar/ISA/SAMEactualpackage only at a coherent accepted stage. Instruction/source counts alone establish no gain.",
+  "setbacks": "A shared helper may increase call/inline state or preparation costs. Keep the existing indexed kernel as the required irregular fallback, not a second permanent fast implementation. Retain adverse/inconclusive evidence and revise or abandon based on complete operations; no fixed continuation threshold or permanent family ban.",
+  "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+  "captureReceipt": "cta714-tight-profile-receipt.json",
+  "exactFrame": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+  "quietGuardsPassed": true,
+  "qualification": {
+    "reusedUnchangedProduction": true,
+    "fullLiveEachOs": 6100,
+    "sameActualPackageBothOs": "666068f5884f3b43abd6ae8776f481cc7dbdc95a4fc1c3f1ea115b0d4291b235",
+    "ciCommit": "6d426ab1988e86672d128614ab92c28abd19664e",
+    "ciRun": 42698090677,
+    "allThreeCiJobsPassed": true,
+    "noRepeatedSuitePackageOrTimingConfirmation": true
+  },
+  "raw": {
+    "file": "bicubic-bounded-current-attribution.tar.xz",
+    "sha256": "3cbfc562361892b1a0bceaac65cb2c19f5b0dd0b0640b8a776360d0601c2867a",
+    "bytes": 139496,
+    "members": 30,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-live-prepared-huffman-qualified.tar.xz",
+        "sha256": "5e152dfb85b0b0371e5f71fc885d7446f29123f313ec875576511e38d428646b"
+      },
+      {
+        "file": "bicubic-shared-byte-repair-qualified.tar.xz",
+        "sha256": "62b95267dcca616931caa99b5920d40c3e63ec89da2feabdf4c11eccba010422"
+      }
+    ]
+  }
+}

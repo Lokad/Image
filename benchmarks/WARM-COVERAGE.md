@@ -59,6 +59,9 @@ current immutable build:6100full/live eachOS,452internal/375public pernormal/
 scalar/disabledAVX2/AVX512, SAMEactualReleasepackage/allthreeexamples.23affected
 baseline costs refresh; six progressive and other codec/resize/text/ownership
 paths reuse valid evidence.
+The [bounded bicubic audit](BICUBIC-BOUNDED-CURRENT-ATTRIBUTION.md) selects shared
+eight-tap overlap preparation/execution as the next prototype lead; it changes
+no production, current cost or numerical policy and supplies no CPU gain claim.
 Unchanged [wider-cache geometry](CACHED-WIDE-PREPARED-GEOMETRY.md) retains its eight
 costs and265internal/729public scalar/ISA qualification. Historical reports retain
 their raw proof. The full127-row actual-package release refresh remains separate.
