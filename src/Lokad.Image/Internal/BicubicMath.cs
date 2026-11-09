@@ -44,6 +44,27 @@ internal static class BicubicMath
         return sum;
     }
 
+    // Each vector already contains a source-column pair. Delay two decoded
+    // rows so both output rows reuse ten loads and retain their own tap order.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void FilterOverlappingVerticalPair(ReadOnlySpan<Vector512<double>> decoded,
+        ReadOnlySpan<double> firstWeights, ReadOnlySpan<double> secondWeights,
+        out Vector512<double> firstSum, out Vector512<double> secondSum)
+    {
+        var early0 = decoded[0]; var early1 = decoded[1];
+        var sum0 = Vector512<double>.Zero; var sum1 = Vector512<double>.Zero;
+        for (var tap = 0; tap < 8; tap += 2)
+        {
+            var late0 = decoded[tap + 2]; var late1 = decoded[tap + 3];
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(early0, Vector512.Create(firstWeights[tap])));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(late0, Vector512.Create(secondWeights[tap])));
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(early1, Vector512.Create(firstWeights[tap + 1])));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(late1, Vector512.Create(secondWeights[tap + 1])));
+            early0 = late0; early1 = late1;
+        }
+        firstSum = sum0; secondSum = sum1;
+    }
+
     internal static void PrepareOverlappingPairs(Span<byte> offsets, ReadOnlySpan<int> counts,
         int columns, int sourceCount, int capacity, int taps, int stride, CancellationToken cancellation)
     {

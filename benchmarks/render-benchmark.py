@@ -898,9 +898,33 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    byte_bands = json.loads((ROOT / 'benchmarks/bicubic-byte-result-bands-evidence.json').read_text(encoding='utf-8'))
+    mixed_vertical = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-vertical-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert mixed_vertical['productionAccepted'] and mixed_vertical['requiredMaterialPaths'] == 283
+    mq = mixed_vertical['qualification']
+    assert mq['fullChecksEachOs'] == mq['windows']['total'] == mq['linux']['total'] == 6124
+    assert mq['sameActualPackageBothOS']
+    assert mq['actualPackage']['sha256'] == mq['samePackageLinux']['sameActualPackageSha256']
+    assert mixed_vertical['raw']['mirrored'] and mixed_vertical['raw']['allMembersVerified']
+    assert mixed_vertical['sourceProof']['wordRestoredByteForByte']
+    assert mixed_vertical['storage']['newOwnedCapacityBytes'] == mixed_vertical['storage']['newRetainedOperationStorageBytes'] == 0
+    assert mixed_vertical['statusCounts'] == {'pass': 1, 'gap': 2, 'uncertain': 0}
+    assert set(mixed_vertical['cases']) == {'Mixed8', 'TightMixed8', 'TightVertical8'}
+    for case, c in mixed_vertical['cases'].items():
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['managedQualifiedOriginalPixelsExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['managedRationalReferenceExact'] == (case != 'TightVertical8')
+        if case == 'TightVertical8':
+            assert c['certifiedExactRationalAlphaHalves'] == 25
+        assert c['librarySha256'] == mq['actualPackage']['librarySha256']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in mixed_vertical['comparison']['views'].values())
+    current_word = mixed_vertical['currentUnchangedWord']
+    assert current_word['librarySha256'] == mixed_vertical['baselineProducers']['windowsSha256']
+    assert current_word['managedRationalReferenceExact'] and current_word['independentOwnedOutput'] and current_word['sourceUnchanged']
+    assert current_word['allOriginalGatesPassed'] and current_word['quietGuardsPassed'] and current_word['status'] == 'gap'
     result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
-    for depth, current in [(8, byte_bands['cases']['TightMixed8']), (16, result_bands['cases']['TightMixed16'])]:
+    for depth, current in [(8, mixed_vertical['cases']['TightMixed8']), (16, current_word)]:
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1511,7 +1535,7 @@ def render():
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for c in result_bands['comparison'].values() for v in c['views'].values())
-    current = result_bands['cases']['TightMixed16']
+    current = current_word
     label = word_labels['TightMixed16']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
     assert len(positions) == 1
@@ -1616,6 +1640,7 @@ def render():
     assert result_bands['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
                                                     for state in ('pass', 'gap', 'uncertain')}
     merged_word.update({case: cost for case, cost in bicubic_overlap['cases'].items() if case in merged_word})
+    merged_word['TightMixed16'] = current_word
     current_word_counts = {state: sum(c['status'] == state for c in merged_word.values())
                            for state in ('pass', 'gap', 'uncertain')}
     # The shared-wide provider above owns Down32x16_8; this older identity
@@ -1648,22 +1673,7 @@ def render():
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
-    assert byte_bands['productionAccepted'] and byte_bands['requiredMaterialPaths'] == 283
-    assert byte_bands['raw']['mirrored'] and byte_bands['raw']['allMembersVerified']
-    assert set(byte_bands['cases']) == {'Mixed8', 'TightMixed8', 'TightVertical8'}
-    bq = byte_bands['qualification']
-    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5964
-    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
-    assert bq['packageByteBandsBothOs'] and bq['allThreeExamplesBothOs']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in byte_bands['comparison']['views'].values())
-    for current in byte_bands['cases'].values():
-        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['managedQualifiedOriginalPixelsExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['certifiedExactRationalAlphaHalves'] == 25 if current['caseId'] == 'TightVertical8' else current['managedRationalReferenceExact']
-        assert current['sourceUnchanged'] and current['independentOwnedOutput']
-        assert current['librarySha256'] == bq['actualPackage']['librarySha256'] == byte_bands['producers']['windowsSha256']
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    current = byte_bands['cases']['TightMixed8']
+    current = mixed_vertical['cases']['TightMixed8']
     label = 'Bicubic RGBA8, width up / height down, input+output+4 KiB'
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
     assert len(positions) == 1
@@ -1896,18 +1906,23 @@ Current scope and remaining work:
   is claimed. Shared column prefix/suffix frames retire before overlap/replay;
   current cross-platform and SAME actual-package checks cover both depths.
   Other source-valid paths reuse evidence; scoped costs do not prove all-path parity.
-  [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
-  reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
-  with separated filtered/all-actual raw/normalized confidence. Current exact
-  package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
-  vertical503.50/zimg587.18µs upper.862 passes/stops. Allocations114/114/113Bop,
-  no added owned capacity/retained scratch;28,136B borrows existing output and
-  retires before suffix writes. Existing4KiB admission and exact replay remain.
-  The earlier1,319.86µs point overstates the contemporary gain; cross-artifact
-  timing differences remain unexplained despite identical sources/configuration
-  and targeted IL. Current claims use matched Windows-produced artifacts and
-  the exact actual package DLL. Both OSes pass5,964full/live, affected scalar/ISA,
-  SAME actual package/byte-band ownership checks and allthree examples.
+  [Mixed-byte vertical reuse](../benchmarks/BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md)
+  shares overlapping decoded rows across independent ordered accumulations.
+  Complete bounded mixed resize saves **{mixed_vertical['comparison']['savedUs']:.2f}µs/{100*mixed_vertical['comparison']['rawReduction']:.2f}% raw/{100*mixed_vertical['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual confidence and native movement
+  {100*mixed_vertical['comparison']['nativePointChange']:.2f}%.
+  Current default/bounded byte costs{mixed_vertical['cases']['Mixed8']['managedUs']:.2f}/
+  {mixed_vertical['cases']['TightMixed8']['managedUs']:.2f}µs, uppers
+  {mixed_vertical['cases']['Mixed8']['upper']:.3f}/{mixed_vertical['cases']['TightMixed8']['upper']:.3f}
+  remain gaps; vertical upper{mixed_vertical['cases']['TightVertical8']['upper']:.3f} passes/stops.
+  Other fresh points establish no causal companion gain. GC114/114/113Bop,
+  existing4KiB admission,28,136B result-backed workspace and retained scratch0
+  remain. Outputs stay charged until disposal; exact pixels/certification/repair
+  and native float gates are unchanged. The tested word extension had a54.32µs
+  separated raw loss; its normalized point was inconclusive. The complete word
+  implementation is restored byte-for-byte, with every adverse sample retained.
+  [Earlier byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md) retain their
+  scoped gains and artifact reconciliation as history, without a renderer dependency.
   [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
   close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
   normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
@@ -1921,22 +1936,14 @@ Current scope and remaining work:
   Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
   Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
   the SAME actual package/three examples. Four displayed rows refresh.
-  [Result-backed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) save
-  {result_bands['comparison']['Mixed16']['savedUs']:.2f}/{result_bands['comparison']['TightMixed16']['savedUs']:.2f}µs
-  on default/4KiB mixed word: {result_bands['cases']['Mixed16']['managedUs']:.2f}/
-  {result_bands['cases']['TightMixed16']['managedUs']:.2f}µs, uppers
-  {result_bands['cases']['Mixed16']['upper']:.3f}/{result_bands['cases']['TightMixed16']['upper']:.3f}.
-  Default passes/stops; tight remains a small gap. GC114B/op remains;28,136B is
-  borrowed from already-admitted output and retired before suffix stores.
-  No added heap or retained scratch. The shared vertical path regresses
-  {result_bands['sentinel']['rawChangeUs']:.2f}µs/{100*result_bands['sentinel']['rawChange']:.2f}%
-  against its contemporary original, but still passes upper
-  {result_bands['cases']['TightVertical16']['upper']:.3f},113B/op. This tradeoff is
-  retained with substantial mixed savings; no uniform gain claim. Both OSes pass
-  5,948full/live, affected normal/scalar/disabled-ISA checks and SAME actual
-  package/three examples. Fifteen word controls now
-  {current_word_counts['pass']}pass/{current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
-  Unchanged paths reuse evidence. Historical bands/geometry stay in linked reports.
+  [Result-backed word bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) remain
+  source-valid. Default mixed{result_bands['cases']['Mixed16']['managedUs']:.2f}µs,
+  upper{result_bands['cases']['Mixed16']['upper']:.3f} passes/stops. The newer unchanged-DLL bounded
+  confirmation is{current_word['managedUs']:.2f}/zimg{current_word['nativeUs']:.2f}µs,
+  upper{current_word['upper']:.3f} remains a gap; no causal historical regression is claimed.
+  Fifteen small-support word controls: {current_word_counts['pass']}pass/
+  {current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
+  Earlier band gains/tradeoffs and raw proof remain in the report.
   [Shared wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) unifies fixed8tap/+2
   and16tap/+4 arithmetic plus byte-offset preparation across three schedules.
   Complete wide-byte saves **{bicubic_overlap['comparison']['savedUs']:.2f}µs/{100*bicubic_overlap['comparison']['rawReduction']:.2f}% raw/{100*bicubic_overlap['comparison']['normalizedReduction']:.2f}% normalized**,
@@ -2040,14 +2047,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{cq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{mq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes285 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes289 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Unchanged JPEG source paths retain452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.

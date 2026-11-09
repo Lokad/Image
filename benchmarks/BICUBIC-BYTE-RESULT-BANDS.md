@@ -1,5 +1,9 @@
 # Result-backed byte bicubic bands
 
+Current mixed/vertical byte costs and whole-build qualification now belong to
+[vertical source reuse](BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md). This report retains
+the band design, scoped gain, artifact reconciliation and raw history.
+
 Mixed-axis RGBA8 bicubic resizing reuses unmaterialized output capacity for a
 64-row band, then retires it before the original small-band suffix. A shared
 numeric range implementation serves both capacities. Four-row publication

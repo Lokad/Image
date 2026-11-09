@@ -1,5 +1,10 @@
 # Result-backed bicubic row bands
 
+The word implementation remains unchanged after the
+[vertical source-reuse experiment](BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md). Its newer
+unchanged-DLL bounded observation is893.16µs/upper1.056; the older bounded cost
+below is superseded. Default/vertical costs and the design/raw evidence remain valid.
+
 Complete RGBA16 width-enlarging/height-reducing resizing now borrows a larger
 filtered-column workspace from its unpublished output. The original 513×259
 control becomes 1027×129. Default workspace saves **86.35 µs /

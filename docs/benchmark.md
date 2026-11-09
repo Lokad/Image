@@ -133,18 +133,23 @@ Current scope and remaining work:
   is claimed. Shared column prefix/suffix frames retire before overlap/replay;
   current cross-platform and SAME actual-package checks cover both depths.
   Other source-valid paths reuse evidence; scoped costs do not prove all-path parity.
-  [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
-  reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
-  with separated filtered/all-actual raw/normalized confidence. Current exact
-  package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
-  vertical503.50/zimg587.18µs upper.862 passes/stops. Allocations114/114/113Bop,
-  no added owned capacity/retained scratch;28,136B borrows existing output and
-  retires before suffix writes. Existing4KiB admission and exact replay remain.
-  The earlier1,319.86µs point overstates the contemporary gain; cross-artifact
-  timing differences remain unexplained despite identical sources/configuration
-  and targeted IL. Current claims use matched Windows-produced artifacts and
-  the exact actual package DLL. Both OSes pass5,964full/live, affected scalar/ISA,
-  SAME actual package/byte-band ownership checks and allthree examples.
+  [Mixed-byte vertical reuse](../benchmarks/BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md)
+  shares overlapping decoded rows across independent ordered accumulations.
+  Complete bounded mixed resize saves **145.36µs/14.06% raw/13.54% normalized**,
+  with separated filtered/all-actual confidence and native movement
+  -0.61%.
+  Current default/bounded byte costs936.03/
+  888.37µs, uppers
+  1.084/1.030
+  remain gaps; vertical upper0.786 passes/stops.
+  Other fresh points establish no causal companion gain. GC114/114/113Bop,
+  existing4KiB admission,28,136B result-backed workspace and retained scratch0
+  remain. Outputs stay charged until disposal; exact pixels/certification/repair
+  and native float gates are unchanged. The tested word extension had a54.32µs
+  separated raw loss; its normalized point was inconclusive. The complete word
+  implementation is restored byte-for-byte, with every adverse sample retained.
+  [Earlier byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md) retain their
+  scoped gains and artifact reconciliation as history, without a renderer dependency.
   [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
   close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
   normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
@@ -158,22 +163,14 @@ Current scope and remaining work:
   Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
   Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
   the SAME actual package/three examples. Four displayed rows refresh.
-  [Result-backed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) save
-  86.35/182.46µs
-  on default/4KiB mixed word: 841.53/
-  862.21µs, uppers
-  0.997/1.025.
-  Default passes/stops; tight remains a small gap. GC114B/op remains;28,136B is
-  borrowed from already-admitted output and retired before suffix stores.
-  No added heap or retained scratch. The shared vertical path regresses
-  61.98µs/14.62%
-  against its contemporary original, but still passes upper
-  0.824,113B/op. This tradeoff is
-  retained with substantial mixed savings; no uniform gain claim. Both OSes pass
-  5,948full/live, affected normal/scalar/disabled-ISA checks and SAME actual
-  package/three examples. Fifteen word controls now
-  11pass/4gap/0uncertain.
-  Unchanged paths reuse evidence. Historical bands/geometry stay in linked reports.
+  [Result-backed word bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) remain
+  source-valid. Default mixed841.53µs,
+  upper0.997 passes/stops. The newer unchanged-DLL bounded
+  confirmation is893.16/zimg851.29µs,
+  upper1.056 remains a gap; no causal historical regression is claimed.
+  Fifteen small-support word controls: 11pass/
+  4gap/0uncertain.
+  Earlier band gains/tradeoffs and raw proof remain in the report.
   [Shared wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) unifies fixed8tap/+2
   and16tap/+4 arithmetic plus byte-offset preparation across three schedules.
   Complete wide-byte saves **30.65µs/6.72% raw/6.68% normalized**,
@@ -277,14 +274,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,120 full/live checks per OS**, affected
+The current production build passes **6,124 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes285 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes289 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Unchanged JPEG source paths retain452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
@@ -415,8 +412,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 504.20 | 419.02 | 1.203 / 1.208 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.86 | 573.09 | 0.952 / 0.956 | 113 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 446.07 | 346.46 | 1.288 / 1.292 | 198,450 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 425.28 | 346.96 | 1.226 / 1.233 | 113 |

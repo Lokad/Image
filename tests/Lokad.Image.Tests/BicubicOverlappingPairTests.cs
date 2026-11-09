@@ -50,6 +50,47 @@ public sealed class BicubicOverlappingPairTests
     private static double Product(double a, double b) => a * b;
 
     [Theory]
+    [InlineData(255, false)] [InlineData(255, true)]
+    [InlineData(65535, false)] [InlineData(65535, true)]
+    public void VerticalWindowsPreserveBothColumnPairsAndEveryOrderedDouble(int maximum, bool transparent)
+    {
+        if (!Avx512F.IsSupported) return;
+        var random = new Random(720);
+        var input = new Vector512<double>[12];
+        var weights0 = new double[10]; var weights1 = new double[10];
+        for (var trial = 0; trial < 32; trial++)
+        {
+            for (var row = 0; row < input.Length; row++)
+            {
+                var a = transparent ? random.Next(3) : random.Next(maximum + 1);
+                var b = transparent ? random.Next(3) : random.Next(maximum + 1);
+                input[row] = Vector512.Create(Vector256.Create((double)a * random.Next(maximum + 1),
+                    (double)a * random.Next(maximum + 1), (double)a * random.Next(maximum + 1), a),
+                    Vector256.Create((double)b * random.Next(maximum + 1), (double)b * random.Next(maximum + 1),
+                        (double)b * random.Next(maximum + 1), b));
+            }
+            for (var tap = 0; tap < weights0.Length; tap++)
+            {
+                weights0[tap] = tap % 2 == 0 ? (tap + 1) * .1 : -(tap + 1) * .0625;
+                weights1[tap] = tap % 3 == 0 ? -(tap + 1) * .01 : (tap + 1) * .125;
+            }
+            var saved = input.ToArray(); var saved0 = weights0.ToArray(); var saved1 = weights1.ToArray();
+            BicubicMath.FilterOverlappingVerticalPair(input.AsSpan(1, 10),
+                weights0.AsSpan(1, 8), weights1.AsSpan(1, 8), out var first, out var second);
+            for (var row = 0; row < 2; row++) for (var channel = 0; channel < 8; channel++)
+            {
+                double expected = 0;
+                for (var tap = 0; tap < 8; tap++)
+                    expected += Product(input[1 + tap + row * 2].GetElement(channel),
+                        (row == 0 ? weights0 : weights1)[tap + 1]);
+                Assert.Equal(BitConverter.DoubleToInt64Bits(expected),
+                    BitConverter.DoubleToInt64Bits((row == 0 ? first : second).GetElement(channel)));
+            }
+            Assert.Equal(saved, input); Assert.Equal(saved0, weights0); Assert.Equal(saved1, weights1);
+        }
+    }
+
+    [Theory]
     [InlineData(8, 2, 10)] [InlineData(16, 4, 17)]
     public void PreparationResetsStaleProofsAndPreservesLiveTapsFullColumnsAndOddTail(int taps, int stride, int capacity)
     {

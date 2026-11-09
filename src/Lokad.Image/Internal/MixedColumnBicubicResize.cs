@@ -142,6 +142,7 @@ internal static class MixedColumnBicubicResize
                 normalizers[y] = normalizer;
             }
             var sourceCount = rowOffsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
+            BicubicMath.PrepareOverlappingPairs(rowOffsets, counts, length, sourceCount, 10, 8, 2, context.Cancellation);
             columnIds.Fill(-1);
             for (var x = 0; x < result.Width; x++)
             {
@@ -195,6 +196,21 @@ internal static class MixedColumnBicubicResize
                     {
                         if (typeof(TBand) == typeof(SixtyFourRowBand) && (y & 7) == 0)
                             context.Cancellation.ThrowIfCancellationRequested();
+                        if (counts[y] == 8 && y + 1 < length && counts[y + 1] == 8 && rowOffsets[y * 10 + 9] != 0)
+                        {
+                            var windowFirst = rowOffsets[y * 10 + 9] - 1;
+                            BicubicMath.FilterOverlappingVerticalPair(decoded.Slice(windowFirst, 10),
+                                vertical.Slice(y * 10, 8), vertical.Slice((y + 1) * 10, 8), out var sum0, out var sum1);
+                            cache[slot * rowCapacity + y] = sum0.GetLower();
+                            cache[slot * rowCapacity + y + 1] = sum1.GetLower();
+                            if (paired)
+                            {
+                                cache[nextSlot * rowCapacity + y] = sum0.GetUpper();
+                                cache[nextSlot * rowCapacity + y + 1] = sum1.GetUpper();
+                            }
+                            y++;
+                            continue;
+                        }
                         var weights = vertical.Slice(y * 10, counts[y]);
                         var offsets = rowOffsets.Slice(y * 10, counts[y]);
                         var sum = Vector512<double>.Zero;
