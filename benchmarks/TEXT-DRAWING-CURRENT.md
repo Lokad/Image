@@ -1,5 +1,12 @@
 # Current text and drawing comparisons
 
+The RGBA8 compositing row below is superseded by the
+[current package refresh](RGBA8-COMPOSITE-CURRENT-PACKAGE.md), 558.02/452.03 µs.
+The two raster costs are superseded by
+[interior coverage](TEXT-INTERIOR-COVERAGE.md). Current consolidated costs belong
+in [the benchmark summary](../docs/benchmark.md); this report retains its stage's
+measurement and reference details.
+
 All nine controls have independent twelve-actual measurements with reference
 brackets and passing quiet-VM guards. Four unchanged layout/fitting controls
 reuse valid costs; owned font preparation, shared compositing rows and shared

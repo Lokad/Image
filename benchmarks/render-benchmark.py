@@ -1141,6 +1141,13 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
+    composite8_current = json.loads((ROOT / 'benchmarks/rgba8-composite-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert not composite8_current['productionChanged']
+    assert composite8_current['current']['allOriginalGatesPassed'] and composite8_current['current']['quietGuardsPassed']
+    assert composite8_current['current']['actualIterations'] == 12
+    assert composite8_current['current']['librarySha256'] == composite8_current['actualPackage']['librarySha256']
+    assert composite8_current['allocation']['sameImageDrawingSourceAsAllocationEvidence']
+    assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
     raster = json.loads((ROOT / 'benchmarks/text-interior-coverage-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
     assert raster['qualification']['fullChecksEachOs'] == 5911
@@ -1151,6 +1158,12 @@ def render():
     assert raster['sourceProof']['sameSequentialPerPixelAdditionsAndPolls']
     assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
     for case_id, previous in text_current['observations'].items():
+        if case_id == 'DrawingComposite8':
+            current = composite8_current['current']
+            rows.append(('editing', f'| {composites["cases"][case_id]["label"]} (gap) † | {current["managedUs"]:,.2f} | '
+                         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                         f'{current["allocatedBytes"]:,} |'))
+            continue
         case = (font_load['current'] if case_id == 'FontLoadRegular'
                 else raster['cases'].get(case_id, composites['cases'].get(case_id, previous)))
         if case_id in raster['cases']:
@@ -1900,6 +1913,11 @@ Current scope and remaining work:
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
+  [Current package RGBA8 composition](../benchmarks/RGBA8-COMPOSITE-CURRENT-PACKAGE.md)
+  is558.02/FFmpeg452.03µs, upper1.265: a105.99µs gap. Allocation56B/op is reused
+  from unchanged shared-row code; this refresh measures no new allocation or
+  physical peak. Borrowed-canvas reset is excluded before every operation on
+  both sides, invocation/unroll1, with exact managed and approved native gates.
   [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
   on complete loading:31.86µs versus labeledFreeType13.42µs, upper2.396 still a gap.
   Allocation falls757,597→176B/op; fullcopy/eager checks remain timed. The isolated

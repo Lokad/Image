@@ -201,6 +201,11 @@ Current scope and remaining work:
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
+  [Current package RGBA8 composition](../benchmarks/RGBA8-COMPOSITE-CURRENT-PACKAGE.md)
+  is558.02/FFmpeg452.03µs, upper1.265: a105.99µs gap. Allocation56B/op is reused
+  from unchanged shared-row code; this refresh measures no new allocation or
+  physical peak. Borrowed-canvas reset is excluded before every operation on
+  both sides, invocation/unroll1, with exact managed and approved native gates.
   [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
   on complete loading:31.86µs versus labeledFreeType13.42µs, upper2.396 still a gap.
   Allocation falls757,597→176B/op; fullcopy/eager checks remain timed. The isolated
@@ -365,7 +370,7 @@ settings do not establish matched quality.
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 130.55 | 45.72 | 2.856 / 4.456 | 67,368 |
 | Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 132.38 | 45.83 | 2.889 / 4.174 | 67,368 |
-| Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
+| Composite RGBA8 / FFmpeg (gap) † | 558.02 | 452.03 | 1.234 / 1.265 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
 
