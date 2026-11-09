@@ -1420,12 +1420,13 @@ def render():
         f'{stream["allocatedBytes"]:,} | — |'))
     bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
     current = bilinear['current']
+    bilinear_up8 = current
     assert not bilinear['productionChanged'] and bilinear['allBuilds'] == 0
     assert bilinear['raw']['mirrored'] and bilinear['raw']['allMembersVerified']
     assert current['librarySha256'] == current['receipt']['librarySha256']
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['receipt']['managedRationalReferenceExact'] and current['receipt']['independentOwnedOutput']
-    assert current['lower'] < 1 < current['upper'] and current['status'] == 'uncertain'
+    assert current['lower'] > 1 and current['status'] == 'gap'
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| Bilinear upscale RGBA8 ')]
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
@@ -1930,9 +1931,15 @@ Current scope and remaining work:
   retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
-  3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is
-  uncertain at2,357µs/102,891Bop,upper1.134. Preserve exact Q30/rational/
-  certified pixels versus native float; historical gains stay in linked reports.
+  3,108.21/native3,037.83µs,upper1.026/116Bop. [Current complete bilinear
+  confidence](../benchmarks/BILINEAR-CURRENT-CONFIDENCE.md) resolves prior uncertainty:
+  {bilinear_up8['managedUs']:,.2f}/native{bilinear_up8['nativeUs']:,.2f}µs,
+  lower{bilinear_up8['lower']:.3f}/upper{bilinear_up8['upper']:.3f},
+  {bilinear_up8['allocatedBytes']:,}Bop, a demonstrated gap. One unchanged-build
+  twelve-actual observation, no source/worker/native build or causal CPUgain claim.
+  Geometry/output ownership stay timed; native graph/context preparation stays
+  retained and labeled. Preserve exact Q30/rational/certified pixels versus native
+  float; historical gains stay in linked reports.
 - **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
   saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
   allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,

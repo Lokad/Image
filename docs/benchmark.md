@@ -192,9 +192,15 @@ Current scope and remaining work:
   retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
-  3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is
-  uncertain at2,357µs/102,891Bop,upper1.134. Preserve exact Q30/rational/
-  certified pixels versus native float; historical gains stay in linked reports.
+  3,108.21/native3,037.83µs,upper1.026/116Bop. [Current complete bilinear
+  confidence](../benchmarks/BILINEAR-CURRENT-CONFIDENCE.md) resolves prior uncertainty:
+  2,222.69/native1,993.50µs,
+  lower1.027/upper1.124,
+  102,891Bop, a demonstrated gap. One unchanged-build
+  twelve-actual observation, no source/worker/native build or causal CPUgain claim.
+  Geometry/output ownership stay timed; native graph/context preparation stays
+  retained and labeled. Preserve exact Q30/rational/certified pixels versus native
+  float; historical gains stay in linked reports.
 - **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
   saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
   allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,
@@ -376,7 +382,7 @@ settings do not establish matched quality.
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,699.03 | 5,223.49 | 0.900 / 0.940 | 4,592,777 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,021.02 | 3,903.37 | 1.030 / 1.043 | 4,265,332 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
-| Bilinear upscale RGBA8 † → 1027×519 | 2,357.04 | 2,155.92 | 1.093 / 1.134 | 102,891 |
+| Bilinear upscale RGBA8 † → 1027×519 | 2,222.69 | 1,993.50 | 1.115 / 1.124 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 485.10 | 416.46 | 1.165 / 1.169 | 199,980 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,752.40 | 2,874.23 | 0.958 / 0.966 | 4,264,573 |
