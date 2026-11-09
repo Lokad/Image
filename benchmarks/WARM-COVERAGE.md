@@ -295,3 +295,9 @@ retains an unselected implementation and current live profile. Its two short
 complete-operation screens show no useful lead. Exact qualified sources and
 binaries are restored; current costs and package qualification remain unchanged.
 It adds no renderer dependency or restriction on materially revised work.
+
+[Cache-pair views](BICUBIC-CACHE-PAIR-VIEWS-EXPERIMENT.md) retain two unselected
+resize representations. A small-control gain is outweighed by the confirmed
+larger-control loss; the root revision has inconclusive short bounds and keeps
+the targeted reload. Qualified sources/modules/package are restored exactly;
+current costs and qualification remain unchanged. No renderer dependency.
