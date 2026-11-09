@@ -943,26 +943,30 @@ def render():
                          f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    byte_repair = json.loads((ROOT / 'benchmarks/bicubic-shared-byte-repair-evidence.json').read_text(encoding='utf-8'))
-    assert byte_repair['productionAccepted'] and byte_repair['requiredMaterialPaths'] == 283
-    assert set(byte_repair['cases']) == {'TightWide8', 'TightWide16', 'TightDown8'}
-    bq = byte_repair['qualification']
-    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 6006
-    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
-    assert bq['allThreeExamplesBothOs'] and bq['sharedWideByteWordColumnOwnershipBothOs']
-    assert byte_repair['storage']['workspaceAdmissionBytes'] == 4096 and byte_repair['storage']['newOwnedHeapCapacityBytes'] == 0
-    assert byte_repair['raw']['mirrored'] and byte_repair['raw']['allMembersVerified']
-    assert byte_repair['sourceProof']['originalByteBodyMovedVerbatim']
-    assert byte_repair['sourceProof']['widePairCertificatesAndWordRepairVerbatim']
-    assert byte_repair['sourceProof']['singleCertificateExtractedVerbatimExceptOutputView']
-    for cost in byte_repair['cases'].values():
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
-        assert cost['managedRationalReferenceExact'] and cost['managedQualifiedOriginalPixelsExact']
-        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed'] and cost['independentOwnedOutput'] and cost['sourceUnchanged']
-        assert cost['librarySha256'] == byte_repair['producers']['windowsSha256'] == byte_repair['actualPackage']['librarySha256']
-        assert cost['status'] == 'gap' and cost['lower'] > 1 and cost['allocatedBytes'] == 113
+    bicubic_overlap = json.loads((ROOT / 'benchmarks/bicubic-wide-overlap-evidence.json').read_text(encoding='utf-8'))
+    assert bicubic_overlap['productionAccepted'] and bicubic_overlap['requiredMaterialPaths'] == 283
+    cq = bicubic_overlap['qualification']
+    assert cq['fullChecksEachOs'] == cq['windows']['total'] == cq['linux']['total'] == 6120
+    assert cq['sameActualPackageBothOS']
+    assert cq['actualPackage']['sha256'] == cq['samePackageLinux']['sameActualPackageSha256']
+    assert bicubic_overlap['raw']['mirrored'] and bicubic_overlap['raw']['allMembersVerified']
+    assert bicubic_overlap['storage']['newOwnedHeapCapacityBytes'] == bicubic_overlap['storage']['newRetainedOperationStorageBytes'] == 0
+    assert len(bicubic_overlap['cases']) == 10 and bicubic_overlap['statusCounts'] == {'pass': 7, 'gap': 3, 'uncertain': 0}
+    for case, c in bicubic_overlap['cases'].items():
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        # Byte horizontal identity keeps its declared binary64 half-tie decisions.
+        assert c['managedRationalReferenceExact'] == (case != 'Horizontal8')
+        assert c['managedQualifiedOriginalPixelsExact']
+        assert c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['librarySha256'] == cq['actualPackage']['librarySha256']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in bicubic_overlap['comparison']['views'].values())
+    assert bicubic_overlap['largeGeneralization']['status'] == 'screen-only-confidence-open'
+    assert bicubic_overlap['largeGeneralization']['normalScalarAndPriorPixelsExact']
+    assert bicubic_overlap['largeGeneralization']['quietGuardsPassed']
     for case in ('TightWide8', 'TightWide16'):
-        cost = byte_repair['cases'][case]
+        cost = bicubic_overlap['cases'][case]
         depth = 8 if case == 'TightWide8' else 16
         rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 128×64 | '
                      f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
@@ -1291,8 +1295,8 @@ def render():
     for label, current in [
         ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['current']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
-        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', byte_repair['cases']['TightWide8']),
-        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', byte_repair['cases']['TightWide16']),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide8']),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide16']),
     ]:
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                      and row.split('|')[1].strip().replace(' H ', ' ') == label]
@@ -1441,25 +1445,6 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    bicubic_overlap = json.loads((ROOT / 'benchmarks/bicubic-shared-overlap-evidence.json').read_text(encoding='utf-8'))
-    assert bicubic_overlap['productionAccepted'] and bicubic_overlap['requiredMaterialPaths'] == 283
-    cq = bicubic_overlap['qualification']
-    assert cq['fullChecksEachOs'] == cq['windows']['total'] == cq['linux']['total'] == 6109
-    assert cq['sameActualPackageBothOS']
-    assert cq['actualPackage']['sha256'] == cq['samePackageLinux']['sameActualPackageSha256']
-    assert bicubic_overlap['raw']['mirrored'] and bicubic_overlap['raw']['allMembersVerified']
-    assert bicubic_overlap['storage']['newOwnedHeapCapacityBytes'] == bicubic_overlap['storage']['newRetainedOperationStorageBytes'] == 0
-    assert len(bicubic_overlap['cases']) == 8 and bicubic_overlap['statusCounts'] == {'pass': 6, 'gap': 2, 'uncertain': 0}
-    for case, c in bicubic_overlap['cases'].items():
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        # Byte horizontal identity keeps its declared binary64 half-tie decisions.
-        assert c['managedRationalReferenceExact'] == (case != 'Horizontal8')
-        assert c['managedQualifiedOriginalPixelsExact']
-        assert c['sourceUnchanged'] and c['independentOwnedOutput']
-        assert c['librarySha256'] == cq['actualPackage']['librarySha256']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    assert all(v['rawGainSeparated'] for v in bicubic_overlap['comparisons']['TightDown8']['views'].values())
     current = bicubic_overlap['cases']['TightDown8']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -1876,17 +1861,14 @@ Current scope and remaining work:
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
 - **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
-  removes whole-frame replay for ordinary uncertain wide byte pixels. One existing
-  large managed-only compact control falls **643.41→30.78ms /20.90×**, exact pixels
-  and4KiB admission; this is no native parity claim. Existing default25.87ms remains
-  faster, so dispatch stays unchanged. Frozen wide-byte476.04/zimg348.99µs,
-  upper1.378 **regresses24.93µs/5.53%raw** versus451.12; keep the adverse result.
-  Small-byte542.51/zimg417.07µs upper1.321 and wide-word453.66/zimg403.32µs
-  upper1.134 remain gaps, all113B/op. Prior small-byte and current word native
-  drift preclude causal companion gain claims. The unchanged small-word590.84/
-  zimg572.81µs upper1.033 retains its [shared-driver evidence](../benchmarks/BICUBIC-SHARED-BYTE-WORD-COLUMNS.md).
-  Earlier [wider consolidation](../benchmarks/BICUBIC-SHARED-WIDE-COLUMNS.md) remains
-  history; exact certificates, tiny-alpha retirement and independent owners remain.
+  retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
+  and4KiB admission as history. The existing large control refreshes on this package:
+  default{bicubic_overlap['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{bicubic_overlap['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,
+  with overlapping intervals. No useful generalized CPU gain, regression,
+  equivalence, native parity or default promotion is established. Its source and
+  normal/scalar/prior full frames agree. Dispatch is unchanged. Earlier costs and
+  adverse stages remain historical; current overlapping
+  execution costs are stated below. Certificates, tiny-alpha unwind and owners remain.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -1955,20 +1937,19 @@ Current scope and remaining work:
   package/three examples. Fifteen word controls now
   {current_word_counts['pass']}pass/{current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
   Unchanged paths reuse evidence. Historical bands/geometry stay in linked reports.
-  [Shared overlap execution](../benchmarks/BICUBIC-SHARED-OVERLAP.md) unifies the
-  ordered eight-tap source-window kernel across cached and bounded schedules.
-  Bounded byte reduction saves **{bicubic_overlap['comparisons']['TightDown8']['savedUs']:.2f}µs/{100*bicubic_overlap['comparisons']['TightDown8']['rawReduction']:.2f}% raw**,
-  with separated filtered/all-actual raw intervals. Normalized3.29% is a point:
-  filtered intervals separate, all-actual intervals overlap. Current540.31/zimg435.80µs,
-  upper1.259 remains a gap. All8affected costs refresh: **6pass/2gaps/0uncertain**;
-  bounded-word and horizontal-word now pass, without losing an earlier pass.
-  Cached-byte raw time worsens12.55µs/2.59% amid native+8.97%, while normalized
-  ratios improve5.86%. One original-only check reproduces the original regime;
-  the completed candidate is reused. No causal absolute gain, nonregression,
-  equivalence or clock explanation is established. Adverse stages/samples remain.
-  No new owned capacity, pool/session or retention: bounded workspace4KiB/113Bop,
-  cached byte199,840B workspace/199,980Bop, retained results132,096/264,192B until
-  disposal and scratch0. Physical/native/total-stack peaks are unmeasured.
+  [Shared wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) unifies fixed8tap/+2
+  and16tap/+4 arithmetic plus byte-offset preparation across three schedules.
+  Complete wide-byte saves **{bicubic_overlap['comparison']['savedUs']:.2f}µs/{100*bicubic_overlap['comparison']['rawReduction']:.2f}% raw/{100*bicubic_overlap['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual raw/normalized confidence and stable reference.
+  Current{bicubic_overlap['cases']['TightWide8']['managedUs']:.2f}/zimg{bicubic_overlap['cases']['TightWide8']['nativeUs']:.2f}µs,
+  upper{bicubic_overlap['cases']['TightWide8']['upper']:.3f} remains a gap. All10 affected costs refresh:
+  **7pass/3gaps/0uncertain**; wide-word now passes and no earlier pass is lost.
+  Other point differences are fresh costs, not causal companion gains. Passing
+  cases stop. Earlier [overlap gains/adverse evidence](../benchmarks/BICUBIC-SHARED-OVERLAP.md)
+  stay linked history. No new owned capacity, pool/session or retention:
+  bounded workspace4KiB/113Bop, cached byte199,840B workspace/{bicubic_overlap['cases']['Down8']['allocatedBytes']:,}Bop.
+  Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
+  until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
   [Certified Lanczos word rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
   reuse existingUInt32 products and remove integer filtering/conversion in the
   accelerated producer. Prepared word reduction saves25.02µs/4.34%raw/4.99%normalized,
@@ -2066,7 +2047,7 @@ opaque-word, progressive-strip, wide-column, shared byte/word enlargement and li
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes274 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes285 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Unchanged JPEG source paths retain452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.

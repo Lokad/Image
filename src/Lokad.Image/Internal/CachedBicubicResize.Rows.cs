@@ -80,7 +80,7 @@ internal static partial class CachedBicubicResize
                 var first=prepared-1;
                 var sum=BicubicMath.FilterOverlappingHorizontalPair(
                     MemoryMarshal.Cast<double,Vector256<double>>(decoded.Slice(first,40)),
-                    weights.Slice(base0,8),weights.Slice(base1,8));
+                    weights.Slice(base0,8),weights.Slice(base1,8),8,2);
                 MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,8)),in sum);
                 continue;
             }

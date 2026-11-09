@@ -1,7 +1,7 @@
 # Direct identity-axis cache rows
 
 Identity-axis gains and costs remain source-valid. Six affected nonidentity
-cached comparisons now belong to [shared overlap execution](BICUBIC-SHARED-OVERLAP.md);
+cached comparisons now belong to [wide overlap execution](BICUBIC-WIDE-OVERLAP.md);
 its current whole-build qualification supersedes this stage's package proof.
 
 ICR614 converts source rows directly into the active bicubic cache slot when

@@ -1,8 +1,8 @@
 # Shared original-order bicubic byte repair
 
-The large compact and wide-column evidence below remains valid. Current narrow
-byte/word column costs and whole-build qualification are owned by
-[shared overlap execution](BICUBIC-SHARED-OVERLAP.md).
+The replay-removal gain and raw proof below remain historical. Current wide/narrow
+column costs, large-mode screening and whole-build qualification belong to
+[wide overlap execution](BICUBIC-WIDE-OVERLAP.md).
 
 WBR665 shares the existing small-column byte repair with wider strips. Uncertain
 byte pairs and singletons now replay only those pixels in the original source

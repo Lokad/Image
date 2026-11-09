@@ -87,6 +87,8 @@ internal static class WideColumnBicubicResize
                 normalizers[x] = normalizer;
             }
             var sourceCount = offsets[(length - 1) * taps + counts[length - 1] - 1] + 1;
+            if (columns == 4)
+                BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 17, 16, 4, context.Cancellation);
             rowIds.Fill(-1);
             for (var y = 0; y < result.Height; y++)
             {
@@ -147,6 +149,15 @@ internal static class WideColumnBicubicResize
                         var count0 = counts[x]; var count1 = counts[x + 1];
                         var weights0 = weights.Slice(x * taps, count0); var weights1 = weights.Slice((x + 1) * taps, count1);
                         var offsets0 = offsets.Slice(x * taps, count0); var offsets1 = offsets.Slice((x + 1) * taps, count1);
+                        if (columns == 4 && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
+                        {
+                            var firstPixel = offsets[x * taps + 16] - 1;
+                            var pair = BicubicMath.FilterOverlappingHorizontalPair(
+                                decoded.Slice(firstPixel, 20), weights0, weights1, 16, 4);
+                            cache[slot * columns + x] = pair.GetLower();
+                            cache[slot * columns + x + 1] = pair.GetUpper();
+                            continue;
+                        }
                         var sum0 = Vector256<double>.Zero; var sum1 = Vector256<double>.Zero;
                         var shared = Math.Min(count0, count1);
                         for (var tx = 0; tx < shared; tx++)

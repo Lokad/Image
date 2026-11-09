@@ -10,27 +10,60 @@ namespace Lokad.Image.Internal;
 // their own geometry, tap order and portable fallback selection.
 internal static class BicubicMath
 {
-    // Two eight-tap outputs start two pixels apart. Reuse their ten source
-    // pixels without changing either lane's ordered Multiply/Add sequence.
+    // Callers select fixed eight-tap/+2 or sixteen-tap/+4 geometry. Reuse
+    // overlapping source windows without changing either lane's tap order.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static Vector512<double> FilterOverlappingHorizontalPair(
         ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> firstWeights,
-        ReadOnlySpan<double> secondWeights)
+        ReadOnlySpan<double> secondWeights, int taps, int stride)
     {
         var window = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded[..2]));
+        var delayed = stride == 4
+            ? MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(2, 2))) : default;
+        var carry = stride == 4
+            ? MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(4, 2))) : default;
         var sum = Vector512<double>.Zero;
-        for (var tap = 0; tap < 8; tap += 2)
+        for (var tap = 0; tap < taps; tap += 2)
         {
-            var next = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 2, 2)));
+            var next = stride == 4 ? carry
+                : MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 2, 2)));
             var even = Avx512F.Shuffle4x128(window, next, 0x44);
             var odd = Avx512F.Shuffle4x128(window, next, 0xee);
             var evenWeights = Avx512F.InsertVector256(Vector512.Create(firstWeights[tap]), Vector256.Create(secondWeights[tap]), 1);
             var oddWeights = Avx512F.InsertVector256(Vector512.Create(firstWeights[tap + 1]), Vector256.Create(secondWeights[tap + 1]), 1);
             sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
             sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
-            window = next;
+            if (stride == 4)
+            {
+                window = delayed; delayed = next;
+                if (tap + 2 < taps)
+                    carry = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 6, 2)));
+            }
+            else window = next;
         }
         return sum;
+    }
+
+    internal static void PrepareOverlappingPairs(Span<byte> offsets, ReadOnlySpan<int> counts,
+        int columns, int sourceCount, int capacity, int taps, int stride, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        if (taps >= capacity) return;
+        // The proof occupies only dead padding, reset on every strip. A full
+        // column retains its last slot as an actual source offset.
+        for (var x = 0; x < columns; x++)
+            if (counts[x] < capacity) offsets[x * capacity + capacity - 1] = 0;
+        for (var x = 0; x + 1 < columns; x += 2)
+        {
+            if (counts[x] != taps || counts[x + 1] != taps) continue;
+            var base0 = x * capacity; var base1 = base0 + capacity;
+            var first = offsets[base0]; var sourcePixels = taps + stride;
+            if (sourceCount < sourcePixels || first > sourceCount - sourcePixels || offsets[base1] != first + stride) continue;
+            var contiguous = true;
+            for (var tap = 0; tap < taps; tap++)
+                contiguous &= offsets[base0 + tap] == first + tap && offsets[base1 + tap] == first + tap + stride;
+            if (contiguous) offsets[base0 + capacity - 1] = (byte)(first + 1);
+        }
     }
 
     internal const int StreamingWorkspaceBytes = 4096;

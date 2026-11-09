@@ -1,5 +1,9 @@
 # Shared ordered bicubic overlap kernel
 
+The scoped gains and adverse evidence below remain historical. Current ten-case
+costs, large-mode screening and whole-build qualification belong to
+[wide overlap execution](BICUBIC-WIDE-OVERLAP.md).
+
 BOV716 shares one eight-tap overlap kernel between cached and bounded-column
 execution. Complete bounded byte reduction saves **33.24 µs / 5.80% raw**,
 573.55→540.31 µs, with separated filtered/all-actual raw intervals. The normalized

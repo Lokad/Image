@@ -8,14 +8,16 @@ namespace Lokad.Image.Tests;
 public sealed class BicubicOverlappingPairTests
 {
     [Theory]
-    [InlineData(255, false)] [InlineData(255, true)]
-    [InlineData(65535, false)] [InlineData(65535, true)]
-    public void SharedWindowsPreserveEveryOrderedDoubleAndBorrowedInput(int maximum, bool transparent)
+    [InlineData(255, false, 8, 2)] [InlineData(255, true, 8, 2)]
+    [InlineData(65535, false, 8, 2)] [InlineData(65535, true, 8, 2)]
+    [InlineData(255, false, 16, 4)] [InlineData(255, true, 16, 4)]
+    [InlineData(65535, false, 16, 4)] [InlineData(65535, true, 16, 4)]
+    public void SharedWindowsPreserveEveryOrderedDoubleAndBorrowedInput(int maximum, bool transparent, int taps, int stride)
     {
         if (!Avx512F.IsSupported) return;
         var random = new Random(715);
-        var input = new Vector256<double>[12];
-        var weights0 = new double[10]; var weights1 = new double[10];
+        var input = new Vector256<double>[taps + stride + 2];
+        var weights0 = new double[taps + 2]; var weights1 = new double[taps + 2];
         for (var trial = 0; trial < 32; trial++)
         {
             for (var p = 0; p < input.Length; p++)
@@ -24,19 +26,19 @@ public sealed class BicubicOverlappingPairTests
                 input[p] = Vector256.Create((double)a * random.Next(maximum + 1),
                     (double)a * random.Next(maximum + 1), (double)a * random.Next(maximum + 1), a);
             }
-            for (var t = 0; t < 10; t++)
+            for (var t = 0; t < weights0.Length; t++)
             {
                 weights0[t] = t % 2 == 0 ? (t + 1) * .1 : -(t + 1) * .0625;
                 weights1[t] = t % 3 == 0 ? -(t + 1) * .01 : (t + 1) * .125;
             }
             var saved = input.ToArray(); var saved0 = weights0.ToArray(); var saved1 = weights1.ToArray();
-            var pair = BicubicMath.FilterOverlappingHorizontalPair(input.AsSpan(1, 10),
-                weights0.AsSpan(1, 8), weights1.AsSpan(1, 8));
+            var pair = BicubicMath.FilterOverlappingHorizontalPair(input.AsSpan(1, taps + stride),
+                weights0.AsSpan(1, taps), weights1.AsSpan(1, taps), taps, stride);
             for (var c = 0; c < 8; c++)
             {
                 double expected = 0;
-                for (var tap = 0; tap < 8; tap++)
-                    expected += Product(input[1 + tap + (c >= 4 ? 2 : 0)].GetElement(c & 3),
+                for (var tap = 0; tap < taps; tap++)
+                    expected += Product(input[1 + tap + (c >= 4 ? stride : 0)].GetElement(c & 3),
                         (c < 4 ? weights0 : weights1)[tap + 1]);
                 Assert.Equal(BitConverter.DoubleToInt64Bits(expected), BitConverter.DoubleToInt64Bits(pair.GetElement(c)));
             }
@@ -47,49 +49,64 @@ public sealed class BicubicOverlappingPairTests
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static double Product(double a, double b) => a * b;
 
-    [Fact]
-    public void PreparationResetsStaleProofsAndPreservesLiveTapsFullColumnsAndOddTail()
+    [Theory]
+    [InlineData(8, 2, 10)] [InlineData(16, 4, 17)]
+    public void PreparationResetsStaleProofsAndPreservesLiveTapsFullColumnsAndOddTail(int taps, int stride, int capacity)
     {
-        var counts = new[] { 8, 8, 8, 9, 10, 10, 8 };
-        var offsets = Enumerable.Repeat((byte)254, counts.Length * 10).ToArray();
+        var counts = new[] { taps, taps, taps, taps + 1, capacity, capacity, taps };
+        var savedCounts = counts.ToArray();
+        var offsets = Enumerable.Repeat((byte)254, counts.Length * capacity).ToArray();
         for (var x = 0; x < counts.Length; x++) for (var t = 0; t < counts[x]; t++)
-            offsets[x * 10 + t] = (byte)(3 + x * 2 + t);
+            offsets[x * capacity + t] = (byte)(3 + x * stride + t);
         var original = offsets.ToArray();
-        ColumnBicubicResize.PrepareOverlappingPairs(offsets, counts, counts.Length, 32, default);
+        BicubicMath.PrepareOverlappingPairs(offsets, counts, counts.Length, 48, capacity, taps, stride, default);
         for (var x = 0; x < counts.Length; x++)
         {
-            Assert.Equal(original.AsSpan(x * 10, counts[x]).ToArray(), offsets.AsSpan(x * 10, counts[x]).ToArray());
-            if (counts[x] < 10) Assert.Equal(x == 0 ? (byte)4 : (byte)0, offsets[x * 10 + 9]);
+            Assert.Equal(original.AsSpan(x * capacity, counts[x]).ToArray(), offsets.AsSpan(x * capacity, counts[x]).ToArray());
+            if (counts[x] < capacity) Assert.Equal(x == 0 ? (byte)4 : (byte)0, offsets[x * capacity + capacity - 1]);
         }
-        offsets[10 + 4]++; // A later strip reuses the same storage with a discontinuity.
+        offsets[capacity + 4]++; // A later strip reuses the same storage with a discontinuity.
         var changed = offsets.ToArray();
-        ColumnBicubicResize.PrepareOverlappingPairs(offsets, counts, counts.Length, 32, default);
-        Assert.Equal(0, offsets[9]);
+        BicubicMath.PrepareOverlappingPairs(offsets, counts, counts.Length, 48, capacity, taps, stride, default);
+        Assert.Equal(0, offsets[capacity - 1]);
         for (var x = 0; x < counts.Length; x++)
-            Assert.Equal(changed.AsSpan(x * 10, counts[x]).ToArray(), offsets.AsSpan(x * 10, counts[x]).ToArray());
-        Assert.Equal(new[] { 8, 8, 8, 9, 10, 10, 8 }, counts);
+            Assert.Equal(changed.AsSpan(x * capacity, counts[x]).ToArray(), offsets.AsSpan(x * capacity, counts[x]).ToArray());
+        Assert.Equal(savedCounts, counts);
     }
 
     [Theory]
-    [InlineData(0, 9)] [InlineData(20, 29)] [InlineData(247, 256)]
-    public void IncompleteSourceWindowsNeverAcquireAProof(byte first, int sourceCount)
+    [InlineData(8, 2, 10, 0, 9)] [InlineData(8, 2, 10, 20, 29)] [InlineData(8, 2, 10, 247, 256)]
+    [InlineData(16, 4, 17, 0, 19)] [InlineData(16, 4, 17, 20, 39)] [InlineData(16, 4, 17, 237, 256)]
+    public void IncompleteSourceWindowsNeverAcquireAProof(int taps, int stride, int capacity, byte first, int sourceCount)
     {
-        var offsets = Enumerable.Repeat((byte)253, 20).ToArray(); var counts = new[] { 8, 8 };
-        for (var t = 0; t < 8; t++) { offsets[t] = (byte)(first + t); offsets[10 + t] = (byte)(first + t + 2); }
+        var offsets = Enumerable.Repeat((byte)253, 2 * capacity).ToArray(); var counts = new[] { taps, taps };
+        for (var t = 0; t < taps; t++) { offsets[t] = (byte)(first + t); offsets[capacity + t] = (byte)(first + t + stride); }
         var saved = offsets.ToArray();
-        ColumnBicubicResize.PrepareOverlappingPairs(offsets, counts, 2, sourceCount, default);
-        Assert.Equal(0, offsets[9]); Assert.Equal(0, offsets[19]);
-        Assert.Equal(saved.AsSpan(0, 8).ToArray(), offsets.AsSpan(0, 8).ToArray());
-        Assert.Equal(saved.AsSpan(10, 8).ToArray(), offsets.AsSpan(10, 8).ToArray());
+        BicubicMath.PrepareOverlappingPairs(offsets, counts, 2, sourceCount, capacity, taps, stride, default);
+        Assert.Equal(0, offsets[capacity - 1]); Assert.Equal(0, offsets[2 * capacity - 1]);
+        Assert.Equal(saved.AsSpan(0, taps).ToArray(), offsets.AsSpan(0, taps).ToArray());
+        Assert.Equal(saved.AsSpan(capacity, taps).ToArray(), offsets.AsSpan(capacity, taps).ToArray());
     }
 
-    [Fact]
-    public void CanceledPreparationLeavesBorrowedMetadataUntouched()
+    [Theory]
+    [InlineData(8, 2, 10)] [InlineData(16, 4, 17)]
+    public void CanceledPreparationLeavesBorrowedMetadataUntouched(int taps, int stride, int capacity)
     {
-        var offsets = Enumerable.Repeat((byte)253, 20).ToArray(); var saved = offsets.ToArray();
+        var offsets = Enumerable.Repeat((byte)253, 2 * capacity).ToArray(); var saved = offsets.ToArray();
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
         var error = Assert.Throws<OperationCanceledException>(() =>
-            ColumnBicubicResize.PrepareOverlappingPairs(offsets, new[] { 8, 8 }, 2, 32, cancellation.Token));
+            BicubicMath.PrepareOverlappingPairs(offsets, new[] { taps, taps }, 2, 48, capacity, taps, stride, cancellation.Token));
         Assert.Equal(cancellation.Token, error.CancellationToken); Assert.Equal(saved, offsets);
+    }
+
+    [Theory]
+    [InlineData(8, 2)] [InlineData(16, 4)]
+    public void FullCapacityHasNoPaddingToHoldAProof(int taps, int stride)
+    {
+        var offsets = new byte[2 * taps]; var counts = new[] { taps, taps };
+        for (var t = 0; t < taps; t++) { offsets[t] = (byte)t; offsets[taps + t] = (byte)(t + stride); }
+        var saved = offsets.ToArray();
+        BicubicMath.PrepareOverlappingPairs(offsets, counts, 2, taps + stride, taps, taps, stride, default);
+        Assert.Equal(saved, offsets);
     }
 }
