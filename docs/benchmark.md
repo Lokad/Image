@@ -221,17 +221,20 @@ Current scope and remaining work:
   Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
   [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
-  [Prepared Huffman replay](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md) saves
-  **151.45µs/9.43% raw**,
-  10.09% reference-normalized, on complete RGBA→gray encoding
-  versus explicitly labeled SIMD libjpeg-turbo. Filtered/all-actual intervals separate;
-  exact58,910B packets and155,436B/op remain. Current
-  1,455.31/native1,409.83µs,
-  upper1.042 remains a gap. All17 affected encoder
-  boundaries refresh: 15pass/1gaps/1uncertain.
-  A4KiB stack lookup fits the existing16KiB table allowance, with no new heap or
-  retained state. GovernedRGBA16 peak remains1,704,856B. Existing coefficient pools
-  and their governed bypass are unchanged; physical/native peaks are unmeasured.
+  [Grayscale tile preparation](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) shares
+  row setup across up to eight MCUs, preserving exact normalization and gray samples.
+  Complete RGBA→gray saves **299.16µs/20.49% raw**,
+  19.96% reference-normalized, with separated
+  filtered/all-actual confidence. Current 1,160.95/native1,403.16µs,
+  upper0.840 passes the labeled SIMD libjpeg-turbo control;
+  caller GRAY8 also passes upper0.969. Both retain exact58,910B
+  packets; total GC is155,435/155,438B/op, without an allocation-gain claim.
+  Extra768B stack storage fits the existing8KiB fixed admission; a conservative
+  source bound including fixed heap/metadata and explicit arrays is4,804B.
+  No new heap owner or retained state; full admitted/physical/JIT stack peaks
+  are unmeasured. Only two costs refresh;15 unchanged color costs retain
+  [Huffman replay evidence](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md): combined
+  16pass/0gaps/1uncertain. Existing coefficient pools and governed bypass stay unchanged.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
 - **Text/drawing:** [shared endpoint storage](../benchmarks/TEXT-ENDPOINT-STORAGE.md)
@@ -264,7 +267,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,064 full/live checks per OS**, affected
+The current production build passes **6,073 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -316,8 +319,8 @@ settings do not establish matched quality.
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
-| JPEG grayscale, standalone SIMD libjpeg-turbo (confirmed gap) † | 1,455.31 | 1,409.83 | 1.032 / 1.042 | 155,436 | 58,910 / 58,910 |
-| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,061.94 | 1,076.74 | 0.986 / 0.994 | 155,438 | 58,910 / 58,910 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,160.95 | 1,403.16 | 0.827 / 0.840 | 155,435 | 58,910 / 58,910 |
+| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,059.14 | 1,112.88 | 0.952 / 0.969 | 155,438 | 58,910 / 58,910 |
 | VP8L photograph / libwebp exact=1 † | 85,959.95 | 82,521.57 | 1.042 / 1.080 | 5,358,980 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |

@@ -1,0 +1,430 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JGT702",
+  "date": "2026-11-09",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+    "linuxSha256": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329"
+  },
+  "timedArtifactSha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+  "cases": {
+    "RgbaGray": {
+      "managedUs": 1160.9514201962809,
+      "nativeUs": 1403.1602578125,
+      "ratio": 0.8273833396665481,
+      "lower": 0.8155697930089258,
+      "upper": 0.8395233843839403,
+      "allocatedBytes": 155435,
+      "status": "pass",
+      "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "caseId": "RgbaGray",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "completePacketExact": true,
+      "metadataExceptionBytes": 0,
+      "managedPacketBytes": 58910,
+      "nativePacketBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Complete public original RGBA8 to one-component grayscale JPEG: single-round alpha flattening on0x204060, full-range BT.601 grayscale normalization, transform/quantization, adaptive histogram/Huffman/entropy coding and fresh owned output acquisition/release. Fresh managed MemoryStream creation/growth/disposal included. Standalone SIMD libjpeg-turbo reuses only codec/gray scratch; every source sample is normalized and encoded again, each packet newly acquired and freed. Startup/I/O/IPC/fixture creation/quality checks excluded; no output cache. Same owned mathematical quantizers, one frozen setting per encoder, existing0.25dB source-quality gate and max4/RMSE1.5 decoder agreement, exact alpha. One CPU, no concurrent codec/filter work. Production uses no native binding or dependency.",
+      "referenceLabel": "SIMD-enabled libjpeg-turbo 3.1.4.1, standalone single-component grayscale reference",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+        "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+        "simdEnabled": true,
+        "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+        "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+        "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+        "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-ffp-contract=off",
+          "-fno-math-errno",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "reusedImmutablePreparedWorker": true,
+        "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+        "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+        "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+      }
+    },
+    "CallerGray": {
+      "managedUs": 1059.137518465909,
+      "nativeUs": 1112.8807135416666,
+      "ratio": 0.9517080362506025,
+      "lower": 0.9301277958626405,
+      "upper": 0.9691398811144096,
+      "allocatedBytes": 155438,
+      "status": "pass",
+      "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "caseId": "CallerGray",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "completePacketExact": true,
+      "metadataExceptionBytes": 0,
+      "managedPacketBytes": 58910,
+      "nativePacketBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "inputSha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+      "boundary": "Identical resident packed 8-bit caller gray/RGB samples to complete fresh independent JPEG bytes. Public EncodeJpeg admission, bounded block/row normalization, color conversion when RGB, transform, quantization, adaptive Huffman/entropy coding, MemoryStream creation/growth and owned output release are timed. Native borrows resident packed samples, reuses codec and private conversion scratch only; every operation processes/encodes all samples and acquires/releases a fresh owned packet. No RGBA staging or alpha flattening in either operation. Input projection, startup, disk I/O, IPC, hashing and quality checks excluded. One CPU; frozen matched-quality packets exact, no quality-number equivalence assumption.",
+      "referenceLabel": "SIMD-enabled libjpeg-turbo 3.1.4.1; single-component grayscale benchmark exception",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "sampleFormat": "gray",
+        "sourceSha256": "89656f6181868ffacf99eb45e3e27c767999e085974c8cb3eee04f646e2f7654",
+        "buildScriptSha256": "e2e739c66599f9819d554ac77df46d7267dd7ad024f9f3c81972155a8cf86e8e",
+        "workerSha256": "f1886cd9f9391270994b45e142dd4d63d0d3932e9d238e38517dd1f17fb8520c",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "simdEnabled": true,
+        "reference": "SIMD-enabled libjpeg-turbo 3.1.4.1",
+        "staticArchives": {
+          "libjpeg.a": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24"
+        }
+      }
+    }
+  },
+  "statusCounts": {
+    "pass": 16,
+    "gap": 0,
+    "uncertain": 1
+  },
+  "comparison": {
+    "savedUs": 299.1611311926083,
+    "rawReduction": 0.20488908948015006,
+    "normalizedReduction": 0.19959574651779788,
+    "nativePointChange": -0.006613336872365538,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "baselineUs": 1460.1125513888892,
+        "candidateUs": 1160.9514201962809,
+        "baselineNormalizedInterval": [
+          1.018321716332121,
+          1.0440783693060591
+        ],
+        "candidateNormalizedInterval": [
+          0.8183902930297942,
+          0.8333325185062637
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "baselineUs": 1463.3780011574074,
+        "candidateUs": 1163.2999417613635,
+        "baselineNormalizedInterval": [
+          1.015968624651508,
+          1.051119013303156
+        ],
+        "candidateNormalizedInterval": [
+          0.8155697930089258,
+          0.8395233843839403
+        ]
+      }
+    },
+    "independentReversedPair": true,
+    "favorableRepeats": 0
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "onlyImageGrayPreparationScheduleChanged": true,
+    "grayRowAndCopyBlockVerbatim": true,
+    "encoderOutsideTileLocalsAndPreparationBranchVerbatim": true,
+    "normalizationTransformQuantizationEntropyReplayHeaderAndOwnershipSourceUnchanged": true,
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "newPublicApis": 0,
+    "additionalStackTileBytes": 768,
+    "existingFixedReservationBytes": 8192,
+    "coarseFixedPhaseBoundBytes": 4804,
+    "physicalAndJitStackPeaksMeasured": false,
+    "sourceScope": "Recorded image input width>8 only. CallerGRAY/RGB samples, tight/restart and record-ineligible image preparation retain original bodies; driver/JIT touched, so existing CallerGray regression receives current complete confirmation. Color JPEG/othercodecs/resizing/text/composition remain source-valid.",
+    "sources": {
+      "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "40ba208353cfab9165c40bd3d330f24517fbab5b7f787f76e40380db028c1bfc",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "0cf2b7670f3d980df0d0561d0a88527098f3b83e440405db409ec84cb51589f4",
+      "tests/Lokad.Image.Tests/JpegGrayTileTests.cs": "a8d01f9922438feb530eed42319adea99f97627010d9dcfd5256c2cfa02d70fd"
+    },
+    "immutableNormalizers": {
+      "src/Lokad.Image/Internal/JpegReferenceColor.Normalize.cs": "2e981346578a2ebf29332f16bf6af4478cebf1448595ae8c8d1af6889fa92be7",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTransform.cs": "5b9de955724082f08c59471f619a4a0163f95890c2828e04c4728b426597233f",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTransform.Avx2.cs": "00a472b52a47ad26d8263efa0d69f809294a2c6ac5bb914d824b4dbb08c65ca5",
+      "src/Lokad.Image/Internal/JpegGrayQuantization.cs": "5314ca1a48e063f121c50e1277c47797eb1a22375e959b26815fd09cd199edd7",
+      "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9f00a3788174f6c224dffb415ee321d62ba170ca4516ef1a5f9fa61c8983fa15"
+    }
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "JGT702",
+    "productionAccepted": false,
+    "publicationPostponed": true,
+    "requiredMaterialPaths": 283,
+    "paths": [
+      "src/Lokad.Image/Internal/JpegGrayPreparation.cs",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs",
+      "tests/Lokad.Image.Tests/JpegGrayTileTests.cs"
+    ],
+    "newPaths": [
+      "tests/Lokad.Image.Tests/JpegGrayTileTests.cs"
+    ],
+    "baseline": {
+      "windowsSha256": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+      "linuxSha256": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837"
+    },
+    "transitionFromLinuxSha256": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "6b79cca96b4725788d54d3692bc9eb8d84a5fc44142a4ed96330b0c390b39439",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "e7f5cc94451a8b6fc4a9f99925bef4acf18b7b72660c644ce164af39acebedc8"
+    },
+    "baselinePackageSha256": "a02bfd52430b3cf01b74698ced949b5838e48b7220d856bc687ad85d6ad3a51f",
+    "baselineFullChecksEachOs": 6064,
+    "hypothesis": "Bounded8-row/64pixel gray tile shares row acquisition, normalization and GrayRow setup across up to8adjacent MCUs, replacing repeated8pixel row preparation. Extra tile copy/state can offset savings; no CPUgain inferred from call counts.",
+    "endState": "One existing MCU transform/quantization/histogram/record body with a private operation-owned tile cache only for recorded image input. Original tight/restart recomputation and caller samples stay on existing preparation. Actual normalization and separate binary64 grayscale arithmetic reused. No new owner/pool/session/API.",
+    "boundaries": "Existing frozen RgbaGray513x259/Q69/background0x204060 exact58910B packet and SIMDlibjpeg-turbo reference; complete normalization, fresh encoded output ownership and release stay timed. CallerGray passing complete boundary is affected-driver regression control. No settings/fixture/workload grid.",
+    "storage": "Conditional512Btile+256BRGB=768B under existing8192B fixedowner. Conservative explicit arrays: pass324B, callerreciprocals128B, tile768B, scalarForward256B plusAVX2Forward256B plusRecordBlockprepared256B (counting exclusive/ended callees together)=1988B. Fixed owned heap allowance: quantization128B+grayhistograms2048B+arrayreferences128B+metadata512B=2816B; combined4804B leaves3388B for minor frame/locals/spills. This is a coarse source bound, not JITstack/physicalpeak. Entropyrecordcapacity/metadata has its own existing charge; replaybank4096B runs afterpassreturns under separate existingtableowner. No new reservation/owner.",
+    "failure": "Prefetch only in recorded private histogram pass before caller output header. Same argument type/parameter for invalidalpha, all failure/reservation cleanup preserved. PerMCUcancellation remains; additional checkpoint each64pixel tile row. Borrow image/root; no new reservations/fallback/retry/wait.",
+    "next": "Preserve originals, focused tile/original and frozen packet tests bothOS normal/scalar, then complete original/candidate short and independent confirmation if useful; qualify affected source boundaries and actualpackage coherently.",
+    "decisionBeforeBroadQualification": {
+      "acceptedForQualification": true,
+      "independentConfirmation": true,
+      "savedUs": 299.1611311926083,
+      "rawReduction": 0.20488908948015006,
+      "normalizedReduction": 0.19959574651779788,
+      "rawAndNormalizedBothViewsSeparated": true,
+      "RgbaGrayStandaloneUpper": 0.8395233843839403,
+      "CallerGrayStandaloneUpper": 0.9691398811144096,
+      "packetExactBytes": 58910,
+      "ownedCapacityChanged": false,
+      "next": "Qualify same immutable build normal/scalar/affectedISA, fullW/L/live and SAMEactualReleasepackage/allthreeexamples; refresh only2affectedgraycosts, reuse15unchangedJPEGencoder boundaries and all unrelated evidence."
+    }
+  },
+  "storage": {
+    "newStackBytes": 768,
+    "existingFixedReservationBytes": 8192,
+    "coarseFixedPhaseBoundBytes": 4804,
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "retainedTileBytesAfterPass": 0,
+    "totalAllocatedRgbaGray": 155435,
+    "totalAllocatedCallerGray": 155438,
+    "allocationGainClaim": false,
+    "fullAdmissionAndPhysicalAndJitStackPeaksRemeasured": false,
+    "existingPoolsUnchanged": true,
+    "scope": "Tile and RGBscratch live only in recordedimage pass inside existing fixedadmission. Extra768Bstack; coarse4804Bsourcebound includes fixedheap/metadata and conservative explicit arrays. Rootcleanup/refusal/invalidalpha/recovery checked. Physical/fulladmittedpeak notremeasured; no peakreduction claim. Existingcoefficientpools and governedbypass unchanged."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6073,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "full": [
+        2808,
+        2317,
+        948
+      ],
+      "total": 6073,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 444,
+        "internal-scalar": 444,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 819,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "d96297721a8c726560e9ccd0e7abe57a09e729c80ee5b5c71b7d7f1032e5860f",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\JpegGrayPreparation.cs": "40ba208353cfab9165c40bd3d330f24517fbab5b7f787f76e40380db028c1bfc"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+      "full": [
+        2808,
+        2317,
+        948
+      ],
+      "total": 6073,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 444,
+        "internal-scalar": 444,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 819,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0f56cb321c3fcd5890d7aa2e2c71a2d584b1a5557f732e69ce76f09fa1985f40",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "40ba208353cfab9165c40bd3d330f24517fbab5b7f787f76e40380db028c1bfc"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "windowsIsa": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "results": {
+        "internal-no-avx512": 444,
+        "public-no-avx512": 375,
+        "internal-no-avx2": 444,
+        "public-no-avx2": 375
+      },
+      "coreSha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "allBuilds": 0
+    },
+    "linuxIsa": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "results": {
+        "internal-no-avx512": 444,
+        "public-no-avx512": 375,
+        "internal-no-avx2": 444,
+        "public-no-avx2": 375
+      },
+      "coreSha256": "f25cccecbb8c61bbd2d6938907f3675722666d12721f1b6eb18e11c542406329",
+      "allBuilds": 0
+    },
+    "affectedNormalScalarEachOs": {
+      "internal-normal": 444,
+      "internal-scalar": 444,
+      "public-normal": 375,
+      "public-scalar": 375
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "05074b8f42120252df42a06ae4243a0687c203f53945b8e9a8237720da74154f",
+      "symbolsSha256": "b4f497a1af66e0d2e13fc800b0714104fb9ad8969656d2bafd4c0db4e027a7ad",
+      "bytes": 438804,
+      "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "sharedByteWordColumnDriverPassed": true,
+      "sharedWideByteWordColumnDriverPassed": true,
+      "packedByteDecodedPrefixPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "packedBilinearRowsAndExistingAdmissionPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "05074b8f42120252df42a06ae4243a0687c203f53945b8e9a8237720da74154f",
+      "librarySha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "sharedByteWordColumnDriverPassed": true,
+      "sharedWideByteWordColumnDriverPassed": true,
+      "packedByteDecodedPrefixPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "packedBilinearRowsAndExistingAdmissionPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOS": true
+  },
+  "workflow": {
+    "mainBuildsEachOs": 1,
+    "embeddedBuilds": {
+      "windows": 2,
+      "linux": 1
+    },
+    "harnessNativeSelectorFixtureBuilds": 0,
+    "shortActualsEachSubject": 3,
+    "independentActualsEachSubject": 12,
+    "affectedCallerGrayConfirmationActuals": 12,
+    "favorableRepeats": 0,
+    "testOnlyRecovery": {
+      "project": "Lokad.Image",
+      "reason": "New test expected initial poison beyond the short final tile despite scratch reuse by earlier tiles. Compare untouched suffix with immediately preceding values. Pixel/block/frozen packet assertions passed. No production change.",
+      "mainSha256": "e7056b5c3d578457f758137ff5e965c0423d9fe4b6e0e29d73fde4e282f7819f",
+      "failedInternalSha256": "e1b5b36c6e589c3bbbad49c62864182794cbac9509cc7fc435dca4948bb58758",
+      "next": "Reuse verified unchanged main; rebuild only embedded tests, then resume focused checks and initial Linux build. No timing run."
+    },
+    "timedArtifact": "Intended Windows Releasepackage DLL on quiet Linux VM; same actualpackagedDLL identity. Linux-native module separately qualified. Unchanged15colorJPEG costs reused, no blanket release refresh."
+  },
+  "raw": {
+    "file": "jpeg-gray-tile-preparation-qualified.tar.xz",
+    "sha256": "5355192b13417330513082d3f8d06dee70ac3bf208abaeab9b42c8255b29069d",
+    "bytes": 5938608,
+    "members": 146,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-prepared-huffman-bank-qualified.tar.xz",
+        "sha256": "14f0e8ed1f88d9714ef10b919fceff40e64c41395834bae39f3fda144f836776"
+      },
+      {
+        "file": "text-endpoint-storage-qualified.tar.xz",
+        "sha256": "2b0939e933183cd40aa9e9d847f1de199c1d85d065801876c67449ba46b67a90"
+      }
+    ]
+  },
+  "decision": "Accept bounded graytile preparation: completeRgbaGray saves299.16us/20.49%raw/19.96%normalized with separatedfiltered/allactual confidence; upper.840passes and stops. CallerGrayupper.969stillpasses. Exact58910Bpacket preserved, no new heap/retained owner; extra768Bstack fits existing8192B fixedreservation. Other15JPEGencoder costs unchanged16pass/0gap/1uncertain combined. Full283-path objective remains open.",
+  "next": "Stop both passing graycontrols; resume independent demonstrated codec/resize gaps or substantial ownership opportunities. Preserve exactpackets/pixels and memory/cancellation/ownership. No furthergrayvariant or unchangedfavorable repeat. Publication postponed."
+}

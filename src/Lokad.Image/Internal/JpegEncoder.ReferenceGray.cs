@@ -63,6 +63,12 @@ internal static partial class JpegEncoder
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[1]; previous.Clear();
+        // Preparation is private until a complete recorded pass succeeds. Keep
+        // recomputation/restart and caller-sample preparation on their own path.
+        var useTile = image is not null && entropyCache is not null && width > 8;
+        Span<byte> tile = useTile ? stackalloc byte[JpegGrayPreparation.TileBytes] : [];
+        Span<int> packed = useTile ? stackalloc int[JpegGrayPreparation.TileWidth] : [];
+        var tileTop = -1; var tileLeft = -1; var tileEnd = -1;
         var mcu = 0;
         for (var top = 0; top < height; top += 8)
         for (var left = 0; left < width; left += 8)
@@ -71,7 +77,17 @@ internal static partial class JpegEncoder
             // reset DC before collecting/encoding the first block of an interval.
             ReferenceRestart(mcu++, restartInterval, previous, writer, context);
             context.Cancellation.ThrowIfCancellationRequested();
-            if (image is null && source.Format == JpegSampleFormat.Grayscale) source.CopyGrayBlock(left, top, samples);
+            if (useTile)
+            {
+                if (top != tileTop || left >= tileEnd)
+                {
+                    var count = JpegGrayPreparation.PrepareTile(image!, left, top, background, tile, packed, context);
+                    tileTop = top; tileLeft = left; tileEnd = left + count;
+                }
+                for (var y = 0; y < 8; y++)
+                    tile.Slice(y * JpegGrayPreparation.TileWidth + left - tileLeft, 8).CopyTo(samples.Slice(y * 8, 8));
+            }
+            else if (image is null && source.Format == JpegSampleFormat.Grayscale) source.CopyGrayBlock(left, top, samples);
             else
                 JpegGrayPreparation.CopyBlock(image, source, width, height, left, top, background, samples);
             JpegGrayReferenceTransform.Forward(samples, transformed);

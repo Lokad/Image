@@ -9,6 +9,8 @@ namespace Lokad.Image.Internal;
 // stays bounded at32packedRGB bytes or24callerRGB bytes, with no owned storage.
 internal static class JpegGrayPreparation
 {
+    internal const int TileWidth = 64, TileBytes = TileWidth * 8;
+
     private static byte Gray(int r, int g, int b)
     {
         // Keep separate binary64 products/additions and nearest rounding at
@@ -50,6 +52,30 @@ internal static class JpegGrayPreparation
         {
             var rgb = pixels[at]; output[at] = Gray(rgb & 255, rgb >> 8 & 255, rgb >> 16 & 255);
         }
+    }
+
+    // The recorded image pass owns this bounded tile and RGB scratch inside its
+    // existing fixed workspace. Every reader finishes before the next tile.
+    internal static int PrepareTile(ImageBuffer image, int left, int top, uint? background,
+        Span<byte> output, Span<int> packed, OperationContext context)
+    {
+        if (output.Length != TileBytes || packed.Length < TileWidth)
+            throw new ArgumentException("Complete grayscale tile and RGB scratch required.");
+        var count = Math.Min(TileWidth, image.Width - left);
+        packed = packed[..count];
+        for (var y = 0; y < 8; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var sourceY = Math.Min(top + y, image.Height - 1);
+            if (image.BitDepth == 8)
+                JpegReferenceColor.NormalizeRgba8(image.GetRow8(sourceY).Slice(left * 4, count * 4), packed, background);
+            else
+                JpegReferenceColor.NormalizeRgba16(image.GetRow16(sourceY).Slice(left * 4, count * 4), packed, background);
+            var row = output.Slice(y * TileWidth, TileWidth);
+            GrayRow(packed, row);
+            row[count..].Fill(row[count - 1]);
+        }
+        return count;
     }
 
     internal static void CopyBlock(ImageBuffer? image, JpegSampleInput source, int width, int height,

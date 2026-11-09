@@ -969,19 +969,30 @@ def render():
     assert len(jpeg_bank['cases']) == 17
     assert jpeg_bank['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_bank['cases'].values())
                                         for state in ('pass', 'gap', 'uncertain')}
-    for name, c in jpeg_bank['cases'].items():
+    jpeg_tiles = json.loads((ROOT / 'benchmarks/jpeg-gray-tile-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_tiles['productionAccepted'] and jpeg_tiles['requiredMaterialPaths'] == 283
+    assert jpeg_tiles['raw']['mirrored'] and jpeg_tiles['raw']['allMembersVerified']
+    assert set(jpeg_tiles['cases']) == {'RgbaGray', 'CallerGray'}
+    assert jpeg_tiles['sourceProof']['onlyImageGrayPreparationScheduleChanged']
+    assert jpeg_tiles['sourceProof']['normalizationTransformQuantizationEntropyReplayHeaderAndOwnershipSourceUnchanged']
+    assert jpeg_tiles['qualification']['fullChecksEachOs'] == 6073
+    assert jpeg_tiles['qualification']['actualPackage']['sha256'] == jpeg_tiles['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert jpeg_tiles['timedArtifactSha256'] == jpeg_tiles['qualification']['actualPackage']['librarySha256']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in jpeg_tiles['comparison']['views'].values())
+    jpeg_encoding_cases = {**jpeg_bank['cases'], **jpeg_tiles['cases']}
+    assert jpeg_tiles['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_encoding_cases.values())
+                                         for state in ('pass', 'gap', 'uncertain')}
+    for name, c in jpeg_encoding_cases.items():
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['librarySha256'] == jpeg_bank['producers']['linuxSha256']
+        assert c['librarySha256'] == (jpeg_tiles['timedArtifactSha256'] if name in jpeg_tiles['cases']
+                                      else jpeg_bank['producers']['linuxSha256'])
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['independentOwnedOutput']
         assert c['completePacketExact'] and c['metadataExceptionBytes'] == (0 if name in ('RgbaGray', 'CallerGray') else 2)
         assert c['nativePacketBytes'] - c['managedPacketBytes'] == c['metadataExceptionBytes']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in jpeg_bank['comparison']['views'].values())
     assert jpeg_bank['sourceProof']['recordGenerationOwnershipGrowCommitDisposeExact']
     assert jpeg_bank['sourceProof']['writerValidationPollAppendStuffingFlushDisposeByteExact']
-    assert jpeg_bank['qualification']['fullChecksEachOs'] == 5943
-    assert jpeg_bank['qualification']['actualPackage']['sha256'] == jpeg_bank['qualification']['samePackageLinux']['sameActualPackageSha256']
     jpeg_labels = {
         'Encode444Stream8': 'JPEG 4:4:4, forward-only / exact reference',
         'CallerRGB420': 'JPEG 4:2:0 from caller RGB samples',
@@ -992,7 +1003,7 @@ def render():
         'Jpeg8AsyncNonSeekable': 'JPEG RGBA8 async nonseekable, 444',
     }
     for name, label in jpeg_labels.items():
-        c = jpeg_bank['cases'][name]
+        c = jpeg_encoding_cases[name]
         positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| ' + label)]
         assert len(positions) == 1, label
         qualifier = {'pass': 'parity confirmed', 'gap': 'confirmed gap', 'uncertain': 'confidence open'}[c['status']]
@@ -1969,17 +1980,20 @@ Current scope and remaining work:
   Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
   [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
-  [Prepared Huffman replay](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md) saves
-  **{jpeg_bank['comparison']['savedUs']:.2f}µs/{100*jpeg_bank['comparison']['rawReduction']:.2f}% raw**,
-  {100*jpeg_bank['comparison']['normalizedPointReduction']:.2f}% reference-normalized, on complete RGBA→gray encoding
-  versus explicitly labeled SIMD libjpeg-turbo. Filtered/all-actual intervals separate;
-  exact58,910B packets and155,436B/op remain. Current
-  {jpeg_bank['cases']['RgbaGray']['managedUs']:,.2f}/native{jpeg_bank['cases']['RgbaGray']['nativeUs']:,.2f}µs,
-  upper{jpeg_bank['cases']['RgbaGray']['upper']:.3f} remains a gap. All17 affected encoder
-  boundaries refresh: {jpeg_bank['statusCounts']['pass']}pass/{jpeg_bank['statusCounts']['gap']}gaps/{jpeg_bank['statusCounts']['uncertain']}uncertain.
-  A4KiB stack lookup fits the existing16KiB table allowance, with no new heap or
-  retained state. GovernedRGBA16 peak remains1,704,856B. Existing coefficient pools
-  and their governed bypass are unchanged; physical/native peaks are unmeasured.
+  [Grayscale tile preparation](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) shares
+  row setup across up to eight MCUs, preserving exact normalization and gray samples.
+  Complete RGBA→gray saves **{jpeg_tiles['comparison']['savedUs']:.2f}µs/{100*jpeg_tiles['comparison']['rawReduction']:.2f}% raw**,
+  {100*jpeg_tiles['comparison']['normalizedReduction']:.2f}% reference-normalized, with separated
+  filtered/all-actual confidence. Current {jpeg_tiles['cases']['RgbaGray']['managedUs']:,.2f}/native{jpeg_tiles['cases']['RgbaGray']['nativeUs']:,.2f}µs,
+  upper{jpeg_tiles['cases']['RgbaGray']['upper']:.3f} passes the labeled SIMD libjpeg-turbo control;
+  caller GRAY8 also passes upper{jpeg_tiles['cases']['CallerGray']['upper']:.3f}. Both retain exact58,910B
+  packets; total GC is155,435/155,438B/op, without an allocation-gain claim.
+  Extra768B stack storage fits the existing8KiB fixed admission; a conservative
+  source bound including fixed heap/metadata and explicit arrays is4,804B.
+  No new heap owner or retained state; full admitted/physical/JIT stack peaks
+  are unmeasured. Only two costs refresh;15 unchanged color costs retain
+  [Huffman replay evidence](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md): combined
+  {jpeg_tiles['statusCounts']['pass']}pass/{jpeg_tiles['statusCounts']['gap']}gaps/{jpeg_tiles['statusCounts']['uncertain']}uncertain. Existing coefficient pools and governed bypass stay unchanged.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
 - **Text/drawing:** [shared endpoint storage](../benchmarks/TEXT-ENDPOINT-STORAGE.md)
@@ -2012,7 +2026,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_tiles['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
