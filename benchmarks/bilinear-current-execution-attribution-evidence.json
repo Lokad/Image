@@ -1,0 +1,96 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BDA686",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newStatisticalMeasurements": 0,
+  "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+  "sources": {
+    "src/Lokad.Image/ImageTransforms.cs": "3f2b8e16bc233dce0dd7f28acc33a1125ddaadfd6fea5445c3cc9ba3a01ac283",
+    "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f",
+    "src/Lokad.Image/Internal/BilinearUpsample.cs": "25da9d49fbaa5880fb0103439774c5a49e1407490b6b730c50c8be19ca48c092",
+    "src/Lokad.Image/Internal/PreparedResize.cs": "5f930b1ae53d3f6cd1856eefd006f7cc090290db2fb59ec8eb05ea7ea5bb6da8",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "b1655b394b895b901f8dc249d04b301f76f271f05aa812bd45ae8b4512c467e7",
+    "src/Lokad.Image/Internal/ResizeAlpha.cs": "b7408c332670da0c5f332b85c751e7b4ffd67e12e3be21824c0469f2a1971718"
+  },
+  "totalLocations": 1996,
+  "methods": [
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1258
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample::PrepareRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,int32&,int32&,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      673
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      44
+    ],
+    [
+      "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.ImageTransforms::Resize(class Lokad.Image.ImageBuffer,int32,int32,valuetype Lokad.Image.ResizeFilter,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      6
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      3
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      3
+    ],
+    [
+      "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+      1
+    ]
+  ],
+  "profiledElapsedDiscarded": true,
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "scope": "One2second capture of current complete public Up8 bilinear resize on qualified intended Windows package DLL. CPU0 operation/CPU1 sampler. All frozen managed/native/source/owner/idle gates retained; no elapsed/allocation/parity claim. Existing public FFmpeg graph/context native boundary stays labeled and unchanged.",
+  "previousTraceReused": false,
+  "reasonForCurrentCapture": "The available old Up8 capture targets the earlier paired-row implementation and predates current dedicated/factored/row-reuse helper. Current source-valid attribution was missing; exactly one2second capture is added.",
+  "decision": "Current locations1258TryApply,673PrepareRow,44Scalar of1996 identify substantial repeated preparation beyond the original geometry-copy leads. Prioritize operation-owned source premultiplication reuse before arithmetic/kernel tuning; no phase-time or CPUgain inference. Retain division/rounding contracts unchanged.",
+  "nextDesign": {
+    "removedWork": "Current horizontal preparation gathers and premultiplies both input taps for every four-output batch. At frozen geometry,2048input-pixel premultiplications per prepared row,259row preparations, versus513distinct input pixels per row. Prepare each input row into exact Int32 premultiplied RGBA once, then reuse those samples for horizontal interpolation.",
+    "endState": "One shared horizontal preparation/weighting loop with raw-gather fallback and operation-owned decoded-row reuse. Borrow contiguous scratch only from still-unwritten final output rows, already independently admitted; no new owner/array/pool/session/public API. Keep existing horizontal row cache, weights/normalizers, integer factorization, vertical operations, division, certificates, scalar repair and precision policy.",
+    "frozenLogicalCounts": {
+      "sourceWidth": 513,
+      "sourceHeight": 259,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "preparedInputRows": 259,
+      "oldVectorInputPixelPreparationsPerRow": 2048,
+      "proposedDistinctInputPixelPreparationsPerRow": 513,
+      "proposedDecodedRowBytes": 8208,
+      "borrowedOutputRows": 2,
+      "availableBorrowedRowBytes": 8216,
+      "firstProtectedOutputRow": 517,
+      "lastActualInputRowPreparationAtY": 516,
+      "sourcePremultiplicationsBefore": 530432,
+      "sourcePremultiplicationsAfter": 132867
+    },
+    "lifetime": "Choose decoded-row capacity by actual output geometry, not available budget. Borrow ceil(sourceWidth*16/resultStride) final rows only while y<height-borrowedRows. Retire the view before first protected output publication; subsequent new row preparation uses existing raw path, while already cached rows remain valid. Tiny/insufficient outputs and nonfactorable widths keep existing path. All output rows must be overwritten before return; cancellation/failure releases the existing result owner after all synchronous users.",
+    "precision": "Each byte RGB*alpha product<=65025, alpha lane remains alpha. Existing65025*(2*outputWidth)<=Int32.MaxValue eligibility preserves exact integer horizontal sums; decoded access retains the same clamped byte-offset coordinate (numeric byte offset equals Int32 element index in4-channel decoded storage). No FMA/reciprocal approximation or weaker managed sample contract.",
+    "temporaryRisk": "Extra Int32 memory traffic, source gathers and branch/register pressure may erase decode savings. Allocation/capacity invariance does not imply CPU improvement. Keep adverse results; use complete frozen Up8 and one small existing functional boundary before independent confirmation. No projected speedup from location counts.",
+    "acceptance": "Prove output-tail disjointness and complete overwrite, exact premultiplied values, retirement/raw fallback, tiny results, cancellation/refusal cleanup and independent survivors; preserve real live checkpoints, add bounded checks to source preparation. Reuse immutable candidates and short controls; broad W/L/scalar/actualpackage qualification only for accepted coherent changes."
+  },
+  "workflow": "Existing BUC685 worker/runtime/selectors/fixtures/native references and qualified actual-package DLL reused, CPU0 operation/CPU1 sampler, tieringoff and idle-v2 guards. Capture completed once; postprocessor looked for wrong benchmark family. Original trace/maps/after-guard were recovered and validated without recapture, timing repeat, build or package proof.",
+  "reusedQualification": "Unchanged WHS6776026W/L full/live/scalar/SAMEactualpackage70a0a631/all3examples, retained crossing test and green current CI. All publication/ownership/source/quality checks pass.",
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "bilinear-current-execution-attribution.tar.xz",
+    "sha256": "076f1d9c32c664e0b39727ace19d9c5948c9aba3883a48180ccd7752eca189b0",
+    "bytes": 102824,
+    "members": 24,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "runtimeInputsProvidedByHash": true,
+    "dependency": {
+      "file": "bilinear-current-confidence.tar.xz",
+      "sha256": "2684029eb6ffb1fdb8c6bf49c1de1a3c2fd4dac86ecd496dcfee116d0389f46c"
+    }
+  }
+}

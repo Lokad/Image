@@ -34,3 +34,7 @@ allocations, boundaries and checks. Mirrored/member-verified raw
 Ninety-one runtime inputs reuse hash-verified retained providers;29missing small
 payloads are included. Next attribute this229.19µs gap before changing execution.
 Publication remains postponed.
+
+The subsequent [current execution capture](BILINEAR-CURRENT-EXECUTION-ATTRIBUTION.md)
+selects repeated source premultiplication for a bounded ownership-aware redesign.
+It adds no timing or speedup claim.
