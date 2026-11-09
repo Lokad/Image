@@ -214,11 +214,14 @@ Current scope and remaining work:
   and their governed bypass are unchanged; physical/native peaks are unmeasured.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
-- **Text/drawing:** [exact interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
-  reuses one exact area across fully covered pixels. Current130.55/132.38µs means are5.94%/6.49%
-  lower than the contemporaneous original; intervals overlap, so a causal CPUgain
-  remains inconclusive. Both reference gaps remain. Allocation67,368B/draw,
-  exactframes,48,544B admitted Latin workspace and zero retainedscratch are unchanged.
+- **Text/drawing:** [prepared pixels and edge order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
+  remove a redundant Edge sort and share exact integer blend weights. Current
+  111.21/97.71µs pointmeans improve11.61%/31.39% over the contemporary original;
+  all-actual gains12.82%/25.55%, but their intervals overlap: robust CPUgain remains
+  inconclusive. Both reference gaps remain. The intended actual-package DLL supplies
+  these two costs; eight exactframes,67,368B/draw,48,544B admitted Latin workspace
+  and zero retainedscratch are unchanged. Earlier [interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
+  retains history. No numerical-policy change or physical-peak claim.
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
@@ -392,8 +395,8 @@ settings do not establish matched quality.
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 130.55 | 45.72 | 2.856 / 4.456 | 67,368 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 132.38 | 45.83 | 2.889 / 4.174 | 67,368 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 111.21 | 48.06 | 2.314 / 3.275 | 67,368 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 97.71 | 45.93 | 2.127 / 3.348 | 67,368 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |

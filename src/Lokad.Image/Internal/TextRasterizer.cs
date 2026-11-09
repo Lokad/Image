@@ -35,12 +35,6 @@ internal sealed partial class TextRasterizer : IDisposable
     {
         public static int Compare(in double a, in double b) => a.CompareTo(b);
     }
-    private readonly struct EdgeOrder : TextRasterSort.IOrder<Edge>
-    {
-        public static int Compare(in Edge a, in Edge b)
-        { var order = a.MinY.CompareTo(b.MinY); return order != 0 ? order : a.Order.CompareTo(b.Order); }
-    }
-
     internal TextRasterizer(TextLayout layout, OperationContext context, int width)
     {
         this.context = context;
@@ -235,19 +229,61 @@ internal sealed partial class TextRasterizer : IDisposable
 
     private static void Blend(ImageBuffer canvas, int x, int y, RgbaColor color, uint coverage)
     {
-        const ulong maximum = 65535, denominator = maximum * maximum;
         var sa = (ulong)color.A * coverage; if (sa == 0) return;
-        var dm = canvas.BitDepth == 8 ? 255UL : maximum; var da = (ulong)canvas.Sample(x, y, 3);
-        var alpha = sa * dm + da * (denominator - sa);
-        var divisor = (UInt128)maximum * alpha;
-        for (var channel = 0; channel < 3; channel++)
+        if (canvas.BitDepth == 8) BlendByte(canvas.GetRow8(y).Slice(x * 4, 4), color, sa);
+        else BlendWord(canvas.GetRow16(y).Slice(x * 4, 4), color, sa);
+    }
+
+    private static void BlendByte(Span<byte> pixel, RgbaColor color, ulong sa)
+    {
+        const ulong maximum = 65535, denominator = maximum * maximum;
+        var remainder = denominator - sa; var da = (ulong)pixel[3];
+        var alpha = sa * 255 + da * remainder;
+        var divisor = maximum * alpha; var half = divisor / 2;
+        var sourceWeight = sa * (255UL * 255); var backgroundWeight = da * remainder * maximum;
+        // n <= 255*d; even n+floor(d/2) is at most18,337,958,949,380,194,687,
+        // below UInt64.MaxValue. Keep full16-bit source color and coverage.
+        pixel[0] = (byte)((color.R * sourceWeight + pixel[0] * backgroundWeight + half) / divisor);
+        pixel[1] = (byte)((color.G * sourceWeight + pixel[1] * backgroundWeight + half) / divisor);
+        pixel[2] = (byte)((color.B * sourceWeight + pixel[2] * backgroundWeight + half) / divisor);
+        pixel[3] = (byte)((alpha + denominator / 2) / denominator);
+    }
+
+    private static void BlendWord(Span<ushort> pixel, RgbaColor color, ulong sa)
+    {
+        const ulong maximum = 65535, denominator = maximum * maximum;
+        var remainder = denominator - sa; var da = (ulong)pixel[3];
+        var alpha = sa * maximum + da * remainder;
+        // Each weight and divisor is bounded by65535^4 < 2^64. Word channel
+        // numerators still need UInt128; no source precision is discarded.
+        var divisor = maximum * alpha; var half = divisor / 2;
+        var sourceWeight = sa * denominator; var backgroundWeight = da * remainder * maximum;
+        pixel[0] = (ushort)(((UInt128)color.R * sourceWeight + (UInt128)pixel[0] * backgroundWeight + half) / divisor);
+        pixel[1] = (ushort)(((UInt128)color.G * sourceWeight + (UInt128)pixel[1] * backgroundWeight + half) / divisor);
+        pixel[2] = (ushort)(((UInt128)color.B * sourceWeight + (UInt128)pixel[2] * backgroundWeight + half) / divisor);
+        pixel[3] = (ushort)((alpha + denominator / 2) / denominator);
+    }
+
+    private static void ReorderEdges(Span<Edge> edges, Span<Crossing> order, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        for (var first = 0; first < edges.Length; first++)
         {
-            var sample = channel == 0 ? color.R : channel == 1 ? color.G : color.B;
-            var numerator = (UInt128)sample * sa * dm * dm
-                + (UInt128)(uint)canvas.Sample(x, y, channel) * da * (denominator - sa) * maximum;
-            canvas.SetSample(x, y, channel, (int)((numerator + divisor / 2) / divisor));
+            cancellation.ThrowIfCancellationRequested();
+            if (order[first].Index < 0) continue;
+            var saved = edges[first]; var at = first;
+            while (order[at].Index != first)
+            {
+                cancellation.ThrowIfCancellationRequested();
+                var origin = order[at].Index;
+                edges[at] = edges[origin];
+                order[at] = order[at] with { Index = -1 };
+                at = origin;
+            }
+            cancellation.ThrowIfCancellationRequested();
+            edges[at] = saved;
+            order[at] = order[at] with { Index = -1 };
         }
-        canvas.SetSample(x, y, 3, (int)((alpha + denominator / 2) / denominator));
     }
 
     private sealed class RasterShape(TextRasterizer owner) : IDisposable
@@ -321,9 +357,9 @@ internal sealed partial class TextRasterizer : IDisposable
             { owner.context.Cancellation.ThrowIfCancellationRequested(); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }
             EventCount = unique;
             if (unique != 0) { MinY = Events[0]; MaxY = Events[unique - 1]; }
-            // Event calculations above retain original edge-index arithmetic.
-            // Only execution order changes; crossing ties keep that identity.
-            TextRasterSort.Sort<Edge, EdgeOrder>(Edges.AsSpan(0, Count), owner.context.Cancellation);
+            // The crossing descriptors already give this same MinY/original-
+            // ordinal order. Their indexes retire after event preparation.
+            ReorderEdges(Edges.AsSpan(0, Count), order.AsSpan(0, Count), owner.context.Cancellation);
         }
         private void Add(Point a, Point b)
         {

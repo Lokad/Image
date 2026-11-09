@@ -1151,14 +1151,14 @@ def render():
     assert composite8_current['qualification']['fullChecksEachOs'] == 5975
     assert composite8_current['actualPackage']['sha256'] == composite8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
-    raster = json.loads((ROOT / 'benchmarks/text-interior-coverage-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-prepared-pixels-and-order-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 5911
+    assert raster['qualification']['fullChecksEachOs'] == 6011
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert raster['decision']['cpuGainInconclusive']
-    assert raster['sourceProof']['onlyBandCoverageLoopAndTwoInteriorHelpersChanged']
-    assert raster['sourceProof']['clippingAreaOrderGeometryEventsSortBlendAdmissionAndPublicBoundaryUnchanged']
-    assert raster['sourceProof']['sameSequentialPerPixelAdditionsAndPolls']
+    assert raster['sourceProof']['onlyPixelBlendAndPreparedEdgeExecutionChanged']
+    assert raster['sourceProof']['otherGeometryCoverageIntegrationEventsSortingAdmissionAndPublicBoundaryVerbatim']
+    assert raster['storage']['allEightFrozenFramesAndPeaksUnchanged']
     assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
     for case_id, previous in text_current['observations'].items():
         if case_id == 'DrawingComposite8':
@@ -1170,7 +1170,7 @@ def render():
         case = (font_load['current'] if case_id == 'FontLoadRegular'
                 else raster['cases'].get(case_id, composites['cases'].get(case_id, previous)))
         if case_id in raster['cases']:
-            assert case['librarySha256'] == raster['producers']['linuxSha256']
+            assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
             assert case['validation']['frozenManagedObservationsExact']
             assert case['managedMemory']['BytesAllocatedPerOperation'] == 67368
             assert case['admittedWorkspacePeak'] == 48544 and case['retainedDrawingWorkspace'] == 0
@@ -1949,11 +1949,14 @@ Current scope and remaining work:
   and their governed bypass are unchanged; physical/native peaks are unmeasured.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
-- **Text/drawing:** [exact interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
-  reuses one exact area across fully covered pixels. Current130.55/132.38µs means are5.94%/6.49%
-  lower than the contemporaneous original; intervals overlap, so a causal CPUgain
-  remains inconclusive. Both reference gaps remain. Allocation67,368B/draw,
-  exactframes,48,544B admitted Latin workspace and zero retainedscratch are unchanged.
+- **Text/drawing:** [prepared pixels and edge order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
+  remove a redundant Edge sort and share exact integer blend weights. Current
+  111.21/97.71µs pointmeans improve11.61%/31.39% over the contemporary original;
+  all-actual gains12.82%/25.55%, but their intervals overlap: robust CPUgain remains
+  inconclusive. Both reference gaps remain. The intended actual-package DLL supplies
+  these two costs; eight exactframes,67,368B/draw,48,544B admitted Latin workspace
+  and zero retainedscratch are unchanged. Earlier [interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
+  retains history. No numerical-policy change or physical-peak claim.
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
