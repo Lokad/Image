@@ -1,0 +1,424 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CWW700/CWF701",
+  "date": "2026-11-09",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "cases": {
+    "cww700-baseline-short": {
+      "managedUs": 503.72173878205126,
+      "nativeUs": 377.0729830729167,
+      "ratio": 1.3358733226576558,
+      "lower": 1.1850516754228133,
+      "upper": 1.4668383250357198,
+      "allocatedBytes": 198449,
+      "librarySha256": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a"
+    },
+    "cww700-baseline-confirm": {
+      "managedUs": 504.0992670833333,
+      "nativeUs": 370.0743004557292,
+      "ratio": 1.3621569140644423,
+      "lower": 1.2989688657217335,
+      "upper": 1.431031767839911,
+      "allocatedBytes": 198448,
+      "librarySha256": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a"
+    },
+    "cww700-candidate-short": {
+      "managedUs": 472.09156750000005,
+      "nativeUs": 348.9838736979167,
+      "ratio": 1.3527604083753348,
+      "lower": 0.8156369121840688,
+      "upper": 1.8577684083885493,
+      "allocatedBytes": 198448,
+      "librarySha256": "81a1f5480b0e3c8fab54560fab92aa8094789df47c83105f2d162b0677b24bc7"
+    },
+    "cww700-candidate-confirm": {
+      "managedUs": 468.25484263392866,
+      "nativeUs": 352.2442503255208,
+      "ratio": 1.3293470147524014,
+      "lower": 1.1960351584390156,
+      "upper": 1.4053319850735804,
+      "allocatedBytes": 198450,
+      "librarySha256": "81a1f5480b0e3c8fab54560fab92aa8094789df47c83105f2d162b0677b24bc7"
+    },
+    "cwf701-candidate-short": {
+      "managedUs": 474.70535416666667,
+      "nativeUs": 349.571984375,
+      "ratio": 1.3579616656506177,
+      "lower": 1.2283203128370417,
+      "upper": 1.4935533177616025,
+      "allocatedBytes": 198450,
+      "librarySha256": "358f67aa7f09745a8c8d97794f5f542059debcb8f366661d35bfe517667d0f3a"
+    }
+  },
+  "firstStageComparison": {
+    "statistics": {
+      "rawPointGain": 0.07110588487223324,
+      "rawGainSeparated": true,
+      "normalizedGainSeparated": false,
+      "baselineNormalizedInterval": [
+        1.2989688657217335,
+        1.431027278222513
+      ],
+      "candidateNormalizedInterval": [
+        1.1960351584390156,
+        1.4053280380661868
+      ]
+    },
+    "unfilteredActualStatistics": {
+      "rawPointGain": 0.0711061092367743,
+      "rawGainSeparated": true,
+      "normalizedGainSeparated": false,
+      "baselineNormalizedInterval": [
+        1.298972984912399,
+        1.431031767839911
+      ],
+      "candidateNormalizedInterval": [
+        1.1960387759630797,
+        1.4053319850735804
+      ]
+    }
+  },
+  "design": {
+    "cww700": {
+      "project": "Lokad.Image",
+      "stage": "CWW700",
+      "productionAccepted": false,
+      "publicationPostponed": true,
+      "requiredMaterialPaths": 283,
+      "paths": [
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs",
+        "tests/Lokad.Image.Tests/CachedWideWindowTests.cs"
+      ],
+      "newPaths": [
+        "tests/Lokad.Image.Tests/CachedWideWindowTests.cs"
+      ],
+      "baseline": {
+        "windowsSha256": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "linuxSha256": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837"
+      },
+      "transitionFromLinuxSha256": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+      "transitionFromSources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a"
+      },
+      "hypothesis": {
+        "removedWork": "For contiguous private clamped horizontal windows, replace two checked variable decoded-pixel indexes per tap with checked bounded spans before the tap traversal. Keep independent ordered accumulators; no overlap-load sharing.",
+        "endState": "One source window per output with identical ordered Multiply/Add, original weights/normalizers/offsets for repair, and the existing irregular/clamped/unequal-padding fallback. No new heap, owner, cache, session or public API.",
+        "eligibilityProofRequired": "Private offsets are Clamp(first+t). Equal counts with endpoint difference n-1 establish a contiguous window; unequal padded counts retain original path. Slice/loop bounds must remain safe on odd, clamped, single, full-capacity and arbitrary nonfixture dimensions.",
+        "risks": "JIT may keep range checks, added eligibility branches/spans may offset savings, or code growth may regress companions. Verify actual generated code rather than infer from source. Keep portable fallback and exact floating operation order.",
+        "workloads": "Existing complete Wide8 first; independent confirmation only for useful completed-stage evidence, then all seven affected byte/word support32/64/128/256 companions. Exact frozen/rational/native gates, ownership/admission and bounded cancellation; no new image/settings grid.",
+        "decisionRule": "No automatic merge or numerical-policy change. Focused normal/scalar checks, complete short and independent confirmation if justified; broad W/L/live/affectedISA/SAMEpackage once at accepted coherent milestone. Do not repeat adverse measurements for favorable results.",
+        "relationToPrior": "CPP657 removes repeated channel interpretation; CWO697 shares overlapping loads without a useful lead. This design instead bounds the contiguous range before indexing; it is not a replay of either implementation."
+      },
+      "baselinePackageSha256": "a02bfd52430b3cf01b74698ced949b5838e48b7220d856bc687ad85d6ad3a51f",
+      "baselineFullChecksEachOs": 6064,
+      "jit": {
+        "generatedCodeInspectionOnly": true,
+        "statisticalTiming": false,
+        "methodBytesOriginal": 8141,
+        "methodBytesCandidate": 8441,
+        "contiguousGroup": "G_M000_IG73",
+        "fallbackGroup": "G_M000_IG63",
+        "difference": "Contiguous loop removes2variable offset loads,2decoded pixel range-check compare/branches and2index shifts per tap; checked window slicing remains before the loop. Same2orderedMultiply/Add. No expected CPUgain inferred.",
+        "smokeRecovery": "Completed smoke produced one native sample per bracket, unlike warm3sample jobs. Postrun report expected3; corrected report-only validation to1 and reused existing log/JIT/gates. No job repeated."
+      },
+      "candidateMainEachOs": {
+        "windows": "81a1f5480b0e3c8fab54560fab92aa8094789df47c83105f2d162b0677b24bc7",
+        "linux": "141cf7f3757ed189c1478af4a886251d5afaae8bbcffa14553314f6a9e919e9d"
+      },
+      "focused": {
+        "internal-normal": 258,
+        "internal-scalar": 258,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "newTests": 12,
+      "firstStageDecision": {
+        "accepted": false,
+        "reason": "Complete independent rawpoint7.11% but native clocks differ; normalizedpoint2.41% with overlapping bounds, no storage saving. Retain as architectural lead, not a robustCPUgain. One coherent4output scheduling revision follows, preserving frozenfirststage evidence.",
+        "candidateUs": 468.25484263392866,
+        "originalUs": 504.0992670833333,
+        "candidateNativeUs": 352.2442503255208,
+        "originalNativeUs": 370.0743004557292
+      }
+    },
+    "cwf701": {
+      "project": "Lokad.Image",
+      "stage": "CWF701",
+      "productionAccepted": false,
+      "publicationPostponed": true,
+      "requiredMaterialPaths": 283,
+      "paths": [
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs",
+        "tests/Lokad.Image.Tests/CachedWideWindowTests.cs"
+      ],
+      "newPaths": [
+        "tests/Lokad.Image.Tests/CachedWideWindowTests.cs"
+      ],
+      "baseline": {
+        "windowsSha256": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "linuxSha256": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837"
+      },
+      "transitionFromLinuxSha256": "141cf7f3757ed189c1478af4a886251d5afaae8bbcffa14553314f6a9e919e9d",
+      "transitionFromSources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "38a07999a167fbdba43d6851927d679017c4149fe09fc4b53103013594037b42",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a"
+      },
+      "hypothesis": {
+        "removedWork": "Contiguous windows remove per-tap offset loads/range checks; schedule4independent ordered sums in one tap traversal, allowing more independent accumulation work. No source-load sharing or changed per-output arithmetic.",
+        "endState": "One shared4output contiguous path plus original2output irregular/edge/unequal fallback and originalsingleton tail. No retained2outputcontiguous specialization, array, API, cache/session, numerical-policy or ownership change.",
+        "temporaryState": "CWW700 has no proven gain and an extra2outputspecialization. Replace that specialization with4outputexecution; keep its raw observations and source snapshots. Judge finalcompleteoperation versus qualified originalDD/466, not CWWshortpoints.",
+        "risks": "Four live accumulators/spans may spill or expand code enough to offset benefits. Read generated code once then original/candidate complete short; no automaticacceptance from counts. If no useful lead, restore baseline without more variants.",
+        "scope": "Existing Wide8 and7affected support/depthcompanions; same frozenpixels/nativefloatbounds/ownership/admission/cancellation. Focused exacttests then independentconfirmation and fullW/L/live/ISA/SAMEpackage at coherentacceptedstage."
+      },
+      "baselinePackageSha256": "a02bfd52430b3cf01b74698ced949b5838e48b7220d856bc687ad85d6ad3a51f",
+      "baselineFullChecksEachOs": 6064,
+      "jit": {
+        "generatedCodeInspectionOnly": true,
+        "statisticalTiming": false,
+        "methodBytesOriginal": 8141,
+        "methodBytesCandidate": 8441,
+        "contiguousGroup": "G_M000_IG73",
+        "fallbackGroup": "G_M000_IG63",
+        "difference": "Contiguous loop removes2variable offset loads,2decoded pixel range-check compare/branches and2index shifts per tap; checked window slicing remains before the loop. Same2orderedMultiply/Add. No expected CPUgain inferred.",
+        "smokeRecovery": "Completed smoke produced one native sample per bracket, unlike warm3sample jobs. Postrun report expected3; corrected report-only validation to1 and reused existing log/JIT/gates. No job repeated."
+      },
+      "candidateMainEachOs": {
+        "windows": "81a1f5480b0e3c8fab54560fab92aa8094789df47c83105f2d162b0677b24bc7",
+        "linux": "141cf7f3757ed189c1478af4a886251d5afaae8bbcffa14553314f6a9e919e9d"
+      },
+      "focused": {
+        "internal-normal": 258,
+        "internal-scalar": 258,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "newTests": 12,
+      "firstStageDecision": {
+        "accepted": false,
+        "reason": "Complete independent rawpoint7.11% but native clocks differ; normalizedpoint2.41% with overlapping bounds, no storage saving. Retain as architectural lead, not a robustCPUgain. One coherent4output scheduling revision follows, preserving frozenfirststage evidence.",
+        "candidateUs": 468.25484263392866,
+        "originalUs": 504.0992670833333,
+        "candidateNativeUs": 352.2442503255208,
+        "originalNativeUs": 370.0743004557292
+      },
+      "jitStage2": {
+        "statisticalTiming": false,
+        "generatedCodeInspectionOnly": true,
+        "methodBytes": 9452,
+        "originalMethodBytes": 8141,
+        "fastLoopGroup": "G_M000_IG76",
+        "originalFallbackGroup": "G_M000_IG63",
+        "finding": "Actual fast tap body has4independent Multiply/Add and sequential window loads, no offset loads, range-check branches or stack spills in that loop. Eligibility/slicing stay checked before loop. Larger code and additional state costs remain in complete timing; no elapsed gain inferred."
+      },
+      "baselineEvidenceReuse": {
+        "short": "tmp/cww700-baseline-Wide8-short-observation.json",
+        "confirmation": "tmp/cww700-baseline-Wide8-confirm-observation.json",
+        "reason": "Same immutable qualified DDartifact, source/harness/native/input/output/settings/boundaries within this round; retains actual3/12jobs and native brackets. No repeat unchanged original scoring. Finalcandidate needs its own current standalone reference confirmation."
+      }
+    }
+  },
+  "jit": {
+    "cww700": {
+      "methodBytes": 8441,
+      "loops": {
+        "G_M000_IG63": {
+          "start": "0BD3",
+          "code": [
+            "mov      r12d, dword ptr [r8+rsi]",
+            "cmp      r12d, eax",
+            "jae      G_M000_IG146",
+            "shl      r12, 5",
+            "vmovups  ymm2, ymmword ptr [rdi+r12]",
+            "mov      r12d, dword ptr [rdx+rsi]",
+            "cmp      r12d, eax",
+            "jae      G_M000_IG146",
+            "shl      r12, 5",
+            "vmovups  ymm3, ymmword ptr [rdi+r12]",
+            "vmulpd   ymm2, ymm2, qword ptr [r9+2*rsi] {1to4}",
+            "vaddpd   ymm0, ymm2, ymm0",
+            "vmulpd   ymm2, ymm3, qword ptr [rcx+2*rsi] {1to4}",
+            "vaddpd   ymm1, ymm2, ymm1",
+            "add      rsi, 4",
+            "dec      r15d",
+            "jne      SHORT G_M000_IG63"
+          ]
+        },
+        "G_M000_IG73": {
+          "start": "0E07",
+          "code": [
+            "vmovups  ymm2, ymmword ptr [rdx+4*r8]",
+            "vmulpd   ymm2, ymm2, qword ptr [r9+r8] {1to4}",
+            "vaddpd   ymm0, ymm2, ymm0",
+            "vmovups  ymm2, ymmword ptr [rsi+4*r8]",
+            "vmulpd   ymm2, ymm2, qword ptr [rcx+r8] {1to4}",
+            "vaddpd   ymm1, ymm2, ymm1",
+            "add      r8, 8",
+            "dec      r15d",
+            "jne      SHORT G_M000_IG73",
+            "jmp      G_M000_IG64"
+          ]
+        }
+      }
+    },
+    "cwf701": {
+      "methodBytes": 9452,
+      "loops": {
+        "G_M000_IG63": {
+          "start": "0C96",
+          "code": [
+            "mov      r12d, dword ptr [r8+rax]",
+            "cmp      r12d, edi",
+            "jae      G_M000_IG154",
+            "shl      r12, 5",
+            "vmovups  ymm2, ymmword ptr [r11+r12]",
+            "mov      r12d, dword ptr [r15+rax]",
+            "cmp      r12d, edi",
+            "jae      G_M000_IG154",
+            "shl      r12, 5",
+            "vmovups  ymm3, ymmword ptr [r11+r12]",
+            "vmulpd   ymm2, ymm2, qword ptr [rsi+2*rax] {1to4}",
+            "vaddpd   ymm0, ymm2, ymm0",
+            "vmulpd   ymm2, ymm3, qword ptr [rdx+2*rax] {1to4}",
+            "vaddpd   ymm1, ymm2, ymm1",
+            "add      rax, 4",
+            "dec      r13d",
+            "jne      SHORT G_M000_IG63"
+          ]
+        },
+        "G_M000_IG76": {
+          "start": "1125",
+          "code": [
+            "vmovups  ymm4, ymmword ptr [r8+4*r10]",
+            "vmulpd   ymm4, ymm4, qword ptr [rsi+r10] {1to4}",
+            "vaddpd   ymm0, ymm4, ymm0",
+            "vmovups  ymm4, ymmword ptr [r9+4*r10]",
+            "vmulpd   ymm4, ymm4, qword ptr [rdx+r10] {1to4}",
+            "vaddpd   ymm1, ymm4, ymm1",
+            "vmovups  ymm4, ymmword ptr [r15+4*r10]",
+            "vmulpd   ymm4, ymm4, qword ptr [r12+r10] {1to4}",
+            "vaddpd   ymm2, ymm4, ymm2",
+            "vmovups  ymm4, ymmword ptr [rbx+4*r10]",
+            "vmulpd   ymm4, ymm4, qword ptr [rax+r10] {1to4}",
+            "vaddpd   ymm3, ymm4, ymm3",
+            "add      r10, 8",
+            "dec      r13d",
+            "jne      SHORT G_M000_IG76"
+          ]
+        }
+      }
+    }
+  },
+  "decision": "Not selected. CWW700 removes per-tap checked offsets, with favorable7.11%raw/2.41%normalized confirmation points but overlapping normalized intervals. A coherent four-output successor CWF701 replaces rather than accumulates that specialization; its complete short474.71/native349.57us supplies no useful lead versus the retained original503.72/native377.07us short or504.10/native370.07us confirmation. No causal regression/equivalence claim. Stop without another confirmation or variant; no permanent family ban.",
+  "correctness": "Both actual kernels preserve ordered double sums on twelve direct geometry/full/unequal/zero-padding/odd-tail/canary/cancellation cases, plus258internal/729public eachnormal/scalar eachOS pervariant. All complete frozen/rational/native/input/output/ownership gates pass. Second pair cancellation remains before its publication, with bounded private-cache execution. Candidate-only tests archived/removed with complete restoration; existing behavioral coverage unchanged.",
+  "workflow": {
+    "productionBuildsPerOs": 2,
+    "embeddedBuilds": {
+      "windows": 3,
+      "linux": 2
+    },
+    "testOnlyCorrection": {
+      "project": "Lokad.Image",
+      "reason": "New test cancelled before OperationContext construction, which correctly throws. Move cancellation after construction to exercise actual filtering. No production change.",
+      "mainSha256": "81a1f5480b0e3c8fab54560fab92aa8094789df47c83105f2d162b0677b24bc7",
+      "failedInternalSha256": "ae4f99d815ccc44b0bac9dea969688787c14b71cf52b5a107de8b86b4a841cbd",
+      "next": "Reuse verified unchanged main; rebuild only embedded tests, then resume focused checks and Linux initial build. No timing was run."
+    },
+    "jitSmoke": "One generated-code smoke pervariant, instrumented elapsed discarded. CWW postreport expected3native samples but smoke returns1; corrected report-only validation and reused completed log/JIT, no job repeat.",
+    "timing": "CWW original/candidate3actual shorts and reversed independent12actual pair; CWF candidate3actual short reuses unchanged original evidence. No further confirmation, companion retuning, favorable sampling, full tests or package proof.",
+    "restoration": "Byte-exact original source/main/embedded/public bindings on bothOS; currentTED6986064full/live/normal-scalar/SAMEactualprivatepackagea02bfd52 and allthreeexamples reused."
+  },
+  "storage": {
+    "ownedCapacityChanged": false,
+    "admittedWorkspaceBytes": 198432,
+    "retainedResultBytes": 32768,
+    "newRetainedScratchBytes": 0,
+    "physicalAndNativePeaksMeasured": false,
+    "allocationNote": "Ceil-rounded diagnostics198448..198450B/op; no array, owner or retained capacity added."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "4ec9b2fdafd71e161ae099544102937caf7be2d7369ec924dcb51b503536d50f",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "9645045ea1ebb16c59feff6d1138b8697369a7e0b564943cea53e76d1e37fc47",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "7df76976d55bd93d88e7cc4deeffdb253624a4040d663f40fedfb093d7876d56"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "4ec9b2fdafd71e161ae099544102937caf7be2d7369ec924dcb51b503536d50f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "4ec9b2fdafd71e161ae099544102937caf7be2d7369ec924dcb51b503536d50f",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "dd4c7f1f2ccad3ab0eb79a496eb998aa2d8dd14f2d70a95d64a9922a0fcfbc6a",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "4ec9b2fdafd71e161ae099544102937caf7be2d7369ec924dcb51b503536d50f",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8"
+      },
+      "allBuilds": 0,
+      "packageSha256": "a02bfd52430b3cf01b74698ced949b5838e48b7220d856bc687ad85d6ad3a51f",
+      "qualificationReuse": "UnchangedTED6986064W/L full/live, affectednormal/scalar and SAMEactualReleasepackagea02bfd52/threeexamples; CIb30f9df4 andf6b82920allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourcesMainEmbeddedRestoredExactly": true,
+      "restored": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "571cdd69faedd02e40c44828f3d8a4a7e1923095ed574120c45ee9c9cc6c71c9",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "fccf169959a7c5911fdf088937df8b691eb68c0c7ceb7f5091ddfbc9bb1af65a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "a113d18bb151f517ed4a06be5b07faf3f6022e72ffeab24e60a7a174b9b9782b",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "a445547bdb78a34bef8f7e6f8723a92d1ab3a752a7f7c6a927524810506a4226",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "6a80fc29f16a26dacafb5c6394762315729e75d0279f920cd937c30326391a4d"
+      },
+      "publicBindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "a113d18bb151f517ed4a06be5b07faf3f6022e72ffeab24e60a7a174b9b9782b",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "a113d18bb151f517ed4a06be5b07faf3f6022e72ffeab24e60a7a174b9b9782b",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "466e0cb1a0ae61e1050f7e101b2d651a02e74242f0ff24a01c6c0df6061c7837",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "a113d18bb151f517ed4a06be5b07faf3f6022e72ffeab24e60a7a174b9b9782b",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91"
+      },
+      "allBuilds": 0,
+      "packageSha256": "a02bfd52430b3cf01b74698ced949b5838e48b7220d856bc687ad85d6ad3a51f",
+      "qualificationReuse": "UnchangedTED6986064W/L full/live, affectednormal/scalar and SAMEactualReleasepackagea02bfd52/threeexamples; CIb30f9df4 andf6b82920allthreegreen. Candidate-only producer tests archived and removed; existing behavior coverage unchanged. No rebuild/test/package repetition for exact immutable restoration."
+    }
+  },
+  "next": "Stop this bounded window/scheduling branch. Resume an independent material codec path from current evidence, preserving all283paths and exact encoder/managed pixel contracts. Do not replay another width, overlap or window loop merely to seek favorable scores.",
+  "raw": {
+    "file": "cached-wide-window-scheduling-experiment.tar.xz",
+    "sha256": "77ef963bb8ff45afd4b522c55c46d0923b8aa16ba731d96b8dc8047385667c9a",
+    "bytes": 7581000,
+    "members": 179,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "cached-wide-pixel-preparation-qualified.tar.xz",
+        "sha256": "c09c3ab9d61ba9082b430cc73611d8de15661ac3f1c92dfc2953d8ed440f1608"
+      },
+      {
+        "file": "text-endpoint-storage-qualified.tar.xz",
+        "sha256": "2b0939e933183cd40aa9e9d847f1de199c1d85d065801876c67449ba46b67a90"
+      },
+      {
+        "file": "cached-wide-current-preparation-attribution.tar.xz",
+        "sha256": "c1289c19ffcbf15d36c2e95f8675ae9cf19e8b25a8b7e1e499d52f1caaabc875"
+      }
+    ]
+  }
+}

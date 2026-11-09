@@ -291,6 +291,9 @@ pending references never block justified codec/resizing work. PLAN.md stays igno
 [Current cached-wide attribution](CACHED-WIDE-CURRENT-PREPARATION-ATTRIBUTION.md)
 locates the remaining horizontal tap work after pixel preparation. It supplies
 a bounded safe-window hypothesis, with no new displayed cost or renderer dependency.
+The subsequent [window/scheduling experiment](CACHED-WIDE-WINDOW-SCHEDULING-EXPERIMENT.md)
+has inconclusive normalized two-window evidence and no useful four-window lead.
+Both sources/modules are restored exactly; existing current costs remain valid.
 
 [Pre-bank grayscale attribution](JPEG-GRAYSCALE-CURRENT-ATTRIBUTION.md) led to the
 accepted replay stage. Its old replay locations/shares are historical; unchanged
