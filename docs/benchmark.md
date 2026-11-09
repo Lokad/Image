@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-09. These **127 selected comparisons** combine qualified
+Updated 2026-11-10. These **127 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -100,7 +100,7 @@ Current scope and remaining work:
 - **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
-  default27.33/compact31.32ms, three actuals each,
+  default24.05/compact29.68ms, three actuals each,
   with overlapping intervals. No useful generalized CPU gain, regression,
   equivalence, native parity or default promotion is established. Its source and
   normal/scalar/prior full frames agree. Dispatch is unchanged. Earlier costs and
@@ -113,19 +113,23 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Prepared wider-cache geometry](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md)
-  proves contiguous windows once in existing dead padding and removes per-tap
-  indexes/checks from eligible rows. Complete128×64byte saves
-  **19.33µs/4.15% raw/3.32% normalized**,
-  with separated filtered/all-actual confidence after one targeted original-only
-  confirmation resolves its observed native-before transient. The completed
-  candidate and every earlier bracket remain; no exclusion or favorable repeat.
-  Current446.07/zimg346.46µs upper1.292
-  remains a gap;198,450B/op and198,432B admitted workspace are unchanged.
-  All8existing support/depth costs refresh: **7pass/1gap/0uncertain**; both64×32
-  uncertainties pass/stop. No new image/grid, capacity, owner or retained scratch.
-  Exact arithmetic/repair and native bounds stay unchanged. Physical/native peaks
-  are unmeasured; historical companion point differences are not causal gains.
+  [Shared cached-wide windows](../benchmarks/CACHED-WIDE-SHARED-WINDOWS.md)
+  reuse the qualified ordered horizontal kernel after once-per-operation geometry
+  proof and checked fixed-size weight views. Complete Wide8 saves
+  **18.69µs/4.19% raw/4.07% normalized**,
+  with separated filtered/all-actual raw/normalized confidence. One original-only
+  check resolves observed native377→350µs movement; the completed candidate and
+  every earlier sample remain. Native movement in the selected comparison is
+  -0.12%. No further primary repeats.
+  Current427.76/zimg348.46µs,
+  upper1.234 remains a gap. Eight existing support/depth controls
+  refresh:7pass/1gap; no earlier pass is lost. Other points are fresh costs,
+  not causal companion gains. Workspace198,432B/result32,768B/scratch0 remain;
+  primary GC198,448Bop is unchanged apart from amortization.
+  Fixed views remove the dynamic loop length reload/checks; a constant index guard
+  remains. Instruction structure alone proves no CPU gain or physical peak.
+  [Earlier preparation](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md) retains its
+  scoped gain/raw history, without supplying displayed costs or renderer dependencies.
   [Pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md) retains prior history.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
@@ -274,14 +278,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,124 full/live checks per OS**, affected
+The current production build passes **6,132 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes289 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes297 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Unchanged JPEG source paths retain452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
@@ -405,13 +409,13 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 332.79 | 412.11 | 0.808 / 0.817 | 197,298 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 312.80 | 375.67 | 0.833 / 0.838 | 197,300 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 504.20 | 419.02 | 1.203 / 1.208 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.86 | 573.09 | 0.952 / 0.956 | 113 |
-| Bicubic RGBA8 wider-support reduction † → 128×64 | 446.07 | 346.46 | 1.288 / 1.292 | 198,450 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 427.76 | 348.46 | 1.228 / 1.234 | 198,448 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |

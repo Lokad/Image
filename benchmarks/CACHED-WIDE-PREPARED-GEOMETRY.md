@@ -1,5 +1,9 @@
 # Prepared wider-cache geometry
 
+Current eight-case costs and whole-build qualification now belong to
+[shared source windows](CACHED-WIDE-SHARED-WINDOWS.md). This report retains the
+preparation design, scoped gain, clock-transient resolution and raw history.
+
 CGP706 proves contiguous horizontal windows once while preparing existing
 operation-owned geometry. A negative marker occupies dead padding only for equal,
 positive pair counts below capacity. Actual clamped indexes remain nonnegative;

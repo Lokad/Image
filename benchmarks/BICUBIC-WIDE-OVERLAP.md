@@ -1,5 +1,9 @@
 # Shared wide bicubic source windows
 
+The ten reference costs remain source-valid. The large managed-only default
+cost below is superseded by [shared cached-wide windows](CACHED-WIDE-SHARED-WINDOWS.md),
+which owns the current default/compact screen and whole-build qualification.
+
 WOP718 shares ordered overlap arithmetic and byte-offset preparation across
 cached, narrow-column and wide-column execution. Complete bounded wide-byte
 resize saves **30.65 µs / 6.72% raw / 6.68% reference-normalized**,

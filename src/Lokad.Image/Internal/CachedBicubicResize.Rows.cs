@@ -141,8 +141,10 @@ internal static partial class CachedBicubicResize
         }
     }
 
-    // Keep the previously measured wide tap kernel. A vector-index view is
-    // arithmetically equivalent but regressed the complete wide control.
+    private const int OverlappingWidePair = -2;
+
+    // Geometry proves shared windows once. Other prepared layouts retain
+    // independent windows; irregular layouts keep indexed taps.
     private static void PrepareWideHorizontalPairs(Span<int> offsets,ReadOnlySpan<int> counts,
         int width,int sourceWidth,int capacity,OperationContext context)
     {
@@ -162,7 +164,8 @@ internal static partial class CachedBicubicResize
             // their original offsets. The proof is shared by every cached row.
             // Valid clamped pixel indexes are nonnegative, so the marker cannot
             // be confused with a live last tap in a full-capacity pair.
-            if(contiguous)offsets[base0+capacity-1]=-1;
+            if(contiguous)offsets[base0+capacity-1]=n==16 && first1==first0+4
+                && sourceWidth>=20 && first0<=sourceWidth-20?OverlappingWidePair:-1;
         }
     }
 
@@ -189,7 +192,13 @@ internal static partial class CachedBicubicResize
             var weights1=weights.Slice((x+1)*capacity,n);
             var offsets0=offsets.Slice(x*capacity,n);
             var offsets1=offsets.Slice((x+1)*capacity,n);
-            if(offsets[x*capacity+capacity-1]<0)
+            if(Avx512F.IsSupported && offsets[x*capacity+capacity-1]==OverlappingWidePair)
+            {
+                var pair=BicubicMath.FilterOverlappingHorizontalPair(
+                    decodedPixels.Slice(offsets0[0],20),weights0[..16],weights1[..16],16,4);
+                sum0=pair.GetLower();sum1=pair.GetUpper();
+            }
+            else if(offsets[x*capacity+capacity-1]<0)
             {
                 var pixels0=decodedPixels.Slice(offsets0[0],n);
                 var pixels1=decodedPixels.Slice(offsets1[0],n);

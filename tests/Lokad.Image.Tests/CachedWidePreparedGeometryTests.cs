@@ -21,6 +21,16 @@ namespace Lokad.Image.Tests
         public void FullCapacityClampedOffsetsRemainOnTheIndexedPath()
             => Internal.CachedBicubicResize.VerifyPreparedWideWindows(24,3,32,32,32);
 
+        [Theory]
+        [InlineData(0,4,16,16,20,-2)] [InlineData(44,4,16,16,64,-2)]
+        [InlineData(44,4,16,16,63,0)] [InlineData(12,3,16,16,64,-1)]
+        [InlineData(12,4,16,17,64,0)] [InlineData(12,4,17,17,64,-1)]
+        [InlineData(0,4,16,16,19,0)]
+        public void SharedAndIndependentMarkersPreserveOrderedPixelsAndBorrowedStorage(
+            int first,int stride,int firstCount,int secondCount,int sourceWidth,int marker)
+            => Internal.CachedBicubicResize.VerifyPreparedWideWindows(sourceWidth,3,32,
+                firstCount,secondCount,first,stride,marker);
+
         [Fact]
         public void CanceledWindowFilteringLeavesBorrowedStorageUntouched()
             => Internal.CachedBicubicResize.VerifyPreparedWideWindowCancellation();
@@ -33,9 +43,9 @@ namespace Lokad.Image.Tests
         public void InvalidSourceWindowsCannotAcquireAProof(int first,int second)
             => Internal.CachedBicubicResize.VerifyPreparedWideInvalid(first,second);
 
-        [Fact]
-        public void PreparationAndExecutionUseNoHeapOrSharedAdmission()
-            => Internal.CachedBicubicResize.VerifyPreparedWideAllocation();
+        [Theory] [InlineData(false)] [InlineData(true)]
+        public void PreparationAndExecutionUseNoHeapOrSharedAdmission(bool overlapping)
+            => Internal.CachedBicubicResize.VerifyPreparedWideAllocation(overlapping);
 
         [Fact]
         public void CanceledPreparationDoesNotWriteGeometry()
@@ -48,7 +58,8 @@ namespace Lokad.Image.Internal
 {
     internal static partial class CachedBicubicResize
     {
-        internal static void VerifyPreparedWideWindows(int sourceWidth,int width,int capacity,int firstCount,int secondCount)
+        internal static void VerifyPreparedWideWindows(int sourceWidth,int width,int capacity,int firstCount,int secondCount,
+            int firstPairStart=-1,int firstPairStride=0,int marker=int.MinValue)
         {
             if(!Avx.IsSupported)return;
             var weights=new double[width*capacity];var offsets=new int[width*capacity];var counts=new int[width];
@@ -60,7 +71,8 @@ namespace Lokad.Image.Internal
                 counts[x]=(int)Math.Floor(center+2*scale)-first+1;
                 if(firstCount>=0)
                 {
-                    first=x==0?12:x==1?24:94;
+                    first=firstPairStart<0?(x==0?12:x==1?24:94)
+                        :x==0?firstPairStart:x==1?firstPairStart+firstPairStride:sourceWidth-2;
                     counts[x]=x==0?firstCount:x==1?secondCount:3;
                 }
                 Assert.InRange(counts[x],0,capacity);
@@ -75,6 +87,7 @@ namespace Lokad.Image.Internal
             using var root=new Tooling.TestMemoryBudget(0);
             using var context=new OperationContext(new(){MemoryBudget=root},default);
             PrepareWideHorizontalPairs(offsets,counts,width,sourceWidth,capacity,context);
+            if(marker!=int.MinValue)Assert.Equal(marker,offsets[capacity-1]);
             var preparedOffsets=offsets.ToArray();
             for(var x=0;x<width;x++)
                 Assert.Equal(originalOffsets.AsSpan(x*capacity,counts[x]).ToArray(),offsets.AsSpan(x*capacity,counts[x]).ToArray());
@@ -149,11 +162,16 @@ namespace Lokad.Image.Internal
             Assert.Equal(0,root.Attempts);Assert.Equal(0,root.Bytes);Assert.False(root.IsDisposed);
         }
 
-        internal static void VerifyPreparedWideAllocation()
+        internal static void VerifyPreparedWideAllocation(bool overlapping)
         {
-            const int width=4,capacity=8,sourceWidth=32;
-            var offsets=new int[width*capacity];var weights=new double[offsets.Length];var counts=new[]{2,2,2,2};
-            for(var x=0;x<width;x++)for(var t=0;t<2;t++){offsets[x*capacity+t]=x+t;weights[x*capacity+t]=.5;}
+            const int width=4,sourceWidth=64;
+            var capacity=overlapping?32:8;var count=overlapping?16:2;
+            var offsets=new int[width*capacity];var weights=new double[offsets.Length];var counts=Enumerable.Repeat(count,width).ToArray();
+            for(var x=0;x<width;x++)for(var t=0;t<count;t++)
+            {
+                offsets[x*capacity+t]=(overlapping?(x/2)*20+(x&1)*4:x)+t;
+                weights[x*capacity+t]=1d/count;
+            }
             var decoded=Enumerable.Repeat(123d,sourceWidth*4).ToArray();var result=new double[width*4];
             using var root=new Tooling.TestMemoryBudget(0);
             using var context=new OperationContext(new(){MemoryBudget=root},default);

@@ -784,21 +784,30 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-prepared-geometry-evidence.json').read_text(encoding='utf-8'))
-    current = wide_byte['current']
-    assert wide_byte['productionAccepted'] and wide_byte['stage'] == 'CGP706'
-    assert wide_byte['qualification']['fullChecksEachOs'] == 6096
-    assert wide_byte['actualPackage']['sha256'] == wide_byte['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert wide_byte['sourceProof']['onlyOneWidePreparationCallAdded']
-    assert wide_byte['sourceProof']['indexedFallbackArithmeticVerbatim']
-    assert wide_byte['storage']['newOwnedCapacityBytes'] == 0
-    assert wide_byte['storage']['newRetainedOperationStorageBytes'] == 0
-    assert wide_byte['statusCounts'] == {state: sum(c['status'] == state for c in wide_byte['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_byte['comparison']['views'].values())
-    assert current['librarySha256'] == wide_byte['actualPackage']['librarySha256']
-    assert current['managedRationalReferenceExact'] and current['managedMaxWorkingBytes'] is None
-    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-shared-windows-evidence.json').read_text(encoding='utf-8'))
+    current = wide_byte['cases']['Wide8']
+    wq = wide_byte['qualification']
+    assert wide_byte['productionAccepted'] and wide_byte['requiredMaterialPaths'] == 283
+    assert wq['fullChecksEachOs'] == wq['windows']['total'] == wq['linux']['total'] == 6132
+    assert wq['actualPackage']['sha256'] == wq['samePackageLinux']['sameActualPackageSha256']
+    assert wq['sameActualPackageBothOS']
+    assert wide_byte['sourceProof']['fullRowsUndoReconstructsQualifiedOriginal']
+    assert wide_byte['sourceProof']['existingSharedMathKernelVerbatim']
+    assert wide_byte['sourceProof']['cacheOwnerGeometryAndScheduleSourceVerbatim']
+    assert wide_byte['storage']['newOwnedCapacityBytes'] == wide_byte['storage']['newRetainedOperationStorageBytes'] == 0
+    assert wide_byte['statusCounts'] == {'pass': 7, 'gap': 1, 'uncertain': 0}
     assert wide_byte['raw']['mirrored'] and wide_byte['raw']['allMembersVerified']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_byte['comparison']['views'].values())
+    assert wide_byte['jitProof']['noVariableWeightLengthStackReadInFinalLoop']
+    assert wide_byte['jitProof']['constantWeightIndexGuardRemains']
+    assert wide_byte['largeGeneralization']['status'] == 'screen-only-confidence-open'
+    assert wide_byte['largeGeneralization']['normalScalarAndPriorPixelsExact'] and wide_byte['largeGeneralization']['quietGuardsPassed']
+    for case, cost in wide_byte['cases'].items():
+        assert cost['librarySha256'] == wq['actualPackage']['librarySha256']
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['managedRationalReferenceExact'] and cost['independentOwnedOutput'] and cost['sourceUnchanged']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
     rows.append(('editing', f'| Bicubic RGBA8 wider-support reduction † → 128×64 | {current["managedUs"]:,.2f} | '
                  f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                  f'{current["allocatedBytes"]:,} |'))
@@ -986,9 +995,6 @@ def render():
         assert c['librarySha256'] == cq['actualPackage']['librarySha256']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in bicubic_overlap['comparison']['views'].values())
-    assert bicubic_overlap['largeGeneralization']['status'] == 'screen-only-confidence-open'
-    assert bicubic_overlap['largeGeneralization']['normalScalarAndPriorPixelsExact']
-    assert bicubic_overlap['largeGeneralization']['quietGuardsPassed']
     for case in ('TightWide8', 'TightWide16'):
         cost = bicubic_overlap['cases'][case]
         depth = 8 if case == 'TightWide8' else 16
@@ -1317,7 +1323,7 @@ def render():
              else row) for kind, row in rows]
     # Fresh package owners supersede the blanket historical marker.
     for label, current in [
-        ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['current']),
+        ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['cases']['Wide8']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide8']),
         ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide16']),
@@ -1365,7 +1371,7 @@ def render():
     assert wide_family['raw']['mirrored'] and wide_family['raw']['allMembersVerified']
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['managedRationalReferenceExact'] and current['independentOwnedOutput']
-    assert current['librarySha256'] == wide_family['actualPackage']['librarySha256']
+    assert current['librarySha256'] == wq['actualPackage']['librarySha256']
     label = 'Bicubic RGBA8, 32×16 / default workspace † → 32×16'
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.split('|')[1].strip().replace(' H ', ' ') == label]
@@ -1773,7 +1779,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-09. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-10. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -1873,7 +1879,7 @@ Current scope and remaining work:
 - **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
-  default{bicubic_overlap['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{bicubic_overlap['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,
+  default{wide_byte['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{wide_byte['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,
   with overlapping intervals. No useful generalized CPU gain, regression,
   equivalence, native parity or default promotion is established. Its source and
   normal/scalar/prior full frames agree. Dispatch is unchanged. Earlier costs and
@@ -1886,19 +1892,23 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Prepared wider-cache geometry](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md)
-  proves contiguous windows once in existing dead padding and removes per-tap
-  indexes/checks from eligible rows. Complete128×64byte saves
+  [Shared cached-wide windows](../benchmarks/CACHED-WIDE-SHARED-WINDOWS.md)
+  reuse the qualified ordered horizontal kernel after once-per-operation geometry
+  proof and checked fixed-size weight views. Complete Wide8 saves
   **{wide_byte['comparison']['savedUs']:.2f}µs/{100*wide_byte['comparison']['rawReduction']:.2f}% raw/{100*wide_byte['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual confidence after one targeted original-only
-  confirmation resolves its observed native-before transient. The completed
-  candidate and every earlier bracket remain; no exclusion or favorable repeat.
-  Current{wide_byte['current']['managedUs']:.2f}/zimg{wide_byte['current']['nativeUs']:.2f}µs upper{wide_byte['current']['upper']:.3f}
-  remains a gap;198,450B/op and198,432B admitted workspace are unchanged.
-  All8existing support/depth costs refresh: **7pass/1gap/0uncertain**; both64×32
-  uncertainties pass/stop. No new image/grid, capacity, owner or retained scratch.
-  Exact arithmetic/repair and native bounds stay unchanged. Physical/native peaks
-  are unmeasured; historical companion point differences are not causal gains.
+  with separated filtered/all-actual raw/normalized confidence. One original-only
+  check resolves observed native377→350µs movement; the completed candidate and
+  every earlier sample remain. Native movement in the selected comparison is
+  {100*wide_byte['comparison']['nativePointChange']:.2f}%. No further primary repeats.
+  Current{wide_byte['cases']['Wide8']['managedUs']:.2f}/zimg{wide_byte['cases']['Wide8']['nativeUs']:.2f}µs,
+  upper{wide_byte['cases']['Wide8']['upper']:.3f} remains a gap. Eight existing support/depth controls
+  refresh:7pass/1gap; no earlier pass is lost. Other points are fresh costs,
+  not causal companion gains. Workspace198,432B/result32,768B/scratch0 remain;
+  primary GC{wide_byte['cases']['Wide8']['allocatedBytes']:,}Bop is unchanged apart from amortization.
+  Fixed views remove the dynamic loop length reload/checks; a constant index guard
+  remains. Instruction structure alone proves no CPU gain or physical peak.
+  [Earlier preparation](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md) retains its
+  scoped gain/raw history, without supplying displayed costs or renderer dependencies.
   [Pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md) retains prior history.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
@@ -2047,14 +2057,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{mq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{wq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes289 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes297 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Unchanged JPEG source paths retain452 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
