@@ -10,6 +10,29 @@ namespace Lokad.Image.Internal;
 // their own geometry, tap order and portable fallback selection.
 internal static class BicubicMath
 {
+    // Two eight-tap outputs start two pixels apart. Reuse their ten source
+    // pixels without changing either lane's ordered Multiply/Add sequence.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector512<double> FilterOverlappingHorizontalPair(
+        ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> firstWeights,
+        ReadOnlySpan<double> secondWeights)
+    {
+        var window = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded[..2]));
+        var sum = Vector512<double>.Zero;
+        for (var tap = 0; tap < 8; tap += 2)
+        {
+            var next = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 2, 2)));
+            var even = Avx512F.Shuffle4x128(window, next, 0x44);
+            var odd = Avx512F.Shuffle4x128(window, next, 0xee);
+            var evenWeights = Avx512F.InsertVector256(Vector512.Create(firstWeights[tap]), Vector256.Create(secondWeights[tap]), 1);
+            var oddWeights = Avx512F.InsertVector256(Vector512.Create(firstWeights[tap + 1]), Vector256.Create(secondWeights[tap + 1]), 1);
+            sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
+            window = next;
+        }
+        return sum;
+    }
+
     internal const int StreamingWorkspaceBytes = 4096;
     internal const int StreamingTapCapacity = 304;
     internal const int PackedStreamingTapCapacity = 544;

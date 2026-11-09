@@ -77,23 +77,10 @@ internal static partial class CachedBicubicResize
             var prepared=offsets[base0+15];
             if(prepared!=0)
             {
-                // Two outputs overlap six of their eight source pixels. Keep
-                // their ordered sums in the lower/upper halves, sharing five
-                // source windows rather than loading sixteen separate pixels.
                 var first=prepared-1;
-                var window=MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(first,8)));
-                var sum=Vector512<double>.Zero;
-                for(var tap=0;tap<8;tap+=2)
-                {
-                    var next=MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(first+(tap+2)*4,8)));
-                    var even=Avx512F.Shuffle4x128(window,next,0x44);
-                    var odd=Avx512F.Shuffle4x128(window,next,0xee);
-                    var evenWeights=Vector512.Create(Vector256.Create(weights[base0+tap]),Vector256.Create(weights[base1+tap]));
-                    var oddWeights=Vector512.Create(Vector256.Create(weights[base0+tap+1]),Vector256.Create(weights[base1+tap+1]));
-                    sum=Avx512F.Add(sum,Avx512F.Multiply(even,evenWeights));
-                    sum=Avx512F.Add(sum,Avx512F.Multiply(odd,oddWeights));
-                    window=next;
-                }
+                var sum=BicubicMath.FilterOverlappingHorizontalPair(
+                    MemoryMarshal.Cast<double,Vector256<double>>(decoded.Slice(first,40)),
+                    weights.Slice(base0,8),weights.Slice(base1,8));
                 MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,8)),in sum);
                 continue;
             }

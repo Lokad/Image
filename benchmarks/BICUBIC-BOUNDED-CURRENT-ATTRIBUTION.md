@@ -1,5 +1,9 @@
 # Current bounded bicubic execution
 
+[Shared overlap execution](BICUBIC-SHARED-OVERLAP.md) implements the hypothesis
+below and changes the profiled loop. This capture remains motivating history,
+without establishing current phase costs.
+
 CTA714 reuses the qualified JLP713 actual-package DLL for one two-second capture
 of existing RGBA8 513×259→256×129 bicubic resizing with input+output+4 KiB working
 limit. Production, fixtures, displayed costs and qualification stay unchanged;

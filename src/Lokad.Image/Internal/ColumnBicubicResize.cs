@@ -80,6 +80,27 @@ internal static class ColumnBicubicResize
         return result;
     }
 
+    internal static void PrepareOverlappingPairs(Span<byte> offsets, ReadOnlySpan<int> counts,
+        int columns, int sourceCount, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        // Slot nine is dead for an eight-tap pair. Reset it on every strip;
+        // ten-tap columns retain that slot as an actual source offset.
+        for (var x = 0; x < columns; x++)
+            if (counts[x] < 10) offsets[x * 10 + 9] = 0;
+        for (var x = 0; x + 1 < columns; x += 2)
+        {
+            if (counts[x] != 8 || counts[x + 1] != 8) continue;
+            var base0 = x * 10; var base1 = base0 + 10;
+            var first = offsets[base0];
+            if (sourceCount < 10 || first > sourceCount - 10 || offsets[base1] != first + 2) continue;
+            var contiguous = true;
+            for (var tap = 0; tap < 8; tap++)
+                contiguous &= offsets[base0 + tap] == first + tap && offsets[base1 + tap] == first + tap + 2;
+            if (contiguous) offsets[base0 + 9] = (byte)(first + 1);
+        }
+    }
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool ApplyRange<TStrip, TSamples>(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, int rowSlots, ColumnBicubicGeometry geometry,
@@ -130,6 +151,7 @@ internal static class ColumnBicubicResize
                 normalizers[x] = normalizer;
             }
             var sourceCount = offsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
+            PrepareOverlappingPairs(offsets, counts, length, sourceCount, context.Cancellation);
             rowIds.Fill(-1);
             for (var y = 0; y < result.Height; y++)
             {
@@ -189,6 +211,15 @@ internal static class ColumnBicubicResize
                         var offsets1 = offsets.Slice((x + 1) * 10, count1);
                         var weights0 = weights.Slice(x * 10, count0);
                         var weights1 = weights.Slice((x + 1) * 10, count1);
+                        if (count0 == 8 && count1 == 8 && offsets[x * 10 + 9] != 0)
+                        {
+                            var firstPixel = offsets[x * 10 + 9] - 1;
+                            var pair = BicubicMath.FilterOverlappingHorizontalPair(
+                                decoded.Slice(firstPixel, 10), weights0, weights1);
+                            cache[slot * cacheStride + x] = pair.GetLower();
+                            cache[slot * cacheStride + x + 1] = pair.GetUpper();
+                            continue;
+                        }
                         var shared = Math.Min(count0, count1);
                         var sum = Vector512<double>.Zero;
                         for (var tx = 0; tx < shared; tx++)
