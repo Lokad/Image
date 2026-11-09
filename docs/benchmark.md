@@ -111,6 +111,11 @@ Current scope and remaining work:
   confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
   Its old allocation/scheduler epoch is superseded, without a causal historical
   CPU claim. Same qualified immutable package; no new builds or qualification runs.
+  [Current shared-wide family](../benchmarks/CACHED-WIDE-CURRENT-FAMILY.md) resolves
+  seven affected companions: four pass/four gaps overall, no uncertainty.
+  Default32×16 byte now392.69/zimg414.33µs, upper.952,197,298B/op passes/stops.
+  Two original byte/word rasters, no new workload grid; passing companions receive
+  only regression qualification when the shared helper changes.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain

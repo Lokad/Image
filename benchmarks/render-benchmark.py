@@ -896,28 +896,6 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
-    assert wide_current['accepted']
-    assert wide_current['qualification']['fullChecksEachOs'] == 5376
-    assert wide_current['qualification']['package']['sha256'] == wide_current['qualification']['linuxPackage']['sameActualPackageSha256']
-    for case in ['Down32x16_8']:
-        observations = wide_current['cases'][case]
-        observation = observations[-1]
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert (observation['conservativeRatioUpper'] <= 1) == (wide_current['status'][case] == 'confirmed-pass-stop')
-        assert observation['receipt']['managedRationalReferenceExact'] and observation['receipt']['independentOwnedOutput']
-        assert observation['receipt']['librarySha256'] == wide_current['producers']['linuxSha256']
-    for prefix, case in [('| Bicubic RGBA8, 32×16 / default', 'Down32x16_8')]:
-        matches = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith(prefix)]
-        assert len(matches) == 1
-        index = matches[0]
-        label = rows[index][1].split('|')[1].strip()
-        observation = wide_current['cases'][case][-1]
-        rows[index] = ('editing', f'| {label} | '
-                       f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
-                       f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                       f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                       f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
     byte_bands = json.loads((ROOT / 'benchmarks/bicubic-byte-result-bands-evidence.json').read_text(encoding='utf-8'))
     result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
     for depth, current in [(8, byte_bands['cases']['TightMixed8']), (16, result_bands['cases']['TightMixed16'])]:
@@ -1316,6 +1294,8 @@ def render():
     assert default_byte['qualificationReused']['sameActualPackageBothOs']
     assert set(overwrite['cases']) == set(labels)
     for case, label in labels.items():
+        if case == 'Down32x16_8':
+            continue  # Current family owner below supersedes this older output-allocation cost.
         owner = default_byte if case == 'Up8' else enlargement if case == 'Up16' else overwrite
         observation = owner['cases'][case]; receipt = observation['receipt']
         assert receipt['librarySha256'] == owner['producers']['linuxSha256']
@@ -1335,6 +1315,19 @@ def render():
         else:
             assert len(positions) == 1, label
             rows[positions[0]] = row
+    wide_family = json.loads((ROOT / 'benchmarks/cached-wide-current-family-evidence.json').read_text(encoding='utf-8'))
+    current = wide_family['cases']['Down32x16_8']
+    assert not wide_family['productionChanged'] and wide_family['allBuilds'] == 0
+    assert wide_family['raw']['mirrored'] and wide_family['raw']['allMembersVerified']
+    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['managedRationalReferenceExact'] and current['independentOwnedOutput']
+    assert current['librarySha256'] == wide_family['actualPackage']['librarySha256']
+    label = 'Bicubic RGBA8, 32×16 / default workspace † → 32×16'
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                 and row.split('|')[1].strip().replace(' H ', ' ') == label]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| {label} | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
@@ -1848,6 +1841,11 @@ Current scope and remaining work:
   confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
   Its old allocation/scheduler epoch is superseded, without a causal historical
   CPU claim. Same qualified immutable package; no new builds or qualification runs.
+  [Current shared-wide family](../benchmarks/CACHED-WIDE-CURRENT-FAMILY.md) resolves
+  seven affected companions: four pass/four gaps overall, no uncertainty.
+  Default32×16 byte now392.69/zimg414.33µs, upper.952,197,298B/op passes/stops.
+  Two original byte/word rasters, no new workload grid; passing companions receive
+  only regression qualification when the shared helper changes.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
