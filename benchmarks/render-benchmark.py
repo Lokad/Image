@@ -45,6 +45,8 @@ def render():
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
     assert set(prepared_model['costs']) == {'Native8', 'Vp8Stream', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
     for name, cost in prepared_model['costs'].items():
+        if name not in {'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8'}:
+            continue  # Alpha callers are refreshed by the current palette/output owner.
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['librarySha256'] == prepared_model['producers']['linuxSha256']
         assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
@@ -56,9 +58,6 @@ def render():
             assert cost['decoderMaximum'] == 0 and cost['managedOutputBytes'] == 531468
         assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
-    assert all(v['rawGainSeparated'] for c in prepared_model['comparisons'].values() for v in c['views'].values())
-    assert all(v['normalizedGainSeparated'] for v in prepared_model['comparisons']['Native8']['views'].values())
-    assert not prepared_model['comparisons']['OpaqueCancelable8']['views']['unfilteredActualStatistics']['normalizedGainSeparated']
     model_proof = prepared_model['sourceProof']
     assert model_proof['originalReconstructedOutsideFrameQuantizerPreparation']
     assert model_proof['allCoefficientReaderContextTransformPredictionFilteringColorOwnershipBodiesExact']
@@ -466,46 +465,35 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    resident_decode = json.loads((ROOT / 'benchmarks/vp8l-final-publication-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/webp-palette-output-evidence.json').read_text(encoding='utf-8'))
     assert resident_decode['productionAccepted'] and resident_decode['requiredMaterialPaths'] == 283
-    assert resident_decode['sourceProof']['wholeSourceUndoEqualsQualifiedOriginal']
+    assert resident_decode['sourceProof']['originalRestoredByRemovingFinalPaletteBranch']
     assert resident_decode['raw']['mirrored'] and resident_decode['raw']['allMembersVerified']
-    assert set(resident_decode['cases']) == {'ValidateVp8lAlpha', 'ValidateVp8Alpha', 'WebpResident', 'Lossless8',
+    assert set(resident_decode['costs']) == {'ValidateVp8lAlpha', 'ValidateVp8Alpha', 'WebpResident', 'Lossless8',
         'IndexedNative16Colors8', 'NativeLosslessCancelable8', 'WebpStream', 'Native8', 'Vp8Stream'}
-    for name, observations in resident_decode['cases'].items():
-        if name in {'Native8', 'Vp8Stream', 'ValidateVp8Alpha'}:
-            continue  # Superseded by the prepared-model owner; six lossless paths are unchanged.
-        observation = observations[-1]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert receipt['librarySha256'] == resident_decode['producers']['linuxSha256']
-        assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
-        assert all(q['passed'] for q in observation['quietness'].values())
+    q = resident_decode['qualification']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6058
+    assert q['sameActualPackageBothOS'] and q['finalPaletteConsumerBothOs']
+    assert q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
+    for name, cost in resident_decode['costs'].items():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['librarySha256'] == q['actualPackage']['librarySha256']
+        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
+        assert cost['sourceUnchanged'] and cost['independentOwnedOutput']
         if name.startswith('Validate'):
-            assert receipt['descriptorExact'] and receipt['prefixAndCodingScopesVerified']
+            assert cost['descriptorExact'] and cost['prefixAndCodingScopesVerified']
         else:
-            assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] and receipt['alphaExact']
-            assert receipt.get('allRgbaSamplesExact', receipt.get('decoderMaximum') == 0)
-        assert resident_decode['status'][name] == ('confirmed-pass' if observation['conservativeRatioUpper'] <= 1
-            else 'confirmed-gap' if observation['conservativeRatioLower'] > 1 else 'confirmed-confidence-open')
+            assert cost['managedOutputSha256'] == cost['nativeOutputSha256'] and cost['alphaExact']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in resident_decode['comparisons']['WebpResident']['views'].values())
-    assert all(v['rawLossSeparated'] and v['normalizedLossSeparated']
-               for v in resident_decode['comparisons']['IndexedNative16Colors8']['views'].values())
-    assert resident_decode['storage']['ownedCapacityUnchanged']
-    assert resident_decode['storage']['newHeapCapacityBytes'] == resident_decode['storage']['newRetainedStateBytes'] == 0
-    for platform in ['windows', 'linux']:
-        peaks = resident_decode['storage']['validationAdmissionEvidenceReused'][platform]['rows']['candidate']['cases']
-        assert [p['firstPeakAdmittedBytes'] for p in peaks] == [235152, 11121]
-        assert all(p['retainedBytes'] == 0 and p['borrowedRootAlive'] for p in peaks)
-    lpf = {name: cost for name, cost in resident_decode['costs'].items()
-           if name not in {'Native8', 'Vp8Stream', 'ValidateVp8Alpha'}}
-    lpf['ValidateVp8Alpha'] = prepared_model['costs']['ValidateVp8Alpha']
-    lpf.update(prepared_model['costs'])
+               for v in resident_decode['comparison']['views'].values())
+    assert resident_decode['storage']['newRetainedScratchBytes'] == 0
+    lpf = {**prepared_model['costs'], **resident_decode['costs']}
+    vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in prepared_model['costs'])
+                         for state in ('pass', 'gap', 'uncertain')}
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
-    assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
-    assert resident_decode['qualification']['sameActualPackageBothOs']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
@@ -634,8 +622,15 @@ def render():
     for case, label in [('NativeDecode420', 'JPEG baseline420, resident decode'),
                         ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
-                        ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_decode if case in {'NativeDecode420', 'CmykCaller'} else resident_decode
+                        ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode'),
+                        ('IndexedNative16Colors8', 'VP8L palette16 RGBA8, resident decode (confirmed pass)')]:
+        if case in lpf:
+            c = lpf[case]
+            qualifier = ' (confidence open)' if c['status'] == 'uncertain' else ''
+            rows.append(('codec', f'| {label}{qualifier} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                         f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |'))
+            continue
+        producer = jpeg_decode
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         samples = 12
@@ -1672,14 +1667,14 @@ def render():
             read_rows.append(f'| {label} † | {current["managedMicroseconds"]:,.3f} | {current["nativeMicroseconds"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
-        if case == 'ValidateVp8Alpha':
-            current = prepared_model['costs'][case]
+        if case in {'ValidateVp8Alpha', 'ValidateVp8lAlpha'}:
+            current = lpf[case]
             assert current['descriptorExact'] and current['prefixAndCodingScopesVerified'] and current['managedOutputBytes'] == 36
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
             read_rows.append(f'| {label} † | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
-        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1762,38 +1757,27 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP decoding:** [fused final inverse/publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
-  saves **155.66µs/4.79% raw**,4.53% native-normalized, on complete resident VP8L.
-  Both confidence views separate. GC stays152,728B/op; no new owned capacity/cache.
-  Current resident/live/stream uppers{lpf['WebpResident']['upper']:.3f}/
-  {lpf['NativeLosslessCancelable8']['upper']:.3f}/{lpf['WebpStream']['upper']:.3f} remain gaps.
-  Six unchanged lossless controls:2pass/4gaps. The contemporary palette
-  control regresses **19.25µs/3.46%**, with separated raw/normalized intervals;
-  retain that tradeoff, not a general decoder speedup claim.
-  Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
-  are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  [Frame-private quantizers](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md)
-  prepare six scalar dequantizers per segment once inside complete decoding,
-  using96B within the existing8KiB allowance. Live opaque saves45.36µs/0.92%raw;
-  raw confidence separates in both views, while0.86% normalized remains a point
-  gain with all-actual uncertainty. Resident alpha saves110.85µs/1.83%raw/
-  1.82%normalized with separated confidence. Contemporary originals resolve the
-  resident historical-clock contradiction; no favorable repeats. Current resident
-  {lpf['Native8']['managedUs']:,.2f}/native{lpf['Native8']['nativeUs']:,.2f}µs,
-  upper{lpf['Native8']['upper']:.3f} is uncertain. Stream upper{stream['upper']:.3f}
-  and validation upper{lpf['ValidateVp8Alpha']['upper']:.3f} pass/stop. Six current
-  costs:{prepared_model['statusCounts']['pass']}pass/{prepared_model['statusCounts']['gap']}gaps/{prepared_model['statusCounts']['uncertain']}uncertain.
+- **WebP decoding:** [output-owned palette expansion](../benchmarks/WEBP-PALETTE-OUTPUT.md)
+  removes a full-frame intermediate and copy. Complete palette16 confirmation saves
+  **168.22µs/26.72% raw**, with separated filtered/all-actual raw/normalized confidence:
+  461.31/native590.92µs, upper0.789 passes. Total GC falls820,190→288,462B/op;
+  returned output remains independently charged until disposal, scratch retention0.
+  An original513×67 palette control fits a239,128B shared bound below two full
+  frames; this is neither the benchmark's measured peak nor a physical heap peak.
+  Nine shared-decoder costs refresh. Six lossless controls now3pass/3uncertain;
+  resident/live/stream uppers{lpf['WebpResident']['upper']:.3f}/
+  {lpf['NativeLosslessCancelable8']['upper']:.3f}/{lpf['WebpStream']['upper']:.3f} are uncertain, without causal gain/regression/equivalence claims.
+  Three opaque VP8 controls reuse unchanged [frame-quantizer evidence](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md).
+  Current combined VP8 scope:{vp8_decode_counts['pass']}pass/{vp8_decode_counts['gap']}gaps/{vp8_decode_counts['uncertain']}uncertain;
+  resident alpha upper{lpf['Native8']['upper']:.3f} is uncertain; stream/validation pass.
   Live opaque remains{live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
-  upper{live['upper']:.3f}gap,{live['allocatedBytes']:,}B/op. All allocation counts
-  are unchanged; no new heap/retention. Existing1,536B probability model and
-  independently retained531,468B frames remain. Physical/native peaks unmeasured;
-  logical fixed payload/coarse allowance5,108B fits8,192B. Syntax, every original
-  poll, cursor/pixels, admission and actual async lifetimes remain. Both OSes pass
-  5,955full/live, normal/scalar/disabled-ISA and SAME package/three examples.
-  [Model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md),
-  [earlier preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
-  [alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
-  retain their historical gains and raw evidence separately.
+  upper{live['upper']:.3f}gap,{live['allocatedBytes']:,}B/op. Exact pixels, cancellation,
+  shared admission,6,058full/live perOS, normal/scalar and SAMEactualpackage/
+  threeexamples pass. Existing pools/governed bypass remain; physical/native peaks
+  unmeasured. Passing cases stop. [Final publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
+  retains preceding gains/adverse history; current palette evidence supersedes its
+  palette regression. The newly displayed palette comparison was already required
+  and measured:127selectedrows/283paths, without a new image or timing workload.
 - **WebP encoding:** [Huffman workspace](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
   reuses one operation-owned tree workspace/queue across alphabets and histogram
   groups. Complete screens save553,184B/photo,37,640B/diagram,668,512B/transparent
@@ -2078,7 +2062,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 126, 'Expected126comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 127, 'Expected127comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

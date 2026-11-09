@@ -1,5 +1,9 @@
 # Frame-private VP8 dequantizer preparation
 
+[Output-owned palettes](WEBP-PALETTE-OUTPUT.md) carry the current shared-method
+lossless/alpha costs. Prior gains and raw evidence below remain history; three
+opaque VP8 costs retain unchanged-path qualification.
+
 VP8 decoding prepares six exact scalar dequantizers per frame segment once,
 instead of repeating clamping and table lookups in each macroblock's 24-subblock
 loop. Up to four segments use 96 B of operation-owned stack storage within the

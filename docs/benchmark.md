@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-09. These **126 selected comparisons** combine qualified
+Updated 2026-11-09. These **127 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -17,38 +17,27 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP decoding:** [fused final inverse/publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
-  saves **155.66µs/4.79% raw**,4.53% native-normalized, on complete resident VP8L.
-  Both confidence views separate. GC stays152,728B/op; no new owned capacity/cache.
-  Current resident/live/stream uppers1.034/
-  1.043/1.027 remain gaps.
-  Six unchanged lossless controls:2pass/4gaps. The contemporary palette
-  control regresses **19.25µs/3.46%**, with separated raw/normalized intervals;
-  retain that tradeoff, not a general decoder speedup claim.
-  Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
-  are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  [Frame-private quantizers](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md)
-  prepare six scalar dequantizers per segment once inside complete decoding,
-  using96B within the existing8KiB allowance. Live opaque saves45.36µs/0.92%raw;
-  raw confidence separates in both views, while0.86% normalized remains a point
-  gain with all-actual uncertainty. Resident alpha saves110.85µs/1.83%raw/
-  1.82%normalized with separated confidence. Contemporary originals resolve the
-  resident historical-clock contradiction; no favorable repeats. Current resident
-  5,961.70/native5,968.47µs,
-  upper1.003 is uncertain. Stream upper0.980
-  and validation upper0.811 pass/stop. Six current
-  costs:2pass/3gaps/1uncertain.
+- **WebP decoding:** [output-owned palette expansion](../benchmarks/WEBP-PALETTE-OUTPUT.md)
+  removes a full-frame intermediate and copy. Complete palette16 confirmation saves
+  **168.22µs/26.72% raw**, with separated filtered/all-actual raw/normalized confidence:
+  461.31/native590.92µs, upper0.789 passes. Total GC falls820,190→288,462B/op;
+  returned output remains independently charged until disposal, scratch retention0.
+  An original513×67 palette control fits a239,128B shared bound below two full
+  frames; this is neither the benchmark's measured peak nor a physical heap peak.
+  Nine shared-decoder costs refresh. Six lossless controls now3pass/3uncertain;
+  resident/live/stream uppers1.035/
+  1.088/1.021 are uncertain, without causal gain/regression/equivalence claims.
+  Three opaque VP8 controls reuse unchanged [frame-quantizer evidence](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md).
+  Current combined VP8 scope:2pass/3gaps/1uncertain;
+  resident alpha upper1.014 is uncertain; stream/validation pass.
   Live opaque remains4,881.47/native4,792.22µs,
-  upper1.028gap,229,344B/op. All allocation counts
-  are unchanged; no new heap/retention. Existing1,536B probability model and
-  independently retained531,468B frames remain. Physical/native peaks unmeasured;
-  logical fixed payload/coarse allowance5,108B fits8,192B. Syntax, every original
-  poll, cursor/pixels, admission and actual async lifetimes remain. Both OSes pass
-  5,955full/live, normal/scalar/disabled-ISA and SAME package/three examples.
-  [Model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md),
-  [earlier preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
-  [alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
-  retain their historical gains and raw evidence separately.
+  upper1.028gap,229,344B/op. Exact pixels, cancellation,
+  shared admission,6,058full/live perOS, normal/scalar and SAMEactualpackage/
+  threeexamples pass. Existing pools/governed bypass remain; physical/native peaks
+  unmeasured. Passing cases stop. [Final publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
+  retains preceding gains/adverse history; current palette evidence supersedes its
+  palette regression. The newly displayed palette comparison was already required
+  and measured:127selectedrows/283paths, without a new image or timing workload.
 - **WebP encoding:** [Huffman workspace](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
   reuses one operation-owned tree workspace/queue across alphabets and histogram
   groups. Complete screens save553,184B/photo,37,640B/diagram,668,512B/transparent
@@ -316,7 +305,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,847.99 | 5,996.63 | 0.975 / 0.980 | 238,960 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,868.76 | 5,999.20 | 0.978 / 0.995 | 238,960 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -357,8 +346,9 @@ settings do not establish matched quality.
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,825.68 | 18,080.22 | 0.931 / 0.941 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode (confirmed pass) † | 829.94 | 1,009.76 | 0.822 / 0.829 | 258,450 | — |
 | JPEG DC-only, caller CMYK decode † | 337.97 | 332.25 | 1.017 / 1.019 | 1,085,977 | — |
-| VP8L RGBA8, resident decode † | 3,093.70 | 3,008.39 | 1.028 / 1.034 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 3,090.59 | 3,027.80 | 1.021 / 1.027 | 152,824 | — |
+| VP8L RGBA8, resident decode (confidence open) † | 3,085.86 | 3,021.48 | 1.021 / 1.035 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode (confidence open) † | 3,290.70 | 3,268.51 | 1.007 / 1.021 | 152,824 | — |
+| VP8L palette16 RGBA8, resident decode (confirmed pass) † | 461.31 | 590.92 | 0.781 / 0.789 | 288,462 | — |
 | JPEG CMYK sparse-2D, resident decode † | 511.72 | 436.56 | 1.172 / 1.178 | 20,944 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 428.14 | 706.85 | 0.606 / 0.608 | 895,563 | — |
 | JPEG 4:1:1, resident decode † | 493.78 | 448.75 | 1.100 / 1.110 | 219,548 | — |
@@ -443,8 +433,8 @@ settings do not establish matched quality.
 | Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span † | 477.351 | 674.564 | 0.708 / 0.711 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
-| Validate VP8L+alpha, span | 2,309.164 | 3,044.518 | 0.758 / 0.765 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,409.048 | 5,448.587 | 0.809 / 0.811 | 14,064 | Confirmed pass |
+| Validate VP8L+alpha, span † | 2,265.372 | 3,067.735 | 0.738 / 0.750 | 297,070 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,418.355 | 5,461.091 | 0.809 / 0.822 | 14,064 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,759.145 | 3,611.996 | 0.764 / 0.765 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

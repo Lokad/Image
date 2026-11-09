@@ -1,5 +1,9 @@
 # Fused VP8L inverse transform and publication
 
+[Output-owned palettes](WEBP-PALETTE-OUTPUT.md) carry the current shared-method
+lossless/alpha costs. Prior gains and raw evidence below remain history; three
+opaque VP8 costs retain unchanged-path qualification.
+
 LPF476, 2026-11-07. Accepted scoped tradeoff; publication postponed.
 Current package qualification and three VP8 costs (`Native8`, `Vp8Stream`,
 `ValidateVp8Alpha`) are superseded by

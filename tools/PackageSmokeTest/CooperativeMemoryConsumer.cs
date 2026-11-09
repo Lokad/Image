@@ -2,6 +2,35 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyPaletteResult()
+    {
+        using var root = new TestMemoryBudget(1024 * 1024);
+        var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
+        foreach (var colors in new[] { 2, 4, 16, 17, 256 })
+        {
+            var packet = AuthoredWebp.Palette(colors, thenPredictor: true);
+            var expected = AuthoredWebp.ExpectedPalette(colors);
+            using var first = ImageCodec.Decode(packet, options);
+            ImageBuffer survivor;
+            using (var input = new MemoryStream(packet, writable: false))
+            {
+                survivor = await ImageCodec.DecodeAsync(input, options);
+                if (!input.CanRead) throw new Exception("Packaged palette closed borrowed input.");
+            }
+            using (survivor)
+            {
+                if (root.Bytes != 72 || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first))
+                    || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
+                    throw new Exception("Packaged palette samples or retained admission differ.");
+                first.GetRow8(0).Fill(0xA7); first.Dispose(); packet.AsSpan().Clear();
+                if (root.Bytes != 36 || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
+                    throw new Exception("Packaged palette result aliases another owner or input.");
+            }
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged palette leaked retained capacity.");
+        }
+        Console.WriteLine("Packaged final palettes preserve exact packed samples and independent sync/async admitted owners.");
+    }
+
     private static void VerifyBicubicSchedule(int workspaceBytes, bool vertical = false, int depth = 16,
         bool reduction = false, bool packedReduction = false)
     {
@@ -1064,6 +1093,7 @@ internal static class CooperativeMemoryConsumer
         VerifyRectangleFill();
         VerifyCompositingRows();
         await VerifyLosslessValidationStorage();
+        await VerifyPaletteResult();
         await VerifyDistortionInstructionStorage();
         await VerifyWebpCandidateWorkspace();
         await VerifyWebpAlphaCoefficientStorage();

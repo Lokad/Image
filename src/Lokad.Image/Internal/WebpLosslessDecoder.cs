@@ -177,7 +177,23 @@ internal ref struct WebpLosslessDecoder
             }
             else if (transform.Type == 3)
             {
-                var expanded = Allocate(transform.Width, height);
+                var publishPalette = index == 0 && output == PixelOutput.Rgba && BitConverter.IsLittleEndian;
+                Span<uint> expanded;
+                if (publishPalette)
+                {
+                    // The final palette has no later ARGB consumer. Establish the
+                    // returned owner before allocating, keeping the packed source
+                    // charged until expansion finishes. Convert only this retired
+                    // palette instead of copying/swapping a full-frame temporary.
+                    result = ImageBuffer.AllocateForOverwrite(transform.Width, height, 8, context);
+                    expanded = MemoryMarshal.Cast<byte, uint>(result.Pixels);
+                    for (var color = 0; color < transform.Data.Length; color++)
+                    {
+                        var pixel = transform.Data[color];
+                        transform.Data[color] = pixel & 0xFF00FF00 | (pixel >> 16 & 255) | (pixel & 255) << 16;
+                    }
+                }
+                else expanded = Allocate(transform.Width, height);
                 var perByte = 1 << transform.Bits; var indexBits = 8 >> transform.Bits;
                 var mask = (1 << indexBits) - 1;
                 for (var y = 0; y < height; y++)
@@ -191,6 +207,7 @@ internal ref struct WebpLosslessDecoder
                     }
                 }
                 context.Release(pixels.Length * 4L + 32); pixels = expanded; codedWidth = transform.Width;
+                rgbaPublished = publishPalette;
             }
             else if (transform.Type == 0 && Sse2.IsSupported) ApplyPredictor(transform, pixels, codedWidth);
             else Apply(transform, pixels, codedWidth);
