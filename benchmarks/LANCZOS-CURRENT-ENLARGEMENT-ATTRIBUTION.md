@@ -1,5 +1,8 @@
 # Current prepared Lanczos enlargement
 
+The subsequent [fused traversal round](LANCZOS-FUSED-VERTICAL-EXPERIMENT.md)
+restores both unselected implementations and retains cache-boundary coverage.
+
 LPH690 records one two-second capture of the frozen prepared RGBA16 enlargement
 on the qualified actual-package DLL. It reuses the worker, harness, selectors,
 inputs and exact output checks. All original gates and both quiet guards pass;

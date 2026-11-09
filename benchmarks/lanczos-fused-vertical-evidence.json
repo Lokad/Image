@@ -1,0 +1,194 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LFV691/LFC692",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "cases": {
+    "lfv691-RepeatedEnlarge16": {
+      "baseline": {
+        "managedUs": 4408.617868055556,
+        "nativeUs": 4228.93875,
+        "ratio": 1.0424879925384485,
+        "lower": 0.8453409572951674,
+        "upper": 1.2664016479217428,
+        "allocatedBytes": 4265302,
+        "retainedBytes": 333396,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 4680.633861111111,
+        "nativeUs": 4252.677861111111,
+        "ratio": 1.1006321226240698,
+        "lower": 0.9618896910067081,
+        "upper": 1.2502912101660133,
+        "allocatedBytes": 4265302,
+        "retainedBytes": 333396,
+        "librarySha256": "821780f03b8eb24e5d09a1de46d981100999b304d5356bd1073799d280f957b1"
+      }
+    },
+    "lfv691-Repeated16": {
+      "baseline": {
+        "managedUs": 596.9653973214286,
+        "nativeUs": 556.4206190476191,
+        "ratio": 1.0728671384306476,
+        "lower": 0.9856675126818234,
+        "upper": 1.1661509552118117,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 635.072715625,
+        "nativeUs": 530.6381992753624,
+        "ratio": 1.1968092694650574,
+        "lower": 0.8339960901384045,
+        "upper": 1.68548710765573,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "821780f03b8eb24e5d09a1de46d981100999b304d5356bd1073799d280f957b1"
+      }
+    },
+    "lfc692-RepeatedEnlarge16": {
+      "baseline": {
+        "managedUs": 4401.385635416667,
+        "nativeUs": 4199.595777777778,
+        "ratio": 1.0480498286779558,
+        "lower": 0.9156215363963712,
+        "upper": 1.201793849374079,
+        "allocatedBytes": 4265302,
+        "retainedBytes": 333396,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 4183.711385416666,
+        "nativeUs": 3908.9320833333336,
+        "ratio": 1.0702952356872406,
+        "lower": 0.3298659360289261,
+        "upper": 1.8760254063983504,
+        "allocatedBytes": 4265302,
+        "retainedBytes": 333396,
+        "librarySha256": "356f6cba9d2364e3e3019e7651dcaf54b2a93b190fcd5f81aa3068764233831d"
+      }
+    },
+    "lfc692-Repeated16": {
+      "baseline": {
+        "managedUs": 550.5648731884058,
+        "nativeUs": 517.0345125448029,
+        "ratio": 1.0648513006966773,
+        "lower": 0.7486853876930296,
+        "upper": 1.660609420256925,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79"
+      },
+      "candidate": {
+        "managedUs": 631.9869557291667,
+        "nativeUs": 551.5541742424243,
+        "ratio": 1.145829340512596,
+        "lower": 0.9710999670821686,
+        "upper": 1.3782640192467863,
+        "allocatedBytes": 139,
+        "retainedBytes": 148040,
+        "librarySha256": "356f6cba9d2364e3e3019e7651dcaf54b2a93b190fcd5f81aa3068764233831d"
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourcesRestored": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf"
+      },
+      "productionSha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+      "originalMainAndPublicBindingsRestored": true,
+      "retainedBehaviorTests": {
+        "normal": 6,
+        "scalar": 6,
+        "avx512off": 6
+      },
+      "internalTestAssemblySha256": "600f4c0a857fe793f51450e9ca548deff9769e3c484f56a7d1d9ef824f3f5c5a",
+      "additionalProductionBuilds": 0,
+      "embeddedTestBuilds": 1,
+      "reused": "UnchangedBPC6886036W/L full/live, normal/scalar/AVX512off and SAMEactualpackage8252c821/threeexamples. No repeated full suite/package proof for unchanged production.",
+      "packageSha256": "8252c82125475150be77d2847f695a83fe8315b8cbb942028770aa9733908979"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourcesRestored": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "31c1ce3a0694bd607a891a43990235cc25746210daf27c129c70409bae266b30",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6bf10ae1a24bc894e0daa3a0cf2df32ec269d09c41d77286d2feaae34144aebf"
+      },
+      "productionSha256": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815",
+      "originalMainAndPublicBindingsRestored": true,
+      "retainedBehaviorTests": {
+        "normal": 6,
+        "scalar": 6,
+        "avx512off": 6
+      },
+      "internalTestAssemblySha256": "4bc9ec50905592fae426f05f61d8f5c79bebb0354f70fa0aedfad2ca75060cfa",
+      "additionalProductionBuilds": 0,
+      "embeddedTestBuilds": 1,
+      "reused": "UnchangedBPC6886036W/L full/live, normal/scalar/AVX512off and SAMEactualpackage8252c821/threeexamples. No repeated full suite/package proof for unchanged production.",
+      "packageSha256": "8252c82125475150be77d2847f695a83fe8315b8cbb942028770aa9733908979"
+    }
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "LFC692 revised fused traversal",
+    "removedWork": "Fast execution clears one full sum row, then rereads and rewrites it once per nonzero vertical tap, before separate exact-certified publication. Fuse eligible ordered vertical sums in registers after all required horizontal rows are prepared.",
+    "endState": "One shared byte/word fast-row preparation/scheduling path and one vector sum traversal, preserving original per-lane ordered FMA. Store sums once for unchanged WriteRow/certificate/repair. Reuse existing rows, sums, row IDs and admitted products; no new owner/cache/session/pool capacity or numerical policy.",
+    "eligibility": "Window.Count<=16 and Window.Count<=workspace.RowIds.Length. Consecutive source rows then have distinct modulo slots, so preparing all cannot evict an earlier required row. Larger supports retain existing streaming accumulation; workspace has at most64slots. Skip identical zero coefficients before reading offsets.",
+    "ownership": "Use a fixed16int stack offset list (64B minor preparation) for eligible rows, reused per output row. Existing rowIDs reset on every execution. Keep output owner and plan executing-state through all synchronous users; preserve failure cleanup and borrowed root. No material owned allocation or retained storage added.",
+    "precision": "For every sample use identical row doubles, exact Q30 coefficient converted to double and ordered FMA from positive zero, skipping the same zero taps. Interleave independent columns only. Existing certified bounds, guard/rounding, WriteRow and exact Int128 repair remain. Native float never weakens managed pixels.",
+    "cancellation": "Keep preparation/tap/output checkpoints. Sum-loop checkpoints every64sample lanes bound each interval to at most16*8=128 AVX512 FMAs, no longer than old4096lane per-tap interval. No fuel/counter quota or refusal fallback.",
+    "workloads": "Start existing complete prepared word enlargement and word reduction shorts; no image/quality grid. Existing exact BigInteger/frozen sample, zero/tiny alpha, cancellation, ring boundary, refusal and surviving owner checks. Small byte behavior/generalization when useful. If accepted all8affected one-shot/prepared costs need current qualification, with setup/independent output included on declared sides.",
+    "risks": "Dynamic inner-tap array/span checks, row pointer reloads, loop branches and register pressure can offset saved stores. Earlier bicubic quartet is adverse evidence, not a ban. No projected speedup from sampled locations. Temporary shared-loop/fallback duplication must remain justified by long supports and portable execution.",
+    "continuation": "One coherent implementation first, exact focused checks and complete shorts. Useful lead gets independent confirmation; revise from concrete JIT/complete evidence or restore unchanged production. No fixed percentage, favorable resampling or automatic merge. Broad W/L/scalar/actualpackage only at acceptance.",
+    "paths": [
+      "src/Lokad.Image/Internal/LanczosResize.cs",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs",
+      "tests/Lokad.Image.Tests/LanczosFusedVerticalTests.cs"
+    ],
+    "newPaths": [
+      "tests/Lokad.Image.Tests/LanczosFusedVerticalTests.cs"
+    ],
+    "baseline": {
+      "windowsSha256": "755bc9109bbfc9998f07ba03568a82dd9c216c718d792d4534549719b0ea0e79",
+      "linuxSha256": "b49e0c87a68e64e5e2933ab7d6fd9b64c60d4191386c35910c6f952283672815"
+    },
+    "transitionFromLinuxSha256": "9625cef5ca723e3209307771cf5a3d01b3f4380730e6d12f2c46b075f6688ae7",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/LanczosResize.cs": "f64062458273a4053e53aef53bc084a0dd50e7eefa01814f44105975d8b75d2d",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs": "b18b9863ce5966f4c6c8e0aeabb22399f5df3fddc2fee9272f5ad8dd2b9bc625",
+      "tests/Lokad.Image.Tests/LanczosFusedVerticalTests.cs": "78b4201208ea20d5bb35683386c05fbfe6fc03b7611813709faf92bca5d43770"
+    },
+    "revision": "LFV691 complete short points regress6.17%enlargement/6.38%reduction. No confirmation or merge. Its inner loop repeatedly converts Q30 Int32 coefficients to double for each sample vector. Prepare those exact doubles once per output row, then broadcast existing doubles. This completes shared row preparation rather than replaying unchanged sampling. New128B minor stack preparation, no material heap/admitted/retained capacity. Preserve both adverse shorts and inspect complete outcomes.",
+    "stackBytes": 192
+  },
+  "decision": "Neither implementation selected. StageA points are slower on both controls. StageB enlargement raw point improves while reference-normalized point worsens; reduction points remain adverse. Threeactual confidence is broad. No useful complete lead justifies independent confirmation; no causal gain/regression/equivalence claim. Production/main/public bindings restored exactly, package unchanged. Keep six actual integer/owner cache-boundary cases; remove obsolete helper-only tests.",
+  "workflow": "One immutable main/embedded version perOS pervariant;251internal/729public normal/scalar eachOS. Eight complete short jobs total (two controls, original/candidate, two designs). No new harness/selector/native/fixture, no favorable repeat/confirmation/full/package proof. Only embedded tests rebuilt once perOS after exact production restoration to retain6normal/scalar/AVX512off behavior checks.",
+  "next": "A materially different source-row conversion reuse design may borrow FastSums only before any sum user, preserving exact UInt32-to-double products and per-lane FMA/certificates. This is a lead, not permission to blindly replay fused loops or merge. Current standalone LHF675 costs/remaining gaps remain unchanged; independent codec work remains eligible.",
+  "raw": {
+    "file": "lanczos-fused-vertical-experiment.tar.xz",
+    "sha256": "ea941aa22591f7aed86c9b33346cad32132b65bf909549724109c2e7624c4b16",
+    "bytes": 25988384,
+    "members": 192,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-certified-rows-qualified.tar.xz",
+        "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+      },
+      {
+        "file": "bilinear-packed-row-storage-qualified.tar.xz",
+        "sha256": "609a6c38bdca563b234cab251d7767023308b41212ee2e2eedbfab30569f19fc"
+      }
+    ]
+  }
+}
