@@ -107,6 +107,10 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
+  [Current default wider-support byte resize](../benchmarks/CACHED-WIDE-BYTE-CURRENT-PACKAGE.md)
+  confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
+  Its old allocation/scheduler epoch is superseded, without a causal historical
+  CPU claim. Same qualified immutable package; no new builds or qualification runs.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -357,10 +361,10 @@ settings do not establish matched quality.
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 552.17 | 417.53 | 1.322 / 1.337 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
-| Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 498.26 | 347.09 | 1.436 / 1.444 | 198,449 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |

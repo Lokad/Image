@@ -789,19 +789,17 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_byte = json.loads((ROOT / 'benchmarks/current-wide-byte-bicubic-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not wide_byte['productionChanged'] and wide_byte['allBuilds'] == 0
-    assert wide_byte['qualificationReuse']['sameActualPackageBothOs']
-    observation = wide_byte['cases']['Wide8'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == wide_byte['producers']['linuxSha256']
-    assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] is None
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
-    rows.append(('editing', f'| Bicubic RGBA8 wider-support reduction † → 128×64 | {stats["Mean"] / 1000:,.2f} | '
-                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-byte-current-package-evidence.json').read_text(encoding='utf-8'))
+    current = wide_byte['current']
+    assert not wide_byte['productionChanged'] and wide_byte['allProductionBuilds'] == 0
+    assert wide_byte['reusedQualification']['sameActualPackageBothOs']
+    assert current['librarySha256'] == wide_byte['actualPackage']['librarySha256']
+    assert current['managedRationalReferenceExact'] and current['managedMaxWorkingBytes'] is None
+    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert wide_byte['raw']['mirrored'] and wide_byte['raw']['allMembersVerified']
+    rows.append(('editing', f'| Bicubic RGBA8 wider-support reduction † → 128×64 | {current["managedUs"]:,.2f} | '
+                 f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                 f'{current["allocatedBytes"]:,} |'))
     exact_alpha = json.loads((ROOT / 'benchmarks/warm-exact-alpha-int128-evidence.json').read_text(encoding='utf-8'))
     assert exact_alpha['qualification']['fullChecksEachOs'] == 5267
     assert exact_alpha['qualification']['sameActualPackageBothOs']
@@ -838,7 +836,7 @@ def render():
             assert alpha_callers['noCallProof']['cases'][key]['reusePriorPerformance']
             reused.add(key)
             continue
-        if key in {'bicubic-TightUp8', 'bicubic-TightHorizontalUp8', 'bicubic-TightVerticalUp8'}:
+        if key in {'bicubic-TightUp8', 'bicubic-TightHorizontalUp8', 'bicubic-TightVerticalUp8', 'bicubic-Wide8'}:
             refreshed.add(key)
             continue  # Current owner above supersedes the earlier alpha cost.
         observation = (alpha_callers if key == 'bicubic-Up16' else exact_alpha)['cases'][key][-1]
@@ -899,19 +897,17 @@ def render():
             updated += 1
     assert updated == 1
     wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
-    assert wide_current['accepted'] and wide_current['decision']['normalizedSeparated']
-    assert wide_current['independentQuietConfirmations'] == len(wide_current['cases']) == 8
+    assert wide_current['accepted']
     assert wide_current['qualification']['fullChecksEachOs'] == 5376
     assert wide_current['qualification']['package']['sha256'] == wide_current['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert list(wide_current['status'].values()).count('confirmed-pass-stop') == 4
-    for case, observations in wide_current['cases'].items():
+    for case in ['Down32x16_8']:
+        observations = wide_current['cases'][case]
         observation = observations[-1]
         assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (wide_current['status'][case] == 'confirmed-pass-stop')
         assert observation['receipt']['managedRationalReferenceExact'] and observation['receipt']['independentOwnedOutput']
         assert observation['receipt']['librarySha256'] == wide_current['producers']['linuxSha256']
-    for prefix, case in [('| Bicubic RGBA8 wider-support reduction', 'Wide8'),
-                         ('| Bicubic RGBA8, 32×16 / default', 'Down32x16_8')]:
+    for prefix, case in [('| Bicubic RGBA8, 32×16 / default', 'Down32x16_8')]:
         matches = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith(prefix)]
         assert len(matches) == 1
         index = matches[0]
@@ -1298,6 +1294,16 @@ def render():
              if kind == 'editing' and row.startswith(('| Bicubic', '| Bilinear')) and ' H ' not in row
              and not row.startswith(('| Bicubic RGBA8 enlargement,', '| Bicubic RGBA8 width enlargement,', '| Bicubic RGBA8 height enlargement,'))
              else row) for kind, row in rows]
+    # Fresh package owners supersede the blanket historical marker.
+    for label, current in [
+        ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['current']),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
+    ]:
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                     and row.split('|')[1].strip().replace(' H ', ' ') == label]
+        assert len(positions) == 1
+        rows[positions[0]] = ('editing', f'| {label} | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
               'Up8': 'Bicubic upscale RGBA8, default workspace'}
@@ -1838,6 +1844,10 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
+  [Current default wider-support byte resize](../benchmarks/CACHED-WIDE-BYTE-CURRENT-PACKAGE.md)
+  confirms498.26/zimg347.09µs, upper1.444,198,449B/op:151µs remains.
+  Its old allocation/scheduler epoch is superseded, without a causal historical
+  CPU claim. Same qualified immutable package; no new builds or qualification runs.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain

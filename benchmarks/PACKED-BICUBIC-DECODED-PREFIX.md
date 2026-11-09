@@ -75,5 +75,5 @@ SHA256 4feb150eaa6d52e0ab481e00da9e1134d1465d812c1baa9f86168af83276567a.
 The [baseline](PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md) and preparation-attribution
 archive are pinned dependencies. Unchanged cached/wider/word/deep/axis paths and
 codecs/text/compositing reuse valid evidence; other eligible layouts receive no
-new CPU claim. Current default wider-support costs need confirmation after their
-later allocation/scheduler changes before further optimization.
+new CPU claim. The [current default wider-support refresh](CACHED-WIDE-BYTE-CURRENT-PACKAGE.md)
+confirms a separate151µs gap after its allocation/scheduler changes.

@@ -1,0 +1,123 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WCR653",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allProductionBuilds": 0,
+  "privateProbeBuilds": 0,
+  "newInputs": 0,
+  "newProfiles": 0,
+  "current": {
+    "managedUs": 498.26201201923084,
+    "nativeUs": 347.08864973958333,
+    "ratio": 1.4355468333322658,
+    "lower": 1.3562709854148776,
+    "upper": 1.443863537034669,
+    "allocatedBytes": 198449,
+    "status": "gap",
+    "librarySha256": "596a5be7699429e0a004356502af288ae3df372b1036193f14dc00c613b5df92",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+    "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": null,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "caseId": "Wide8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 128,
+    "outputHeight": 64,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "2db7ad498bf72dc794631877daafa98e92916eba0e22b1f92855028c1bc594ef",
+    "symbolsSha256": "0e4626d37487a0adbfa253c34e6db01ac7fc255a6fcce30a02598885c7b14341",
+    "bytes": 437161,
+    "librarySha256": "596a5be7699429e0a004356502af288ae3df372b1036193f14dc00c613b5df92",
+    "actualConsumerPassed": true,
+    "byteColumnStripsOwnershipPassed": true,
+    "packedByteDecodedPrefixPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "reusedQualification": {
+    "provider": "packed-bicubic-decoded-prefix-evidence.json",
+    "fullChecksEachOs": 5985,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "newTestOrPackageRuns": 0
+  },
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "04333a8f1d30cd3fe077ca388e73e1ef19052eddb57d781faaa1d2b0795ce4ff",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "85cf242bf9d2d250aeee674bf8e7c2bd16edc5a51495c6b460e2fd0b1579f247",
+    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
+  },
+  "storage": {
+    "totalAllocatedBytes": 198449,
+    "retainedResultBytes": 32768,
+    "estimatedWorkspaceReservationBytes": 198432,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "physicalAndNativePeaksMeasured": false,
+    "existingIdlePoolCapacityMeasured": false
+  },
+  "invalidation": {
+    "priorProvider": "wide-bicubic-independent-repair-evidence.json",
+    "priorDate": "2026-11-01",
+    "priorManagedUs": 493.82,
+    "priorNativeUs": 347.1,
+    "priorAllocatedBytes": 231241,
+    "changes": [
+      "d7fcbd41(2026-11-03):filtered output uses complete-overwrite storage; older allocation cannot qualify current output cost.",
+      "9776115e(2026-11-04):shared cached geometry/workspace/row scheduling changes complete preparation/execution; older whole-operation clocks are historical."
+    ]
+  },
+  "decision": "Current defaultWide8 confirmed151.17us gap498.26/zimg347.09us,lower1.356/upper1.444,198449Bop. Same actual immutable package596a/2db7ad49. One12actual confirmation, no favorable repeats, production/fixture/worker builds, profiles or qualification repetition. Older493.82/347.10us and231241B are retained history, not causal gain/regression evidence.",
+  "next": "Use one bounded current profile to distinguish preparation/owned storage from horizontal interpretation/filtering and exact repair before selecting a redesign. No new fixture/settings grid or routine package/suite repetition. Existing caller-owned Lanczos plans do not establish a need for a general bicubic cache/session.",
+  "raw": {
+    "file": "cached-wide-byte-current-package.tar.xz",
+    "sha256": "5b4b87ef967acc01b6cc22d50c1a0a61724aa399790bb6eba48b1cfa345b1eee",
+    "bytes": 6144932,
+    "members": 116,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-bicubic-decoded-prefix-qualified.tar.xz",
+        "sha256": "4feb150eaa6d52e0ab481e00da9e1134d1465d812c1baa9f86168af83276567a",
+        "bytes": 18061436,
+        "members": 407
+      }
+    ]
+  }
+}

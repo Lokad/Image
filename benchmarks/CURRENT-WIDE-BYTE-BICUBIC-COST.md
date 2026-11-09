@@ -1,5 +1,8 @@
 # Current wider-support byte bicubic cost
 
+This producer's cost is superseded by the
+[current actual-package refresh](CACHED-WIDE-BYTE-CURRENT-PACKAGE.md).
+
 These timings precede the [exact-alpha producer](WARM-EXACT-ALPHA-INT128.md), which supplies the latest costs for these paths. Original evidence is retained.
 
 The existing513×259 RGBA8→128×64 control confirms **1.521× / upper1.532**,
