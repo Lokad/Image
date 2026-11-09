@@ -13,12 +13,9 @@ Nonzero-mask discovery has 23, offering little justification for an additional
 per-block cache. JIT offsets identify locations; they are not phase times or
 projected speedups. Per-bit cancellation publication is already conditional.
 
-The next bounded model considers SIMD preparation of corrections already present
-in the bit cache, followed by the original per-bit poll, consume, overflow check
-and immediate coefficient commit. Scalar partial-state behavior must remain exact.
-This differs from earlier buffered-run/prefix eligibility trials. Their adverse
-evidence remains in [buffered correction preparation](JPEG-BUFFERED-CORRECTION-PREPARATION.md);
-no implementation is approved by these samples or by an instruction count.
+The subsequent [cached-correction experiment](JPEG-CACHED-CORRECTION-EXPERIMENT.md)
+found no useful lead; its adverse screen is retained. These samples do not approve
+an implementation or establish savings from an instruction count.
 
 The existing worker/fixtures/selectors are reused with zero builds or statistical
 measurements. All frozen native/pixel/source/ownership and idle-v2 gates pass;
@@ -33,3 +30,21 @@ method/block attribution and output checks. Mirrored/member-verified raw
 `0c7987ade22237920072542d1cb0d2d83ee785b6eefecf1762ede5fa7b0c9a15`,
 196,416B/72 members, preserves the trace, maps, JIT, guards, original/corrected
 receipt and scripts, with qualified module/worker dependencies linked.
+
+## Current call-boundary audit
+
+JDI676 verifies that the reader, Huffman, decoder and prepared-refinement sources
+still match this capture. Decode, caller-sample decode and pixel validation each
+construct a fresh private decoder. It never escapes or resumes after failure;
+exceptions expose no reader/coefficient state. Scan position publishes after
+successful completion. The scan's failure cleanup releases its stack charge;
+both top-level cleanup paths return private coefficient storage, and ordinary
+decode also disposes unpublished output. Caller-sample writes follow scan completion.
+
+This proves the private-failure boundary, without changing existing internal
+partial-state tests. Completed reader state, public failure semantics, live-token
+checkpoints and cleanup remain required. The hot buffered reader already uses
+locals without enclosing exception handling; failure publication is cold.
+Removing that publication alone supplies no credible substantial saving, so this
+audit launches no new JPEG build, profile or timing trial. Earlier scan/correction
+trials remain leads for materially revised designs, not family prohibitions.

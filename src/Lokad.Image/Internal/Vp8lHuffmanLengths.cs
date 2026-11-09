@@ -19,23 +19,24 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
     // RFC 9649 section 5.2 defines the canonical length representation. The
     // independent encoder policy smooths short population runs, then builds a
     // deterministic tree. Raising the positive-weight floor bounds its depth.
-    internal static Vp8lHuffmanLengths Build(ReadOnlySpan<int> populations, OperationContext context, int maximum = 15)
+    internal static Vp8lHuffmanLengths Build(ReadOnlySpan<int> populations, OperationContext context, int maximum = 15,
+        Vp8lHuffmanWorkspace? workspace = null)
     {
         if (populations.Length > 1304) throw new ArgumentOutOfRangeException(nameof(populations));
         if (maximum is < 1 or > 15) throw new ArgumentOutOfRangeException(nameof(maximum));
+        workspace?.Validate(populations.Length, context);
         var result = new Vp8lHuffmanLengths(populations.Length, context);
-        long reserved = 0;
         try
         {
             var count = populations.Length;
-            // Five int arrays, one bool array, and a presized BCL priority queue
-            // (conservatively 32 bytes/entry), including object/header allowance.
-            var scratch = count * 53L + 512;
-            context.Reserve(scratch); reserved = scratch; context.Cancellation.ThrowIfCancellationRequested();
-            var weights = populations.ToArray(); var protectedRun = new bool[count];
-            var first = new int[count]; var second = new int[count];
-            var nodes = new int[count]; var depths = new int[count];
-            var queue = new PriorityQueue<int, (long Weight, int Kind, int Rank)>(count);
+            using var owned = workspace is null ? new Vp8lHuffmanWorkspace(count, context) : null;
+            workspace ??= owned!;
+            context.Cancellation.ThrowIfCancellationRequested();
+            var weights = workspace.Region(0, count); populations.CopyTo(weights);
+            var protectedRun = workspace.ProtectedRun(count); protectedRun.Clear();
+            var first = workspace.Region(1, count); var second = workspace.Region(2, count);
+            var nodes = workspace.Region(3, count); var depths = workspace.Region(4, count);
+            var queue = workspace.Queue;
             foreach (var weight in weights)
                 if (weight < 0) throw new ArgumentOutOfRangeException(nameof(populations));
             Smooth(weights, protectedRun, context);
@@ -78,7 +79,6 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
             }
         }
         catch { result.Dispose(); throw; }
-        finally { if (reserved != 0) context.Release(reserved); }
     }
 
     private static void Smooth(Span<int> weights, Span<bool> protectedRun, OperationContext context)

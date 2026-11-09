@@ -141,3 +141,9 @@ member-verified raw `webp-current-lifetime-audit.tar.xz` is 82,424 B / 29 member
 SHA256 `6c39b732294b0e04d38605f0ae5273b2c4df86cfee386fd51c08ec9583ea6377`.
 Unchanged full Windows/Linux and actual-package qualification is reused. No
 displayed benchmark cost or renderer dependency is added.
+
+
+The subsequent [Huffman workspace stage](WEBP-HUFFMAN-WORKSPACE.md) completes
+operation-owned alphabet/group reuse without changing the queue or tree policy.
+Its current allocation, peak, uncertainty and actual-package evidence supersede
+the earlier storage lead; no cross-operation pool or extra session is introduced.

@@ -1344,7 +1344,7 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-clustering-storage-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-huffman-workspace-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted']
     qualification = webp_owned['qualification']
     assert qualification['fullChecksEachOs'] == qualification['windows']['total'] == qualification['linux']['total']
@@ -1787,16 +1787,18 @@ Current scope and remaining work:
   [earlier preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
   [alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
   retain their historical gains and raw evidence separately.
-- **WebP encoding:** [clustering storage handoff](../benchmarks/WEBP-CLUSTERING-STORAGE.md)
-  saves470,360B/encode on photograph/diagram,52,720B on transparent alpha and3,672B
-  on the existing authored bars. Typed execution views reuse the still-charged
-  matching index after its final row reader; independent selected state remains.
-  Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
-  Eight affected comparisons refresh on the actual-package DLL:6pass/2uncertain.
-  Photograph nowpasses upper0.984; opaque/alpha remain uncertain. No causal
-  CPU-gain or physical-peak claim. [Earlier matching/population reuse](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
-  retains history. Normal/scalar and6,015full/live eachOS plus SAMEactualpackage/
-  threeexamples pass; no harness/native rebuild or timed-actual repeat.
+- **WebP encoding:** [Huffman workspace](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
+  reuses one operation-owned tree workspace/queue across alphabets and histogram
+  groups. Complete screens save553,184B/photo,37,640B/diagram,668,512B/transparent
+  alpha and112,632B/authored bars. Selected codes remain independently owned.
+  Four admitted peaks remain3,470,059/3,251,328/3,656,309/312,716B; retained scratch0.
+  All eight affected costs refresh on the actual-package DLL:4pass/4uncertain.
+  Photograph, opaque and both alpha cases remain uncertain; prior photo/alpha16
+  passes are superseded. No causal CPU-gain/regression/equivalence or physical-peak
+  claim; adverse short points and later bracket variation remain retained.
+  Normal/scalar and6,026full/live eachOS plus SAMEactualpackage/threeexamples pass.
+  No worker/native rebuild or completed actual is repeated. [Earlier clustering](../benchmarks/WEBP-CLUSTERING-STORAGE.md)
+  and [matching reuse](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md) retain history.
   [Rounded-border prediction](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   saves **{vp8_current['comparison']['savedUs']:.2f}µs/{100*vp8_current['comparison']['rawReduction']:.2f}% raw**,
   {100*vp8_current['comparison']['normalizedPointReduction']:.2f}% reference-normalized, on complete effort2.

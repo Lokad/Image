@@ -28,9 +28,11 @@ internal sealed class Vp8lImageCode : IDisposable
         var reservation = count * 1024L + 64; context.Reserve(reservation);
         try { context.Cancellation.ThrowIfCancellationRequested(); groups = new Vp8lHuffmanGroup?[count]; groupReservation = reservation; }
         catch { context.Release(reservation); throw; }
+        using var workspace = new Vp8lHuffmanWorkspace(layout.GreenSize, context);
         for (var i = 0; i < count; i++)
         {
-            groups[i] = Vp8lHuffmanGroup.Build(counts.Slice(i * layout.Total, layout.Total), layout, context, out var dataBits);
+            groups[i] = Vp8lHuffmanGroup.Build(counts.Slice(i * layout.Total, layout.Total), layout, context,
+                out var dataBits, workspace);
             bodyBits += dataBits;
         }
     }

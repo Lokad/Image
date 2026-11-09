@@ -12,9 +12,10 @@ internal sealed class Vp8lHuffmanCode : IDisposable
     private Vp8lHuffmanCode(OperationContext context, Vp8lHuffmanLengths lengths, ushort[] words, bool single)
     { this.context = context; this.lengths = lengths; this.words = words; this.single = single; }
 
-    internal static Vp8lHuffmanCode Build(ReadOnlySpan<int> populations, OperationContext context, out long dataBits, int maximum = 15)
+    internal static Vp8lHuffmanCode Build(ReadOnlySpan<int> populations, OperationContext context, out long dataBits,
+        int maximum = 15, Vp8lHuffmanWorkspace? workspace = null)
     {
-        var lengths = Vp8lHuffmanLengths.Build(populations, context, maximum); long reserved = 0;
+        var lengths = Vp8lHuffmanLengths.Build(populations, context, maximum, workspace); long reserved = 0;
         try
         {
             context.Reserve(populations.Length * 2L); reserved = populations.Length * 2L; context.Cancellation.ThrowIfCancellationRequested();

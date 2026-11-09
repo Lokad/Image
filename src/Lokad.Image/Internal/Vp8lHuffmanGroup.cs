@@ -9,17 +9,20 @@ internal sealed class Vp8lHuffmanGroup : IDisposable
     private bool disposed;
     private Vp8lHuffmanGroup(OperationContext context) => this.context = context;
 
-    internal static Vp8lHuffmanGroup Build(ReadOnlySpan<int> counts, Vp8lHistogramLayout layout, OperationContext context, out long dataBits)
+    internal static Vp8lHuffmanGroup Build(ReadOnlySpan<int> counts, Vp8lHistogramLayout layout, OperationContext context,
+        out long dataBits, Vp8lHuffmanWorkspace? workspace = null)
     {
         if (counts.Length != layout.Total) throw new ArgumentException("Expected one complete histogram group.", nameof(counts));
         var result = new Vp8lHuffmanGroup(context);
         try
         {
-            result.codes[0] = Vp8lHuffmanCode.Build(counts[..layout.GreenSize], context, out var green);
-            result.codes[1] = Vp8lHuffmanCode.Build(counts.Slice(layout.Red, 256), context, out var red);
-            result.codes[2] = Vp8lHuffmanCode.Build(counts.Slice(layout.Blue, 256), context, out var blue);
-            result.codes[3] = Vp8lHuffmanCode.Build(counts.Slice(layout.Alpha, 256), context, out var alpha);
-            result.codes[4] = Vp8lHuffmanCode.Build(counts.Slice(layout.Distance, 40), context, out var distance);
+            using var owned = workspace is null ? new Vp8lHuffmanWorkspace(layout.GreenSize, context) : null;
+            workspace ??= owned!;
+            result.codes[0] = Vp8lHuffmanCode.Build(counts[..layout.GreenSize], context, out var green, workspace: workspace);
+            result.codes[1] = Vp8lHuffmanCode.Build(counts.Slice(layout.Red, 256), context, out var red, workspace: workspace);
+            result.codes[2] = Vp8lHuffmanCode.Build(counts.Slice(layout.Blue, 256), context, out var blue, workspace: workspace);
+            result.codes[3] = Vp8lHuffmanCode.Build(counts.Slice(layout.Alpha, 256), context, out var alpha, workspace: workspace);
+            result.codes[4] = Vp8lHuffmanCode.Build(counts.Slice(layout.Distance, 40), context, out var distance, workspace: workspace);
             // RFC 9649 sections 3.6.2.2 and 3.7.2: canonical symbol bits plus
             // the fixed extras of length/distance prefixes. Populations die
             // after preparation; no second length scan or retained code field.

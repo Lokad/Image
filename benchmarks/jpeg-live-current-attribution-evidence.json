@@ -540,5 +540,28 @@
         "members": 290
       }
     ]
+  },
+  "currentLifecycleAudit": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newProfiles": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "d5dfa36f080c27428001fc19b3be2015299619886ee3e4e8883fa56e14e4bedf",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "9aa1578ba7ad44874b3428bb1400bb723f95ef83c14abf1d2b0378965fa23b48",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+      "src/Lokad.Image/ImageCodec.cs": "7714f76f418aeb54ef785bfe84f068a911b6037bd4ae945414ee0bbd3f60f6f6",
+      "src/Lokad.Image/ImageCodec.JpegSamples.cs": "c9f3072575d851d2309e47d68bc8b6a2aae68cd1e588383642b4e0bf52ca5770",
+      "src/Lokad.Image/ImageCodec.Validation.cs": "00f59ffe3bd39a5fde894a46ca961e1e6090022fb6d534f1d8751feb0c27a332",
+      "src/Lokad.Image/Internal/JpegDecoder.Samples.cs": "9c58e5d83776212d3687778ee4ede7e4e48a6dfbcd1f2b4d80d073fec49c594b",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+    },
+    "provider": "jpeg-live-current-attribution-evidence.json",
+    "next": "No JPEG candidate or fresh capture: hot lookahead already local and EH-free; removing cold failure publication alone is not an architectural saving. Move to repeated WebP Huffman scratch.",
+    "conclusion": "Decode, DecodeSamples and ValidatePixels each construct a fresh operation-private ref decoder, never return/resume it, and expose no reader/coefficient state in exceptions. ReadPreparedRefinementScan only releases its stack charge on failure. Both top-level decoder finally blocks release private coefficients; the image path also disposes unpublished output. Outer scan position updates only after success. Caller sample writes occur after scan completion. Internal failed-prefix oracles exceed this public boundary but remain unchanged; completed-state, real cancellation checkpoints, failure kinds and owner cleanup remain required.",
+    "productionChange": false,
+    "newMeasurements": 0,
+    "qualificationRepeated": false
   }
 }

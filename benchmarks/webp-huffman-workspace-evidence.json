@@ -1,0 +1,608 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WHS677",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+    "linuxSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+    "timedArtifactSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "4f5bef92277ae92c5f9780a5de080806e0c90eaa8dc7354a01e6f556a61ec902",
+      "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": "dbd00383c2ed53e92b1166a94f2dea03ed6819880678cd329be291a7744bed96",
+      "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "4ba260aba23a38c16f2949cf9cfff44697412b24be55521973fa0a801bddad2b",
+      "src/Lokad.Image/Internal/Vp8lImageCode.cs": "194dbc517b09b40428060e2dfc6dd52f51d2d3c1324dbe067e4b4e58b00be7eb",
+      "src/Lokad.Image/Internal/Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4",
+      "tests/Lokad.Image.Tests/Vp8lHuffmanWorkspaceTests.cs": "c62dadda0e466404fc11c5485e1a4950dcf4ce1f891ebab3faa154ed07141b22"
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "WHS677",
+    "treeConstructionAndSmoothingVerbatim": true,
+    "queueAndTotalOrderUnchanged": true,
+    "independentlyOwnedCanonicalLengthsAndWords": true,
+    "workspaceRetainsNoSelectedCode": true,
+    "initializationProof": "Weights copied for every alphabet; protected-run flags cleared for every used prefix. First/second nodes written for every created parent, nodes/depth stack written before read, queue cleared on each depth-floor pass. Empty/single/failure paths do not poison a subsequent use. Capacity and identical context validated before borrowed use.",
+    "admission": "One coarse 53*maximumAlphabet+512 workspace charge before packed int/bool arrays and presized BCL queue allocation. Full capacity remains charged across smaller alphabets and all histogram groups, then is released in using on success/failure. Selected byte lengths and ushort words each retain their independent existing charges. Standalone builders retain original length/scratch/word admission ordering.",
+    "changedPaths": {
+      "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "4f5bef92277ae92c5f9780a5de080806e0c90eaa8dc7354a01e6f556a61ec902",
+      "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": "dbd00383c2ed53e92b1166a94f2dea03ed6819880678cd329be291a7744bed96",
+      "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "4ba260aba23a38c16f2949cf9cfff44697412b24be55521973fa0a801bddad2b",
+      "src/Lokad.Image/Internal/Vp8lImageCode.cs": "194dbc517b09b40428060e2dfc6dd52f51d2d3c1324dbe067e4b4e58b00be7eb",
+      "src/Lokad.Image/Internal/Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4",
+      "tests/Lokad.Image.Tests/Vp8lHuffmanWorkspaceTests.cs": "c62dadda0e466404fc11c5485e1a4950dcf4ce1f891ebab3faa154ed07141b22"
+    }
+  },
+  "cases": {
+    "ordinary": {
+      "managedUs": 107509.18059090909,
+      "nativeUs": 126289.1105,
+      "ratio": 0.8512941469400016,
+      "lower": 0.7832215777204222,
+      "upper": 0.9103803880202043,
+      "allocatedBytes": 5948664,
+      "status": "pass",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 11,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "One resident original 513x259 RGBA8 raster to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration.",
+      "receipt": "whs677-current-ordinary-confirm-receipt.json"
+    },
+    "opaque": {
+      "managedUs": 74977.26566666667,
+      "nativeUs": 75349.64866666668,
+      "ratio": 0.9950579331610774,
+      "lower": 0.9717979285708114,
+      "upper": 1.0131216520806334,
+      "allocatedBytes": 4823168,
+      "status": "uncertain",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "nativePacketSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "managedPacketBytes": 121896,
+      "nativePacketBytes": 121896,
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "boundary": "One resident original 513x259 RGBA8 raster with RGB unchanged and alpha255 to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration.",
+      "receipt": "whs677-current-opaque-confirm-receipt.json"
+    },
+    "photograph": {
+      "managedUs": 85959.94802604167,
+      "nativeUs": 82521.574,
+      "ratio": 1.0416663650409972,
+      "lower": 0.9237832666984702,
+      "upper": 1.080158195609563,
+      "allocatedBytes": 5358980,
+      "status": "uncertain",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "nativePacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "managedPacketBytes": 160032,
+      "nativePacketBytes": 160032,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "receipt": "whs677-current-photograph-confirm-receipt.json"
+    },
+    "diagram": {
+      "managedUs": 7441.586497159091,
+      "nativeUs": 9575.222177083335,
+      "ratio": 0.7771711569230491,
+      "lower": 0.7196101546883693,
+      "upper": 0.7907765599486105,
+      "allocatedBytes": 3721041,
+      "status": "pass",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 11,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "nativePacketSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "managedPacketBytes": 7234,
+      "nativePacketBytes": 7234,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "receipt": "whs677-current-diagram-confirm-receipt.json"
+    },
+    "rgba16": {
+      "managedUs": 114600.56016666668,
+      "nativeUs": 131281.45191666667,
+      "ratio": 0.8729379397739407,
+      "lower": 0.857088931452759,
+      "upper": 0.8874035140065955,
+      "allocatedBytes": 5948664,
+      "status": "pass",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "One resident original 513x259 RGBA16 raster to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration.",
+      "receipt": "whs677-current-rgba16-confirm-receipt.json"
+    },
+    "async": {
+      "managedUs": 112507.39095833333,
+      "nativeUs": 131039.52616666668,
+      "ratio": 0.8585759903865748,
+      "lower": 0.8422062953754533,
+      "upper": 0.8690558537227061,
+      "allocatedBytes": 5949048,
+      "status": "pass",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Same original borrowed resident RGBA8 to fresh independently owned nonseekable caller output. Managed EncodeWebpAsync, admission, complete exact VP8L encode through segmented staging, actual WriteAsync copies/growth, awaited completion and staging/output release are timed. Native libwebp exact=1 (FFmpeg encoder backend), lossless1/method4/quality75/thread0; full-frame RGBA-to-BGRA repack, fresh import allocation, complete encode into fresh WebPMemoryWriter staging, immediate append callbacks into fresh growing caller output, staging release before output ownership and output release are timed. Native delivers bounded64KiB chunks; its public backend needs no AVIO adapter or flush. Caller output survives staging/source/peer release. Both callbacks complete immediately, no forced scheduling/real I/O/seek/length/output view/final snapshot copy. Exact all RGBA including hidden RGB, original packets and compressed sizes checked. Prepared source/context/wrappers/BGRA workspace and released private storage may be reused; pixels/encoded content never cached. Startup/I/O/IPC/preparation/hashing/validation excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC. No image/settings grid.",
+      "receipt": "whs677-current-async-confirm-receipt.json"
+    },
+    "alpha": {
+      "managedUs": 54544.67575,
+      "nativeUs": 53351.22508333334,
+      "ratio": 1.022369695631216,
+      "lower": 0.8984920071205649,
+      "upper": 1.0646132047984573,
+      "allocatedBytes": 6242608,
+      "status": "uncertain",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Resident original RGBA8 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "receipt": "whs677-current-alpha-confirm-receipt.json"
+    },
+    "alpha16": {
+      "managedUs": 57605.21191666667,
+      "nativeUs": 58080.659,
+      "ratio": 0.9918140205101093,
+      "lower": 0.973900883228517,
+      "upper": 1.001581828917858,
+      "allocatedBytes": 6241792,
+      "status": "uncertain",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "receipt": "whs677-current-alpha16-confirm-receipt.json"
+    }
+  },
+  "statusCounts": {
+    "pass": 4,
+    "gap": 0,
+    "uncertain": 4
+  },
+  "storage": {
+    "directContemporaryScreen": {
+      "photograph": {
+        "baselineAllocatedBytes": 5911552.0,
+        "candidateAllocatedBytes": 5358368.0,
+        "baselineUs": 81402.70866666667,
+        "candidateUs": 86916.75766666667,
+        "baselineAdmittedPeak": 3470059,
+        "candidateAdmittedPeak": 3470059,
+        "retainedScratch": 0,
+        "packetBytes": 160032,
+        "completePacketExact": true
+      },
+      "diagram": {
+        "baselineAllocatedBytes": 3757712.0,
+        "candidateAllocatedBytes": 3720072.0,
+        "baselineUs": 7215.983976190477,
+        "candidateUs": 7672.681571428571,
+        "baselineAdmittedPeak": 3251328,
+        "candidateAdmittedPeak": 3251328,
+        "retainedScratch": 0,
+        "packetBytes": 7234,
+        "completePacketExact": true
+      },
+      "alpha": {
+        "baselineAllocatedBytes": 6910304.0,
+        "candidateAllocatedBytes": 6241792.0,
+        "baselineUs": 53519.2045,
+        "candidateUs": 57480.560333333335,
+        "baselineAdmittedPeak": 3656309,
+        "candidateAdmittedPeak": 3656309,
+        "retainedScratch": 0,
+        "packetBytes": 98590,
+        "completePacketExact": true
+      },
+      "authored-bars": {
+        "baselineAllocatedBytes": 891664.0,
+        "candidateAllocatedBytes": 779032.0,
+        "baselineUs": 764.715890625,
+        "candidateUs": 830.9987799352751,
+        "baselineAdmittedPeak": 312716,
+        "candidateAdmittedPeak": 312716,
+        "retainedScratch": 0,
+        "packetBytes": 660,
+        "completePacketExact": true
+      }
+    },
+    "admittedPeaksUnchanged": true,
+    "crossOperationRetainedBytes": 0,
+    "operationWorkspaceAdmissionFormula": "53*maximumAlphabet+512",
+    "physicalNativePeaksMeasured": false,
+    "note": "DirectGC and BDN aggregate counters are separately reported. One explicitly admitted operation-owned workspace remains charged across alphabets/groups; codes/maps/tokens remain independent. Longer workspace lifetime could affect other admitted peaks; the four measured peaks are unchanged. No physical-peak claim. Admission volume, totalGC, admitted highwater and physicalpeak are distinct."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6026,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "full": [
+        2761,
+        2317,
+        948
+      ],
+      "total": 6026,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 426,
+        "internal-scalar": 426,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "affectedWebpScalarEachOs": 665,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "5d4125be487fc7ea0e1f5e70e1fa3cf495c1a1c3f7f5368ca197e20cb12cb1ff",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+      "full": [
+        2761,
+        2317,
+        948
+      ],
+      "total": 6026,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 426,
+        "internal-scalar": 426,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "affectedWebpScalarEachOs": 665,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "065607a473f066c7149d92690eacd93c94162a112357b6546e62e29d30d251c7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "ca106453a53532b852aee4398bd421cf7a37b0fddad68ebd2f244b057d73042f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "70a0a631065c4338eff75141b1d631cba40647215f4f09226d13e028ecc7d28a",
+      "symbolsSha256": "4d18a25fc821a88837a909170dfb8abd6f3664bcd3128e356afa5ec6f75bbc43",
+      "bytes": 437564,
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "sharedByteWordColumnDriverPassed": true,
+      "sharedWideByteWordColumnDriverPassed": true,
+      "packedByteDecodedPrefixPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "70a0a631065c4338eff75141b1d631cba40647215f4f09226d13e028ecc7d28a",
+      "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+      "actualConsumerPassed": true,
+      "byteColumnStripsOwnershipPassed": true,
+      "sharedByteWordColumnDriverPassed": true,
+      "sharedWideByteWordColumnDriverPassed": true,
+      "packedByteDecodedPrefixPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOS": true,
+    "affectedIsa": "Normal/scalar426internal+239public eachOS. SIMD helpers/dispatch/arithmetic unchanged; existing affected-ISA evidence reused."
+  },
+  "decision": {
+    "accepted": true,
+    "reason": "Verified operation-owned Huffman reuse saves553184B/photo,37640B/diagram,668512B/alpha,112632B/authoredbar, with exact packets and independent code ownership. Same queue/tree policy and no cross-operation retention/pool/session. CPU effect remains inconclusive; no favorable resampling or rejected-packet/quality tradeoff.",
+    "causalCpuGainClaim": false,
+    "standaloneScope": "Eight existing affected controls refreshed on the intended actual-package DLL;4pass/4uncertain. Photo/opaque/alpha8/alpha16 remain uncertain, not demonstrated gaps. Raw short-screen regression points and subsequent native-bracket variation remain retained; no causal gain, regression or equivalence claim. No wholelibrary/allpath parity claim.",
+    "contemporaryPhotographShorts": {
+      "baseline": {
+        "managedUs": 81155.1238125,
+        "nativeUs": 83462.502,
+        "ratio": 0.972354313227993,
+        "lower": 0.7412746786121065,
+        "upper": 1.2355300573486203
+      },
+      "current": {
+        "managedUs": 85610.65597916667,
+        "nativeUs": 88171.09966666668,
+        "ratio": 0.970960510902327,
+        "lower": 0.8619258610794512,
+        "upper": 1.098457231269102
+      }
+    }
+  },
+  "workflow": {
+    "producedMainEmbeddedEachOS": 1,
+    "failedCompilesBeforeProducedArtifact": 0,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "contemporaryScreens": 4,
+    "independentActualsPerAffectedControl": 12,
+    "favorableRepeats": 0,
+    "setupRecovery": "Async managed admission/sink/cancellation/ownership proof refreshed proactively before timing, retaining unchanged byte-exact native proof. One 2second capture completed; postprocessing assumed an absent validation key, then a recovery variable was absent. Both errors retained; existing trace/guards recovered without another capture or timed actual. Refresh paused at a workload boundary for attribution, with all completed cases reused. Linux package preflight found the preceding Lanczos certificate document stale in the reference workspace; current tracked bytes were synchronized and the SAME package consumer ran, without repack/main build or full-suite repeat."
+  },
+  "raw": {
+    "file": "webp-huffman-workspace-qualified.tar.xz",
+    "sha256": "83757ae5ab3160e288d61f6fc70168a643ec8f7541152275526f3edc10fc0fc1",
+    "bytes": 13625672,
+    "members": 305,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-certified-rows-qualified.tar.xz",
+        "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+      },
+      {
+        "file": "webp-clustering-storage-qualified.tar.xz",
+        "sha256": "1d3b2c5fddf29df61300395b468daa1de13551384c5763070128eb79f452b6eb"
+      },
+      {
+        "file": "webp-current-lifetime-audit.tar.xz",
+        "sha256": "6c39b732294b0e04d38605f0ae5273b2c4df86cfee386fd51c08ec9583ea6377"
+      }
+    ]
+  },
+  "next": "Stop passing controls. Resolve remaining CPU uncertainty before assuming an optimization gap; no favorable repeat. Use existing attribution for demonstrated JPEG/WebP-read/resize gaps and materially revised architectural designs. No global block, blanket family ban or publication.",
+  "attribution": {
+    "totalLocations": 1981,
+    "huffmanRelatedLocations": 48,
+    "methods": [
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceColorTransform::BuildHistogram(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        204
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::PreparedPredictionEntropy(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>,int64)[Optimized]",
+        202
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::LargeSLog(int32)[Optimized]",
+        152
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lPredictorHistogram::AccumulateInterior(valuetype [System.Runtime]System.Span`1<int32>,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        137
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSumColor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        117
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        108
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::FillCore(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lMatchIndex,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        100
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lColorCost::Evaluate(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>,int64,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
+        75
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::ResidualBias(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>)[Optimized]",
+        74
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Replay(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32&)[Optimized]",
+        61
+      ],
+      [
+        "instance int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceColorTransform+Search::Score(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,uint32,uint32,bool,int32,int32,int32)[Optimized]",
+        57
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lColorCost::Prepare(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.Span`1<int64>)[Optimized]",
+        53
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        38
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::FillAllFromHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        34
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.WebpBitWriter::Write(int32,int32)[Optimized]",
+        32
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lHistogramLayout::Fill(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,bool,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        31
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Read(int32,int32,bool)[Optimized]",
+        27
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceColorTransform+Search::SelectAndApply(valuetype [System.Runtime]System.Span`1<uint32>,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>)[Optimized]",
+        25
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferencePredictor+Analysis::Visit(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32)[Optimized]",
+        24
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz+TraceState::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int64)[Optimized]",
+        17
+      ],
+      [
+        "valuetype Lokad.Image.Internal.Vp8lEncodingAnalysis [Lokad.Image] Lokad.Image.Internal.Vp8lEncodingAnalysis::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        17
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lHuffmanCode::Write(class Lokad.Image.Internal.WebpBitWriter,int32)[Optimized]",
+        16
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::SparsePopulation(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        13
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lHuffmanGroup::WriteToken(class Lokad.Image.Internal.WebpBitWriter,valuetype Lokad.Image.Internal.Vp8lToken,int32)[Optimized]",
+        13
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceClustering+State::Evaluate(int32,int32,bool,int64,valuetype Lokad.Image.Internal.Vp8lReferenceClustering/Pair&)[Optimized]",
+        13
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::PreparePrediction(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        13
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lImageCode::Write(class Lokad.Image.Internal.WebpBitWriter)[Optimized]",
+        13
+      ],
+      [
+        "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Repeats(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        11
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lPredictorHistogram::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        10
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8lSymbols::Plane(int32,int32)[Optimized]",
+        10
+      ]
+    ],
+    "profiledElapsedDiscarded": true,
+    "allBuilds": 0,
+    "note": "Locations are not phase times or projected savings. Hot paths are predominantly unchanged prediction/entropy/color work; this capture does not establish a causal allocation/CPU relationship or justify a further tree-kernel rewrite."
+  }
+}
