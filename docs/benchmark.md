@@ -87,9 +87,11 @@ Current scope and remaining work:
   repeated range search with the exact integer-logarithm formula. All15 current
   one-shot encodes refresh: **13 pass/stop, 0 gaps,
   2 uncertain**. WordSmallest now passes. ByteFastest
-  upper1.017 and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
+  upper1.028 and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
   WordFastest saves180.09µs/1.00% raw with separated filtered/allactual intervals;
   normalized intervals overlap. Byte's84.29µs point gain has allactual uncertainty.
+  A [current-package Fastest confirmation](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md)
+  remains uncertain; its updated cost is displayed. No unchanged favorable repeat.
   No robust normalized or blanket gain claim. Exact packets,384KiB admission,
   retained0scratch and primaryGC820916/2437660Bop remain. Earlier
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
@@ -325,7 +327,7 @@ settings do not establish matched quality.
 | VP8L opaque RGBA8 / libwebp exact=1 † | 74,977.27 | 75,349.65 | 0.995 / 1.013 | 4,823,168 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 4,343.15 | 4,342.02 | 1.000 / 1.017 | 820,916 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 4,757.43 | 4,717.98 | 1.008 / 1.028 | 820,916 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
 | PNG grayscale8, one-shot Optimal6 / native6 † | 1,993.15 | 1,968.89 | 1.012 / 1.047 | 551,364 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,370.01 | 9,793.98 | 0.957 / 0.972 | 819,884 | 168,729 / 168,729 |

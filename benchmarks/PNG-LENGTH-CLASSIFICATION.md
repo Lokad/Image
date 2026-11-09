@@ -1,5 +1,8 @@
 # Exact constant-time PNG length classification
 
+[Current-package Fastest8 confidence](PNG-FASTEST-CURRENT-CONFIDENCE.md) supersedes
+that cost below and remains uncertain. The other14 costs retain valid evidence.
+
 LSF584 replaces the repeated Deflate length-range search with its exact integer
 logarithm formula and permits inlining. Lengths 3–10 keep their direct mapping;
 258 keeps its dedicated symbol. For 11–257, the original doubling interval gives

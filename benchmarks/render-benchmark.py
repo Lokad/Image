@@ -1549,6 +1549,11 @@ def render():
              else row) for kind, row in rows]
     def png_label(label):
         return label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ').replace(', red-plane reference', '')
+    png_fast = json.loads((ROOT / 'benchmarks/png-fastest-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not png_fast['productionChanged'] and png_fast['allBuilds'] == 0
+    assert png_fast['raw']['mirrored'] and png_fast['raw']['allMembersVerified']
+    assert png_fast['sourceProof']['classificationSourceMatches']
+    assert png_fast['qualificationReused']['packageSha256'] == resident_decode['qualification']['actualPackage']['sha256']
     for case, current in png['cases'].items():
         assert current['caseId'] == case
         assert not current['reusedUnchangedPath']
@@ -1559,6 +1564,17 @@ def render():
         assert current['packetSha256'] == current['nativePacketSha256'] and current['packetBytes'] == current['nativePacketBytes']
         assert current['equivalentOneShotBoundary'] and current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        if case == 'EncodeFast8':
+            fresh = png_fast['current']
+            assert fresh['librarySha256'] == png_fast['qualificationReused']['librarySha256']
+            assert fresh['actualIterations'] == fresh['nativeSamplesEachBracket'] == len(fresh['managedActualNanoseconds']) == 12
+            assert fresh['allOriginalGatesPassed'] and fresh['quietGuardsPassed'] and fresh['completePacketExact']
+            assert fresh['codecPreparationTimed'] and not fresh['nativeCodecRetainedBetweenOperations']
+            for field in ('inputSha256', 'packetBytes', 'packetSha256', 'nativePacketBytes', 'nativePacketSha256', 'allocatedBytes', 'depth', 'level'):
+                assert fresh[field] == current[field]
+            assert fresh['status'] == 'uncertain' and fresh['lower'] < 1 < fresh['upper']
+            assert math.isclose(fresh['managedUs'] / fresh['nativeUs'], fresh['ratio'], rel_tol=1e-12)
+            current = png['cases'][case] = fresh
         label = current['label']; target = png_label(label)
         positions = [i for i, (kind, row) in enumerate(rows)
                      if kind == 'codec' and png_label(row.split('|')[1].strip()) == target]
@@ -1827,9 +1843,11 @@ Current scope and remaining work:
   repeated range search with the exact integer-logarithm formula. All15 current
   one-shot encodes refresh: **{png['statusCounts']['pass']} pass/stop, {png['statusCounts']['gap']} gaps,
   {png['statusCounts']['uncertain']} uncertain**. WordSmallest now passes. ByteFastest
-  upper1.017 and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
+  upper{png['cases']['EncodeFast8']['upper']:.3f} and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
   WordFastest saves180.09µs/1.00% raw with separated filtered/allactual intervals;
   normalized intervals overlap. Byte's84.29µs point gain has allactual uncertainty.
+  A [current-package Fastest confirmation](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md)
+  remains uncertain; its updated cost is displayed. No unchanged favorable repeat.
   No robust normalized or blanket gain claim. Exact packets,384KiB admission,
   retained0scratch and primaryGC820916/2437660Bop remain. Earlier
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
