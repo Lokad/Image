@@ -1,0 +1,162 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JRO669/JRT670",
+  "date": "2026-11-09",
+  "productionAccepted": false,
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "de4caa965187aebbda79ed3a78720fa574a9513ed13920b649d747061da0f382",
+    "symbolsSha256": "0bdf0ba36fac14eeb6fd6ee4baac52fe9bfba6c4d19a57ab6bef500a823b6f0e",
+    "bytes": 435937,
+    "librarySha256": "0d460313ad99dcb78824ae7496ee532180d6f0e45dde2a3ef5a6ffb56928363d",
+    "actualConsumerPassed": true,
+    "byteColumnStripsOwnershipPassed": true,
+    "sharedByteWordColumnDriverPassed": true,
+    "sharedWideByteWordColumnDriverPassed": true,
+    "packedByteDecodedPrefixPassed": true,
+    "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+    "groupedJpegEntropyAndOwnershipPassed": true,
+    "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+    "horizontalCompressedAlphaPublicationPassed": true,
+    "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+    "largeBandsExactAndAdmittedPassed": true,
+    "livePngCursorSamplesAndOwnershipPassed": true,
+    "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+    "opaqueLiveSyncAsyncOwnedPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "progressiveStripsOwnershipPassed": true,
+    "genericCompletedPlanesOwnershipPassed": true,
+    "cachedHorizontalWindowsPassed": true,
+    "identityCacheRowsPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true
+  },
+  "cases": {
+    "jro669": {
+      "managedUs": 3584.7665052083335,
+      "nativeUs": 3354.0414791666667,
+      "ratio": 1.06879015285732,
+      "lower": 0.9107679076113969,
+      "upper": 1.2610447955982707,
+      "allocatedBytes": 169664,
+      "status": "uncertain",
+      "librarySha256": "e91f69901985163f3e73caae5c466f0b757825a6c995b0bc7f044848503cea14"
+    },
+    "jrt670": {
+      "managedUs": 3551.4592109375,
+      "nativeUs": 3357.1265833333337,
+      "ratio": 1.057886595211793,
+      "lower": 0.9946578357952028,
+      "upper": 1.1186902717577205,
+      "allocatedBytes": 169664,
+      "status": "uncertain",
+      "librarySha256": "a752043d568858ae3dabf343702abfac210da67301deb70547b34d6769d61b2e"
+    }
+  },
+  "original": {
+    "managedUs": 3553.05955859375,
+    "nativeUs": 3351.4900364583336,
+    "caseId": "ProgressiveCancelable444",
+    "provider": "tmp/jpe562-current-cases.json",
+    "sourceValid": true
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "JRT670",
+    "modelOnly": true,
+    "checked": 78336,
+    "missingTargets": 45032,
+    "allDeferredErrorPredicatesEquivalent": true,
+    "proof": "Found insertion target is within band; its ordinal consumes run preceding zeros. FoundZRL target consumes run zeros including target. Missing insertion always ends afterband even if remainingrun0; missingZRL always has remainingrun>0. Thus original combined error predicate equals targetmissing. All corrections must still complete before raising it."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "JRT670",
+    "allOtherReaderTextVerbatim": true,
+    "bufferedEntryOnly": true,
+    "allPollsReadsPublicationOverflowStoresEobAndErrorStatementsVerbatim": true,
+    "allDeferredErrorPredicatesProvedEquivalent": true,
+    "zeroPrefixAndRemainingRunNotLiveAcrossCorrections": true,
+    "noNewOwnedCapacityOrRetainedState": true,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "7eae3a26bb72ed898fcee656446c6b0dbccf2ddf897702faa466d88033202e06",
+      "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "7b6e206fcad43e71f475367fc6e77ada2c36dd363dc826b94610b9ead30cf2a3"
+    },
+    "model": "tmp/jrt670-model.json",
+    "priorVariant": "tmp/jro669-design.json"
+  },
+  "decision": "Neither zero-run state implementation is selected: JRO3584.77us and strongerJRT3551.46us versus3553.06us source-valid original, with wide short intervals and unchanged169664B/op. No useful point gain, allocation benefit or confirmed CPU gain. Retain both screens and algebra; no favorable repetition, broad production qualification or package rebuild.",
+  "correctness": "Both variants preserve exact frozen531468B pixels from132961B input, native bounds/source/independent ownership and idle-v2. EachOS427internal/375public focused checks per normal/scalar pass. Stronger78336-case proof preserves deferred malformed-band decisions. Three added actual-entry terminal zero-ordinal tests remain useful against qualified production; they are not prototype-only APIs/tests.",
+  "workflow": {
+    "mainVariantsEachOs": 2,
+    "prototypeEmbeddedVariantsEachOs": 2,
+    "newHarnessNativeFixtureProfileBuilds": 0,
+    "repeatedUnchangedFullSuitesOrPackages": 0
+  },
+  "next": "Qualified WBR decoder/main/public bindings/package restored. Three useful terminal-zero-ordinal tests retained and pass on restored code bothOS normal/scalar; previous production qualification reused. Next TRP671 examines exact typed text blending/prepared integer weights and reuse of existing edge permutation. No relaxed pixels, floating policy, cache or work excluded from timing.",
+  "raw": {
+    "file": "jpeg-zero-run-state-unselected.tar.xz",
+    "sha256": "1afd61509f51f7ad64f6093a2dd9b920e41012558712fbaef8b05ce919c51a27",
+    "bytes": 15112624,
+    "members": 242,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-shared-byte-repair-qualified.tar.xz",
+        "sha256": "62b95267dcca616931caa99b5920d40c3e63ec89da2feabdf4c11eccba010422",
+        "bytes": 12801560,
+        "members": 361
+      },
+      {
+        "file": "jpeg-live-current-attribution-jpr608.tar.xz",
+        "sha256": "0c7987ade22237920072542d1cb0d2d83ee785b6eefecf1762ede5fa7b0c9a15",
+        "bytes": 196416,
+        "members": 72
+      }
+    ]
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSourceAndMainRestoredByteForByte": true,
+      "librarySha256": "0d460313ad99dcb78824ae7496ee532180d6f0e45dde2a3ef5a6ffb56928363d",
+      "internalSha256": "cd62974a5eb4e7938c0133d195ae891975ab64434c1d1a642c470be1acdb3240",
+      "retainedBehavioralTests": 3,
+      "newChecksEachNormalScalar": 3,
+      "testSourceSha256": "7b6e206fcad43e71f475367fc6e77ada2c36dd363dc826b94610b9ead30cf2a3",
+      "embeddedRebuildsAfterRestoration": 1,
+      "additionalMainHarnessNativePackageBuilds": 0,
+      "unchangedProductionQualificationReused": 6006,
+      "publicBindingsRestored": true,
+      "actualPackageUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSourceAndMainRestoredByteForByte": true,
+      "librarySha256": "19afb56c5d93d8e8e2cb8d5b2c40cafbeb5f7bd15a1465e0db647c2a7a374b4f",
+      "internalSha256": "0411e8214b7bbb0117f8f90907a2d7f328ad138f9414e4f8c7bfd37ec7fafa0c",
+      "retainedBehavioralTests": 3,
+      "newChecksEachNormalScalar": 3,
+      "testSourceSha256": "7b6e206fcad43e71f475367fc6e77ada2c36dd363dc826b94610b9ead30cf2a3",
+      "embeddedRebuildsAfterRestoration": 1,
+      "additionalMainHarnessNativePackageBuilds": 0,
+      "unchangedProductionQualificationReused": 6006,
+      "publicBindingsRestored": true,
+      "actualPackageUnchanged": true
+    },
+    "productionComplete": true,
+    "actualPackageUnchanged": true,
+    "unchangedProductionQualificationReused": 6006,
+    "newTestSource": "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs",
+    "newTestSourceNormalizedSha256": "c99ac4cb331b0a8b387749c38e29ae722e92e9aa89d82607538006c58785a31a",
+    "newTestSourceRetainedInThisCommit": true,
+    "readerSourceSha256": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63"
+  }
+}

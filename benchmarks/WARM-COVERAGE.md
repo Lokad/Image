@@ -301,3 +301,9 @@ resize representations. A small-control gain is outweighed by the confirmed
 larger-control loss; the root revision has inconclusive short bounds and keeps
 the targeted reload. Qualified sources/modules/package are restored exactly;
 current costs and qualification remain unchanged. No renderer dependency.
+
+[Zero-run state reuse](JPEG-ZERO-RUN-STATE-EXPERIMENT.md) retains two unselected
+live progressive JPEG implementations with inconclusive screens and no useful
+point/allocation gain. Qualified production and package are restored exactly;
+three new terminal-zero-ordinal oracle tests remain and pass on restored code.
+Current timing/production qualification is unchanged; no renderer dependency.

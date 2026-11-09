@@ -6,6 +6,45 @@ namespace Lokad.Image.Tests;
 public sealed class JpegRefinementBlockTests
 {
     [Theory]
+    [InlineData(0, true)]
+    [InlineData(15, true)]
+    [InlineData(16, false)]
+    public void TerminalZeroOrdinalsPreserveCorrectionsAndErrorPrefixes(int run, bool inserting)
+    {
+        if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
+        using var tables = new OperationContext(new(), default);
+        var symbol = inserting ? (byte)(run << 4 | 1) : (byte)0xf0;
+        var table = new JpegHuffman([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [symbol], tables);
+        var headers = new uint[512]; table.BuildRefinementHeaders(headers, default);
+        using var token = new CancellationTokenSource();
+        for (var zeros = 0; zeros <= 16; zeros++)
+        foreach (var prepared in new[] { false, true })
+        foreach (var length in new[] { 1, 4 })
+        {
+            byte[] data = [0x55, 0x63, 0xa5, 0xc3, 255, 217];
+            data = data[..length];
+            Assert.Equal(Run(false), Run(true));
+
+            string Run(bool fused)
+            {
+                using var context = new OperationContext(new(), token.Token);
+                var reader = new JpegEntropyReader(data, 0, context); var eob = 0;
+                var values = Enumerable.Range(0, 64).Select(i => i >= 64 - zeros ? 0 : (i % 2 == 0 ? 2 : -3)).ToArray();
+                Exception? failure = null; var tail = -1;
+                try
+                {
+                    if (fused) Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, 48, 63, 0,
+                        ref eob, prepared ? headers : default));
+                    else Reference(ref reader, values, table, 48, 63, 0, ref eob);
+                    tail = reader.ReadBits(3);
+                }
+                catch (Exception error) when (error is ImageDataException or OverflowException) { failure = error; }
+                return $"{failure?.GetType()}:{failure?.Message}:{reader.Position}:{eob}:{tail}:{string.Join(',', values)}";
+            }
+        }
+    }
+
+    [Theory]
     [InlineData(0, false, false)] [InlineData(1, false, false)] [InlineData(2, false, false)]
     [InlineData(0, true, false)] [InlineData(1, true, false)] [InlineData(2, true, false)]
     [InlineData(0, false, true)] [InlineData(1, false, true)] [InlineData(2, false, true)]
