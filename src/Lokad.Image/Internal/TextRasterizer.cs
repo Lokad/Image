@@ -324,11 +324,18 @@ internal sealed partial class TextRasterizer : IDisposable
         }
         internal void BuildEvents(Crossing[] order)
         {
+            var previousLow = double.NaN; var previousHigh = double.NaN;
             for (var i = 0; i < Count; i++)
             {
                 owner.context.Cancellation.ThrowIfCancellationRequested();
-                Event(Edges[i].MinY); Event(Edges[i].MaxY);
-                order[i] = new(Edges[i].MinY, i, i);
+                var low = Edges[i].MinY; var high = Edges[i].MaxY;
+                // Adjacent contour edges share a vertex height. Keep the same
+                // distinct event coordinates without storing/sorting that shared
+                // endpoint twice. NaN comparisons preserve the original entries.
+                if (low != previousLow && low != previousHigh) Event(low);
+                if (high != previousLow && high != previousHigh) Event(high);
+                previousLow = low; previousHigh = high;
+                order[i] = new(low, i, i);
             }
             TextRasterSort.Sort<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
             for (var i = 0; i < Count; i++)

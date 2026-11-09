@@ -1105,15 +1105,6 @@ def render():
     assert overlap['rejectedTrial']['restoration']['productionRestoredByteExactly']
     rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedMicroseconds"]:,.2f} | '
                  f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
-    allocation_only = json.loads((ROOT / 'benchmarks/text-drawing-allocation-controls-evidence.json').read_text(encoding='utf-8'))
-    assert allocation_only['allocationOnly'] and not allocation_only['timingClaim'] and not allocation_only['comparativeBaselineUsed']
-    assert allocation_only['quietGuardsPassed'] and allocation_only['remainingAuditedWithoutElapsedTime'] == 9
-    allocation_values = {c['caseId']: c['allocatedBytesPerOperation'] for c in allocation_only['observations']['cases']}
-    assert len(allocation_values) == 9
-    assert all(c['sampleValues'] == [c['allocatedBytesPerOperation']] * 3 and c['operationsPerSample'] == 16
-               for c in allocation_only['observations']['cases'])
-    assert allocation_values['DrawingComposite8'] == allocation_values['DrawingComposite16']
-    assert allocation_values['DrawText8'] == allocation_values['DrawText16']
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
@@ -1145,14 +1136,15 @@ def render():
     assert composite8_current['qualification']['fullChecksEachOs'] == 5975
     assert composite8_current['actualPackage']['sha256'] == composite8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
-    raster = json.loads((ROOT / 'benchmarks/text-prepared-pixels-and-order-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-endpoint-storage-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 6011
+    assert raster['qualification']['fullChecksEachOs'] == 6064
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert raster['decision']['cpuGainInconclusive']
-    assert raster['sourceProof']['onlyPixelBlendAndPreparedEdgeExecutionChanged']
-    assert raster['sourceProof']['otherGeometryCoverageIntegrationEventsSortingAdmissionAndPublicBoundaryVerbatim']
-    assert raster['storage']['allEightFrozenFramesAndPeaksUnchanged']
+    assert raster['sourceProof']['onlyConsecutiveEndpointInsertionChanged']
+    assert raster['sourceProof']['otherIntersectionEventsFinalSortReorderingGeometryIntegrationBlendAdmissionAndPublicBoundaryVerbatim']
+    assert raster['storage']['allEightFrozenFramesExact']
+    assert raster['qualification']['actualPackage']['librarySha256'] == raster['producers']['timedArtifactSha256']
     assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
     for case_id, previous in text_current['observations'].items():
         if case_id == 'DrawingComposite8':
@@ -1166,8 +1158,8 @@ def render():
         if case_id in raster['cases']:
             assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
             assert case['validation']['frozenManagedObservationsExact']
-            assert case['managedMemory']['BytesAllocatedPerOperation'] == 67368
-            assert case['admittedWorkspacePeak'] == 48544 and case['retainedDrawingWorkspace'] == 0
+            assert case['managedMemory']['BytesAllocatedPerOperation'] == 59000
+            assert case['admittedWorkspacePeak'] == 42336 and case['retainedDrawingWorkspace'] == 0
         if case_id in composites['cases']:
             assert case['librarySha256'] == composites['producers']['linuxSha256']
             assert case['validation']['exactManagedPixels'] and case['managedMemory']['BytesAllocatedPerOperation'] == 56
@@ -1990,14 +1982,19 @@ Current scope and remaining work:
   and their governed bypass are unchanged; physical/native peaks are unmeasured.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
-- **Text/drawing:** [prepared pixels and edge order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
-  remove a redundant Edge sort and share exact integer blend weights. Current
-  111.21/97.71µs pointmeans improve11.61%/31.39% over the contemporary original;
-  all-actual gains12.82%/25.55%, but their intervals overlap: robust CPUgain remains
-  inconclusive. Both reference gaps remain. The intended actual-package DLL supplies
-  these two costs; eight exactframes,67,368B/draw,48,544B admitted Latin workspace
-  and zero retainedscratch are unchanged. Earlier [interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
-  retains history. No numerical-policy change or physical-peak claim.
+- **Text/drawing:** [shared endpoint storage](../benchmarks/TEXT-ENDPOINT-STORAGE.md)
+  omits repeated consecutive contour endpoints before event growth and sorting.
+  Latin allocation falls67,368→59,000B/draw; admitted workspace falls48,544→42,336B,
+  Arabic275,776→238,848B and fitting47,896→41,688B. Retained scratch stays zero;
+  all eight frozen byte/word frames remain exact. Current98.44/102.57µs points
+  improve13.74%/8.03% over contemporary originals, but raw/normalized intervals
+  overlap: CPU gain remains inconclusive and both reference gaps remain.
+  These complete prepared-layout draws include geometry/workspace/composition/
+  disposal; resident font/layout and canvas resets are excluded equally. The
+  labeled ImageSharp.Drawing2.1.7/Fonts2.1.3 integration retains public paths but
+  rebuilds translated segments and scanner workspace per Fill. No managed work
+  is removed from timing. Earlier [prepared pixels/order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
+  retains history. No numerical-policy change or physical/native peak claim.
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
@@ -2015,7 +2012,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{byte_repair['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

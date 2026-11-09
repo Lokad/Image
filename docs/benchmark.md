@@ -234,14 +234,19 @@ Current scope and remaining work:
   and their governed bypass are unchanged; physical/native peaks are unmeasured.
   Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
   paths retain source-valid evidence. Older normalization/replay stages remain history.
-- **Text/drawing:** [prepared pixels and edge order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
-  remove a redundant Edge sort and share exact integer blend weights. Current
-  111.21/97.71µs pointmeans improve11.61%/31.39% over the contemporary original;
-  all-actual gains12.82%/25.55%, but their intervals overlap: robust CPUgain remains
-  inconclusive. Both reference gaps remain. The intended actual-package DLL supplies
-  these two costs; eight exactframes,67,368B/draw,48,544B admitted Latin workspace
-  and zero retainedscratch are unchanged. Earlier [interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
-  retains history. No numerical-policy change or physical-peak claim.
+- **Text/drawing:** [shared endpoint storage](../benchmarks/TEXT-ENDPOINT-STORAGE.md)
+  omits repeated consecutive contour endpoints before event growth and sorting.
+  Latin allocation falls67,368→59,000B/draw; admitted workspace falls48,544→42,336B,
+  Arabic275,776→238,848B and fitting47,896→41,688B. Retained scratch stays zero;
+  all eight frozen byte/word frames remain exact. Current98.44/102.57µs points
+  improve13.74%/8.03% over contemporary originals, but raw/normalized intervals
+  overlap: CPU gain remains inconclusive and both reference gaps remain.
+  These complete prepared-layout draws include geometry/workspace/composition/
+  disposal; resident font/layout and canvas resets are excluded equally. The
+  labeled ImageSharp.Drawing2.1.7/Fonts2.1.3 integration retains public paths but
+  rebuilds translated segments and scanner workspace per Fill. No managed work
+  is removed from timing. Earlier [prepared pixels/order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
+  retains history. No numerical-policy change or physical/native peak claim.
   [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
@@ -259,7 +264,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,006 full/live checks per OS**, affected
+The current production build passes **6,064 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -416,8 +421,8 @@ settings do not establish matched quality.
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 111.21 | 48.06 | 2.314 / 3.275 | 67,368 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 97.71 | 45.93 | 2.127 / 3.348 | 67,368 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 98.44 | 50.45 | 1.951 / 3.155 | 59,000 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 102.57 | 51.14 | 2.006 / 3.208 | 59,000 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
