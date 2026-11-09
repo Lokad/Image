@@ -1,5 +1,8 @@
 using System.Runtime.Intrinsics;
 
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Independent spatial population clustering. Tile syntax is RFC 9649 section
@@ -87,22 +90,28 @@ internal static class Vp8lReferenceClustering
         }
     }
 
-    private sealed class State
+    private static int StateWords(int tiles, int pairCapacity)
+        => ((tiles + 1) & ~1) + tiles * 2 * (Unsafe.SizeOf<Stats>() / sizeof(int))
+            + pairCapacity * (Unsafe.SizeOf<Pair>() / sizeof(int));
+
+    private ref struct State
     {
         private readonly OperationContext context;
         private readonly Vp8lHistogramLayout layout;
         private readonly int tiles, quality, threshold;
         private readonly uint literal;
         private readonly long emptyCost, redCost, blueCost, alphaCost;
-        private readonly int[] slots;
+        private readonly Span<int> slots;
         private readonly Vp8lPopulationWorkspace populations;
         private readonly int supportWords, blueSupport, alphaSupport;
-        private readonly Stats[] originals, items;
-        private readonly Pair[] pool;
+        private readonly Span<Stats> originals, items;
+        private readonly Span<Pair> pool;
         private int count, pairs;
         internal State(int tiles, Vp8lPopulationWorkspace populations,
-            Vp8lHistogramLayout layout, uint literal, int supportWords, OperationContext context, int quality, int threshold)
+            Vp8lHistogramLayout layout, uint literal, int supportWords, OperationContext context, int quality, int threshold,
+            Span<int> storage)
         {
+            this = default;
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
             this.populations = populations; this.literal = literal; this.supportWords = supportWords;
             blueSupport = layout.RedSize == 256 ? 4 : 0;
@@ -116,8 +125,29 @@ internal static class Vp8lReferenceClustering
                 if (layout.BlueSize == 1) blueCost = ConstantPopulationCost(scratch, (int)(literal & 255), context);
                 if (layout.AlphaSize == 1) alphaCost = ConstantPopulationCost(scratch, (int)(literal >> 24), context);
             }
-            slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
-            pool = new Pair[PairCapacity(tiles, threshold)];
+            var pairCapacity = PairCapacity(tiles, threshold);
+            if (storage.IsEmpty)
+            {
+                slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
+                pool = new Pair[pairCapacity];
+            }
+            else
+            {
+                // Population row indexes have no remaining readers. The matching
+                // owner keeps this entire capacity charged through Finish.
+                slots = storage[..tiles]; var offset = (tiles + 1) & ~1;
+                var statsWords = tiles * (Unsafe.SizeOf<Stats>() / sizeof(int));
+                originals = MemoryMarshal.Cast<int, Stats>(storage.Slice(offset, statsWords)); offset += statsWords;
+                items = MemoryMarshal.Cast<int, Stats>(storage.Slice(offset, statsWords)); offset += statsWords;
+                pool = MemoryMarshal.Cast<int, Pair>(storage.Slice(offset, pairCapacity * (Unsafe.SizeOf<Pair>() / sizeof(int))));
+                // Empty tiles must retain default statistics. Slots and pairs are
+                // read only below their independently initialized live counts.
+                for (var at = 0; at < tiles; at += 128)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested(); var length = Math.Min(128, tiles - at);
+                    originals.Slice(at, length).Clear(); items.Slice(at, length).Clear();
+                }
+            }
         }
 
         private Span<int> Population(int slot, int side = 0, bool original = false)
@@ -402,6 +432,9 @@ internal static class Vp8lReferenceClustering
         // The preceding analysis selects tile bits to keep this finite bound.
         if (tiles > 2600) throw new ArgumentException("Histogram tiling exceeds the analyzed bound.", nameof(tileBits));
         var layout = new Vp8lHistogramLayout(cacheBits); var pairCapacity = PairCapacity(tiles, threshold);
+        var words = StateWords(tiles, pairCapacity); var borrowed = scratch.Length >= words;
+        if (borrowed && MemoryMarshal.AsBytes(tokens).Overlaps(MemoryMarshal.AsBytes(scratch[..words])))
+            throw new ArgumentException("Clustering state must not overlap live tokens.", nameof(scratch));
         uint literal = 0, varying = 0; var hasLiteral = false;
         if (tiles >= 64)
         {
@@ -429,12 +462,13 @@ internal static class Vp8lReferenceClustering
         }
         var supportWords = SupportWords(layout, tiles);
         using var populations = Vp8lPopulationWorkspace.Create(tokens, width, height, tileBits, layout, supportWords, context, scratch);
-        var reserved = tiles * 192L + pairCapacity * 64L + 512;
+        var reserved = borrowed ? 512 : tiles * 192L + pairCapacity * 64L + 512;
         context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var state = new State(tiles, populations, layout, literal, supportWords, context, quality, threshold);
+            var state = new State(tiles, populations, layout, literal, supportWords, context, quality, threshold,
+                borrowed ? scratch[..words] : default);
             state.Fill(); return state.Finish(lowEffort, columns, tileBits);
         }
         finally { context.Release(reserved); }

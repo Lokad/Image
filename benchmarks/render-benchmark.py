@@ -1342,7 +1342,7 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-matching-population-storage-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-clustering-storage-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted']
     qualification = webp_owned['qualification']
     assert qualification['fullChecksEachOs'] == qualification['windows']['total'] == qualification['linux']['total']
@@ -1355,7 +1355,7 @@ def render():
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['completePacketExact']
-        assert current['librarySha256'] == webp_owned['producers']['linuxSha256']
+        assert current['librarySha256'] == webp_owned['producers']['timedArtifactSha256']
         assert current['packetSha256'] == current['nativePacketSha256']
         assert current['managedPacketBytes'] == current['nativePacketBytes']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
@@ -1399,13 +1399,14 @@ def render():
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     vp8_rows = []
     for case, label in vp8_labels.items():
-        c = vp8_current['cases'][case]
+        c = webp_owned['cases'][case] if case in ('alpha', 'alpha16') else vp8_current['cases'][case]
         assert not any(row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label for _, row in rows)
         vp8_rows.append(('codec', f'| {label} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
             f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | '
             f'{c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |'))
     rows[position:position] = vp8_rows
-    vp8_status_counts = {state: sum(vp8_current['cases'][case]['status'] == state
+    vp8_status_counts = {state: sum((webp_owned['cases'][case] if case in ('alpha', 'alpha16')
+                                   else vp8_current['cases'][case])['status'] == state
                                   for case in vp8_current['cases'])
                          for state in ('pass', 'gap', 'uncertain')}
     selected_cost = vp8_current['cases']['selected']
@@ -1784,11 +1785,16 @@ Current scope and remaining work:
   [earlier preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
   [alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
   retain their historical gains and raw evidence separately.
-- **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
-  saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
+- **WebP encoding:** [clustering storage handoff](../benchmarks/WEBP-CLUSTERING-STORAGE.md)
+  saves470,360B/encode on photograph/diagram,52,720B on transparent alpha and3,672B
+  on the existing authored bars. Typed execution views reuse the still-charged
+  matching index after its final row reader; independent selected state remains.
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
-  Six unchanged lossless comparisons reuse that evidence; photograph/opaque
-  remain uncertain. No causal CPU-gain claim for that storage change.
+  Eight affected comparisons refresh on the actual-package DLL:6pass/2uncertain.
+  Photograph nowpasses upper0.984; opaque/alpha remain uncertain. No causal
+  CPU-gain or physical-peak claim. [Earlier matching/population reuse](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
+  retains history. Normal/scalar and6,015full/live eachOS plus SAMEactualpackage/
+  threeexamples pass; no harness/native rebuild or timed-actual repeat.
   [Rounded-border prediction](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   saves **{vp8_current['comparison']['savedUs']:.2f}µs/{100*vp8_current['comparison']['rawReduction']:.2f}% raw**,
   {100*vp8_current['comparison']['normalizedPointReduction']:.2f}% reference-normalized, on complete effort2.
@@ -1796,7 +1802,8 @@ Current scope and remaining work:
   no new owned heap capacity or retained state. Current
   {distortion_cost['managedUs']:,.2f}/native{distortion_cost['nativeUs']:,.2f}µs,
   upper{distortion_cost['upper']:.3f} is uncertain, not a parity pass or demonstrated gap.
-  Eight unchanged encode costs reuse [histogram-stage evidence](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md);
+  Six unchanged encode costs reuse [histogram-stage evidence](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md);
+  the alpha pair uses the current storage-stage costs above.
   shared RDO/decoder prediction code is untouched. Combined lossy scope:
   {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
   Exact complete packets remain unchanged; passing controls stop.
