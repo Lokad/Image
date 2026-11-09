@@ -1,0 +1,99 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WHA681",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newStatisticalMeasurements": 0,
+  "librarySha256": "130166164caa2b2e22df1620bb93d692f67b702629c412a1f926653f13336d18",
+  "sources": {
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "af574eb71730cbe26d7dd37d21ab8393692df1e52337fc91b90548e18b1b477a",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "2fe65b899558b6faf580d85bf401599dfdf47eb389b144de6c04392e834fc2cd"
+  },
+  "totalLocations": 1996,
+  "methods": [
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.WideColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1760
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      100
+    ],
+    [
+      "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+      63
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      21
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      15
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      13
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.WideColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1
+    ]
+  ],
+  "regions": {
+    "sharedHorizontalTapLoop": {
+      "start": "0x834",
+      "endExclusive": "0x886",
+      "locations": 572
+    },
+    "pairedPixelDecoding": {
+      "start": "0x66b",
+      "endExclusive": "0x6e5",
+      "locations": 434
+    },
+    "pairedVerticalTapLoop": {
+      "start": "0xb06",
+      "endExclusive": "0xb6d",
+      "locations": 248
+    }
+  },
+  "scope": "One2second capture of source-valid current complete public TightWide8 resize on qualified intended Windows package DLL. CPU0 operation/CPU1 sampler. All frozen managed/native/source/owner/idle gates retained; no elapsed/allocation/parity claim. Existing graph/scratch native boundary stays labeled and unchanged.",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "profiledElapsedDiscarded": true,
+  "decision": "The hot four-column range already shares row decode, geometry and cache ownership; it executes two sequential horizontal pair loops. New geometry-view evidence supplies no useful robust CPU saving. Source/JIT shows a credible next hypothesis: expose four independent ordered accumulators in one shared tap traversal, leaving three-column/partial fallback and ownership unchanged. Samples locate instructions with skid; they are not phase times or projected speedups.",
+  "nextDesign": {
+    "removedWork": "Two sequential pair-loop setups/iterations and restricted independent accumulation scheduling for full four-column strips. No claim that tap contributions disappear.",
+    "endState": "One full-four-column horizontal traversal in existing four-column specialization, four ordered Vector256 accumulators, common prefix then exact individual tails. Existing pair/single fallback serves three-column and partial strips. No new buffer/cache/session/owner/API or unchecked memory access.",
+    "correctness": "Per-pixel decoded input, weight doubles and Multiply/Add tap order stay exact; do not fuse with FMA or reassociate. Preserve unsigned word products, certificates, repair, actual cancellation checkpoints,4KiB admission and independent outputs. Cache writes complete before any row consumer.",
+    "temporaryRisk": "Four accumulators can raise register pressure/code size or regress large controls. Keep adverse results; use existing byte/word wide controls and one existing large generalization before independent confirmation. Earlier cache-pair-view trials remain context, not proof or automatic permission to replay.",
+    "continuation": "One immutable candidate perOS, focused exact/resource/scalar checks, existing complete short first. Continue only on useful complete-workload evidence; no fixed threshold/family ban or favorable repeat. Broad/package qualification at coherent production acceptance."
+  },
+  "reusedQualification": "Current WHS677 sameactualpackage70a0a631 and6026W/L full/live; RGS680 restored production exactly and added one actual crossing case with33normal/scalar checks eachOS. No repeated broad qualification for profiling.",
+  "raw": {
+    "file": "wide-bicubic-current-attribution.tar.xz",
+    "sha256": "69fec0a6000d3c52146860c2fa1a36f966ac5058a7f4359f5b1dbd2aa9430f6d",
+    "bytes": 90316,
+    "members": 18,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "runtimeInputsProvidedByHash": true,
+    "dependency": {
+      "file": "bicubic-guarded-geometry-views-experiment.tar.xz",
+      "sha256": "ed43a65e88f8a76a1d52633f923048da5d098fd02edcea7753155b45304505ef"
+    }
+  },
+  "followup": {
+    "report": "BICUBIC-ORDERED-QUARTET-EXPERIMENT.md",
+    "stages": [
+      "WQH682",
+      "WQR683"
+    ],
+    "decision": "Both unselected; production restored exactly. No useful complete point lead, independent confirmation or family ban."
+  }
+}
