@@ -100,10 +100,13 @@ Current scope and remaining work:
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
   remains a gap;113B/op, no added owned capacity/retained scratch.
-  [Current packed64×32 byte reduction](../benchmarks/PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md)
-  is544.63/zimg373.78µs, upper1.499 and113B/op. The old8,329B allocation predates
-  complete-overwrite allocation. Repeated geometry is a lead; a row-batch model
-  also repeats56.37%more source work, so it establishes no speed gain.
+  [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
+  saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
+  filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
+  leaves115µs;113B/op unchanged. Four-column prefix and original two-column
+  suffix share one numeric range and4KiB admission; no new owned capacity or
+  retained scratch. Predecoded doubles preserve exact products/tap order and
+  original certificates. The adverse/flat transitional stages remain in the report.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -219,7 +222,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,975 full/live checks per OS**, affected
+The current production build passes **5,985 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -357,7 +360,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 544.63 | 373.78 | 1.457 / 1.499 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |

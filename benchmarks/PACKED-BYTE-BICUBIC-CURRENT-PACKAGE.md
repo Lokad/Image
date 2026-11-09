@@ -1,5 +1,9 @@
 # Packed byte bicubic: current cost and preparation model
 
+This pre-change baseline is superseded by
+[decoded source preparation](PACKED-BICUBIC-DECODED-PREFIX.md), 485.40/370.61 µs.
+Its measurements and count-only row-batch model remain retained evidence.
+
 TDR647 confirms the existing 513×259 → 64×32 RGBA8 bicubic operation on the
 qualified actual package DLL: **544.63 / zimg 373.78 µs**, ratio **1.457**,
 conservative interval **1.338–1.499**. The remaining gap is 170.85 µs.

@@ -928,14 +928,19 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_byte_current = json.loads((ROOT / 'benchmarks/packed-byte-bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
+    packed_byte_current = json.loads((ROOT / 'benchmarks/packed-bicubic-decoded-prefix-evidence.json').read_text(encoding='utf-8'))
     current = packed_byte_current['current']
-    assert not packed_byte_current['productionChanged'] and packed_byte_current['allProductionBuilds'] == 0
+    assert packed_byte_current['productionAccepted'] and packed_byte_current['selectedStage'] == 3
     assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['managedRationalReferenceExact'] and current['independentOwnedOutput'] and current['sourceUnchanged']
     assert current['librarySha256'] == packed_byte_current['actualPackage']['librarySha256']
     assert packed_byte_current['raw']['mirrored'] and packed_byte_current['raw']['allMembersVerified']
     assert current['status'] == 'gap' and current['allocatedBytes'] == 113
+    assert packed_byte_current['qualification']['fullChecksEachOs'] == 5985
+    assert packed_byte_current['actualPackage']['sha256'] == packed_byte_current['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert packed_byte_current['sourceProof']['oneSharedConstantSpecializedNumericRange']
+    assert packed_byte_current['sourceProof']['originalPairPublicationAndCertificatesVerbatim']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_byte_current['comparison']['views'].values())
     rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | '
                  f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                  f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1826,10 +1831,13 @@ Current scope and remaining work:
   saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
   remains a gap;113B/op, no added owned capacity/retained scratch.
-  [Current packed64×32 byte reduction](../benchmarks/PACKED-BYTE-BICUBIC-CURRENT-PACKAGE.md)
-  is544.63/zimg373.78µs, upper1.499 and113B/op. The old8,329B allocation predates
-  complete-overwrite allocation. Repeated geometry is a lead; a row-batch model
-  also repeats56.37%more source work, so it establishes no speed gain.
+  [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
+  saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
+  filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
+  leaves115µs;113B/op unchanged. Four-column prefix and original two-column
+  suffix share one numeric range and4KiB admission; no new owned capacity or
+  retained scratch. Predecoded doubles preserve exact products/tap order and
+  original certificates. The adverse/flat transitional stages remain in the report.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
@@ -1945,7 +1953,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{composite8_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{packed_byte_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

@@ -2,10 +2,11 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
-    private static void VerifyBicubicSchedule(int workspaceBytes, bool vertical = false, int depth = 16, bool reduction = false)
+    private static void VerifyBicubicSchedule(int workspaceBytes, bool vertical = false, int depth = 16,
+        bool reduction = false, bool packedReduction = false)
     {
-        var width = reduction ? 256 : vertical ? 513 : 1027;
-        const int height = 129;
+        var width = packedReduction ? 64 : reduction ? 256 : vertical ? 513 : 1027;
+        var height = packedReduction ? 32 : 129;
         var outputBytes = width * height * (depth / 2);
         using var source = OriginalPixels.Buffer(513, 259, depth);
         if (depth == 16) source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
@@ -24,7 +25,8 @@ internal static class CooperativeMemoryConsumer
             && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
         // Hashes are frozen by the existing independently checked complete
         // bicubic controls on this exact original raster, before this change.
-        var expectedHash = reduction ? "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+        var expectedHash = packedReduction ? "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6"
+            : reduction ? "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
             : depth == 8 ? (vertical
             ? "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697"
             : "1ca9938539ba1421fe4f1540055be5d0675ac8ddc1ea87df5932a93ca35a0356")
@@ -62,7 +64,9 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged mixed-word recovery changed pixels.");
         if (root.Bytes != 0 || root.IsDisposed || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
             throw new Exception("Packaged mixed-word rows lost source or borrowed-root ownership.");
-        Console.WriteLine(reduction
+        Console.WriteLine(packedReduction
+            ? "Packaged packed byte bicubic preserves frozen pixels, aggregate admission, cancellation and independent survivors."
+            : reduction
             ? "Packaged byte column strips preserve frozen pixels, aggregate admission, cancellation and independent survivors."
             : depth == 8
             ? "Packaged byte bands preserve frozen pixels, aggregate admission, cancellation and independent survivors."
@@ -1014,6 +1018,7 @@ internal static class CooperativeMemoryConsumer
         VerifyBicubicSchedule(4096, depth: 8);
         VerifyBicubicSchedule(4096, vertical: true, depth: 8);
         VerifyBicubicSchedule(4096, depth: 8, reduction: true);
+        VerifyBicubicSchedule(4096, depth: 8, packedReduction: true);
         await VerifyPngCursors(cancellable: true);
         await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();
