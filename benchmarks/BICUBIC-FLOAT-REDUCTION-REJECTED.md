@@ -30,4 +30,8 @@ The full 268-path objective is unchanged.
 
 [Evidence](bicubic-float-reduction-rejected-evidence.json) pins the candidate,
 proof, rejection, restoration and mirrored/member-verified bicubic-float-reduction-rejected.tar.xz,
-SHA256 04441aa14f2a56aee1d8394d2680c6b9aa98f2f116f6f1ce2579e5645b21885b. Close this FP32/certificate family.
+SHA256 04441aa14f2a56aee1d8394d2680c6b9aa98f2f116f6f1ce2579e5645b21885b.
+The historical family-closure rule is superseded. The later
+[arithmetic/repair audit](ARCHITECTURAL-CURRENT-ATTRIBUTION.md) examines this
+implementation without rebuilding it; materially revised designs require their
+own numerical and complete-operation evidence.

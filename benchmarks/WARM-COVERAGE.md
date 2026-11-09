@@ -16,6 +16,12 @@ the alpha pair uses the current storage handoff.
 costs; two pixel-free coding-validation costs reuse unchanged evidence. Current
 29-read scope is18pass/7gap/4uncertain, with no all-JPEG parity claim.
 
+[Current bounded attribution](ARCHITECTURAL-CURRENT-ATTRIBUTION.md) retains a
+source/arithmetic resize audit and one current sparse-CMYK capture, without new
+cost claims or builds. The next hypothesis removes repeated component-row
+preparation in JPEG's generic tile packer; exact raw samples and final metadata
+interpretation remain required. Earlier FP32 replay is not a justified next step.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |

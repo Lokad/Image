@@ -1,0 +1,315 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CNA707/JCA708",
+  "date": "2026-11-09",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "newImagesOrSettings": 0,
+  "currentCommit": "b25bdf51bdde14c2a841b6165a6de2823571d76c",
+  "actualPackage": {
+    "project": "Lokad.Image",
+    "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "34023b9147fd5cf8537426d433d6f7a37d65d92854de5b417dc9aee882d8b8c3",
+    "symbolsSha256": "e0163ff3dcc21c1dcfa8251210dd0c2c80047d7bdf65d992d7b310dab576c3a3",
+    "bytes": 439149,
+    "librarySha256": "480d7b369e5dd1d5d7c28a8768357ef6613aea421434ceeeebbf755465ccd2db",
+    "actualConsumerPassed": true,
+    "allExistingConsumerChecksPassed": true,
+    "usageExamples": 3,
+    "publishedPackagesUnchanged": {
+      "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+    },
+    "publicationPostponed": true,
+    "additionalProductionOrEmbeddedBuilds": 0
+  },
+  "qualifiedLinuxSha256": "4213f4f77540fb52f5e2b76026580a00379f09c67536a90e81297b5864b55829",
+  "numericalAudit": {
+    "project": "Lokad.Image",
+    "stage": "CNA707",
+    "productionChanged": false,
+    "builds": 0,
+    "timings": 0,
+    "profiles": 0,
+    "newImagesOrSettings": 0,
+    "scope": "Two existing frozen geometries; arithmetic models, not current production measurements.",
+    "pythonVersion": "3.13.2",
+    "numpyVersion": "2.2.4",
+    "sources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "4bdd27caf52dd8d34e867988357805bb71a0f2ef0c688680b34bcd6a1d7dd65c",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "1fe555fa5daef6054776545d9cd7a12caa5a903a68e820d223bc41765074dd03",
+      "src/Lokad.Image/Internal/ResizeAlpha.cs": "b7408c332670da0c5f332b85c751e7b4ffd67e12e3be21824c0469f2a1971718",
+      "tools/Shared/OriginalPixels.cs": "c85638cbe027a08efed07719041c80b364203c3f7091f11678cc86bd7d18e880",
+      "benchmarks/Lokad.Image.Benchmarks/HorizontalFlip.cs": "f0c464b7295e17948b11e11ecaa4c57c5c9b338f3ce3ae5ba0c88893e5624b7e",
+      "tmp/cgp707-numeric-audit.py": "3bb9b99e112bb19dc4bc6c51b5e2a2f323d01e3b0a27a8011711297253319ca8",
+      "tmp/cgp707-prior-float-source.cs": "3f95b31aecdc81a68a074d1c35f5c724b0a5167cbeba872037127265d4983809"
+    },
+    "midpointRepairs": 0,
+    "cases": [
+      {
+        "target": [
+          256,
+          129
+        ],
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "horizontalTapCounts": {
+          "8": 252,
+          "9": 4
+        },
+        "verticalTapCounts": {
+          "8": 124,
+          "9": 5
+        },
+        "pixels": 33024,
+        "oldBoundaryApplicable": true,
+        "oldCertificateModel": {
+          "alphaBelow64": 18,
+          "colorOrAlphaOutsideByteRange": 0,
+          "rgbHalfBoundary": 1591,
+          "alphaHalfBoundary": 59,
+          "normalizerOrL1": 0
+        },
+        "oldAnyRefused": 1662,
+        "orderedDoubleWithWide32MarginsModelRefused": 195,
+        "maxFp32VsSeparableDoubleError": 6.96004456983701e-05,
+        "revisedConservativeModelRefused": 830,
+        "revisedRgbMarginMedian": 0.003968243308626573,
+        "revisedRgbMarginMaximum": 0.012596241031965794,
+        "revisedAlphaMarginMaximum": 0.0013727177585528163,
+        "noObservedCurrentSeparableDoubleOutsideRevisedIntervals": true,
+        "measuredOriginalReplayCounts": false,
+        "actualProductionOrNativeChecks": false,
+        "oldCandidateAndOriginalFrameMatchesRetainedOutputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+      },
+      {
+        "target": [
+          128,
+          64
+        ],
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "horizontalTapCounts": {
+          "16": 124,
+          "17": 4
+        },
+        "verticalTapCounts": {
+          "16": 52,
+          "17": 12
+        },
+        "pixels": 8192,
+        "oldBoundaryApplicable": false,
+        "oldCertificateModel": {
+          "alphaBelow64": 0,
+          "colorOrAlphaOutsideByteRange": 0,
+          "rgbHalfBoundary": 361,
+          "alphaHalfBoundary": 15,
+          "normalizerOrL1": 0
+        },
+        "oldAnyRefused": 374,
+        "orderedDoubleWithWide32MarginsModelRefused": 41,
+        "maxFp32VsSeparableDoubleError": 7.454577425392017e-05,
+        "revisedConservativeModelRefused": 176,
+        "revisedRgbMarginMedian": 0.003952697845854688,
+        "revisedRgbMarginMaximum": 0.008084208419190723,
+        "revisedAlphaMarginMaximum": 0.0013362008311611586,
+        "noObservedCurrentSeparableDoubleOutsideRevisedIntervals": true,
+        "measuredOriginalReplayCounts": false,
+        "actualProductionOrNativeChecks": false
+      }
+    ],
+    "limits": "No attribution of historical elapsed time to a particular source cost is established. No new numerical policy, production certificate, CPU gain or merge authorization. Planar lane/tree reduction differs from the modeled FMA chain and still requires a complete instruction-level bound, original-order/rational repair and actual current-kernel qualification."
+  },
+  "currentCmykAttribution": {
+    "totalSampleLocations": 1997,
+    "methods": [
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 541
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "samples": 252
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "samples": 241
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlockCore(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 206
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 152
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "samples": 84
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmykInPlace(valuetype [System.Runtime]System.Span`1<uint8>,bool)[Optimized]",
+        "samples": 78
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 77
+      },
+      {
+        "method": "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        "samples": 36
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::PrepareBaselinePairs(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 31
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "samples": 20
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::PackCmykSamples(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 4
+      }
+    ],
+    "rawReceipt": "tmp/jca708-cmyk-profile-receipt.json",
+    "rawJit": "tmp/jca708-cmyk-profile-jit.txt",
+    "exactInputBytes": 22708,
+    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "outputBytes": 531468,
+    "traceSha256": "a60e3eb2803d4ad9aaba6083e080fe5a69a6731e480c68628d79dfbd78c81332",
+    "sourceSha256": "4888348240af26bb91ed6e2130d0621b09cde9d9ee141c65d032e641f4261f1c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/jca708-cmyk-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/jca708-cmyk-runtime/CmykDecodeConfirmDriver.runtimeconfig.json",
+      "tmp/jca708-cmyk-runtime/CmykDecodeConfirmDriver.dll",
+      "--benchmarkName",
+      "WarmJpegDecode.Managed(Case: CmykAdobeSparse2D)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "2973022",
+      "-o",
+      "tmp/jca708-cmyk-profile.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "sourceIdentities": {
+      "src/Lokad.Image/Internal/JpegDecoder.RgbFrame.cs": "bfb0245e25347508c20d2ef1c8898cd068117ea5ba4bafdeb980e0700c21cc34",
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "3a280a22e0a18677610f9454eef0f3d810f23e4b709bee31d79ebdc74b9bb099",
+      "src/Lokad.Image/Internal/JpegDecoder.Cmyk.cs": "06ac124f92c3e6909289554a659e93a885b515bdec445f2fe9094f312f49312e",
+      "src/Lokad.Image/Internal/JpegDecoder.CmykRow.cs": "37c80b09fd4bc6ebc94277a98ef564e122eea4e3a21e6eb4e336102265447dd2",
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d",
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "f84dce669d5d5ef3a6560086eef9a85dd0643be17d04ccc612215b93b98be64e",
+      "src/Lokad.Image/Internal/JpegHuffman.BaselinePairs.cs": "a428edb4c3585b52ea30487cd139b0c443d7da8f0545c9f466606062a3abbd4e",
+      "tests/Lokad.Image.Tests/JpegRgbMcuTests.cs": "e356eb390f700ad39e87d6f3b186df06cd109109309a178ebb7e88a9121a0579"
+    },
+    "quietGuardsPassed": true,
+    "allOriginalChecksPassed": true,
+    "boundaries": "Complete public parsing/preparation/entropy/IDCT/component staging/packing/metadata interpretation/independent output/disposal remain. Existing FFmpeg contexts retain their declared preparation. Instrumented elapsed discarded. CPU0 operation, CPU1 sampler; two seconds once.",
+    "store": {
+      "samples": 252,
+      "generatedBytes": 1231,
+      "source": "src/Lokad.Image/Internal/JpegDecoder.RgbFrame.cs",
+      "hotRegions": [
+        {
+          "group": "G_M000_IG31",
+          "start": "0x331",
+          "samples": 79
+        },
+        {
+          "group": "G_M000_IG28",
+          "start": "0x29e",
+          "samples": 63
+        },
+        {
+          "group": "G_M000_IG27",
+          "start": "0x26d",
+          "samples": 50
+        },
+        {
+          "group": "G_M000_IG29",
+          "start": "0x30e",
+          "samples": 18
+        },
+        {
+          "group": "G_M000_IG07",
+          "start": "0x84",
+          "samples": 15
+        },
+        {
+          "group": "G_M000_IG30",
+          "start": "0x324",
+          "samples": 9
+        }
+      ],
+      "finding": "General MCU row preparation repeatedly computes source/target offsets and slices; generated byte-to-Int32 widening round-trips source words through stack temporaries. The sampled shape is not an isolated packer microbenchmark; skid and inlining prevent phase-cost claims."
+    }
+  },
+  "decision": "Do not rebuild the old FP32 design. Existing source/model evidence gives no credible completed speed lead: conservative draft still increases replay, and planar reduction requires its own instruction-order proof. This rejects neither all reduced-precision designs nor a numerical-policy proposal. Continue independent codec work.",
+  "nextHypothesis": {
+    "removedRepeatedWork": "Repeated per-row component span preparation and generic eight-parameter bookkeeping in the MCU packer; investigate widening stack round trips.",
+    "intendedDesign": "One shared validated eight-pixel tile borrower for equal-grid RGB/raw-CMYK, packing bytes directly with bounded vector views. Preserve the generic partial-width/portable path and final post-EOI color/Adobe interpretation; no early conversion or output publication.",
+    "boundary": "Existing complete CmykAdobeSparse2D primary and DirectRgb444 generalization, plus affected RGB/CMYK/YCCK equal-grid correctness and ownership. Existing source/hash/reference settings only.",
+    "temporaryDuplication": "A development tile helper may coexist with the generic path; retain portable/partial paths and merge only if a coherent completed stage removes useful repeated work without unjustified duplication.",
+    "continuation": "Generated code must actually remove the identified preparation/spills. Use complete short screen and independent confirmation if useful. A helper-count reduction is not a CPU claim. Do not retune passing controls.",
+    "safety": "Raw four components including K remain private and exact until complete container/late Adobe validation. Keep admission/stack ownership, cancellation checkpoints, malformed input/public failures and surviving outputs. No heap, pool, session, new allowance, pixel or encoder policy change."
+  },
+  "qualificationReused": {
+    "fullLiveEachOs": 6096,
+    "actualSamePackageBothOs": true,
+    "examplesEachOs": 3,
+    "normalScalarAndAffectedIsa": true,
+    "reason": "No production/test/harness/package inputs changed. CGP706 and unchanged JPEG evidence remain valid."
+  },
+  "raw": {
+    "file": "architectural-current-attribution.tar.xz",
+    "sha256": "196ce5b7563808bbabfc3b4df8116a971554f6a237e212a621c809d514c9822b",
+    "bytes": 142644,
+    "members": 35,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "dependencies": [
+    {
+      "file": "cached-wide-prepared-geometry-qualified.tar.xz",
+      "sha256": "94d022a05f3bc8cd604b85c87022840ced7c09b79de2c8651a76bd08cd9d6fbf"
+    },
+    {
+      "file": "jpeg-narrow-scan-preparation-qualified.tar.xz",
+      "sha256": "22d40ca3c459957ce5cdb0da95c65009506fdd7c95f45e57f4abdffc58d3cf9d"
+    },
+    {
+      "file": "bicubic-float-reduction-rejected.tar.xz",
+      "sha256": "04441aa14f2a56aee1d8394d2680c6b9aa98f2f116f6f1ce2579e5645b21885b"
+    }
+  ],
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 283
+}
