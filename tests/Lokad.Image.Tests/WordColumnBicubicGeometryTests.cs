@@ -17,7 +17,7 @@ public sealed class WordColumnBicubicGeometryTests
         using var result = ImageBuffer.Create(256, 129, 16);
         using var root = new TestMemoryBudget(4096);
         using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, default);
-        Assert.True(WordColumnBicubicResize.TryApply(source, result, 513d / 256, 259d / 129, 10, 10, context));
+        Assert.True(ColumnBicubicResize.TryApply(source, result, 513d / 256, 259d / 129, 10, 10, context));
         Assert.Equal("2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
             Convert.ToHexStringLower(SHA256.HashData(OriginalPixels.Bytes(result))));
         Assert.Equal(input, OriginalPixels.Bytes(source));
@@ -43,7 +43,7 @@ public sealed class WordColumnBicubicGeometryTests
         using var result = ImageBuffer.Create(outputWidth, outputHeight, 16);
         using var root = new TestMemoryBudget(4096);
         using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, default);
-        Assert.True(WordColumnBicubicResize.TryApply(source, result, (double)width / outputWidth, (double)height / outputHeight, 10, 10, context));
+        Assert.True(ColumnBicubicResize.TryApply(source, result, (double)width / outputWidth, (double)height / outputHeight, 10, 10, context));
         Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
         Assert.Equal(original, OriginalPixels.Bytes(source));
         Assert.Equal(0, root.Bytes); Assert.Equal(4096, root.Peak); Assert.False(root.IsDisposed);

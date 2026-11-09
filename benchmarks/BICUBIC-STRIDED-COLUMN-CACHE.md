@@ -1,5 +1,8 @@
 # Strided bicubic column workspace
 
+Retained stage history. [Shared byte/word columns](BICUBIC-SHARED-BYTE-WORD-COLUMNS.md)
+own current production costs and qualification.
+
 The complete tight-memory RGBA8 reduction saves **19.18 µs /
 3.36% raw / 3.30% normalized**:
 **571.36 → 552.17 µs**. Filtered and all-actual raw

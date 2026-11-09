@@ -1,5 +1,8 @@
 # Shared word column preparation
 
+Retained stage history. [Shared byte/word columns](BICUBIC-SHARED-BYTE-WORD-COLUMNS.md)
+own current production costs and qualification.
+
 RGBA16 small-support resizing now uses the existing byte/word geometry helper.
 Vertical geometry occupies unpublished output-row tails until every aligned prefix
 strip finishes; final strips rebuild geometry after those bytes retire. Relative

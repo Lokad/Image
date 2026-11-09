@@ -1418,8 +1418,8 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    column = json.loads((ROOT / 'benchmarks/bicubic-strided-column-cache-evidence.json').read_text(encoding='utf-8'))
-    current = column['current']
+    column = json.loads((ROOT / 'benchmarks/bicubic-shared-byte-word-columns-evidence.json').read_text(encoding='utf-8'))
+    current = column['cases']['TightDown8']
     assert column['productionAccepted'] and column['requiredMaterialPaths'] == 283
     assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
     assert current['managedRationalReferenceExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
@@ -1427,12 +1427,14 @@ def render():
     cq = column['qualification']
     assert current['librarySha256'] == cq['actualPackage']['librarySha256'] == column['producers']['windowsSha256']
     assert cq['actualPackage']['sha256'] == cq['samePackageLinux']['sameActualPackageSha256']
-    assert cq['fullChecksEachOs'] == cq['windows']['total'] == cq['linux']['total'] == 5973
-    assert cq['allThreeExamplesBothOs'] and cq['byteColumnStripsOwnershipBothOs']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in column['comparison']['views'].values())
-    assert column['sourceProof']['oneOriginalNumericLoopExactAfterRangeStrideCapacitySubstitution']
-    assert column['sourceProof']['originalByteAndReciprocalCertificateVerbatim']
-    assert column['storage']['rootWorkspaceBytes'] == 4096 and column['storage']['newOwnedCapacityBytes'] == 0
+    assert cq['fullChecksEachOs'] == cq['windows']['total'] == cq['linux']['total'] == 5994
+    assert cq['allThreeExamplesBothOs'] and cq['sharedByteWordColumnOwnershipBothOs']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in column['comparisons']['TightDown16']['views'].values())
+    assert all(v['rawLossSeparated'] and not v['normalizedLossSeparated'] for v in column['comparisons']['TightDown8']['views'].values())
+    assert column['sourceProof']['oneSharedByteWordPreparationOwnershipAndScheduler']
+    assert column['sourceProof']['originalByteRepairAndReciprocalCertificateVerbatim']
+    assert column['sourceProof']['originalWordRepairVerbatim'] and column['sourceProof']['deletedDuplicateDriverAbsent']
+    assert column['storage']['workspaceAdmissionBytes'] == 4096 and column['storage']['newOwnedCapacityBytes'] == 0
     assert column['raw']['mirrored'] and column['raw']['allMembersVerified']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -1441,13 +1443,11 @@ def render():
     rows[positions[0]] = ('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | '
                          f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    word_column = json.loads((ROOT / 'benchmarks/bicubic-word-column-preparation-evidence.json').read_text(encoding='utf-8'))
-    current = word_column['cases']['TightDown16']
-    assert word_column['productionAccepted'] and current['actualIterations'] == 12
-    assert current['managedExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-    assert current['librarySha256'] == word_column['producers']['linuxSha256']
-    assert word_column['qualification']['actualPackage']['sha256'] == word_column['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in word_column['independentComparison']['views'])
+    current = column['cases']['TightDown16']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedRationalReferenceExact'] and current['managedQualifiedOriginalPixelsExact']
+    assert current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+    assert current['librarySha256'] == cq['actualPackage']['librarySha256']
     rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1829,10 +1829,16 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Strided column workspace](../benchmarks/BICUBIC-STRIDED-COLUMN-CACHE.md)
-  saves **571.36→552.17µs /19.18µs/3.36%raw/3.30%normalized**, with separated
-  filtered/all-actual raw/normalized confidence. Current zimg417.53µs,upper1.337
-  remains a gap;113B/op, no added owned capacity/retained scratch.
+- **Resizing:** [Shared byte/word columns](../benchmarks/BICUBIC-SHARED-BYTE-WORD-COLUMNS.md)
+  save **689.43→590.84µs /98.59µs/14.30%raw/14.50%normalized** on word256×129.
+  Matched filtered/allactual raw/normalized confidence separates; zimg572.81µs,
+  upper1.033 leaves18µs. One driver replaces two,493→395production lines; exact
+  products/certificates/repair,4KiB admission and113B/op remain. No added owned
+  capacity or retained scratch. Byte confirmation is574.56/zimg422.95µs,upper1.410:
+  raw+32.74µs/6.04% against matched541.82µs, but native brackets422.95/445.90µs
+  leave normalized intervals overlapping. Byte effect remains inconclusive;
+  the adverse confirmation stays visible rather than the favorable535.70µs short.
+  Earlier751.02word/552.17byte points are history, not contemporary causal baselines.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -1852,12 +1858,9 @@ Current scope and remaining work:
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain
-  is claimed. The strided reduction's shared numeric range serves a16column borrowed-
-  output prefix and original8/6column suffix;
-  separate non-inlined stack frames share one4KiB allowance and retire before
-  overlap/replay. Both OSes pass5,973full/live, scalar/ISA, SAME actual package/
-  column ownership checks and allthree examples. Other source-valid paths reuse
-  evidence; this is one scoped control, not all-path parity.
+  is claimed. Shared column prefix/suffix frames retire before overlap/replay;
+  current5,994full/live and SAME actual-package qualification covers both depths.
+  Other source-valid paths reuse evidence; scoped costs do not prove all-path parity.
   [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
   reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
   with separated filtered/all-actual raw/normalized confidence. Current exact
@@ -1964,7 +1967,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{wide_byte['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{column['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

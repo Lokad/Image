@@ -13,19 +13,22 @@ internal static class ColumnBicubicResize
 
     private readonly struct SmallStrip { }
     private readonly struct LargeStrip { }
+    private readonly struct ByteSamples { }
+    private readonly struct WordSamples { }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
-        if (source.BitDepth != 8 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
+        if (source.BitDepth is not (8 or 16) || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > 10 || tapsY > 10
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
         context.Reserve(WorkspaceBytes);
         try
         {
-            var rowSlots = scaleY < 2.25 ? 9 : 10;
+            var word = source.BitDepth == 16;
+            var rowSlots = scaleY < 2.25 && (!word || scaleX < 2.25) ? 9 : 10;
             var stripColumns = rowSlots == 9 ? 8 : 6;
             var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 10,
                 stripColumns, context.Cancellation);
@@ -34,13 +37,20 @@ internal static class ColumnBicubicResize
                 && TryLocateResultCache(result, rowSlots, out var start, out var prefixColumns))
             {
                 var cache = MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels[start..]);
-                if (!ApplyRange<LargeStrip>(source, result, scaleX, scaleY, rowSlots,
-                    geometry, cache, result.Stride / 32, 0, prefixColumns, context)) return false;
+                var complete = word
+                    ? ApplyRange<LargeStrip, WordSamples>(source, result, scaleX, scaleY, rowSlots,
+                        geometry, cache, result.Stride / 32, 0, prefixColumns, context)
+                    : ApplyRange<LargeStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
+                        geometry, cache, result.Stride / 32, 0, prefixColumns, context);
+                if (!complete) return false;
                 firstColumn = prefixColumns;
             }
             // The large stack/cache users have returned before suffix writes.
-            return ApplyRange<SmallStrip>(source, result, scaleX, scaleY, rowSlots,
-                geometry, default, 0, firstColumn, result.Width, context);
+            return word
+                ? ApplyRange<SmallStrip, WordSamples>(source, result, scaleX, scaleY, rowSlots,
+                    geometry, default, 0, firstColumn, result.Width, context)
+                : ApplyRange<SmallStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
+                    geometry, default, 0, firstColumn, result.Width, context);
         }
         finally { context.Release(WorkspaceBytes); }
     }
@@ -49,12 +59,13 @@ internal static class ColumnBicubicResize
         out int start, out int prefixColumns)
     {
         start = prefixColumns = 0;
-        if (result.BitDepth != 8 || result.Stride % 32 != 0 || result.Height < rowSlots) return false;
+        if (result.BitDepth is not (8 or 16) || result.Stride % 32 != 0 || result.Height < rowSlots) return false;
         // Existing geometry occupies96B at the end of every visible row.
         // Each cache slot occupies512B in a distinct, still-unwritten row tail.
-        var candidate = (result.Width * 4 - 96 - 16 * 32) & ~31;
+        var pixelBytes = result.BitDepth / 8 * 4;
+        var candidate = (result.Width * pixelBytes - 96 - 16 * 32) & ~31;
         if (candidate < 0) return false;
-        var prefix = candidate / 4 / 16 * 16;
+        var prefix = candidate / pixelBytes / 16 * 16;
         if (prefix < 32) return false;
         start = candidate; prefixColumns = prefix;
         return true;
@@ -70,15 +81,17 @@ internal static class ColumnBicubicResize
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static bool ApplyRange<TStrip>(ImageBuffer source, ImageBuffer result,
+    private static bool ApplyRange<TStrip, TSamples>(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, int rowSlots, ColumnBicubicGeometry geometry,
         scoped Span<Vector256<double>> cache, int cacheStride, int firstColumn, int endColumn,
-        OperationContext context) where TStrip : struct
+        OperationContext context) where TStrip : struct where TSamples : struct
     {
         // These physically separate frames retire between prefix and suffix.
         // Small retains the original4080B payload; large uses3232B plus a loan
         // from the independently admitted result. Neither owns additional capacity.
         var large = typeof(TStrip) == typeof(LargeStrip);
+        var word = typeof(TSamples) == typeof(WordSamples);
+        var pixelBytes = word ? 8 : 4;
         Span<byte> workspace = stackalloc byte[large ? 3232 : 4080];
         var capacity = large ? 16 : 8;
         var sourceCapacity = large ? 45 : 25;
@@ -130,22 +143,43 @@ internal static class ColumnBicubicResize
                     var slot = sy % rowSlots; rows[t] = slot * cacheStride;
                     if (rowIds[slot] == sy) continue;
                     rowIds[slot] = sy;
-                    var row = input.Slice(sy * source.Stride + sourceFirst * 4, sourceCount * 4);
+                    var row = input.Slice(sy * source.Stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
                     var px = 0;
-                    for (; px + 1 < sourceCount; px += 2)
+                    if (word)
                     {
-                        var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(px * 4, 8));
-                        var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
-                        var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-                        var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
-                        decoded[px] = products.GetLower(); decoded[px + 1] = products.GetUpper();
+                        for (; px + 1 < sourceCount; px += 2)
+                        {
+                            var samples = Avx2.ConvertToVector256Int32(MemoryMarshal.Read<Vector128<ushort>>(row.Slice(px * 8, 16)));
+                            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+                            var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+                            decoded[px] = products.GetLower(); decoded[px + 1] = products.GetUpper();
+                        }
+                        if (px < sourceCount)
+                        {
+                            var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(px * 8, 8));
+                            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsUInt16());
+                            var alpha = (int)(packed >> 48);
+                            var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1));
+                            decoded[px] = Avx512F.ConvertToVector512Double(Vector256.Create(products.AsUInt32(), Vector128<uint>.Zero)).GetLower();
+                        }
                     }
-                    if (px < sourceCount)
+                    else
                     {
-                        var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(px * 4, 4));
-                        var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
-                        var factors = Vector128.Create((int)(packed >> 24), (int)(packed >> 24), (int)(packed >> 24), 1);
-                        decoded[px] = Avx.ConvertToVector256Double(Sse41.MultiplyLow(samples, factors));
+                        for (; px + 1 < sourceCount; px += 2)
+                        {
+                            var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(px * 4, 8));
+                            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
+                            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+                            var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+                            decoded[px] = products.GetLower(); decoded[px + 1] = products.GetUpper();
+                        }
+                        if (px < sourceCount)
+                        {
+                            var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(px * 4, 4));
+                            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
+                            var factors = Vector128.Create((int)(packed >> 24), (int)(packed >> 24), (int)(packed >> 24), 1);
+                            decoded[px] = Avx.ConvertToVector256Double(Sse41.MultiplyLow(samples, factors));
+                        }
                     }
                     var x = 0;
                     for (; x + 1 < length; x += 2)
@@ -179,7 +213,7 @@ internal static class ColumnBicubicResize
                         cache[slot * cacheStride + x] = sum;
                     }
                 }
-                var destination = result.GetRow8(y);
+                var destination = word ? result.Pixels.Slice(y * result.Stride, result.Stride) : result.GetRow8(y);
                 var outputX = 0;
                 for (; outputX + 1 < length; outputX += 2)
                 {
@@ -189,7 +223,22 @@ internal static class ColumnBicubicResize
                         var pair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 2)));
                         sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
                     }
-                    if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
+                    if (word)
+                    {
+                        var n0 = normalizers[outputX] * normalizerY;
+                        var n1 = normalizers[outputX + 1] * normalizerY;
+                        if (!BicubicMath.TryWriteWordPairWide(sum, n0, n1, destination.Slice((tile + outputX) * 8, 16)))
+                        {
+                            // Preserve the word certificate and original-order
+                            // ordinary-alpha repair. Tiny alpha unwinds first.
+                            if (!(n0 >= .5 && n1 >= .5 && sum.GetElement(3) / n0 >= 2 && sum.GetElement(7) / n1 >= 2)
+                                || !OriginalWord(source, result, tile + outputX, y, weights.Slice(outputX * 10, counts[outputX]),
+                                    offsets.Slice(outputX * 10, counts[outputX]), sourceFirst, vertical[..count], first, context)
+                                || !OriginalWord(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * 10, counts[outputX + 1]),
+                                    offsets.Slice((outputX + 1) * 10, counts[outputX + 1]), sourceFirst, vertical[..count], first, context)) return false;
+                        }
+                    }
+                    else if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
                         destination.Slice((tile + outputX) * 4, 8)))
                     {
                         // Repair only uncertain pixels, preserving original tap order.
@@ -202,6 +251,12 @@ internal static class ColumnBicubicResize
                 }
                 for (var x = outputX; x < length; x++)
                 {
+                    if (word)
+                    {
+                        if (!OriginalWord(source, result, tile + x, y, weights.Slice(x * 10, counts[x]),
+                            offsets.Slice(x * 10, counts[x]), sourceFirst, vertical[..count], first, context)) return false;
+                        continue;
+                    }
                     var sum = Vector256<double>.Zero;
                     for (var t = 0; t < count; t++)
                         sum = Avx.Add(sum, Avx.Multiply(cache[rows[t] + x], Vector256.Create(vertical[t])));
@@ -236,6 +291,39 @@ internal static class ColumnBicubicResize
         context.Cancellation.ThrowIfCancellationRequested();
         return true;
     }
+    private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
+        ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,
+        ReadOnlySpan<double> vertical, int firstY, OperationContext context)
+    {
+        double red = 0, green = 0, blue = 0, alphaSum = 0, normalizer = 0;
+        for (var ty = 0; ty < vertical.Length; ty++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var wy = vertical[ty]; if (wy == 0) continue;
+            var row = source.GetRow16(Math.Clamp(firstY + ty, 0, source.Height - 1));
+            for (var tx = 0; tx < weights.Length; tx++)
+            {
+                var w = wy * weights[tx]; if (w == 0) continue;
+                var offset = (sourceFirst + offsets[tx]) * 4;
+                var a = row[offset + 3];
+                red += w * a * row[offset]; green += w * a * row[offset + 1]; blue += w * a * row[offset + 2];
+                alphaSum += w * a; normalizer += w;
+            }
+        }
+        var normalized = alphaSum / normalizer;
+        // Exact tiny-alpha arithmetic needs the complete 4-KiB allowance.
+        // Decline while this frame is live; the caller replays after it unwinds.
+        if (normalized > 0 && normalized < 1) return false;
+        var aOut = BicubicMath.RoundWord(normalized);
+        var color = aOut > 0 && alphaSum > 0;
+        var destination = result.GetRow16(y).Slice(x * 4, 4);
+        destination[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
+        destination[3] = aOut;
+        return true;
+    }
+
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
         ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,
         ReadOnlySpan<double> vertical, int firstY, OperationContext context)
