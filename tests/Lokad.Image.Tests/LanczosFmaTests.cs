@@ -26,6 +26,44 @@ public sealed class LanczosFmaTests
     private static int Round(BigInteger n, BigInteger d, int maximum)
         => n <= 0 ? 0 : (int)BigInteger.Min(maximum, (2 * n + d) / (2 * d));
 
+    [Theory]
+    [InlineData(1, 5)] [InlineData(3, 9)] [InlineData(5, 13)]
+    [InlineData(31, 9)] [InlineData(1031, 2)]
+    public void ByteRowsKeepExactBitsGuardsAndAdmissionWithoutAllocation(int width, int target)
+    {
+        if (!Supported) return;
+        using var source = ImageBuffer.Create(width, 1, 8);
+        for (var x = 0; x < width; x++)
+        {
+            source.SetSample(x, 0, 0, 255); source.SetSample(x, 0, 1, x % 2 == 0 ? 255 : 1);
+            source.SetSample(x, 0, 2, x % 3 == 0 ? 0 : 254);
+            source.SetSample(x, 0, 3, (x % 4) switch { 0 => 0, 1 => 1, 2 => 16, _ => 255 });
+        }
+        var original = source.Pixels.ToArray();
+        using var root = new TestMemoryBudget(1 << 22);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var plan = LanczosPlan.Create(width, target, context); var charged = root.Bytes;
+        const ulong guard = 0xfff8abcd12345678;
+        var output = Enumerable.Repeat(BitConverter.UInt64BitsToDouble(guard), target * 4 + 8).ToArray();
+        void Apply() => LanczosFmaResize.Horizontal(source, 0, plan, output.AsSpan(4, target * 4), Span<uint>.Empty, context);
+        Apply(); var before = GC.GetAllocatedBytesForCurrentThread(); Apply();
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
+        Assert.Equal(charged, root.Bytes); Assert.Equal(original, source.Pixels.ToArray());
+        for (var i = 0; i < 4; i++)
+        {
+            Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(output[i]));
+            Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(output[target * 4 + 4 + i]));
+        }
+        for (var x = 0; x < target; x++) for (var c = 0; c < 4; c++)
+        {
+            var window = plan.Windows[x]; BigInteger exact = 0;
+            for (var t = 0; t < window.Count; t++) exact += (BigInteger)source.Sample(window.First + t, 0, 3)
+                * (c == 3 ? 1 : source.Sample(window.First + t, 0, c)) * plan.Weights[window.Offset + t];
+            Assert.Equal(BitConverter.DoubleToUInt64Bits((double)exact), BitConverter.DoubleToUInt64Bits(output[4 + x * 4 + c]));
+        }
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Fact]
     public void SelectionUsesLocalBoundsWithoutQueryingSharedAvailability()
     {
@@ -74,6 +112,8 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
                         expected += (BigInteger)source.Sample(window.First + i, y, 3)
                             * (c == 3 ? 1 : source.Sample(window.First + i, y, c)) * h.Weights[window.Offset + i];
                     exact[y][x * 4 + c] = expected;
+                    if (depth == 8) Assert.Equal(BitConverter.DoubleToUInt64Bits((double)expected),
+                        BitConverter.DoubleToUInt64Bits(rows[y][x * 4 + c]));
                     Assert.True(BigInteger.Abs((BigInteger)rows[y][x * 4 + c] - expected)
                         <= (c == 3 ? 0 : (BigInteger)512 * (depth == 16 ? h.MaximumCount + 3L : 1)));
                 }

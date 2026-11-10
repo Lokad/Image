@@ -208,13 +208,21 @@ Current scope and remaining work:
   prepared RGBA16 enlargement saves **164.58µs/4.09% raw**,
   3.84% normalized; both confidence views separate.
   Current3856.44/zimg3892.93µs,
-  upper0.995 passes/stops. Four word costs refresh, four unchanged byte
-  costs reuse: **sixpasses/two prepared-reduction gaps**. Other fresh costs qualify
+  upper0.995 passes/stops. Four word costs refresh; three byte costs
+  reuse unchanged paths. A [current byte-reduction confirmation](../benchmarks/lanczos-byte-current-cost-evidence.json)
+  measures 580.52/zimg489.96µs,
+  upper1.195, GC139B/op and retained139,800B. Original production/package are
+  unchanged; this replaces the older cost without a causal historical gain claim.
+  Overall **six passes/two prepared-reduction gaps**. Other fresh costs qualify
   current status, without causal companion-gain claims. Word prepared GC139/
   4,265,332B/op and retained148,040/333,396B remain; independent enlargement output
   4,264,104B, physical/native peaks unmeasured. No new buffer/pool/session; exact
   four-chain order, Q30, strict certificates/repair and explicit one-shot/prepared
-  boundaries stay. [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  boundaries stay. [Unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
+  retain adverse results and current profile separately; no production change survived.
+  Five new exact-row/guard/ownership cases and the strengthened oracle pass the
+  affected 19-case class in four modes on each OS; unchanged full/package proof is reused.
+  [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
   retain earlier gains/history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
@@ -420,7 +428,7 @@ settings do not establish matched quality.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 707.72 | 1,567.51 | 0.451 / 0.457 | 138,643 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 625.69 | 532.52 | 1.175 / 1.186 | 139 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 580.52 | 489.96 | 1.185 / 1.195 | 139 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 684.21 | 1,801.96 | 0.380 / 0.382 | 146,866 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 544.76 | 510.63 | 1.067 / 1.073 | 139 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,085.56 | 5,715.79 | 0.715 / 0.720 | 319,224 |

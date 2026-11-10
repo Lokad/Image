@@ -1,0 +1,135 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LBC743",
+  "productionChanged": false,
+  "producers": {
+    "windowsSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+    "linuxSha256": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+    "timedArtifactSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9"
+  },
+  "actualPackageSha256": "09dccc3ea1ea4691239a90caae7fb5dafbbd00ff2c6e3e9814749053630b100d",
+  "caseId": "Repeated8",
+  "case": {
+    "managedUs": 580.5158194731404,
+    "nativeUs": 489.9550302287582,
+    "ratio": 1.184834900464436,
+    "lower": 1.174747883906249,
+    "upper": 1.195468203679717,
+    "allocatedBytes": 139,
+    "retainedBytes": 139800,
+    "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+    "status": "gap",
+    "actualIterations": 12,
+    "filteredIterations": 11,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "reusedUnchangedPath": false,
+    "receipt": "lds743-baseline-Repeated8-confirm-receipt.json",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+    "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+    "quality": {
+      "state": "checked",
+      "matched": true,
+      "sourceUnchanged": true,
+      "rgbMaximum": 0,
+      "alphaMaximum": 0,
+      "rgbMeanSquared": 0,
+      "alphaMeanSquared": 0
+    },
+    "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+    "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+  },
+  "raw": {
+    "file": "lanczos-byte-row-experiment.tar.xz",
+    "sha256": "f0640cfc95998fca027aa4e13ab4d6dd9528ba644ea135d76b5db19252b551b8",
+    "bytes": 19576284,
+    "members": 279,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-paired-word-windows.tar.xz",
+        "sha256": "4e18a5e8e27547f7a5dab8f2a2d887d9bf7a06a6a3422e98a30dc793a5845c2c"
+      }
+    ]
+  },
+  "qualification": {
+    "reusedFullLiveEachOs": 6148,
+    "unchangedProductionAndPackage": true,
+    "newBehaviorCases": 5,
+    "strengthenedExistingRowOracle": true,
+    "affectedRowClassEachModeEachOS": 19,
+    "modes": [
+      "normal",
+      "scalar",
+      "no-avx2",
+      "no-avx512"
+    ],
+    "restoration": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSourcesAndMainRestoredExactly": true,
+        "restoredMainSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "restoredCertificateSha256": "28d3e7b88fcd1688366ce487b2366b222ac073e3591638542aed42d750ac9ddd",
+        "retainedTestSourceSha256": "851d92017f9c7d7555a1f31828eff6329b31d6c0e9911ff38b007dd6e64a7f53",
+        "internalAssemblySha256": "f8108e149b3afec519bea9010ce6ad62c1c785843d8a9766a1c5e0743221e897",
+        "checks": {
+          "normal": 19,
+          "scalar": 19,
+          "no-avx2": 19,
+          "no-avx512": 19
+        },
+        "bindings": {
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "875ff02360b82591da644e1a3b3c946fc56e545fe45e89ea940cdf73b6e491a3",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "875ff02360b82591da644e1a3b3c946fc56e545fe45e89ea940cdf73b6e491a3",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "875ff02360b82591da644e1a3b3c946fc56e545fe45e89ea940cdf73b6e491a3",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46"
+        },
+        "productionBuilds": 0,
+        "embeddedTestOnlyBuilds": 1,
+        "packageSha256": "09dccc3ea1ea4691239a90caae7fb5dafbbd00ff2c6e3e9814749053630b100d",
+        "qualificationReuse": "UnchangedLPM7406148full/live/OSandSAMEactualpackage/threeexamples,327internal/729public focusedcandidateproofretainedhistory. Originalproduction/scalar/ISA/proofreused; affectedrowclassincludingnew5behaviorcases reruns onrestoredactualproduction sources normal/scalar/AVX2off/512off, embeddedonlyrebuilt. No repeatedmain/package/full-live run."
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSourcesAndMainRestoredExactly": true,
+        "restoredMainSha256": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "restoredCertificateSha256": "28d3e7b88fcd1688366ce487b2366b222ac073e3591638542aed42d750ac9ddd",
+        "retainedTestSourceSha256": "851d92017f9c7d7555a1f31828eff6329b31d6c0e9911ff38b007dd6e64a7f53",
+        "internalAssemblySha256": "6fa65367934ee03a71949a03ce3446314a3dc4140bc2543bda24d5343176e7ef",
+        "checks": {
+          "normal": 19,
+          "scalar": 19,
+          "no-avx2": 19,
+          "no-avx512": 19
+        },
+        "bindings": {
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "578e082877cadadbbc4e40869f691a6315d7638da5f4a68fef6aba2fcdf1046f",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "c8d0a1e2acd09ef726287db85e0dd4a24635912bbba45abbfc72df8fc9e4887f",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "578e082877cadadbbc4e40869f691a6315d7638da5f4a68fef6aba2fcdf1046f",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "c8d0a1e2acd09ef726287db85e0dd4a24635912bbba45abbfc72df8fc9e4887f",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "578e082877cadadbbc4e40869f691a6315d7638da5f4a68fef6aba2fcdf1046f",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "c8d0a1e2acd09ef726287db85e0dd4a24635912bbba45abbfc72df8fc9e4887f"
+        },
+        "productionBuilds": 0,
+        "embeddedTestOnlyBuilds": 1,
+        "packageSha256": "09dccc3ea1ea4691239a90caae7fb5dafbbd00ff2c6e3e9814749053630b100d",
+        "qualificationReuse": "UnchangedLPM7406148full/live/OSandSAMEactualpackage/threeexamples,327internal/729public focusedcandidateproofretainedhistory. Originalproduction/scalar/ISA/proofreused; affectedrowclassincludingnew5behaviorcases reruns onrestoredactualproduction sources normal/scalar/AVX2off/512off, embeddedonlyrebuilt. No repeatedmain/package/full-live run."
+      }
+    }
+  },
+  "invalidation": "No production change survives. Original main DLLs, production sources, certificate, public/differential/probe bindings and package restored exactly. Only internal test assembly rebuilt for retained five new row cases and strengthened exact-bit oracle; 19 affected cases pass four modes per OS. Original 6148 full/live and SAME package/all three examples reused, not rerun. Other seven Lanczos costs source-valid reused. No causal historical speed or GC claim from clock movement."
+}

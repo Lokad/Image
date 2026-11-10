@@ -1244,6 +1244,14 @@ def render():
     assert len(lanczos_current['cases']) == 8 and len(lanczos_current['refreshedWordCases']) == len(lanczos_current['reusedByteCases']) == 4
     assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 2, 'uncertain': 0}
     assert lanczos_current['cases']['RepeatedEnlarge16']['upper'] <= 1
+    lanczos_byte_cost = json.loads((ROOT / 'benchmarks/lanczos-byte-current-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not lanczos_byte_cost['productionChanged']
+    assert lanczos_byte_cost['producers'] == lanczos_current['producers']
+    assert lanczos_byte_cost['actualPackageSha256'] == current_build_qualification['actualPackage']['sha256']
+    assert lanczos_byte_cost['raw']['mirrored'] and lanczos_byte_cost['raw']['allMembersVerified']
+    assert lanczos_byte_cost['qualification']['unchangedProductionAndPackage']
+    assert lanczos_byte_cost['caseId'] == 'Repeated8' and lanczos_byte_cost['case']['filteredIterations'] == 11
+    current_lanczos_cases = {**lanczos_current['cases'], 'Repeated8': lanczos_byte_cost['case']}
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
     for case, label, size in [
@@ -1255,7 +1263,7 @@ def render():
             ('RepeatedEnlarge8', 'Lanczos3 prepared RGBA8 / zimg prepared', '1027×519'),
             ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '1027×519'),
             ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
-        observation = lanczos_current['cases'][case]
+        observation = current_lanczos_cases[case]
         assert observation['managedExact'] and observation['allOriginalGatesPassed'] and observation['quietGuardsPassed']
         assert observation['reusedUnchangedPath'] or observation['librarySha256'] == lanczos_current['producers']['timedArtifactSha256']
         assert observation['actualIterations'] == 12
@@ -2001,13 +2009,21 @@ Current scope and remaining work:
   prepared RGBA16 enlargement saves **{lanczos_current['comparisons']['RepeatedEnlarge16']['savedUs']:.2f}µs/{100*lanczos_current['comparisons']['RepeatedEnlarge16']['rawReduction']:.2f}% raw**,
   {100*lanczos_current['comparisons']['RepeatedEnlarge16']['normalizedReduction']:.2f}% normalized; both confidence views separate.
   Current{lanczos_current['cases']['RepeatedEnlarge16']['managedUs']:.2f}/zimg{lanczos_current['cases']['RepeatedEnlarge16']['nativeUs']:.2f}µs,
-  upper{lanczos_current['cases']['RepeatedEnlarge16']['upper']:.3f} passes/stops. Four word costs refresh, four unchanged byte
-  costs reuse: **sixpasses/two prepared-reduction gaps**. Other fresh costs qualify
+  upper{lanczos_current['cases']['RepeatedEnlarge16']['upper']:.3f} passes/stops. Four word costs refresh; three byte costs
+  reuse unchanged paths. A [current byte-reduction confirmation](../benchmarks/lanczos-byte-current-cost-evidence.json)
+  measures {lanczos_byte_cost['case']['managedUs']:.2f}/zimg{lanczos_byte_cost['case']['nativeUs']:.2f}µs,
+  upper{lanczos_byte_cost['case']['upper']:.3f}, GC139B/op and retained139,800B. Original production/package are
+  unchanged; this replaces the older cost without a causal historical gain claim.
+  Overall **six passes/two prepared-reduction gaps**. Other fresh costs qualify
   current status, without causal companion-gain claims. Word prepared GC139/
   4,265,332B/op and retained148,040/333,396B remain; independent enlargement output
   4,264,104B, physical/native peaks unmeasured. No new buffer/pool/session; exact
   four-chain order, Q30, strict certificates/repair and explicit one-shot/prepared
-  boundaries stay. [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  boundaries stay. [Unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
+  retain adverse results and current profile separately; no production change survived.
+  Five new exact-row/guard/ownership cases and the strengthened oracle pass the
+  affected 19-case class in four modes on each OS; unchanged full/package proof is reused.
+  [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
   retain earlier gains/history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
