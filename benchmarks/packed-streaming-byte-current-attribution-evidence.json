@@ -1,0 +1,131 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PSA751",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 283,
+  "case": {
+    "caseId": "Tight4x9_8",
+    "managedUs": 797.366153030303,
+    "nativeUs": 717.4849114583334,
+    "ratio": 1.1113350821686354,
+    "lower": 1.0702563336090039,
+    "upper": 1.1504852725404322,
+    "allocatedBytes": 114,
+    "status": "gap",
+    "librarySha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+    "packetBytes": 144,
+    "packetSha256": "df49ddc41185b3feaa2a0fc283fb3cd2432e463aa4aa7294a041cd76036effd1",
+    "actualIterations": 12,
+    "filteredIterations": 11,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receiptFile": "psa751-candidate-Tight4x9_8-confirm-receipt.json"
+  },
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "PSA751",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "requiredMaterialPaths": 283,
+    "selectedExistingCase": "Tight4x9_8",
+    "selection": "4x9byte815.17/native684.23us gap~130.94 exceeds256x129boundedbyte~85.18. EarlierPLAN8x17~85 shorthand was incorrect:8x17 is~49.15. No new control/settings added.",
+    "wholeFilesUnchanged": {
+      "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": true,
+      "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": true,
+      "src/Lokad.Image/Internal/StreamingBicubicResize.cs": true,
+      "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": true,
+      "src/Lokad.Image/Internal/BicubicMath.cs": false,
+      "src/Lokad.Image/ImageTransforms.cs": false
+    },
+    "relevantDependencyBodiesUnchanged": {
+      "Coefficient": true,
+      "PrepareStreamingRows": true,
+      "RoundByte": true,
+      "Kernel": true
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "c2136155fd7b5c3120078ab461c15267b9790032e2067cbc3e25e3cc3d62ebb7",
+      "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": "966281ddd199ba867771e7dd2770710e09c0a2bec3e1c072cd9e07a1933760d8",
+      "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "a3f319f102a973e5699d53952d40560ff678492d80aefd4c43ebe5d9a0a3e355",
+      "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "df6db16f571725e1b37a773386c994964b7497dfd32028009249eb8b96389443",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+    },
+    "scope": "Fourstreamingdriver/kernel bodies unchanged. BicubicMath/ImageTransforms fileschangedelsewhere; requiredCoefficient/PrepareStreamingRows/RoundByte/Kernel bodies remainexact. Larger-tap4x9 rejects earlier boundedColumn/PackedColumn/DeepColumn/fullStreaming capacities and uses packedStreaming; current code capture will verify actual call boundary. Fresh currentcost resolves olderclock/producer evidence before optimization, same immutable actual package DLL."
+  },
+  "profile": {
+    "totalSamples": 1998,
+    "instances": [
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64> [Lokad.Image] Lokad.Image.Internal.PackedStreamingBicubicResize::FilterRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32,int32)[Optimized]",
+        "address": "0x7e8cb74cc380",
+        "codeBytes": 655,
+        "samples": 1899
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedStreamingBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7e8cb74cb320",
+        "codeBytes": 2876,
+        "samples": 66
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x7e8cb74cc000",
+        "codeBytes": 184,
+        "samples": 26
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedStreamingBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "address": "0x7e8cb74cc960",
+        "codeBytes": 481,
+        "samples": 2
+      }
+    ],
+    "profilingOnly": true,
+    "instrumentedElapsedDiscarded": true,
+    "receipt": "psa751-packedrowsbyte-profile-receipt.json",
+    "annotation": "psa751-code-annotation.json",
+    "scope": "1899/1998samplelocations inFilterRow655B, not exact phasecost or removablepercentage. Clamp/bounds/bit-reconstruction/integerpremultiply and ordered sums areactualhotloop leads; setup isminor. One current2secondcapture CPU0/CPU1, no newmeasurementharness/nativefixture."
+  },
+  "rowPairModel": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "performanceClaims": false,
+    "schedulerModelChecks": 64,
+    "existingCase": "Tight4x9_8",
+    "rowPairsPerColumn": 129,
+    "singleRowsPerColumn": 1,
+    "filteredRowsPerColumn": 259,
+    "oldFilterCalls": 1036,
+    "pairedFilterCalls": 520,
+    "oldCoefficientDecodes": 531468,
+    "pairedCoefficientDecodes": 266760,
+    "hypothesis": "Current actual-package profile puts1899/1998samples in655BpackedbyteFilterRow. Batch two actual adjacent required source rows to share clamped sample indices and six-byte coefficient reconstruction, interleaving two independent original-order accumulation chains. Each row still adds lowerthenupper products per two taps; no reassociation/FMA, coefficient/pixel/precision change. No CPUgain inferred from logicalcounts.",
+    "endState": "One shared packed scheduler source with depth/row-batch constants chosen once at entry, existing word/single-row kernels retained and batching state erased there. A paired byte row kernel returns two numeric vectors; no new source/product array, cache/framework/session, budgetroot or owner. Preserve4KiBexplicitstorage, original prefix/suffix/cancel/repair lifetimes.",
+    "lifetime": "Only next immediate coordinate required within current admitted output-row block, only if clamped nextsource row differs. First/last repeatededge contributions remain separate in original coordinate/output order. Both rows complete before use; one next-row numeric vector stays private until nextcoordinate. Block reset and failure cleanup discard private state. Actual source/read and accumulation traces equal original model.",
+    "qualification": "Beforebuild inspect actual row-pair lane/order/owner/codegen case and genericmode isolation. Focused actualC#bits/edge/odd/count/guards/root/cancel tests and existing packedbyte short, useful independentconfirmation and affectedexisting4packed costs. Full-stream4paths sourcevalidreuse ifunchanged. Broad W/L/scalar/ISA/SAMEpackage at accepted coherent stage. No new performance shape/grid, fixture-dependent preparation or claim from model."
+  },
+  "qualificationReuse": "No production/test change. ReusePIF7506154full/live perOS,328internal/729publicnormal/scalar/ISA and SAMEactualpackage/allthreeexamples. One current4x9confirmation resolvesoldcost beforeoptimization, oneprofileelapseddiscarded. Existing full/packedstreaming sources and relevantmath bodiesunchanged; no CPUcausalgain from815.17\u2192797.37 historical movement.",
+  "decision": "Current existing4x9byte797.37/native717.48us upper1.150 remainsdemonstratedgap (~79.88us), GC114amortization. Earlier~131usgap superseded withoutcausalgainclaim. CorrectedpriorPLAN8x17~85 shorthand: bounded256x129 gap85,8x17 gap49. Nativegraph retained/halo/packing/output boundary unchanged. Row-pairmodel identifies shareable prep without new storage/numericalpolicy, not actualC#orCPUproof; model alone does not prove an actual kernel or CPU benefit.",
+  "raw": {
+    "file": "packed-streaming-byte-current-attribution.tar.xz",
+    "sha256": "b69212c86862b33fabc638e9daf6e74e30aedef9d9e3217e37b74f6342addc79",
+    "bytes": 90944,
+    "members": 34,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-bicubic-indexed-reduction.tar.xz",
+        "sha256": "c132b88f7e08c7beec1560012c196915ccfaa9f1c4de26be8fa0efde5788ba8d"
+      },
+      {
+        "file": "bicubic-shared-streaming-blocks-qualified.tar.xz",
+        "sha256": "3b26c6b86ff3e3fd65a6bd312e76ec0be7f5f9d3a09b2a2d1594680ffe20d39a"
+      }
+    ]
+  }
+}
