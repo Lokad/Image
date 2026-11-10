@@ -221,8 +221,20 @@ Current scope and remaining work:
   physical/native/JIT-stack peaks unmeasured. [Paired word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md),
   [certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md) and
   [unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
-  retain earlier evidence and adverse results. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
-  passes six of eight; small/wide-column gaps remain linked in coverage.
+  retain earlier evidence and adverse results.
+  [Paired packed streaming rows](../benchmarks/PACKED-STREAMING-PAIRED-BYTE-ROWS.md)
+  share clamped indices/coefficient reconstruction between two required byte rows.
+  Complete4×9 byte saves **387.88µs/48.75% raw and normalized**,
+  with separated filtered/all-actual confidence and effectively unchanged reference.
+  Current407.83/zimg676.28µs,
+  upper0.607 passes. Four affected packed costs refresh/pass;
+  four unchanged full-streaming costs remain source-valid: **seven of eight pass**,
+  with8×17 byte upper1.127/~49µs gap. Original exact per-row/vertical order and
+  single-row code remain; word mode erases pair state. GC113B/op,4KiB workspace,
+  scratchretention0 and independent32/64/144/288B output payloads are unchanged.
+  Physical/native/JIT-stack peaks are unmeasured. Complete managed prep stays
+  timed; labeled zimg retains graph/input/scratch. No fresh-native-graph claim.
+  Passing controls stop; bounded/cached-wide and JPEG leads remain in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
   save201.65µs/9.05% raw on complete public RGBA8 enlargement, with separated
@@ -310,14 +322,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,154 full/live checks per OS**, affected
+The current production build passes **6,155 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes322 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes329 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.

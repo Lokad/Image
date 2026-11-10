@@ -1414,16 +1414,19 @@ def render():
         assert current['packetSha256'] == current['nativePacketSha256']
         assert current['managedPacketBytes'] == current['nativePacketBytes']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
-    assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
-    assert streaming['qualification']['fullChecksEachOs'] == 5587
-    assert streaming['qualification']['actualPackage']['sha256'] == streaming['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert len(streaming['cases']) == 8 and sum(c['status'] == 'pass' for c in streaming['cases'].values()) == 6
+    streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
+    assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
+    current_build_qualification = streaming['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6155
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert current_build_qualification['resizeInternalEachModeEachOs'] == 329
+    assert streaming['raw']['mirrored'] and streaming['raw']['allMembersVerified']
+    assert len(streaming['cases']) == 8 and streaming['statusCounts'] == {'pass': 7, 'gap': 1, 'uncertain': 0}
     for current in streaming['cases'].values():
         assert current['actualIterations'] == 12 and current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['librarySha256'] == streaming['producers']['linuxSha256']
+        if not current['reusedUnchangedPath']:
+            assert current['librarySha256'] == streaming['timedWindowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -2016,8 +2019,20 @@ Current scope and remaining work:
   physical/native/JIT-stack peaks unmeasured. [Paired word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md),
   [certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md) and
   [unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
-  retain earlier evidence and adverse results. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
-  passes six of eight; small/wide-column gaps remain linked in coverage.
+  retain earlier evidence and adverse results.
+  [Paired packed streaming rows](../benchmarks/PACKED-STREAMING-PAIRED-BYTE-ROWS.md)
+  share clamped indices/coefficient reconstruction between two required byte rows.
+  Complete4×9 byte saves **{streaming['comparison']['savedUs']:.2f}µs/{100*streaming['comparison']['rawReduction']:.2f}% raw and normalized**,
+  with separated filtered/all-actual confidence and effectively unchanged reference.
+  Current{streaming['cases']['packedrowsbyte']['managedUs']:.2f}/zimg{streaming['cases']['packedrowsbyte']['nativeUs']:.2f}µs,
+  upper{streaming['cases']['packedrowsbyte']['upper']:.3f} passes. Four affected packed costs refresh/pass;
+  four unchanged full-streaming costs remain source-valid: **seven of eight pass**,
+  with8×17 byte upper1.127/~49µs gap. Original exact per-row/vertical order and
+  single-row code remain; word mode erases pair state. GC113B/op,4KiB workspace,
+  scratchretention0 and independent32/64/144/288B output payloads are unchanged.
+  Physical/native/JIT-stack peaks are unmeasured. Complete managed prep stays
+  timed; labeled zimg retains graph/input/scratch. No fresh-native-graph claim.
+  Passing controls stop; bounded/cached-wide and JPEG leads remain in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
   save201.65µs/9.05% raw on complete public RGBA8 enlargement, with separated
@@ -2112,7 +2127,7 @@ opaque-word, progressive-strip, wide-column, shared byte/word enlargement and li
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes322 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes{current_build_qualification['resizeInternalEachModeEachOs']} internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.

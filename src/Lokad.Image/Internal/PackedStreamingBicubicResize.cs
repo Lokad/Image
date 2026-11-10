@@ -23,86 +23,112 @@ internal static class PackedStreamingBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 4,096 bytes. Only the last horizontal result
-            // is retained, including repeated clamped edge rows.
-            Span<uint> coefficientLow = stackalloc uint[Capacity];
-            Span<ushort> coefficientHigh = stackalloc ushort[Capacity];
-            Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
-            Span<double> centers = stackalloc double[OutputRowsPerBlock];
-            Span<int> first = stackalloc int[OutputRowsPerBlock];
-            Span<int> last = stackalloc int[OutputRowsPerBlock];
-            Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
-            Span<double> verticalMagnitudes = stackalloc double[OutputRowsPerBlock];
-            var word = source.BitDepth == 16;
-            var pixelBytes = word ? 8 : 4;
-            var input = source.Pixels;
-            var stride = source.Stride;
-            for (var x = 0; x < result.Width; x++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var centerX = (x + .5) * source.Width / result.Width - .5;
-                var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
-                var countX = (int)Math.Floor(centerX + 2 * scaleX) - firstX + 1;
-                var sourceFirst = Math.Clamp(firstX, 0, source.Width - 1);
-                double normalizerX = 0, horizontalMagnitude = 0, coefficientError = 0;
-                for (var t = 0; t < countX; t++)
-                {
-                    var w = ImageTransforms.Kernel((firstX + t - centerX) / scaleX, ResizeFilter.Bicubic);
-                    normalizerX += w; horizontalMagnitude += Math.Abs(w);
-                    // Preserve sign/exponent and 36 fraction bits in six bytes.
-                    // The omitted error is measured from the original coefficient.
-                    var bits = BitConverter.DoubleToUInt64Bits(w);
-                    coefficientLow[t] = (uint)(bits >> 16);
-                    coefficientHigh[t] = (ushort)(bits >> 48);
-                    coefficientError += Math.Abs(w - BicubicMath.Coefficient(coefficientLow[t], coefficientHigh[t]));
-                }
-                var sourceCount = Math.Clamp(firstX + countX - 1, 0, source.Width - 1) - sourceFirst + 1;
-                // Reuse the same bounded arrays for each output-row block.
-                // Original global coordinates and full tap order are preserved.
-                for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
-                {
-                    var height = BicubicMath.PrepareStreamingRows(source.Height, result.Height,
-                        blockStart, scaleY, centers, first, last);
-                    totals[..height].Clear(); normalizers[..height].Clear(); verticalMagnitudes[..height].Clear();
-                    var previousRow = -1;
-                    var horizontal = Vector256<double>.Zero;
-                    // Unclamped coordinates are visited in increasing order. Each
-                    // output receives exactly its original vertical taps, including
-                    // separate contributions from duplicated clamped edge samples.
-                    for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
-                    {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        var sy = Math.Clamp(coordinate, 0, source.Height - 1);
-                        if (sy != previousRow)
-                        {
-                            previousRow = sy;
-                            var row = input.Slice(sy * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
-                            horizontal = word ? PackedStreamingWordBicubicResize.FilterRow(row, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width)
-                                : FilterRow(row, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width);
-                        }
-                        for (var y = 0; y < height; y++)
-                        {
-                            if (coordinate < first[y] || coordinate > last[y]) continue;
-                            var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
-                            normalizers[y] += w; verticalMagnitudes[y] += Math.Abs(w);
-                            totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
-                        }
-                    }
-                    if (word)
-                    {
-                        if (!PackedStreamingWordBicubicResize.WriteBlock(source, result, x, blockStart, centerX, firstX, countX, scaleX, scaleY,
-                            normalizerX, horizontalMagnitude, coefficientError, totals[..height], normalizers[..height],
-                            verticalMagnitudes[..height], centers[..height], first[..height], last[..height], context)) return false;
-                    }
-                    else if (!WriteBlock(source, result, x, blockStart, centerX, firstX, countX, scaleX, scaleY,
-                            normalizerX, horizontalMagnitude, coefficientError, totals[..height], normalizers[..height],
-                            verticalMagnitudes[..height], centers[..height], first[..height], last[..height], context)) return false;
-                }
-            }
-            context.Cancellation.ThrowIfCancellationRequested();
-            return true;
+            return source.BitDepth == 8
+                ? Apply<PairedByteRows>(source, result, scaleX, scaleY, context)
+                : Apply<SingleRows>(source, result, scaleX, scaleY, context);
         }
         finally { context.Release(WorkspaceBytes); }
+    }
+
+    private readonly struct SingleRows { }
+    private readonly struct PairedByteRows { }
+
+    private static bool Apply<TRows>(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context) where TRows : struct
+    {
+        // Fixed arrays occupy 4,096 bytes. Byte execution retains at most
+        // two horizontal numeric results; word execution retains one.
+        Span<uint> coefficientLow = stackalloc uint[Capacity];
+        Span<ushort> coefficientHigh = stackalloc ushort[Capacity];
+        Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
+        Span<double> centers = stackalloc double[OutputRowsPerBlock];
+        Span<int> first = stackalloc int[OutputRowsPerBlock];
+        Span<int> last = stackalloc int[OutputRowsPerBlock];
+        Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
+        Span<double> verticalMagnitudes = stackalloc double[OutputRowsPerBlock];
+        var word = source.BitDepth == 16;
+        var pixelBytes = word ? 8 : 4;
+        var input = source.Pixels;
+        var stride = source.Stride;
+        for (var x = 0; x < result.Width; x++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var centerX = (x + .5) * source.Width / result.Width - .5;
+            var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
+            var countX = (int)Math.Floor(centerX + 2 * scaleX) - firstX + 1;
+            var sourceFirst = Math.Clamp(firstX, 0, source.Width - 1);
+            double normalizerX = 0, horizontalMagnitude = 0, coefficientError = 0;
+            for (var t = 0; t < countX; t++)
+            {
+                var w = ImageTransforms.Kernel((firstX + t - centerX) / scaleX, ResizeFilter.Bicubic);
+                normalizerX += w; horizontalMagnitude += Math.Abs(w);
+                // Preserve sign/exponent and 36 fraction bits in six bytes.
+                // The omitted error is measured from the original coefficient.
+                var bits = BitConverter.DoubleToUInt64Bits(w);
+                coefficientLow[t] = (uint)(bits >> 16);
+                coefficientHigh[t] = (ushort)(bits >> 48);
+                coefficientError += Math.Abs(w - BicubicMath.Coefficient(coefficientLow[t], coefficientHigh[t]));
+            }
+            var sourceCount = Math.Clamp(firstX + countX - 1, 0, source.Width - 1) - sourceFirst + 1;
+            // Reuse the same bounded arrays for each output-row block.
+            // Original global coordinates and full tap order are preserved.
+            for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
+            {
+                var height = BicubicMath.PrepareStreamingRows(source.Height, result.Height,
+                    blockStart, scaleY, centers, first, last);
+                totals[..height].Clear(); normalizers[..height].Clear(); verticalMagnitudes[..height].Clear();
+                var previousRow = -1; var nextRow = -1;
+                var horizontal = Vector256<double>.Zero; var nextHorizontal = Vector256<double>.Zero;
+                // Unclamped coordinates are visited in increasing order. Each
+                // output receives exactly its original vertical taps, including
+                // separate contributions from duplicated clamped edge samples.
+                for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var sy = Math.Clamp(coordinate, 0, source.Height - 1);
+                    if (sy != previousRow)
+                    {
+                        previousRow = sy;
+                        if (typeof(TRows) == typeof(PairedByteRows) && nextRow == sy)
+                        {
+                            horizontal = nextHorizontal; nextRow = -1;
+                        }
+                        else
+                        {
+                            var row = input.Slice(sy * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
+                            var next = typeof(TRows) == typeof(PairedByteRows) && coordinate < last[height - 1]
+                                ? Math.Clamp(coordinate + 1, 0, source.Height - 1) : sy;
+                            if (typeof(TRows) == typeof(PairedByteRows) && next != sy)
+                            {
+                                var following = input.Slice(next * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
+                                var pair = FilterRowPair(row, following, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width);
+                                horizontal = pair.GetLower(); nextHorizontal = pair.GetUpper(); nextRow = next;
+                            }
+                            else horizontal = word ? PackedStreamingWordBicubicResize.FilterRow(row, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width)
+                                : FilterRow(row, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width);
+                        }
+                    }
+                    for (var y = 0; y < height; y++)
+                    {
+                        if (coordinate < first[y] || coordinate > last[y]) continue;
+                        var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                        normalizers[y] += w; verticalMagnitudes[y] += Math.Abs(w);
+                        totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
+                    }
+                }
+                if (word)
+                {
+                    if (!PackedStreamingWordBicubicResize.WriteBlock(source, result, x, blockStart, centerX, firstX, countX, scaleX, scaleY,
+                        normalizerX, horizontalMagnitude, coefficientError, totals[..height], normalizers[..height],
+                        verticalMagnitudes[..height], centers[..height], first[..height], last[..height], context)) return false;
+                }
+                else if (!WriteBlock(source, result, x, blockStart, centerX, firstX, countX, scaleX, scaleY,
+                        normalizerX, horizontalMagnitude, coefficientError, totals[..height], normalizers[..height],
+                        verticalMagnitudes[..height], centers[..height], first[..height], last[..height], context)) return false;
+            }
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
+        return true;
     }
 
     private static bool WriteBlock(ImageBuffer source, ImageBuffer result, int x, int blockStart,
@@ -160,6 +186,40 @@ internal static class PackedStreamingBicubicResize
             sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(BicubicMath.Coefficient(low[t], high[t]))));
         }
         return sum;
+    }
+
+    // Two independent original-order sums share coefficient reconstruction
+    // and clamped indices. All row views expire with this synchronous call.
+    internal static Vector512<double> FilterRowPair(ReadOnlySpan<byte> firstRow, ReadOnlySpan<byte> secondRow,
+        ReadOnlySpan<uint> low, ReadOnlySpan<ushort> high, int firstX, int sourceFirst, int sourceWidth)
+    {
+        var firstPixels = MemoryMarshal.Cast<byte, uint>(firstRow);
+        var secondPixels = MemoryMarshal.Cast<byte, uint>(secondRow);
+        var first = Vector256<double>.Zero; var second = Vector256<double>.Zero; var t = 0;
+        for (; t + 1 < low.Length; t += 2)
+        {
+            var at0 = Math.Clamp(firstX + t, 0, sourceWidth - 1) - sourceFirst;
+            var at1 = Math.Clamp(firstX + t + 1, 0, sourceWidth - 1) - sourceFirst;
+            var w0 = BicubicMath.Coefficient(low[t], high[t]); var w1 = BicubicMath.Coefficient(low[t + 1], high[t + 1]);
+            var coefficients = Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1);
+            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(firstPixels[at0] | ((ulong)firstPixels[at1] << 32)).AsByte());
+            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+            var products = Avx512F.Multiply(Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors)), coefficients);
+            first = Avx.Add(first, products.GetLower()); first = Avx.Add(first, products.GetUpper());
+            samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(secondPixels[at0] | ((ulong)secondPixels[at1] << 32)).AsByte());
+            factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+            products = Avx512F.Multiply(Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors)), coefficients);
+            second = Avx.Add(second, products.GetLower()); second = Avx.Add(second, products.GetUpper());
+        }
+        if (t < low.Length)
+        {
+            var at = Math.Clamp(firstX + t, 0, sourceWidth - 1) - sourceFirst;
+            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(firstPixels[at] | ((ulong)secondPixels[at] << 32)).AsByte());
+            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+            var products = Avx512F.Multiply(Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors)), Vector512.Create(BicubicMath.Coefficient(low[t], high[t])));
+            first = Avx.Add(first, products.GetLower()); second = Avx.Add(second, products.GetUpper());
+        }
+        return Vector512.Create(first, second);
     }
 
     private static bool TryWrite(Vector256<double> sum, double normalizer, double unitError, Span<byte> output)
