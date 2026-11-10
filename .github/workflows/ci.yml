@@ -53,7 +53,9 @@ jobs:
           Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
           EOF
           sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
-          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y build-essential cmake pkg-config perl autoconf automake libtool xz-utils curl git python3 libicu74 libssl3t64 zlib1g ca-certificates
+          # Keep already installed tools; provisioning needs missing packages,
+          # not unrelated upgrades from a temporarily inconsistent security pool.
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y --no-upgrade build-essential cmake pkg-config perl autoconf automake libtool xz-utils curl git python3 libicu74 libssl3t64 zlib1g ca-certificates
           bash tools/setup-linux.sh --jobs=4
       - name: Locked restore
         run: |
