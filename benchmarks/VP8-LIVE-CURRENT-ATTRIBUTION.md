@@ -1,5 +1,9 @@
 # Current live VP8 coefficient attribution
 
+The subsequent [macroblock-window experiment](VP8-LIVE-MACROBLOCK-WINDOW-EXPERIMENT.md)
+preserves correctness but establishes no useful gain; production is restored.
+This capture remains attribution, rather than a removable-cost estimate.
+
 AVP769 makes one two-second capture of the existing complete opaque live-token
 VP8 decode on the qualified actual package DLL. Current source-valid cost remains
 4,881.47/native 4,792.22 us, upper 1.028 gap, 229,344 B/op. This adds no timing or
