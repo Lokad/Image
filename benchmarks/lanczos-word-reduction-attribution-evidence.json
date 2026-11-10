@@ -1,0 +1,171 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LWA775",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "profiledElapsedDiscarded": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "sourcePins": {
+    "src/Lokad.Image/Internal/LanczosResize.cs": "099e2606979d723dfbea4222d5f86e2aa7ae14160502639cb95e9f5036feabf9",
+    "src/Lokad.Image/Internal/LanczosFmaResize.cs": "c45f0a78c3ab2660c0f5fd73d185fe0c524e258f84358c14e64b21883fc8f0e3",
+    "src/Lokad.Image/Internal/LanczosPlan.cs": "7f1ae5cfe7844f0cca49041e797ccfd2c9a77d09976e30987315eca86ad016b4",
+    "src/Lokad.Image/Internal/LanczosWorkspace.cs": "cb34ab31a0172a6dbd5159f2e0560f8784f4825b78b5ecf35dd7f04c6c8c930b",
+    "src/Lokad.Image/Lanczos3ResizePlan.cs": "30b0008137a64a229a278141420e7e22491eaa72b26aa6c324ade971e7f8b62d",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "b1655b394b895b901f8dc249d04b301f76f271f05aa812bd45ae8b4512c467e7",
+    "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f"
+  },
+  "profile": {
+    "librarySha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+    "totalSamples": 1996,
+    "managedSamples": 1972,
+    "methods": [
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::HorizontalWord(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<float64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1092
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Accumulate(valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.Span`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        482
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::WriteRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,float64,float64,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        228
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::PrepareWordProducts(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        117
+      ],
+      [
+        "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.LanczosResize::Execute(class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosWorkspace,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        44
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        4
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Horizontal(class Lokad.Image.ImageBuffer,int32,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.Span`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        3
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        1
+      ],
+      [
+        "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Lanczos3ResizePlan::Resize(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1
+      ]
+    ],
+    "horizontalCodeBytes": 655,
+    "horizontalSamples": 1092,
+    "topGroups": [
+      {
+        "group": "G_M000_IG15",
+        "offset": "0xe3",
+        "samples": 619
+      },
+      {
+        "group": "G_M000_IG17",
+        "offset": "0x179",
+        "samples": 151
+      },
+      {
+        "group": "G_M000_IG16",
+        "offset": "0x16c",
+        "samples": 100
+      },
+      {
+        "group": "G_M000_IG24",
+        "offset": "0x23b",
+        "samples": 73
+      },
+      {
+        "group": "G_M000_IG10",
+        "offset": "0x86",
+        "samples": 49
+      },
+      {
+        "group": "G_M000_IG08",
+        "offset": "0x73",
+        "samples": 37
+      },
+      {
+        "group": "G_M000_IG09",
+        "offset": "0x77",
+        "samples": 23
+      },
+      {
+        "group": "G_M000_IG13",
+        "offset": "0xc5",
+        "samples": 12
+      }
+    ],
+    "quietGuardsPassed": true,
+    "exactManagedAndAllFrozenGatesPassed": true,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "notes": "Locations/inlining/skid arenot phasecosts/removablepercentages/predictedgains. Instrumentedactual/nativeelapsednotusedasnewcost."
+  },
+  "currentCost": {
+    "managedUs": 587.9127413419915,
+    "nativeUs": 548.8972083333334,
+    "ratio": 1.0710798532335855,
+    "lower": 1.0443849847850244,
+    "upper": 1.0954485255896,
+    "allocatedBytes": 139,
+    "retainedBytes": 148040,
+    "librarySha256": "6aaf8e270e8ed9d63605042e366b46e52f5ff52849f92419863c168af36fe2d2",
+    "status": "gap",
+    "actualIterations": 12,
+    "filteredIterations": 11,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "reusedUnchangedPath": false,
+    "receipt": "lbr748-candidate-Repeated16-confirm-receipt.json",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac",
+    "nativeOutputSha256": "0a791a404fde304cd73d7595048103a531de0817077f04c6841f7e07d4cc6e6a",
+    "quality": {
+      "state": "checked",
+      "matched": true,
+      "sourceUnchanged": true,
+      "rgbMaximum": 1,
+      "alphaMaximum": 1,
+      "rgbMeanSquared": 0.002513323643410853,
+      "alphaMeanSquared": 0.0016048934108527132
+    },
+    "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+    "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+  },
+  "preparationFinding": "Horizontal1092/1996locations, accumulation482, publication228, products117. Current655Bsinglewordbody converts/permuteseach4weightband for everymissingrow; coefficients/geometryidenticalbetweenneededrows. Existingbytepairedscheduler alreadydemonstrates boundedmissingrowpairing. Do notblindlyreplay97,952Bretainedcoefficientcache orfull-source-double staging.",
+  "proposal": {
+    "repeatedWork": "Shareonecheckedcoefficientbandconversion/permutation andwindowtraversal betweentworequiredmissingwordrows; retainsourceconversion/FMAchainsperrow.",
+    "endState": "Reuseexistingpaireligibility scheduler withclosedword-rowmode; oneadditionalrowcapacity insideexistingworkspaceProductsarray (notnewowner/pool) preparedbeforeallocation/chargeduntilplanDispose. Existingbyte/default kernels/fallbacks retained; no genericabstractionperpixel. No retainedexpandedcoefficientmatrix.",
+    "storage": "OneexistingUInt32arraygrowsto2sourceRows onlyforfastwordreductionwith2slotsandlocalcapacity; primaryextra8208B, estimatedplan148040to156248B. No newWorkspacefield/header orsecondarray. BeforeReserve choosefromlocalMaxWorkingBytes/arraylimits only; rootrefusalterminal, noretry oravailabilitysnapshot. Actualalloc/retention/peaks mustbeverified.",
+    "correctness": "EveryperrowUInt32product/conversion/FMAchain/recombination/tailbit andexactQ30rationaloutputunchanged. CacheIDsafterbothactualusers; privateworkingrows/borrowedsource, checkpoints/refusal/cancel/recovery/survivors. No numericalpolicychange.",
+    "risks": "Addedretention/one-shotallocation androwregisterpressure/extra sourceviews/loopABI mayoffsetsharing. No gainassumed. Testactualrowbits/rootownershipthenexistingshorts; completeprimaryandaffectedcompanionsbeforebroad/package. No newimage/settingsgrid."
+  },
+  "reuse": "QualifiedEQE772Bactualpackage933a4fb1/mainc665602b andindependentLinuxd175056e; source-currentLBR748Lanczospaths verified. Existing6183full/live/resizeISA/samepackage proof andnewrestoredJPEG462ISAchecks reused. Zero production/test/harness/native/selector/fixturebuilds.",
+  "raw": {
+    "file": "lanczos-word-reduction-attribution-lwa775.tar.xz",
+    "sha256": "76c3428d07499095814616db82be96596dd6df9c840c62dd5f1701dd39507074",
+    "bytes": 540704,
+    "members": 30,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-paired-byte-rows.tar.xz",
+        "sha256": "30ffc7e72eefc7e14294be1bf24fe95eae68a58c0ac981ccffa55baf8007f055"
+      },
+      {
+        "file": "bicubic-shared-quartet-execution.tar.xz",
+        "sha256": "19a823a7f1666a784b01950870652cef9c8e1411b5e5960595a67c884883b88b"
+      }
+    ]
+  }
+}
