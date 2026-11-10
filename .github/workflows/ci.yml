@@ -37,9 +37,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Provision pinned Linux tools and live oracle
         run: |
-          # Avoid a stalled HTTP Azure mirror before its working HTTPS fallback.
-          printf '%s\n' 'https://archive.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
-          printf '%s\n' 'https://security.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-security-mirrors.txt >/dev/null
+          # Route each suite directly; runner mirror lists can send security
+          # indexes to an archive mirror whose package pool has not caught up.
+          sudo tee /etc/apt/sources.list.d/ubuntu.sources >/dev/null <<'EOF'
+          Types: deb
+          URIs: https://archive.ubuntu.com/ubuntu
+          Suites: noble noble-updates noble-backports
+          Components: main restricted universe multiverse
+          Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+          Types: deb
+          URIs: https://security.ubuntu.com/ubuntu
+          Suites: noble-security
+          Components: main restricted universe multiverse
+          Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+          EOF
           sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y build-essential cmake pkg-config perl autoconf automake libtool xz-utils curl git python3 libicu74 libssl3t64 zlib1g ca-certificates
           bash tools/setup-linux.sh --jobs=4
