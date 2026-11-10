@@ -104,8 +104,12 @@ internal static partial class CachedBicubicResize
                 }
                 if(wide)
                 {
-                    WriteWideRow(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
-                        normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,context);
+                    if(wide16)
+                        WriteWideRow<WordSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,false,context);
+                    else
+                        WriteWideRow<ByteSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,tapsX<=20 && tapsY<=20,context);
                     continue;
                 }
                 var destination=result.Pixels.Slice(y*result.Stride,result.Stride);

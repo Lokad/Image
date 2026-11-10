@@ -784,23 +784,19 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-shared-windows-evidence.json').read_text(encoding='utf-8'))
+    wide_byte = json.loads((ROOT / 'benchmarks/cached-wide-certified-publication-evidence.json').read_text(encoding='utf-8'))
     current = wide_byte['cases']['Wide8']
-    wq = wide_byte['qualification']
+    cached_publication_qualification = wide_byte['qualification']
+    wq = cached_publication_qualification
     assert wide_byte['productionAccepted'] and wide_byte['requiredMaterialPaths'] == 283
-    assert wq['fullChecksEachOs'] == wq['windows']['total'] == wq['linux']['total'] == 6132
+    assert wq['fullChecksEachOs'] == wq['windows']['total'] == wq['linux']['total'] == 6158
     assert wq['actualPackage']['sha256'] == wq['samePackageLinux']['sameActualPackageSha256']
     assert wq['sameActualPackageBothOS']
-    assert wide_byte['sourceProof']['fullRowsUndoReconstructsQualifiedOriginal']
-    assert wide_byte['sourceProof']['existingSharedMathKernelVerbatim']
-    assert wide_byte['sourceProof']['cacheOwnerGeometryAndScheduleSourceVerbatim']
+    assert wq['resizeInternalEachModeEachOs'] == 332 and wq['resizePublicEachModeEachOs'] == 729
+    assert all(p['originalReconstructedExactly'] for p in wide_byte['sourceCodeProof']['sources'].values())
     assert wide_byte['storage']['newOwnedCapacityBytes'] == wide_byte['storage']['newRetainedOperationStorageBytes'] == 0
-    assert wide_byte['statusCounts'] == {'pass': 7, 'gap': 1, 'uncertain': 0}
     assert wide_byte['raw']['mirrored'] and wide_byte['raw']['allMembersVerified']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in wide_byte['comparison']['views'].values())
-    assert wide_byte['jitProof']['noVariableWeightLengthStackReadInFinalLoop']
-    assert wide_byte['jitProof']['constantWeightIndexGuardRemains']
-    assert wide_byte['largeGeneralization']['status'] == 'screen-only-confidence-open'
     assert wide_byte['largeGeneralization']['normalScalarAndPriorPixelsExact'] and wide_byte['largeGeneralization']['quietGuardsPassed']
     for case, cost in wide_byte['cases'].items():
         assert cost['librarySha256'] == wq['actualPackage']['librarySha256']
@@ -1444,7 +1440,7 @@ def render():
         if not current['reusedUnchangedPath']:
             assert current['librarySha256'] == streaming['timedWindowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    current_build_qualification = byte_publication_qualification
+    current_build_qualification = cached_publication_qualification
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1934,11 +1930,10 @@ Current scope and remaining work:
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
   default{wide_byte['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{wide_byte['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,
-  with overlapping intervals. No useful generalized CPU gain, regression,
-  equivalence, native parity or default promotion is established. Its source and
-  normal/scalar/prior full frames agree. Dispatch is unchanged. Earlier costs and
-  adverse stages remain historical; current overlapping
-  execution costs are stated below. Certificates, tiny-alpha unwind and owners remain.
+  a short screen with separated default/compact intervals within this pair.
+  No independent generalized or historical gain, native parity or default promotion
+  is established. Normal/scalar/prior full frames and independent owners agree.
+  Earlier costs remain historical; certificates, tiny-alpha unwind and owners remain.
   [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
   saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
   filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
@@ -1946,24 +1941,23 @@ Current scope and remaining work:
   suffix share one numeric range and4KiB admission; no new owned capacity or
   retained scratch. Predecoded doubles preserve exact products/tap order and
   original certificates. The adverse/flat transitional stages remain in the report.
-  [Shared cached-wide windows](../benchmarks/CACHED-WIDE-SHARED-WINDOWS.md)
-  reuse the qualified ordered horizontal kernel after once-per-operation geometry
-  proof and checked fixed-size weight views. Complete Wide8 saves
-  **{wide_byte['comparison']['savedUs']:.2f}µs/{100*wide_byte['comparison']['rawReduction']:.2f}% raw/{100*wide_byte['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual raw/normalized confidence. One original-only
-  check resolves observed native377→350µs movement; the completed candidate and
-  every earlier sample remain. Native movement in the selected comparison is
-  {100*wide_byte['comparison']['nativePointChange']:.2f}%. No further primary repeats.
+  [Cached-wide certified publication](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
+  reuses the ordinary-byte certificate under proved tap bounds, retaining original
+  division and individual repair for uncertainty, tiny alpha and larger supports.
+  Complete Wide8 saves **{wide_byte['comparison']['savedUs']:.2f}µs/{100*wide_byte['comparison']['rawReduction']:.2f}% raw/{100*wide_byte['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual confidence; native movement is
+  {100*wide_byte['comparison']['nativePointChange']:.2f}%. All twelve actuals remain,
+  including candidate variation; no unchanged primary repeat.
   Current{wide_byte['cases']['Wide8']['managedUs']:.2f}/zimg{wide_byte['cases']['Wide8']['nativeUs']:.2f}µs,
-  upper{wide_byte['cases']['Wide8']['upper']:.3f} remains a gap. Eight existing support/depth controls
-  refresh:7pass/1gap; no earlier pass is lost. Other points are fresh costs,
-  not causal companion gains. Workspace198,432B/result32,768B/scratch0 remain;
-  primary GC{wide_byte['cases']['Wide8']['allocatedBytes']:,}Bop is unchanged apart from amortization.
-  Fixed views remove the dynamic loop length reload/checks; a constant index guard
-  remains. Instruction structure alone proves no CPU gain or physical peak.
-  [Earlier preparation](../benchmarks/CACHED-WIDE-PREPARED-GEOMETRY.md) retains its
-  scoped gain/raw history, without supplying displayed costs or renderer dependencies.
-  [Pixel preparation](../benchmarks/CACHED-WIDE-PIXEL-PREPARATION.md) retains prior history.
+  upper{wide_byte['cases']['Wide8']['upper']:.3f} remains a gap.
+  Eight existing support/depth costs refresh; the report records any uncertainty
+  and the unchanged-build countercheck. Other costs establish no causal companion
+  gain or equivalence. Workspace198,432B/result32,768B/scratch0 remain;
+  GC{wide_byte['cases']['Wide8']['allocatedBytes']:,}B/op differs only by amortization.
+  Managed exact pixels, ordered sums and ownership remain unchanged. Word generated
+  code excludes byte reciprocal imports. Physical/native/JIT-stack peaks are unknown.
+  [Shared windows](../benchmarks/CACHED-WIDE-SHARED-WINDOWS.md) retains prior history
+  without supplying displayed current costs or renderer dependencies.
   [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
   is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
   qualified package and frozen workload are reused; no causal historical gain

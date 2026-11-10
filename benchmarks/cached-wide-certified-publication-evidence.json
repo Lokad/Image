@@ -1,0 +1,751 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CSP757",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+    "linuxSha256": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "7dfd8382f32e39aef396c9dcc0180efb5bde7a6f7cec44cea6bb9bdf49f33718",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+    "tests/Lokad.Image.Tests/CachedWidePublicationTests.cs": "bd9255ae59f31bec7a8d1a210121e1a86ff90bcb80ab268d96b2c228b9045f68"
+  },
+  "cases": {
+    "Wide8": {
+      "caseId": "Wide8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 395.95767250631314,
+      "nativeUs": 345.5403772786458,
+      "ratio": 1.1459085494573344,
+      "lower": 1.0835711083032689,
+      "upper": 1.2061079813775069,
+      "allocatedBytes": 198450,
+      "status": "gap",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Wide8-confirm",
+      "receiptFile": "csp757-candidate-Wide8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 32768,
+      "packetSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 12,
+      "allActualsRetained": true
+    },
+    "Wide16": {
+      "caseId": "Wide16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 374.00577740641717,
+      "nativeUs": 413.9424381510417,
+      "ratio": 0.9035212216389077,
+      "lower": 0.8971527571569076,
+      "upper": 0.911770986951044,
+      "allocatedBytes": 198447,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Wide16-confirm",
+      "receiptFile": "csp757-candidate-Wide16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 65536,
+      "packetSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "filteredIterations": 11,
+      "allActualsRetained": true
+    },
+    "Down64x32_8": {
+      "caseId": "Down64x32_8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 64,
+      "outputHeight": 32,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "nativeOutputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 64x32 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixteen-pixel clamped halo (19.364% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 340.6022115325553,
+      "nativeUs": 358.1207926432292,
+      "ratio": 0.9510819213222103,
+      "lower": 0.9084425216595989,
+      "upper": 0.958753225271155,
+      "allocatedBytes": 197681,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down64x32_8-confirm",
+      "receiptFile": "csp757-candidate-Down64x32_8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 8192,
+      "packetSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "nativeRgbMaximum": 0,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 11,
+      "allActualsRetained": true
+    },
+    "Down64x32_16": {
+      "caseId": "Down64x32_16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 64,
+      "outputHeight": 32,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "nativeOutputSha256": "f4189787d485cb0f7d0beee9b324fb6301e3dc821d9c5da6859186de177c2ba7",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 64x32 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixteen-pixel clamped halo (19.364% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 357.175464699074,
+      "nativeUs": 388.1112874348958,
+      "ratio": 0.9202913603974705,
+      "lower": 0.9131019374969579,
+      "upper": 0.9235444228654694,
+      "allocatedBytes": 197677,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down64x32_16-recheck",
+      "receiptFile": "csp757-candidate-Down64x32_16-recheck-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 16384,
+      "packetSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.05412658773652741,
+      "nativeAlphaRmse": 0.04941058844013093,
+      "filteredIterations": 12,
+      "allActualsRetained": true
+    },
+    "Down32x16_8": {
+      "caseId": "Down32x16_8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "nativeOutputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 329.1282553453948,
+      "nativeUs": 376.4978645833333,
+      "ratio": 0.8741835912127628,
+      "lower": 0.7832401493477156,
+      "upper": 0.898050040493913,
+      "allocatedBytes": 197298,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down32x16_8-confirm",
+      "receiptFile": "csp757-candidate-Down32x16_8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 2048,
+      "packetSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "nativeRgbMaximum": 0,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 12,
+      "allActualsRetained": true
+    },
+    "Down32x16_16": {
+      "caseId": "Down32x16_16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053",
+      "nativeOutputSha256": "19b7a2d543d60ffabb34791677cf64fb93fa176eddf2c9ba2e3528aad4bf1a44",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 325.510195676275,
+      "nativeUs": 411.856458984375,
+      "ratio": 0.790348648359122,
+      "lower": 0.7099541695060005,
+      "upper": 0.8058778424555905,
+      "allocatedBytes": 197296,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down32x16_16-confirm",
+      "receiptFile": "csp757-candidate-Down32x16_16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 4096,
+      "packetSha256": "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.0625,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "filteredIterations": 11,
+      "allActualsRetained": true
+    },
+    "Down16x8_8": {
+      "caseId": "Down16x8_8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "nativeOutputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 316.76417643229166,
+      "nativeUs": 496.20466796875,
+      "ratio": 0.6383740357159253,
+      "lower": 0.621766025256554,
+      "upper": 0.648036614254853,
+      "allocatedBytes": 201203,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down16x8_8-confirm",
+      "receiptFile": "csp757-candidate-Down16x8_8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 512,
+      "packetSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "nativeRgbMaximum": 0,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 12,
+      "allActualsRetained": true
+    },
+    "Down16x8_16": {
+      "caseId": "Down16x8_16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8",
+      "nativeOutputSha256": "0b94e3613c10f789ca0070a06f0f96eb496d9dd661a5159ec43882b8f2a015e5",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 288.93344330018937,
+      "nativeUs": 497.385880859375,
+      "ratio": 0.5809039910842966,
+      "lower": 0.5763358938317306,
+      "upper": 0.5843272591143127,
+      "allocatedBytes": 201202,
+      "status": "pass",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "csp757-candidate-Down16x8_16-confirm",
+      "receiptFile": "csp757-candidate-Down16x8_16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 1024,
+      "packetSha256": "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0.07216878364870322,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 12,
+      "allActualsRetained": true
+    }
+  },
+  "statusCounts": {
+    "pass": 7,
+    "gap": 1,
+    "uncertain": 0
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "originalUs": 428.4378571180556,
+    "currentUs": 395.95767250631314,
+    "savedUs": 32.48018461174246,
+    "rawReduction": 0.0758107251077782,
+    "normalizedReduction": 0.06656895632994042,
+    "nativePointChange": -0.009900858601725071,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawOriginal": {
+          "N": 12,
+          "Mean": 428437.85711805563,
+          "StandardError": 301.5113393984253,
+          "Level": 12,
+          "Margin": 1337.79958282628,
+          "Lower": 427100.05753522937,
+          "Upper": 429775.6567008819
+        },
+        "rawCandidate": {
+          "N": 12,
+          "Mean": 395957.67250631313,
+          "StandardError": 4035.14942791895,
+          "Level": 12,
+          "Margin": 17903.87463397626,
+          "Lower": 378053.7978723369,
+          "Upper": 413861.5471402894
+        },
+        "normalizedOriginal": [
+          1.2157777546847113,
+          1.2338686138463129
+        ],
+        "normalizedCandidate": [
+          1.0835711083032689,
+          1.206104167437424
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawOriginal": {
+          "N": 12,
+          "Mean": 428439.1717013889,
+          "StandardError": 301.5113393984237,
+          "Level": 12,
+          "Margin": 1337.7995828262724,
+          "Lower": 427101.37211856263,
+          "Upper": 429776.97128421516
+        },
+        "rawCandidate": {
+          "N": 12,
+          "Mean": 395958.98121843435,
+          "StandardError": 4035.14942791895,
+          "Level": 12,
+          "Margin": 17903.87463397626,
+          "Lower": 378055.1065844581,
+          "Upper": 413862.8558524106
+        },
+        "normalizedOriginal": [
+          1.21578149676141,
+          1.2338723879621567
+        ],
+        "normalizedCandidate": [
+          1.0835748593108017,
+          1.2061079813775069
+        ]
+      }
+    },
+    "allActualsRetained": true,
+    "unchangedCandidateRepeats": 0
+  },
+  "sourceCodeProof": {
+    "project": "Lokad.Image",
+    "sources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+        "sha256": "7dfd8382f32e39aef396c9dcc0180efb5bde7a6f7cec44cea6bb9bdf49f33718",
+        "onlyDeclaredEntryAndPublicationEdits": true,
+        "originalReconstructedExactly": true
+      },
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": {
+        "sha256": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+        "onlyDeclaredEntryAndPublicationEdits": true,
+        "originalReconstructedExactly": true
+      }
+    },
+    "generatedCode": [
+      {
+        "caseId": "Wide8",
+        "elapsedDiscarded": true,
+        "bodies": [
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+            "codeBytes": 9550,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 1,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:PrepareWideHorizontalPairs(System.Span`1[int],System.ReadOnlySpan`1[int],int,int,int,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 490,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:DecodePremultipliedRow[Lokad.Image.Internal.CachedBicubicResize+NoRowPolling](System.ReadOnlySpan`1[byte],System.Span`1[double],int,bool,System.Threading.CancellationToken) (FullOpts)",
+            "codeBytes": 384,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:WriteWideRow[Lokad.Image.Internal.CachedBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],double,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,Lokad.Image.Internal.CachedBicubicResize+WideErrorBounds,bool,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 2632,
+            "reciprocalEstimates": 1,
+            "vectorDivisions": 1,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:Original(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],int,int,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 2513,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          }
+        ]
+      },
+      {
+        "caseId": "Wide16",
+        "elapsedDiscarded": true,
+        "bodies": [
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+            "codeBytes": 9550,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 1,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:PrepareWideHorizontalPairs(System.Span`1[int],System.ReadOnlySpan`1[int],int,int,int,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 490,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:DecodePremultipliedRow[Lokad.Image.Internal.CachedBicubicResize+NoRowPolling](System.ReadOnlySpan`1[byte],System.Span`1[double],int,bool,System.Threading.CancellationToken) (FullOpts)",
+            "codeBytes": 384,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:WriteWideRow[Lokad.Image.Internal.CachedBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],double,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,Lokad.Image.Internal.CachedBicubicResize+WideErrorBounds,bool,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 2092,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 1,
+            "fusedMultiplyAdds": 0
+          },
+          {
+            "header": "Lokad.Image.Internal.CachedBicubicResize:Original(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],int,int,Lokad.Image.Internal.OperationContext) (FullOpts)",
+            "codeBytes": 2513,
+            "reciprocalEstimates": 0,
+            "vectorDivisions": 0,
+            "fusedMultiplyAdds": 0
+          }
+        ]
+      }
+    ],
+    "numericProofReused": "bicubic-shared-byte-publication-evidence.json#numericProof",
+    "publicCallerProof": "cwa756-public-caller-proof.json",
+    "maxPerAxisTapUpperBound": 20,
+    "maximumTerms": 400,
+    "ordinaryAlphaMinimum": 16,
+    "normalizerMinimum": 0.5,
+    "margin": 1.52587890625e-05,
+    "geometryAndSumOrderUnchanged": true,
+    "originalFallbackAndIndividualRepairUnchanged": true,
+    "noNewArraysOrOwners": true,
+    "additionalOwnedCapacity": 0,
+    "physicalNativeJitStackPeaksMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "full": [
+        2893,
+        2317,
+        948
+      ],
+      "total": 6158,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 332,
+        "internal-scalar": 332,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1061,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "7aab3cba1ae0e3a761db90156a93dde3bfef4c54cde03aa3ccbe9eeea10aa50f",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+      "full": [
+        2893,
+        2317,
+        948
+      ],
+      "total": 6158,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 332,
+        "internal-scalar": 332,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1061,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "caf39072ac9f4b6de70a881cdd28631926b46941404d65a061dda13f85bbfaa7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 6158,
+    "resizeInternalEachModeEachOs": 332,
+    "resizePublicEachModeEachOs": 729,
+    "isa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 332,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 332,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 332,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 332,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "1cd903c5161e81915987d03fd177f9ad149d24a84df3550af6458b6e98d4c0af",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "33268e22dbb0e90f9a89ee5b8b51c3d5519ed26ea5f812b656b021152aebd70c",
+      "symbolsSha256": "8e7003b6668756ad2cf3b52a7cc789b81665a6f714b8c7e7b71da07808158165",
+      "bytes": 442264,
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "33268e22dbb0e90f9a89ee5b8b51c3d5519ed26ea5f812b656b021152aebd70c",
+      "librarySha256": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true
+  },
+  "largeGeneralization": {
+    "status": "screen-only-confidence-open",
+    "costs": {
+      "default": {
+        "meanMs": 21.609067296296296,
+        "lowerMs": 20.18872676695852,
+        "upperMs": 23.02940782563407,
+        "allocatedBytes": 1585372,
+        "actualIterations": 3
+      },
+      "compact": {
+        "meanMs": 31.355416944444443,
+        "lowerMs": 30.17619689695589,
+        "upperMs": 32.534636991933,
+        "allocatedBytes": 153,
+        "actualIterations": 3
+      }
+    },
+    "normalScalarAndPriorPixelsExact": true,
+    "quietGuardsPassed": true,
+    "normalValidation": {
+      "project": "Lokad.Image",
+      "stage": "WBR665",
+      "productionChanged": true,
+      "managedOnly": true,
+      "parityClaim": false,
+      "libraryHash": "3363e1aed8b280066fc1a63c7cebf2e97a7a137cebf72e87bc525832cb36ef0a",
+      "sourceHash": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+      "outputHash": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+      "width": 4097,
+      "height": 2051,
+      "outputWidth": 1024,
+      "outputHeight": 512,
+      "depth": 8,
+      "generator": "tools/Shared/OriginalPixels.cs asymmetric-v1 phase0 RGBA",
+      "scalar": false,
+      "avx512": true,
+      "avx2": true,
+      "completePublicOperations": true,
+      "exactOutputs": true,
+      "independentOwners": true,
+      "sourceUnchanged": true,
+      "admission": [
+        {
+          "mode": "default",
+          "peakAdmittedBytes": 3682592,
+          "retainedBytes": 2097152,
+          "workspaceAtPeakBytes": 1585440
+        },
+        {
+          "mode": "compact",
+          "peakAdmittedBytes": 2101248,
+          "retainedBytes": 2097152,
+          "workspaceAtPeakBytes": 4096
+        }
+      ]
+    },
+    "receiptFile": "csp757-large-receipt.json",
+    "nativeParityClaim": false
+  },
+  "storage": {
+    "primaryWorkspaceBytes": 198432,
+    "primaryRetainedResultBytes": 32768,
+    "allocatedBytesPerOperation": 198450,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedOperationStorageBytes": 0,
+    "physicalNativeJitStackPeaksMeasured": false,
+    "notes": "No new arrays/roots/pools/owners/sessions or intrinsic allocation reduction. Amortized GC varies by a few bytes. Explicit generic row dispatch increases parent static frame 1144to1560B; both publisher frames536B. This is generated-frame observation, not total physical peak."
+  },
+  "boundaries": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+  "invalidation": "Entry dispatch and cached-wide row publication invalidate eight existing cached-wide costs plus the existing large default diagnostic. All eight refresh on the actual package DLL; unchanged compiled large worker requires both default/compact modes once. Shared geometry/weights/ordered sums/cache schedule/owners and non-wide/othercodec/resizing numerical paths are unchanged. Reuse relevant source-valid qualification/costs without claims of bit-identical JIT for changed parent. Full127-row release refresh remains separate.",
+  "uncertaintyResolution": {
+    "caseId": "Down64x32_16",
+    "initialCandidate": "csp757-candidate-Down64x32_16-confirm-observation.json",
+    "unchangedCountercheck": "csp757-baseline-Down64x32_16-confirm-observation.json",
+    "targetedResolution": "csp757-candidate-Down64x32_16-recheck-observation.json",
+    "reason": "Initialword upper1.025 uncertain vs priorpass. Contemporary original387.27us overlaps candidate385.91us, but native395/393to416.65us moves materially. One targeted candidatecheck357.18/native388.11us upper.924 resolves referencecost uncertainty. No managedregression/causalcompaniongain/equivalence inferred; all actuals remain. No further unchanged sampling."
+  },
+  "workflow": {
+    "coreVersionsEachOS": 1,
+    "successfulInternalVersionsEachOS": 3,
+    "productionRebuildsForTestOnlyCorrections": 0,
+    "benchmarkHarnessNativeSelectorFixtureBuilds": 0,
+    "fullQualificationRunsEachOS": 1,
+    "actualPackageProofEachOS": 1,
+    "primaryUnchangedRepeats": 0,
+    "companionReferenceCounterchecks": 1,
+    "targetedCompanionResolution": 1,
+    "newBenchmarkImagesOrSettings": 0,
+    "failedTestSetup": "Firstcompile missingToolingnamespace/stackallocloop CA2014; Linuxzero local limit refused, then alreadycanceled context construction threw beforewriter assert. Corrected onlytests; eachfailedlog retained. Finalborrowed token cancels aftercontextcreation andbeforewrites."
+  },
+  "next": "Stop7passingcachedwidecases. Retainprimary32.48us/7.58%raw/6.66%normalized incremental gain, upper1.206 gap remains. Next attribute largerboundednarrowbyte~87us before substantial redesign; JPEG~60us andotherindependentfamilies remaineligible. All283paths required; publicationpostponed.",
+  "raw": {
+    "file": "cached-wide-certified-publication.tar.xz",
+    "sha256": "5ba34c4cad295dcf819ea9a4e8699667db7b60feaa74e3a75603d45f67cbc824",
+    "bytes": 6961832,
+    "members": 266,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "cached-wide-shared-windows-qualified.tar.xz",
+        "sha256": "f84526a9023683303704f7088a05b327ddef8d3a434f20228f6353a94c72a6ba"
+      },
+      {
+        "file": "bicubic-shared-byte-publication.tar.xz",
+        "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224"
+      },
+      {
+        "file": "cached-wide-publication-attribution.tar.xz",
+        "sha256": "74cc93ed187292c21642717af0cc7fe1150144afcb4d0d1b8ebc9768ca9928b6"
+      }
+    ]
+  }
+}
