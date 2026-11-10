@@ -1,5 +1,9 @@
 # Live RGBA16 PNG attribution
 
+The subsequent [cached-run experiment](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md)
+finds no useful gain in two bounded implementations and restores production.
+The capture below remains attribution, without a displayed timing replacement.
+
 PWA777 captures the complete existing live-token513×259 RGBA16 decode using the
 immutable DLL in the qualified LWP776C package. It changes no production source,
 build, fixture, worker or timing result. Existing51 PNG decode/validation controls
