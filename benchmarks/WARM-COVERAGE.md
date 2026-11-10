@@ -24,6 +24,12 @@ Historical companion points establish no causal gain/nonregression/equivalence.
 [Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) retains scoped sparse-CMYK
 gain and adverse/inconclusive companion evidence.
 
+[Coefficient pipeline attribution](JPEG-COEFFICIENT-PIPELINE-ATTRIBUTION.md)
+reuses the current package for one bounded sparse-CMYK capture and a two-packet
+canonical model. It motivates a baseline entropy-to-inverse storage prototype;
+there is no production change, timing gain or automatic acceptance. Existing
+qualification/costs remain valid; the diagnostic stays outside renderer inputs.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |

@@ -1,0 +1,143 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JSA727",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newBenchmarkImagesOrSettings": 0,
+  "statisticalTiming": false,
+  "librarySha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+  "sourceSha256": "9d9958b51c5a5ae918a58731e8989042331c6d0ce75dae70488a7661f7cef3e3",
+  "sources": {
+    "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
+    "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b1dc8af3369f4925a23174fb756e359181d63fa02227600f2a17912c08c43e26",
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d"
+  },
+  "capture": {
+    "totalSampleLocations": 1993,
+    "methodLocations": {
+      "InverseAvx2": 580,
+      "TryReadPlainBaselineBlock": 304,
+      "ReadBaselineBlockCore": 210,
+      "Dequantize": 160,
+      "RenderCmykInPlace": 73,
+      "StoreComponentRows": 70,
+      "StoreComponentMcu": 59
+    },
+    "seconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "quietGuardsPassed": true,
+    "exactFrameSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "inputBytes": 22708,
+    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "instrumentedElapsedDiscarded": true,
+    "scope": "Location/inlining/skidcounts identifycurrentleads; notphasecosts,removablepercentages orCPUgain. OneexistingSparseCMYKcapture,allnative/ownership/sourcegatesretained."
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "JSA727",
+    "productionChanged": false,
+    "allProductionHarnessFixtureBuilds": 0,
+    "performanceMeasured": false,
+    "cases": {
+      "SparseCmyk": {
+        "inputPath": "artifacts/warm-reference/jpeg-cmyk-adobe-sparse2d/input.jpg",
+        "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+        "inputBytes": 22708,
+        "counts": {
+          "dcStores": 8580,
+          "acStores": 17160,
+          "equalDequantizedWords": 549120,
+          "blocks": 8580,
+          "twoLowRowsBlocks": 8580,
+          "existingRowVisits": 17160,
+          "existingAcRowTransforms": 8580,
+          "rowPairsfirstAcOnly": 8580
+        },
+        "originalCoefficientClearBytes": 2196480,
+        "proposedCoefficientClearBytes": 1098240,
+        "originalDenseProductLanes": 549120,
+        "proposedTokenProductLanes": 25740,
+        "finalLogicalCursor": 22706,
+        "finalPendingBits": 1,
+        "paddingAndEoiVerified": true,
+        "everyFusedWordExact": true
+      },
+      "DirectRgb444": {
+        "inputPath": "tmp/jar509-direct-rgb-input.jpg",
+        "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+        "inputBytes": 133057,
+        "counts": {
+          "dcStores": 6630,
+          "acStores": 221575,
+          "equalDequantizedWords": 424320,
+          "blocks": 6630,
+          "fullRowsBlocks": 6433,
+          "existingRowVisits": 51852,
+          "existingAcRowTransforms": 48937,
+          "rowPairsbothAc": 23519,
+          "rowPairssecondAcOnly": 911,
+          "rowPairsfirstAcOnly": 988,
+          "rowPairsbothDc": 508,
+          "twoLowRowsBlocks": 194,
+          "globalDcOnlyBlocks": 3
+        },
+        "originalCoefficientClearBytes": 1697280,
+        "proposedCoefficientClearBytes": 848640,
+        "originalDenseProductLanes": 424320,
+        "proposedTokenProductLanes": 228205,
+        "finalLogicalCursor": 133055,
+        "finalPendingBits": 1,
+        "paddingAndEoiVerified": true,
+        "everyFusedWordExact": true
+      }
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b1dc8af3369f4925a23174fb756e359181d63fa02227600f2a17912c08c43e26",
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d"
+    },
+    "scope": "IndependentcanonicalT81baselinegrammar on2existingfrozenpackets. Ashortnaturalorderblock receivesDCwideproduct+1024saturation andACmodulo65536productatvalidatedtokencommit; every64wordblockmatches currentpost-dequantizationsemantics. Countsaremodeleddatawork, notruntimephasecost,physicaltraffic,CPUgain orblanketfusionsafety. Existingfullword/quantizer/DCextremetestsremainnecessary. Progressive/refinementandvalidation storageareoutsideproposal."
+  },
+  "proposal": {
+    "removedWork": "Baselinecurrentlyclears64Int32s, storesrawamplitudes, densedequantizes/narrows64lanes intoseparateshortinput, thenrunsIDCT. Investigate directvalidated-token productsintoa64shortnaturalorderblock, avoidingthefullcoefficienttoconversionpass.",
+    "endState": "OneboundedbaselinecoefficientstorewithrealnaturalInt32modeforpersistent/validationcallersanddequantizedInt16modeforimmediatereconstruction;sharegrammar/checkpointsandactualinversecore. KeepfullwidthDCpredictorandproduct+1024saturation; ACproductmodulo65536. No newpublicAPI,pool,session,crossoperationcache,allocator orfixture-specificdispatch.",
+    "workloads": "ExistingSparseCMYKprimary andDirectRGB444generalization, completepublicresidentdecode/normalization/newownedoutput/disposal, exactfrozenframes/reference/settings. Refreshotheractuallyaffectedbaseline/caller/stream/validationcostsatacceptedmilestone. ProgressiverefinedInt32storage/semanticsunchanged.",
+    "transition": "Firstproveall64dequantizedwords/cursor/state includingpartialmisses,ZRL,longcodes/stuffing/restarts,logicalcancellationandfailureboundaries. Then coherentreader/inverseexecutionstage withoneimmutablecandidateperstage; focusedWindows/Linux/scalarbeforeboundedcompletescreens. Temporarydualstagingmustberemovedbyfinalstage. Do notpreserveunpublishedtesthookssolelyforcompatibility.",
+    "risks": "Per-token scalarproduct/addressingmaycostmorethandenseSIMD ongeneralcoefficients; genericstorecodegen/checks, instructioncache, widerreaderframes andsmall/DCcontrolsoverheads coulderasebenefit. Countsaredata-workmodel, notelapsed/physicaltraffic orautomaticacceptance. Inspectcompleteoperationevidence,reviseorrestoreifnotuseful.",
+    "previous": "JPC639/JPS640/JVP641pairedprogressivecomponentstages addedscatter/scalarproductsor512bitpairing withoutusefulcompletegain; JIA543/JRP544pairedrowimplementations alsounselected. Thisproposal fusesbaselineentropycommit ratherthanpairingalreadyretainedprogressiveblocks; no512bitnewmatrix,reorderedinversearithmeticorunchangedreplay.",
+    "acceptance": "Preservedeclaredencoderpackets,metadataandmanagedpixels, independentowners/refusalcleanup, fullDCsaturation/ACwrap andeverylogicalpoll. Confirmusefulcompletetime/allocation/simplification jointly onquietVM; nofixedthreshold. BroadWindows/Linux/live/scalar/affectedISA/SAMEpackage atcoherentacceptedmilestone; unchangedproofreused. Noautomaticmergefrommodelorprofile."
+  },
+  "referenceInsight": {
+    "path": "external/ffmpeg/libavcodec/mjpegdec.c",
+    "sha256": "dc949851e0426a2416bf327dd9716556e9beb40f010ec9b9bf5ea9cc7d02f713",
+    "scope": "Inspecteddecode_blockstrategyoffusingdequantizationatvalidatedentropyoutput; nosource/table/textcopied, noproductiondependency. IndependentT81grammarandownexactpixelarithmeticremainauthoritative."
+  },
+  "qualification": {
+    "reusedUnchangedProduction": true,
+    "fullChecksEachOs": 6133,
+    "sameActualPackageBothOS": true,
+    "packageSha256": "994d23ecb167305c87fb76383b11c19435d709a1d98afea8e81f76bb13e3d9e0",
+    "jpegInternalPerMode": 453,
+    "jpegPublicPerMode": 375,
+    "resizeInternalPerMode": 297,
+    "resizePublicPerMode": 729
+  },
+  "decision": "Attributionandexactmodeljustifyboundedbaselineentropy-to-inverseprototype, notproductionacceptance. Nochange/rebuild/timingclaim ornumericpolicyrelaxation. Full283pathobjectiveopen; stopconfirmedpassingquartercontrols.",
+  "raw": {
+    "file": "jpeg-coefficient-pipeline-attribution.tar.xz",
+    "sha256": "4dd56c4370c14d544fa1d5b033ee8735633a7011b684d2cffdb0a6bce28ad7fc",
+    "bytes": 290960,
+    "members": 29,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-quarter-interpolation-qualified.tar.xz",
+        "sha256": "d0a9f382a265469536ffbf9f6763253e323e1a4442b3f56a851f3a18c2092208"
+      }
+    ]
+  }
+}
