@@ -7,6 +7,20 @@ namespace Lokad.Image.Tests;
 
 public sealed class PackedColumnStorageTests
 {
+    [Fact]
+    public void ContiguousPairProofRetainsClippedAndUnequalCountFallbacks()
+    {
+        int[] counts = [3, 3, 3, 3];
+        ushort[] offsets = [0, 1, 2, 2, 3, 4, 1, 2, 3, 3, 4, 5];
+        Assert.Equal(5, PackedColumnBicubicResize.PrepareContiguousPairs(counts, offsets, 3));
+        offsets[1] = 0; // Repeated source sample at a clipped edge.
+        Assert.Equal(4, PackedColumnBicubicResize.PrepareContiguousPairs(counts, offsets, 3));
+        counts[3] = 2;
+        Assert.Equal(0, PackedColumnBicubicResize.PrepareContiguousPairs(counts, offsets, 3));
+        counts[3] = 3; offsets[10] = 5; // An interior discontinuity is also rejected.
+        Assert.Equal(0, PackedColumnBicubicResize.PrepareContiguousPairs(counts, offsets, 3));
+    }
+
     [Theory]
     [InlineData(513, 259, 64, 32, true)]
     [InlineData(769, 389, 96, 48, true)]

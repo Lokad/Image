@@ -103,6 +103,8 @@ internal static class PackedColumnBicubicResize
         var wordRows = Take<ushort>(ref workspace, word && !prepared ? taps : 0);
         // Keep the odd-sized33-entry integer arrays after all double storage.
         var rowIds = Take<int>(ref workspace, taps);
+        ReadOnlySpan<double> horizontalWeights = weights;
+        ReadOnlySpan<ushort> horizontalOffsets = offsets;
         ReadOnlySpan<byte> input = source.Pixels;
         ReadOnlySpan<Vector256<double>> cacheRead = cache;
         ReadOnlySpan<Vector256<double>> loanRead = loan;
@@ -131,6 +133,7 @@ internal static class PackedColumnBicubicResize
                 normalizers[x] = normalizer;
             }
             var sourceCount = offsets[(length - 1) * taps + counts[length - 1] - 1] + 1;
+            var contiguousPairs = PrepareContiguousPairs(counts[..length], horizontalOffsets, taps);
             rowIds.Fill(-1);
             for (var y = 0; y < result.Height; y++)
             {
@@ -217,10 +220,13 @@ internal static class PackedColumnBicubicResize
                     for (var column = 0; column + 1 < length; column += 2)
                     {
                         var count0 = counts[column]; var count1 = counts[column + 1];
-                        var weights0 = weights.Slice(column * taps, count0); var weights1 = weights.Slice((column + 1) * taps, count1);
-                        var offsets0 = offsets.Slice(column * taps, count0); var offsets1 = offsets.Slice((column + 1) * taps, count1);
+                        var weights0 = horizontalWeights.Slice(column * taps, count0); var weights1 = horizontalWeights.Slice((column + 1) * taps, count1);
+                        var offsets0 = horizontalOffsets.Slice(column * taps, count0); var offsets1 = horizontalOffsets.Slice((column + 1) * taps, count1);
                         var sum = Vector512<double>.Zero;
                         var shared = Math.Min(count0, count1);
+                        if ((contiguousPairs & (1 << column)) != 0)
+                            sum = FilterContiguousPair<TMode, TSamples>(decodedRead, offsets0[0], offsets1[0], weights0, weights1, shared);
+                        else
                         for (var tx = 0; tx < shared; tx++)
                         {
                             Vector512<double> values;
@@ -364,6 +370,61 @@ internal static class PackedColumnBicubicResize
         }
         return cache[index + channel];
     }
+    // Prove once per strip. The original indexed path keeps repeated/clipped
+    // samples and unequal counts; no coefficients or ownership are changed.
+    internal static int PrepareContiguousPairs(ReadOnlySpan<int> counts,
+        ReadOnlySpan<ushort> offsets, int taps)
+    {
+        var mask = 0;
+        for (var x = 0; x + 1 < counts.Length; x += 2)
+        {
+            var count = counts[x];
+            if (count <= 0 || counts[x + 1] != count) continue;
+            var first = x * taps; var second = first + taps;
+            var start0 = offsets[first]; var start1 = offsets[second];
+            var contiguous = true;
+            for (var t = 1; t < count; t++)
+                contiguous &= offsets[first + t] == start0 + t && offsets[second + t] == start1 + t;
+            if (contiguous) mask |= 1 << x;
+        }
+        return mask;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static Vector512<double> FilterContiguousPair<TMode, TSamples>(ReadOnlySpan<byte> decoded,
+        int firstOffset, int secondOffset, ReadOnlySpan<double> firstWeights, ReadOnlySpan<double> secondWeights,
+        int count) where TMode : struct where TSamples : struct
+    {
+        var prepared = typeof(TMode) == typeof(DecodedPrefix);
+        var word = typeof(TSamples) == typeof(WordSamples);
+        // All views borrow the current decoded row. Constant modes erase the
+        // unused representations. Count-sized views expose each loop bound.
+        var firstDecoded = prepared ? MemoryMarshal.Cast<byte, Vector256<double>>(decoded).Slice(firstOffset, count) : default;
+        var secondDecoded = prepared ? MemoryMarshal.Cast<byte, Vector256<double>>(decoded).Slice(secondOffset, count) : default;
+        var firstWord = !prepared && word ? MemoryMarshal.Cast<byte, Vector128<uint>>(decoded).Slice(firstOffset, count) : default;
+        var secondWord = !prepared && word ? MemoryMarshal.Cast<byte, Vector128<uint>>(decoded).Slice(secondOffset, count) : default;
+        var firstByte = !prepared && !word ? MemoryMarshal.Cast<byte, ulong>(decoded).Slice(firstOffset, count) : default;
+        var secondByte = !prepared && !word ? MemoryMarshal.Cast<byte, ulong>(decoded).Slice(secondOffset, count) : default;
+        firstWeights = firstWeights[..count]; secondWeights = secondWeights[..count];
+        var sum = Vector512<double>.Zero;
+        for (var t = 0; t < firstWeights.Length; t++)
+        {
+            Vector512<double> values;
+            if (prepared)
+                values = Avx512F.InsertVector256(firstDecoded[t].ToVector512Unsafe(), secondDecoded[t], 1);
+            else if (word)
+                values = Avx512F.ConvertToVector512Double(Vector256.Create(firstWord[t], secondWord[t]));
+            else
+            {
+                var samples = Avx2.ConvertToVector256Int32(Vector128.Create(firstByte[t], secondByte[t]).AsUInt16());
+                values = Avx512F.ConvertToVector512Double(samples);
+            }
+            var coefficients = Avx512F.InsertVector256(Vector512.Create(firstWeights[t]), Vector256.Create(secondWeights[t]), 1);
+            sum = Avx512F.Add(sum, Avx512F.Multiply(values, coefficients));
+        }
+        return sum;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector256<double> ReadDecoded<TMode, TSamples>(ReadOnlySpan<byte> products, int offset) where TMode : struct where TSamples : struct
     {

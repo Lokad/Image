@@ -1,5 +1,7 @@
 # Shared packed byte/word bicubic execution
 
+Current packed costs and qualification now belong to [contiguous views](PACKED-BICUBIC-CONTIGUOUS-VIEWS.md). This report retains the shared scheduler stage.
+
 PRV733 removes the separate word scheduler and extends the existing decoded-prefix
 range to both depths. Word products are converted from unsigned 32-bit values to
 exact doubles once per decoded source pixel, then reused across four output
