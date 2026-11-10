@@ -1232,15 +1232,18 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-word-certified-rows-evidence.json').read_text(encoding='utf-8'))
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-word-windows-evidence.json').read_text(encoding='utf-8'))
+    current_build_qualification = lanczos_current['qualification']
     assert lanczos_current['productionAccepted'] and lanczos_current['storage']['capacityUnchanged']
-    assert lanczos_current['comparisons']['Repeated16']['rawGainSeparatedBothViews']
-    assert lanczos_current['comparisons']['Repeated16']['normalizedGainSeparated']
-    assert lanczos_current['sourceProof']['certificateDivisionRoundingGuardMasksAndExactRepairBodiesVerbatim']
-    assert lanczos_current['qualification']['fullChecksEachOs'] == 6017
-    assert lanczos_current['qualification']['actualPackage']['sha256'] == lanczos_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert len(lanczos_current['cases']) == 8
-    assert sum(c['status'] == 'pass' for c in lanczos_current['cases'].values()) == 5
+    assert lanczos_current['sourceProof']['sourceUndoReconstructsQualifiedOriginal']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in lanczos_current['comparisons']['RepeatedEnlarge16']['views'].values())
+    assert current_build_qualification['fullChecksEachOs'] == 6148
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
+    assert len(lanczos_current['cases']) == 8 and len(lanczos_current['refreshedWordCases']) == len(lanczos_current['reusedByteCases']) == 4
+    assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 2, 'uncertain': 0}
+    assert lanczos_current['cases']['RepeatedEnlarge16']['upper'] <= 1
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
     for case, label, size in [
@@ -1254,7 +1257,7 @@ def render():
             ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
         observation = lanczos_current['cases'][case]
         assert observation['managedExact'] and observation['allOriginalGatesPassed'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == lanczos_current['producers']['timedArtifactSha256']
+        assert observation['reusedUnchangedPath'] or observation['librarySha256'] == lanczos_current['producers']['timedArtifactSha256']
         assert observation['actualIterations'] == 12
         current_resize_rows.append(('editing', f'| {label} † → {size} | {observation["managedUs"]:,.2f} | '
                                     f'{observation["nativeUs"]:,.2f} | {observation["ratio"]:.3f} / '
@@ -1993,16 +1996,19 @@ Current scope and remaining work:
   bounded workspace4KiB/113Bop, cached byte199,840B workspace/{bicubic_overlap['cases']['Down8']['allocatedBytes']:,}Bop.
   Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
   until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
-  [Certified Lanczos word rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
-  reuse existingUInt32 products and remove integer filtering/conversion in the
-  accelerated producer. Prepared word reduction saves25.02µs/4.34%raw/4.99%normalized,
-  with separated filtered/allactual confidence. Enlargement's+14.87µs point has
-  overlapping intervals; no uniform gain claim. All eight costs refresh on the
-  actual-package DLL: fivepasses/three preparedgaps; retention139,800–333,396B
-  unchanged, equivalent one-shot setup timed. Exact Q30 pixels/strict certificate/
-  repair remain;6,017full/live eachOS, normal/scalar/AVX512off and SAMEpackage pass.
-  [Earlier certificate preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
-  retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  [Paired Lanczos word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md)
+  share converted source values between independent Q30/FMA streams. Complete
+  prepared RGBA16 enlargement saves **{lanczos_current['comparisons']['RepeatedEnlarge16']['savedUs']:.2f}µs/{100*lanczos_current['comparisons']['RepeatedEnlarge16']['rawReduction']:.2f}% raw**,
+  {100*lanczos_current['comparisons']['RepeatedEnlarge16']['normalizedReduction']:.2f}% normalized; both confidence views separate.
+  Current{lanczos_current['cases']['RepeatedEnlarge16']['managedUs']:.2f}/zimg{lanczos_current['cases']['RepeatedEnlarge16']['nativeUs']:.2f}µs,
+  upper{lanczos_current['cases']['RepeatedEnlarge16']['upper']:.3f} passes/stops. Four word costs refresh, four unchanged byte
+  costs reuse: **sixpasses/two prepared-reduction gaps**. Other fresh costs qualify
+  current status, without causal companion-gain claims. Word prepared GC139/
+  4,265,332B/op and retained148,040/333,396B remain; independent enlargement output
+  4,264,104B, physical/native peaks unmeasured. No new buffer/pool/session; exact
+  four-chain order, Q30, strict certificates/repair and explicit one-shot/prepared
+  boundaries stay. [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  retain earlier gains/history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
@@ -2091,7 +2097,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{packed_qualification['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

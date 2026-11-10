@@ -1,5 +1,7 @@
 # Certified Lanczos word rows
 
+Current costs now belong to [paired word windows](LANCZOS-PAIRED-WORD-WINDOWS.md). Four word controls refresh; four unchanged byte controls reuse the evidence below.
+
 [Current enlargement attribution](LANCZOS-CURRENT-ENLARGEMENT-ATTRIBUTION.md)
 examines the remaining prepared gap without changing the costs below.
 

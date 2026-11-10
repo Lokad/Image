@@ -1,0 +1,616 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LPM740",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+    "linuxSha256": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+    "timedArtifactSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/LanczosFmaResize.cs": "ea8da93b6432269602d5fc49a77dc6aef696f09131fdb483e10d7fecdf1a94bb",
+    "tests/Lokad.Image.Tests/LanczosWordFmaTests.cs": "de3af99bf894d659163f0b02b9bb7295696184b59baba49c963544bc4ab47a98"
+  },
+  "cases": {
+    "OneShot8": {
+      "managedUs": 707.7185372474747,
+      "nativeUs": 1567.5117864583333,
+      "ratio": 0.4514916846950847,
+      "lower": 0.43941227225537527,
+      "upper": 0.4566018461118579,
+      "allocatedBytes": 138643,
+      "retainedBytes": 0,
+      "librarySha256": "f3f22576dbca69bf43c39d5d385e8eae3f81e6cc52b6f402eca5032aed466475",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "receipt": "lhf675-refresh-OneShot8-confirm-receipt.json",
+      "reusedUnchangedPath": true
+    },
+    "Repeated8": {
+      "managedUs": 625.6858137400794,
+      "nativeUs": 532.5153818681318,
+      "ratio": 1.1749628931752052,
+      "lower": 1.159429665750748,
+      "upper": 1.1855900228453986,
+      "allocatedBytes": 139,
+      "retainedBytes": 139800,
+      "librarySha256": "f3f22576dbca69bf43c39d5d385e8eae3f81e6cc52b6f402eca5032aed466475",
+      "status": "gap",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "receipt": "lhf675-refresh-Repeated8-confirm-receipt.json",
+      "reusedUnchangedPath": true
+    },
+    "OneShot16": {
+      "managedUs": 684.209279007177,
+      "nativeUs": 1801.9563055555554,
+      "ratio": 0.3797035904243142,
+      "lower": 0.3738505451804341,
+      "upper": 0.38242432917377095,
+      "allocatedBytes": 146866,
+      "retainedBytes": 0,
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "reusedUnchangedPath": false,
+      "receipt": "lpm740-candidate-OneShot16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac",
+      "nativeOutputSha256": "0a791a404fde304cd73d7595048103a531de0817077f04c6841f7e07d4cc6e6a",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002513323643410853,
+        "alphaMeanSquared": 0.0016048934108527132
+      },
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal"
+    },
+    "Repeated16": {
+      "managedUs": 544.7591394927535,
+      "nativeUs": 510.6252994791667,
+      "ratio": 1.0668471382996554,
+      "lower": 1.0595788223673783,
+      "upper": 1.073399039970685,
+      "allocatedBytes": 139,
+      "retainedBytes": 148040,
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "status": "gap",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "reusedUnchangedPath": false,
+      "receipt": "lpm740-candidate-Repeated16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac",
+      "nativeOutputSha256": "0a791a404fde304cd73d7595048103a531de0817077f04c6841f7e07d4cc6e6a",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002513323643410853,
+        "alphaMeanSquared": 0.0016048934108527132
+      },
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+    },
+    "OneShotEnlarge8": {
+      "managedUs": 4085.5566732954544,
+      "nativeUs": 5715.791259259259,
+      "ratio": 0.7147840933968824,
+      "lower": 0.7080818253494946,
+      "upper": 0.7203802650763448,
+      "allocatedBytes": 319224,
+      "retainedBytes": 0,
+      "librarySha256": "f3f22576dbca69bf43c39d5d385e8eae3f81e6cc52b6f402eca5032aed466475",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f528e66303b1284de832fe3fe3989345be2980e3e0b91bee26374f7551c896ff",
+      "nativeOutputSha256": "8828276c6e0b791eeeed24c12e34769d767035cd30ffb8fbf3f72c3dd4c9def9",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 6.879131778524477e-06,
+        "alphaMeanSquared": 9.380634243442467e-06
+      },
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "receipt": "lhf675-refresh-OneShotEnlarge8-confirm-receipt.json",
+      "reusedUnchangedPath": true
+    },
+    "RepeatedEnlarge8": {
+      "managedUs": 3492.0847826704544,
+      "nativeUs": 4067.379777777778,
+      "ratio": 0.858558820041723,
+      "lower": 0.8332708676826398,
+      "upper": 0.8649721227766378,
+      "allocatedBytes": 148,
+      "retainedBytes": 325156,
+      "librarySha256": "f3f22576dbca69bf43c39d5d385e8eae3f81e6cc52b6f402eca5032aed466475",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f528e66303b1284de832fe3fe3989345be2980e3e0b91bee26374f7551c896ff",
+      "nativeOutputSha256": "8828276c6e0b791eeeed24c12e34769d767035cd30ffb8fbf3f72c3dd4c9def9",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 6.879131778524477e-06,
+        "alphaMeanSquared": 9.380634243442467e-06
+      },
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "receipt": "lhf675-refresh-RepeatedEnlarge8-confirm-receipt.json",
+      "reusedUnchangedPath": true
+    },
+    "OneShotEnlarge16": {
+      "managedUs": 4099.158196614583,
+      "nativeUs": 5077.688716666667,
+      "ratio": 0.8072882024374161,
+      "lower": 0.8032739741548423,
+      "upper": 0.8109959918476547,
+      "allocatedBytes": 4592818,
+      "retainedBytes": 0,
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "reusedUnchangedPath": false,
+      "receipt": "lpm740-candidate-OneShotEnlarge16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "dd1fd2dddedb6a3a0b1d19a5458308837da6fef5be2bfc1821601cf176521b2e",
+      "nativeOutputSha256": "fa778ce77ac2972f07bbcd075369adb58d85ff62fe23b03d842b6e8b709afd66",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002488369576977172,
+        "alphaMeanSquared": 0.001729788954490791
+      },
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal"
+    },
+    "RepeatedEnlarge16": {
+      "managedUs": 3856.4369088541666,
+      "nativeUs": 3892.929121794872,
+      "ratio": 0.9906260268813011,
+      "lower": 0.984601963976423,
+      "upper": 0.9954893609100512,
+      "allocatedBytes": 4265332,
+      "retainedBytes": 333396,
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "reusedUnchangedPath": false,
+      "receipt": "lpm740-candidate-RepeatedEnlarge16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "dd1fd2dddedb6a3a0b1d19a5458308837da6fef5be2bfc1821601cf176521b2e",
+      "nativeOutputSha256": "fa778ce77ac2972f07bbcd075369adb58d85ff62fe23b03d842b6e8b709afd66",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002488369576977172,
+        "alphaMeanSquared": 0.001729788954490791
+      },
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+    }
+  },
+  "statusCounts": {
+    "pass": 6,
+    "gap": 2,
+    "uncertain": 0
+  },
+  "refreshedWordCases": [
+    "RepeatedEnlarge16",
+    "Repeated16",
+    "OneShotEnlarge16",
+    "OneShot16"
+  ],
+  "reusedByteCases": [
+    "OneShot8",
+    "OneShotEnlarge8",
+    "Repeated8",
+    "RepeatedEnlarge8"
+  ],
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "LPM740",
+    "sourceSha256": "ea8da93b6432269602d5fc49a77dc6aef696f09131fdb483e10d7fecdf1a94bb",
+    "sourceUndoReconstructsQualifiedOriginal": true,
+    "scope": "Onlywordhorizontalproduceranditsrow-levelgeometrydispatchchange. Bytehorizontal, errors,normalizers,certificates,Guard,pixelwriters/exactrepair,verticalaccumulation,geometry/storage/plans/ownersremainverbatim.",
+    "math": "Pairpredicate checksidenticalFirst/Count, nevercoefficients. SharedUInt32conversion isexact, sameasexisting. FourFMAchains peroutput, Addfirst/second thenAddlow/high andtailFMA orderunchanged. NextwindowoffsetonlyselectsitsownQ30coefficients. Existingexpandedtestsverifyeveryrowbit againstindependentscalar4-chainFMAoracle,BigIntegerenvelopeandalphaexactness. No numericalpolicychange.",
+    "ownership": "Onlyregisterlocals and borrowedreadonlyplanviews. SameProducts/Rows/Sums allocation/admission/retention. No doubledsourcerow, changedverticalstaging, copy, cache/session/pool, owneror root snapshot. Cancellationperoutput/per1024tap andafterrowremainsbounded; pairselectaddscheck forsecondoutput beforepairedwork. No partial-worksemantics required.",
+    "qualification": "Two immutable successfulmain/embedded versions perOS,322internal/729public normal/scalar eachOS; expandedexistingrowFact covers1/3/4tap pairedwindows,5tap/odd,513->1027common6tap,nonpairreductionandlongsupport, poisonedguards,highUInt32,exactalpha,zeroallocation/rootbalance. Full/scalar/ISA/SAMEpackage onlyatacceptedmilestone."
+  },
+  "comparisons": {
+    "RepeatedEnlarge16": {
+      "originalUs": 4021.0159140625,
+      "currentUs": 3856.4369088541666,
+      "savedUs": 164.57900520833346,
+      "rawReduction": 0.04092970749823677,
+      "normalizedReduction": 0.03835786062587765,
+      "nativePointChange": -0.002674432376718716,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      },
+      "originalSourceValidConfirmationReused": true
+    },
+    "Repeated16": {
+      "originalUs": 551.3886033843874,
+      "currentUs": 544.7591394927535,
+      "savedUs": 6.6294638916338045,
+      "rawReduction": 0.012023215298507361,
+      "normalizedReduction": 0.0060551060648250665,
+      "nativePointChange": -0.006004466917732043,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      },
+      "originalSourceValidConfirmationReused": true
+    },
+    "OneShotEnlarge16": {
+      "originalUs": 4699.026043402777,
+      "currentUs": 4099.158196614583,
+      "savedUs": 599.8678467881937,
+      "rawReduction": 0.1276579106494592,
+      "normalizedReduction": 0.1026086667320103,
+      "nativePointChange": -0.027913400752632933,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      },
+      "originalSourceValidConfirmationReused": true
+    },
+    "OneShot16": {
+      "originalUs": 693.0440436921295,
+      "currentUs": 684.209279007177,
+      "savedUs": 8.834764684952574,
+      "rawReduction": 0.012747768003150473,
+      "normalizedReduction": 0.00989031532303808,
+      "nativePointChange": -0.0028859960914783267,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      },
+      "originalSourceValidConfirmationReused": true
+    }
+  },
+  "codeProof": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "statisticalTiming": false,
+    "instrumentedElapsedDiscarded": true,
+    "cases": {
+      "RepeatedEnlarge16": {
+        "mode": "PairedWordWindows",
+        "methodBytes": 1003,
+        "staticFmaInstructions": 6,
+        "staticUint32Conversions": 3,
+        "scope": "ActualrowbodyonintendedfinalDLL/.NET10.0.8; pairedbodydoublesFMAstreamswithoutdoublingconversions. Singlemodeerasesnextstream,staticcodecountsnotruntimecounts/CPUsavings."
+      },
+      "Repeated16": {
+        "mode": "SingleWordWindows",
+        "methodBytes": 655,
+        "staticFmaInstructions": 3,
+        "staticUint32Conversions": 3,
+        "scope": "ActualrowbodyonintendedfinalDLL/.NET10.0.8; pairedbodydoublesFMAstreamswithoutdoublingconversions. Singlemodeerasesnextstream,staticcodecountsnotruntimecounts/CPUsavings."
+      }
+    }
+  },
+  "storage": {
+    "capacityUnchanged": true,
+    "newOwnedCapacityBytes": 0,
+    "retainedPreparedWordReductionBytes": 148040,
+    "retainedPreparedWordEnlargementBytes": 333396,
+    "independentWordEnlargementOutputBytes": 4264104,
+    "newPhysicalOrAdmittedPeakMeasurement": false,
+    "note": "Current B/op and planretention are reported independently. Primary word139/4265332Bop match their contemporary originals; minor one-shot amortization differences are not intrinsic allocation claims. Existing admission/ownership paths and capacity are unchanged; no extra row, pool/cache/session."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6148,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "full": [
+        2883,
+        2317,
+        948
+      ],
+      "total": 6148,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 322,
+        "internal-scalar": 322,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1051,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "c89c2426b20cc906ce909d4d5c074f25d4ad1c965f83dcf02b33566d87721f81",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\LanczosFmaResize.cs": "ea8da93b6432269602d5fc49a77dc6aef696f09131fdb483e10d7fecdf1a94bb"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+      "full": [
+        2883,
+        2317,
+        948
+      ],
+      "total": 6148,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 322,
+        "internal-scalar": 322,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1051,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "843a898f6fe1536f3b5a1993ed6ffb5264b8ba67680d8f4a79310936b3a2b26e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "ea8da93b6432269602d5fc49a77dc6aef696f09131fdb483e10d7fecdf1a94bb"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "affectedIsa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 322,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 322,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 322,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 322,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "918e821b003ffe54101b20c1cfeaa3d1637f1057a733e8e8f4d75dd176aa8f8d",
+        "allBuilds": 0
+      }
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "09dccc3ea1ea4691239a90caae7fb5dafbbd00ff2c6e3e9814749053630b100d",
+      "symbolsSha256": "d62e477de7e7f2b3f577f6f409e5781079aad38a1fd45a1ee84f9add0bbbcecb",
+      "bytes": 440750,
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "09dccc3ea1ea4691239a90caae7fb5dafbbd00ff2c6e3e9814749053630b100d",
+      "librarySha256": "e4e4ab3cbf93591f5482603f5b11331540c415669c640752c1e8af3c09ee48d9",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "resizeInternalEachModeEachOs": 322,
+    "resizePublicEachModeEachOs": 729,
+    "consumerInput": {
+      "project": "Lokad.Image",
+      "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+      "originalSha256": "53fe935e18ef886b87ffd7c7b3c4e065cd9ba8ca4d2c368ad5339317aeab296f",
+      "currentSha256": "2d0e515def97da3cf103e753a93594344f4d8e60f4f96da8de7a0f6f148663da",
+      "cases": [
+        [
+          17,
+          11,
+          8
+        ],
+        [
+          17,
+          11,
+          16
+        ],
+        [
+          65,
+          39,
+          16
+        ]
+      ],
+      "scope": "Reuseexistingpreparedplan/root/changed-source/retained-survivor/asyncencodeconsumer atwordenlargement too. Toolingonly, no production/main/embeddedrebuild or packageinputchange. AddedbeforeWindowspackageinvocation; syncbeforeLinuxSAMEpackageverification."
+    },
+    "unaffectedJpegInternalPublicEachModeEachOs": [
+      453,
+      375
+    ]
+  },
+  "transition": {
+    "firstStage": "LPW739",
+    "finalStage": "LPM740",
+    "initialEnlargementUs": 3801.7880364583334,
+    "initialReductionUs": 573.3382660984847,
+    "scope": "Both3-actualinitialpoints unconfirmed. Finalgeometry-selectedconstantmodesremove dormantpairwork inreduction; oneproducerbody, no duplicatekernelclass. Actualsingle655B/paired1003B codehas3uintconverts but3/6FMAinstructions. StaticcountsnotCPUgain. Allinterimcode/modules/screensretained; onewrongnative-sample-countreceiptcheckrecoveredcompletedcodecapturewithoutreplay. Allinstrumentedelapseddiscarded."
+  },
+  "workflow": {
+    "productionAndEmbeddedCandidatesPerOS": 2,
+    "productionCompileFailures": 0,
+    "harnessSelectorNativeFixtureBuilds": 0,
+    "newBenchmarkImagesOrSettings": 0,
+    "primaryShortThenIndependentConfirmation": true,
+    "refreshedWordConfirmations": 4,
+    "extraFavorableRepeats": 0,
+    "fullRunsPerOS": 1,
+    "actualPackageProofsPerOS": 1,
+    "allSamplesRetained": true
+  },
+  "invalidation": "Onlywordhorizontalproducer/rowdispatchchange: fourwordone-shot/preparedboundariesrefresh, fourbytecasesreuseunchangedbody/ownership. Allvertical/certificate/Guard/exactrepair/geometry/plans/storage andotherimagecodepathsunchanged. ExtendedsameexistingrowFacttestsnomatrix/newbenchmarkimages, plusactualpackageconsumerwordenlargementretention/asyncsurvival. Full6148/scalar/affectedISA/SAMEpackagequalified. No full127-rowrelease refresh.",
+  "decision": "Accept164.58us/4.09%raw/3.84%normalized preparedwordenlargementgain, separatedfiltered/allactualraw+normalizedconfidence, native-.267%. Currentupper.995passes/stops. Otherthreewordcostsqualifycurrentstatus, nocausalcompaniongain/equivalenceclaim. Eightcases6pass/2preparedreductiongaps; earlieroneshotpassesremain. No newownedcapacity/retentionorallocationclaim, exactQ30/finalpixels/contractspreserved. Publishedpackagesimmutable/publicationpostponed/full283objectiveopen.",
+  "next": "Stopconfirmedpreparedwordenlargement. Largestcurrentdemonstratedresizinglead includespreparedbyteLanczosreduction~93us andpackedbyte~88/narrowbyte~85/cachedwide~79. Reuseunchangedcosts/qualification; inspectattributionbeforeanotherdesign, no newgrid or repetitionsforfavorablepoints.",
+  "raw": {
+    "file": "lanczos-paired-word-windows.tar.xz",
+    "sha256": "4e18a5e8e27547f7a5dab8f2a2d887d9bf7a06a6a3422e98a30dc793a5845c2c",
+    "bytes": 33609896,
+    "members": 277,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-certified-rows-qualified.tar.xz",
+        "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+      },
+      {
+        "file": "lanczos-current-enlargement-attribution.tar.xz",
+        "sha256": "e5fc490280c52351dad16d56022f726cd6bb0e0dff409ecbce7bb9da487f1e77"
+      },
+      {
+        "file": "packed-bicubic-contiguous-views.tar.xz",
+        "sha256": "6b98c99939eb762654d017e64b702a8026317a5654efde461a3896f70e2cb8ff"
+      }
+    ]
+  }
+}

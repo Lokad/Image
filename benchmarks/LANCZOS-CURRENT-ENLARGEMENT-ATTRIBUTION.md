@@ -1,5 +1,9 @@
 # Current prepared Lanczos enlargement
 
+This capture predates [paired word windows](LANCZOS-PAIRED-WORD-WINDOWS.md).
+That producer supersedes the horizontal-body attribution and owns current costs;
+the original capture below remains historical evidence, not current phase costs.
+
 The subsequent [fused traversal round](LANCZOS-FUSED-VERTICAL-EXPERIMENT.md)
 restores both unselected implementations and retains cache-boundary coverage.
 

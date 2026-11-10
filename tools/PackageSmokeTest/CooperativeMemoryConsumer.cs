@@ -581,13 +581,13 @@ internal static class CooperativeMemoryConsumer
 
     private static async Task VerifyLanczosPlans()
     {
-        foreach (var depth in new[] { 8, 16 })
+        foreach (var (width, height, depth) in new[] { (17, 11, 8), (17, 11, 16), (65, 39, 16) })
         {
             using var root = new TestMemoryBudget(3 * 1024 * 1024);
             var limits = new ImageLimits { MemoryBudget = root };
             using var original = OriginalPixels.Buffer(31, 19, depth);
             using var source = original.Clone(limits);
-            using var plan = Lanczos3ResizePlan.Create(31, 19, 17, 11, depth, limits);
+            using var plan = Lanczos3ResizePlan.Create(31, 19, width, height, depth, limits);
             if (root.Bytes != source.Stride * source.Height + plan.StorageBytes)
                 throw new Exception("Packaged Lanczos preparation lost its retained admission.");
             using var first = plan.Resize(source);
@@ -595,7 +595,7 @@ internal static class CooperativeMemoryConsumer
             for (var y = 0; y < source.Height; y++)
                 if (depth == 8) changed.GetRow8(y).CopyTo(source.GetRow8(y));
                 else changed.GetRow16(y).CopyTo(source.GetRow16(y));
-            using var expected = ImageTransforms.Resize(changed, 17, 11, ResizeFilter.Lanczos3);
+            using var expected = ImageTransforms.Resize(changed, width, height, ResizeFilter.Lanczos3);
             using var survivor = plan.Resize(source);
             var pixels = OriginalPixels.Bytes(expected);
             if (!pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))

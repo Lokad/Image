@@ -203,16 +203,19 @@ Current scope and remaining work:
   bounded workspace4KiB/113Bop, cached byte199,840B workspace/199,981Bop.
   Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
   until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
-  [Certified Lanczos word rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
-  reuse existingUInt32 products and remove integer filtering/conversion in the
-  accelerated producer. Prepared word reduction saves25.02µs/4.34%raw/4.99%normalized,
-  with separated filtered/allactual confidence. Enlargement's+14.87µs point has
-  overlapping intervals; no uniform gain claim. All eight costs refresh on the
-  actual-package DLL: fivepasses/three preparedgaps; retention139,800–333,396B
-  unchanged, equivalent one-shot setup timed. Exact Q30 pixels/strict certificate/
-  repair remain;6,017full/live eachOS, normal/scalar/AVX512off and SAMEpackage pass.
-  [Earlier certificate preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
-  retains history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  [Paired Lanczos word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md)
+  share converted source values between independent Q30/FMA streams. Complete
+  prepared RGBA16 enlargement saves **164.58µs/4.09% raw**,
+  3.84% normalized; both confidence views separate.
+  Current3856.44/zimg3892.93µs,
+  upper0.995 passes/stops. Four word costs refresh, four unchanged byte
+  costs reuse: **sixpasses/two prepared-reduction gaps**. Other fresh costs qualify
+  current status, without causal companion-gain claims. Word prepared GC139/
+  4,265,332B/op and retained148,040/333,396B remain; independent enlargement output
+  4,264,104B, physical/native peaks unmeasured. No new buffer/pool/session; exact
+  four-chain order, Q30, strict certificates/repair and explicit one-shot/prepared
+  boundaries stay. [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
+  retain earlier gains/history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
@@ -418,12 +421,12 @@ settings do not establish matched quality.
 | --- | ---: | ---: | ---: | ---: |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 707.72 | 1,567.51 | 0.451 / 0.457 | 138,643 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 625.69 | 532.52 | 1.175 / 1.186 | 139 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 693.04 | 1,807.17 | 0.383 / 0.387 | 146,869 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 551.39 | 513.71 | 1.073 / 1.084 | 139 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 684.21 | 1,801.96 | 0.380 / 0.382 | 146,866 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 544.76 | 510.63 | 1.067 / 1.073 | 139 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,085.56 | 5,715.79 | 0.715 / 0.720 | 319,224 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,492.08 | 4,067.38 | 0.859 / 0.865 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,699.03 | 5,223.49 | 0.900 / 0.940 | 4,592,777 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,021.02 | 3,903.37 | 1.030 / 1.043 | 4,265,332 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,099.16 | 5,077.69 | 0.807 / 0.811 | 4,592,818 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,856.44 | 3,892.93 | 0.991 / 0.995 | 4,265,332 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |

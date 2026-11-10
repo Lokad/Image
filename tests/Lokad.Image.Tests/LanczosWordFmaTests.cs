@@ -12,7 +12,7 @@ public sealed class LanczosWordFmaTests
     {
         if (!(Avx512F.IsSupported && Avx512DQ.IsSupported && Avx512DQ.VL.IsSupported
             && Avx2.IsSupported && Fma.IsSupported && Sse41.IsSupported)) return;
-        foreach (var (width, target) in new[] { (5, 13), (17, 9), (1031, 2) })
+        foreach (var (width, target) in new[] { (1, 9), (3, 13), (4, 17), (5, 13), (513, 1027), (17, 9), (1031, 2) })
         {
             using var source = ImageBuffer.Create(width, 1, 16);
             for (var x = 0; x < width; x++)
@@ -36,7 +36,7 @@ public sealed class LanczosWordFmaTests
             var before = GC.GetAllocatedBytesForCurrentThread(); Apply();
             Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
             Assert.Equal(charged, root.Bytes); Assert.Equal(original, source.Pixels.ToArray());
-            Assert.Contains(products.AsSpan(4, width * 4).ToArray(), value => value > int.MaxValue);
+            if (width > 3) Assert.Contains(products.AsSpan(4, width * 4).ToArray(), value => value > int.MaxValue);
             for (var i = 0; i < 4; i++)
             {
                 Assert.Equal(productGuard, products[i]); Assert.Equal(productGuard, products[width * 4 + 4 + i]);
@@ -53,6 +53,22 @@ public sealed class LanczosWordFmaTests
                         * plan.Weights[window.Offset + tap];
                 var error = BigInteger.Abs((BigInteger)output[4 + x * 4 + channel] - exact);
                 Assert.True(error <= (channel == 3 ? BigInteger.Zero : (window.Count + 3L) * 512));
+                // Independent scalar four-chain FMA oracle. The pair shares
+                // source conversions, never coefficient streams or reductions.
+                double c0 = 0, c1 = 0, c2 = 0, c3 = 0; var t = 0;
+                double Value(int tap) => (double)source.Sample(window.First + tap, 0, 3)
+                    * (channel == 3 ? 1 : source.Sample(window.First + tap, 0, channel));
+                for (; t + 3 < window.Count; t += 4)
+                {
+                    c0 = Math.FusedMultiplyAdd(Value(t), plan.Weights[window.Offset + t], c0);
+                    c1 = Math.FusedMultiplyAdd(Value(t + 1), plan.Weights[window.Offset + t + 1], c1);
+                    c2 = Math.FusedMultiplyAdd(Value(t + 2), plan.Weights[window.Offset + t + 2], c2);
+                    c3 = Math.FusedMultiplyAdd(Value(t + 3), plan.Weights[window.Offset + t + 3], c3);
+                }
+                var expected = (c0 + c2) + (c1 + c3);
+                for (; t < window.Count; t++)
+                    expected = Math.FusedMultiplyAdd(Value(t), plan.Weights[window.Offset + t], expected);
+                Assert.Equal(BitConverter.DoubleToUInt64Bits(expected), BitConverter.DoubleToUInt64Bits(output[4 + x * 4 + channel]));
             }
             plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         }

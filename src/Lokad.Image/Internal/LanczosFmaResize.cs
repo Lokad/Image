@@ -136,7 +136,9 @@ internal static class LanczosFmaResize
         if (source.BitDepth == 16)
         {
             LanczosResize.PrepareWordProducts(source.GetRow16(y), products, context);
-            HorizontalWord(products, plan, output, context);
+            if (plan.Windows.Length > plan.SourceLength)
+                HorizontalWord<PairedWordWindows>(products, plan, output, context);
+            else HorizontalWord<SingleWordWindows>(products, plan, output, context);
             context.Cancellation.ThrowIfCancellationRequested(); return;
         }
         // Reuse one admitted backing store through two private views. No full
@@ -157,35 +159,67 @@ internal static class LanczosFmaResize
         }
     }
 
-    private static void HorizontalWord(ReadOnlySpan<uint> input, LanczosPlan plan,
-        Span<double> output, OperationContext context)
+    private readonly struct PairedWordWindows { }
+    private readonly struct SingleWordWindows { }
+
+    private static void HorizontalWord<TWindows>(ReadOnlySpan<uint> input, LanczosPlan plan,
+        Span<double> output, OperationContext context) where TWindows : struct
     {
         var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
         var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
-        for (var x = 0; x < plan.Windows.Length; x++)
+        ReadOnlySpan<LanczosPlan.Window> windows = plan.Windows;
+        ReadOnlySpan<int> weights = plan.Weights;
+        for (var x = 0; x < windows.Length; x++)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var window = plan.Windows[x];
+            context.Cancellation.ThrowIfCancellationRequested(); var window = windows[x];
+            var next = typeof(TWindows) == typeof(PairedWordWindows) && x + 1 < windows.Length ? windows[x + 1] : default;
+            var paired = typeof(TWindows) == typeof(PairedWordWindows) && x + 1 < windows.Length && next.First == window.First && next.Count == window.Count;
+            if (paired) context.Cancellation.ThrowIfCancellationRequested();
+            var nextFirst = Vector512<double>.Zero; var nextSecond = Vector512<double>.Zero;
             var first = Vector512<double>.Zero; var second = Vector512<double>.Zero; var i = 0;
             for (; i <= window.Count - 4; i += 4)
             {
                 if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
                 var products = Vector512.Create(input.Slice((window.First + i) * 4, 16));
-                var coefficients = Avx.ConvertToVector256Double(Vector128.Create(plan.Weights.AsSpan(window.Offset + i, 4)));
+                var coefficients = Avx.ConvertToVector256Double(Vector128.Create(weights.Slice(window.Offset + i, 4)));
                 var wide = Vector512.Create(coefficients, coefficients).AsInt64();
                 var weights01 = Avx512F.PermuteVar8x64(wide, replicate01).AsDouble();
                 var weights23 = Avx512F.PermuteVar8x64(wide, replicate23).AsDouble();
-                first = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(products.GetLower()), weights01, first);
-                second = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(products.GetUpper()), weights23, second);
+                var values01 = Avx512F.ConvertToVector512Double(products.GetLower());
+                var values23 = Avx512F.ConvertToVector512Double(products.GetUpper());
+                first = Avx512F.FusedMultiplyAdd(values01, weights01, first);
+                second = Avx512F.FusedMultiplyAdd(values23, weights23, second);
+                if (paired)
+                {
+                    var nextCoefficients = Avx.ConvertToVector256Double(Vector128.Create(weights.Slice(next.Offset + i, 4)));
+                    var nextWide = Vector512.Create(nextCoefficients, nextCoefficients).AsInt64();
+                    var nextWeights01 = Avx512F.PermuteVar8x64(nextWide, replicate01).AsDouble();
+                    var nextWeights23 = Avx512F.PermuteVar8x64(nextWide, replicate23).AsDouble();
+                    nextFirst = Avx512F.FusedMultiplyAdd(values01, nextWeights01, nextFirst);
+                    nextSecond = Avx512F.FusedMultiplyAdd(values23, nextWeights23, nextSecond);
+                }
             }
             var pair = Avx512F.Add(first, second); var sum = Avx.Add(pair.GetLower(), pair.GetUpper());
+            var nextSum = Vector256<double>.Zero;
+            if (paired)
+            {
+                var nextPair = Avx512F.Add(nextFirst, nextSecond);
+                nextSum = Avx.Add(nextPair.GetLower(), nextPair.GetUpper());
+            }
             for (; i < window.Count; i++)
             {
                 if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
                 var products = Vector256.Create(Vector128.Create(input.Slice((window.First + i) * 4, 4)), Vector128<uint>.Zero);
                 var values = Avx512F.ConvertToVector512Double(products).GetLower();
-                sum = Fma.MultiplyAdd(values, Vector256.Create((double)plan.Weights[window.Offset + i]), sum);
+                sum = Fma.MultiplyAdd(values, Vector256.Create((double)weights[window.Offset + i]), sum);
+                if (paired) nextSum = Fma.MultiplyAdd(values, Vector256.Create((double)weights[next.Offset + i]), nextSum);
             }
             sum.CopyTo(output.Slice(x * 4, 4));
+            if (paired)
+            {
+                nextSum.CopyTo(output.Slice((x + 1) * 4, 4));
+                x++;
+            }
         }
     }
 
