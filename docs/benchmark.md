@@ -61,8 +61,12 @@ Current scope and remaining work:
   upper0.971 passes/stops. The same 4 KiB/113 B/op
   covers 11,776 B borrowed from unpublished result rows, with no new capacity.
   [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
-  has 7 passes / 1 gap; [packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
-  has 2 gaps. [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
+  has 7 passes / 1 gap. [Packed byte preparation](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md)
+  saves **13.99 µs/3.33% raw**,
+  with separated raw/normalized confidence and native clock movement disclosed;
+  byte/word upper1.028/1.098
+  remain gaps. No new capacity; same 4 KiB/113 B/op and scratch 0.
+  [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
   resolve the byte uncertainty before tuning. Exact managed Q30/rational results
   remain distinct from native float. Useful specialized kernels/fallbacks remain.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -73,9 +77,9 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,180 full/live checks per OS**
+The current immutable build passes **6,181 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Resize checks pass 349 internal/729 public per
+Windows/Linux**. Resize checks pass 350 internal/729 public per
 normal/scalar/disabled-AVX2/AVX512 mode; unchanged JPEG evidence
 (458 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
@@ -198,8 +202,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 395.96 | 345.54 | 1.146 / 1.206 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 428.98 | 366.56 | 1.170 / 1.177 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 416.24 | 387.97 | 1.073 / 1.086 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 405.59 | 398.21 | 1.019 / 1.028 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 422.81 | 397.48 | 1.064 / 1.098 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 406.16 | 367.01 | 1.107 / 1.119 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB (confidence open) † → 128×64 | 433.70 | 436.46 | 0.994 / 1.003 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 782.07 | 840.35 | 0.931 / 0.936 | 199,943 |

@@ -10,6 +10,36 @@ namespace Lokad.Image.Tests;
 
 public sealed class PackedColumnStorageTests
 {
+    [Fact]
+    public void FourBytePixelProductsPreserveEveryColorAlphaPairAndLaneWithoutAllocation()
+    {
+        if (!Avx2.IsSupported) return;
+        Span<byte> input = stackalloc byte[32]; input.Fill(0xe3);
+        Span<ushort> output = stackalloc ushort[16];
+        PackedColumnBicubicResize.PrepareFourBytePixels(Vector128<byte>.Zero);
+        var allocated = GC.GetAllocatedBytesForCurrentThread();
+        var exact = true;
+        for (var alpha = 0; alpha < 256; alpha++) for (var color = 0; color < 256; color++)
+        {
+            for (var x = 0; x < 4; x++)
+            {
+                for (var c = 0; c < 3; c++) input[8 + x * 4 + c] = (byte)(color + x * 43 + c * 79);
+                input[8 + x * 4 + 3] = (byte)(alpha + x * 37);
+            }
+            PackedColumnBicubicResize.PrepareFourBytePixels(
+                System.Runtime.InteropServices.MemoryMarshal.Read<Vector128<byte>>(input.Slice(8, 16))).CopyTo(output);
+            for (var x = 0; x < 4; x++) for (var c = 0; c < 4; c++)
+            {
+                var expected = c == 3 ? input[8 + x * 4 + 3] : input[8 + x * 4 + c] * input[8 + x * 4 + 3];
+                exact &= expected == output[x * 4 + c];
+            }
+        }
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - allocated);
+        Assert.True(exact);
+        Assert.Equal(-1, input[..8].IndexOfAnyExcept((byte)0xe3));
+        Assert.Equal(-1, input[24..].IndexOfAnyExcept((byte)0xe3));
+    }
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static double RoundedProduct(double sample, double weight) => sample * weight;
 

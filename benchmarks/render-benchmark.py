@@ -933,21 +933,21 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-indexed-reduction-evidence.json').read_text(encoding='utf-8'))
+    packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-four-pixel-preparation-evidence.json').read_text(encoding='utf-8'))
     packed_qualification = packed_current['qualification']
     assert packed_current['productionAccepted'] and packed_current['requiredMaterialPaths'] == 283
     assert packed_current['raw']['mirrored'] and packed_current['raw']['allMembersVerified']
-    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6154
+    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6181
     assert packed_qualification['sameActualPackageBothOS'] and packed_qualification['actualPackage']['sha256'] == packed_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert packed_qualification['resizeInternalEachModeEachOs'] == 328 and packed_qualification['resizePublicEachModeEachOs'] == 729
-    assert packed_current['sourceProof']['sourceUndoReconstructsQualifiedOriginal']
-    assert packed_current['sourceProof']['contiguousGeometryTailsVerticalPublishersCertificatesRepairOwnersVerbatim']
-    assert packed_current['codeProof']['actualCandidateCode'] and packed_current['codeProof']['byteContiguousInstructionsVerbatim']
-    assert all(not h['accumulatorStackTrafficInLoop'] and h['singleFinalVectorStore']
-               for h in packed_current['codeProof']['indexed'].values())
-    assert packed_current['storage']['workspaceReservationBytes'] == 4096
+    assert packed_qualification['resizeInternalEachModeEachOs'] == 350 and packed_qualification['resizePublicEachModeEachOs'] == 729
+    assert packed_current['sourceCodeProof']['originalSourceReconstructedExactly']
+    assert packed_current['sourceCodeProof']['orderedFiltersGeometryCertificatesRepairWordTwoPixelAndSingleTailsVerbatim']
+    assert packed_current['sourceCodeProof']['actualCode']['actualCandidateCode']
+    assert all(packed_current['sourceCodeProof']['actualCode']['bodies'][f'8-{mode}']['ushortMultiply'] == 1
+               for mode in ('prefix', 'suffix'))
+    assert packed_current['storage']['workingAdmissionBytes'] == 4096
     assert packed_current['storage']['newOwnedCapacityBytes'] == packed_current['storage']['retainedOperationScratchBytes'] == 0
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_current['comparisons']['Tight64x32_8']['views'].values())
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_current['comparison']['views'].values())
     for depth in (8, 16):
         current = packed_current['cases'][f'Tight64x32_{depth}']
         assert current['actualIterations'] == 12 and current['allActualsRetained']
@@ -1727,7 +1727,7 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = narrow_qualification
+    current_build_qualification = packed_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1899,8 +1899,12 @@ Current scope and remaining work:
   upper{narrow_loan['cases']['TightDown16']['upper']:.3f} passes/stops. The same 4 KiB/113 B/op
   covers 11,776 B borrowed from unpublished result rows, with no new capacity.
   [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
-  has 7 passes / 1 gap; [packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
-  has 2 gaps. [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
+  has 7 passes / 1 gap. [Packed byte preparation](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md)
+  saves **{packed_current['comparison']['savedUs']:.2f} µs/{100*packed_current['comparison']['rawReduction']:.2f}% raw**,
+  with separated raw/normalized confidence and native clock movement disclosed;
+  byte/word upper{packed_current['cases']['Tight64x32_8']['upper']:.3f}/{packed_current['cases']['Tight64x32_16']['upper']:.3f}
+  remain gaps. No new capacity; same 4 KiB/113 B/op and scratch 0.
+  [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
   resolve the byte uncertainty before tuning. Exact managed Q30/rational results
   remain distinct from native float. Useful specialized kernels/fallbacks remain.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)

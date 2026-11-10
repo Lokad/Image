@@ -77,6 +77,16 @@ internal static class PackedColumnBicubicResize
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector256<ushort> PrepareFourBytePixels(Vector128<byte> pixels)
+    {
+        var samples = Avx2.ConvertToVector256Int16(pixels).AsUInt16();
+        var alpha = Avx2.ShuffleHigh(Avx2.ShuffleLow(samples, 255), 255);
+        var factors = Avx2.Blend(alpha, Vector256.Create((ushort)1), 136);
+        // Byte color products fit UInt16; the alpha lane keeps its sample.
+        return Avx2.MultiplyLow(samples, factors);
+    }
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool ApplyRange<TMode, TSamples>(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, scoped Span<Vector256<double>> loan,
@@ -162,6 +172,21 @@ internal static class PackedColumnBicubicResize
                         else cacheAt = (slot - 32) * columns;
                     }
                     var px = 0;
+                    if (!word)
+                    {
+                        for (; px + 3 < sourceCount; px += 4)
+                        {
+                            var products = PrepareFourBytePixels(MemoryMarshal.Read<Vector128<byte>>(row.Slice(px * 4, 16)));
+                            if (prepared)
+                            {
+                                var firstPixels = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(products.GetLower()).AsUInt32());
+                                var secondPixels = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(products.GetUpper()).AsUInt32());
+                                MemoryMarshal.Write(decodedBytes.Slice(px * 32, 64), in firstPixels);
+                                MemoryMarshal.Write(decodedBytes.Slice((px + 2) * 32, 64), in secondPixels);
+                            }
+                            else MemoryMarshal.Write(decodedBytes.Slice(px * 8, 32), in products);
+                        }
+                    }
                     for (; px + 1 < sourceCount; px += 2)
                     {
                         var samples = word
