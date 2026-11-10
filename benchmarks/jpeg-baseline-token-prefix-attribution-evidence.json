@@ -1,0 +1,317 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JRA762",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newBenchmarkImagesOrSettings": 0,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "producers": {
+    "windowsSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+    "linuxSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb"
+  },
+  "packageSha256": "361dd2578ecb2c6fc77ceea66acb0073101d05128c53f16a745adb52734d9587",
+  "sources": {
+    "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
+    "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b1dc8af3369f4925a23174fb756e359181d63fa02227600f2a17912c08c43e26",
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d",
+    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "7e5bd56ac4e184ecd295bacc91c268b3f089a4233c5168feefc12a099bd5a3b3",
+    "src/Lokad.Image/Internal/JpegHuffman.cs": "9cef93b5fce138f6efeb9cf8a8e63f7d5d83729bc5c69c6f90c092db45676b37",
+    "src/Lokad.Image/Internal/JpegHuffman.BaselinePairs.cs": "a428edb4c3585b52ea30487cd139b0c443d7da8f0545c9f466606062a3abbd4e"
+  },
+  "reusedCase": {
+    "managedMicroseconds": 1616.01546875,
+    "nativeMicroseconds": 1559.459109375,
+    "ratio": 1.0362666510683096,
+    "lower": 1.0213910016121885,
+    "upper": 1.0552491866817875,
+    "allocatedBytes": 42936,
+    "status": "confirmed-gap",
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "librarySha256": "d10b289f443c499c6a0f2e9447060a59c4693c92e7b3149fb3c0df46411b228e",
+    "inputBytes": 133057,
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "managedOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+    "nativeOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+    "descriptorSha256": null,
+    "outputBytes": 531468,
+    "runId": "jlp713-candidate-DirectRgb444-confirm",
+    "receiptFile": "jlp713-candidate-DirectRgb444-confirm-receipt.json",
+    "reusedUnchangedPath": false,
+    "measurementOwner": "JLP713"
+  },
+  "currentQualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "full": [
+        2902,
+        2317,
+        948
+      ],
+      "total": 6167,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 341,
+        "internal-scalar": 341,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1070,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "20e20580ad799eaedf519679962ed00df5939f3db7ae132ee228ec0f73f7821c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+      "full": [
+        2902,
+        2317,
+        948
+      ],
+      "total": 6167,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 341,
+        "internal-scalar": 341,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1070,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "49a52fb6be76fb6cf3bb158d9c96997c415c708d1a3789139cbc705e578b0bf1",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 6167,
+    "resizeInternalEachModeEachOs": 341,
+    "resizePublicEachModeEachOs": 729,
+    "isa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 341,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 341,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 341,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 341,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "361dd2578ecb2c6fc77ceea66acb0073101d05128c53f16a745adb52734d9587",
+      "symbolsSha256": "ce6c7c36323899790515a8929a8865d472b5c252c4f9adf451b7a0a4cbc5bbc9",
+      "bytes": 443312,
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "361dd2578ecb2c6fc77ceea66acb0073101d05128c53f16a745adb52734d9587",
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true
+  },
+  "capture": {
+    "totalSampleLocations": 1998,
+    "managedSampleLocations": 1721,
+    "selectedMethodLocations": {
+      "plainBaselineReader": 830,
+      "inverse": 445,
+      "baselineScheduler": 78,
+      "ordinaryAc": 54,
+      "tablePreparation": 46,
+      "dequantization": 41
+    },
+    "sampledPlainReaderCodeBytes": 1011,
+    "traceSha256": "88334d716283dada77e035d0bd6334411076d90b4524955065c4031c94f2164b",
+    "traceBytes": 754956,
+    "seconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "quietGuardsPassed": true,
+    "inputBytes": 133057,
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "outputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+    "outputBytes": 531468,
+    "instrumentedElapsedDiscarded": true,
+    "notes": "Inlining/skid/sample locations are not phase times, removable percentages, CPU gains or actual token frequency."
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "JRA762",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "allBuilds": 0,
+    "cases": {
+      "DirectRgb444": {
+        "inputPath": "tmp/jar509-direct-rgb-input.jpg",
+        "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+        "inputBytes": 133057,
+        "counts": {
+          "nonzeroAc": 221575,
+          "blocks": 6630,
+          "canonicalAcTokens": 226740,
+          "oldLookupIterations": 124521,
+          "oldPairs": 102219,
+          "oldMissIterations": 22301,
+          "newSingle": 16943,
+          "newEob": 2788,
+          "remainingCanonicalMiss": 1830,
+          "unchangedPairBoundaryMiss": 740,
+          "shortLogicalTail": 1
+        },
+        "prefixTables": {
+          "0": {
+            "kinds": {
+              "pair": 3406,
+              "single": 514,
+              "eob": 128,
+              "miss": 48
+            },
+            "oldSha256": "a300bb2d693912920d04e4fd7fb2a82c959ccefd526d9d243a3ff785deb8478d",
+            "proposedSha256": "7f1864877fa6b7a3cffb6b69ee988945c9ddafb311c6cf9e364bf93d73125550"
+          },
+          "1": {
+            "kinds": {
+              "pair": 3374,
+              "single": 558,
+              "eob": 128,
+              "miss": 36
+            },
+            "oldSha256": "985fac1064e8c9fea5a2595770cbe2d72e9e9c501af571bbcf856b5fa7ec77b4",
+            "proposedSha256": "8d906f0d1f211d65be1a2d0111ed9b04391bd928129872b1caa0e7ba8d0fb885"
+          }
+        },
+        "finalLogicalCursor": 133055,
+        "finalPendingBits": 1,
+        "paddingEoiExact": true,
+        "allDescriptorSemanticsChecked": true
+      },
+      "SparseCmyk": {
+        "inputPath": "artifacts/warm-reference/jpeg-cmyk-adobe-sparse2d/input.jpg",
+        "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+        "inputBytes": 22708,
+        "counts": {
+          "nonzeroAc": 17160,
+          "blocks": 8580,
+          "canonicalAcTokens": 25740,
+          "oldLookupIterations": 17160,
+          "oldPairs": 8580,
+          "oldMissIterations": 8579,
+          "newEob": 8579,
+          "shortLogicalTail": 1
+        },
+        "prefixTables": {
+          "0": {
+            "kinds": {
+              "eob": 1024,
+              "pair": 512,
+              "single": 512,
+              "miss": 2048
+            },
+            "oldSha256": "58a4738a1f54452a9e9006adabc1445c962e1d49eb0d26df798636bf768ef84b",
+            "proposedSha256": "6297d07c74aeee789c882af05c9a59486a3edba05c84f8e5c6a0e5fcb41a16f8"
+          }
+        },
+        "finalLogicalCursor": 22706,
+        "finalPendingBits": 1,
+        "paddingEoiExact": true,
+        "allDescriptorSemanticsChecked": true
+      }
+    },
+    "storage": {
+      "existingEntries": 4096,
+      "entryBytes": 4,
+      "additionalCapacityBytes": 0
+    },
+    "proposal": "Retain existing pair descriptors and priority. Populate currently zero entries with tagged single amplitude/run/width or EOB. One encoded-table-derived lookup can avoid repeated fallback canonical lookup and sign interpretation without larger tables or changed grammar. Both actual plain/cancelable table users must recognize tags; unsupported/truncated/long/ZRL/near-end pair misses keep canonical traversal. Preserve all exact cursor/partialstores/cancel/admission/lifetimes.",
+    "scope": "Independent canonical T81 grammar on two existing packets; all proposed descriptor uses checked against exact tokens/values/consumption/finalpadEOI. Counts model logical token-prefix coverage, ignoring actual initialDC/refill/FFstuffing/windowavailability/long-code handoffs and content probabilities. Not measured execution counts, memorytraffic, phasecost, CPUgain or mergeauthorization. Generic malformed/full-domain/partial-error/root tests and complete costs remain necessary."
+  },
+  "proposal": {
+    "repeatedWork": "Existing pair-table misses repeat canonical prefix lookup and signed amplitude interpretation inside hot entropy loops.",
+    "endState": "One existing scan-owned4096xUInt32 table retains pair priority and fills zero entries with tagged single amplitude/run/width or EOB. No added capacity/pool/root/session/API/general cache. Same CanPrepare eligibility, admission and disposal. Both actual plain/cancelable users recognize tags; long/ZRL/truncated/window-boundary and pair-near-end misses retain original grammar.",
+    "acceptance": "Model is a lead only. Actual compiler descriptors must match independentcanonicalgrammar over everyprefix, signs/categories/zero-runs/lastcoefficient/EOB. Preserve DC/predictor/cursor/followingreads/partialstores/errors/stuffing/truncation, cooperativecheckpoints and terminalrefusal. Existing sparse/directRGB complete shorts, independent confirmation only if useful, affected baseline costs before any broad claim; full W/L/scalar/ISA/SAMEpackage once at coherent milestone.",
+    "temporaryCosts": "Existing pair hits gain a tag discrimination and table preparation does more work. May enlarge method/frame or hurt sparse cases. Measure complete workloads before acceptance; retain adverse results, revise or abandon, no fixed thresholds."
+  },
+  "invalidation": "No production/test/harness/native/selector/fixture change; current6167/scalar/ISA/SAMEpackage and source-valid costs reused. A real hybrid table changes both baseline reader bodies and preparation; pair-null/validation/cancellable/live callers may have changed code costs too. Identify affected current baseline inventory and refresh it at acceptance; keep six progressive controls only if relevant code remains unchanged. Not a whole127row release refresh.",
+  "workflow": {
+    "profileCaptures": 1,
+    "fullOrPackageQualificationRepeats": 0,
+    "allBuilds": 0,
+    "localPreparationCorrection": "One local generator syntax error in scope-literal closing parenthesis corrected before any VM call/build/experiment.",
+    "modelCorrection": "One independent logical-prefix extractor padded the final two-byte read to its24-bit alignment after an assertion on the final token. Earlier script retained; no production or benchmark failure. Corrected model checks both complete streams and finalpadEOI."
+  },
+  "raw": {
+    "file": "jpeg-baseline-token-prefix-attribution.tar.xz",
+    "sha256": "a4a6fc51e9f2f02498aa48e9cc9e35761d2b61743522f187cb5c47b35ed88c56",
+    "bytes": 302592,
+    "members": 33,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-result-row-loan.tar.xz",
+        "sha256": "37b964975f355e6c837fbd2db07f90a02797cb0479299bca5da2080ba71cbef6"
+      },
+      {
+        "file": "jpeg-coefficient-pipeline-attribution.tar.xz",
+        "sha256": "4dd56c4370c14d544fa1d5b033ee8735633a7011b684d2cffdb0a6bce28ad7fc"
+      },
+      {
+        "file": "jpeg-live-prepared-huffman-qualified.tar.xz",
+        "sha256": "5e152dfb85b0b0371e5f71fc885d7446f29123f313ec875576511e38d428646b"
+      }
+    ]
+  }
+}

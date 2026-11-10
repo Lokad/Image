@@ -32,6 +32,15 @@ are removed with exact source/module restoration; current qualification/costs
 remain valid. These studies stay outside renderer inputs and do not ban revised
 architectural designs.
 
+[Current direct-RGB attribution](JPEG-BASELINE-TOKEN-PREFIX-ATTRIBUTION.md) finds
+plain baseline entropy830/inverse445 of1998sample locations, with elapsed discarded.
+A two-packet canonical model motivates filling existing12-bit pair-table misses
+with tagged single/EOB descriptors, avoiding repeated canonical/sign work without
+new capacity. RGB19731 and sparseCMYK8579 modeled lookups are eligible; actual
+window/refill/stuffing effects and added tag/preparation costs remain unmeasured.
+No production/build/cost/qualification change or renderer dependency. This is a
+bounded next design, not proven gain or automatic merge authorization.
+
 [Shared byte publication](BICUBIC-SHARED-BYTE-PUBLICATION.md) reuses rounding and
 ordinary-alpha certification with exact pixels. Wide byte saves7.96µs/1.86%raw/
 2.34%normalized; both confidence views separate. Bounded wide byte upper1.209 remains a gap; its narrow byte
