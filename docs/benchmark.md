@@ -97,7 +97,16 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
+- **Resizing:** [current bounded packed-word resize](../benchmarks/CURRENT-PACKED-WORD-RESIZE.md)
+  confirms the existing64×32 RGBA16 gap on the actual qualified package:
+  **522.34/zimg388.07µs**,
+  upper1.361, total GC113B/op.
+  This replaces its historical H cost; no causal historical speed/allocation claim.
+  Same4KiB reservation/4,044B arrays,16,384B independent result until disposal,
+  operation scratch0; default pool retention remains separate. One existing
+  control, no production/build/profile change or repeated package proof.
+  Repeated vertical geometry is a next preparation/reuse lead, not a measured gain.
+  [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
   default24.05/compact29.68ms, three actuals each,
@@ -427,7 +436,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 485.40 | 370.61 | 1.310 / 1.314 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 522.34 | 388.07 | 1.346 / 1.361 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 425.28 | 346.96 | 1.226 / 1.233 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.87 | 416.73 | 0.974 / 0.978 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 782.07 | 840.35 | 0.931 / 0.936 | 199,943 |

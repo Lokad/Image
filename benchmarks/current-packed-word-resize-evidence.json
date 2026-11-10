@@ -1,0 +1,130 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TWQ730",
+  "productionChanged": false,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "independentQuietConfirmation": true,
+  "allBuilds": 0,
+  "current": {
+    "project": "Lokad.Image",
+    "stage": "TWQ730",
+    "productionChanged": false,
+    "librarySha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+    "caseId": "Tight64x32_16",
+    "runId": "twq730-current-Tight64x32_16-confirm",
+    "managedUs": 522.3443271780303,
+    "nativeUs": 388.0696129557292,
+    "ratio": 1.3460067723406601,
+    "lower": 1.3198250740861415,
+    "upper": 1.3609690071479816,
+    "allocatedBytes": 113,
+    "actualIterations": 12,
+    "filteredResults": 11,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "gap",
+    "width": 513,
+    "height": 259,
+    "depth": 16,
+    "outputWidth": 64,
+    "outputHeight": 32,
+    "managedMaxWorkingBytes": 1083416,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+    "nativeOutputSha256": "f4189787d485cb0f7d0beee9b324fb6301e3dc821d9c5da6859186de177c2ba7",
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.05412658773652741,
+    "nativeAlphaMaximum": 1,
+    "nativeAlphaRmse": 0.04941058844013093
+  },
+  "sourceAudit": {
+    "packedWordSourceUnchangedSinceHistoricalCost": true,
+    "sourceHashes": {
+      "src/Lokad.Image/ImageTransforms.cs": "3f2b8e16bc233dce0dd7f28acc33a1125ddaadfd6fea5445c3cc9ba3a01ac283",
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "4bdd27caf52dd8d34e867988357805bb71a0f2ef0c688680b34bcd6a1d7dd65c",
+      "src/Lokad.Image/Internal/PackedWordColumnBicubicResize.cs": "6437ce8e49dcfccb6e7f3ae9f25282366965f911823e92a8e0756101860b48ec",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "df6db16f571725e1b37a773386c994964b7497dfd32028009249eb8b96389443"
+    },
+    "dispatch": "Current4KiBexcludesCachedfullrows; NarrowColumn<=10andWideColumn<=20declineactual33/34support. WordPacked<=34thenservesexisting64x32. Packedwordbody andRoundWordexpressionunchanged sincehistoricalprovider; dispatcher/cachedeligibility/othermath changed, freshcompletecostresolves currentHboundaryuncertainty.",
+    "preparation": "Verticalcenter/first/count/weights/normalizer are rebuiltinsideeach2columnstrip. ExistingColumnBicubicGeometry.Preparecanloanrightoutputrowtails toalignedprefixstrips; afterprefixretire, suffixReadrebuildsdirectly. Sameperrowkernel/normalizersum order; no numericalpolicychange.",
+    "limits": "Existing4044Bdeclaredarrays under4096Bbeforallocationreservation; existingresultowner16384Buntildisposal, operationretainedscratch0. Preparedviewwouldborrowalreadyownedunpublishedtail, no newcapacity,allocator,pool,cache,sessionorpublicAPI. Actualnative/physical/admittedpeaksnotremeasured. Minorviewdescriptor/JITframecost notinferredfromarraypayload.",
+    "risks": "Preparation/readcopy/helpercall/registerliveness anddirectsuffixcostmayoffsetremovedkernelwork. Countsaremodelonly, notCPU/physicaltraffic estimates. Completeoperationevidenceandmeaningfulgeneralization/correctnessdecide."
+  },
+  "preparationModel": {
+    "project": "Lokad.Image",
+    "stage": "TWQ730",
+    "productionChanged": false,
+    "modelOnly": true,
+    "scope": "Existing513x259to64x32RGBA16only; sourcework counts, notdynamiccalls/phasecost/CPUgain.",
+    "originalStrips": 32,
+    "prefixColumns": 28,
+    "preparedStrips": 14,
+    "suffixStrips": 18,
+    "weightCountsPerImage": 1036,
+    "originalKernelEvaluations": 33152,
+    "proposedKernelEvaluations": 19684,
+    "resultTailBytesPerRow": 288,
+    "originalDeclaredArrayBytes": 4044,
+    "workspaceReservationBytes": 4096,
+    "additionalOwnedCapacityBytes": 0,
+    "numericalProof": "GeometryhelperBuildcenter/first/countandorderedweights/normalizers matchoriginalindependentgeometry. Prefixstripswriteendingbyte224; loanbeginsbyte224, suffixreadsgeometrydirectlybeforereplacingtails. Noordering/pixelpolicyrelaxation. No productionchangeoractualpeakclaim."
+  },
+  "scope": "Exactlyexistingresident513x259RGBA16to64x32 withinput+output+4096localceiling; completepublicResize/normalize/newownedoutput/dispose onactualJQI726packageDLL. Frozenoriginal/nativepixelbounds/source/owner/sourceidentity/quiet-v2gates. Zimggraph/scratchplansretained; fullpacking/halo/quantization/outputownership timed. NotFFmpegCLI, noequivalentpreparedmanagedresizeplan removedfromtiming.",
+  "storage": {
+    "gcTotalBytesPerOperation": 113,
+    "workspaceReservationBytes": 4096,
+    "declaredArrayBytes": 4044,
+    "independentlyOwnedResultBytes": 16384,
+    "retainedOperationScratchBytes": 0,
+    "physicalNativeAndGovernedPeaksRemeasured": false,
+    "defaultIdleOutputPool": "Existingseparate4MiBcap; defaultarrayreuseisnotretainedoperationscratch. Governedcallsbypass. Historical16521Bopversuscurrent113establishescurrentcost, notcausalGCgainforunchangedkernel."
+  },
+  "qualification": {
+    "reusedUnchangedProduction": true,
+    "fullChecksEachOs": 6133,
+    "sameActualPackageBothOS": true,
+    "packageSha256": "994d23ecb167305c87fb76383b11c19435d709a1d98afea8e81f76bb13e3d9e0",
+    "jpegNormalScalarIsaInternal": 453,
+    "jpegNormalScalarIsaPublic": 375,
+    "resizeNormalScalarIsaInternal": 297,
+    "resizeNormalScalarIsaPublic": 729,
+    "newFullPackageRuns": 0
+  },
+  "workflow": {
+    "newBenchmarkImagesOrSettings": 0,
+    "productionHarnessSelectorNativeFixtureBuilds": 0,
+    "profiles": 0,
+    "completeConfirmations": 1,
+    "extraFavorableRepeats": 0,
+    "all12ActualsRetained": true,
+    "filteredResults": 11,
+    "conservativeEnvelopeUsesFilteredAndAllActuals": true
+  },
+  "decision": "Currentupper1.361/lower1.320confirmsmaterial134.27usgap. Current522.34/native388.07us/113Bop replaceshistoricalH518.01/native389.68us/16521Bop; nohistoricalcausalgain/regression/equivalence claim. Exactpixels/source/owners preserved; allothercosts unchanged. Thisisonecurrentcostrefresh,nofull127rowrelease refresh orwholelibraryparity.",
+  "next": "Prototype reuseofexistingColumnBicubicGeometry inpackedwordprefix/tailboundary, samebuffers/reservation/owners. Modelreducesverticalkernelwork33152to19684 withoutpredictingCPU. Retainper-taporder,numericalrepair,andportablefallback; focusedteststhencompletecurrentscreen,usefulconfirmation andcoherentW/L/live/scalar/ISA/SAMEpackagequalification. No fixed32tapvariant ornewbenchmarkgrid.",
+  "raw": {
+    "file": "current-packed-word-resize.tar.xz",
+    "sha256": "0c052905794c310472e30d7990fc31ed2a201480c617236a0a219d240e99baef",
+    "bytes": 732408,
+    "members": 23,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "current-tight-wide-word-bicubic-costs.tar.xz",
+        "sha256": "bd805c5d2a55cae9c862d9f39e8fe0b33f52c8e643e215c3651def548aa7dc52"
+      },
+      {
+        "file": "jpeg-quarter-interpolation-qualified.tar.xz",
+        "sha256": "d0a9f382a265469536ffbf9f6763253e323e1a4442b3f56a851f3a18c2092208"
+      }
+    ]
+  }
+}

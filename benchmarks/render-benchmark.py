@@ -953,29 +953,22 @@ def render():
     rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | '
                  f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                  f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    for depth, name in [(16, 'word')]:
-        tight_wide = json.loads((ROOT / f'benchmarks/current-tight-wide-{name}-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
-        assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
-        assert tight_wide['workflow']['allBuilds'] == tight_wide['workflow']['newInputs'] == tight_wide['workflow']['newProfiles'] == 0
-        assert tight_wide['qualificationReused']['fullChecksEachOs'] == 5314
-        assert set(tight_wide['cases']) == {f'TightWide{depth}', f'Tight64x32_{depth}'}
-        for case, observations in tight_wide['cases'].items():
-            if case == f'TightWide{depth}':
-                continue  # Current wide costs come directly from shared preparation.
-            observation = observations[-1]
-            receipt, stats = observation['receipt'], observation['managed']['statistics']
-            assert receipt['librarySha256'] == tight_wide['producers']['linuxSha256']
-            assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
-            assert receipt['independentOwnedOutput'] and receipt['sourceUnchanged']
-            assert all(q['passed'] for q in observation['quietness'].values())
-            assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-            assert receipt['managedMaxWorkingBytes'] == (513 * 259 + receipt['outputWidth'] * receipt['outputHeight']) * (depth // 2) + 4096
-            assert tight_wide['comparisonLowerBounds'][case] > 1 and tight_wide['status'][case] == 'confirmed-gap'
-            native = min(b['mean'] for b in observation['nativeBrackets'])
-            rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
-                         f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                         f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                         f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    packed_word_current = json.loads((ROOT / 'benchmarks/current-packed-word-resize-evidence.json').read_text(encoding='utf-8'))
+    current = packed_word_current['current']
+    assert not packed_word_current['productionChanged'] and packed_word_current['independentQuietConfirmation']
+    assert packed_word_current['allBuilds'] == 0 and current['actualIterations'] == 12
+    assert current['allActualsRetained'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['managedRationalReferenceExact'] and current['managedQualifiedOriginalPixelsExact']
+    assert current['sourceUnchanged'] and current['independentOwnedOutput']
+    assert current['managedMaxWorkingBytes'] == (513 * 259 + 64 * 32) * 8 + 4096
+    assert current['caseId'] == 'Tight64x32_16' and current['lower'] > 1 and current['status'] == 'gap'
+    assert current['nativeRgbMaximum'] <= 1 and current['nativeAlphaMaximum'] <= 1
+    assert current['nativeRgbRmse'] <= .25 and current['nativeAlphaRmse'] <= .25
+    assert packed_word_current['raw']['mirrored'] and packed_word_current['raw']['allMembersVerified']
+    assert packed_word_current['qualification']['reusedUnchangedProduction']
+    rows.append(('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | '
+                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     bicubic_overlap = json.loads((ROOT / 'benchmarks/bicubic-wide-overlap-evidence.json').read_text(encoding='utf-8'))
     assert bicubic_overlap['productionAccepted'] and bicubic_overlap['requiredMaterialPaths'] == 283
     cq = bicubic_overlap['qualification']
@@ -1114,6 +1107,8 @@ def render():
                for v in jpeg_read['comparison']['views'].values())
     quarter = json.loads((ROOT / 'benchmarks/jpeg-quarter-interpolation-evidence.json').read_text(encoding='utf-8'))
     jq = quarter['qualification']
+    assert packed_word_current['current']['librarySha256'] == jq['actualPackage']['librarySha256']
+    assert packed_word_current['qualification']['packageSha256'] == jq['actualPackage']['sha256']
     assert quarter['productionAccepted'] and quarter['requiredMaterialPaths'] == 283
     assert jq['fullChecksEachOs'] == jq['windows']['total'] == jq['linux']['total'] == 6133
     assert jq['sameActualPackageBothOS'] and quarter['raw']['mirrored'] and quarter['raw']['allMembersVerified']
@@ -1346,6 +1341,7 @@ def render():
     for label, current in [
         ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['cases']['Wide8']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32', packed_word_current['current']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide8']),
         ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide16']),
     ]:
@@ -1897,7 +1893,16 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
+- **Resizing:** [current bounded packed-word resize](../benchmarks/CURRENT-PACKED-WORD-RESIZE.md)
+  confirms the existing64×32 RGBA16 gap on the actual qualified package:
+  **{packed_word_current['current']['managedUs']:.2f}/zimg{packed_word_current['current']['nativeUs']:.2f}µs**,
+  upper{packed_word_current['current']['upper']:.3f}, total GC{packed_word_current['current']['allocatedBytes']}B/op.
+  This replaces its historical H cost; no causal historical speed/allocation claim.
+  Same4KiB reservation/4,044B arrays,16,384B independent result until disposal,
+  operation scratch0; default pool retention remains separate. One existing
+  control, no production/build/profile change or repeated package proof.
+  Repeated vertical geometry is a next preparation/reuse lead, not a measured gain.
+  [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
   default{wide_byte['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{wide_byte['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,

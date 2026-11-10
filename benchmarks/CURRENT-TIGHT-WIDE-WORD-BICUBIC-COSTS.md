@@ -1,5 +1,9 @@
 # Current tight wider-support word bicubic costs
 
+Historical measurements below: current `TightWide16` is owned by
+[wide overlap](BICUBIC-WIDE-OVERLAP.md) and passes. Current `Tight64x32_16` is
+owned by the [packed-word refresh](CURRENT-PACKED-WORD-RESIZE.md) and remains a gap.
+
 Both existing tight RGBA16 controls are independently confirmed CPU gaps.
 
 | Complete operation | Lokad µs | Ratio / upper | Managed B/op |
