@@ -186,3 +186,12 @@ verify-copy-region-overlap-linux.py, family CopyOverlap / DrawingCopyOverlap8.
 Both subjects count forward movement and reverse restoration on one canvas.
 [Current cost](../../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md) is per pair;
 native plane calls use disjoint bands without temporary pixels.
+
+## CMYK decode context boundaries
+
+The CMYK RGBA worker retains its decoder, frame wrapper and packing context by
+default. Set `LOKAD_IMAGE_JPEG_FRESH=1` to create/open/dispose all three inside
+each complete operation. The padded resident input packet is borrowed in both
+modes; decoding, color conversion, independently owned zeroed output, packing
+and release remain timed. Ready records identify the selected boundary.
+See [the current comparison](../../benchmarks/JPEG-CMYK-CONTEXT-BOUNDARIES.md).

@@ -1870,6 +1870,26 @@ def render():
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     assert refreshed_png_reads == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
+    cmyk_boundary = json.loads((ROOT / 'benchmarks/jpeg-cmyk-context-boundaries-evidence.json').read_text(encoding='utf-8'))
+    assert not cmyk_boundary['productionChanged'] and cmyk_boundary['referenceToolingAccepted']
+    assert cmyk_boundary['requiredMaterialPaths'] == 289
+    assert cmyk_boundary['raw']['mirrored'] and cmyk_boundary['raw']['allMembersVerified']
+    assert cmyk_boundary['sourceProof']['applyExactAfterOnlySetupAndTeardownCallsRemoved']
+    assert cmyk_boundary['producers']['nativeReady']['freshDecoderFrameAndPackingContextTimed']
+    assert cmyk_boundary['producers']['nativeReady']['residentPaddedPacketBorrowed']
+    assert cmyk_boundary['producers']['actualPackageSha256'] == current_build_qualification['actualPackage']['sha256']
+    current = cmyk_boundary['case']
+    assert current['status'] == 'pass' and current['upper'] <= 1
+    assert current['librarySha256'] == raster['producers']['timedArtifactSha256']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['managedOutputSha256'] == current['nativeOutputSha256']
+    assert current['normalAndScalarNativeMaximum'] == [0, 0] and current['alphaExact']
+    assert current['allocatedBytes'] == 20944 and current['outputBytes'] == 531468
+    assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+    read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
+                     f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                     f'{current["allocatedBytes"]:,} | Confirmed pass |')
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1968,7 +1988,10 @@ labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
 The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
-disposal. Other native codec workers retain their documented wrappers/contexts.
+disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-CMYK-CONTEXT-BOUNDARIES.md)
+also times decoder/frame/packing-context setup and disposal; its original
+retained-context comparison remains separate. Other native codec workers retain
+their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.
 
 Text compares the complete **ImageSharp.Drawing 2.1.7/Fonts 2.1.3 public integration**,
@@ -2003,7 +2026,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 137, 'Expected137comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 138, 'Expected138comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

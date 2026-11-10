@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-11. These **137 selected comparisons** combine qualified
+Updated 2026-11-11. These **138 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -94,7 +94,10 @@ labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
 The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
-disposal. Other native codec workers retain their documented wrappers/contexts.
+disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-CMYK-CONTEXT-BOUNDARIES.md)
+also times decoder/frame/packing-context setup and disposal; its original
+retained-context comparison remains separate. Other native codec workers retain
+their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.
 
 Text compares the complete **ImageSharp.Drawing 2.1.7/Fonts 2.1.3 public integration**,
@@ -259,6 +262,7 @@ settings do not establish matched quality.
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
 | Identify PNG8, fresh seekable Stream, adapter reference | 19.537 | 15.929 | 1.226 / 1.232 | 192 | Confirmed gap |
 | Identify PNG8, async nonseekable, adapter reference | 20.312 | 19.321 | 1.051 / 1.060 | 8,400 | Confirmed gap |
+| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 427.754 | 750.553 | 0.570 / 0.573 | 20,944 | Confirmed pass |
 
 [Coverage and linked family reports](../benchmarks/WARM-COVERAGE.md) retain producer
 identities, confidence decisions, ownership/correctness gates and reproducible raw

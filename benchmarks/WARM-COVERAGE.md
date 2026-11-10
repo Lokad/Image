@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-11. **289 material required paths** remain
-in scope; the 137 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 138 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
@@ -19,7 +19,7 @@ Unchanged performance/qualification evidence is reused only within its source sc
 
 | Required family/boundary | Current owner and remaining work |
 | --- | --- |
-| JPEG decoding and coding validation | [Batched two-row columns](JPEG-BATCHED-TWO-ROW-COLUMNS.md): 29 reads, 22 pass / 2 gaps / 5 uncertain. Horizontal CMYK and caller CMYK remain gaps; RGB444/422/420, sparse CMYK and progressive live444 remain uncertain. Sparse saves26.08µs/5.38% raw; no blanket RGB gain. |
+| JPEG decoding and coding validation | [Batched two-row columns](JPEG-BATCHED-TWO-ROW-COLUMNS.md): 29 reads, 22 pass / 2 gaps / 5 uncertain. Horizontal CMYK and caller CMYK remain gaps against retained FFmpeg state; [fresh CMYK contexts](JPEG-CMYK-CONTEXT-BOUNDARIES.md) confirm427.75/750.55µs, upper.573 pass as a separate equivalent one-shot view, without closing retained-state gaps; RGB444/422/420, sparse CMYK and progressive live444 remain uncertain. Sparse saves26.08µs/5.38% raw; no blanket RGB gain. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md): 51 controls, 49 pass / 1 gap / 1 uncertain. Materialized live RGBA16 upper1.012 is a gap; live byte upper1.004 is uncertain. [Cached literal-run trials](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md) show no useful lead and restore production; three independent behavior tests remain. Other affected historical stream/composition costs remain H. |
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |

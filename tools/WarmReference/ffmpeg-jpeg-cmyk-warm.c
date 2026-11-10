@@ -38,7 +38,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *source,*output,*expected;
     size_t encoded_bytes,raw_bytes;
-    int width,height,cpu;
+    int width,height,cpu,fresh;
     uint64_t completed,observed;
 } Work;
 static void initialize_conversion(Work *w)
@@ -56,9 +56,26 @@ static void initialize_conversion(Work *w)
     int64_t threads;require(av_opt_get_int(w->conversion,"threads",0,&threads),"Read conversion threads");
     if (threads!=1) fail("Conversion threading differs.");
 }
+static void initialize_operation(Work *w)
+{
+    const AVCodec *codec=avcodec_find_decoder_by_name("mjpeg");
+    if (!codec || codec->id!=AV_CODEC_ID_MJPEG) fail("Software MJPEG decoder missing.");
+    w->codec=avcodec_alloc_context3(codec); w->decoded=av_frame_alloc();
+    if (!w->codec || !w->decoded) fail("Allocate codec wrappers failed.");
+    w->codec->thread_count=1; w->codec->thread_type=0; w->codec->max_pixels=(int64_t)(w->width+255)*(w->height+64);
+    require(avcodec_open2(w->codec,codec,NULL),"Open decoder");
+    if (w->codec->thread_count!=1 || w->codec->thread_type!=0 || w->codec->active_thread_type!=0) fail("Decoder threading differs.");
+    initialize_conversion(w);
+}
+static void close_operation(Work *w)
+{
+    av_frame_free(&w->decoded); avcodec_free_context(&w->codec);
+    sws_freeContext(w->conversion); w->conversion=NULL;
+}
 static void release(Work *w) { free(w->output); w->output=NULL; }
 static void apply(Work *w)
 {
+    if (w->fresh) initialize_operation(w);
     /* Match new byte[] acquisition, including zero initialization, inside the
      * operation. Decoder planes and the independently surviving caller output
      * are separate owners; all four component decodes and device-color/black multiplication execute
@@ -80,6 +97,7 @@ static void apply(Work *w)
         fail("GBRAP-to-RGBA packing incomplete.");
     av_frame_unref(d);
     w->observed+=w->output[w->raw_bytes/2]; w->completed++;
+    if (w->fresh) close_operation(w);
 }
 static void check_pixels(const Work *w,const uint8_t *pixels)
 {
@@ -99,7 +117,7 @@ int main(int argc,char **argv)
 {
     if (argc!=4 || strcmp(argv[1],"jpeg-cmyk-decode"))
         fail("Usage: ffmpeg-jpeg-cmyk-warm jpeg-cmyk-decode INPUT OUTPUT");
-    Work w={0}; w.cpu=affinity_cpu(); w.width=513; w.height=259; w.raw_bytes=(size_t)w.width*w.height*4;
+    Work w={0}; const char *fresh=getenv("LOKAD_IMAGE_JPEG_FRESH"); w.fresh=fresh && !strcmp(fresh,"1"); w.cpu=affinity_cpu(); w.width=513; w.height=259; w.raw_bytes=(size_t)w.width*w.height*4;
     FILE *file=fopen(argv[2],"rb"); if (!file) fail("Open JPEG failed.");
     if (fseek(file,0,SEEK_END)) fail("JPEG seek failed.");
     long length=ftell(file);
@@ -108,16 +126,10 @@ int main(int argc,char **argv)
     if (fread(w.source,1,w.encoded_bytes,file)!=w.encoded_bytes || ferror(file) || fclose(file)) fail("Read JPEG failed.");
     if (w.source[0]!=255 || w.source[1]!=216 || w.source[length-2]!=255 || w.source[length-1]!=217) fail("Complete JPEG required.");
     av_log_set_level(AV_LOG_ERROR);
-    const AVCodec *codec=avcodec_find_decoder_by_name("mjpeg");
-    if (!codec || codec->id!=AV_CODEC_ID_MJPEG) fail("Software MJPEG decoder missing.");
-    w.codec=avcodec_alloc_context3(codec); w.input=av_packet_alloc(); w.decoded=av_frame_alloc();
-    if (!w.codec || !w.input || !w.decoded) fail("Allocate codec wrappers failed.");
-    w.codec->thread_count=1; w.codec->thread_type=0; w.codec->max_pixels=(int64_t)(w.width+255)*(w.height+64);
-    require(avcodec_open2(w.codec,codec,NULL),"Open decoder");
-    if (w.codec->thread_count!=1 || w.codec->thread_type!=0 || w.codec->active_thread_type!=0) fail("Decoder threading differs.");
+    w.input=av_packet_alloc(); if (!w.input) fail("Allocate packet wrapper failed.");
     require(av_new_packet(w.input,(int)w.encoded_bytes),"Allocate padded resident packet");
     memcpy(w.input->data,w.source,w.encoded_bytes); w.input->flags|=AV_PKT_FLAG_KEY;
-    initialize_conversion(&w);
+    if (!w.fresh) initialize_operation(&w);
     apply(&w); w.expected=malloc(w.raw_bytes); if (!w.expected) fail("Allocate untimed validation pixels failed.");
     memcpy(w.expected,w.output,w.raw_bytes);
     uint8_t *held=w.output; w.output=NULL; apply(&w);
@@ -125,8 +137,8 @@ int main(int argc,char **argv)
     check_pixels(&w,held); check_pixels(&w,w.output); held[0]^=255;
     check_pixels(&w,w.output); free(held); check_pixels(&w,w.output); release(&w);
     check_and_write(&w,argv[3]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-cmyk-decode\",\"width\":513,\"height\":259,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"decoder\":\"mjpeg\",\"decodedPixelFormat\":\"gbrap\",\"outputBytes\":%zu,\"outputStride\":2052,\"initialCompletedOperations\":%" PRIu64 ",\"freshZeroedCallerOutputTimed\":true,\"packingTimed\":true,\"adobeTransform\":0,\"blackAppliedByDecoderTimed\":true,\"opaqueAlpha\":true,\"conversionThreads\":1,\"stateResetTimed\":true,\"decoderPlanesReleaseTimed\":true,\"outputAcquisitionAndReleaseTimed\":true,\"independentLiveOutputs\":true,\"pixelsDeterministic\":true,\"rgbaIntermediate\":false,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
-        w.cpu,w.raw_bytes,w.completed,av_version_info(),avcodec_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-cmyk-decode\",\"width\":513,\"height\":259,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"decoder\":\"mjpeg\",\"decodedPixelFormat\":\"gbrap\",\"outputBytes\":%zu,\"outputStride\":2052,\"initialCompletedOperations\":%" PRIu64 ",\"freshZeroedCallerOutputTimed\":true,\"packingTimed\":true,\"adobeTransform\":0,\"blackAppliedByDecoderTimed\":true,\"opaqueAlpha\":true,\"conversionThreads\":1,\"stateResetTimed\":true,\"decoderPlanesReleaseTimed\":true,\"outputAcquisitionAndReleaseTimed\":true,\"independentLiveOutputs\":true,\"pixelsDeterministic\":true,\"rgbaIntermediate\":false,\"freshDecoderFrameAndPackingContextTimed\":%s,\"residentPaddedPacketBorrowed\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
+        w.cpu,w.raw_bytes,w.completed,w.fresh?"true":"false",av_version_info(),avcodec_version()); fflush(stdout);
     char line[128];
     while (fgets(line,sizeof(line),stdin)) {
         if (!strcmp(line,"quit\n")) break;
@@ -143,6 +155,6 @@ int main(int argc,char **argv)
             count,elapsed,w.completed,w.observed,w.raw_bytes,w.cpu); fflush(stdout);
     }
     if (ferror(stdin)) fail("Protocol read failed.");
-    release(&w); av_packet_free(&w.input); av_frame_free(&w.decoded); avcodec_free_context(&w.codec); sws_freeContext(w.conversion);
+    release(&w); av_packet_free(&w.input); close_operation(&w);
     free(w.source); free(w.expected); return 0;
 }
