@@ -62,6 +62,13 @@ examples pass each OS. [Attribution](BOUNDED-BYTE-COEFFICIENT-PREPARATION-ATTRIB
 retains its model/profile, without supplying current costs or renderer dependencies.
 
 
+[Wide-column storage attribution](WIDE-COLUMN-ROW-STORAGE-ATTRIBUTION.md) reuses
+419.13/native349.29us upper1.209. One2s current-package capture and a bounded
+result-row loan model motivate sixteen-column top rows plus original tail rows.
+Logical decode/row/geometry work falls, while horizontal filtering increases by
+1536column-rows; no CPU gain is proven. Loan users must retire before tail metadata
+restore/publication. No production/build/cost change or renderer dependency.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |
