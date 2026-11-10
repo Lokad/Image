@@ -1702,6 +1702,30 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
+    paired_coefficients = json.loads((ROOT / 'benchmarks/bicubic-paired-coefficient-preparation-evidence.json').read_text(encoding='utf-8'))
+    paired_coefficient_qualification = paired_coefficients['qualification']
+    assert paired_coefficients['productionAccepted'] and paired_coefficients['requiredMaterialPaths'] == 283
+    assert paired_coefficient_qualification['fullChecksEachOs'] == paired_coefficient_qualification['windows']['total'] == paired_coefficient_qualification['linux']['total'] == 6161
+    assert paired_coefficient_qualification['sameActualPackageBothOS']
+    assert paired_coefficient_qualification['actualPackage']['sha256'] == paired_coefficient_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert paired_coefficients['sourceCodeProof']['originalReconstructedExactly']
+    assert all(b['instructionsIdentical'] for b in paired_coefficients['sourceCodeProof']['wordCodeReuse']['wordBodies'])
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in paired_coefficients['comparison']['views'].values())
+    assert paired_coefficients['storage']['newOwnedCapacityBytes'] == paired_coefficients['storage']['retainedOperationScratchBytes'] == 0
+    assert paired_coefficients['raw']['mirrored'] and paired_coefficients['raw']['allMembersVerified']
+    current = paired_coefficients['cases']['TightDown8']
+    assert current['librarySha256'] == paired_coefficient_qualification['actualPackage']['librarySha256']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
+    assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                 and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ') and '→ 256×129 |' in row]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | '
+                         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+    current_build_qualification = paired_coefficient_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -2002,25 +2026,23 @@ Current scope and remaining work:
   Fifteen small-support word controls: {current_word_counts['pass']}pass/
   {current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
   Earlier band gains/tradeoffs and raw proof remain in the report.
-  [Shared certified byte publication](../benchmarks/BICUBIC-SHARED-BYTE-PUBLICATION.md)
-  reuses nearest rounding for uncertainty and output, and shares the ordinary-alpha
-  reciprocal certificate with wide byte publication. Original dynamic wide fallback,
-  ordered sums, exact repair and ownership remain. Complete wide byte saves
-  **{byte_publication['comparison']['savedUs']:.2f}µs/{100*byte_publication['comparison']['rawReduction']:.2f}% raw/{100*byte_publication['comparison']['normalizedReduction']:.2f}% normalized**;
-  filtered/all-actual confidence separates, native+0.492%.
-  Current{byte_publication['cases']['TightWide8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightWide8']['nativeUs']:.2f}µs,
-  upper{byte_publication['cases']['TightWide8']['upper']:.3f} remains a gap; narrow byte
-  {byte_publication['cases']['TightDown8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightDown8']['nativeUs']:.2f}µs,
-  upper{byte_publication['cases']['TightDown8']['upper']:.3f} is also a gap. Two word controls pass/stop.
-  Byte B timings are reused after all three emitted bodies match final C; word
-  costs use final C. This does not claim direct final-package byte timings or
-  causal companion gains/equivalence. Explicit type guards remove dead byte locals
-  from word JIT import; prototype uncertainty and changed reference clocks remain
-  in the report. GC113B/op,4KiB/unchanged payloads, scratch0 and independent outputs
-  remain; physical/native/JIT-stack peaks are unmeasured. Same final package/all
-  three examples pass both OSes, including the bounded-byte ownership consumer.
-  [Wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) retains earlier gains and
-  six unaffected costs; current cached-wide evidence remains separately sourced.
+  [Paired coefficient preparation](../benchmarks/BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
+  stores exact two-tap groups once per strip and uses fixed typed views; scalar
+  replay borrows dead decode workspace after horizontal users finish. Complete
+  bounded narrow byte saves **{paired_coefficients['comparison']['savedUs']:.2f}µs/{100*paired_coefficients['comparison']['rawReduction']:.2f}% raw/{100*paired_coefficients['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual confidence and native+0.056%.
+  Current{paired_coefficients['cases']['TightDown8']['managedUs']:.2f}/zimg{paired_coefficients['cases']['TightDown8']['nativeUs']:.2f}µs,
+  upper{paired_coefficients['cases']['TightDown8']['upper']:.3f} remains a gap. One targeted check resolves
+  observed native419→450µs movement; every earlier stage/actual remains in the report.
+  Word driver/both strips/replay match the original instructions, so its passing
+  evidence is reused. Same113B/op,4KiB admission/3232/4080B payloads,132096B result,
+  scratch0 and exact pixels/ownership. No new array, pool, session or public API.
+  Physical/native/JIT-stack peaks remain unmeasured. The
+  [shared byte publisher](../benchmarks/BICUBIC-SHARED-BYTE-PUBLICATION.md) retains
+  bounded wide-byte{byte_publication['cases']['TightWide8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightWide8']['nativeUs']:.2f}µs,
+  upper{byte_publication['cases']['TightWide8']['upper']:.3f} gap and two passing word controls. Its
+  recorded emitted-path timing reuse remains labeled; no whole-release refresh.
+  [Wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) retains six unchanged costs/history.
   [Paired Lanczos byte rows](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) share coefficient
   expansion across two required rows in existing admitted storage. Complete prepared
   RGBA8 reduction saves **{lanczos_current['comparisons']['Repeated8']['savedUs']:.2f}µs/{100*lanczos_current['comparisons']['Repeated8']['rawReduction']:.2f}% raw**,

@@ -131,6 +131,9 @@ internal static class ColumnBicubicResize
             }
             var sourceCount = offsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
             BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 10, 8, 2, context.Cancellation);
+            if (typeof(TSamples) == typeof(ByteSamples))
+                PreparePairedByteWeights(weights, offsets, counts[..length],
+                    MemoryMarshal.Cast<Vector256<double>, double>(decoded[..4]));
             rowIds.Fill(-1);
             for (var y = 0; y < result.Height; y++)
             {
@@ -193,8 +196,10 @@ internal static class ColumnBicubicResize
                         if (count0 == 8 && count1 == 8 && offsets[x * 10 + 9] != 0)
                         {
                             var firstPixel = offsets[x * 10 + 9] - 1;
-                            var pair = BicubicMath.FilterOverlappingHorizontalPair(
-                                decoded.Slice(firstPixel, 10), weights0, weights1, 8, 2);
+                            var pair = typeof(TSamples) == typeof(ByteSamples)
+                                ? FilterPreparedBytePair(decoded.Slice(firstPixel, 10), weights.Slice(x * 10, 16))
+                                : BicubicMath.FilterOverlappingHorizontalPair(
+                                    decoded.Slice(firstPixel, 10), weights0, weights1, 8, 2);
                             cache[slot * cacheStride + x] = pair.GetLower();
                             cache[slot * cacheStride + x + 1] = pair.GetUpper();
                             continue;
@@ -251,12 +256,12 @@ internal static class ColumnBicubicResize
                     else if (typeof(TSamples) == typeof(ByteSamples) && !BicubicMath.TryWriteOrdinaryBytePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
                         destination.Slice((tile + outputX) * 4, 8)))
                     {
-                        // Repair only uncertain pixels, preserving original tap order.
-                        // Tiny-alpha replay still unwinds this workspace first.
-                        for (var repair = outputX; repair < outputX + 2; repair++)
-                            if (!BicubicMath.TryWriteOriginalByte(source, result, tile + repair, y,
-                                weights.Slice(repair * 10, counts[repair]), offsets.Slice(repair * 10, counts[repair]),
-                                sourceFirst, vertical.Slice(0, count), first, context)) return false;
+                        // Horizontal users have finished. Borrow decoded storage for
+                        // original coefficients only during this uncertain repair.
+                        if (!TryRepairBytePair(source, result, tile + outputX, y,
+                            weights.Slice(outputX * 10, 20), offsets.Slice(outputX * 10, 20), counts.Slice(outputX, 2),
+                            sourceFirst, vertical[..count], first,
+                            MemoryMarshal.Cast<Vector256<double>, double>(decoded[..2]), context)) return false;
                     }
                 }
                 for (var x = outputX; x < length; x++)
@@ -301,6 +306,70 @@ internal static class ColumnBicubicResize
         context.Cancellation.ThrowIfCancellationRequested();
         return true;
     }
+    internal static void PreparePairedByteWeights(Span<double> weights, ReadOnlySpan<byte> offsets,
+        ReadOnlySpan<int> counts, Span<double> scratch)
+    {
+        scratch = scratch[..16];
+        for (var x = 0; x + 1 < counts.Length; x += 2)
+        {
+            if (counts[x] != 8 || counts[x + 1] != 8 || offsets[x * 10 + 9] == 0) continue;
+            // Two taps from each column share one four-double load.
+            for (var tap = 0; tap < 8; tap += 2)
+            {
+                scratch[tap * 2] = weights[x * 10 + tap];
+                scratch[tap * 2 + 1] = weights[x * 10 + tap + 1];
+                scratch[tap * 2 + 2] = weights[(x + 1) * 10 + tap];
+                scratch[tap * 2 + 3] = weights[(x + 1) * 10 + tap + 1];
+            }
+            scratch.CopyTo(weights.Slice(x * 10, 16));
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector512<double> FilterPreparedBytePair(ReadOnlySpan<Vector256<double>> decoded,
+        ReadOnlySpan<double> weights)
+    {
+        var pairs = MemoryMarshal.Cast<Vector256<double>, Vector512<double>>(decoded[..10]);
+        var groups = MemoryMarshal.Cast<double, Vector256<double>>(weights[..16]);
+        var window = pairs[0];
+        var sum = Vector512<double>.Zero;
+        for (var group = 0; group < 4; group++)
+        {
+            var next = pairs[group + 1];
+            var coefficients = groups[group].ToVector512Unsafe();
+            var paired = Avx512F.Shuffle4x128(coefficients, coefficients, 0x50);
+            var evenWeights = Avx512F.Permute4x64(paired, 0x00);
+            var oddWeights = Avx512F.Permute4x64(paired, 0x55);
+            var even = Avx512F.Shuffle4x128(window, next, 0x44);
+            var odd = Avx512F.Shuffle4x128(window, next, 0xee);
+            sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
+            window = next;
+        }
+        return sum;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static bool TryRepairBytePair(ImageBuffer source, ImageBuffer result, int x, int y,
+        ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, ReadOnlySpan<int> counts,
+        int sourceFirst, ReadOnlySpan<double> vertical, int firstY, Span<double> replay, OperationContext context)
+    {
+        var prepared = counts[0] == 8 && counts[1] == 8 && offsets[9] != 0;
+        for (var lane = 0; lane < 2; lane++)
+        {
+            var count = counts[lane];
+            ReadOnlySpan<double> original = weights.Slice(lane * 10, count);
+            if (prepared)
+            {
+                for (var tap = 0; tap < 8; tap++) replay[tap] = weights[(tap & ~1) * 2 + lane * 2 + (tap & 1)];
+                original = replay[..8];
+            }
+            if (!BicubicMath.TryWriteOriginalByte(source, result, x + lane, y,
+                original, offsets.Slice(lane * 10, count), sourceFirst, vertical, firstY, context)) return false;
+        }
+        return true;
+    }
+
     private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
         ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,
         ReadOnlySpan<double> vertical, int firstY, OperationContext context)
