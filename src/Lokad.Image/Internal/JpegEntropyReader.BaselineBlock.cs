@@ -41,15 +41,32 @@ internal ref partial struct JpegEntropyReader
             if (pairs is not null)
             {
                 var pair = pairs[(int)(cache >> 52)];
-                var secondIndex = k + (int)((pair >> 8) & 31);
+                var secondIndex = k + (int)((pair >> 8) & 63);
                 if (pair != 0 && secondIndex <= 63)
                 {
                     var firstIndex = k + (int)((pair >> 4) & 15);
                     block[JpegTransform.Zigzag[firstIndex]] = unchecked((sbyte)(pair >> 16));
                     var second = unchecked((int)pair) >> 24;
                     var consumed = (int)(pair & 15); cache <<= consumed; pending -= consumed;
-                    if (second == 0) { k = 64; break; }
+                    if (second == 0)
+                    {
+                        if ((pair & 0x8000) != 0) { k = firstIndex + 1; continue; }
+                        k = 64; break;
+                    }
                     block[JpegTransform.Zigzag[secondIndex]] = second; k = secondIndex + 1;
+                    continue;
+                }
+                if ((pair & 0xc000) != 0)
+                {
+                    var consumed = (int)(pair & 15);
+                    if ((pair & 0x4000) != 0)
+                    {
+                        cache <<= consumed; pending -= consumed; k = 64; break;
+                    }
+                    var index = k + (int)((pair >> 4) & 15);
+                    if (index > 63) break;
+                    block[JpegTransform.Zigzag[index]] = unchecked((int)pair) >> 16;
+                    cache <<= consumed; pending -= consumed; k = index + 1;
                     continue;
                 }
             }

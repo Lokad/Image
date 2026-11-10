@@ -767,7 +767,7 @@ cache = candidateCache; pending = candidatePending - length;
             if (pairs is not null)
             {
                 var pair = pairs[(int)(localBits >> 52)];
-                var secondIndex = k + (int)((pair >> 8) & 31);
+                var secondIndex = k + (int)((pair >> 8) & 63);
                 if (pair != 0 && secondIndex <= 63)
                 {
                     var firstIndex = k + (int)((pair >> 4) & 15);
@@ -785,7 +785,23 @@ cache = candidateCache; pending = candidatePending - length;
                         block[JpegTransform.Zigzag[secondIndex]] = second;
                     }
                     var consumed = (int)(pair & 15); localBits <<= consumed; localAvailable -= consumed;
-                    k = second == 0 ? 64 : secondIndex + 1;
+                    k = second == 0 ? (pair & 0x8000) != 0 ? firstIndex + 1 : 64 : secondIndex + 1;
+                    continue;
+                }
+                if ((pair & 0xc000) != 0)
+                {
+                    var consumed = (int)(pair & 15);
+                    if ((pair & 0x4000) != 0)
+                    {
+                        cancellation.ThrowIfCancellationRequested();
+                        localBits <<= consumed; localAvailable -= consumed; k = 64; break;
+                    }
+                    var index = k + (int)((pair >> 4) & 15);
+                    if (index > 63) break;
+                    cancellation.ThrowIfCancellationRequested(); // Prefix.
+                    cancellation.ThrowIfCancellationRequested(); // Nonempty amplitude.
+                    block[JpegTransform.Zigzag[index]] = unchecked((int)pair) >> 16;
+                    localBits <<= consumed; localAvailable -= consumed; k = index + 1;
                     continue;
                 }
             }

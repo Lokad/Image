@@ -23,6 +23,7 @@ public sealed partial class JpegBaselineBlockTests
             {
                 var expected = PairOracle(Convert.ToString(prefix, 2).PadLeft(12, '0'), k, codes);
                 var packed = pairs[prefix]; var secondIndex = k + (int)((packed >> 8) & 31);
+                if ((packed & 0xc000) != 0) { Assert.Null(expected); continue; }
                 if (packed == 0 || secondIndex > 63) { Assert.Null(expected); continue; }
                 Assert.NotNull(expected); valid++;
                 Assert.Equal(expected.Value.Bits, (int)(packed & 15));
