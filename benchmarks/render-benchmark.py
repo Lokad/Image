@@ -1754,6 +1754,23 @@ def render():
         label = f'Bicubic {"prepared" if prepared else "one-shot"} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
         rows.append(('editing', f'| {label} † → 128×64 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    narrow_boundaries = json.loads((ROOT / 'benchmarks/bicubic-narrow-boundaries-evidence.json').read_text(encoding='utf-8'))
+    assert not narrow_boundaries['productionChanged'] and narrow_boundaries['requiredMaterialPaths'] == 287
+    assert narrow_boundaries['raw']['mirrored'] and narrow_boundaries['raw']['allMembersVerified']
+    assert narrow_boundaries['raw']['dependency']['sha256'] == bicubic_preparation['raw']['sha256']
+    assert narrow_boundaries['packageSha256'] == current_build_qualification['actualPackage']['sha256']
+    for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
+        current = narrow_boundaries['cases'][case]
+        assert current['librarySha256'] == bicubic_preparation['producers']['timedArtifactSha256']
+        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+        prepared = case.startswith('Repeated')
+        assert current['retainedBytes'] == (199840 if prepared else 0)
+        label = f'Bicubic {"prepared" if prepared else "one-shot"} narrow RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
+        rows.append(('editing', f'| {label} † → 256×129 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -1849,7 +1866,7 @@ def render():
 
 Updated 2026-11-10. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [285 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [287 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
@@ -1899,6 +1916,11 @@ Current scope and remaining work:
   Isolating the unchanged word-row kernel saves338.94µs/43.26% raw against the
   contemporary vertical-word baseline. Ordinary wide-byte resizing costs11.83µs
   more; its retained-native gap stays visible separately from fresh-native results.
+  [Equivalent narrow boundaries](../benchmarks/BICUBIC-NARROW-BOUNDARIES.md) pass
+  both one-shot controls and prepared RGBA16; prepared RGBA8 remains437.43/zimg417.13µs,
+  upper1.054 gap. Narrow plans retain199,840 B and allocate138/137 B/op;
+  governed peaks331,936/464,032 B exclude borrowed input. These reuse the same
+  actual package and qualification, without a production speedup claim.
   [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
   [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
   [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
@@ -1967,7 +1989,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 131, 'Expected131comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 135, 'Expected135comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

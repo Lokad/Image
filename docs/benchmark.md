@@ -1,8 +1,8 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-10. These **131 selected comparisons** combine qualified
+Updated 2026-11-10. These **135 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [285 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [287 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
@@ -52,6 +52,11 @@ Current scope and remaining work:
   Isolating the unchanged word-row kernel saves338.94µs/43.26% raw against the
   contemporary vertical-word baseline. Ordinary wide-byte resizing costs11.83µs
   more; its retained-native gap stays visible separately from fresh-native results.
+  [Equivalent narrow boundaries](../benchmarks/BICUBIC-NARROW-BOUNDARIES.md) pass
+  both one-shot controls and prepared RGBA16; prepared RGBA8 remains437.43/zimg417.13µs,
+  upper1.054 gap. Narrow plans retain199,840 B and allocate138/137 B/op;
+  governed peaks331,936/464,032 B exclude borrowed input. These reuse the same
+  actual package and qualification, without a production speedup claim.
   [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
   [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
   [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
@@ -221,6 +226,10 @@ settings do not establish matched quality.
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 318.85 | 368.80 | 0.865 / 0.870 | 137 |
 | Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 451.13 | 626.32 | 0.720 / 0.771 | 198,451 |
 | Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 379.55 | 435.66 | 0.871 / 0.888 | 137 |
+| Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 494.39 | 1,042.27 | 0.474 / 0.478 | 199,990 |
+| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 437.43 | 417.13 | 1.049 / 1.054 | 138 |
+| Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 467.83 | 713.48 | 0.656 / 0.659 | 199,982 |
+| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 394.35 | 569.96 | 0.692 / 0.695 | 137 |
 
 **Inspection and pixel-coding validation**
 

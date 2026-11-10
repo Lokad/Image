@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-10. **285 material required paths** remain
-in scope; the 131 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+Current architectural phase, 2026-11-10. **287 material required paths** remain
+in scope; the 135 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
@@ -31,6 +31,7 @@ Unchanged performance/qualification evidence is reused only within its source sc
 | Bounded narrow bicubic | [Result-row loan](NARROW-BICUBIC-ROW-LOAN.md): byte472.44/zimg417.11µs upper1.165 remains a gap; word upper.971 passes/stops. Same113B/op/4KiB, no added owned capacity. |
 | Bounded wide bicubic | [Result-row loan](BICUBIC-RESULT-ROW-LOAN.md): byte406.16/zimg367.01µs upper1.119 remains a gap; word upper1.003 is uncertain. No substitution of an older pass over a changed driver. |
 | Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 and Down8 retain native-prepared gaps; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
+| Prepared narrow bicubic | [Equivalent boundaries](BICUBIC-NARROW-BOUNDARIES.md):3 pass/1 gap. Both complete one-shot controls and prepared word pass; prepared byte437.43/zimg417.13µs upper1.054 remains a20.30µs point gap.199840B retained,138/137B/op, governedpeaks331936/464032B. Original asymmetric Down8 observations remain separate. No production change or repeated qualification. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear enlargement | [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md): complete RGBA8 Up8 upper.993 passes; source-valid other bilinear boundaries retain their own evidence/H status. |
 | Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Prepared drawing](TEXT-ENDPOINT-STORAGE.md) remains two gaps; allocation59000B/draw and inconclusive CPU gains stay distinct. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 is a gap,176B/op; pooled capacity/lazy native validation are separately labeled. Independent codec/resizing work continues. |
@@ -59,17 +60,26 @@ Only these four boundaries are retired:
 
 Their APIs/encoders were removed; retained caller-root cases still qualify shared
 admission. The remaining **253** base controls plus the **30** previously named additions
-and **two** prepared-bicubic public boundaries below give **285**, without adding a shape/depth/filter/quality grid. A later case
+and **four** prepared-bicubic public boundaries below give **287**, without adding a shape/depth/filter/quality grid. A later case
 requires evidence of a distinct required algorithm or public boundary omitted
 from this finite set. Differences in default option values are accepted.
 
-Two new public boundaries use the existing original513×259 byte/word rasters
+Two wide public boundaries use the existing original513×259 byte/word rasters
 and128×64 outputs: `BicubicResizePlan.Resize` for RGBA8 and RGBA16. Both retain
 admitted preparation explicitly while reading fresh input and returning independent
 results on every call. No new image, shape or settings grid. Existing Wide8/16
 one-shot operations now also have equivalent fresh-zimg views; their former
 fresh-managed/prepared-native observations remain separately visible diagnostic
 comparisons. Setup and output ownership are included on equivalent sides.
+
+Two additional prepared narrow boundaries, `BicubicPreparedNarrow8` and
+`BicubicPreparedNarrow16`, use existing Down8/16 rasters and256×129 outputs.
+Their byte/word row certificates and execution differ from the wide prepared
+kernels. [Equivalent narrow comparisons](BICUBIC-NARROW-BOUNDARIES.md) qualify
+both complete one-shot controls and prepared word; prepared byte retains20.30µs
+point gap, upper1.054. Plans retain199840B; current package/qualification are
+unchanged. Two new prepared paths extend285→287; fresh-native views reuse existing
+one-shot operations. No new source image, filter or settings grid.
 
 Four required algorithm additions retain their frozen recipes:
 
@@ -200,4 +210,4 @@ Current invalidation and next execution:
   current sources before proposing a materially revised design. Passing quartet
   cases stop. Text/drawing never globally blocks independent codec/resizing work.
 - All cited raw archives, released packages and reproducibility remain retained.
-  Publication and the all285-path completion audit are separate; PLAN.md is ignored.
+  Publication and the all287-path completion audit are separate; PLAN.md is ignored.
