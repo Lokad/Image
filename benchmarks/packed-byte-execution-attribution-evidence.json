@@ -1,0 +1,172 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BPA734",
+  "productionChanged": false,
+  "productionBuilds": 0,
+  "newFixtures": 0,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+  "currentCostReused": {
+    "caseId": "Tight64x32_8",
+    "managedUs": 485.7029392482517,
+    "nativeUs": 367.4210240885417,
+    "ratio": 1.3219247332215978,
+    "lower": 1.3081884472258036,
+    "upper": 1.3292232229116305,
+    "allocatedBytes": 113,
+    "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+    "runId": "prv733-candidate-Tight64x32_8-confirm",
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "packetBytes": 8192,
+    "packetSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+    "status": "gap",
+    "managedRationalReferenceExact": true,
+    "managedMaxWorkingBytes": 543756,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "nativeRgbMaximum": 0,
+    "nativeAlphaMaximum": 0,
+    "nativeRgbRmse": 0,
+    "nativeAlphaRmse": 0,
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "receiptFile": "prv733-candidate-Tight64x32_8-confirm-receipt.json"
+  },
+  "totalSampleLocations": 1993,
+  "instances": [
+    {
+      "mode": "packed-suffix",
+      "methodBytes": 5420,
+      "sampleLocations": 1017
+    },
+    {
+      "mode": "decoded-prefix",
+      "methodBytes": 6001,
+      "sampleLocations": 827
+    }
+  ],
+  "otherSampleLocations": {
+    "kernel": 135,
+    "pixelsGetter": 8,
+    "strideGetter": 2
+  },
+  "gates": {
+    "exactManagedRationalPixels": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "quietGuardsPassed": true,
+    "unchangedNativeBounds": true,
+    "allInstrumentedActualsRetained": true
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "newFixtures": 0,
+    "currentCost": "Required Tight64x32_8 complete resize485.70/native367.42us,118.28us demonstrated gap on qualified immutable3962ae8d package DLL.",
+    "removedWorkHypothesis": "Identify dominant repeated arithmetic or preparation in current shared packed byte execution. Geometry-only word prototype did not help; do not replay it unchanged. Decode products are already reused in prefix.",
+    "endState": "Further share substantial geometry/execution work only where current attribution demonstrates a credible reduction; retain existing measured byte/word kernels and exact certificates/repair, no new fixed-shape family.",
+    "boundary": "Existing complete public Resize/independent result/disposal, frozen original513x259RGBA8->64x32, same4KiB/root/nativebounds. One2secondsample capture on final immutable package; every instrumented elapsed value discarded. No candidate code or statistical retiming.",
+    "continuation": "Inspect actual disassembly and sample locations together, not removable phase percentages. Revise/abandon hypothesis if repeated work is not material. No optimization acceptance from profiling. Unaffected qualification and packet/cost evidence reuse."
+  },
+  "findings": [
+    "The perf-map display names omit generic mode arguments. Address/size correlation separates actual 5420-byte packed-suffix and6001-byte decoded-prefix code; merged offset counts would be misleading.",
+    "Packed suffix actual horizontal loop still loads two offset/weight streams and widens packed UInt16 products each tap. Decoded prefix avoids that widening but retains range checks and source/product preparation. No Span-to-ReadOnlySpan call samples remain.",
+    "Kernel sample locations135 do not establish setup phase cost. Main1017suffix/827prefix sample locations are not timing attribution, applicability or removable-percent evidence.",
+    "Next bounded source/model comparison should assess preparing contiguous horizontal views once per strip and reusing ordered pair execution, preserving clipped-edge and unequal-count fallbacks. Avoid a new fixed32tap implementation. Credible codegen/storage savings are required before a candidate build."
+  ],
+  "qualificationReused": {
+    "fullChecksEachOs": 6147,
+    "sameActualPackageBothOS": true,
+    "packageSha256": "9a1187626603c2b6d8cd25b548cd89c2aed08f05ffc52b07c8e2c8403b9b86ab",
+    "resizeInternalPublicEachModeEachOs": [
+      311,
+      729
+    ],
+    "newFullOrPackageProofs": 0
+  },
+  "nextModel": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "sourceModelOnly": true,
+    "newImagesOrSettings": 0,
+    "cases": {
+      "8": {
+        "prefixColumns": 32,
+        "pairs": 32,
+        "eligiblePairs": 30,
+        "fallbackPairs": [
+          {
+            "x": 0,
+            "prepared": true,
+            "count0": 32,
+            "count1": 32,
+            "eligible": false,
+            "shift": 0
+          },
+          {
+            "x": 62,
+            "prepared": false,
+            "count0": 32,
+            "count1": 32,
+            "eligible": false,
+            "shift": 8
+          }
+        ],
+        "eligibleTapCounts": [
+          32,
+          33
+        ],
+        "perDecodedSourceRowOffsetLookupsAvoidable": 1924
+      },
+      "16": {
+        "prefixColumns": 48,
+        "pairs": 32,
+        "eligiblePairs": 30,
+        "fallbackPairs": [
+          {
+            "x": 0,
+            "prepared": true,
+            "count0": 32,
+            "count1": 32,
+            "eligible": false,
+            "shift": 0
+          },
+          {
+            "x": 62,
+            "prepared": false,
+            "count0": 32,
+            "count1": 32,
+            "eligible": false,
+            "shift": 8
+          }
+        ],
+        "eligibleTapCounts": [
+          32,
+          33
+        ],
+        "perDecodedSourceRowOffsetLookupsAvoidable": 1924
+      }
+    },
+    "endState": "Prepare contiguous pair views once per decoded row under once-per-strip proof; shared variable-length ordered pair execution for packed byte/word and decoded prefix. Retain existing clipped-edge/unequal-count loop and exact publishers/repair. No fixed32tap class, allocation, changed coefficients/order or numeric policy.",
+    "scope": "Existing513x259->64x32 required controls. Eligibility/index equivalence model only, not dynamic branch count, general compatibility, phase cost or predicted speedup. Existing FilterOverlappingHorizontalPair accepts fixed8/+2 or16/+4; cannot call it unchanged for32/33tap,+8/9 geometry. Any future generalized reuse must retain those measured constant cases.",
+    "next": "One coherent candidate only if actual emitted code removes repeated offset lookups/decoded span range checks without ABI/helper cost or new retained storage; focused exact/ownership/scalar checks before short complete-operation byte screen. Confirm promising stage and refresh affectedword control, then broad/package only at accepted milestone. Do not infer CPU gain from eligibility."
+  },
+  "raw": {
+    "file": "packed-byte-execution-attribution.tar.xz",
+    "sha256": "e71b5a8195248b970386f5fb69f34307acc096a0363abdf9b3b97b4ee0e8fcd5",
+    "bytes": 96848,
+    "members": 23,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-byte-word-consolidation.tar.xz",
+        "sha256": "bb4695f2015b6c36b41501f9a80824e9c2ead24ac8bcb59686048778fd5ec4e6"
+      }
+    ]
+  },
+  "decision": "Attribution only, no production/numerical change, causal CPU gain or newly passing case. Keep all source-valid costs and qualification. Current required byte118.28us gap remains; uncertain larger WebP points do not establish tuning need. Continue independent justified work."
+}

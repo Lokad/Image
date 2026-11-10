@@ -32,6 +32,11 @@ are removed with exact source/module restoration; current qualification/costs
 remain valid. These studies stay outside renderer inputs and do not ban revised
 architectural designs.
 
+[Current byte execution attribution](PACKED-BYTE-EXECUTION-ATTRIBUTION.md) separates
+actual prefix/suffix code and models contiguous views on the existing control.
+It is a source/code-generation lead, not a new performance result; current
+qualification is reused and this report stays outside renderer dependencies.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |
