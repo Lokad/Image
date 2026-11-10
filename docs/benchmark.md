@@ -192,19 +192,25 @@ Current scope and remaining work:
   Fifteen small-support word controls: 11pass/
   4gap/0uncertain.
   Earlier band gains/tradeoffs and raw proof remain in the report.
-  [Shared wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) unifies fixed8tap/+2
-  and16tap/+4 arithmetic plus byte-offset preparation across three schedules.
-  Complete wide-byte saves **30.65µs/6.72% raw/6.68% normalized**,
-  with separated filtered/all-actual raw/normalized confidence and stable reference.
-  Current425.28/zimg346.96µs,
-  upper1.233 remains a gap. All10 affected costs refresh:
-  **7pass/3gaps/0uncertain**; wide-word now passes and no earlier pass is lost.
-  Other point differences are fresh costs, not causal companion gains. Passing
-  cases stop. Earlier [overlap gains/adverse evidence](../benchmarks/BICUBIC-SHARED-OVERLAP.md)
-  stay linked history. No new owned capacity, pool/session or retention:
-  bounded workspace4KiB/113Bop, cached byte199,840B workspace/199,981Bop.
-  Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
-  until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
+  [Shared certified byte publication](../benchmarks/BICUBIC-SHARED-BYTE-PUBLICATION.md)
+  reuses nearest rounding for uncertainty and output, and shares the ordinary-alpha
+  reciprocal certificate with wide byte publication. Original dynamic wide fallback,
+  ordered sums, exact repair and ownership remain. Complete wide byte saves
+  **7.96µs/1.86% raw/2.34% normalized**;
+  filtered/all-actual confidence separates, native+0.492%.
+  Current419.13/zimg349.29µs,
+  upper1.209 remains a gap; narrow byte
+  504.61/zimg417.18µs,
+  upper1.216 is also a gap. Two word controls pass/stop.
+  Byte B timings are reused after all three emitted bodies match final C; word
+  costs use final C. This does not claim direct final-package byte timings or
+  causal companion gains/equivalence. Explicit type guards remove dead byte locals
+  from word JIT import; prototype uncertainty and changed reference clocks remain
+  in the report. GC113B/op,4KiB/unchanged payloads, scratch0 and independent outputs
+  remain; physical/native/JIT-stack peaks are unmeasured. Same final package/all
+  three examples pass both OSes, including the bounded-byte ownership consumer.
+  [Wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) retains earlier gains and
+  six unaffected costs; current cached-wide evidence remains separately sourced.
   [Paired Lanczos byte rows](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) share coefficient
   expansion across two required rows in existing admitted storage. Complete prepared
   RGBA8 reduction saves **88.92µs/15.32% raw**,
@@ -322,14 +328,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,155 full/live checks per OS**, affected
+The current production build passes **6,157 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes329 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes331 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
@@ -457,15 +463,15 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 504.20 | 419.02 | 1.203 / 1.208 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.86 | 573.09 | 0.952 / 0.956 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 504.61 | 417.18 | 1.210 / 1.216 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 560.37 | 572.84 | 0.978 / 0.985 | 113 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 427.76 | 348.46 | 1.228 / 1.234 | 198,448 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 428.98 | 366.56 | 1.170 / 1.177 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 416.24 | 387.97 | 1.073 / 1.086 | 113 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 425.28 | 346.96 | 1.226 / 1.233 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.87 | 416.73 | 0.974 / 0.978 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 419.13 | 349.29 | 1.200 / 1.209 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 430.50 | 451.13 | 0.954 / 0.968 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 782.07 | 840.35 | 0.931 / 0.936 | 199,943 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 768.81 | 824.92 | 0.932 / 0.936 | 199,898 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |

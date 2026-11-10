@@ -1,0 +1,661 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CRR755C",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+    "linuxSha256": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73"
+  },
+  "byteTimedWindowsSha256": "906e87b5b7617abeceba6f925fb4d3014567da3aa9bc03a154506af29082a99d",
+  "sources": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "69d0926161626525d314d7e8853e9bdb5d3ee422d844a53689518fd4b24e774c",
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "876586597d68647c4d146d730146b062f23c3e1328d50c746c864874aed06eed",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67",
+    "tests/Lokad.Image.Tests/BicubicCertifiedRoundingTests.cs": "d36d3d39e9a18ab8e2fda9c77c2dbe5e7bb0059e5e6c68c658d58ccd6dc96e43",
+    "tests/Lokad.Image.Tests/BicubicByteNormalizationTests.cs": "28cbf0730a0279526dcb616eb247ccf7e7b5bafc1a694095a084270735ea7ba3"
+  },
+  "consumerSha256": "ee254c749e253ce09e647711870d2303a0b76eab8b3ea4de2c144fa692950be1",
+  "cases": {
+    "TightDown8": {
+      "caseId": "TightDown8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 667660,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 504.61331363636356,
+      "nativeUs": 417.1781302083333,
+      "ratio": 1.2095871693570472,
+      "lower": 1.2020100535718121,
+      "upper": 1.2160143720997936,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "906e87b5b7617abeceba6f925fb4d3014567da3aa9bc03a154506af29082a99d",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "crr755b-candidate-TightDown8-confirm",
+      "receiptFile": "crr755b-candidate-TightDown8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.003177053548595931,
+      "nativeAlphaRmse": 0.005502818164535149,
+      "filteredIterations": 11,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": true,
+      "reuseProof": "crr755c-byte-code-reuse.json"
+    },
+    "TightWide8": {
+      "caseId": "TightWide8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": 568332,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 568332 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 419.12819791666664,
+      "nativeUs": 349.2887897135417,
+      "ratio": 1.19994746542081,
+      "lower": 1.1924097948358112,
+      "upper": 1.208585598050436,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "906e87b5b7617abeceba6f925fb4d3014567da3aa9bc03a154506af29082a99d",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "crr755b-candidate-TightWide8-confirm",
+      "receiptFile": "crr755b-candidate-TightWide8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 32768,
+      "packetSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 11,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": true,
+      "reuseProof": "crr755c-byte-code-reuse.json"
+    },
+    "TightDown16": {
+      "caseId": "TightDown16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 1331224,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1331224 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 560.3653436264823,
+      "nativeUs": 572.8361360677084,
+      "ratio": 0.9782297385656689,
+      "lower": 0.9725830043245897,
+      "upper": 0.9848621066012732,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "crr755c-candidate-TightDown16-confirm",
+      "receiptFile": "crr755c-candidate-TightDown16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 264192,
+      "packetSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.049116055937996415,
+      "nativeAlphaRmse": 0.04006112093854481,
+      "filteredIterations": 11,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": false,
+      "reuseProof": null
+    },
+    "TightWide16": {
+      "caseId": "TightWide16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": 1132568,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1132568 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 430.49754220545975,
+      "nativeUs": 451.1308522135417,
+      "ratio": 0.9542631369438789,
+      "lower": 0.9280766596761836,
+      "upper": 0.9681636311745808,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "crr755c-candidate-TightWide16-confirm",
+      "receiptFile": "crr755c-candidate-TightWide16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 65536,
+      "packetSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": false,
+      "reuseProof": null
+    }
+  },
+  "statusCounts": {
+    "pass": 2,
+    "gap": 2,
+    "uncertain": 0
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "originalUs": 427.08694090909086,
+    "currentUs": 419.12819791666664,
+    "savedUs": 7.95874299242422,
+    "rawReduction": 0.018634948133706364,
+    "normalizedReduction": 0.02343586172033607,
+    "nativePointChange": 0.004916127265421677,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false
+      }
+    },
+    "scope": "One contemporaryoriginal12actual confirmation and independent final12actuals following promising3actualscreen, allactualsretained. Same original required public4KiB resize/source/output/disposal, nativegraph/context/samples/gates and idle-v2. No more unchanged sampling; old425.28us source-valid cost is historical, not causalbaselinegain."
+  },
+  "numericProof": {
+    "project": "Lokad.Image",
+    "stage": "CRR755-followup",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "minimumAlphaSum": 16,
+    "minimumNormalizer": 0.5,
+    "unitErrorExact": "400/2^40",
+    "relativeReciprocalBoundExact": "1/2^27",
+    "fixedMarginExact": "1/2^16",
+    "colorErrorBound": 7.851980661007049e-06,
+    "alphaErrorBound": 2.6598572736439077e-06,
+    "fixedMargin": 1.52587890625e-05,
+    "proof": "Use unchangedwide400/2^40 absolute accumulation error; narrowunit256/2^40 is smaller. At critical approximate quotients[0,256], exactdouble quotient magnitude <=256/(1-eta)<257. Existingerror formulas bounded bymin alpha16/norm.5 give abovecolor/alpha bounds incl257*eta. Both strictlybelowunchangedfixed2^-16margin. Reciprocal14 plus fused Newton has e^2+rounding <2^-27. Outsidecriticalrange, affinequotienterror slope<1 and saturation endpoint inequalities imply stable0/255. Clip-first ambiguity test/nearest output alreadymatches original half decisions underfixedmargin.",
+    "endState": "Move existingordinaryalpha narrowpublisher into one sharedactualbytehelper; narrow uses itdirectly withoutprivateforwardwrapper. Wide tries itfirst; onfailure retains currentdynamicdivision/errorcertificate asfallback. Sameexactpack/pixels/repair/resource/cancel/root/outputcontracts; no newcapacity/caches/session. Existingwidefallbackkeeps tinyalpha/nearhalfcases, sharedhelperdoesnotreserveorownstorage.",
+    "qualification": "Actualhelperdyadic quotient/guard/clip/half/directerrorchecks and existingwidecompleteoracle/tinyalpha/root tests, actualinlining/boundconditions, existingtwo byte screens and usefulindependentconfirmation. Four affectedboundednarrow/wide8/16costs; currentcached/packed/Lanczos/codecsunchanged. Coherent finalWindows/Linux/scalar/ISA/SAMEpackage qualification once, not betweenpreparation andfastpath stages."
+  },
+  "roundingProof": {
+    "project": "Lokad.Image",
+    "stage": "CRR755",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "scalarBoundaryChecks": 13915,
+    "distinctValues": 2783,
+    "margins": [
+      0.0,
+      1.52587890625e-05,
+      2.9802322387695312e-08,
+      0.01,
+      0.24999999999999997
+    ],
+    "preservesOriginalAmbiguityDecisions": true,
+    "clippedRoundedSamplesExact": true,
+    "hypothesis": "Narrow and wide bytepublishers duplicate finalcertificate and performfloorforfraction andnearestforoutput. Clipfirst, nearestonce, .5-abs(clipped-nearest) givesdistance tohalf integer. Same margins, sameambiguity/replay decisions, reuse nearest forsample. Remove separatefloorrange masks/redundantround andsharehelper between twoactual bytepaths.",
+    "proof": "Margins in[0,.25). Clipped endpoints areinteger andgap .5, matching oldoutside mask. Near decisionboundary, nearestresidual is[.25,.5]; Sterbenz makes .5-residual exact. Originalfraction/half subtraction isalsoexact there; both compute samehalf-integer distance. Outsideboundaryregion bothcertify. Clamp/round commute forinteger0/255 endpoints. Inputsfinite byboundedintegerimage/filter/normalizer guards; no numerical-policy relaxation.",
+    "boundary": "ExistingTightDown8/TightWide8, withTightDown16/TightWide16affected-source status. Narrowkeepsreciprocal/Newton/fixedmargin; widekeepsdivision/dynamicperchannelmargins, alpha guards/certs unchanged. Samegeometry/cache/taps/repair/cancel/4KiB/root/owners, no newbenchmark matrix. Actualhelperbits andwholepixels/code beforeexisting screens, usefuloriginal/final confirmations then broadW/L/ISA/SAMEpackage at coherentaccepted milestone."
+  },
+  "sourceCodeProof": {
+    "project": "Lokad.Image",
+    "stage": "CRR755C",
+    "actualCode": true,
+    "instrumentedElapsedDiscarded": true,
+    "helpersInlinedInAllTimedByteModes": true,
+    "wideDynamicFallbackRetained": true,
+    "code": {
+      "TightDown8": [
+        {
+          "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+LargeStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 5891,
+          "reciprocalEstimates": 1,
+          "dynamicDivisions": 1,
+          "roundScaleInstructions": [
+            "vrndscalepd zmm1, zmm0, 0"
+          ]
+        },
+        {
+          "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+SmallStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 6015,
+          "reciprocalEstimates": 1,
+          "dynamicDivisions": 1,
+          "roundScaleInstructions": [
+            "vrndscalepd zmm1, zmm0, 0"
+          ]
+        }
+      ],
+      "TightWide8": [
+        {
+          "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+FourColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 5936,
+          "reciprocalEstimates": 1,
+          "dynamicDivisions": 2,
+          "roundScaleInstructions": [
+            "vrndscalepd zmm4, zmm3, 0",
+            "vrndscalepd zmm2, zmm0, 0"
+          ]
+        }
+      ]
+    },
+    "sourceUndoProvesAllOtherMathBodiesAndGeometryOwnersUnchanged": true,
+    "numericProof": {
+      "project": "Lokad.Image",
+      "stage": "CRR755-followup",
+      "productionChanged": false,
+      "actualSimdOrCpuProof": false,
+      "minimumAlphaSum": 16,
+      "minimumNormalizer": 0.5,
+      "unitErrorExact": "400/2^40",
+      "relativeReciprocalBoundExact": "1/2^27",
+      "fixedMarginExact": "1/2^16",
+      "colorErrorBound": 7.851980661007049e-06,
+      "alphaErrorBound": 2.6598572736439077e-06,
+      "fixedMargin": 1.52587890625e-05,
+      "proof": "Use unchangedwide400/2^40 absolute accumulation error; narrowunit256/2^40 is smaller. At critical approximate quotients[0,256], exactdouble quotient magnitude <=256/(1-eta)<257. Existingerror formulas bounded bymin alpha16/norm.5 give abovecolor/alpha bounds incl257*eta. Both strictlybelowunchangedfixed2^-16margin. Reciprocal14 plus fused Newton has e^2+rounding <2^-27. Outsidecriticalrange, affinequotienterror slope<1 and saturation endpoint inequalities imply stable0/255. Clip-first ambiguity test/nearest output alreadymatches original half decisions underfixedmargin.",
+      "endState": "Move existingordinaryalpha narrowpublisher into one sharedactualbytehelper; narrow uses itdirectly withoutprivateforwardwrapper. Wide tries itfirst; onfailure retains currentdynamicdivision/errorcertificate asfallback. Sameexactpack/pixels/repair/resource/cancel/root/outputcontracts; no newcapacity/caches/session. Existingwidefallbackkeeps tinyalpha/nearhalfcases, sharedhelperdoesnotreserveorownstorage.",
+      "qualification": "Actualhelperdyadic quotient/guard/clip/half/directerrorchecks and existingwidecompleteoracle/tinyalpha/root tests, actualinlining/boundconditions, existingtwo byte screens and usefulindependentconfirmation. Four affectedboundednarrow/wide8/16costs; currentcached/packed/Lanczos/codecsunchanged. Coherent finalWindows/Linux/scalar/ISA/SAMEpackage qualification once, not betweenpreparation andfastpath stages."
+    },
+    "roundingProof": {
+      "project": "Lokad.Image",
+      "stage": "CRR755",
+      "productionChanged": false,
+      "actualSimdOrCpuProof": false,
+      "scalarBoundaryChecks": 13915,
+      "distinctValues": 2783,
+      "margins": [
+        0.0,
+        1.52587890625e-05,
+        2.9802322387695312e-08,
+        0.01,
+        0.24999999999999997
+      ],
+      "preservesOriginalAmbiguityDecisions": true,
+      "clippedRoundedSamplesExact": true,
+      "hypothesis": "Narrow and wide bytepublishers duplicate finalcertificate and performfloorforfraction andnearestforoutput. Clipfirst, nearestonce, .5-abs(clipped-nearest) givesdistance tohalf integer. Same margins, sameambiguity/replay decisions, reuse nearest forsample. Remove separatefloorrange masks/redundantround andsharehelper between twoactual bytepaths.",
+      "proof": "Margins in[0,.25). Clipped endpoints areinteger andgap .5, matching oldoutside mask. Near decisionboundary, nearestresidual is[.25,.5]; Sterbenz makes .5-residual exact. Originalfraction/half subtraction isalsoexact there; both compute samehalf-integer distance. Outsideboundaryregion bothcertify. Clamp/round commute forinteger0/255 endpoints. Inputsfinite byboundedintegerimage/filter/normalizer guards; no numerical-policy relaxation.",
+      "boundary": "ExistingTightDown8/TightWide8, withTightDown16/TightWide16affected-source status. Narrowkeepsreciprocal/Newton/fixedmargin; widekeepsdivision/dynamicperchannelmargins, alpha guards/certs unchanged. Samegeometry/cache/taps/repair/cancel/4KiB/root/owners, no newbenchmark matrix. Actualhelperbits andwholepixels/code beforeexisting screens, usefuloriginal/final confirmations then broadW/L/ISA/SAMEpackage at coherentaccepted milestone."
+    },
+    "scope": "Newordinaryhelper is originalnarrowreciprocal/pack body withsharedexactclip/round completion anddocumentedwideerrorproof. PrivateColumnwrapperremoved, actualcallscommonbody. Wideordinaryfastacceptsorfalls unchangedolddivision/dynamicmargin path. Currentcached/sharedmathword/byte methods, schedulers,coefficients,originalsums,repair/cancel/4KiB/loans/ownersverbatim. No newcapacity/session/pool/API/numericalpolicy; physical/JITstackpeaksunmeasured. Actualcompletecost next; no CPUclaimfrominstructioncount/model."
+  },
+  "byteCodeReuse": {
+    "project": "Lokad.Image",
+    "stage": "CRR755C",
+    "byteBodies": {
+      "TightDown8": [
+        {
+          "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+LargeStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 5891,
+          "instructionsIdentical": true,
+          "normalizedInstructionsSha256": "d2a6029398dca3ff8a9ee05e0258aa120c34d59f5a48dd189df6cdec30bcc35a"
+        },
+        {
+          "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+SmallStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 6015,
+          "instructionsIdentical": true,
+          "normalizedInstructionsSha256": "729efe5ae61bdc2c317613088c93c9773f8e7cb896df56c8a21098478725371b"
+        }
+      ],
+      "TightWide8": [
+        {
+          "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+FourColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "bytes": 5936,
+          "instructionsIdentical": true,
+          "normalizedInstructionsSha256": "737e01ba7aedbad4ca9ad4d371fcba9591dcd534d5ebb045ec0f1567868c12c1"
+        }
+      ]
+    },
+    "normalization": "Relocatedprocessaddresses and stacksecuritycookie only; numeric constants/ordering/branches/registers/stack offsets unchanged.",
+    "reuse": "C explicitByteSamplesguard isconstanttrue forbyte and onlypreventsimportedbyte-locals inword. Bytecompletepath/sources/sharedhelpers/ownership/preparation unchanged; reuse B original/final12actualbyte evidence withproducer906e87b5, do notclaim currentCpackage timed forbyte or CPU equivalence. C wordpaths need newcosts. No127row release refresh."
+  },
+  "wordCodeInspection": {
+    "project": "Lokad.Image",
+    "stage": "CRR755C",
+    "wordCodeInspectionOnly": true,
+    "instrumentedElapsedDiscarded": true,
+    "originalBytes": 5700,
+    "candidateBytes": 5712,
+    "normalizedInstructionsIdentical": false,
+    "originalNormalizedInstructionsSha256": "2a0c6238d58410e74c522ee26eead8eaf6ec1e3467804f62eb8f553a1edb7de4",
+    "candidateNormalizedInstructionsSha256": "ceea8b7e02ad9d38b53dae65671da5dfd91fb29d786f095cf4ef90884f0971db",
+    "normalizedProcessAddressesOnly": true,
+    "differences": [
+      "--- \n",
+      "+++ \n",
+      "@@ -9,7 +9,7 @@\n",
+      " vxorps   xmm8, xmm8, xmm8",
+      " vmovdqu32 zmmword ptr [rbp-0xC0], zmm8",
+      " vmovdqu32 zmmword ptr [rbp-0x80], zmm8",
+      "-mov      eax, 0xA83DA995",
+      "+mov      eax, 0xA8419CA7",
+      " mov      qword ptr [rbp-0x1F0], rax",
+      " vmovsd   qword ptr [rbp-0x30], xmm0",
+      " vmovsd   qword ptr [rbp-0x38], xmm1",
+      "@@ -19,10 +19,10 @@\n",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 0x880",
+      " lea      rdi, [rsp+0x40]",
+      "-mov      qword ptr [rbp-0x158], rdi",
+      "+mov      qword ptr [rbp-0x150], rdi",
+      " mov      esi, 0x880",
+      " call     CORINFO_HELP_MEMZERO",
+      "-mov      rdi, qword ptr [rbp-0x158]",
+      "+mov      rdi, qword ptr [rbp-0x150]",
+      " mov      r13, rdi",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 80",
+      "@@ -31,25 +31,25 @@\n",
+      " vmovdqu32 zmmword ptr [rdi], zmm0",
+      " vmovdqu  xmmword ptr [rdi+0x40], xmm0",
+      " mov      r12, rdi",
+      "-mov      bword ptr [rbp-0x188], r12",
+      "+mov      bword ptr [rbp-0x180], r12",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 960",
+      " lea      rdi, [rsp+0x40]",
+      "+mov      qword ptr [rbp-0x158], rdi",
+      "+mov      esi, 960",
+      "+call     CORINFO_HELP_MEMZERO",
+      "+mov      rdi, qword ptr [rbp-0x158]",
+      "+mov      rax, rdi",
+      "+mov      bword ptr [rbp-0x188], rax",
+      "+test     dword ptr [rsp], esp",
+      "+sub      rsp, 544",
+      "+lea      rdi, [rsp+0x40]",
+      " mov      qword ptr [rbp-0x160], rdi",
+      "-mov      esi, 960",
+      "+mov      esi, 544",
+      " call     CORINFO_HELP_MEMZERO",
+      " mov      rdi, qword ptr [rbp-0x160]",
+      " mov      rax, rdi",
+      " mov      bword ptr [rbp-0x190], rax",
+      "-test     dword ptr [rsp], esp",
+      "-sub      rsp, 544",
+      "-lea      rdi, [rsp+0x40]",
+      "-mov      qword ptr [rbp-0x168], rdi",
+      "-mov      esi, 544",
+      "-call     CORINFO_HELP_MEMZERO",
+      "-mov      rdi, qword ptr [rbp-0x168]",
+      "-mov      rax, rdi",
+      "-mov      bword ptr [rbp-0x198], rax",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 80",
+      " lea      rdi, [rsp+0x40]",
+      "@@ -57,21 +57,21 @@\n",
+      " vmovdqu32 zmmword ptr [rdi], zmm0",
+      " vmovdqu  xmmword ptr [rdi+0x40], xmm0",
+      " mov      rcx, rdi",
+      "-mov      bword ptr [rbp-0x1A0], rcx",
+      "+mov      bword ptr [rbp-0x198], rcx",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 16",
+      " lea      rdi, [rsp+0x40]",
+      " vxorps   xmm0, xmm0, xmm0",
+      " vmovups  xmmword ptr [rdi], xmm0",
+      " mov      rdx, rdi",
+      "-mov      bword ptr [rbp-0x1A8], rdx",
+      "+mov      bword ptr [rbp-0x1A0], rdx",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 32",
+      " lea      rdi, [rsp+0x40]",
+      " vxorps   ymm0, ymm0, ymm0",
+      " vmovdqu  ymmword ptr [rdi], ymm0",
+      " mov      rsi, rdi",
+      "-mov      bword ptr [rbp-0x1B0], rsi",
+      "+mov      bword ptr [rbp-0x1A8], rsi",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 144",
+      " lea      rdi, [rsp+0x40]",
+      "@@ -80,7 +80,7 @@\n",
+      " vmovdqu32 zmmword ptr [rdi+0x40], zmm0",
+      " vmovdqu32 xmmword ptr [rdi+0x80], xmm0",
+      " mov      r8, rdi",
+      "-mov      bword ptr [rbp-0x1B8], r8",
+      "+mov      bword ptr [rbp-0x1B0], r8",
+      " test     dword ptr [rsp], esp",
+      " sub      rsp, 80",
+      " lea      rdi, [rsp+0x40]",
+      "@@ -88,11 +88,11 @@\n",
+      " vmovdqu32 zmmword ptr [rdi], zmm0",
+      " vmovdqu  xmmword ptr [rdi+0x40], xmm0",
+      " mov      r9, rdi",
+      "-mov      bword ptr [rbp-0x1C0], r9"
+    ]
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+      "full": [
+        2892,
+        2317,
+        948
+      ],
+      "total": 6157,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 331,
+        "internal-scalar": 331,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1060,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "95330661846c2d79797d49acd3cef493c4097a1cde8aabf7dfff950b0ebc410a",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+      "full": [
+        2892,
+        2317,
+        948
+      ],
+      "total": 6157,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 331,
+        "internal-scalar": 331,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1060,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "cca9388fef5508aa73d6ff2559b710cdd01d63978f678e1351a3de823eea342d",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 6157,
+    "resizeInternalEachModeEachOs": 331,
+    "resizePublicEachModeEachOs": 729,
+    "isa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 331,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 331,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 331,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 331,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "cfb5ca956b71890f9961d62c606905565f82f044482db2239bb5b50a8516da73",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "ce0a5df2a1c489e15f524974f4022419cebdef7e8ac42174153efa0ca204379a",
+      "symbolsSha256": "304c968015be7f4adecab466304c1d905202fe82e4b39070c2ab7d5ac6b577a7",
+      "bytes": 442090,
+      "librarySha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "ce0a5df2a1c489e15f524974f4022419cebdef7e8ac42174153efa0ca204379a",
+      "librarySha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true
+  },
+  "ownership": {
+    "allocatedBytesPerOperation": 113,
+    "workingAdmissionBytes": 4096,
+    "narrowExplicitPayloadBytes": [
+      3232,
+      4080
+    ],
+    "wideExplicitPayloadBytes": [
+      4068,
+      3776
+    ],
+    "additionalOwnedCapacity": 0,
+    "retainedOperationScratchBytes": 0,
+    "independentResultPayloadBytes": [
+      32768,
+      65536,
+      132096,
+      264192
+    ],
+    "physicalNativeJitStackPeaksMeasured": false,
+    "notes": "No allocation/retention gain claim; source/result/root/loan/replay lifetimes unchanged. Existing pool retention remains separate. Wordlocalframe536to520 is codeobservation, not physicalpeakmeasurement."
+  },
+  "boundaries": "Existing four complete513x259 to256x129/128x64 RGBA8/16 public4KiBResize, source/geometry/workingpreparation/independentoutput/disposal timed. Labeledzimg3.0.6 FFmpegzscale backend retains graph/input/scratch; declaredhalo/packing/filter/output/release/nativepixelbounds preserved. Bytecosts reuse B12actuals after exact emittedbody comparison withC (onlyprocessaddress/securitycookie normalized), not directcurrentpackage timing. Wordcosts measuredC/currentpackageDLL. No full127rowrelease refresh.",
+  "invalidation": "Narrow/wide bytepublication changes invalidate oldTightDown8/TightWide8 costs. Bbyteconfirmations remainvalidC because allthree byteexecution bodies/instructions/branches/registers/stackoffsets match, sourceoperation/othercallees unchanged. Explicittypeguard changes wordemittedbodies: bothwordcosts refreshedC. AlloldsharedMathmethods/cached/packed/Lanczos/codec/text productionpaths unchanged; reuse valid evidence. PrivateNarrowTryWritePair removed,15reflectiontests nowdirectactualpublisher; new2functionaltests, no wrapper.",
+  "adverseHistory": "PreparationAcodechecks/shorts supplied no useful isolatedgain. Bwidegain confirmed, butwordcurrentupper1.003 contradictedpriorpass. Onecontemporaryoriginalwordcountercheck passedupper.979; actualJIT5700to5768B andframe520to536 identifiedimporteddeadbyte-localcost. ExplicittypeofByteSamplesguard fixesframe520 beforeacceptance; finalCwordupper.968/.985pass. Nativewidewordclockchangedfrom415.58to451.13us, so no causalwordCPUgain/equivalence/nonregression claim. Allactuals retained; no favorable unchangedrepeat.",
+  "workflow": {
+    "coreVersionsEachOs": 3,
+    "successfulInternalVersionsEachOs": 4,
+    "compilerFailures": 1,
+    "obsoleteReflectionLinuxFailures": 15,
+    "preflightMissingPreparation": 1,
+    "benchmarkHarnessNativeSelectorFixtureBuilds": 0,
+    "productionRebuildsForTestOnlyCorrection": 0,
+    "finalCQualificationRunsEachOs": 1,
+    "prototypeBWindowsFullAndPackage": 1,
+    "prototypeBLinuxFullOrPackage": 0,
+    "packageBuildsTotal": 2,
+    "reason": "Initialphase A andcredibleB/C architecturaltransition retained. Wordcontradictionresolvedthroughactualcode/data beforeacceptance; byteCconfirmation reused when emittedpathunchanged. Finalqualifiedinputs immutable. Preservealladverse/uncertain evidence; no fixedthreshold or familyban."
+  },
+  "next": "Stop bothpassingwordcontrols. Remaininglargestscopednarrowbyte~87us,cachedwide~79us,widebyte~70us,packedbyte~62us,JPEG~60us stayeligible. Prefer new currentattribution/repeatedwork/storage designs, no blindretune confirmedcases. All283materialpaths required; publicationpostponed.",
+  "raw": {
+    "file": "bicubic-shared-byte-publication.tar.xz",
+    "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224",
+    "bytes": 13258500,
+    "members": 418,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-streaming-paired-byte-rows.tar.xz",
+        "sha256": "5dc038f1aee1c70f5b05da55f6939a8a1881d68ce2cd804143ead9c83a3971bb"
+      },
+      {
+        "file": "bounded-column-current-attribution.tar.xz",
+        "sha256": "e9ccaa68f36aab3dc3104c745d0d43ca20c3e10b8809ba55e6cf307bd8068d46"
+      },
+      {
+        "file": "column-vertical-quad-study.tar.xz",
+        "sha256": "3d861a90a2a00de71298608e3459ccf4e8bc3e53cffff033ceeee5bbbb9f14ff"
+      },
+      {
+        "file": "bicubic-wide-overlap-qualified.tar.xz",
+        "sha256": "5ccaa3e758c9ff5c25ae8b15344686196b01897d91d323c0e72bcd43556614fe"
+      }
+    ]
+  }
+}

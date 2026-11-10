@@ -984,6 +984,23 @@ def render():
         assert c['librarySha256'] == cq['actualPackage']['librarySha256']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in bicubic_overlap['comparison']['views'].values())
+    byte_publication = json.loads((ROOT / 'benchmarks/bicubic-shared-byte-publication-evidence.json').read_text(encoding='utf-8'))
+    assert byte_publication['productionAccepted'] and byte_publication['requiredMaterialPaths'] == 283
+    byte_publication_qualification = byte_publication['qualification']
+    assert byte_publication_qualification['fullChecksEachOs'] == byte_publication_qualification['windows']['total'] == byte_publication_qualification['linux']['total'] == 6157
+    assert byte_publication_qualification['actualPackage']['sha256'] == byte_publication_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert byte_publication_qualification['resizeInternalEachModeEachOs'] == 331 and byte_publication_qualification['resizePublicEachModeEachOs'] == 729
+    assert byte_publication['raw']['mirrored'] and byte_publication['raw']['allMembersVerified']
+    assert byte_publication['statusCounts'] == {'pass': 2, 'gap': 2, 'uncertain': 0}
+    assert all(body['instructionsIdentical'] for bodies in byte_publication['byteCodeReuse']['byteBodies'].values() for body in bodies)
+    assert set(byte_publication['cases']) == {'TightDown8', 'TightWide8', 'TightDown16', 'TightWide16'}
+    for current in byte_publication['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['managedRationalReferenceExact']
+        expected = byte_publication['byteTimedWindowsSha256'] if current['reusedUnchangedPath'] else byte_publication_qualification['actualPackage']['librarySha256']
+        assert current['librarySha256'] == expected
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    bicubic_overlap['cases'].update(byte_publication['cases'])
     for case in ('TightWide8', 'TightWide16'):
         cost = bicubic_overlap['cases'][case]
         depth = 8 if case == 'TightWide8' else 16
@@ -1427,6 +1444,7 @@ def render():
         if not current['reusedUnchangedPath']:
             assert current['librarySha256'] == streaming['timedWindowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    current_build_qualification = byte_publication_qualification
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1506,7 +1524,7 @@ def render():
     assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
     assert current['managedRationalReferenceExact'] and current['managedQualifiedOriginalPixelsExact']
     assert current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-    assert current['librarySha256'] == cq['actualPackage']['librarySha256']
+    assert current['librarySha256'] == byte_publication_qualification['actualPackage']['librarySha256']
     rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1990,19 +2008,25 @@ Current scope and remaining work:
   Fifteen small-support word controls: {current_word_counts['pass']}pass/
   {current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
   Earlier band gains/tradeoffs and raw proof remain in the report.
-  [Shared wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) unifies fixed8tap/+2
-  and16tap/+4 arithmetic plus byte-offset preparation across three schedules.
-  Complete wide-byte saves **{bicubic_overlap['comparison']['savedUs']:.2f}µs/{100*bicubic_overlap['comparison']['rawReduction']:.2f}% raw/{100*bicubic_overlap['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual raw/normalized confidence and stable reference.
-  Current{bicubic_overlap['cases']['TightWide8']['managedUs']:.2f}/zimg{bicubic_overlap['cases']['TightWide8']['nativeUs']:.2f}µs,
-  upper{bicubic_overlap['cases']['TightWide8']['upper']:.3f} remains a gap. All10 affected costs refresh:
-  **7pass/3gaps/0uncertain**; wide-word now passes and no earlier pass is lost.
-  Other point differences are fresh costs, not causal companion gains. Passing
-  cases stop. Earlier [overlap gains/adverse evidence](../benchmarks/BICUBIC-SHARED-OVERLAP.md)
-  stay linked history. No new owned capacity, pool/session or retention:
-  bounded workspace4KiB/113Bop, cached byte199,840B workspace/{bicubic_overlap['cases']['Down8']['allocatedBytes']:,}Bop.
-  Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
-  until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
+  [Shared certified byte publication](../benchmarks/BICUBIC-SHARED-BYTE-PUBLICATION.md)
+  reuses nearest rounding for uncertainty and output, and shares the ordinary-alpha
+  reciprocal certificate with wide byte publication. Original dynamic wide fallback,
+  ordered sums, exact repair and ownership remain. Complete wide byte saves
+  **{byte_publication['comparison']['savedUs']:.2f}µs/{100*byte_publication['comparison']['rawReduction']:.2f}% raw/{100*byte_publication['comparison']['normalizedReduction']:.2f}% normalized**;
+  filtered/all-actual confidence separates, native+0.492%.
+  Current{byte_publication['cases']['TightWide8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightWide8']['nativeUs']:.2f}µs,
+  upper{byte_publication['cases']['TightWide8']['upper']:.3f} remains a gap; narrow byte
+  {byte_publication['cases']['TightDown8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightDown8']['nativeUs']:.2f}µs,
+  upper{byte_publication['cases']['TightDown8']['upper']:.3f} is also a gap. Two word controls pass/stop.
+  Byte B timings are reused after all three emitted bodies match final C; word
+  costs use final C. This does not claim direct final-package byte timings or
+  causal companion gains/equivalence. Explicit type guards remove dead byte locals
+  from word JIT import; prototype uncertainty and changed reference clocks remain
+  in the report. GC113B/op,4KiB/unchanged payloads, scratch0 and independent outputs
+  remain; physical/native/JIT-stack peaks are unmeasured. Same final package/all
+  three examples pass both OSes, including the bounded-byte ownership consumer.
+  [Wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) retains earlier gains and
+  six unaffected costs; current cached-wide evidence remains separately sourced.
   [Paired Lanczos byte rows](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) share coefficient
   expansion across two required rows in existing admitted storage. Complete prepared
   RGBA8 reduction saves **{lanczos_current['comparisons']['Repeated8']['savedUs']:.2f}µs/{100*lanczos_current['comparisons']['Repeated8']['rawReduction']:.2f}% raw**,

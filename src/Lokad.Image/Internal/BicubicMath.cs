@@ -10,6 +10,56 @@ namespace Lokad.Image.Internal;
 // their own geometry, tap order and portable fallback selection.
 internal static class BicubicMath
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static bool TryWriteOrdinaryBytePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
+    {
+        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
+        if (!(n0 >= .5 && n1 >= .5 && a0 >= 16 && a1 >= 16)) return false;
+        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
+        // VRCP14PD has relative error <2^-14 (Intel ISA reference). One fused
+        // Newton correction and the quotient multiply give error <2^-27.
+        // For alpha sums >=16 and normalizers >=.5, the wider existing
+        // 400/2^40 accumulation bound gives color/alpha error <7.852e-6 /
+        // 2.660e-6 including reciprocal error near quantization thresholds.
+        // The unchanged 2^-16 margin covers both narrow and wide byte paths.
+        // Clipped endpoints are stable under the same affine error bound.
+        var reciprocal = Avx512F.Reciprocal14(divisors);
+        reciprocal = Avx512F.Multiply(reciprocal,
+            Avx512F.FusedMultiplyAddNegated(divisors, reciprocal, Vector512.Create(2d)));
+        var values = Avx512F.Multiply(sum, reciprocal);
+        const double margin = 1.52587890625e-5;
+        var margins = Vector512.Create(margin);
+        if (!(values.GetElement(3) >= 1 + margin && values.GetElement(7) >= 1 + margin)) return false;
+        if (!TryRoundBytePair(values, margins, out var ints)) return false;
+        var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
+        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
+        BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
+        return true;
+    }
+
+    // Callers supply finite values and nonnegative margins below .25.
+    // After clipping, .5 - abs(v - round(v)) is the same distance to a
+    // half-integer used by the certificate. Near that boundary both distances
+    // are exact (Sterbenz); clipped integer endpoints are never ambiguous.
+    // Reuse this nearest-even result for output instead of rounding twice.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static bool TryRoundBytePair(Vector512<double> values, Vector512<double> margins,
+        out Vector256<int> integers)
+    {
+        var clipped = Avx512F.Min(Vector512.Create(255d), Avx512F.Max(Vector512<double>.Zero, values));
+        var rounded = Avx512F.RoundScale(clipped, 0);
+        var residual = Avx512F.AndNot(Vector512.Create(long.MinValue),
+            Avx512F.Subtract(clipped, rounded).AsInt64()).AsDouble();
+        var distance = Avx512F.Subtract(Vector512.Create(.5), residual);
+        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareLessThanOrEqual(distance, margins)) != 0)
+        {
+            integers = default;
+            return false;
+        }
+        integers = Avx512F.ConvertToVector256Int32WithTruncation(rounded);
+        return true;
+    }
+
     // Callers select fixed eight-tap/+2 or sixteen-tap/+4 geometry. Reuse
     // overlapping source windows without changing either lane's tap order.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

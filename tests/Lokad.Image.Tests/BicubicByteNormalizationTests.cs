@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -137,10 +136,6 @@ public sealed class BicubicByteNormalizationTests
         Assert.Equal(expected, OriginalPixels.Bytes(recovered)); Assert.False(root.IsDisposed);
     }
 
-    private delegate bool PairWriter(Vector512<double> sum, double n0, double n1, Span<byte> output);
-    private static readonly PairWriter Write = typeof(ColumnBicubicResize)
-        .GetMethod("TryWritePair", BindingFlags.NonPublic | BindingFlags.Static)!.CreateDelegate<PairWriter>();
-
     [Theory]
     [InlineData(16, .5, 0)]
     [InlineData(16, .5, 1)]
@@ -157,7 +152,7 @@ public sealed class BicubicByteNormalizationTests
         destination.Fill(0xa7);
         var sum = Vector512.Create(color * alpha, 13 * alpha, 241 * alpha, alpha,
             53 * alpha, color * alpha, 239 * alpha, alpha);
-        Assert.True(Write(sum, normalizer, normalizer, destination.Slice(2, 8)));
+        Assert.True(BicubicMath.TryWriteOrdinaryBytePair(sum, normalizer, normalizer, destination.Slice(2, 8)));
         var expectedAlpha = (byte)Math.Clamp(Math.Round(alpha / normalizer, MidpointRounding.AwayFromZero), 0, 255);
         var expectedColor = (byte)Math.Clamp(color, 0, 255);
         Assert.Equal(new byte[] { expectedColor, 13, 241, expectedAlpha, 53, expectedColor, 239, expectedAlpha }, destination.Slice(2, 8).ToArray());
@@ -176,7 +171,7 @@ public sealed class BicubicByteNormalizationTests
         {
             destination.Fill(0xa7);
             var sum = Vector512.Create(value * 16, 16d, 16d, 16d, 16d, 16d, 16d, 16d);
-            Assert.False(Write(sum, 4, 4, destination));
+            Assert.False(BicubicMath.TryWriteOrdinaryBytePair(sum, 4, 4, destination));
             Assert.Equal(0xa7a7a7a7a7a7a7a7ul, BinaryPrimitives.ReadUInt64LittleEndian(destination));
         }
     }
@@ -191,7 +186,7 @@ public sealed class BicubicByteNormalizationTests
         Span<byte> destination = stackalloc byte[8];
         destination.Fill(0xa7);
         var sum = Vector512.Create(alpha, alpha, alpha, alpha, alpha, alpha, alpha, alpha);
-        Assert.False(Write(sum, normalizer, normalizer, destination));
+        Assert.False(BicubicMath.TryWriteOrdinaryBytePair(sum, normalizer, normalizer, destination));
         Assert.Equal(0xa7a7a7a7a7a7a7a7ul, BinaryPrimitives.ReadUInt64LittleEndian(destination));
     }
 }

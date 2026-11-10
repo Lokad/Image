@@ -248,7 +248,7 @@ internal static class ColumnBicubicResize
                                     offsets.Slice((outputX + 1) * 10, counts[outputX + 1]), sourceFirst, vertical[..count], first, context)) return false;
                         }
                     }
-                    else if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
+                    else if (typeof(TSamples) == typeof(ByteSamples) && !BicubicMath.TryWriteOrdinaryBytePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
                         destination.Slice((tile + outputX) * 4, 8)))
                     {
                         // Repair only uncertain pixels, preserving original tap order.
@@ -334,38 +334,5 @@ internal static class ColumnBicubicResize
         return true;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
-    {
-        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 >= 16 && a1 >= 16)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        // VRCP14PD has relative error <2^-14 (Intel ISA reference). One fused
-        // Newton correction and the quotient multiply give error <2^-27.
-        // With alpha sums >=16 and normalizers >=.5, the existing 2^-32
-        // accumulation bound contributes <3.79e-6 after clipping to [0,255];
-        // reciprocal error adds <1.90e-6. The larger 2^-16 margin certifies
-        // the original rounding decision. Uncertain pixels replay unchanged.
-        var reciprocal = Avx512F.Reciprocal14(divisors);
-        reciprocal = Avx512F.Multiply(reciprocal,
-            Avx512F.FusedMultiplyAddNegated(divisors, reciprocal, Vector512.Create(2d)));
-        var values = Avx512F.Multiply(sum, reciprocal);
-        const double margin = 1.52587890625e-5;
-        var margins = Vector512.Create(margin);
-        if (!(values.GetElement(3) >= 1 + margin && values.GetElement(7) >= 1 + margin)) return false;
-        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
-            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
-        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
-            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(255d)).AsInt64());
-        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
-        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
-        var clipped = Avx512F.Min(Vector512.Create(255d), Avx512F.Max(Vector512<double>.Zero, values));
-        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
-        var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
-        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
-        BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
-        return true;
-    }
 
 }

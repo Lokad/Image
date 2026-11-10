@@ -205,7 +205,7 @@ internal static class WideColumnBicubicResize
                                     offsets.Slice((outputX + 1) * taps, counts[outputX + 1]), sourceFirst, vertical[..count], first, context)) return false;
                         }
                     }
-                    else if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
+                    else if (typeof(TSamples) == typeof(ByteSamples) && !TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
                         destination.Slice((tile + outputX) * 4, 8)))
                     {
                         for (var repair = outputX; repair < outputX + 2; repair++)
@@ -273,6 +273,9 @@ internal static class WideColumnBicubicResize
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
     {
+        // Ordinary alpha shares the bounded reciprocal certificate. Keep the
+        // dynamic division path for tiny alpha and uncertain rounding cases.
+        if (BicubicMath.TryWriteOrdinaryBytePair(sum, n0, n1, output)) return true;
         const double unitError = 3.637978807091713e-10;
         const double alphaError = unitError * 255;
         var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
@@ -289,15 +292,7 @@ internal static class WideColumnBicubicResize
         var margins = Avx512F.Divide(Avx512F.Multiply(numerators, Vector512.Create(2d)), Avx512F.Subtract(divisors, errors));
         if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
             || !(values.GetElement(3) >= 1 + margins.GetElement(3) && values.GetElement(7) >= 1 + margins.GetElement(7))) return false;
-        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
-            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
-        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
-            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(255d)).AsInt64());
-        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
-        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
-        var clipped = Avx512F.Min(Vector512.Create(255d), Avx512F.Max(Vector512<double>.Zero, values));
-        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
+        if (!BicubicMath.TryRoundBytePair(values, margins, out var ints)) return false;
         var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
         var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
         BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
