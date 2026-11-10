@@ -1,0 +1,511 @@
+{
+  "project": "Lokad.Image",
+  "stage": "NRA764",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newBenchmarkImagesOrSettings": 0,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "producers": {
+    "windowsSha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+    "linuxSha256": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884"
+  },
+  "packageSha256": "f688d9232f00a0661fec1fd454198b0708468259de849ca809671b85308157dd",
+  "sources": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "990a7566ab6c3131997541a9d16983d471eb56e9e28a68a95fe0be832464a244",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+  },
+  "costReused": {
+    "caseId": "TightDown8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "outputWidth": 256,
+    "outputHeight": 129,
+    "managedMaxWorkingBytes": 667660,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "managedUs": 484.903121722028,
+    "nativeUs": 417.3490299479167,
+    "ratio": 1.1618647389273715,
+    "lower": 1.1571192024419534,
+    "upper": 1.1669860307840123,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "1c6ee3bf31e19a645e22f3b7932f49907e29cd2eeee4488a78ce782df3b0eeb8",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "runId": "bpc759c-candidate-TightDown8-recheck",
+    "receiptFile": "bpc759c-candidate-TightDown8-recheck-receipt.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "packetBytes": 132096,
+    "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeRgbMaximum": 1,
+    "nativeAlphaMaximum": 1,
+    "nativeRgbRmse": 0.003177053548595931,
+    "nativeAlphaRmse": 0.005502818164535149,
+    "filteredIterations": 11,
+    "allActualsRetained": true,
+    "reusedUnchangedPath": false,
+    "reuseProof": null
+  },
+  "sourceCodeReuse": {
+    "project": "Lokad.Image",
+    "stage": "NRA764",
+    "bodies": [
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+LargeStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 5934,
+        "instructionsIdentical": true,
+        "normalizedInstructionsSha256": "7ce6a4f3bcf2f768c5b8b61df6e24165acaa0b02b0b14b46184a8456589656ef"
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+SmallStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 5999,
+        "instructionsIdentical": true,
+        "normalizedInstructionsSha256": "96ee63ba9be01d008bd806f7aac24cc42fb8a0f8172a043bbf60b070eaacf6a2"
+      }
+    ],
+    "normalization": "Only relocated processaddresses/securitycookies; constants/stack/registers/branches/operations unchanged.",
+    "reuse": "Current6172/SAMEpackage1b58529c two actualbyte kernels match acceptedBPC759C. Reuse source-valid484.90/native417.35us upper1.167/113Bop; thisinstrumentedcapture isnotstatisticaltiming."
+  },
+  "qualificationReused": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+      "full": [
+        2907,
+        2317,
+        948
+      ],
+      "total": 6172,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 458,
+        "internal-scalar": 458,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 833,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "ca2a2aa91859d8e421e1490655616c176b3ba46891e6ae3bfe5c58b6ef8f96d4",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+      "full": [
+        2907,
+        2317,
+        948
+      ],
+      "total": 6172,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 458,
+        "internal-scalar": 458,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 833,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "058e27b2bf569a2bc9013280b2816221940fd115cbdfdffe3af09740989fd59b",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 6172,
+    "jpegInternalEachModeEachOs": 458,
+    "jpegPublicEachModeEachOs": 375,
+    "resizeInternalEachModeEachOs": 341,
+    "resizePublicEachModeEachOs": 729,
+    "resizeEvidenceReusedUnchanged": true,
+    "isa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 458,
+          "public-no-avx512": 375,
+          "internal-no-avx2": 458,
+          "public-no-avx2": 375
+        },
+        "coreSha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 458,
+          "public-no-avx512": 375,
+          "internal-no-avx2": 458,
+          "public-no-avx2": 375
+        },
+        "coreSha256": "5a5e89de932e9c0f8066cfbc19781bc0d99e29b8653b22b005c0a5d11032d884",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "f688d9232f00a0661fec1fd454198b0708468259de849ca809671b85308157dd",
+      "symbolsSha256": "bd56a9ec28f5077bfce8277fbe9ed3191153dae0d801829114e38d2d58a2520e",
+      "bytes": 443536,
+      "librarySha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "f688d9232f00a0661fec1fd454198b0708468259de849ca809671b85308157dd",
+      "librarySha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true
+  },
+  "capture": {
+    "totalSampleLocations": 1996,
+    "kernels": [
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+LargeStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 5934,
+        "samples": 656
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+SmallStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 5999,
+        "samples": 1182
+      }
+    ],
+    "geometryBuildLocations": 32,
+    "geometryReadLocations": 30,
+    "strideLocations": 40,
+    "kernelLocations": 23,
+    "preparedPairLocations": 6,
+    "seconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "quietGuardsPassed": true,
+    "instrumentedElapsedDiscarded": true,
+    "notes": "Location/inlining/skid counts, not phase costs/removable percentages/CPU gain."
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "NRA764",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "allBuilds": 0,
+    "models": [
+      {
+        "source": [
+          513,
+          259
+        ],
+        "output": [
+          256,
+          129
+        ],
+        "depth": 8,
+        "purpose": "existing primary",
+        "eligible": true,
+        "rowSlots": 9,
+        "oldLargePrefixColumns": 96,
+        "oldSmallSuffixColumns": 160,
+        "oldSegments": [
+          [
+            0,
+            96,
+            16,
+            45
+          ],
+          [
+            96,
+            256,
+            8,
+            25
+          ]
+        ],
+        "preparedGeometryPrefixColumns": 232,
+        "geometryFooterBytes": 96,
+        "topColumns": 32,
+        "tailColumns": 8,
+        "old": {
+          "rowVisits": 3354,
+          "unpreparedGeometryBuilds": 387,
+          "sourceRowConversions": 6734,
+          "decodedSourcePixels": 171976,
+          "horizontalColumnRows": 66304,
+          "horizontalWeightEvaluations": 2052,
+          "verticalWeightEvaluations": 4148,
+          "maxSourceCount": 38,
+          "sourceAddressTraceChecks": 2052,
+          "geometryBuildsIncludingPreparation": 516,
+          "totalKernelEvaluations": 6200
+        },
+        "proposed": {
+          "rowVisits": 1320,
+          "unpreparedGeometryBuilds": 36,
+          "sourceRowConversions": 2768,
+          "decodedSourcePixels": 151228,
+          "horizontalColumnRows": 67840,
+          "horizontalWeightEvaluations": 4104,
+          "verticalWeightEvaluations": 1421,
+          "sourceAddressTraceChecks": 4104,
+          "maxSourceCount": 71,
+          "geometryBuildsIncludingPreparation": 177,
+          "totalKernelEvaluations": 5525
+        },
+        "borrowedCacheBytes": 9216,
+        "borrowedWeightBytes": 2560,
+        "borrowedBytes": 11776,
+        "loanRows": 12,
+        "tailFirstRow": 117,
+        "borrowedCapacityBytes": 12288,
+        "explicitTopStackPayloadBytes": 3424,
+        "workingAdmissionBytes": 4096,
+        "additionalOwnedCapacityBytes": 0,
+        "topWritesDisjointFromLoan": true,
+        "restoreOnlyTailMetadataAfterLoanFrameReturns": true,
+        "extraHorizontalColumnRows": 1536,
+        "extraHorizontalWeightEvaluations": 2052,
+        "kernelEvaluationChange": -675,
+        "pixelVisits": 33024
+      },
+      {
+        "source": [
+          151,
+          83
+        ],
+        "output": [
+          75,
+          41
+        ],
+        "depth": 8,
+        "purpose": "existing odd/small functional control",
+        "eligible": false,
+        "reason": "Insufficient complete row-loan/top extent; original modes remain."
+      },
+      {
+        "source": [
+          144,
+          144
+        ],
+        "output": [
+          64,
+          64
+        ],
+        "depth": 8,
+        "purpose": "analytic rowSlots10 boundary",
+        "eligible": true,
+        "rowSlots": 10,
+        "oldLargePrefixColumns": 0,
+        "oldSmallSuffixColumns": 64,
+        "oldSegments": [
+          [
+            0,
+            64,
+            6,
+            25
+          ]
+        ],
+        "preparedGeometryPrefixColumns": 36,
+        "geometryFooterBytes": 96,
+        "topColumns": 32,
+        "tailColumns": 6,
+        "old": {
+          "rowVisits": 704,
+          "unpreparedGeometryBuilds": 320,
+          "sourceRowConversions": 1584,
+          "decodedSourcePixels": 30096,
+          "horizontalColumnRows": 9216,
+          "horizontalWeightEvaluations": 576,
+          "verticalWeightEvaluations": 3456,
+          "maxSourceCount": 20,
+          "sourceAddressTraceChecks": 576,
+          "geometryBuildsIncludingPreparation": 384,
+          "totalKernelEvaluations": 4032
+        },
+        "proposed": {
+          "rowVisits": 578,
+          "unpreparedGeometryBuilds": 250,
+          "sourceRowConversions": 1346,
+          "decodedSourcePixels": 29494,
+          "horizontalColumnRows": 9664,
+          "horizontalWeightEvaluations": 1152,
+          "verticalWeightEvaluations": 3276,
+          "sourceAddressTraceChecks": 1152,
+          "maxSourceCount": 75,
+          "geometryBuildsIncludingPreparation": 364,
+          "totalKernelEvaluations": 4428
+        },
+        "borrowedCacheBytes": 10240,
+        "borrowedWeightBytes": 2560,
+        "borrowedBytes": 12800,
+        "loanRows": 50,
+        "tailFirstRow": 14,
+        "borrowedCapacityBytes": 12800,
+        "explicitTopStackPayloadBytes": 3424,
+        "workingAdmissionBytes": 4096,
+        "additionalOwnedCapacityBytes": 0,
+        "topWritesDisjointFromLoan": true,
+        "restoreOnlyTailMetadataAfterLoanFrameReturns": true,
+        "extraHorizontalColumnRows": 448,
+        "extraHorizontalWeightEvaluations": 576,
+        "kernelEvaluationChange": 396,
+        "pixelVisits": 4096
+      },
+      {
+        "source": [
+          307,
+          259
+        ],
+        "output": [
+          151,
+          129
+        ],
+        "depth": 8,
+        "purpose": "analytic odd-stride generalization",
+        "eligible": true,
+        "rowSlots": 9,
+        "oldLargePrefixColumns": 0,
+        "oldSmallSuffixColumns": 151,
+        "oldSegments": [
+          [
+            0,
+            151,
+            8,
+            25
+          ]
+        ],
+        "preparedGeometryPrefixColumns": 120,
+        "geometryFooterBytes": 96,
+        "topColumns": 32,
+        "tailColumns": 8,
+        "old": {
+          "rowVisits": 2451,
+          "unpreparedGeometryBuilds": 516,
+          "sourceRowConversions": 4921,
+          "decodedSourcePixels": 108003,
+          "horizontalColumnRows": 39109,
+          "horizontalWeightEvaluations": 1229,
+          "verticalWeightEvaluations": 5185,
+          "maxSourceCount": 23,
+          "sourceAddressTraceChecks": 1229,
+          "geometryBuildsIncludingPreparation": 645,
+          "totalKernelEvaluations": 6414
+        },
+        "proposed": {
+          "rowVisits": 925,
+          "unpreparedGeometryBuilds": 189,
+          "sourceRowConversions": 1927,
+          "decodedSourcePixels": 91413,
+          "horizontalColumnRows": 40015,
+          "horizontalWeightEvaluations": 2458,
+          "verticalWeightEvaluations": 2714,
+          "sourceAddressTraceChecks": 2458,
+          "maxSourceCount": 71,
+          "geometryBuildsIncludingPreparation": 338,
+          "totalKernelEvaluations": 5172
+        },
+        "borrowedCacheBytes": 9216,
+        "borrowedWeightBytes": 2560,
+        "borrowedBytes": 11776,
+        "loanRows": 20,
+        "tailFirstRow": 109,
+        "borrowedCapacityBytes": 12080,
+        "explicitTopStackPayloadBytes": 3424,
+        "workingAdmissionBytes": 4096,
+        "additionalOwnedCapacityBytes": 0,
+        "topWritesDisjointFromLoan": true,
+        "restoreOnlyTailMetadataAfterLoanFrameReturns": true,
+        "extraHorizontalColumnRows": 906,
+        "extraHorizontalWeightEvaluations": 1229,
+        "kernelEvaluationChange": -1242,
+        "pixelVisits": 19479
+      },
+      {
+        "source": [
+          513,
+          259
+        ],
+        "output": [
+          256,
+          129
+        ],
+        "depth": 16,
+        "purpose": "unchanged word boundary",
+        "eligible": false,
+        "reason": "Word path remains original."
+      }
+    ],
+    "hypothesis": "Current narrow executor alreadyusesLarge16 forprefix96 andSmall8 forsuffix160 onprimary. Move cache/weights to trailingunpublishedrows, use32columns acrosstop117rows, returnframe beforetail-onlygeometry restore/oldSmall8 allcolumns. Geometry/row/decode repeats fall; weights are prepared twice and boundaryhorizontalrows repeat. Derive32 fromsourcewindow<=80vectors and3424B explicitmetadata/decodedpayload underold4KiB, not a width sweep.",
+    "endState": "Oneexistingnarrowexecutor with closedrowloan/tail modes and originalpaired-coefficient pack/repair; share existingColumnBicubicGeometry tail preparation. Preserveword/oldlarge/small/scalar fallbacks. Consider commonloan-layout helperonlyif justified; no duplicatedpixelloops, generalcache/session/root/newownedcapacity or numericalpolicy.",
+    "acceptance": "Model counts/sourceaddresses/lifetime intervals are logical, not actualSIMD/CPU/physicalpeak proof. Actualpackedweight/group/metadata/kernelbits, clipped/odd/rowSlots10/laststrip/canaries, loanretirement-before-tail-restore, zeroalloc/sharedadmission/refusal/cancel/tinyalphaunwind/recovery/survivors before primaryshort. Identify changedcompletecosts precisely includingworddriver/otherloanhelpers ifconsolidated; currentpassingpaths notretuned blindly. Coherent W/L/scalar/ISA/SAMEpackage only foruseful acceptedstage.",
+    "scope": "One existingtimedprimary andexisting75x41fallback, plus two analytical arithmetic/lifetime boundaries andunchangedword. No newtimingworkload/inputimage/settings/fixture orproduction changes. A model generalization boundary only becomes a requiredfunctionaltest ifimplementation uses that path."
+  },
+  "workflow": {
+    "profileCaptures": 1,
+    "allBuilds": 0,
+    "fullOrPackageQualificationRepeats": 0,
+    "existingCostAndQualificationReused": true,
+    "originalSourceCodeIdentityVerified": true
+  },
+  "next": "Implement bounded32column top-rowcache/weight loan inexistingNarrowexecutor, originalSmall8/6 tail afterframe returns/tailgeometryrestore. Keep oldLarge16/small/word/fallback modes and pairedcoefficient/certificate/replay math. Actualphase/metadata/lane/root/cancel/refusal/recovery/oddstride/rowSlots10 tests beforeprimaryshort. Model isnotactualSIMDorCPUproof; extra1536horizontalcolumnrows/+2052horizontalweight evaluations retained. Identifywhichchangedcosts needqualification; no newtiminggrid or numericpolicy.",
+  "raw": {
+    "file": "narrow-bicubic-row-cache-attribution.tar.xz",
+    "sha256": "b21184928ce44b36f50517cd9a7fa5445e8020e86ec126d323440a19691cb976",
+    "bytes": 135916,
+    "members": 29,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-prepared-token-descriptors.tar.xz",
+        "sha256": "bcb777111e6a2586d1e2a1d9bb202efc5424e05730e6bbb7eb78e94c8281b2d5"
+      },
+      {
+        "file": "bicubic-paired-coefficient-preparation.tar.xz",
+        "sha256": "efa42f668066f45149db2ac81ba01b17554c1728d3bba40ae58d8a9263f2eab8"
+      },
+      {
+        "file": "bicubic-result-row-loan.tar.xz",
+        "sha256": "37b964975f355e6c837fbd2db07f90a02797cb0479299bca5da2080ba71cbef6"
+      }
+    ]
+  }
+}

@@ -82,6 +82,14 @@ All6167full/live eachOS,341internal/729public normal/scalar/ISA and SAME package
 threeexamples pass. [Attribution](WIDE-COLUMN-ROW-STORAGE-ATTRIBUTION.md) retains
 corrected152Bfooter/88prefix/704to390build model and original raw evidence.
 
+[Current narrow row/cache attribution](NARROW-BICUBIC-ROW-CACHE-ATTRIBUTION.md)
+finds656large/1182small-strip locations of1996; elapseddiscarded. Actualkernels
+matchBPC759C. A bounded32-column top/result-rowloan model reduces striprows3354to1320,
+sourceconversions6734to2768 andgeometry516to177, but adds1536horizontalcolumnrows
+and2052horizontalweight evaluations. No CPUforecast/productionchange/build or
+rendererdependency. Preserve exactmath/packedcoefficients/ownerlifetimes; actual
+phase/root/cancel/metadata checks precede any short performance screen.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |
