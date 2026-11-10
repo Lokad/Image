@@ -1,0 +1,1351 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PRV733",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+    "linuxSha256": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db"
+  },
+  "baselineProducers": {
+    "windowsSha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+    "linuxSha256": "b2fbde20a85c1f1c7d1da8f5de2098cc3f4352639e3811bf78316e5fb47d7f64"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "315697fd494c871cc9a1cbfdf7053729fea9d3a5c4d44e5b579454fca9b57124",
+    "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25",
+    "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "d7256c360316fa91c22b34b89a714bf1435a8a987a49711c59f5899a26da765a",
+    "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs": "53fe935e18ef886b87ffd7c7b3c4e065cd9ba8ca4d2c368ad5339317aeab296f"
+  },
+  "cases": {
+    "Tight64x32_8": {
+      "caseId": "Tight64x32_8",
+      "managedUs": 485.7029392482517,
+      "nativeUs": 367.4210240885417,
+      "ratio": 1.3219247332215978,
+      "lower": 1.3081884472258036,
+      "upper": 1.3292232229116305,
+      "allocatedBytes": 113,
+      "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+      "runId": "prv733-candidate-Tight64x32_8-confirm",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "packetBytes": 8192,
+      "packetSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "status": "gap",
+      "managedRationalReferenceExact": true,
+      "managedMaxWorkingBytes": 543756,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeRgbMaximum": 0,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0,
+      "nativeAlphaRmse": 0,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "receiptFile": "prv733-candidate-Tight64x32_8-confirm-receipt.json"
+    },
+    "Tight64x32_16": {
+      "caseId": "Tight64x32_16",
+      "managedUs": 479.18638175154314,
+      "nativeUs": 387.3377835286458,
+      "ratio": 1.2371279078073845,
+      "lower": 1.1754438625675276,
+      "upper": 1.261891342568362,
+      "allocatedBytes": 113,
+      "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+      "runId": "prv733-candidate-Tight64x32_16-confirm",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "packetBytes": 16384,
+      "packetSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "status": "gap",
+      "managedRationalReferenceExact": true,
+      "managedMaxWorkingBytes": 1083416,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.05412658773652741,
+      "nativeAlphaRmse": 0.04941058844013093,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "receiptFile": "prv733-candidate-Tight64x32_16-confirm-receipt.json"
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "PRV733",
+    "productionAccepted": false,
+    "bytePairAndScalarPublishersVerbatim": true,
+    "wordPairScalarAndOriginalOrderRepairBodiesVerbatim": true,
+    "parentDispatchOnlyChangesWordCallee": true,
+    "readonlyRevisionIsOnlyBorrowedViewPreparation": true,
+    "redundantWordClassRemovedWithoutWrapper": true,
+    "payloads": {
+      "decodedPrefix": 3880,
+      "bytePackedSuffix": 3992,
+      "wordPackedSuffix": 4044,
+      "reservedBytes": 4096
+    },
+    "numeric": "WordUInt16*alpha<=4294836225<2^32; vectorlowproductreadasUInt32 preservesallbits, unsignedconversiontoDoubleexact. Pixel source/tap/normalizer positions andaddition/multiplicationorderremain; prefix4columns computes independentadjacentpairs. Sameuniterror/certificatesandOriginalWordrowmajorrepair, scalarportabledeclinesunchanged.",
+    "ownership": "Sameone4096beforeallocationworkspacecharge/root/finally, prefix/suffixNoInliningframesretirebeforetailpublication/replay. 32fourvectorcacheentriesborrowunpublishedresultrowtails, onelastslotonstack. Rootresult ownerestablishedbeforeallocation; readonlysource/decoded/cacheviewsareoperationlocalaliases,nocopies/capacity/pools/session/API/retainedscratch. Fullphysical/native/admittedpeaksnotinferredfrompayload.",
+    "invalidation": "Sharedbyte/wordpackedrange changesexactlyrequiredTight64x32_8/16producerboundaries; defaultcached/wide/deep/streaming/narrow/enlargement/codec/textnumericbodiesunchanged. Parentworddispatcheronlyretargetsactualpackedcallee, fullfunctionalregressionatacceptedmilestone. No newshapegrid orpassingfamilyretuning.",
+    "sources": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "315697fd494c871cc9a1cbfdf7053729fea9d3a5c4d44e5b579454fca9b57124",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25",
+      "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "d7256c360316fa91c22b34b89a714bf1435a8a987a49711c59f5899a26da765a",
+      "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs": "53fe935e18ef886b87ffd7c7b3c4e065cd9ba8ca4d2c368ad5339317aeab296f"
+    }
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "originalUs": 522.3443271780303,
+    "currentUs": 479.18638175154314,
+    "savedUs": 43.157945426487174,
+    "rawReduction": 0.08262355534642896,
+    "normalizedReduction": 0.08089027987871045,
+    "nativePointChange": -0.0018858199731471847,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false
+      }
+    },
+    "originalCurrentConfirmationReused": true
+  },
+  "byteComparison": {
+    "originalUs": 485.3990116185897,
+    "currentUs": 485.7029392482517,
+    "elapsedPointChange": 0.000626139778588497,
+    "scope": "Older source-valid byte path confirmation reused as context; new code refreshes complete operation. Approximately unchanged elapsed point, not an equivalence, causal gain or nonregression proof. Native bracket differs. Both remain gaps."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6147,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+      "full": [
+        2882,
+        2317,
+        948
+      ],
+      "total": 6147,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 311,
+        "internal-scalar": 311,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1040,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "0d52ea455c3d99d68a5a2abdb1d16ebcb4e95f37b4975ca51cc47146e13f421a",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\PackedColumnBicubicResize.cs": "315697fd494c871cc9a1cbfdf7053729fea9d3a5c4d44e5b579454fca9b57124"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+      "full": [
+        2882,
+        2317,
+        948
+      ],
+      "total": 6147,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 311,
+        "internal-scalar": 311,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1040,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "37a9ece97afa6c8ea372cc94b52126451bc894c88abb023dcc579996b003e166",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "315697fd494c871cc9a1cbfdf7053729fea9d3a5c4d44e5b579454fca9b57124"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "affectedIsa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 311,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 311,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 311,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 311,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "3135499d5302d57a16da4c9ede27ef8064ea324dc3fd90eff2553e72f1aa36db",
+        "allBuilds": 0
+      }
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "9a1187626603c2b6d8cd25b548cd89c2aed08f05ffc52b07c8e2c8403b9b86ab",
+      "symbolsSha256": "dfaa39d9ffd849b116668b839338bdd6869c4ba28db3b504854a43d9310270ba",
+      "bytes": 440053,
+      "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "9a1187626603c2b6d8cd25b548cd89c2aed08f05ffc52b07c8e2c8403b9b86ab",
+      "librarySha256": "3962ae8dc75b4ae995aa1b6b8b5cf01d1edabb81e94c6364b71b461175eba878",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "resizeInternalEachModeEachOs": 311,
+    "resizePublicEachModeEachOs": 729,
+    "unaffectedJpegInternalPublicEachModeEachOs": [
+      453,
+      375
+    ]
+  },
+  "storage": {
+    "workspaceReservationBytes": 4096,
+    "decodedPrefixPayloadBytes": 3880,
+    "bytePackedSuffixPayloadBytes": 3992,
+    "wordPackedSuffixPayloadBytes": 4044,
+    "resultBytes": {
+      "Tight64x32_8": 8192,
+      "Tight64x32_16": 16384
+    },
+    "totalGcBytesPerOperation": 113,
+    "retainedOperationScratchBytes": 0,
+    "newOwnedCapacityBytes": 0,
+    "physicalNativeAndTotalAdmittedPeaksRemeasured": false,
+    "scope": "Unpublished result tails loan 32 four-vector cache slots; one on stack. Prefix users retire before tail publication/replay. Existing output pool separate; governed calls bypass it. Admission test overlapping word results plus workspace bounded at 36864 B, not physical/native peak."
+  },
+  "transition": {
+    "firstStage": {
+      "project": "Lokad.Image",
+      "caseId": "Tight64x32_16",
+      "subject": "candidate",
+      "mode": "short",
+      "runId": "pwc732-candidate-Tight64x32_16-short",
+      "managed": {
+        "statistics": {
+          "OriginalValues": [
+            1153090.8693181819,
+            1163606.5056818181,
+            1164056.3352272727
+          ],
+          "N": 3,
+          "Min": 1153090.8693181819,
+          "LowerFence": 1150124.5880681819,
+          "Q1": 1158348.6875,
+          "Median": 1163606.5056818181,
+          "Mean": 1160251.236742424,
+          "Q3": 1163831.4204545454,
+          "UpperFence": 1172055.5198863635,
+          "Max": 1164056.3352272727,
+          "InterquartileRange": 5482.732954545412,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 3582.537875706005,
+          "Variance": 38503732.89260428,
+          "StandardDeviation": 6205.137620762675,
+          "Skewness": -0.38262583692205127,
+          "Kurtosis": 0.6666666666666284,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1160251.236742424,
+            "StandardError": 3582.537875706005,
+            "Level": 12,
+            "Margin": 113204.80939850447,
+            "Lower": 1047046.4273439196,
+            "Upper": 1273456.0461409285
+          },
+          "Percentiles": {
+            "P0": 1153090.8693181819,
+            "P25": 1158348.6875,
+            "P50": 1163606.5056818181,
+            "P67": 1163759.4477272728,
+            "P80": 1163876.4034090908,
+            "P85": 1163921.3863636362,
+            "P90": 1163966.3693181819,
+            "P95": 1164011.3522727273,
+            "P100": 1164056.3352272727
+          }
+        },
+        "unfilteredActualStatistics": {
+          "OriginalValues": [
+            1153092.4943181819,
+            1163608.1306818181,
+            1164057.9602272727
+          ],
+          "N": 3,
+          "Min": 1153092.4943181819,
+          "LowerFence": 1150126.2130681819,
+          "Q1": 1158350.3125,
+          "Median": 1163608.1306818181,
+          "Mean": 1160252.861742424,
+          "Q3": 1163833.0454545454,
+          "UpperFence": 1172057.1448863635,
+          "Max": 1164057.9602272727,
+          "InterquartileRange": 5482.732954545412,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 3582.537875706005,
+          "Variance": 38503732.89260428,
+          "StandardDeviation": 6205.137620762675,
+          "Skewness": -0.38262583692205127,
+          "Kurtosis": 0.6666666666666284,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1160252.861742424,
+            "StandardError": 3582.537875706005,
+            "Level": 12,
+            "Margin": 113204.80939850447,
+            "Lower": 1047048.0523439196,
+            "Upper": 1273457.6711409285
+          },
+          "Percentiles": {
+            "P0": 1153092.4943181819,
+            "P25": 1158350.3125,
+            "P50": 1163608.1306818181,
+            "P67": 1163761.0727272728,
+            "P80": 1163878.0284090908,
+            "P85": 1163923.0113636362,
+            "P90": 1163967.9943181816,
+            "P95": 1164012.9772727273,
+            "P100": 1164057.9602272727
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 176,
+            "Nanoseconds": 202944279
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 176,
+            "Nanoseconds": 204795031
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 176,
+            "Nanoseconds": 204874201
+          }
+        ],
+        "results": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 176,
+            "Nanoseconds": 202943993
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 176,
+            "Nanoseconds": 204794745
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 4,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 176,
+            "Nanoseconds": 204873915
+          }
+        ],
+        "rawGc": "// GC:  0 0 0 19960 176",
+        "rawThreading": "// Threading:  0 0 176",
+        "extraStatsRecorded": true
+      },
+      "nativeBrackets": [
+        {
+          "mean": 388122.9791666667,
+          "standardError": 241.74225340087352,
+          "confidenceLower": 380484.15253893204,
+          "confidenceUpper": 395761.8057944013,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99336341,
+              "CompletedOperations": 1539,
+              "Observed": 227772,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 388032.58203125
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99265754,
+              "CompletedOperations": 1795,
+              "Observed": 265660,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 387756.8515625
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99476353,
+              "CompletedOperations": 2051,
+              "Observed": 303548,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 388579.50390625
+            }
+          ]
+        },
+        {
+          "mean": 387400.984375,
+          "standardError": 177.79877898201417,
+          "confidenceLower": 381782.71107705776,
+          "confidenceUpper": 393019.25767294224,
+          "samples": [
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99264311,
+              "CompletedOperations": 3075,
+              "Observed": 455100,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 387751.21484375
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99116177,
+              "CompletedOperations": 3331,
+              "Observed": 492988,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 387172.56640625
+            },
+            {
+              "State": "sample",
+              "Operations": 256,
+              "ElapsedNanoseconds": 99143468,
+              "CompletedOperations": 3587,
+              "Observed": 530876,
+              "OutputStride": 512,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 387279.171875
+            }
+          ]
+        }
+      ],
+      "managedUs": 1160.251236742424,
+      "nativeUs": 387.400984375,
+      "ratio": 2.994962025236656,
+      "lower": 2.645647993348457,
+      "upper": 3.3469401094454923,
+      "allocatedBytes": 114,
+      "packetBytes": 16384,
+      "packetSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "librarySha256": "b86e307ce30ea38ff58b014177c1d7af7177b51133b7088722448966b0c5de0b",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "gap"
+    },
+    "capture": {
+      "project": "Lokad.Image",
+      "profilingOnly": true,
+      "statisticalTiming": false,
+      "totalSampleLocations": 1997,
+      "methods": [
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          1543
+        ],
+        [
+          "valuetype System.ReadOnlySpan`1<!0> [System.Private.CoreLib] System.Span`1[System.Runtime.Intrinsics.Vector256`1[System.Double]]::op_Implicit(valuetype System.Span`1<!0>)[Optimized]",
+          48
+        ],
+        [
+          "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+          33
+        ],
+        [
+          "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+          2
+        ],
+        [
+          "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+          1
+        ]
+      ],
+      "offsets": [
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x697",
+          "samples": 339
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x699",
+          "samples": 114
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x71a",
+          "samples": 87
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6f4",
+          "samples": 78
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x649",
+          "samples": 74
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x687",
+          "samples": 71
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6c0",
+          "samples": 67
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x623",
+          "samples": 59
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a39",
+          "samples": 36
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a68",
+          "samples": 31
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x651",
+          "samples": 29
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x60a",
+          "samples": 29
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x689",
+          "samples": 24
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6ef",
+          "samples": 24
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1012",
+          "samples": 20
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6c7",
+          "samples": 20
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x5de",
+          "samples": 18
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc05",
+          "samples": 17
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x68d",
+          "samples": 16
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbf6",
+          "samples": 16
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc10",
+          "samples": 15
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xee1",
+          "samples": 14
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc3b",
+          "samples": 11
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1ae8",
+          "samples": 10
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc37",
+          "samples": 10
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc46",
+          "samples": 9
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbcb",
+          "samples": 9
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a94",
+          "samples": 8
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc2e",
+          "samples": 8
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc13",
+          "samples": 8
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa25",
+          "samples": 8
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbe4",
+          "samples": 8
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xfc8",
+          "samples": 7
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xc1e",
+          "samples": 7
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6b2",
+          "samples": 6
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbd6",
+          "samples": 6
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xeb6",
+          "samples": 6
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xfe7",
+          "samples": 6
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x11cc",
+          "samples": 6
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1206",
+          "samples": 5
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbc0",
+          "samples": 5
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9e8",
+          "samples": 5
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd7a",
+          "samples": 5
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a6b",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb17",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1da4",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9b5",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa7b",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9cf",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xae8",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xebc",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa07",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9ad",
+          "samples": 4
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xee7",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa21",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf12",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xae3",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb1f",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd5d",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9ec",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa51",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x68f",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9df",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9be",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf6c",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9fa",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa3c",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa2c",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd3b",
+          "samples": 3
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf98",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xe9b",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa4a",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa3b",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa19",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x4f1",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xac8",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb01",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb19",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb31",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd4a",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9a2",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xade",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb84",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd52",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xacc",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb14",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf4e",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1240",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6bd",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb08",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa90",
+          "samples": 2
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x5e7",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x11f0",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x129f",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf0b",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xcc3",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbf1",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xaf2",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa70",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x10a4",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xe4d",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xdbf",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x581",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6c4",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9e3",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9c8",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1b66",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9cb",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x975",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xfc3",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1106",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xad6",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x11a7",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa79",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf78",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xab3",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x116d",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xae7",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x134a",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a8a",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1039",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xd3f",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xad2",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9fc",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x10de",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x9bb",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbc2",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6b9",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1178",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xac5",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xdea",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x411",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1a5e",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x111b",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xbb1",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x559",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xba6",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb0b",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xadb",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xb05",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xfb8",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1133",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x114d",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x6e3",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xda9",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x591",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0x1d60",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xa08",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf67",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf9b",
+          "samples": 1
+        },
+        {
+          "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          "offset": "0xf59",
+          "samples": 1
+        }
+      ],
+      "scope": "One2secondcapture CPU0operation/CPU1sampler, exactfrozen/native/source/owner/idle-v2gates. Instrumentedelapseddiscarded. Inlining/skidlocationsnotphasecost/removablepercent orCPUgain."
+    },
+    "scope": "Initial shared scheduler adverse 1160.25 us. One bounded actual-code/profile capture identifies repeated Span-to-ReadOnlySpan calls. Revision prepares borrowed readonly views once per range/decoded row. Instrumented elapsed discarded; samples are not phase costs. All adverse actuals retained."
+  },
+  "workflow": {
+    "productionAndEmbeddedCandidatesPerOS": 2,
+    "compileFailures": 0,
+    "harnessSelectorNativeFixtureBuilds": 0,
+    "newBenchmarkImagesOrSettings": 0,
+    "wordShortThenIndependentConfirmation": true,
+    "byteShortThenIndependentConfirmation": true,
+    "extraFavorableRepeats": 0,
+    "fullRunsPerOS": 1,
+    "actualPackageProofsPerOS": 1,
+    "allSamplesRetained": true
+  },
+  "invalidation": "Shared packed range changes the existing required Tight64x32_8/16 boundaries; both refresh on final actual-package DLL. Separate word scheduler removed, word parent dispatch retargeted. Other numerical kernels/owners and all codecs/text unchanged; source-valid cached/narrow/wide/Lanczos/JPEG costs and unaffected qualification reuse. Full public functional regression covers parent behavior. No new matrix, no full 127-row release refresh.",
+  "decision": "Accept 43.16 us/8.26% raw/8.09% normalized complete word gain, separated filtered/all-actual raw/normalized confidence, native -0.189%. Byte current485.70 us vs earlier485.40 us does not reproduce short-screen adverse point; no equivalence claim. Both required controls remain gaps. Accept shared scheduler removal with exact pixels/publishers/repair, same admission/storage/cancellation/independent owners. Preserve first-stage adverse evidence.",
+  "next": "Select next material attributed required path, without retuning passing controls or blindly repeating geometry-only/FP32/coefficient-fusion experiments. Independent codec/text/resizing work remains available; full 283-path objective open.",
+  "raw": {
+    "file": "packed-byte-word-consolidation.tar.xz",
+    "sha256": "bb4695f2015b6c36b41501f9a80824e9c2ead24ac8bcb59686048778fd5ec4e6",
+    "bytes": 11254884,
+    "members": 247,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-quarter-interpolation-qualified.tar.xz",
+        "sha256": "d0a9f382a265469536ffbf9f6763253e323e1a4442b3f56a851f3a18c2092208"
+      },
+      {
+        "file": "current-packed-word-resize.tar.xz",
+        "sha256": "0c052905794c310472e30d7990fc31ed2a201480c617236a0a219d240e99baef"
+      },
+      {
+        "file": "packed-bicubic-decoded-prefix-qualified.tar.xz",
+        "sha256": "4feb150eaa6d52e0ab481e00da9e1134d1465d812c1baa9f86168af83276567a"
+      }
+    ]
+  }
+}

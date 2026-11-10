@@ -1,5 +1,7 @@
 # Decode packed bicubic source rows once
 
+Current packed costs and qualification now belong to [shared byte/word execution](PACKED-BYTE-WORD-CONSOLIDATION.md). The staged evidence below is retained as history.
+
 BDW652 reduces the frozen complete 513×259 → 64×32 RGBA8 resize from
 **544.63 to 485.40 µs**, saving **59.23 µs / 10.88% raw / 10.11% normalized**.
 Both filtered/all-actual raw and reference-normalized intervals separate.

@@ -160,7 +160,7 @@ public static class ImageTransforms
                     || CrossColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                 : ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
-                    || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)

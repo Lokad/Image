@@ -54,7 +54,9 @@ internal static class CooperativeMemoryConsumer
             && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
         // Hashes are frozen by the existing independently checked complete
         // bicubic controls on this exact original raster, before this change.
-        var expectedHash = packedReduction ? "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6"
+        var expectedHash = packedReduction ? (depth == 16
+            ? "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce"
+            : "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6")
             : reduction ? "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
             : depth == 8 ? (vertical
             ? "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697"
@@ -1050,6 +1052,7 @@ internal static class CooperativeMemoryConsumer
         VerifyBicubicSchedule(4096, vertical: true, depth: 8);
         VerifyBicubicSchedule(4096, depth: 8, reduction: true);
         VerifyBicubicSchedule(4096, depth: 8, packedReduction: true);
+        VerifyBicubicSchedule(4096, packedReduction: true);
         await VerifyPngCursors(cancellable: true);
         await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();

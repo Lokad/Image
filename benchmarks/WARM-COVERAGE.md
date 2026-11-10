@@ -36,8 +36,7 @@ architectural designs.
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Bounded packed-word bicubic | [Current package refresh](CURRENT-PACKED-WORD-RESIZE.md) confirms existing Tight64x32_16 at522.34/zimg388.07µs, upper1.361/lower1.320,134.27µs gap and113B/op. Replaces the historical H point; no causal historical speed/allocation claim. Exact rational/frozen pixels, native max1/RMSE≤.25, source/independent owners and idle-v2 pass; all12 actuals retained. Same4044B arrays/4096B reservation, result16384B until disposal/scratch0; pool retention separate. No production/harness/native/fixture build, new case/profile or package repeat. Current6133/OS and SAME-package/scalar/ISA proof reused. The subsequent geometry-only study is unselected; this current cost remains valid. Decoded-cache consolidation is the next execution lead below. Passing word-wide controls remain stopped. |
-| Packed byte/word consolidation lead | [Geometry study](PACKED-WORD-GEOMETRY-EXPERIMENT.md) has no clear complete-operation lead:566.14/native415.27µs three-actual screen versus522.34/388.07 original; native+7.01%, wide intervals and no causal claim. Exact sources/main/embedded/bindings/manifest restore; current costs/qualification remain. One bounded capture identifies repeated word-product widening in horizontal accumulation, not removable phase costs. Next extend the existing byte decoded-cache prefix to word samples in one shared packed execution source, retaining depth-specific certificates/repair, independent owners and4KiB admission. No new kernel family or benchmark grid; proof and complete timing remain required. |
+| Bounded packed byte/word bicubic | [Shared execution](PACKED-BYTE-WORD-CONSOLIDATION.md) removes the separate word scheduler, shares decoded-prefix/result-tail scheduling and widens word products once per source pixel. Complete word522.34→479.19µs saves43.16µs/8.26%raw/8.09%normalized, filtered/all-actual raw/normalized intervals separated, native−.189%. Current word/native479.19/387.34µs upper1.262; byte485.70/367.42µs upper1.329; both gaps,113B/op. Earlier byte485.40µs is context, no equivalence or causal claim. Same4KiB reservation,3880/3992/4044B phase payloads, independently retained8192/16384B outputs/scratch0. Exact managed frames, scoped native max1/RMSE≤.25, owners/idle-v2 pass. Initial1160.25µs adverse stage retained; actual span-view calls motivate once-per-range readonly preparation. Both existing controls refresh; no new grid. Current6147/OS,311internal/729public normal/scalar/ISA and SAME actual package/three examples pass. [Earlier confirmation](CURRENT-PACKED-WORD-RESIZE.md) and [unselected geometry study](PACKED-WORD-GEOMETRY-EXPERIMENT.md) retain history. Passing wide controls stop. |
 | Resident lossless WebP | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md) reuses construction storage across alphabets/groups; selected codes stay independent. Six lossless controls4pass/2uncertain: photograph85959.95/libwebp82521.57µs upper1.080 and opaque upper1.013 remain uncertain; previous photo pass is superseded. Direct photo/diagram GC falls553184/37640B; aggregate5358980/3721041Bop. Measured peaks3470059/3251328B unchanged, retained0; no physical-peak or causalCPU claim. Exact packets/settings and adverse/raw/bracket evidence remain. |
 | Resident VP8 encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md) shares exact interpolation preparation within distortion search and stores only the surviving winner. Complete effort2 saves112.73µs/4.27%raw/4.55%normalized; filtered/all-actual intervals separate. Current2525.56/native2511.68µs,upper1.013 is uncertain; GC406705B unchanged. Six other costs reuse source-valid [histogram evidence](VP8-FOUR-BLOCK-HISTOGRAM.md); the alpha pair uses [current Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): combined5pass/0gaps/4uncertain. Shared prediction, RDO and decoder source remain unchanged. Methods0/1/2 preserve exact packets, ordered ties, cancellation and ownership;32B rounded stack payload stays inside16KiB decision allowance. No new heap capacity or retention; physical/native peaks unmeasured. Passing cases stop; uncertainty is not a demonstrated gap. |
 | Other WebP encoding boundaries | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md) refreshes all eight affected costs on the actual-package DLL:4pass/4uncertain. Full-depth normalization, awaited nonseekable output and independent ownership stay timed. Transparent-alpha directGC falls668512B; peak3656309B/retained0 unchanged. Both alpha cases are uncertain (uppers1.065/1.002), superseding earlier alpha16 pass. No inferredCPU gain or demonstrated gap from uncertainty. Normal/scalar426internal+239public and6026full/live eachOS, SAMEactualpackage/threeexamples pass. |
@@ -66,17 +65,17 @@ Historical strided/word-column clocks remain in their reports.
 3114.50/zimg3041.43us upper1.030,116B/op,73usgap. Existing preparation is present;
 larger current column/codec gaps take priority. Full283-path objective unchanged.
 
-[Quarter interpolation](JPEG-QUARTER-INTERPOLATION.md) qualifies the current
-immutable build:6133 full/live each OS,453 internal/375 public JPEG checks per
-normal/scalar/disabled-AVX2/AVX512, SAME actual Release package/all three examples.
-Only two quarter-decode costs change;27 JPEG costs and other unchanged families
-reuse valid evidence. [Shared cached-wide windows](CACHED-WIDE-SHARED-WINDOWS.md)
-retains source-valid resizing297/729 per-mode qualification, eight wide costs and
-the existing large managed-only pair. Mixed-byte/restored-word, bounded/narrow,
-other codec/text/ownership evidence remains valid where production paths are
-unchanged. Superseded costs stay historical with raw proof retained. The full
-127-row actual-package release refresh stays separate. Publication is postponed
-and all283paths remain required.
+[Packed byte/word consolidation](PACKED-BYTE-WORD-CONSOLIDATION.md) qualifies
+the current immutable build:6147 full/live checks each OS,311 internal/729 public
+resize checks per normal/scalar/disabled-AVX2/AVX512, SAME actual Release package
+and all three examples. Only two packed costs change. Source-valid
+[quarter interpolation](JPEG-QUARTER-INTERPOLATION.md) retains453/375 JPEG per-mode
+qualification and its29 current costs; [shared cached-wide windows](CACHED-WIDE-SHARED-WINDOWS.md)
+retains eight wide costs and the existing large managed-only pair. Mixed byte,
+bounded/narrow, other codec/text/ownership evidence remains valid where production
+paths are unchanged. Superseded costs stay historical with raw proof retained.
+The full127-row actual-package release refresh stays separate. Publication is
+postponed and all283paths remain required.
 
 Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
 [validated progression](JPEG-VALIDATED-PROGRESSION-EXPERIMENT.md),

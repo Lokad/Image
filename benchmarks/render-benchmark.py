@@ -937,38 +937,32 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_byte_current = json.loads((ROOT / 'benchmarks/packed-bicubic-decoded-prefix-evidence.json').read_text(encoding='utf-8'))
-    current = packed_byte_current['current']
-    assert packed_byte_current['productionAccepted'] and packed_byte_current['selectedStage'] == 3
-    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['managedRationalReferenceExact'] and current['independentOwnedOutput'] and current['sourceUnchanged']
-    assert current['librarySha256'] == packed_byte_current['actualPackage']['librarySha256']
-    assert packed_byte_current['raw']['mirrored'] and packed_byte_current['raw']['allMembersVerified']
-    assert current['status'] == 'gap' and current['allocatedBytes'] == 113
-    assert packed_byte_current['qualification']['fullChecksEachOs'] == 5985
-    assert packed_byte_current['actualPackage']['sha256'] == packed_byte_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert packed_byte_current['sourceProof']['oneSharedConstantSpecializedNumericRange']
-    assert packed_byte_current['sourceProof']['originalPairPublicationAndCertificatesVerbatim']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_byte_current['comparison']['views'].values())
-    rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | '
-                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_word_current = json.loads((ROOT / 'benchmarks/current-packed-word-resize-evidence.json').read_text(encoding='utf-8'))
-    current = packed_word_current['current']
-    assert not packed_word_current['productionChanged'] and packed_word_current['independentQuietConfirmation']
-    assert packed_word_current['allBuilds'] == 0 and current['actualIterations'] == 12
-    assert current['allActualsRetained'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['managedRationalReferenceExact'] and current['managedQualifiedOriginalPixelsExact']
-    assert current['sourceUnchanged'] and current['independentOwnedOutput']
-    assert current['managedMaxWorkingBytes'] == (513 * 259 + 64 * 32) * 8 + 4096
-    assert current['caseId'] == 'Tight64x32_16' and current['lower'] > 1 and current['status'] == 'gap'
-    assert current['nativeRgbMaximum'] <= 1 and current['nativeAlphaMaximum'] <= 1
-    assert current['nativeRgbRmse'] <= .25 and current['nativeAlphaRmse'] <= .25
-    assert packed_word_current['raw']['mirrored'] and packed_word_current['raw']['allMembersVerified']
-    assert packed_word_current['qualification']['reusedUnchangedProduction']
-    rows.append(('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | '
-                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    packed_consolidation = json.loads((ROOT / 'benchmarks/packed-byte-word-consolidation-evidence.json').read_text(encoding='utf-8'))
+    pq = packed_consolidation['qualification']
+    assert packed_consolidation['productionAccepted'] and packed_consolidation['requiredMaterialPaths'] == 283
+    assert packed_consolidation['raw']['mirrored'] and packed_consolidation['raw']['allMembersVerified']
+    assert pq['fullChecksEachOs'] == pq['windows']['total'] == pq['linux']['total'] == 6147
+    assert pq['sameActualPackageBothOS'] and pq['actualPackage']['sha256'] == pq['samePackageLinux']['sameActualPackageSha256']
+    assert pq['resizeInternalEachModeEachOs'] == 311 and pq['resizePublicEachModeEachOs'] == 729
+    assert packed_consolidation['sourceProof']['bytePairAndScalarPublishersVerbatim']
+    assert packed_consolidation['sourceProof']['wordPairScalarAndOriginalOrderRepairBodiesVerbatim']
+    assert packed_consolidation['sourceProof']['redundantWordClassRemovedWithoutWrapper']
+    assert packed_consolidation['storage']['workspaceReservationBytes'] == 4096
+    assert packed_consolidation['storage']['newOwnedCapacityBytes'] == packed_consolidation['storage']['retainedOperationScratchBytes'] == 0
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_consolidation['comparison']['views'].values())
+    for depth in (8, 16):
+        current = packed_consolidation['cases'][f'Tight64x32_{depth}']
+        assert current['actualIterations'] == 12 and current['allActualsRetained']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['librarySha256'] == pq['actualPackage']['librarySha256']
+        assert current['status'] == 'gap' and current['lower'] > 1 and current['allocatedBytes'] == 113
+        assert current['managedMaxWorkingBytes'] == (513 * 259 + 64 * 32) * (depth // 2) + 4096
+        assert current['nativeRgbMaximum'] <= 1 and current['nativeAlphaMaximum'] <= 1
+        assert current['nativeRgbRmse'] <= .25 and current['nativeAlphaRmse'] <= .25
+        rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 64×32 | '
+                     f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     bicubic_overlap = json.loads((ROOT / 'benchmarks/bicubic-wide-overlap-evidence.json').read_text(encoding='utf-8'))
     assert bicubic_overlap['productionAccepted'] and bicubic_overlap['requiredMaterialPaths'] == 283
     cq = bicubic_overlap['qualification']
@@ -1107,8 +1101,6 @@ def render():
                for v in jpeg_read['comparison']['views'].values())
     quarter = json.loads((ROOT / 'benchmarks/jpeg-quarter-interpolation-evidence.json').read_text(encoding='utf-8'))
     jq = quarter['qualification']
-    assert packed_word_current['current']['librarySha256'] == jq['actualPackage']['librarySha256']
-    assert packed_word_current['qualification']['packageSha256'] == jq['actualPackage']['sha256']
     assert quarter['productionAccepted'] and quarter['requiredMaterialPaths'] == 283
     assert jq['fullChecksEachOs'] == jq['windows']['total'] == jq['linux']['total'] == 6133
     assert jq['sameActualPackageBothOS'] and quarter['raw']['mirrored'] and quarter['raw']['allMembersVerified']
@@ -1340,8 +1332,8 @@ def render():
     # Fresh package owners supersede the blanket historical marker.
     for label, current in [
         ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['cases']['Wide8']),
-        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_byte_current['current']),
-        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32', packed_word_current['current']),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_consolidation['cases']['Tight64x32_8']),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32', packed_consolidation['cases']['Tight64x32_16']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide8']),
         ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide16']),
     ]:
@@ -1893,15 +1885,22 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [current bounded packed-word resize](../benchmarks/CURRENT-PACKED-WORD-RESIZE.md)
-  confirms the existing64×32 RGBA16 gap on the actual qualified package:
-  **{packed_word_current['current']['managedUs']:.2f}/zimg{packed_word_current['current']['nativeUs']:.2f}µs**,
-  upper{packed_word_current['current']['upper']:.3f}, total GC{packed_word_current['current']['allocatedBytes']}B/op.
-  This replaces its historical H cost; no causal historical speed/allocation claim.
-  Same4KiB reservation/4,044B arrays,16,384B independent result until disposal,
-  operation scratch0; default pool retention remains separate. One existing
-  control, no production/build/profile change or repeated package proof.
-  Repeated vertical geometry is a next preparation/reuse lead, not a measured gain.
+- **Resizing:** [shared packed byte/word execution](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md)
+  removes the separate word scheduler and reuses decoded source products across
+  four output columns. Complete word64×32 saves **{packed_consolidation['comparison']['savedUs']:.2f}µs/{100*packed_consolidation['comparison']['rawReduction']:.2f}% raw**,
+  {100*packed_consolidation['comparison']['normalizedReduction']:.2f}% normalized; both confidence views separate.
+  Current word{packed_consolidation['cases']['Tight64x32_16']['managedUs']:.2f}/zimg{packed_consolidation['cases']['Tight64x32_16']['nativeUs']:.2f}µs,
+  upper{packed_consolidation['cases']['Tight64x32_16']['upper']:.3f}; byte{packed_consolidation['cases']['Tight64x32_8']['managedUs']:.2f}/zimg{packed_consolidation['cases']['Tight64x32_8']['nativeUs']:.2f}µs,
+  upper{packed_consolidation['cases']['Tight64x32_8']['upper']:.3f}. Both remain gaps,113B/op each.
+  Byte's earlier485.40µs point is context, not an equivalence claim. Same4KiB
+  admission, phase payloads3880/3992/4044B, independently owned8192/16384B outputs,
+  scratch0; physical/native peaks unmeasured. Exact publishers/repair remain.
+  Initial1160.25µs adverse stage and the actual-code span-view attribution are retained;
+  revision prepares borrowed readonly views once. Complete managed preparation and
+  fresh output stay timed; native zimg graph/scratch stay retained and labeled.
+  Both existing controls refresh, no new benchmark grid. Earlier
+  [word confirmation](../benchmarks/CURRENT-PACKED-WORD-RESIZE.md) and
+  [geometry-only study](../benchmarks/PACKED-WORD-GEOMETRY-EXPERIMENT.md) retain history.
   [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
@@ -2091,14 +2090,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{pq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes297 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
+Current resizing passes311 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
 Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.

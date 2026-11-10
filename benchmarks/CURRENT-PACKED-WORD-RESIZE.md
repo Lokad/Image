@@ -1,5 +1,8 @@
 # Current bounded packed-word resize
 
+This confirmation is now the original for [shared byte/word execution](PACKED-BYTE-WORD-CONSOLIDATION.md),
+which owns the current packed costs and qualification. The evidence below is retained.
+
 TWQ730 refreshes exactly one existing required control on the qualified package:
 resident513×259 RGBA16 to independently owned64×32, with input+output+4KiB working
 allowance. Complete public resize/disposal costs **522.34µs / zimg388.07µs**,
