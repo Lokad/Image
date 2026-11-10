@@ -32,15 +32,16 @@ are removed with exact source/module restoration; current qualification/costs
 remain valid. These studies stay outside renderer inputs and do not ban revised
 architectural designs.
 
-[Current bounded-column attribution](BOUNDED-COLUMN-CURRENT-ATTRIBUTION.md) reuses
-valid504.20/native419.02µs evidence and the current qualified package, without
-builds or repeated timing. One2s capture locates1840/1996samples in two column
-bodies, not setup/repair. A two-pair vertical model shares row/weight traversal
-without changing sample loads, exact sums,4KiB or result loans; it is not actual
-SIMD/CPU proof. Next establish actual code/lifetimes before the existing screen.
-Earlier [packed attribution](PACKED-BYTE-EXECUTION-ATTRIBUTION.md) is superseded
-by accepted contiguous/indexed reductions. Neither historical study is a renderer
-input; raw evidence remains linked.
+[Bounded-column attribution](BOUNDED-COLUMN-CURRENT-ATTRIBUTION.md) retains
+valid504.20/native419.02µs evidence and one current2s capture, not new phase timings.
+The subsequent [vertical traversal study](COLUMN-VERTICAL-QUAD-STUDY.md) removes
+modelled repeated row/weight visits but yields no useful complete-operation gain:
+separateleaf750.53µs, inline496.44µs versus currentoriginal494.43µs short.
+Both implementations are removed with exact source/module/binding restoration;
+6155full/live/scalar/ISA/SAME-package proof is reused. No favorable repeats,
+new workload grid or family ban. Next inspect shared byte certificate/final-round
+redundancy with unchanged margins, repair decisions and ownership. These studies
+stay outside renderer dependencies; cited raw evidence remains retained.
 
 ## Current family status
 

@@ -1,0 +1,261 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CVQ754",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "cases": {
+    "original": {
+      "caseId": "TightDown8",
+      "managedUs": 494.43229567307696,
+      "nativeUs": 417.61760677083333,
+      "ratio": 1.1839354654996515,
+      "lower": 1.1197743808547727,
+      "upper": 1.2545327376191762,
+      "allocatedBytes": 113,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "librarySha256": "a65e3c83561090f2b3081f0afc118352db534460838ee7fd87042221bcad91db",
+      "actualIterations": 3,
+      "allActualsRetained": true,
+      "receiptFile": "cvq754-baseline-TightDown8-short-receipt.json"
+    },
+    "leaf": {
+      "caseId": "TightDown8",
+      "managedUs": 750.5334944852941,
+      "nativeUs": 415.7526979166667,
+      "ratio": 1.805240226332171,
+      "lower": 1.7390804746670419,
+      "upper": 1.8447706971072335,
+      "allocatedBytes": 113,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "librarySha256": "36cb15a4a6d02c90a412c34b6506a10a9dfac2d4bb1893e709fc6d0c1af5b2f9",
+      "actualIterations": 3,
+      "allActualsRetained": true,
+      "receiptFile": "cvq754-candidate-TightDown8-short-receipt.json"
+    },
+    "inline": {
+      "caseId": "TightDown8",
+      "managedUs": 496.43554487179483,
+      "nativeUs": 416.7665130208333,
+      "ratio": 1.1911598685640539,
+      "lower": 1.1124857445454097,
+      "upper": 1.2600499991946164,
+      "allocatedBytes": 113,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "librarySha256": "40a27b4336b495a6745509dfc620ed7355ca2f9a595f599c815ca48a9f16d29f",
+      "actualIterations": 3,
+      "allActualsRetained": true,
+      "receiptFile": "cvq754b-candidate-TightDown8-short-receipt.json"
+    }
+  },
+  "implementations": {
+    "leaf": {
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "a65e3c83561090f2b3081f0afc118352db534460838ee7fd87042221bcad91db",
+          "candidateSha256": "36cb15a4a6d02c90a412c34b6506a10a9dfac2d4bb1893e709fc6d0c1af5b2f9",
+          "internalTestAssemblySha256": "741cd2df7f4ef2d10d839a4c104263e9348d477220dedcc9b8c22aa86bb86a46",
+          "focused": {
+            "internal-normal": 330,
+            "internal-scalar": 330,
+            "public-normal": 729,
+            "public-scalar": 729
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7d7f6b8e564b30b28ae20423e101baa361485b7f6a3c6b92624893ddd049a130",
+            "tests/Lokad.Image.Tests/ColumnBicubicVerticalTests.cs": "db33fb0b61fd69f8e242fb97552cfe23da0a1ef5f4bed458ae5eee7982599671"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "9db8817457f6854b599928fa757c0e98f58d0d8e7e94390f84b54b533ce1fadb",
+          "candidateSha256": "ed839f74e48623d1a8bd101c057e25ddddaea315d50155301d14a4ffba0f1a7f",
+          "internalTestAssemblySha256": "2cde17f85a49fff5f71d1e7e25e5720c3794e0f297c5d304911c9385f074b923",
+          "focused": {
+            "internal-normal": 330,
+            "internal-scalar": 330,
+            "public-normal": 729,
+            "public-scalar": 729
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "7d7f6b8e564b30b28ae20423e101baa361485b7f6a3c6b92624893ddd049a130",
+            "tests/Lokad.Image.Tests/ColumnBicubicVerticalTests.cs": "db33fb0b61fd69f8e242fb97552cfe23da0a1ef5f4bed458ae5eee7982599671"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "proof": {
+        "project": "Lokad.Image",
+        "stage": "CVQ754",
+        "actualCode": true,
+        "instrumentedElapsedDiscarded": true,
+        "quadKernelBytes": 253,
+        "wordSchedulerBytes": [
+          5830,
+          5872
+        ],
+        "pairStateAndCallsErasedFromWord": true,
+        "separateMultiplyAdd": true,
+        "quadAccumulatorsRemainRegisters": true,
+        "sourceUndoReconstructsOriginal": true,
+        "unchanged": "Alloriginal geometry/cache/resultloan/sourceconversion/horizontalarithmetic/publishers/certificates/repair/tinyalpha unwind/tails/cancellation/admission/owners. Only bytevertical traversal paired; originalpair/single path remains. Fourcolumnfirstpair then pendingsecond preserves actualstore/repair order.",
+        "lifetime": "Samefixed4KiBpreallocation charge; Largecache borrows rows of unpublished result with physical stride result.Stride/32, Smallstackcache has6/8 stride. All rowoffsets even; outputstart multiples4; cast pairs maps same cache addresses. Typedspans borrow only for synchronousleaf; two numeric sums contain no references. Prefix/resultfooter loans retire unchanged. No extra ownedarray/capacity/root/pool/session/retention; actual JITstack/nativephysical peaks unmeasured.",
+        "qualification": "72 direct-helper combinations:6/8/16 strides,9/10slot layouts,count0/1/7/8/9/10, first/last adjacentpair, repeated/wrapped/nonmonotonic rows, negative/fractional doubleinput, distinctweights, exactscalar roundedbits, borrowedpoisonedguards/noallocation. Existingactual full-stride resultloan/frozen/root/cancellation/tinyalpha/odd151x83control run unchanged normal/scalar.",
+        "scope": "Generatedcode and sourceproof do not establish CPUgain. Original publicpreparation/4KiB/output/disposal and helper overhead remain in measurement."
+      }
+    },
+    "inline": {
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "36cb15a4a6d02c90a412c34b6506a10a9dfac2d4bb1893e709fc6d0c1af5b2f9",
+          "candidateSha256": "40a27b4336b495a6745509dfc620ed7355ca2f9a595f599c815ca48a9f16d29f",
+          "internalTestAssemblySha256": "a495cf531170a260152e2c5816f8e1f20e221d4b557407d1b57585f3ac1167e8",
+          "focused": {
+            "internal-normal": 330,
+            "internal-scalar": 330,
+            "public-normal": 729,
+            "public-scalar": 729
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "d66119eb82e57e8df3cb349bf3017f160f6a4c5975cff7cda2593cb9961a5ad9",
+            "tests/Lokad.Image.Tests/ColumnBicubicVerticalTests.cs": "db33fb0b61fd69f8e242fb97552cfe23da0a1ef5f4bed458ae5eee7982599671"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "ed839f74e48623d1a8bd101c057e25ddddaea315d50155301d14a4ffba0f1a7f",
+          "candidateSha256": "ea7fc1b6797d5b2736338d95d1d8dac52e879619f50bc4f0a8dadc576a1311aa",
+          "internalTestAssemblySha256": "50419916ec2f6e2bf5478ded087b2fb651089b0e955280c1b46b8b7bda753b10",
+          "focused": {
+            "internal-normal": 330,
+            "internal-scalar": 330,
+            "public-normal": 729,
+            "public-scalar": 729
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "d66119eb82e57e8df3cb349bf3017f160f6a4c5975cff7cda2593cb9961a5ad9",
+            "tests/Lokad.Image.Tests/ColumnBicubicVerticalTests.cs": "db33fb0b61fd69f8e242fb97552cfe23da0a1ef5f4bed458ae5eee7982599671"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "proof": {
+        "project": "Lokad.Image",
+        "stage": "CVQ754",
+        "actualCode": true,
+        "instrumentedElapsedDiscarded": true,
+        "quadInlined": true,
+        "byteSchedulerBytes": [
+          6257,
+          6357
+        ],
+        "wordSchedulerBytes": [
+          5826,
+          5900
+        ],
+        "pairStateAndCallsErasedFromWord": true,
+        "separateMultiplyAdd": true,
+        "quadAccumulatorsRemainRegisters": true,
+        "adverseLeafRetained": true,
+        "sourceUndoReconstructsOriginal": true,
+        "unchanged": "Alloriginal geometry/cache/resultloan/sourceconversion/horizontalarithmetic/publishers/certificates/repair/tinyalpha unwind/tails/cancellation/admission/owners. Only bytevertical traversal paired; originalpair/single path remains. Fourcolumnfirstpair then pendingsecond preserves actualstore/repair order.",
+        "lifetime": "Samefixed4KiBpreallocation charge; Largecache borrows rows of unpublished result with physical stride result.Stride/32, Smallstackcache has6/8 stride. All rowoffsets even; outputstart multiples4; cast pairs maps same cache addresses. Typedspans borrow only for synchronousleaf; two numeric sums contain no references. Prefix/resultfooter loans retire unchanged. No extra ownedarray/capacity/root/pool/session/retention; actual JITstack/nativephysical peaks unmeasured.",
+        "qualification": "72 direct-helper combinations:6/8/16 strides,9/10slot layouts,count0/1/7/8/9/10, first/last adjacentpair, repeated/wrapped/nonmonotonic rows, negative/fractional doubleinput, distinctweights, exactscalar roundedbits, borrowedpoisonedguards/noallocation. Existingactual full-stride resultloan/frozen/root/cancellation/tinyalpha/odd151x83control run unchanged normal/scalar.",
+        "scope": "Generatedcode and sourceproof do not establish CPUgain. Original publicpreparation/4KiB/output/disposal and helper overhead remain in measurement."
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "qualifiedSourcesAndModulesRestored": true,
+      "identities": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "0801acc4f0ec55a47c0a03de825b4d47e7890681c1df2a7e186838c571179569",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "a65e3c83561090f2b3081f0afc118352db534460838ee7fd87042221bcad91db",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "244482490d3f0f9c485e50db4b92d3a4738bfa5f6c2a58a22ec63e6934cea3c3",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "94455090335e888976c77b0933a974580b90a699135ec6129af4f2209c293efc",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "2d02234cc570d1abf7e0a4617d9c0bb29d06422b64dfa35ebd5f04663c1d7c95"
+      },
+      "newTestRemoved": true,
+      "rebuilt": false,
+      "packageUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "qualifiedSourcesAndModulesRestored": true,
+      "identities": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "0801acc4f0ec55a47c0a03de825b4d47e7890681c1df2a7e186838c571179569",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "9db8817457f6854b599928fa757c0e98f58d0d8e7e94390f84b54b533ce1fadb",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "2895cfee69678bbe7dad42515d6e907e2c7bd14bf8d456cbb198ed3b1fd13ecf",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "c8d0a1e2acd09ef726287db85e0dd4a24635912bbba45abbfc72df8fc9e4887f",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "f408137a1b2b40a63c1f314c6df6781d8fa33b92e66860ba8b0e7814e145c8a3",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "b9e18fc59f355650046f29f21723c7ec383949f7544a4d95ff7b71b8bd0bbe52"
+      },
+      "newTestRemoved": true,
+      "rebuilt": false,
+      "packageUnchanged": true,
+      "sourceManifestRestoredAndVerified": true
+    }
+  },
+  "conclusion": "Sharedvertical row/weight traversal removes modelvisits132736to66368 but notsampleloads. Leaf750.53us is adverse vs qualifiedoriginal494.43; revisedinline496.44us gives no usefulscreen gain, no equivalenceclaim. Separate exactsums/alpha/clipping/borrowedguards/4KiB/113Bop remain. Addedstate/control/code outweigh theoreticalprep reduction in these implementations. Bothremoved; no permanentfamilyban and no extra unchanged favorable sampling.",
+  "workflow": {
+    "productionAndEmbeddedVersionsEachOs": 2,
+    "failedProductionCompiles": 0,
+    "completeShortScreens": 3,
+    "independentTwelveActualConfirmations": 0,
+    "generatedCodeOnlySmokes": 4,
+    "allInstrumentedElapsedDiscarded": true,
+    "benchmarkHarnessNativeSelectorFixtureBuilds": 0,
+    "fullOrPackageQualifications": 0,
+    "reason": "Noacceptedproductionchange; restoreexactqualifiedoriginalmodules/publicbindings/source-manifest and reuse valid6155full/live perOS/scalar/ISA/SAMEactualpackage evidence."
+  },
+  "next": "Audit common byte certificate/finalrounding redundancy in bounded narrow/wide publishers. Keep distinct arithmetic error bounds and exactrepair/ownership; scalar boundarymodel first. Largerindependent codec/cachedresize leads remaineligible. No speedclaim frommodel or smallerinstruction count.",
+  "qualificationReused": "PRR7526155full/live perOS,329internal/729publicnormal/scalar/ISA,SAMEactualpackage7fafa5ba/allthreeexamples. Published packages unchanged; CIe4bc4de2/42774508302allthreejobs green.",
+  "raw": {
+    "file": "column-vertical-quad-study.tar.xz",
+    "sha256": "3d861a90a2a00de71298608e3459ccf4e8bc3e53cffff033ceeee5bbbb9f14ff",
+    "bytes": 7734208,
+    "members": 165,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-streaming-paired-byte-rows.tar.xz",
+        "sha256": "5dc038f1aee1c70f5b05da55f6939a8a1881d68ce2cd804143ead9c83a3971bb"
+      },
+      {
+        "file": "bounded-column-current-attribution.tar.xz",
+        "sha256": "e9ccaa68f36aab3dc3104c745d0d43ca20c3e10b8809ba55e6cf307bd8068d46"
+      },
+      {
+        "file": "bicubic-wide-overlap-qualified.tar.xz",
+        "sha256": "5ccaa3e758c9ff5c25ae8b15344686196b01897d91d323c0e72bcd43556614fe"
+      }
+    ]
+  }
+}
