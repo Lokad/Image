@@ -1,0 +1,114 @@
+{
+  "project": "Lokad.Image",
+  "stage": "AVP769",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "a679240aac8cb0563f46541c70d33b43d678a8c1861c6eaad2751bd179fbc3e7",
+    "linuxSha256": "cefc6a729448276d5794a3ca1fea6a7ffddec00bb96de7b83199f1ad036b3786"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8Decoder.cs": "f0050fac3ad54765b7ce59e017b898e2818540d7cf72ce1d422968036bc5d2c2",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1004c68e9ff7c90c6b8b82513da980d49f06be96ea1cb9f0dbc9d9ce31946c5f",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f2c4ab9db131c2e2ee394a055ba1ca73a3a2df4f4036126749ceddcd96a37b2f",
+    "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+    "src/Lokad.Image/Internal/Vp8Tables.cs": "9060a5114e6c81c2077e7e10a6113d9a29e2a72edc36e2741fae7322da2f51ea",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+    "src/Lokad.Image/Internal/Vp8Color.cs": "ac38508b5621299def0d3f6397b91a4e2696a579090991fc8b3dbe09b1c5df9f",
+    "src/Lokad.Image/Internal/Vp8Prediction.cs": "ae5aab65663ef1c9978779d233d53217282717f555dc92ce8d915666c102368d",
+    "src/Lokad.Image/Internal/Vp8LoopFilter.cs": "b892f7b0397be3e5b5fc06df2cdf19162f2a4bdc3de94cecdb2de54775d992fb"
+  },
+  "currentCase": {
+    "managedUs": 4881.466879166666,
+    "nativeUs": 4792.22359375,
+    "ratio": 1.018622521188923,
+    "lower": 1.0111238538495244,
+    "upper": 1.0280690212044703,
+    "allocatedBytes": 229344,
+    "status": "gap",
+    "librarySha256": "4f59928419711977442d09005b14755a52ee5698cdf5f62bbe4ea6cce2714371",
+    "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+    "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality.",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedOutputBytes": 531468,
+    "nativeOutputBytes": 531468,
+    "caseId": "OpaqueCancelable8",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receipt": "tmp/vqp630-candidate-OpaqueCancelable8-confirm-receipt.json",
+    "statistics": "tmp/vqp630-candidate-OpaqueCancelable8-confirm-statistics.json",
+    "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+    "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+    "alphaExact": true,
+    "decoderMaximum": 0
+  },
+  "reusedQualification": {
+    "fullChecksEachOS": 6182,
+    "actualPackageSha256": "47616c839442aa21a16200b03eea0fe094c1d8a48ed4e56fdcfb0202eced8819",
+    "sameActualPackageBothOS": true,
+    "source": "jpeg-batched-two-row-columns-evidence.json"
+  },
+  "capture": {
+    "totalSamples": 1997,
+    "selectedMethodLocations": {
+      "liveCoefficientReader": 1445,
+      "modeReader": 92,
+      "frameDriver": 82,
+      "pixelOutput": 70,
+      "reconstruction": 60,
+      "verticalFilter": 34
+    },
+    "liveCoefficientCodeBytes": 3090,
+    "mappedLiveReaderSamples": 1441,
+    "traceSha256": "7c97eed09772e2f3655f2fff37fce21236bd53f72a6240f6a95e8165eea9c5c9",
+    "traceBytes": 705796,
+    "seconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "quietGuardsPassed": true,
+    "instrumentedElapsedDiscarded": true,
+    "inputBytes": 72380,
+    "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+    "outputBytes": 531468,
+    "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+    "notes": "Inlining/skid/location counts do not isolate lifecyclework or predictphasecosts/removablepercentages/CPUsavings. liveCoefficientReader family includes4eligibility samples; exactmappedmethod has1441."
+  },
+  "proposal": {
+    "repeatedWork": "LiveReadPlanes rejects ordinarymacroblockwindow whenCanBeCanceled. Each eligiblecoefficientblock creates/refills BlockReader thennormalizes/publishes backtoVp8BooleanReader. Ordinaryalreadysharesoneborrowedwindowacross24/25blocks.",
+    "endState": "Extendoperation-ownedmacroblockwindowreuse tolivecancellation throughcurrentpollingcoefficientcore. Preserveeveryper-block/per-decisionpoll, successfulcoefficients/context/cursor/followingreads andstrictpartitionbound; currentfailure-private decoder remainsabandoned onexception. ReuseexistingBlockReaderstate/math andretainper-block/short-tailfallbacks. No cache/pool/session/owner/root ornewheapcapacity.",
+    "firstTask": "Reuseexisting272B/block and24/25-blockwindowbound/proofs. Inspectactualwindow/callboundaries, then implementborrowedlivewindow plusper-decisionpollingcore andexactsuccess/cancel/partition/tail/rootoracles before existingLive/Ordinaryshorts. Adduntimedeligibilitycounts onlyifinspection leavesaconcrete uncertainty; no separatebookkeepingframework orduplicateprofile.",
+    "risks": "Movingstate can introduceextraABI/refstructcopies/branchcost, duplicategrammar, changecancelpollorder orpartitionend semantics. Preferoneexistingborrowedwindow pluspollingcore; avoida generalpolicyframework. Measurecompletedstages, retainadverseresults, nofixedthreshold/permanentfamilyban."
+  },
+  "workflow": {
+    "allBuilds": 0,
+    "profileCaptures": 1,
+    "fullOrPackageQualificationRepeats": 0,
+    "newImagesOrSettings": 0,
+    "sourceChanges": 0,
+    "currentSourcesChecked": true,
+    "alreadyCompletedWork": "Currentliveblockalready publishesonlysuccess; do notrepeatfinallyremoval orreinterpretolderliveexecutionreport ascurrent."
+  },
+  "raw": {
+    "file": "vp8-live-macroblock-attribution-avp769.tar.xz",
+    "sha256": "53fdfd0217c9d16f6afe7ec046949591cc5f2d53a69edd81fa6f44e8f7352831",
+    "bytes": 153736,
+    "members": 28,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-batched-two-row-columns.tar.xz",
+        "sha256": "8ed600096f4167228c797702e7420236ab95475d3e1e1fd3daaa97174a438cc2"
+      },
+      {
+        "file": "vp8-frame-quantizer-preparation-qualified.tar.xz",
+        "sha256": "845e24ce204393658cdd89e9bc910bbb42d2d0cab292f419f8478413bb96c176"
+      }
+    ]
+  }
+}
