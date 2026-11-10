@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -41,6 +40,25 @@ internal static class EnlargingColumnBicubicResize
         ReadOnlySpan<int> rows, int first, double normalizerY, OperationContext context, ref bool deferred)
     {
         var destination = result.GetRow8(y); var outputX = 0;
+        for (; outputX + 3 < length; outputX += 4)
+        {
+            if ((outputX & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            EnlargingBicubicResize.FilterVerticalQuartet(cache, vertical, rows, outputX, out var firstSum, out var secondSum);
+            var n0 = normalizers[outputX] * normalizerY;
+            var n1 = normalizers[outputX + 1] * normalizerY;
+            var n2 = normalizers[outputX + 2] * normalizerY;
+            var n3 = normalizers[outputX + 3] * normalizerY;
+            // Enlargement's <=5 taps fit the shared <=16-tap certificate.
+            // Each pair keeps its own acceptance and exact repair path.
+            var accepted = BicubicMath.WriteByteQuartet(firstSum, secondSum, n0, n1, n2, n3,
+                destination.Slice((tile + outputX) * 4, 16));
+            if ((accepted & 1) == 0 && (!(n0 >= .5 && n1 >= .5)
+                || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                    vertical, first, context, ref deferred))) return false;
+            if ((accepted & 2) == 0 && (!(n2 >= .5 && n3 >= .5)
+                || !RepairPair(source, result, tile, y, outputX + 2, weights, offsets, counts, sourceFirst,
+                    vertical, first, context, ref deferred))) return false;
+        }
         for (; outputX + 1 < length; outputX += 2)
         {
             if ((outputX & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
@@ -51,13 +69,11 @@ internal static class EnlargingColumnBicubicResize
                 sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
             }
             var n0 = normalizers[outputX] * normalizerY; var n1 = normalizers[outputX + 1] * normalizerY;
-            if (!TryWritePair(sum, n0, n1, destination.Slice((tile + outputX) * 4, 8)))
+            if (!BicubicMath.TryWriteBytePair(sum, n0, n1, destination.Slice((tile + outputX) * 4, 8)))
             {
                 if (!(n0 >= .5 && n1 >= .5)
-                    || !OriginalByte(source, result, tile + outputX, y, weights.Slice(outputX * 5, counts[outputX]),
-                        offsets.Slice(outputX * 5, counts[outputX]), sourceFirst, vertical, first, context, ref deferred)
-                    || !OriginalByte(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * 5, counts[outputX + 1]),
-                        offsets.Slice((outputX + 1) * 5, counts[outputX + 1]), sourceFirst, vertical, first, context, ref deferred)) return false;
+                    || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                        vertical, first, context, ref deferred)) return false;
             }
         }
         for (var x = outputX; x < length; x++)
@@ -75,37 +91,14 @@ internal static class EnlargingColumnBicubicResize
         }
         return true;
     }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
+    private static bool RepairPair(ImageBuffer source, ImageBuffer result, int tile, int y, int x,
+        ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, int sourceFirst,
+        ReadOnlySpan<double> vertical, int first, OperationContext context, ref bool deferred)
     {
-        const double maximum = 255d;
-        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 >= 1 && a1 >= 1)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        var values = Avx512F.Divide(sum, divisors);
-        // For clamp(N/D,0,255), the perturbation is bounded by
-        // (Nerr + 255*Derr)/(D-Derr), including across saturation boundaries.
-        // Existing byte arithmetic errors are (65025u,255u) for RGB and
-        // (255u,u) for alpha, u=2^-32. At D>=1 and D>=1/2 respectively,
-        // these fixed margins exceed twice that bound plus 2^-28 for rounding.
-        const double rgbMargin = 0.00006103515625; // 2^-14
-        const double alphaMargin = 0.00000095367431640625; // 2^-20
-        var margins = Vector512.Create(rgbMargin, rgbMargin, rgbMargin, alphaMargin,
-            rgbMargin, rgbMargin, rgbMargin, alphaMargin);
-        if (!(values.GetElement(3) >= 1 + alphaMargin && values.GetElement(7) >= 1 + alphaMargin)) return false;
-        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
-            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
-        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
-            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(maximum)).AsInt64());
-        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
-        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
-        var clipped = Avx512F.Min(Vector512.Create(maximum), Avx512F.Max(Vector512<double>.Zero, values));
-        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
-        var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
-        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
-        BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
-        return true;
+        return OriginalByte(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
+                offsets.Slice(x * 5, counts[x]), sourceFirst, vertical, first, context, ref deferred)
+            && OriginalByte(source, result, tile + x + 1, y, weights.Slice((x + 1) * 5, counts[x + 1]),
+                offsets.Slice((x + 1) * 5, counts[x + 1]), sourceFirst, vertical, first, context, ref deferred);
     }
 
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,

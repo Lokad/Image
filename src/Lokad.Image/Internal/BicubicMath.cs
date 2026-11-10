@@ -426,17 +426,17 @@ internal static class BicubicMath
         values = margins = default;
         var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
         if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        values = Avx512F.Divide(sum, divisors);
+        var alpha = Avx512F.PermuteVar8x64(sum, Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7));
+        var alphaLanes = Vector512.Create(0L, 0, 0, -1L, 0, 0, 0, -1L).AsDouble();
+        var normalizers = Vector512.Create(Vector256.Create(n0), Vector256.Create(n1));
+        values = Avx512F.Divide(sum, Vector512.ConditionalSelect(alphaLanes, normalizers, alpha));
         // With 2^-40*16^2 and maximum 255, quotient bounds at every
         // in-range threshold are below 1e-6 for alpha and 1e-4/alpha
         // for color. The quarter-margin guard protects clipping thresholds.
         // Alpha's lower power of two gives a conservative reciprocal bound.
-        var exponent0 = (int)((BitConverter.DoubleToUInt64Bits(a0) >> 52) & 2047);
-        var exponent1 = (int)((BitConverter.DoubleToUInt64Bits(a1) >> 52) & 2047);
-        var margin0 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent0) << 52);
-        var margin1 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent1) << 52);
-        margins = Vector512.Create(margin0, margin0, margin0, 1e-6, margin1, margin1, margin1, 1e-6);
+        var exponents = Avx512F.And(Avx512F.ShiftRightLogical(alpha.AsUInt64(), 52), Vector512.Create(2047UL));
+        var powers = Avx512F.ShiftLeftLogical(Avx512F.Subtract(Vector512.Create(2046UL), exponents), 52).AsDouble();
+        margins = Vector512.ConditionalSelect(alphaLanes, Vector512.Create(1e-6), Avx512F.Multiply(powers, Vector512.Create(1e-4)));
         return true;
     }
 

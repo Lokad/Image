@@ -735,38 +735,33 @@ def render():
     assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
     assert tight_byte_up['qualification']['sameActualPackageBothOs']
     assert tight_byte_up['decisions']['confirm']['passed'] and tight_byte_up['decisions']['confirm']['normalizedSeparated']
-    # One current owner for shared byte/word enlargement boundaries.
-    enlargement = json.loads((ROOT / 'benchmarks/bicubic-shared-enlargement-evidence.json').read_text(encoding='utf-8'))
-    assert enlargement['productionAccepted'] and enlargement['raw']['mirrored'] and enlargement['raw']['allMembersVerified']
-    eq = enlargement['qualification']
-    assert eq['fullChecksEachOs'] == eq['windows']['total'] == eq['linux']['total'] == 5741
-    assert eq['actualPackage']['sha256'] == eq['samePackageLinux']['sameActualPackageSha256']
-    assert eq['actualPackage']['outputWorkspaceBicubicPassed'] and eq['samePackageLinux']['outputWorkspaceBicubicPassed']
-    assert enlargement['sourceProof']['originalBytePublicationRepairAndGeometryBodiesExact']
-    assert enlargement['sourceProof']['wordRepairBodiesExact'] and enlargement['sourceProof']['wordSmallSupportCertificateUnchanged']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in enlargement['independentComparison']['views'].values())
-    assert len(enlargement['cases']) == 12
-    for current in enlargement['cases'].values():
-        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['librarySha256'] == enlargement['producers']['linuxSha256']
+    # Current enlargement and shared byte-quartet caller costs have one owner.
+    quartet = json.loads((ROOT / 'benchmarks/bicubic-shared-quartet-execution-evidence.json').read_text(encoding='utf-8'))
+    assert quartet['productionAccepted'] and quartet['requiredMaterialPaths'] == 283
+    assert quartet['raw']['mirrored'] and quartet['raw']['allMembersVerified']
+    qq = quartet['qualification']
+    assert qq['fullChecksEachOs'] == qq['windows']['total'] == qq['linux']['total'] == 6183
+    assert qq['sameActualPackageBothOS'] and qq['actualPackage']['sha256'] == qq['samePackageLinux']['sameActualPackageSha256']
+    assert qq['actualPackage']['actualConsumerPassed'] and qq['samePackageLinux']['actualConsumerPassed']
+    assert quartet['storage']['newOwnedHeapCapacityBytes'] == quartet['storage']['newRetainedStateBytes'] == 0
+    assert quartet['sourceProof']['allMathOutsideByteQuartetPreparationVerbatim']
+    assert quartet['sourceProof']['byteOriginalOrderRepairAndTinyReplayVerbatim']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in quartet['comparison']['views'].values())
+    assert len(quartet['cases']) == 15
+    assert quartet['statusCounts'] == {state: sum(c['status'] == state for c in quartet['cases'].values())
+                                     for state in ('pass', 'gap', 'uncertain')}
+    for current in quartet['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['librarySha256'] == qq['actualPackage']['librarySha256']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
+        assert current['managedRationalReferenceExact'] or current['certifiedExactRationalAlphaHalves'] + current['certifiedExactRationalRgbHalves'] > 0
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert enlargement['storage']['newOwnedHeapCapacityBytes'] == 0
     labels = {'TightUp8': 'Bicubic RGBA8 enlargement,',
               'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
               'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
-    assert set(labels) <= set(enlargement['cases'])
-    enlargement_byte_current = json.loads((ROOT / 'benchmarks/byte-bicubic-enlargement-current-package-evidence.json').read_text(encoding='utf-8'))
-    assert not enlargement_byte_current['productionChanged'] and enlargement_byte_current['allProductionBuilds'] == 0
-    assert enlargement_byte_current['raw']['mirrored'] and enlargement_byte_current['raw']['allMembersVerified']
-    assert enlargement_byte_current['reusedQualification']['fullChecksEachOs'] == 5973
     for case, label in labels.items():
-        current = enlargement_byte_current['current'] if case == 'TightUp8' else enlargement['cases'][case]
-        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['actualIterations'] == 12
-        expected_library = enlargement_byte_current['actualPackage']['librarySha256'] if case == 'TightUp8' else enlargement['producers']['linuxSha256']
-        assert current['librarySha256'] == expected_library
-        assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        current = quartet['cases'][case]
         rows.append(('editing', f'| {label} input+output+4 KiB † → {current["outputWidth"]}×{current["outputHeight"]} | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} |'))
@@ -903,33 +898,14 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    mixed_vertical = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-vertical-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert mixed_vertical['productionAccepted'] and mixed_vertical['requiredMaterialPaths'] == 283
-    mq = mixed_vertical['qualification']
-    assert mq['fullChecksEachOs'] == mq['windows']['total'] == mq['linux']['total'] == 6124
-    assert mq['sameActualPackageBothOS']
-    assert mq['actualPackage']['sha256'] == mq['samePackageLinux']['sameActualPackageSha256']
-    assert mixed_vertical['raw']['mirrored'] and mixed_vertical['raw']['allMembersVerified']
-    assert mixed_vertical['sourceProof']['wordRestoredByteForByte']
-    assert mixed_vertical['storage']['newOwnedCapacityBytes'] == mixed_vertical['storage']['newRetainedOperationStorageBytes'] == 0
-    assert mixed_vertical['statusCounts'] == {'pass': 1, 'gap': 2, 'uncertain': 0}
-    assert set(mixed_vertical['cases']) == {'Mixed8', 'TightMixed8', 'TightVertical8'}
-    for case, c in mixed_vertical['cases'].items():
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['managedQualifiedOriginalPixelsExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
-        assert c['managedRationalReferenceExact'] == (case != 'TightVertical8')
-        if case == 'TightVertical8':
-            assert c['certifiedExactRationalAlphaHalves'] == 25
-        assert c['librarySha256'] == mq['actualPackage']['librarySha256']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in mixed_vertical['comparison']['views'].values())
-    current_word = mixed_vertical['currentUnchangedWord']
-    assert current_word['librarySha256'] == mixed_vertical['baselineProducers']['windowsSha256']
+    # This older provider still owns the unchanged word mixed boundary only.
+    mixed_word_history = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-vertical-reuse-evidence.json').read_text(encoding='utf-8'))
+    current_word = mixed_word_history['currentUnchangedWord']
+    assert current_word['librarySha256'] == mixed_word_history['baselineProducers']['windowsSha256']
     assert current_word['managedRationalReferenceExact'] and current_word['independentOwnedOutput'] and current_word['sourceUnchanged']
     assert current_word['allOriginalGatesPassed'] and current_word['quietGuardsPassed'] and current_word['status'] == 'gap'
     result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
-    for depth, current in [(8, mixed_vertical['cases']['TightMixed8']), (16, current_word)]:
+    for depth, current in [(8, quartet['cases']['TightMixed8']), (16, current_word)]:
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1346,29 +1322,25 @@ def render():
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
               'Up8': 'Bicubic upscale RGBA8, default workspace'}
-    # One unchanged-build confirmation resolves default-byte uncertainty;
-    # other enlargement cases keep their source-valid current owners.
-    default_byte = json.loads((ROOT / 'benchmarks/bicubic-byte-enlargement-current-evidence.json').read_text(encoding='utf-8'))
-    assert not default_byte['productionChanged'] and default_byte['allBuilds'] == 0
-    assert default_byte['raw']['mirrored'] and default_byte['raw']['allMembersVerified']
-    assert default_byte['cases']['Up8']['status'] == 'gap' and default_byte['cases']['Up8']['lower'] > 1
-    assert default_byte['qualificationReused']['sameActualPackageBothOs']
     assert set(overwrite['cases']) == set(labels)
     for case, label in labels.items():
         if case == 'Down32x16_8':
-            continue  # Current family owner below supersedes this older output-allocation cost.
-        owner = default_byte if case == 'Up8' else enlargement if case == 'Up16' else overwrite
-        observation = owner['cases'][case]; receipt = observation['receipt']
-        assert receipt['librarySha256'] == owner['producers']['linuxSha256']
-        assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        if case not in {'Up8', 'Up16'}:
-            assert (observation['conservativeRatioUpper'] <= 1) == (case == 'Down32x16_8')
-        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
-        row = ('editing', f'| {label} † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
-               f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-               f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-               f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+            continue  # The current reduction owner below supplies this row.
+        if case in {'Up8', 'Up16'}:
+            current = quartet['cases'][case]
+            row = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
+                   f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                   f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+        else:
+            observation = overwrite['cases'][case]; receipt = observation['receipt']
+            assert receipt['librarySha256'] == overwrite['producers']['linuxSha256']
+            assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
+            assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+            stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+            row = ('editing', f'| {label} † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
+                   f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                   f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
         positions = [i for i, (_, old_row) in enumerate(rows) if old_row.startswith('| ' + label + ' †')]
         if case == 'Up8':
             assert not positions
@@ -1520,19 +1492,18 @@ def render():
     assert word_prep['sourceProof']['all2048ExponentConstructionsBitIdentical']
     assert word_prep['storage']['newOwnedCapacityBytes'] == word_prep['storage']['newCrossOperationRetainedBytes'] == 0
     for current in word_prep['cases'].values():
-        if current['caseId'] == 'TightVertical16':
+        if current['caseId'] == 'TightVertical16' or current['caseId'] in quartet['cases']:
             continue  # Refreshed by identity geometry below.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['librarySha256'] == word_prep['producers']['linuxSha256']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    word_labels = {'Up16': 'Bicubic upscale RGBA16',
-                   'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
+    word_labels = {'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
                    'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, label in word_labels.items():
-        current = word_prep['cases'][case]
+        current = quartet['cases'].get(case, word_prep['cases'][case])
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
         assert len(positions) == 1, label
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
@@ -1571,7 +1542,6 @@ def render():
     assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5948
     assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
-    merged_word = {**word_prep['cases'], **result_bands['cases']}
     png = json.loads((ROOT / 'benchmarks/png-length-classification-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
     pq = png['qualification']
@@ -1656,13 +1626,6 @@ def render():
     assert overlap['implementation']['originalConversionArithmeticVerbatim']
     assert overlap['storage']['identity513WorkspaceAfterBytes'] == 367436
     assert overlap['storage']['ownedDecodedCapacityRemovedBytes'] == 16416
-    merged_word.update({case: cost for case, cost in overlap['cases'].items() if case in merged_word})
-    assert result_bands['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
-                                                    for state in ('pass', 'gap', 'uncertain')}
-    merged_word.update({case: cost for case, cost in bicubic_overlap['cases'].items() if case in merged_word})
-    merged_word['TightMixed16'] = current_word
-    current_word_counts = {state: sum(c['status'] == state for c in merged_word.values())
-                           for state in ('pass', 'gap', 'uncertain')}
     # The shared-wide provider above owns Down32x16_8; this older identity
     # overlay supplies only the unchanged narrow/identity paths it still owns.
     overlap_labels = {'Down8': 'Bicubic resize RGBA8',
@@ -1729,7 +1692,7 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = packed_qualification
+    current_build_qualification = quartet['qualification']
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1740,12 +1703,13 @@ def render():
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
-    current = mixed_vertical['cases']['TightMixed8']
+    current = quartet['cases']['TightMixed8']
     label = 'Bicubic RGBA8, width up / height down, input+output+4 KiB'
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
     assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| {label} † → 1027×129 | '
-        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+    shown_label = label + (' (confidence open)' if current['status'] == 'uncertain' else '')
+    rows[positions[0]] = ('editing', f'| {shown_label} † → 1027×129 | '
+        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.4f} | '
         f'{current["allocatedBytes"]:,} |')
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
@@ -1882,7 +1846,14 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
+- **Resizing:** [shared quartet execution](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md)
+  saves **{quartet['comparison']['savedUs']:.2f} µs/{100*quartet['comparison']['rawReduction']:.2f}% raw/{100*quartet['comparison']['normalizedReduction']:.2f}% normalized** on complete bounded RGBA8 enlargement.
+  It passes at upper{quartet['cases']['TightUp8']['upper']:.3f}, same 116 B/op and 4 KiB admission.
+  Across 15 affected enlargement/mixed controls: {quartet['statusCounts']['pass']} pass /
+  {quartet['statusCounts']['gap']} gaps / {quartet['statusCounts']['uncertain']} uncertain. Horizontal word uncertainty is retained;
+  the contemporary original counter does not support a regression. No added owned capacity
+  or retained scratch; JIT row stack rises 200→408 B, separate from admitted capacity.
+  [Wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
   saves **{row_loan['comparison']['savedUs']:.2f}µs/{100*row_loan['comparison']['rawReduction']:.2f}% raw/{100*row_loan['comparison']['normalizedReduction']:.2f}% normalized**,
   with separated filtered/all-actual raw/normalized intervals. Wide byte is
   {row_loan['cases']['TightWide8']['managedUs']:.2f}/zimg{row_loan['cases']['TightWide8']['nativeUs']:.2f}µs,
@@ -1917,9 +1888,9 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. JPEG checks pass {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per
-normal/scalar/disabled-AVX2/AVX512 mode; unchanged resize evidence
-({current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
+Windows/Linux**. Resize checks pass {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
+({current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;

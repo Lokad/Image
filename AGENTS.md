@@ -38,8 +38,9 @@ The internal test project compiles production sources into its own assembly;
 rebuild it after affected source changes. Replacing its Lokad.Image.dll does not
 update that embedded code. Public/differential assemblies may reuse their builds
 with the current library DLL when their own inputs and API bindings are unchanged.
-Resize-focused qualification must include PackedColumnStorageTests explicitly;
-its names do not match the usual Resize/Bicubic filters.
+Resize-focused qualification must include PackedColumnStorageTests,
+EnlargingStripBoundaryTests and EnlargementVerticalStorageTests explicitly;
+their names do not match the usual Resize/Bicubic filters.
 Use `--tl:off` for dotnet output. Pack only with `-c Release` and verify the actual
 package with `./tools/PackageSmokeTest/verify-package.ps1`. Package output goes
 directly in `artifacts/nugets/`, without a release/version subdirectory.

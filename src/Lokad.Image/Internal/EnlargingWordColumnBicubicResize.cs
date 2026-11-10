@@ -44,14 +44,7 @@ internal static class EnlargingWordColumnBicubicResize
         var outputX = 0;
         for (; outputX + 3 < length; outputX += 4)
         {
-            var firstSum = Vector512<double>.Zero; var secondSum = Vector512<double>.Zero;
-            for (var t = 0; t < vertical.Length; t++)
-            {
-                var weight = Vector512.Create(vertical[t]);
-                var row = MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 4));
-                firstSum = Avx512F.Add(firstSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row), weight));
-                secondSum = Avx512F.Add(secondSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row[64..]), weight));
-            }
+            EnlargingBicubicResize.FilterVerticalQuartet(cache, vertical, rows, outputX, out var firstSum, out var secondSum);
             var n0 = normalizers[outputX] * normalizerY;
             var n1 = normalizers[outputX + 1] * normalizerY;
             var n2 = normalizers[outputX + 2] * normalizerY;

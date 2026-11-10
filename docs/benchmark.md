@@ -42,7 +42,14 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
+- **Resizing:** [shared quartet execution](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md)
+  saves **159.58 µs/5.10% raw/5.12% normalized** on complete bounded RGBA8 enlargement.
+  It passes at upper0.981, same 116 B/op and 4 KiB admission.
+  Across 15 affected enlargement/mixed controls: 9 pass /
+  2 gaps / 4 uncertain. Horizontal word uncertainty is retained;
+  the contemporary original counter does not support a regression. No added owned capacity
+  or retained scratch; JIT row stack rises 200→408 B, separate from admitted capacity.
+  [Wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
   saves **58.90µs/12.66% raw/8.94% normalized**,
   with separated filtered/all-actual raw/normalized intervals. Wide byte is
   406.16/zimg367.01µs,
@@ -75,11 +82,11 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,181 full/live checks per OS**
+The current immutable build passes **6,183 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. JPEG checks pass 458 internal/375 public per
-normal/scalar/disabled-AVX2/AVX512 mode; unchanged resize evidence
-(350 internal/729 public per mode) is reused. Exact packets/pixels, shared admission,
+Windows/Linux**. Resize checks pass 351 internal/747 public per
+normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
+(459 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
@@ -187,18 +194,18 @@ settings do not establish matched quality.
 | Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 460.84 | 418.20 | 1.102 / 1.106 | 199,981 |
-| Bicubic upscale RGBA16 † → 1027×519 | 2,752.40 | 2,874.23 | 0.958 / 0.966 | 4,264,573 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
+| Bicubic upscale RGBA16 † → 1027×519 | 2,722.27 | 2,874.11 | 0.947 / 0.952 | 4,264,573 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 2,940.49 | 3,048.98 | 0.964 / 0.971 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 329.13 | 376.50 | 0.874 / 0.898 | 197,298 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,969.56 | 3,040.59 | 0.977 / 0.981 | 116 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.81 | 1,515.06 | 1.021 / 1.035 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,722.39 | 1,743.04 | 0.988 / 0.994 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 472.44 | 417.11 | 1.133 / 1.165 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.94 | 569.04 | 0.959 / 0.971 | 113 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 395.96 | 345.54 | 1.146 / 1.206 | 198,450 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 863.94 | 870.01 | 0.993 / 1.0002 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 405.59 | 398.21 | 1.019 / 1.028 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 422.81 | 397.48 | 1.064 / 1.098 | 113 |
