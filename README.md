@@ -5,7 +5,7 @@ No unsafe code, native bindings, subprocess codecs or vendored sources.
 
 - PNG, JPEG and WebP encode/decode, including progressive/CMYK/YCCK JPEG decode.
 - 8/16-bit RGBA editing: crop, orientation, flips, rotations, nearest/bilinear/
-  bicubic/Lanczos3 resizing, reusable Lanczos3 plans, drawing and alpha compositing.
+  bicubic/Lanczos3 resizing, drawing and alpha compositing.
 - Supplied TrueType text measurement, wrapping, alignment, fitting and rendering;
   explicit OpenType mode for supported Latin, Hebrew and Arabic shaping.
 - Caller JPEG sample buffers, async streams, bounded header inspection, typed
@@ -37,6 +37,7 @@ support has explicit table/script boundaries. See the [supported contract](docs/
 [usage](docs/usage.md) and [0.2.0 migration notes](docs/migration.md).
 The [codec parity table](docs/codec-parity.md) and [benchmark snapshot](docs/benchmark.md)
 state tested scope; full CPU parity and general replacement readiness remain open.
+Development 0.2.1 also adds caller-owned bicubic/Lanczos3 plans for repeated resizing.
 
 For development, install the SDK in `global.json`, restore, then run:
 

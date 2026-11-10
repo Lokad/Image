@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Add caller-owned bicubic plans with shared exact preparation/execution,
+  admitted retained storage and independently owned results.
+
 - Prepare VP8 dequantizers once per frame segment, preserving exact decoded
   pixels, bounded scratch admission and independent output ownership.
 

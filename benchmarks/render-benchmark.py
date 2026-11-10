@@ -1713,6 +1713,47 @@ def render():
     rows[positions[0]] = ('editing', f'| {shown_label} † → 1027×129 | '
         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.4f} | '
         f'{current["allocatedBytes"]:,} |')
+    # Current shared preparation owns the affected cached rows; historical
+    # native-prepared observations remain distinct from equivalent new boundaries.
+    bicubic_preparation = json.loads((ROOT / 'benchmarks/bicubic-shared-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert bicubic_preparation['productionAccepted'] and bicubic_preparation['requiredMaterialPaths'] == 285
+    assert bicubic_preparation['raw']['mirrored'] and bicubic_preparation['raw']['allMembersVerified']
+    assert len(bicubic_preparation['cases']) == 16 and len(bicubic_preparation['boundaries']) == 4
+    current_build_qualification = bicubic_preparation['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6229
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert bicubic_preparation['sourceProof']['isolatedWordRowVerbatimAfterDedent']
+    assert bicubic_preparation['codeProof']['wordAccumulatorRegisterResident']
+    labels = {
+        'Down8': 'Bicubic resize RGBA8',
+        'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
+        'Wide8': 'Bicubic RGBA8 wider-support reduction',
+        'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
+        'Cross16': 'Bicubic RGBA16, width down / height up, default workspace',
+    }
+    for case, current in {**bicubic_preparation['cases'], **bicubic_preparation['boundaries']}.items():
+        assert current['librarySha256'] == bicubic_preparation['producers']['timedArtifactSha256']
+        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+        if case not in labels:
+            continue
+        label = labels[case]
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
+        assert len(positions) == 1, label
+        if case == 'Wide8':
+            label = 'Bicubic RGBA8, fresh managed / prepared zimg'
+        rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
+            f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / '
+            f'{current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+    for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
+        current = bicubic_preparation['boundaries'][case]
+        assert current['status'] == 'pass'
+        prepared = case.startswith('Repeated')
+        label = f'Bicubic {"prepared" if prepared else "one-shot"} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
+        rows.append(('editing', f'| {label} † → 128×64 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -1808,7 +1849,7 @@ def render():
 
 Updated 2026-11-10. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [285 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
@@ -1848,44 +1889,25 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [shared quartet execution](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md)
-  saves **{quartet['comparison']['savedUs']:.2f} µs/{100*quartet['comparison']['rawReduction']:.2f}% raw/{100*quartet['comparison']['normalizedReduction']:.2f}% normalized** on complete bounded RGBA8 enlargement.
-  It passes at upper{quartet['cases']['TightUp8']['upper']:.3f}, same 116 B/op and 4 KiB admission.
-  Across 15 affected enlargement/mixed controls: {quartet['statusCounts']['pass']} pass /
-  {quartet['statusCounts']['gap']} gaps / {quartet['statusCounts']['uncertain']} uncertain. Horizontal word uncertainty is retained;
-  the contemporary original counter does not support a regression. No added owned capacity
-  or retained scratch; JIT row stack rises 200→408 B, separate from admitted capacity.
-  [Wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
-  saves **{row_loan['comparison']['savedUs']:.2f}µs/{100*row_loan['comparison']['rawReduction']:.2f}% raw/{100*row_loan['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual raw/normalized intervals. Wide byte is
-  {row_loan['cases']['TightWide8']['managedUs']:.2f}/zimg{row_loan['cases']['TightWide8']['nativeUs']:.2f}µs,
-  upper{row_loan['cases']['TightWide8']['upper']:.3f} gap; refreshed word upper{row_loan['cases']['TightWide16']['upper']:.3f} is uncertain.
-  Its changed driver prevents substituting the older passing word cost; current
-  intervals do not prove a regression. No unchanged favorable repeat.
-  Cache/weights borrow 10,880 B from unpublished output, with no added owned capacity;
-  same 4 KiB admission, 113 B/op, 32,768 B result and scratch 0. The existing large
-  default/compact pair screens 20.53/21.64 ms, three actuals each, without a native
-  or historical-gain claim. [Narrow row reuse](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md)
-  saves **{narrow_loan['comparison']['savedUs']:.2f} µs/{100*narrow_loan['comparison']['rawReduction']:.2f}% raw**;
-  both raw confidence views separate, while normalized intervals overlap.
-  Its byte upper{narrow_loan['cases']['TightDown8']['upper']:.3f} remains a gap; refreshed word
-  upper{narrow_loan['cases']['TightDown16']['upper']:.3f} passes/stops. The same 4 KiB/113 B/op
-  covers 11,776 B borrowed from unpublished result rows, with no new capacity.
-  [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
-  has 7 passes / 1 gap. [Packed byte preparation](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md)
-  saves **{packed_current['comparison']['savedUs']:.2f} µs/{100*packed_current['comparison']['rawReduction']:.2f}% raw**,
-  with separated raw/normalized confidence and native clock movement disclosed;
-  byte/word upper{packed_current['cases']['Tight64x32_8']['upper']:.3f}/{packed_current['cases']['Tight64x32_16']['upper']:.3f}
-  remain gaps. No new capacity; same 4 KiB/113 B/op and scratch 0.
-  [Lanczos word-row sharing](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) has 6 passes /
-  1 prepared-byte gap / 1 prepared-word uncertainty. The paired study saves
-  41.10/41.15 µs for prepared/one-shot word reduction; final current costs stay
-  separate from that scoped evidence. Word preparation retains 156,248 B,
-  up8,208 B; final prepared/one-shot allocations are139/155,077 B/op. The final
-  word comparison improves7.18% relative to its native bracket while raw time
-  rises0.57%; byte normalized intervals overlap. No universal gain or parity claim.
-  Resolve word uncertainty before further tuning. Exact managed Q30/rational
-  results remain distinct from native float; useful kernels/fallbacks remain.
+- **Resizing:** [shared bicubic preparation](../benchmarks/BICUBIC-SHARED-PREPARATION.md)
+  has {bicubic_preparation['statusCounts']['pass']} passes / {bicubic_preparation['statusCounts']['gap']} gaps /
+  {bicubic_preparation['statusCounts']['uncertain']} uncertain across 16 refreshed cached controls. Both equivalent fresh
+  one-shot and both prepared comparisons pass. Prepared plans retain198,432 B and
+  allocate137 B/op; preparation and its disposal are excluded only for explicitly
+  prepared comparisons. Governed owned peaks are231,200/263,968 B for RGBA8/16,
+  excluding borrowed input; native graph/total capacity remains unmeasured.
+  Isolating the unchanged word-row kernel saves338.94µs/43.26% raw against the
+  contemporary vertical-word baseline. Ordinary wide-byte resizing costs11.83µs
+  more; its retained-native gap stays visible separately from fresh-native results.
+  [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
+  [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
+  [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
+  [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain their
+  source-valid costs and gaps. The existing large managed default/compact screen
+  is20.40/21.89ms, three actuals each, without a native or historical-gain claim.
+  [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains6 pass /
+  1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain156,248 B.
+  Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
   [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and
@@ -1945,7 +1967,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 127, 'Expected127comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 131, 'Expected131comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

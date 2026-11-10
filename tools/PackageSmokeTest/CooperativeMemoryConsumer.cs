@@ -2,6 +2,43 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyBicubicPlans()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            using var source = OriginalPixels.Buffer(513, 259, depth);
+            if (depth == 8) source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+            else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
+            using var root = new TestMemoryBudget(4 * 1024 * 1024);
+            using var plan = BicubicResizePlan.Create(513, 259, 128, 64, depth,
+                new() { MemoryBudget = root });
+            var retained = plan.StorageBytes;
+            if (root.Bytes != retained) throw new Exception("Packaged bicubic preparation lost its charge.");
+            using var result = plan.Resize(source);
+            var expected = OriginalPixels.Bytes(result);
+            var hash = depth == 8
+                ? "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71"
+                : "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9";
+            if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected)) != hash
+                || root.Bytes != retained + expected.Length)
+                throw new Exception("Packaged bicubic plan changed frozen samples or retained ownership.");
+            Console.WriteLine($"Packaged bicubic{depth}: retained={retained}, peak={root.Peak}, result={expected.Length}.");
+            using var canceled = new CancellationTokenSource(); canceled.Cancel();
+            try
+            {
+                using var unexpected = plan.Resize(source, canceled.Token);
+                throw new Exception("Packaged bicubic plan ignored cancellation.");
+            }
+            catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { }
+            plan.Dispose(); source.Dispose();
+            if (root.Bytes != expected.Length || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(result)))
+                throw new Exception("Packaged bicubic result did not survive plan/source disposal.");
+            result.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged bicubic plan leaked or disposed the caller root.");
+        }
+        Console.WriteLine("Packaged bicubic plans preserve frozen samples and admitted survivor lifetimes.");
+    }
+
     private static async Task VerifyPaletteResult()
     {
         using var root = new TestMemoryBudget(1024 * 1024);
@@ -1074,6 +1111,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        VerifyBicubicPlans();
         VerifyBicubicSchedule(4096);
         VerifyBicubicSchedule(8192);
         VerifyBicubicSchedule(4096, vertical: true);

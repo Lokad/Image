@@ -1,16 +1,17 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-10. **283 material required paths** remain
-in scope; the 127 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+Current architectural phase, 2026-11-10. **285 material required paths** remain
+in scope; the 131 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [Lanczos word-row stage](LANCZOS-PAIRED-WORD-ROWS.md) passes
-6,197 full/live checks per OS, affected normal/scalar/ISA and the same actual
-Release-package consumer/all three examples on Windows/Linux. This qualifies
-production correctness and ownership; it is not a whole-release timing refresh.
+The latest accepted [shared bicubic preparation stage](BICUBIC-SHARED-PREPARATION.md)
+passes6,229 full/live checks per OS, affected normal/scalar/ISA and the same actual
+Release-package consumer/all three examples. Compression packets, exact managed
+pixels and cooperative ownership remain unchanged.
+This is not a whole-release timing refresh.
 Unchanged performance/qualification evidence is reused only within its source scope.
 
 ## Current family status
@@ -29,7 +30,7 @@ Unchanged performance/qualification evidence is reused only within its source sc
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
 | Bounded narrow bicubic | [Result-row loan](NARROW-BICUBIC-ROW-LOAN.md): byte472.44/zimg417.11µs upper1.165 remains a gap; word upper.971 passes/stops. Same113B/op/4KiB, no added owned capacity. |
 | Bounded wide bicubic | [Result-row loan](BICUBIC-RESULT-ROW-LOAN.md): byte406.16/zimg367.01µs upper1.119 remains a gap; word upper1.003 is uncertain. No substitution of an older pass over a changed driver. |
-| Cached wider/other bicubic | [Certified publication](CACHED-WIDE-CERTIFIED-PUBLICATION.md): 8 controls, 7 pass / 1 gap. Wide byte395.96/zimg345.54µs upper1.206 remains a gap. [Preparation attribution](CACHED-BICUBIC-PREPARATION-ATTRIBUTION.md) finds33.3–33.6µs diagnostic setup; caller-owned reuse is the next lead, without a speedup claim. [Identity caches](BICUBIC-IDENTITY-CACHE-ROWS.md), [overlap](BICUBIC-WIDE-OVERLAP.md) and unchanged [word preparation](BICUBIC-SHARED-WORD-PREPARATION.md) own other named paths. |
+| Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 and Down8 retain native-prepared gaps; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear enlargement | [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md): complete RGBA8 Up8 upper.993 passes; source-valid other bilinear boundaries retain their own evidence/H status. |
 | Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Prepared drawing](TEXT-ENDPOINT-STORAGE.md) remains two gaps; allocation59000B/draw and inconclusive CPU gains stay distinct. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 is a gap,176B/op; pooled capacity/lazy native validation are separately labeled. Independent codec/resizing work continues. |
@@ -57,10 +58,18 @@ Only these four boundaries are retired:
 - Optional JPEG CompactColor encoder.
 
 Their APIs/encoders were removed; retained caller-root cases still qualify shared
-admission. The remaining **253** base controls plus the **30** named additions
-below give **283**, without adding a shape/depth/filter/quality grid. A later case
+admission. The remaining **253** base controls plus the **30** previously named additions
+and **two** prepared-bicubic public boundaries below give **285**, without adding a shape/depth/filter/quality grid. A later case
 requires evidence of a distinct required algorithm or public boundary omitted
 from this finite set. Differences in default option values are accepted.
+
+Two new public boundaries use the existing original513×259 byte/word rasters
+and128×64 outputs: `BicubicResizePlan.Resize` for RGBA8 and RGBA16. Both retain
+admitted preparation explicitly while reading fresh input and returning independent
+results on every call. No new image, shape or settings grid. Existing Wide8/16
+one-shot operations now also have equivalent fresh-zimg views; their former
+fresh-managed/prepared-native observations remain separately visible diagnostic
+comparisons. Setup and output ownership are included on equivalent sides.
 
 Four required algorithm additions retain their frozen recipes:
 
@@ -167,6 +176,13 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- CBP780B refreshes all16 cached executor controls: Wide8/16, Down64x32_8/16,
+  Down32x16_8/16, Down16x8_8/16, Down8/16, Horizontal8/16, Vertical8/16 and
+  Cross8/16. Preparation/execution and the word-row call boundary changed;
+  previous costs on these paths are superseded. Mixed8/16 return earlier through
+  unchanged result-band executors; bounded fallbacks/enlargement and other filters
+  keep source-valid evidence. The existing large default/compact managed screen
+  refreshes to20.40/21.89ms without a native or historical-gain claim.
 - EQE772B changes shared four-pixel enlargement accumulation and the private byte
   quartet preparation. Its fifteen named controls supersede all twelve enlargement
   costs plus Mixed8/TightMixed8/TightVertical8. Other BicubicMath bodies, codec,
@@ -184,4 +200,4 @@ Current invalidation and next execution:
   current sources before proposing a materially revised design. Passing quartet
   cases stop. Text/drawing never globally blocks independent codec/resizing work.
 - All cited raw archives, released packages and reproducibility remain retained.
-  Publication and the all283-path completion audit are separate; PLAN.md is ignored.
+  Publication and the all285-path completion audit are separate; PLAN.md is ignored.

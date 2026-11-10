@@ -61,8 +61,12 @@ alpha has zero RGB; identity resizing preserves hidden RGB. Lanczos3 uses
 `sinc(x) * sinc(x/3)` within radius three, normalized Q30 weights and exact final
 integer rounding. SIMD and portable paths preserve the same defined pixels.
 
-`Lanczos3ResizePlan` retains admitted axes and working rows for a fixed source
-shape, destination shape and depth. Each `Resize` reads the current borrowed
+Development 0.2.1 provides `Lanczos3ResizePlan` and `BicubicResizePlan` for a fixed
+source shape, destination shape and depth. Lanczos3 retains admitted axes and
+working rows. Bicubic retains horizontal geometry and working rows for eligible
+two-axis reductions on supported SIMD hardware; other shapes, portable paths and
+tight local bounds use ordinary exact resizing with zero retained storage.
+Each `Resize` reads the current borrowed
 source and returns an independent image with its current orientation. Identity
 plans copy hidden RGB. The creation limits/root apply to every call; the creation
 token governs preparation only. `StorageBytes` reports retained capacity until

@@ -19,12 +19,15 @@ native-only editing tolerances remain explicitly documented. Record managed
 allocation, encoded bytes and quiet guards alongside elapsed time; allocation
 is separate from cooperative admission capacity.
 
-Resolve uncertain measurements before tuning. Optimize a demonstrated substantial
-gap using one primitive and narrow controls. Reuse an immutable verified build
+Resolve uncertain measurements before tuning. Investigate substantial repeated
+work or storage with coherent architectural changes and narrow controls. Reuse an immutable verified build
 through a bounded experiment. Independently confirm promising changes; qualify
 accepted production changes on Windows/Linux, scalar paths and the actual Release
 package. Stop passing cases; add a workload only for a concrete missing required
 algorithm or public boundary. Compression correctness precedes CPU gains.
+Temporary regressions may be resolved across a coherent experiment. Judge completed
+stages on elapsed time, allocations, retention and simplification together; preserve
+adverse evidence and distinguish failed designs from inconclusive measurements.
 
 Generated cached selectors can bind fixed parameter values. Verify their prepared
 case and ordinal before reuse; changing the case environment filter does not

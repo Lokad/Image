@@ -13,142 +13,121 @@ internal static partial class CachedBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, OperationContext context)
     {
-        var support=Math.Max(tapsX,tapsY);
-        if(source.BitDepth is not (8 or 16) || support>2048)return false;
-        var wide=support>16;
-        var capacity=!wide?16:support>128?(int)BitOperations.RoundUpToPowerOf2((uint)support):support>64?128:support>32?64:32;
-        var heapMetadata=capacity>128;
-        var upsample=result.Width>source.Width && result.Height>source.Height;
-        var mixed=result.Width>source.Width && result.Height<source.Height
-            || result.Width<source.Width && result.Height>source.Height;
-        var horizontalDown=result.Width<source.Width && result.Height==source.Height;
-        var verticalDown=result.Width==source.Width && result.Height<source.Height;
-        var horizontalUp=source.BitDepth==8 && result.Width>source.Width && result.Height==source.Height;
-        var verticalUp=result.Width==source.Width && result.Height>source.Height;
-        if ((wide?result.Width>=source.Width || result.Height>=source.Height
-                :!upsample && !mixed && !horizontalDown && !verticalDown && !horizontalUp && !verticalUp && (result.Width>=source.Width || result.Height>=source.Height))
-            || result.Width<2 || tapsX>capacity || tapsY>capacity
-            || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
-            return false;
-        var width=result.Width;var wide16=source.BitDepth==16;
-        var identityHorizontal=verticalDown || verticalUp;
-        var bounds=wide?WideErrorBounds.Create(wide16,capacity):default;
-        var cacheWidth=(long)width+(mixed?(width&1):0);
-        var decodedElements=identityHorizontal?0:source.Width*4;
-        var dataElements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+decodedElements;
-        var geometryElements=(long)width*(capacity+1);
-        var elements=dataElements+(heapMetadata?capacity:0);
-        var indexElements=geometryElements+(heapMetadata?2*capacity:0);
-        var bytes=elements*sizeof(double)+indexElements*sizeof(int)+(heapMetadata?0:capacity*8);
-        if (elements>Array.MaxLength || indexElements>Array.MaxLength || bytes>context.RemainingWorkingBytes-ResizeAlpha.ScratchBytes)
-            return false;
-        context.Reserve(bytes);
+        if (!TryPrepare(source.Width, source.Height, source.BitDepth, result.Width, result.Height,
+            scaleX, tapsX, tapsY, context, out var workspace)) return false;
         try
         {
-            var storage=new double[(int)elements];
-            var geometry=new int[(int)indexElements];
-            var cacheElements=(int)(cacheWidth*(capacity*4));
-            var weights=storage.AsSpan(cacheElements,width*capacity);
-            var normalizers=storage.AsSpan(cacheElements+width*capacity,width);
-            var decodedWorkspace=storage.AsSpan(cacheElements+width*(capacity+1),decodedElements);
-            var offsets=geometry.AsSpan(0,width*capacity);
-            var counts=geometry.AsSpan(width*capacity,width);
-            for(var x=0;x<width;x++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var center=(x+0.5)*source.Width/width-0.5;
-                var first=(int)Math.Ceiling(center-2*scaleX);
-                var count=(int)Math.Floor(center+2*scaleX)-first+1;
-                counts[x]=count;
-                for(var t=0;t<count;t++)
-                {
-                    var w=ImageTransforms.Kernel((first+t-center)/scaleX,ResizeFilter.Bicubic);
-                    weights[x*capacity+t]=w;normalizers[x]+=w;
-                    // Wide rows consume pixel vectors directly. Narrow rows
-                    // retain channel offsets and their prepared overlap marker.
-                    offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*(wide?1:4);
-                }
-            }
-            if(!wide && !identityHorizontal)PrepareOverlappingHorizontalPairs(offsets,counts,width,source.Width,context);
-            if(wide)PrepareWideHorizontalPairs(offsets,counts,width,source.Width,capacity,context);
-            Span<int> rowIds=heapMetadata?geometry.AsSpan((int)geometryElements,capacity):stackalloc int[capacity];rowIds.Fill(-1);
-            Span<int> rows=heapMetadata?geometry.AsSpan((int)geometryElements+capacity,capacity):stackalloc int[capacity];
-            Span<double> vertical=heapMetadata?storage.AsSpan((int)dataElements,capacity):stackalloc double[capacity];
-            var input=source.Pixels;
-            var cancellation=context.Cancellation;
-            var pollConversion=identityHorizontal && cancellation.CanBeCanceled;
-            for(var y=0;y<result.Height;y++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var center=(y+0.5)*source.Height/result.Height-0.5;
-                var first=(int)Math.Ceiling(center-2*scaleY);
-                var count=(int)Math.Floor(center+2*scaleY)-first+1;
-                double normalizerY=0;
-                for(var t=0;t<count;t++)
-                {
-                    var w=ImageTransforms.Kernel((first+t-center)/scaleY,ResizeFilter.Bicubic);
-                    vertical[t]=w;normalizerY+=w;
-                    var sy=Math.Clamp(first+t,0,source.Height-1);
-                    var slot=sy&(capacity-1);rows[t]=(int)(slot*cacheWidth*4);
-                    if(rowIds[slot]==sy)continue;
-                    rowIds[slot]=sy;
-                    var row=input.Slice(sy*source.Stride,source.Stride);
-                    // An unchanged horizontal axis preserves these exact products.
-                    // Convert directly into its cache slot, without a copied row.
-                    var decoded=identityHorizontal?storage.AsSpan(rows[t],width*4):decodedWorkspace;
-                    if(pollConversion)DecodePremultipliedRow<PollRow>(row,decoded,source.Width,wide16,cancellation);
-                    else DecodePremultipliedRow<NoRowPolling>(row,decoded,source.Width,wide16,default);
-                    if(wide)FilterWideHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,context);
-                    else if(!identityHorizontal)FilterHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,
-                        mixed || horizontalUp,context);
-                }
-                if(wide)
-                {
-                    if(wide16)
-                        WriteWideRow<WordSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
-                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,false,context);
-                    else
-                        WriteWideRow<ByteSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
-                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,tapsX<=20 && tapsY<=20,context);
-                    continue;
-                }
-                var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
-                if(mixed)
-                {
-                    var vectors=MemoryMarshal.Cast<double,Vector512<double>>(storage.AsSpan(0,cacheElements));
-                    if(wide16)WriteMixedWordRow(source,result,y,vectors,rows[..count],vertical[..count],
-                        normalizers,normalizerY,weights,offsets,counts,first,context);
-                    else WriteMixedByteRow(source,result,y,vectors,rows[..count],vertical[..count],
-                        normalizers,normalizerY,weights,offsets,counts,first,context);
-                    if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
-                    continue;
-                }
-                if(!wide16)
-                {
-                    WriteByteRow(source,result,y,storage,rows[..count],vertical[..count],
-                        normalizers,normalizerY,weights,offsets,counts,first,context);
-                    if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
-                    continue;
-                }
-                for(var x=0;x+1<width;x+=2)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var sum=Vector512<double>.Zero;
-                    for(var t=0;t<count;t++)
-                        sum=Avx512F.Add(sum,Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(storage.AsSpan(rows[t]+x*4,8))),Vector512.Create(vertical[t])));
-                    var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
-                    if(!BicubicMath.TryWriteWordPair(sum,n0,n1,destination.Slice(x*8,16)))
-                    {
-                        Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,16,context);
-                        Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,16,context);
-                    }
-                }
-                if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
-            }
+            Execute(source, result, scaleY, tapsX, tapsY, workspace, context);
             return true;
         }
-        finally {context.Release(bytes);}
+        finally { context.Release(workspace.Bytes); }
     }
+
+    internal static void Execute(ImageBuffer source, ImageBuffer result, double scaleY, long tapsX, long tapsY,
+        in Workspace workspace, OperationContext context)
+    {
+        var width=result.Width;var wide16=source.BitDepth==16;
+        var capacity=workspace.Capacity;var wide=workspace.Wide;var heapMetadata=capacity>128;
+        var mixed=workspace.Mixed;var horizontalUp=workspace.HorizontalUp;
+        var identityHorizontal=workspace.IdentityHorizontal;var cacheWidth=workspace.CacheWidth;
+        var bounds=wide?WideErrorBounds.Create(wide16,capacity):default;
+        var storage=workspace.Storage;var geometry=workspace.Geometry;
+        var cacheElements=cacheWidth*(capacity*4);var geometryElements=(long)width*(capacity+1);
+        var decodedElements=identityHorizontal?0:source.Width*4;
+        var dataElements=cacheElements+geometryElements+decodedElements;
+        var weights=storage.AsSpan(cacheElements,width*capacity);
+        var normalizers=storage.AsSpan(cacheElements+width*capacity,width);
+        var decodedWorkspace=storage.AsSpan(cacheElements+width*(capacity+1),decodedElements);
+        var offsets=geometry.AsSpan(0,width*capacity);
+        var counts=geometry.AsSpan(width*capacity,width);
+        Span<int> rowIds=heapMetadata?geometry.AsSpan((int)geometryElements,capacity):stackalloc int[capacity];rowIds.Fill(-1);
+        Span<int> rows=heapMetadata?geometry.AsSpan((int)geometryElements+capacity,capacity):stackalloc int[capacity];
+        Span<double> vertical=heapMetadata?storage.AsSpan((int)dataElements,capacity):stackalloc double[capacity];
+        var input=source.Pixels;
+        var cancellation=context.Cancellation;
+        var pollConversion=identityHorizontal && cancellation.CanBeCanceled;
+        for(var y=0;y<result.Height;y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var center=(y+0.5)*source.Height/result.Height-0.5;
+            var first=(int)Math.Ceiling(center-2*scaleY);
+            var count=(int)Math.Floor(center+2*scaleY)-first+1;
+            double normalizerY=0;
+            for(var t=0;t<count;t++)
+            {
+                var w=ImageTransforms.Kernel((first+t-center)/scaleY,ResizeFilter.Bicubic);
+                vertical[t]=w;normalizerY+=w;
+                var sy=Math.Clamp(first+t,0,source.Height-1);
+                var slot=sy&(capacity-1);rows[t]=(int)(slot*cacheWidth*4);
+                if(rowIds[slot]==sy)continue;
+                rowIds[slot]=sy;
+                var row=input.Slice(sy*source.Stride,source.Stride);
+                // An unchanged horizontal axis preserves these exact products.
+                // Convert directly into its cache slot, without a copied row.
+                var decoded=identityHorizontal?storage.AsSpan(rows[t],width*4):decodedWorkspace;
+                if(pollConversion)DecodePremultipliedRow<PollRow>(row,decoded,source.Width,wide16,cancellation);
+                else DecodePremultipliedRow<NoRowPolling>(row,decoded,source.Width,wide16,default);
+                if(wide)FilterWideHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,context);
+                else if(!identityHorizontal)FilterHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,
+                    mixed || horizontalUp,context);
+            }
+            if(wide)
+            {
+                if(wide16)
+                    WriteWideRow<WordSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                        normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,false,context);
+                else
+                    WriteWideRow<ByteSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                        normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,tapsX<=20 && tapsY<=20,context);
+                continue;
+            }
+            if(mixed)
+            {
+                var vectors=MemoryMarshal.Cast<double,Vector512<double>>(storage.AsSpan(0,cacheElements));
+                if(wide16)WriteMixedWordRow(source,result,y,vectors,rows[..count],vertical[..count],
+                    normalizers,normalizerY,weights,offsets,counts,first,context);
+                else WriteMixedByteRow(source,result,y,vectors,rows[..count],vertical[..count],
+                    normalizers,normalizerY,weights,offsets,counts,first,context);
+                if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
+                continue;
+            }
+            if(!wide16)
+            {
+                WriteByteRow(source,result,y,storage,rows[..count],vertical[..count],
+                    normalizers,normalizerY,weights,offsets,counts,first,context);
+                if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
+                continue;
+            }
+            WriteWordRow(source,result,y,storage,rows[..count],vertical[..count],
+                normalizers,normalizerY,weights,offsets,counts,first,context);
+        }
+    }
+    // Keep the narrow word accumulator and its unchanged certificate in a
+    // row kernel, outside the geometry/cache scheduler's large live frame.
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static void WriteWordRow(ImageBuffer source,ImageBuffer result,int y,
+        double[] storage,ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,
+        ReadOnlySpan<double> normalizers,double normalizerY,ReadOnlySpan<double> weights,
+        ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int first,OperationContext context)
+    {
+        var width=result.Width;var count=rows.Length;
+        var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
+        for(var x=0;x+1<width;x+=2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var sum=Vector512<double>.Zero;
+            for(var t=0;t<count;t++)
+                sum=Avx512F.Add(sum,Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(storage.AsSpan(rows[t]+x*4,8))),Vector512.Create(vertical[t])));
+            var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
+            if(!BicubicMath.TryWriteWordPair(sum,n0,n1,destination.Slice(x*8,16)))
+            {
+                Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,16,context);
+                Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,16,context);
+            }
+        }
+        if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,16,context);
+    }
+
     private static void WriteByteRow(ImageBuffer source,ImageBuffer result,int y,
         ReadOnlySpan<double> cached,ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,
         ReadOnlySpan<double> normalizers,double normalizerY,ReadOnlySpan<double> weights,
