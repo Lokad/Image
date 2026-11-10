@@ -612,6 +612,35 @@ internal static class CooperativeMemoryConsumer
             if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged Lanczos plan leaked admission or disposed the caller root.");
         }
         Console.WriteLine("Packaged Lanczos plans preserve exact reuse, retained admission and asynchronous surviving outputs.");
+        VerifyLanczosPendingOutput();
+    }
+
+    private static void VerifyLanczosPendingOutput()
+    {
+        if (!(System.Runtime.Intrinsics.X86.Avx512F.IsSupported
+            && System.Runtime.Intrinsics.X86.Avx512DQ.IsSupported
+            && System.Runtime.Intrinsics.X86.Avx512DQ.VL.IsSupported
+            && System.Runtime.Intrinsics.X86.Avx2.IsSupported
+            && System.Runtime.Intrinsics.X86.Fma.IsSupported
+            && System.Runtime.Intrinsics.X86.Sse41.IsSupported)) return;
+        using var source = OriginalPixels.Buffer(39, 9, 16);
+        using var probe = Lanczos3ResizePlan.Create(39, 9, 19, 4, 16);
+        const int outputBytes = 19 * 4 * 8;
+        // Leave room for the pending result, rather than selecting optional
+        // product storage that is sixteen bytes too large at this boundary.
+        var limit = (long)source.Stride * source.Height + probe.StorageBytes - 39 * 16L + 2L * outputBytes;
+        using var expected = ImageTransforms.Resize(source, 19, 4, ResizeFilter.Lanczos3);
+        using var root = new TestMemoryBudget(1 << 20);
+        using (var actual = ImageTransforms.Resize(source, 19, 4, ResizeFilter.Lanczos3,
+            new ImageLimits { MemoryBudget = root, MaxWorkingBytes = limit }))
+        {
+            if (!OriginalPixels.Bytes(expected).AsSpan().SequenceEqual(OriginalPixels.Bytes(actual))
+                || root.Bytes != outputBytes)
+                throw new Exception("Packaged Lanczos pending output lost exact pixels or retained admission.");
+        }
+        if (root.Bytes != 0 || root.IsDisposed)
+            throw new Exception("Packaged Lanczos pending output leaked storage or disposed its borrowed root.");
+        Console.WriteLine("Packaged Lanczos local ceiling preserves pending output and independent admitted ownership.");
     }
     private static async Task VerifyWebpCandidateWorkspace()
     {

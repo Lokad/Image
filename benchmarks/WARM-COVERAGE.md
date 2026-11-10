@@ -7,8 +7,8 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [quartet stage](BICUBIC-SHARED-QUARTET-EXECUTION.md) passes
-6,183 full/live checks per OS, affected normal/scalar/ISA and the same actual
+The latest accepted [Lanczos word-row stage](LANCZOS-PAIRED-WORD-ROWS.md) passes
+6,197 full/live checks per OS, affected normal/scalar/ISA and the same actual
 Release-package consumer/all three examples on Windows/Linux. This qualifies
 production correctness and ownership; it is not a whole-release timing refresh.
 Unchanged performance/qualification evidence is reused only within its source scope.
@@ -30,7 +30,7 @@ Unchanged performance/qualification evidence is reused only within its source sc
 | Bounded narrow bicubic | [Result-row loan](NARROW-BICUBIC-ROW-LOAN.md): byte472.44/zimg417.11µs upper1.165 remains a gap; word upper.971 passes/stops. Same113B/op/4KiB, no added owned capacity. |
 | Bounded wide bicubic | [Result-row loan](BICUBIC-RESULT-ROW-LOAN.md): byte406.16/zimg367.01µs upper1.119 remains a gap; word upper1.003 is uncertain. No substitution of an older pass over a changed driver. |
 | Cached wider/other bicubic | [Certified publication](CACHED-WIDE-CERTIFIED-PUBLICATION.md): 8 controls, 7 pass / 1 gap. Wide byte395.96/zimg345.54µs upper1.206 remains a gap. [Identity caches](BICUBIC-IDENTITY-CACHE-ROWS.md), [overlap](BICUBIC-WIDE-OVERLAP.md) and unchanged [word preparation](BICUBIC-SHARED-WORD-PREPARATION.md) own other named paths. |
-| Lanczos3 | [Paired byte rows](LANCZOS-PAIRED-BYTE-ROWS.md): 8 controls, 6 pass / 1 prepared-word reduction gap / 1 byte uncertainty (upper1.011). Word enlargement upper.979 passes. Preserve exact Q30/rational output and disclose prepared versus one-shot boundaries. |
+| Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear enlargement | [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md): complete RGBA8 Up8 upper.993 passes; source-valid other bilinear boundaries retain their own evidence/H status. |
 | Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Prepared drawing](TEXT-ENDPOINT-STORAGE.md) remains two gaps; allocation59000B/draw and inconclusive CPU gains stay distinct. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 is a gap,176B/op; pooled capacity/lazy native validation are separately labeled. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |

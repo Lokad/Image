@@ -1202,14 +1202,16 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-word-rows-evidence.json').read_text(encoding='utf-8'))
     lanczos_qualification = lanczos_current['qualification']
-    assert lanczos_current['productionAccepted'] and lanczos_current['storage']['capacityUnchanged']
-    assert lanczos_current['sourceProof']['singleByteKernelAndConversionSourceVerbatim']
+    assert lanczos_current['productionAccepted'] and lanczos_current['storage']['primaryExtraOwnedCapacityBytes'] == 8208
+    assert lanczos_current['sourceProof']['existingByteSingleAndPairedWordArithmeticSourceVerbatim']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in lanczos_current['comparisons']['Repeated8']['views'].values())
-    assert not any(v['normalizedLossSeparated'] for c in lanczos_current['comparisons'].values() for v in c['views'].values())
-    assert lanczos_qualification['fullChecksEachOs'] == 6153
+               for case in ['Repeated16', 'OneShot16']
+               for v in lanczos_current['mechanismComparisons'][case]['views'].values())
+    assert all(v['normalizedGainSeparated'] for v in lanczos_current['currentComparisons']['Repeated16']['views'].values())
+    assert not any(v['normalizedLossSeparated'] for v in lanczos_current['currentComparisons']['Repeated8']['views'].values())
+    assert lanczos_qualification['fullChecksEachOs'] == 6197
     assert lanczos_qualification['actualPackage']['sha256'] == lanczos_qualification['samePackageLinux']['sameActualPackageSha256']
     current_build_qualification = jpeg_qualification
     assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
@@ -1692,7 +1694,7 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = quartet['qualification']
+    current_build_qualification = lanczos_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1875,9 +1877,15 @@ Current scope and remaining work:
   with separated raw/normalized confidence and native clock movement disclosed;
   byte/word upper{packed_current['cases']['Tight64x32_8']['upper']:.3f}/{packed_current['cases']['Tight64x32_16']['upper']:.3f}
   remain gaps. No new capacity; same 4 KiB/113 B/op and scratch 0.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
-  resolve the byte uncertainty before tuning. Exact managed Q30/rational results
-  remain distinct from native float. Useful specialized kernels/fallbacks remain.
+  [Lanczos word-row sharing](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) has 6 passes /
+  1 prepared-byte gap / 1 prepared-word uncertainty. The paired study saves
+  41.10/41.15 µs for prepared/one-shot word reduction; final current costs stay
+  separate from that scoped evidence. Word preparation retains 156,248 B,
+  up8,208 B; final prepared/one-shot allocations are139/155,077 B/op. The final
+  word comparison improves7.18% relative to its native bracket while raw time
+  rises0.57%; byte normalized intervals overlap. No universal gain or parity claim.
+  Resolve word uncertainty before further tuning. Exact managed Q30/rational
+  results remain distinct from native float; useful kernels/fallbacks remain.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
   [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and

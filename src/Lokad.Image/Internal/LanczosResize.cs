@@ -14,17 +14,24 @@ internal static class LanczosResize
         using var horizontal = LanczosPlan.Create(source.Width, width, context);
         using var vertical = LanczosPlan.Create(source.Height, height, context);
         var fast = LanczosFmaResize.CanUse(source.BitDepth, width, height, horizontal, vertical, context);
-        using var workspace = new LanczosWorkspace(horizontal, vertical, source.BitDepth, fast, context);
+        // Keep room for the independently owned result when choosing optional
+        // row capacity. This selection does not reserve or charge that output.
+        var outputBytes = context.PixelBytes(width, height, source.BitDepth);
+        using var workspace = new LanczosWorkspace(horizontal, vertical, source.BitDepth, fast, context, outputBytes);
         return Execute(source, width, height, horizontal, vertical, workspace, context);
     }
 
     private readonly struct SingleRows { }
     private readonly struct PairedByteRows { }
+    private readonly struct PairedWordRows { }
 
     internal static ImageBuffer Execute(ImageBuffer source, int width, int height, LanczosPlan horizontal,
         LanczosPlan vertical, LanczosWorkspace workspace, OperationContext context)
         => workspace.Fast && source.BitDepth == 8 && height < vertical.SourceLength
             ? Execute<PairedByteRows>(source, width, height, horizontal, vertical, workspace, context)
+            : workspace.Fast && source.BitDepth == 16 && width < source.Width && height < source.Height
+                && workspace.Products.Length >= source.Width * 8L
+                ? Execute<PairedWordRows>(source, width, height, horizontal, vertical, workspace, context)
             : Execute<SingleRows>(source, width, height, horizontal, vertical, workspace, context);
 
     private static ImageBuffer Execute<TRows>(ImageBuffer source, int width, int height, LanczosPlan horizontal,
@@ -60,18 +67,23 @@ internal static class LanczosResize
                             // that this window will actually consume. Distinct
                             // cache slots stay private until both are complete.
                             var prepared = false;
-                            if (typeof(TRows) == typeof(PairedByteRows))
+                            if (typeof(TRows) == typeof(PairedByteRows) || typeof(TRows) == typeof(PairedWordRows))
                             {
                                 var next = sy + 1; var nextSlot = next % slots;
                                 if (slots > 1 && tap + 1 < window.Count
                                     && vertical.Weights[window.Offset + tap + 1] != 0 && rowIds[nextSlot] != next)
                                 {
                                     var nextRow = workspace.FastRows.AsSpan(nextSlot * (int)channels, (int)channels);
-                                    LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
+                                    if (typeof(TRows) == typeof(PairedByteRows))
+                                        LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
+                                    else LanczosFmaResize.HorizontalWordPair(source, sy, next, horizontal,
+                                        row, nextRow, workspace.Products, context);
                                     rowIds[nextSlot] = next; prepared = true;
                                 }
                             }
-                            if (!prepared) LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context);
+                            if (!prepared) LanczosFmaResize.Horizontal(source, sy, horizontal, row,
+                                typeof(TRows) == typeof(PairedWordRows)
+                                    ? workspace.Products.AsSpan(0, source.Width * 4) : workspace.Products, context);
                             rowIds[slot] = sy;
                         }
                         context.Cancellation.ThrowIfCancellationRequested();

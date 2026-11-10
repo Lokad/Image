@@ -46,7 +46,7 @@ Preparation boundaries remain explicit:
 - Lanczos compares both complete one-shot operations and separately prepared
   execution with owned plans/workspace. Native graph/input/scratch and managed
   axes/rows stay retained only in the prepared boundary. Current costs are owned
-  by [certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md); initial
+  by [shared word-row preparation](LANCZOS-PAIRED-WORD-ROWS.md); initial
   asymmetric measurements remain history. Exact managed Q30/rational results and
   certified repair differ from native float and remain required.
 - Current fresh-context PNG controls include codec/zlib/working-state preparation,

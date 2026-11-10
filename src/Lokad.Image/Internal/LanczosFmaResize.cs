@@ -189,6 +189,63 @@ internal static class LanczosFmaResize
     private readonly struct PairedWordWindows { }
     private readonly struct SingleWordWindows { }
 
+    internal static void HorizontalWordPair(ImageBuffer source, int firstY, int secondY, LanczosPlan plan,
+        Span<double> output, Span<double> nextOutput, Span<uint> products, OperationContext context)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        var channels = checked(source.Width * 4);
+        var firstProducts = products[..channels]; var secondProducts = products.Slice(channels, channels);
+        var firstSource = source.GetRow16(firstY); var secondSource = source.GetRow16(secondY);
+        LanczosResize.PrepareWordProducts(firstSource, firstProducts, context);
+        LanczosResize.PrepareWordProducts(secondSource, secondProducts, context);
+        FilterWordPair(firstProducts, secondProducts, plan, output, nextOutput, context);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void FilterWordPair(ReadOnlySpan<uint> firstProducts, ReadOnlySpan<uint> secondProducts,
+        LanczosPlan plan, Span<double> output, Span<double> nextOutput, OperationContext context)
+    {
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
+        ReadOnlySpan<LanczosPlan.Window> windows = plan.Windows;
+        ReadOnlySpan<int> weights = plan.Weights;
+        for (var x = 0; x < windows.Length; x++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var window = windows[x];
+            var first = Vector512<double>.Zero; var second = Vector512<double>.Zero;
+            var nextFirst = Vector512<double>.Zero; var nextSecond = Vector512<double>.Zero; var i = 0;
+            for (; i <= window.Count - 4; i += 4)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                // Only coefficient loading/conversion/permutation is shared.
+                // Each row keeps all four original FMA chains and their order.
+                var coefficients = Avx.ConvertToVector256Double(Vector128.Create(weights.Slice(window.Offset + i, 4)));
+                var wide = Vector512.Create(coefficients, coefficients).AsInt64();
+                var weights01 = Avx512F.PermuteVar8x64(wide, replicate01).AsDouble();
+                var weights23 = Avx512F.PermuteVar8x64(wide, replicate23).AsDouble();
+                var values = firstProducts.Slice((window.First + i) * 4, 16);
+                first = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(Vector256.Create(values)), weights01, first);
+                second = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(Vector256.Create(values[8..])), weights23, second);
+                values = secondProducts.Slice((window.First + i) * 4, 16);
+                nextFirst = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(Vector256.Create(values)), weights01, nextFirst);
+                nextSecond = Avx512F.FusedMultiplyAdd(Avx512F.ConvertToVector512Double(Vector256.Create(values[8..])), weights23, nextSecond);
+            }
+            var pair = Avx512F.Add(first, second); var sum = Avx.Add(pair.GetLower(), pair.GetUpper());
+            var nextPair = Avx512F.Add(nextFirst, nextSecond); var nextSum = Avx.Add(nextPair.GetLower(), nextPair.GetUpper());
+            for (; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var factor = Vector256.Create((double)weights[window.Offset + i]);
+                var values = Vector256.Create(Vector128.Create(firstProducts.Slice((window.First + i) * 4, 4)), Vector128<uint>.Zero);
+                sum = Fma.MultiplyAdd(Avx512F.ConvertToVector512Double(values).GetLower(), factor, sum);
+                values = Vector256.Create(Vector128.Create(secondProducts.Slice((window.First + i) * 4, 4)), Vector128<uint>.Zero);
+                nextSum = Fma.MultiplyAdd(Avx512F.ConvertToVector512Double(values).GetLower(), factor, nextSum);
+            }
+            sum.CopyTo(output.Slice(x * 4, 4)); nextSum.CopyTo(nextOutput.Slice(x * 4, 4));
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
+    }
+
     private static void HorizontalWord<TWindows>(ReadOnlySpan<uint> input, LanczosPlan plan,
         Span<double> output, OperationContext context) where TWindows : struct
     {

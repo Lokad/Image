@@ -71,9 +71,15 @@ Current scope and remaining work:
   with separated raw/normalized confidence and native clock movement disclosed;
   byte/word upper1.028/1.098
   remain gaps. No new capacity; same 4 KiB/113 B/op and scratch 0.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
-  resolve the byte uncertainty before tuning. Exact managed Q30/rational results
-  remain distinct from native float. Useful specialized kernels/fallbacks remain.
+  [Lanczos word-row sharing](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) has 6 passes /
+  1 prepared-byte gap / 1 prepared-word uncertainty. The paired study saves
+  41.10/41.15 µs for prepared/one-shot word reduction; final current costs stay
+  separate from that scoped evidence. Word preparation retains 156,248 B,
+  up8,208 B; final prepared/one-shot allocations are139/155,077 B/op. The final
+  word comparison improves7.18% relative to its native bracket while raw time
+  rises0.57%; byte normalized intervals overlap. No universal gain or parity claim.
+  Resolve word uncertainty before further tuning. Exact managed Q30/rational
+  results remain distinct from native float; useful kernels/fallbacks remain.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
   [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and
@@ -82,11 +88,11 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,183 full/live checks per OS**
+The current immutable build passes **6,197 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Resize checks pass 351 internal/747 public per
+Windows/Linux**. Resize checks pass 362 internal/747 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
-(459 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
+(462 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
@@ -182,14 +188,14 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 672.38 | 1,696.51 | 0.396 / 0.400 | 138,647 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 491.59 | 489.18 | 1.005 / 1.011 | 138 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 684.08 | 1,812.27 | 0.377 / 0.380 | 146,866 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 587.91 | 548.90 | 1.071 / 1.095 | 139 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,765.94 | 5,244.39 | 0.718 / 0.723 | 319,224 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,780.94 | 4,376.66 | 0.864 / 0.877 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,393.34 | 5,486.14 | 0.801 / 0.808 | 4,592,777 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,784.95 | 3,898.01 | 0.971 / 0.979 | 4,265,332 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 667.33 | 1,629.83 | 0.409 / 0.436 | 138,647 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 504.32 | 491.61 | 1.026 / 1.039 | 138 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 698.00 | 1,963.30 | 0.356 / 0.360 | 155,077 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 550.80 | 552.29 | 0.997 / 1.012 | 139 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,769.63 | 5,231.96 | 0.720 / 0.726 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,496.35 | 4,060.63 | 0.861 / 0.865 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,084.94 | 5,070.48 | 0.806 / 0.811 | 4,592,818 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |

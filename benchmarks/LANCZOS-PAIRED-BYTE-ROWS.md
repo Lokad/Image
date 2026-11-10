@@ -1,5 +1,9 @@
 # Paired Lanczos byte rows
 
+The [word-row stage](LANCZOS-PAIRED-WORD-ROWS.md) supersedes the eight costs and
+whole-build qualification below. This report retains the byte-row design,
+scoped gain, adverse transition and reproducibility.
+
 LBR748 shares Q30 coefficient expansion across two required missing source rows,
 using their existing admitted cache slots. Complete prepared RGBA8 reduction
 improves **580.52→491.59 µs: 88.92 µs / 15.32% raw / 15.18% normalized**, with
