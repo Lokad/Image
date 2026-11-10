@@ -32,7 +32,7 @@ is zero. Existing default output-pool retention is separate and governed calls
 bypass it. Physical/native/full admitted peaks are not remeasured or inferred
 from GC.
 
-## Next preparation boundary
+## Preparation lead and subsequent execution
 
 The kernel rebuilds vertical weights and normalizers inside every two-column
 strip. Existing `ColumnBicubicGeometry` already prepares those values in borrowed,
@@ -46,6 +46,12 @@ and18 direct suffix strips. The model changes vertical kernel evaluations from
 traffic or predicted elapsed savings. Preserve ordered weights/normalizers,
 exact pixels and tiny-alpha repair. Added calls/copies and register liveness may
 offset saved work; a complete-operation screen and useful confirmation decide.
+
+The subsequent [geometry study](PACKED-WORD-GEOMETRY-EXPERIMENT.md) preserves exact
+pixels but establishes no useful complete-operation gain; its implementation is
+removed. The capture instead motivates consolidating the byte/word packed paths
+around the existing decoded-cache prefix, avoiding repeated word widening in
+horizontal accumulation. Current costs above remain unchanged.
 
 [Evidence](current-packed-word-resize-evidence.json) pins the current package,
 module/source/input/output identities, confidence, guards and model. Mirrored,
