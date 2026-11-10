@@ -54,8 +54,13 @@ Current scope and remaining work:
   Cache/weights borrow 10,880 B from unpublished output, with no added owned capacity;
   same 4 KiB admission, 113 B/op, 32,768 B result and scratch 0. The existing large
   default/compact pair screens 20.53/21.64 ms, three actuals each, without a native
-  or historical-gain claim. [Narrow preparation](../benchmarks/BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
-  retains 33.29 µs savings/upper 1.167 gap. [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
+  or historical-gain claim. [Narrow row reuse](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md)
+  saves **16.28 µs/3.33% raw**;
+  both raw confidence views separate, while normalized intervals overlap.
+  Its byte upper1.165 remains a gap; refreshed word
+  upper0.971 passes/stops. The same 4 KiB/113 B/op
+  covers 11,776 B borrowed from unpublished result rows, with no new capacity.
+  [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
   has 7 passes / 1 gap; [packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
   has 2 gaps. [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
   resolve the byte uncertainty before tuning. Exact managed Q30/rational results
@@ -68,11 +73,11 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,172 full/live checks per OS**
+The current immutable build passes **6,180 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. JPEG checks pass 458 internal/375 public per
-normal/scalar/disabled-AVX2/AVX512 mode; unchanged resize evidence (341 internal/729 public)
-is reused. Exact packets/pixels, shared admission,
+Windows/Linux**. Resize checks pass 349 internal/729 public per
+normal/scalar/disabled-AVX2/AVX512 mode; unchanged JPEG evidence
+(458 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
@@ -188,8 +193,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,114.50 | 3,041.43 | 1.024 / 1.030 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 484.90 | 417.35 | 1.162 / 1.167 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 560.37 | 572.84 | 0.978 / 0.985 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 472.44 | 417.11 | 1.133 / 1.165 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.94 | 569.04 | 0.959 / 0.971 | 113 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 395.96 | 345.54 | 1.146 / 1.206 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |

@@ -7,12 +7,14 @@ using System.Runtime.Intrinsics.X86;
 namespace Lokad.Image.Internal;
 
 /// <summary>Bounded column strips reuse source rows within an admitted stack workspace.</summary>
-internal static class ColumnBicubicResize
+internal static partial class ColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
     private readonly struct SmallStrip { }
     private readonly struct LargeStrip { }
+    private readonly struct RowLoanStrip { }
+    private readonly struct RowTailStrip { }
     private readonly struct ByteSamples { }
     private readonly struct WordSamples { }
 
@@ -27,32 +29,57 @@ internal static class ColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            var word = source.BitDepth == 16;
-            var rowSlots = scaleY < 2.25 && (!word || scaleX < 2.25) ? 9 : 10;
-            var stripColumns = rowSlots == 9 ? 8 : 6;
-            var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 10,
-                stripColumns, context.Cancellation);
-            var firstColumn = 0;
-            if (geometry.PrefixColumns != 0
-                && TryLocateResultCache(result, rowSlots, out var start, out var prefixColumns))
-            {
-                var cache = MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels[start..]);
-                var complete = word
-                    ? ApplyRange<LargeStrip, WordSamples>(source, result, scaleX, scaleY, rowSlots,
-                        geometry, cache, result.Stride / 32, 0, prefixColumns, context)
-                    : ApplyRange<LargeStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
-                        geometry, cache, result.Stride / 32, 0, prefixColumns, context);
-                if (!complete) return false;
-                firstColumn = prefixColumns;
-            }
-            // The large stack/cache users have returned before suffix writes.
-            return word
-                ? ApplyRange<SmallStrip, WordSamples>(source, result, scaleX, scaleY, rowSlots,
-                    geometry, default, 0, firstColumn, result.Width, context)
-                : ApplyRange<SmallStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
-                    geometry, default, 0, firstColumn, result.Width, context);
+            return source.BitDepth == 16
+                ? ApplyPrepared<WordSamples>(source, result, scaleX, scaleY, context)
+                : ApplyPrepared<ByteSamples>(source, result, scaleX, scaleY, context);
         }
         finally { context.Release(WorkspaceBytes); }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool ApplyPrepared<TSamples>(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context) where TSamples : struct
+    {
+        var word = typeof(TSamples) == typeof(WordSamples);
+        var rowSlots = scaleY < 2.25 && (!word || scaleX < 2.25) ? 9 : 10;
+        var stripColumns = rowSlots == 9 ? 8 : 6;
+        var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 10,
+            stripColumns, context.Cancellation);
+        if (typeof(TSamples) == typeof(ByteSamples)
+            && TryLocateRowLoan(result, rowSlots, out var firstTailRow, out _))
+        {
+            if (!ApplyRange<RowLoanStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
+                geometry, default, 32, 0, result.Width, context)) return false;
+            // Cache and coefficient users have returned before their rows are
+            // reused for tail metadata and final pixels.
+            geometry = ColumnBicubicGeometry.PrepareTail(result, source.Height, scaleY, 10,
+                stripColumns, firstTailRow, context.Cancellation);
+            return ApplyRange<RowTailStrip, ByteSamples>(source, result, scaleX, scaleY, rowSlots,
+                geometry, default, 0, 0, result.Width, context);
+        }
+        var firstColumn = 0;
+        if (geometry.PrefixColumns != 0
+            && TryLocateResultCache(result, rowSlots, out var start, out var prefixColumns))
+        {
+            var cache = MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels[start..]);
+            if (!ApplyRange<LargeStrip, TSamples>(source, result, scaleX, scaleY, rowSlots,
+                geometry, cache, result.Stride / 32, 0, prefixColumns, context)) return false;
+            firstColumn = prefixColumns;
+        }
+        return ApplyRange<SmallStrip, TSamples>(source, result, scaleX, scaleY, rowSlots,
+            geometry, default, 0, firstColumn, result.Width, context);
+    }
+
+    internal static bool TryLocateRowLoan(ImageBuffer result, int rowSlots, out int firstTailRow, out int start)
+    {
+        firstTailRow = start = 0;
+        if (result.BitDepth != 8 || result.Width < 32 || (uint)(rowSlots - 9) > 1) return false;
+        var bytes = rowSlots * 32 * 32 + 32 * 10 * sizeof(double);
+        var rows = (int)((bytes + (long)result.Stride - 1) / result.Stride);
+        var first = result.Height - rows;
+        if (first < rowSlots) return false;
+        firstTailRow = first; start = checked(first * result.Stride);
+        return true;
     }
 
     internal static bool TryLocateResultCache(ImageBuffer result, int rowSlots,
@@ -86,26 +113,39 @@ internal static class ColumnBicubicResize
         scoped Span<Vector256<double>> cache, int cacheStride, int firstColumn, int endColumn,
         OperationContext context) where TStrip : struct where TSamples : struct
     {
-        // These physically separate frames retire between prefix and suffix.
-        // Small retains the original4080B payload; large uses3232B plus a loan
-        // from the independently admitted result. Neither owns additional capacity.
-        var large = typeof(TStrip) == typeof(LargeStrip);
+        // Frames retire before their unpublished result storage is reused.
+        // Payloads: old small/large4,080/3,232B; row loan3,424B. No new capacity.
+        var rowLoan = typeof(TStrip) == typeof(RowLoanStrip);
+        var rowTail = typeof(TStrip) == typeof(RowTailStrip);
+        var firstTailRow = 0; var loanStart = 0;
+        if (rowLoan || rowTail)
+            if (!TryLocateRowLoan(result, rowSlots, out firstTailRow, out loanStart)) return false;
+        var large = typeof(TStrip) == typeof(LargeStrip) || rowLoan;
         var word = typeof(TSamples) == typeof(WordSamples);
         var pixelBytes = word ? 8 : 4;
-        Span<byte> workspace = stackalloc byte[large ? 3232 : 4080];
-        var capacity = large ? 16 : 8;
-        var sourceCapacity = large ? 45 : 25;
-        if (!large) { cache = Take<Vector256<double>>(ref workspace, 9 * 8); cacheStride = rowSlots == 9 ? 8 : 6; }
+        Span<byte> workspace = stackalloc byte[rowLoan ? 3424 : large ? 3232 : 4080];
+        var capacity = rowLoan ? 32 : large ? 16 : 8;
+        var sourceCapacity = rowLoan ? 80 : large ? 45 : 25;
+        if (rowLoan)
+        {
+            cache = MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels.Slice(loanStart, rowSlots * 32 * 32));
+            cacheStride = 32;
+        }
+        else if (!large) { cache = Take<Vector256<double>>(ref workspace, 9 * 8); cacheStride = rowSlots == 9 ? 8 : 6; }
         var rowIds = Take<int>(ref workspace, 10);
         var decoded = Take<Vector256<double>>(ref workspace, sourceCapacity);
-        var weights = Take<double>(ref workspace, capacity * 10);
+        scoped Span<double> weights;
+        if (rowLoan)
+            weights = MemoryMarshal.Cast<byte, double>(result.Pixels.Slice(loanStart + rowSlots * 32 * 32, 32 * 10 * sizeof(double)));
+        else
+            weights = Take<double>(ref workspace, capacity * 10);
         var offsets = Take<byte>(ref workspace, capacity * 10);
         var counts = Take<int>(ref workspace, capacity);
         var normalizers = Take<double>(ref workspace, capacity);
         var vertical = Take<double>(ref workspace, 10);
         var rows = Take<int>(ref workspace, 10);
         var input = source.Pixels;
-        var stripColumns = large ? 16 : rowSlots == 9 ? 8 : 6;
+        var stripColumns = rowLoan ? 32 : large ? 16 : rowSlots == 9 ? 8 : 6;
         for (var tile = firstColumn; tile < endColumn; tile += stripColumns)
         {
             var length = Math.Min(stripColumns, endColumn - tile);
@@ -135,7 +175,7 @@ internal static class ColumnBicubicResize
                 PreparePairedByteWeights(weights, offsets, counts[..length],
                     MemoryMarshal.Cast<Vector256<double>, double>(decoded[..4]));
             rowIds.Fill(-1);
-            for (var y = 0; y < result.Height; y++)
+            for (var y = rowTail ? firstTailRow : 0; y < (rowLoan ? firstTailRow : result.Height); y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 geometry.Read(y, tile < geometry.PrefixColumns, vertical,

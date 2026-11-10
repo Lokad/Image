@@ -1681,30 +1681,29 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    paired_coefficients = json.loads((ROOT / 'benchmarks/bicubic-paired-coefficient-preparation-evidence.json').read_text(encoding='utf-8'))
-    paired_coefficient_qualification = paired_coefficients['qualification']
-    assert paired_coefficients['productionAccepted'] and paired_coefficients['requiredMaterialPaths'] == 283
-    assert paired_coefficient_qualification['fullChecksEachOs'] == paired_coefficient_qualification['windows']['total'] == paired_coefficient_qualification['linux']['total'] == 6161
-    assert paired_coefficient_qualification['sameActualPackageBothOS']
-    assert paired_coefficient_qualification['actualPackage']['sha256'] == paired_coefficient_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert paired_coefficients['sourceCodeProof']['originalReconstructedExactly']
-    assert all(b['instructionsIdentical'] for b in paired_coefficients['sourceCodeProof']['wordCodeReuse']['wordBodies'])
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in paired_coefficients['comparison']['views'].values())
-    assert paired_coefficients['storage']['newOwnedCapacityBytes'] == paired_coefficients['storage']['retainedOperationScratchBytes'] == 0
-    assert paired_coefficients['raw']['mirrored'] and paired_coefficients['raw']['allMembersVerified']
-    current = paired_coefficients['cases']['TightDown8']
-    assert current['librarySha256'] == paired_coefficient_qualification['actualPackage']['librarySha256']
-    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-    assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
-    assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
-                 and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ') and '→ 256×129 |' in row]
-    assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | '
-                         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = paired_coefficient_qualification
+    narrow_loan = json.loads((ROOT / 'benchmarks/narrow-bicubic-row-loan-evidence.json').read_text(encoding='utf-8'))
+    narrow_qualification = narrow_loan['qualification']
+    assert narrow_loan['productionAccepted'] and narrow_loan['requiredMaterialPaths'] == 283
+    assert narrow_qualification['fullChecksEachOs'] == narrow_qualification['windows']['total'] == narrow_qualification['linux']['total'] == 6180
+    assert narrow_qualification['sameActualPackageBothOS']
+    assert narrow_qualification['actualPackage']['sha256'] == narrow_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert narrow_loan['sourceCodeProof']['orderedPixelLoopAndHelpersVerbatimExceptYBounds']
+    assert all(v['rawGainSeparated'] for v in narrow_loan['comparison']['views'].values())
+    assert narrow_loan['storage']['newOwnedCapacityBytes'] == narrow_loan['storage']['retainedOperationScratchBytes'] == 0
+    assert narrow_loan['raw']['mirrored'] and narrow_loan['raw']['allMembersVerified']
+    for case, current in narrow_loan['cases'].items():
+        assert current['librarySha256'] == narrow_qualification['actualPackage']['librarySha256']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        label = 'Bicubic RGBA' + ('8' if case == 'TightDown8' else '16') + ' reduction, input+output+4 KiB'
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                     and row.startswith('| ' + label + ' ') and '→ 256×129 |' in row]
+        assert len(positions) == 1
+        rows[positions[0]] = ('editing', f'| {label} † → 256×129 | '
+                             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     row_loan = json.loads((ROOT / 'benchmarks/bicubic-result-row-loan-evidence.json').read_text(encoding='utf-8'))
     row_loan_qualification = row_loan['qualification']
     assert row_loan['productionAccepted'] and row_loan['requiredMaterialPaths'] == 283
@@ -1728,7 +1727,7 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = jpeg_token_qualification
+    current_build_qualification = narrow_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1893,8 +1892,13 @@ Current scope and remaining work:
   Cache/weights borrow 10,880 B from unpublished output, with no added owned capacity;
   same 4 KiB admission, 113 B/op, 32,768 B result and scratch 0. The existing large
   default/compact pair screens 20.53/21.64 ms, three actuals each, without a native
-  or historical-gain claim. [Narrow preparation](../benchmarks/BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
-  retains 33.29 µs savings/upper 1.167 gap. [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
+  or historical-gain claim. [Narrow row reuse](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md)
+  saves **{narrow_loan['comparison']['savedUs']:.2f} µs/{100*narrow_loan['comparison']['rawReduction']:.2f}% raw**;
+  both raw confidence views separate, while normalized intervals overlap.
+  Its byte upper{narrow_loan['cases']['TightDown8']['upper']:.3f} remains a gap; refreshed word
+  upper{narrow_loan['cases']['TightDown16']['upper']:.3f} passes/stops. The same 4 KiB/113 B/op
+  covers 11,776 B borrowed from unpublished result rows, with no new capacity.
+  [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
   has 7 passes / 1 gap; [packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
   has 2 gaps. [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
   resolve the byte uncertainty before tuning. Exact managed Q30/rational results
@@ -1909,9 +1913,9 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. JPEG checks pass {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per
-normal/scalar/disabled-AVX2/AVX512 mode; unchanged resize evidence ({current_build_qualification['resizeInternalEachModeEachOs']} internal/729 public)
-is reused. Exact packets/pixels, shared admission,
+Windows/Linux**. Resize checks pass {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+normal/scalar/disabled-AVX2/AVX512 mode; unchanged JPEG evidence
+({current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
