@@ -937,18 +937,18 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-contiguous-views-evidence.json').read_text(encoding='utf-8'))
+    packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-indexed-reduction-evidence.json').read_text(encoding='utf-8'))
     packed_qualification = packed_current['qualification']
     assert packed_current['productionAccepted'] and packed_current['requiredMaterialPaths'] == 283
     assert packed_current['raw']['mirrored'] and packed_current['raw']['allMembersVerified']
-    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6148
+    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6154
     assert packed_qualification['sameActualPackageBothOS'] and packed_qualification['actualPackage']['sha256'] == packed_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert packed_qualification['resizeInternalEachModeEachOs'] == 322 and packed_qualification['resizePublicEachModeEachOs'] == 729
-    assert packed_current['sourceProof']['fullUndoReconstructsQualifiedOriginal']
-    assert packed_current['sourceProof']['indexedPathNumericBodyAndPublishersRepairVerbatim']
-    assert packed_current['sourceProof']['loopBoundRevisionAndFinalHelperIsolationVerified']
-    assert packed_current['codeProof']['actualCandidateCode'] and packed_current['codeProof']['helperBoundaryRetained']
-    assert all(h['perTapRangeGuards'] == 0 for h in packed_current['codeProof']['helpers'])
+    assert packed_qualification['resizeInternalEachModeEachOs'] == 328 and packed_qualification['resizePublicEachModeEachOs'] == 729
+    assert packed_current['sourceProof']['sourceUndoReconstructsQualifiedOriginal']
+    assert packed_current['sourceProof']['contiguousGeometryTailsVerticalPublishersCertificatesRepairOwnersVerbatim']
+    assert packed_current['codeProof']['actualCandidateCode'] and packed_current['codeProof']['byteContiguousInstructionsVerbatim']
+    assert all(not h['accumulatorStackTrafficInLoop'] and h['singleFinalVectorStore']
+               for h in packed_current['codeProof']['indexed'].values())
     assert packed_current['storage']['workspaceReservationBytes'] == 4096
     assert packed_current['storage']['newOwnedCapacityBytes'] == packed_current['storage']['retainedOperationScratchBytes'] == 0
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_current['comparisons']['Tight64x32_8']['views'].values())
@@ -1233,14 +1233,15 @@ def render():
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
-    current_build_qualification = lanczos_current['qualification']
+    lanczos_qualification = lanczos_current['qualification']
     assert lanczos_current['productionAccepted'] and lanczos_current['storage']['capacityUnchanged']
     assert lanczos_current['sourceProof']['singleByteKernelAndConversionSourceVerbatim']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in lanczos_current['comparisons']['Repeated8']['views'].values())
     assert not any(v['normalizedLossSeparated'] for c in lanczos_current['comparisons'].values() for v in c['views'].values())
-    assert current_build_qualification['fullChecksEachOs'] == 6153
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert lanczos_qualification['fullChecksEachOs'] == 6153
+    assert lanczos_qualification['actualPackage']['sha256'] == lanczos_qualification['samePackageLinux']['sameActualPackageSha256']
+    current_build_qualification = packed_qualification
     assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
     assert len(lanczos_current['cases']) == 8
     assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
@@ -1891,21 +1892,23 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [contiguous packed views](../benchmarks/PACKED-BICUBIC-CONTIGUOUS-VIEWS.md)
-  prove eligible pairs once per strip and prepare borrowed sample/weight views
-  once per decoded row. A small separate helper removes per-tap guards; its call
-  cost stays timed. Complete byte64×32 saves **{packed_current['comparisons']['Tight64x32_8']['savedUs']:.2f}µs/{100*packed_current['comparisons']['Tight64x32_8']['rawReduction']:.2f}% raw**,
+- **Resizing:** [indexed packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
+  retains its ordered dot accumulator in a register, removing repeated stack
+  traffic from clipped-edge fallback. Borrowed typed views and helper-call cost
+  stay within the complete operation. Byte64×32 saves **{packed_current['comparisons']['Tight64x32_8']['savedUs']:.2f}µs/{100*packed_current['comparisons']['Tight64x32_8']['rawReduction']:.2f}% raw**,
   {100*packed_current['comparisons']['Tight64x32_8']['normalizedReduction']:.2f}% normalized, separated raw/normalized intervals in both views.
   Current byte{packed_current['cases']['Tight64x32_8']['managedUs']:.2f}/zimg{packed_current['cases']['Tight64x32_8']['nativeUs']:.2f}µs,
   upper{packed_current['cases']['Tight64x32_8']['upper']:.3f}; word{packed_current['cases']['Tight64x32_16']['managedUs']:.2f}/zimg{packed_current['cases']['Tight64x32_16']['nativeUs']:.2f}µs,
-  upper{packed_current['cases']['Tight64x32_16']['upper']:.3f}. Word's earlier479.19µs point overlaps;
-  native+8.07% does not establish a causal word gain or equivalence. Both remain
+  upper{packed_current['cases']['Tight64x32_16']['upper']:.3f}. One current original450.28µs confirmation
+  is the byte gain baseline; earlier458.14µs stays historical. Word clock movement
+  does not establish a causal companion gain or equivalence. Both remain
   gaps,113B/op. Same4KiB admission and3880/3992/4044B phase payloads, independent
   8192/16384B outputs/scratch0; physical/native peaks unmeasured. Exact arithmetic,
   clipped/unequal fallbacks and repair remain. Complete managed preparation and
   output stay timed; zimg retains its graph/scratch. Both existing controls refresh.
-  [Shared scheduling](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md) and
-  [attribution](../benchmarks/PACKED-BYTE-EXECUTION-ATTRIBUTION.md) retain history.
+  [Contiguous views](../benchmarks/PACKED-BICUBIC-CONTIGUOUS-VIEWS.md),
+  [shared scheduling](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md) and
+  [attribution](../benchmarks/PACKED-BYTE-PREPARATION-ATTRIBUTION.md) retain history.
   [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
@@ -2003,7 +2006,8 @@ Current scope and remaining work:
   {100*lanczos_current['comparisons']['Repeated8']['normalizedReduction']:.2f}% normalized; both confidence views separate.
   Current {lanczos_current['cases']['Repeated8']['managedUs']:.2f}/zimg{lanczos_current['cases']['Repeated8']['nativeUs']:.2f}µs,
   upper{lanczos_current['cases']['Repeated8']['upper']:.3f} is **uncertain near parity**, not a pass.
-  All eight costs refresh: **six passes, one word-reduction gap, one uncertainty**.
+  Eight source-valid Lanczos costs are reused for their unchanged paths:
+  **six passes, one word-reduction gap, one uncertainty**.
   Other fresh costs qualify status, without causal companion-gain/equivalence claims.
   Closed scheduler modes erase batching state from word/enlargement execution;
   original single-row/word instructions and exact Q30/certificates/repair remain.

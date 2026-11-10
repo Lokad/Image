@@ -11,10 +11,10 @@ internal static class PackedColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
-    private readonly struct DecodedPrefix { }
-    private readonly struct PackedSuffix { }
-    private readonly struct ByteSamples { }
-    private readonly struct WordSamples { }
+    internal readonly struct DecodedPrefix { }
+    internal readonly struct PackedSuffix { }
+    internal readonly struct ByteSamples { }
+    internal readonly struct WordSamples { }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
@@ -227,35 +227,7 @@ internal static class PackedColumnBicubicResize
                         if ((contiguousPairs & (1 << column)) != 0)
                             sum = FilterContiguousPair<TMode, TSamples>(decodedRead, offsets0[0], offsets1[0], weights0, weights1, shared);
                         else
-                        for (var tx = 0; tx < shared; tx++)
-                        {
-                            Vector512<double> values;
-                                if (prepared)
-                                    // Fill the upper half immediately. The explicit
-                                    // insert avoids a temporary512bit construction
-                                    // with a loop-carried spill/reload dependency.
-                                    values = Avx512F.InsertVector256(ReadDecoded<TMode, TSamples>(decodedRead, offsets0[tx]).ToVector512Unsafe(),
-                                        ReadDecoded<TMode, TSamples>(decodedRead, offsets1[tx]), 1);
-                            else
-                            {
-                                if (word)
-                                {
-                                    var p0 = MemoryMarshal.Read<Vector128<uint>>(decodedRead.Slice(offsets0[tx] * 16, 16));
-                                    var p1 = MemoryMarshal.Read<Vector128<uint>>(decodedRead.Slice(offsets1[tx] * 16, 16));
-                                    values = Avx512F.ConvertToVector512Double(Vector256.Create(p0, p1));
-                                }
-                                else
-                                {
-                                    var p0 = BinaryPrimitives.ReadUInt64LittleEndian(decodedRead.Slice(offsets0[tx] * 8, 8));
-                                    var p1 = BinaryPrimitives.ReadUInt64LittleEndian(decodedRead.Slice(offsets1[tx] * 8, 8));
-                                    var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
-                                    values = Avx512F.ConvertToVector512Double(samples);
-                                }
-                            }
-                            var w0 = weights0[tx]; var w1 = weights1[tx];
-                            var coefficients = Avx512F.InsertVector256(Vector512.Create(w0), Vector256.Create(w1), 1);
-                            sum = Avx512F.Add(sum, Avx512F.Multiply(values, coefficients));
-                        }
+                            sum = FilterIndexedPair<TMode, TSamples>(decodedRead, offsets0, offsets1, weights0, weights1, shared);
                         var sum0 = sum.GetLower(); var sum1 = sum.GetUpper();
                         for (var tx = shared; tx < count0; tx++)
                             sum0 = Avx.Add(sum0, Avx.Multiply(ReadDecoded<TMode, TSamples>(decodedRead, offsets0[tx]), Vector256.Create(weights0[tx])));
@@ -388,6 +360,42 @@ internal static class PackedColumnBicubicResize
             if (contiguous) mask |= 1 << x;
         }
         return mask;
+    }
+
+    // Isolate the indexed reduction so publishing its halves cannot make the
+    // accumulator address-exposed throughout the tap loop. Every view borrows
+    // the current row; clipped/repeated offsets keep their original order.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static Vector512<double> FilterIndexedPair<TMode, TSamples>(ReadOnlySpan<byte> decoded,
+        ReadOnlySpan<ushort> firstOffsets, ReadOnlySpan<ushort> secondOffsets,
+        ReadOnlySpan<double> firstWeights, ReadOnlySpan<double> secondWeights, int count)
+        where TMode : struct where TSamples : struct
+    {
+        var prepared = typeof(TMode) == typeof(DecodedPrefix);
+        var word = typeof(TSamples) == typeof(WordSamples);
+        var decodedValues = prepared ? MemoryMarshal.Cast<byte, Vector256<double>>(decoded) : default;
+        var wordValues = !prepared && word ? MemoryMarshal.Cast<byte, Vector128<uint>>(decoded) : default;
+        var byteValues = !prepared && !word ? MemoryMarshal.Cast<byte, ulong>(decoded) : default;
+        firstOffsets = firstOffsets[..count]; secondOffsets = secondOffsets[..count];
+        firstWeights = firstWeights[..count]; secondWeights = secondWeights[..count];
+        var sum = Vector512<double>.Zero;
+        for (var t = 0; t < firstWeights.Length; t++)
+        {
+            var first = firstOffsets[t]; var second = secondOffsets[t];
+            Vector512<double> values;
+            if (prepared)
+                values = Avx512F.InsertVector256(decodedValues[first].ToVector512Unsafe(), decodedValues[second], 1);
+            else if (word)
+                values = Avx512F.ConvertToVector512Double(Vector256.Create(wordValues[first], wordValues[second]));
+            else
+            {
+                var samples = Avx2.ConvertToVector256Int32(Vector128.Create(byteValues[first], byteValues[second]).AsUInt16());
+                values = Avx512F.ConvertToVector512Double(samples);
+            }
+            var coefficients = Avx512F.InsertVector256(Vector512.Create(firstWeights[t]), Vector256.Create(secondWeights[t]), 1);
+            sum = Avx512F.Add(sum, Avx512F.Multiply(values, coefficients));
+        }
+        return sum;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]

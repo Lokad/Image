@@ -1,0 +1,337 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PIF750",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+    "linuxSha256": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a"
+  },
+  "baselineProducers": {
+    "windowsSha256": "6aaf8e270e8ed9d63605042e366b46e52f5ff52849f92419863c168af36fe2d2",
+    "linuxSha256": "b24f6b8f8a1fc53a9f49bb806d13ea8ad4500b0a0d5fd9f47d3457578631a9a4"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "7e86840032da8f2679044f73987c9288e77d947bfedde2971fcf07c9788f1728",
+    "tests/Lokad.Image.Tests/PackedColumnStorageTests.cs": "9da69ab1514d9cf5b7e76a481d9e44ab793f4b75a1c7737881b701bdfce541f9"
+  },
+  "cases": {
+    "Tight64x32_8": {
+      "caseId": "Tight64x32_8",
+      "managedUs": 428.97881840277773,
+      "nativeUs": 366.5582093098958,
+      "ratio": 1.1702883948783978,
+      "lower": 1.1537096157407785,
+      "upper": 1.176746508887575,
+      "allocatedBytes": 113,
+      "librarySha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+      "runId": "pif750-candidate-Tight64x32_8-confirm",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "packetBytes": 8192,
+      "packetSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "status": "gap",
+      "managedRationalReferenceExact": true,
+      "managedMaxWorkingBytes": 543756,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeRgbMaximum": 0,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0,
+      "nativeAlphaRmse": 0,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "receiptFile": "pif750-candidate-Tight64x32_8-confirm-receipt.json"
+    },
+    "Tight64x32_16": {
+      "caseId": "Tight64x32_16",
+      "managedUs": 416.2356338541666,
+      "nativeUs": 387.9703968098958,
+      "ratio": 1.0728541076244038,
+      "lower": 1.0565668844383747,
+      "upper": 1.0863010374403925,
+      "allocatedBytes": 113,
+      "librarySha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+      "runId": "pif750-candidate-Tight64x32_16-confirm",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "packetBytes": 16384,
+      "packetSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "status": "gap",
+      "managedRationalReferenceExact": true,
+      "managedMaxWorkingBytes": 1083416,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.05412658773652741,
+      "nativeAlphaRmse": 0.04941058844013093,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "receiptFile": "pif750-candidate-Tight64x32_16-confirm-receipt.json"
+    }
+  },
+  "statusCounts": {
+    "pass": 0,
+    "gap": 2,
+    "uncertain": 0
+  },
+  "comparisons": {
+    "Tight64x32_8": {
+      "project": "Lokad.Image",
+      "originalUs": 450.28313027597403,
+      "currentUs": 428.97881840277773,
+      "savedUs": 21.304311873196298,
+      "rawReduction": 0.04731314686414989,
+      "normalizedReduction": 0.03740003173749051,
+      "nativePointChange": -0.010298270780699004,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      },
+      "scope": "One contemporaryoriginal12actual confirmation and independent final12actuals following promising3actualscreen, allactualsretained. Same original required public4KiB resize/source/output/disposal, nativegraph/context/samples/gates and idle-v2. No more unchanged sampling; old458.14us source-valid cost is historical, not causalbaselinegain."
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "PIF750",
+    "sourceUndoReconstructsQualifiedOriginal": true,
+    "contiguousGeometryTailsVerticalPublishersCertificatesRepairOwnersVerbatim": true,
+    "math": "Count-sized typed views index the same current-row samples. PrefixVector256Double, wordVector128UInt32 and byteULong representations already exist in contiguous helper; CPU-only x86 little-endian path. Original per-lane coefficient bits, separateMul/Add and tap order remain. Repeated/clipped/unequal offsets and original unequal tails survive; count0returns+0vector. No FMA/pixel-policy/bound changes.",
+    "lifetime": "All spans borrow operation-owned decoded row and stack plans only through synchronous leaf call. FinalVector512 contains values, no references. Same4KiBpreallocation admission, input/result/cache/prefixloan retirement, terminalrefusal/cancellation/cleanup and output ownership. No array/copy/pool/session/reservation/root or retained capacity added; actual JIT/register/spill peaks distinct from measured owned capacity.",
+    "qualification": "Newactualproduction-helperFactchecks16 count/depth/storage combinations against separately-rounded scalar bits, uintproducts>Int32Max, repeated/reversed/clipped indices, poisonoutsidecount, zeroallocation and unchangedborrowedguardeddata. Existing complete layout/roots/refusal/cancellation/recovery tests retained. Internal marker visibility only; no public API/wrapper.",
+    "sources": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "7e86840032da8f2679044f73987c9288e77d947bfedde2971fcf07c9788f1728",
+      "tests/Lokad.Image.Tests/PackedColumnStorageTests.cs": "9da69ab1514d9cf5b7e76a481d9e44ab793f4b75a1c7737881b701bdfce541f9"
+    }
+  },
+  "codeProof": {
+    "project": "Lokad.Image",
+    "actualCandidateCode": true,
+    "statisticalTiming": false,
+    "instrumentedElapsedDiscarded": true,
+    "indexed": {
+      "8-prefix": {
+        "bytes": 204,
+        "separateMultiplyAndAdd": true,
+        "accumulatorStackTrafficInLoop": false,
+        "singleFinalVectorStore": true
+      },
+      "8-suffix": {
+        "bytes": 210,
+        "separateMultiplyAndAdd": true,
+        "accumulatorStackTrafficInLoop": false,
+        "singleFinalVectorStore": true
+      },
+      "16-prefix": {
+        "bytes": 204,
+        "separateMultiplyAndAdd": true,
+        "accumulatorStackTrafficInLoop": false,
+        "singleFinalVectorStore": true
+      },
+      "16-suffix": {
+        "bytes": 213,
+        "separateMultiplyAndAdd": true,
+        "accumulatorStackTrafficInLoop": false,
+        "singleFinalVectorStore": true
+      }
+    },
+    "byteContiguousInstructionsVerbatim": true,
+    "scope": "Actual immutable WindowsDLL/.NET10.0.8 in existing standalone public-operation host. Each indexed instantiation retains accumulator inregister and stores finalVector512 once, no per-tap512bitstackspill orFMA. New helper/caller overhead remains in complete timing; code alone does not prove CPUgain."
+  },
+  "storage": {
+    "workspaceReservationBytes": 4096,
+    "phasePayloadBytes": [
+      3880,
+      3992,
+      4044
+    ],
+    "newOwnedCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "resultBytes": {
+      "8": 8192,
+      "16": 16384
+    },
+    "note": "TotalGC113B/op bothcases unchanged. Leafregister/alias/return state adds no explicit owned capacity or retention. Existing input/result/cache loan lifetimes, shared admission and defaultpool/governedbypass unchanged. Physical/native/JITstack peaks unmeasured."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6154,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+      "full": [
+        2889,
+        2317,
+        948
+      ],
+      "total": 6154,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 328,
+        "internal-scalar": 328,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1057,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "95a211eebbe21489410907d631cf4f855ed2b17bad7371c864babe96c8c35cf1",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\PackedColumnBicubicResize.cs": "7e86840032da8f2679044f73987c9288e77d947bfedde2971fcf07c9788f1728"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+      "full": [
+        2889,
+        2317,
+        948
+      ],
+      "total": 6154,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 328,
+        "internal-scalar": 328,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1057,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "c3ceadcaffe2db57e3f371f63bffc34974a436cec36a4b685925f4f65ae44c4f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "7e86840032da8f2679044f73987c9288e77d947bfedde2971fcf07c9788f1728"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "affectedIsa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 328,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 328,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 328,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 328,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "d70328f02b88488e07c558b245039eaf97c1c10be8798ffdca53340246b9659a",
+        "allBuilds": 0
+      }
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "d17ee831cd52f025a93cf7b4892afa948f8d80e63e37f582f33a3872d18cfacc",
+      "symbolsSha256": "fd3992db88ae08b00f354e930f882b803825762c778a69d3168f6b09bd4fcbb9",
+      "bytes": 441591,
+      "librarySha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "d17ee831cd52f025a93cf7b4892afa948f8d80e63e37f582f33a3872d18cfacc",
+      "librarySha256": "4808293283f6665f8a7a0455127322e5c79847fb449e4cc5544ff1df9ce95f1c",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "resizeInternalEachModeEachOs": 328,
+    "resizePublicEachModeEachOs": 729,
+    "consumer": {
+      "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+      "sha256": "2d0e515def97da3cf103e753a93594344f4d8e60f4f96da8de7a0f6f148663da",
+      "unchanged": true,
+      "requiredPackedDepths": [
+        8,
+        16
+      ],
+      "checks": "Existing actual packagedpublic4KiB64x32 frozenpixels/aggregate root/retained survivors/refusal/disposal/cancellation/recovery, allthreeexamples."
+    },
+    "unaffectedQualification": "Other codec/editing/Lanczos paths unchanged; source-valid evidence reused. No repeat JPEG/methodaudit/127rowrelease refresh."
+  },
+  "workflow": {
+    "productionAndEmbeddedCandidatesPerOS": 1,
+    "productionCompileFailures": 0,
+    "harnessSelectorNativeFixtureBuilds": 0,
+    "newBenchmarkImagesOrSettings": 0,
+    "shortScreens": 1,
+    "contemporaryOriginalConfirmations": 1,
+    "finalAffectedConfirmations": 2,
+    "extraFavorableRepeats": 0,
+    "fullRunsPerOS": 1,
+    "sameActualPackageProofsPerOS": 1,
+    "allSamplesRetained": true
+  },
+  "invalidation": "OnlyPackedColumn indexed shared-dot boundary and private marker visibility change, with one actualhelperFact. Both required completepackedbyte/word costs refresh. Original contingentcase450.28us replaceshistorical458.14us onlyforcausalgaincomparison; originalbuildisreused. All other image families includingLanczos unaffected andsourcevalidcosts/qualificationreused; full6154/live/ISA/SAMEpackage qualifies finalmodule. No newpublicAPI/dependency, packet/pixel/numericalpolicy or resourcecontract.",
+  "decision": "Accept21.30us/4.73%raw/3.74%normalized bytegain with separatedbothconfidenceviews/native-1.03%. Current429/366.56us upper1.177stillgap; word416.24/387.97us upper1.086stillgap. Wordcurrentcostqualifiesstatus only, nocausalcompaniongain/equivalenceclaim againstolder480/native418.59clockcontext. GC113Bop/capacity/retentionunchanged, exactpixels/owners/cancel/admission remain. Publicationpostponed/full283objectiveopen.",
+  "next": "Prioritize larger provennarrowbyte~85/cachedwide~79/boundedwide~78/JPEG~60us leads. Packedbyte~62/word~28remainvisible. Four-pixelUInt16 preparation remains a possible sharedarchitecture lead after actualinstruction/lifetime case; do not retune passed/unchangedcases for favorable confidence.",
+  "raw": {
+    "file": "packed-bicubic-indexed-reduction.tar.xz",
+    "sha256": "c132b88f7e08c7beec1560012c196915ccfaa9f1c4de26be8fa0efde5788ba8d",
+    "bytes": 6682584,
+    "members": 150,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-paired-byte-rows.tar.xz",
+        "sha256": "30ffc7e72eefc7e14294be1bf24fe95eae68a58c0ac981ccffa55baf8007f055"
+      },
+      {
+        "file": "packed-byte-current-preparation-profile.tar.xz",
+        "sha256": "51118e613ebd267f9f50bbbc5a73093a23f7732959b2bf649a410b1b4b3e0969"
+      },
+      {
+        "file": "packed-bicubic-contiguous-views.tar.xz",
+        "sha256": "6b98c99939eb762654d017e64b702a8026317a5654efde461a3896f70e2cb8ff"
+      }
+    ]
+  }
+}

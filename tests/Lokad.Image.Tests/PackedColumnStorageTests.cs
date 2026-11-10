@@ -1,3 +1,6 @@
+using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
@@ -7,6 +10,73 @@ namespace Lokad.Image.Tests;
 
 public sealed class PackedColumnStorageTests
 {
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static double RoundedProduct(double sample, double weight) => sample * weight;
+
+    [Fact]
+    public void IndexedPairPreservesRoundedBitsAndBorrowedViewsWithoutAllocation()
+    {
+        if (!Avx512F.IsSupported || !Avx2.IsSupported) return;
+        foreach (var word in new[] { false, true }) foreach (var prepared in new[] { false, true })
+        foreach (var count in new[] { 0, 1, 7, 33 })
+        {
+            const int rows = 9, guard = 32;
+            var maximum = word ? 65535u : 255u;
+            var samples = new double[rows * 4];
+            var rowBytes = prepared ? 32 : word ? 16 : 8;
+            var data = Enumerable.Repeat((byte)0xa5, guard * 2 + rows * rowBytes).ToArray();
+            for (var x = 0; x < rows; x++) for (var c = 0; c < 4; c++)
+            {
+                var alpha = x % 4 == 0 ? 0u : x % 4 == 1 ? 1u : maximum;
+                var color = c == 0 ? maximum : c == 1 ? maximum - (uint)(x % 2) : (uint)(x * 7919) & maximum;
+                var product = c == 3 ? alpha : alpha * color;
+                samples[x * 4 + c] = product;
+                var at = guard + x * rowBytes;
+                if (prepared) BinaryPrimitives.WriteInt64LittleEndian(data.AsSpan(at + c * 8, 8), BitConverter.DoubleToInt64Bits(product));
+                else if (word) BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(at + c * 4, 4), product);
+                else BinaryPrimitives.WriteUInt16LittleEndian(data.AsSpan(at + c * 2, 2), (ushort)product);
+            }
+            var original = data.ToArray();
+            var offsets0 = Enumerable.Repeat(ushort.MaxValue, count + 3).ToArray();
+            var offsets1 = offsets0.ToArray();
+            var weights0 = Enumerable.Repeat(double.NaN, count + 3).ToArray();
+            var weights1 = weights0.ToArray();
+            for (var t = 0; t < count; t++)
+            {
+                offsets0[t + 1] = (ushort)(t % 3 == 0 ? 0 : t % rows);
+                offsets1[t + 1] = (ushort)(t % 3 == 0 ? rows - 1 : (rows - 1 - t % rows));
+                weights0[t + 1] = (t % 3) switch { 0 => .1, 1 => -1d / 3, _ => .75 };
+                weights1[t + 1] = (t % 3) switch { 0 => -.2, 1 => 1d / 7, _ => .5 };
+            }
+            Vector512<double> Apply()
+            {
+                var decoded = data.AsSpan(guard, rows * rowBytes);
+                var first = offsets0.AsSpan(1); var second = offsets1.AsSpan(1);
+                var w0 = weights0.AsSpan(1); var w1 = weights1.AsSpan(1);
+                return prepared
+                    ? word
+                        ? PackedColumnBicubicResize.FilterIndexedPair<PackedColumnBicubicResize.DecodedPrefix, PackedColumnBicubicResize.WordSamples>(decoded, first, second, w0, w1, count)
+                        : PackedColumnBicubicResize.FilterIndexedPair<PackedColumnBicubicResize.DecodedPrefix, PackedColumnBicubicResize.ByteSamples>(decoded, first, second, w0, w1, count)
+                    : word
+                        ? PackedColumnBicubicResize.FilterIndexedPair<PackedColumnBicubicResize.PackedSuffix, PackedColumnBicubicResize.WordSamples>(decoded, first, second, w0, w1, count)
+                        : PackedColumnBicubicResize.FilterIndexedPair<PackedColumnBicubicResize.PackedSuffix, PackedColumnBicubicResize.ByteSamples>(decoded, first, second, w0, w1, count);
+            }
+            Apply(); var allocated = GC.GetAllocatedBytesForCurrentThread(); var actual = Apply();
+            Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - allocated);
+            for (var c = 0; c < 8; c++)
+            {
+                var expected = 0d;
+                for (var t = 0; t < count; t++)
+                    expected += RoundedProduct(samples[(c < 4 ? offsets0[t + 1] : offsets1[t + 1]) * 4 + c % 4],
+                        c < 4 ? weights0[t + 1] : weights1[t + 1]);
+                Assert.Equal(BitConverter.DoubleToInt64Bits(expected), BitConverter.DoubleToInt64Bits(actual.GetElement(c)));
+            }
+            Assert.Equal(original, data);
+            Assert.Equal(ushort.MaxValue, offsets0[0]); Assert.Equal(ushort.MaxValue, offsets1[^1]);
+            Assert.True(double.IsNaN(weights0[0])); Assert.True(double.IsNaN(weights1[^1]));
+        }
+    }
+
     [Fact]
     public void ContiguousPairProofRetainsClippedAndUnequalCountFallbacks()
     {

@@ -97,21 +97,23 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [contiguous packed views](../benchmarks/PACKED-BICUBIC-CONTIGUOUS-VIEWS.md)
-  prove eligible pairs once per strip and prepare borrowed sample/weight views
-  once per decoded row. A small separate helper removes per-tap guards; its call
-  cost stays timed. Complete byte64×32 saves **27.56µs/5.67% raw**,
-  6.41% normalized, separated raw/normalized intervals in both views.
-  Current byte458.14/zimg370.31µs,
-  upper1.245; word480.01/zimg418.59µs,
-  upper1.159. Word's earlier479.19µs point overlaps;
-  native+8.07% does not establish a causal word gain or equivalence. Both remain
+- **Resizing:** [indexed packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
+  retains its ordered dot accumulator in a register, removing repeated stack
+  traffic from clipped-edge fallback. Borrowed typed views and helper-call cost
+  stay within the complete operation. Byte64×32 saves **21.30µs/4.73% raw**,
+  3.74% normalized, separated raw/normalized intervals in both views.
+  Current byte428.98/zimg366.56µs,
+  upper1.177; word416.24/zimg387.97µs,
+  upper1.086. One current original450.28µs confirmation
+  is the byte gain baseline; earlier458.14µs stays historical. Word clock movement
+  does not establish a causal companion gain or equivalence. Both remain
   gaps,113B/op. Same4KiB admission and3880/3992/4044B phase payloads, independent
   8192/16384B outputs/scratch0; physical/native peaks unmeasured. Exact arithmetic,
   clipped/unequal fallbacks and repair remain. Complete managed preparation and
   output stay timed; zimg retains its graph/scratch. Both existing controls refresh.
-  [Shared scheduling](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md) and
-  [attribution](../benchmarks/PACKED-BYTE-EXECUTION-ATTRIBUTION.md) retain history.
+  [Contiguous views](../benchmarks/PACKED-BICUBIC-CONTIGUOUS-VIEWS.md),
+  [shared scheduling](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md) and
+  [attribution](../benchmarks/PACKED-BYTE-PREPARATION-ATTRIBUTION.md) retain history.
   [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
   retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
   and4KiB admission as history. The existing large control refreshes on this package:
@@ -209,7 +211,8 @@ Current scope and remaining work:
   15.18% normalized; both confidence views separate.
   Current 491.59/zimg489.18µs,
   upper1.011 is **uncertain near parity**, not a pass.
-  All eight costs refresh: **six passes, one word-reduction gap, one uncertainty**.
+  Eight source-valid Lanczos costs are reused for their unchanged paths:
+  **six passes, one word-reduction gap, one uncertainty**.
   Other fresh costs qualify status, without causal companion-gain/equivalence claims.
   Closed scheduler modes erase batching state from word/enlargement execution;
   original single-row/word instructions and exact Q30/certificates/repair remain.
@@ -307,7 +310,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,153 full/live checks per OS**, affected
+The current production build passes **6,154 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -447,8 +450,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 427.76 | 348.46 | 1.228 / 1.234 | 198,448 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 888.37 | 866.88 | 1.025 / 1.030 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 458.14 | 370.31 | 1.237 / 1.245 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 480.01 | 418.59 | 1.147 / 1.159 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 428.98 | 366.56 | 1.170 / 1.177 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 416.24 | 387.97 | 1.073 / 1.086 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 425.28 | 346.96 | 1.226 / 1.233 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.87 | 416.73 | 0.974 / 0.978 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 782.07 | 840.35 | 0.931 / 0.936 | 199,943 |
