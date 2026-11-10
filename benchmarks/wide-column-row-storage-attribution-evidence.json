@@ -417,23 +417,23 @@
         "eligible": true,
         "old": {
           "rowVisits": 2048,
-          "unpreparedGeometryBuilds": 384,
+          "unpreparedGeometryBuilds": 640,
           "sourceRowConversions": 8288,
           "decodedSourcePixels": 229474,
           "horizontalColumnRows": 33152,
           "sourceAddressTraceChecks": 2052,
           "maxSourceCount": 29,
-          "geometryBuildsIncludingPreparation": 448
+          "geometryBuildsIncludingPreparation": 704
         },
         "proposed": {
           "rowVisits": 1040,
-          "unpreparedGeometryBuilds": 174,
+          "unpreparedGeometryBuilds": 304,
           "sourceRowConversions": 4448,
           "decodedSourcePixels": 189418,
           "horizontalColumnRows": 34688,
           "sourceAddressTraceChecks": 4104,
           "maxSourceCount": 77,
-          "geometryBuildsIncludingPreparation": 260
+          "geometryBuildsIncludingPreparation": 390
         },
         "loanRows": 22,
         "tailFirstRow": 42,
@@ -446,6 +446,8 @@
         "additionalOwnedCapacityBytes": 0,
         "topWritesDisjointFromLoan": true,
         "restoreTailGeometryAfterLoanRetires": true,
+        "geometryFooterBytes": 152,
+        "preparedPrefixColumns": 88,
         "pixelVisitCountUnchanged": 8192,
         "extraHorizontalColumnRows": 1536
       },
@@ -462,23 +464,23 @@
         "eligible": true,
         "old": {
           "rowVisits": 2048,
-          "unpreparedGeometryBuilds": 384,
+          "unpreparedGeometryBuilds": 640,
           "sourceRowConversions": 8448,
           "decodedSourcePixels": 241824,
           "horizontalColumnRows": 33792,
           "sourceAddressTraceChecks": 2112,
           "maxSourceCount": 29,
-          "geometryBuildsIncludingPreparation": 448
+          "geometryBuildsIncludingPreparation": 704
         },
         "proposed": {
           "rowVisits": 1040,
-          "unpreparedGeometryBuilds": 174,
+          "unpreparedGeometryBuilds": 304,
           "sourceRowConversions": 4536,
           "decodedSourcePixels": 198400,
           "horizontalColumnRows": 35328,
           "sourceAddressTraceChecks": 4224,
           "maxSourceCount": 78,
-          "geometryBuildsIncludingPreparation": 260
+          "geometryBuildsIncludingPreparation": 390
         },
         "loanRows": 22,
         "tailFirstRow": 42,
@@ -491,6 +493,8 @@
         "additionalOwnedCapacityBytes": 0,
         "topWritesDisjointFromLoan": true,
         "restoreTailGeometryAfterLoanRetires": true,
+        "geometryFooterBytes": 152,
+        "preparedPrefixColumns": 88,
         "pixelVisitCountUnchanged": 8192,
         "extraHorizontalColumnRows": 1536
       },
@@ -562,15 +566,19 @@
     "ciRun": 42800600405,
     "ciAllThreeJobsGreen": true
   },
-  "decision": "No production/testchange/build orCPUclaim. Reuse widebyte419.13/native349.29us upper1.209/113Bop; exactcurrentWide/math/geometry sources unchanged. Onecurrentprofile exposes strip/execution and repeatedgeometry sites. NewFourByte-only result-rowloan hypothesis uses16cols for first42rows, borrows8704Bcache+2176Bweights from final22unpublishedrows, explicit3296Bstackunder4KiBadmission. Returnloanframe, restoretailmetadata only, thenoriginal4coltail. Logicalrowvisits2048to1040, decodepixels229474to189418, geometrybuilds448to260, but horizontalcolumnrows33152to34688 (1536extra) recordedadversework. No CPUforecast, newcapacity/root/pool/session/API or numericpolicy. Boundary528x264 model+existingodd/three/smallfallbacks, no newperfgrid. Actualborrow/retirement/restore/wordcode/precision/root/cancel/recovery tests thenexistingprimaryshort next; coherentqualificationifuseful.",
+  "decision": "No production/testchange/build orCPUclaim. Reuse widebyte419.13/native349.29us upper1.209/113Bop; exactcurrentWide/math/geometry sources unchanged. Onecurrentprofile exposes strip/execution and repeatedgeometry sites. NewFourByte-only result-rowloan hypothesis uses16cols for first42rows, borrows8704Bcache+2176Bweights from final22unpublishedrows, explicit3296Bstackunder4KiBadmission. Returnloanframe, restoretailmetadata only, thenoriginal4coltail. Logicalrowvisits2048to1040, decodepixels229474to189418, geometrybuilds704to390, but horizontalcolumnrows33152to34688 (1536extra) recordedadversework. No CPUforecast, newcapacity/root/pool/session/API or numericpolicy. Boundary528x264 model+existingodd/three/smallfallbacks, no newperfgrid. Actualborrow/retirement/restore/wordcode/precision/root/cancel/recovery tests thenexistingprimaryshort next; coherentqualificationifuseful.",
   "raw": {
-    "file": "wide-column-row-storage-attribution.tar.xz",
-    "sha256": "3aea3d34f7791969c9e725963ef224456d8a4a54e974ad1c570912934c0baa41",
-    "bytes": 108192,
-    "members": 25,
+    "file": "wide-column-row-storage-corrected-attribution.tar.xz",
+    "sha256": "a10ff7204363d0e42764e7de5bf21a32d2e775757258dc6bfff14ee8987e062b",
+    "bytes": 13924,
+    "members": 7,
     "mirrored": true,
     "allMembersVerified": true,
     "dependencies": [
+      {
+        "file": "wide-column-row-storage-attribution.tar.xz",
+        "sha256": "3aea3d34f7791969c9e725963ef224456d8a4a54e974ad1c570912934c0baa41"
+      },
       {
         "file": "bicubic-paired-coefficient-preparation.tar.xz",
         "sha256": "efa42f668066f45149db2ac81ba01b17554c1728d3bba40ae58d8a9263f2eab8"
@@ -580,5 +588,40 @@
         "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224"
       }
     ]
+  },
+  "modelCorrection": {
+    "project": "Lokad.Image",
+    "stage": "WCA760",
+    "footerBytes": 152,
+    "supersededAssumedFooterBytes": 96,
+    "preparedPrefixColumns": 88,
+    "supersededPrefixColumns": 104,
+    "geometryBuilds": [
+      704,
+      390
+    ],
+    "supersededGeometryBuilds": [
+      448,
+      260
+    ],
+    "scope": "Correctlogicalgeometryprefix/buildcounts using16+17*8bytefooter fromactualsource. Rowvisits/decode/cache/weightloan dimensions andtiming/correctness/qualification unchanged. Originalcitedraw preserved. No newproduction/testbuild/timing/qualification.",
+    "originalRaw": {
+      "file": "wide-column-row-storage-attribution.tar.xz",
+      "sha256": "3aea3d34f7791969c9e725963ef224456d8a4a54e974ad1c570912934c0baa41",
+      "bytes": 108192,
+      "members": 25,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "bicubic-paired-coefficient-preparation.tar.xz",
+          "sha256": "efa42f668066f45149db2ac81ba01b17554c1728d3bba40ae58d8a9263f2eab8"
+        },
+        {
+          "file": "bicubic-shared-byte-publication.tar.xz",
+          "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224"
+        }
+      ]
+    }
   }
 }

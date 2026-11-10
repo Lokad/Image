@@ -1726,6 +1726,30 @@ def render():
                          f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     current_build_qualification = paired_coefficient_qualification
+    row_loan = json.loads((ROOT / 'benchmarks/bicubic-result-row-loan-evidence.json').read_text(encoding='utf-8'))
+    row_loan_qualification = row_loan['qualification']
+    assert row_loan['productionAccepted'] and row_loan['requiredMaterialPaths'] == 283
+    assert row_loan_qualification['fullChecksEachOs'] == row_loan_qualification['windows']['total'] == row_loan_qualification['linux']['total'] == 6167
+    assert row_loan_qualification['sameActualPackageBothOS']
+    assert row_loan_qualification['actualPackage']['sha256'] == row_loan_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in row_loan['comparison']['views'].values())
+    assert row_loan['storage']['newOwnedCapacityBytes'] == row_loan['storage']['retainedOperationScratchBytes'] == 0
+    assert row_loan['raw']['mirrored'] and row_loan['raw']['allMembersVerified']
+    for case, current in row_loan['cases'].items():
+        assert current['librarySha256'] == row_loan_qualification['actualPackage']['librarySha256']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        label = 'Bicubic RGBA' + ('8' if case == 'TightWide8' else '16') + ' reduction, input+output+4 KiB'
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                     and row.startswith('| ' + label + ' ') and '→ 128×64 |' in row]
+        assert len(positions) == 1
+        status = 'gap' if current['status'] == 'gap' else 'confidence open' if current['status'] == 'uncertain' else 'pass'
+        rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
+                             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+    current_build_qualification = row_loan_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1853,338 +1877,58 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP decoding:** [output-owned palette expansion](../benchmarks/WEBP-PALETTE-OUTPUT.md)
-  removes a full-frame intermediate and copy. Complete palette16 confirmation saves
-  **168.22µs/26.72% raw**, with separated filtered/all-actual raw/normalized confidence:
-  461.31/native590.92µs, upper0.789 passes. Total GC falls820,190→288,462B/op;
-  returned output remains independently charged until disposal, scratch retention0.
-  An original513×67 palette control fits a239,128B shared bound below two full
-  frames; this is neither the benchmark's measured peak nor a physical heap peak.
-  Nine shared-decoder costs refresh. Six lossless controls now3pass/3uncertain;
-  resident/live/stream uppers{lpf['WebpResident']['upper']:.3f}/
-  {lpf['NativeLosslessCancelable8']['upper']:.3f}/{lpf['WebpStream']['upper']:.3f} are uncertain, without causal gain/regression/equivalence claims.
-  Three opaque VP8 controls reuse unchanged [frame-quantizer evidence](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md).
-  Current combined VP8 scope:{vp8_decode_counts['pass']}pass/{vp8_decode_counts['gap']}gaps/{vp8_decode_counts['uncertain']}uncertain;
-  resident alpha upper{lpf['Native8']['upper']:.3f} is uncertain; stream/validation pass.
-  Live opaque remains{live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
-  upper{live['upper']:.3f}gap,{live['allocatedBytes']:,}B/op. Exact pixels, cancellation,
-  shared admission,6,058full/live perOS, normal/scalar and SAMEactualpackage/
-  threeexamples pass. Existing pools/governed bypass remain; physical/native peaks
-  unmeasured. Passing cases stop. [Final publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
-  retains preceding gains/adverse history; current palette evidence supersedes its
-  palette regression. The newly displayed palette comparison was already required
-  and measured:127selectedrows/283paths, without a new image or timing workload.
-- **WebP encoding:** [Huffman workspace](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  reuses one operation-owned tree workspace/queue across alphabets and histogram
-  groups. Complete screens save553,184B/photo,37,640B/diagram,668,512B/transparent
-  alpha and112,632B/authored bars. Selected codes remain independently owned.
-  Four admitted peaks remain3,470,059/3,251,328/3,656,309/312,716B; retained scratch0.
-  All eight affected costs refresh on the actual-package DLL:4pass/4uncertain.
-  Photograph, opaque and both alpha cases remain uncertain; prior photo/alpha16
-  passes are superseded. A [current-package photograph confirmation](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
-  also remains uncertain; the selected table retains the source-valid workspace
-  stage comparison. No causal CPU-gain/regression/equivalence or physical-peak
-  claim; adverse short points and later bracket variation remain retained.
-  Normal/scalar and6,026full/live eachOS plus SAMEactualpackage/threeexamples pass.
-  No worker/native rebuild or completed actual is repeated. [Earlier clustering](../benchmarks/WEBP-CLUSTERING-STORAGE.md)
-  and [matching reuse](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md) retain history.
-  [Rounded-border prediction](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
-  saves **{vp8_current['comparison']['savedUs']:.2f}µs/{100*vp8_current['comparison']['rawReduction']:.2f}% raw**,
-  {100*vp8_current['comparison']['normalizedPointReduction']:.2f}% reference-normalized, on complete effort2.
-  Both filtered/all-actual confidence views separate. GC remains406,705B/op;
-  no new owned heap capacity or retained state. Current
-  {distortion_cost['managedUs']:,.2f}/native{distortion_cost['nativeUs']:,.2f}µs,
-  upper{distortion_cost['upper']:.3f} is uncertain, not a parity pass or demonstrated gap.
-  Six unchanged encode costs reuse [histogram-stage evidence](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md);
-  the alpha pair uses the current storage-stage costs above.
-  shared RDO/decoder prediction code is untouched. Combined lossy scope:
-  {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
-  Exact complete packets remain unchanged; passing controls stop.
-- **PNG:** [ordinary/slab cursor publication](../benchmarks/PNG-NORMAL-CURSOR-PUBLICATION.md)
-  removes exception-only publication of abandoned private state. Completed cursors,
-  public errors/partial stores, lookahead, polls and owner cleanup remain exact.
-  Tight/default RGBA16, RGB16 and tight-live RGBA16 save **192/125/216/217µs**;
-  all four former gaps now pass. The two-image shared-root operation saves260µs:
-  2610.86/native2847.04µs, upper0.920, passes. Filtered/allactual raw/normalized
-  intervals separate. Its admitted peak1,766,641B, retained pair1,062,936B and
-  GC1,638,214B/op remain unchanged; all51 inventory allocations are unchanged.
-  [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
-  {len(png_framing['cases'])} confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
-  {png_framing['statusCounts']['gap']} gap and {png_framing['statusCounts']['uncertain']} uncertain.
-  The publication stage refreshed43 affected costs and retained eight unchanged
-  providers. The current encoding change preserves these decode paths.
-  Live materialized RGBA16 remains2919.94/native2894.87µs upper1.012, a gap;
-  liveRGBA8 upper1.004 remains uncertain. No favorable resampling or global parity
-  claim. Header-only work is unchanged; older stream/composition
-  costs remain historical. Physical/native peaks are not remeasured. Earlier
-  [prefix](../benchmarks/PNG-PREPARED-PREFIX.md) and
-  [live-cursor](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) gains remain linked history.
-  [Exact length classification](../benchmarks/PNG-LENGTH-CLASSIFICATION.md) replaces
-  repeated range search with the exact integer-logarithm formula. All15 current
-  one-shot encodes refresh: **{png['statusCounts']['pass']} pass/stop, {png['statusCounts']['gap']} gaps,
-  {png['statusCounts']['uncertain']} uncertain**. WordSmallest now passes. ByteFastest
-  upper{png['cases']['EncodeFast8']['upper']:.3f} and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
-  WordFastest saves180.09µs/1.00% raw with separated filtered/allactual intervals;
-  normalized intervals overlap. Byte's84.29µs point gain has allactual uncertainty.
-  A [current-package Fastest confirmation](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md)
-  remains uncertain; its updated cost is displayed. No unchanged favorable repeat.
-  No robust normalized or blanket gain claim. Exact packets,384KiB admission,
-  retained0scratch and primaryGC820916/2437660Bop remain. Earlier
-  [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
-  [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
-  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [indexed packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
-  retains its ordered dot accumulator in a register, removing repeated stack
-  traffic from clipped-edge fallback. Borrowed typed views and helper-call cost
-  stay within the complete operation. Byte64×32 saves **{packed_current['comparisons']['Tight64x32_8']['savedUs']:.2f}µs/{100*packed_current['comparisons']['Tight64x32_8']['rawReduction']:.2f}% raw**,
-  {100*packed_current['comparisons']['Tight64x32_8']['normalizedReduction']:.2f}% normalized, separated raw/normalized intervals in both views.
-  Current byte{packed_current['cases']['Tight64x32_8']['managedUs']:.2f}/zimg{packed_current['cases']['Tight64x32_8']['nativeUs']:.2f}µs,
-  upper{packed_current['cases']['Tight64x32_8']['upper']:.3f}; word{packed_current['cases']['Tight64x32_16']['managedUs']:.2f}/zimg{packed_current['cases']['Tight64x32_16']['nativeUs']:.2f}µs,
-  upper{packed_current['cases']['Tight64x32_16']['upper']:.3f}. One current original450.28µs confirmation
-  is the byte gain baseline; earlier458.14µs stays historical. Word clock movement
-  does not establish a causal companion gain or equivalence. Both remain
-  gaps,113B/op. Same4KiB admission and3880/3992/4044B phase payloads, independent
-  8192/16384B outputs/scratch0; physical/native peaks unmeasured. Exact arithmetic,
-  clipped/unequal fallbacks and repair remain. Complete managed preparation and
-  output stay timed; zimg retains its graph/scratch. Both existing controls refresh.
-  [Contiguous views](../benchmarks/PACKED-BICUBIC-CONTIGUOUS-VIEWS.md),
-  [shared scheduling](../benchmarks/PACKED-BYTE-WORD-CONSOLIDATION.md) and
-  [attribution](../benchmarks/PACKED-BYTE-PREPARATION-ATTRIBUTION.md) retain history.
-  [Shared original-order byte repair](../benchmarks/BICUBIC-SHARED-BYTE-REPAIR.md)
-  retains the large managed-only compact643.41→30.78ms/20.90× gain, exact pixels
-  and4KiB admission as history. The existing large control refreshes on this package:
-  default{wide_byte['largeGeneralization']['costs']['default']['meanMs']:.2f}/compact{wide_byte['largeGeneralization']['costs']['compact']['meanMs']:.2f}ms, three actuals each,
-  a short screen with separated default/compact intervals within this pair.
-  No independent generalized or historical gain, native parity or default promotion
-  is established. Normal/scalar/prior full frames and independent owners agree.
-  Earlier costs remain historical; certificates, tiny-alpha unwind and owners remain.
-  [Packed byte source preparation](../benchmarks/PACKED-BICUBIC-DECODED-PREFIX.md)
-  saves **544.63→485.40µs /59.23µs/10.88%raw/10.11%normalized**, with separated
-  filtered/all-actual raw/normalized confidence. Current zimg370.61µs, upper1.314
-  leaves115µs;113B/op unchanged. Four-column prefix and original two-column
-  suffix share one numeric range and4KiB admission; no new owned capacity or
-  retained scratch. Predecoded doubles preserve exact products/tap order and
-  original certificates. The adverse/flat transitional stages remain in the report.
-  [Cached-wide certified publication](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
-  reuses the ordinary-byte certificate under proved tap bounds, retaining original
-  division and individual repair for uncertainty, tiny alpha and larger supports.
-  Complete Wide8 saves **{wide_byte['comparison']['savedUs']:.2f}µs/{100*wide_byte['comparison']['rawReduction']:.2f}% raw/{100*wide_byte['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual confidence; native movement is
-  {100*wide_byte['comparison']['nativePointChange']:.2f}%. All twelve actuals remain,
-  including candidate variation; no unchanged primary repeat.
-  Current{wide_byte['cases']['Wide8']['managedUs']:.2f}/zimg{wide_byte['cases']['Wide8']['nativeUs']:.2f}µs,
-  upper{wide_byte['cases']['Wide8']['upper']:.3f} remains a gap.
-  Eight existing support/depth costs refresh; the report records any uncertainty
-  and the unchanged-build countercheck. Other costs establish no causal companion
-  gain or equivalence. Workspace198,432B/result32,768B/scratch0 remain;
-  GC{wide_byte['cases']['Wide8']['allocatedBytes']:,}B/op differs only by amortization.
-  Managed exact pixels, ordered sums and ownership remain unchanged. Word generated
-  code excludes byte reciprocal imports. Physical/native/JIT-stack peaks are unknown.
-  [Shared windows](../benchmarks/CACHED-WIDE-SHARED-WINDOWS.md) retains prior history
-  without supplying displayed current costs or renderer dependencies.
-  [Current tight-byte enlargement](../benchmarks/BYTE-BICUBIC-ENLARGEMENT-CURRENT-PACKAGE.md)
-  is **3,114.50 / zimg3,041.43µs**, upper1.030 and116B/op:73µs remains. The
-  qualified package and frozen workload are reused; no causal historical gain
-  is claimed. Shared column prefix/suffix frames retire before overlap/replay;
-  current cross-platform and SAME actual-package checks cover both depths.
-  Other source-valid paths reuse evidence; scoped costs do not prove all-path parity.
-  [Mixed-byte vertical reuse](../benchmarks/BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md)
-  shares overlapping decoded rows across independent ordered accumulations.
-  Complete bounded mixed resize saves **{mixed_vertical['comparison']['savedUs']:.2f}µs/{100*mixed_vertical['comparison']['rawReduction']:.2f}% raw/{100*mixed_vertical['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual confidence and native movement
-  {100*mixed_vertical['comparison']['nativePointChange']:.2f}%.
-  Current default/bounded byte costs{mixed_vertical['cases']['Mixed8']['managedUs']:.2f}/
-  {mixed_vertical['cases']['TightMixed8']['managedUs']:.2f}µs, uppers
-  {mixed_vertical['cases']['Mixed8']['upper']:.3f}/{mixed_vertical['cases']['TightMixed8']['upper']:.3f}
-  remain gaps; vertical upper{mixed_vertical['cases']['TightVertical8']['upper']:.3f} passes/stops.
-  Other fresh points establish no causal companion gain. GC114/114/113Bop,
-  existing4KiB admission,28,136B result-backed workspace and retained scratch0
-  remain. Outputs stay charged until disposal; exact pixels/certification/repair
-  and native float gates are unchanged. The tested word extension had a54.32µs
-  separated raw loss; its normalized point was inconclusive. The complete word
-  implementation is restored byte-for-byte, with every adverse sample retained.
-  [Earlier byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md) retain their
-  scoped gains and artifact reconciliation as history, without a renderer dependency.
-  [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
-  close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
-  normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
-  Filtered/all-actual confidence separates; parity uppers0.908/0.904.
-  The previous vertical-word regression is superseded. These identity paths remain
-  source-valid; affected narrow cached costs now belong to shared overlap below.
-  Identity workspace383,852→367,436B; total allocation367,675/367,595Bop,
-  retainedscratch0/result264,708/529,416B until disposal. Exact repair's4KiB
-  overlap stays separately admitted. Physical/native peaks are unmeasured;
-  existing output-pool retention remains separate. No new API/owner/cache/pool.
-  Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
-  Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
-  the SAME actual package/three examples. Four displayed rows refresh.
-  [Result-backed word bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) remain
-  source-valid. Default mixed{result_bands['cases']['Mixed16']['managedUs']:.2f}µs,
-  upper{result_bands['cases']['Mixed16']['upper']:.3f} passes/stops. The newer unchanged-DLL bounded
-  confirmation is{current_word['managedUs']:.2f}/zimg{current_word['nativeUs']:.2f}µs,
-  upper{current_word['upper']:.3f} remains a gap; no causal historical regression is claimed.
-  Fifteen small-support word controls: {current_word_counts['pass']}pass/
-  {current_word_counts['gap']}gap/{current_word_counts['uncertain']}uncertain.
-  Earlier band gains/tradeoffs and raw proof remain in the report.
-  [Paired coefficient preparation](../benchmarks/BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
-  stores exact two-tap groups once per strip and uses fixed typed views; scalar
-  replay borrows dead decode workspace after horizontal users finish. Complete
-  bounded narrow byte saves **{paired_coefficients['comparison']['savedUs']:.2f}µs/{100*paired_coefficients['comparison']['rawReduction']:.2f}% raw/{100*paired_coefficients['comparison']['normalizedReduction']:.2f}% normalized**,
-  with separated filtered/all-actual confidence and native+0.056%.
-  Current{paired_coefficients['cases']['TightDown8']['managedUs']:.2f}/zimg{paired_coefficients['cases']['TightDown8']['nativeUs']:.2f}µs,
-  upper{paired_coefficients['cases']['TightDown8']['upper']:.3f} remains a gap. One targeted check resolves
-  observed native419→450µs movement; every earlier stage/actual remains in the report.
-  Word driver/both strips/replay match the original instructions, so its passing
-  evidence is reused. Same113B/op,4KiB admission/3232/4080B payloads,132096B result,
-  scratch0 and exact pixels/ownership. No new array, pool, session or public API.
-  Physical/native/JIT-stack peaks remain unmeasured. The
-  [shared byte publisher](../benchmarks/BICUBIC-SHARED-BYTE-PUBLICATION.md) retains
-  bounded wide-byte{byte_publication['cases']['TightWide8']['managedUs']:.2f}/zimg{byte_publication['cases']['TightWide8']['nativeUs']:.2f}µs,
-  upper{byte_publication['cases']['TightWide8']['upper']:.3f} gap and two passing word controls. Its
-  recorded emitted-path timing reuse remains labeled; no whole-release refresh.
-  [Wide overlap](../benchmarks/BICUBIC-WIDE-OVERLAP.md) retains six unchanged costs/history.
-  [Paired Lanczos byte rows](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) share coefficient
-  expansion across two required rows in existing admitted storage. Complete prepared
-  RGBA8 reduction saves **{lanczos_current['comparisons']['Repeated8']['savedUs']:.2f}µs/{100*lanczos_current['comparisons']['Repeated8']['rawReduction']:.2f}% raw**,
-  {100*lanczos_current['comparisons']['Repeated8']['normalizedReduction']:.2f}% normalized; both confidence views separate.
-  Current {lanczos_current['cases']['Repeated8']['managedUs']:.2f}/zimg{lanczos_current['cases']['Repeated8']['nativeUs']:.2f}µs,
-  upper{lanczos_current['cases']['Repeated8']['upper']:.3f} is **uncertain near parity**, not a pass.
-  Eight source-valid Lanczos costs are reused for their unchanged paths:
-  **six passes, one word-reduction gap, one uncertainty**.
-  Other fresh costs qualify status, without causal companion-gain/equivalence claims.
-  Closed scheduler modes erase batching state from word/enlargement execution;
-  original single-row/word instructions and exact Q30/certificates/repair remain.
-  Primary GC138B/op versus139 is amortization, not an allocation gain; retained
-  plan139,800B and output132,096B remain separate. No new owned capacity or pool;
-  physical/native/JIT-stack peaks unmeasured. [Paired word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md),
-  [certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md) and
-  [unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
-  retain earlier evidence and adverse results.
-  [Paired packed streaming rows](../benchmarks/PACKED-STREAMING-PAIRED-BYTE-ROWS.md)
-  share clamped indices/coefficient reconstruction between two required byte rows.
-  Complete4×9 byte saves **{streaming['comparison']['savedUs']:.2f}µs/{100*streaming['comparison']['rawReduction']:.2f}% raw and normalized**,
-  with separated filtered/all-actual confidence and effectively unchanged reference.
-  Current{streaming['cases']['packedrowsbyte']['managedUs']:.2f}/zimg{streaming['cases']['packedrowsbyte']['nativeUs']:.2f}µs,
-  upper{streaming['cases']['packedrowsbyte']['upper']:.3f} passes. Four affected packed costs refresh/pass;
-  four unchanged full-streaming costs remain source-valid: **seven of eight pass**,
-  with8×17 byte upper1.127/~49µs gap. Original exact per-row/vertical order and
-  single-row code remain; word mode erases pair state. GC113B/op,4KiB workspace,
-  scratchretention0 and independent32/64/144/288B output payloads are unchanged.
-  Physical/native/JIT-stack peaks are unmeasured. Complete managed prep stays
-  timed; labeled zimg retains graph/input/scratch. No fresh-native-graph claim.
-  Passing controls stop; bounded/cached-wide and JPEG leads remain in coverage.
-  [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
-  3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
-  save201.65µs/9.05% raw on complete public RGBA8 enlargement, with separated
-  filtered/all-actual raw and normalized confidence. Current
-  {bilinear_up8['managedUs']:,.2f}/native{bilinear_up8['nativeUs']:,.2f}µs,
-  lower{bilinear_up8['lower']:.3f}/upper{bilinear_up8['upper']:.3f},
-  {bilinear_up8['allocatedBytes']:,}Bop passes this control. Existing admitted
-  capacity and output pool are unchanged; no new cross-operation retention.
-  Exact pixels,6,036full/live eachOS, normal/scalar/AVX512off and SAMEactualpackage
-  pass. Geometry/output ownership stay timed; native graph/context preparation
-  stays retained and labeled. Preserve exact Q30/rational/certified pixels versus
-  native float; historical gains stay in linked reports.
-- **JPEG and reading:** [live prepared Huffman decoding](../benchmarks/JPEG-LIVE-PREPARED-HUFFMAN.md)
-  shares existing long-prefix lookup and scan-owned pair descriptors, preserving
-  every logical cancellation checkpoint. Complete live baseline444 saves
-  **{jpeg_read['comparison']['savedUs']:.2f}µs/{100*jpeg_read['comparison']['rawReduction']:.2f}% raw**,
-  {100*jpeg_read['comparison']['normalizedReduction']:.2f}% normalized; filtered/all-actual confidence separates.
-  Current{jpeg_read['cases']['NativeDecodeCancelable8']['managedMicroseconds']:.2f}/FFmpeg{jpeg_read['cases']['NativeDecodeCancelable8']['nativeMicroseconds']:.2f}µs,
-  upper{jpeg_read['cases']['NativeDecodeCancelable8']['upper']:.3f} passes/stops.
-  GC10,120→42,936B/op; governed peak541,253→574,069B; result531,468B until disposal,
-  retained scratch0. Physical/native peaks are unmeasured; no new pool/session.
-  [Quarter interpolation](../benchmarks/JPEG-QUARTER-INTERPOLATION.md) removes duplicate
-  horizontal reads/averages and zero-weight vertical blending within shared kernels.
-  Complete4:1:1 saves **{quarter['comparison']['savedUs']:.2f}µs/{100*quarter['comparison']['rawReduction']:.2f}% raw**,
-  {100*quarter['comparison']['normalizedReduction']:.2f}% normalized; both confidence views separate.
-  Current390.09/FFmpeg447.08µs, upper.885 passes/stops; shared4:1:0 remains passing,
-  372.66/519.59µs, upper.752. GC219,551/189,088B/op; no new capacity or retained
-  scratch, same1,536/1,792B render workspace and531,468B independently owned result.
-  These are frozen DC-coded sampling controls, not general photographic speed claims.
-  Both affected costs refresh;27 unchanged JPEG costs reuse valid evidence:
-  **{jpeg_counts['confirmed-pass-stop']}pass/{jpeg_counts['confirmed-gap']}gaps/{jpeg_counts['confirmed-confidence-open']}uncertain**.
-  No previously passing affected control becomes a gap. RGB422 remains a gap;
-  resident/stream restart420 and progressive live444 remain uncertain. Companion
-  historical points establish no causal gain, nonregression or equivalence.
-  Earlier adverse4:1:1 evidence remains historical after this source change. Exact frames,
-  admission/ownership and private post-EOI interpretation remain unchanged.
-  [Paired tile packing](../benchmarks/JPEG-PAIRED-TILE-PACKING.md) retains its scoped
-  sparse-CMYK gain, inconclusive RGB comparison and adverse horizontal-AC evidence.
-  [Narrow scan preparation](../benchmarks/JPEG-NARROW-SCAN-PREPARATION.md) retains
-  progressive gains and source-valid costs. No new images/settings or repeated
-  candidate confirmations. FFmpeg retains its contexts without an equivalent live token.
-  [Grayscale tile preparation](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) shares
-  row setup across up to eight MCUs, preserving exact normalization and gray samples.
-  Complete RGBA→gray saves **{jpeg_tiles['comparison']['savedUs']:.2f}µs/{100*jpeg_tiles['comparison']['rawReduction']:.2f}% raw**,
-  {100*jpeg_tiles['comparison']['normalizedReduction']:.2f}% reference-normalized, with separated
-  filtered/all-actual confidence. Current {jpeg_tiles['cases']['RgbaGray']['managedUs']:,.2f}/native{jpeg_tiles['cases']['RgbaGray']['nativeUs']:,.2f}µs,
-  upper{jpeg_tiles['cases']['RgbaGray']['upper']:.3f} passes the labeled SIMD libjpeg-turbo control;
-  caller GRAY8 also passes upper{jpeg_tiles['cases']['CallerGray']['upper']:.3f}. Both retain exact58,910B
-  packets; total GC is155,435/155,438B/op, without an allocation-gain claim.
-  Extra768B stack storage fits the existing8KiB fixed admission; a conservative
-  source bound including fixed heap/metadata and explicit arrays is4,804B.
-  No new heap owner or retained state; full admitted/physical/JIT stack peaks
-  are unmeasured. Only two costs refresh;15 unchanged color costs retain
-  [Huffman replay evidence](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md): combined
-  {jpeg_tiles['statusCounts']['pass']}pass/{jpeg_tiles['statusCounts']['gap']}gaps/{jpeg_tiles['statusCounts']['uncertain']}uncertain. Existing coefficient pools and governed bypass stay unchanged.
-  Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
-  paths retain source-valid evidence. Older normalization/replay stages remain history.
-- **Text/drawing:** [shared endpoint storage](../benchmarks/TEXT-ENDPOINT-STORAGE.md)
-  omits repeated consecutive contour endpoints before event growth and sorting.
-  Latin allocation falls67,368→59,000B/draw; admitted workspace falls48,544→42,336B,
-  Arabic275,776→238,848B and fitting47,896→41,688B. Retained scratch stays zero;
-  all eight frozen byte/word frames remain exact. Current98.44/102.57µs points
-  improve13.74%/8.03% over contemporary originals, but raw/normalized intervals
-  overlap: CPU gain remains inconclusive and both reference gaps remain.
-  These complete prepared-layout draws include geometry/workspace/composition/
-  disposal; resident font/layout and canvas resets are excluded equally. The
-  labeled ImageSharp.Drawing2.1.7/Fonts2.1.3 integration retains public paths but
-  rebuilds translated segments and scanner workspace per Fill. No managed work
-  is removed from timing. Earlier [prepared pixels/order](../benchmarks/TEXT-PREPARED-PIXELS-AND-ORDER.md)
-  retains history. No numerical-policy change or physical/native peak claim.
-  [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
-  [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  pass/stop. These independent cases do not block codec or resize work.
-  [Exact byte-vector composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md)
-  saves492.39µs/88.24%raw (88.22%normalized):65.63/FFmpeg451.36µs, upper0.157
-  passes the frozen RGBA8 control. Integer weights and a proven exact float
-  division replace three scalar divisions per pixel. Allocation56B/op is refreshed
-  on the actual package DLL, with no new owned workspace or retained scratch.
-  Borrowed-canvas reset is excluded before every operation on both sides,
-  invocation/unroll1, with exact managed and approved native gates. This is a
-  scoped control result, not all-input parity; physical/native peaks are unmeasured.
-  [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
-  on complete loading:31.86µs versus labeledFreeType13.42µs, upper2.396 still a gap.
-  Allocation falls757,597→176B/op; fullcopy/eager checks remain timed. The isolated
-  load retains757,076B idle within the existing shared two-array/4MiB ceiling;
-  governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
+- **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
+  has 4 passes / 4 uncertain encode controls; the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
+  has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
+  exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
+  VP8 has 2 passes / 3 gaps / 1 uncertain. Live opaque decode remains 4,881.47/native 4,792.22µs,
+  upper1.028. Selected codes/results retain independent ownership; scratch0.
+- **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
+  has 49 passes / 1 gap / 1 uncertain across 51 controls. Live materialized RGBA16 remains
+  2,919.94/native2,894.87µs, upper1.012. [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
+  has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
+  [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
+  uncertain. Fresh native codec/zlib state, normalization and independent packets
+  are timed. Exact packets and existing admission remain; no global parity claim.
+- **JPEG:** [current read scope](../benchmarks/JPEG-QUARTER-INTERPOLATION.md)
+  has 20 passes / 6 gaps / 3 uncertain across 29 controls. Sparse CMYK, direct RGB444 and
+  RGB422 remain material leads; restart420/progressive live444 need resolution.
+  [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
+  gains and 15 unchanged color costs. Default/CompactColor and content/sampling
+  claims remain distinct in the packet table. Frozen packets/metadata gates apply.
+- **Resizing:** [wide result-row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md)
+  saves **{row_loan['comparison']['savedUs']:.2f}µs/{100*row_loan['comparison']['rawReduction']:.2f}% raw/{100*row_loan['comparison']['normalizedReduction']:.2f}% normalized**,
+  with separated filtered/all-actual raw/normalized intervals. Wide byte is
+  {row_loan['cases']['TightWide8']['managedUs']:.2f}/zimg{row_loan['cases']['TightWide8']['nativeUs']:.2f}µs,
+  upper{row_loan['cases']['TightWide8']['upper']:.3f} gap; refreshed word upper{row_loan['cases']['TightWide16']['upper']:.3f} is uncertain.
+  Its changed driver prevents substituting the older passing word cost; current
+  intervals do not prove a regression. No unchanged favorable repeat.
+  Cache/weights borrow 10,880 B from unpublished output, with no added owned capacity;
+  same 4 KiB admission, 113 B/op, 32,768 B result and scratch 0. The existing large
+  default/compact pair screens 20.53/21.64 ms, three actuals each, without a native
+  or historical-gain claim. [Narrow preparation](../benchmarks/BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
+  retains 33.29 µs savings/upper 1.167 gap. [Cached-wide](../benchmarks/CACHED-WIDE-CERTIFIED-PUBLICATION.md)
+  has 7 passes / 1 gap; [packed reduction](../benchmarks/PACKED-BICUBIC-INDEXED-REDUCTION.md)
+  has 2 gaps. [Lanczos](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) has 6 passes / 1 gap / 1 uncertain;
+  resolve the byte uncertainty before tuning. Exact managed Q30/rational results
+  remain distinct from native float. Useful specialized kernels/fallbacks remain.
+- **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
+  [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and
+  current 98.44/102.57 µs points, with reference gaps and inconclusive CPU gains.
+  [Font loading](../benchmarks/FONT-OWNED-STORAGE.md) remains 31.86/FreeType 13.42 µs,
+  upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
+  not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current production build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**, affected
-normal/scalar checks, and the **same actual Release package/all three examples
-on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
-sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
-admission, terminalrefusal, cancellationcleanup and independent survivors.
-Current resizing passes{current_build_qualification['resizeInternalEachModeEachOs']} internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
-Current JPEG passes453 internal/375 public checks per those modes
-on each OS, including actual live-window DC/EOB/following-read witnesses,
-truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
-The current PNG package also verifies ordinary/live byte/word sync/async pixels,
-terminal refusal, cancellation cleanup/recovery and independent survivors, plus
-frozen Fastest8/16 sync/async packets,
-shared admission and independent ownership. The current package also exercises
-authored grouped-AC JPEG pixels in ordinary/live-token sync/async scans, terminal refusal and
-independent survivors. Its live baseline witnesses also pass. Unchanged
-alpha prefix/border/tail/palette, compressed horizontal-alpha package and other
-coefficient/decoder/word/ISA evidence is reused.
-Unchanged paths reuse valid evidence. This is correctness/package qualification,
-not a full release refresh or whole-library performance pass. The retained
-long-run cases are included in this full qualification. Original adverse and
-uncertain points remain in the [green-prediction report](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md),
-including the [earlier compact layouts](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md).
-Complete physical/admitted peaks are not inferred from allocations.
+The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
+and the **same actual Release-package consumer/all three usage examples on
+Windows/Linux**. Affected resize checks pass {current_build_qualification['resizeInternalEachModeEachOs']} internal/729 public per
+normal/scalar/disabled-AVX2/AVX512 mode. Exact packets/pixels, shared admission,
+refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
+paths and family-specific ISA evidence are reused; this is not a whole-release
+performance refresh. Total GC, admitted capacity and retained state are separate;
+physical/native/JIT-stack peaks are unmeasured unless a linked report says otherwise.
+Historical/adverse experiments remain in the linked family reports and raw archives.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled

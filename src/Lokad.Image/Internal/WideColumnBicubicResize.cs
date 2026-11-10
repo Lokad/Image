@@ -7,12 +7,14 @@ using System.Runtime.Intrinsics.X86;
 namespace Lokad.Image.Internal;
 
 /// <summary>Bounded column strips reuse source rows within an admitted stack workspace.</summary>
-internal static class WideColumnBicubicResize
+internal static partial class WideColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
     private readonly struct FourColumns { }
     private readonly struct ThreeColumns { }
+    private readonly struct RowLoanColumns { }
+    private readonly struct TailColumns { }
     private readonly struct ByteSamples { }
     private readonly struct WordSamples { }
 
@@ -32,6 +34,13 @@ internal static class WideColumnBicubicResize
                 return four
                     ? ApplyRange<FourColumns, WordSamples>(source, result, scaleX, scaleY, context)
                     : ApplyRange<ThreeColumns, WordSamples>(source, result, scaleX, scaleY, context);
+            if (four && TryLocateRowLoan(result, out _, out _))
+            {
+                if (!ApplyRange<RowLoanColumns, ByteSamples>(source, result, scaleX, scaleY, context)) return false;
+                // The cache/weight frame has returned before metadata restore
+                // or publication can reuse any of its borrowed result rows.
+                return ApplyRange<TailColumns, ByteSamples>(source, result, scaleX, scaleY, context);
+            }
             return four
                 ? ApplyRange<FourColumns, ByteSamples>(source, result, scaleX, scaleY, context)
                 : ApplyRange<ThreeColumns, ByteSamples>(source, result, scaleX, scaleY, context);
@@ -39,20 +48,39 @@ internal static class WideColumnBicubicResize
         finally { context.Release(WorkspaceBytes); }
     }
 
+    internal static bool TryLocateRowLoan(ImageBuffer result, out int firstTailRow, out int start)
+    {
+        firstTailRow = start = 0;
+        if (result.BitDepth != 8 || result.Width < 16) return false;
+        const int bytes = 17 * 16 * 32 + 16 * 17 * sizeof(double);
+        var rows = (int)((bytes + (long)result.Stride - 1) / result.Stride);
+        var first = result.Height - rows;
+        if (first < 17) return false;
+        firstTailRow = first; start = checked(first * result.Stride);
+        return true;
+    }
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool ApplyRange<TWidth, TSamples>(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, OperationContext context) where TWidth : struct where TSamples : struct
     {
-        // Constant width/depth modes share one scheduler. Their array
-        // payloads occupy4,068/3,776B and retire before original-order replay.
-        var columns = typeof(TWidth) == typeof(FourColumns) ? 4 : 3;
-        var taps = columns == 4 ? 17 : 20;
+        // Closed modes share one schedule. The row loan retains3,296B of
+        // explicit stack payload; original modes retain4,068/3,776B.
+        var columns = typeof(TWidth) == typeof(RowLoanColumns) ? 16 : typeof(TWidth) == typeof(ThreeColumns) ? 3 : 4;
+        var taps = typeof(TWidth) == typeof(ThreeColumns) ? 20 : 17;
+        var firstTailRow = 0; var loanStart = 0;
+        if (typeof(TWidth) == typeof(RowLoanColumns) || typeof(TWidth) == typeof(TailColumns))
+            if (!TryLocateRowLoan(result, out firstTailRow, out loanStart)) return false;
         var word = typeof(TSamples) == typeof(WordSamples);
         var pixelBytes = word ? 8 : 4;
-        Span<Vector256<double>> cache = stackalloc Vector256<double>[taps * columns];
+        Span<Vector256<double>> cache = typeof(TWidth) == typeof(RowLoanColumns)
+            ? MemoryMarshal.Cast<byte, Vector256<double>>(result.Pixels.Slice(loanStart, 8704))
+            : stackalloc Vector256<double>[taps * columns];
         Span<int> rowIds = stackalloc int[taps];
-        Span<Vector256<double>> decoded = stackalloc Vector256<double>[30];
-        Span<double> weights = stackalloc double[columns * taps];
+        Span<Vector256<double>> decoded = stackalloc Vector256<double>[typeof(TWidth) == typeof(RowLoanColumns) ? 80 : 30];
+        Span<double> weights = typeof(TWidth) == typeof(RowLoanColumns)
+            ? MemoryMarshal.Cast<byte, double>(result.Pixels.Slice(loanStart + 8704, 2176))
+            : stackalloc double[columns * taps];
         Span<byte> offsets = stackalloc byte[columns * taps];
         Span<int> counts = stackalloc int[columns];
         Span<double> normalizers = stackalloc double[columns];
@@ -60,8 +88,12 @@ internal static class WideColumnBicubicResize
         Span<int> rows = stackalloc int[taps];
         var input = source.Pixels;
         var stride = source.Stride;
-        var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, taps,
-            columns, context.Cancellation);
+        ColumnBicubicGeometry geometry;
+        if (typeof(TWidth) == typeof(TailColumns))
+            geometry = ColumnBicubicGeometry.PrepareTail(result, source.Height, scaleY, taps, 4, firstTailRow, context.Cancellation);
+        else
+            geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, taps,
+                typeof(TWidth) == typeof(RowLoanColumns) ? 4 : columns, context.Cancellation);
         for (var tile = 0; tile < result.Width; tile += columns)
         {
             var length = Math.Min(columns, result.Width - tile);
@@ -87,10 +119,11 @@ internal static class WideColumnBicubicResize
                 normalizers[x] = normalizer;
             }
             var sourceCount = offsets[(length - 1) * taps + counts[length - 1] - 1] + 1;
-            if (columns == 4)
+            if (taps == 17)
                 BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 17, 16, 4, context.Cancellation);
             rowIds.Fill(-1);
-            for (var y = 0; y < result.Height; y++)
+            for (var y = typeof(TWidth) == typeof(TailColumns) ? firstTailRow : 0;
+                y < (typeof(TWidth) == typeof(RowLoanColumns) ? firstTailRow : result.Height); y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 geometry.Read(y, tile < geometry.PrefixColumns, vertical,

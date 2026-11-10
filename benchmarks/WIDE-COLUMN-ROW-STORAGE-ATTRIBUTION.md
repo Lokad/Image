@@ -28,8 +28,12 @@ tail with the original four-column workspace. Every result pixel is materialized
 | Row visits | 2048 | 1040 |
 | Source-row conversions | 8288 | 4448 |
 | Decoded source pixels | 229474 | 189418 |
-| Geometry builds, including preparation/restoration | 448 | 260 |
+| Geometry builds, including preparation/restoration | 704 | 390 |
 | Horizontal column-rows | 33152 | 34688 |
+
+The wide17-tap footer is152B and its prepared prefix is88columns. The initial
+model used the96B narrow footer; its448->260build count is superseded. Timing,
+loan sizes and other counters are unchanged; the original cited raw is retained.
 
 The extra1536horizontal column-rows are adverse work at the phase boundary.
 Counters prove neither elapsed-time gain nor memory-bandwidth reduction. The
@@ -55,10 +59,14 @@ accepted stage. No general cache framework or extra pixel-loop abstraction.
 
 [Evidence](wide-column-row-storage-attribution-evidence.json) pins source identity,
 profile annotations, bounded ownership/address model and reused qualification.
-Mirrored/member-verified raw `wide-column-row-storage-attribution.tar.xz`:
-108192B/25members, SHA256
-`3aea3d34f7791969c9e725963ef224456d8a4a54e974ad1c570912934c0baa41`. The
+Mirrored/member-verified raw `wide-column-row-storage-corrected-attribution.tar.xz`:
+13924B/7members, SHA256
+`a10ff7204363d0e42764e7de5bf21a32d2e775757258dc6bfff14ee8987e062b`. The
 [shared publisher](BICUBIC-SHARED-BYTE-PUBLICATION.md) owns current wide costs;
 [paired preparation](BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md) owns the newer
 narrow-byte gain. This attribution adds no renderer dependency or current-cost
 change. All283paths remain required; publication stays postponed.
+
+The subsequent [result-row implementation](BICUBIC-RESULT-ROW-LOAN.md) owns newer
+wide-byte/word costs and qualification. The attribution above describes its
+preimplementation checkpoint; its model/profile and original raw remain retained.

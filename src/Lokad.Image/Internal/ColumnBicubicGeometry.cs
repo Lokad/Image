@@ -45,6 +45,33 @@ internal readonly ref struct ColumnBicubicGeometry
         return resultView;
     }
 
+    // Only unpublished tail rows are rebuilt after their cache users return.
+    // The original whole-image preparation remains unchanged for other callers.
+    internal static ColumnBicubicGeometry PrepareTail(ImageBuffer result, int sourceHeight,
+        double scale, int maximumTaps, int stripColumns, int firstRow, CancellationToken cancellation)
+    {
+        if ((uint)firstRow > (uint)result.Height) throw new ArgumentOutOfRangeException(nameof(firstRow));
+        var bytes = 16 + maximumTaps * sizeof(double);
+        var pixelBytes = result.BitDepth / 8 * 4;
+        var footerColumns = (bytes + pixelBytes - 1) / pixelBytes;
+        var prefix = (result.Width - footerColumns) / stripColumns * stripColumns;
+        if (prefix < 2 * stripColumns)
+            return new(default, result.Stride, 0, sourceHeight, result.Height, scale, 0);
+        var resultView = new ColumnBicubicGeometry(result.Pixels, result.Stride,
+            result.Width * pixelBytes - bytes, sourceHeight, result.Height, scale, prefix);
+        for (var y = firstRow; y < result.Height; y++)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var entry = resultView.storage.Slice(y * resultView.stride + resultView.offset, bytes);
+            var weights = MemoryMarshal.Cast<byte, double>(entry[16..]);
+            resultView.Build(y, weights, out var first, out var count, out var normalizer);
+            BinaryPrimitives.WriteInt32LittleEndian(entry, first);
+            BinaryPrimitives.WriteInt32LittleEndian(entry[4..], count);
+            BinaryPrimitives.WriteDoubleLittleEndian(entry[8..], normalizer);
+        }
+        return resultView;
+    }
+
     internal void Read(int y, bool prepared, Span<double> weights,
         out int first, out int count, out double normalizer)
     {

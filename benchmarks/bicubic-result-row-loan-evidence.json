@@ -1,0 +1,638 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WRL761B",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+    "linuxSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "3ff5212b21e57fe7212f62a6c171c4f28e30511e08da781817f80d3559c03e94",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+    "tests/Lokad.Image.Tests/WideColumnRowLoanTests.cs": "0fff88123a0d0c8ee924bb20e9f09db0b95fb62daeb2baa8174766a79ac01c10"
+  },
+  "cases": {
+    "TightWide8": {
+      "caseId": "TightWide8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": 568332,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 568332 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 406.1624484206989,
+      "nativeUs": 367.00846484375,
+      "ratio": 1.1066841430854144,
+      "lower": 1.0897780962975963,
+      "upper": 1.1189214782372094,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "wrl761b-candidate-TightWide8-confirm",
+      "receiptFile": "wrl761b-candidate-TightWide8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 32768,
+      "packetSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 0,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaRmse": 0,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": false,
+      "reuseProof": null
+    },
+    "TightWide16": {
+      "caseId": "TightWide16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": 1132568,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1132568 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 433.69661907327577,
+      "nativeUs": 436.460609375,
+      "ratio": 0.993667262881564,
+      "lower": 0.9832369776628298,
+      "upper": 1.0026723579490635,
+      "allocatedBytes": 113,
+      "status": "uncertain",
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "wrl761b-candidate-TightWide16-confirm",
+      "receiptFile": "wrl761b-candidate-TightWide16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 65536,
+      "packetSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": false,
+      "reuseProof": null
+    }
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "originalUs": 465.05987247474746,
+    "currentUs": 406.1624484206989,
+    "savedUs": 58.89742405404854,
+    "rawReduction": 0.12664482046286774,
+    "normalizedReduction": 0.08941575793734802,
+    "nativePointChange": -0.04088480868193878,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "originalRaw": {
+          "N": 11,
+          "Mean": 465059.8724747475,
+          "StandardError": 327.4418834352625,
+          "Level": 12,
+          "Margin": 1501.941163764367,
+          "Lower": 463557.9313109831,
+          "Upper": 466561.81363851187
+        },
+        "candidateRaw": {
+          "N": 12,
+          "Mean": 406162.44842069893,
+          "StandardError": 508.548582087065,
+          "Level": 12,
+          "Margin": 2256.419550655629,
+          "Lower": 403906.0288700433,
+          "Upper": 408418.8679713546
+        },
+        "originalNormalized": [
+          1.2042818803978734,
+          1.2265626544400108
+        ],
+        "candidateNormalized": [
+          1.0897780962975963,
+          1.1189174682110943
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "originalRaw": {
+          "N": 12,
+          "Mean": 465428.2040895061,
+          "StandardError": 473.10930765017866,
+          "Level": 12,
+          "Margin": 2099.176222255688,
+          "Lower": 463329.02786725044,
+          "Upper": 467527.3803117618
+        },
+        "candidateRaw": {
+          "N": 12,
+          "Mean": 406163.9121303764,
+          "StandardError": 508.5485820870671,
+          "Level": 12,
+          "Margin": 2256.419550655638,
+          "Lower": 403907.49257972074,
+          "Upper": 408420.331681032
+        },
+        "originalNormalized": [
+          1.2039194193113039,
+          1.2288612193844068
+        ],
+        "candidateNormalized": [
+          1.0897820455299223,
+          1.1189214782372094
+        ]
+      }
+    }
+  },
+  "sourceCodeProof": {
+    "project": "Lokad.Image",
+    "stage": "WRL761B",
+    "sources": {
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "3ff5212b21e57fe7212f62a6c171c4f28e30511e08da781817f80d3559c03e94",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+    },
+    "existingGeometryPrepareReadBuildVerbatim": true,
+    "numericalExecutionAfterGeometryReadVerbatim": true,
+    "sourceCoefficientPreparationVerbatimExceptClosedPairGuard": true,
+    "wordCode": [
+      {
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "instructionsIdentical": false,
+        "oldBytes": 383,
+        "currentBytes": 501,
+        "normalizedInstructionsSha256": "e696afe305f4366b5b78b154629668a3a5494738f50dbdd930f8a8fb38c251c6"
+      },
+      {
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+FourColumns,Lokad.Image.Internal.WideColumnBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "instructionsIdentical": true,
+        "oldBytes": 5712,
+        "currentBytes": 5712,
+        "normalizedInstructionsSha256": "f5030f29311057690dcbfa7bdbe90b7167b5e8a3c93c7d6a0a6474653f97cade"
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicGeometry:Prepare(Lokad.Image.ImageBuffer,int,double,int,int,System.Threading.CancellationToken):Lokad.Image.Internal.ColumnBicubicGeometry (FullOpts)",
+        "instructionsIdentical": true,
+        "oldBytes": 639,
+        "currentBytes": 639,
+        "normalizedInstructionsSha256": "ae3f945a8a6cf41d1393978b8a7365a2be61f53f6d2143a1bdbc2c106197ec06"
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicGeometry:Build(int,System.Span`1[double],byref,byref,byref):this (FullOpts)",
+        "instructionsIdentical": true,
+        "oldBytes": 316,
+        "currentBytes": 316,
+        "normalizedInstructionsSha256": "815b1f942c6f04c51dd3659bd2ed0758b8e897368b07ab5eb1b0d7398eec574e"
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicGeometry:Read(int,bool,System.Span`1[double],byref,byref,byref):this (FullOpts)",
+        "instructionsIdentical": true,
+        "oldBytes": 287,
+        "currentBytes": 287,
+        "normalizedInstructionsSha256": "bcd03d555031ee79137104d3b6328821dad9f4ee8262e623d20dc8882f26e21d"
+      }
+    ],
+    "generatedCode": [
+      {
+        "stage": "wrl761",
+        "caseId": "TightWide8",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+RowLoanColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 5833,
+        "staticStackAdjustments": [
+          "552",
+          "80"
+        ],
+        "instrumentedElapsedDiscarded": true
+      },
+      {
+        "stage": "wrl761",
+        "caseId": "TightWide8",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+TailColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 6136,
+        "staticStackAdjustments": [
+          "568",
+          "0x880"
+        ],
+        "instrumentedElapsedDiscarded": true
+      },
+      {
+        "stage": "wrl761",
+        "caseId": "TightWide16",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+FourColumns,Lokad.Image.Internal.WideColumnBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 5769,
+        "staticStackAdjustments": [
+          "568",
+          "0x880"
+        ],
+        "instrumentedElapsedDiscarded": true
+      },
+      {
+        "stage": "wrl761b",
+        "caseId": "TightWide16",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+FourColumns,Lokad.Image.Internal.WideColumnBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 5712,
+        "staticStackAdjustments": [
+          "520",
+          "0x880"
+        ],
+        "instrumentedElapsedDiscarded": true
+      },
+      {
+        "stage": "wrl761b",
+        "caseId": "TightWide8",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+RowLoanColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 5786,
+        "staticStackAdjustments": [
+          "504",
+          "80"
+        ],
+        "instrumentedElapsedDiscarded": true
+      },
+      {
+        "stage": "wrl761b",
+        "caseId": "TightWide8",
+        "header": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+TailColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "bytes": 6096,
+        "staticStackAdjustments": [
+          "520",
+          "0x880"
+        ],
+        "instrumentedElapsedDiscarded": true
+      }
+    ],
+    "wordConclusion": "FourColumn/WordSamples andGeometryPrepare/Read/Build instructions match contemporaryqualifiedbaseline afteraddresses/cookiesonly. Driverchanges383to501B/frame24to40B, so fullwordcost refreshed:433.70/native436.46us upper1.00267uncertain. Do notreuseearlierpassingupperascurrentwholepathorclaimCPUregressionfromoverlappingintervals. Aconditionalrefstructtemporary568B/5769Bbodywasremoved; Boriginal520B/5712B restored.",
+    "storage": {
+      "workingAdmissionBytes": 4096,
+      "newOwnedCapacityBytes": 0,
+      "borrowedCacheBytes": 8704,
+      "borrowedWeightBytes": 2176,
+      "loanBytes": 10880,
+      "loanCapacityPrimaryBytes": 11264,
+      "explicitTopStackPayloadBytes": 3296,
+      "oldExplicitStackPayloadBytes": [
+        4068,
+        3776
+      ],
+      "retainedOperationScratchBytes": 0,
+      "independentResultBytes": 32768,
+      "physicalNativeJitStackPeaksMeasured": false
+    },
+    "scope": "Fourbytewideeligible rowloantop/tail andwideentry only. Three/word/smallimage math preserved; no numerical/packet/metadata/cancel/admission/ownerpolicy change. Tests actualphasecanaries/poison/cancel/recovery/noalloc/oddstride/partial16col/nofooter. All original geometry users stay untouched."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "full": [
+        2902,
+        2317,
+        948
+      ],
+      "total": 6167,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 341,
+        "internal-scalar": 341,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1070,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "20e20580ad799eaedf519679962ed00df5939f3db7ae132ee228ec0f73f7821c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+      "full": [
+        2902,
+        2317,
+        948
+      ],
+      "total": 6167,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 341,
+        "internal-scalar": 341,
+        "public-normal": 729,
+        "public-scalar": 729
+      },
+      "affectedResizeScalarEachOs": 1070,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "49a52fb6be76fb6cf3bb158d9c96997c415c708d1a3789139cbc705e578b0bf1",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 6167,
+    "resizeInternalEachModeEachOs": 341,
+    "resizePublicEachModeEachOs": 729,
+    "isa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 341,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 341,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 341,
+          "public-no-avx512": 729,
+          "internal-no-avx2": 341,
+          "public-no-avx2": 729
+        },
+        "coreSha256": "95256eb6e0e556a08efc5c847aef6c16701f61b1ff87d8db05ed07a36c2350eb",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "361dd2578ecb2c6fc77ceea66acb0073101d05128c53f16a745adb52734d9587",
+      "symbolsSha256": "ce6c7c36323899790515a8929a8865d472b5c252c4f9adf451b7a0a4cbc5bbc9",
+      "bytes": 443312,
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "361dd2578ecb2c6fc77ceea66acb0073101d05128c53f16a745adb52734d9587",
+      "librarySha256": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true
+  },
+  "storage": {
+    "workingAdmissionBytes": 4096,
+    "newOwnedCapacityBytes": 0,
+    "borrowedCacheBytes": 8704,
+    "borrowedWeightBytes": 2176,
+    "loanBytes": 10880,
+    "loanCapacityPrimaryBytes": 11264,
+    "explicitTopStackPayloadBytes": 3296,
+    "oldExplicitStackPayloadBytes": [
+      4068,
+      3776
+    ],
+    "retainedOperationScratchBytes": 0,
+    "independentResultBytes": 32768,
+    "physicalNativeJitStackPeaksMeasured": false
+  },
+  "largeGeneralization": {
+    "project": "Lokad.Image",
+    "stage": "WRL761B",
+    "productionChanged": true,
+    "additionalProductionBuilds": 0,
+    "diagnosticBuilds": 0,
+    "failedCompileBeforeSuccessfulBuild": 0,
+    "managedOnly": true,
+    "nativeParityClaim": false,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/wrl761b-large/runtime/LargeWide.dll",
+      "--artifacts",
+      "tmp/wrl761b-large/bdn"
+    ],
+    "identities": {
+      "tmp/wrl761b-large/runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/wrl761b-large/runtime/Lokad.Image.pdb": "c327801a6c8afcf2c6196020a15274e2045a538d08d2b1af5619f8f18a0d5352",
+      "tmp/wrl761b-large/runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/wrl761b-large/runtime/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+      "tmp/wrl761b-large/runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/wrl761b-large/runtime/LargeWide.deps.json": "120bcff6aab2123e5a1c43f9f6bc8382b1d315509a45ffb1913d00188ae80f79",
+      "tmp/wrl761b-large/runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/wrl761b-large/runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/wrl761b-large/runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/wrl761b-large/runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/wrl761b-large/runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/wrl761b-large/runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/wrl761b-large/runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/wrl761b-large/runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/wrl761b-large/runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/wrl761b-large/runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/wrl761b-large/runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/wrl761b-large/runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/wrl761b-large/runtime/LargeWide.dll": "1fa5f660a7840be5e59162e2284d0adab1c77665fffabe3290461332281a39d2",
+      "tmp/wrl761b-large/runtime/LargeWide.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+      "tmp/wrl761b-large/runtime/Lokad.Image.dll": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/wrl761b-large/runtime/LargeWide.pdb": "0d9386c395694d265e0da42a2efdaaf17ce82ef3ca9c7904cc53e2bda8a85a03",
+      "tmp/wrl761b-large/runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/wrl761b-large/runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/wrl761b-large/runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/wrl761b-large/runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    },
+    "actualsPerMode": 3,
+    "scalarCompleteFrameMatches": true,
+    "normalValidation": {
+      "project": "Lokad.Image",
+      "stage": "WBR665",
+      "productionChanged": true,
+      "managedOnly": true,
+      "parityClaim": false,
+      "libraryHash": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "sourceHash": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+      "outputHash": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+      "width": 4097,
+      "height": 2051,
+      "outputWidth": 1024,
+      "outputHeight": 512,
+      "depth": 8,
+      "generator": "tools/Shared/OriginalPixels.cs asymmetric-v1 phase0 RGBA",
+      "scalar": false,
+      "avx512": true,
+      "avx2": true,
+      "completePublicOperations": true,
+      "exactOutputs": true,
+      "independentOwners": true,
+      "sourceUnchanged": true,
+      "admission": [
+        {
+          "mode": "default",
+          "peakAdmittedBytes": 3682592,
+          "retainedBytes": 2097152,
+          "workspaceAtPeakBytes": 1585440
+        },
+        {
+          "mode": "compact",
+          "peakAdmittedBytes": 2101248,
+          "retainedBytes": 2097152,
+          "workspaceAtPeakBytes": 4096
+        }
+      ]
+    },
+    "scalarValidation": {
+      "project": "Lokad.Image",
+      "stage": "WBR665",
+      "productionChanged": true,
+      "managedOnly": true,
+      "parityClaim": false,
+      "libraryHash": "8712994682aeab172964d19ffbd7afab07c4ae51f048c62e15f8a669f5008fcb",
+      "sourceHash": "210d58b4f91285e49a6efb70229237a4b6e0f40a29677ea81a96c94a61ea024e",
+      "outputHash": "7c0509b62cef0991b6935b92b60e2ac0555456a25bf7a04980ee6f5f9f69be9e",
+      "width": 4097,
+      "height": 2051,
+      "outputWidth": 1024,
+      "outputHeight": 512,
+      "depth": 8,
+      "generator": "tools/Shared/OriginalPixels.cs asymmetric-v1 phase0 RGBA",
+      "scalar": true,
+      "avx512": false,
+      "avx2": false,
+      "completePublicOperations": true,
+      "exactOutputs": true,
+      "independentOwners": false,
+      "sourceUnchanged": true,
+      "admission": []
+    },
+    "quietGuardsPassed": true,
+    "boundaries": "Current WRL761B actual-package DLL; WideColumn byte rowloan changes invalidate older compact cost; existing diagnostic requires default/compact pair. Default cached-wide arithmetic unchanged. One current-package generalization screen; no independent historical/native gain claim. Same prepared diagnostic, original raster and complete public boundaries, no new build/image/settings. Existing complete public default/compact Resize including all preparation/workspace/independent result ownership/disposal. One resident original 4097x2051 RGBA8 raster, output1024x512; only working-limit selection differs. Input generation/checks outside timing. InProcessEmit BenchmarkDotNet ShortRun, oneCPU/tieringoff/workstation nonconcurrentGC. No native timing or codec/pixel policy change.",
+    "completeCosts": [
+      {
+        "method": "Default",
+        "meanUs": 20527.18476666667,
+        "confidenceInterval": {
+          "N": 3,
+          "Mean": 20527184.76666667,
+          "StandardError": 125922.13460431798,
+          "Level": 12,
+          "Margin": 3979020.3876422197,
+          "Lower": 16548164.37902445,
+          "Upper": 24506205.15430889
+        },
+        "allocatedBytes": 1585369
+      },
+      {
+        "method": "Compact",
+        "meanUs": 21637.221074074074,
+        "confidenceInterval": {
+          "N": 3,
+          "Mean": 21637221.074074075,
+          "StandardError": 18669.661374563984,
+          "Level": 12,
+          "Margin": 589943.6463112435,
+          "Lower": 21047277.427762832,
+          "Upper": 22227164.720385317
+        },
+        "allocatedBytes": 140
+      }
+    ]
+  },
+  "boundaries": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 568332 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+  "invalidation": "Wide entry changes and eligibleFourByte top/tail modes invalidate TightWide8/TightWide16 costs; both refresh onactualfinalpackageDLL. Original geometryPrepare/Read/Build andallorderedcoefficients/pixelmath verbatim, originalwordkernel instructionsidentical, but driverframe changes24to40B, so oldwordpass notsubstituted. Currentwordupper1.00267uncertain; originalwordupper.99691pass andcurrent rawoverlap do notprove regression. Existing4097wide diagnostic compactpath affected andexistingpairrefreshes3actualseach, currentdefault20.53/compact21.64ms, no native/generalizedhistoricalgainclaim. Other resize/codec/text paths reuseunchangedevidence. No newtiminggrid; full127row release refresh separate.",
+  "stages": {
+    "A": {
+      "windows": "25a145ea0f38527f487c60d1f1d071010faa1ff66718e3876847e5b5a333f083",
+      "byteShort": 383.0469292929293,
+      "byteConfirm": 427.28633125,
+      "wordConfirm": 446.69756189123376,
+      "decision": "Usefulbytegain butworduncertain. Targetedoriginalwordstillpasses. Conditionalgeometryreturn creates48Btemporary. Preserveallcosts, reviseexpressionbeforeacceptance."
+    },
+    "B": {
+      "short": 413.34996774193553,
+      "decision": "Explicitgeometrybranchrestoreswordkernel520B/5712B andremovestemporaryinbyteframes. Byteconfirmed406.16us withraw/normalizedintervals separated. Wordcurrent433.70/native436.46upper1.00267uncertain, retain asuncertain; nofurtherunchangedfavorable repeat."
+    }
+  },
+  "workflow": {
+    "coreVersionsEachOS": 2,
+    "successfulInternalVersionsEachOS": 4,
+    "productionRebuildsForTestOnlyCorrections": 0,
+    "benchmarkHarnessNativeSelectorFixtureBuilds": 0,
+    "fullQualificationRunsEachOS": 1,
+    "actualPackageProofEachOS": 1,
+    "wordOriginalCounterchecks": 1,
+    "allActualsRetained": true,
+    "newBenchmarkImagesOrSettings": 0,
+    "additionalFunctionalControls": 2,
+    "coverageCorrection": "Initialnewtestclassname omittedBicubic, usualfiltermissed4newcases. Test-onlyrename/rebuildperOS; then2existingdesignboundaries oddpartial16col/nofooters addedwithtest-onlyrebuildperOS. Initial335, then339, final341actualfocusedpasses preserved. Remoteoutputfetchfilename mismatch recoveredcompletedlogs/snapshotwithoutretesting. Correctedgeometrymodel152B/footerprefix88 and704to390builds, originalcitedrawretained."
+  },
+  "next": "Retain58.90us/12.66%raw/8.94%normalized savings; byteupper1.119stillgap, wordupper1.003uncertain. Sourcevalidnarrowbyte~68us,packedbyte~62us,sparseCMYK~60us,directRGB444~57us anddrawing~48us remaineligible; selectattributionforlarger repeatedwork. Do not assumeuncertainwordneedsoptimization orsampleunchangedcandidateforfavorablepass. All283requiredpathsremain; publicationpostponed.",
+  "raw": {
+    "file": "bicubic-result-row-loan.tar.xz",
+    "sha256": "37b964975f355e6c837fbd2db07f90a02797cb0479299bca5da2080ba71cbef6",
+    "bytes": 9584036,
+    "members": 295,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "wide-column-row-storage-corrected-attribution.tar.xz",
+        "sha256": "a10ff7204363d0e42764e7de5bf21a32d2e775757258dc6bfff14ee8987e062b"
+      },
+      {
+        "file": "bicubic-paired-coefficient-preparation.tar.xz",
+        "sha256": "efa42f668066f45149db2ac81ba01b17554c1728d3bba40ae58d8a9263f2eab8"
+      },
+      {
+        "file": "bicubic-shared-byte-publication.tar.xz",
+        "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224"
+      }
+    ]
+  }
+}
