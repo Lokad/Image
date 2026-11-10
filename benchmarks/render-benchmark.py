@@ -1112,6 +1112,27 @@ def render():
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in jpeg_read['comparison']['views'].values())
+    quarter = json.loads((ROOT / 'benchmarks/jpeg-quarter-interpolation-evidence.json').read_text(encoding='utf-8'))
+    jq = quarter['qualification']
+    assert quarter['productionAccepted'] and quarter['requiredMaterialPaths'] == 283
+    assert jq['fullChecksEachOs'] == jq['windows']['total'] == jq['linux']['total'] == 6133
+    assert jq['sameActualPackageBothOS'] and quarter['raw']['mirrored'] and quarter['raw']['allMembersVerified']
+    assert jq['actualPackage']['sha256'] == jq['samePackageLinux']['sameActualPackageSha256']
+    assert quarter['sourceProof']['fullSourceUndoReconstructsQualifiedOriginal']
+    assert quarter['storage']['newOwnedCapacityBytes'] == quarter['storage']['newRetainedOperationStorageBytes'] == 0
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in quarter['comparison']['views'].values())
+    assert set(quarter['cases']) == {'Decode411', 'Decode410'} and len(quarter['reusedUnchangedJpegCases']) == 27
+    jpeg_current = dict(jpeg_read['cases'])
+    for case, cost in quarter['cases'].items():
+        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed'] and cost['managedPixelsExact'] and cost['nativePixelsExact']
+        assert cost['librarySha256'] == jq['actualPackage']['librarySha256'] and cost['upper'] <= 1
+        assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
+        jpeg_current[case] = cost
+    jpeg_counts = {state: sum(c['status'] == state for c in jpeg_current.values())
+                   for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
+    assert jpeg_counts == quarter['mergedJpegStatusCounts'] == {
+        'confirmed-pass-stop': 20, 'confirmed-gap': 6, 'confirmed-confidence-open': 3}
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
                      ('Progressive420', 'JPEG progressive420, resident decode'),
@@ -1119,7 +1140,7 @@ def render():
                      ('Progressive444', 'JPEG ordinary progressive444, resident decode'),
                      ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode')]
     for case, label in replacements:
-        c = jpeg_read['cases'][case]
+        c = jpeg_current[case]
         qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
         row = (f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
                f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
@@ -1999,12 +2020,20 @@ Current scope and remaining work:
   upper{jpeg_read['cases']['NativeDecodeCancelable8']['upper']:.3f} passes/stops.
   GC10,120→42,936B/op; governed peak541,253→574,069B; result531,468B until disposal,
   retained scratch0. Physical/native peaks are unmeasured; no new pool/session.
-  All23 affected baseline costs refresh; six unchanged progressive paths reuse evidence:
-  **{jpeg_read['statusCounts']['confirmed-pass-stop']}pass/{jpeg_read['statusCounts']['confirmed-gap']}gaps/{jpeg_read['statusCounts']['confirmed-confidence-open']}uncertain**.
-  No previously passing affected control becomes a gap. RGB422 is now a gap;
+  [Quarter interpolation](../benchmarks/JPEG-QUARTER-INTERPOLATION.md) removes duplicate
+  horizontal reads/averages and zero-weight vertical blending within shared kernels.
+  Complete4:1:1 saves **{quarter['comparison']['savedUs']:.2f}µs/{100*quarter['comparison']['rawReduction']:.2f}% raw**,
+  {100*quarter['comparison']['normalizedReduction']:.2f}% normalized; both confidence views separate.
+  Current390.09/FFmpeg447.08µs, upper.885 passes/stops; shared4:1:0 remains passing,
+  372.66/519.59µs, upper.752. GC219,551/189,088B/op; no new capacity or retained
+  scratch, same1,536/1,792B render workspace and531,468B independently owned result.
+  These are frozen DC-coded sampling controls, not general photographic speed claims.
+  Both affected costs refresh;27 unchanged JPEG costs reuse valid evidence:
+  **{jpeg_counts['confirmed-pass-stop']}pass/{jpeg_counts['confirmed-gap']}gaps/{jpeg_counts['confirmed-confidence-open']}uncertain**.
+  No previously passing affected control becomes a gap. RGB422 remains a gap;
   resident/stream restart420 and progressive live444 remain uncertain. Companion
   historical points establish no causal gain, nonregression or equivalence.
-  The adverse4:1:1 point remains without favorable remeasurement. Exact frames,
+  Earlier adverse4:1:1 evidence remains historical after this source change. Exact frames,
   admission/ownership and private post-EOI interpretation remain unchanged.
   [Paired tile packing](../benchmarks/JPEG-PAIRED-TILE-PACKING.md) retains its scoped
   sparse-CMYK gain, inconclusive RGB comparison and adverse horizontal-AC evidence.
@@ -2057,7 +2086,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{wq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -2065,7 +2094,7 @@ sync/async consumers, plus bounded main validation and exact method2 residual st
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
 Current resizing passes297 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
-Unchanged JPEG source paths retain452 internal/375 public checks per those modes
+Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,

@@ -28,7 +28,7 @@ internal ref partial struct JpegDecoder
                 for (var y = 0; y < info.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    FillQuarterStripRow(y, windows[..count], cb, cr);
+                    FillQuarterStripRow<DirectQuarterSamples>(y, windows[..count], cb, cr);
                     // Zero vertical weight preserves (Q7 - 16384) << 2 exactly.
                     JpegInverseColor.WriteFilteredQuarterRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8 + start, count),
                         cb, cb, cr, cr, 0, output.GetRow8(y).Slice(start * 4, count * 4));

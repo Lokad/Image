@@ -13,6 +13,7 @@ internal static partial class JpegInverseColor
             || crBottom.Length != luma.Length || output.Length != luma.Length * 4L)
             throw new ArgumentException("Quarter-chroma rows require equal Q7 planes and four output bytes per pixel.");
         var x = 0;
+        var zeroVertical = bottomWeight == 0;
         if (Avx2.IsSupported)
         {
             var top = Vector256.Create(4096 - bottomWeight); var bottom = Vector256.Create(bottomWeight);
@@ -21,12 +22,22 @@ internal static partial class JpegInverseColor
             var greenU = Vector256.Create(GreenU); var greenV = Vector256.Create(GreenV);
             for (; x <= luma.Length - 8; x += 8)
             {
-                var u = Avx2.Subtract(Avx2.ShiftRightArithmetic(Avx2.Add(
-                    Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(cbTop.Slice(x, 8))), top),
-                    Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(cbBottom.Slice(x, 8))), bottom)), 10), center);
-                var v = Avx2.Subtract(Avx2.ShiftRightArithmetic(Avx2.Add(
-                    Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(crTop.Slice(x, 8))), top),
-                    Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(crBottom.Slice(x, 8))), bottom)), 10), center);
+                Vector256<int> u, v;
+                if (zeroVertical)
+                {
+                    // Q7 * 4096 >> 10 is exactly Q7 << 2, without rounding.
+                    u = Avx2.Subtract(Avx2.ShiftLeftLogical(Avx2.ConvertToVector256Int32(Vector128.Create(cbTop.Slice(x, 8))), 2), center);
+                    v = Avx2.Subtract(Avx2.ShiftLeftLogical(Avx2.ConvertToVector256Int32(Vector128.Create(crTop.Slice(x, 8))), 2), center);
+                }
+                else
+                {
+                    u = Avx2.Subtract(Avx2.ShiftRightArithmetic(Avx2.Add(
+                        Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(cbTop.Slice(x, 8))), top),
+                        Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(cbBottom.Slice(x, 8))), bottom)), 10), center);
+                    v = Avx2.Subtract(Avx2.ShiftRightArithmetic(Avx2.Add(
+                        Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(crTop.Slice(x, 8))), top),
+                        Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(Vector128.Create(crBottom.Slice(x, 8))), bottom)), 10), center);
+                }
                 var y = Avx2.Add(Avx2.ShiftLeftLogical(WidenEight(luma, x), 22), bias);
                 var r = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(v, red)), 22));
                 var g = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(Avx2.Add(y, Avx2.MultiplyLow(u, greenU)), Avx2.MultiplyLow(v, greenV)), 22));
@@ -37,8 +48,10 @@ internal static partial class JpegInverseColor
         }
         for (; x < luma.Length; x++)
         {
-            var u = (cbTop[x] * (4096 - bottomWeight) + cbBottom[x] * bottomWeight - (128 << 19)) >> 10;
-            var v = (crTop[x] * (4096 - bottomWeight) + crBottom[x] * bottomWeight - (128 << 19)) >> 10;
+            var u = zeroVertical ? (cbTop[x] - 16384) << 2
+                : (cbTop[x] * (4096 - bottomWeight) + cbBottom[x] * bottomWeight - (128 << 19)) >> 10;
+            var v = zeroVertical ? (crTop[x] - 16384) << 2
+                : (crTop[x] * (4096 - bottomWeight) + crBottom[x] * bottomWeight - (128 << 19)) >> 10;
             WriteFilteredPixel(luma[x], u, v, output.Slice(x * 4, 4), 4);
         }
     }

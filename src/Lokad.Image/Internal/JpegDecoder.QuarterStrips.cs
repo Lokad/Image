@@ -7,6 +7,9 @@ internal ref partial struct JpegDecoder
     private const int QuarterStripPixels = 64;
     private const int QuarterStripWorkspaceBytes = QuarterStripPixels * (5 * sizeof(int) + 4 * sizeof(ushort));
 
+    private readonly struct DirectQuarterSamples { }
+    private readonly struct ExpandedQuarterSamples { }
+
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     private readonly struct QuarterStripWindow(int firstLeft, int firstRight, int secondLeft, int secondRight, int weight)
     {
@@ -48,7 +51,7 @@ internal ref partial struct JpegDecoder
                     {
                         var sourceRow = endpoint == 0 ? top : bottom; var slot = sourceRow & 1;
                         if ((slot == 0 ? evenRow : oddRow) == sourceRow) continue;
-                        FillQuarterStripRow(sourceRow, windows[..count], rows.Slice(slot * 128, count), rows.Slice(slot * 128 + 64, count));
+                        FillQuarterStripRow<ExpandedQuarterSamples>(sourceRow, windows[..count], rows.Slice(slot * 128, count), rows.Slice(slot * 128 + 64, count));
                         if (slot == 0) evenRow = sourceRow; else oddRow = sourceRow;
                     }
                     JpegInverseColor.WriteFilteredQuarterRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8 + start, count),
@@ -61,7 +64,8 @@ internal ref partial struct JpegDecoder
         finally { context.Release(QuarterStripWorkspaceBytes); }
     }
 
-    private void FillQuarterStripRow(int y, scoped ReadOnlySpan<QuarterStripWindow> windows, scoped Span<ushort> cb, scoped Span<ushort> cr)
+    private void FillQuarterStripRow<TSamples>(int y, scoped ReadOnlySpan<QuarterStripWindow> windows, scoped Span<ushort> cb, scoped Span<ushort> cr)
+        where TSamples : struct
     {
         var first = components[1]; var second = components[2];
         var sourceCb = first.Plane.AsSpan(y * first.BlockColumns * 8, first.SampleWidth);
@@ -69,11 +73,17 @@ internal ref partial struct JpegDecoder
         for (var i = 0; i < windows.Length; i++)
         {
             var window = windows[i];
-            // Preserve the native 4:1:0 byte expansion BEFORE horizontal Q14.
-            var cbFirst = (sourceCb[window.FirstLeft] + sourceCb[window.FirstRight]) >> 1;
-            var cbSecond = (sourceCb[window.SecondLeft] + sourceCb[window.SecondRight]) >> 1;
-            var crFirst = (sourceCr[window.FirstLeft] + sourceCr[window.FirstRight]) >> 1;
-            var crSecond = (sourceCr[window.SecondLeft] + sourceCr[window.SecondRight]) >> 1;
+            var cbFirst = (int)sourceCb[window.FirstLeft]; var cbSecond = (int)sourceCb[window.SecondLeft];
+            var crFirst = (int)sourceCr[window.FirstLeft]; var crSecond = (int)sourceCr[window.SecondLeft];
+            // 4:1:0 expands bytes BEFORE horizontal Q14. The 4:1:1 source
+            // already has the required samples; its paired endpoints coincide.
+            if (typeof(TSamples) == typeof(ExpandedQuarterSamples))
+            {
+                cbFirst = (cbFirst + sourceCb[window.FirstRight]) >> 1;
+                cbSecond = (cbSecond + sourceCb[window.SecondRight]) >> 1;
+                crFirst = (crFirst + sourceCr[window.FirstRight]) >> 1;
+                crSecond = (crSecond + sourceCr[window.SecondRight]) >> 1;
+            }
             cb[i] = (ushort)((cbFirst * (16384 - window.Weight) + cbSecond * window.Weight) >> 7);
             cr[i] = (ushort)((crFirst * (16384 - window.Weight) + crSecond * window.Weight) >> 7);
         }

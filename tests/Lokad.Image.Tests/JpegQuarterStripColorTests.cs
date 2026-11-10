@@ -42,6 +42,32 @@ public sealed class JpegQuarterStripColorTests
     }
 
     [Fact]
+    public void ZeroWeightKeepsEveryValidQ7SampleExactWithIndependentBottomPlanesAndOddTail()
+    {
+        const int width = 32641;
+        var luma = new byte[width + 2];
+        var planes = Enumerable.Range(0, 4).Select(_ => new ushort[width + 2]).ToArray();
+        var expected = new byte[width * 4];
+        for (var i = 0; i < width; i++)
+        {
+            luma[i + 1] = (byte)(i * 37);
+            planes[0][i + 1] = (ushort)i; planes[2][i + 1] = (ushort)(32640 - i);
+            planes[1][i + 1] = (ushort)((i * 19 + 2) % width); planes[3][i + 1] = (ushort)((i * 31 + 7) % width);
+            var u = (planes[0][i + 1] * 4096 - (128 << 19)) >> 10;
+            var v = (planes[2][i + 1] * 4096 - (128 << 19)) >> 10;
+            JpegInverseColor.WriteFilteredPixel(luma[i + 1], u, v, expected.AsSpan(i * 4, 4), 4);
+        }
+        var originalLuma = luma.ToArray(); var originalPlanes = planes.Select(p => p.ToArray()).ToArray();
+        var output = Enumerable.Repeat((byte)165, expected.Length + 14).ToArray();
+        JpegInverseColor.WriteFilteredQuarterRow(luma.AsSpan(1, width), planes[0].AsSpan(1, width), planes[1].AsSpan(1, width),
+            planes[2].AsSpan(1, width), planes[3].AsSpan(1, width), 0, output.AsSpan(7, expected.Length));
+        Assert.Equal(expected, output.AsSpan(7, expected.Length).ToArray());
+        Assert.All(output.Take(7).Concat(output.Skip(7 + expected.Length)), b => Assert.Equal(165, b));
+        Assert.Equal(originalLuma, luma);
+        for (var p = 0; p < planes.Length; p++) Assert.Equal(originalPlanes[p], planes[p]);
+    }
+
+    [Fact]
     public void InvalidWeightsAndShapesLeaveOutputUntouchedAndValidRowsAllocateNoHeap()
     {
         var luma = new byte[65]; var plane = Enumerable.Range(0, 65).Select(i => (ushort)(i * 127)).ToArray();
@@ -50,6 +76,7 @@ public sealed class JpegQuarterStripColorTests
         Assert.Throws<ArgumentOutOfRangeException>(() => JpegInverseColor.WriteFilteredQuarterRow(luma, plane, plane, plane, plane, 4097, output));
         Assert.Throws<ArgumentException>(() => JpegInverseColor.WriteFilteredQuarterRow(luma, plane.AsSpan(1), plane, plane, plane, 2048, output));
         Assert.Throws<ArgumentException>(() => JpegInverseColor.WriteFilteredQuarterRow(luma, plane, plane, plane, plane, 2048, output.AsSpan(1)));
+        Assert.Throws<ArgumentException>(() => JpegInverseColor.WriteFilteredQuarterRow(luma, plane, plane.AsSpan(1), plane, plane, 0, output));
         Assert.All(output, b => Assert.Equal(165, b));
         for (var i = 0; i < 16; i++) JpegInverseColor.WriteFilteredQuarterRow(luma, plane, plane, plane, plane, 2048, output);
         var before = GC.GetAllocatedBytesForCurrentThread();

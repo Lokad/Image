@@ -220,12 +220,20 @@ Current scope and remaining work:
   upper0.935 passes/stops.
   GC10,120→42,936B/op; governed peak541,253→574,069B; result531,468B until disposal,
   retained scratch0. Physical/native peaks are unmeasured; no new pool/session.
-  All23 affected baseline costs refresh; six unchanged progressive paths reuse evidence:
-  **19pass/7gaps/3uncertain**.
-  No previously passing affected control becomes a gap. RGB422 is now a gap;
+  [Quarter interpolation](../benchmarks/JPEG-QUARTER-INTERPOLATION.md) removes duplicate
+  horizontal reads/averages and zero-weight vertical blending within shared kernels.
+  Complete4:1:1 saves **125.06µs/24.28% raw**,
+  22.51% normalized; both confidence views separate.
+  Current390.09/FFmpeg447.08µs, upper.885 passes/stops; shared4:1:0 remains passing,
+  372.66/519.59µs, upper.752. GC219,551/189,088B/op; no new capacity or retained
+  scratch, same1,536/1,792B render workspace and531,468B independently owned result.
+  These are frozen DC-coded sampling controls, not general photographic speed claims.
+  Both affected costs refresh;27 unchanged JPEG costs reuse valid evidence:
+  **20pass/6gaps/3uncertain**.
+  No previously passing affected control becomes a gap. RGB422 remains a gap;
   resident/stream restart420 and progressive live444 remain uncertain. Companion
   historical points establish no causal gain, nonregression or equivalence.
-  The adverse4:1:1 point remains without favorable remeasurement. Exact frames,
+  Earlier adverse4:1:1 evidence remains historical after this source change. Exact frames,
   admission/ownership and private post-EOI interpretation remain unchanged.
   [Paired tile packing](../benchmarks/JPEG-PAIRED-TILE-PACKING.md) retains its scoped
   sparse-CMYK gain, inconclusive RGB comparison and adverse horizontal-AC evidence.
@@ -278,7 +286,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,132 full/live checks per OS**, affected
+The current production build passes **6,133 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -286,7 +294,7 @@ sync/async consumers, plus bounded main validation and exact method2 residual st
 The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
 admission, terminalrefusal, cancellationcleanup and independent survivors.
 Current resizing passes297 internal/729 public checks per normal/scalar/disabled-AVX2/AVX512 mode.
-Unchanged JPEG source paths retain452 internal/375 public checks per those modes
+Current JPEG passes453 internal/375 public checks per those modes
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also verifies ordinary/live byte/word sync/async pixels,
@@ -373,8 +381,8 @@ settings do not establish matched quality.
 | VP8L palette16 RGBA8, resident decode (confirmed pass) † | 461.31 | 590.92 | 0.781 / 0.789 | 288,462 | — |
 | JPEG CMYK sparse-2D, resident decode † | 497.49 | 437.67 | 1.137 / 1.167 | 20,944 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 429.38 | 711.29 | 0.604 / 0.610 | 895,563 | — |
-| JPEG 4:1:1, resident decode † | 508.82 | 447.30 | 1.138 / 1.182 | 219,548 | — |
-| JPEG 4:1:0, resident decode (confirmed pass) † | 338.12 | 505.14 | 0.669 / 0.675 | 189,091 | — |
+| JPEG 4:1:1, resident decode (confirmed pass) † | 390.09 | 447.08 | 0.873 / 0.885 | 219,551 | — |
+| JPEG 4:1:0, resident decode (confirmed pass) † | 372.66 | 519.59 | 0.717 / 0.752 | 189,088 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 114,600.56 | 131,281.45 | 0.873 / 0.887 | 5,948,664 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,581.70 | 1,629.27 | 0.971 / 0.979 | 309,524 | 52,091 / 52,093 |

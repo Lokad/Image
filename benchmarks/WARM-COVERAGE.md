@@ -12,15 +12,17 @@ The [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md) owns eight affected
 lossless/alpha encode costs. [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md)
 owns effort2; six unchanged lossy costs reuse [four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md);
 the alpha pair uses the current storage handoff.
-[Live prepared Huffman decoding](JPEG-LIVE-PREPARED-HUFFMAN.md) owns23 affected
-baseline costs and reuses six unchanged progressive paths:29reads19pass/7gap/
-3uncertain. Complete livebaseline444 saves201.15µs/11.18%raw/11.14%normalized,
-upper.935 passes/stops. Temporary allocation/admittedpeak+32816B, retainedscratch0.
-No passing affected control becomes a gap. RGB422 is now a gap; restart420 and
-progressive live444 remain uncertain. Companion historical points establish no
-causal gain/nonregression/equivalence; the adverse4:1:1 point remains without
-favorable resampling. [Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) retains
-its scoped sparse-CMYK gain and adverse/inconclusive companion evidence.
+[Quarter interpolation](JPEG-QUARTER-INTERPOLATION.md) owns the two changed
+4:1:1/4:1:0 costs;27 unchanged JPEG costs reuse valid evidence, including
+[live prepared Huffman decoding](JPEG-LIVE-PREPARED-HUFFMAN.md).
+The29 reads now have20pass/6gap/3uncertain. Complete4:1:1 saves125.06µs/24.28%raw/
+22.51%normalized, upper.885 passes/stops;4:1:0 upper.752 remains passing.
+The source-valid livebaseline444 gain remains201.15µs/11.18%raw/11.14%normalized,
+upper.935 passes/stops, temporary allocation/admittedpeak+32816B, scratch0.
+RGB422 remains a gap; restart420 and progressive live444 remain uncertain.
+Historical companion points establish no causal gain/nonregression/equivalence.
+[Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) retains scoped sparse-CMYK
+gain and adverse/inconclusive companion evidence.
 
 ## Current family status
 
@@ -32,7 +34,7 @@ its scoped sparse-CMYK gain and adverse/inconclusive companion evidence.
 | PNG decoding/coding validation | [Ordinary/slab publication](PNG-NORMAL-CURSOR-PUBLICATION.md) removes three exception-only publication regions from abandoned private readers, preserving exact completed cursors/public errors/partial stores/lookahead/polls/ownership. Tight/default RGBA16, RGB16 and tight-live RGBA16 save192/125/216/217us; all four former gaps pass. Separate shared-root pair saves260us and passes upper0.920, retaining1,638,214B/op, admitted1,766,641B and retainedpair1,062,936B. [All51controls](PNG-CURRENT-FRAMING-COSTS.md):49pass/1gap/1uncertain;43 refreshed,8 unchanged providers reused, no allocation change. Separate materialized-live word remains2919.94/native2894.87us upper1.012 gap; livebyte upper1.004 uncertain. Stop passing cases; resolve uncertainty before tuning. Older stream/composition costs remain historical. |
 | PNG encoding | [Exact length classification](PNG-LENGTH-CLASSIFICATION.md) replaces repeated range search with the exact integer-logarithm formula. All15 complete one-shot costs refresh:13pass/0gaps/2uncertain. WordSmallest now passes/stops; ByteFastest [current-package confirmation](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain at4757.43/native4717.98µs upper1.028; no unchanged favorable repeat. Gray8 upper1.047 remains the other uncertainty; no optimization need is inferred. Word raw180.09us/1.00% intervals separate both views, normalized intervals overlap; byte84.29us point gain has allactual uncertainty. No robust normalized/blanket gain claim. All packets remain exact,384KiB admission/retained0scratch and primaryGC820916/2437660Bop unchanged. [Streaming census](PNG-STREAMING-TOKEN-FREQUENCIES.md) and prior preparation remain history. |
 | WebP image reading | [Output-owned palettes](WEBP-PALETTE-OUTPUT.md) remove a full-frame intermediate and copy when final palette expansion can publish directly into an admitted result. Complete palette16 saves168.22µs/26.72%raw/26.84%normalized, with separated filtered/all-actual confidence;461.31/native590.92µs upper.789 passes/stops. GC820190→288462B/op, result531468B until disposal, scratchretention0. An original513×67 palette16 fits239128B shared capacity below two full frames; this is a bound, not benchmark/physical peak measurement. Nine shared-method costs refresh: six lossless3pass/3uncertain; resident/live/stream uppers1.035/1.088/1.021 are uncertain, without companion causal claims. ResidentVP8 alpha upper1.014 uncertain; stream/validation pass. Three opaque VP8 paths reuse [quantizer evidence](VP8-FRAME-QUANTIZER-PREPARATION.md), combined VP8 scope2pass/3gap/1uncertain. Exact pixels, packed-source/result overlap, terminal refusal/cancellation/async cleanup,6058full/live eachOS, normal/scalar and SAMEactualpackage/threeexamples pass. Existing pools/governed bypass unchanged. [Final publication](VP8L-FINAL-PUBLICATION.md) retains earlier gains/adverse history; its palette regression is superseded. |
-| JPEG decoding | [Live prepared Huffman decoding](JPEG-LIVE-PREPARED-HUFFMAN.md) reuses existing9/10lookup and scan-owned pairs while retaining every logical prefix/amplitude checkpoint. Complete livebaseline4441799.58→1598.43µs saves201.15µs/11.18%raw/11.14%normalized; filtered/allactual intervals separate, upper.935 passes/stops.23baseline costs refresh,6progressive costs reuse:19pass/7gap/3uncertain. GC10120→42936B/op; governedpeak541253→574069B; result531468B until disposal, scratch0. No new pool/session; physical/native peaks unmeasured. No passing affected control becomes a gap; RGB422 is now a gap. Companion historical points are not causal gain/nonregression/equivalence claims; adverse4:1:1 remains without favorable repeats. Exact pixels/state, logical polls, admission/refusal/recovery and independent owners pass. Current6100full/live eachOS,452internal/375public pernormal/scalar/AVX2off/AVX512off, SAMEactualpackage/threeexamples pass. [Paired tile packing](JPEG-PAIRED-TILE-PACKING.md) and [narrow scan preparation](JPEG-NARROW-SCAN-PREPARATION.md) retain scoped prior gains and unchanged-path evidence. |
+| JPEG decoding | [Quarter interpolation](JPEG-QUARTER-INTERPOLATION.md) removes duplicate horizontal fetch/averaging and zero-weight vertical work in shared kernels. Complete4:1:1 saves125.06µs/24.28%raw/22.51%normalized,515.15→390.09µs, separated filtered/allactual confidence/native−2.277%; upper.885 passes/stops. Shared4:1:0 upper.752 remains passing. Two affected costs refresh,27 unchanged costs reuse:20pass/6gap/3uncertain. GC219551/189088Bop; same1536/1792B renderworkspace, result531468B until disposal/scratch0. Exact analytical/native coded-grid frames, original polls/admission/owners; no packet or numerical-policy change. Current6133full/live eachOS,453internal/375public normal/scalar/ISA and SAME actual package/allthree examples pass. [Live preparation](JPEG-LIVE-PREPARED-HUFFMAN.md) retains201.15µs/11.18%raw/11.14%normalized livebaseline444 gain/upper.935pass with+32816B allocation/admittedpeak. Earlier companion points are historical. [Paired packing](JPEG-PAIRED-TILE-PACKING.md) and [narrow scans](JPEG-NARROW-SCAN-PREPARATION.md) retain source-valid gains/history. SparseCMYK/directRGB remain material gaps; passing quarter cases stop. |
 | JPEG encoding | [Grayscale tile preparation](JPEG-GRAY-TILE-PREPARATION.md) shares row setup across up to8MCUs, preserving exact normalization/gray/DCT/entropy order. Complete RGBA→gray saves299.16µs/20.49%raw/19.96%normalized with separated filtered/allactual confidence:1160.95/labeledSIMDlibjpeg-turbo1403.16µs upper.840 passes/stops. CallerGRAY1059.14/native1112.88µs upper.969 also passes; no causal companion gain claim. Exact58910Bpackets; GC155435/155438Bop, no allocationgain claim. Extra768Bstack fits existing8192Bfixedadmission; coarsefixedphase4804B includes heap/metadata/explicitarrays. No new heap/owner/retention; fulladmitted/physical/JITstack peaks unmeasured, existing coefficientpools/governedbypass unchanged. Only2costs refresh;15color costs reuse [Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md):16pass/0gap/1uncertain, callerRGB420 remains uncertain. 6073full/live eachOS, normal/scalar/AVX2off/AVX512off and SAMEactualpackage/threeexamples pass. Strict packets/metadataexceptions and tight/restart/input ownership remain. |
 | Bicubic columns and narrow cached rows | [Wide overlap](BICUBIC-WIDE-OVERLAP.md) shares ordered window arithmetic and offset preparation across cached, narrow and wide columns. Tight wide-byte saves30.65µs/6.72% raw/6.68% normalized; upper1.233 remains a gap. Ten affected costs:7 pass/3 gaps/0 uncertain; wide-word now passes and no earlier pass is lost. Other fresh costs establish no causal companion gains. Tight reduction byte upper1.208 and cached byte1.106 remain gaps. No new owned capacity or retention; bounded4KiB/113Bop. The newer [cached-wide screen](CACHED-WIDE-SHARED-WINDOWS.md) owns the existing large default/compact24.05/29.68ms short points with overlapping intervals; no generalized CPU gain, default promotion or native parity. Workspace1585440/4096B, result2097152B until disposal, governed peaks3682592/2101248B. Current6120 full/live checks each OS,285 internal/729 public scalar/ISA and SAME actual package/three examples pass. [Earlier overlap](BICUBIC-SHARED-OVERLAP.md)/[shared repair](BICUBIC-SHARED-BYTE-REPAIR.md) retain scoped gains, adverse results and raw history. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
@@ -54,15 +56,17 @@ Historical strided/word-column clocks remain in their reports.
 3114.50/zimg3041.43us upper1.030,116B/op,73usgap. Existing preparation is present;
 larger current column/codec gaps take priority. Full283-path objective unchanged.
 
-[Shared cached-wide windows](CACHED-WIDE-SHARED-WINDOWS.md) qualifies the current
-immutable build:6132 full/live each OS,297 internal/729 public per normal/scalar/
-disabled-AVX2/AVX512, SAME actual Release package/all three examples. Eight wide
-costs and the existing large managed-only pair refresh. Three mixed-byte costs,
-the current restored-word witness, ten bounded/narrow-overlap comparisons,
-JPEG452/375 scalar/ISA proof and other unchanged codec/resize/text/ownership
-evidence remain source-valid. Older wide/large costs are historical; raw proof
-remains. The full127-row actual-package release refresh stays separate.
-Publication is postponed and all283paths remain required.
+[Quarter interpolation](JPEG-QUARTER-INTERPOLATION.md) qualifies the current
+immutable build:6133 full/live each OS,453 internal/375 public JPEG checks per
+normal/scalar/disabled-AVX2/AVX512, SAME actual Release package/all three examples.
+Only two quarter-decode costs change;27 JPEG costs and other unchanged families
+reuse valid evidence. [Shared cached-wide windows](CACHED-WIDE-SHARED-WINDOWS.md)
+retains source-valid resizing297/729 per-mode qualification, eight wide costs and
+the existing large managed-only pair. Mixed-byte/restored-word, bounded/narrow,
+other codec/text/ownership evidence remains valid where production paths are
+unchanged. Superseded costs stay historical with raw proof retained. The full
+127-row actual-package release refresh stays separate. Publication is postponed
+and all283paths remain required.
 
 Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
 [validated progression](JPEG-VALIDATED-PROGRESSION-EXPERIMENT.md),
