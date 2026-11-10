@@ -1,0 +1,236 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CWA756",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "newCostConfirmations": 0,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "currentCost": {
+    "caseId": "Wide8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "outputWidth": 128,
+    "outputHeight": 64,
+    "managedMaxWorkingBytes": null,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+    "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "managedUs": 427.7559746527778,
+    "nativeUs": 348.4648785807292,
+    "ratio": 1.2275440107335787,
+    "lower": 1.2153657991585192,
+    "upper": 1.233858412845234,
+    "allocatedBytes": 198448,
+    "status": "gap",
+    "librarySha256": "daee69661bf2ebe3f8b9112b2a64d78c72f5093e3617e99f9f462c6ad4d83679",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "runId": "cwv724-candidate-Wide8-confirm",
+    "receiptFile": "cwv724-candidate-Wide8-confirm-receipt.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12
+  },
+  "currentCostOwner": "cached-wide-shared-windows-evidence.json",
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "CWA756",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "caseId": "Wide8",
+    "sourceCommit": "cc0db7c4b12c86765554696be5c1b75cc6f162d5",
+    "wholeCachedDriverAndRowsUnchanged": true,
+    "relevantMathBodiesUnchanged": {
+      "PrepareWordPair": true,
+      "Round": true,
+      "TryWriteWordPair": true,
+      "FilterOverlappingHorizontalPair": true
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "4bdd27caf52dd8d34e867988357805bb71a0f2ef0c688680b34bcd6a1d7dd65c",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "0dd9847439bd133ee8e2e9890fcde3e09f963be8cfa430fbf4327edc6b9fbd96",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "bf63cb1b3de0cbe68eaa09ce30241752e9fe3f9362a6a79a9ccc69e0106dcf67"
+    },
+    "costReused": {
+      "caseId": "Wide8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": null,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 427.7559746527778,
+      "nativeUs": 348.4648785807292,
+      "ratio": 1.2275440107335787,
+      "lower": 1.2153657991585192,
+      "upper": 1.233858412845234,
+      "allocatedBytes": 198448,
+      "status": "gap",
+      "librarySha256": "daee69661bf2ebe3f8b9112b2a64d78c72f5093e3617e99f9f462c6ad4d83679",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "cwv724-candidate-Wide8-confirm",
+      "receiptFile": "cwv724-candidate-Wide8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12
+    },
+    "scope": "Existingcomplete resident513x259to128x64 RGBA8 defaultworkspace publicResize. Geometry, rowcacheprep/materialization, sourceconversion, original/rationalrepair, independentoutput/disposal timed. zimgretainsgraph/input/scratch andexistinghalo/packing/filter/output boundary. QualifiedCRR755Cmodule, no source/test/harness/native/fixturebuild or costconfirmation. Current427.76/native348.46us upper1.234/~79.29usgap remains source-valid; current2secondprofile doesnot produce CPUgain/phasecost."
+  },
+  "currentProfilingLibrarySha256": "1a7c5a22318c1260f7c682e44f02f09b7b5e9087b6c0ab149b8bcd569cc82370",
+  "sourceCommit": "9fd9366d9341451f2979fae5721082724c6fe9f4",
+  "profile": {
+    "totalSamples": 1777,
+    "instances": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74277c0b6e00",
+        "codeBytes": 8952,
+        "samples": 859
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::WriteWideRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,float64,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,valuetype Lokad.Image.Internal.CachedBicubicResize/WideErrorBounds,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74277c0b9ac0",
+        "codeBytes": 2641,
+        "samples": 467
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::DecodePremultipliedRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<float64>,int32,bool,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x74277c0b9900",
+        "codeBytes": 384,
+        "samples": 227
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::Original(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74277c0ba580",
+        "codeBytes": 2513,
+        "samples": 146
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x74277c0b9510",
+        "codeBytes": 184,
+        "samples": 16
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BicubicMath::Round(float64,int32)[Optimized]",
+        "address": "0x74277c0baf90",
+        "codeBytes": 125,
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "address": "0x74277c0b38e0",
+        "codeBytes": 39,
+        "samples": 4
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "address": "0x74277c0b3870",
+        "codeBytes": 82,
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::PrepareWideHorizontalPairs(valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74277c0b9640",
+        "codeBytes": 490,
+        "samples": 2
+      }
+    ],
+    "instrumentedElapsedDiscarded": true,
+    "receipt": "cwa756-cachedwide-profile-receipt.json",
+    "scope": "1777samplelocations: TryApply859,WriteWideRow467,DecodePremultipliedRow227,Original146,Kernel16. Inlining/skid notexactphasecost or removablepercent. One2secondcaptureCPU0/CPU1, exactfrozenrational/native/source/ownership/idle-v2 gates; no newbenchmarkimage/grid/harness/native build."
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "CWA756",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "source": [
+      513,
+      259
+    ],
+    "output": [
+      128,
+      64
+    ],
+    "tapHints": [
+      18,
+      18
+    ],
+    "maximumCertifiedTerms": 400,
+    "ownedWorkspaceBytes": 198432,
+    "retainedResultBytes": 32768,
+    "additionalOwnedCapacity": 0,
+    "hypothesis": "Existingcachedwide bytepublisher normalizes throughdivision and uses conservativecapacity32color margin1e-3, then original-order repair. Reuse CRR755sharedordinaryalpha certificate whenactual caller-tap upperbounds peraxis<=20 (18/18here); preserves exact400termerror proof. Fastpath can certify some samples within oldbroadmargin, removing redundant normalization/rounding/repair work. Alpha<16 oruncertainty falls through originalwidecertificate/individual-originalrepair. No measurablegain or avoidedrepaircount isprovenbyprofile/model.",
+    "endState": "Onecached-wide rowpublisher source, entry-selected byte/word mode with explicittypeofbyte guard before sharedfastcall so no deadbytelocals importedinword. Preserve originalsample/taporder, masks/individual-neighborrepair,tinyalpha, three128/64/32supportranges, oddtails/cancel/sharedroot/ownedarrays/results. No pool/session/cache/framework/newallocation. Nativegraphprep remains retained andlabeled; profileKernel16locations offers no setup-dominance/publicplan justification.",
+    "acceptance": "First verifypubliccaller tap-estimate bound andmaxcoeff coverage, rowpublisher typecode ownership/lifetimes andexistingtestreflections; no obsoletewrappers. Directexactdyadic/ambiguous/smallalpha/clip tests alreadyqualifyhelper. Newcompletecachedpath tests needoldcertificate-fail/new-certified cases plus exacthalf fallback/individualneighbor/word/tail/source/root/refusal/cancel/survivor/recovery. ExistingWide8short, usefulindependentoriginal/finalconfirm if promising; all8affectedcachedwidecosts plus existing4097managed diagnostic only atacceptedstage. No addedbenchmarkimages/settingsgrid. QualifyfinalW/L/scalar/ISA/SAMEpackagecoherently, reusecurrent6157otherwise.",
+    "profileCode": [
+      {
+        "header": "Lokad.Image.Internal.CachedBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 8952,
+        "reciprocalEstimates": 0,
+        "vectorDivisions": 1,
+        "roundScaleInstructions": 2
+      },
+      {
+        "header": "Lokad.Image.Internal.CachedBicubicResize:WriteWideRow(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],double,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,Lokad.Image.Internal.CachedBicubicResize+WideErrorBounds,Lokad.Image.Internal.OperationContext) (FullOpts)",
+        "codeBytes": 2641,
+        "reciprocalEstimates": 0,
+        "vectorDivisions": 1,
+        "roundScaleInstructions": 2
+      },
+      {
+        "header": "Lokad.Image.Internal.CachedBicubicResize:Original(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],int,int,Lokad.Image.Internal.OperationContext) (FullOpts)",
+        "codeBytes": 2513,
+        "reciprocalEstimates": 0,
+        "vectorDivisions": 0,
+        "roundScaleInstructions": 0
+      }
+    ]
+  },
+  "qualificationReuse": {
+    "owner": "bicubic-shared-byte-publication-evidence.json",
+    "fullChecksEachOs": 6157,
+    "resizeInternalEachModeEachOs": 331,
+    "resizePublicEachModeEachOs": 729,
+    "sameActualPackageBothOS": "ce0a5df2a1c489e15f524974f4022419cebdef7e8ac42174153efa0ca204379a",
+    "allThreeExamplesBothOS": true,
+    "sourceUnchanged": true,
+    "ciRun": 42784436394,
+    "ciAllThreeJobsGreen": true
+  },
+  "decision": "No production/testchange or CPUclaim. Reuse427.76/native348.46us upper1.234 (~79.29usgap),198448Bop. WriteWideRownormalizes throughdivision,capacity32 fixedbyte margin1e-3 triggers someOriginalrepair; boundedsharedcertificate underactualtaps<=20 is a distinctsafe reuse lead, not measuredavoidedrepairs. Hints18/18 support400term proof; certify beforefalling througholdindividualrepair. Isolatebyte/wordexecution early topreventdeadpub locals asCRRlearned. GeometryKernel16samplelocations offers no newpublicplan/session justification. Actualtypedpublisher/root/precision/code tests andexistingWide8screen next; acceptedmilestone scopeeightcurrentcontrols+existing4097diagnostic, no newgrid.",
+  "raw": {
+    "file": "cached-wide-publication-attribution.tar.xz",
+    "sha256": "74cc93ed187292c21642717af0cc7fe1150144afcb4d0d1b8ebc9768ca9928b6",
+    "bytes": 108124,
+    "members": 24,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-shared-byte-publication.tar.xz",
+        "sha256": "6a8646614d09f395b80ff740adce836fed1b2f5315ad38a02a0c659363421224"
+      },
+      {
+        "file": "cached-wide-shared-windows-qualified.tar.xz",
+        "sha256": "f84526a9023683303704f7088a05b327ddef8d3a434f20228f6353a94c72a6ba"
+      }
+    ]
+  }
+}

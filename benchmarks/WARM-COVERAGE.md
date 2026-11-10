@@ -40,6 +40,13 @@ identical emitted paths across final type-guard refinement; word costs refresh.
 The [attribution](BOUNDED-COLUMN-CURRENT-ATTRIBUTION.md) and discarded
 [vertical traversal](COLUMN-VERTICAL-QUAD-STUDY.md) retain history and raw evidence,
 without renderer dependencies. Larger cached-wide/JPEG leads remain eligible.
+[Cached-wide publication attribution](CACHED-WIDE-PUBLICATION-ATTRIBUTION.md)
+reuses its source-valid~79µs gap and current qualification. One2s capture maps
+467publisher/146repair locations of1777; these are not phase times or avoidable
+percentages. Next qualify existing shared ordinary-alpha certification under
+validated≤20tap bounds, with isolated word modes and unchanged individual repair/
+lifetimes. No new build, image/grid, cost confirmation or renderer dependency.
+
 
 ## Current family status
 
