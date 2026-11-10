@@ -1,0 +1,242 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BCA753",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "newTimingConfirmations": 0,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "currentCost": {
+    "caseId": "TightDown8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "outputWidth": 256,
+    "outputHeight": 129,
+    "managedMaxWorkingBytes": 667660,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "managedUs": 504.2036358333333,
+    "nativeUs": 419.024798828125,
+    "ratio": 1.2032787492373378,
+    "lower": 1.194564304874679,
+    "upper": 1.208103532464755,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "f1d649414bceea67661cdf7b0263a588db08ea53baca745a6587ba18629a0bf9",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "runId": "wop718-candidate-TightDown8-confirm",
+    "receiptFile": "wop718-candidate-TightDown8-confirm-receipt.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12
+  },
+  "currentCostOwner": "bicubic-wide-overlap-evidence.json",
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "BCA753",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "caseId": "TightDown8",
+    "sourceUnchanged": {
+      "column": true,
+      "geometry": true,
+      "byteMathBodies": {
+        "FilterOverlappingHorizontalPair": true,
+        "PrepareOverlappingPairs": true,
+        "TryWriteOriginalByte": true
+      }
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "0801acc4f0ec55a47c0a03de825b4d47e7890681c1df2a7e186838c571179569",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "df6db16f571725e1b37a773386c994964b7497dfd32028009249eb8b96389443",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+    },
+    "currentCostReused": {
+      "caseId": "TightDown8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 667660,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 504.2036358333333,
+      "nativeUs": 419.024798828125,
+      "ratio": 1.2032787492373378,
+      "lower": 1.194564304874679,
+      "upper": 1.208103532464755,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "f1d649414bceea67661cdf7b0263a588db08ea53baca745a6587ba18629a0bf9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "wop718-candidate-TightDown8-confirm",
+      "receiptFile": "wop718-candidate-TightDown8-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12
+    },
+    "scope": "Existing complete513x259to256x129RGBA8public4KiBresize. Column geometry/prefix/suffix and byte math unchanged since WOP718; wholemath/dispatcher changedelsewhere. Existing504.20/native419.02us upper remains validgap, no fresh timing confirmation needed for attribution. One current2secondprofile on qualifiedPRR752actualpackage, allinstrumentedelapseddiscarded."
+  },
+  "currentProfilingLibrarySha256": "a65e3c83561090f2b3081f0afc118352db534460838ee7fd87042221bcad91db",
+  "sourceCommit": "06c3768a85d2f1233782869c16310d16f1caef25",
+  "profile": {
+    "totalSamples": 1996,
+    "instances": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,valuetype Lokad.Image.Internal.ColumnBicubicGeometry,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74c0564bbf00",
+        "codeBytes": 6046,
+        "samples": 1160
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,valuetype Lokad.Image.Internal.ColumnBicubicGeometry,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74c0564b9cc0",
+        "codeBytes": 5922,
+        "samples": 680
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        "address": "0x74c0564b9960",
+        "codeBytes": 316,
+        "samples": 37
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "address": "0x74c0564b39f0",
+        "codeBytes": 39,
+        "samples": 36
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x74c0564b9ae0",
+        "codeBytes": 184,
+        "samples": 31
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        "address": "0x74c0564bb720",
+        "codeBytes": 287,
+        "samples": 21
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "address": "0x74c0564b3980",
+        "codeBytes": 82,
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BicubicMath::PrepareOverlappingPairs(valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x74c0564bb4e0",
+        "codeBytes": 539,
+        "samples": 6
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteOriginalByte(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x74c0564bb860",
+        "codeBytes": 1444,
+        "samples": 3
+      }
+    ],
+    "instrumentedElapsedDiscarded": true,
+    "receipt": "bca753-boundedbyte-profile-receipt.json",
+    "annotation": "bca753-code-annotation.json",
+    "scope": "Two column bodies1840/1996locations, geometry37Build+21Read+1Prepare, stride36,Kernel31,exactrepair3. Separate5922Blarge/6046Bsmall mapped by address+size, no ambiguous shared-name mapping. Hot selected indexedhorizontal and verticalrowoffset/bounds/broadcast instructions remain; counts/skid/inlining are not phasecost or removablepercent."
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "BCA753",
+    "productionChanged": false,
+    "actualSimdOrCpuProof": false,
+    "models": [
+      {
+        "source": [
+          513,
+          259
+        ],
+        "output": [
+          256,
+          129
+        ],
+        "existingControl": true,
+        "borrowedPrefixColumns": 96,
+        "oldRowOffsetAndCoefficientVisits": 132736,
+        "proposedVisits": 66368,
+        "unchangedPairSampleLoads": 132736,
+        "quadTapAddressChecks": 66368,
+        "independentTapTracesExact": true,
+        "oddPairSingleTailsUnchanged": true
+      },
+      {
+        "source": [
+          151,
+          83
+        ],
+        "output": [
+          75,
+          41
+        ],
+        "existingControl": true,
+        "borrowedPrefixColumns": 0,
+        "oldRowOffsetAndCoefficientVisits": 12321,
+        "proposedVisits": 6327,
+        "unchangedPairSampleLoads": 12321,
+        "quadTapAddressChecks": 5994,
+        "independentTapTracesExact": true,
+        "oddPairSingleTailsUnchanged": true
+      }
+    ],
+    "hypothesis": "Adjacent two output-column pairs at same y can share the existing vertical row-index/weight traversal while maintaining two independent original-order sums. Sampleloadvolume and certificates/publishers unchanged; fourpixel loop replaces two pairloops, remaining pair/single fallback retained. Leaf helper can reduce large-driver register pressure; actual call/code overhead remains to measure.",
+    "endState": "Bounded column scheduler and current4096B workspace/result loan unchanged. Closed byte mode selects quad vertical arithmetic, word retains originalpair path. No new array/cache/session/root/owner/quota or numerical policy. Consider reuse in other column family only if same complete boundary/evidence justifies it.",
+    "acceptance": "Actual production helper scalarbits/count/guards/noallocation, live scheduler/oracle/root/cancellation/loan/tails; inspect SIMD and word erasure, existingTightDown8short/currentoriginal+finalconfirmation if useful/TightDown16 currentstatus. Existing151x83to75x41 is a functional generalization, not new perfgrid. Windows/Linux/scalar/ISA/SAMEpackage at accepted stage. Revise/abandon based on full time+allocation+simplicity, no fixedthreshold."
+  },
+  "qualificationReuse": {
+    "owner": "packed-streaming-paired-byte-rows-evidence.json",
+    "fullChecksEachOs": 6155,
+    "resizeInternalEachModeEachOs": 329,
+    "resizePublicEachModeEachOs": 729,
+    "sameActualPackageBothOS": "7fafa5bae86f2366f79dca79eea8adbc255856e86392d372c1cfe9af98b61b0a",
+    "allThreeExamplesBothOS": true,
+    "sourceUnchanged": true,
+    "ciRun": 42773274478,
+    "ciAllThreeJobsGreen": true
+  },
+  "decision": "Current source-valid504.20/native419.02us upper1.208/113Bop remains a demonstrated~85.18usgap; no repeatedclock confirmation for attribution and no CPUgainclaim. Current profile identifies repeated vertical row/weight traversal; model132736to66368visits retains allsampleloads/taporder. Next actual quad-columnleaf/byteentry and lifetime proof then focusedbits/code/screen; no new benchmarkgrid, exactword/singletails and4KiB/resultloans unchanged. Credible revised designs remain eligible; model alone proves no actualSIMD/CPU benefit.",
+  "raw": {
+    "file": "bounded-column-current-attribution.tar.xz",
+    "sha256": "e9ccaa68f36aab3dc3104c745d0d43ca20c3e10b8809ba55e6cf307bd8068d46",
+    "bytes": 128764,
+    "members": 27,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-streaming-paired-byte-rows.tar.xz",
+        "sha256": "5dc038f1aee1c70f5b05da55f6939a8a1881d68ce2cd804143ead9c83a3971bb"
+      },
+      {
+        "file": "bicubic-wide-overlap-qualified.tar.xz",
+        "sha256": "5ccaa3e758c9ff5c25ae8b15344686196b01897d91d323c0e72bcd43556614fe"
+      },
+      {
+        "file": "bicubic-bounded-current-attribution.tar.xz",
+        "sha256": "3cbfc562361892b1a0bceaac65cb2c19f5b0dd0b0640b8a776360d0601c2867a"
+      }
+    ]
+  }
+}

@@ -32,10 +32,15 @@ are removed with exact source/module restoration; current qualification/costs
 remain valid. These studies stay outside renderer inputs and do not ban revised
 architectural designs.
 
-[Current byte execution attribution](PACKED-BYTE-EXECUTION-ATTRIBUTION.md) separates
-actual prefix/suffix code and models contiguous views on the existing control.
-It is a source/code-generation lead, not a new performance result; current
-qualification is reused and this report stays outside renderer dependencies.
+[Current bounded-column attribution](BOUNDED-COLUMN-CURRENT-ATTRIBUTION.md) reuses
+valid504.20/native419.02µs evidence and the current qualified package, without
+builds or repeated timing. One2s capture locates1840/1996samples in two column
+bodies, not setup/repair. A two-pair vertical model shares row/weight traversal
+without changing sample loads, exact sums,4KiB or result loans; it is not actual
+SIMD/CPU proof. Next establish actual code/lifetimes before the existing screen.
+Earlier [packed attribution](PACKED-BYTE-EXECUTION-ATTRIBUTION.md) is superseded
+by accepted contiguous/indexed reductions. Neither historical study is a renderer
+input; raw evidence remains linked.
 
 ## Current family status
 
