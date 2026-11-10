@@ -1,0 +1,162 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PWA777",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "profiledElapsedDiscarded": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "sourcePins": {
+    "src/Lokad.Image/Internal/Adler32.cs": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+    "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+    "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+    "src/Lokad.Image/Internal/PngRowPrediction.cs": "4f2dc5562baf7f4db5a3426396706c5f50b2c2eb898c2e9bd37845e136d7122c",
+    "src/Lokad.Image/Internal/ZlibFraming.cs": "79b736041da34ea431ebb9f9c264264b9b96ac5a8602678e5e9b24fa9297e7b3",
+    "src/Lokad.Image/Internal/ZlibFraming.LiveCursor.cs": "bc8733d76ba8586855c7c275461c8f3611558538e7fb7dec7d1b4cc271b7fb99",
+    "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "66081d4740f55cccd52aabd0ff123410dd3c4775b4539f6f160f066d09dae56c"
+  },
+  "profile": {
+    "librarySha256": "d42a3d7a63ca9395474d67d4edd64fe3ab1f361475a686bc9be841ed1a0b808d",
+    "totalSamples": 1994,
+    "managedSamples": 1884,
+    "methods": [
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::CopyCancelableLiteralRun(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        1373
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateLiveCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32)[Optimized]",
+        291
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        51
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        46
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        39
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        38
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        27
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Walk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,valuetype [System.Runtime]System.Span`1<uint8>,bool&)[Optimized]",
+        13
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.PngCodec::<ReadRaster>g__ReadPass|11_0(int32,int32,int32,int32,valuetype Lokad.Image.Internal.PngCodec/<>c__DisplayClass11_0&)[Optimized]",
+        2
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.PngCodec::<ReadRaster>g__AddAdler|11_1(uint8,valuetype Lokad.Image.Internal.PngCodec/<>c__DisplayClass11_0&)[Optimized]",
+        2
+      ],
+      [
+        "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        1
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]",
+        1
+      ]
+    ],
+    "literalRunCodeBytes": 305,
+    "literalRunSamples": 1373,
+    "quietGuardsPassed": true,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "exactManagedAndFrozenGatesPassed": true,
+    "notes": "Sample locations, inlining and skid are leads, not phase times, removable percentages or predicted gains. All instrumented elapsed times are discarded."
+  },
+  "currentCost": {
+    "managedUs": 2919.940831818182,
+    "nativeUs": 2894.8720052083336,
+    "ratio": 1.008659735755068,
+    "lower": 1.0039786089720173,
+    "upper": 1.0116999305637402,
+    "allocatedBytes": 8568,
+    "status": "gap",
+    "librarySha256": "bad642c2b9d6f512c1bd855c5e5d25b117629e54b28ef24d2d410412bffd390f",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "label": "DecodeCancelable16",
+    "actualIterations": 12,
+    "filteredResults": 11,
+    "managedActualNanoseconds": [
+      2922103.225,
+      2921241.925,
+      2921691.9875,
+      2928857.475,
+      2921211.8875,
+      2920959.1375,
+      2922640.1875,
+      2917700.825,
+      2914887.3125,
+      2921675.725,
+      2919366.8375,
+      2915897.6
+    ],
+    "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+    "inputBytes": null,
+    "outputBytes": 1062936,
+    "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "managedExact": true,
+    "alphaExact": true,
+    "hiddenRgbExact": true,
+    "normalScalarCliExact": true,
+    "independentOwnedOutput": true,
+    "sourceUnchanged": true,
+    "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+    "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+    "rawGc": "// GC:  0 0 0 685440 80",
+    "receipt": "tmp/plk571-candidate-DecodeCancelable16-confirm-receipt.json",
+    "observation": "tmp/plk571-candidate-DecodeCancelable16-confirm-observation.json",
+    "cancellationCanBeCanceled": true,
+    "cancellationRequested": false,
+    "tightWorkingBytes": null,
+    "nativeDecodeEndianConversionTimed": true,
+    "nativeSamplesEachBracket": 12
+  },
+  "finding": "1373/1994 locations in CopyCancelableLiteralRun (305-byte body),291 in InflateLiveCursor,51 canonical Decode,46 tree construction,39 Adler and38 CRC. Source still repeats per-literal prefix bounds/classification, cancellation polls and refill checks. Table/bit state remains local inside a run; avoid claiming this is repeated tree construction or per-literal caller dispatch.",
+  "nextHypothesis": {
+    "repeatedWork": "Investigate bounded groups of already-cached short literal prefixes, reducing loop/refill/view setup while preserving each symbol's two cancellation checks and exact partial stores. No benefit is assumed from the profile.",
+    "endState": "One shared live literal-run implementation and existing outer dispatcher, with safely bounded local source/lookup/output views. No multi-symbol table, owner, pool, retained session, speculative input padding or fixture-specific preparation.",
+    "correctness": "Preserve RFC1951 lookup/code consumption, short/incomplete prefixes, EOB/match/overflow fallback, cancellation ordering and partial stores. Failed reader is operation-private; completed cursor state remains exact. No encoder/ordinary/rolling/counting changes unless justified.",
+    "workloads": "Existing live-word complete Decode primary and live-byte companion. Reuse original inputs/native worker/settings/ownership gates. Add independent actual-kernel all-prefix/tail/cancel checks; focused checks during transition. Confirm useful byte/word stage once and resolve affected companions before broad/package proof.",
+    "risks": "Unrolling, extra spans and shared locals may add branches/register pressure and regress the complete decoder. Compare coherent stages, preserve adverse data, revise or abandon when evidence warrants; no fixed threshold or family ban."
+  },
+  "reuse": "Actual private LWP776C package d1b25749 / timed Windows DLL d42a3d7a; independent Linux core03ee8789. Existing6197 full/live,resize ISA,SAMEpackage/all3examples qualification reused, no production or tooling input change from this capture. Existing51PNG costs49pass/1gap/1uncertain remain source-scoped evidence, not refreshed timings.",
+  "preflight": "Before any guard/capture, one assertion detected only a stale package-consumer source hash after the public consumer check. Preserved the failed preflight script/log and old source manifest; reconciled that one known tooling change and canonical manifest hash. No failed/completed capture was restarted.",
+  "raw": {
+    "file": "png-live-word-current-attribution-pwa777.tar.xz",
+    "sha256": "1bd1a3117265854b35b36cc02b5c6193db4c14a366d9db27fc07641b9e880ed2",
+    "bytes": 344008,
+    "members": 30,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-paired-word-rows.tar.xz",
+        "sha256": "b4d9cc9ca790793ec9875850ebf88bae8148eba4c209d92c484562a538432d50"
+      },
+      {
+        "file": "png-live-prepared-cursor-qualified.tar.xz",
+        "sha256": "53bd9a1ab340a0f8ebbe7e076c840d18e868016b3bd8e8e9a2c5f943d229f3cb"
+      },
+      {
+        "file": "png-normal-cursor-publication-qualified.tar.xz",
+        "sha256": "a22235f789fcbb8de23cfce7f819d58b78327561f264c565d8b3b7a6d40ed9b9"
+      }
+    ]
+  }
+}
