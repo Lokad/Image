@@ -1,0 +1,439 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PBA749",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "currentPackageSha256": "e751a7af7505e5bedd1580904b4525aa116d370aeccc12b3dcf966b7e4c5f963",
+  "librarySha256": "6aaf8e270e8ed9d63605042e366b46e52f5ff52849f92419863c168af36fe2d2",
+  "profileReceipt": "pba749-byte-profile-receipt.json",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "totalSamples": 1997,
+  "instances": [
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "address": "0x78cf8789bc20",
+      "codeBytes": 5768,
+      "samples": 753,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:ApplyRange[Lokad.Image.Internal.PackedColumnBicubicResize+PackedSuffix,Lokad.Image.Internal.PackedColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)"
+    },
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "address": "0x78cf87899ec0",
+      "codeBytes": 6284,
+      "samples": 622,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:ApplyRange[Lokad.Image.Internal.PackedColumnBicubicResize+DecodedPrefix,Lokad.Image.Internal.PackedColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)"
+    },
+    {
+      "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<float64> [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::FilterContiguousPair(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32)[Optimized]",
+      "address": "0x78cf8789d420",
+      "codeBytes": 178,
+      "samples": 279,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterContiguousPair[Lokad.Image.Internal.PackedColumnBicubicResize+PackedSuffix,Lokad.Image.Internal.PackedColumnBicubicResize+ByteSamples](System.ReadOnlySpan`1[byte],int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    },
+    {
+      "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<float64> [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::FilterContiguousPair(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32)[Optimized]",
+      "address": "0x78cf8789bb40",
+      "codeBytes": 181,
+      "samples": 240,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterContiguousPair[Lokad.Image.Internal.PackedColumnBicubicResize+DecodedPrefix,Lokad.Image.Internal.PackedColumnBicubicResize+ByteSamples](System.ReadOnlySpan`1[byte],int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    },
+    {
+      "method": "int32 [Lokad.Image] Lokad.Image.Internal.PackedColumnBicubicResize::PrepareContiguousPairs(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32)[Optimized]",
+      "address": "0x78cf8789b9e0",
+      "codeBytes": 291,
+      "samples": 1,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:PrepareContiguousPairs(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],int):int (FullOpts)"
+    }
+  ],
+  "model": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "mathChecks": 65792,
+    "tailCoverageChecks": 58,
+    "tiles": [
+      {
+        "mode": "decoded-prefix",
+        "start": 0,
+        "sourceCount": 44,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5698,
+        "newFourPixelBatches": 2849,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 4,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 8,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 12,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 16,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 20,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 24,
+        "sourceCount": 56,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "decoded-prefix",
+        "start": 28,
+        "sourceCount": 57,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 7252,
+        "newFourPixelBatches": 3626,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 259
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 32,
+        "sourceCount": 41,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 259
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 34,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 36,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 38,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 40,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 42,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 44,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 46,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 48,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 50,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 52,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 54,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 56,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 58,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 60,
+        "sourceCount": 40,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 5180,
+        "newFourPixelBatches": 2590,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      },
+      {
+        "mode": "packed-suffix",
+        "start": 62,
+        "sourceCount": 28,
+        "sourceRows": 259,
+        "oldTwoPixelBatches": 3626,
+        "newFourPixelBatches": 1813,
+        "newTwoPixelTailBatches": 0,
+        "singlePixelTails": 0
+      }
+    ],
+    "totals": {
+      "oldTwoPixelBatches": 137788,
+      "newFourPixelBatches": 68894,
+      "newTwoPixelTailBatches": 0,
+      "singlePixelTails": 518
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "955f98fea1e721bcd04bd1974a698655677427e9b4f179b42ca91940d01d8047",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+    },
+    "indexedAccumulator": {
+      "pairs": [
+        {
+          "mode": "decoded-prefix",
+          "outputX": 0,
+          "sharedTaps": 32,
+          "sourceRows": 259,
+          "tapIterations": 8288
+        },
+        {
+          "mode": "packed-suffix",
+          "outputX": 62,
+          "sharedTaps": 32,
+          "sourceRows": 259,
+          "tapIterations": 8288
+        }
+      ],
+      "tapIterations": 16576,
+      "logicalStackReadWriteBytes": 2121728,
+      "scope": "Actual JIT offsets0x6ae/0x95d use twoUInt16 horizontal-offset streams and two coefficient streams: indexed horizontal fallback, not vertical accumulation. Each sum loads/stores64B at rbp-0x130 every shared tap. Logical traffic only, not heap allocation, measured phase cost or prospective saving. Candidate isolates unchanged ordered indexed dot loop and returns finalVector512 once; inspect actual code before timing. Preserve clipped/repeated/unequal offsets, tail order and exact Mul/Add arithmetic."
+    },
+    "hypothesis": "Byte premultiply products<=65025 permit fourRGBA pixels/oneAVX2UInt16 multiply instead of twoRGBA pixels/oneInt32 multiply. Prefix widens products exactly to double; suffix stores identical packedU16 lanes. Same original two/single tails, source rows and decoded cache; no coefficient/FMA/normalization or pixel policy change. Word retains existing fullU32 products. Current outer-executor sample share includes more than decode, so no proposed CPU gain is quantified.",
+    "endState": "One byte bulk-preparation block shared by prefix/suffix depth-selected execution, with existing word/tails and common scheduler. No new fixed-shape kernel, buffer, owner, pool, metadata or general cache. Preserve exact byte product/alpha lane order and little-endian packed representation.",
+    "qualification": "Before build, inspect current decoder instruction/data-flow costs and establish unsigned lane/shuffle/store bounds. Then actual C# producer guards, odd/clipped lengths1..58 and exact frozen pixels/root/cancellation checks; immutable short byte and affected word boundary as justified. One independent confirmation if useful; broad scalar/ISA/W/L/SAMEpackage at accepted stage only. Logical/model checks are not actual SIMD or CPU proof."
+  },
+  "qualificationReuse": "Unchanged LBR7486153full/live perOS,327/729normal/scalar/ISA and SAMEactualpackage/allthreeexamples. No production/test change, extra qualification or new measurement harness/native/fixture. Existing packed complete cost458.14/native370.31us remains source-valid; no profiled elapsed/allocation update.",
+  "accumulatorSpill": {
+    "sampledStores": [
+      {
+        "codeBytes": 6284,
+        "mode": "decoded-prefix",
+        "offset": "0x6ae",
+        "samples": 103,
+        "instruction": "vmovups  zmmword ptr [rbp-0x130], zmm0",
+        "nearby": [
+          {
+            "offset": "0x69e",
+            "instruction": "vmulpd   zmm0, zmm0, zmm1"
+          },
+          {
+            "offset": "0x6a4",
+            "instruction": "vaddpd   zmm0, zmm0, zmmword ptr [rbp-0x130]"
+          },
+          {
+            "offset": "0x6ae",
+            "instruction": "vmovups  zmmword ptr [rbp-0x130], zmm0"
+          },
+          {
+            "offset": "0x6b8",
+            "instruction": "inc      edx"
+          },
+          {
+            "offset": "0x6ba",
+            "instruction": "cmp      edx, r13d"
+          }
+        ]
+      },
+      {
+        "codeBytes": 5768,
+        "mode": "packed-suffix",
+        "offset": "0x95d",
+        "samples": 81,
+        "instruction": "vmovups  zmmword ptr [rbp-0x130], zmm0",
+        "nearby": [
+          {
+            "offset": "0x94d",
+            "instruction": "vmulpd   zmm0, zmm0, zmm1"
+          },
+          {
+            "offset": "0x953",
+            "instruction": "vaddpd   zmm0, zmm0, zmmword ptr [rbp-0x130]"
+          },
+          {
+            "offset": "0x95d",
+            "instruction": "vmovups  zmmword ptr [rbp-0x130], zmm0"
+          },
+          {
+            "offset": "0x967",
+            "instruction": "inc      r10d"
+          },
+          {
+            "offset": "0x96a",
+            "instruction": "cmp      r10d, ebx"
+          }
+        ]
+      }
+    ],
+    "model": {
+      "pairs": [
+        {
+          "mode": "decoded-prefix",
+          "outputX": 0,
+          "sharedTaps": 32,
+          "sourceRows": 259,
+          "tapIterations": 8288
+        },
+        {
+          "mode": "packed-suffix",
+          "outputX": 62,
+          "sharedTaps": 32,
+          "sourceRows": 259,
+          "tapIterations": 8288
+        }
+      ],
+      "tapIterations": 16576,
+      "logicalStackReadWriteBytes": 2121728,
+      "scope": "Actual JIT offsets0x6ae/0x95d use twoUInt16 horizontal-offset streams and two coefficient streams: indexed horizontal fallback, not vertical accumulation. Each sum loads/stores64B at rbp-0x130 every shared tap. Logical traffic only, not heap allocation, measured phase cost or prospective saving. Candidate isolates unchanged ordered indexed dot loop and returns finalVector512 once; inspect actual code before timing. Preserve clipped/repeated/unequal offsets, tail order and exact Mul/Add arithmetic."
+    },
+    "scope": "184sampledstorelocations, not removableCPUpercentage. Surrounding twoUInt16 offset/two-coefficient streams identify indexedhorizontal fallback, not vertical accumulation. Mul/Add-loop stackread/write repeats eachtap; targeted leafhelper may keep accumulator inregister. No new storage/owner, reordered arithmetic or blanketNoInlining; actual code/timing must decide."
+  },
+  "next": "First investigate isolating ordered indexed horizontal pair accumulation to eliminate observed per-tap512bitstack spills. Preserve clipped/repeated/unequal offset handling, tail order, exact Mul/Add and original finalpublisher/repair. Inspect real emitted code before complete short/confirmation. Four-pixel byte integer preparation remains a separate secondary lead, no blind build or gain claim.",
+  "raw": {
+    "file": "packed-byte-current-preparation-profile.tar.xz",
+    "sha256": "51118e613ebd267f9f50bbbc5a73093a23f7732959b2bf649a410b1b4b3e0969",
+    "bytes": 95512,
+    "members": 18,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-paired-byte-rows.tar.xz",
+        "sha256": "30ffc7e72eefc7e14294be1bf24fe95eae68a58c0ac981ccffa55baf8007f055"
+      },
+      {
+        "file": "packed-bicubic-contiguous-views.tar.xz",
+        "sha256": "6b98c99939eb762654d017e64b702a8026317a5654efde461a3896f70e2cb8ff"
+      }
+    ]
+  }
+}

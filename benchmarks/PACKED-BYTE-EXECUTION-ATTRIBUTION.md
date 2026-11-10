@@ -1,5 +1,8 @@
 # Current packed-byte execution attribution
 
+Historical PRV733 state. The [current preparation profile](PACKED-BYTE-PREPARATION-ATTRIBUTION.md)
+supersedes its instruction/sample attribution after the contiguous helper changed.
+
 BPA734 uses the immutable package from [shared byte/word execution](PACKED-BYTE-WORD-CONSOLIDATION.md).
 The existing complete RGBA8 513×259 → 64×32 control remains 485.70 / native
 367.42 µs, a demonstrated 118.28 µs gap. One two-second CPU0 capture with CPU1
