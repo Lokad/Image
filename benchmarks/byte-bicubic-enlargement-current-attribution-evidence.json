@@ -1,0 +1,117 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BEP771",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "producers": {
+    "windowsSha256": "a679240aac8cb0563f46541c70d33b43d678a8c1861c6eaad2751bd179fbc3e7",
+    "linuxSha256": "cefc6a729448276d5794a3ca1fea6a7ffddec00bb96de7b83199f1ad036b3786"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/EnlargingBicubicResize.cs": "03eefe56a6af5e51ddfb3bbdea1ffaf039d430086d72b383bcc92093c0de7023",
+    "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": "231822d5b1ee0741747b07d8848ae96ba60475e8df711f40c97e7353ffbb04b7",
+    "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "376a184a3f42bdb4ff9081da23e147dfadfc2107b03f2f3806ae76617082716e"
+  },
+  "currentCase": {
+    "managedUs": 3114.5021106770837,
+    "nativeUs": 3041.4293671875,
+    "ratio": 1.0240257900702643,
+    "lower": 1.0166692428011623,
+    "upper": 1.030117135395017,
+    "allocatedBytes": 116,
+    "status": "gap",
+    "librarySha256": "8baf7021159a78bf0f2c2524c9ccb3ec33537b41776c3f977c8c8605697aae1a",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94",
+    "nativeOutputSha256": "42c00d0a2ac75c3915d1bf2b0596469b8607ba5f15bd23ff93be005d00ebe7ad",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 1027x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2667616 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedMaxWorkingBytes": 2667616,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "caseId": "TightUp8",
+    "width": 513,
+    "height": 259,
+    "outputWidth": 1027,
+    "outputHeight": 519,
+    "depth": 8,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "reusedQualification": {
+    "fullChecksEachOS": 6182,
+    "actualPackageSha256": "47616c839442aa21a16200b03eea0fe094c1d8a48ed4e56fdcfb0202eced8819",
+    "sameActualPackageBothOS": true,
+    "source": "jpeg-batched-two-row-columns-evidence.json"
+  },
+  "capture": {
+    "totalSamples": 1994,
+    "selectedMethodLocations": {
+      "bytePublication": 1213,
+      "horizontalFiltering": 319,
+      "tinyAlphaReplay": 180,
+      "originalOrderRepair": 60,
+      "verticalPreparation": 46,
+      "sourceDecode": 40
+    },
+    "bytePublicationCodeBytes": 2060,
+    "mappedBytePublicationSamples": 1213,
+    "traceSha256": "5cc543d893e6a4527a1e395168483b1afcf6b57d0e08c7db0f735bcb4f4ff93a",
+    "traceBytes": 675516,
+    "seconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "quietGuardsPassed": true,
+    "instrumentedElapsedDiscarded": true,
+    "inputBytes": 531468,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputBytes": 2132052,
+    "outputSha256": "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94",
+    "notes": "Inlining/skid/location counts do not isolate lifecyclework or predictphasecosts/removablepercentages/CPUsavings."
+  },
+  "proposal": {
+    "repeatedWork": "CurrentWriteRow sums one2pixelpair perverticaltaploop, repeatedlyloadingrowoffsets/weights/broadcasts and serializing nextpair behind divide/certificate/publication. Currenthorizontalplans/cache alreadyexist;do notrecreate. 1213/1994WriteRowlocations, including614incombineddivide/certificate/pack region and274verticalaccumulation loop; counts/skid are notremovablecost.",
+    "endState": "Bounded4pixelrowbatch sharesoneverticaltap traversal fortwoindependentpairaccumulators, keeps eachlane orderedseparateMultiply/Add unchanged, issuesoriginalvector divisions beforecertifying/publishing eitherpair. Preserveoriginalpair/single tails and exactrepair/tinyalpha. Inspectbyte/wordpublisherguards first; sharegeometry/scheduling outside typedcertificates where justified, no genericpolicyinsidepixelmath. No reciprocal/FMA/reassociation/tolerancechange, owner/cache/session or newbuffer. Measurecode/registerpressure/completeworkloads ratherthanassumevectorbatchwin.",
+    "workloads": [
+      "TightUp8 primary513x259to1027x519 input+output+4096B",
+      "ExistingdefaultUp8 companion",
+      "Existingbyteaxial/tailcontrols wherechanged",
+      "Existingwordcontrols onlyifsharedexecution/code changes"
+    ],
+    "correctness": "Exact rational/frozenmanagedpixels and16bits; allfrozenoriginalzimgnativebounds; perlaneadditionorder/division/certificatemargins/repair/deferredmarker unchanged. Currentpollordinals at256pixelboundaries andperrow; input/output/source/guards/independentowners/borrowedroot/refusal/cancellation/cleanup. Preservelocalcapacity2667616B andactualscratchlifetimes; reportJITspill/totalalloc/peak/retentionseparately.",
+    "temporaryRisk": "Firstbyteprototype maytemporarilyduplicate2pair/tails before completed sharedrowstage. Explicitstageendmustremoveunnecessaryschedulingduplication orjustify retained measuredtailkernel. Larger livevectors/certificationbranching mayspill oroffsetloopsharing. Oneprimaryshort then usefulindependentconfirmation/affectedcurrentcosts; norepeatedunchangedfavorablesampling. Judgecoherentcompletedstage includingelapsed/allocation/retention/simplification; no fixedthreshold/familyban.",
+    "nextAction": "Inspectexactbyteandwordpairguards andcurrentcaller/sourceboundaries, freezeoriginalsources/main+embeddedDLLs, then implementactual4pixel rowbatch andbehavioralnumeric/cancel/bounds oracles beforefocusedbuilds. No furtherprofile before evidencechanges."
+  },
+  "workflow": {
+    "allBuilds": 0,
+    "profileCaptures": 1,
+    "fullOrPackageQualificationRepeats": 0,
+    "newImagesOrSettings": 0,
+    "sourceChanges": 0,
+    "currentSourcesChecked": true,
+    "alreadyCompletedWork": "Fullwidthoutput-backedhorizontalplans/rowcache,prefixretirement,4KiBstriptails andtinymarkerrepair alreadyimplemented; oldpre-workspacecaptureisnotcurrentphasecost."
+  },
+  "raw": {
+    "file": "byte-bicubic-enlargement-attribution-bep771.tar.xz",
+    "sha256": "81d7890705c061cc35f342baed5dd680952680c0f7261a5d4bcd5572b4428661",
+    "bytes": 105472,
+    "members": 22,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-batched-two-row-columns.tar.xz",
+        "sha256": "8ed600096f4167228c797702e7420236ab95475d3e1e1fd3daaa97174a438cc2"
+      },
+      {
+        "file": "byte-bicubic-enlargement-current-package.tar.xz",
+        "sha256": "4110d0262f64903d2818033123b2e2dfcdc461c3b69cbd32847ace15ecb36d8f"
+      }
+    ]
+  }
+}
