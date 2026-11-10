@@ -159,6 +159,33 @@ internal static class LanczosFmaResize
         }
     }
 
+    internal static void HorizontalBytePair(ImageBuffer source, int y, int nextY, LanczosPlan plan,
+        Span<double> output, Span<double> nextOutput, OperationContext context)
+    {
+        LanczosResize.HorizontalBytePair(source, y, nextY, plan,
+            MemoryMarshal.Cast<double, long>(output), MemoryMarshal.Cast<double, long>(nextOutput), context);
+        context.Cancellation.ThrowIfCancellationRequested();
+        ConvertByteRow(output, context);
+        context.Cancellation.ThrowIfCancellationRequested();
+        ConvertByteRow(nextOutput, context);
+    }
+
+    private static void ConvertByteRow(Span<double> output, OperationContext context)
+    {
+        var integer = MemoryMarshal.Cast<double, long>(output);
+        var i = 0;
+        for (; i <= output.Length - 8; i += 8)
+        {
+            if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            Avx512DQ.ConvertToVector512Double(Vector512.Create(integer.Slice(i, 8))).CopyTo(output.Slice(i, 8));
+        }
+        if (i < output.Length)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            Avx512DQ.VL.ConvertToVector256Double(Vector256.Create(integer.Slice(i, 4))).CopyTo(output.Slice(i, 4));
+        }
+    }
+
     private readonly struct PairedWordWindows { }
     private readonly struct SingleWordWindows { }
 

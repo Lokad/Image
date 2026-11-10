@@ -18,8 +18,17 @@ internal static class LanczosResize
         return Execute(source, width, height, horizontal, vertical, workspace, context);
     }
 
+    private readonly struct SingleRows { }
+    private readonly struct PairedByteRows { }
+
     internal static ImageBuffer Execute(ImageBuffer source, int width, int height, LanczosPlan horizontal,
         LanczosPlan vertical, LanczosWorkspace workspace, OperationContext context)
+        => workspace.Fast && source.BitDepth == 8 && height < vertical.SourceLength
+            ? Execute<PairedByteRows>(source, width, height, horizontal, vertical, workspace, context)
+            : Execute<SingleRows>(source, width, height, horizontal, vertical, workspace, context);
+
+    private static ImageBuffer Execute<TRows>(ImageBuffer source, int width, int height, LanczosPlan horizontal,
+        LanczosPlan vertical, LanczosWorkspace workspace, OperationContext context) where TRows : struct
     {
         var slots = workspace.RowIds.Length; var channels = width * 4L;
         var rowIds = workspace.RowIds; Array.Fill(rowIds, -1);
@@ -45,7 +54,26 @@ internal static class LanczosResize
                     if (workspace.Fast)
                     {
                         var row = workspace.FastRows.AsSpan(slot * (int)channels, (int)channels);
-                        if (rowIds[slot] != sy) { LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
+                        if (rowIds[slot] != sy)
+                        {
+                            // Share coefficient expansion only across two rows
+                            // that this window will actually consume. Distinct
+                            // cache slots stay private until both are complete.
+                            var prepared = false;
+                            if (typeof(TRows) == typeof(PairedByteRows))
+                            {
+                                var next = sy + 1; var nextSlot = next % slots;
+                                if (slots > 1 && tap + 1 < window.Count
+                                    && vertical.Weights[window.Offset + tap + 1] != 0 && rowIds[nextSlot] != next)
+                                {
+                                    var nextRow = workspace.FastRows.AsSpan(nextSlot * (int)channels, (int)channels);
+                                    LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
+                                    rowIds[nextSlot] = next; prepared = true;
+                                }
+                            }
+                            if (!prepared) LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context);
+                            rowIds[slot] = sy;
+                        }
                         context.Cancellation.ThrowIfCancellationRequested();
                         LanczosFmaResize.Accumulate(row, workspace.FastSums, weight, context);
                     }
@@ -256,6 +284,77 @@ internal static class LanczosResize
             sum.CopyTo(output.Slice(x * 4, 4));
         }
     }
+
+    // Two required rows share only coefficient expansion. Keep the measured
+    // single-row kernel above: unused second spans change its hot-loop ABI.
+    internal static void HorizontalBytePair(ImageBuffer source, int y, int nextY, LanczosPlan plan,
+        Span<long> output, Span<long> nextOutput, OperationContext context)
+        => Horizontal8Pair(source.GetRow8(y), source.GetRow8(nextY), plan, output, nextOutput, context);
+
+    private static void Horizontal8Pair(ReadOnlySpan<byte> input, ReadOnlySpan<byte> nextInput,
+        LanczosPlan plan, Span<long> output, Span<long> nextOutput, OperationContext context)
+    {
+        var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
+            Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
+        var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
+            Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
+        for (var x = 0; x < plan.Windows.Length; x++)
+        {
+            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
+            var sum = Vector256<long>.Zero; var nextSum = Vector256<long>.Zero; var i = 0;
+            if (Avx512F.IsSupported)
+            {
+                // Byte premultiplication is <=65025, so each even Int32
+                // lane of the widened values remains a positive operand.
+                // Four disjoint tap subsets and their reduction stay <2^47.
+                var first = Vector512<long>.Zero; var second = Vector512<long>.Zero;
+                var nextFirst = Vector512<long>.Zero; var nextSecond = Vector512<long>.Zero;
+                for (; i <= window.Count - 4; i += 4)
+                {
+                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var samples = Avx512F.ConvertToVector512Int32(Vector128.Create(input.Slice((window.First + i) * 4, 16)));
+                    var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
+                    var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
+                    var at = window.Offset + i;
+                    var coefficients = Avx512F.ConvertToVector512Int64(Vector256.Create(Vector128.Create(plan.Weights.AsSpan(at, 4)), Vector128<int>.Zero));
+                    var weights01 = Avx512F.PermuteVar8x64(coefficients, replicate01).AsInt32();
+                    var weights23 = Avx512F.PermuteVar8x64(coefficients, replicate23).AsInt32();
+                    first = Avx512F.Add(first, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetLower()).AsInt32(), weights01));
+                    second = Avx512F.Add(second, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetUpper()).AsInt32(), weights23));
+                    var nextSamples = Avx512F.ConvertToVector512Int32(Vector128.Create(nextInput.Slice((window.First + i) * 4, 16)));
+                    var nextRgbOne = Avx512F.Or(Avx512F.And(nextSamples, keepRgb), alphaOne);
+                    var nextProducts = Avx512F.MultiplyLow(nextRgbOne, Avx512F.Shuffle(nextSamples, 255)).AsUInt32();
+                    nextFirst = Avx512F.Add(nextFirst, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(nextProducts.GetLower()).AsInt32(), weights01));
+                    nextSecond = Avx512F.Add(nextSecond, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(nextProducts.GetUpper()).AsInt32(), weights23));
+                }
+                var paired = Avx512F.Add(first, second);
+                sum = Avx2.Add(paired.GetLower(), paired.GetUpper());
+                var nextPaired = Avx512F.Add(nextFirst, nextSecond);
+                nextSum = Avx2.Add(nextPaired.GetLower(), nextPaired.GetUpper());
+            }
+            for (; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(input.Slice((window.First + i) * 4, 4))).AsByte());
+                var premultiplied = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255));
+                // Byte products are <=65025, so signed32 operands suffice.
+                // Even lanes of the widened values give four exact Int64
+                // products; the axis bound keeps all prefixes below2^47.
+                var values = Avx2.ConvertToVector256Int64(premultiplied).AsInt32();
+                var weight = Vector256.Create(plan.Weights[window.Offset + i]);
+                sum = Avx2.Add(sum, Avx2.Multiply(values, weight));
+                var nextSamples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(nextInput.Slice((window.First + i) * 4, 4))).AsByte());
+                var nextPremultiplied = Sse41.MultiplyLow(Sse41.Insert(nextSamples, 1, 3), Sse2.Shuffle(nextSamples, 255));
+                var nextValues = Avx2.ConvertToVector256Int64(nextPremultiplied).AsInt32();
+                nextSum = Avx2.Add(nextSum, Avx2.Multiply(nextValues, weight));
+            }
+            sum.CopyTo(output.Slice(x * 4, 4));
+            nextSum.CopyTo(nextOutput.Slice(x * 4, 4));
+        }
+    }
+
 
     // Source pixels are shared by overlapping output windows. Form their exact
     // unsigned word alpha products once, then borrow them for the entire row.

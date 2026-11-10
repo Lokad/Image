@@ -32,12 +32,12 @@ public sealed class LanczosFmaTests
     public void ByteRowsKeepExactBitsGuardsAndAdmissionWithoutAllocation(int width, int target)
     {
         if (!Supported) return;
-        using var source = ImageBuffer.Create(width, 1, 8);
-        for (var x = 0; x < width; x++)
+        using var source = ImageBuffer.Create(width, 2, 8);
+        for (var y = 0; y < 2; y++) for (var x = 0; x < width; x++)
         {
-            source.SetSample(x, 0, 0, 255); source.SetSample(x, 0, 1, x % 2 == 0 ? 255 : 1);
-            source.SetSample(x, 0, 2, x % 3 == 0 ? 0 : 254);
-            source.SetSample(x, 0, 3, (x % 4) switch { 0 => 0, 1 => 1, 2 => 16, _ => 255 });
+            source.SetSample(x, y, 0, 255 - y); source.SetSample(x, y, 1, (x + y) % 2 == 0 ? 255 : 1);
+            source.SetSample(x, y, 2, (x + y) % 3 == 0 ? 0 : 254);
+            source.SetSample(x, y, 3, ((x + y) % 4) switch { 0 => 0, 1 => 1, 2 => 16, _ => 255 });
         }
         var original = source.Pixels.ToArray();
         using var root = new TestMemoryBudget(1 << 22);
@@ -54,12 +54,28 @@ public sealed class LanczosFmaTests
             Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(output[i]));
             Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(output[target * 4 + 4 + i]));
         }
-        for (var x = 0; x < target; x++) for (var c = 0; c < 4; c++)
+        void Check(double[] row, int y)
         {
-            var window = plan.Windows[x]; BigInteger exact = 0;
-            for (var t = 0; t < window.Count; t++) exact += (BigInteger)source.Sample(window.First + t, 0, 3)
-                * (c == 3 ? 1 : source.Sample(window.First + t, 0, c)) * plan.Weights[window.Offset + t];
-            Assert.Equal(BitConverter.DoubleToUInt64Bits((double)exact), BitConverter.DoubleToUInt64Bits(output[4 + x * 4 + c]));
+            for (var x = 0; x < target; x++) for (var c = 0; c < 4; c++)
+            {
+                var window = plan.Windows[x]; BigInteger exact = 0;
+                for (var t = 0; t < window.Count; t++) exact += (BigInteger)source.Sample(window.First + t, y, 3)
+                    * (c == 3 ? 1 : source.Sample(window.First + t, y, c)) * plan.Weights[window.Offset + t];
+                Assert.Equal(BitConverter.DoubleToUInt64Bits((double)exact), BitConverter.DoubleToUInt64Bits(row[4 + x * 4 + c]));
+            }
+        }
+        Check(output, 0);
+        var nextOutput = Enumerable.Repeat(BitConverter.UInt64BitsToDouble(guard), target * 4 + 8).ToArray();
+        void PairApply() => LanczosFmaResize.HorizontalBytePair(source, 0, 1, plan,
+            output.AsSpan(4, target * 4), nextOutput.AsSpan(4, target * 4), context);
+        PairApply(); before = GC.GetAllocatedBytesForCurrentThread(); PairApply();
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
+        Assert.Equal(charged, root.Bytes); Assert.Equal(original, source.Pixels.ToArray());
+        Check(output, 0); Check(nextOutput, 1);
+        foreach (var row in new[] { output, nextOutput }) for (var i = 0; i < 4; i++)
+        {
+            Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(row[i]));
+            Assert.Equal(guard, BitConverter.DoubleToUInt64Bits(row[target * 4 + 4 + i]));
         }
         plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }

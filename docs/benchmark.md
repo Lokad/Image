@@ -203,27 +203,22 @@ Current scope and remaining work:
   bounded workspace4KiB/113Bop, cached byte199,840B workspace/199,981Bop.
   Wide results retain32,768/65,536B and smaller-support results132,096/264,192B
   until disposal; operation scratch0. Physical/native/total-stack peaks are unmeasured.
-  [Paired Lanczos word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md)
-  share converted source values between independent Q30/FMA streams. Complete
-  prepared RGBA16 enlargement saves **164.58µs/4.09% raw**,
-  3.84% normalized; both confidence views separate.
-  Current3856.44/zimg3892.93µs,
-  upper0.995 passes/stops. Four word costs refresh; three byte costs
-  reuse unchanged paths. A [current byte-reduction confirmation](../benchmarks/lanczos-byte-current-cost-evidence.json)
-  measures 580.52/zimg489.96µs,
-  upper1.195, GC139B/op and retained139,800B. Original production/package are
-  unchanged; this replaces the older cost without a causal historical gain claim.
-  Overall **six passes/two prepared-reduction gaps**. Other fresh costs qualify
-  current status, without causal companion-gain claims. Word prepared GC139/
-  4,265,332B/op and retained148,040/333,396B remain; independent enlargement output
-  4,264,104B, physical/native peaks unmeasured. No new buffer/pool/session; exact
-  four-chain order, Q30, strict certificates/repair and explicit one-shot/prepared
-  boundaries stay. [Unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
-  retain adverse results and current profile separately; no production change survived.
-  Five new exact-row/guard/ownership cases and the strengthened oracle pass the
-  affected 19-case class in four modes on each OS; unchanged full/package proof is reused.
-  [Certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md)
-  retain earlier gains/history. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  [Paired Lanczos byte rows](../benchmarks/LANCZOS-PAIRED-BYTE-ROWS.md) share coefficient
+  expansion across two required rows in existing admitted storage. Complete prepared
+  RGBA8 reduction saves **88.92µs/15.32% raw**,
+  15.18% normalized; both confidence views separate.
+  Current 491.59/zimg489.18µs,
+  upper1.011 is **uncertain near parity**, not a pass.
+  All eight costs refresh: **six passes, one word-reduction gap, one uncertainty**.
+  Other fresh costs qualify status, without causal companion-gain/equivalence claims.
+  Closed scheduler modes erase batching state from word/enlargement execution;
+  original single-row/word instructions and exact Q30/certificates/repair remain.
+  Primary GC138B/op versus139 is amortization, not an allocation gain; retained
+  plan139,800B and output132,096B remain separate. No new owned capacity or pool;
+  physical/native/JIT-stack peaks unmeasured. [Paired word windows](../benchmarks/LANCZOS-PAIRED-WORD-WINDOWS.md),
+  [certified rows](../benchmarks/LANCZOS-WORD-CERTIFIED-ROWS.md) and
+  [unselected byte-row experiments](../benchmarks/LANCZOS-BYTE-ROW-EXPERIMENT.md)
+  retain earlier evidence and adverse results. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
   passes six of eight; small/wide-column gaps remain linked in coverage.
   [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
   3,108.21/native3,037.83µs,upper1.026/116Bop. [Packed bilinear rows](../benchmarks/BILINEAR-PACKED-ROW-STORAGE.md)
@@ -312,7 +307,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **6,148 full/live checks per OS**, affected
+The current production build passes **6,153 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -427,14 +422,14 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 707.72 | 1,567.51 | 0.451 / 0.457 | 138,643 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 580.52 | 489.96 | 1.185 / 1.195 | 139 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 684.21 | 1,801.96 | 0.380 / 0.382 | 146,866 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 544.76 | 510.63 | 1.067 / 1.073 | 139 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,085.56 | 5,715.79 | 0.715 / 0.720 | 319,224 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,492.08 | 4,067.38 | 0.859 / 0.865 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,099.16 | 5,077.69 | 0.807 / 0.811 | 4,592,818 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,856.44 | 3,892.93 | 0.991 / 0.995 | 4,265,332 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 672.38 | 1,696.51 | 0.396 / 0.400 | 138,647 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 491.59 | 489.18 | 1.005 / 1.011 | 138 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 684.08 | 1,812.27 | 0.377 / 0.380 | 146,866 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 587.91 | 548.90 | 1.071 / 1.095 | 139 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,765.94 | 5,244.39 | 0.718 / 0.723 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,780.94 | 4,376.66 | 0.864 / 0.877 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,393.34 | 5,486.14 | 0.801 / 0.808 | 4,592,777 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,784.95 | 3,898.01 | 0.971 / 0.979 | 4,265,332 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
