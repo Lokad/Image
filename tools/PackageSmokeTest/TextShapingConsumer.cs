@@ -59,6 +59,7 @@ internal static class TextShapingConsumer
     private static void VerifyRasterIntervals()
     {
         foreach (var depth in new[] { 8, 16 })
+        foreach (var prepared in new[] { false, true })
         {
             var outline = AuthoredTrueType.Outline([
                 [(0, 0, true), (750, 700, true), (50, 700, true), (700, 0, true)],
@@ -76,8 +77,28 @@ internal static class TextShapingConsumer
                 if (depth == 8) canvas.GetRow8(y)[4 * x + c] = (byte)(value >> 8);
                 else canvas.GetRow16(y)[4 * x + c] = (ushort)value;
             }
-            ImageDrawing.DrawText(canvas, layout, -.375, 1.625, new(12345, 54321, 32769, 45678));
-            ImageDrawing.DrawText(canvas, layout, 4.125, -2.375, new(65535, 1, 1234, 1));
+            if (prepared)
+            {
+                using var root = new TestMemoryBudget(1_000_000);
+                using var creation = new CancellationTokenSource();
+                using var first = TextRenderPlan.Create(layout, 32, 24, depth, -.375, 1.625,
+                    new() { MemoryBudget = root }, creation.Token);
+                using var second = TextRenderPlan.Create(layout, 32, 24, depth, 4.125, -2.375,
+                    new() { MemoryBudget = root });
+                if (root.Bytes != first.StorageBytes + second.StorageBytes || root.Bytes <= 0)
+                    throw new Exception("Packaged text geometry lost retained admission.");
+                layout.Dispose(); font.Dispose(); creation.Cancel();
+                first.Draw(canvas, new(12345, 54321, 32769, 45678));
+                second.Draw(canvas, new(65535, 1, 1234, 1));
+                first.Dispose(); second.Dispose();
+                if (root.Bytes != 0 || root.IsDisposed || first.StorageBytes != 0)
+                    throw new Exception("Packaged text render plans leaked or disposed the caller root.");
+            }
+            else
+            {
+                ImageDrawing.DrawText(canvas, layout, -.375, 1.625, new(12345, 54321, 32769, 45678));
+                ImageDrawing.DrawText(canvas, layout, 4.125, -2.375, new(65535, 1, 1234, 1));
+            }
             using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             for (var y = 0; y < canvas.Height; y++)
                 hash.AppendData(depth == 8 ? canvas.GetRow8(y) : MemoryMarshal.AsBytes(canvas.GetRow16(y)));
@@ -87,5 +108,6 @@ internal static class TextShapingConsumer
             if (actual != expected) throw new Exception("Packaged text interval preparation changed exact mixed-alpha pixels.");
         }
         Console.WriteLine("Packaged text interval preparation preserves exact clipped mixed-alpha byte/word frames.");
+        Console.WriteLine("Packaged text render plans preserve frozen samples after font/layout disposal and release retained admission.");
     }
 }

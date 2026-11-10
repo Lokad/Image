@@ -128,6 +128,13 @@ Rendering clips to the canvas, uses unhinted area coverage and source-over at bo
 depths; it allocates no full-frame mask. Rasterization differences have explicit
 comparison tolerances, not a promise of identical antialiasing.
 
+Development 0.2.1 adds caller-owned `TextRenderPlan` for repeated drawing at a fixed
+origin and canvas shape/depth. It owns copied glyph positions, geometry and workspace,
+independent of font/layout lifetime, and uses the same exact raster arithmetic as
+`DrawText`. Retained capacity remains admitted until disposal. Creation and draw
+tokens are independent; drawing and disposal require exclusive access. Canvases
+are borrowed, with no retained pixel mask or output alias.
+
 ## Inspection, streams and failures
 
 `ImageInfo` describes encoded dimensions, orientation, sample/index `BitDepth`,

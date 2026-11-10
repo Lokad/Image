@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Add caller-owned text render plans with independently owned geometry and
+  admitted reusable workspace, preserving exact drawing and per-call cancellation.
+
 - Add caller-owned bicubic plans with shared exact preparation/execution,
   admitted retained storage and independently owned results.
 

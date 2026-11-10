@@ -7,10 +7,16 @@ namespace Lokad.Image.Internal;
 internal sealed partial class TextRasterizer : IDisposable
 {
     private readonly OperationContext context;
-    private readonly Dictionary<TextLayout.Shape, RasterShape> shapes = new();
+    private readonly List<RasterShape> shapes = [];
+    private readonly RasterGlyph[] glyphs;
     private readonly Crossing[] crossings;
     private readonly double[] row;
     private long bytes;
+    internal long StorageBytes => bytes;
+
+    // Own the positions and prepared edges, without retaining the borrowed
+    // layout, font or decoded outlines after preparation.
+    private readonly record struct RasterGlyph(RasterShape Shape, double X, double Y);
 
     private readonly record struct Point(double X, double Y)
     {
@@ -25,6 +31,16 @@ internal sealed partial class TextRasterizer : IDisposable
     }
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
     private readonly record struct Crossing(double X, int Index, int Order);
+
+    internal static (int Left, int Top, int Right, int Bottom) Clip(TextBounds bounds,
+        double x, double y, int width, int height)
+    {
+        bounds = bounds.Translate(x, y);
+        if (!double.IsFinite(bounds.Right) || !double.IsFinite(bounds.Bottom)) throw new ArgumentOutOfRangeException(nameof(x));
+        var left = Math.Max(0, Math.Floor(bounds.X)); var top = Math.Max(0, Math.Floor(bounds.Y));
+        var right = Math.Min(width, Math.Ceiling(bounds.Right)); var bottom = Math.Min(height, Math.Ceiling(bounds.Bottom));
+        return left >= right || top >= bottom ? default : ((int)left, (int)top, (int)right, (int)bottom);
+    }
 
     private readonly struct CrossingOrder : TextRasterSort.IOrder<Crossing>
     {
@@ -41,21 +57,29 @@ internal sealed partial class TextRasterizer : IDisposable
         Admit(4096); // Owner plus bounded sort/integration frame allowance.
         try
         {
+            Admit(32 + layout.GlyphCount * 24L);
+            glyphs = new RasterGlyph[layout.GlyphCount];
+            var preparedShapes = new Dictionary<TextLayout.Shape, RasterShape>();
             var maximum = 0;
+            var index = 0;
             foreach (var p in layout.Placements)
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var shape = p.Shape!;
-                if (shapes.ContainsKey(shape)) continue;
-                Admit(512); var prepared = new RasterShape(this);
-                try { prepared.BuildEdges(shape.Outline, layout.FontSize / layout.Font.UnitsPerEm); shapes.Add(shape, prepared); }
-                catch { prepared.Dispose(); throw; }
-                maximum = Math.Max(maximum, prepared.Count);
+                if (!preparedShapes.TryGetValue(shape, out var prepared))
+                {
+                    Admit(512); prepared = new RasterShape(this); shapes.Add(prepared);
+                    prepared.BuildEdges(shape.Outline, layout.FontSize / layout.Font.UnitsPerEm);
+                    preparedShapes.Add(shape, prepared);
+                    maximum = Math.Max(maximum, prepared.Count);
+                }
+                glyphs[index++] = new(prepared, p.X, p.Y);
             }
             Admit(32 + maximum * 16L); Admit(32 + width * 8L);
             crossings = new Crossing[maximum]; row = new double[width];
             // Preparation and scan conversion do not overlap. Reuse the crossing
             // storage to order edge intervals before it holds scan-band crossings.
-            foreach (var prepared in shapes.Values) prepared.BuildEvents(crossings);
+            foreach (var prepared in shapes) prepared.BuildEvents(crossings);
+            context.Cancellation.ThrowIfCancellationRequested();
         }
         catch { Dispose(); throw; }
     }
@@ -66,12 +90,12 @@ internal sealed partial class TextRasterizer : IDisposable
     }
     private void Release(long amount) { context.Release(amount); bytes -= amount; }
 
-    internal void Draw(ImageBuffer canvas, TextLayout layout, double x, double y, RgbaColor color,
-        int left, int top, int right, int bottom)
+    internal void Draw(ImageBuffer canvas, double x, double y, RgbaColor color,
+        int left, int top, int right, int bottom, CancellationToken cancellation)
     {
-        foreach (var glyph in layout.Placements)
+        foreach (var glyph in glyphs)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var shape = shapes[glyph.Shape!]; if (shape.Count == 0) continue;
+            cancellation.ThrowIfCancellationRequested(); var shape = glyph.Shape; if (shape.Count == 0) continue;
             var dx = x + glyph.X; var dy = y + glyph.Y;
             var first = Math.Max(top, Math.Floor(shape.MinY + dy)); var last = Math.Min(bottom, Math.Ceiling(shape.MaxY + dy));
             if (first >= last) continue;
@@ -80,21 +104,21 @@ internal sealed partial class TextRasterizer : IDisposable
             {
                 for (var offset = 0; offset < row.Length;)
                 {
-                    var count = Math.Min(4096, row.Length - offset); context.Cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(4096, row.Length - offset); cancellation.ThrowIfCancellationRequested();
                     row.AsSpan(offset, count).Clear(); offset += count;
                 }
                 var band = py - dy; var rowEnd = py + 1 - dy;
-                while (eventIndex < shape.EventCount && shape.Events[eventIndex] <= band) { context.Cancellation.ThrowIfCancellationRequested(); eventIndex++; }
+                while (eventIndex < shape.EventCount && shape.Events[eventIndex] <= band) { cancellation.ThrowIfCancellationRequested(); eventIndex++; }
                 while (eventIndex < shape.EventCount && shape.Events[eventIndex] < rowEnd)
                 {
                     var end = shape.Events[eventIndex++];
-                    if (end > band) Band(shape, band, end, dx, dy - py, left, right, ref activeCount, ref nextEdge);
+                    if (end > band) Band(shape, band, end, dx, dy - py, left, right, ref activeCount, ref nextEdge, cancellation);
                     band = end;
                 }
-                if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right, ref activeCount, ref nextEdge);
+                if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right, ref activeCount, ref nextEdge, cancellation);
                 for (var i = 0; i < row.Length;)
                 {
-                    var count = Math.Min(128, row.Length - i); context.Cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(128, row.Length - i); cancellation.ThrowIfCancellationRequested();
                     for (var j = i; j < i + count; j++)
                     {
                         var coverage = (uint)Math.Clamp(Math.Floor(row[j] * 65535 + .5), 0, 65535);
@@ -107,28 +131,28 @@ internal sealed partial class TextRasterizer : IDisposable
     }
 
     private void Band(RasterShape shape, double top, double bottom, double dx, double dy, int left, int right,
-        ref int activeCount, ref int nextEdge)
+        ref int activeCount, ref int nextEdge, CancellationToken cancellation)
     {
         var middle = top * .5 + bottom * .5; var count = 0;
         // Bands advance monotonically within one glyph. Keep the same active
         // set and exact X values as a full scan, without revisiting dead edges.
         for (var i = 0; i < activeCount; i++)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var index = crossings[i].Index; var edge = shape.Edges[index];
+            cancellation.ThrowIfCancellationRequested(); var index = crossings[i].Index; var edge = shape.Edges[index];
             if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
         }
         while (nextEdge < shape.Count && shape.Edges[nextEdge].MinY < middle)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var index = nextEdge++; var edge = shape.Edges[index];
+            cancellation.ThrowIfCancellationRequested(); var index = nextEdge++; var edge = shape.Edges[index];
             if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
         }
         activeCount = count;
-        TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), context.Cancellation);
+        TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), cancellation);
         Span<Point> firstPolygon = stackalloc Point[8]; Span<Point> secondPolygon = stackalloc Point[8];
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[crossings[i].Index]; var previous = winding; winding += edge.Winding;
+            cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[crossings[i].Index]; var previous = winding; winding += edge.Winding;
             if (previous == 0 && winding != 0) start = edge;
             else if (previous != 0 && winding == 0)
             {
@@ -141,7 +165,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 var px = (int)first;
                 for (; px < insideFirst; px++)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    cancellation.ThrowIfCancellationRequested();
                     row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
                 }
                 if (px < insideLast)
@@ -149,13 +173,13 @@ internal sealed partial class TextRasterizer : IDisposable
                     var area = InteriorArea(y0, y1);
                     for (; px < insideLast; px++)
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
+                        cancellation.ThrowIfCancellationRequested();
                         row[px - left] += area;
                     }
                 }
                 for (; px < last; px++)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    cancellation.ThrowIfCancellationRequested();
                     row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
                 }
             }
@@ -390,7 +414,7 @@ internal sealed partial class TextRasterizer : IDisposable
 
     public void Dispose()
     {
-        foreach (var shape in shapes.Values) shape.Dispose();
+        foreach (var shape in shapes) shape.Dispose();
         shapes.Clear(); context.Release(bytes); bytes = 0;
     }
 }

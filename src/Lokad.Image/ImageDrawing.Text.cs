@@ -17,13 +17,10 @@ public static partial class ImageDrawing
         if (!double.IsFinite(x) || !double.IsFinite(y)) throw new ArgumentOutOfRangeException(nameof(x));
         using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         context.ReserveBorrowed(canvas.ByteLength); context.ReserveBorrowed(layout.StorageBytes);
-        var bounds = layout.InkBounds.Translate(x, y);
-        if (!double.IsFinite(bounds.Right) || !double.IsFinite(bounds.Bottom)) throw new ArgumentOutOfRangeException(nameof(x));
-        var left = Math.Max(0, Math.Floor(bounds.X)); var top = Math.Max(0, Math.Floor(bounds.Y));
-        var right = Math.Min(canvas.Width, Math.Ceiling(bounds.Right)); var bottom = Math.Min(canvas.Height, Math.Ceiling(bounds.Bottom));
+        var (left, top, right, bottom) = TextRasterizer.Clip(layout.InkBounds, x, y, canvas.Width, canvas.Height);
         if (left >= right || top >= bottom || color.A == 0) return;
-        context.PixelBytes((int)(right - left), (int)(bottom - top), canvas.BitDepth);
-        using var raster = new TextRasterizer(layout, context, (int)(right - left));
-        raster.Draw(canvas, layout, x, y, color, (int)left, (int)top, (int)right, (int)bottom);
+        context.PixelBytes(right - left, bottom - top, canvas.BitDepth);
+        using var raster = new TextRasterizer(layout, context, right - left);
+        raster.Draw(canvas, x, y, color, left, top, right, bottom, context.Cancellation);
     }
 }

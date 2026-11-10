@@ -54,7 +54,7 @@ public sealed class TextRasterArithmeticTests
         using var canvas = OriginalPixels.Buffer(64, 32, depth); using var expected = canvas.Clone();
         using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using var raster = new TextRasterizer(layout, context, canvas.Width);
-        raster.Draw(canvas, layout, -2.375, -1.625, Ink, 0, 0, canvas.Width, canvas.Height);
+        raster.Draw(canvas, -2.375, -1.625, Ink, 0, 0, canvas.Width, canvas.Height, default);
         var first = single.Placements[0];
         foreach (var glyph in layout.Placements)
             if (glyph.GlyphIndex == first.GlyphIndex)
@@ -70,10 +70,10 @@ public sealed class TextRasterArithmeticTests
         using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using var raster = new TextRasterizer(layout, context, 64); var retained = root.Bytes;
         using var disposed = ImageBuffer.Create(64, 32, depth); disposed.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => raster.Draw(disposed, layout, 4.375, .625, Ink, 0, 0, 64, 32));
+        Assert.Throws<ObjectDisposedException>(() => raster.Draw(disposed, 4.375, .625, Ink, 0, 0, 64, 32, default));
         Assert.Equal(retained, root.Bytes);
         using var actual = OriginalPixels.Buffer(64, 32, depth); using var expected = actual.Clone();
-        raster.Draw(actual, layout, 29.625, 3.375, Ink, 0, 0, 64, 32);
+        raster.Draw(actual, 29.625, 3.375, Ink, 0, 0, 64, 32, default);
         ImageDrawing.DrawText(expected, layout, 29.625, 3.375, Ink);
         Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
         raster.Dispose(); Assert.Equal(0, root.Bytes);

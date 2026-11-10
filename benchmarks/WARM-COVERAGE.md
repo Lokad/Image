@@ -1,16 +1,17 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-10. **287 material required paths** remain
-in scope; the 135 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+Current architectural phase, 2026-11-11. **289 material required paths** remain
+in scope; the 137 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [shared bicubic preparation stage](BICUBIC-SHARED-PREPARATION.md)
-passes6,229 full/live checks per OS, affected normal/scalar/ISA and the same actual
-Release-package consumer/all three examples. Compression packets, exact managed
-pixels and cooperative ownership remain unchanged.
+The latest accepted [owned text render preparation](TEXT-RENDER-PREPARATION.md)
+passes6,244 full/live checks per OS, affected normal/scalar and the same actual
+Release-package consumer/all three examples. Unchanged resize/JPEG ISA evidence
+is reused. Compression packets, exact managed pixels and cooperative ownership
+remain unchanged. The new byte/word prepared public boundary adds two named paths.
 This is not a whole-release timing refresh.
 Unchanged performance/qualification evidence is reused only within its source scope.
 
@@ -34,7 +35,7 @@ Unchanged performance/qualification evidence is reused only within its source sc
 | Prepared narrow bicubic | [Equivalent boundaries](BICUBIC-NARROW-BOUNDARIES.md):3 pass/1 gap. Both complete one-shot controls and prepared word pass; prepared byte437.43/zimg417.13µs upper1.054 remains a20.30µs point gap.199840B retained,138/137B/op, governedpeaks331936/464032B. Original asymmetric Down8 observations remain separate. No production change or repeated qualification. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear enlargement | [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md): complete RGBA8 Up8 upper.993 passes; source-valid other bilinear boundaries retain their own evidence/H status. |
-| Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Prepared drawing](TEXT-ENDPOINT-STORAGE.md) remains two gaps; allocation59000B/draw and inconclusive CPU gains stay distinct. [Preparation attribution](TEXT-PREPARATION-ATTRIBUTION.md) finds27–29µs diagnostic geometry/events and50–53µs raster/composition; no current time or speedup claim. Equivalent explicit preparation is the next lead. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 is a gap,176B/op; pooled capacity/lazy native validation are separately labeled. Independent codec/resizing work continues. |
+| Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Owned render preparation](TEXT-RENDER-PREPARATION.md): ordinary byte/word87.12/92.57µs remain gaps,59,304B/op (+304), CPU change inconclusive. Prepared53.81/56.80µs save33.30/35.77µs versus current ordinary,56B/op with40,408B idle ownership; byte parity uncertain/word gap against explicitly prepared ImageSharp.Drawing. All8 frozen frames exact. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 remains a gap; capacity/parser differences stay labeled. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
 
 [Preparation/storage attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md) explains
@@ -154,6 +155,8 @@ approved scopes and current evidence above.
 | TextFitOpenType | TextLayout.TryFit, existing ConstrainedFit | Complete bounded size search, releasing rejected candidates and retaining the winner. |
 | DrawText8 | ImageDrawing.DrawText, RGBA8 | Prepared-layout rasterization and alpha compositing into a borrowed canvas. |
 | DrawText16 | ImageDrawing.DrawText, RGBA16 | Distinct full-precision destination/color behavior with the same prepared layout. |
+| PreparedText8 | TextRenderPlan.Draw, RGBA8 | Distinct caller-owned copied glyph geometry/events/workspace, fixed shape/origin; reference positions public paths once and performs complete identity Fill. |
+| PreparedText16 | TextRenderPlan.Draw, RGBA16 | Distinct exact full16-bit coverage/composition with explicit retained preparation; full samples remain in the approved visual reference gates. |
 
 ## Evidence and execution rules
 
@@ -196,7 +199,7 @@ Current invalidation and next execution:
 - EQE772B changes shared four-pixel enlargement accumulation and the private byte
   quartet preparation. Its fifteen named controls supersede all twelve enlargement
   costs plus Mixed8/TightMixed8/TightVertical8. Other BicubicMath bodies, codec,
-  Lanczos, text/drawing and ownership algorithms remain unchanged. Earlier word
+  Lanczos and other unchanged providers retain their source scope. Earlier word
   mixed and other unchanged providers stay valid within their tested scope.
 - JPEG's current owner refreshes25 changed pixel-decode paths; four unchanged
   DC-only/coding-validation cases retain their source-valid confirmations.
@@ -210,4 +213,4 @@ Current invalidation and next execution:
   current sources before proposing a materially revised design. Passing quartet
   cases stop. Text/drawing never globally blocks independent codec/resizing work.
 - All cited raw archives, released packages and reproducibility remain retained.
-  Publication and the all287-path completion audit are separate; PLAN.md is ignored.
+  Publication and the all289-path completion audit are separate; PLAN.md is ignored.

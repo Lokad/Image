@@ -1167,17 +1167,31 @@ def render():
     assert composite8_current['qualification']['fullChecksEachOs'] == 5975
     assert composite8_current['actualPackage']['sha256'] == composite8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
-    raster = json.loads((ROOT / 'benchmarks/text-endpoint-storage-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-render-preparation-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 6064
+    assert raster['qualification']['fullChecksEachOs'] == 6244
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert raster['decision']['cpuGainInconclusive']
-    assert raster['sourceProof']['onlyConsecutiveEndpointInsertionChanged']
-    assert raster['sourceProof']['otherIntersectionEventsFinalSortReorderingGeometryIntegrationBlendAdmissionAndPublicBoundaryVerbatim']
     assert raster['storage']['allEightFrozenFramesExact']
-    assert raster['qualification']['actualPackage']['librarySha256'] == raster['producers']['timedArtifactSha256']
-    assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
+    assert raster['equivalentPreparedReference']['allEightReferenceFramesExact']
+    assert raster['sourceProof']['drawAndBandExactAfterOnlyCopiedGlyphStorageAndExplicitExecutionTokenSubstitution']
+    assert raster['raw']['mirrored'] and raster['raw']['allMembersVerified']
+    for case in raster['cases'].values():
+        assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
+        assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12
+        assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+        prepared = case['caseId'].startswith('Prepared')
+        assert case['allocatedBytes'] == (56 if prepared else 59304)
+        assert case['retainedBytes'] == (40408 if prepared else 0)
+        depth = case['depth']
+        status = 'confidence open' if case['status'] == 'uncertain' else case['status']
+        label = f'Text {"prepared raster" if prepared else "ordinary draw"} RGBA{depth} / ImageSharp.Drawing ({status})'
+        rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["nativeUs"]:,.2f} | '
+                     f'{case["ratio"]:.3f} / {case["upper"]:.3f} | {case["allocatedBytes"]:,} |'))
     for case_id, previous in text_current['observations'].items():
+        if case_id in ('DrawText8', 'DrawText16'):
+            continue  # Current ordinary and explicitly prepared boundaries above.
         if case_id == 'DrawingComposite8':
             current = composite8_current['current']
             rows.append(('editing', f'| {composites["cases"][case_id]["label"]} (pass) † | {current["managedUs"]:,.2f} | '
@@ -1185,12 +1199,7 @@ def render():
                          f'{current["allocatedBytes"]:,} |'))
             continue
         case = (font_load['current'] if case_id == 'FontLoadRegular'
-                else raster['cases'].get(case_id, composites['cases'].get(case_id, previous)))
-        if case_id in raster['cases']:
-            assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
-            assert case['validation']['frozenManagedObservationsExact']
-            assert case['managedMemory']['BytesAllocatedPerOperation'] == 59000
-            assert case['admittedWorkspacePeak'] == 42336 and case['retainedDrawingWorkspace'] == 0
+                else composites['cases'].get(case_id, previous))
         if case_id in composites['cases']:
             assert case['librarySha256'] == composites['producers']['linuxSha256']
             assert case['validation']['exactManagedPixels'] and case['managedMemory']['BytesAllocatedPerOperation'] == 56
@@ -1198,7 +1207,7 @@ def render():
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
         status = 'pass' if case['status'] == 'Confirmed pass' else 'gap' if case['status'] == 'Confirmed gap' else 'confidence open'
-        mark = ' †' if case_id == 'FontLoadRegular' or case_id in raster['cases'] else ''
+        mark = ' †' if case_id == 'FontLoadRegular' else ''
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
@@ -1771,6 +1780,7 @@ def render():
         label = f'Bicubic {"prepared" if prepared else "one-shot"} narrow RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
         rows.append(('editing', f'| {label} † → 256×129 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    current_build_qualification = raster['qualification']
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -1864,16 +1874,16 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-10. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-11. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [287 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
 workstation GC. Times are **µs per complete operation**. Ratios use the faster
-native bracket; **upper** includes conservative filtered/all-actual confidence.
+reference bracket; **upper** includes conservative filtered/all-actual confidence.
 Short screens do not establish independent parity. **B/op** is total managed
 allocation, separate from peak live capacity and retained storage. Native
 allocations are unmeasured. Normalization, output ownership and disposal stay
@@ -1932,15 +1942,19 @@ Current scope and remaining work:
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
-  [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and
-  current 98.44/102.57 µs points, with reference gaps and inconclusive CPU gains.
+  [Shared render preparation](../benchmarks/TEXT-RENDER-PREPARATION.md) saves33.30/35.77 µs
+  for repeated drawing versus current ordinary calls. Prepared drawing allocates56 B/op,
+  retains40,408 B and costs53.81/56.80 µs; byte parity is uncertain, word remains a gap.
+  Ordinary87.12/92.57 µs reference gaps remain,59,304 B/op (+304); CPU changes are inconclusive.
+  ImageSharp.Drawing's prepared public paths and per-call working storage are explicitly labeled.
   [Font loading](../benchmarks/FONT-OWNED-STORAGE.md) remains 31.86/FreeType 13.42 µs,
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Resize checks pass {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+Windows/Linux**. Affected text checks pass170 internal/126 public per normal/scalar mode.
+Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
 ({current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
@@ -1989,7 +2003,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 135, 'Expected135comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 137, 'Expected137comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

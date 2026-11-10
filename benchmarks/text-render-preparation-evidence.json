@@ -1,0 +1,539 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TRP784",
+  "date": "2026-11-11",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "priorRequiredMaterialPaths": 287,
+  "requiredMaterialPaths": 289,
+  "independentQuietConfirmation": true,
+  "producers": {
+    "windowsSha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+    "linuxSha256": "d01b2cea01a8d05621ef4a4bcb7025557f386d04a2f89be9a85622c539e9ba08",
+    "timedArtifactSha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69"
+  },
+  "cases": {
+    "Ordinary8": {
+      "managedUs": 87.11731818181818,
+      "nativeUs": 45.40280434122647,
+      "ratio": 1.9187651389787448,
+      "lower": 1.191026877198687,
+      "upper": 2.9446213312994733,
+      "allocatedBytes": 59304,
+      "retainedBytes": 0,
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "status": "gap",
+      "caseId": "Ordinary8",
+      "depth": 8,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "trp784-candidate-ordinary-DrawText8-confirm-receipt.json",
+      "resetExcludedEqually": true
+    },
+    "Ordinary16": {
+      "managedUs": 92.56581818181817,
+      "nativeUs": 46.476347267316015,
+      "ratio": 1.9916758442614118,
+      "lower": 1.2975554627651007,
+      "upper": 2.9748947140705067,
+      "allocatedBytes": 59304,
+      "retainedBytes": 0,
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "status": "gap",
+      "caseId": "Ordinary16",
+      "depth": 16,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "trp784-candidate-ordinary-DrawText16-confirm-receipt.json",
+      "resetExcludedEqually": true
+    },
+    "Prepared8": {
+      "managedUs": 53.814166666666665,
+      "nativeUs": 37.795857807807806,
+      "ratio": 1.4238112266246759,
+      "lower": 0.9830912392193013,
+      "upper": 1.6221432210069162,
+      "allocatedBytes": 56,
+      "retainedBytes": 40408,
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "status": "uncertain",
+      "caseId": "Prepared8",
+      "depth": 8,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "trp784-candidate-prepared-DrawText8-confirm-receipt.json",
+      "resetExcludedEqually": true
+    },
+    "Prepared16": {
+      "managedUs": 56.79686363636364,
+      "nativeUs": 37.60958124385447,
+      "ratio": 1.510170061934535,
+      "lower": 1.0568648352991343,
+      "upper": 2.014607907085251,
+      "allocatedBytes": 56,
+      "retainedBytes": 40408,
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "status": "gap",
+      "caseId": "Prepared16",
+      "depth": 16,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "trp784-candidate-prepared-DrawText16-confirm-receipt.json",
+      "resetExcludedEqually": true
+    }
+  },
+  "sourceProof": {
+    "stage": "TRP784",
+    "productionBaseCommit": "09c54d80285af6c708506761778d5935a658b4e5",
+    "originalSourceSha256": "cdae6f567de6186743fc5b686c744566c155c462c7272e42a8395883482e53f9",
+    "candidateSourceSha256": "622cbb74296c9a01815f9b22aa925f259235f2305b24112f770600f49a8a0411",
+    "drawAndBandExactAfterOnlyCopiedGlyphStorageAndExplicitExecutionTokenSubstitution": true,
+    "allCoverageBlendSubdivisionEventsReorderingGrowthArithmeticVerbatim": true,
+    "checkpointLocationsAndOrderPreserved": true,
+    "affectedCostEvidence": [
+      "DrawText8",
+      "DrawText16",
+      "New separately labeled prepared-raster byte/word boundary"
+    ],
+    "unchangedPaths": "Font loading/layout/fitting without raster, image composition, codecs, all resizing and packet contracts unchanged. No whole-library method audit.",
+    "sourceBuildsUnchanged": true,
+    "candidateRawSourceSha256": "600bcad70dac15e0fa0caa4b993e4a3f649ff34121808420e2953a2fb9d383df",
+    "arithmeticComparisonUsesNormalizedNewlines": true
+  },
+  "changedInputs": {
+    "src/Lokad.Image/ImageDrawing.Text.cs": "715a41b2706ef753263c12ca19e1f642cd844c1f657fa427e72bd4a68a434188",
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "600bcad70dac15e0fa0caa4b993e4a3f649ff34121808420e2953a2fb9d383df",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+    "tests/Lokad.Image.Tests/TextRasterArithmeticTests.cs": "95435850c6db69f07fb416047142f8d4406c8ee2c17311b3ec23d0c558b64b23",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fc4c7d02c0a10c73b687b50618058be399401f592deb8a82a19d88c3ec280584",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderingTests.cs": "024a1f642563b2b0daac2a2718f45c212159cb93322046088fbb645529e51d4f",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "ada0cc8b53eb4902cad73bec6a4a6a6db87a622e3dc98a76d99a01433d98c324"
+  },
+  "design": "Small fixed-canvas/depth/origin caller-owned plan independent of layout/font with copied positions and exact prepared edges; shared cancellation-token execution.",
+  "equivalentPreparedReference": {
+    "reference": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12",
+    "notFFmpeg": true,
+    "copyPositionsAndTranslatePathsBeforeTiming": true,
+    "allRasterScanCoverageBlendStorageAndDisposalTimed": true,
+    "originalLayoutHelperDisposed": true,
+    "allEightReferenceFramesExact": true,
+    "prerequisite": "TPR783",
+    "parserEquivalenceNotClaimed": true,
+    "referencePreparationTimeAllocationsAndRetainedCapacityUnmeasured": true
+  },
+  "storage": {
+    "project": "Lokad.Image",
+    "stage": "TRP784",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "allEightFrozenFramesExact": true,
+    "fontUnchanged": true,
+    "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+    "cases": [
+      {
+        "name": "NarrowLongWord",
+        "depth": 8,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "9c4246c24aaf561e956966fc51088c1c0910e1285b80b00868d073e899688c79",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 7696,
+        "preparationPeak": 7696,
+        "retainedStorage": 6640,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "NarrowLongWord",
+        "depth": 16,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "b4bc65bbbf0befc1a374820c282f8fe440dc8c80a15c3ab649f5aa39aa9f6dd0",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 7696,
+        "preparationPeak": 7696,
+        "retainedStorage": 6640,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "LatinKerning",
+        "depth": 8,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "a966fc39b237bce7170b434ba86a2275f5623ba031cf26b824f9a0db41cd7a5f",
+        "ordinaryAllocation": [
+          59304,
+          59304,
+          59304
+        ],
+        "preparedAllocation": [
+          56,
+          56,
+          56
+        ],
+        "ordinaryWorkspacePeak": 42488,
+        "preparationPeak": 42488,
+        "retainedStorage": 40408,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "LatinKerning",
+        "depth": 16,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "7d0932f54f603df2bd61d22406e1d3836e3a43cb3ee68212849506b54b9d1696",
+        "ordinaryAllocation": [
+          59304,
+          59304,
+          59304
+        ],
+        "preparedAllocation": [
+          56,
+          56,
+          56
+        ],
+        "ordinaryWorkspacePeak": 42488,
+        "preparationPeak": 42488,
+        "retainedStorage": 40408,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "ArabicMarksDigits",
+        "depth": 8,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "bc605be094ab1eb2329e51de00acb05ecf276d40c8b22582f3b7e125fb694563",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 239312,
+        "preparationPeak": 239312,
+        "retainedStorage": 238384,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "ArabicMarksDigits",
+        "depth": 16,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "f22bb758afb151b99edfb0d5d4ca5e284284d754344504705a01995888dce933",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 239312,
+        "preparationPeak": 239312,
+        "retainedStorage": 238384,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "ConstrainedFit",
+        "depth": 8,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "4f0a420706ead9d5ab28f85c888eac2bf1dc7f7c1d57782d44816d956e748a1c",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 41984,
+        "preparationPeak": 41984,
+        "retainedStorage": 39904,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      },
+      {
+        "name": "ConstrainedFit",
+        "depth": 16,
+        "exactFrozenFrame": true,
+        "survivesFontAndLayoutDisposal": true,
+        "outputSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+        "ordinaryAllocation": [],
+        "preparedAllocation": [],
+        "ordinaryWorkspacePeak": 41984,
+        "preparationPeak": 41984,
+        "retainedStorage": 39904,
+        "drawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0,
+        "creationTokenDoesNotGovernExecution": true
+      }
+    ]
+  },
+  "comparison": {
+    "stage": "TRP784",
+    "allSixShortsAndIndependentConfirmationsPassedGates": true,
+    "productionStageAcceptedPendingQualification": true,
+    "newBoundaryIsNotSameBoundaryKernelSpeedup": true,
+    "ordinaryAllocationIncreaseB": 304,
+    "retainedCapacityIsExplicitIdleCost": true,
+    "referenceTargetPassingNotClaimed": true,
+    "allFrozenPacketAndPixelRequirementsPreserved": true,
+    "noFavorableRepeats": true,
+    "rows": {
+      "DrawText8": {
+        "originalOrdinaryUs": 85.83213636363637,
+        "currentOrdinaryUs": 87.11731818181818,
+        "preparedUs": 53.814166666666665,
+        "repeatedUseSavingsUs": 33.30315151515151,
+        "repeatedUsePointGain": 0.38227934709429623,
+        "views": {
+          "statistics": {
+            "preparedUpper": 57425.3716150094,
+            "ordinaryLower": 78063.7142772062,
+            "rawIntervalsSeparate": true
+          },
+          "unfilteredActualStatistics": {
+            "preparedUpper": 57465.3716150094,
+            "ordinaryLower": 70650.27354490035,
+            "rawIntervalsSeparate": true
+          }
+        },
+        "ordinaryCpuChangeConfidence": "inconclusive",
+        "originalOrdinaryB": 59000,
+        "currentOrdinaryB": 59304,
+        "preparedB": 56,
+        "preparedRetainedB": 40408,
+        "preparedReferenceStatus": "uncertain",
+        "ordinaryReferenceStatus": "gap"
+      },
+      "DrawText16": {
+        "originalOrdinaryUs": 94.85504545454546,
+        "currentOrdinaryUs": 92.56581818181817,
+        "preparedUs": 56.79686363636364,
+        "repeatedUseSavingsUs": 35.768954545454534,
+        "repeatedUsePointGain": 0.38641644667578046,
+        "views": {
+          "statistics": {
+            "preparedUpper": 62197.46483083071,
+            "ordinaryLower": 81913.80350358138,
+            "rawIntervalsSeparate": true
+          },
+          "unfilteredActualStatistics": {
+            "preparedUpper": 68893.27954090273,
+            "ordinaryLower": 74839.05129839978,
+            "rawIntervalsSeparate": true
+          }
+        },
+        "ordinaryCpuChangeConfidence": "inconclusive",
+        "originalOrdinaryB": 59000,
+        "currentOrdinaryB": 59304,
+        "preparedB": 56,
+        "preparedRetainedB": 40408,
+        "preparedReferenceStatus": "gap",
+        "ordinaryReferenceStatus": "gap"
+      }
+    }
+  },
+  "qualification": {
+    "fullChecksEachOs": 6244,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+      "full": [
+        2935,
+        2346,
+        948
+      ],
+      "total": 6229,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 362,
+        "internal-scalar": 362,
+        "public-normal": 776,
+        "public-scalar": 776
+      },
+      "affectedResizeScalarEachOs": 1138,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "75aee080c9105196232123f30e00a685988ff46f725e8f93603d10179289d122",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "61c0d3e38afe15773272e7ceb23dc237d4f5ede02b29f056a60f14dcc8e86feb",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+      "full": [
+        2935,
+        2346,
+        948
+      ],
+      "total": 6229,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 362,
+        "internal-scalar": 362,
+        "public-normal": 776,
+        "public-scalar": 776
+      },
+      "affectedResizeScalarEachOs": 1138,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fd62f6427340d7019af967b608a0531ee1a88ee284f39c5f3bbc03c37c411a6e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "f720cd8666cb99a13b0eef516de6034ce1fdd993b85951d13418bb9cf17eb837",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "affectedIsa": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 362,
+          "public-no-avx512": 776,
+          "internal-no-avx2": 362,
+          "public-no-avx2": 776
+        },
+        "coreSha256": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 362,
+          "public-no-avx512": 776,
+          "internal-no-avx2": 362,
+          "public-no-avx2": 776
+        },
+        "coreSha256": "1431eedaa1f11f3b1dd2c0499f8630e18c6964833b600cc43e608ac2d943d34c",
+        "allBuilds": 0
+      }
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "96a290c2b6bea3b0a0707b286f32a6265e09d11b6fb5356e38a9bcce725ab0e6",
+      "symbolsSha256": "c794b9fa0e2dda022d4def9cf72d6cdcc0713e682c47ca37963b2e4a5afc4f34",
+      "bytes": 448704,
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "96a290c2b6bea3b0a0707b286f32a6265e09d11b6fb5356e38a9bcce725ab0e6",
+      "librarySha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "allThreeExamplesBothOS": true,
+    "resizeInternalEachModeEachOs": 362,
+    "resizePublicEachModeEachOs": 776,
+    "jpegInternalEachModeEachOs": 462,
+    "jpegPublicEachModeEachOs": 375,
+    "jpegIsaReusedUnchanged": true,
+    "platforms": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+        "full": [
+          2935,
+          2361,
+          948
+        ],
+        "total": 6244,
+        "fullLivePassed": true,
+        "identities": {
+          "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "e8c459ca95fc0f4f84be64ca92e4372ef41beff388310418b2dbb6fe85bf7d69",
+          "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "9d33e9765066a220c0d2335d9dea880bb95c02bb1f5a488d573c8eb27231c254",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "16cd60802ebc76d6746d0c95084911ae31a40db3e9c92f12702ace487b7c3b5c"
+        },
+        "affectedTextFontNormalAndScalarPerOs": [
+          170,
+          126
+        ],
+        "unchangedCodecsResizeIsaQualificationReused": true,
+        "additionalProductionOrEmbeddedBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSha256": "d01b2cea01a8d05621ef4a4bcb7025557f386d04a2f89be9a85622c539e9ba08",
+        "full": [
+          2935,
+          2361,
+          948
+        ],
+        "total": 6244,
+        "fullLivePassed": true,
+        "identities": {
+          "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "d01b2cea01a8d05621ef4a4bcb7025557f386d04a2f89be9a85622c539e9ba08",
+          "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "4a95e1848079261499635050429c7bf4a0eee92a143cca383ecffce0c9b561e3",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "bc752e7229313fe0b119ff5a92726e8a2dffa581afcc05f95bb05828c9e30c0e"
+        },
+        "affectedTextFontNormalAndScalarPerOs": [
+          170,
+          126
+        ],
+        "unchangedCodecsResizeIsaQualificationReused": true,
+        "additionalProductionOrEmbeddedBuilds": 0
+      }
+    },
+    "textInternalEachModeEachOs": 170,
+    "textPublicEachModeEachOs": 126,
+    "resizeAndJpegIsaReusedForUnchangedPaths": true,
+    "priorResizeQualification": "bicubic-shared-preparation-evidence.json"
+  },
+  "raw": {
+    "file": "text-render-preparation-qualified.tar.xz",
+    "bytes": 11297488,
+    "sha256": "6622835194e308c3763fff695670a9cd55b94ec15d63032878badae499a3b05b",
+    "members": 273,
+    "rawEvidencePreserved": true,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "earlierAttribution": "TEXT-PREPARATION-ATTRIBUTION.md",
+  "supersededOrdinaryCosts": "TEXT-ENDPOINT-STORAGE.md",
+  "evidenceReuse": "Only raster drawing paths change. Reuse unchanged layout/fitting without rendering, font loading, image composition, codecs and all resizing costs/ISA evidence. Complete text integration still includes every layout call and fitting trial. Exact packets and managed pixel contracts unchanged.",
+  "scope": "Frozen DejaVu Sans18px AV To,384x160 canvas,origin8/8: complete ordinary and explicit prepared-raster byte/word draws. Additional frozen narrow/Arabic/fitting frames are correctness/generalization, not broader performance claims. Prepared output retains full16-bit precision; unchanged approved visual reference gates. No global cache, cross-operation pool or production dependency.",
+  "timingAdapterOverhead": "Candidate mode dispatch/environment lookup remains timed (one per managed draw, two per reference draw); isolated cost unmeasured. Public-operation allocation counters exclude adapter dispatch/reset. Historical baseline adapter has no mode lookup."
+}

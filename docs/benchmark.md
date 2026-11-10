@@ -1,15 +1,15 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-10. These **135 selected comparisons** combine qualified
+Updated 2026-11-11. These **137 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [287 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
 workstation GC. Times are **µs per complete operation**. Ratios use the faster
-native bracket; **upper** includes conservative filtered/all-actual confidence.
+reference bracket; **upper** includes conservative filtered/all-actual confidence.
 Short screens do not establish independent parity. **B/op** is total managed
 allocation, separate from peak live capacity and retained storage. Native
 allocations are unmeasured. Normalization, output ownership and disposal stay
@@ -68,15 +68,19 @@ Current scope and remaining work:
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
-  [Prepared drawing](../benchmarks/TEXT-ENDPOINT-STORAGE.md) retains 59,000 B/op and
-  current 98.44/102.57 µs points, with reference gaps and inconclusive CPU gains.
+  [Shared render preparation](../benchmarks/TEXT-RENDER-PREPARATION.md) saves33.30/35.77 µs
+  for repeated drawing versus current ordinary calls. Prepared drawing allocates56 B/op,
+  retains40,408 B and costs53.81/56.80 µs; byte parity is uncertain, word remains a gap.
+  Ordinary87.12/92.57 µs reference gaps remain,59,304 B/op (+304); CPU changes are inconclusive.
+  ImageSharp.Drawing's prepared public paths and per-call working storage are explicitly labeled.
   [Font loading](../benchmarks/FONT-OWNED-STORAGE.md) remains 31.86/FreeType 13.42 µs,
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,229 full/live checks per OS**
+The current immutable build passes **6,244 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Resize checks pass 362 internal/776 public per
+Windows/Linux**. Affected text checks pass170 internal/126 public per normal/scalar mode.
+Unchanged resize qualification is reused: 362 internal/776 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
 (462 internal/375 public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
@@ -212,13 +216,15 @@ settings do not establish matched quality.
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 4.18 | 3.78 | 1.106 / 1.152 | 112 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 87.12 | 45.40 | 1.919 / 2.945 | 59,304 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 92.57 | 46.48 | 1.992 / 2.975 | 59,304 |
+| Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 53.81 | 37.80 | 1.424 / 1.622 | 56 |
+| Text prepared raster RGBA16 / ImageSharp.Drawing (gap) † | 56.80 | 37.61 | 1.510 / 2.015 | 56 |
 | Font loading / FreeType 2.13.2 (gap) † | 31.86 | 13.42 | 2.375 / 2.396 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) † | 98.44 | 50.45 | 1.951 / 3.155 | 59,000 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 102.57 | 51.14 | 2.006 / 3.208 | 59,000 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
