@@ -68,6 +68,8 @@ equivalent sides; label existing comparisons that retain native contexts/plans.
 Paired DLL comparisons prove scoped incremental effects; qualify the actual
 standalone reference boundary before treating them as passing current costs.
 Resolve material contradictions before accepting a production stage.
+Finish affected performance reconciliation before broad/package qualification;
+use focused checks while an architectural transition remains unsettled.
 Report total allocations, peak live capacity and retained state separately.
 Prefer operation-owned workspace reuse before cross-operation pools. Architectural
 experiments may span coherent changes and temporary regressions; use evidence

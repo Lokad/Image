@@ -1,0 +1,2049 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JLP774",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "decision": "Do not retain these four production implementations. DhasdemonstratedhorizontalCMYK37.38us/8.38percentraw14.30percentnormalizedgain and stableRGBpair, but independent contemporaryoriginalYCCK/callerYCCK/grayscale counterchecks showmaterialraw/normalizedadversecosts. Theyarelargerthantheprimarysaving; materialstandalonecontradictionsremainunresolved. Restorequalifiedproduction ratherthanacceptfromprimaryalone. No permanentfamilyban oruniversalalgorithmicfailureclaim.",
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "JLP774",
+        "productionChanged": false,
+        "productionAccepted": false,
+        "publicationPostponed": true,
+        "requiredMaterialPaths": 283,
+        "baseline": {
+          "windowsSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+          "linuxSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a"
+        },
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs"
+        ],
+        "newPaths": [
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs"
+        ],
+        "repeatedWork": "Existing two-low-row inverse computes four pair products pernonconstantrow whenonlyfirsttwofrequenciesarenonzero, stores/loads intermediaterows and loops/replicateshorizontal output. Existingmodel shows8580low2x2sparseblocks versus2RGBblocks; authoredhorizontalcontrol hasonly horizontalAC4/unitquantizers. Countsarenottimes. RowProduct/DCwrap/ACsaturation sourceunchangedbyJBCcolumns.",
+        "endState": "Guardactualdequantizedlow2x2support insideexistingtwoLowRows gate; transformeachnonconstantrow withonlyRow01 product+bias/shift/saturation; constantrowskeepworddc*8wrap. Keepfirst/second transformedrowsinVec128 ratherthan64wordrows. Sharedtwo-rowpublication retainscurrentzero-row/Avx512BWpublisher/Avx2 math, usesoneVector512 repeated64bitrowstoreforhorizontal. Genericfullrows/AVX2/scalar andglobalDC paths remain actualfallbacks. ScopedNoInlining lowfrequencyhelper isolates registerlifetimes; sharedpublication removesduplication. No entropygrammar/dequantizationfusion or densepairedrows replay.",
+        "correctness": "Exactoriginalfixedpoint boundaries: DCdequantizewide+saturate, ACwordwrap; DC-onlyrowwrap versusnonconstantrowInt32sum+bias1024shift11saturation; signedword+32columnbiasbeforewiden, modularsum, shift20, unsignedbyteclip/reflection/order. Preservefullinput/outputguard,polls,bounds,ownership/root/refusal/cancel/recovery/survivors. No encoder/packet/metadata/precisionpolicychange.",
+        "tests": "ActualcompleteInverse against independentcosine/T81scalaroracle, natural/scan-order, fullInt32coefficients/UInt16quantizers/signedword/DCbias/saturationboundary, low2x2plusineligibleadditionalbasis; canary/inputimmutability/noallocation/root0/cancel. ExistingJpegPackedInverse/Reference/TwoRow tests retained, portable/scalar/AVX2off/AVX512off atacceptance.",
+        "storage": "No newownedheap/staticformatcapacity/retainedstate/pool/session/root/API. Existingblockstackcanremain256Bcoarseboundary; actualJITframes/code separatelymeasured, no physical/nativepeakclaim. Completehorizontal20944Bop/531468Bindependentoutput/scratch0.",
+        "performance": "ExistingdemonstratedgapCmykAdobeAc438.61/native392.08us upper1.160. ExistingDirectRgb444 affectedcompanion, not tuningtargetinferredfromuncertainty. Existing sparse affectedcompanion likewise. Reusefrozen25affectedJBCcases and4provedunchangedDC/validation costsifaccepted. Original/candidateprimary+RGBshorts, independentconfirmationonlyifuseful; no fixture/settingsgrid. Completepublicparse/preparation/entropy/inverse/normalization/independentoutput/dispose. Existinglabelednativecontext/idle-v2/oneCPU, currentactualimmutableDLL.",
+        "risks": "Extraeligibilityscans/dispatch/calls/code/regpressuremayoffsetzeroterm/storage removal, especiallydenseRGB. Sharepublicationwithoutmovingnecessaryworkoutsideoperation; revisebasedactualJIT/completeevidence. Temporaryduplication/regressionallowedwithincoherentstage; nofixedthreshold/bans. FocusedW/LthenbroadISA/SAMEpackageonceifaccepted.",
+        "sourcesBefore": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "b107350c9e303ce6579fdfa5a2f833f19620d1432412df527a54d97ff5e26d6c"
+        },
+        "affectedExistingCases": [
+          "DirectRgb444",
+          "Decode8",
+          "NativeDecode8",
+          "NativeDecode420",
+          "NativeDecode422",
+          "OwnedDecodeGray",
+          "ProgressiveGray",
+          "Progressive420",
+          "Progressive444",
+          "Progressive422",
+          "NativeDecode420Restart",
+          "StreamDecode420Restart",
+          "NativeDecodeCancelable8",
+          "ProgressiveCancelable444",
+          "DirectRgb422",
+          "DirectRgb420",
+          "CmykAdobe",
+          "CmykAdobeAc",
+          "CmykAdobeGeneral",
+          "CmykAdobeSparse2D",
+          "Ycck420",
+          "CmykCaller",
+          "Ycck420CallerRgb",
+          "Decode411",
+          "Decode410",
+          "CallerGray",
+          "CallerRgb",
+          "ValidateJpegBaseline420",
+          "ValidateJpegProgressive420"
+        ]
+      },
+      "producers": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+          "candidateSha256": "05cdd2f419712e5728f4fe4d45099f99297a4b0880a9afdc32ebc2d12a7c07af",
+          "internalTestAssemblySha256": "3cf5e2797676099a4920cc61bcd05446731e109b08dadcdbdfb297ba19cc7004",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "5306d731a6e41eac2789f51a9b9ffa4628f26ca8cadc8bc604a25aab02a6daa5",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a",
+          "candidateSha256": "1552dbd4b9947bf3b20abe5048030c3ccb0930b3983fcb9be4e46d12d0ca3c54",
+          "internalTestAssemblySha256": "f3ffb130c5b6f47d5b3446e56da5332363f3a11ffe8361dd0d3ed91b200f1c7e",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "5306d731a6e41eac2789f51a9b9ffa4628f26ca8cadc8bc604a25aab02a6daa5",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "shorts": {
+        "CmykAdobeAc": {
+          "managedUs": 425.6924314516129,
+          "nativeUs": 392.3572239583333,
+          "ratio": 1.0849613705514942,
+          "lower": 0.7418245650559605,
+          "upper": 1.3490078204431453,
+          "allocatedBytes": 20944,
+          "status": "uncertain"
+        },
+        "DirectRgb444": {
+          "managedUs": 1580.8043606770832,
+          "nativeUs": 1564.8551354166668,
+          "ratio": 1.0101921416873965,
+          "lower": 0.8836869150025437,
+          "upper": 1.1515884788499904,
+          "allocatedBytes": 42936,
+          "status": "uncertain"
+        }
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "JLP774B",
+        "productionChanged": false,
+        "productionAccepted": false,
+        "publicationPostponed": true,
+        "requiredMaterialPaths": 283,
+        "baseline": {
+          "windowsSha256": "05cdd2f419712e5728f4fe4d45099f99297a4b0880a9afdc32ebc2d12a7c07af",
+          "linuxSha256": "1552dbd4b9947bf3b20abe5048030c3ccb0930b3983fcb9be4e46d12d0ca3c54"
+        },
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs"
+        ],
+        "newPaths": [],
+        "repeatedWork": "Existing two-low-row inverse computes four pair products pernonconstantrow whenonlyfirsttwofrequenciesarenonzero, stores/loads intermediaterows and loops/replicateshorizontal output. Existingmodel shows8580low2x2sparseblocks versus2RGBblocks; authoredhorizontalcontrol hasonly horizontalAC4/unitquantizers. Countsarenottimes. RowProduct/DCwrap/ACsaturation sourceunchangedbyJBCcolumns.",
+        "endState": "Guardactualdequantizedlow2x2support insideexistingtwoLowRows gate; transformeachnonconstantrow withonlyRow01 product+bias/shift/saturation; constantrowskeepworddc*8wrap. Keepfirst/second transformedrowsinVec128 ratherthan64wordrows. Sharedtwo-rowpublication retainscurrentzero-row/Avx512BWpublisher/Avx2 math, usesoneVector512 repeated64bitrowstoreforhorizontal. Genericfullrows/AVX2/scalar andglobalDC paths remain actualfallbacks. ScopedNoInlining lowfrequencyhelper isolates registerlifetimes; sharedpublication removesduplication. No entropygrammar/dequantizationfusion or densepairedrows replay.",
+        "correctness": "Exactoriginalfixedpoint boundaries: DCdequantizewide+saturate, ACwordwrap; DC-onlyrowwrap versusnonconstantrowInt32sum+bias1024shift11saturation; signedword+32columnbiasbeforewiden, modularsum, shift20, unsignedbyteclip/reflection/order. Preservefullinput/outputguard,polls,bounds,ownership/root/refusal/cancel/recovery/survivors. No encoder/packet/metadata/precisionpolicychange.",
+        "tests": "ActualcompleteInverse against independentcosine/T81scalaroracle, natural/scan-order, fullInt32coefficients/UInt16quantizers/signedword/DCbias/saturationboundary, low2x2plusineligibleadditionalbasis; canary/inputimmutability/noallocation/root0/cancel. ExistingJpegPackedInverse/Reference/TwoRow tests retained, portable/scalar/AVX2off/AVX512off atacceptance.",
+        "storage": "No newownedheap/staticformatcapacity/retainedstate/pool/session/root/API. Existingblockstackcanremain256Bcoarseboundary; actualJITframes/code separatelymeasured, no physical/nativepeakclaim. Completehorizontal20944Bop/531468Bindependentoutput/scratch0.",
+        "performance": "ExistingdemonstratedgapCmykAdobeAc438.61/native392.08us upper1.160. ExistingDirectRgb444 affectedcompanion, not tuningtargetinferredfromuncertainty. Existing sparse affectedcompanion likewise. Reusefrozen25affectedJBCcases and4provedunchangedDC/validation costsifaccepted. Original/candidateprimary+RGBshorts, independentconfirmationonlyifuseful; no fixture/settingsgrid. Completepublicparse/preparation/entropy/inverse/normalization/independentoutput/dispose. Existinglabelednativecontext/idle-v2/oneCPU, currentactualimmutableDLL.",
+        "risks": "Extraeligibilityscans/dispatch/calls/code/regpressuremayoffsetzeroterm/storage removal, especiallydenseRGB. Sharepublicationwithoutmovingnecessaryworkoutsideoperation; revisebasedactualJIT/completeevidence. Temporaryduplication/regressionallowedwithincoherentstage; nofixedthreshold/bans. FocusedW/LthenbroadISA/SAMEpackageonceifaccepted.",
+        "sourcesBefore": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "5306d731a6e41eac2789f51a9b9ffa4628f26ca8cadc8bc604a25aab02a6daa5",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+        },
+        "affectedExistingCases": [
+          "DirectRgb444",
+          "Decode8",
+          "NativeDecode8",
+          "NativeDecode420",
+          "NativeDecode422",
+          "OwnedDecodeGray",
+          "ProgressiveGray",
+          "Progressive420",
+          "Progressive444",
+          "Progressive422",
+          "NativeDecode420Restart",
+          "StreamDecode420Restart",
+          "NativeDecodeCancelable8",
+          "ProgressiveCancelable444",
+          "DirectRgb422",
+          "DirectRgb420",
+          "CmykAdobe",
+          "CmykAdobeAc",
+          "CmykAdobeGeneral",
+          "CmykAdobeSparse2D",
+          "Ycck420",
+          "CmykCaller",
+          "Ycck420CallerRgb",
+          "Decode411",
+          "Decode410",
+          "CallerGray",
+          "CallerRgb",
+          "ValidateJpegBaseline420",
+          "ValidateJpegProgressive420"
+        ],
+        "qualifiedBaseline": {
+          "windowsSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+          "linuxSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a"
+        },
+        "revision": "Acompletehorizontalshort425.69/native392.36us vsoriginal430.71/native402.98, no useful normalizedlead; denseRGB1580.80/native1564.86vs1580.19/native1561.10. InspectactualInverseAvx2->InverseLow2x2->StoreTwoRowColumns call/ABI chain; B moveslow-supportdispatch intoexistingInverseentry andinline sharedpublisher. Sameproductionlow2x2 support andactualrow/columnmath, no workexcluded or newstorage. No unchangedAconfirmation.",
+        "actualCodeLead": "AInverse551B/frame40; InverseAvx2 1584B/frame232 tail-jumps lowhelper afterprologue/dispatch. Lowhelper407B/frame136 calls sharedpublisher156B, which tailjumps existing512leaf fornonzerosecondrow. Bdirectentry removesgenericInverseAvx2prologue/epilogue/argumentboundary fromlow-supportpath; inlinepublisher removesvectorbyvalueABI boundary. Not a claim thatthreefullcallframes persist simultaneously. No newcapture/fixture."
+      },
+      "producers": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "05cdd2f419712e5728f4fe4d45099f99297a4b0880a9afdc32ebc2d12a7c07af",
+          "candidateSha256": "1bd4c1905c8cbb6c9684dfd6204cfb9660db471e95a2f6699bc45d926cd904ae",
+          "internalTestAssemblySha256": "e6d6504fdd39e6926657ac395b9c3ea9d500efd750457426510300aba0980493",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "858aab2cb117aadcf528b7011189466da68ab90c4a1f775bb514fd72c1071381",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "1552dbd4b9947bf3b20abe5048030c3ccb0930b3983fcb9be4e46d12d0ca3c54",
+          "candidateSha256": "e1b95337f8036296156eb74858f35afd664ed29c70d46d700ce30c703b480431",
+          "internalTestAssemblySha256": "cc55231621724cccd3e5eb17ea1f321fb8b181725716ca9f1e9faf5d21674521",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "858aab2cb117aadcf528b7011189466da68ab90c4a1f775bb514fd72c1071381",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "shorts": {
+        "CmykAdobeAc": {
+          "managedUs": 413.09288194444446,
+          "nativeUs": 417.9211979166667,
+          "ratio": 0.9884468268269441,
+          "lower": 0.8703393222727438,
+          "upper": 1.0977676628490318,
+          "allocatedBytes": 20944,
+          "status": "uncertain"
+        },
+        "DirectRgb444": {
+          "managedUs": 1612.95154296875,
+          "nativeUs": 1450.0773125,
+          "ratio": 1.11232106665261,
+          "lower": 0.8272008364200795,
+          "upper": 1.3276779032023542,
+          "allocatedBytes": 42936,
+          "status": "uncertain"
+        }
+      }
+    },
+    "C": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "JLP774C",
+        "productionChanged": false,
+        "productionAccepted": false,
+        "publicationPostponed": true,
+        "requiredMaterialPaths": 283,
+        "baseline": {
+          "windowsSha256": "1bd4c1905c8cbb6c9684dfd6204cfb9660db471e95a2f6699bc45d926cd904ae",
+          "linuxSha256": "e1b95337f8036296156eb74858f35afd664ed29c70d46d700ce30c703b480431"
+        },
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs"
+        ],
+        "newPaths": [],
+        "repeatedWork": "Existing two-low-row inverse computes four pair products pernonconstantrow whenonlyfirsttwofrequenciesarenonzero, stores/loads intermediaterows and loops/replicateshorizontal output. Existingmodel shows8580low2x2sparseblocks versus2RGBblocks; authoredhorizontalcontrol hasonly horizontalAC4/unitquantizers. Countsarenottimes. RowProduct/DCwrap/ACsaturation sourceunchangedbyJBCcolumns.",
+        "endState": "Guardactualdequantizedlow2x2support insideexistingtwoLowRows gate; transformeachnonconstantrow withonlyRow01 product+bias/shift/saturation; constantrowskeepworddc*8wrap. Keepfirst/second transformedrowsinVec128 ratherthan64wordrows. Sharedtwo-rowpublication retainscurrentzero-row/Avx512BWpublisher/Avx2 math, usesoneVector512 repeated64bitrowstoreforhorizontal. Genericfullrows/AVX2/scalar andglobalDC paths remain actualfallbacks. ScopedNoInlining lowfrequencyhelper isolates registerlifetimes; sharedpublication removesduplication. No entropygrammar/dequantizationfusion or densepairedrows replay.",
+        "correctness": "Exactoriginalfixedpoint boundaries: DCdequantizewide+saturate, ACwordwrap; DC-onlyrowwrap versusnonconstantrowInt32sum+bias1024shift11saturation; signedword+32columnbiasbeforewiden, modularsum, shift20, unsignedbyteclip/reflection/order. Preservefullinput/outputguard,polls,bounds,ownership/root/refusal/cancel/recovery/survivors. No encoder/packet/metadata/precisionpolicychange.",
+        "tests": "ActualcompleteInverse against independentcosine/T81scalaroracle, natural/scan-order, fullInt32coefficients/UInt16quantizers/signedword/DCbias/saturationboundary, low2x2plusineligibleadditionalbasis; canary/inputimmutability/noallocation/root0/cancel. ExistingJpegPackedInverse/Reference/TwoRow tests retained, portable/scalar/AVX2off/AVX512off atacceptance.",
+        "storage": "No newownedheap/staticformatcapacity/retainedstate/pool/session/root/API. Existingblockstackcanremain256Bcoarseboundary; actualJITframes/code separatelymeasured, no physical/nativepeakclaim. Completehorizontal20944Bop/531468Bindependentoutput/scratch0.",
+        "performance": "ExistingdemonstratedgapCmykAdobeAc438.61/native392.08us upper1.160. ExistingDirectRgb444 affectedcompanion, not tuningtargetinferredfromuncertainty. Existing sparse affectedcompanion likewise. Reusefrozen25affectedJBCcases and4provedunchangedDC/validation costsifaccepted. Original/candidateprimary+RGBshorts, independentconfirmationonlyifuseful; no fixture/settingsgrid. Completepublicparse/preparation/entropy/inverse/normalization/independentoutput/dispose. Existinglabelednativecontext/idle-v2/oneCPU, currentactualimmutableDLL.",
+        "risks": "Extraeligibilityscans/dispatch/calls/code/regpressuremayoffsetzeroterm/storage removal, especiallydenseRGB. Sharepublicationwithoutmovingnecessaryworkoutsideoperation; revisebasedactualJIT/completeevidence. Temporaryduplication/regressionallowedwithincoherentstage; nofixedthreshold/bans. FocusedW/LthenbroadISA/SAMEpackageonceifaccepted.",
+        "sourcesBefore": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "858aab2cb117aadcf528b7011189466da68ab90c4a1f775bb514fd72c1071381",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+        },
+        "affectedExistingCases": [
+          "DirectRgb444",
+          "Decode8",
+          "NativeDecode8",
+          "NativeDecode420",
+          "NativeDecode422",
+          "OwnedDecodeGray",
+          "ProgressiveGray",
+          "Progressive420",
+          "Progressive444",
+          "Progressive422",
+          "NativeDecode420Restart",
+          "StreamDecode420Restart",
+          "NativeDecodeCancelable8",
+          "ProgressiveCancelable444",
+          "DirectRgb422",
+          "DirectRgb420",
+          "CmykAdobe",
+          "CmykAdobeAc",
+          "CmykAdobeGeneral",
+          "CmykAdobeSparse2D",
+          "Ycck420",
+          "CmykCaller",
+          "Ycck420CallerRgb",
+          "Decode411",
+          "Decode410",
+          "CallerGray",
+          "CallerRgb",
+          "ValidateJpegBaseline420",
+          "ValidateJpegProgressive420"
+        ],
+        "qualifiedBaseline": {
+          "windowsSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+          "linuxSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a"
+        },
+        "revision": "Bprimary446.22to403.48us/9.58percentraw13.33percentnormalized, bothviewsseparate/upper.981pass; RGBraw1608.16vs1451.36, originalcounter1455.16, nativeclockmoves~6percent andnormalizedadverseintervalsoverlap. Materialcompanioncontradictionnotaccepted. ActualInverseJIT660B makesextraNonPackedIndexOfValueType(short,count6) calloneachnonDCblock. C replacesONLY six-wordprefixsearch withsafechecked8B+4BMemoryMarshalReads/ORzero, samepredicate; trailing54wordsearch unchanged. No scalarprecisionpolicy/callboundary/publisherchange, no repeatedunchangedBcandidate sampling.",
+        "actualCodeLead": "AInverse551B/frame40; InverseAvx2 1584B/frame232 tail-jumps lowhelper afterprologue/dispatch. Lowhelper407B/frame136 calls sharedpublisher156B, which tailjumps existing512leaf fornonzerosecondrow. Bdirectentry removesgenericInverseAvx2prologue/epilogue/argumentboundary fromlow-supportpath; inlinepublisher removesvectorbyvalueABI boundary. Not a claim thatthreefullcallframes persist simultaneously. No newcapture/fixture."
+      },
+      "producers": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "1bd4c1905c8cbb6c9684dfd6204cfb9660db471e95a2f6699bc45d926cd904ae",
+          "candidateSha256": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+          "internalTestAssemblySha256": "0fc3d08e7c750be05c02448ef893e52952c252b23b695a531215b191bf4572bb",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "40a89005098a7829d8b7115333cb06b5e5755399fa83ae2829448977d9586cf0",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "e1b95337f8036296156eb74858f35afd664ed29c70d46d700ce30c703b480431",
+          "candidateSha256": "6a4f13b803829c4f166d4801036e4c5bc581d63a13321020d937722fe5c21ceb",
+          "internalTestAssemblySha256": "ef0b00dcb54b64fcb17b61a0cff60cb1bbca4c185bc95d2e61ff443bf1861806",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "40a89005098a7829d8b7115333cb06b5e5755399fa83ae2829448977d9586cf0",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "shorts": {
+        "CmykAdobeAc": {
+          "managedUs": 366.4921053921569,
+          "nativeUs": 394.7044479166667,
+          "ratio": 0.9285228664804247,
+          "lower": 0.8379465203971597,
+          "upper": 1.0219926903626046,
+          "allocatedBytes": 20944,
+          "status": "uncertain"
+        },
+        "DirectRgb444": {
+          "managedUs": 1473.8399351851854,
+          "nativeUs": 1454.87259375,
+          "ratio": 1.0130371150825628,
+          "lower": 0.587431233312531,
+          "upper": 1.9408107194189286,
+          "allocatedBytes": 42936,
+          "status": "uncertain"
+        }
+      }
+    },
+    "D": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "JLP774D",
+        "productionChanged": false,
+        "productionAccepted": false,
+        "publicationPostponed": true,
+        "requiredMaterialPaths": 283,
+        "baseline": {
+          "windowsSha256": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+          "linuxSha256": "6a4f13b803829c4f166d4801036e4c5bc581d63a13321020d937722fe5c21ceb"
+        },
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs"
+        ],
+        "newPaths": [],
+        "repeatedWork": "Existing two-low-row inverse computes four pair products pernonconstantrow whenonlyfirsttwofrequenciesarenonzero, stores/loads intermediaterows and loops/replicateshorizontal output. Existingmodel shows8580low2x2sparseblocks versus2RGBblocks; authoredhorizontalcontrol hasonly horizontalAC4/unitquantizers. Countsarenottimes. RowProduct/DCwrap/ACsaturation sourceunchangedbyJBCcolumns.",
+        "endState": "Guardactualdequantizedlow2x2support insideexistingtwoLowRows gate; transformeachnonconstantrow withonlyRow01 product+bias/shift/saturation; constantrowskeepworddc*8wrap. Keepfirst/second transformedrowsinVec128 ratherthan64wordrows. Sharedtwo-rowpublication retainscurrentzero-row/Avx512BWpublisher/Avx2 math, usesoneVector512 repeated64bitrowstoreforhorizontal. Genericfullrows/AVX2/scalar andglobalDC paths remain actualfallbacks. ScopedNoInlining lowfrequencyhelper isolates registerlifetimes; sharedpublication removesduplication. No entropygrammar/dequantizationfusion or densepairedrows replay.",
+        "correctness": "Exactoriginalfixedpoint boundaries: DCdequantizewide+saturate, ACwordwrap; DC-onlyrowwrap versusnonconstantrowInt32sum+bias1024shift11saturation; signedword+32columnbiasbeforewiden, modularsum, shift20, unsignedbyteclip/reflection/order. Preservefullinput/outputguard,polls,bounds,ownership/root/refusal/cancel/recovery/survivors. No encoder/packet/metadata/precisionpolicychange.",
+        "tests": "ActualcompleteInverse against independentcosine/T81scalaroracle, natural/scan-order, fullInt32coefficients/UInt16quantizers/signedword/DCbias/saturationboundary, low2x2plusineligibleadditionalbasis; canary/inputimmutability/noallocation/root0/cancel. ExistingJpegPackedInverse/Reference/TwoRow tests retained, portable/scalar/AVX2off/AVX512off atacceptance.",
+        "storage": "No newownedheap/staticformatcapacity/retainedstate/pool/session/root/API. Existingblockstackcanremain256Bcoarseboundary; actualJITframes/code separatelymeasured, no physical/nativepeakclaim. Completehorizontal20944Bop/531468Bindependentoutput/scratch0.",
+        "performance": "ExistingdemonstratedgapCmykAdobeAc438.61/native392.08us upper1.160. ExistingDirectRgb444 affectedcompanion, not tuningtargetinferredfromuncertainty. Existing sparse affectedcompanion likewise. Reusefrozen25affectedJBCcases and4provedunchangedDC/validation costsifaccepted. Original/candidateprimary+RGBshorts, independentconfirmationonlyifuseful; no fixture/settingsgrid. Completepublicparse/preparation/entropy/inverse/normalization/independentoutput/dispose. Existinglabelednativecontext/idle-v2/oneCPU, currentactualimmutableDLL.",
+        "risks": "Extraeligibilityscans/dispatch/calls/code/regpressuremayoffsetzeroterm/storage removal, especiallydenseRGB. Sharepublicationwithoutmovingnecessaryworkoutsideoperation; revisebasedactualJIT/completeevidence. Temporaryduplication/regressionallowedwithincoherentstage; nofixedthreshold/bans. FocusedW/LthenbroadISA/SAMEpackageonceifaccepted.",
+        "sourcesBefore": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "40a89005098a7829d8b7115333cb06b5e5755399fa83ae2829448977d9586cf0",
+          "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+        },
+        "affectedExistingCases": [
+          "DirectRgb444",
+          "Decode8",
+          "NativeDecode8",
+          "NativeDecode420",
+          "NativeDecode422",
+          "OwnedDecodeGray",
+          "ProgressiveGray",
+          "Progressive420",
+          "Progressive444",
+          "Progressive422",
+          "NativeDecode420Restart",
+          "StreamDecode420Restart",
+          "NativeDecodeCancelable8",
+          "ProgressiveCancelable444",
+          "DirectRgb422",
+          "DirectRgb420",
+          "CmykAdobe",
+          "CmykAdobeAc",
+          "CmykAdobeGeneral",
+          "CmykAdobeSparse2D",
+          "Ycck420",
+          "CmykCaller",
+          "Ycck420CallerRgb",
+          "Decode411",
+          "Decode410",
+          "CallerGray",
+          "CallerRgb",
+          "ValidateJpegBaseline420",
+          "ValidateJpegProgressive420"
+        ],
+        "qualifiedBaseline": {
+          "windowsSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+          "linuxSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a"
+        },
+        "revision": "Cprimary446.22to372.34us/16.56percentraw15.59percentnormalized, bothviewsseparate/upper.948pass. RGB1473.84short; completedconfirmationafterguardI/Owait.01249fails, retainedunscored. Oneguardedreplacement1570.64us/nativebefore1561.42after1452.41, confidenceadverseoverlap butrawlossrelativeto1455.16original. Do notacceptunresolvedcompanion. DpreservesentireoriginalInverseentry/globalDC/scalarbody andplacesbounded12Bzeroprefix underexistingInverseAvx2twoLowRowsgate. Cinlinepublisher/directregisterlowrowsretained; onlypotentialtwoLowRows blocks paypredicate/dispatch. A hadgeneral6wordsearch andnoninlinepublisher407B/frame136; D safe8B+4Bprefix+inline357B/frame32 publicationisamateriallyrevisedeligibility/ABIboundary, notunchangedA replay. MaycostCMYKextraGenericprologue/tailjump; completeevidence decides. No furthervariantswithoutnewconcretelead.",
+        "actualCodeLead": "AInverse551B/frame40; InverseAvx2 1584B/frame232 tail-jumps lowhelper afterprologue/dispatch. Lowhelper407B/frame136 calls sharedpublisher156B, which tailjumps existing512leaf fornonzerosecondrow. Bdirectentry removesgenericInverseAvx2prologue/epilogue/argumentboundary fromlow-supportpath; inlinepublisher removesvectorbyvalueABI boundary. Not a claim thatthreefullcallframes persist simultaneously. No newcapture/fixture.",
+        "exactPredicate": "ExistingtwoLowRows hasalreadyprovedinput16..63zero. ORfourchecked64/32bitreadsoverinput2..7and10..15 (24Btotal) testsbothsix-wordtails, no generalsearch. Same2x2supportwithoutrechecking48already-provedzeros or chargingdenseblocks. OriginalInverseentryrestoredverbatim."
+      },
+      "producers": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+          "candidateSha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+          "internalTestAssemblySha256": "4d73300d817e7188772c3be0216110f1bd89e8814662b27c0a2929e7aaff0a3d",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e8365b6c6f1cf726c3f8a90f4299ed72a0f359b3a063ae42a22b96f28f635bc0",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "6a4f13b803829c4f166d4801036e4c5bc581d63a13321020d937722fe5c21ceb",
+          "candidateSha256": "140b2ea82b8c98c90a19feaf63d17d74bdba270269df0b0afe049b920229988a",
+          "internalTestAssemblySha256": "0898291b16e76bee7add10c55990ddf7b7c2d878157f4a956aa389d5f46d9ea7",
+          "focused": {
+            "internal-normal": 462,
+            "internal-scalar": 462,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e8365b6c6f1cf726c3f8a90f4299ed72a0f359b3a063ae42a22b96f28f635bc0",
+            "tests/Lokad.Image.Tests/JpegLowFrequencyRowsTests.cs": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "shorts": {
+        "CmykAdobeAc": {
+          "managedUs": 376.81743181818183,
+          "nativeUs": 391.976765625,
+          "ratio": 0.9613259378201999,
+          "lower": 0.8836551631711678,
+          "upper": 1.0395911278578052,
+          "allocatedBytes": 20944,
+          "status": "uncertain"
+        },
+        "DirectRgb444": {
+          "managedUs": 1561.733133101852,
+          "nativeUs": 1539.17059375,
+          "ratio": 1.0146588945003692,
+          "lower": 0.6288633621394671,
+          "upper": 1.421430132597946,
+          "allocatedBytes": 42936,
+          "status": "uncertain"
+        }
+      }
+    }
+  },
+  "finalPrimaryAndRgb": {
+    "CmykAdobeAc": {
+      "project": "Lokad.Image",
+      "originalObservation": "tmp/jlp774b-baseline-CmykAdobeAc-confirm-observation.json",
+      "immutableOriginalReused": true,
+      "currentObservation": "tmp/jlp774d-candidate-CmykAdobeAc-confirm-observation.json",
+      "originalUs": 446.2156491477273,
+      "currentUs": 408.834924303519,
+      "savedUs": 37.38072484420826,
+      "rawReduction": 0.08377277873513744,
+      "normalizedReduction": 0.14296559663295005,
+      "nativePointChange": 0.06906702655723085,
+      "views": {
+        "statistics": {
+          "originalLower": 442.2261974198807,
+          "originalUpper": 450.20510087557386,
+          "currentLower": 408.03575628287695,
+          "currentUpper": 409.6340923241611,
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "originalLower": 442.1212091511227,
+          "originalUpper": 451.8131818459011,
+          "currentLower": 407.5124720564399,
+          "currentUpper": 410.83921947581814,
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    },
+    "DirectRgb444": {
+      "project": "Lokad.Image",
+      "originalObservation": "tmp/jlp774d-baseline-DirectRgb444-confirm-observation.json",
+      "immutableOriginalReused": true,
+      "currentObservation": "tmp/jlp774d-candidate-DirectRgb444-confirm-observation.json",
+      "originalUs": 1447.2771024305557,
+      "currentUs": 1447.6132881944445,
+      "savedUs": -0.33618576388880683,
+      "rawReduction": -0.00023228845624956307,
+      "normalizedReduction": 0.0015664090435923983,
+      "nativePointChange": 0.00180151941614759,
+      "views": {
+        "statistics": {
+          "originalLower": 1440.1994063731258,
+          "originalUpper": 1454.3547984879858,
+          "currentLower": 1441.3618593100775,
+          "currentUpper": 1453.8647170788115,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "originalLower": 1440.2012154009033,
+          "originalUpper": 1454.3566075157632,
+          "currentLower": 1433.5167707578341,
+          "currentUpper": 1475.3125891958696,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    }
+  },
+  "adverseIndependentComparisons": {
+    "Ycck420": {
+      "project": "Lokad.Image",
+      "originalObservation": "tmp/jlp774d-baseline-Ycck420-confirm-observation.json",
+      "immutableOriginalReused": true,
+      "currentObservation": "tmp/jlp774d-candidate-Ycck420-confirm-observation.json",
+      "originalUs": 423.8305350694445,
+      "currentUs": 556.776449604743,
+      "savedUs": -132.94591453529847,
+      "rawReduction": -0.31367705612224306,
+      "normalizedReduction": -0.310403667689074,
+      "nativePointChange": 0.0024980000543968206,
+      "views": {
+        "statistics": {
+          "originalLower": 421.6697927044021,
+          "originalUpper": 425.99127743448696,
+          "currentLower": 553.9348006596657,
+          "currentUpper": 559.6180985498204,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        },
+        "unfilteredActualStatistics": {
+          "originalLower": 421.67113853773526,
+          "originalUpper": 425.99262326782014,
+          "currentLower": 553.6272450309516,
+          "currentUpper": 561.2097753494833,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        }
+      }
+    },
+    "Ycck420CallerRgb": {
+      "project": "Lokad.Image",
+      "originalObservation": "tmp/jlp774d-baseline-Ycck420CallerRgb-confirm-observation.json",
+      "immutableOriginalReused": true,
+      "currentObservation": "tmp/jlp774d-candidate-Ycck420CallerRgb-confirm-observation.json",
+      "originalUs": 436.830700071839,
+      "currentUs": 604.7956664186507,
+      "savedUs": -167.96496634681176,
+      "rawReduction": -0.3845081545761071,
+      "normalizedReduction": -0.3840352596240044,
+      "nativePointChange": 0.00034167839931420474,
+      "views": {
+        "statistics": {
+          "originalLower": 435.691894953419,
+          "originalUpper": 437.96950519025893,
+          "currentLower": 603.8539231489827,
+          "currentUpper": 605.7374096883188,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        },
+        "unfilteredActualStatistics": {
+          "originalLower": 435.6932214620398,
+          "originalUpper": 437.97083169887964,
+          "currentLower": 603.8552951727924,
+          "currentUpper": 605.7387817121286,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        }
+      }
+    },
+    "CallerGray": {
+      "project": "Lokad.Image",
+      "originalObservation": "tmp/jlp774d-baseline-CallerGray-confirm-observation.json",
+      "immutableOriginalReused": true,
+      "currentObservation": "tmp/jlp774d-candidate-CallerGray-confirm-observation.json",
+      "originalUs": 609.7414337797619,
+      "currentUs": 655.4594894736844,
+      "savedUs": -45.71805569392245,
+      "rawReduction": -0.07497941448806933,
+      "normalizedReduction": -0.07524031763018924,
+      "nativePointChange": -0.00024264635341686436,
+      "views": {
+        "statistics": {
+          "originalLower": 604.5483803328331,
+          "originalUpper": 614.9344872266907,
+          "currentLower": 652.8729212969497,
+          "currentUpper": 658.0460576504189,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        },
+        "unfilteredActualStatistics": {
+          "originalLower": 604.5499755709283,
+          "originalUpper": 614.9360824647861,
+          "currentLower": 652.2359029312934,
+          "currentUpper": 661.4588986037943,
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "rawLossSeparated": true,
+          "normalizedLossSeparated": true
+        }
+      }
+    }
+  },
+  "finalStandaloneObservations": {
+    "baseline-CallerGray": {
+      "runId": "jlp774d-baseline-CallerGray-confirm",
+      "caseId": "CallerGray",
+      "subject": "baseline",
+      "managedUs": 609.7414337797619,
+      "nativeUs": 647.646611328125,
+      "ratio": 0.9414724374599426,
+      "lower": 0.9222355135592101,
+      "upper": 0.9611856351799346,
+      "allocatedBytes": 273444,
+      "status": "pass",
+      "librarySha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4"
+    },
+    "baseline-DirectRgb444": {
+      "runId": "jlp774d-baseline-DirectRgb444-confirm",
+      "caseId": "DirectRgb444",
+      "subject": "baseline",
+      "managedUs": 1447.2771024305557,
+      "nativeUs": 1449.67690625,
+      "ratio": 0.9983445940201586,
+      "lower": 0.9911557178121992,
+      "upper": 1.0047054301218488,
+      "allocatedBytes": 42936,
+      "status": "uncertain",
+      "librarySha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4"
+    },
+    "baseline-Ycck420": {
+      "runId": "jlp774d-baseline-Ycck420-confirm",
+      "caseId": "Ycck420",
+      "subject": "baseline",
+      "managedUs": 423.8305350694445,
+      "nativeUs": 706.8722532552084,
+      "ratio": 0.5995857569987617,
+      "lower": 0.5958795103862644,
+      "upper": 0.6031727253696797,
+      "allocatedBytes": 895563,
+      "status": "pass",
+      "librarySha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4"
+    },
+    "baseline-Ycck420CallerRgb": {
+      "runId": "jlp774d-baseline-Ycck420CallerRgb-confirm",
+      "caseId": "Ycck420CallerRgb",
+      "subject": "baseline",
+      "managedUs": 436.830700071839,
+      "nativeUs": 604.5867083333334,
+      "ratio": 0.7225277930374154,
+      "lower": 0.719642054689308,
+      "upper": 0.725084334631212,
+      "allocatedBytes": 762721,
+      "status": "pass",
+      "librarySha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4"
+    },
+    "candidate-CallerGray": {
+      "runId": "jlp774d-candidate-CallerGray-confirm",
+      "caseId": "CallerGray",
+      "subject": "candidate",
+      "managedUs": 655.4594894736844,
+      "nativeUs": 647.4894622395834,
+      "ratio": 1.0123091226944971,
+      "lower": 1.0060324350257148,
+      "upper": 1.0228946222884583,
+      "allocatedBytes": 273439,
+      "status": "gap",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-CallerRgb": {
+      "runId": "jlp774d-candidate-CallerRgb-confirm",
+      "caseId": "CallerRgb",
+      "subject": "candidate",
+      "managedUs": 952.7567406031467,
+      "nativeUs": 1158.9255598958332,
+      "ratio": 0.8221034841002062,
+      "lower": 0.8125461359502267,
+      "upper": 0.830497353971563,
+      "allocatedBytes": 657359,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-CmykAdobeAc": {
+      "runId": "jlp774d-candidate-CmykAdobeAc-confirm",
+      "caseId": "CmykAdobeAc",
+      "subject": "candidate",
+      "managedUs": 408.834924303519,
+      "nativeUs": 426.95335546875,
+      "ratio": 0.9575634412210232,
+      "lower": 0.9513822627274408,
+      "upper": 0.9637428858245957,
+      "allocatedBytes": 20944,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-CmykAdobeGeneral": {
+      "runId": "jlp774d-candidate-CmykAdobeGeneral-confirm",
+      "caseId": "CmykAdobeGeneral",
+      "subject": "candidate",
+      "managedUs": 1386.6765003156565,
+      "nativeUs": 3114.0448854166666,
+      "ratio": 0.44529753145485446,
+      "lower": 0.44255410716739074,
+      "upper": 0.44861710529450494,
+      "allocatedBytes": 20944,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-CmykAdobeSparse2D": {
+      "runId": "jlp774d-candidate-CmykAdobeSparse2D-confirm",
+      "caseId": "CmykAdobeSparse2D",
+      "subject": "candidate",
+      "managedUs": 409.6195869318182,
+      "nativeUs": 441.08769986979166,
+      "ratio": 0.9286579223422853,
+      "lower": 0.9182657213556964,
+      "upper": 0.9363828690992486,
+      "allocatedBytes": 20944,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Decode410": {
+      "runId": "jlp774d-candidate-Decode410-confirm",
+      "caseId": "Decode410",
+      "subject": "candidate",
+      "managedUs": 343.5172584459459,
+      "nativeUs": 507.7169915364583,
+      "ratio": 0.6765920073038929,
+      "lower": 0.6716470668872303,
+      "upper": 0.6801656790856817,
+      "allocatedBytes": 189090,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Decode411": {
+      "runId": "jlp774d-candidate-Decode411-confirm",
+      "caseId": "Decode411",
+      "subject": "candidate",
+      "managedUs": 384.22649862258953,
+      "nativeUs": 448.43670377604167,
+      "ratio": 0.8568132255616613,
+      "lower": 0.850907333491537,
+      "upper": 0.8641957490085856,
+      "allocatedBytes": 219551,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Decode8": {
+      "runId": "jlp774d-candidate-Decode8-confirm",
+      "caseId": "Decode8",
+      "subject": "candidate",
+      "managedUs": 1620.3478874289774,
+      "nativeUs": 1895.6786067708333,
+      "ratio": 0.8547587558574267,
+      "lower": 0.8453228015335585,
+      "upper": 0.8667964547474416,
+      "allocatedBytes": 4320,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-DirectRgb420": {
+      "runId": "jlp774d-candidate-DirectRgb420-confirm",
+      "caseId": "DirectRgb420",
+      "subject": "candidate",
+      "managedUs": 745.4994712009802,
+      "nativeUs": 742.5783138020834,
+      "ratio": 1.0039338038084364,
+      "lower": 0.9981545534775804,
+      "upper": 1.0095950043416786,
+      "allocatedBytes": 258452,
+      "status": "uncertain",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-DirectRgb422": {
+      "runId": "jlp774d-candidate-DirectRgb422-confirm",
+      "caseId": "DirectRgb422",
+      "subject": "candidate",
+      "managedUs": 1121.2751292613634,
+      "nativeUs": 1093.2285794270833,
+      "ratio": 1.0256547901894206,
+      "lower": 1.0164342840553058,
+      "upper": 1.0347806096733476,
+      "allocatedBytes": 330260,
+      "status": "gap",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-DirectRgb444": {
+      "runId": "jlp774d-candidate-DirectRgb444-confirm",
+      "caseId": "DirectRgb444",
+      "subject": "candidate",
+      "managedUs": 1447.6132881944445,
+      "nativeUs": 1452.28852734375,
+      "ratio": 0.9967807780194639,
+      "lower": 0.9858020224256626,
+      "upper": 1.0167890973686182,
+      "allocatedBytes": 42936,
+      "status": "uncertain",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-NativeDecode420": {
+      "runId": "jlp774d-candidate-NativeDecode420-confirm",
+      "caseId": "NativeDecode420",
+      "subject": "candidate",
+      "managedUs": 833.0000475694445,
+      "nativeUs": 1008.42766796875,
+      "ratio": 0.8260384696180889,
+      "lower": 0.806198633577222,
+      "upper": 0.8348938750720186,
+      "allocatedBytes": 258450,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-NativeDecode420Restart": {
+      "runId": "jlp774d-candidate-NativeDecode420Restart-confirm",
+      "caseId": "NativeDecode420Restart",
+      "subject": "candidate",
+      "managedUs": 962.5292731643357,
+      "nativeUs": 1011.3320559895834,
+      "ratio": 0.9517440562313686,
+      "lower": 0.9413683880523944,
+      "upper": 0.9608106046670668,
+      "allocatedBytes": 262824,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-NativeDecode422": {
+      "runId": "jlp774d-candidate-NativeDecode422-confirm",
+      "caseId": "NativeDecode422",
+      "subject": "candidate",
+      "managedUs": 1103.1837647727275,
+      "nativeUs": 1344.4426692708332,
+      "ratio": 0.8205509911189042,
+      "lower": 0.8159298405925319,
+      "upper": 0.8272895973615825,
+      "allocatedBytes": 330260,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-NativeDecode8": {
+      "runId": "jlp774d-candidate-NativeDecode8-confirm",
+      "caseId": "NativeDecode8",
+      "subject": "candidate",
+      "managedUs": 1542.8023431712963,
+      "nativeUs": 1722.6067916666668,
+      "ratio": 0.8956207247265031,
+      "lower": 0.8653473474143141,
+      "upper": 0.9213973964385164,
+      "allocatedBytes": 42936,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-NativeDecodeCancelable8": {
+      "runId": "jlp774d-candidate-NativeDecodeCancelable8-confirm",
+      "caseId": "NativeDecodeCancelable8",
+      "subject": "candidate",
+      "managedUs": 1566.1891519886365,
+      "nativeUs": 1722.4619114583334,
+      "ratio": 0.9092736051635606,
+      "lower": 0.898593315276593,
+      "upper": 0.9253106687391703,
+      "allocatedBytes": 42936,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-OwnedDecodeGray": {
+      "runId": "jlp774d-candidate-OwnedDecodeGray-confirm",
+      "caseId": "OwnedDecodeGray",
+      "subject": "candidate",
+      "managedUs": 606.4044355158729,
+      "nativeUs": 680.386177734375,
+      "ratio": 0.8912650717496133,
+      "lower": 0.8851969734108411,
+      "upper": 0.8959690357846267,
+      "allocatedBytes": 140455,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Progressive420": {
+      "runId": "jlp774d-candidate-Progressive420-confirm",
+      "caseId": "Progressive420",
+      "subject": "candidate",
+      "managedUs": 1557.6683739346593,
+      "nativeUs": 1951.8397265625,
+      "ratio": 0.7980513731411548,
+      "lower": 0.7915679532700864,
+      "upper": 0.8071949144425118,
+      "allocatedBytes": 243664,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Progressive422": {
+      "runId": "jlp774d-candidate-Progressive422-confirm",
+      "caseId": "Progressive422",
+      "subject": "candidate",
+      "managedUs": 2013.7751794642854,
+      "nativeUs": 2246.977484375,
+      "ratio": 0.8962151127315011,
+      "lower": 0.8866404082729233,
+      "upper": 0.9048861285453974,
+      "allocatedBytes": 315496,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Progressive444": {
+      "runId": "jlp774d-candidate-Progressive444-confirm",
+      "caseId": "Progressive444",
+      "subject": "candidate",
+      "managedUs": 3163.986756392045,
+      "nativeUs": 3353.6303802083335,
+      "ratio": 0.9434512446763715,
+      "lower": 0.9233748615130798,
+      "upper": 0.952574546823878,
+      "allocatedBytes": 169664,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-ProgressiveCancelable444": {
+      "runId": "jlp774d-candidate-ProgressiveCancelable444-confirm",
+      "caseId": "ProgressiveCancelable444",
+      "subject": "candidate",
+      "managedUs": 3338.5227563920453,
+      "nativeUs": 3356.1023125,
+      "ratio": 0.9947619129361824,
+      "lower": 0.9894725784076899,
+      "upper": 1.0016217225370843,
+      "allocatedBytes": 169664,
+      "status": "uncertain",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-ProgressiveGray": {
+      "runId": "jlp774d-candidate-ProgressiveGray-confirm",
+      "caseId": "ProgressiveGray",
+      "subject": "candidate",
+      "managedUs": 1629.7831453125,
+      "nativeUs": 1709.167671875,
+      "ratio": 0.9535536929063179,
+      "lower": 0.949490217593328,
+      "upper": 0.9581909271464067,
+      "allocatedBytes": 151432,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-StreamDecode420Restart": {
+      "runId": "jlp774d-candidate-StreamDecode420Restart-confirm",
+      "caseId": "StreamDecode420Restart",
+      "subject": "candidate",
+      "managedUs": 957.3842778846154,
+      "nativeUs": 993.8329583333334,
+      "ratio": 0.9633251441873665,
+      "lower": 0.9574024425873411,
+      "upper": 0.9716156785761116,
+      "allocatedBytes": 262920,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Ycck420": {
+      "runId": "jlp774d-candidate-Ycck420-confirm",
+      "caseId": "Ycck420",
+      "subject": "candidate",
+      "managedUs": 556.776449604743,
+      "nativeUs": 708.6380201822916,
+      "ratio": 0.7856993750653072,
+      "lower": 0.7799573943624385,
+      "upper": 0.79270939473557,
+      "allocatedBytes": 895559,
+      "status": "pass",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    },
+    "candidate-Ycck420CallerRgb": {
+      "runId": "jlp774d-candidate-Ycck420CallerRgb-confirm",
+      "caseId": "Ycck420CallerRgb",
+      "subject": "candidate",
+      "managedUs": 604.7956664186507,
+      "nativeUs": 604.7932825520834,
+      "ratio": 1.0000039416220983,
+      "lower": 0.9972601557928745,
+      "upper": 1.0027565362518103,
+      "allocatedBytes": 762713,
+      "status": "uncertain",
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61"
+    }
+  },
+  "codeSourceProof": {
+    "project": "Lokad.Image",
+    "stage": "JLP774D",
+    "originalSha256": "b107350c9e303ce6579fdfa5a2f833f19620d1432412df527a54d97ff5e26d6c",
+    "currentSha256": "e8365b6c6f1cf726c3f8a90f4299ed72a0f359b3a063ae42a22b96f28f635bc0",
+    "originalReconstructedExactlyAfterRemovingLowSupportDispatchAndRestoringRecordedColumnDriver": true,
+    "originalInverseEntryAndGlobalDcVerbatim": true,
+    "reconstructionScope": "Fullnormalizedsourcetext exactafterremovingonlyrecorded low-supportdispatch/3privatehelpers andrestoringrecordedtwo-rowcolumnbranch. Raworiginal/currentfilesarchivedwithhashes. No otherproductionedits.",
+    "unchangedMethodBodies": {
+      "internal static void Dequantize(": true,
+      "internal static void DequantizeScanOrder(": true,
+      "internal static void StoreTwoRowColumnsAvx512(": true,
+      "private static Vector256<int> RowProduct(": true,
+      "private static void StoreRow(": true
+    },
+    "allFixedPointBoundariesAndPortableScalarMathPreserved": true,
+    "actualCode": {
+      "Inverse": {
+        "codeBytes": 551,
+        "explicitStackSubtractions": [
+          40,
+          128,
+          128
+        ],
+        "calls": [
+          "FF15D8125101         call     [Lokad.Image.Internal.JpegInverseTransform:DequantizeScanOrder(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],System.Span`1[short])]",
+          "FF15C6125101         call     [Lokad.Image.Internal.JpegInverseTransform:Dequantize(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],System.Span`1[short])]",
+          "FF1538115101         call     [System.SpanHelpers:NonPackedIndexOfValueType[short,System.SpanHelpers+Negate`1[short]](byref,short,int):int]",
+          "FF1595125101         call     [Lokad.Image.Internal.JpegInverseTransform:InverseAvx2(System.ReadOnlySpan`1[short],System.Span`1[short],System.Span`1[byte])]",
+          "FF15E6115101         call     [System.SpanHelpers:Fill[byte](byref,nuint,byte)]"
+        ]
+      },
+      "InverseAvx2": {
+        "codeBytes": 1761,
+        "explicitStackSubtractions": [
+          280
+        ],
+        "calls": [
+          "FF158B0E5101         call     [System.SpanHelpers:NonPackedIndexOfValueType[short,System.SpanHelpers+Negate`1[short]](byref,short,int):int]",
+          "FF15A20D5101         call     [System.SpanHelpers:NonPackedIndexOfValueType[short,System.SpanHelpers+Negate`1[short]](byref,short,int):int]",
+          "FF15C8125101         call     [System.SpanHelpers:Fill[short](byref,nuint,short)]",
+          "FF155E135101         call     [Lokad.Image.Internal.JpegInverseTransform:StoreTwoRowColumnsAvx512(System.Runtime.Intrinsics.Vector128`1[short],System.Runtime.Intrinsics.Vector128`1[short],System.Span`1[byte])]"
+        ]
+      },
+      "InverseLow2x2": {
+        "codeBytes": 357,
+        "explicitStackSubtractions": [
+          32
+        ],
+        "calls": [
+          "FF151DF35001         call     [Lokad.Image.Internal.JpegInverseTransform:StoreTwoRowColumnsAvx512(System.Runtime.Intrinsics.Vector128`1[short],System.Runtime.Intrinsics.Vector128`1[short],System.Span`1[byte])]"
+        ]
+      }
+    },
+    "invalidation": {
+      "project": "Lokad.Image",
+      "affected": [
+        "DirectRgb444",
+        "Decode8",
+        "NativeDecode8",
+        "NativeDecode420",
+        "NativeDecode422",
+        "OwnedDecodeGray",
+        "ProgressiveGray",
+        "Progressive420",
+        "Progressive444",
+        "Progressive422",
+        "NativeDecode420Restart",
+        "StreamDecode420Restart",
+        "NativeDecodeCancelable8",
+        "ProgressiveCancelable444",
+        "DirectRgb422",
+        "DirectRgb420",
+        "CmykAdobeAc",
+        "CmykAdobeGeneral",
+        "CmykAdobeSparse2D",
+        "Ycck420",
+        "Ycck420CallerRgb",
+        "Decode411",
+        "Decode410",
+        "CallerGray",
+        "CallerRgb"
+      ],
+      "reused": [
+        "CmykAdobe",
+        "CmykCaller",
+        "ValidateJpegBaseline420",
+        "ValidateJpegProgressive420"
+      ],
+      "reason": "DrestoresentireoriginalInverseentry/globalDC/scalar source. All25decode controlsenteringchangedInverseAvx2 refresh. TwoDC-onlycontrolsreturnfromunchangedcompiledInverseentry, two syntaxcontrolsnevercallinverse;4costsvalidreuse. B/Cparentchangesnotaccepted, so those27invalidations donotapplytorestoredDentry. Samecurrentcodec/encoder/resize/font/drawing sourcepathsremainunaffected. No newworkload/settings."
+    },
+    "storage": {
+      "newPerImageOwnedCapacityBytes": 0,
+      "retainedOperationScratchBytes": 0,
+      "newStaticFormatCapacityBytes": 0,
+      "observedHelperJitReadOnlyDataBytes": 64,
+      "observedHelperJitDataScope": "RGBcapture includes32Bweightcopy/4Bbias/12Bpadding/16Bwordbias; notwholemodule orphysicalpeak.",
+      "declaredInverseInputAndRowsBytes": 256,
+      "resultBytes": 531468,
+      "physicalNativeAndFullJitStackPeakUnmeasured": true,
+      "jitStackSubtractionsAreNotPhysicalOrAdmissionPeak": true
+    },
+    "oracleScope": "ActualInverse4096blockspernatural/scanorder=8192blocks/524288independentscalarsamples. FullInt32coefficient/UInt16quantizer/word/DCbias/ACsaturation/supportboundary/canary/inputimmutability, plusactualnoheap/root0/cancellation. All462/375focusednormal/scalarchecksperOS pass; no newtest-onlyproductionentrypoint."
+  },
+  "ycckCodeObservation": {
+    "project": "Lokad.Image",
+    "statisticalTiming": false,
+    "actualCode": [
+      {
+        "method": "Lokad.Image.Internal.JpegInverseTransform:Inverse(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],System.Span`1[byte],Lokad.Image.Internal.OperationContext,bool) (FullOpts)",
+        "codeBytes": 551,
+        "explicitStackSubtractions": [
+          40,
+          128,
+          128
+        ],
+        "calls": [
+          "FF15384A4401         call     [Lokad.Image.Internal.JpegInverseTransform:DequantizeScanOrder(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],System.Span`1[short])]",
+          "FF15264A4401         call     [Lokad.Image.Internal.JpegInverseTransform:Dequantize(System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[ushort],System.Span`1[short])]",
+          "FF1598484401         call     [System.SpanHelpers:NonPackedIndexOfValueType[short,System.SpanHelpers+Negate`1[short]](byref,short,int):int]",
+          "FF15F5494401         call     [Lokad.Image.Internal.JpegInverseTransform:InverseAvx2(System.ReadOnlySpan`1[short],System.Span`1[short],System.Span`1[byte])]",
+          "FF1546494401         call     [System.SpanHelpers:Fill[byte](byref,nuint,byte)]",
+          "E89D3D407E           call     CORINFO_HELP_FAIL_FAST",
+          "E8920C557E           call     CORINFO_HELP_NEWSFAST",
+          "FF1572A77A00         call     [CORINFO_HELP_STRCNS]",
+          "FF15AEA77A00         call     [System.ArgumentException:.ctor(System.String):this]",
+          "E80639407E           call     CORINFO_HELP_THROW",
+          "FF153B364401         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+          "FF158434F9FF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+          "E8049326FF           call     CORINFO_HELP_GET_GCSTATIC_BASE",
+          "E86A7AF8FF           call     CORINFO_HELP_RNGCHKFAIL"
+        ]
+      }
+    ]
+  },
+  "causalLimit": "YCCKJITshowsglobalDCInverseentryonly; noInverseAvx2/Low2x2bodyiscompiled. DrestoresoriginalInverseentrysourceverbatim. Thelargecompleteadversecosts thereforearenotproofof slowlow2x2arithmetic; causeis unresolved, not a basisforignoringstandalonecosts. No timingclaimfromJITsmoke. Passingcurrentproductionevidence remainsunchanged afterexactmodule restoration.",
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newStaticFormatArraysBytes": 0,
+    "newRetainedOperationScratchBytes": 0,
+    "observedDHelperJitReadOnlyDataBytes": 64,
+    "jitStackAndCodeSeparate": true,
+    "physicalNativeAndFullJitStackPeakUnmeasured": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "allQualifiedSourceMainEmbeddedIdentitiesRestoredBeforeRetainedTestBuild": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "b107350c9e303ce6579fdfa5a2f833f19620d1432412df527a54d97ff5e26d6c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "b2d134ca81d97f3ce38e8f44ba8237cf71cae75ea3c402046946dfe9708bb248",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0af18abd43096adf006701565520f1c0580563a902b6e98dad8a3c4b65031dd3",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "7ce75a76c57965513e3eae8a30da3b087b45532dc656d51e7fa6c2b1555c6e26"
+      },
+      "retainedActualInverseTestSha256": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23",
+      "privatePackageSha256": "933a4fb19a966bdccbac712c000ac1b58404c03c88301f4feb996afb4757d338",
+      "qualificationReused": "EQE772B6183full/live+351/747resizeISA bothOS, unchangedJPEG459/375ISA, SAMEactual933a4fb1package/all3examplesbothOS. NewactualInverse testswillqualifyagainstrestoredproduction withoneembedded-onlybuildperOS; no mainbuild/full/package repeat."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "allQualifiedSourceMainEmbeddedIdentitiesRestoredBeforeRetainedTestBuild": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "b107350c9e303ce6579fdfa5a2f833f19620d1432412df527a54d97ff5e26d6c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "a281e53158f9b155b6c80e7ce31c8eb6053d995f591d5a210f7f7fd54d279872",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "c8d0a1e2acd09ef726287db85e0dd4a24635912bbba45abbfc72df8fc9e4887f",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "65a2ad393866726e4eb41af9b3b629064fbec4fc5876a8e261f6f623fe708329",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "88b3bdb60272aea63078cf68f482ece147ed7ad2f870f04d60c28d0066e87462"
+      },
+      "retainedActualInverseTestSha256": "09662f4bf61c6d901de6cc830634c62cf3b9c0c6c55d12492c0c6f515e384c23",
+      "sourceManifestSha256": "ec6255ba0bbd520a67b152376054d70a8f86187d711a66cd514f8796b1d74dbb",
+      "testOnlyManifestAddition": true
+    }
+  },
+  "retainedTests": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "platform": "windows",
+      "coreSha256": "c665602b0b4a7bba927b15da1944659f497d5d29f309bf4c85ed2313fecf2ff4",
+      "internalTestAssemblySha256": "c975040fe0981e10e9b12e0777dac931037e428a3ed22cf8e3b2482a3cc780f7",
+      "retainedNewBehavioralTests": 3,
+      "independentInverseBlocks": 8192,
+      "scalarSamples": 524288,
+      "results": {
+        "normal": 462,
+        "scalar": 462,
+        "no-avx512": 462,
+        "no-avx2": 462
+      },
+      "coreBuilds": 0,
+      "embeddedBuilds": 1,
+      "fullPackageAndPublicProofReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "platform": "linux",
+      "coreSha256": "d175056e5309253686c48e907c447a8119c957b413bc7c707cd487df4a35902a",
+      "internalTestAssemblySha256": "5d537ff3f364a62eb214a027382cb523fdc4f9413e4a1f3e5239c0786856ddfb",
+      "retainedNewBehavioralTests": 3,
+      "independentInverseBlocks": 8192,
+      "scalarSamples": 524288,
+      "results": {
+        "normal": 462,
+        "scalar": 462,
+        "no-avx512": 462,
+        "no-avx2": 462
+      },
+      "coreBuilds": 0,
+      "embeddedBuilds": 1,
+      "fullPackageAndPublicProofReused": true
+    }
+  },
+  "qualificationReuse": "EQE772B6183full/live+351/747resizeISA bothOS, existingJPEG459/375ISA/publicproof andsameactual933a4fb1Releasepackage/all3examples bothOS. Productionexactrestored; threeindependentbehavioralInverse testsretained withoneembedded-onlybaselinebuild/OS and462JPEGnormal/scalar/noAVX2/noAVX512checks/OS. No freshLinuxfull/packageorwhole-librarytimingclaim.",
+  "interimQualification": {
+    "windowsC": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+      "full": [
+        2921,
+        2317,
+        948
+      ],
+      "total": 6186,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 462,
+        "internal-scalar": 462,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 837,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "0fc3d08e7c750be05c02448ef893e52952c252b23b695a531215b191bf4572bb",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "windowsD": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+      "full": [
+        2921,
+        2317,
+        948
+      ],
+      "total": 6186,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 462,
+        "internal-scalar": 462,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "affectedJpegScalarEachOs": 837,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "4d73300d817e7188772c3be0216110f1bd89e8814662b27c0a2929e7aaff0a3d",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "windowsDIsa": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "results": {
+        "internal-no-avx512": 462,
+        "public-no-avx512": 375,
+        "internal-no-avx2": 462,
+        "public-no-avx2": 375
+      },
+      "coreSha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+      "allBuilds": 0
+    },
+    "windowsDPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "ab2b042481f687fc859af17d9d77d22831007c407e7fac31b5233678640b4447",
+      "symbolsSha256": "ffb743c4ad8bfdd3786a230c330d94f68fe216d9e6d13e59a8fb3c3bc7f7232e",
+      "bytes": 444279,
+      "librarySha256": "920ef802e5847502e054c404b5c6636630aef56881489c78ff71687d87c62f61",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "acceptedOrReleased": false,
+    "linuxDPackageOrBroadProofNotRun": true
+  },
+  "workflow": {
+    "coreVersionsEachOs": 4,
+    "experimentEmbeddedVersionsEachOs": 4,
+    "restoredEmbeddedOnlyVersionsEachOs": 1,
+    "productionCompileFailures": 0,
+    "harnessNativeSelectorFixtureBuilds": 0,
+    "newBenchmarkImagesOrSettings": 0,
+    "changedPrototypeStandaloneControls": 25,
+    "independentOriginalCounterchecksD": 4,
+    "unscoredCompletedCConfirmation": 1,
+    "guardedReplacementCConfirmation": 1,
+    "unchangedFavorableSamplingRepeats": 0,
+    "prematureWindowsBroadRuns": 2,
+    "prematureWindowsPackageRuns": 1,
+    "lesson": "Resolveallmaterialperformancecompanions beforebroad/package qualification. Focused W/L/ISA checksserve boundedtransitions; actualacceptedproductionrequiresfull/packageonceatcoherentmilestone. Unchangedproofisreusedafterexactrestore."
+  },
+  "unscoredRun": {
+    "project": "Lokad.Image",
+    "runId": "jlp774c-candidate-DirectRgb444-confirm",
+    "timingValid": false,
+    "reason": "AfterguardaggregateI/Owait.0124937531exceeds.01; beforepasses,CPU0idle/nooverlappingjobs. Completed12actualsandnativebracketsretainedunscored. Oneimmediateguardedrecheck, nocooldownorbuild.",
+    "validationPath": "artifacts/benchmark-validation/WarmJpegDecode-931dda21a57444c6b746f1229ed3b334.json",
+    "validation": {
+      "schemaVersion": 1,
+      "name": "WarmJpegDecode",
+      "caseId": "DirectRgb444",
+      "smoke": false,
+      "runId": "jlp774c-candidate-DirectRgb444-confirm",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "managedAffinityCount": 1,
+      "processorCount": 1,
+      "serverGc": false,
+      "gcConfiguration": {
+        "ServerGC": false,
+        "ConcurrentGC": false,
+        "RetainVM": false,
+        "NoAffinitize": false,
+        "GCCpuGroup": false,
+        "GCLargePages": false,
+        "LOHThreshold": 85000,
+        "HeapCount": 1,
+        "MaxHeapCount": 0,
+        "GCHeapAffinitizeMask": 0,
+        "GCHeapAffinitizeRanges": "",
+        "GCHighMemPercent": 90,
+        "GCGen0MaxBudget": 134217728,
+        "GCHeapHardLimit": 0,
+        "GCHeapHardLimitPercent": 0,
+        "GCRegionRange": 33532829696,
+        "GCRegionSize": 0,
+        "UOHWaitBGCSizeIncPercent": 200,
+        "GCHeapHardLimitSOH": 0,
+        "GCHeapHardLimitLOH": 0,
+        "GCHeapHardLimitPOH": 0,
+        "GCHeapHardLimitSOHPercent": 0,
+        "GCHeapHardLimitLOHPercent": 0,
+        "GCHeapHardLimitPOHPercent": 0,
+        "GCConserveMem": 0,
+        "GCName": "",
+        "GCPath": "",
+        "GCDynamicAdaptationMode": 1,
+        "GCDTargetTCP": 0,
+        "GCDGen0GrowthPercent": 0,
+        "GCDGen0GrowthMinFactor": 0,
+        "GCDGen0GrowthMaxFactor": 0
+      },
+      "runtime": ".NET 10.0.8",
+      "platform": "linux-x64",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alreadyCanceledRejected": null,
+      "inputAnchorCase": null,
+      "cancellationBoundary": null,
+      "sourceIdentity": {
+        "sourceSha256": "5dc0ae7340bb0f2813ae70df3126be7a2b4539e953fc08c5bd8a8bf038801997",
+        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
+      },
+      "inputOrigin": "original-native-marker-only-direct-rgb",
+      "sampling": "1x2,1x2,1x2",
+      "progressive": false,
+      "inputBytes": 133057,
+      "directRgb": true,
+      "markerOnlyInterpretation": true,
+      "directRgbSourcePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
+      "rgbCenteredPhaseCorrectionTimed": false,
+      "uncorrectedRgbPhaseNegativeControl": false,
+      "rgbComponentPlaneInterpretationTimed": false,
+      "misinterpretedRgbPlanesNegativeControl": false,
+      "restartInterval": 0,
+      "restartMarkers": 0,
+      "freshSeekableStream": false,
+      "inputView": false,
+      "inputCopiesTimed": false,
+      "callerInputLifetimeChecked": false,
+      "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+      "nativeOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+      "alphaExact": true,
+      "decoderAgreementWithinBounds": true,
+      "decoderMaximum": 0,
+      "decoderRmse": 0,
+      "nativeCliPixelsExact": true,
+      "scalarCliAgreementWithinBounds": true,
+      "scalarDecoderMaximum": 0,
+      "scalarDecoderRmse": 0,
+      "nativeSampleTargetMilliseconds": "50",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeExitCode": 0,
+      "librarySha256": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm JPEG decode FFmpeg worker",
+        "sourceSha256": "9cce738b3e7c2e97ad1170fe0527d0c1aa9e2d89e81454119cb8d5e0b8225dff",
+        "buildScriptSha256": "880887e1b96adf7ae293e17d9b1df8a306c306d43f7e6795af2a8a5dbee4e032",
+        "workerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "jpeg-rgb-decode",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "threadType": 0,
+        "activeThreadType": 0,
+        "conversionThreads": 1,
+        "decoder": "mjpeg",
+        "sampling": "444",
+        "chromaExpansionTimed": false,
+        "chromaVerticalFactor": 1,
+        "grayscale": false,
+        "directRgb": true,
+        "rgbCenteredPhaseCorrectionTimed": false,
+        "rgbComponentPlaneInterpretationTimed": false,
+        "decodedPixelFormat": "gbrp",
+        "colorConversionTimed": true,
+        "stateResetTimed": true,
+        "pixelsDeterministic": true,
+        "outputBytes": 531468,
+        "initialCompletedOperations": 3,
+        "independentLiveOutputs": true,
+        "ffmpegVersion": "n8.1",
+        "avcodecVersion": 4070500,
+        "swscaleVersion": 591204
+      },
+      "nativeBefore": [
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92880533,
+          "CompletedOperations": 386,
+          "Observed": 38214,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1451258.328125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92787541,
+          "CompletedOperations": 450,
+          "Observed": 44550,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449805.328125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92821464,
+          "CompletedOperations": 514,
+          "Observed": 50886,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450335.375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92765619,
+          "CompletedOperations": 578,
+          "Observed": 57222,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449462.796875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92927804,
+          "CompletedOperations": 642,
+          "Observed": 63558,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1451996.9375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92936137,
+          "CompletedOperations": 706,
+          "Observed": 69894,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1452127.140625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92759299,
+          "CompletedOperations": 770,
+          "Observed": 76230,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449364.046875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92888155,
+          "CompletedOperations": 834,
+          "Observed": 82566,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1451377.421875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92671576,
+          "CompletedOperations": 898,
+          "Observed": 88902,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1447993.375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92848374,
+          "CompletedOperations": 962,
+          "Observed": 95238,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450755.84375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92858530,
+          "CompletedOperations": 1026,
+          "Observed": 101574,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450914.53125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92721482,
+          "CompletedOperations": 1090,
+          "Observed": 107910,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448773.15625
+        }
+      ],
+      "nativeAfter": [
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92708893,
+          "CompletedOperations": 1346,
+          "Observed": 133254,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448576.453125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92768172,
+          "CompletedOperations": 1410,
+          "Observed": 139590,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449502.6875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92817337,
+          "CompletedOperations": 1474,
+          "Observed": 145926,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450270.890625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 93063460,
+          "CompletedOperations": 1538,
+          "Observed": 152262,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1454116.5625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92663434,
+          "CompletedOperations": 1602,
+          "Observed": 158598,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1447866.15625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92807332,
+          "CompletedOperations": 1666,
+          "Observed": 164934,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450114.5625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92762714,
+          "CompletedOperations": 1730,
+          "Observed": 171270,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449417.40625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92727461,
+          "CompletedOperations": 1794,
+          "Observed": 177606,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448866.578125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92727932,
+          "CompletedOperations": 1858,
+          "Observed": 183942,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448873.9375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92823146,
+          "CompletedOperations": 1922,
+          "Observed": 190278,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450361.65625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92635534,
+          "CompletedOperations": 1986,
+          "Observed": 196614,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1447430.21875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92795648,
+          "CompletedOperations": 2050,
+          "Observed": 202950,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449932
+        }
+      ],
+      "boundary": "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, GBRP direct-plane packing, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+    },
+    "actuals": 12,
+    "allOriginalGatesPassed": true,
+    "identities": {
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/JpegDecodeShortDriver.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb420Confirm.dll": "944cf0d25c8352ede256c9e265cfe68ad89713e4732b01ae8760573d0b6c322c",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.pdb": "75095da26738761f7b847957088baed20e329a81e90de891f7b3fb8d03cc71f6",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Dmc31Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31AsyncConfirm.dll": "9c6b38e0267d749de73d2e66dd599f955b70623ee725cdab6bd28ce7548fc31b",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "89d299c14c2574f1b8941d1d80e5de8088c93518e12851b76a92b13ee785173b",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.xml": "5e01b5be95331f19684bddfed40441ce6b702c1d80c54989a0dda68c8e044f46",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks.pdb": "a88e18f1e39af31ffa24e7e84dbc5143b78812a4bf93afa13f14dc764a9b97cd",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Fmp1PngShort.dll": "2cbaf0816efff60b9eec4c257fd915e9bff51abca6e106d7ebe80edf317eb9f1",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb444Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngDecodeConfirmDriver.dll": "2aa4da79d900818f0521df9e434a48759c9abc0902e1c35f4e3600831e225f9a",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Confirm.dll": "21bd4803a9438a3b1ad3b78a02f118976020a1de31aa4941f3f308f8247974f7",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Short.dll": "54bcad7b990b94467d33e2513a5793fa12527d00035c1a26e39791833551cdd1",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431NativeDecode8Confirm.dll": "529c8caeed6bba79c5c0e4d197459c00f7f7726f6dbc232e66e2cc00fb7c0c20",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431NativeDecodeCancelable8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431Decode8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431Decode8Confirm.dll": "14aa04e245d5c8db3dc4a55e41be76e3def7cc6f601d943dde86568d63b52c99",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Fmp1PngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb444Confirm.dll": "c443e73aeea27c1b6211c87142b0544cd7163d33e3f71e0db366ed06dbdc1682",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/JpegDecodeShortDriver.dll": "6dd6c70aaab0890daba23e233d569de1b3eb10847d30e82c8f56a6e01d054a88",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431NativeDecode8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/B44431NativeDecodeCancelable8Confirm.dll": "17cd2e2421bd397517b598ae4e0fd4926a08ebd94b55ceafa798064e5074ef56",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Dmc31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Dmc31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Resident8Confirm.dll": "5408fab8b719301c521aa676f5846c8f58f34846d17c773f6161e281e42aa792",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31AsyncConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks.dll": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.dll": "ab0c947f3f7804e60cb312687105217018c46bbb1d831966a2194fb89e8ab00f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Jav32Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/CmykDecodeConfirmDriver.dll": "e56fff257699610fc9d928b7ed3e4fd9e745d37dddcc169df078e94114dfc7b4",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Resident16Confirm.dll": "fe80e2c07eb809f0b9103e5bb4b4d5b80f89417063275140b6ea7b48557df940",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb422Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Jav32Short.dll": "7fe7941538ea6ccfca8f4b92b3824c102079300881a44034fb3d76d2c8b81d98",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Resident8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31CancelableConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll": "1195d51f9a7d4bf32abf0e21c303bdc4bd809045080e21f248e7735e795d5473",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Dmc31Short.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Drgb31DirectRgb422Confirm.dll": "5a0049cc7f526a4af5c3442c8cae0bd932f65e4f40da9cdb0106beda713c40b0",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31Resident16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/CmykDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/J4n31CancelableConfirm.dll": "8848f146b950303813af0fd0bce377d67398be2953c3f35a7643badc49931f79",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/jlp774c-candidate-DirectRgb444-confirm-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    }
+  },
+  "next": "Advance independent currentpreparedwordLanczosreductiongap(~39us): source-currentboundedattribution, reusepreparedworkers/fixtures/exactQ30andnativegates, no passingcaseretuning ornewmatrix. Full283pathobjectiveopen, publicationpostponed.",
+  "raw": {
+    "file": "jpeg-low-frequency-row-study.tar.xz",
+    "sha256": "39d31b86fbeaa1432792df21400d410648b4892b7b9c01b1a59da70f1f5899a6",
+    "bytes": 16854184,
+    "members": 783,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-batched-two-row-columns.tar.xz",
+        "sha256": "8ed600096f4167228c797702e7420236ab95475d3e1e1fd3daaa97174a438cc2",
+        "bytes": 13569020,
+        "members": 622,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "jpeg-sparse-current-attribution.tar.xz",
+            "sha256": "3d1d2dcf7c467fc9f86564719c93f2494131f8b1859a3778e97d74b401635170"
+          },
+          {
+            "file": "jpeg-prepared-token-descriptors.tar.xz",
+            "sha256": "bcb777111e6a2586d1e2a1d9bb202efc5424e05730e6bbb7eb78e94c8281b2d5"
+          },
+          {
+            "file": "packed-bicubic-four-pixel-preparation.tar.xz",
+            "sha256": "ea62895c444987b31495ed85de986e508eacb077e57060c5afa79e42db9ee5fa"
+          }
+        ]
+      },
+      {
+        "file": "bicubic-shared-quartet-execution.tar.xz",
+        "sha256": "19a823a7f1666a784b01950870652cef9c8e1411b5e5960595a67c884883b88b",
+        "bytes": 9668180,
+        "members": 400,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "byte-bicubic-enlargement-attribution-bep771.tar.xz",
+            "sha256": "81d7890705c061cc35f342baed5dd680952680c0f7261a5d4bcd5572b4428661"
+          },
+          {
+            "file": "jpeg-batched-two-row-columns.tar.xz",
+            "sha256": "8ed600096f4167228c797702e7420236ab95475d3e1e1fd3daaa97174a438cc2"
+          },
+          {
+            "file": "bicubic-shared-word-preparation-qualified.tar.xz",
+            "sha256": "1c9528ea15b55ccb329dd9b6a64fc8d9ab1af52192b368e867d087474ace77aa"
+          },
+          {
+            "file": "bicubic-mixed-byte-vertical-reuse.tar.xz",
+            "sha256": "8ce15cc6a105a6ca5d77eb996856ac98c6d40472d43f60bb718c3781126933ab"
+          }
+        ]
+      }
+    ]
+  }
+}
