@@ -25,10 +25,12 @@ Historical companion points establish no causal gain/nonregression/equivalence.
 gain and adverse/inconclusive companion evidence.
 
 [Coefficient pipeline attribution](JPEG-COEFFICIENT-PIPELINE-ATTRIBUTION.md)
-reuses the current package for one bounded sparse-CMYK capture and a two-packet
-canonical model. It motivates a baseline entropy-to-inverse storage prototype;
-there is no production change, timing gain or automatic acceptance. Existing
-qualification/costs remain valid; the diagnostic stays outside renderer inputs.
+retains one bounded sparse-CMYK capture and a two-packet canonical model.
+The subsequent [fusion study](JPEG-COEFFICIENT-FUSION-EXPERIMENT.md) removes a
+conversion pass but establishes no useful complete-operation gain. Both stages
+are removed with exact source/module restoration; current qualification/costs
+remain valid. These studies stay outside renderer inputs and do not ban revised
+architectural designs.
 
 ## Current family status
 

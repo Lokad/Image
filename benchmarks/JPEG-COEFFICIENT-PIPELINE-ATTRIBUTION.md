@@ -5,6 +5,10 @@ No production, harness, fixture or package rebuild; existing costs and
 qualification remain valid. This supplies a next architectural hypothesis,
 not a speed claim or production acceptance.
 
+The subsequent [fusion study](JPEG-COEFFICIENT-FUSION-EXPERIMENT.md) preserves
+the model's exact values but establishes no useful complete-operation gain.
+Both implementations are removed; this audit remains motivating history.
+
 One two-second CPU0 capture of complete sparse-CMYK decode/disposal has 1,993
 sample locations: inverse AVX2 580, plain entropy reader 304, baseline scheduling
 210, dequantization 160, component packing 129 and CMYK conversion 73. CPU1

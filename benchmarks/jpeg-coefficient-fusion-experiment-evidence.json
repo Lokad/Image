@@ -1,0 +1,410 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "JCF728",
+    "JCR729"
+  ],
+  "productionAccepted": false,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "newBenchmarkImagesOrSettings": 0,
+  "design": {
+    "removedWork": "Baselinecurrentlyclears64Int32s, storesrawamplitudes, densedequantizes/narrows64lanes intoseparateshortinput, thenrunsIDCT. Investigate directvalidated-token productsintoa64shortnaturalorderblock, avoidingthefullcoefficienttoconversionpass.",
+    "endState": "OneboundedbaselinecoefficientstorewithrealnaturalInt32modeforpersistent/validationcallersanddequantizedInt16modeforimmediatereconstruction;sharegrammar/checkpointsandactualinversecore. KeepfullwidthDCpredictorandproduct+1024saturation; ACproductmodulo65536. No newpublicAPI,pool,session,crossoperationcache,allocator orfixture-specificdispatch.",
+    "workloads": "ExistingSparseCMYKprimary andDirectRGB444generalization, completepublicresidentdecode/normalization/newownedoutput/disposal, exactfrozenframes/reference/settings. Refreshotheractuallyaffectedbaseline/caller/stream/validationcostsatacceptedmilestone. ProgressiverefinedInt32storage/semanticsunchanged.",
+    "transition": "Firstproveall64dequantizedwords/cursor/state includingpartialmisses,ZRL,longcodes/stuffing/restarts,logicalcancellationandfailureboundaries. Then coherentreader/inverseexecutionstage withoneimmutablecandidateperstage; focusedWindows/Linux/scalarbeforeboundedcompletescreens. Temporarydualstagingmustberemovedbyfinalstage. Do notpreserveunpublishedtesthookssolelyforcompatibility.",
+    "risks": "Per-token scalarproduct/addressingmaycostmorethandenseSIMD ongeneralcoefficients; genericstorecodegen/checks, instructioncache, widerreaderframes andsmall/DCcontrolsoverheads coulderasebenefit. Countsaredata-workmodel, notelapsed/physicaltraffic orautomaticacceptance. Inspectcompleteoperationevidence,reviseorrestoreifnotuseful.",
+    "previous": "JPC639/JPS640/JVP641pairedprogressivecomponentstages addedscatter/scalarproductsor512bitpairing withoutusefulcompletegain; JIA543/JRP544pairedrowimplementations alsounselected. Thisproposal fusesbaselineentropycommit ratherthanpairingalreadyretainedprogressiveblocks; no512bitnewmatrix,reorderedinversearithmeticorunchangedreplay.",
+    "acceptance": "Preservedeclaredencoderpackets,metadataandmanagedpixels, independentowners/refusalcleanup, fullDCsaturation/ACwrap andeverylogicalpoll. Confirmusefulcompletetime/allocation/simplification jointly onquietVM; nofixedthreshold. BroadWindows/Linux/live/scalar/affectedISA/SAMEpackage atcoherentacceptedmilestone; unchangedproofreused. Noautomaticmergefrommodelorprofile."
+  },
+  "cases": {
+    "sparseOriginal": {
+      "managedUs": 525.9053020833334,
+      "nativeUs": 477.1717083333333,
+      "ratio": 1.102130098869895,
+      "lower": 0.9347232744652446,
+      "upper": 1.3089616939182285,
+      "allocatedBytes": 20944,
+      "librarySha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+      "runId": "jcf728-baseline-CmykAdobeSparse2D-short",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true
+    },
+    "sparseA": {
+      "managedUs": 564.7198333333333,
+      "nativeUs": 472.1006848958333,
+      "ratio": 1.1961851600743516,
+      "lower": 1.0251460339706546,
+      "upper": 1.3560182467398652,
+      "allocatedBytes": 20944,
+      "librarySha256": "4b486102e16f0898288633a7553ef3458a1e8233ee66cc69f8dcc27e0aeada3a",
+      "runId": "jcf728-candidate-CmykAdobeSparse2D-short",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true
+    },
+    "sparseB": {
+      "managedUs": 517.1176775,
+      "nativeUs": 478.2373880208333,
+      "ratio": 1.081299142336134,
+      "lower": 0.9065571043176439,
+      "upper": 1.2793078417978592,
+      "allocatedBytes": 20944,
+      "librarySha256": "df4b496a049b7a1dba0924326d928c5744b9ba9679372191f95c97e2c127dce4",
+      "runId": "jcr729-candidate-CmykAdobeSparse2D-short",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true
+    },
+    "rgbOriginal": {
+      "managedUs": 1643.6220963541668,
+      "nativeUs": 1567.5091979166668,
+      "ratio": 1.04855658808169,
+      "lower": 0.8684191514719929,
+      "upper": 1.2319414857193949,
+      "allocatedBytes": 42936,
+      "librarySha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+      "runId": "jcr729-baseline-DirectRgb444-short-guard-retry",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true
+    },
+    "rgbB": {
+      "managedUs": 1661.2468658854168,
+      "nativeUs": 1564.5582291666667,
+      "ratio": 1.0617993213140104,
+      "lower": 0.888467803179594,
+      "upper": 1.253303366956707,
+      "allocatedBytes": 42936,
+      "librarySha256": "df4b496a049b7a1dba0924326d928c5744b9ba9679372191f95c97e2c127dce4",
+      "runId": "jcr729-candidate-DirectRgb444-short",
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true
+    }
+  },
+  "comparisons": {
+    "sparseA": {
+      "savedUs": -38.81453124999996,
+      "rawReduction": -0.07380517195061387,
+      "normalizedReduction": -0.08533934541929211,
+      "nativeMovement": -0.010627250838512792,
+      "original": "sparseOriginal",
+      "candidate": "sparseA",
+      "scope": "Threeactualscreens only, broadintervalsoverlap; nocausalgain/regression/equivalence claim."
+    },
+    "sparseB": {
+      "savedUs": 8.787624583333354,
+      "rawReduction": 0.01670951889726502,
+      "normalizedReduction": 0.018900633015213608,
+      "nativeMovement": 0.0022333253813857645,
+      "original": "sparseOriginal",
+      "candidate": "sparseB",
+      "scope": "Threeactualscreens only, broadintervalsoverlap; nocausalgain/regression/equivalence claim."
+    },
+    "rgbB": {
+      "savedUs": -17.624769531249967,
+      "rawReduction": -0.010723127640072994,
+      "normalizedReduction": -0.012629488367955188,
+      "nativeMovement": -0.0018825846469814334,
+      "original": "rgbOriginal",
+      "candidate": "rgbB",
+      "scope": "Threeactualscreens only, broadintervalsoverlap; nocausalgain/regression/equivalence claim."
+    }
+  },
+  "stageA": {
+    "ownedDestination": "OneborrowedgenericrefstructwithnaturalInt32anddequantizedInt16modes; sharedbaselinegrammar/inversecore. No heap/pool/session/API.",
+    "actualCodeBytes": {
+      "Lokad.Image.Internal.JpegDecoder:ReadBaselineBlocks(byref,System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,bool,bool,System.Span`1[byte]):this (FullOpts)": 998,
+      "Lokad.Image.Internal.JpegDecoder:ReadBaselineBlockCore[short](byref,System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,bool,System.Span`1[byte]):this (FullOpts)": 2250,
+      "Lokad.Image.Internal.JpegDecoder:ReadBaselineBlock[short](byref,Lokad.Image.Internal.JpegBaselineBlock`1[short],byref,Lokad.Image.Internal.JpegHuffman,Lokad.Image.Internal.JpegHuffman,Lokad.Image.Internal.OperationContext) (FullOpts)": 1879,
+      "Lokad.Image.Internal.JpegEntropyReader:TryReadPlainBaselineBlock[short](System.ReadOnlySpan`1[ushort],Lokad.Image.Internal.JpegHuffman,Lokad.Image.Internal.JpegBaselineBlock`1[short],byref,byref):bool:this (FullOpts)": 1267,
+      "Lokad.Image.Internal.JpegInverseTransform:InverseDequantizedCore(System.ReadOnlySpan`1[short],System.Span`1[byte]) (FullOpts)": 308
+    },
+    "copyObserved": "Actualshortdecoderbody includes32byte movsqvaluehandofftofastreader; inlineStores arepresent, so instructionremovalcounts didnotpredictcompletegain.",
+    "jitInstrumentedElapsedDiscarded": true
+  },
+  "stageB": {
+    "revision": "Separateordinaryscopedspanparametersatdecoder/entropycallboundaries, localtypedstore retained. Saferefstructvalue/referencecompileattempts producednoexecutables; no borrowingconstraintsweakened. Bshortsparse517usversusoriginal526us isunconfirmed, RGB1661usversus1644usadversepoint alsoinconclusive.",
+    "numericInverseBodySourceVerbatim": true,
+    "allOriginalCancellationCheckpointSitesRetained": true,
+    "storage": "Coefficientclear256to128B/block andseparatedenseconversionremoved; extra descriptors/changedframes makeactualphysical/admittedstackpeakunproven. No newownedcapacity orretainedstate, GC20944sparse/42936RGBunchanged, result531468Buntildisposal/scratch0. Originaladmissions/root/owners/finallyunchanged."
+  },
+  "qualification": {
+    "stages": {
+      "jcf728": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+          "candidateSha256": "4b486102e16f0898288633a7553ef3458a1e8233ee66cc69f8dcc27e0aeada3a",
+          "internalTestAssemblySha256": "f4cec9eb685afbeb9670b627da9071bedc0db8221acae2e6270823c2da9d5389",
+          "focused": {
+            "internal-normal": 456,
+            "internal-scalar": 456,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "9362d46e0d8cdd8c0c38cbafa936614601da4dde363be4a40dd19f6768d52977",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "325d4af77c530fe7f387a4eb052eb92c7702b9233fae84835b3aab41b8697db6",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "380dba3db68eda9b97c47a165370026c8889fda02ee09c6c4450bda2901ddb0d",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "970809b40f8c796c7fe589f23996423465b484141cdabc4856b98428230e3e1a",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "7f3330063fb6ea438b6edc35c5eae6a2db6933c3426006ac300ff9f0b28472aa",
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e057a7ca9c469fbd1683d7e7e48f9b72d2b0addedd11e5d18fe2f2befc98c883",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3a0dd40ad26a58f50b481603ccf0686f4550df2fe7e4133ce81fa0e16c56fa63",
+            "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "d94feb8953635e4727a05bcf7768e4403450a59c7e0fb4604ece33f237e53a8f",
+            "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "9f3a78e57588327a7672a21f1b382204328d76cea4808d2609057eecc207b02d",
+            "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "b9ee0230862265c9f7e47386fcdad962c15343349de9ba574f5e198b0c695d54",
+            "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "568434e0bffc6b3d953a70b0ad8e0b6bd4654eaafc2025d549aafa6c0ab373ee",
+            "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "6a9f21b599322d4c7cfc4edad7b5c96c4cd5b6e0a4c030127d8545e6f73dc3bd",
+            "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "e1d2d53a26210c81573c1847440df3908cfe42fd539028161645af6372b7fa15",
+            "src/Lokad.Image/Internal/JpegBaselineBlock.cs": "7bcecaa72194308d211a5508e1783702977cd646925b938121a1c30047000342"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b2fbde20a85c1f1c7d1da8f5de2098cc3f4352639e3811bf78316e5fb47d7f64",
+          "candidateSha256": "69d1225e0d9b5af94a5f0248d15557353b5f8b82ef311000bf5cca14e96cd874",
+          "internalTestAssemblySha256": "75476c4bca32ed8798a2d23964fb802cea5d6011491abb13f8fa7fa4b21809f4",
+          "focused": {
+            "internal-normal": 456,
+            "internal-scalar": 456,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "9362d46e0d8cdd8c0c38cbafa936614601da4dde363be4a40dd19f6768d52977",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "325d4af77c530fe7f387a4eb052eb92c7702b9233fae84835b3aab41b8697db6",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "380dba3db68eda9b97c47a165370026c8889fda02ee09c6c4450bda2901ddb0d",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "970809b40f8c796c7fe589f23996423465b484141cdabc4856b98428230e3e1a",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "7f3330063fb6ea438b6edc35c5eae6a2db6933c3426006ac300ff9f0b28472aa",
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e057a7ca9c469fbd1683d7e7e48f9b72d2b0addedd11e5d18fe2f2befc98c883",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3a0dd40ad26a58f50b481603ccf0686f4550df2fe7e4133ce81fa0e16c56fa63",
+            "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "d94feb8953635e4727a05bcf7768e4403450a59c7e0fb4604ece33f237e53a8f",
+            "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "9f3a78e57588327a7672a21f1b382204328d76cea4808d2609057eecc207b02d",
+            "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "b9ee0230862265c9f7e47386fcdad962c15343349de9ba574f5e198b0c695d54",
+            "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "568434e0bffc6b3d953a70b0ad8e0b6bd4654eaafc2025d549aafa6c0ab373ee",
+            "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "6a9f21b599322d4c7cfc4edad7b5c96c4cd5b6e0a4c030127d8545e6f73dc3bd",
+            "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "e1d2d53a26210c81573c1847440df3908cfe42fd539028161645af6372b7fa15",
+            "src/Lokad.Image/Internal/JpegBaselineBlock.cs": "7bcecaa72194308d211a5508e1783702977cd646925b938121a1c30047000342"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "jcr729": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+          "candidateSha256": "df4b496a049b7a1dba0924326d928c5744b9ba9679372191f95c97e2c127dce4",
+          "internalTestAssemblySha256": "fba7859a9808833711670e51172877702ac7706222720f885e04c6acc1618e9f",
+          "focused": {
+            "internal-normal": 456,
+            "internal-scalar": 456,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "00b9aab9078e0b369c834d638599fa1b6366db5821f0b8a75777bb85a628a7c0",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "61c77f217cf2c36efbbc908ef4ad91edbe70ebbb32fb5ec6d469a3b17809282f",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4153475c595c782e1782c04bf3b7ff81972e83a946a73604fbebb02ab40d93e9",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "9e969eac7169ecdbca01fd3e1180fa63f6d3827e569b1585aceebc3d26708934",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "6df9a779462ee5f2cadf132d2eeb4b10eadaab25bf9b2bb5eeec503907a27934",
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e057a7ca9c469fbd1683d7e7e48f9b72d2b0addedd11e5d18fe2f2befc98c883",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "b9fc3efc02c8e6011bca5c5dda0c987cb3e8f46516b02e37ca0d33aae872eb4a",
+            "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "d94feb8953635e4727a05bcf7768e4403450a59c7e0fb4604ece33f237e53a8f",
+            "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "9f3a78e57588327a7672a21f1b382204328d76cea4808d2609057eecc207b02d",
+            "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "b9ee0230862265c9f7e47386fcdad962c15343349de9ba574f5e198b0c695d54",
+            "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "568434e0bffc6b3d953a70b0ad8e0b6bd4654eaafc2025d549aafa6c0ab373ee",
+            "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "6a9f21b599322d4c7cfc4edad7b5c96c4cd5b6e0a4c030127d8545e6f73dc3bd",
+            "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "e1d2d53a26210c81573c1847440df3908cfe42fd539028161645af6372b7fa15",
+            "src/Lokad.Image/Internal/JpegBaselineBlock.cs": "61ef6d019758179bc5dc5bc6d23ea77c34cb330a8d23fc5f5efb1eb875027a72"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b2fbde20a85c1f1c7d1da8f5de2098cc3f4352639e3811bf78316e5fb47d7f64",
+          "candidateSha256": "705b73f93e9323ec505bddedde35dff426312da524cb82a204973fd1ab131d1e",
+          "internalTestAssemblySha256": "6cc172aa2342d9a57df1d49586c2490e05ca6308be72be849a3391b23c4d7696",
+          "focused": {
+            "internal-normal": 456,
+            "internal-scalar": 456,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "00b9aab9078e0b369c834d638599fa1b6366db5821f0b8a75777bb85a628a7c0",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "61c77f217cf2c36efbbc908ef4ad91edbe70ebbb32fb5ec6d469a3b17809282f",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4153475c595c782e1782c04bf3b7ff81972e83a946a73604fbebb02ab40d93e9",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "9e969eac7169ecdbca01fd3e1180fa63f6d3827e569b1585aceebc3d26708934",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "6df9a779462ee5f2cadf132d2eeb4b10eadaab25bf9b2bb5eeec503907a27934",
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "e057a7ca9c469fbd1683d7e7e48f9b72d2b0addedd11e5d18fe2f2befc98c883",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "b9fc3efc02c8e6011bca5c5dda0c987cb3e8f46516b02e37ca0d33aae872eb4a",
+            "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "d94feb8953635e4727a05bcf7768e4403450a59c7e0fb4604ece33f237e53a8f",
+            "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "9f3a78e57588327a7672a21f1b382204328d76cea4808d2609057eecc207b02d",
+            "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "b9ee0230862265c9f7e47386fcdad962c15343349de9ba574f5e198b0c695d54",
+            "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "568434e0bffc6b3d953a70b0ad8e0b6bd4654eaafc2025d549aafa6c0ab373ee",
+            "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "6a9f21b599322d4c7cfc4edad7b5c96c4cd5b6e0a4c030127d8545e6f73dc3bd",
+            "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "e1d2d53a26210c81573c1847440df3908cfe42fd539028161645af6372b7fa15",
+            "src/Lokad.Image/Internal/JpegBaselineBlock.cs": "61ef6d019758179bc5dc5bc6d23ea77c34cb330a8d23fc5f5efb1eb875027a72"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      }
+    },
+    "normalScalarInternal": 456,
+    "normalScalarPublic": 375,
+    "newTests": "FullACword/quantizerandwideDCboundarycommitstores; everyphase/truncation,partialDC/AC/syntaxfailurecommit,predictor/cursorandfollowingbits fornatural/directmodes withordinary/live token. Existingnaturalgrammar/pairs/longcodes/refusal/cancellation/publicowners reused. Noall-pathperformance,broadnewqualificationorpackageacceptanceclaim.",
+    "broadAndPackageRerun": false,
+    "reusedOriginalFullChecksEachOs": 6133,
+    "reusedOriginalSamePackageBothOS": true,
+    "packageUnchanged": true
+  },
+  "guardResolution": {
+    "invalidOriginalRgbCompleteActuals": 3,
+    "invalidOriginalRetained": true,
+    "afterGuard": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.0003364398144186,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.10275689223057644,
+          "ioWaitFraction": 0.0040100250626566416,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.04618473895582329,
+          "ioWaitFraction": 0.008032128514056224,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.10275689223057644,
+      "ioWaitFraction": 0.0040100250626566416,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.3701171875,
+        0.28173828125,
+        0.21728515625
+      ],
+      "passed": false,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "scored": false,
+    "originalOnlyRechecks": 1,
+    "candidateFavorableRepeats": 0,
+    "scope": "Afterguardfailed aggregatebusy.103 whileCPU0.046, no overlappingjobs. Completedoriginalactuals/nativevalidation retainedbutnotusabletiming. Oneimmediatefreshguardedoriginalrecheck, unchangedinputs/settings/cadence. Nohistorical-loadcooldown orfavorableresampling."
+  },
+  "workflow": {
+    "successfulProductionEmbeddedVersionsPerOS": 2,
+    "failedWindowsInternalCompilesNoExecutable": 3,
+    "harnessSelectorNativeFixtureBuilds": 0,
+    "independentTimingConfirmations": 0,
+    "fullOrPackageRepeats": 0,
+    "restoreBuilds": 0,
+    "allSamplesRetained": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExactly": true,
+      "embeddedRestoredByteExactly": true,
+      "sourcesAndModuleIdentities": {
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
+        "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "7e5bd56ac4e184ecd295bacc91c268b3f089a4233c5168feefc12a099bd5a3b3",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b1dc8af3369f4925a23174fb756e359181d63fa02227600f2a17912c08c43e26",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "9cef93b5fce138f6efeb9cf8a8e63f7d5d83729bc5c69c6f90c092db45676b37",
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "bc1f1ee14a7f1d415b1d18cf6f4b4224dc26b7bd8f976b1f643e9287bc9d7e97",
+        "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "0473bece03effd72c6a6d433048289e988a87f6b9b03bc70f46d4f63e8b4c8ef",
+        "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "c49f21310ae41cb9b5b5faadb6555632d5a22f75ad11e8a40bffd2a7ef8339ac",
+        "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "7e964e96e7d2a6a5eed17d2e6d6d71e85522f002a89f21a23f7a8ec1e946e6df",
+        "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "16bbc1d54bf2ef968643810f4b9c440c6305e20a8452a0d9676cdb69704b5fc3",
+        "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "292b3ef065d8eb276daf5a950cdc3b49ec98ddb73332dcf5a5cd2b9ffb12fc06",
+        "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "81a8e391b50d4a279c980ce6b793c2109982fcf5a6be6c3ffe5fa09754f168dc",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "4c36ff575003ba93cec221f9a56248fdf2afeeea6789d6adfc834cc16c3a08c6",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "461d8a335554be58bdf96c0d50b100b6de97d3a2062cc39af8d7524ced331a3d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ef67b7691fd39eec8c793cb5e87ad9813f809483ddead189a07227d83f099bc8",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "8942e9977d3c84fe9bd83a69155b5d6a2c1d81b1cb610e4d49158e7c090bdbea",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "d7a3b1fb8c1ee6ba3f4fa08220f0e14424aa7c512a650b61be7ecc52b298bb47"
+      },
+      "originalBindingsRestored": true,
+      "allBuilds": 0,
+      "prototypeOnlyHelperRemoved": true,
+      "packageUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExactly": true,
+      "embeddedRestoredByteExactly": true,
+      "sourcesAndModuleIdentities": {
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
+        "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "7e5bd56ac4e184ecd295bacc91c268b3f089a4233c5168feefc12a099bd5a3b3",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b1dc8af3369f4925a23174fb756e359181d63fa02227600f2a17912c08c43e26",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "9cef93b5fce138f6efeb9cf8a8e63f7d5d83729bc5c69c6f90c092db45676b37",
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "bc1f1ee14a7f1d415b1d18cf6f4b4224dc26b7bd8f976b1f643e9287bc9d7e97",
+        "tests/Lokad.Image.Tests/JpegBaselineEobTests.cs": "0473bece03effd72c6a6d433048289e988a87f6b9b03bc70f46d4f63e8b4c8ef",
+        "tests/Lokad.Image.Tests/JpegBaselineLiveWindowTests.cs": "c49f21310ae41cb9b5b5faadb6555632d5a22f75ad11e8a40bffd2a7ef8339ac",
+        "tests/Lokad.Image.Tests/JpegBaselineLongCodesTests.cs": "7e964e96e7d2a6a5eed17d2e6d6d71e85522f002a89f21a23f7a8ec1e946e6df",
+        "tests/Lokad.Image.Tests/JpegCancellationTests.cs": "16bbc1d54bf2ef968643810f4b9c440c6305e20a8452a0d9676cdb69704b5fc3",
+        "tests/Lokad.Image.Tests/JpegLivePreparedAdmissionTests.cs": "292b3ef065d8eb276daf5a950cdc3b49ec98ddb73332dcf5a5cd2b9ffb12fc06",
+        "tests/Lokad.Image.Tests/JpegDequantizationTests.cs": "81a8e391b50d4a279c980ce6b793c2109982fcf5a6be6c3ffe5fa09754f168dc",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b2fbde20a85c1f1c7d1da8f5de2098cc3f4352639e3811bf78316e5fb47d7f64",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "3cc3767fb6f36368b8ef921da110b90ac77837d7e2f38e9cf2ec9307a67d7d99",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "f411f2bc910ed28e3f9d2bd807647bcdd37415fa8c4f1599a9f9f36a98c4bc91",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "9bcbecf918d0965190c7e8b6481be25b09c50596bc6d4dadbe299a7ba7c35687",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "abf2842cb02001fcc1bf1d6fdb53da4f2e1dea907cc6f201600ad8402ab430d0"
+      },
+      "benchmarkManifestRestoredByteExactly": true,
+      "sourceSha256": "9d9958b51c5a5ae918a58731e8989042331c6d0ce75dae70488a7661f7cef3e3",
+      "originalBindingsRestored": true,
+      "allBuilds": 0,
+      "prototypeOnlyHelperRemoved": true
+    }
+  },
+  "decision": "Do notselecteitherimplementation: Avsoriginaladverse38.81uspoint; Bsmall8.79usleadnotconfirmed andRGBadverse17.62uspoint, allwideintervals/noallocationorretainedbenefit. Addedtypedgrammar/codegencomplexityisnotjustifiedbycurrentcompletedstageevidence. Restorequalifiedsources/main/embedded/bindings/manifestbyteexactly; removeprototypehelperanddedicatedtests. Currentcosts/package/qualificationunchanged. Thisdoesnotproveallfusiondesignsfailorclosefamily.",
+  "next": "Resolve existing historical-H Tight64x32_16 cost oncurrentimmutablequalifiedpackage beforeassumingoptimization: packedwordkernel itselfunchanged, butImageTransformsdispatchandsharedBicubicMathchanged sinceprovider. Byte64x32kernel remains source-valid; nocostblanketinvalidating wholelibrary. Reconcile exactrequired branches thenchoosegeneralizedpreparation/reuse, no newshapegrid orfixed32tapkernel. Full283pathobjectiveopen.",
+  "raw": {
+    "file": "jpeg-coefficient-fusion-unselected.tar.xz",
+    "sha256": "bf88043ad3ca57cf2f43ef042b2a3845ed3fb73a0c235b63d7d1f7c188a91df8",
+    "bytes": 7883924,
+    "members": 247,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-quarter-interpolation-qualified.tar.xz",
+        "sha256": "d0a9f382a265469536ffbf9f6763253e323e1a4442b3f56a851f3a18c2092208"
+      },
+      {
+        "file": "jpeg-coefficient-pipeline-attribution.tar.xz",
+        "sha256": "4dd56c4370c14d544fa1d5b033ee8735633a7011b684d2cffdb0a6bce28ad7fc"
+      }
+    ]
+  }
+}
