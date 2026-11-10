@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -15,6 +16,18 @@ internal static class JpegInverseTransform
     private static readonly Vector256<short> Row23 = BuildRowPair(2);
     private static readonly Vector256<short> Row45 = BuildRowPair(4);
     private static readonly Vector256<short> Row67 = BuildRowPair(6);
+    private static readonly Vector512<short> Column01 = BuildColumnPair(0);
+    private static readonly Vector512<short> Column23 = BuildColumnPair(2);
+    private static readonly Vector512<short> Column45 = BuildColumnPair(4);
+    private static readonly Vector512<short> Column67 = BuildColumnPair(6);
+
+    private static Vector512<short> BuildColumnPair(int row)
+    {
+        // Match the existing reflected column evaluation, including its
+        // explicitly negated odd-frequency weight in the lower half.
+        int Odd(int y) => y < 4 ? Kernel[8 + y] : -Kernel[8 + 7 - y];
+        return Vector512.Create(PairWeights(Kernel[0], Odd(row)), PairWeights(Kernel[0], Odd(row + 1)));
+    }
 
     private static Vector256<short> BuildRowPair(int frequency)
     {
@@ -179,32 +192,41 @@ internal static class JpegInverseTransform
 
         // Bias in signed words before widening, preserving the scalar wrap.
         var first = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows[..8]));
-        var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
         if (twoLowRows)
         {
             // Every omitted row transforms to zero. Keep all sixteen lower
             // frequencies, the original word bias and the same column sums.
-            var even = Avx2.MultiplyLow(r0, Vector256.Create(Kernel[0]));
-            var r1 = WidenRow(rows, 1);
-            if (Vector256.EqualsAll(r1, Vector256<int>.Zero))
+            var second = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(8, 8)));
+            if (Vector128.EqualsAll(second, Vector128<short>.Zero))
             {
                 // Every odd term is exactly zero. Preserve the existing word
                 // bias, modulo-Int32 product and clipping once, then reuse the
                 // completed bytes for all eight identical output rows.
+                var constant = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
+                var even = Avx2.MultiplyLow(constant, Vector256.Create(Kernel[0]));
                 StoreRow(even, pixels[..8]);
                 var packed = BinaryPrimitives.ReadUInt64LittleEndian(pixels[..8]);
                 for (var y = 1; y < 8; y++)
                     BinaryPrimitives.WriteUInt64LittleEndian(pixels.Slice(y * 8, 8), packed);
                 return;
             }
+            if (Avx512BW.IsSupported)
+            {
+                StoreTwoRowColumnsAvx512(first, second, pixels);
+                return;
+            }
+            var low0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
+            var evenLow = Avx2.MultiplyLow(low0, Vector256.Create(Kernel[0]));
+            var r1 = Avx2.ConvertToVector256Int32(second);
             for (var y = 0; y < 4; y++)
             {
                 var odd = Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y]));
-                StoreRow(Avx2.Add(even, odd), pixels.Slice(y * 8, 8));
-                StoreRow(Avx2.Subtract(even, odd), pixels.Slice((7 - y) * 8, 8));
+                StoreRow(Avx2.Add(evenLow, odd), pixels.Slice(y * 8, 8));
+                StoreRow(Avx2.Subtract(evenLow, odd), pixels.Slice((7 - y) * 8, 8));
             }
             return;
         }
+        var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
         var r4 = WidenRow(rows, 4);
         var p26 = PairRows(rows, 2, 6);
         var p13 = PairRows(rows, 1, 3);
@@ -226,6 +248,27 @@ internal static class JpegInverseTransform
             StoreRow(Avx2.Add(even, odd), pixels.Slice(y * 8, 8));
             StoreRow(Avx2.Subtract(even, odd), pixels.Slice((7 - y) * 8, 8));
         }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static void StoreTwoRowColumnsAvx512(Vector128<short> first, Vector128<short> second, Span<byte> pixels)
+    {
+        // The caller validates the complete block. Bias wraps in signed words
+        // before the pair products, just as in the AVX2/scalar column paths.
+        first = Sse2.Add(first, Vector128.Create((short)32));
+        var pair = Vector256.Create(Sse2.UnpackLow(first, second), Sse2.UnpackHigh(first, second));
+        var pairs = Vector512.Create(pair, pair);
+        var a = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column01), 20);
+        var b = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column23), 20);
+        var c = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column45), 20);
+        var d = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column67), 20);
+        // Shifted Int32 values are within [-2048,2047], so narrowing to words
+        // is exact. The unsigned saturating pack performs final byte clipping.
+        var top = Vector512.Narrow(a, b);
+        var bottom = Vector512.Narrow(c, d);
+        var packed = Avx512BW.PackUnsignedSaturate(top, bottom).AsUInt64();
+        var ordered = Avx512F.PermuteVar8x64(packed, Vector512.Create(0ul, 2ul, 4ul, 6ul, 1ul, 3ul, 5ul, 7ul));
+        MemoryMarshal.Write(pixels, in ordered);
     }
 
     private static Vector256<int> RowProduct(ReadOnlySpan<short> row, int first, Vector256<short> weights)

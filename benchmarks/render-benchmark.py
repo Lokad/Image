@@ -1089,24 +1089,26 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    # One current JPEG provider owns all29 read costs, including six explicitly
-    # reused progressive paths. Historical stages stay in their family reports.
-    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-prepared-token-descriptors-evidence.json').read_text(encoding='utf-8'))
-    jpeg_token_qualification = jpeg_read['qualification']
+    # One current JPEG provider owns all29 read costs, including four explicitly
+    # reused DC-only/validation paths. Historical stages stay in their reports.
+    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-batched-two-row-columns-evidence.json').read_text(encoding='utf-8'))
+    jpeg_qualification = jpeg_read['qualification']
     assert jpeg_read['productionAccepted'] and jpeg_read['requiredMaterialPaths'] == 283
-    assert jpeg_token_qualification['fullChecksEachOs'] == jpeg_token_qualification['windows']['total'] == jpeg_token_qualification['linux']['total'] == 6172
-    assert jpeg_token_qualification['sameActualPackageBothOS']
-    assert jpeg_token_qualification['actualPackage']['sha256'] == jpeg_token_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert jpeg_qualification['fullChecksEachOs'] == jpeg_qualification['windows']['total'] == jpeg_qualification['linux']['total'] == 6182
+    assert jpeg_qualification['sameActualPackageBothOS']
+    assert jpeg_qualification['actualPackage']['sha256'] == jpeg_qualification['samePackageLinux']['sameActualPackageSha256']
     assert jpeg_read['raw']['mirrored'] and jpeg_read['raw']['allMembersVerified']
-    assert jpeg_read['sourceProof']['otherReaderMethodsVerbatim']
-    assert jpeg_read['sourceProof']['tableEligibilityFieldsCapacityAndReleaseVerbatim']
-    assert jpeg_read['storage']['additionalOwnedCapacityBytes'] == jpeg_read['storage']['retainedOperationScratchBytes'] == 0
-    assert len(jpeg_read['refreshedCases']) == 23 and len(jpeg_read['reusedCases']) == 6 and len(jpeg_read['cases']) == 29
+    assert jpeg_read['sourceProof']['originalReconstructedExactlyAfterRemovingPublisherAndRestoringRecordedDriver']
+    assert jpeg_read['sourceProof']['allOtherValidationDequantizationRowTransformScalarGlobalDcAndFullColumnSourcesVerbatim']
+    assert jpeg_read['sourceProof']['actualCode']['StoreTwoRowColumnsAvx512']['pairMultiply512'] == 4
+    assert jpeg_read['sourceProof']['actualCode']['StoreTwoRowColumnsAvx512']['final64ByteStore'] == 1
+    assert jpeg_read['storage']['newPerImageOwnedCapacityBytes'] == jpeg_read['storage']['retainedOperationScratchBytes'] == 0
+    assert len(jpeg_read['refreshedCases']) == 25 and len(jpeg_read['reusedCases']) == 4 and len(jpeg_read['cases']) == 29
     for case, cost in jpeg_read['cases'].items():
         assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
         assert cost['reusedUnchangedPath'] == (case in jpeg_read['reusedCases'])
-        assert cost['reusedUnchangedPath'] or cost['librarySha256'] == jpeg_token_qualification['actualPackage']['librarySha256']
+        assert cost['reusedUnchangedPath'] or cost['librarySha256'] == jpeg_qualification['actualPackage']['librarySha256']
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in jpeg_read['comparison']['views'].values())
@@ -1233,7 +1235,7 @@ def render():
     assert not any(v['normalizedLossSeparated'] for c in lanczos_current['comparisons'].values() for v in c['views'].values())
     assert lanczos_qualification['fullChecksEachOs'] == 6153
     assert lanczos_qualification['actualPackage']['sha256'] == lanczos_qualification['samePackageLinux']['sameActualPackageSha256']
-    current_build_qualification = packed_qualification
+    current_build_qualification = jpeg_qualification
     assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
     assert len(lanczos_current['cases']) == 8
     assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
@@ -1868,17 +1870,15 @@ Current scope and remaining work:
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
-- **JPEG:** [compiled token descriptors](../benchmarks/JPEG-PREPARED-TOKEN-DESCRIPTORS.md)
-  save **{jpeg_read['comparison']['savedUs']:.2f} µs/{100*jpeg_read['comparison']['rawReduction']:.2f}% raw/{100*jpeg_read['comparison']['normalizedReduction']:.2f}% normalized** on complete direct RGB444,
-  with separated filtered/all-actual raw/normalized intervals. Current
-  {jpeg_current['DirectRgb444']['managedMicroseconds']:.2f}/native{jpeg_current['DirectRgb444']['nativeMicroseconds']:.2f} µs,
-  upper{jpeg_current['DirectRgb444']['upper']:.3f} stays uncertain near parity; one targeted check resolves
-  initial managed variation, with every actual retained. The existing 16,408 B
-  table per prepared alphabet and scratch retention 0 remain; primary GC is
-  42,936 B/op, without new owned capacity. All 23 baseline costs refresh; six
-  unchanged progressive costs are reused. Across 29 reads: **{jpeg_counts['confirmed-pass-stop']} pass / {jpeg_counts['confirmed-gap']} gaps /
-  {jpeg_counts['confirmed-confidence-open']} uncertain**. RGB420/RGB422, sparse CMYK and caller CMYK remain gaps;
-  RGB444, horizontal CMYK and progressive live444 need confidence resolution.
+- **JPEG:** [batched two-row columns](../benchmarks/JPEG-BATCHED-TWO-ROW-COLUMNS.md)
+  save **{jpeg_read['comparison']['savedUs']:.2f} µs/{100*jpeg_read['comparison']['rawReduction']:.2f}% raw/{100*jpeg_read['comparison']['normalizedReduction']:.2f}% normalized** on complete sparse CMYK,
+  with separated filtered/all-actual raw/normalized intervals. Sparse upper{jpeg_current['CmykAdobeSparse2D']['upper']:.3f}
+  and RGB444 upper{jpeg_current['DirectRgb444']['upper']:.3f} remain uncertain; no causal RGB companion gain is claimed.
+  Twenty-five decode costs refresh; four unchanged DC-only/validation costs are reused.
+  Across 29 reads: **{jpeg_counts['confirmed-pass-stop']} pass / {jpeg_counts['confirmed-gap']} gaps /
+  {jpeg_counts['confirmed-confidence-open']} uncertain**. The linked case table identifies each status.
+  GC remains 20,944/42,936 B/op for sparse/RGB, with no added image capacity or retained scratch.
+  Fixed format weights (256 B) and observed helper JIT constant data (384 B) are separate.
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
@@ -1917,9 +1917,9 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Resize checks pass {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
-normal/scalar/disabled-AVX2/AVX512 mode; unchanged JPEG evidence
-({current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
+Windows/Linux**. JPEG checks pass {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per
+normal/scalar/disabled-AVX2/AVX512 mode; unchanged resize evidence
+({current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
