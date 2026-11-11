@@ -70,6 +70,9 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
+  [Current bilinear reduction](../benchmarks/BILINEAR-DOWNSIZE-CURRENT-COSTS.md)
+  confirms byte488.55/FFmpeg386.73µs and word443.43/420.90µs gaps, with25,785/8,473B/op.
+  Shared preparation is the next lead; these replace historical costs, not a speedup claim.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
@@ -198,9 +201,6 @@ settings do not establish matched quality.
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,496.35 | 4,060.63 | 0.861 / 0.865 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,084.94 | 5,070.48 | 0.806 / 0.811 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
-| Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
-| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
-| Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 438.33 | 419.09 | 1.046 / 1.064 | 199,983 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,722.27 | 2,874.11 | 0.947 / 0.952 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 2,940.49 | 3,048.98 | 0.964 / 0.971 | 116 |
@@ -239,6 +239,9 @@ settings do not establish matched quality.
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
+| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
+| Bilinear resize RGBA8 (gap) † → 256×129 | 488.55 | 386.73 | 1.263 / 1.278 | 25,785 |
+| Bilinear resize RGBA16 (gap) † → 256×129 | 443.43 | 420.90 | 1.054 / 1.066 | 8,473 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 389.10 | 997.60 | 0.390 / 0.393 | 198,457 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 318.85 | 368.80 | 0.865 / 0.870 | 137 |

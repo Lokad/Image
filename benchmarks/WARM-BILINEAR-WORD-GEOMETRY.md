@@ -1,5 +1,10 @@
 # Reuse RGBA16 bilinear geometry
 
+[Current downsizing costs](BILINEAR-DOWNSIZE-CURRENT-COSTS.md) supersede the
+Down8/Down16 timing below after output-storage changes. Original stage evidence
+and causal claims remain historical.
+
+
 The existing word reduction independently confirms **13.7% less elapsed time**
 and **17,309 fewer allocated B/op**. Native-normalized improvement is 14.0%;
 filtered, all-actual and normalized independent intervals separately separate.

@@ -1,7 +1,12 @@
 # Current byte-bilinear costs
 
+[Current downsizing costs](BILINEAR-DOWNSIZE-CURRENT-COSTS.md) supersede the
+Down8/Down16 timing below after output-storage changes. Original stage evidence
+and causal claims remain historical.
+
+
 Up8 costs are superseded by [exact horizontal-row reuse](WARM-BILINEAR-BYTE-ROW-REUSE.md).
-Down8 remains applicable to its unchanged path; the original costs below are retained.
+Down8 below is historical; the original costs and packet/pixel proof are retained.
 
 Two existing 513×259 RGBA8 controls resolve complete-operation uncertainty after
 the word-bilinear dispatch change. Each receives one independent 12-iteration

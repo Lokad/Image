@@ -376,40 +376,14 @@ def render():
     assert horizontal_cost['baselineReference']['librarySha256'] == down8_cost['preparation']['productionSha256']
     assert byte_zero_taps['qualification']['sameActualPackageBothOs']
     assert byte_zero_taps['sourceScope']['otherCachedSourceUnchanged']
-    bilinear_word_cost = json.loads((ROOT / 'benchmarks/warm-bilinear-word-geometry-evidence.json').read_text(encoding='utf-8'))
-    assert bilinear_word_cost['productionChanged'] and bilinear_word_cost['decision']['passed']
-    assert bilinear_word_cost['qualification']['sameActualPackageBothOs']
-    assert bilinear_word_cost['independentQuietConfirmation']
-    bilinear_word = bilinear_word_cost['cases']['Down16'][-1]
-    assert len(bilinear_word['managed']['actual']) == 12
-    assert bilinear_word['receipt']['managedRationalReferenceExact']
-    assert bilinear_word['receipt']['sourceUnchanged'] and bilinear_word['receipt']['independentOwnedOutput']
-    assert bilinear_word_cost['comparisonLowerBounds']['Down16'] > 1
-    assert bilinear_word_cost['status']['Down16'] == 'confirmed-gap'
-    bilinear_byte_cost = json.loads((ROOT / 'benchmarks/current-byte-bilinear-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not bilinear_byte_cost['productionChanged'] and bilinear_byte_cost['allBuilds'] == 0
-    assert bilinear_byte_cost['independentQuietConfirmation']
-    assert set(bilinear_byte_cost['cases']) == {'Down8', 'Up8'}
-    assert bilinear_byte_cost['qualification']['sameActualPackageBothOs']
-    assert all(v > 1 for v in bilinear_byte_cost['comparisonLowerBounds'].values())
-    bilinear_byte_reuse = json.loads((ROOT / 'benchmarks/warm-bilinear-byte-row-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert bilinear_byte_reuse['productionChanged'] and bilinear_byte_reuse['decision']['passed']
-    assert bilinear_byte_reuse['decision']['normalizedSeparated']
-    assert bilinear_byte_reuse['qualification']['fullChecksEachOs'] == 5241
-    assert bilinear_byte_reuse['qualification']['sameActualPackageBothOs']
-    assert bilinear_byte_reuse['qualification']['byteBilinearRowReusePixelsAndExistingAdmissionPassed']
-    assert bilinear_byte_reuse['qualification']['package']['sha256'] == bilinear_byte_reuse['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert bilinear_byte_reuse['memory']['ownedCapacityIncrease'] == 0
     bicubic_byte_cost = json.loads((ROOT / 'benchmarks/current-bicubic-byte-reduction-cost-evidence.json').read_text(encoding='utf-8'))
     assert not bicubic_byte_cost['productionChanged'] and bicubic_byte_cost['allBuilds'] == 0
     assert bicubic_byte_cost['independentQuietConfirmation'] and bicubic_byte_cost['status']['Down8'] == 'confirmed-gap'
     assert len(bicubic_byte_cost['cases']['Down8'][-1]['managed']['actual']) == 12
-    editing_costs = {'case21': bilinear_word,
-                     'case22': bicubic_byte_cost['cases']['Down8'][-1],
+    editing_costs = {'case22': bicubic_byte_cost['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
                      'case24': cross16_cost['cases']['TightCross16'][-1]}
-    editing_producers = {'case21': bilinear_word_cost,
-                         'case22': bicubic_byte_cost, 'case23': word_publication,
+    editing_producers = {'case22': bicubic_byte_cost, 'case23': word_publication,
                          'case24': cross16_cost}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
@@ -514,7 +488,7 @@ def render():
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     rows = []
     for case in evidence['cases']:
-        if case['id'] in {'case00', 'case06', 'case08', 'case09', 'case10', 'case11', 'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28', 'case29', 'case30'}:
+        if case['id'] in {'case21', 'case00', 'case06', 'case08', 'case09', 'case10', 'case11', 'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28', 'case29', 'case30'}:
             continue  # Replaced by current self-contained family evidence below.
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14'}
@@ -716,20 +690,6 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {managed_bytes:,} / {native_bytes:,} |'))
-    position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| Bilinear resize RGBA16'))
-    for ordinal, case in enumerate(['Down8', 'Up8']):
-        producer = bilinear_byte_reuse if case == 'Up8' else bilinear_byte_cost
-        observation = producer['cases'][case][-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == producer['producers']['linuxSha256']
-        assert receipt['managedRationalReferenceExact'] and receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert all(q['passed'] for q in observation['quietness'].values())
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        assert math.isclose(stats['Mean'] / native, observation['worstBracketRatio'], rel_tol=1e-12)
-        label = f'Bilinear {"resize" if case == "Down8" else "upscale"} RGBA8 † → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
-        row = f'| {label} | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'
-        rows.insert(position + ordinal, ('editing', row))
     tight_byte_up = json.loads((ROOT / 'benchmarks/warm-bicubic-byte-fixed-certificate-evidence.json').read_text(encoding='utf-8'))
     assert tight_byte_up['productionChanged'] and tight_byte_up['independentQuietConfirmation']
     assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
@@ -810,7 +770,6 @@ def render():
     assert alpha_callers['producers'] == exact_alpha['producers']
     assert not alpha_callers['productionChanged'] and alpha_callers['allBuilds'] == 0
     refreshed_prefixes = {
-        'Bilinear upscale RGBA8': 'bilinear-Up8',
         'Bicubic RGBA8 enlargement,': 'bicubic-TightUp8',
         'Bicubic RGBA8 width enlargement,': 'bicubic-TightHorizontalUp8',
         'Bicubic RGBA8 height enlargement,': 'bicubic-TightVerticalUp8',
@@ -819,8 +778,6 @@ def render():
         'Bicubic upscale RGBA16': 'bicubic-Up16',
     }
     reused_prefixes = {
-        'Bilinear resize RGBA8': 'bilinear-Down8',
-        'Bilinear resize RGBA16': 'bilinear-Down16',
         'Bicubic resize RGBA8': 'bicubic-Down8',
         'Bicubic RGBA16, width down / height up': 'bicubic-TightCross16',
         'Bicubic RGBA8, 32×16 / input+output': 'bicubic-Tight32x16_8',
@@ -849,8 +806,8 @@ def render():
         rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
         refreshed.add(key)
-    assert refreshed == set(exact_alpha['cases']) | {'bicubic-Up16'}
-    assert reused == set(alpha_callers['noCallProof']['cases'])
+    assert refreshed == (set(exact_alpha['cases']) - {'bilinear-Up8'}) | {'bicubic-Up16'}
+    assert reused == set(alpha_callers['noCallProof']['cases']) - {'bilinear-Down8', 'bilinear-Down16'}
     progressive = json.loads((ROOT / 'benchmarks/current-progressive-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not progressive['productionChanged'] and progressive['allBuilds'] == 0
     assert progressive['producers'] == exact_alpha['producers']
@@ -1482,10 +1439,21 @@ def render():
     assert current['librarySha256'] == bq['actualPackage']['librarySha256']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in bilinear['comparison']['views'].values())
-    positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| Bilinear upscale RGBA8 ')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
-        f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+    rows.append(('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
+                 f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    bilinear_down = json.loads((ROOT / 'benchmarks/bilinear-downsize-current-evidence.json').read_text(encoding='utf-8'))
+    assert not bilinear_down['productionChanged'] and bilinear_down['allBuilds'] == 0
+    assert set(bilinear_down['cases']) == {'Down8', 'Down16'}
+    assert bilinear_down['raw']['mirrored'] and bilinear_down['raw']['allMembersVerified']
+    for name, cost in bilinear_down['cases'].items():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['managedExact'] and cost['independentOwnedOutput']
+        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
+        assert cost['librarySha256'] == bilinear_down['producers']['windowsSha256']
+        assert cost['status'] == 'gap' and cost['lower'] > 1
+        depth = 8 if name == 'Down8' else 16
+        rows.append(('editing', f'| Bilinear resize RGBA{depth} (gap) † → 256×129 | {cost["managedUs"]:,.2f} | '
+                     f'{cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
     current = bicubic_overlap['cases']['TightDown8']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -2000,6 +1968,9 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
+  [Current bilinear reduction](../benchmarks/BILINEAR-DOWNSIZE-CURRENT-COSTS.md)
+  confirms byte488.55/FFmpeg386.73µs and word443.43/420.90µs gaps, with25,785/8,473B/op.
+  Shared preparation is the next lead; these replace historical costs, not a speedup claim.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
