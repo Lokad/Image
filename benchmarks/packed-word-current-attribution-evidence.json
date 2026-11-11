@@ -1,0 +1,150 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PWA820",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "case": {
+    "caseId": "Tight64x32_16",
+    "managedUs": 422.8068444602273,
+    "nativeUs": 397.478197265625,
+    "ratio": 1.0637233623601139,
+    "lower": 1.0034461681642972,
+    "upper": 1.0976324301091664,
+    "allocatedBytes": 113,
+    "librarySha256": "d316aa6e1dc0209fe3d4cd7adf0f965004d8eb911b840ca5e58a991226982f84",
+    "runId": "pfp766-candidate-Tight64x32_16-confirm",
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "packetBytes": 16384,
+    "packetSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+    "status": "gap",
+    "managedRationalReferenceExact": true,
+    "managedMaxWorkingBytes": 1083416,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "nativeRgbMaximum": 1,
+    "nativeAlphaMaximum": 1,
+    "nativeRgbRmse": 0.05412658773652741,
+    "nativeAlphaRmse": 0.04941058844013093,
+    "actualIterations": 12,
+    "filteredIterations": 11,
+    "allActualsRetained": true,
+    "receiptFile": "pfp766-candidate-Tight64x32_16-confirm-receipt.json",
+    "width": 513,
+    "height": 259,
+    "depth": 16,
+    "outputWidth": 64,
+    "outputHeight": 32,
+    "nativeSamplesEachBracket": 12,
+    "reusedUnchangedPath": false,
+    "reuseProof": null
+  },
+  "currentProducers": {
+    "windowsSha256": "8a0fff84ae5f4bb66c605614c1bdbdfa3bf5600bc0446b4dd5ed7fe927ca8dda",
+    "linuxSha256": "745929aaa3c681a71936a9d56f0319913af37966cdaf00a8c27194338ad75509",
+    "actualPackageSha256": "a2f3ea5a1831d63665fa197eb96d73aef47e875b084bdf9bb6025287abe77f39"
+  },
+  "sourceValidity": "PWA820 read-only current-package bounded RGBA16 packed bicubic attribution. Existing513x259->64x32 complete public Resize at input+output+4096 remains422.81/prepared-zimg397.48us, range1.003-1.098. Packed source unchanged from PFP766; later shared Math changes add unused helpers, old bodies verbatim. Current B8a0/7459/privatepackagea2 reuses6351full/live Windows/Linux and same actual package consumer. One2secondCPU0 operation/CPU1 sampler; all instrumented elapsed discarded. Distinguish prefix/suffix preparation/filtering/publication and retained-state differences without inferring phase times/removable fractions. Preserve original frozen/rational pixels, approved max1/RMSE.25, input/ownership/native/idle-v2 gates. No production/harness/native/fixture builds, new grids or broad checks.",
+  "sources": {
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "f8a6f219a1f4a5f1f74328bc5aa0f1b909a35156849f42432e7dc9cc9c050fcf"
+  },
+  "qualificationReused": {
+    "fullChecksEachOs": 6351,
+    "sameActualPackageBothOS": true,
+    "resizeInternalEachModeEachOs": 442,
+    "resizePublicEachModeEachOs": 789
+  },
+  "referenceBoundary": "Complete managed Resize versus prepared zimg graph/scratch; fresh source processing, independent output/disposal timed on both sides. Existing asymmetry remains explicit.",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "totalSamples": 1995,
+  "managedSamples": 1979,
+  "instances": [
+    {
+      "mode": "decoded-prefix",
+      "method": "ApplyRange",
+      "address": "0x7a75404a8160",
+      "codeBytes": 6986,
+      "samples": 895,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:ApplyRange[Lokad.Image.Internal.PackedColumnBicubicResize+DecodedPrefix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)"
+    },
+    {
+      "mode": "decoded-prefix",
+      "method": "FilterContiguousPair",
+      "address": "0x7a75404aa180",
+      "codeBytes": 181,
+      "samples": 411,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterContiguousPair[Lokad.Image.Internal.PackedColumnBicubicResize+DecodedPrefix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](System.ReadOnlySpan`1[byte],int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    },
+    {
+      "mode": "packed-suffix",
+      "method": "ApplyRange",
+      "address": "0x7a75404aa260",
+      "codeBytes": 6230,
+      "samples": 348,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:ApplyRange[Lokad.Image.Internal.PackedColumnBicubicResize+PackedSuffix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)"
+    },
+    {
+      "mode": "packed-suffix",
+      "method": "FilterContiguousPair",
+      "address": "0x7a75404abc00",
+      "codeBytes": 186,
+      "samples": 164,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterContiguousPair[Lokad.Image.Internal.PackedColumnBicubicResize+PackedSuffix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](System.ReadOnlySpan`1[byte],int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    },
+    {
+      "mode": "packed-suffix",
+      "method": "FilterIndexedPair",
+      "address": "0x7a75404abce0",
+      "codeBytes": 213,
+      "samples": 25,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterIndexedPair[Lokad.Image.Internal.PackedColumnBicubicResize+PackedSuffix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    },
+    {
+      "mode": "decoded-prefix",
+      "method": "FilterIndexedPair",
+      "address": "0x7a75404aa080",
+      "codeBytes": 204,
+      "samples": 23,
+      "actualMethod": "Lokad.Image.Internal.PackedColumnBicubicResize:FilterIndexedPair[Lokad.Image.Internal.PackedColumnBicubicResize+DecodedPrefix,Lokad.Image.Internal.PackedColumnBicubicResize+WordSamples](System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],int):System.Runtime.Intrinsics.Vector512`1[double] (FullOpts)"
+    }
+  ],
+  "model": {
+    "project": "Lokad.Image",
+    "sourceOnly": true,
+    "notPerformanceProof": true,
+    "totalDecodedRowVisits": 5180,
+    "horizontalPairCalls": 8288,
+    "contiguousCalls": 7770
+  },
+  "hypothesis": {
+    "repeatedWork": "Eligible contiguous equal-count horizontal pairs return64B through a stack result buffer, then caller loads lower/full vectors and copies halves into an already-owned cache. Current prefix offsets0x62a/0x632 and suffix0x5fa/0x602 observe that boundary; this is once per pair, not an accumulator spill on each tap.",
+    "endState": "Convert the existing private contiguous-pair producer to write its final ordered Vector512 directly into the supplied two-vector cache view. Same exact indexed/unequal/odd fallback; no forwarding wrapper or duplicated arithmetic, new storage/owner/pool/session or numerical policy.",
+    "boundaries": "Complete existing Tight64x32_16 and affected Tight64x32_8. All original input/settings, exact rational/frozen pixels/native tolerances, independent output/disposal/admission and prepared-zimg asymmetry unchanged. Preserve clipped and unequal tails and precise cache loan lifetimes.",
+    "transition": "A borrowed destination may add call arguments/guards or change generic code layout; first inspect actual emitted bodies and focused exact-pixel/storage tests. A short complete control must justify independent affected confirmations. Abandon or revise if costs do not improve; no automatic merge from samples or model. Broad/package once only at coherent accepted production milestone.",
+    "continuation": "Existing deterministic word gap, actual ABI copy/stack boundary and7770contiguous calls justify a bounded candidate. Counts/samples do not predict a gain. Do not blindly replay old indexed-helper or byte-product experiments."
+  },
+  "raw": {
+    "file": "packed-word-current-attribution.tar.xz",
+    "sha256": "36ed9196b8b0182d236ddab95eadf3b96c10df525a8b3bd7fb85b02b65b04edc",
+    "bytes": 114172,
+    "members": 20,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "packed-bicubic-four-pixel-preparation.tar.xz",
+        "sha256": "ea62895c444987b31495ed85de986e508eacb077e57060c5afa79e42db9ee5fa",
+        "scope": "Original bounded byte/word costs, reference/harness/fixture identities and old exactness proof"
+      },
+      {
+        "file": "bicubic-enlargement-horizontal-modes.tar.xz",
+        "sha256": "856e6d3f68e8a8f5e5faacb5d50c49b08fec2cb9fefe3761a7d3df741a904cfd",
+        "scope": "Current actual package, timed DLL, source-valid reused helpers and6351 W/L/SAMEpackage proof"
+      }
+    ]
+  },
+  "next": "Implement only a bounded direct-cache producer experiment if actual code and focused correctness support it; measure complete affected byte/word operations. No automatic acceptance, new grid, numerical relaxation, font/text tuning or repeated broad/package checks."
+}
