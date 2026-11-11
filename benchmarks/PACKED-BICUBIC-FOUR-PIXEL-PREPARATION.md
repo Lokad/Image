@@ -1,5 +1,10 @@
 # Packed bicubic byte preparation
 
+For current packed costs and qualification, see
+[horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md). The byte control
+passes; broader word parity remains uncertain across retained sampling views.
+Measurements and design evidence below describe the earlier stage.
+
 Complete RGBA8 bicubic 513×259→64×32 with 4 KiB admission saves
 **13.99 µs / 3.33% raw**, 419.58→405.59 µs. Filtered/all-actual raw and
 reference-normalized confidence intervals separate. The normalized point gain

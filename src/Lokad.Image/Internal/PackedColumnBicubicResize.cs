@@ -144,6 +144,7 @@ internal static class PackedColumnBicubicResize
             }
             var sourceCount = offsets[(length - 1) * taps + counts[length - 1] - 1] + 1;
             var contiguousPairs = PrepareContiguousPairs(counts[..length], horizontalOffsets, taps);
+            var contiguousQuartet = prepared && IsContiguousQuartet(counts[..length], horizontalOffsets, taps, sourceCount, contiguousPairs);
             rowIds.Fill(-1);
             for (var y = 0; y < result.Height; y++)
             {
@@ -242,7 +243,14 @@ internal static class PackedColumnBicubicResize
                         }
                     }
                     ReadOnlySpan<byte> decodedRead = decodedBytes;
-                    for (var column = 0; column + 1 < length; column += 2)
+                    var column = 0;
+                    if (contiguousQuartet)
+                    {
+                        FilterContiguousQuartet(MemoryMarshal.Cast<byte, Vector256<double>>(decodedRead),
+                            horizontalWeights, selectedCache.Slice(cacheAt, 4), context);
+                        column = 4;
+                    }
+                    for (; column + 1 < length; column += 2)
                     {
                         var count0 = counts[column]; var count1 = counts[column + 1];
                         var weights0 = horizontalWeights.Slice(column * taps, count0); var weights1 = horizontalWeights.Slice((column + 1) * taps, count1);
@@ -262,7 +270,7 @@ internal static class PackedColumnBicubicResize
                     }
                     if ((length & 1) != 0)
                     {
-                        var column = length - 1;
+                        column = length - 1;
                         var tapWeights = weights.Slice(column * taps, counts[column]);
                         var tapOffsets = offsets.Slice(column * taps, counts[column]);
                         var sum = Vector256<double>.Zero;
@@ -385,6 +393,66 @@ internal static class PackedColumnBicubicResize
             if (contiguous) mask |= 1 << x;
         }
         return mask;
+    }
+
+    internal static bool IsContiguousQuartet(ReadOnlySpan<int> counts, ReadOnlySpan<ushort> offsets,
+        int taps, int sourceCount, int pairs)
+        => taps == 33 && counts.Length == 4 && sourceCount >= 56 && (pairs & 5) == 5
+            && counts[0] == 32 && counts[1] == 32 && counts[2] == 32 && counts[3] == 32
+            && offsets[0] == 0 && offsets[33] == 8 && offsets[66] == 16 && offsets[99] == 24;
+
+    // Visit the union of four overlapping windows in seven fixed bands.
+    // Each column still consumes its original t0..t31 Add(Multiply) order,
+    // with the original column-major coefficients and exact-result repair.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static void FilterContiguousQuartet(ReadOnlySpan<Vector256<double>> decoded,
+        ReadOnlySpan<double> weights, Span<Vector256<double>> cache, OperationContext context)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        decoded = decoded[..56]; weights = weights[..132]; cache = cache[..4];
+        var sum0 = Vector256<double>.Zero; var sum1 = Vector256<double>.Zero;
+        var sum2 = Vector256<double>.Zero; var sum3 = Vector256<double>.Zero;
+        for (var p = 0; p < 8; p++)
+            sum0 = Avx.Add(sum0, Avx.Multiply(decoded[p], Vector256.Create(weights[p])));
+        for (var p = 8; p < 16; p++)
+        {
+            var pixel = decoded[p];
+            sum0 = Avx.Add(sum0, Avx.Multiply(pixel, Vector256.Create(weights[p])));
+            sum1 = Avx.Add(sum1, Avx.Multiply(pixel, Vector256.Create(weights[p + 25])));
+        }
+        for (var p = 16; p < 24; p++)
+        {
+            var pixel = decoded[p];
+            sum0 = Avx.Add(sum0, Avx.Multiply(pixel, Vector256.Create(weights[p])));
+            sum1 = Avx.Add(sum1, Avx.Multiply(pixel, Vector256.Create(weights[p + 25])));
+            sum2 = Avx.Add(sum2, Avx.Multiply(pixel, Vector256.Create(weights[p + 50])));
+        }
+        for (var p = 24; p < 32; p++)
+        {
+            var pixel = decoded[p];
+            sum0 = Avx.Add(sum0, Avx.Multiply(pixel, Vector256.Create(weights[p])));
+            sum1 = Avx.Add(sum1, Avx.Multiply(pixel, Vector256.Create(weights[p + 25])));
+            sum2 = Avx.Add(sum2, Avx.Multiply(pixel, Vector256.Create(weights[p + 50])));
+            sum3 = Avx.Add(sum3, Avx.Multiply(pixel, Vector256.Create(weights[p + 75])));
+        }
+        for (var p = 32; p < 40; p++)
+        {
+            var pixel = decoded[p];
+            sum1 = Avx.Add(sum1, Avx.Multiply(pixel, Vector256.Create(weights[p + 25])));
+            sum2 = Avx.Add(sum2, Avx.Multiply(pixel, Vector256.Create(weights[p + 50])));
+            sum3 = Avx.Add(sum3, Avx.Multiply(pixel, Vector256.Create(weights[p + 75])));
+        }
+        for (var p = 40; p < 48; p++)
+        {
+            var pixel = decoded[p];
+            sum2 = Avx.Add(sum2, Avx.Multiply(pixel, Vector256.Create(weights[p + 50])));
+            sum3 = Avx.Add(sum3, Avx.Multiply(pixel, Vector256.Create(weights[p + 75])));
+        }
+        for (var p = 48; p < 56; p++)
+            sum3 = Avx.Add(sum3, Avx.Multiply(decoded[p], Vector256.Create(weights[p + 75])));
+        cache[0] = sum0; cache[1] = sum1;
+        context.Cancellation.ThrowIfCancellationRequested();
+        cache[2] = sum2; cache[3] = sum3;
     }
 
     // Isolate the indexed reduction so publishing its halves cannot make the

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse bounded bicubic source windows across four output columns, preserving
+  exact pixels and working-memory limits.
+
 - Reuse prepared bicubic coefficients and overlapping source windows through
   shared wide/narrow schedules without additional working storage, preserving
   exact samples and ownership.

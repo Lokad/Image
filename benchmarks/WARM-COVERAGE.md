@@ -7,7 +7,24 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
+The latest accepted [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
+passes 6,417 full/live checks per OS, 508 internal/789 public affected checks in
+normal/scalar/AVX2-off/AVX512-off modes and SAME actual Release-package/all three
+examples on Windows/Linux. Byte 64×32 saves 14.21 µs/3.76% raw/3.68%
+normalized, with separated filtered/all-actual/normalized intervals and native
+-0.08%. Current 364.04/zimg 372.99 µs upper 0.982 passes/stops.
+Word global 386.57/378.04 µs upper 1.027 is uncertain; matched 64-operation
+adjacent 397.04/410.52 µs upper 0.979 passes its scoped view. Both are retained;
+broader word parity remains open and no word causal gain is claimed. Stop
+unchanged repeats and optimization based on a presumed word gap. Seven source
+bands read 56 instead of 128 decoded pixels without changing per-lane arithmetic,
+column-major weights, exact repair or 4 KiB admission. Same 113 B/op/zero scratch
+retention; no new arrays/owners/pools/capacity. Sixteen focused cases include word
+precision-decline cleanup/public replay. One production/embedded build per OS,
+one allowlist-only diagnostic-driver build and one full/package milestone.
+Unchanged cached/bilinear/Lanczos/codecs/text costs and ISA evidence are reused.
+
+Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and the SAME actual Release-package/all
 three examples on Windows/Linux. Down8 saves 22.70 µs/4.78% raw/5.11%
@@ -115,7 +132,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | Bicubic enlargement/shared byte publication | [Horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md) owns all12 refreshed enlargement controls:11pass/0gap/1uncertain. Tight vertical byte/word save286.55/232.95 µs; tight full word saves78.84 µs, with separated raw/all-actual/normalized confidence. Tight horizontal byte1,499.15/zimg1,521.64 µs upper1.048 remains uncertain. Same4KiB,114–116 B/op except full word4,264,573 B/op; no added owned capacity/retention. With unchanged TightVertical8 from [quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md), family totals12pass/0gap/1uncertain. Stop passing controls; two mixed byte costs belong to compact geometry below. |
 | Mixed-axis byte/word bicubic | [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md): all4affected default/tight controls refresh. Byte846.46/zimg867.46µs upper.989 and850.67/893.27µs upper.978 pass/stop; word921.81/918.99µs upper1.012 and923.05/914.24µs upper1.016 remain uncertain. Current default predecessor is also uncertain; raw/native movement and normalized overlap are retained. Exact geometry shrinks84→36B/column without changing filtering/repair or owned capacity;114B/op, scratch4/8KiB, no added retention. Unchanged vertical pass and previous row-band design remain in[result-backed history](BICUBIC-RESULT-BACKED-BANDS.md). |
 | Horizontal/reverse-mixed word bicubic | [Ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md): existing TightCross16 513×259→256×519 passes 892.36/zimg900.40 µs upper.999; TightHorizontal16→256×259 passes 493.16/640.62 µs upper.774. Savings 49.41/34.44 µs, 5.25%/6.53% raw and 6.36%/15.36% normalized, with separated confidence. Native +1.19%/+10.44% is explicit.114/113 B/op, same4KiB admission, no added capacity/retention. Both pass/stop; defaults and other kernels unchanged. |
-| Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. [Current word attribution](PACKED-WORD-CURRENT-ATTRIBUTION.md) records the temporary return-buffer lead and an inconclusive direct-cache implementation. Production is restored exactly; no verified gain, favorable repeat or broad/package rerun. |
+| Bounded packed bicubic | [Horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md): byte364.04/zimg372.99µs upper0.982 passes/stops after14.21µs/3.76%raw/3.68%normalized gain; both confidence views separate. Word386.57/378.04µs upper1.027 stays uncertain. Matched64-operation adjacent397.04/410.52µs upper0.979 passes its scope; retain both and leave broader word confirmation open. Same113B/op/4KiB, no new owned capacity or retention. Earlier return-transfer trial/profile remain history. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
 | Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |
 | Cached wider/other bicubic | [Shared horizontal schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md): all 24 shared controls refresh, 22 pass / 0 gaps / 2 uncertain. Down8 452.28/zimg454.42 µs upper1.005 and Wide8 378.51/375.02 µs upper1.020 are uncertain. Down8 saves22.70 µs/4.78% raw/5.11% normalized with separated confidence and native+0.35%. No presumed gap or favorable repeat. All eight equivalent boundaries pass/stop. Same owned capacity/retention; earlier costs are history. |

@@ -924,34 +924,41 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB{qualifier} † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-four-pixel-preparation-evidence.json').read_text(encoding='utf-8'))
+    packed_current = json.loads((ROOT / 'benchmarks/packed-horizontal-window-reuse-evidence.json').read_text(encoding='utf-8'))
     packed_qualification = packed_current['qualification']
-    assert packed_current['productionAccepted'] and packed_current['requiredMaterialPaths'] == 283
+    assert packed_current['productionAccepted'] and packed_current['requiredMaterialPaths'] == 289
+    assert packed_current['allAffectedPerformanceReconciled'] and not packed_current['materialPassToGapContradictions']
     assert packed_current['raw']['mirrored'] and packed_current['raw']['allMembersVerified']
-    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6181
-    assert packed_qualification['sameActualPackageBothOS'] and packed_qualification['actualPackage']['sha256'] == packed_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert packed_qualification['resizeInternalEachModeEachOs'] == 350 and packed_qualification['resizePublicEachModeEachOs'] == 729
-    assert packed_current['sourceCodeProof']['originalSourceReconstructedExactly']
-    assert packed_current['sourceCodeProof']['orderedFiltersGeometryCertificatesRepairWordTwoPixelAndSingleTailsVerbatim']
-    assert packed_current['sourceCodeProof']['actualCode']['actualCandidateCode']
-    assert all(packed_current['sourceCodeProof']['actualCode']['bodies'][f'8-{mode}']['ushortMultiply'] == 1
-               for mode in ('prefix', 'suffix'))
+    assert packed_qualification['fullChecksEachOs'] == packed_qualification['windows']['total'] == packed_qualification['linux']['total'] == 6417
+    assert packed_qualification['sameActualPackageBothOS']
+    assert packed_qualification['actualPackage']['sha256'] == packed_qualification['samePackageLinux']['sameActualPackageSha256'] == packed_current['producers']['actualPackageSha256']
+    assert packed_qualification['resizeInternalEachModeEachOs'] == 508 and packed_qualification['resizePublicEachModeEachOs'] == 789
+    assert packed_qualification['actualPackage']['actualConsumerPassed'] and packed_qualification['samePackageLinux']['actualConsumerPassed']
+    assert packed_current['sourceProof']['originalFileReconstructedExactly']
+    assert packed_current['sourceProof']['allOldPairIndexedOddSuffixDecodeVerticalPublishCertificateAndRepairBodiesVerbatim']
     assert packed_current['storage']['workingAdmissionBytes'] == 4096
     assert packed_current['storage']['newOwnedCapacityBytes'] == packed_current['storage']['retainedOperationScratchBytes'] == 0
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in packed_current['comparison']['views'].values())
+    effect = packed_current['comparison']['Tight64x32_8']
+    assert effect['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in effect['views'].values())
+    assert packed_current['statusCounts'] == {'pass': 1, 'gap': 0, 'uncertain': 1}
+    adjacent_word = packed_current['adjacentWord']
+    assert adjacent_word['status'] == 'pass' and adjacent_word['operationsPerSubject'] == 64
+    assert adjacent_word['allPairsRetained'] and adjacent_word['threeNativeBracketsRetained']
+    assert not adjacent_word['currentGeneralPassAccepted']
     for depth in (8, 16):
         current = packed_current['cases'][f'Tight64x32_{depth}']
-        assert current['actualIterations'] == 12 and current['allActualsRetained']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12 and current['allActualsRetained']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
-        assert current['librarySha256'] == packed_qualification['actualPackage']['librarySha256']
-        assert current['status'] == 'gap' and current['lower'] > 1 and current['allocatedBytes'] == 113
+        assert current['librarySha256'] == packed_qualification['actualPackage']['librarySha256'] == packed_current['producers']['timedArtifactSha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        assert current['status'] == ('pass' if depth == 8 else 'uncertain') and current['allocatedBytes'] == 113
         assert current['managedMaxWorkingBytes'] == (513 * 259 + 64 * 32) * (depth // 2) + 4096
         assert current['nativeRgbMaximum'] <= 1 and current['nativeAlphaMaximum'] <= 1
         assert current['nativeRgbRmse'] <= .25 and current['nativeAlphaRmse'] <= .25
-        rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 64×32 | '
-                     f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+        qualifier = ' (confidence open)' if depth == 16 else ''
+        rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB{qualifier} † → 64×32 | '
+                     f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     bicubic_overlap = json.loads((ROOT / 'benchmarks/bicubic-wide-overlap-evidence.json').read_text(encoding='utf-8'))
     assert bicubic_overlap['productionAccepted'] and bicubic_overlap['requiredMaterialPaths'] == 283
     cq = bicubic_overlap['qualification']
@@ -1355,7 +1362,7 @@ def render():
     for label, current in [
         ('Bicubic RGBA8 wider-support reduction † → 128×64', wide_byte['cases']['Wide8']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32', packed_current['cases']['Tight64x32_8']),
-        ('Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32', packed_current['cases']['Tight64x32_16']),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB (confidence open) † → 64×32', packed_current['cases']['Tight64x32_16']),
         ('Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide8']),
         ('Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64', bicubic_overlap['cases']['TightWide16']),
     ]:
@@ -2034,6 +2041,7 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['threeNamedStorageSuitesIncluded']
+    current_build_qualification = packed_qualification
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-11. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2126,8 +2134,14 @@ Current scope and remaining work:
   clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
   scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
   with no extra heap capacity or retention. Original exact arithmetic/repair remain.
-  [Packed bicubic](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) retains
-  its source-scoped costs and remaining gaps; passing cases stop.
+  [Bounded horizontal window reuse](../benchmarks/PACKED-HORIZONTAL-WINDOW-REUSE.md)
+  saves 14.21 µs/3.76% raw/3.68% normalized on byte 64×32, with separated
+  confidence and native -0.08%. Byte 364.04/zimg 372.99 µs upper 0.982 passes/stops.
+  Word 386.57/378.04 µs upper 1.027 remains uncertain. A matched 64-operation
+  adjacent view 397.04/410.52 µs upper 0.979 passes its scope; both views remain
+  visible and broader word parity stays open. No causal word gain or favorable
+  repeat is claimed. Same 113 B/op (112 direct in the adjacent tool), 4 KiB
+  admission and 8,192/16,384 B independently owned results; no added capacity or retention.
   [Current Lanczos3 byte confidence](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md)
   is 489.94/zimg 491.00 µs, upper 1.015: uncertain on the unchanged actual package,
   superseding the former byte gap. The eight controls now have 6 passes / 2 uncertain;

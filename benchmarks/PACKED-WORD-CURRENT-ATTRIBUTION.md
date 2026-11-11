@@ -1,5 +1,10 @@
 # Bounded word bicubic attribution
 
+For current packed costs and qualification, see
+[horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md). The byte control
+passes; broader word parity remains uncertain across retained sampling views.
+Measurements and design evidence below describe the earlier stage.
+
 The existing 513×259→64×32 RGBA16 complete Resize remains a demonstrated gap:
 422.81/zimg 397.48 µs, range 1.003–1.098, 113 B/op and 4 KiB admission, from
 [current packed costs](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md). This read-only
