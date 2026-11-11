@@ -80,4 +80,5 @@ SHA256 `36f5882c8d2458e20bd967fc1c33ea396cd0f27084d1991dfb1b888db794c172`. It pr
 controllers/modules, baseline and package proof; pinned dependencies retain
 fixtures/reference tools. [Earlier current-cost attribution](BILINEAR-DOWNSIZE-CURRENT-COSTS.md)
 and [original packed enlargement](BILINEAR-PACKED-ROW-STORAGE.md) remain history.
-All 289 required paths remain. Next: attribute the larger current Up16 gap.
+All 289 required paths remain. [Current Up16 attribution](BILINEAR-UP16-CURRENT-ATTRIBUTION.md)
+selects direct certified-mask publication as a candidate, not a proven gain.

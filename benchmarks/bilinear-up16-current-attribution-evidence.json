@@ -1,0 +1,2602 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BUA802",
+  "date": "2026-11-11",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "sources": {
+    "src/Lokad.Image/Internal/BilinearUpsample16.cs": "944d9b55677bafca81b72fe519cbb234f271154c9966e7fc013326daf39dd2cb",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "b1655b394b895b901f8dc249d04b301f76f271f05aa812bd45ae8b4512c467e7",
+    "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f",
+    "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b",
+    "src/Lokad.Image/Internal/PreparedResize.cs": "6a77972d0ac3e650241403a8aab08cdc343c200b3d85a28022ca742231a1b5dc"
+  },
+  "producers": {
+    "windowsSha256": "5f5696ad33b13cc7b419aad6179c805007e59ceee9c5fd4bfc96ec5b95af4994",
+    "linuxSha256": "8bc02909db780453c2bf6e8900137109ba84a1a6028ca179c6b9fd1153f8e032",
+    "packageSha256": "debdc5ca4cae978c404f846ebd92422e22f7553f0696080fe3c059b6107837c3"
+  },
+  "currentCompleteCostReused": {
+    "caseId": "Up16",
+    "managedUs": 2724.9634208333337,
+    "nativeUs": 2146.4243229166664,
+    "ratio": 1.2695362197212339,
+    "upper": 1.3162654207484006,
+    "lower": 1.2256247859670195,
+    "allocatedBytes": 4498923,
+    "librarySha256": "5f5696ad33b13cc7b419aad6179c805007e59ceee9c5fd4bfc96ec5b95af4994",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "status": "gap",
+    "receiptFile": "bgi801b-candidate-Up16-confirm-receipt.json",
+    "observationFile": "bgi801b-candidate-Up16-confirm-observation.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+    "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+    "managedRationalReferenceExact": true,
+    "independentOwnedOutput": true,
+    "sourceUnchanged": true,
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.04627403278265037,
+    "nativeAlphaMaximum": 1,
+    "nativeAlphaRmse": 0.04239492329328568,
+    "nativeCliPixelsExact": true,
+    "nativeCliNormalScalarPixelsExact": true,
+    "nativePixelsDeterministic": true,
+    "nativeZeroAlphaRgbZero": true,
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x519 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured.",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "24e11ecc952cf9077b4914c279012d29452cac90c067ad734f00257f839a9800",
+      "buildScriptSha256": "db132df11aa3b8178ab16823dbd33d55ceff4e3601349b17c41565e14324d201",
+      "workerSha256": "3a14b8570aa606c352fc1585b63d1b98d763a052cc01dbd32b4216b06686b1da",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "bilinear-resize",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "affinityCount": 1,
+      "filterThreads": 1,
+      "threadType": 0,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "kernel": "triangle",
+      "alphaMode": "straight",
+      "premultipliedAlphaTimed": true,
+      "encodedSampleSpace": true,
+      "independentLiveOutputs": true,
+      "alphaTolerance1": true,
+      "zeroAlphaNormalizationTimed": false,
+      "initialCompletedOperations": 3,
+      "inputStride": 4128,
+      "ffmpegVersion": "n8.1",
+      "avfilterVersion": 724580,
+      "avutilVersion": 3938916
+    }
+  },
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "managedExact": true,
+  "summary": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSampleLocations": 1899,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1257
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        553
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        31
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        6
+      ],
+      [
+        "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.ImageTransforms::Resize(class Lokad.Image.ImageBuffer,int32,int32,valuetype Lokad.Image.ResizeFilter,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        2
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        1
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        1
+      ]
+    ],
+    "offsets": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x54a",
+        "samples": 180
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x569",
+        "samples": 146
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x562",
+        "samples": 86
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x506",
+        "samples": 60
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x516",
+        "samples": 38
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4ff",
+        "samples": 38
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x50f",
+        "samples": 35
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x463",
+        "samples": 34
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x2ff",
+        "samples": 33
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x613",
+        "samples": 29
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x3ac",
+        "samples": 29
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x646",
+        "samples": 27
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x9bc",
+        "samples": 27
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4ce",
+        "samples": 26
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x658",
+        "samples": 26
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x66d",
+        "samples": 25
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x32e",
+        "samples": 25
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x464",
+        "samples": 25
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x293",
+        "samples": 23
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x367",
+        "samples": 23
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x496",
+        "samples": 22
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x5e8",
+        "samples": 22
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x55b",
+        "samples": 21
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x6b2",
+        "samples": 21
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x58c",
+        "samples": 20
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x704",
+        "samples": 20
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x566",
+        "samples": 19
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x3cc",
+        "samples": 19
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x5b8",
+        "samples": 19
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x443",
+        "samples": 18
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x3f6",
+        "samples": 17
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x205",
+        "samples": 16
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x68f",
+        "samples": 16
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x6e0",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x389",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x724",
+        "samples": 15
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2fc",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x286",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x20b",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x326",
+        "samples": 13
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x424",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4d7",
+        "samples": 12
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x40e",
+        "samples": 12
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3ab",
+        "samples": 11
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x226",
+        "samples": 11
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x80f",
+        "samples": 11
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x21b",
+        "samples": 10
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1dd",
+        "samples": 10
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x47c",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x17e",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x29f",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x50a",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4b9",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x48d",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1ee",
+        "samples": 8
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x6cd",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x258",
+        "samples": 8
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4f8",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x164",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2a5",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x51c",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0xde",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2de",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4a8",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4fc",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x23c",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4f0",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x136",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x446",
+        "samples": 6
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x69e",
+        "samples": 6
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x67e",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x236",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x196",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3dd",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1b7",
+        "samples": 5
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x88c",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x429",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x153",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x537",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x117",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2c1",
+        "samples": 5
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x713",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x457",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x553",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1a0",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x36b",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2ef",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1c2",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0xfa",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x53d",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4b0",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x24d",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2be",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x476",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4ca",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x361",
+        "samples": 4
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4e8",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2d0",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3d1",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x23f",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x142",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x349",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x316",
+        "samples": 4
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x7fe",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x33d",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4c4",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x37b",
+        "samples": 3
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x651",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x470",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3a1",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3f8",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x56b",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x548",
+        "samples": 3
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4ef",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3c6",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x498",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0xfd",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x333",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x528",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2b6",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x267",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x391",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x13a",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x3f2",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x51f",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x36b",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4f4",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x54b",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x4d0",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x107",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x25e",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x550",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2ad",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x438",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x177",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x104",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x278",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x371",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x3b2",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x1e8",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x174",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x49e",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2e1",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x47f",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x122",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x275",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x309",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x655",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x6ef",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x35c",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x16a",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x47b",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x244",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x473",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x145",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x52b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x5ba",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x3c9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x3c3",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x35a",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x38a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x3fa",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x55c",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x4c0",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x69",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x4ee",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x3f2",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x4ca",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x7112acec45b0",
+        "codeBytes": 184,
+        "offset": "0xb2",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4b3",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x2cd",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x230",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x735",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x541",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x801",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x63a",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x805",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x552",
+        "samples": 1
+      },
+      {
+        "method": "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.ImageTransforms::Resize(class Lokad.Image.ImageBuffer,int32,int32,valuetype Lokad.Image.ResizeFilter,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x7112acec06a0",
+        "codeBytes": 9388,
+        "offset": "0x200d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x1ee",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x6db",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x320",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x533",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x57a",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "offset": "0x4d5",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x570",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x176",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x14f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x37d",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x1c9",
+        "samples": 1
+      },
+      {
+        "method": "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.ImageTransforms::Resize(class Lokad.Image.ImageBuffer,int32,int32,valuetype Lokad.Image.ResizeFilter,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x7112acec06a0",
+        "codeBytes": 9388,
+        "offset": "0x1f88",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x2c7",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x414",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "offset": "0x416",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "offset": "0x436",
+        "samples": 1
+      }
+    ],
+    "instances": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5240",
+        "codeBytes": 2822,
+        "samples": 1257
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Prepare(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec5e80",
+        "codeBytes": 2399,
+        "samples": 553
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BilinearUpsample16::Scalar(class Lokad.Image.ImageBuffer,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x7112acec68e0",
+        "codeBytes": 1634,
+        "samples": 31
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "address": "0x7112acec0020",
+        "codeBytes": 39,
+        "samples": 6
+      },
+      {
+        "method": "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.ImageTransforms::Resize(class Lokad.Image.ImageBuffer,int32,int32,valuetype Lokad.Image.ResizeFilter,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x7112acec06a0",
+        "codeBytes": 9388,
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x7112acec45b0",
+        "codeBytes": 184,
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "address": "0x7112acebffb0",
+        "codeBytes": 82,
+        "samples": 1
+      }
+    ],
+    "scope": "One2secondcapture CPU0operation/CPU1sampler, exactfrozen/native/source/owner/idle-v2gates. Instrumentedelapseddiscarded. Inlining/skidlocationsnotphasecost/removablepercent orCPUgain."
+  },
+  "codeBodies": [
+    {
+      "header": "Lokad.Image.Internal.BilinearUpsample16:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": 2822,
+      "samples": 1257,
+      "hotLocations": [
+        {
+          "offset": "0x54a",
+          "samples": 180,
+          "instruction": "vpmovm2q zmm5, k1",
+          "nearby": [
+            {
+              "offset": "0x53d",
+              "instruction": "vpandd   zmm11, zmm11, zmm13"
+            },
+            {
+              "offset": "0x543",
+              "instruction": "vcmplepd k1, zmm11, zmm5"
+            },
+            {
+              "offset": "0x54a",
+              "instruction": "vpmovm2q zmm5, k1"
+            },
+            {
+              "offset": "0x550",
+              "instruction": "vmovaps  zmm11, zmm5"
+            },
+            {
+              "offset": "0x556",
+              "instruction": "vmovmskpd r12, ymm11"
+            }
+          ]
+        },
+        {
+          "offset": "0x569",
+          "samples": 146,
+          "instruction": "or       r12d, ecx",
+          "nearby": [
+            {
+              "offset": "0x562",
+              "instruction": "vmovmskpd rcx, ymm5"
+            },
+            {
+              "offset": "0x566",
+              "instruction": "shl      ecx, 4"
+            },
+            {
+              "offset": "0x569",
+              "instruction": "or       r12d, ecx"
+            },
+            {
+              "offset": "0x56c",
+              "instruction": "vmovaps  xmm5, xmm2"
+            },
+            {
+              "offset": "0x570",
+              "instruction": "vmovaps  xmm11, xmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x562",
+          "samples": 86,
+          "instruction": "vmovmskpd rcx, ymm5",
+          "nearby": [
+            {
+              "offset": "0x556",
+              "instruction": "vmovmskpd r12, ymm11"
+            },
+            {
+              "offset": "0x55b",
+              "instruction": "vextractf64x4 ymm5, zmm5, 1"
+            },
+            {
+              "offset": "0x562",
+              "instruction": "vmovmskpd rcx, ymm5"
+            },
+            {
+              "offset": "0x566",
+              "instruction": "shl      ecx, 4"
+            },
+            {
+              "offset": "0x569",
+              "instruction": "or       r12d, ecx"
+            }
+          ]
+        },
+        {
+          "offset": "0x506",
+          "samples": 60,
+          "instruction": "vmovaps  xmm12, xmm6",
+          "nearby": [
+            {
+              "offset": "0x4f8",
+              "instruction": "vinsertf32x4 zmm5, zmm5, xmm11"
+            },
+            {
+              "offset": "0x4ff",
+              "instruction": "vextractf32x4 xmm11, zmm5"
+            },
+            {
+              "offset": "0x506",
+              "instruction": "vmovaps  xmm12, xmm6"
+            },
+            {
+              "offset": "0x50a",
+              "instruction": "vunpcklpd xmm11, xmm11, xmm12"
+            },
+            {
+              "offset": "0x50f",
+              "instruction": "vinsertf32x4 zmm5, zmm5, xmm11"
+            }
+          ]
+        },
+        {
+          "offset": "0x516",
+          "samples": 38,
+          "instruction": "vrndscalepd zmm11, zmm0, 1",
+          "nearby": [
+            {
+              "offset": "0x50a",
+              "instruction": "vunpcklpd xmm11, xmm11, xmm12"
+            },
+            {
+              "offset": "0x50f",
+              "instruction": "vinsertf32x4 zmm5, zmm5, xmm11"
+            },
+            {
+              "offset": "0x516",
+              "instruction": "vrndscalepd zmm11, zmm0, 1"
+            },
+            {
+              "offset": "0x51d",
+              "instruction": "vsubpd   zmm11, zmm0, zmm11"
+            },
+            {
+              "offset": "0x523",
+              "instruction": "vbroadcastsd zmm12, qword ptr [reloc @RWD144]"
+            }
+          ]
+        },
+        {
+          "offset": "0x4ff",
+          "samples": 38,
+          "instruction": "vextractf32x4 xmm11, zmm5",
+          "nearby": [
+            {
+              "offset": "0x4f3",
+              "instruction": "vunpcklpd xmm11, xmm11, xmm12"
+            },
+            {
+              "offset": "0x4f8",
+              "instruction": "vinsertf32x4 zmm5, zmm5, xmm11"
+            },
+            {
+              "offset": "0x4ff",
+              "instruction": "vextractf32x4 xmm11, zmm5"
+            },
+            {
+              "offset": "0x506",
+              "instruction": "vmovaps  xmm12, xmm6"
+            },
+            {
+              "offset": "0x50a",
+              "instruction": "vunpcklpd xmm11, xmm11, xmm12"
+            }
+          ]
+        },
+        {
+          "offset": "0x50f",
+          "samples": 35,
+          "instruction": "vinsertf32x4 zmm5, zmm5, xmm11",
+          "nearby": [
+            {
+              "offset": "0x506",
+              "instruction": "vmovaps  xmm12, xmm6"
+            },
+            {
+              "offset": "0x50a",
+              "instruction": "vunpcklpd xmm11, xmm11, xmm12"
+            },
+            {
+              "offset": "0x50f",
+              "instruction": "vinsertf32x4 zmm5, zmm5, xmm11"
+            },
+            {
+              "offset": "0x516",
+              "instruction": "vrndscalepd zmm11, zmm0, 1"
+            },
+            {
+              "offset": "0x51d",
+              "instruction": "vsubpd   zmm11, zmm0, zmm11"
+            }
+          ]
+        },
+        {
+          "offset": "0x463",
+          "samples": 34,
+          "instruction": "vunpcklpd xmm6, xmm6, xmm8",
+          "nearby": [
+            {
+              "offset": "0x45a",
+              "instruction": "vunpcklpd xmm5, xmm5, xmm8"
+            },
+            {
+              "offset": "0x45f",
+              "instruction": "vmovaps  xmm8, xmm7"
+            },
+            {
+              "offset": "0x463",
+              "instruction": "vunpcklpd xmm6, xmm6, xmm8"
+            },
+            {
+              "offset": "0x468",
+              "instruction": "vinsertf128 ymm5, ymm5, xmm6"
+            },
+            {
+              "offset": "0x46e",
+              "instruction": "vinsertf64x4 zmm4, zmm4, ymm5, 1"
+            }
+          ]
+        },
+        {
+          "offset": "0x2ff",
+          "samples": 33,
+          "instruction": "mov      gword ptr [rbp-0xA8], rcx",
+          "nearby": [
+            {
+              "offset": "0x2f4",
+              "instruction": "mov      rdi, gword ptr [rbp-0xE8]"
+            },
+            {
+              "offset": "0x2fb",
+              "instruction": "mov      rcx, gword ptr [rdi+0x28]"
+            },
+            {
+              "offset": "0x2ff",
+              "instruction": "mov      gword ptr [rbp-0xA8], rcx"
+            },
+            {
+              "offset": "0x306",
+              "instruction": "cmp      gword ptr [rbp-0xA8], 0"
+            },
+            {
+              "offset": "0x30e",
+              "instruction": "jne      SHORT G_M000_IG16"
+            }
+          ]
+        },
+        {
+          "offset": "0x613",
+          "samples": 29,
+          "instruction": "vinsertf32x4 zmm2, zmm2, xmm3",
+          "nearby": [
+            {
+              "offset": "0x60b",
+              "instruction": "vmovaps  xmm4, xmm6"
+            },
+            {
+              "offset": "0x60f",
+              "instruction": "vunpcklpd xmm3, xmm3, xmm4"
+            },
+            {
+              "offset": "0x613",
+              "instruction": "vinsertf32x4 zmm2, zmm2, xmm3"
+            },
+            {
+              "offset": "0x61a",
+              "instruction": "vrndscalepd zmm3, zmm1, 1"
+            },
+            {
+              "offset": "0x621",
+              "instruction": "vsubpd   zmm3, zmm1, zmm3"
+            }
+          ]
+        },
+        {
+          "offset": "0x3ac",
+          "samples": 29,
+          "instruction": "add      edx, 8",
+          "nearby": [
+            {
+              "offset": "0x3a2",
+              "instruction": "vpaddq   zmm0, zmm3, zmm0"
+            },
+            {
+              "offset": "0x3a8",
+              "instruction": "lea      rsi, bword ptr [r13+0x10]"
+            },
+            {
+              "offset": "0x3ac",
+              "instruction": "add      edx, 8"
+            },
+            {
+              "offset": "0x3af",
+              "instruction": "mov      r12d, edx"
+            },
+            {
+              "offset": "0x3b2",
+              "instruction": "add      r12, 8"
+            }
+          ]
+        },
+        {
+          "offset": "0x646",
+          "samples": 27,
+          "instruction": "vmovmskpd rcx, ymm3",
+          "nearby": [
+            {
+              "offset": "0x63a",
+              "instruction": "vpmovm2q zmm2, k1"
+            },
+            {
+              "offset": "0x640",
+              "instruction": "vmovaps  zmm3, zmm2"
+            },
+            {
+              "offset": "0x646",
+              "instruction": "vmovmskpd rcx, ymm3"
+            },
+            {
+              "offset": "0x64a",
+              "instruction": "vextractf64x4 ymm2, zmm2, 1"
+            },
+            {
+              "offset": "0x651",
+              "instruction": "vmovmskpd rsi, ymm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x9bc",
+          "samples": 27,
+          "instruction": "je       G_M000_IG35",
+          "nearby": [
+            {
+              "offset": "0x9ae",
+              "instruction": "mov      dword ptr [rbp-0x8C], r12d"
+            },
+            {
+              "offset": "0x9b5",
+              "instruction": "test     byte  ptr [rbp-0xAC], 240"
+            },
+            {
+              "offset": "0x9bc",
+              "instruction": "je       G_M000_IG35"
+            },
+            {
+              "offset": "0x9c2",
+              "instruction": "lea      rdi, [rsp]"
+            },
+            {
+              "offset": "0x9c6",
+              "instruction": "lea      rsi, [rbp-0x60]"
+            }
+          ]
+        },
+        {
+          "offset": "0x4ce",
+          "samples": 26,
+          "instruction": "vpsllq   zmm5, zmm5, 52",
+          "nearby": [
+            {
+              "offset": "0x4be",
+              "instruction": "vbroadcastsd zmm9, qword ptr [reloc @RWD136]"
+            },
+            {
+              "offset": "0x4c8",
+              "instruction": "vpaddq   zmm5, zmm5, zmm9"
+            },
+            {
+              "offset": "0x4ce",
+              "instruction": "vpsllq   zmm5, zmm5, 52"
+            },
+            {
+              "offset": "0x4d5",
+              "instruction": "vmovsd   xmm10, qword ptr [rbp-0x88]"
+            },
+            {
+              "offset": "0x4dc",
+              "instruction": "vbroadcastsd zmm11, zmm10"
+            }
+          ]
+        },
+        {
+          "offset": "0x658",
+          "samples": 26,
+          "instruction": "or       ecx, esi",
+          "nearby": [
+            {
+              "offset": "0x651",
+              "instruction": "vmovmskpd rsi, ymm2"
+            },
+            {
+              "offset": "0x655",
+              "instruction": "shl      esi, 4"
+            },
+            {
+              "offset": "0x658",
+              "instruction": "or       ecx, esi"
+            },
+            {
+              "offset": "0x65a",
+              "instruction": "vextractf32x4 xmm2, zmm0"
+            },
+            {
+              "offset": "0x661",
+              "instruction": "vunpckhpd xmm2, xmm2, xmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x66d",
+          "samples": 25,
+          "instruction": "vucomisd xmm3, xmm2",
+          "nearby": [
+            {
+              "offset": "0x661",
+              "instruction": "vunpckhpd xmm2, xmm2, xmm2"
+            },
+            {
+              "offset": "0x665",
+              "instruction": "vaddsd   xmm3, xmm6, qword ptr [reloc @RWD00]"
+            },
+            {
+              "offset": "0x66d",
+              "instruction": "vucomisd xmm3, xmm2"
+            },
+            {
+              "offset": "0x671",
+              "instruction": "jb       SHORT G_M000_IG21"
+            },
+            {
+              "offset": "0x673",
+              "instruction": "or       r12d, 15"
+            }
+          ]
+        },
+        {
+          "offset": "0x32e",
+          "samples": 25,
+          "instruction": "mov      r12d, edx",
+          "nearby": [
+            {
+              "offset": "0x326",
+              "instruction": "mov      edx, ecx"
+            },
+            {
+              "offset": "0x328",
+              "instruction": "add      edx, dword ptr [rbp-0x98]"
+            },
+            {
+              "offset": "0x32e",
+              "instruction": "mov      r12d, edx"
+            },
+            {
+              "offset": "0x331",
+              "instruction": "mov      r9d, r12d"
+            },
+            {
+              "offset": "0x334",
+              "instruction": "add      r9, 8"
+            }
+          ]
+        },
+        {
+          "offset": "0x367",
+          "samples": 23,
+          "instruction": "add      ecx, eax",
+          "nearby": [
+            {
+              "offset": "0x35d",
+              "instruction": "vmovups  zmm0, zmmword ptr [rsi]"
+            },
+            {
+              "offset": "0x363",
+              "instruction": "lea      rsi, bword ptr [r13+0x10]"
+            },
+            {
+              "offset": "0x367",
+              "instruction": "add      ecx, eax"
+            },
+            {
+              "offset": "0x369",
+              "instruction": "mov      r9d, ecx"
+            },
+            {
+              "offset": "0x36c",
+              "instruction": "mov      r12d, r9d"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "header": "Lokad.Image.Internal.BilinearUpsample16:Prepare(Lokad.Image.ImageBuffer,int,System.Span`1[long],System.Span`1[int],System.ReadOnlySpan`1[int],int,Lokad.Image.Internal.OperationContext):int (FullOpts)",
+      "codeBytes": 2399,
+      "samples": 553,
+      "hotLocations": [
+        {
+          "offset": "0x464",
+          "samples": 25,
+          "instruction": "vmovaps  zmm4, zmm2",
+          "nearby": [
+            {
+              "offset": "0x457",
+              "instruction": "vinserti128 ymm4, ymm4, xmm5"
+            },
+            {
+              "offset": "0x45d",
+              "instruction": "vinserti64x4 zmm3, zmm3, ymm4, 1"
+            },
+            {
+              "offset": "0x464",
+              "instruction": "vmovaps  zmm4, zmm2"
+            },
+            {
+              "offset": "0x46a",
+              "instruction": "vpmovzxdq zmm4, zmm4"
+            },
+            {
+              "offset": "0x470",
+              "instruction": "vpmullq  zmm3, zmm3, zmm4"
+            }
+          ]
+        },
+        {
+          "offset": "0x293",
+          "samples": 23,
+          "instruction": "vmovaps  zmm2, zmm0",
+          "nearby": [
+            {
+              "offset": "0x286",
+              "instruction": "vinserti128 ymm2, ymm2, xmm3"
+            },
+            {
+              "offset": "0x28c",
+              "instruction": "vinserti64x4 zmm1, zmm1, ymm2, 1"
+            },
+            {
+              "offset": "0x293",
+              "instruction": "vmovaps  zmm2, zmm0"
+            },
+            {
+              "offset": "0x299",
+              "instruction": "vpmovzxdq zmm2, zmm2"
+            },
+            {
+              "offset": "0x29f",
+              "instruction": "vpmullq  zmm1, zmm1, zmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x205",
+          "samples": 16,
+          "instruction": "vpmovzxwd zmm0, zmm0",
+          "nearby": [
+            {
+              "offset": "0x1fe",
+              "instruction": "mov      dword ptr [rbp-0x3C], r9d"
+            },
+            {
+              "offset": "0x202",
+              "instruction": "sub      esi, r9d"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vpmovzxwd zmm0, zmm0"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vbroadcastf32x4 zmm1, xmmword ptr [reloc @RWD00]"
+            },
+            {
+              "offset": "0x215",
+              "instruction": "vmovaps  zmm2, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x2fc",
+          "samples": 13,
+          "instruction": "vextracti32x8 ymm0, zmm0, 1",
+          "nearby": [
+            {
+              "offset": "0x2ef",
+              "instruction": "vinserti128 ymm3, ymm3, xmm4"
+            },
+            {
+              "offset": "0x2f5",
+              "instruction": "vinserti64x4 zmm2, zmm2, ymm3, 1"
+            },
+            {
+              "offset": "0x2fc",
+              "instruction": "vextracti32x8 ymm0, zmm0, 1"
+            },
+            {
+              "offset": "0x303",
+              "instruction": "vpmovzxdq zmm0, zmm0"
+            },
+            {
+              "offset": "0x309",
+              "instruction": "vpmullq  zmm0, zmm2, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x286",
+          "samples": 13,
+          "instruction": "vinserti128 ymm2, ymm2, xmm3",
+          "nearby": [
+            {
+              "offset": "0x27d",
+              "instruction": "movsxd   rcx, r14d"
+            },
+            {
+              "offset": "0x280",
+              "instruction": "vpinsrq  xmm3, xmm3, rcx, 1"
+            },
+            {
+              "offset": "0x286",
+              "instruction": "vinserti128 ymm2, ymm2, xmm3"
+            },
+            {
+              "offset": "0x28c",
+              "instruction": "vinserti64x4 zmm1, zmm1, ymm2, 1"
+            },
+            {
+              "offset": "0x293",
+              "instruction": "vmovaps  zmm2, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x20b",
+          "samples": 13,
+          "instruction": "vbroadcastf32x4 zmm1, xmmword ptr [reloc @RWD00]",
+          "nearby": [
+            {
+              "offset": "0x202",
+              "instruction": "sub      esi, r9d"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vpmovzxwd zmm0, zmm0"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vbroadcastf32x4 zmm1, xmmword ptr [reloc @RWD00]"
+            },
+            {
+              "offset": "0x215",
+              "instruction": "vmovaps  zmm2, zmm0"
+            },
+            {
+              "offset": "0x21b",
+              "instruction": "vpternlogd zmm2, zmm1, zmmword ptr [reloc @RWD64], -22"
+            }
+          ]
+        },
+        {
+          "offset": "0x326",
+          "samples": 13,
+          "instruction": "cmp      esi, r9d",
+          "nearby": [
+            {
+              "offset": "0x31e",
+              "instruction": "mov      r14d, dword ptr [rbp+0x18]"
+            },
+            {
+              "offset": "0x322",
+              "instruction": "lea      r9d, [r14-0x1D]"
+            },
+            {
+              "offset": "0x326",
+              "instruction": "cmp      esi, r9d"
+            },
+            {
+              "offset": "0x329",
+              "instruction": "jge      G_M000_IG26"
+            },
+            {
+              "offset": "0x32f",
+              "instruction": "lea      ecx, [r10+0x05]"
+            }
+          ]
+        },
+        {
+          "offset": "0x4d7",
+          "samples": 12,
+          "instruction": "vextracti32x8 ymm2, zmm2, 1",
+          "nearby": [
+            {
+              "offset": "0x4ca",
+              "instruction": "vinserti128 ymm4, ymm4, xmm5"
+            },
+            {
+              "offset": "0x4d0",
+              "instruction": "vinserti64x4 zmm3, zmm3, ymm4, 1"
+            },
+            {
+              "offset": "0x4d7",
+              "instruction": "vextracti32x8 ymm2, zmm2, 1"
+            },
+            {
+              "offset": "0x4de",
+              "instruction": "vpmovzxdq zmm2, zmm2"
+            },
+            {
+              "offset": "0x4e4",
+              "instruction": "vpmullq  zmm2, zmm3, zmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x40e",
+          "samples": 12,
+          "instruction": "movsxd   rcx, eax",
+          "nearby": [
+            {
+              "offset": "0x402",
+              "instruction": "vpermd   zmm2, zmm3, zmm2"
+            },
+            {
+              "offset": "0x408",
+              "instruction": "vpmulld  zmm2, zmm2, zmm4"
+            },
+            {
+              "offset": "0x40e",
+              "instruction": "movsxd   rcx, eax"
+            },
+            {
+              "offset": "0x411",
+              "instruction": "vmovq    xmm3, rcx"
+            },
+            {
+              "offset": "0x416",
+              "instruction": "movsxd   rcx, eax"
+            }
+          ]
+        },
+        {
+          "offset": "0x3ab",
+          "samples": 11,
+          "instruction": "add      r14, 8",
+          "nearby": [
+            {
+              "offset": "0x3a4",
+              "instruction": "lea      r10d, [rdi+2*r10]"
+            },
+            {
+              "offset": "0x3a8",
+              "instruction": "mov      r14d, r10d"
+            },
+            {
+              "offset": "0x3ab",
+              "instruction": "add      r14, 8"
+            },
+            {
+              "offset": "0x3af",
+              "instruction": "cmp      r14, r12"
+            },
+            {
+              "offset": "0x3b2",
+              "instruction": "ja       G_M000_IG30"
+            }
+          ]
+        },
+        {
+          "offset": "0x226",
+          "samples": 11,
+          "instruction": "vmovups  zmm1, zmmword ptr [reloc @RWD128]",
+          "nearby": [
+            {
+              "offset": "0x215",
+              "instruction": "vmovaps  zmm2, zmm0"
+            },
+            {
+              "offset": "0x21b",
+              "instruction": "vpternlogd zmm2, zmm1, zmmword ptr [reloc @RWD64], -22"
+            },
+            {
+              "offset": "0x226",
+              "instruction": "vmovups  zmm1, zmmword ptr [reloc @RWD128]"
+            },
+            {
+              "offset": "0x230",
+              "instruction": "vpermd   zmm0, zmm1, zmm0"
+            },
+            {
+              "offset": "0x236",
+              "instruction": "vpmulld  zmm0, zmm0, zmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x21b",
+          "samples": 10,
+          "instruction": "vpternlogd zmm2, zmm1, zmmword ptr [reloc @RWD64], -22",
+          "nearby": [
+            {
+              "offset": "0x20b",
+              "instruction": "vbroadcastf32x4 zmm1, xmmword ptr [reloc @RWD00]"
+            },
+            {
+              "offset": "0x215",
+              "instruction": "vmovaps  zmm2, zmm0"
+            },
+            {
+              "offset": "0x21b",
+              "instruction": "vpternlogd zmm2, zmm1, zmmword ptr [reloc @RWD64], -22"
+            },
+            {
+              "offset": "0x226",
+              "instruction": "vmovups  zmm1, zmmword ptr [reloc @RWD128]"
+            },
+            {
+              "offset": "0x230",
+              "instruction": "vpermd   zmm0, zmm1, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x1dd",
+          "samples": 10,
+          "instruction": "vmovq    xmm1, qword ptr [rbp-0x78]",
+          "nearby": [
+            {
+              "offset": "0x1d1",
+              "instruction": "vmovq    xmm0, qword ptr [rbp-0x58]"
+            },
+            {
+              "offset": "0x1d6",
+              "instruction": "vpinsrq  xmm0, xmm0, qword ptr [rbp-0x68], 1"
+            },
+            {
+              "offset": "0x1dd",
+              "instruction": "vmovq    xmm1, qword ptr [rbp-0x78]"
+            },
+            {
+              "offset": "0x1e2",
+              "instruction": "vpinsrq  xmm1, xmm1, qword ptr [rcx], 1"
+            },
+            {
+              "offset": "0x1e8",
+              "instruction": "vinserti128 ymm0, ymm0, xmm1"
+            }
+          ]
+        },
+        {
+          "offset": "0x47c",
+          "samples": 9,
+          "instruction": "movsxd   rax, r11d",
+          "nearby": [
+            {
+              "offset": "0x470",
+              "instruction": "vpmullq  zmm3, zmm3, zmm4"
+            },
+            {
+              "offset": "0x476",
+              "instruction": "vpaddq   zmm1, zmm3, zmm1"
+            },
+            {
+              "offset": "0x47c",
+              "instruction": "movsxd   rax, r11d"
+            },
+            {
+              "offset": "0x47f",
+              "instruction": "vmovq    xmm3, rax"
+            },
+            {
+              "offset": "0x484",
+              "instruction": "movsxd   rax, r11d"
+            }
+          ]
+        },
+        {
+          "offset": "0x17e",
+          "samples": 9,
+          "instruction": "ja       G_M000_IG30",
+          "nearby": [
+            {
+              "offset": "0x177",
+              "instruction": "add      r14, 8"
+            },
+            {
+              "offset": "0x17b",
+              "instruction": "cmp      r14, r12"
+            },
+            {
+              "offset": "0x17e",
+              "instruction": "ja       G_M000_IG30"
+            },
+            {
+              "offset": "0x184",
+              "instruction": "add      rcx, r13"
+            },
+            {
+              "offset": "0x187",
+              "instruction": "mov      rcx, qword ptr [rcx]"
+            }
+          ]
+        },
+        {
+          "offset": "0x29f",
+          "samples": 9,
+          "instruction": "vpmullq  zmm1, zmm1, zmm2",
+          "nearby": [
+            {
+              "offset": "0x293",
+              "instruction": "vmovaps  zmm2, zmm0"
+            },
+            {
+              "offset": "0x299",
+              "instruction": "vpmovzxdq zmm2, zmm2"
+            },
+            {
+              "offset": "0x29f",
+              "instruction": "vpmullq  zmm1, zmm1, zmm2"
+            },
+            {
+              "offset": "0x2a5",
+              "instruction": "movsxd   rcx, r13d"
+            },
+            {
+              "offset": "0x2a8",
+              "instruction": "vmovq    xmm2, rcx"
+            }
+          ]
+        },
+        {
+          "offset": "0x50a",
+          "samples": 9,
+          "instruction": "ja       G_M000_IG30",
+          "nearby": [
+            {
+              "offset": "0x504",
+              "instruction": "mov      esi, r12d"
+            },
+            {
+              "offset": "0x507",
+              "instruction": "cmp      rdx, rsi"
+            },
+            {
+              "offset": "0x50a",
+              "instruction": "ja       G_M000_IG30"
+            },
+            {
+              "offset": "0x510",
+              "instruction": "mov      ecx, ecx"
+            },
+            {
+              "offset": "0x512",
+              "instruction": "lea      rcx, bword ptr [r15+8*rcx]"
+            }
+          ]
+        },
+        {
+          "offset": "0x4b9",
+          "samples": 8,
+          "instruction": "movsxd   rax, r9d",
+          "nearby": [
+            {
+              "offset": "0x4b0",
+              "instruction": "movsxd   rax, r9d"
+            },
+            {
+              "offset": "0x4b3",
+              "instruction": "vpinsrq  xmm4, xmm4, rax, 1"
+            },
+            {
+              "offset": "0x4b9",
+              "instruction": "movsxd   rax, r9d"
+            },
+            {
+              "offset": "0x4bc",
+              "instruction": "vmovq    xmm5, rax"
+            },
+            {
+              "offset": "0x4c1",
+              "instruction": "movsxd   rax, r9d"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "storage": {
+    "resultPayloadBytes": 4264104,
+    "existingIdlePoolMaximumBytes": 4194304,
+    "totalAllocatedBytesPerOperation": 4498923,
+    "retainedOperationScratchBytes": 0,
+    "noRetentionChange": true,
+    "physicalNativeAndJitStackPeaksUnmeasured": true
+  },
+  "findings": [
+    "Current source already has exact Int64 horizontal/vertical sums, four cached source rows and certified original replay. Do not propose those as new work.",
+    "1257 main/553 row-preparation/31 scalar-repair sample locations among1899 total; sampling/inlining/skid are not phase times, removable percentages or gain forecasts. Other/unmapped locations remain.",
+    "The main certified publication expands each8lane comparison mask to a vector, extracts two256bit halves, obtains two masks, shifts/ORs them. Hot locations occur around that sequence. This is a lead, not causal CPU proof.",
+    "Existing Errors inserts alpha margins with two scalar WithElement operations per8lane half; exact margins and predicates must remain.",
+    "Large output is not idle-pooled, but this profile does not establish allocation as a dominant CPU cause or justify fitting a pool cap to a fixture."
+  ],
+  "nextHypothesis": {
+    "repeatedWork": "Avoid mask-to-vector-to-halves-to-mask publication round trips, preserving exact certified predicates and per-pixel repair decisions.",
+    "endState": "Use the existing full-width mask extraction primitive, as other certified resize paths do; retain exact arithmetic/margins, local row ownership, cancellation and portable fallback. No new abstraction, capacity or cache.",
+    "completeWorkload": "Existing Up16 complete Resize including preparation, normalization, independent output/disposal; unchanged current standalone cost reused as baseline.",
+    "boundaries": "Exact rational/qualified frames and native bounds, focused resize/shared ownership Windows/Linux; no settings grid. A paired effect is not standalone passing proof.",
+    "temporaryRisks": "JIT shape or CPU scheduling can negate source simplification. Inspect actual code and one bounded complete screen before independent confirmation; restore if not useful. No permanent family ban.",
+    "currentEvidence": "One actual-package2second profile and code annotation justify a candidate, not merge authorization or speedup. Unchanged6251W/L/SAMEpackage evidence reused."
+  },
+  "raw": {
+    "file": "bilinear-up16-current-attribution.tar.xz",
+    "sha256": "b14f0e6643452827bf5391d55fe6f84e9fb7e480636f6351ffd43b2a2d87661f",
+    "bytes": 103568,
+    "members": 22,
+    "dependency": {
+      "file": "bilinear-shared-preparation.tar.xz",
+      "sha256": "36f5882c8d2458e20bd967fc1c33ea396cd0f27084d1991dfb1b888db794c172",
+      "scope": "Actual accepted package/module, current standalone costs, complete worker/fixture/selector and6251W/L/SAMEpackage qualification."
+    },
+    "mirrored": true,
+    "allMembersVerified": true
+  }
+}
