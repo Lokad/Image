@@ -1,0 +1,256 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DWS831",
+  "productionAccepted": false,
+  "conclusion": "No useful gain established; qualified source/modules/package restored exactly.",
+  "caseId": "TightDown8",
+  "baseline": {
+    "managedUs": 452.2135639880952,
+    "nativeUs": 441.4368118489583,
+    "ratio": 1.024412898629814,
+    "lower": 1.013825182207401,
+    "upper": 1.0344548266582456,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c"
+  },
+  "candidate": {
+    "managedUs": 453.39731006493514,
+    "nativeUs": 443.11289908854167,
+    "ratio": 1.0232094597055241,
+    "lower": 1.0092073726684672,
+    "upper": 1.0383206867557613,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "ec56e45638fc478ccf6382db9e01489ead926a8fc9be24529f9f049fbc8ae188"
+  },
+  "comparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 452.2135639880952,
+        "candidateUs": 453.39731006493514,
+        "savedUs": -1.1837460768399177,
+        "savedFraction": -0.002617670435181907,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 452213.5639880952,
+          "StandardError": 393.26500253609015,
+          "Level": 12,
+          "Margin": 1744.90869027563,
+          "Lower": 450468.6552978196,
+          "Upper": 453958.47267837083
+        },
+        "candidateCI": {
+          "N": 11,
+          "Mean": 453397.3100649351,
+          "StandardError": 222.33969115336996,
+          "Level": 12,
+          "Margin": 1019.8485635938044,
+          "Lower": 452377.4615013413,
+          "Upper": 454417.15862852894
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 452.21503943452376,
+        "candidateUs": 453.6155457589286,
+        "savedUs": -1.4005063244047924,
+        "savedFraction": -0.0030969919225951603,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 452215.0394345238,
+          "StandardError": 393.2650025360865,
+          "Level": 12,
+          "Margin": 1744.908690275614,
+          "Lower": 450470.13074424816,
+          "Upper": 453959.9481247994
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 453615.5457589286,
+          "StandardError": 297.0176795555514,
+          "Level": 12,
+          "Margin": 1317.8613069552819,
+          "Lower": 452297.6844519733,
+          "Upper": 454933.40706588386
+        }
+      }
+    },
+    "normalizedGain": 0.001174759636372702,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": 0.0037968905052641055,
+    "baselineRatioBounds": [
+      1.013825182207401,
+      1.0344548266582456
+    ],
+    "candidateRatioBounds": [
+      1.0092073726684672,
+      1.0383206867557613
+    ]
+  },
+  "hypothesis": {
+    "repeatedWork": "Byte source-pair conversion splits oneVector512<double> into twoVector256 halves and performs two indexed decoded stores. The current wide executor already publishes the same64bytes in one bounded MemoryMarshal.Write.",
+    "endState": "Use one sourceCount-bounded decoded byte view and one64Bwrite per converted byte pair in the existing narrow executor. Keep odd source pixels, word decode, all arithmetic, prepared weights, vertical quartet/publication/repair and row/tail lifetimes unchanged. No new helper/cache/pool/array/owner/capacity.",
+    "scope": "Existing TightDown8 complete Resize primary. Word remains a passing path; its type-specialized branch should remain unchanged, requiring source/code reconciliation rather than retuning. No new image/settings grid.",
+    "evidence": "Current row-loan6616B/tail6562B generated bodies have extractf64x4, two256bitstores and repeated capacity/index work around sampled byte conversion locations. Samples/skid/inlining are not phase costs or a gain forecast.",
+    "correctness": "Converted integer products and ordered arithmetic identical; bounded full64Bwrite has the same two pixel values. Focused public/exact/rational/rowloan/poison/tail/scalar/refusal/cancel/ownership checks first. No dropped cancellation checkpoint.",
+    "temporaryCosts": "One extra sourceCount-bounded byte-view construction per decoded row; compiler may retain equivalent checks or introduce code/frame cost. Verify actual JIT and complete short screen before independent confirmation.",
+    "acceptance": "Use immutable qualified predecessor, frozen complete TightDown8 short, then independent confirmation if useful. No favorable repeats. Reconcile affected costs before one W/L/ISA/SAMEactualpackage milestone. Restore byte-identical production/modules if inconclusive or adverse."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "DWS831",
+    "entireOriginalFileReconstructedExactly": true,
+    "onlyChange": "Byte conversion publishes one Vector512<double> through its bounded decoded byte view instead of twoVector256 assignments. SourceCount narrows the view once per decoded row. Exact same products and packed bytes; odd and word branches verbatim.",
+    "allGeometryPreparationPairQuartetFilterCertificateRepairPublicationCancellationOwnershipBodiesVerbatim": true,
+    "newCapacityBytes": 0,
+    "newRetainedBytes": 0,
+    "newArrays": 0,
+    "newHelpers": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "newPools": 0,
+    "workingAdmissionBytes": 4096,
+    "explicitPhasePayloadBytes": [
+      3424,
+      3232,
+      4080
+    ],
+    "resultBytes": 132096,
+    "tests": "Existing actual source/row-loan/tail and poisoned storage tests, public frozen/rational pixels, paired coefficient bits, budgets/refusal/cancellation/survivors. No implementation-mirroring test added.",
+    "focusedInternalEachModeEachOS": 508,
+    "focusedPublicEachModeEachOS": 789,
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "033c62104986bad7cbf576779d02238ef416f006b189dd3d5eb3a4857725a31a"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "f1601c6a5cb9017c50b7588a89cc8a1cd7dce3df44d5f6be1613d48753f08c3d",
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49"
+    }
+  },
+  "codegen": {
+    "short": {
+      "file": "tmp/dws831-candidate-TightDown8-short-kernel-jit.txt",
+      "sha256": "c3a8f1f78d4cc17576e6c45721912793a5f18c2f8b0ec37b2ed9fd21a7bcea0e",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowLoanStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6572"
+          ],
+          "stackReservations": [
+            "616",
+            "0xD60"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowTailStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6525"
+          ],
+          "stackReservations": [
+            "664",
+            "0xFF0"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    },
+    "confirm": {
+      "file": "tmp/dws831-candidate-TightDown8-confirm-kernel-jit.txt",
+      "sha256": "c360ffadeb96b2bbc71a67b98c0bf205b0537aeb7519da714ce863bb4a39f519",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowLoanStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6572"
+          ],
+          "stackReservations": [
+            "616",
+            "0xD60"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowTailStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6525"
+          ],
+          "stackReservations": [
+            "664",
+            "0xFF0"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    }
+  },
+  "focusedEachOS": {
+    "windows": {
+      "internal-normal": 508,
+      "public-normal": 789,
+      "internal-scalar": 508,
+      "public-scalar": 789
+    },
+    "linux": {
+      "internal-normal": 508,
+      "public-normal": 789,
+      "internal-scalar": 508,
+      "public-scalar": 789
+    }
+  },
+  "restored": {
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa"
+    },
+    "windowsSha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c",
+    "linux": {
+      "restoredSources": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa"
+      },
+      "productionSha256": "6b890a03402c13edf383b29b2315e77c3831f8c8e3d1ebc74e0b81d357610066",
+      "manifestSha256": "c30a4fd8772f1e8b183c7629c3c64855da92d1b33de5546ff377fdf72b214fef"
+    },
+    "actualPackageSha256": "86c09ae78a81b22d64291c7bf94f5cb5e68c873a5de69bc265b98b540cb1f4e6"
+  },
+  "qualification": "Unchanged restored production keeps6,417full/live checks perOS and SAMEactualpackage/all3examples from packed-horizontal-window-reuse-evidence.json. No broad/package rerun.",
+  "reportRecovery": {
+    "stage": "Report-only predecessor case path after successful W/L restoration",
+    "error": "TightWide8 copied from prior controller instead of TightDown8",
+    "recoveredWithoutBuildMeasurementOrRestoreRepeat": true
+  },
+  "raw": {
+    "file": "tmp/narrow-bicubic-decoded-pair-trial.tar.xz",
+    "sha256": "f00679e545570bb68ee0ba17b680ba2d1ed235553e29aa5ea456845758bba1a8",
+    "bytes": 1390128,
+    "members": 83,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "packed-horizontal-window-reuse.tar.xz",
+        "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+        "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+      },
+      {
+        "file": "narrow-bicubic-quartet-attribution.tar.xz",
+        "sha256": "0b58f43eb7c32d11d945d3dcc70f0bd8891a1bd8cee4eef0dc2ca1a8083acdba",
+        "scope": "benchmarks/narrow-bicubic-quartet-attribution-evidence.json"
+      }
+    ]
+  },
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "next": "Retain existing narrow-byte gap; no word retuning, favorable resampling, broad qualification or package generation. The attempted single64B store does not establish a useful gain; do not retune unchanged decode stores. Reassess coarser scheduling/preparation or select an independent outstanding named coverage item using current evidence."
+}

@@ -31,6 +31,14 @@ Original qualified source/modules/package are restored exactly. The wide-byte
 gap remains; no favorable repeats or broad/package rerun. Next inspect the
 independent demonstrated bounded narrow-byte gap using existing attribution.
 
+The [narrow decoded-pair write trial](NARROW-BICUBIC-DECODED-PAIR-TRIAL.md)
+also retains no production change. Short-screen savings disappear in independent
+confirmation:452.21→453.40µs raw, normalized0.12% with overlapping confidence.
+Smaller emitted code and one64Bstore do not prove a CPU gain. Qualified original
+source/modules/package are restored exactly; no broad/package repeats or passing
+word retuning. Both local edits are closed; further resize work needs a revised
+preparation/scheduling hypothesis, while independent codec/coverage work continues.
+
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and the SAME actual Release-package/all
