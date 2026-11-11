@@ -1722,6 +1722,22 @@ def render():
     rows[positions[0]] = ('editing', f'| {shown_label} † → 1027×129 | '
         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.4f} | '
         f'{current["allocatedBytes"]:,} |')
+    cached_publication = json.loads((ROOT / 'benchmarks/cached-narrow-shared-publication-evidence.json').read_text(encoding='utf-8'))
+    assert cached_publication['productionAccepted'] and cached_publication['requiredMaterialPaths'] == 289
+    assert cached_publication['raw']['mirrored'] and cached_publication['raw']['allMembersVerified']
+    assert cached_publication['allAffectedPerformanceReconciled'] and not cached_publication['materialPassToGapContradictions']
+    assert set(cached_publication['cases']) == {'Repeated8', 'OneShot8', 'Down8', 'Horizontal8', 'Vertical8'}
+    assert cached_publication['sourceProof']['entireOriginalSourceReconstructedByRestoringOnlyDuplicateBytePublisher']
+    assert cached_publication['storage']['newOwnedCapacityBytes'] == cached_publication['storage']['newRetainedStateBytes'] == 0
+    for current in cached_publication['cases'].values():
+        assert current['librarySha256'] == cached_publication['producers']['timedArtifactSha256']
+        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+    assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values())
+               for c in cached_publication['comparison'].values())
+    assert cached_publication['qualification']['fullChecksEachOs'] == 6248
     # Current shared preparation owns the affected cached rows; historical
     # native-prepared observations remain distinct from equivalent new boundaries.
     bicubic_preparation = json.loads((ROOT / 'benchmarks/bicubic-shared-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1741,7 +1757,9 @@ def render():
         'Cross16': 'Bicubic RGBA16, width down / height up, default workspace',
     }
     for case, current in {**bicubic_preparation['cases'], **bicubic_preparation['boundaries']}.items():
-        assert current['librarySha256'] == bicubic_preparation['producers']['timedArtifactSha256']
+        current = cached_publication['cases'].get(case, current)
+        owner = cached_publication if case in cached_publication['cases'] else bicubic_preparation
+        assert current['librarySha256'] == owner['producers']['timedArtifactSha256']
         assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
@@ -1769,8 +1787,9 @@ def render():
     assert narrow_boundaries['raw']['dependency']['sha256'] == bicubic_preparation['raw']['sha256']
     assert narrow_boundaries['packageSha256'] == current_build_qualification['actualPackage']['sha256']
     for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
-        current = narrow_boundaries['cases'][case]
-        assert current['librarySha256'] == bicubic_preparation['producers']['timedArtifactSha256']
+        current = cached_publication['cases'].get(case, narrow_boundaries['cases'][case])
+        owner_sha = cached_publication['producers']['timedArtifactSha256'] if case in cached_publication['cases'] else bicubic_preparation['producers']['timedArtifactSha256']
+        assert current['librarySha256'] == owner_sha
         assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
@@ -1885,7 +1904,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = prepared_model['qualification']
+    current_build_qualification = cached_publication['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1940,7 +1959,7 @@ Current scope and remaining work:
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** [shared bicubic preparation](../benchmarks/BICUBIC-SHARED-PREPARATION.md)
   has {bicubic_preparation['statusCounts']['pass']} passes / {bicubic_preparation['statusCounts']['gap']} gaps /
-  {bicubic_preparation['statusCounts']['uncertain']} uncertain across 16 refreshed cached controls. Both equivalent fresh
+  {bicubic_preparation['statusCounts']['uncertain']} uncertain across 16 cached controls; three byte costs refresh below. Both equivalent fresh
   one-shot and both prepared comparisons pass. Prepared plans retain198,432 B and
   allocate137 B/op; preparation and its disposal are excluded only for explicitly
   prepared comparisons. Governed owned peaks are231,200/263,968 B for RGBA8/16,
@@ -1948,11 +1967,15 @@ Current scope and remaining work:
   Isolating the unchanged word-row kernel saves338.94µs/43.26% raw against the
   contemporary vertical-word baseline. Ordinary wide-byte resizing costs11.83µs
   more; its retained-native gap stays visible separately from fresh-native results.
-  [Equivalent narrow boundaries](../benchmarks/BICUBIC-NARROW-BOUNDARIES.md) pass
-  both one-shot controls and prepared RGBA16; prepared RGBA8 remains437.43/zimg417.13µs,
-  upper1.054 gap. Narrow plans retain199,840 B and allocate138/137 B/op;
-  governed peaks331,936/464,032 B exclude borrowed input. These reuse the same
-  actual package and qualification, without a production speedup claim.
+  [Shared narrow byte publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
+  saves 24.97/23.62 µs for prepared/one-shot calls, with separated raw/all-actual/
+  normalized intervals. It removes the duplicate division/certificate/packing body
+  without adding capacity or changing managed precision. All five affected byte costs
+  refresh: 3 pass / 1 gap / 1 uncertain. Prepared byte 413.36/zimg418.98 µs, upper1.011,
+  is uncertain; its equivalent complete one-shot passes. Default managed-fresh/native-
+  prepared Down8 remains 438.33/419.09 µs, upper1.064 gap. Narrow retention 199,840 B
+  and governed byte peak 331,936 B remain; borrowed source is excluded. Prepared
+  totals 137–138 B/op show no added allocation; unchanged word boundaries pass.
   [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
   [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
   [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
@@ -1975,9 +1998,9 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Current VP8/shared-memory checks pass 1,041 internal/433 public per
+Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
-Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+Current resize qualification: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.

@@ -146,27 +146,12 @@ internal static partial class CachedBicubicResize
             for(var t=firstTap;t<lastTap;t++)
                 sum=Avx512F.Add(sum,Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cached.Slice(rows[t]+x*4,8))),Vector512.Create(vertical[t])));
             var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
-            var a0=sum.GetElement(3);var a1=sum.GetElement(7);
-            var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
-            var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
-            var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
-            var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
-            var margins=Vector512.Create(1e-4,1e-4,1e-4,1e-6,1e-4,1e-4,1e-4,1e-6);
-            var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
-                Avx512F.CompareLessThanOrEqual(values,Vector512.Create(255d)).AsInt64());
-            var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
-            if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+1e-6 && values.GetElement(7)>=1+1e-6)
-                || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
-            {
-                Original(source,result,x,y,weights,offsets,counts,vertical,firstY,16,context);
-                Original(source,result,x+1,y,weights,offsets,counts,vertical,firstY,16,context);
-                continue;
-            }
-            var clipped=Avx512F.Min(Vector512.Create(255d),Avx512F.Max(Vector512<double>.Zero,values));
-            var ints=Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped,0));
-            var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
-            var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
-            BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
+            // The existing <=16-tap accumulation bound also covers this
+            // ordinary cached row. Reuse certified publication; low alpha or
+            // a rounding ambiguity retains original-order pixel evaluation.
+            if(BicubicMath.TryWriteOrdinaryBytePair(sum,n0,n1,destination.Slice(x*4,8)))continue;
+            Original(source,result,x,y,weights,offsets,counts,vertical,firstY,16,context);
+            Original(source,result,x+1,y,weights,offsets,counts,vertical,firstY,16,context);
         }
     }
     private static void WriteMixedByteRow(ImageBuffer source,ImageBuffer result,int y,

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share certified bicubic byte publication across cached and bounded execution,
+  preserving exact rounding, repair and memory ownership.
+
 - Prepare VP8 coefficient positions once per frame for shared ordinary, cancelable
   and validation decoding, preserving exact samples and memory admission.
 

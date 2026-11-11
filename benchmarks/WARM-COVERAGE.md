@@ -7,15 +7,15 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [VP8 position preparation](VP8-POSITION-MODEL-PREPARATION.md)
-passes 6,247 full/live checks per OS, 1,041 internal/433 public shared VP8/memory
-checks per normal/scalar mode, and the SAME actual Release-package consumer/all
-three examples. Unchanged numerical ISA and JPEG/resize/text evidence are reused.
-Exact packets, managed pixels and cooperative ownership remain unchanged. All six
-affected VP8 costs refresh, with 1,536 B/op more frame preparation and unchanged
-8 KiB admission. No case/grid is added; the finite 289-path objective remains.
-This is not a whole-release timing refresh. Linked family reports retain history.
-Unchanged performance/qualification is reused only within its source scope.
+The latest accepted [cached-narrow shared publication](CACHED-NARROW-SHARED-PUBLICATION.md)
+passes 6,248 full/live checks per OS, 363 internal/776 public resize checks in
+normal/scalar/disabled-AVX2/disabled-AVX512 modes, and the SAME actual Release
+package consumer/all three examples. All three named storage suites are included.
+Unchanged codec/text evidence and ISA qualification are reused. Five affected byte
+costs refresh; no case/grid or owned capacity is added. Exact packets, managed
+pixels and cooperative ownership remain unchanged. The finite 289-path objective
+remains open. This is not a whole-release timing refresh; linked reports retain
+historical evidence and its source scope.
 
 ## Current family status
 
@@ -33,8 +33,8 @@ Unchanged performance/qualification is reused only within its source scope.
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
 | Bounded narrow bicubic | [Result-row loan](NARROW-BICUBIC-ROW-LOAN.md): byte472.44/zimg417.11µs upper1.165 remains a gap; word upper.971 passes/stops. Same113B/op/4KiB, no added owned capacity. |
 | Bounded wide bicubic | [Result-row loan](BICUBIC-RESULT-ROW-LOAN.md): byte406.16/zimg367.01µs upper1.119 remains a gap; word upper1.003 is uncertain. No substitution of an older pass over a changed driver. |
-| Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 and Down8 retain native-prepared gaps; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
-| Prepared narrow bicubic | [Equivalent boundaries](BICUBIC-NARROW-BOUNDARIES.md):3 pass/1 gap. Both complete one-shot controls and prepared word pass; prepared byte437.43/zimg417.13µs upper1.054 remains a20.30µs point gap.199840B retained,138/137B/op, governedpeaks331936/464032B. Original asymmetric Down8 observations remain separate. No production change or repeated qualification. |
+| Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 retains its native-prepared gap; [current narrow byte publication](CACHED-NARROW-SHARED-PUBLICATION.md) refreshes Down8 to438.33/native419.09 µs, upper1.064 gap, plus passing Horizontal8/Vertical8; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
+| Prepared narrow bicubic | [Shared certified publication](CACHED-NARROW-SHARED-PUBLICATION.md): prepared/one-shot byte saves 24.97/23.62 µs, with separated raw/all-actual/normalized intervals. Prepared byte 413.36/zimg418.98 µs, upper1.011 is uncertain; one-shot byte and unchanged word boundaries pass. Narrow plans retain199840 B; controlled byte peak331936 B excludes borrowed input. Aggregate totals137–138 B/op prepared, with no added owned capacity or allocation-saving claim. Four equivalent boundaries now3 pass/1 uncertain. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear enlargement | [Packed row storage](BILINEAR-PACKED-ROW-STORAGE.md): complete RGBA8 Up8 upper.993 passes; source-valid other bilinear boundaries retain their own evidence/H status. |
 | Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Owned render preparation](TEXT-RENDER-PREPARATION.md): ordinary byte/word87.12/92.57µs remain gaps,59,304B/op (+304), CPU change inconclusive. Prepared53.81/56.80µs save33.30/35.77µs versus current ordinary,56B/op with40,408B idle ownership; byte parity uncertain/word gap against explicitly prepared ImageSharp.Drawing. All8 frozen frames exact. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 remains a gap; capacity/parser differences stay labeled. Independent codec/resizing work continues. |
@@ -203,6 +203,11 @@ Current invalidation and next execution:
   costs plus Mixed8/TightMixed8/TightVertical8. Other BicubicMath bodies, codec,
   Lanczos and other unchanged providers retain their source scope. Earlier word
   mixed and other unchanged providers stay valid within their tested scope.
+- CNP789 replaces only the private cached-narrow byte publication block with the
+  existing certified helper. Repeated8/OneShot8 and default Down8/Horizontal8/
+  Vertical8 refresh. Geometry, ordered sums, exact repair and word/wide/mixed/
+  bounded paths remain unchanged; their qualified costs and codec/text evidence
+  retain source validity. No added image, profile or settings grid.
 - VPP788 replaces repeated coefficient-position/band addressing with one frame
   model preparation shared by ordinary/live/window/scalar/validation decoding.
   Six named VP8 cost paths refresh; exact probability syntax, numerical operations,
