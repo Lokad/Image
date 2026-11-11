@@ -201,24 +201,6 @@ internal static class EnlargingBicubicResize
         }
     }
 
-    // Both depths accumulate four adjacent pixels in the same tap order.
-    // Publication and exact repair remain depth-specific.
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static void FilterVerticalQuartet(ReadOnlySpan<Vector256<double>> cache,
-        ReadOnlySpan<double> vertical, ReadOnlySpan<int> rows, int x,
-        out Vector512<double> first, out Vector512<double> second)
-    {
-        var firstSum = Vector512<double>.Zero; var secondSum = Vector512<double>.Zero;
-        for (var t = 0; t < vertical.Length; t++)
-        {
-            var weight = Vector512.Create(vertical[t]);
-            var row = MemoryMarshal.AsBytes(cache.Slice(rows[t] + x, 4));
-            firstSum = Avx512F.Add(firstSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row), weight));
-            secondSum = Avx512F.Add(secondSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row[64..]), weight));
-        }
-        first = firstSum; second = secondSum;
-    }
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool WriteRow<TSamples>(ImageBuffer source, ImageBuffer result, int tile, int y, int length,
         ReadOnlySpan<Vector256<double>> cache, ReadOnlySpan<double> normalizers, ReadOnlySpan<double> weights,

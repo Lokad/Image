@@ -68,10 +68,14 @@ Current scope and remaining work:
   and governed byte peak 331,936 B remain; borrowed source is excluded. Prepared
   totals 137–138 B/op show no added allocation; unchanged word boundaries pass.
   [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
-  [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
+  [shared narrow quartets](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md),
   [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
   [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain their
-  source-valid costs and gaps. The existing large managed default/compact screen
+  source-valid costs and gaps. Shared bounded vertical traversal saves 46.34 µs
+  (9.04% normalized) for byte and 74.66 µs (5.71% normalized) for word; raw/all-actual
+  and normalized intervals separate. Allocation stays 113 B/op and working admission
+  4 KiB, with no new owned capacity or retained scratch. Byte 459.65/zimg451.35 µs,
+  upper1.027 remains a gap; word506.31/574.04 µs, upper.888 passes. The existing large managed default/compact screen
   is20.40/21.89ms, three actuals each, without a native or historical-gain claim.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain156,248 B.
@@ -215,8 +219,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,969.56 | 3,040.59 | 0.977 / 0.981 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.81 | 1,515.06 | 1.021 / 1.035 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,722.39 | 1,743.04 | 0.988 / 0.994 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 472.44 | 417.11 | 1.133 / 1.165 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 545.94 | 569.04 | 0.959 / 0.971 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 459.65 | 451.35 | 1.018 / 1.027 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 506.31 | 574.04 | 0.882 / 0.888 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 391.10 | 345.95 | 1.131 / 1.134 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 863.94 | 870.01 | 0.993 / 1.0002 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |

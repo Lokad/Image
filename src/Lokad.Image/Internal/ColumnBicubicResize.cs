@@ -270,13 +270,22 @@ internal static partial class ColumnBicubicResize
                 }
                 var destination = word ? result.Pixels.Slice(y * result.Stride, result.Stride) : result.GetRow8(y);
                 var outputX = 0;
+                var pending = Vector512<double>.Zero;
                 for (; outputX + 1 < length; outputX += 2)
                 {
-                    var sum = Vector512<double>.Zero;
-                    for (var t = 0; t < count; t++)
+                    Vector512<double> sum;
+                    if ((outputX & 2) != 0)
+                        sum = pending;
+                    else if (outputX + 3 < length)
+                        BicubicMath.FilterVerticalQuartet(cache, vertical[..count], rows, outputX, out sum, out pending);
+                    else
                     {
-                        var pair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 2)));
-                        sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
+                        sum = Vector512<double>.Zero;
+                        for (var t = 0; t < count; t++)
+                        {
+                            var pair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 2)));
+                            sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
+                        }
                     }
                     if (word)
                     {

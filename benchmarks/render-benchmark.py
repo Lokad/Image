@@ -1657,18 +1657,21 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    narrow_loan = json.loads((ROOT / 'benchmarks/narrow-bicubic-row-loan-evidence.json').read_text(encoding='utf-8'))
-    narrow_qualification = narrow_loan['qualification']
-    assert narrow_loan['productionAccepted'] and narrow_loan['requiredMaterialPaths'] == 283
-    assert narrow_qualification['fullChecksEachOs'] == narrow_qualification['windows']['total'] == narrow_qualification['linux']['total'] == 6180
-    assert narrow_qualification['sameActualPackageBothOS']
-    assert narrow_qualification['actualPackage']['sha256'] == narrow_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert narrow_loan['sourceCodeProof']['orderedPixelLoopAndHelpersVerbatimExceptYBounds']
-    assert all(v['rawGainSeparated'] for v in narrow_loan['comparison']['views'].values())
-    assert narrow_loan['storage']['newOwnedCapacityBytes'] == narrow_loan['storage']['retainedOperationScratchBytes'] == 0
-    assert narrow_loan['raw']['mirrored'] and narrow_loan['raw']['allMembersVerified']
-    for case, current in narrow_loan['cases'].items():
-        assert current['librarySha256'] == narrow_qualification['actualPackage']['librarySha256']
+    bounded_quartet = json.loads((ROOT / 'benchmarks/bounded-bicubic-shared-quartets-evidence.json').read_text(encoding='utf-8'))
+    bounded_qualification = bounded_quartet['qualification']
+    assert bounded_quartet['productionAccepted'] and bounded_quartet['requiredMaterialPaths'] == 289
+    assert bounded_qualification['fullChecksEachOs'] == bounded_qualification['windows']['total'] == bounded_qualification['linux']['total'] == 6248
+    assert bounded_qualification['sameActualPackageBothOS']
+    assert bounded_qualification['actualPackage']['sha256'] == bounded_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert bounded_quartet['sourceProof']['allFiveProductionFilesReconstructExactly']
+    assert bounded_quartet['sourceProof']['actualOrderedLaneComparisons'] == 40960
+    assert bounded_quartet['allAffectedPerformanceReconciled'] and not bounded_quartet['materialPassToGapContradictions']
+    assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values())
+               for c in bounded_quartet['comparison'].values())
+    assert bounded_quartet['storage']['newOwnedCapacityBytes'] == bounded_quartet['storage']['retainedOperationScratchBytes'] == 0
+    assert bounded_quartet['raw']['mirrored'] and bounded_quartet['raw']['allMembersVerified']
+    for case, current in bounded_quartet['cases'].items():
+        assert current['librarySha256'] == bounded_qualification['actualPackage']['librarySha256']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
@@ -1904,7 +1907,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = cached_publication['qualification']
+    current_build_qualification = bounded_quartet['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1977,10 +1980,14 @@ Current scope and remaining work:
   and governed byte peak 331,936 B remain; borrowed source is excluded. Prepared
   totals 137–138 B/op show no added allocation; unchanged word boundaries pass.
   [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
-  [narrow](../benchmarks/NARROW-BICUBIC-ROW-LOAN.md),
+  [shared narrow quartets](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md),
   [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
   [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain their
-  source-valid costs and gaps. The existing large managed default/compact screen
+  source-valid costs and gaps. Shared bounded vertical traversal saves 46.34 µs
+  (9.04% normalized) for byte and 74.66 µs (5.71% normalized) for word; raw/all-actual
+  and normalized intervals separate. Allocation stays 113 B/op and working admission
+  4 KiB, with no new owned capacity or retained scratch. Byte 459.65/zimg451.35 µs,
+  upper1.027 remains a gap; word506.31/574.04 µs, upper.888 passes. The existing large managed default/compact screen
   is20.40/21.89ms, three actuals each, without a native or historical-gain claim.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain156,248 B.

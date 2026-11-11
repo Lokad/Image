@@ -43,7 +43,7 @@ internal static class EnlargingColumnBicubicResize
         for (; outputX + 3 < length; outputX += 4)
         {
             if ((outputX & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
-            EnlargingBicubicResize.FilterVerticalQuartet(cache, vertical, rows, outputX, out var firstSum, out var secondSum);
+            BicubicMath.FilterVerticalQuartet(cache, vertical, rows, outputX, out var firstSum, out var secondSum);
             var n0 = normalizers[outputX] * normalizerY;
             var n1 = normalizers[outputX + 1] * normalizerY;
             var n2 = normalizers[outputX + 2] * normalizerY;
