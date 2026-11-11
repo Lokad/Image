@@ -1472,9 +1472,7 @@ def render():
     assert bilinear_qualification['fullChecksEachOs'] == bilinear_qualification['windows']['total'] == bilinear_qualification['linux']['total'] == 6251
     assert bilinear_qualification['sameActualPackageBothOS'] and bilinear_qualification['threeNamedStorageSuitesIncluded']
     assert bilinear_qualification['actualPackage']['sha256'] == bilinear_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert bilinear['comparison']['Down8']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in bilinear['comparison']['Down8']['views'].values())
-    for name in ['Down8', 'Down16', 'Up8']:
+    for name in ['Up8']:
         cost = bilinear['cases'][name]
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
@@ -1484,11 +1482,24 @@ def render():
     assert current['upper'] <= 1 and current['status'] == 'pass'
     rows.append(('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
                  f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    for name in ['Down8', 'Down16']:
-        cost = bilinear['cases'][name]
-        assert cost['status'] == 'gap' and cost['lower'] > 1
+    bilinear_windows = json.loads((ROOT / 'benchmarks/bilinear-ordered-horizontal-windows-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear_windows['productionAccepted'] and bilinear_windows['allAffectedPerformanceReconciled']
+    assert bilinear_windows['requiredMaterialPaths'] == 289 and not bilinear_windows['materialPassToGapContradictions']
+    assert bilinear_windows['raw']['mirrored'] and bilinear_windows['raw']['allMembersVerified']
+    assert bilinear_windows['statusCounts'] == {'pass': 1, 'gap': 0, 'uncertain': 1}
+    assert bilinear_windows['sourceProof']['bothWholeDownsampleSourcesRestoredByRemovingOnlyPreparationAndEligibleWindowDispatch']
+    assert bilinear_windows['sourceProof']['sharedWindowMathBodyVerbatim']
+    for name, cost in bilinear_windows['cases'].items():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['librarySha256'] == bilinear_windows['producers']['windowsSha256']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        gain = bilinear_windows['comparison'][name]
+        assert gain['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in gain['views'].values())
         depth = 8 if name == 'Down8' else 16
-        rows.append(('editing', f'| Bilinear resize RGBA{depth} (gap) † → 256×129 | {cost["managedUs"]:,.2f} | '
+        qualifier = 'parity confirmed' if cost['status'] == 'pass' else 'confidence open'
+        rows.append(('editing', f'| Bilinear resize RGBA{depth} ({qualifier}) † → 256×129 | {cost["managedUs"]:,.2f} | '
                      f'{cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
     bilinear_vector = json.loads((ROOT / 'benchmarks/bilinear-vector-certification-evidence.json').read_text(encoding='utf-8'))
     assert bilinear_vector['productionAccepted'] and bilinear_vector['allAffectedPerformanceReconciled']
@@ -1970,10 +1981,10 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = compact_geometry['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6283
+    current_build_qualification = bilinear_windows['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6291
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == compact_geometry['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == bilinear_windows['producers']['windowsSha256']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2062,10 +2073,13 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
-  [Shared bilinear preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md)
-  saves 68.39 µs/14.00% raw/13.72% normalized on byte reduction; allocation falls
-  25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
-  Up8 passes/stops; Down8/16 remain gaps. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
+  [Ordered bilinear horizontal windows](../benchmarks/BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
+  save28.77/32.94 µs on byte/word reduction:6.42%/7.08%raw and6.35%/6.88%normalized,
+  with separated raw/all-actual and normalized confidence. Native clocks move−.072%/−.208%.
+  Down16 passes/stops; Down8 is uncertain (upper{bilinear_windows['cases']['Down8']['upper']:.3f}).
+  GC stays8,473 B/op and admitted scratch12,608 B, with no added capacity or retention.
+  [Earlier shared preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md) retains
+  the unchanged Up8 pass. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
   independently saves 769.82 µs/27.67% raw/18.12% normalized on existing Up16.
   Its [current adjacent complete cost](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) is
   {bv_current['managedUs']:,.2f}/FFmpeg {bv_current['nativeUs']:,.2f} µs, conservative

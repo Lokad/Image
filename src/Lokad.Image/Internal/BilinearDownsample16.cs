@@ -68,6 +68,7 @@ internal static class BilinearDownsample16
                 if (sourceCount > decoded.Length) return false;
                 for (var x = 0; x < length; x++)
                     for (var t = 0; t < counts[x]; t++) offsets[x * 10 + t] -= sourceFirst;
+                BilinearHorizontalPairs.Prepare(counts[..length], offsets);
                 rowIds.Fill(-1);
                 for (var y = 0; y < result.Height; y++)
                 {
@@ -102,6 +103,14 @@ internal static class BilinearDownsample16
                         var x = 0;
                         for (; x + 1 < length; x += 2)
                         {
+                            var pairStart = offsets[x * 10 + 9];
+                            if (pairStart >= 0)
+                            {
+                                var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(pairStart, 6),
+                                    weights.Slice(x * 10, 4), weights.Slice((x + 1) * 10, 4), 4, 2);
+                                cache[slot * 6 + x] = pair.GetLower(); cache[slot * 6 + x + 1] = pair.GetUpper();
+                                continue;
+                            }
                             var sum0 = Vector256<double>.Zero;
                             var sum1 = Vector256<double>.Zero;
                             var count0 = counts[x]; var count1 = counts[x + 1];

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse ordered source windows across byte/word bilinear reduction, preserving
+  exact samples, admission and independently owned outputs.
+
 - Reuse bounded zeroed canvas storage and compact mixed-axis bicubic geometry,
   preserving exact pixels, cancellation and shared memory ownership.
 

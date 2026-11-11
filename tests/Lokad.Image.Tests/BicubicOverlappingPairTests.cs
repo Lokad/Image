@@ -8,6 +8,8 @@ namespace Lokad.Image.Tests;
 public sealed class BicubicOverlappingPairTests
 {
     [Theory]
+    [InlineData(255, false, 4, 2)] [InlineData(255, true, 4, 2)]
+    [InlineData(65535, false, 4, 2)] [InlineData(65535, true, 4, 2)]
     [InlineData(255, false, 8, 2)] [InlineData(255, true, 8, 2)]
     [InlineData(65535, false, 8, 2)] [InlineData(65535, true, 8, 2)]
     [InlineData(255, false, 16, 4)] [InlineData(255, true, 16, 4)]

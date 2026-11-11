@@ -1,7 +1,9 @@
 # Shared bilinear preparation
 
-[Subsequent vector certification](BILINEAR-VECTOR-CERTIFICATION.md) supersedes
-this stage’s Up16 cost. The other three comparisons remain source-valid.
+[Ordered horizontal windows](BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md) now owns
+both reduction costs; [vector certification](BILINEAR-VECTOR-CERTIFICATION.md)
+and its adjacent view supersede Up16. This stage retains the unchanged Up8 cost,
+original preparation design and historical gains.
 
 BGI801B moves byte reduction ahead of an unused horizontal plan and shares
 vertical geometry preparation with word reduction. Caller-local arrays preserve

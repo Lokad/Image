@@ -1330,11 +1330,12 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged lossless result leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged lossless output fits one frame plus bounded parser storage.");
-        using (var pattern = OriginalPixels.Buffer(513, 259, 16))
+        foreach (var depth in new[] { 8, 16 })
+        using (var pattern = OriginalPixels.Buffer(513, 259, depth))
         {
-            const int outputBytes = 256 * 129 * 8;
+            var outputBytes = 256 * 129 * (depth / 2);
             using var expected = ImageTransforms.Resize(pattern, 256, 129, ResizeFilter.Bilinear,
-                new ImageLimits { MaxWorkingBytes = 513 * 259 * 8 + outputBytes + 4096 });
+                new ImageLimits { MaxWorkingBytes = 513 * 259 * (depth / 2) + outputBytes + 4096 });
             var accelerated = System.Runtime.Intrinsics.X86.Avx512F.IsSupported
                 && System.Runtime.Intrinsics.X86.Avx2.IsSupported && System.Runtime.Intrinsics.X86.Avx.IsSupported
                 && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
@@ -1345,13 +1346,14 @@ internal static class CooperativeMemoryConsumer
                 if (bilinearBudget.Bytes != outputBytes)
                     throw new Exception("Packaged bilinear preparation retained temporary storage.");
                 for (var y = 0; y < actual.Height; y++)
-                    if (!actual.GetRow16(y).SequenceEqual(expected.GetRow16(y)))
-                        throw new Exception("Packaged bilinear word samples differ.");
+                    if (depth == 8 ? !actual.GetRow8(y).SequenceEqual(expected.GetRow8(y))
+                        : !actual.GetRow16(y).SequenceEqual(expected.GetRow16(y)))
+                        throw new Exception("Packaged bilinear reduction samples differ.");
             }
             if (bilinearBudget.Bytes != 0 || bilinearBudget.IsDisposed)
                 throw new Exception("Packaged bilinear preparation leaked storage or disposed the borrowed root.");
         }
-        Console.WriteLine("Packaged bilinear word preparation pixels and admission passed.");
+        Console.WriteLine("Packaged bilinear byte/word reduction pixels and admission passed.");
         {
             const int sourceWidth = 5, sourceHeight = 9, width = 11, height = 29;
             const long sourceBytes = sourceWidth * sourceHeight * 4, outputBytes = width * height * 4;

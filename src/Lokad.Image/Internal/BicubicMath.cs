@@ -78,7 +78,7 @@ internal static class BicubicMath
         return true;
     }
 
-    // Callers select fixed eight-tap/+2 or sixteen-tap/+4 geometry. Reuse
+    // Callers select fixed four/eight-tap/+2 or sixteen-tap/+4 geometry. Reuse
     // overlapping source windows without changing either lane's tap order.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static Vector512<double> FilterOverlappingHorizontalPair(
