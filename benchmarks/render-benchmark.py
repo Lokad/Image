@@ -711,17 +711,30 @@ def render():
     assert quartet['statusCounts'] == {state: sum(c['status'] == state for c in quartet['cases'].values())
                                      for state in ('pass', 'gap', 'uncertain')}
     for current in quartet['cases'].values():
+        if current['caseId'] == 'TightHorizontalUp8':
+            continue  # Current immutable-package confirmation below owns this cost.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['librarySha256'] == qq['actualPackage']['librarySha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
         assert current['managedRationalReferenceExact'] or current['certifiedExactRationalAlphaHalves'] + current['certifiedExactRationalRgbHalves'] > 0
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    horizontal_confidence = json.loads((ROOT / 'benchmarks/enlargement-horizontal-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not horizontal_confidence['productionChanged'] and horizontal_confidence['currentCostBuilds'] == 0
+    assert horizontal_confidence['productionSourceRestoredExactly'] and horizontal_confidence['newPerformanceControls'] == 0
+    assert horizontal_confidence['raw']['mirrored'] and horizontal_confidence['raw']['allMembersVerified']
+    hc = horizontal_confidence['case']
+    assert hc['actualIterations'] == hc['nativeSamplesEachBracket'] == 12
+    assert hc['allOriginalGatesPassed'] and hc['quietGuardsPassed']
+    assert hc['managedExact'] and hc['managedRationalReferenceExact'] and hc['sourceUnchanged'] and hc['independentOwnedOutput']
+    assert hc['librarySha256'] == horizontal_confidence['producers']['windowsSha256']
+    assert hc['status'] == 'gap' and hc['lower'] > 1
+    assert horizontal_confidence['qualificationReuse']['prior6321FullAndSameActualPackageProofReused']
     labels = {'TightUp8': 'Bicubic RGBA8 enlargement,',
               'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
               'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
     for case, label in labels.items():
-        current = quartet['cases'][case]
+        current = hc if case == 'TightHorizontalUp8' else quartet['cases'][case]
         rows.append(('editing', f'| {label} input+output+4 KiB † → {current["outputWidth"]}×{current["outputHeight"]} | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} |'))
@@ -2001,6 +2014,8 @@ def render():
     assert current_build_qualification['fullChecksEachOs'] == 6321
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['librarySha256'] == bicubic_windows['producers']['windowsSha256']
+    assert horizontal_confidence['producers']['actualPackageSha256'] == current_build_qualification['actualPackage']['sha256']
+    assert horizontal_confidence['producers']['windowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2112,6 +2127,11 @@ Current scope and remaining work:
   Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
+  [Current horizontal byte enlargement](../benchmarks/ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
+  remains a gap on the unchanged actual package: {hc['managedUs']:,.2f}/zimg{hc['nativeUs']:,.2f} µs,
+  upper{hc['upper']:.3f},114 B/op,4KiB scratch allowance. Eight new focused rational/ownership
+  cases supplement reused qualification; no production or package change.
+  Unaccepted capacity trials and sampling attribution remain in linked history.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};

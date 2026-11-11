@@ -1,0 +1,129 @@
+{
+  "project": "Lokad.Image",
+  "stage": "HUP818-current",
+  "date": "2026-11-11",
+  "productionChanged": false,
+  "currentCostBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "newPerformanceControls": 0,
+  "productionSourceRestoredExactly": true,
+  "case": {
+    "managedUs": 1682.9806541193182,
+    "nativeUs": 1641.69309375,
+    "ratio": 1.0251493781185421,
+    "lower": 1.0184194156612902,
+    "upper": 1.0313625162263467,
+    "status": "gap",
+    "allocatedBytes": 114,
+    "librarySha256": "d93309af02ed6cc138546c102adf1d478d1ae46c0b49876a29f142306fbadb50",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724",
+    "nativeOutputSha256": "b60875ade7f8b211bac8c6e3c10ef31dfc0274f371646c3e1e0c2508f3cd8fa1",
+    "outputWidth": 1027,
+    "outputHeight": 259,
+    "depth": 8,
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 1027x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1599536 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "caseId": "TightHorizontalUp8",
+    "receipt": "tmp/hup818b-baseline-TightHorizontalUp8-confirm-receipt.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "managedRationalReferenceExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true
+  },
+  "producers": {
+    "windowsSha256": "d93309af02ed6cc138546c102adf1d478d1ae46c0b49876a29f142306fbadb50",
+    "linuxSha256": "d6d49f533dd2f320746f3c5539200ea557845b5a6a51c275aa704ff5dc97b714",
+    "actualPackageSha256": "4a66c486a7a528a5712f891523b0be5a71164b88dc254d4a5d017db16892ab90"
+  },
+  "qualificationReuse": {
+    "prior6321FullAndSameActualPackageProofReused": true,
+    "sourceUnchanged": true,
+    "additionalBroadOrPackageRuns": 0,
+    "restored": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSourceRestoredExactly": true,
+        "productionSha256": "d93309af02ed6cc138546c102adf1d478d1ae46c0b49876a29f142306fbadb50",
+        "privatePackageSha256": "4a66c486a7a528a5712f891523b0be5a71164b88dc254d4a5d017db16892ab90",
+        "additionalProductionBuilds": 0,
+        "restoredEmbeddedBuilds": 1,
+        "focused": {
+          "normal": 420,
+          "scalar": 420,
+          "avx2-off": 8,
+          "avx512-off": 8
+        },
+        "newTests": 8,
+        "sharedOriginalRationalOracleLinked": true,
+        "prior6321FullAndSameActualPackageProofReused": true,
+        "noBroadOrPackageRepeats": true,
+        "sources": {
+          "src/Lokad.Image/Internal/EnlargingBicubicResize.cs": "03eefe56a6af5e51ddfb3bbdea1ffaf039d430086d72b383bcc92093c0de7023",
+          "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": "7c7c2ae95351ee17aefaa9a0cebbeb8a20c7e7ebb48ea6402bed53f6c8f0576f",
+          "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "ff11743385dcc1bcd997d1c069bb0050f295afe79c2aad957fe891a78047ab92",
+          "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+        },
+        "newTestSources": {
+          "tests/Lokad.Image.Tests/EnlargingIdentityBicubicTests.cs": "44d7f5843716b4d29cdad41d4f386a8676d3073a3b50c8a32d111033832f2f2f",
+          "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj": "86643791e3f642d9c202ea7d9e6903f827cfde1f5fe4a7e57f680d7d9e440299"
+        }
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSourceRestoredExactly": true,
+        "productionSha256": "d6d49f533dd2f320746f3c5539200ea557845b5a6a51c275aa704ff5dc97b714",
+        "privatePackageSha256": "4a66c486a7a528a5712f891523b0be5a71164b88dc254d4a5d017db16892ab90",
+        "additionalProductionBuilds": 0,
+        "restoredEmbeddedBuilds": 1,
+        "focused": {
+          "normal": 420,
+          "scalar": 420,
+          "avx2-off": 8,
+          "avx512-off": 8
+        },
+        "newTests": 8,
+        "sharedOriginalRationalOracleLinked": true,
+        "prior6321FullAndSameActualPackageProofReused": true,
+        "noBroadOrPackageRepeats": true,
+        "sources": {
+          "src/Lokad.Image/Internal/EnlargingBicubicResize.cs": "03eefe56a6af5e51ddfb3bbdea1ffaf039d430086d72b383bcc92093c0de7023",
+          "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": "7c7c2ae95351ee17aefaa9a0cebbeb8a20c7e7ebb48ea6402bed53f6c8f0576f",
+          "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "ff11743385dcc1bcd997d1c069bb0050f295afe79c2aad957fe891a78047ab92",
+          "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+        },
+        "newTestSources": {
+          "tests/Lokad.Image.Tests/EnlargingIdentityBicubicTests.cs": "44d7f5843716b4d29cdad41d4f386a8676d3073a3b50c8a32d111033832f2f2f",
+          "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj": "86643791e3f642d9c202ea7d9e6903f827cfde1f5fe4a7e57f680d7d9e440299"
+        }
+      }
+    }
+  },
+  "raw": {
+    "file": "enlargement-identity-capacity-trials.tar.xz",
+    "sha256": "69f2b633a99de22ce5ea1b395517e2f0e08b6946be6415f7ed4ff1188be15834",
+    "bytes": 3254092,
+    "members": 231,
+    "dependencies": [
+      {
+        "file": "bicubic-ordered-horizontal-windows.tar.xz",
+        "sha256": "fd5862c1296eafc03ace7ae19241ebd791a06a05f260cd9e0798d7274625bb47",
+        "scope": "Verified b80 production/source, actual unchanged package4a,6321full/live bothOS, original worker/runtime/fixture identities and qualification."
+      },
+      {
+        "file": "bicubic-shared-quartet-execution.tar.xz",
+        "sha256": "19a823a7f1666a784b01950870652cef9c8e1411b5e5960595a67c884883b88b",
+        "scope": "Original12enlargement controls, native bounds, fixture/settings/source-valid historical costs and reference identities."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "scope": "Only current complete TightHorizontalUp8 cost refreshed on the unchanged actual package DLL: resident513x259RGBA8->1027x259, input+output+4096. Managed complete public Resize/preparation/filter/repair/independent output/disposal and original prepared-zimg boundary. Exact frozen/rational managed pixels, original native bounds, source and owner gates preserved. Other11enlargement costs remain source-valid; no production change accepted.",
+  "next": "Current primary remains a gap. Use measured horizontal-filter/publication attribution before another capacity change; any future shared enlargement kernel change must reconcile all12existing default/tight controls. Do not infer general text/codec slowdowns or expand the matrix. Publication postponed."
+}

@@ -107,6 +107,11 @@ Current scope and remaining work:
   Measured direct GC 4,498,558 B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
+  [Current horizontal byte enlargement](../benchmarks/ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
+  remains a gap on the unchanged actual package: 1,682.98/zimg1,641.69 µs,
+  upper1.031,114 B/op,4KiB scratch allowance. Eight new focused rational/ownership
+  cases supplement reused qualification; no production or package change.
+  Unaccepted capacity trials and sampling attribution remain in linked history.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
@@ -251,7 +256,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 308.62 | 376.78 | 0.819 / 0.821 | 197,300 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,969.56 | 3,040.59 | 0.977 / 0.981 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.81 | 1,515.06 | 1.021 / 1.035 | 114 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,682.98 | 1,641.69 | 1.025 / 1.031 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,722.39 | 1,743.04 | 0.988 / 0.994 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 459.65 | 451.35 | 1.018 / 1.027 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 506.31 | 574.04 | 0.882 / 0.888 | 113 |
