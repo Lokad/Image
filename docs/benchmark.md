@@ -1,10 +1,10 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-11. These **138 tabulated comparisons** combine qualified
+Updated 2026-11-12. These **138 tabulated comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
-development costs; **H** marks affected historical costs that are not current
-performance proof. Publication is postponed.
+development costs. Retained release costs apply only to unchanged production
+paths. Publication is postponed.
 
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
@@ -49,7 +49,7 @@ Current scope and remaining work:
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Current predictable/stored controls](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
-  replace three H rows on the actual package DLL. Predictable16 277.00/407.42 ms
+  replace three historical rows on the actual package DLL. Predictable16 277.00/407.42 ms
   upper0.706 and stored8 94.11/190.82 µs upper0.674 pass/stop. Stored16's post-GC
   four-op507.69/405.03 µs upper1.343 is a distinct diagnostic; natural-GC matched
   64-op351.54/405.42 µs upper0.902 passes its scope. Preserve both; general word
@@ -148,6 +148,12 @@ Current scope and remaining work:
   explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
   [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
   unaccepted capacity trials remain history; original exact arithmetic/repair remain.
+- **Deep bounded bicubic:** [current actual-package confirmation](../benchmarks/DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
+  resolves the last historical displayed row: RGBA8 32×16 is499.44/zimg408.73µs,
+  upper1.229, a demonstrated gap at113B/op and4KiB. One2sprofile identifies the
+  separate65tap executor. Source-driven paired-column storage is the next design;
+  its exact portable model is not SIMD or performance qualification. Current
+  production/packets/pixels are unchanged; passing paths remain stopped.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
@@ -290,7 +296,7 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA16 † → 1027×519 | 2,893.73 | 3,105.31 | 0.932 / 0.940 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,113.60 | 3,291.86 | 0.946 / 0.955 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 892.36 | 900.40 | 0.991 / 0.999 | 114 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB (gap) † → 32×16 | 499.44 | 408.73 | 1.222 / 1.229 | 113 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 311.98 | 378.45 | 0.824 / 0.840 | 197,299 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,064.21 | 3,289.31 | 0.932 / 0.939 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,499.15 | 1,521.64 | 0.985 / 1.048 | 114 |

@@ -1863,6 +1863,22 @@ def render():
         assert len(positions) == 1
         rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                              f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
+    deep_current = json.loads((ROOT / 'benchmarks/deep-bicubic-current-confirmation-evidence.json').read_text(encoding='utf-8'))
+    assert not deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
+    assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
+    assert deep_current['qualification']['fullChecksEachOs'] == 6417 and deep_current['qualification']['sameActualPackageBothOS']
+    deep = deep_current['case']
+    assert deep['librarySha256'] == deep_current['producers']['timedArtifactSha256'] == deep_current['qualification']['librarySha256']
+    assert deep['actualIterations'] == deep['nativeSamplesEachBracket'] == 12 and deep['allActualsRetained']
+    assert deep['allOriginalGatesPassed'] and deep['quietGuardsPassed'] and deep['managedExact']
+    assert deep['sourceUnchanged'] and deep['independentOwnedOutput'] and deep['retainedOperationScratchBytes'] == 0
+    assert deep['status'] == 'gap' and deep['lower'] > 1 and deep['allocatedBytes'] == 113
+    label = 'Bicubic RGBA8, 32×16 / input+output+4 KiB'
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' H ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| {label} (gap) † → 32×16 | {deep["managedUs"]:,.2f} | {deep["nativeUs"]:,.2f} | '
+                         f'{deep["ratio"]:.3f} / {deep["upper"]:.3f} | {deep["allocatedBytes"]:,} |')
+    assert not any(re.search(r'\sH(?:\s|\|)', row) for _, row in rows), 'Historical marked rows remain.'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
                          *(row for kind, row in rows if kind == 'codec')])
     read_labels = ['Probe PNG dimensions, seekable', 'Probe JPEG dimensions, seekable',
@@ -2067,11 +2083,11 @@ def render():
     current_build_qualification = packed_qualification
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-11. These **{displayed_count} tabulated comparisons** combine qualified
+Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
-development costs; **H** marks affected historical costs that are not current
-performance proof. Publication is postponed.
+development costs. Retained release costs apply only to unchanged production
+paths. Publication is postponed.
 
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
@@ -2116,7 +2132,7 @@ Current scope and remaining work:
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Current predictable/stored controls](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
-  replace three H rows on the actual package DLL. Predictable16 277.00/407.42 ms
+  replace three historical rows on the actual package DLL. Predictable16 277.00/407.42 ms
   upper0.706 and stored8 94.11/190.82 µs upper0.674 pass/stop. Stored16's post-GC
   four-op507.69/405.03 µs upper1.343 is a distinct diagnostic; natural-GC matched
   64-op351.54/405.42 µs upper0.902 passes its scope. Preserve both; general word
@@ -2215,6 +2231,12 @@ Current scope and remaining work:
   explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
   [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
   unaccepted capacity trials remain history; original exact arithmetic/repair remain.
+- **Deep bounded bicubic:** [current actual-package confirmation](../benchmarks/DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
+  resolves the last historical displayed row: RGBA8 32×16 is499.44/zimg408.73µs,
+  upper1.229, a demonstrated gap at113B/op and4KiB. One2sprofile identifies the
+  separate65tap executor. Source-driven paired-column storage is the next design;
+  its exact portable model is not SIMD or performance qualification. Current
+  production/packets/pixels are unchanged; passing paths remain stopped.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};

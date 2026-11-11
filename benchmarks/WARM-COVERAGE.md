@@ -54,6 +54,19 @@ retained; an ignored matching provenance view preserves reference identities.
 Next resolve the remaining historical Tight32x16_8 bicubic control on this actual
 package before assuming optimization is needed. All289paths remain; no global pass.
 
+The [current deep bicubic confirmation](DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
+resolves the final historical displayed row: Tight32x16_8 is499.44/zimg408.73µs,
+upper1.229, a demonstrated gap,113B/op and4KiB. One2s capture identifies the
+separate65tap DeepColumn executor, not the packed kernel. **Next architectural
+priority:** source-driven two-column output accumulators share exact integer
+source preparation and vertical coefficients. The portable model preserves2,048
+channel/512normalizer double bits; logical raw products531,468→319,606 and vertical
+Kernel calls33,152→16,576, with3,536B explicit payload. Model counts are not gains
+or actual SIMD proof. Retain original72term certificate/repair, disjoint frame
+fallback, word/portable paths and root/cancellation. Actual tests/generalization,
+complete screen/confirmation and affected reconciliation precede one broad/package
+milestone. No production/build/qualification change yet; all289paths remain.
+
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and the SAME actual Release-package/all

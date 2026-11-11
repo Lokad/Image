@@ -1,0 +1,718 @@
+{
+  "project": "Lokad.Image",
+  "stage": "HBC833",
+  "recordedOn": "2026-11-12",
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "case": {
+    "managedUs": 499.43638562500007,
+    "nativeUs": 408.73286783854167,
+    "ratio": 1.2219139318697714,
+    "lower": 1.2099255192735683,
+    "upper": 1.2294203760587405,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c",
+    "caseId": "Tight32x16_8",
+    "receipt": "tmp/hbc833-candidate-Tight32x16_8-confirm-receipt.json",
+    "observation": "tmp/hbc833-candidate-Tight32x16_8-confirm-observation.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "retainedOperationScratchBytes": 0,
+    "managedMaxWorkingBytes": 537612,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+    "nativeOutputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+    "outputBytes": 2048,
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 537612 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "nativeRgbMaximum": 0,
+    "nativeRgbRmse": 0,
+    "nativeAlphaMaximum": 0,
+    "nativeAlphaRmse": 0
+  },
+  "producers": {
+    "windowsSha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c",
+    "linuxSha256": "6b890a03402c13edf383b29b2315e77c3831f8c8e3d1ebc74e0b81d357610066",
+    "timedArtifactSha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c",
+    "actualPackageSha256": "86c09ae78a81b22d64291c7bf94f5cb5e68c873a5de69bc265b98b540cb1f4e6"
+  },
+  "qualification": {
+    "reusedEvidence": "packed-horizontal-window-reuse-evidence.json",
+    "fullChecksEachOs": 6417,
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOS": 3,
+    "additionalProductionOrEmbeddedBuilds": 0,
+    "additionalFullOrPackageChecks": 0,
+    "actualPackageSha256": "86c09ae78a81b22d64291c7bf94f5cb5e68c873a5de69bc265b98b540cb1f4e6",
+    "librarySha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+    "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "0ac48ea73b2ee884b51dfae83a73929300d24eb899f81c372a9f83d5444fee18",
+    "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+    "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+  },
+  "profile": {
+    "totalSampleLocations": 1997,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.DeepColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1798
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        141
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.DeepColumnBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        51
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        3
+      ]
+    ],
+    "instances": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeepColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x75fe61497fe0",
+        "codeBytes": 3032,
+        "samples": 1798
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x75fe61498d80",
+        "codeBytes": 184,
+        "samples": 141
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeepColumnBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "address": "0x75fe61498ea0",
+        "codeBytes": 489,
+        "samples": 51
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "address": "0x75fe61493c10",
+        "codeBytes": 39,
+        "samples": 3
+      }
+    ],
+    "hotBodies": [
+      {
+        "header": "Lokad.Image.Internal.DeepColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 3032,
+        "samples": 1798,
+        "hotLocations": [
+          {
+            "offset": "0x921",
+            "samples": 98,
+            "instruction": "vaddpd   zmm0, zmm0, zmm1",
+            "nearby": [
+              {
+                "offset": "0x914",
+                "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1"
+              },
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm1, zmm3, zmm1"
+              },
+              {
+                "offset": "0x921",
+                "instruction": "vaddpd   zmm0, zmm0, zmm1"
+              },
+              {
+                "offset": "0x927",
+                "instruction": "add      r11d, 2"
+              },
+              {
+                "offset": "0x92b",
+                "instruction": "mov      rbx, gword ptr [rbp-0xF0]"
+              }
+            ]
+          },
+          {
+            "offset": "0x91b",
+            "samples": 61,
+            "instruction": "vmulpd   zmm1, zmm3, zmm1",
+            "nearby": [
+              {
+                "offset": "0x90e",
+                "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]"
+              },
+              {
+                "offset": "0x914",
+                "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1"
+              },
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm1, zmm3, zmm1"
+              },
+              {
+                "offset": "0x921",
+                "instruction": "vaddpd   zmm0, zmm0, zmm1"
+              },
+              {
+                "offset": "0x927",
+                "instruction": "add      r11d, 2"
+              }
+            ]
+          },
+          {
+            "offset": "0xa6f",
+            "samples": 58,
+            "instruction": "mov      r8d, edi",
+            "nearby": [
+              {
+                "offset": "0xa63",
+                "instruction": "vmovsd   qword ptr [rcx+8*rdi], xmm0"
+              },
+              {
+                "offset": "0xa68",
+                "instruction": "vaddsd   xmm2, xmm0, qword ptr [rbp-0x90]"
+              },
+              {
+                "offset": "0xa6f",
+                "instruction": "mov      r8d, edi"
+              },
+              {
+                "offset": "0xa72",
+                "instruction": "add      r8d, dword ptr [rbp-0x84]"
+              },
+              {
+                "offset": "0xa79",
+                "instruction": "mov      gword ptr [rbp-0xF0], rbx"
+              }
+            ]
+          },
+          {
+            "offset": "0x8ed",
+            "samples": 54,
+            "instruction": "vpshufd  ymm3, ymm1, -1",
+            "nearby": [
+              {
+                "offset": "0x8e3",
+                "instruction": "vmovq    xmm1, rbx"
+              },
+              {
+                "offset": "0x8e8",
+                "instruction": "vpmovzxbd ymm1, ymm1"
+              },
+              {
+                "offset": "0x8ed",
+                "instruction": "vpshufd  ymm3, ymm1, -1"
+              },
+              {
+                "offset": "0x8f2",
+                "instruction": "vpblendd ymm3, ymm3, ymmword ptr [reloc @RWD32], -120"
+              },
+              {
+                "offset": "0x8fc",
+                "instruction": "vpmulld  ymm1, ymm3, ymm1"
+              }
+            ]
+          },
+          {
+            "offset": "0x879",
+            "samples": 50,
+            "instruction": "cmp      r11d, 72",
+            "nearby": [
+              {
+                "offset": "0x86d",
+                "instruction": "jmp      G_M000_IG52"
+              },
+              {
+                "offset": "0x872",
+                "instruction": "mov      gword ptr [rbp-0xF8], r15"
+              },
+              {
+                "offset": "0x879",
+                "instruction": "cmp      r11d, 72"
+              },
+              {
+                "offset": "0x87d",
+                "instruction": "jae      G_M000_IG67"
+              },
+              {
+                "offset": "0x883",
+                "instruction": "mov      ecx, r11d"
+              }
+            ]
+          },
+          {
+            "offset": "0x8ca",
+            "samples": 49,
+            "instruction": "cmp      rbx, r9",
+            "nearby": [
+              {
+                "offset": "0x8c2",
+                "instruction": "shl      r14d, 2"
+              },
+              {
+                "offset": "0x8c6",
+                "instruction": "lea      rbx, [r14+0x04]"
+              },
+              {
+                "offset": "0x8ca",
+                "instruction": "cmp      rbx, r9"
+              },
+              {
+                "offset": "0x8cd",
+                "instruction": "ja       G_M000_IG65"
+              },
+              {
+                "offset": "0x8d3",
+                "instruction": "add      r14, r8"
+              }
+            ]
+          },
+          {
+            "offset": "0x907",
+            "samples": 47,
+            "instruction": "vbroadcastsd zmm3, qword ptr [r12+8*rcx]",
+            "nearby": [
+              {
+                "offset": "0x8fc",
+                "instruction": "vpmulld  ymm1, ymm3, ymm1"
+              },
+              {
+                "offset": "0x901",
+                "instruction": "vcvtudq2pd zmm1, zmm1"
+              },
+              {
+                "offset": "0x907",
+                "instruction": "vbroadcastsd zmm3, qword ptr [r12+8*rcx]"
+              },
+              {
+                "offset": "0x90e",
+                "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]"
+              },
+              {
+                "offset": "0x914",
+                "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1"
+              }
+            ]
+          },
+          {
+            "offset": "0x8cd",
+            "samples": 47,
+            "instruction": "ja       G_M000_IG65",
+            "nearby": [
+              {
+                "offset": "0x8c6",
+                "instruction": "lea      rbx, [r14+0x04]"
+              },
+              {
+                "offset": "0x8ca",
+                "instruction": "cmp      rbx, r9"
+              },
+              {
+                "offset": "0x8cd",
+                "instruction": "ja       G_M000_IG65"
+              },
+              {
+                "offset": "0x8d3",
+                "instruction": "add      r14, r8"
+              },
+              {
+                "offset": "0x8d6",
+                "instruction": "mov      ebx, r15d"
+              }
+            ]
+          },
+          {
+            "offset": "0x8e8",
+            "samples": 45,
+            "instruction": "vpmovzxbd ymm1, ymm1",
+            "nearby": [
+              {
+                "offset": "0x8e0",
+                "instruction": "or       rbx, r15"
+              },
+              {
+                "offset": "0x8e3",
+                "instruction": "vmovq    xmm1, rbx"
+              },
+              {
+                "offset": "0x8e8",
+                "instruction": "vpmovzxbd ymm1, ymm1"
+              },
+              {
+                "offset": "0x8ed",
+                "instruction": "vpshufd  ymm3, ymm1, -1"
+              },
+              {
+                "offset": "0x8f2",
+                "instruction": "vpblendd ymm3, ymm3, ymmword ptr [reloc @RWD32], -120"
+              }
+            ]
+          },
+          {
+            "offset": "0x89d",
+            "samples": 44,
+            "instruction": "mov      gword ptr [rbp-0xF0], rbx",
+            "nearby": [
+              {
+                "offset": "0x896",
+                "instruction": "lea      r15, [r14+0x04]"
+              },
+              {
+                "offset": "0x89a",
+                "instruction": "cmp      r15, r9"
+              },
+              {
+                "offset": "0x89d",
+                "instruction": "mov      gword ptr [rbp-0xF0], rbx"
+              },
+              {
+                "offset": "0x8a4",
+                "instruction": "ja       G_M000_IG65"
+              },
+              {
+                "offset": "0x8aa",
+                "instruction": "add      r14, r8"
+              }
+            ]
+          },
+          {
+            "offset": "0x8a4",
+            "samples": 44,
+            "instruction": "ja       G_M000_IG65",
+            "nearby": [
+              {
+                "offset": "0x89a",
+                "instruction": "cmp      r15, r9"
+              },
+              {
+                "offset": "0x89d",
+                "instruction": "mov      gword ptr [rbp-0xF0], rbx"
+              },
+              {
+                "offset": "0x8a4",
+                "instruction": "ja       G_M000_IG65"
+              },
+              {
+                "offset": "0x8aa",
+                "instruction": "add      r14, r8"
+              },
+              {
+                "offset": "0x8ad",
+                "instruction": "mov      r15d, dword ptr [r14]"
+              }
+            ]
+          },
+          {
+            "offset": "0x901",
+            "samples": 42,
+            "instruction": "vcvtudq2pd zmm1, zmm1",
+            "nearby": [
+              {
+                "offset": "0x8f2",
+                "instruction": "vpblendd ymm3, ymm3, ymmword ptr [reloc @RWD32], -120"
+              },
+              {
+                "offset": "0x8fc",
+                "instruction": "vpmulld  ymm1, ymm3, ymm1"
+              },
+              {
+                "offset": "0x901",
+                "instruction": "vcvtudq2pd zmm1, zmm1"
+              },
+              {
+                "offset": "0x907",
+                "instruction": "vbroadcastsd zmm3, qword ptr [r12+8*rcx]"
+              },
+              {
+                "offset": "0x90e",
+                "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]"
+              }
+            ]
+          },
+          {
+            "offset": "0x896",
+            "samples": 41,
+            "instruction": "lea      r15, [r14+0x04]",
+            "nearby": [
+              {
+                "offset": "0x88d",
+                "instruction": "movzx    r14, word  ptr [rsi+2*rcx]"
+              },
+              {
+                "offset": "0x892",
+                "instruction": "shl      r14d, 2"
+              },
+              {
+                "offset": "0x896",
+                "instruction": "lea      r15, [r14+0x04]"
+              },
+              {
+                "offset": "0x89a",
+                "instruction": "cmp      r15, r9"
+              },
+              {
+                "offset": "0x89d",
+                "instruction": "mov      gword ptr [rbp-0xF0], rbx"
+              }
+            ]
+          },
+          {
+            "offset": "0x914",
+            "samples": 41,
+            "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1",
+            "nearby": [
+              {
+                "offset": "0x907",
+                "instruction": "vbroadcastsd zmm3, qword ptr [r12+8*rcx]"
+              },
+              {
+                "offset": "0x90e",
+                "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]"
+              },
+              {
+                "offset": "0x914",
+                "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1"
+              },
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm1, zmm3, zmm1"
+              },
+              {
+                "offset": "0x921",
+                "instruction": "vaddpd   zmm0, zmm0, zmm1"
+              }
+            ]
+          },
+          {
+            "offset": "0x89a",
+            "samples": 41,
+            "instruction": "cmp      r15, r9",
+            "nearby": [
+              {
+                "offset": "0x892",
+                "instruction": "shl      r14d, 2"
+              },
+              {
+                "offset": "0x896",
+                "instruction": "lea      r15, [r14+0x04]"
+              },
+              {
+                "offset": "0x89a",
+                "instruction": "cmp      r15, r9"
+              },
+              {
+                "offset": "0x89d",
+                "instruction": "mov      gword ptr [rbp-0xF0], rbx"
+              },
+              {
+                "offset": "0x8a4",
+                "instruction": "ja       G_M000_IG65"
+              }
+            ]
+          },
+          {
+            "offset": "0x87d",
+            "samples": 40,
+            "instruction": "jae      G_M000_IG67",
+            "nearby": [
+              {
+                "offset": "0x872",
+                "instruction": "mov      gword ptr [rbp-0xF8], r15"
+              },
+              {
+                "offset": "0x879",
+                "instruction": "cmp      r11d, 72"
+              },
+              {
+                "offset": "0x87d",
+                "instruction": "jae      G_M000_IG67"
+              },
+              {
+                "offset": "0x883",
+                "instruction": "mov      ecx, r11d"
+              },
+              {
+                "offset": "0x886",
+                "instruction": "mov      rsi, bword ptr [rbp-0x110]"
+              }
+            ]
+          },
+          {
+            "offset": "0x90e",
+            "samples": 40,
+            "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]",
+            "nearby": [
+              {
+                "offset": "0x901",
+                "instruction": "vcvtudq2pd zmm1, zmm1"
+              },
+              {
+                "offset": "0x907",
+                "instruction": "vbroadcastsd zmm3, qword ptr [r12+8*rcx]"
+              },
+              {
+                "offset": "0x90e",
+                "instruction": "vbroadcastsd ymm4, qword ptr [r12+8*r10]"
+              },
+              {
+                "offset": "0x914",
+                "instruction": "vinsertf64x4 zmm3, zmm3, ymm4, 1"
+              },
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm1, zmm3, zmm1"
+              }
+            ]
+          },
+          {
+            "offset": "0x943",
+            "samples": 40,
+            "instruction": "jl       G_M000_IG51",
+            "nearby": [
+              {
+                "offset": "0x93d",
+                "instruction": "mov      eax, dword ptr [rbp-0x50]"
+              },
+              {
+                "offset": "0x940",
+                "instruction": "cmp      r10d, eax"
+              },
+              {
+                "offset": "0x943",
+                "instruction": "jl       G_M000_IG51"
+              },
+              {
+                "offset": "0x949",
+                "instruction": "vmovaps  zmm1, zmm0"
+              },
+              {
+                "offset": "0x94f",
+                "instruction": "vextractf64x4 ymm0, zmm0, 1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "oneCaptureSeconds": 2,
+    "operationCpu": 0,
+    "samplerCpu": 1,
+    "instrumentedElapsedDiscarded": true,
+    "locationsAreNotPhaseCostsOrForecasts": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "sourceModel": {
+    "project": "Lokad.Image",
+    "stage": "HBC833-source-model",
+    "productionChanged": false,
+    "sources": {
+      "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "0ac48ea73b2ee884b51dfae83a73929300d24eb899f81c372a9f83d5444fee18",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+    },
+    "actualDispatch": "DeepColumnBicubicResize; support65exceeds PackedColumn max36. Word executor is separate and unchanged.",
+    "geometry": {
+      "source": [
+        513,
+        259
+      ],
+      "result": [
+        32,
+        16
+      ],
+      "horizontalCounts": [
+        64,
+        65
+      ],
+      "verticalCounts": [
+        64,
+        65
+      ]
+    },
+    "exactPortableDoubleModel": {
+      "channelAccumulatorsCompared": 2048,
+      "normalizersCompared": 512,
+      "allBitsEqual": true,
+      "integerProductsExactUInt16": true,
+      "notActualProductionSimdProof": true
+    },
+    "logical": {
+      "oldSourceRowFilters": 8288,
+      "newSourceRowProductPreparations": 4144,
+      "oldRepeatedRawPixelProducts": 531468,
+      "newUniqueRawPixelProducts": 319606,
+      "oldVerticalKernelEvaluations": 33152,
+      "newVerticalKernelEvaluations": 16576,
+      "arithmeticHorizontalMultiplyAddsUnchanged": true,
+      "verticalPixelMultiplyAddsUnchanged": true
+    },
+    "intendedEndState": "For small output heights, source-driven two-column tiles keep output-row accumulators instead of72cached source rows. Decode each unique physical source pixel once into bounded UInt16premultiplication products shared by both columns; preserve existing even/odd horizontal tap streams/final fold. Sweep virtual source rows ascending, including repeated clamped halo coordinates, so every output retains original ordered vertical Add(Multiply) and normalizers. Sweep active output-row interval; no all-height scan per source row. No float workspace or numerical-policy change.",
+    "payloadBytes": {
+      "twoColumnOutputAccumulators": 1024,
+      "prepared92RgbaProducts": 736,
+      "horizontalWeights": 1152,
+      "horizontalOffsets": 288,
+      "verticalNormalizers": 128,
+      "verticalCenters": 128,
+      "firstVirtualRows": 64,
+      "verticalCounts": 16
+    },
+    "explicitPayloadTotal": 3536,
+    "admissionBytes": 4096,
+    "retainedScratchBytes": 0,
+    "newHeapArrays": 0,
+    "newOwners": 0,
+    "newPools": 0,
+    "ownership": "One operation-owned bounded frame only. Retire row-driven frame before original-column fallback or tiny-alpha replay. Shared existing byte certificate/original repair remain; after all source rows, decoded storage may stage original vertical coefficients for rare repair. Borrow source and private result; no output/cache alias or lifetime extension.",
+    "dependencies": "Move existing column body behind a separate noninlined boundary so its4032Bstack cannot overlap3536Brow frame. Retain original path for larger heights/structural declines. Admission refusal/cancellation throw through existing finally without fallback. Geometry/source span bounds and portable/word behavior remain.",
+    "risks": "Virtual/physical clamp order, source-window edges, odd column,65/72tap bounds, active interval scheduling, certificate/tiny-alpha unwind, frame overlap, register pressure and scalar conversions require actual-code proof. Extra per-row output accumulators may negate reduced preparation. Counts/model are not sampled phase costs or a speed forecast.",
+    "acceptance": "Freeze actual predecessor pixels; actual SIMD ordered-bit/canary/odd/edge/lowalpha tests plus one small generalization before existing complete Tight32x16_8 screen and independent confirmation if useful. Reconcile original-column callers/code effects before one W/L/scalar/ISA/SAMEpackage milestone. No new timing grid or passing word retuning."
+  },
+  "proposalNotProductionQualification": true,
+  "storage": {
+    "workingAdmissionBytes": 4096,
+    "currentExplicitArrayPayloadBytes": 4032,
+    "proposedExplicitArrayPayloadBytes": 3536,
+    "retainedOperationScratchBytes": 0,
+    "resultBytes": 2048,
+    "governedPhysicalNativeJitPeaksRemeasured": false,
+    "libraryPoolRetentionRemeasured": false
+  },
+  "workflow": {
+    "allBuilds": 0,
+    "existingControlsRefreshed": 1,
+    "newImagesOrSettings": 0,
+    "independentConfirmations": 1,
+    "currentModuleProfiles": 1,
+    "fullPackageChecksRepeated": 0
+  },
+  "raw": {
+    "file": "deep-bicubic-current-confirmation-v2.tar.xz",
+    "sha256": "0e8d11394a5fcebea6b06c6d1411d0a721c39eded13ecd1ba258ccd5a703089e",
+    "bytes": 6042584,
+    "members": 178,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "packed-horizontal-window-reuse.tar.xz",
+        "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+        "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+      },
+      {
+        "file": "release-0.2.0-benchmark-raw.tar.xz",
+        "sha256": "f1443f256332bcd39a7efe430a5216170c6ef0c0a168cda603d686e53de4c129",
+        "scope": "benchmarks/release-0.2.0-benchmark-evidence.json"
+      }
+    ]
+  },
+  "next": "Prototype source-driven paired-column execution for small output heights under the same4KiB admission, with actual ordered-bit/canary/clamp/odd/lowalpha/root/cancel and one generalization check. Preserve72term certificate/original repair and nonoverlapping fallback frames. Existing complete Tight32x16_8 screen, independent if useful; reconcile affected original-column paths before coherent W/L/scalar/ISA/SAMEpackage qualification. No passing word tuning or numerical-policy relaxation."
+}
