@@ -1,142 +1,1412 @@
 {
   "project": "Lokad.Image",
-  "stage": "BRM538",
+  "stage": "MIA795",
+  "date": "2026-11-11",
   "productionChanged": false,
-  "productionAccepted": false,
-  "requiredMaterialPaths": 283,
-  "warmParityComplete": false,
-  "publicationPostponed": true,
-  "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
-  "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
-  "sources": {
-    "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e9b826d8c2d2412807d3c7f5fb7e293524819517e654037a9e2274c89c6a0bda",
-    "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
-    "src/Lokad.Image/Internal/BicubicMath.cs": "790643a112e5aa8e8c4d5a880294f5e0b31306b445a94d5bcc4b03616bbae08f",
-    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
-  },
+  "newStatisticalTiming": false,
   "allBuilds": 0,
-  "newBroadQualificationRuns": 0,
-  "newPackageRuns": 0,
-  "displayedCostsChanged": 0,
-  "quietGuardsPassed": true,
-  "allOriginalGatesPassed": true,
-  "control": {
-    "caseId": "Mixed16",
-    "width": 513,
-    "height": 259,
-    "depth": 16,
-    "outputWidth": 1027,
-    "outputHeight": 129,
-    "managedMaxWorkingBytes": null,
-    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
-    "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
-    "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
-    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
-    "nativeRgbMaximum": 1,
-    "nativeRgbRmse": 0.048111977689428514,
-    "nativeAlphaMaximum": 1,
-    "nativeAlphaRmse": 0.038167927407420775
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "MIA795",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "caseId": "TightMixed16",
+    "sources": {
+      "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "9ce75f42a08b40369628c2076618d54ef7f38e0cca33ada6da2832716341c00e",
+      "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "b5ee595015a201fb8873b4fcc28a6bf8ca57dc98420f4acad950657768b9d357"
+    },
+    "wordSourceByteExactToCurrentCost": true,
+    "costReused": {
+      "caseId": "TightMixed16",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 1027,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 2126896,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2126896 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "certifiedExactRationalAlphaHalves": 0,
+      "managedUs": 893.1555472470238,
+      "nativeUs": 851.2868046875,
+      "ratio": 1.0491828868120345,
+      "lower": 1.0422614529684036,
+      "upper": 1.0561887982551423,
+      "allocatedBytes": 114,
+      "status": "gap",
+      "librarySha256": "f1d649414bceea67661cdf7b0263a588db08ea53baca745a6587ba18629a0bf9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "mva720-baseline-TightMixed16-confirm",
+      "receiptFile": "mva720-baseline-TightMixed16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12
+    },
+    "qualificationReused": "wide-bicubic-shared-quartets-evidence.json",
+    "scope": "MIA795 read-only actual-package TightMixed16 preparation/execution attribution. Existing513x259->1027x129 RGBA16/4KiB complete Resize includes geometry/workspace, source conversion, filtering/certification/repair, independent result/disposal. Reuse declared893.16/native851.29us(~42us point gap), not new statistical cost. Current word source byte-identical to restored MVB721 path; shared math/geometry pinned to current qualified package. Already publishes quartets; no blind replay of BQF/BWF or unselected word overlap candidate. Native graph/input/scratch retained as declared. One2secondCPU0capture/CPU1sampler; all instrumented elapsed discarded. OldBRM538 capture predates64-row loan, so its offsets are not current. No builds, new images/settings/grid, full/ISA/package repeat."
   },
-  "attribution": {
-    "seconds": 2,
-    "totalSamples": 1995,
+  "profile": {
+    "totalSampleLocations": 1993,
     "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,class Lokad.Image.Internal.OperationContext,valuetype [System.Runtime]System.Span`1<uint8>,valuetype Lokad.Image.Internal.MixedBicubicGeometry,int32,int32)[Optimized]",
+        1827
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        43
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteWord(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        34
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::OriginalWord(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,float64,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        28
+      ],
+      [
+        "valuetype Lokad.Image.Internal.MixedBicubicGeometry [Lokad.Image] Lokad.Image.Internal.MixedBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        27
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        5
+      ],
+      [
+        "uint16 [Lokad.Image] Lokad.Image.Internal.BicubicMath::RoundWord(float64)[Optimized]",
+        4
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        1
+      ]
+    ],
+    "instances": [
       {
-        "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
-        "samples": 1830,
-        "fraction": 0.9172932330827067
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,class Lokad.Image.Internal.OperationContext,valuetype [System.Runtime]System.Span`1<uint8>,valuetype Lokad.Image.Internal.MixedBicubicGeometry,int32,int32)[Optimized]",
+        "address": "0x799059ec77c0",
+        "codeBytes": 8484,
+        "samples": 1574
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,class Lokad.Image.Internal.OperationContext,valuetype [System.Runtime]System.Span`1<uint8>,valuetype Lokad.Image.Internal.MixedBicubicGeometry,int32,int32)[Optimized]",
+        "address": "0x799059eca420",
+        "codeBytes": 8378,
+        "samples": 253
       },
       {
         "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
-        "samples": 55,
-        "fraction": 0.02756892230576441
-      },
-      {
-        "method": "Native or unresolved",
-        "samples": 39,
-        "fraction": 0.019548872180451128
+        "address": "0x799059ec7600",
+        "codeBytes": 184,
+        "samples": 43
       },
       {
         "method": "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteWord(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
-        "samples": 27,
-        "fraction": 0.013533834586466165
-      },
-      {
-        "method": "valuetype Lokad.Image.Internal.MixedBicubicGeometry [Lokad.Image] Lokad.Image.Internal.MixedBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
-        "samples": 20,
-        "fraction": 0.010025062656641603
+        "address": "0x799059eca1a0",
+        "codeBytes": 488,
+        "samples": 34
       },
       {
         "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::OriginalWord(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,float64,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
-        "samples": 19,
-        "fraction": 0.009523809523809525
+        "address": "0x799059ec9a40",
+        "codeBytes": 1619,
+        "samples": 28
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.MixedBicubicGeometry [Lokad.Image] Lokad.Image.Internal.MixedBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x799059ec7200",
+        "codeBytes": 935,
+        "samples": 27
       },
       {
         "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
-        "samples": 2,
-        "fraction": 0.0010025062656641604
+        "address": "0x799059ec39f0",
+        "codeBytes": 39,
+        "samples": 5
       },
       {
         "method": "uint16 [Lokad.Image] Lokad.Image.Internal.BicubicMath::RoundWord(float64)[Optimized]",
-        "samples": 2,
-        "fraction": 0.0010025062656641604
+        "address": "0x799059eca0e0",
+        "codeBytes": 107,
+        "samples": 4
       },
       {
-        "method": "stub ReportStubBlock<MethodCallThunk>",
-        "samples": 1,
-        "fraction": 0.0005012531328320802
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "address": "0x799059ec3980",
+        "codeBytes": 82,
+        "samples": 1
       }
     ],
-    "actualTryApplyCodeBytes": 8262,
-    "jitReportedLocalFrameBytes": 872,
-    "wholeTryApplySamples": 1830,
-    "geometryPrepareSamples": 20,
-    "scalarRepairSamples": 19,
-    "profilingOnly": true,
-    "statisticalTiming": false,
-    "note": "Current standalone immutable producer; cached complete-operation driver and original reference gates, CPU0operation/CPU1sampler. Actual TryApply includes inlined horizontal/vertical execution and exact certification. Hot offsets span decoded storage, multiply/add, division/exponent margins, certification/clipping/packing; skid and locations are not phase times, stall proof or predicted gains. PriorBRM493hot shares predateRPA503 math and remain historical."
-  },
-  "existingArchitecture": "Shared borrowed output-suffix geometry, paired source-column decode/vertical cache, quartet publication, sharedBicubicMath quotient/certification and exact scalar repair already exist. Do not rediscover these as new work or assume nativefloat has equivalent exactness costs.",
-  "workspace": {
-    "fixedArrayBytes": {
-      "cache": 1536,
-      "columnIds": 24,
-      "decoded": 1536,
-      "vertical": 640,
-      "rowOffsets": 80,
-      "counts": 32,
-      "normalizers": 64,
-      "horizontal": 40,
-      "columns": 20,
-      "samplesX": 20
-    },
-    "totalFixedArrayBytes": 3992,
-    "reservedWorkspaceBytes": 4096,
-    "retainedScratchBytes": 0,
-    "wholePhysicalAdmittedNativePeaksRemeasured": false,
-    "note": "Source-derived explicit stack-array capacities only. JIT frame may include some fixed storage; these figures are not additive or measured total stack/live peak. Existing admission/result ownership unchanged."
-  },
-  "nextHypothesis": "Investigate retiring paired-column decode/vertical filtering into one bounded execution helper with existing prepared row-band metadata. Current8,262B mixed driver keeps preparation, decode, vertical cache, horizontal accumulation, certificate and stores in one function. Removing decode temporaries from the long-lived horizontal/certification driver may simplify its state, not automatically improve CPU. Keep specialized SIMD and exact tap/certification/repair arithmetic; no generic pixel loop.",
-  "intendedEndState": "One operation-owned4KiBworkspace and shared geometry descriptor, explicit paired-column vertical phase followed by existing quartet/pair/single publication. Borrow existing input/cache spans, no heap/cache/session/API. Reuse the same actual column phase rather than duplicate it; later byte/word preparation consolidation only where source/evidence justifies it.",
-  "transition": "First prove decode-span lifetime and packed32Bpublication scratch after extraction. Replacing1536Bdecoded caller array with1536Bcallee scratch plus32Bcaller staging gives4024Bexplicit overlap, within existing4096Bworkspace; this is a design bound, not measured peak or gain. Preserve every poll, failure boundary, fallback, output bit, input/root and retained-result lifetime. Calls/codegen can outweigh shorter-lived state; revise/abandon from complete workloads, not frame size.",
-  "workloads": "Existing Mixed16,TightMixed16, and relevant TightVertical16 generalization if this executed column phase changes. Current declared~175/~170/~142us gaps. No new shape/depth/filter grid. Resolve actual eligibility/source scope before refresh; default vertical takes cached path and other kernels stay unchanged.",
-  "acceptance": "Focused exact rational/pair/quartet/tail/native-bound/ownership/cancellation/admission checks on bothOS/scalar, then short complete controls on one immutable build. Independent contemporary confirmation only if promising. At accepted coherent stage qualify affected costs and broadWindows/Linux/live/SAMEactualpackage once; unchanged paths reuse evidence. No numerical-policy relaxation or speed inference from sample/frame counts.",
-  "raw": {
-    "file": "bicubic-mixed-current-execution-attribution.tar.xz",
-    "sha256": "a88958cbfc6dae4ec1555f698edaca50be23afe776b8a5ae84867a5a167d68ce",
-    "bytes": 6222684,
-    "members": 137,
-    "mirrored": true,
-    "allMembersVerified": true,
-    "dependencies": [
+    "hotBodies": [
       {
-        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
-        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+        "header": "Lokad.Image.Internal.MixedWordColumnBicubicResize:ApplyRange[Lokad.Image.Internal.MixedWordColumnBicubicResize+SixtyFourRowBand](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,Lokad.Image.Internal.OperationContext,System.Span`1[byte],Lokad.Image.Internal.MixedBicubicGeometry,int,int):bool (FullOpts)",
+        "codeBytes": 8484,
+        "samples": 1574,
+        "hotLocations": [
+          {
+            "offset": "0xba9",
+            "samples": 51,
+            "instruction": "vaddpd   zmm0, zmm2, zmm0",
+            "nearby": [
+              {
+                "offset": "0xb9b",
+                "instruction": "vmovups  zmm2, zmmword ptr [r11+r10]"
+              },
+              {
+                "offset": "0xba2",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rdx+8*r14] {1to8}"
+              },
+              {
+                "offset": "0xba9",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0xbaf",
+                "instruction": "inc      r13d"
+              },
+              {
+                "offset": "0xbb2",
+                "instruction": "cmp      r13d, eax"
+              }
+            ]
+          },
+          {
+            "offset": "0xd51",
+            "samples": 50,
+            "instruction": "mov      r11, bword ptr [rbp-0x280]",
+            "nearby": [
+              {
+                "offset": "0xd46",
+                "instruction": "vpmulld  ymm0, ymm2, ymm0"
+              },
+              {
+                "offset": "0xd4b",
+                "instruction": "vcvtudq2pd zmm0, zmm0"
+              },
+              {
+                "offset": "0xd51",
+                "instruction": "mov      r11, bword ptr [rbp-0x280]"
+              },
+              {
+                "offset": "0xd58",
+                "instruction": "vmovups  zmmword ptr [r11+rdx], zmm0"
+              },
+              {
+                "offset": "0xd5f",
+                "instruction": "inc      eax"
+              }
+            ]
+          },
+          {
+            "offset": "0xba2",
+            "samples": 47,
+            "instruction": "vmulpd   zmm2, zmm2, qword ptr [rdx+8*r14] {1to8}",
+            "nearby": [
+              {
+                "offset": "0xb97",
+                "instruction": "shl      r10, 6"
+              },
+              {
+                "offset": "0xb9b",
+                "instruction": "vmovups  zmm2, zmmword ptr [r11+r10]"
+              },
+              {
+                "offset": "0xba2",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rdx+8*r14] {1to8}"
+              },
+              {
+                "offset": "0xba9",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0xbaf",
+                "instruction": "inc      r13d"
+              }
+            ]
+          },
+          {
+            "offset": "0x15d2",
+            "samples": 34,
+            "instruction": "vpsrlq   zmm3, zmm7, 52",
+            "nearby": [
+              {
+                "offset": "0x15c5",
+                "instruction": "vpternlogq zmm3, zmm9, zmm7, -54"
+              },
+              {
+                "offset": "0x15cc",
+                "instruction": "vdivpd   zmm0, zmm0, zmm3"
+              },
+              {
+                "offset": "0x15d2",
+                "instruction": "vpsrlq   zmm3, zmm7, 52"
+              },
+              {
+                "offset": "0x15d9",
+                "instruction": "vpandq   zmm3, zmm3, qword ptr [reloc @RWD160] {1to8}"
+              },
+              {
+                "offset": "0x15e3",
+                "instruction": "vxorps   ymm4, ymm4, ymm4"
+              }
+            ]
+          },
+          {
+            "offset": "0x17cb",
+            "samples": 30,
+            "instruction": "jne      SHORT G_M000_IG111",
+            "nearby": [
+              {
+                "offset": "0x17c4",
+                "instruction": "kmovb    edi, k1"
+              },
+              {
+                "offset": "0x17c8",
+                "instruction": "test     rdi, rdi"
+              },
+              {
+                "offset": "0x17cb",
+                "instruction": "jne      SHORT G_M000_IG111"
+              },
+              {
+                "offset": "0x17cd",
+                "instruction": "vxorps   ymm2, ymm2, ymm2"
+              },
+              {
+                "offset": "0x17d1",
+                "instruction": "vmaxpd   zmm2, zmm2, zmm8"
+              }
+            ]
+          },
+          {
+            "offset": "0xbaf",
+            "samples": 28,
+            "instruction": "inc      r13d",
+            "nearby": [
+              {
+                "offset": "0xba2",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rdx+8*r14] {1to8}"
+              },
+              {
+                "offset": "0xba9",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0xbaf",
+                "instruction": "inc      r13d"
+              },
+              {
+                "offset": "0xbb2",
+                "instruction": "cmp      r13d, eax"
+              },
+              {
+                "offset": "0xbb5",
+                "instruction": "jl       SHORT G_M000_IG51"
+              }
+            ]
+          },
+          {
+            "offset": "0x17c0",
+            "samples": 26,
+            "instruction": "kandb    k1, k1, k2",
+            "nearby": [
+              {
+                "offset": "0x17af",
+                "instruction": "vpandq   zmm2, zmm2, qword ptr [reloc @RWD216] {1to8}"
+              },
+              {
+                "offset": "0x17b9",
+                "instruction": "vcmplepd k2, zmm2, zmm7"
+              },
+              {
+                "offset": "0x17c0",
+                "instruction": "kandb    k1, k1, k2"
+              },
+              {
+                "offset": "0x17c4",
+                "instruction": "kmovb    edi, k1"
+              },
+              {
+                "offset": "0x17c8",
+                "instruction": "test     rdi, rdi"
+              }
+            ]
+          },
+          {
+            "offset": "0xb91",
+            "samples": 25,
+            "instruction": "jae      G_M000_IG166",
+            "nearby": [
+              {
+                "offset": "0xb85",
+                "instruction": "movzx    r10, byte  ptr [r9+r14]"
+              },
+              {
+                "offset": "0xb8a",
+                "instruction": "cmp      r10d, 144"
+              },
+              {
+                "offset": "0xb91",
+                "instruction": "jae      G_M000_IG166"
+              },
+              {
+                "offset": "0xb97",
+                "instruction": "shl      r10, 6"
+              },
+              {
+                "offset": "0xb9b",
+                "instruction": "vmovups  zmm2, zmmword ptr [r11+r10]"
+              }
+            ]
+          },
+          {
+            "offset": "0xb8a",
+            "samples": 24,
+            "instruction": "cmp      r10d, 144",
+            "nearby": [
+              {
+                "offset": "0xb82",
+                "instruction": "mov      r14d, r13d"
+              },
+              {
+                "offset": "0xb85",
+                "instruction": "movzx    r10, byte  ptr [r9+r14]"
+              },
+              {
+                "offset": "0xb8a",
+                "instruction": "cmp      r10d, 144"
+              },
+              {
+                "offset": "0xb91",
+                "instruction": "jae      G_M000_IG166"
+              },
+              {
+                "offset": "0xb97",
+                "instruction": "shl      r10, 6"
+              }
+            ]
+          },
+          {
+            "offset": "0xb9b",
+            "samples": 22,
+            "instruction": "vmovups  zmm2, zmmword ptr [r11+r10]",
+            "nearby": [
+              {
+                "offset": "0xb91",
+                "instruction": "jae      G_M000_IG166"
+              },
+              {
+                "offset": "0xb97",
+                "instruction": "shl      r10, 6"
+              },
+              {
+                "offset": "0xb9b",
+                "instruction": "vmovups  zmm2, zmmword ptr [r11+r10]"
+              },
+              {
+                "offset": "0xba2",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rdx+8*r14] {1to8}"
+              },
+              {
+                "offset": "0xba9",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              }
+            ]
+          },
+          {
+            "offset": "0xd25",
+            "samples": 22,
+            "instruction": "cmp      eax, 144",
+            "nearby": [
+              {
+                "offset": "0xd1b",
+                "instruction": "vmovups  xmm0, xmmword ptr [r11]"
+              },
+              {
+                "offset": "0xd20",
+                "instruction": "vpmovzxwd ymm0, ymm0"
+              },
+              {
+                "offset": "0xd25",
+                "instruction": "cmp      eax, 144"
+              },
+              {
+                "offset": "0xd2a",
+                "instruction": "jae      G_M000_IG166"
+              },
+              {
+                "offset": "0xd30",
+                "instruction": "mov      rdx, rax"
+              }
+            ]
+          },
+          {
+            "offset": "0xb85",
+            "samples": 17,
+            "instruction": "movzx    r10, byte  ptr [r9+r14]",
+            "nearby": [
+              {
+                "offset": "0xb80",
+                "instruction": "jle      SHORT G_M000_IG52"
+              },
+              {
+                "offset": "0xb82",
+                "instruction": "mov      r14d, r13d"
+              },
+              {
+                "offset": "0xb85",
+                "instruction": "movzx    r10, byte  ptr [r9+r14]"
+              },
+              {
+                "offset": "0xb8a",
+                "instruction": "cmp      r10d, 144"
+              },
+              {
+                "offset": "0xb91",
+                "instruction": "jae      G_M000_IG166"
+              }
+            ]
+          },
+          {
+            "offset": "0xd5f",
+            "samples": 17,
+            "instruction": "inc      eax",
+            "nearby": [
+              {
+                "offset": "0xd51",
+                "instruction": "mov      r11, bword ptr [rbp-0x280]"
+              },
+              {
+                "offset": "0xd58",
+                "instruction": "vmovups  zmmword ptr [r11+rdx], zmm0"
+              },
+              {
+                "offset": "0xd5f",
+                "instruction": "inc      eax"
+              },
+              {
+                "offset": "0xd61",
+                "instruction": "mov      edx, dword ptr [rbp-0x64]"
+              },
+              {
+                "offset": "0xd64",
+                "instruction": "cmp      eax, edx"
+              }
+            ]
+          },
+          {
+            "offset": "0x1baf",
+            "samples": 17,
+            "instruction": "mov      qword ptr [rsi], rdx",
+            "nearby": [
+              {
+                "offset": "0x1ba9",
+                "instruction": "add      rdx, r11"
+              },
+              {
+                "offset": "0x1bac",
+                "instruction": "mov      rdx, qword ptr [rdx]"
+              },
+              {
+                "offset": "0x1baf",
+                "instruction": "mov      qword ptr [rsi], rdx"
+              },
+              {
+                "offset": "0x1bb2",
+                "instruction": "lea      edi, [r9+rdi+0x01]"
+              },
+              {
+                "offset": "0x1bb7",
+                "instruction": "imul     edi, dword ptr [rbp-0x4C]"
+              }
+            ]
+          },
+          {
+            "offset": "0x1c23",
+            "samples": 16,
+            "instruction": "mov      r9, bword ptr [rbp-0x2B0]",
+            "nearby": [
+              {
+                "offset": "0x1c16",
+                "instruction": "mov      edx, dword ptr [rbp-0xB8]"
+              },
+              {
+                "offset": "0x1c1c",
+                "instruction": "mov      rsi, bword ptr [rbp-0x2A8]"
+              },
+              {
+                "offset": "0x1c23",
+                "instruction": "mov      r9, bword ptr [rbp-0x2B0]"
+              },
+              {
+                "offset": "0x1c2a",
+                "instruction": "jl       G_M000_IG121"
+              },
+              {
+                "offset": "0x1c30",
+                "instruction": "add      eax, 4"
+              }
+            ]
+          },
+          {
+            "offset": "0xd4b",
+            "samples": 16,
+            "instruction": "vcvtudq2pd zmm0, zmm0",
+            "nearby": [
+              {
+                "offset": "0xd3c",
+                "instruction": "vpblendd ymm2, ymm2, ymmword ptr [reloc @RWD32], -120"
+              },
+              {
+                "offset": "0xd46",
+                "instruction": "vpmulld  ymm0, ymm2, ymm0"
+              },
+              {
+                "offset": "0xd4b",
+                "instruction": "vcvtudq2pd zmm0, zmm0"
+              },
+              {
+                "offset": "0xd51",
+                "instruction": "mov      r11, bword ptr [rbp-0x280]"
+              },
+              {
+                "offset": "0xd58",
+                "instruction": "vmovups  zmmword ptr [r11+rdx], zmm0"
+              }
+            ]
+          },
+          {
+            "offset": "0x1bfd",
+            "samples": 16,
+            "instruction": "mov      qword ptr [rdi], rsi",
+            "nearby": [
+              {
+                "offset": "0x1bf7",
+                "instruction": "add      rsi, r11"
+              },
+              {
+                "offset": "0x1bfa",
+                "instruction": "mov      rsi, qword ptr [rsi]"
+              },
+              {
+                "offset": "0x1bfd",
+                "instruction": "mov      qword ptr [rdi], rsi"
+              },
+              {
+                "offset": "0x1c00",
+                "instruction": "inc      ecx"
+              },
+              {
+                "offset": "0x1c02",
+                "instruction": "cmp      ecx, 2"
+              }
+            ]
+          },
+          {
+            "offset": "0x734",
+            "samples": 16,
+            "instruction": "cmp      ecx, 5",
+            "nearby": [
+              {
+                "offset": "0x72b",
+                "instruction": "add      rdi, r14"
+              },
+              {
+                "offset": "0x72e",
+                "instruction": "vmovups  zmm4, zmmword ptr [rdi]"
+              },
+              {
+                "offset": "0x734",
+                "instruction": "cmp      ecx, 5"
+              },
+              {
+                "offset": "0x737",
+                "instruction": "jae      G_M000_IG166"
+              },
+              {
+                "offset": "0x73d",
+                "instruction": "vbroadcastsd zmm5, qword ptr [r12+8*rcx]"
+              }
+            ]
+          }
+        ]
       },
       {
-        "file": "bicubic-shared-word-preparation-qualified.tar.xz",
-        "sha256": "1c9528ea15b55ccb329dd9b6a64fc8d9ab1af52192b368e867d087474ace77aa"
+        "header": "Lokad.Image.Internal.MixedWordColumnBicubicResize:ApplyRange[Lokad.Image.Internal.MixedWordColumnBicubicResize+EightRowBand](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,Lokad.Image.Internal.OperationContext,System.Span`1[byte],Lokad.Image.Internal.MixedBicubicGeometry,int,int):bool (FullOpts)",
+        "codeBytes": 8378,
+        "samples": 253,
+        "hotLocations": [
+          {
+            "offset": "0x1c35",
+            "samples": 10,
+            "instruction": "vaddsd   xmm1, xmm1, xmm0",
+            "nearby": [
+              {
+                "offset": "0x1c28",
+                "instruction": "vmovsd   qword ptr [r12+8*rdi], xmm0"
+              },
+              {
+                "offset": "0x1c2e",
+                "instruction": "vmovsd   xmm1, qword ptr [rbp-0xA0]"
+              },
+              {
+                "offset": "0x1c35",
+                "instruction": "vaddsd   xmm1, xmm1, xmm0"
+              },
+              {
+                "offset": "0x1c39",
+                "instruction": "vmovsd   qword ptr [rbp-0xA0], xmm1"
+              },
+              {
+                "offset": "0x1c40",
+                "instruction": "mov      edi, r13d"
+              }
+            ]
+          },
+          {
+            "offset": "0x1c39",
+            "samples": 9,
+            "instruction": "vmovsd   qword ptr [rbp-0xA0], xmm1",
+            "nearby": [
+              {
+                "offset": "0x1c2e",
+                "instruction": "vmovsd   xmm1, qword ptr [rbp-0xA0]"
+              },
+              {
+                "offset": "0x1c35",
+                "instruction": "vaddsd   xmm1, xmm1, xmm0"
+              },
+              {
+                "offset": "0x1c39",
+                "instruction": "vmovsd   qword ptr [rbp-0xA0], xmm1"
+              },
+              {
+                "offset": "0x1c40",
+                "instruction": "mov      edi, r13d"
+              },
+              {
+                "offset": "0x1c43",
+                "instruction": "mov      rax, bword ptr [rbp-0x2B8]"
+              }
+            ]
+          },
+          {
+            "offset": "0x8b2",
+            "samples": 7,
+            "instruction": "vextractf32x4 xmm2, zmm8",
+            "nearby": [
+              {
+                "offset": "0x8a4",
+                "instruction": "vucomisd xmm2, qword ptr [reloc @RWD200]"
+              },
+              {
+                "offset": "0x8ac",
+                "instruction": "jb       G_M000_IG31"
+              },
+              {
+                "offset": "0x8b2",
+                "instruction": "vextractf32x4 xmm2, zmm8"
+              },
+              {
+                "offset": "0x8b9",
+                "instruction": "vunpckhpd xmm2, xmm2, xmm2"
+              },
+              {
+                "offset": "0x8bd",
+                "instruction": "vucomisd xmm2, qword ptr [reloc @RWD200]"
+              }
+            ]
+          },
+          {
+            "offset": "0x918",
+            "samples": 7,
+            "instruction": "jne      SHORT G_M000_IG31",
+            "nearby": [
+              {
+                "offset": "0x911",
+                "instruction": "kmovb    edi, k1"
+              },
+              {
+                "offset": "0x915",
+                "instruction": "test     rdi, rdi"
+              },
+              {
+                "offset": "0x918",
+                "instruction": "jne      SHORT G_M000_IG31"
+              },
+              {
+                "offset": "0x91a",
+                "instruction": "vxorps   ymm2, ymm2, ymm2"
+              },
+              {
+                "offset": "0x91e",
+                "instruction": "vmaxpd   zmm2, zmm2, zmm8"
+              }
+            ]
+          },
+          {
+            "offset": "0x17f4",
+            "samples": 6,
+            "instruction": "mov      rdx, bword ptr [rbp-0x278]",
+            "nearby": [
+              {
+                "offset": "0x17e9",
+                "instruction": "vpmulld  ymm2, ymm0, ymm2"
+              },
+              {
+                "offset": "0x17ee",
+                "instruction": "vcvtudq2pd zmm0, zmm2"
+              },
+              {
+                "offset": "0x17f4",
+                "instruction": "mov      rdx, bword ptr [rbp-0x278]"
+              },
+              {
+                "offset": "0x17fb",
+                "instruction": "vmovups  zmmword ptr [rdx+r11], zmm0"
+              },
+              {
+                "offset": "0x1802",
+                "instruction": "inc      eax"
+              }
+            ]
+          },
+          {
+            "offset": "0x1c0f",
+            "samples": 5,
+            "instruction": "vmovsd   qword ptr [rbp-0x98], xmm0",
+            "nearby": [
+              {
+                "offset": "0x1c07",
+                "instruction": "vxorps   xmm2, xmm2, xmm2"
+              },
+              {
+                "offset": "0x1c0b",
+                "instruction": "vcvtsi2sd xmm2, xmm2, esi"
+              },
+              {
+                "offset": "0x1c0f",
+                "instruction": "vmovsd   qword ptr [rbp-0x98], xmm0"
+              },
+              {
+                "offset": "0x1c16",
+                "instruction": "vsubsd   xmm0, xmm2, xmm0"
+              },
+              {
+                "offset": "0x1c1a",
+                "instruction": "mov      edi, 2"
+              }
+            ]
+          },
+          {
+            "offset": "0x19a1",
+            "samples": 5,
+            "instruction": "vaddpd   zmm0, zmm2, zmm0",
+            "nearby": [
+              {
+                "offset": "0x1993",
+                "instruction": "vmovups  zmm2, zmmword ptr [rdx+r9]"
+              },
+              {
+                "offset": "0x199a",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rax+8*r15] {1to8}"
+              },
+              {
+                "offset": "0x19a1",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0x19a7",
+                "instruction": "inc      r13d"
+              },
+              {
+                "offset": "0x19aa",
+                "instruction": "cmp      r13d, r14d"
+              }
+            ]
+          },
+          {
+            "offset": "0x1985",
+            "samples": 5,
+            "instruction": "cmp      r9d, 24",
+            "nearby": [
+              {
+                "offset": "0x197d",
+                "instruction": "mov      r15d, r13d"
+              },
+              {
+                "offset": "0x1980",
+                "instruction": "movzx    r9, byte  ptr [r11+r15]"
+              },
+              {
+                "offset": "0x1985",
+                "instruction": "cmp      r9d, 24"
+              },
+              {
+                "offset": "0x1989",
+                "instruction": "jae      G_M000_IG154"
+              },
+              {
+                "offset": "0x198f",
+                "instruction": "shl      r9, 6"
+              }
+            ]
+          },
+          {
+            "offset": "0x1c1a",
+            "samples": 5,
+            "instruction": "mov      edi, 2",
+            "nearby": [
+              {
+                "offset": "0x1c0f",
+                "instruction": "vmovsd   qword ptr [rbp-0x98], xmm0"
+              },
+              {
+                "offset": "0x1c16",
+                "instruction": "vsubsd   xmm0, xmm2, xmm0"
+              },
+              {
+                "offset": "0x1c1a",
+                "instruction": "mov      edi, 2"
+              },
+              {
+                "offset": "0x1c1f",
+                "instruction": "call     [Lokad.Image.ImageTransforms:Kernel(double,int):double]"
+              },
+              {
+                "offset": "0x1c25",
+                "instruction": "mov      edi, r13d"
+              }
+            ]
+          },
+          {
+            "offset": "0x1606",
+            "samples": 4,
+            "instruction": "jae      G_M000_IG154",
+            "nearby": [
+              {
+                "offset": "0x1601",
+                "instruction": "sub      esi, eax"
+              },
+              {
+                "offset": "0x1603",
+                "instruction": "cmp      ecx, 5"
+              },
+              {
+                "offset": "0x1606",
+                "instruction": "jae      G_M000_IG154"
+              },
+              {
+                "offset": "0x160c",
+                "instruction": "lea      r9d, [8*rsi]"
+              },
+              {
+                "offset": "0x1614",
+                "instruction": "mov      dword ptr [rbp-0x24C], r9d"
+              }
+            ]
+          },
+          {
+            "offset": "0xa79",
+            "samples": 4,
+            "instruction": "lea      ecx, [r13+2*r9]",
+            "nearby": [
+              {
+                "offset": "0xa6f",
+                "instruction": "mov      dword ptr [rbp-0xB4], r11d"
+              },
+              {
+                "offset": "0xa76",
+                "instruction": "xor      r9d, r9d"
+              },
+              {
+                "offset": "0xa79",
+                "instruction": "lea      ecx, [r13+2*r9]"
+              },
+              {
+                "offset": "0xa7e",
+                "instruction": "mov      dword ptr [rbp-0xBC], ecx"
+              },
+              {
+                "offset": "0xa84",
+                "instruction": "mov      dword ptr [rbp-0xB8], r9d"
+              }
+            ]
+          },
+          {
+            "offset": "0x1bf6",
+            "samples": 4,
+            "instruction": "vmovsd   xmm0, qword ptr [rbp-0x98]",
+            "nearby": [
+              {
+                "offset": "0x1bee",
+                "instruction": "jge      G_M000_IG17"
+              },
+              {
+                "offset": "0x1bf4",
+                "instruction": "mov      edi, edx"
+              },
+              {
+                "offset": "0x1bf6",
+                "instruction": "vmovsd   xmm0, qword ptr [rbp-0x98]"
+              },
+              {
+                "offset": "0x1bfd",
+                "instruction": "mov      dword ptr [rbp-0xA4], edi"
+              },
+              {
+                "offset": "0x1c03",
+                "instruction": "lea      esi, [rdi+r13]"
+              }
+            ]
+          },
+          {
+            "offset": "0x1c5d",
+            "samples": 4,
+            "instruction": "js       G_M000_IG151",
+            "nearby": [
+              {
+                "offset": "0x1c58",
+                "instruction": "mov      edi, dword ptr [rbx+0x18]"
+              },
+              {
+                "offset": "0x1c5b",
+                "instruction": "dec      edi"
+              },
+              {
+                "offset": "0x1c5d",
+                "instruction": "js       G_M000_IG151"
+              },
+              {
+                "offset": "0x1c63",
+                "instruction": "test     esi, esi"
+              },
+              {
+                "offset": "0x1c65",
+                "instruction": "jl       G_M000_IG120"
+              }
+            ]
+          },
+          {
+            "offset": "0x19a7",
+            "samples": 4,
+            "instruction": "inc      r13d",
+            "nearby": [
+              {
+                "offset": "0x199a",
+                "instruction": "vmulpd   zmm2, zmm2, qword ptr [rax+8*r15] {1to8}"
+              },
+              {
+                "offset": "0x19a1",
+                "instruction": "vaddpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0x19a7",
+                "instruction": "inc      r13d"
+              },
+              {
+                "offset": "0x19aa",
+                "instruction": "cmp      r13d, r14d"
+              },
+              {
+                "offset": "0x19ad",
+                "instruction": "jl       SHORT G_M000_IG104"
+              }
+            ]
+          },
+          {
+            "offset": "0x1980",
+            "samples": 4,
+            "instruction": "movzx    r9, byte  ptr [r11+r15]",
+            "nearby": [
+              {
+                "offset": "0x197b",
+                "instruction": "jle      SHORT G_M000_IG105"
+              },
+              {
+                "offset": "0x197d",
+                "instruction": "mov      r15d, r13d"
+              },
+              {
+                "offset": "0x1980",
+                "instruction": "movzx    r9, byte  ptr [r11+r15]"
+              },
+              {
+                "offset": "0x1985",
+                "instruction": "cmp      r9d, 24"
+              },
+              {
+                "offset": "0x1989",
+                "instruction": "jae      G_M000_IG154"
+              }
+            ]
+          },
+          {
+            "offset": "0x1802",
+            "samples": 4,
+            "instruction": "inc      eax",
+            "nearby": [
+              {
+                "offset": "0x17f4",
+                "instruction": "mov      rdx, bword ptr [rbp-0x278]"
+              },
+              {
+                "offset": "0x17fb",
+                "instruction": "vmovups  zmmword ptr [rdx+r11], zmm0"
+              },
+              {
+                "offset": "0x1802",
+                "instruction": "inc      eax"
+              },
+              {
+                "offset": "0x1804",
+                "instruction": "cmp      eax, dword ptr [rbp-0x64]"
+              },
+              {
+                "offset": "0x1807",
+                "instruction": "jge      G_M000_IG90"
+              }
+            ]
+          },
+          {
+            "offset": "0x90d",
+            "samples": 3,
+            "instruction": "kandb    k1, k1, k2",
+            "nearby": [
+              {
+                "offset": "0x8fc",
+                "instruction": "vpandq   zmm2, zmm2, qword ptr [reloc @RWD216] {1to8}"
+              },
+              {
+                "offset": "0x906",
+                "instruction": "vcmplepd k2, zmm2, zmm7"
+              },
+              {
+                "offset": "0x90d",
+                "instruction": "kandb    k1, k1, k2"
+              },
+              {
+                "offset": "0x911",
+                "instruction": "kmovb    edi, k1"
+              },
+              {
+                "offset": "0x915",
+                "instruction": "test     rdi, rdi"
+              }
+            ]
+          },
+          {
+            "offset": "0x1823",
+            "samples": 3,
+            "instruction": "test     edx, edx",
+            "nearby": [
+              {
+                "offset": "0x181a",
+                "instruction": "imul     r11d, dword ptr [rbp-0x48]"
+              },
+              {
+                "offset": "0x181f",
+                "instruction": "lea      r11d, [r11+8*rdi]"
+              },
+              {
+                "offset": "0x1823",
+                "instruction": "test     edx, edx"
+              },
+              {
+                "offset": "0x1825",
+                "instruction": "je       SHORT G_M000_IG93"
+              },
+              {
+                "offset": "0x1827",
+                "instruction": "mov      r13d, r11d"
+              }
+            ]
+          }
+        ]
       }
-    ]
+    ],
+    "instrumentedElapsedDiscarded": true,
+    "sampleLocationsAreNotPhaseCostsOrRemovableShares": true
+  },
+  "frozenChecks": {
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "librarySha256": "55b93e0028ad9916d2a02fc1ddedd5cee5b749e4d38c28b3ade038af3d363fc8",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/mia795-profile-runtime/Rwp413BicubicConfirm.runtimeconfig.json",
+      "tmp/mia795-profile-runtime/Rwp413BicubicConfirm.dll",
+      "--benchmarkName",
+      "WarmBicubicResize.Managed(Case: TightMixed16)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "identities": {
+      "tmp/mia795-profile-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/mia795-profile-runtime/Lokad.Image.pdb": "f9aa4890f072ea453d7bc62cb9ab5d47d640c7214ec9baf00f09e7afc31df6c5",
+      "tmp/mia795-profile-runtime/Bcax1HorizontalConfirm.dll": "87ad328d2a703949211524fb341824e03d0fda6264bfadd5507fb85f67690ddf",
+      "tmp/mia795-profile-runtime/E248RootAudit.runtimeconfig.json": "82350457dc711d130b4992f95f63d54e39868bc7eb6e4bcb1eda9a954d3c3def",
+      "tmp/mia795-profile-runtime/PngSmallest16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "cf55fb108b01370eaa147279400822513d443793507a67c9c067008bdd71cf67",
+      "tmp/mia795-profile-runtime/ImageProbe.deps.json": "ee0d46b1d50f5ba033306ffbd8120a9c2ac7b8a9759e3e8ed2d183ee4d8072d3",
+      "tmp/mia795-profile-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/mia795-profile-runtime/JpegEncode422Host.dll": "7c11ebabadd0a8ce2ed2c2a0c632fdd7e48ea5398cbff2f51129c8e70035f56f",
+      "tmp/mia795-profile-runtime/JpegEncodeHost.dll": "f20603257d83f37a320ad25111513f5ce939856186b0000457ca97629c8a8583",
+      "tmp/mia795-profile-runtime/Vp8EncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Lokad.Image.xml": "4e56734e7d4685b05a846bd92cf04312d9e1fbd0a77acf74b34586a59eff1311",
+      "tmp/mia795-profile-runtime/PngStored16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/mia795-profile-runtime/Parser.dll": "dcf554cd3306fa60e597a37d48ecb0c5300d5825d3c882f20ba7598b5f9ad093",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks.pdb": "33837410ef004f49b5d70d329ce8cbb2466d1ddc9d1cb696194abef944517be4",
+      "tmp/mia795-profile-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/mia795-profile-runtime/Vp8lEncodeConfirmHost.dll": "cace0f379f560b3e0440fa3a20bcab5fbe4793a9493743617095a55832ebfd7a",
+      "tmp/mia795-profile-runtime/PngStored16ShortHost.dll": "656ba455ed62577e7a470edd97338e5ba28b5e0b2cd87234ac9088455d85fc61",
+      "tmp/mia795-profile-runtime/Rwp413BicubicConfirm.dll": "bb128357d2b9ff419fab351bc3adf684b4c0c9b95ed907b9788e8aee20396505",
+      "tmp/mia795-profile-runtime/Vp8lEncode16Host.dll": "7119d94d194bbcaea9a02afb2308f4ba2bb91cae8cd161833d90f32f944d4483",
+      "tmp/mia795-profile-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/mia795-profile-runtime/Vp8lEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/mia795-profile-runtime/JpegGrayShortHost.dll": "6b852be8ca2ebc245b2726d7f560f519b02aa9fb294387825dcf89466f82321f",
+      "tmp/mia795-profile-runtime/Bcax1HorizontalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Bcut1TightUp8Confirm.dll": "d5813d0a138a4b2de7498d674578307d4bdf13fb9ea31605baf9a3b7168a0c95",
+      "tmp/mia795-profile-runtime/JpegEncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegEncode16ConfirmHost.dll": "3bb4a7cb9fbaaabdb9d7b34513d307abf2f69073a79f9f39765ef7ab76cc5a15",
+      "tmp/mia795-profile-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/mia795-profile-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/mia795-profile-runtime/E141CombinedPopulationProof.dll": "0739caf9b8af8857297b13685aa69fae59b084938ada962aa244ea3d0b88b575",
+      "tmp/mia795-profile-runtime/Vp8Opaque16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/BicubicGeneralHost.dll": "7d02fdd4583e40f943b430b17b38faabec87a2f0658dbf7621deae3ec618d178",
+      "tmp/mia795-profile-runtime/LanczosShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegEncode444StreamConfirmHost.dll": "21bd4803a9438a3b1ad3b78a02f118976020a1de31aa4941f3f308f8247974f7",
+      "tmp/mia795-profile-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/mia795-profile-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/mia795-profile-runtime/JpegEncode444StreamHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/PngFast8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E152GrayQualityInspect.dll": "cdc3fc65c16b8a0fd3327f44343c6e0c46fa94eb2c9cfbc53b2af8497b1c4e20",
+      "tmp/mia795-profile-runtime/Bcax1VerticalConfirm.dll": "8ed624d29097d9b15a374f9dc53e34baf5a05969f99ffea5dc66e9fee14617a8",
+      "tmp/mia795-profile-runtime/ImageProbe.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/mia795-profile-runtime/E249RootAudit.runtimeconfig.json": "82350457dc711d130b4992f95f63d54e39868bc7eb6e4bcb1eda9a954d3c3def",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/mia795-profile-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/mia795-profile-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/mia795-profile-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/mia795-profile-runtime/LanczosShortHost.dll": "361a156f86758cc41373f710d09ab4f909c0058d88add72e3b2d343d1f7182c5",
+      "tmp/mia795-profile-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Rwp413BicubicConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/mia795-profile-runtime/BicubicGeneralHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/mia795-profile-runtime/Vp8DecodeStreamConfirmHost.dll": "c4b90abb6b59a6b377ec5dc254827e059217e3b1dd5e48a61c90b07c858afad7",
+      "tmp/mia795-profile-runtime/BicubicCrossShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks.dll": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "tmp/mia795-profile-runtime/PngEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E229CallerQualityDiagnostic.dll": "cf1844d753ceef276865331f2259197c57ab47e51bfd5fd2deb6a5a8c2a27913",
+      "tmp/mia795-profile-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/mia795-profile-runtime/Vp8DecodeStreamHost.dll": "cf55fb108b01370eaa147279400822513d443793507a67c9c067008bdd71cf67",
+      "tmp/mia795-profile-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/mia795-profile-runtime/Bcax1VerticalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E249RootAudit.dll": "81c8da55944922a9243455c387f7c6cb447e42fe144afccfaf04abcdc983162d",
+      "tmp/mia795-profile-runtime/BicubicCrossConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Vp8lEncode16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegGrayShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Lokad.Image.dll": "55b93e0028ad9916d2a02fc1ddedd5cee5b749e4d38c28b3ade038af3d363fc8",
+      "tmp/mia795-profile-runtime/E137AllocationAudit.dll": "c8a94e7458c83a2c917552e1926d03d52222ea605f15c290aab0aebc91366954",
+      "tmp/mia795-profile-runtime/E139AllocationAudit.dll": "dd5ab3c4de3eedccf1aa19195d98d261926c739a9eeda1ccc137d63291140305",
+      "tmp/mia795-profile-runtime/E238NativeOffsets.dll": "aefe3fee3badaa8fc200ff242d00e1f1d0c277c35de0041d53945da48ce706c8",
+      "tmp/mia795-profile-runtime/BicubicCrossShortHost.dll": "7df5beed9e6d17ed66d41515c08309af9c261b292f0951b1ebc9dc7ced4e01c2",
+      "tmp/mia795-profile-runtime/PngSmallest16ConfirmHost.dll": "ebf4776791299f5676b82eae4f2645afa9102e01248f3f4717baf31d7ab39483",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/mia795-profile-runtime/JpegEncode444StreamHost.dll": "54bcad7b990b94467d33e2513a5793fa12527d00035c1a26e39791833551cdd1",
+      "tmp/mia795-profile-runtime/E163Sampler.dll": "e3deabf3bfd3d292c414832c555f9bb48cad2635f51326a1db2d367a1a870016",
+      "tmp/mia795-profile-runtime/E235NativeOffsets.dll": "9406c0f9bce9e555d2372b4cf17ead77c309a9ffdc75dabdaa77682024b63d2c",
+      "tmp/mia795-profile-runtime/JpegEncode44416Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/BilinearDown16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/PngEncodeHost.dll": "4c7fc3333e6dab2c0c7e8ce8cf624f53e8c0a534f818f7024af8e09504e4dc55",
+      "tmp/mia795-profile-runtime/E139ForwardProof.dll": "16a40a97a9b521bd385d15a31a268d5a239b7bfbb3e1865938ad0948e25ca546",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/mia795-profile-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/mia795-profile-runtime/JpegEncode444StreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/BicubicCrossConfirmHost.dll": "4577d24e42f33b99eddece3e142b430d351b6add285178e9f83d040fd4d6f845",
+      "tmp/mia795-profile-runtime/E152JpegSparseProof.dll": "5ce87e4c1d7ce4683f2cdddb10a672b169abd393dc55b45ea51166e3727c2e34",
+      "tmp/mia795-profile-runtime/Vp8DecodeStreamHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/mia795-profile-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/mia795-profile-runtime/JpegGrayConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E150JpegDeliveryAudit.dll": "ca3264116b2932d188ad3903e443f30370bb0f72d42b64c83232dbcb49bbaa8b",
+      "tmp/mia795-profile-runtime/JpegGrayConfirmHost.dll": "19abf8cf10f399606078f9bf768e87563ae2e50d6cd399657a3dd5be378a9d69",
+      "tmp/mia795-profile-runtime/Bcut1TightUp8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E205NativeOffsets.dll": "4e2cf64c5abc5ede46f1c998d698443cc6562b01ba5293d7acce7ad44e154610",
+      "tmp/mia795-profile-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/mia795-profile-runtime/JpegEncodeConfirmHost.dll": "b2091ae520783db6e88aea02172dc3e55ed0c44cb93327ea28aee1edcd44f861",
+      "tmp/mia795-profile-runtime/Vp8Opaque16ShortHost.dll": "c6a5f7003b5f5edd8ab165fbf386011f58579fbe817dc9a17b2cc72685d58fc2",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/mia795-profile-runtime/JpegProfile.dll": "e6736415701c0f491e27d0d3169379c8f2e14eeedb2f6431c5f5c952a4fb0984",
+      "tmp/mia795-profile-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/mia795-profile-runtime/Vp8lEncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegEncode16Host.dll": "ce7560aa71c18e3561fb22afdd3e11d8a0055d7f67c3ad78a44e3459ac4d0a93",
+      "tmp/mia795-profile-runtime/Vp8EncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E200NativeOffsets.dll": "919d68c258a4e03b6da0ef3500b90706bdefe261a17463adeecbcd889e562570",
+      "tmp/mia795-profile-runtime/Vp8DecodeStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/JpegEncode16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E196NativeOffsets.dll": "97883018fa4655493463256516aa68f7a10c8a769051992cccc5f88d9d0dd599",
+      "tmp/mia795-profile-runtime/EventProfile.dll": "17fcb82380a5f708c08db9bf42d001af2fed8e4133444ac43e836e217acabbcc",
+      "tmp/mia795-profile-runtime/JpegEncode44416Host.dll": "d2d50b429a4214644860c2e041ea384ed01b61312d00617aa3376d0557bb9fa2",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/mia795-profile-runtime/PngFast8ShortHost.dll": "a5a0f29fd092cb7a45973374e9f8c01ca641d6589f407cccedf439d02312b0a0",
+      "tmp/mia795-profile-runtime/Vp8EncodeHost.dll": "391e89d3b6ba09cfccce58222102d0089d23f3e081801a38274931e50be8adac",
+      "tmp/mia795-profile-runtime/Vp8lEncodeHost.dll": "3a3e94d57ea9836c099cd6e1fadddce230d60d89f1607edce6f7721d463492e0",
+      "tmp/mia795-profile-runtime/E248RootAudit.dll": "422a49cff294878a89de0b4c4b17ad7da59471cc95297f7bddd1ec1c86c3a7ea",
+      "tmp/mia795-profile-runtime/BilinearDown16Host.dll": "c881116813950f0ebdc8b91536fc96f6e2241ac89ced632da9447ff657d14340",
+      "tmp/mia795-profile-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/mia795-profile-runtime/JpegEncode16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/mia795-profile-runtime/E146JpegOwnerAudit.dll": "df4677d8f065a485926d7439f8052eb07746c184f2bd400a1a20ca4e06cfc0f7",
+      "tmp/mia795-profile-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/mia795-profile-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+      "tmp/mia795-profile-runtime/Vp8EncodeConfirmHost.dll": "cd64b290c4a86825c37fbd3db62be5ee7987c26b845930cbc8507f00d44bd918",
+      "tmp/mia795-profile-runtime/JpegEncode422Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+    }
+  },
+  "preparationModel": {
+    "project": "Lokad.Image",
+    "stage": "MIA795",
+    "logicalSourceModelOnly": true,
+    "geometryBytes": 86268,
+    "geometrySafeRows": 118,
+    "loanStart": 945408,
+    "loanSafeRows": 115,
+    "oneHorizontalPreparationKernelEvaluations": 4109,
+    "bands": {
+      "tight": {
+        "bands": [
+          {
+            "first": 0,
+            "length": 64,
+            "geometryPlanned": true
+          },
+          {
+            "first": 64,
+            "length": 51,
+            "geometryPlanned": true
+          },
+          {
+            "first": 115,
+            "length": 8,
+            "geometryPlanned": false
+          },
+          {
+            "first": 123,
+            "length": 6,
+            "geometryPlanned": false
+          }
+        ],
+        "horizontalKernelEvaluations": 12327
+      },
+      "default": {
+        "bands": [
+          {
+            "first": 0,
+            "length": 64,
+            "geometryPlanned": true
+          },
+          {
+            "first": 64,
+            "length": 51,
+            "geometryPlanned": true
+          },
+          {
+            "first": 115,
+            "length": 14,
+            "geometryPlanned": false
+          }
+        ],
+        "horizontalKernelEvaluations": 8218
+      }
+    },
+    "noPhaseTimingOrCpuGainClaim": true
+  },
+  "quotientLead": {
+    "project": "Lokad.Image",
+    "stage": "MIA795",
+    "conditionalRationalModelOnly": true,
+    "productionChanged": false,
+    "assumptions": [
+      "Reuse the existing byte-path ISA assumption: RCP14 relative error<2^-14 for positive normal inputs.",
+      "Each fused Newton residual and multiply rounds once with unit roundoff2^-53; no overflow/underflow on the proven physical word-kernel divisor range.",
+      "Only in-range rounding thresholds need the absolute quotient bound; clipped values require a separate endpoint argument before production."
+    ],
+    "relativeBounds": {
+      "firstNewton": 3.72529052050652e-09,
+      "secondNewton": 2.3592239438720704e-16,
+      "finalMultiply": 3.4694469684972274e-16
+    },
+    "exactFinalBound": {
+      "numerator": "120245380811394948907255450328220817669934226042634346868940839329205724536894112719833869614254841743427061678081",
+      "denominator": "346583711765101857447301773017885462929554634421977071896309947576827663475703202879996800763017447262173901370175446478621769728"
+    },
+    "relativeLessThan2PowerMinus50": true,
+    "maximumThresholdMagnitude": 65537,
+    "thresholdAbsoluteErrorBound": 2.273771459744028e-11,
+    "proposedAddedMargin": 2.3283064365386963e-10,
+    "addedMarginExceedsTwiceThresholdError": true,
+    "proposal": "Investigate two fused Newton corrections in shared word quotient preparation, with existing certificate margins conservatively enlarged by2^-32 and aligned alpha guard. Full managed pixels, rational/qualified oracles and original repair remain unchanged; no visual/sample tolerance. Need actual-hardware boundary/invalid-value/certificate/repaired-pixel proof before a production candidate. This is not a gain, completed correctness proof or merge authorization.",
+    "temporaryCosts": "Extra dependent FMA/multiply instructions, register pressure and more conservative refusal/repair; current two independent quotients may overlap, but CPU effect is unknown.",
+    "next": "Inspect physical divisor bounds, clipping, subnormal/invalid handling and current frozen word preparation tests; reuse actual pair/quartet controls. Run untimed hardware numerical model first. Only if proof holds freeze one candidate and screen existing TightMixed16 plus actually affected representative word companions, then reconcile full affected scope before qualification. No new workload matrix or unchanged profiling."
+  },
+  "qualificationReused": "wide-bicubic-shared-quartets-evidence.json",
+  "raw": {
+    "file": "mixed-word-current-attribution.tar.xz",
+    "sha256": "b316d7a1bf0c019ef168e7646430706c5bca649465f6b15f82f9ddbf7c87d95b",
+    "bytes": 125648,
+    "members": 27,
+    "dependency": {
+      "file": "wide-bicubic-shared-quartets.tar.xz",
+      "sha256": "e955203ad4e4102b11a89bd392b835a30289b18d6cfabc6eafcc3ac456c14736",
+      "scope": "Actual accepted BWF794 DLL55b93e00/packagea88e69e4, unchanged fixtures/reference/managed workers and6248/ISA/SAMEpackage qualification. Profile receipt pins module identities."
+    },
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "previousEvidence": {
+    "commit": "489ed20e7eeffc8607d7f5dc282283d002a304c3",
+    "stage": "BRM538",
+    "file": "bicubic-mixed-current-execution-attribution.tar.xz",
+    "sha256": "a88958cbfc6dae4ec1555f698edaca50be23afe776b8a5ae84867a5a167d68ce",
+    "scope": "Earlier pre-result-band profile remains history; its offsets are not current."
+  },
+  "next": "Before production changes, inspect physical divisor/rounding/clipping/invalid-value boundaries and current pair/quartet tests. Reuse those controls for an untimed hardware model of two fused Newton corrections plus conservative2^-32 certificate margin and alpha guard. Preserve exact managed pixels and original repair, not a visual tolerance. Model is conditional, not acceptance or a CPU forecast. Current retained-zimg graph boundary remains explicitly labeled; no equivalent fresh-graph or bare-kernel claim.",
+  "nextScopeFindings": {
+    "currentTests": [
+      "BicubicWordPreparationTests:24576cases/2741accepted",
+      "BicubicWordPairTests and both quartet positions:1008cases/68accepted"
+    ],
+    "testsVerifyFrozenGuardsAndIndependentRoundedWords": true,
+    "directPreparedValueConsumer": "CachedBicubicResize.WriteMixedWordRow has a separate alpha/ambiguity guard; a pair-writer-only model is insufficient.",
+    "productionStillUnchanged": true
   }
 }
