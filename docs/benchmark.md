@@ -18,7 +18,8 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has 4 passes / 4 uncertain encode controls; the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
+  has 5 passes / 3 uncertain encode controls; [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
+  passes on the actual package DLL (adjacent complete-operation batches, no production speedup claim); the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
@@ -130,7 +131,7 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,160.95 | 1,403.16 | 0.827 / 0.840 | 155,435 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,059.14 | 1,112.88 | 0.952 / 0.969 | 155,438 | 58,910 / 58,910 |
-| VP8L photograph / libwebp exact=1 † | 85,959.95 | 82,521.57 | 1.042 / 1.080 | 5,358,980 | 160,032 / 160,032 |
+| VP8L photograph / libwebp exact=1 † | 81,000.31 | 83,387.76 | 0.971 / 0.981 | 5,358,368 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
 | VP8 opaque RGBA16, including normalization † | 13,882.59 | 15,579.01 | 0.891 / 0.894 | 1,201,560 | 72,380 / 72,380 |

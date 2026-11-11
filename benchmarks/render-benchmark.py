@@ -1414,9 +1414,22 @@ def render():
         'async': 'VP8L async, fresh nonseekable output / libwebp exact=1',
     }
     assert set(current_labels) <= set(webp_owned['cases'])
+    photo_evidence = json.loads((ROOT / 'benchmarks/webp-lossless-photograph-confidence-evidence.json').read_text(encoding='utf-8'))
+    photo = photo_evidence['current']
+    assert not photo_evidence['productionChanged'] and photo_evidence['allBuilds'] == 0
+    assert photo_evidence['raw']['mirrored'] and photo_evidence['raw']['allMembersVerified']
+    assert photo['status'] == 'pass' and photo['upper'] <= 1
+    assert photo['actualIterations'] == photo['nativeSamplesEachBracket'] == 12
+    assert photo['pairedOperationsPerSubject'] == 4
+    assert photo['managedExact'] and photo['completePacketExact'] and photo['independentOwnedOutput']
+    assert photo['allOriginalGatesPassed'] and photo['quietGuardsPassed']
+    assert photo['managedPacketBytes'] == photo['nativePacketBytes'] == 160032
+    assert photo['packetSha256'] == photo['nativePacketSha256']
+    assert photo['librarySha256'] == photo_evidence['producers']['windows']
+    assert photo_evidence['producers']['actualPackageContainsTimedDll']
     for case, label in current_labels.items():
         owner = webp_owned
-        current = owner['cases'][case]
+        current = photo if case == 'photograph' else owner['cases'][case]
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
         assert len(positions) == 1, label
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
@@ -1934,7 +1947,8 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has 4 passes / 4 uncertain encode controls; the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
+  has 5 passes / 3 uncertain encode controls; [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
+  passes on the actual package DLL (adjacent complete-operation batches, no production speedup claim); the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
