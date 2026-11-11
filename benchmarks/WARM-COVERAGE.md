@@ -1,13 +1,27 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-11. **289 material required paths** remain
+Current architectural phase, 2026-11-12. **289 material required paths** remain
 in scope; the 138 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
-stated. Missing/uncertain evidence and affected historical H rows remain open.
+stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
-The latest accepted [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
+The latest accepted [source-driven deep reduction](SOURCE-DRIVEN-DEEP-BICUBIC.md)
+passes6,430full/live checks perOS,519internal/791public affected checks in normal/
+scalar/AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Complete32×16 byte
+Resize saves86.87µs/17.39%raw/10.31%normalized with separated confidence and
+native−7.89%. Current412.57/zimg376.47µs upper1.100 remains a gap. Two columns
+share exact UInt16source products and vertical coefficients, with ordered doubles
+and verbatim72term certificates/repair.3,536/4,032Brow/column frames do not overlap;
+same4KiB/113B perop/zero retained scratch, no new heap/pool/owner/capacity.
+Odd generalization,17row fallback, poison, cancellation/tiny-alpha cleanup and
+actual packaged frozen pixels/root/surviving ownership pass. One immutable
+core/embedded/public-test build perOS, one full/package milestone; unchanged
+families and ISA evidence reused. Next investigate shared conversion of overlapping
+prepared horizontal samples; preserve exact arithmetic and complete boundaries.
+
+Unchanged [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
 passes 6,417 full/live checks per OS, 508 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and SAME actual Release-package/all three
 examples on Windows/Linux. Byte 64×32 saves 14.21 µs/3.76% raw/3.68%
@@ -24,20 +38,9 @@ precision-decline cleanup/public replay. One production/embedded build per OS,
 one allowlist-only diagnostic-driver build and one full/package milestone.
 Unchanged cached/bilinear/Lanczos/codecs/text costs and ISA evidence are reused.
 
-The [wide row-loan overlap trial](WIDE-ROW-LOAN-OVERLAP-TRIAL.md) is closed
-without a production change. Independent raw1.46%/normalized0.44% improvements
-have overlapping confidence; the promising short screen did not confirm.
-Original qualified source/modules/package are restored exactly. The wide-byte
-gap remains; no favorable repeats or broad/package rerun. Next inspect the
-independent demonstrated bounded narrow-byte gap using existing attribution.
-
-The [narrow decoded-pair write trial](NARROW-BICUBIC-DECODED-PAIR-TRIAL.md)
-also retains no production change. Short-screen savings disappear in independent
-confirmation:452.21→453.40µs raw, normalized0.12% with overlapping confidence.
-Smaller emitted code and one64Bstore do not prove a CPU gain. Qualified original
-source/modules/package are restored exactly; no broad/package repeats or passing
-word retuning. Both local edits are closed; further resize work needs a revised
-preparation/scheduling hypothesis, while independent codec/coverage work continues.
+Unselected [wide overlap](WIDE-ROW-LOAN-OVERLAP-TRIAL.md) and
+[narrow decoded stores](NARROW-BICUBIC-DECODED-PAIR-TRIAL.md) retain their
+inconclusive evidence and exact restoration. They impose no permanent strategy ban.
 
 The [current predictable/stored PNG confirmations](PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
 replace the three displayed historical PNG costs using the unchanged actual
@@ -53,19 +56,6 @@ owned-driver build. The initial reference preflight fails before timing and is
 retained; an ignored matching provenance view preserves reference identities.
 Next resolve the remaining historical Tight32x16_8 bicubic control on this actual
 package before assuming optimization is needed. All289paths remain; no global pass.
-
-The [current deep bicubic confirmation](DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
-resolves the final historical displayed row: Tight32x16_8 is499.44/zimg408.73µs,
-upper1.229, a demonstrated gap,113B/op and4KiB. One2s capture identifies the
-separate65tap DeepColumn executor, not the packed kernel. **Next architectural
-priority:** source-driven two-column output accumulators share exact integer
-source preparation and vertical coefficients. The portable model preserves2,048
-channel/512normalizer double bits; logical raw products531,468→319,606 and vertical
-Kernel calls33,152→16,576, with3,536B explicit payload. Model counts are not gains
-or actual SIMD proof. Retain original72term certificate/repair, disjoint frame
-fallback, word/portable paths and root/cancellation. Actual tests/generalization,
-complete screen/confirmation and affected reconciliation precede one broad/package
-milestone. No production/build/qualification change yet; all289paths remain.
 
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in

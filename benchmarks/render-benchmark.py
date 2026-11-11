@@ -1863,12 +1863,13 @@ def render():
         assert len(positions) == 1
         rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                              f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
-    deep_current = json.loads((ROOT / 'benchmarks/deep-bicubic-current-confirmation-evidence.json').read_text(encoding='utf-8'))
-    assert not deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
+    deep_current = json.loads((ROOT / 'benchmarks/source-driven-deep-bicubic-evidence.json').read_text(encoding='utf-8'))
+    assert deep_current['productionAccepted'] and deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
     assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
-    assert deep_current['qualification']['fullChecksEachOs'] == 6417 and deep_current['qualification']['sameActualPackageBothOS']
+    assert deep_current['qualification']['fullChecksEachOs'] == 6430 and deep_current['qualification']['sameActualPackageBothOS']
+    assert deep_current['comparison']['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in deep_current['comparison']['views'].values())
     deep = deep_current['case']
-    assert deep['librarySha256'] == deep_current['producers']['timedArtifactSha256'] == deep_current['qualification']['librarySha256']
+    assert deep['librarySha256'] == deep_current['producers']['timedArtifactSha256'] == deep_current['qualification']['actualPackage']['librarySha256']
     assert deep['actualIterations'] == deep['nativeSamplesEachBracket'] == 12 and deep['allActualsRetained']
     assert deep['allOriginalGatesPassed'] and deep['quietGuardsPassed'] and deep['managedExact']
     assert deep['sourceUnchanged'] and deep['independentOwnedOutput'] and deep['retainedOperationScratchBytes'] == 0
@@ -2080,7 +2081,9 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['threeNamedStorageSuitesIncluded']
-    current_build_qualification = packed_qualification
+    current_build_qualification = deep_current['qualification']
+    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6430
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2231,12 +2234,13 @@ Current scope and remaining work:
   explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
   [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
   unaccepted capacity trials remain history; original exact arithmetic/repair remain.
-- **Deep bounded bicubic:** [current actual-package confirmation](../benchmarks/DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
-  resolves the last historical displayed row: RGBA8 32×16 is499.44/zimg408.73µs,
-  upper1.229, a demonstrated gap at113B/op and4KiB. One2sprofile identifies the
-  separate65tap executor. Source-driven paired-column storage is the next design;
-  its exact portable model is not SIMD or performance qualification. Current
-  production/packets/pixels are unchanged; passing paths remain stopped.
+- **Deep bounded bicubic:** [source-driven paired columns](../benchmarks/SOURCE-DRIVEN-DEEP-BICUBIC.md)
+  save86.87µs/17.39%raw/10.31%normalized, with separated raw/all-actual/normalized
+  confidence and native−7.89%. Current32×16 byte412.57/zimg376.47µs upper1.100
+  remains a gap. Same113B/op/4KiB, zero retained scratch;3,536Brow and4,032Bcolumn
+  frames do not overlap. Exact pixels/certificates/repair and ownership remain.
+  Next investigate shared conversion across overlapping horizontal windows;
+  passing word/other families stay stopped.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};

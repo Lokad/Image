@@ -1,12 +1,13 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>A single output column reuses wider source support within 4 KiB.</summary>
-internal static class DeepColumnBicubicResize
+/// <summary>Wider-support reduction with bounded source or output-row storage.</summary>
+internal static partial class DeepColumnBicubicResize
 {
     private const int Capacity = 72;
     private const int WorkspaceBytes = 4096;
@@ -21,6 +22,18 @@ internal static class DeepColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
+            if (result.Height <= 16 && ApplyRows(source, result, scaleX, scaleY, context)) return true;
+            return ApplyColumns(source, result, scaleX, scaleY, context);
+        }
+        finally { context.Release(WorkspaceBytes); }
+    }
+
+    // Keep alternative stack workspaces in separate frames, including on
+    // numerical decline. Only the completed result escapes the public call.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool ApplyColumns(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context)
+    {
             // These six fixed arrays occupy 4,032 bytes. No decoded-source table
             // is needed: each selected source row is filtered once per column.
             Span<Vector256<double>> cache = stackalloc Vector256<double>[Capacity];
@@ -108,8 +121,147 @@ internal static class DeepColumnBicubicResize
             // Speculation preserves the original tap order and pixel rounding.
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool ApplyRows(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context)
+    {
+        const int MaxRows = 16, SourceCapacity = 92;
+        if (result.Height > MaxRows) return false;
+        context.Cancellation.ThrowIfCancellationRequested();
+        // 3,536 B: output pairs replace the 72-source-row cache. No result
+        // storage is borrowed, and no coefficient or pixel precision changes.
+        Span<Vector512<double>> totals = stackalloc Vector512<double>[MaxRows];
+        Span<ushort> prepared = stackalloc ushort[SourceCapacity * 4];
+        Span<double> weights = stackalloc double[Capacity * 2];
+        Span<ushort> offsets = stackalloc ushort[Capacity * 2];
+        Span<double> normalizers = stackalloc double[MaxRows];
+        Span<double> centers = stackalloc double[MaxRows];
+        Span<int> firsts = stackalloc int[MaxRows];
+        Span<byte> counts = stackalloc byte[MaxRows];
+        var height = result.Height;
+        var firstVirtual = int.MaxValue; var endVirtual = int.MinValue;
+        for (var y = 0; y < height; y++)
+        {
+            var center = (y + .5) * source.Height / height - .5;
+            var first = (int)Math.Ceiling(center - 2 * scaleY);
+            var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+            if ((uint)(count - 1) >= Capacity) return false;
+            centers[y] = center; firsts[y] = first; counts[y] = (byte)count;
+            firstVirtual = Math.Min(firstVirtual, first); endVirtual = Math.Max(endVirtual, first + count);
         }
-        finally { context.Release(WorkspaceBytes); }
+        for (var x = 0; x < result.Width; x += 2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var columns = Math.Min(2, result.Width - x);
+            var firstCenter = (x + .5) * source.Width / result.Width - .5;
+            var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleX), 0, source.Width - 1);
+            var sourceCount = 0; var count0 = 0; var count1 = 0;
+            double normalizer0 = 0, normalizer1 = 0;
+            for (var column = 0; column < columns; column++)
+            {
+                var center = (x + column + .5) * source.Width / result.Width - .5;
+                var first = (int)Math.Ceiling(center - 2 * scaleX);
+                var count = (int)Math.Floor(center + 2 * scaleX) - first + 1;
+                if ((uint)(count - 1) >= Capacity) return false;
+                double normalizer = 0;
+                for (var t = 0; t < count; t++)
+                {
+                    var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
+                    weights[column * Capacity + t] = w; normalizer += w;
+                    var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
+                    if ((uint)relative >= SourceCapacity) return false;
+                    offsets[column * Capacity + t] = (ushort)relative;
+                    sourceCount = Math.Max(sourceCount, relative + 1);
+                }
+                if (column == 0) { count0 = count; normalizer0 = normalizer; }
+                else { count1 = count; normalizer1 = normalizer; }
+            }
+            totals.Clear(); normalizers.Clear();
+            var firstActive = 0; var endActive = 0; var lastPhysical = -1;
+            var filtered = Vector512<double>.Zero;
+            for (var virtualY = firstVirtual; virtualY < endVirtual; virtualY++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                while (firstActive < height && virtualY >= firsts[firstActive] + counts[firstActive]) firstActive++;
+                while (endActive < height && firsts[endActive] <= virtualY) endActive++;
+                if (firstActive == endActive) continue;
+                var physical = Math.Clamp(virtualY, 0, source.Height - 1);
+                if (physical != lastPhysical)
+                {
+                    var row = source.GetRow8(physical).Slice(sourceFirst * 4, sourceCount * 4);
+                    var pixel = 0;
+                    for (; pixel + 3 < sourceCount; pixel += 4)
+                        PackedColumnBicubicResize.PrepareFourBytePixels(MemoryMarshal.Read<Vector128<byte>>(row.Slice(pixel * 4, 16)))
+                            .CopyTo(prepared.Slice(pixel * 4, 16));
+                    for (; pixel < sourceCount; pixel++)
+                    {
+                        var p = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(pixel * 4, 4)); var a = p >> 24;
+                        prepared[pixel * 4] = (ushort)((p & 255) * a);
+                        prepared[pixel * 4 + 1] = (ushort)((p >> 8 & 255) * a);
+                        prepared[pixel * 4 + 2] = (ushort)((p >> 16 & 255) * a);
+                        prepared[pixel * 4 + 3] = (ushort)a;
+                    }
+                    var pixels = prepared[..(sourceCount * 4)];
+                    var left = FilterPreparedColumn(pixels, offsets[..count0], weights[..count0]);
+                    var right = columns == 2 ? FilterPreparedColumn(pixels,
+                        offsets.Slice(Capacity, count1), weights.Slice(Capacity, count1)) : Vector256<double>.Zero;
+                    filtered = Vector512.Create(left, right); lastPhysical = physical;
+                }
+                for (var y = firstActive; y < endActive; y++)
+                {
+                    var w = ImageTransforms.Kernel((virtualY - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                    normalizers[y] += w;
+                    totals[y] = Avx512F.Add(totals[y], Avx512F.Multiply(filtered, Vector512.Create(w)));
+                }
+            }
+            // All prepared-source readers have finished. The same storage can
+            // stage original vertical coefficients for uncertain certificates.
+            var vertical = MemoryMarshal.Cast<ushort, double>(prepared);
+            for (var y = 0; y < height; y++)
+            for (var column = 0; column < columns; column++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var sum = column == 0 ? totals[y].GetLower() : totals[y].GetUpper();
+                var normalizer = (column == 0 ? normalizer0 : normalizer1) * normalizers[y];
+                if (TryWrite(sum, normalizer, result.GetRow8(y).Slice((x + column) * 4, 4))) continue;
+                if (!(normalizer >= .5 && sum.GetElement(3) / normalizer >= 2)) return false;
+                var countY = counts[y];
+                for (var t = 0; t < countY; t++)
+                    vertical[t] = ImageTransforms.Kernel((firsts[y] + t - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                var countX = column == 0 ? count0 : count1;
+                if (!OriginalByte(source, result, x + column, y, weights.Slice(column * Capacity, countX),
+                    offsets.Slice(column * Capacity, countX), sourceFirst, vertical[..countY], firsts[y], context)) return false;
+            }
+        }
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector256<double> FilterPreparedColumn(ReadOnlySpan<ushort> prepared,
+        ReadOnlySpan<ushort> offsets, ReadOnlySpan<double> weights)
+    {
+        var partial = Vector512<double>.Zero; var t = 0;
+        var bytes = MemoryMarshal.AsBytes(prepared);
+        for (; t + 1 < weights.Length; t += 2)
+        {
+            var p0 = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(offsets[t] * 8, 8));
+            var p1 = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(offsets[t + 1] * 8, 8));
+            var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
+            var values = Avx512F.ConvertToVector512Double(samples.AsUInt32());
+            var coefficients = Avx512F.InsertVector256(Vector512.Create(weights[t]), Vector256.Create(weights[t + 1]), 1);
+            partial = Avx512F.Add(partial, Avx512F.Multiply(values, coefficients));
+        }
+        var sum = Avx.Add(partial.GetLower(), partial.GetUpper());
+        if (t < weights.Length)
+        {
+            var p = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(offsets[t] * 8, 8));
+            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(p).AsUInt16());
+            var values = Avx512F.ConvertToVector512Double(Vector256.Create(samples.AsUInt32(), Vector128<uint>.Zero)).GetLower();
+            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(weights[t])));
+        }
+        return sum;
     }
 
     private static bool TryWrite(Vector256<double> sum, double normalizer, Span<byte> output)

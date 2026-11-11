@@ -1411,7 +1411,8 @@ internal static class CooperativeMemoryConsumer
         foreach (var (width, height, expectedHash) in new[]
         {
             (1027, 519, "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94"),
-            (256, 129, "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8")
+            (256, 129, "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"),
+            (32, 16, "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d")
         })
         {
             const int sourceWidth = 513, sourceHeight = 259;
@@ -1437,6 +1438,7 @@ internal static class CooperativeMemoryConsumer
             actual.Dispose();
             if (bicubicBudget.Bytes != 0 || bicubicBudget.IsDisposed)
                 throw new Exception("Packaged byte bicubic leaked storage or disposed the caller root.");
+            if (width == 32) Console.WriteLine("Packaged deep byte bicubic frozen pixels and shared admission passed.");
         }
         Console.WriteLine("Packaged tight byte bicubic exact pixels and admission passed.");
         foreach (var depth in new[] { 8, 16 })

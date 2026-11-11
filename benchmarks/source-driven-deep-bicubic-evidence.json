@@ -1,0 +1,429 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SDR834",
+  "recordedOn": "2026-11-12",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "case": {
+    "managedUs": 412.56513159824044,
+    "nativeUs": 376.47062109375,
+    "ratio": 1.0958760351594663,
+    "lower": 1.0867062438319215,
+    "upper": 1.1001551500592728,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+    "caseId": "Tight32x16_8",
+    "receipt": "tmp/sdr834-candidate-Tight32x16_8-confirm-receipt.json",
+    "observation": "tmp/sdr834-candidate-Tight32x16_8-confirm-observation.json",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "retainedOperationScratchBytes": 0,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+    "nativeOutputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+    "managedMaxWorkingBytes": 537612,
+    "outputBytes": 2048,
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 537612 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "managedRationalReferenceExact": true,
+    "nativeRgbMaximum": 0,
+    "nativeRgbRmse": 0,
+    "nativeAlphaMaximum": 0,
+    "nativeAlphaRmse": 0
+  },
+  "comparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 499.43638562500007,
+        "candidateUs": 412.56513159824044,
+        "savedUs": 86.87125402675959,
+        "savedFraction": 0.17393857661781686,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 499436.38562500005,
+          "StandardError": 354.1797834470075,
+          "Level": 12,
+          "Margin": 1571.488380789513,
+          "Lower": 497864.89724421053,
+          "Upper": 501007.8740057896
+        },
+        "candidateCI": {
+          "N": 11,
+          "Mean": 412565.13159824046,
+          "StandardError": 60.42260327579559,
+          "Level": 12,
+          "Margin": 277.1520678101133,
+          "Lower": 412287.97953043034,
+          "Upper": 412842.2836660506
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 499.43781187499997,
+        "candidateUs": 412.75611895161285,
+        "savedUs": 86.6816929233871,
+        "savedFraction": 0.17355853093694462,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 499437.81187499996,
+          "StandardError": 354.1797834470077,
+          "Level": 12,
+          "Margin": 1571.4883807895142,
+          "Lower": 497866.32349421043,
+          "Upper": 501009.3002557895
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 412756.11895161285,
+          "StandardError": 197.5418521447508,
+          "Level": 12,
+          "Margin": 876.4891161879747,
+          "Lower": 411879.6298354249,
+          "Upper": 413632.6080678008
+        }
+      }
+    },
+    "normalizedGain": 0.10314793327337057,
+    "normalizedGainSeparated": true,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.07893235235864593,
+    "baselineRatioBounds": [
+      1.2099255192735683,
+      1.2294203760587405
+    ],
+    "candidateRatioBounds": [
+      1.0867062438319215,
+      1.1001551500592728
+    ]
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "SDR834",
+    "entireOriginalFileReconstructed": true,
+    "originalColumnNumericBodyVerbatim": true,
+    "certificateAndOriginalRepairVerbatim": true,
+    "entryGuardAndAdmissionVerbatim": true,
+    "newExplicitPayloadBytes": 3536,
+    "originalExplicitPayloadBytes": 4032,
+    "admissionBytes": 4096,
+    "noInliningSeparatesFrames": true,
+    "newHeapArrays": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "newPools": 0,
+    "retainedOperationScratchBytes": 0,
+    "outputAliasing": false,
+    "numerical": "Prepared UInt16products are exact; AVX2zeroextension and AVX512double conversion preserve values. Existing even/odd horizontal streams/final fold; virtual source rows ascend including clamped repeats. Vector512lanes preserve each output ordered vertical Add(Multiply) and normalizers. Existing72term certificate/repair; no float workspace or numerical-policy change.",
+    "ownership": "All rows/source tables are operation-private stack storage. After all source users finish, prepared storage stages vertical coefficients for rare repair. Numeric decline returns before column frame is entered; cancellation/refusal throw through original finally. Public result escapes only on successful Resize, so private partial pixels may be overwritten by original fallback.",
+    "tests": {
+      "newInternal": 11,
+      "newPublic": 2,
+      "focusedInternalEachMode": 519,
+      "focusedPublicEachMode": 791,
+      "actualProductionOrderedBits": true,
+      "poisonAndNoAllocation": true,
+      "oddGeneralizationAndHeight17Fallback": true,
+      "tinyAlphaDeclineAndPublicRootRecovery": true,
+      "alreadyCanceledBeforePublication": true
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "b58f1c8e7ea95051e938e7582c0a6b9a46c8d217bd4b11b41291153049c73d64",
+      "tests/Lokad.Image.PublicApi.Tests/DeepColumnBicubicResizeTests.cs": "75b105a26c3f9c6b6e66938760efb30e1e66635d0ad3eb60a3fc55fffa3e9e72",
+      "tests/Lokad.Image.Tests/DeepRowDrivenBicubicTests.cs": "bb6c1b86eaff38bff830c443fec0c46ed338b51df643f024df216ab484e11087"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+    },
+    "publicationPostponed": true
+  },
+  "codegen": {
+    "short": {
+      "file": "tmp/sdr834-candidate-Tight32x16_8-short-kernel-jit.txt",
+      "sha256": "6780235db0a643dfae5bae5812932fa3f07cd9192ca7505c0ae65f5f85108131",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "273"
+          ],
+          "stackReservations": [
+            "32"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:ApplyRows(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "5910"
+          ],
+          "stackReservations": [
+            "728",
+            "0x400",
+            "736",
+            "0x480",
+            "288",
+            "128",
+            "128",
+            "64"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:TryWrite(System.Runtime.Intrinsics.Vector256`1[double],double,System.Span`1[byte]):bool (FullOpts)",
+          "codeBytes": [
+            "489"
+          ],
+          "stackReservations": [
+            "48"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    },
+    "confirm": {
+      "file": "tmp/sdr834-candidate-Tight32x16_8-confirm-kernel-jit.txt",
+      "sha256": "3f5bc732d8ca74ee26768052b31f04b3dfa4217ec91eb7e06f7a65ef4e3540dc",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "273"
+          ],
+          "stackReservations": [
+            "32"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:ApplyRows(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "5910"
+          ],
+          "stackReservations": [
+            "728",
+            "0x400",
+            "736",
+            "0x480",
+            "288",
+            "128",
+            "128",
+            "64"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.DeepColumnBicubicResize:TryWrite(System.Runtime.Intrinsics.Vector256`1[double],double,System.Span`1[byte]):bool (FullOpts)",
+          "codeBytes": [
+            "489"
+          ],
+          "stackReservations": [
+            "48"
+          ],
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    }
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+      "full": [
+        3101,
+        2381,
+        948
+      ],
+      "total": 6430,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 519,
+        "public-normal": 791,
+        "internal-scalar": 519,
+        "public-scalar": 791
+      },
+      "isa": {
+        "internal-avx512-off": 519,
+        "public-avx512-off": 791,
+        "internal-avx2-off": 519,
+        "public-avx2-off": 791
+      },
+      "resizeInternalEachMode": 519,
+      "resizePublicEachMode": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "b58f1c8e7ea95051e938e7582c0a6b9a46c8d217bd4b11b41291153049c73d64",
+        "tests/Lokad.Image.PublicApi.Tests/DeepColumnBicubicResizeTests.cs": "75b105a26c3f9c6b6e66938760efb30e1e66635d0ad3eb60a3fc55fffa3e9e72",
+        "tests/Lokad.Image.Tests/DeepRowDrivenBicubicTests.cs": "bb6c1b86eaff38bff830c443fec0c46ed338b51df643f024df216ab484e11087"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "05094dc0afe1b0c4dee468e0efa31fdf5e0455f04fb5582875a0b37e0ff85a12",
+      "full": [
+        3101,
+        2381,
+        948
+      ],
+      "total": 6430,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 519,
+        "public-normal": 791,
+        "internal-scalar": 519,
+        "public-scalar": 791
+      },
+      "isa": {
+        "internal-avx512-off": 519,
+        "public-avx512-off": 791,
+        "internal-avx2-off": 519,
+        "public-avx2-off": 791
+      },
+      "resizeInternalEachMode": 519,
+      "resizePublicEachMode": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "b58f1c8e7ea95051e938e7582c0a6b9a46c8d217bd4b11b41291153049c73d64",
+        "tests/Lokad.Image.PublicApi.Tests/DeepColumnBicubicResizeTests.cs": "75b105a26c3f9c6b6e66938760efb30e1e66635d0ad3eb60a3fc55fffa3e9e72",
+        "tests/Lokad.Image.Tests/DeepRowDrivenBicubicTests.cs": "bb6c1b86eaff38bff830c443fec0c46ed338b51df643f024df216ab484e11087"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "bef9d79f275b755f6f35697638677f2576d737dd79efcb9f0b7eede8ed50b675",
+      "symbolsSha256": "cc4b5fbbdf500738d57571083656a044c98b62c56ee7967f20c1b9f48f5c9579",
+      "bytes": 453653,
+      "librarySha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "bef9d79f275b755f6f35697638677f2576d737dd79efcb9f0b7eede8ed50b675",
+      "librarySha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "fullChecksEachOs": 6430,
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOs": 3,
+    "threeNamedStorageSuitesIncluded": true,
+    "resizeInternalEachModeEachOs": 519,
+    "resizePublicEachModeEachOs": 791,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "codecAndTextIsaReused": true,
+    "unchangedEvidence": "packed-horizontal-window-reuse-evidence.json",
+    "packagedDeepFrozenPixelsAndSharedAdmissionBothOS": true
+  },
+  "raw": {
+    "file": "source-driven-deep-bicubic-qualified.tar.xz",
+    "sha256": "7b230636b0cc24562ff61abfb5617b5a37aaf0e2323314d951074a51abc50a9d",
+    "bytes": 2592132,
+    "members": 102,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "deep-bicubic-current-confirmation-v2.tar.xz",
+        "sha256": "0e8d11394a5fcebea6b06c6d1411d0a721c39eded13ecd1ba258ccd5a703089e",
+        "scope": "benchmarks/deep-bicubic-current-confirmation-evidence.json"
+      },
+      {
+        "file": "packed-horizontal-window-reuse.tar.xz",
+        "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+        "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+      }
+    ]
+  },
+  "producers": {
+    "windowsSha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+    "linuxSha256": "05094dc0afe1b0c4dee468e0efa31fdf5e0455f04fb5582875a0b37e0ff85a12",
+    "timedArtifactSha256": "8cb933dfe2cec8f9469d26db3a8532b774ea53b00faf0e1ac7e475c3cbe75df9",
+    "actualPackageSha256": "bef9d79f275b755f6f35697638677f2576d737dd79efcb9f0b7eede8ed50b675"
+  },
+  "sourceModelDependency": "deep-bicubic-current-confirmation-evidence.json",
+  "storage": {
+    "workingAdmissionBytes": 4096,
+    "explicitRowPayloadBytes": 3536,
+    "explicitColumnPayloadBytes": 4032,
+    "framesDoNotOverlap": true,
+    "newHeapArrays": 0,
+    "newPools": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "newRetainedStateBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "resultBytes": 2048,
+    "outputAliasing": false,
+    "physicalNativeJitPeaksRemeasured": false,
+    "defaultPoolRetentionRemeasured": false
+  },
+  "workflow": {
+    "productionVersionsEachOS": 1,
+    "embeddedVersionsEachOS": 1,
+    "publicTestVersionsEachOS": 1,
+    "productionOrEmbeddedCompileFailures": 0,
+    "preflightControllerEscapingFixedBeforeLinuxBuild": true,
+    "newInternalTests": 11,
+    "newPublicTests": 2,
+    "benchmarkNativeFixtureSelectorBuilds": 0,
+    "primaryExistingControls": 1,
+    "completeShortScreens": 1,
+    "independentConfirmations": 1,
+    "sourceValidIndependentBaselineReused": true,
+    "fullQualificationMilestonesEachOS": 1,
+    "actualPackageProofEachOS": 1,
+    "actualPackagePackCalls": 1
+  },
+  "next": "Current existing deep-byte control still has upper1.100 gap. Investigate sharing prepared-sample load/UInt16-to-double conversion across overlapping horizontal column windows; current row stage shares integer premultiplication but still filters two windows separately. Preserve even/odd lane order, certificates/repair and fallback frames. This is a revised operation-owned reuse hypothesis, not a replay of the inconclusive wide overlap guard or decode-store trial. No passing word/cached/codec/text retuning; publication postponed."
+}

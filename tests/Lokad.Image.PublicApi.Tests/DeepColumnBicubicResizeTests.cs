@@ -6,6 +6,22 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class DeepColumnBicubicResizeTests
 {
     [Theory]
+    [InlineData(401, 245, 23, 14)] // Odd-column source-driven generalization.
+    [InlineData(401, 299, 23, 17)] // Original column frame beyond the row-storage capacity.
+    public void OutputRowCapacityBoundaryPreservesExactPixelsAndSurvivingOwners(int sw, int sh, int width, int height)
+    {
+        using var source = OriginalPixels.Buffer(sw, sh, 8);
+        var input = OriginalPixels.Bytes(source);
+        using var expected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic);
+        var golden = OriginalPixels.Bytes(expected);
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 4 + 4096 };
+        using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        using var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        Assert.Equal(golden, OriginalPixels.Bytes(first)); Assert.Equal(golden, OriginalPixels.Bytes(second));
+        first.Dispose(); Assert.Equal(golden, OriginalPixels.Bytes(second)); Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(4095)] [InlineData(4096)]
     public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {

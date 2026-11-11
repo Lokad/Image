@@ -148,12 +148,13 @@ Current scope and remaining work:
   explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
   [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
   unaccepted capacity trials remain history; original exact arithmetic/repair remain.
-- **Deep bounded bicubic:** [current actual-package confirmation](../benchmarks/DEEP-BICUBIC-CURRENT-CONFIRMATION.md)
-  resolves the last historical displayed row: RGBA8 32×16 is499.44/zimg408.73µs,
-  upper1.229, a demonstrated gap at113B/op and4KiB. One2sprofile identifies the
-  separate65tap executor. Source-driven paired-column storage is the next design;
-  its exact portable model is not SIMD or performance qualification. Current
-  production/packets/pixels are unchanged; passing paths remain stopped.
+- **Deep bounded bicubic:** [source-driven paired columns](../benchmarks/SOURCE-DRIVEN-DEEP-BICUBIC.md)
+  save86.87µs/17.39%raw/10.31%normalized, with separated raw/all-actual/normalized
+  confidence and native−7.89%. Current32×16 byte412.57/zimg376.47µs upper1.100
+  remains a gap. Same113B/op/4KiB, zero retained scratch;3,536Brow and4,032Bcolumn
+  frames do not overlap. Exact pixels/certificates/repair and ownership remain.
+  Next investigate shared conversion across overlapping horizontal windows;
+  passing word/other families stay stopped.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
@@ -174,13 +175,13 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,417 full/live checks per OS**
+The current immutable build passes **6,430 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Current resize qualification passes 508 internal/789 public per
+Current resize qualification passes 519 internal/791 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -296,7 +297,7 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA16 † → 1027×519 | 2,893.73 | 3,105.31 | 0.932 / 0.940 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,113.60 | 3,291.86 | 0.946 / 0.955 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 892.36 | 900.40 | 0.991 / 0.999 | 114 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB (gap) † → 32×16 | 499.44 | 408.73 | 1.222 / 1.229 | 113 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB (gap) † → 32×16 | 412.57 | 376.47 | 1.096 / 1.100 | 113 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 311.98 | 378.45 | 0.824 / 0.840 | 197,299 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,064.21 | 3,289.31 | 0.932 / 0.939 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,499.15 | 1,521.64 | 0.985 / 1.048 | 114 |

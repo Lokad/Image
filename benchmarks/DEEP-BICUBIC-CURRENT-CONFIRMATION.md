@@ -1,5 +1,8 @@
 # Current bounded deep bicubic reduction
 
+Current costs and qualification are owned by [source-driven reduction](SOURCE-DRIVEN-DEEP-BICUBIC.md).
+This report retains the predecessor confirmation, attribution and source model.
+
 The final displayed historical resize control remains a **demonstrated gap** on
 the actual verified package DLL. It is the next material resize priority.
 
