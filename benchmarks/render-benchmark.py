@@ -1954,11 +1954,28 @@ def render():
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
     current_build_qualification = cached_wide['qualification']
+    text_pipeline = json.loads((ROOT / 'benchmarks/text-complete-public-pipelines-evidence.json').read_text(encoding='utf-8'))
+    assert not text_pipeline['productionChanged'] and text_pipeline['requiredMaterialPaths'] == 289
+    assert text_pipeline['raw']['mirrored'] and text_pipeline['raw']['allMembersVerified']
+    assert text_pipeline['qualificationReuse']['focusedNewHarnessWindowsLinux']
+    assert text_pipeline['qualificationReuse']['newBroadSuites'] == text_pipeline['qualificationReuse']['newPacks'] == 0
+    assert set(text_pipeline['cases']) == {'OneShot', 'PrepareDraw8', 'Preparation', 'PreparedDraw'}
+    for case, cost in text_pipeline['cases'].items():
+        assert cost['pairs'] == cost['referenceBracketSamples'] == 12 and cost['operationsPerSample'] == 32
+        assert cost['quietGuardsPassed'] and cost['allFrozenChecksPassed'] and cost['allActualsRetained']
+        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
+        assert cost['status'] == ('uncertain' if cost['upper'] is None else 'pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        assert cost['completeWorkload'] == (case in {'OneShot', 'PrepareDraw8'})
+    tp_one = text_pipeline['cases']['OneShot']
+    tp_batch = text_pipeline['cases']['PrepareDraw8']
+    tp_draw = text_pipeline['cases']['PreparedDraw']
+    assert tp_one['status'] == tp_batch['status'] == 'pass'
+    assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-11. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-11. These **{displayed_count} tabulated comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -2047,16 +2064,22 @@ Current scope and remaining work:
   Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
-- **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
-  [Shared render preparation](../benchmarks/TEXT-RENDER-PREPARATION.md) saves33.30/35.77 µs
-  for repeated drawing versus current ordinary calls. Prepared drawing allocates56 B/op,
-  retains40,408 B and costs53.81/56.80 µs; byte parity is uncertain, word remains a gap.
-  Ordinary87.12/92.57 µs reference gaps remain,59,304 B/op (+304); CPU changes are inconclusive.
-  ImageSharp.Drawing's prepared public paths and per-call working storage are explicitly labeled.
-  [Font loading](../benchmarks/FONT-OWNED-STORAGE.md) remains 31.86/FreeType 13.42 µs,
-  upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
-  not block codec/resizing work. Existing pools and governed bypass remain.
+- **Text/drawing:** [Complete public pipelines](../benchmarks/TEXT-COMPLETE-PUBLIC-PIPELINES.md)
+  pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
+  {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
+  preparation plus eight fresh-canvas draws/disposal {tp_batch['managedUs']:,.2f}/{tp_batch['referenceUs']:,.2f} µs,
+  upper {tp_batch['upper']:.3f}, measured amortization {tp_batch['amortizedManagedUs']:,.2f}/{tp_batch['amortizedReferenceUs']:,.2f} µs/draw.
+  GC totals are {math.ceil(tp_one['managedAllocatedBytes']):,}/{math.ceil(tp_one['referenceAllocatedBytes']):,} B one-shot and
+  {math.ceil(tp_batch['managedAllocatedBytes']):,}/{math.ceil(tp_batch['referenceAllocatedBytes']):,} B per eight-draw batch.
+  Managed active preparation owns39,904 B; approximate live-heap deltas33,920/22,504 B
+  are separate from allocations and unchanged pools. Steady fresh-canvas drawing remains
+  a scoped gap ({tp_draw['managedUs']:,.2f}/{tp_draw['referenceUs']:,.2f} µs, upper {tp_draw['upper']:.3f});
+  no general-font or arbitrary-repeat-count claim. Parser validation, retained paths/workspace,
+  all fitting/layout calls and full16-bit visual gates remain explicit. Earlier
+  [font-load](../benchmarks/FONT-OWNED-STORAGE.md) and [drawing](../benchmarks/TEXT-RENDER-PREPARATION.md)
+  stage costs below are scoped diagnostics, not proof of overall text slowdown; never add
+  them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on

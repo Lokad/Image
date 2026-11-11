@@ -1,5 +1,9 @@
 # Owned text render preparation
 
+[Complete public text pipelines](TEXT-COMPLETE-PUBLIC-PIPELINES.md) separately
+measure preparation and full one-shot/repeated operations. These retained-state
+draw timings remain scoped diagnostics; they do not establish end-to-end costs.
+
 TRP784 adds `TextRenderPlan` for repeated drawing at a fixed canvas shape, depth
 and origin. It owns copied glyph positions, prepared edges/events, crossings and
 one coverage row. Font and layout may be disposed after creation. Ordinary

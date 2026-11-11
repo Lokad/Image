@@ -1,5 +1,9 @@
 # Owned font storage
 
+[Complete public text pipelines](TEXT-COMPLETE-PUBLIC-PIPELINES.md) measure
+font→fit→layout→draw and repeated use directly. This loading-only comparison has
+different validation policies; its stage gap does not prove an overall slowdown.
+
 Default font loads reuse exact-size byte storage within the existing two-array,
 4 MiB image pool. Each load still copies every input byte, performs all eager
 validation, returns an independent face and disposes that face inside timing.
