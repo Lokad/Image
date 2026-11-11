@@ -163,8 +163,11 @@ diagnostics remain scoped, never additive phases or an overall slowdown claim.
 complete one-shot versus retained native state. Current owners link their earlier
 milestones and raw evidence. The [exact coefficient trial](CACHED-CUBIC-WEIGHT-PREPARATION-EXPERIMENT.md)
 adds no production gain or current cost; accepted builds are restored. The
-[current bounded narrow attribution](NARROW-BICUBIC-CURRENT-ATTRIBUTION.md) selects
-shared ordered vertical traversal, now qualified by the bounded-quartet stage.
+[current bounded narrow attribution](NARROW-BICUBIC-QUARTET-ATTRIBUTION.md) refreshes
+the actual package after accepted vertical quartets. One2s capture identifies
+source-pair split stores/indexing as a bounded lead for a single64B write, already
+used by the wide executor. No new statistical timing/build/fixture/qualification;
+instrumented elapsed is discarded. Earlier pre-quartet attribution remains history.
 Neither diagnostic becomes a renderer dependency. The [previous coverage narrative](https://github.com/lokad/image/blob/54112a2147d325eb69faac255e9e71ad5c808fe6/benchmarks/WARM-COVERAGE.md)
 retains superseded costs, qualification and experiment links in Git history;
 those do not govern current status or permanently close algorithm families.
