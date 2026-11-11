@@ -72,8 +72,14 @@ Current scope and remaining work:
   word upper.888 passes. Wide byte 371.62/zimg351.70 µs,
   upper1.069 remains a gap after a 5.35% normalized gain; word
   upper0.988 passes, with inconclusive CPU effect. No new owned capacity or retention.
-  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md),
-  [mixed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) and
+  [Compact mixed geometry](../benchmarks/COMPACT-MIXED-BICUBIC-GEOMETRY.md)
+  uses36 rather than84 B/column. Default/bounded byte save35.35/13.27 µs,
+  4.01%/1.54% raw and4.07%/4.10% normalized, with separated confidence; both pass/stop.
+  Native clocks move+0.063%/+2.673%. Both word controls remain uncertain; raw/native
+  clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
+  scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
+  with no extra heap capacity or retention. Original exact arithmetic/repair remain.
+  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
   [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain the
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
@@ -109,12 +115,12 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,275 full/live checks per OS**
+The current immutable build passes **6,283 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current resize qualification: 366 internal/789 public per
+Current resize qualification: 374 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -238,8 +244,8 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 459.65 | 451.35 | 1.018 / 1.027 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 506.31 | 574.04 | 0.882 / 0.888 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 375.61 | 346.77 | 1.083 / 1.088 | 198,451 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 863.94 | 870.01 | 0.993 / 1.0002 | 114 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 893.16 | 851.29 | 1.049 / 1.056 | 114 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 850.67 | 893.27 | 0.952 / 0.978 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 923.05 | 914.24 | 1.010 / 1.016 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 405.59 | 398.21 | 1.019 / 1.028 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 422.81 | 397.48 | 1.064 / 1.098 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 371.62 | 351.70 | 1.057 / 1.069 | 113 |

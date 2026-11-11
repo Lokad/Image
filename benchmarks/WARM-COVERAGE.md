@@ -7,11 +7,16 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [cleared canvas storage](CLEARED-CANVAS-STORAGE.md) passes
-6,275 full/live checks and183internal/162public focused normal/scalar checks per OS,
-then the SAME actual Release-package consumer/all three examples on Windows/Linux.
-The complete eight-draw text pipeline saves665.54µs/24.46%raw/29.86%normalized,
-with allocations4,217,697→284,623B and separately disclosed idle retention.
+The latest accepted [compact mixed geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md)
+passes6,283full/live and374internal/789public resize checks per OS in normal/scalar/
+AVX2off/AVX512off modes, then SAME actual Release-package/all three examples on
+Windows/Linux. Default/bounded mixed byte save35.35/13.27µs,4.01%/1.54%raw and
+4.07%/4.10%normalized with separated confidence; both pass. Word costs remain
+uncertain after contemporary predecessor counterchecks; no uniform speedup claim.
+Geometry borrows36,972 instead of86,268B from output, with unchanged114B/op,
+4/8KiB scratch and owners. Unchanged [cleared canvas storage](CLEARED-CANVAS-STORAGE.md)
+retains183internal/162public normal/scalar coverage and its eight-draw gain:
+665.54µs/24.46%raw/29.86%normalized, allocations4,217,697→284,623B, separate retention.
 Unchanged [cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) retain
 366internal/789public resize checks in normal/scalar/disabled-AVX2/AVX512 modes.
 Wide8 saves52.83µs/12.33% raw/4.68% normalized with
@@ -41,8 +46,8 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Position preparation](VP8-POSITION-MODEL-PREPARATION.md): six refreshed VP8 controls, 4 pass / 0 gaps / 2 uncertain. Ordinary opaque has a confirmed 2.02% normalized gain; live 4,803.55/native 4,786.85 µs, upper 1.009, and stream remain uncertain. Every VP8 total grows 1,536 B/op, within unchanged 8 KiB admission; no retained scratch. Prior window failures remain history. Unchanged [output-owned palettes](WEBP-PALETTE-OUTPUT.md) retains six lossless controls, 3 pass / 3 uncertain. |
-| Bicubic enlargement/shared byte publication | [Shared quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md): 15 affected enlargement/mixed controls, 9 pass / 2 gaps / 4 uncertain. Complete bounded byte enlargement saves159.58µs/5.10% raw/5.12% normalized, upper.981 passes; same116B/op/4KiB. Horizontal byte and default mixed byte remain gaps. Word horizontal and tight mixed uncertainty remain explicit. |
-| Mixed-axis RGBA16 bicubic | [Result-backed bands](BICUBIC-RESULT-BACKED-BANDS.md) retain unchanged word paths: default/vertical pass; bounded mixed893.16/zimg851.29µs upper1.056 is a gap. Byte mixed costs are owned by the quartet stage above. |
+| Bicubic enlargement/shared byte publication | [Shared quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md) retains13 unchanged controls:9pass/1gap/3uncertain. Complete bounded byte enlargement saves159.58µs/5.10%raw/5.12%normalized, upper.981 passes; same116B/op/4KiB. Horizontal byte remains a gap and word horizontal remains uncertain. Two mixed byte costs are now owned by compact geometry below. |
+| Mixed-axis byte/word bicubic | [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md): all4affected default/tight controls refresh. Byte846.46/zimg867.46µs upper.989 and850.67/893.27µs upper.978 pass/stop; word921.81/918.99µs upper1.012 and923.05/914.24µs upper1.016 remain uncertain. Current default predecessor is also uncertain; raw/native movement and normalized overlap are retained. Exact geometry shrinks84→36B/column without changing filtering/repair or owned capacity;114B/op, scratch4/8KiB, no added retention. Unchanged vertical pass and previous row-band design remain in[result-backed history](BICUBIC-RESULT-BACKED-BANDS.md). |
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
 | Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |

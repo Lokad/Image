@@ -855,15 +855,25 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    # This older provider still owns the unchanged word mixed boundary only.
-    mixed_word_history = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-vertical-reuse-evidence.json').read_text(encoding='utf-8'))
-    current_word = mixed_word_history['currentUnchangedWord']
-    assert current_word['librarySha256'] == mixed_word_history['baselineProducers']['windowsSha256']
-    assert current_word['managedRationalReferenceExact'] and current_word['independentOwnedOutput'] and current_word['sourceUnchanged']
-    assert current_word['allOriginalGatesPassed'] and current_word['quietGuardsPassed'] and current_word['status'] == 'gap'
+    compact_geometry = json.loads((ROOT / 'benchmarks/compact-mixed-bicubic-geometry-evidence.json').read_text(encoding='utf-8'))
+    assert compact_geometry['productionAccepted'] and compact_geometry['requiredMaterialPaths'] == 289
+    assert compact_geometry['raw']['mirrored'] and compact_geometry['raw']['allMembersVerified']
+    assert compact_geometry['statusCounts'] == {'pass': 2, 'gap': 0, 'uncertain': 2}
+    assert compact_geometry['sourceProof']['bothExecutionSourceBodiesRestoredByRevertingOnlyLoanExtent']
+    assert compact_geometry['byteBaselineProjectionExact'] and compact_geometry['sourceValidProfileReused']
+    for current in compact_geometry['cases'].values():
+        assert current['librarySha256'] == compact_geometry['producers']['windowsSha256']
+        assert current['managedRationalReferenceExact'] and current['independentOwnedOutput']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    current_word = compact_geometry['cases']['TightMixed16']
+    compact_geometry_prefixes = tuple(f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB'
+                                      for depth in (8, 16))
     result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
-    for depth, current in [(8, quartet['cases']['TightMixed8']), (16, current_word)]:
-        rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
+    for depth, current in [(8, compact_geometry['cases']['TightMixed8']), (16, current_word)]:
+        qualifier = ' (confidence open)' if current['status'] == 'uncertain' else ''
+        rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB{qualifier} † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     packed_current = json.loads((ROOT / 'benchmarks/packed-bicubic-four-pixel-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1241,7 +1251,7 @@ def render():
                       'Bicubic RGBA8, 32×16 / default workspace': 'Down32x16_8'}
     refreshed_cached = set()
     for i, (kind, row) in enumerate(rows):
-        if kind != 'editing' or not row.startswith('| Bicubic'):
+        if kind != 'editing' or not row.startswith('| Bicubic') or row.startswith(compact_geometry_prefixes):
             continue
         label = row.split('|')[1].strip()
         case = next((case for prefix, case in current_cached.items() if label.startswith(prefix)), None)
@@ -1274,6 +1284,7 @@ def render():
     rows = [(kind, row.replace(' →', ' H →', 1)
              if kind == 'editing' and row.startswith(('| Bicubic', '| Bilinear')) and ' H ' not in row
              and not row.startswith(('| Bicubic RGBA8 enlargement,', '| Bicubic RGBA8 width enlargement,', '| Bicubic RGBA8 height enlargement,'))
+             and not row.startswith(compact_geometry_prefixes)
              else row) for kind, row in rows]
     # Fresh package owners supersede the blanket historical marker.
     for label, current in [
@@ -1538,7 +1549,6 @@ def render():
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     word_labels = {'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
-                   'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
                    'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, label in word_labels.items():
         current = quartet['cases'].get(case, word_prep['cases'][case])
@@ -1556,21 +1566,12 @@ def render():
     assert set(result_bands['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
     assert result_bands['sourceProof']['sharedLoopTokensExactAfterRangeAndCheckpointSubstitution']
     assert result_bands['sourceProof']['originalWordTokensExact']
-    for current in result_bands['cases'].values():
+    for current in [result_bands['cases']['TightVertical16']]:
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['librarySha256'] == result_bands['producers']['linuxSha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in result_bands['comparison'].values() for v in c['views'].values())
-    current = current_word
-    label = word_labels['TightMixed16']
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
-        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
-        f'{current["allocatedBytes"]:,} |')
     current = result_bands['cases']['TightVertical16']
     assert current['status'] == 'pass'
     rows.append(('editing', f'| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → {current["outputWidth"]}×{current["outputHeight"]} | '
@@ -1748,14 +1749,6 @@ def render():
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
-    current = quartet['cases']['TightMixed8']
-    label = 'Bicubic RGBA8, width up / height down, input+output+4 KiB'
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
-    assert len(positions) == 1
-    shown_label = label + (' (confidence open)' if current['status'] == 'uncertain' else '')
-    rows[positions[0]] = ('editing', f'| {shown_label} † → 1027×129 | '
-        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.4f} | '
-        f'{current["allocatedBytes"]:,} |')
     cached_publication = json.loads((ROOT / 'benchmarks/cached-narrow-shared-publication-evidence.json').read_text(encoding='utf-8'))
     assert cached_publication['productionAccepted'] and cached_publication['requiredMaterialPaths'] == 289
     assert cached_publication['raw']['mirrored'] and cached_publication['raw']['allMembersVerified']
@@ -1849,6 +1842,8 @@ def render():
         rows.append(('editing', f'| {label} † → 256×129 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     current_build_qualification = raster['qualification']
+    compact_rows = [row for kind, row in rows if kind == 'editing' and row.startswith(compact_geometry_prefixes)]
+    assert len(compact_rows) == 2 and all(' H ' not in row for row in compact_rows)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -1975,6 +1970,10 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
+    current_build_qualification = compact_geometry['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6283
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == compact_geometry['producers']['windowsSha256']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2051,8 +2050,14 @@ Current scope and remaining work:
   word upper.888 passes. Wide byte {wide_quartet['cases']['TightWide8']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide8']['nativeUs']:.2f} µs,
   upper{wide_quartet['cases']['TightWide8']['upper']:.3f} remains a gap after a 5.35% normalized gain; word
   upper{wide_quartet['cases']['TightWide16']['upper']:.3f} passes, with inconclusive CPU effect. No new owned capacity or retention.
-  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md),
-  [mixed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) and
+  [Compact mixed geometry](../benchmarks/COMPACT-MIXED-BICUBIC-GEOMETRY.md)
+  uses36 rather than84 B/column. Default/bounded byte save35.35/13.27 µs,
+  4.01%/1.54% raw and4.07%/4.10% normalized, with separated confidence; both pass/stop.
+  Native clocks move+0.063%/+2.673%. Both word controls remain uncertain; raw/native
+  clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
+  scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
+  with no extra heap capacity or retention. Original exact arithmetic/repair remain.
+  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
   [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain the
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /

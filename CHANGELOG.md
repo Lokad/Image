@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse bounded zeroed canvas storage and compact mixed-axis bicubic geometry,
+  preserving exact pixels, cancellation and shared memory ownership.
+
 - Share byte/word bilinear reduction preparation and keep RGBA16 enlargement
   normalization and certification in vector lanes, preserving exact pixels,
   cancellation and shared memory ownership.

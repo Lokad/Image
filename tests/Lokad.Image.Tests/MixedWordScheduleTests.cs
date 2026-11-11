@@ -24,7 +24,7 @@ public sealed class MixedWordScheduleTests
         result.Pixels.Fill(0xa5);
         Assert.True(MixedWordColumnBicubicResize.TryLocateResultWorkspace(result, out var start, out var safeRows));
         Assert.True((long)safeRows * result.Stride <= start);
-        Assert.True(start + MixedWordColumnBicubicResize.ResultWorkspaceBytes <= result.ByteLength - (long)width * 84);
+        Assert.True(start + MixedWordColumnBicubicResize.ResultWorkspaceBytes <= result.ByteLength - MixedBicubicGeometry.StorageBytes(width));
         using var root = new TestMemoryBudget(scratch);
         using var context = new OperationContext(new() { MaxWorkingBytes = scratch, MemoryBudget = root }, default);
         Assert.True(MixedWordColumnBicubicResize.TryApply(source, result, 1,

@@ -58,7 +58,7 @@ public sealed class BicubicByteNormalizationTests
         if (usesBank)
         {
             Assert.True((long)safeRows * result.Stride <= start);
-            Assert.True(start + MixedColumnBicubicResize.ResultWorkspaceBytes <= result.ByteLength - width * 84L);
+            Assert.True(start + MixedColumnBicubicResize.ResultWorkspaceBytes <= result.ByteLength - MixedBicubicGeometry.StorageBytes(width));
         }
         using var root = new TestMemoryBudget(4096);
         using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, default);

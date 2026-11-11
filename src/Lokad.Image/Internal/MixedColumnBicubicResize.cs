@@ -80,7 +80,7 @@ internal static class MixedColumnBicubicResize
 
     internal static bool TryLocateResultWorkspace(ImageBuffer result, out int start, out int safeRows)
     {
-        var geometryStart = result.ByteLength - (long)result.Width * 7 * (sizeof(double) + sizeof(int));
+        var geometryStart = result.ByteLength - MixedBicubicGeometry.StorageBytes(result.Width);
         var end = geometryStart & ~63L;
         var candidate = (end - ResultWorkspaceBytes) & ~63L;
         start = candidate >= 0 ? (int)candidate : 0;

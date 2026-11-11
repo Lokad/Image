@@ -1,5 +1,8 @@
 # Result-backed bicubic row bands
 
+Current mixed byte/word costs are owned by [compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md).
+This report retains the row-bank design and unchanged vertical evidence.
+
 The word implementation remains unchanged after the
 [vertical source-reuse experiment](BICUBIC-MIXED-BYTE-VERTICAL-REUSE.md). Its newer
 unchanged-DLL bounded observation is893.16µs/upper1.056; the older bounded cost

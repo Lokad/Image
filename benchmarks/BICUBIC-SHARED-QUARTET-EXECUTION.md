@@ -1,5 +1,8 @@
 # Shared bicubic quartet execution
 
+[Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md) now owns Mixed8/TightMixed8
+costs. The other13controls and this stage's exact arithmetic evidence remain valid.
+
 Complete bounded RGBA8 enlargement improves **3,129.13 → 2,969.56 µs**, saving
 **159.58 µs / 5.10% raw / 5.12% reference-normalized**. Filtered/all-actual raw and
 normalized confidence intervals separate; native time moves +0.019%. The current
