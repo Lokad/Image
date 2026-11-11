@@ -1,9 +1,8 @@
 # Shared bicubic preparation
 
-[Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) supersede
-the affected cached costs and package qualification below. The current 24-control
-scope has 22 passes/two gaps; all equivalent wide/narrow one-shot/prepared views
-pass. Earlier mechanism results and raw evidence remain retained history.
+For current cached costs and package proof, see the
+[family status](WARM-COVERAGE.md#current-family-status). Measurements below retain
+this stage's design, incremental effects and raw evidence as history.
 
 [Cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) record an
 intermediate stage. The horizontal-quartet report above owns all current affected

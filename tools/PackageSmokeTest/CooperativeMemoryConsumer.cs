@@ -39,24 +39,27 @@ internal static class CooperativeMemoryConsumer
     private static void VerifyBicubicPlans()
     {
         foreach (var depth in new[] { 8, 16 })
+        foreach (var (width, height) in new[] { (128, 64), (256, 129) })
         {
             using var source = OriginalPixels.Buffer(513, 259, depth);
             if (depth == 8) source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
             else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
             using var root = new TestMemoryBudget(4 * 1024 * 1024);
-            using var plan = BicubicResizePlan.Create(513, 259, 128, 64, depth,
+            using var plan = BicubicResizePlan.Create(513, 259, width, height, depth,
                 new() { MemoryBudget = root });
             var retained = plan.StorageBytes;
             if (root.Bytes != retained) throw new Exception("Packaged bicubic preparation lost its charge.");
             using var result = plan.Resize(source);
             var expected = OriginalPixels.Bytes(result);
-            var hash = depth == 8
-                ? "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71"
-                : "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9";
+            var hash = width == 128
+                ? depth == 8 ? "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71"
+                    : "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9"
+                : depth == 8 ? "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+                    : "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f";
             if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected)) != hash
                 || root.Bytes != retained + expected.Length)
                 throw new Exception("Packaged bicubic plan changed frozen samples or retained ownership.");
-            Console.WriteLine($"Packaged bicubic{depth}: retained={retained}, peak={root.Peak}, result={expected.Length}.");
+            Console.WriteLine($"Packaged {(width == 128 ? "" : "narrow ")}bicubic{depth}: retained={retained}, peak={root.Peak}, result={expected.Length}.");
             using var canceled = new CancellationTokenSource(); canceled.Cancel();
             try
             {

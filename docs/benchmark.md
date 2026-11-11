@@ -60,22 +60,23 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [Prepared horizontal quartets](../benchmarks/CACHED-BICUBIC-HORIZONTAL-QUARTETS.md)
-  save 23.82 µs/6.36% raw/6.25% reference-normalized on cached Wide8, with
-  separated filtered/all-actual and normalized confidence; native moves −.124%.
-  Current 350.57/zimg 347.95 µs, upper 1.014 remains a small gap. All 24 existing shared
-  factory/executor costs refresh: 22 pass / 2 gaps / 0 uncertain. The other gap is default
-  Down8, upper 1.063. All eight equivalent wide/narrow one-shot/prepared boundaries pass;
-  narrow prepared byte uncertainty is resolved. Stop passing cases.
-  Live coefficients, every ordered double and original repair are unchanged.
-  Four-output source/weight reuse uses existing dead padding, with no new capacity
-  or owner. Wide/narrow plans still retain 198,432/199,840 B, prepared GC 137 B/op;
-  ordinary Wide8 total GC 198,449 B/op includes amortized measurement overhead.
-  Linux actual-package coarse governed owned peaks are 231,200/263,968 B for wide
-  byte/word, excluding borrowed source. Windows uses the portable fallback with
-  zero plan retention and peaks 32,768/65,536 B; physical/native/JIT peaks unmeasured.
-  Other raw costs move adversely alongside native clocks; no uniform gain claim.
-  Original native-prepared asymmetry stays separate from equivalent boundaries.
+- **Resizing:** [Shared horizontal preparation/execution](../benchmarks/CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
+  saves 22.70 µs/4.78% raw/5.11% reference-normalized on narrow Down8,
+  with separated filtered/all-actual and normalized intervals. Native time moves
+  +0.35%. Current 452.28/zimg 454.42 µs, upper 1.005, remains uncertain;
+  Wide8 378.51/375.02 µs upper 1.020 is also uncertain. Neither is a presumed tuning need.
+  All 24 existing shared cached controls refresh: 22 pass / 0 gaps / 2 uncertain.
+  All eight equivalent one-shot/prepared boundaries pass; stop passing cases.
+  One shared prepared-layout body and one closed numeric source retain fixed wide/narrow
+  schedules and original exact tap order, certificates and repair. Existing padding
+  holds coefficients; no new owner, array or capacity. Down8 GC 199,982 B/op;
+  prepared GC 137–138 B/op, wide/narrow retained plans 198,432/199,840 B.
+  The same actual package verifies all four frozen byte/word wide/narrow plans,
+  cancellation, prompt admission release and independent surviving outputs on both OSes.
+  Its coarse governed peaks and portable/cached differences are reported separately;
+  physical/native/JIT peaks remain unmeasured. Other raw/native clock movements stay
+  visible; no uniform gain claim. The native-prepared asymmetry remains explicit
+  alongside equivalent boundaries. Earlier quartet results retain linked history.
   [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
   [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
   allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
@@ -154,13 +155,13 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,382 full/live checks per OS**
+The current immutable build passes **6,401 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Current resize qualification passes 473 internal/789 public per
+Current resize qualification passes 492 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -272,26 +273,26 @@ settings do not establish matched quality.
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,496.35 | 4,060.63 | 0.861 / 0.865 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,084.94 | 5,070.48 | 0.806 / 0.811 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
-| Bicubic resize RGBA8 † → 256×129 | 435.54 | 418.81 | 1.040 / 1.063 | 199,983 |
+| Bicubic resize RGBA8 † → 256×129 | 452.28 | 454.42 | 0.995 / 1.005 | 199,982 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,893.73 | 3,105.31 | 0.932 / 0.940 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,113.60 | 3,291.86 | 0.946 / 0.955 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 892.36 | 900.40 | 0.991 / 0.999 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 309.20 | 375.55 | 0.823 / 0.830 | 197,300 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 311.98 | 378.45 | 0.824 / 0.840 | 197,299 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,064.21 | 3,289.31 | 0.932 / 0.939 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,499.15 | 1,521.64 | 0.985 / 1.048 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,458.80 | 1,744.79 | 0.836 / 0.845 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 459.65 | 451.35 | 1.018 / 1.027 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 506.31 | 574.04 | 0.882 / 0.888 | 113 |
-| Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 350.57 | 347.95 | 1.008 / 1.014 | 198,449 |
+| Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 378.51 | 375.02 | 1.009 / 1.020 | 198,450 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 850.67 | 893.27 | 0.952 / 0.978 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 923.05 | 914.24 | 1.010 / 1.016 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 405.59 | 398.21 | 1.019 / 1.028 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 422.81 | 397.48 | 1.064 / 1.098 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 371.62 | 351.70 | 1.057 / 1.069 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB (pass) † → 128×64 | 407.47 | 417.67 | 0.976 / 0.988 | 113 |
-| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 838.58 | 894.73 | 0.937 / 0.949 | 199,938 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 820.54 | 881.47 | 0.931 / 0.941 | 199,891 |
+| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 768.30 | 840.72 | 0.914 / 0.918 | 199,947 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 821.70 | 889.98 | 0.923 / 0.936 | 199,891 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
@@ -314,14 +315,14 @@ settings do not establish matched quality.
 | Bilinear resize RGBA8 (confidence open) † → 256×129 | 419.27 | 417.88 | 1.003 / 1.013 | 8,473 |
 | Bilinear resize RGBA16 (parity confirmed) † → 256×129 | 432.57 | 449.05 | 0.963 / 0.974 | 8,473 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
-| Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 372.90 | 1,074.07 | 0.347 / 0.352 | 198,456 |
-| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 276.17 | 371.76 | 0.743 / 0.751 | 137 |
-| Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 425.63 | 642.79 | 0.662 / 0.668 | 198,452 |
-| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 354.89 | 448.31 | 0.792 / 0.801 | 137 |
-| Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 482.51 | 1,038.61 | 0.465 / 0.493 | 199,990 |
-| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 409.35 | 416.50 | 0.983 / 0.989 | 137 |
-| Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 506.63 | 778.01 | 0.651 / 0.656 | 199,983 |
-| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 423.30 | 622.41 | 0.680 / 0.688 | 137 |
+| Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 349.70 | 989.97 | 0.353 / 0.358 | 198,455 |
+| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 258.97 | 347.40 | 0.745 / 0.752 | 137 |
+| Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 397.92 | 602.90 | 0.660 / 0.694 | 198,453 |
+| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 331.70 | 415.65 | 0.798 / 0.803 | 137 |
+| Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 494.53 | 1,057.83 | 0.467 / 0.490 | 199,991 |
+| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 436.53 | 455.85 | 0.958 / 0.968 | 138 |
+| Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 452.32 | 713.95 | 0.634 / 0.644 | 199,983 |
+| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 396.33 | 572.47 | 0.692 / 0.726 | 137 |
 
 **Inspection and pixel-coding validation**
 

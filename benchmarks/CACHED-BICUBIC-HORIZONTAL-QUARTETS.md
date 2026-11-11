@@ -1,5 +1,9 @@
 # Prepared horizontal bicubic quartets
 
+For current cached costs and package proof, see the
+[family status](WARM-COVERAGE.md#current-family-status). Measurements below retain
+this stage's design, incremental effects and raw evidence as history.
+
 The existing cached Wide8 complete Resize improves **374.39→350.57 µs**:
 **23.82 µs / 6.36% raw / 6.25% reference-normalized**. Filtered/all-actual raw
 and conservative normalized confidence intervals separate. Native time changes

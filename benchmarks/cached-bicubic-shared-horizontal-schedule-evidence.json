@@ -1,0 +1,2792 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CWQ827B",
+  "date": "2026-11-11",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 289,
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+    "linuxSha256": "132873f18ae6bba8c30f0ecfd6e95bd0cdf7d87c656fa99b9ec731367668337c",
+    "timedArtifactSha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+    "actualPackageSha256": "5ba30ae2f57cad85b3880a6dcda207e36d79c13866f386beffe6d5b68a30236d"
+  },
+  "cases": {
+    "Wide8": {
+      "managedUs": 378.5092184343434,
+      "nativeUs": 375.0184039713542,
+      "ratio": 1.009308381738129,
+      "lower": 0.9941482108443885,
+      "upper": 1.0197520378296725,
+      "allocatedBytes": 198450,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "uncertain",
+      "caseId": "Wide8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Wide8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Wide8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Wide8-confirm",
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Wide16": {
+      "managedUs": 386.3772937327823,
+      "nativeUs": 443.0436705729167,
+      "ratio": 0.8720975366449611,
+      "lower": 0.8608152851224178,
+      "upper": 0.884509226680316,
+      "allocatedBytes": 198446,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Wide16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Wide16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Wide16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Wide16-confirm",
+      "depth": 16,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down64x32_8": {
+      "managedUs": 374.1106917892157,
+      "nativeUs": 399.2761927083333,
+      "ratio": 0.9369721977450814,
+      "lower": 0.9251455360924216,
+      "upper": 0.9456419609326013,
+      "allocatedBytes": 197683,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down64x32_8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down64x32_8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down64x32_8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down64x32_8-confirm",
+      "depth": 8,
+      "outputWidth": 64,
+      "outputHeight": 32,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "nativeOutputSha256": "e2340f662ce94418bed4e7be5c65ac4c73fb7a705b047af06784e42b37c267c6",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 64x32 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixteen-pixel clamped halo (19.364% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down64x32_16": {
+      "managedUs": 392.41276725260417,
+      "nativeUs": 415.5394088541667,
+      "ratio": 0.9443454914051755,
+      "lower": 0.9270056856094998,
+      "upper": 0.959688788142751,
+      "allocatedBytes": 197677,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down64x32_16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down64x32_16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down64x32_16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down64x32_16-confirm",
+      "depth": 16,
+      "outputWidth": 64,
+      "outputHeight": 32,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "59db672430bfd4c9fc4468faae4ae846a730320b185be54196676589b81fb5ce",
+      "nativeOutputSha256": "f4189787d485cb0f7d0beee9b324fb6301e3dc821d9c5da6859186de177c2ba7",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 64x32 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixteen-pixel clamped halo (19.364% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down32x16_8": {
+      "managedUs": 311.98366981534093,
+      "nativeUs": 378.4484947916667,
+      "ratio": 0.8243755071270288,
+      "lower": 0.8021847436613954,
+      "upper": 0.8396210206639734,
+      "allocatedBytes": 197299,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down32x16_8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down32x16_8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down32x16_8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down32x16_8-confirm",
+      "depth": 8,
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "nativeOutputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down32x16_16": {
+      "managedUs": 325.12006650641024,
+      "nativeUs": 431.05334505208333,
+      "ratio": 0.75424554811685,
+      "lower": 0.7118081350521273,
+      "upper": 0.7910992609134604,
+      "allocatedBytes": 197295,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down32x16_16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down32x16_16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down32x16_16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down32x16_16-confirm",
+      "depth": 16,
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053",
+      "nativeOutputSha256": "19b7a2d543d60ffabb34791677cf64fb93fa176eddf2c9ba2e3528aad4bf1a44",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down16x8_8": {
+      "managedUs": 293.5854854651162,
+      "nativeUs": 453.815833984375,
+      "ratio": 0.6469264919373097,
+      "lower": 0.6018796887968948,
+      "upper": 0.6516209223380731,
+      "allocatedBytes": 201205,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down16x8_8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down16x8_8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down16x8_8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down16x8_8-confirm",
+      "depth": 8,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "nativeOutputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down16x8_16": {
+      "managedUs": 301.93987606534097,
+      "nativeUs": 508.4838138020833,
+      "ratio": 0.593804301866853,
+      "lower": 0.5477147463520353,
+      "upper": 0.6219067600157635,
+      "allocatedBytes": 201202,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down16x8_16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down16x8_16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down16x8_16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down16x8_16-confirm",
+      "depth": 16,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8",
+      "nativeOutputSha256": "0b94e3613c10f789ca0070a06f0f96eb496d9dd661a5159ec43882b8f2a015e5",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down8": {
+      "managedUs": 452.28084821428564,
+      "nativeUs": 454.4208580729167,
+      "ratio": 0.9952906874307964,
+      "lower": 0.9851288144404193,
+      "upper": 1.0045260173664554,
+      "allocatedBytes": 199982,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "uncertain",
+      "caseId": "Down8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq827-baseline-Down8-confirm",
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Down16": {
+      "managedUs": 449.7930159970239,
+      "nativeUs": 616.1959772135416,
+      "ratio": 0.7299512373173914,
+      "lower": 0.7225747570591797,
+      "upper": 0.7371476150916053,
+      "allocatedBytes": 199957,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Down16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Down16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Down16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Down16-confirm",
+      "depth": 16,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Horizontal8": {
+      "managedUs": 408.18277762096767,
+      "nativeUs": 577.11636328125,
+      "ratio": 0.7072798547942838,
+      "lower": 0.6807373734198267,
+      "upper": 0.7309813770200231,
+      "allocatedBytes": 199980,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Horizontal8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Horizontal8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Horizontal8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 10,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Horizontal8-confirm",
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 259,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20",
+      "nativeOutputSha256": "23441de997c54720b052b3a2b958e204b5162d994118d9a102497afc467617b0",
+      "managedRationalReferenceExact": false,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Horizontal16": {
+      "managedUs": 508.5053795454545,
+      "nativeUs": 577.3741438802084,
+      "ratio": 0.880720733575069,
+      "lower": 0.8637761023139952,
+      "upper": 0.8862278050357069,
+      "allocatedBytes": 199929,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Horizontal16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Horizontal16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Horizontal16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Horizontal16-confirm",
+      "depth": 16,
+      "outputWidth": 256,
+      "outputHeight": 259,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ef78fb7dbfb05cb1a756a64702961cbe60abd5046fa5f2b7cc6fb91b3072cceb",
+      "nativeOutputSha256": "6473a287135dc19141f06f1bbca47771f89977c01ab7fb406881b4ecd1710861",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Vertical8": {
+      "managedUs": 457.5330814732143,
+      "nativeUs": 588.421818359375,
+      "ratio": 0.7775596811635879,
+      "lower": 0.7592289701917727,
+      "upper": 0.7832199704657714,
+      "allocatedBytes": 367676,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Vertical8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Vertical8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Vertical8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 10,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Vertical8-confirm",
+      "depth": 8,
+      "outputWidth": 513,
+      "outputHeight": 129,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697",
+      "nativeOutputSha256": "bb37af865b17b37835464fc609affdca80fd007d2ad8e7b46d66c9497b82db2e",
+      "managedRationalReferenceExact": false,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 513x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Vertical16": {
+      "managedUs": 441.31124686520377,
+      "nativeUs": 590.8227005208333,
+      "ratio": 0.7469436202708031,
+      "lower": 0.7380918086949482,
+      "upper": 0.7532215122467908,
+      "allocatedBytes": 367597,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Vertical16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Vertical16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Vertical16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Vertical16-confirm",
+      "depth": 16,
+      "outputWidth": 513,
+      "outputHeight": 129,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd",
+      "nativeOutputSha256": "f22048d3816fba849e7d71cb2918a1408b68d1bcbfdde98c95df7234813b76d2",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 513x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Cross8": {
+      "managedUs": 768.3,
+      "nativeUs": 840.7216510416666,
+      "ratio": 0.9138577542853391,
+      "lower": 0.9074598049408917,
+      "upper": 0.9184776069790497,
+      "allocatedBytes": 199947,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Cross8",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Cross8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Cross8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Cross8-confirm",
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 519,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e",
+      "nativeOutputSha256": "cb4ca24bfa2efdece339afc582e8ea1c768809464ba9e653bc10cb2bf27983c7",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Cross16": {
+      "managedUs": 821.7019868607954,
+      "nativeUs": 889.9836536458333,
+      "ratio": 0.9232776169479957,
+      "lower": 0.9065644681646466,
+      "upper": 0.9363427111725179,
+      "allocatedBytes": 199891,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Cross16",
+      "family": "ordinary",
+      "receipt": "tmp/cwq827b-candidate-Cross16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-candidate-Cross16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-candidate-Cross16-confirm",
+      "depth": 16,
+      "outputWidth": 256,
+      "outputHeight": 519,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+      "nativeOutputSha256": "fb741bb37e310921a0c588ab79c72ec5c6e17ac156c11a686a95eaf8e16afd70",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "wide/Repeated8": {
+      "managedUs": 258.9727900510204,
+      "nativeUs": 347.39759497549016,
+      "ratio": 0.7454651206474,
+      "lower": 0.7396389960505046,
+      "upper": 0.7519258964536627,
+      "allocatedBytes": 137,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Repeated8",
+      "family": "wide",
+      "receipt": "tmp/cwq827b-wide-prepared-candidate-Repeated8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-wide-prepared-candidate-Repeated8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 10,
+      "retainedBytes": 198432,
+      "managedExact": true,
+      "previousProvider": "cwq826b-wide-prepared-candidate-Repeated8-confirm",
+      "depth": 8,
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6"
+    },
+    "wide/Repeated16": {
+      "managedUs": 331.7034037081339,
+      "nativeUs": 415.65243623188405,
+      "ratio": 0.7980306977512417,
+      "lower": 0.7934103228899426,
+      "upper": 0.8025066991814315,
+      "allocatedBytes": 137,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Repeated16",
+      "family": "wide",
+      "receipt": "tmp/cwq827b-wide-prepared-candidate-Repeated16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-wide-prepared-candidate-Repeated16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 198432,
+      "managedExact": true,
+      "previousProvider": "cwq826b-wide-prepared-candidate-Repeated16-confirm",
+      "depth": 16,
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d"
+    },
+    "wide/OneShot8": {
+      "managedUs": 349.7023182607323,
+      "nativeUs": 989.9650625,
+      "ratio": 0.3532471311438148,
+      "lower": 0.3485305417783828,
+      "upper": 0.3576440333591422,
+      "allocatedBytes": 198455,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "OneShot8",
+      "family": "wide",
+      "receipt": "tmp/cwq827b-wide-prepared-candidate-OneShot8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-wide-prepared-candidate-OneShot8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-wide-prepared-candidate-OneShot8-confirm",
+      "depth": 8,
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6"
+    },
+    "wide/OneShot16": {
+      "managedUs": 397.92409511718745,
+      "nativeUs": 602.9026849593496,
+      "ratio": 0.6600138049543058,
+      "lower": 0.5948528470739929,
+      "upper": 0.6940848307276855,
+      "allocatedBytes": 198453,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "OneShot16",
+      "family": "wide",
+      "receipt": "tmp/cwq827b-wide-prepared-candidate-OneShot16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-wide-prepared-candidate-OneShot16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 10,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-wide-prepared-candidate-OneShot16-confirm",
+      "depth": 16,
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d"
+    },
+    "narrow/Repeated8": {
+      "managedUs": 436.53234985632173,
+      "nativeUs": 455.8531079931973,
+      "ratio": 0.95761626322582,
+      "lower": 0.9469383416642259,
+      "upper": 0.9684680996002326,
+      "allocatedBytes": 138,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Repeated8",
+      "family": "narrow",
+      "receipt": "tmp/cwq827b-narrow-prepared-candidate-Repeated8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-narrow-prepared-candidate-Repeated8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 199840,
+      "managedExact": true,
+      "previousProvider": "cwq826b-narrow-prepared-candidate-Repeated8-confirm",
+      "depth": 8,
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a"
+    },
+    "narrow/Repeated16": {
+      "managedUs": 396.32990641801075,
+      "nativeUs": 572.4713536324787,
+      "ratio": 0.692313954057605,
+      "lower": 0.6050327540093022,
+      "upper": 0.7261721453510882,
+      "allocatedBytes": 137,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "Repeated16",
+      "family": "narrow",
+      "receipt": "tmp/cwq827b-narrow-prepared-candidate-Repeated16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-narrow-prepared-candidate-Repeated16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 199840,
+      "managedExact": true,
+      "previousProvider": "cwq826b-narrow-prepared-candidate-Repeated16-confirm",
+      "depth": 16,
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86"
+    },
+    "narrow/OneShot8": {
+      "managedUs": 494.5266899181548,
+      "nativeUs": 1057.8348062015505,
+      "ratio": 0.467489523902026,
+      "lower": 0.4338426412492488,
+      "upper": 0.4896958081826408,
+      "allocatedBytes": 199991,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "OneShot8",
+      "family": "narrow",
+      "receipt": "tmp/cwq827b-narrow-prepared-candidate-OneShot8-confirm-receipt.json",
+      "observation": "tmp/cwq827b-narrow-prepared-candidate-OneShot8-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 12,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-narrow-prepared-candidate-OneShot8-confirm",
+      "depth": 8,
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a"
+    },
+    "narrow/OneShot16": {
+      "managedUs": 452.3217033279221,
+      "nativeUs": 713.9545353535353,
+      "ratio": 0.6335441277138772,
+      "lower": 0.62549269681728,
+      "upper": 0.6439567460464941,
+      "allocatedBytes": 199983,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "status": "pass",
+      "caseId": "OneShot16",
+      "family": "narrow",
+      "receipt": "tmp/cwq827b-narrow-prepared-candidate-OneShot16-confirm-receipt.json",
+      "observation": "tmp/cwq827b-narrow-prepared-candidate-OneShot16-confirm-observation.json",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "filteredIterations": 11,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "previousProvider": "cwq826b-narrow-prepared-candidate-OneShot16-confirm",
+      "depth": 16,
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86"
+    }
+  },
+  "statusCounts": {
+    "pass": 22,
+    "gap": 0,
+    "uncertain": 2
+  },
+  "comparison": {
+    "Wide8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 350.57407219328707,
+          "candidateUs": 378.5092184343434,
+          "savedUs": -27.935146241056326,
+          "savedFraction": -0.07968400534097242,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 350574.0721932871,
+            "StandardError": 175.44430813802762,
+            "Level": 12,
+            "Margin": 778.442770028451,
+            "Lower": 349795.62942325865,
+            "Upper": 351352.5149633155
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 378509.2184343434,
+            "StandardError": 607.4144070926098,
+            "Level": 12,
+            "Margin": 2695.0851733552063,
+            "Lower": 375814.1332609882,
+            "Upper": 381204.3036076986
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 350.5754202835648,
+          "candidateUs": 378.5106691919192,
+          "savedUs": -27.935248908354378,
+          "savedFraction": -0.07968399178059538,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 350575.42028356483,
+            "StandardError": 175.44430813803038,
+            "Level": 12,
+            "Margin": 778.4427700284632,
+            "Lower": 349796.97751353635,
+            "Upper": 351353.8630535933
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 378510.6691919192,
+            "StandardError": 607.4144070926075,
+            "Level": 12,
+            "Margin": 2695.085173355196,
+            "Lower": 375815.584018564,
+            "Upper": 381205.7543652744
+          }
+        }
+      },
+      "normalizedGain": -0.0017461420795457094,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.07780200989807029,
+      "baselineRatioBounds": [
+        1.0010054890466562,
+        1.01359624958981
+      ],
+      "candidateRatioBounds": [
+        0.9941482108443885,
+        1.0197520378296725
+      ]
+    },
+    "Wide16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 384.9007952967172,
+          "candidateUs": 386.3772937327823,
+          "savedUs": -1.4764984360650997,
+          "savedFraction": -0.003836049325195212,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 384900.7952967172,
+            "StandardError": 591.0604120760529,
+            "Level": 12,
+            "Margin": 2622.5228353869406,
+            "Lower": 382278.2724613303,
+            "Upper": 387523.3181321041
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 386377.2937327823,
+            "StandardError": 299.25173070322455,
+            "Level": 12,
+            "Margin": 1372.6359253603641,
+            "Lower": 385004.6578074219,
+            "Upper": 387749.9296581427
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 384.90232275883847,
+          "candidateUs": 386.62888431186866,
+          "savedUs": -1.7265615530301583,
+          "savedFraction": -0.004485713519873924,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 384902.3227588385,
+            "StandardError": 591.0604120760516,
+            "Level": 12,
+            "Margin": 2622.522835386935,
+            "Lower": 382279.79992345156,
+            "Upper": 387524.8455942254
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 386628.88431186863,
+            "StandardError": 370.3873480716181,
+            "Level": 12,
+            "Margin": 1643.4010101343824,
+            "Lower": 384985.48330173426,
+            "Upper": 388272.285322003
+          }
+        }
+      },
+      "normalizedGain": 0.006155936917294325,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.010053877276779755,
+      "baselineRatioBounds": [
+        0.8472735049456924,
+        0.8899890394911464
+      ],
+      "candidateRatioBounds": [
+        0.8608152851224178,
+        0.884509226680316
+      ]
+    },
+    "Down64x32_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 379.23724542297975,
+          "candidateUs": 374.1106917892157,
+          "savedUs": 5.126553633764037,
+          "savedFraction": 0.013518064735561941,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 379237.24542297976,
+            "StandardError": 232.3991262671433,
+            "Level": 12,
+            "Margin": 1031.1501212182932,
+            "Lower": 378206.09530176147,
+            "Upper": 380268.39554419805
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 374110.6917892157,
+            "StandardError": 348.0112327869522,
+            "Level": 12,
+            "Margin": 1544.1186489707043,
+            "Lower": 372566.573140245,
+            "Upper": 375654.81043818645
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 379.2387918244949,
+          "candidateUs": 374.11215502450983,
+          "savedUs": 5.126636799985077,
+          "savedFraction": 0.013518228911449492,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 379238.7918244949,
+            "StandardError": 232.3991262671433,
+            "Level": 12,
+            "Margin": 1031.1501212182932,
+            "Lower": 378207.6417032766,
+            "Upper": 380269.9419457132
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 374112.1550245098,
+            "StandardError": 348.01123278695434,
+            "Level": 12,
+            "Margin": 1544.1186489707138,
+            "Lower": 372568.0363755391,
+            "Upper": 375656.27367348055
+          }
+        }
+      },
+      "normalizedGain": 0.0029891247655242648,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.010560506641977607,
+      "baselineRatioBounds": [
+        0.9300988179213898,
+        0.9460508735067024
+      ],
+      "candidateRatioBounds": [
+        0.9251455360924216,
+        0.9456419609326013
+      ]
+    },
+    "Down64x32_16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 363.9615850649351,
+          "candidateUs": 392.41276725260417,
+          "savedUs": -28.451182187669097,
+          "savedFraction": -0.07817083822896609,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 363961.5850649351,
+            "StandardError": 150.7781742087829,
+            "Level": 12,
+            "Margin": 691.6034810988941,
+            "Lower": 363269.9815838362,
+            "Upper": 364653.188546034
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 392412.7672526042,
+            "StandardError": 652.2370568844348,
+            "Level": 12,
+            "Margin": 2893.9623443177024,
+            "Lower": 389518.8049082865,
+            "Upper": 395306.7295969219
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 364.2499214285714,
+          "candidateUs": 392.41425358072917,
+          "savedUs": -28.16433215215779,
+          "savedFraction": -0.07732145017821446,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 364249.9214285714,
+            "StandardError": 318.3507880446629,
+            "Level": 12,
+            "Margin": 1412.5158685185813,
+            "Lower": 362837.40556005284,
+            "Upper": 365662.43729708996
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 392414.2535807292,
+            "StandardError": 652.2370568844348,
+            "Level": 12,
+            "Margin": 2893.9623443177024,
+            "Lower": 389520.2912364115,
+            "Upper": 395308.2159250469
+          }
+        }
+      },
+      "normalizedGain": -0.006574460074343813,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0711287450600866,
+      "baselineRatioBounds": [
+        0.9221209285832354,
+        0.9562069239285386
+      ],
+      "candidateRatioBounds": [
+        0.9270056856094998,
+        0.959688788142751
+      ]
+    },
+    "Down32x16_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 309.1975710111788,
+          "candidateUs": 311.98366981534093,
+          "savedUs": -2.786098804162117,
+          "savedFraction": -0.009010739622082653,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 309197.57101117884,
+            "StandardError": 219.14098283862307,
+            "Level": 12,
+            "Margin": 972.3240127770199,
+            "Lower": 308225.2469984018,
+            "Upper": 310169.89502395585
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 311983.66981534095,
+            "StandardError": 99.90848748383694,
+            "Level": 12,
+            "Margin": 458.26962753553477,
+            "Lower": 311525.4001878054,
+            "Upper": 312441.9394428765
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 309.19888351117885,
+          "candidateUs": 312.09312291666663,
+          "savedUs": -2.8942394054877805,
+          "savedFraction": -0.009360445848386023,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 309198.88351117884,
+            "StandardError": 219.14098283862307,
+            "Level": 12,
+            "Margin": 972.3240127770199,
+            "Lower": 308226.5594984018,
+            "Upper": 310171.20752395585
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 312093.1229166666,
+            "StandardError": 141.4039620321147,
+            "Level": 12,
+            "Margin": 627.4064577271886,
+            "Lower": 311465.7164589394,
+            "Upper": 312720.5293743938
+          }
+        }
+      },
+      "normalizedGain": -0.001284374268233579,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.007716454538198025,
+      "baselineRatioBounds": [
+        0.8167431014188251,
+        0.8299610171183966
+      ],
+      "candidateRatioBounds": [
+        0.8021847436613954,
+        0.8396210206639734
+      ]
+    },
+    "Down32x16_16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 305.36060777439025,
+          "candidateUs": 325.12006650641024,
+          "savedUs": -19.759458732019993,
+          "savedFraction": -0.0647086042827727,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 305360.60777439026,
+            "StandardError": 105.99675698203222,
+            "Level": 12,
+            "Margin": 506.76122938402773,
+            "Lower": 304853.8465450062,
+            "Upper": 305867.3690037743
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 325120.06650641025,
+            "StandardError": 1243.4504155714988,
+            "Level": 12,
+            "Margin": 5517.163800657386,
+            "Lower": 319602.9027057529,
+            "Upper": 330637.2303070676
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 306.1410261686992,
+          "candidateUs": 325.12157451923076,
+          "savedUs": -18.98054835053155,
+          "savedFraction": -0.061999362150410686,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 306141.0261686992,
+            "StandardError": 626.7001339059304,
+            "Level": 12,
+            "Margin": 2780.6555447277683,
+            "Lower": 303360.37062397145,
+            "Upper": 308921.68171342695
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 325121.57451923075,
+            "StandardError": 1243.4504155714958,
+            "Level": 12,
+            "Margin": 5517.163800657373,
+            "Lower": 319604.4107185734,
+            "Upper": 330638.7383198881
+          }
+        }
+      },
+      "normalizedGain": -0.020932754182423796,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.042878289408400105,
+      "baselineRatioBounds": [
+        0.7308516847688286,
+        0.7483394438034622
+      ],
+      "candidateRatioBounds": [
+        0.7118081350521273,
+        0.7910992609134604
+      ]
+    },
+    "Down16x8_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 315.59019244791665,
+          "candidateUs": 293.5854854651162,
+          "savedUs": 22.004706982800446,
+          "savedFraction": 0.06972557294039483,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 315590.19244791666,
+            "StandardError": 302.9344391418094,
+            "Level": 12,
+            "Margin": 1344.1138469823738,
+            "Lower": 314246.0786009343,
+            "Upper": 316934.306294899
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 293585.4854651162,
+            "StandardError": 240.7686289361312,
+            "Level": 12,
+            "Margin": 1068.2854316227879,
+            "Lower": 292517.20003349346,
+            "Upper": 294653.770896739
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 315.59161744791663,
+          "candidateUs": 293.58678125,
+          "savedUs": 22.004836197916653,
+          "savedFraction": 0.06972566754422171,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 315591.61744791665,
+            "StandardError": 302.9344391418119,
+            "Level": 12,
+            "Margin": 1344.113846982385,
+            "Lower": 314247.5036009343,
+            "Upper": 316935.731294899
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 293586.78125,
+            "StandardError": 240.7686289361321,
+            "Level": 12,
+            "Margin": 1068.285431622792,
+            "Lower": 292518.4958183772,
+            "Upper": 294655.0666816228
+          }
+        }
+      },
+      "normalizedGain": 0.001418632789456531,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.06840398028029326,
+      "baselineRatioBounds": [
+        0.6389443619119344,
+        0.6558839439371417
+      ],
+      "candidateRatioBounds": [
+        0.6018796887968948,
+        0.6516209223380731
+      ]
+    },
+    "Down16x8_16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 309.0308735677082,
+          "candidateUs": 301.93987606534097,
+          "savedUs": 7.090997502367303,
+          "savedFraction": 0.022945919352661992,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 309030.87356770824,
+            "StandardError": 1963.7435976683462,
+            "Level": 12,
+            "Margin": 8713.089766308842,
+            "Lower": 300317.7838013994,
+            "Upper": 317743.9633340171
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 301939.87606534094,
+            "StandardError": 1709.1654452828247,
+            "Level": 12,
+            "Margin": 7583.531764485264,
+            "Lower": 294356.34430085565,
+            "Upper": 309523.40782982623
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 309.0322657552083,
+          "candidateUs": 301.9411274857954,
+          "savedUs": 7.091138269412913,
+          "savedFraction": 0.022946271490725034,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 309032.2657552083,
+            "StandardError": 1963.7435976683464,
+            "Level": 12,
+            "Margin": 8713.089766308842,
+            "Lower": 300319.1759888995,
+            "Upper": 317745.35552151717
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 301941.1274857954,
+            "StandardError": 1709.1654452828257,
+            "Level": 12,
+            "Margin": 7583.5317644852685,
+            "Lower": 294357.5957213101,
+            "Upper": 309524.6592502807
+          }
+        }
+      },
+      "normalizedGain": -0.009443604531755412,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.032086511558455766,
+      "baselineRatioBounds": [
+        0.5491364581279415,
+        0.6194800334951217
+      ],
+      "candidateRatioBounds": [
+        0.5477147463520353,
+        0.6219067600157635
+      ]
+    },
+    "Down8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 474.9766420454545,
+          "candidateUs": 452.28084821428564,
+          "savedUs": 22.695793831168906,
+          "savedFraction": 0.047782968302253814,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 474976.64204545453,
+            "StandardError": 410.38642022416667,
+            "Level": 12,
+            "Margin": 1882.3989500611312,
+            "Lower": 473094.2430953934,
+            "Upper": 476859.04099551565
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 452280.8482142856,
+            "StandardError": 265.6491891627805,
+            "Level": 12,
+            "Margin": 1178.6799632450682,
+            "Lower": 451102.16825104057,
+            "Upper": 453459.5281775307
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 475.3990781250001,
+          "candidateUs": 452.28231250000005,
+          "savedUs": 23.116765625,
+          "savedFraction": 0.048626021144537734,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 475399.07812500006,
+            "StandardError": 563.5056275032442,
+            "Level": 12,
+            "Margin": 2500.262825597856,
+            "Lower": 472898.8152994022,
+            "Upper": 477899.3409505979
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 452282.31250000006,
+            "StandardError": 265.64918916278,
+            "Level": 12,
+            "Margin": 1178.679963245066,
+            "Lower": 451103.632536755,
+            "Upper": 453460.9924632451
+          }
+        }
+      },
+      "normalizedGain": 0.051148366304370696,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0035468116221808454,
+      "baselineRatioBounds": [
+        1.0377272053179938,
+        1.0591509359294278
+      ],
+      "candidateRatioBounds": [
+        0.9851288144404193,
+        1.0045260173664554
+      ]
+    },
+    "Down16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 434.96841738505753,
+          "candidateUs": 449.7930159970239,
+          "savedUs": -14.8245986119663,
+          "savedFraction": -0.034082011519569244,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 434968.41738505755,
+            "StandardError": 265.1634113190976,
+            "Level": 12,
+            "Margin": 1176.5245769902033,
+            "Lower": 433791.8928080673,
+            "Upper": 436144.9419620478
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 449793.01599702385,
+            "StandardError": 381.7985859326599,
+            "Level": 12,
+            "Margin": 1694.0324367350925,
+            "Lower": 448098.98356028873,
+            "Upper": 451487.04843375896
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 434.96989583333334,
+          "candidateUs": 449.7945249255952,
+          "savedUs": -14.824629092261894,
+          "savedFraction": -0.034081965750434984,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 434969.8958333333,
+            "StandardError": 265.1634113190973,
+            "Level": 12,
+            "Margin": 1176.5245769902021,
+            "Lower": 433793.3712563431,
+            "Upper": 436146.42041032354
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 449794.5249255952,
+            "StandardError": 381.79858593265845,
+            "Level": 12,
+            "Margin": 1694.032436735086,
+            "Lower": 448100.4924888601,
+            "Upper": 451488.5573623303
+          }
+        }
+      },
+      "normalizedGain": 0.034239989348075484,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.07074428441236114,
+      "baselineRatioBounds": [
+        0.74018804542651,
+        0.7674420802195469
+      ],
+      "candidateRatioBounds": [
+        0.7225747570591797,
+        0.7371476150916053
+      ]
+    },
+    "Horizontal8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 460.6707572544643,
+          "candidateUs": 408.18277762096767,
+          "savedUs": 52.487979633496664,
+          "savedFraction": 0.11393816257475942,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 460670.7572544643,
+            "StandardError": 444.85655980512064,
+            "Level": 12,
+            "Margin": 1973.8193638495459,
+            "Lower": 458696.9378906148,
+            "Upper": 462644.57661831385
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 408182.77762096765,
+            "StandardError": 240.87340348747244,
+            "Level": 12,
+            "Margin": 1151.5946860328763,
+            "Lower": 407031.1829349348,
+            "Upper": 409334.3723070005
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 460.67227734375,
+          "candidateUs": 409.46909206989244,
+          "savedUs": 51.20318527385756,
+          "savedFraction": 0.11114883137552067,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 460672.27734375,
+            "StandardError": 444.8565598051236,
+            "Level": 12,
+            "Margin": 1973.819363849559,
+            "Lower": 458698.4579799004,
+            "Upper": 462646.0967075996
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 409469.09206989245,
+            "StandardError": 987.7803368740366,
+            "Level": 12,
+            "Margin": 4382.760944350041,
+            "Lower": 405086.3311255424,
+            "Upper": 413851.8530142425
+          }
+        }
+      },
+      "normalizedGain": 0.06463156646428925,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.05271355579543169,
+      "baselineRatioBounds": [
+        0.7360189630379704,
+        0.7772315643140475
+      ],
+      "candidateRatioBounds": [
+        0.6807373734198267,
+        0.7309813770200231
+      ]
+    },
+    "Horizontal16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 575.6113210227273,
+          "candidateUs": 508.5053795454545,
+          "savedUs": 67.10594147727278,
+          "savedFraction": 0.11658203900166719,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 575611.3210227273,
+            "StandardError": 438.3647580415521,
+            "Level": 12,
+            "Margin": 1945.0153735637389,
+            "Lower": 573666.3056491636,
+            "Upper": 577556.336396291
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 508505.3795454545,
+            "StandardError": 151.56349386209087,
+            "Level": 12,
+            "Margin": 695.2056589926991,
+            "Lower": 507810.1738864618,
+            "Upper": 509200.5852044472
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 575.6129289772728,
+          "candidateUs": 508.71913895833336,
+          "savedUs": 66.89379001893936,
+          "savedFraction": 0.11621314715392805,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 575612.9289772727,
+            "StandardError": 438.3647580415438,
+            "Level": 12,
+            "Margin": 1945.015373563702,
+            "Lower": 573667.913603709,
+            "Upper": 577557.9443508364
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 508719.13895833335,
+            "StandardError": 253.463366359358,
+            "Level": 12,
+            "Margin": 1124.6117192601498,
+            "Lower": 507594.5272390732,
+            "Upper": 509843.7506775935
+          }
+        }
+      },
+      "normalizedGain": 0.035875711601602855,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.08370946398843826,
+      "baselineRatioBounds": [
+        0.9039972963743799,
+        0.9223660431321837
+      ],
+      "candidateRatioBounds": [
+        0.8637761023139952,
+        0.8862278050357069
+      ]
+    },
+    "Vertical8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 479.1465381250001,
+          "candidateUs": 457.5330814732143,
+          "savedUs": 21.613456651785878,
+          "savedFraction": 0.04510823919622553,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 479146.53812500014,
+            "StandardError": 4691.4626687061145,
+            "Level": 12,
+            "Margin": 20815.92292204478,
+            "Lower": 458330.6152029554,
+            "Upper": 499962.4610470449
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 457533.08147321426,
+            "StandardError": 120.3909718231541,
+            "Level": 12,
+            "Margin": 575.5787122636335,
+            "Lower": 456957.50276095065,
+            "Upper": 458108.6601854779
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 479.14811562500006,
+          "candidateUs": 457.9753035714286,
+          "savedUs": 21.172812053571455,
+          "savedFraction": 0.04418844896416563,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 479148.11562500003,
+            "StandardError": 4691.462668706112,
+            "Level": 12,
+            "Margin": 20815.92292204477,
+            "Lower": 458332.1927029553,
+            "Upper": 499964.0385470448
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 457975.3035714286,
+            "StandardError": 335.0297748136993,
+            "Level": 12,
+            "Margin": 1486.5201881773412,
+            "Lower": 456488.7833832512,
+            "Upper": 459461.82375960593
+          }
+        }
+      },
+      "normalizedGain": 0.03590137889328582,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.00954970798772714,
+      "baselineRatioBounds": [
+        0.7136787759565097,
+        0.8647926207115336
+      ],
+      "candidateRatioBounds": [
+        0.7592289701917727,
+        0.7832199704657714
+      ]
+    },
+    "Vertical16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 454.57675885416666,
+          "candidateUs": 441.31124686520377,
+          "savedUs": 13.265511988962883,
+          "savedFraction": 0.02918211661854586,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 454576.75885416666,
+            "StandardError": 3735.8160182296947,
+            "Level": 12,
+            "Margin": 16575.738480267322,
+            "Lower": 438001.0203738993,
+            "Upper": 471152.497334434
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 441311.2468652038,
+            "StandardError": 109.76361806672399,
+            "Level": 12,
+            "Margin": 503.47406546944256,
+            "Lower": 440807.7727997343,
+            "Upper": 441814.72093067324
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 454.5781880208333,
+          "candidateUs": 441.423691091954,
+          "savedUs": 13.154496928879293,
+          "savedFraction": 0.028937809326382458,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 454578.1880208333,
+            "StandardError": 3735.8160182296947,
+            "Level": 12,
+            "Margin": 16575.738480267322,
+            "Lower": 438002.44954056595,
+            "Upper": 471153.92650110065
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 441423.691091954,
+            "StandardError": 149.5746859066668,
+            "Level": 12,
+            "Margin": 663.6597907281085,
+            "Lower": 440760.0313012259,
+            "Upper": 442087.35088268213
+          }
+        }
+      },
+      "normalizedGain": 0.019866795630874567,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.009504137749998254,
+      "baselineRatioBounds": [
+        0.6829250377598112,
+        0.8013290497602653
+      ],
+      "candidateRatioBounds": [
+        0.7380918086949482,
+        0.7532215122467908
+      ]
+    },
+    "Cross8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 838.5818649621211,
+          "candidateUs": 768.3,
+          "savedUs": 70.28186496212112,
+          "savedFraction": 0.08381038023675336,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 838581.8649621211,
+            "StandardError": 762.5609601164812,
+            "Level": 12,
+            "Margin": 3497.7861838039994,
+            "Lower": 835084.0787783171,
+            "Upper": 842079.6511459252
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 768300,
+            "StandardError": 414.6171100836209,
+            "Level": 12,
+            "Margin": 1839.647550268561,
+            "Lower": 766460.3524497314,
+            "Upper": 770139.6475502686
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 839.3449357638889,
+          "candidateUs": 768.3015073529413,
+          "savedUs": 71.04342841094767,
+          "savedFraction": 0.08464151671599829,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 839344.9357638889,
+            "StandardError": 1031.6721822040608,
+            "Level": 12,
+            "Margin": 4577.508155148604,
+            "Lower": 834767.4276087403,
+            "Upper": 843922.4439190375
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 768301.5073529412,
+            "StandardError": 414.61711008361715,
+            "Level": 12,
+            "Margin": 1839.6475502685444,
+            "Lower": 766461.8598026726,
+            "Upper": 770141.1549032098
+          }
+        }
+      },
+      "normalizedGain": 0.024957637451182957,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.06035916494102467,
+      "baselineRatioBounds": [
+        0.9264292827491576,
+        0.948824917599481
+      ],
+      "candidateRatioBounds": [
+        0.9074598049408917,
+        0.9184776069790497
+      ]
+    },
+    "Cross16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 820.5354391276041,
+          "candidateUs": 821.7019868607954,
+          "savedUs": -1.1665477331912844,
+          "savedFraction": -0.0014216908588757793,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 820535.4391276041,
+            "StandardError": 1045.3940458512718,
+            "Level": 12,
+            "Margin": 4638.3917806184245,
+            "Lower": 815897.0473469857,
+            "Upper": 825173.8309082226
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 821701.9868607954,
+            "StandardError": 591.5275432565394,
+            "Level": 12,
+            "Margin": 2713.274054609615,
+            "Lower": 818988.7128061858,
+            "Upper": 824415.260915405
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 820.5372008463542,
+          "candidateUs": 822.8781217447917,
+          "savedUs": -2.3409208984375,
+          "savedFraction": -0.002852912574863087,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 820537.2008463541,
+            "StandardError": 1045.3940458512718,
+            "Level": 12,
+            "Margin": 4638.3917806184245,
+            "Lower": 815898.8090657357,
+            "Upper": 825175.5926269726
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 822878.1217447916,
+            "StandardError": 1292.5709625689176,
+            "Level": 12,
+            "Margin": 5735.110652714284,
+            "Lower": 817143.0110920774,
+            "Upper": 828613.2323975059
+          }
+        }
+      },
+      "normalizedGain": 0.008153215915921885,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.009653614780471997,
+      "baselineRatioBounds": [
+        0.9204434765774472,
+        0.9407486037220507
+      ],
+      "candidateRatioBounds": [
+        0.9065644681646466,
+        0.9363427111725179
+      ]
+    },
+    "wide/Repeated8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 276.1737312047101,
+          "candidateUs": 258.9727900510204,
+          "savedUs": 17.200941153689755,
+          "savedFraction": 0.06228304581560573,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 276173.73120471014,
+            "StandardError": 271.5040604195753,
+            "Level": 12,
+            "Margin": 1204.6579060331217,
+            "Lower": 274969.07329867705,
+            "Upper": 277378.38911074324
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 258972.7900510204,
+            "StandardError": 55.42467328582192,
+            "Level": 12,
+            "Margin": 264.9805180104926,
+            "Lower": 258707.8095330099,
+            "Upper": 259237.7705690309
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 276.17531680253626,
+          "candidateUs": 259.2000027636054,
+          "savedUs": 16.97531403893084,
+          "savedFraction": 0.06146571762989261,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 276175.31680253625,
+            "StandardError": 271.50406041957217,
+            "Level": 12,
+            "Margin": 1204.6579060331078,
+            "Lower": 274970.65889650316,
+            "Upper": 277379.97470856935
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 259200.00276360541,
+            "StandardError": 179.99797251892676,
+            "Level": 12,
+            "Margin": 798.647284794802,
+            "Lower": 258401.3554788106,
+            "Upper": 259998.65004840022
+          }
+        }
+      },
+      "normalizedGain": -0.0034679852594927674,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.06552379551809584,
+      "baselineRatioBounds": [
+        0.7344486587670743,
+        0.7514535828904761
+      ],
+      "candidateRatioBounds": [
+        0.7396389960505046,
+        0.7519258964536627
+      ]
+    },
+    "wide/Repeated16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 354.8885169270833,
+          "candidateUs": 331.7034037081339,
+          "savedUs": 23.18511321894941,
+          "savedFraction": 0.0653306943253763,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 354888.5169270833,
+            "StandardError": 282.93783108005067,
+            "Level": 12,
+            "Margin": 1255.3893101993267,
+            "Lower": 353633.127616884,
+            "Upper": 356143.9062372826
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 331703.4037081339,
+            "StandardError": 90.48760852172214,
+            "Level": 12,
+            "Margin": 415.0570556934863,
+            "Lower": 331288.34665244044,
+            "Upper": 332118.4607638274
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 354.88994227430555,
+          "candidateUs": 331.8678673245614,
+          "savedUs": 23.02207494974416,
+          "savedFraction": 0.06487102678145118,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 354889.94227430556,
+            "StandardError": 282.93783108004925,
+            "Level": 12,
+            "Margin": 1255.3893101993203,
+            "Lower": 353634.55296410626,
+            "Upper": 356145.33158450486
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 331867.8673245614,
+            "StandardError": 182.888126377916,
+            "Level": 12,
+            "Margin": 811.4708377483124,
+            "Lower": 331056.3964868131,
+            "Upper": 332679.3381623097
+          }
+        }
+      },
+      "normalizedGain": -0.008098597701867272,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.07283939506972636,
+      "baselineRatioBounds": [
+        0.7769319015507555,
+        0.8012535954939515
+      ],
+      "candidateRatioBounds": [
+        0.7934103228899426,
+        0.8025066991814315
+      ]
+    },
+    "wide/OneShot8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 372.8978140318627,
+          "candidateUs": 349.7023182607323,
+          "savedUs": 23.19549577113043,
+          "savedFraction": 0.06220335678650146,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 372897.8140318627,
+            "StandardError": 468.0886552948236,
+            "Level": 12,
+            "Margin": 2076.89969149598,
+            "Lower": 370820.9143403667,
+            "Upper": 374974.7137233587
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 349702.3182607323,
+            "StandardError": 59.52070673442881,
+            "Level": 12,
+            "Margin": 273.01516410456367,
+            "Lower": 349429.3030966277,
+            "Upper": 349975.33342483686
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 372.89924969362744,
+          "candidateUs": 350.0908292824074,
+          "savedUs": 22.808420411219995,
+          "savedFraction": 0.06116510137780995,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 372899.2496936274,
+            "StandardError": 468.0886552948239,
+            "Level": 12,
+            "Margin": 2076.8996914959816,
+            "Lower": 370822.3500021314,
+            "Upper": 374976.1493851234
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 350090.8292824074,
+            "StandardError": 390.98281672064155,
+            "Level": 12,
+            "Margin": 1734.782678968955,
+            "Lower": 348356.04660343844,
+            "Upper": 351825.6119613764
+          }
+        }
+      },
+      "normalizedGain": -0.01746790791946551,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.0783034669554149,
+      "baselineRatioBounds": [
+        0.3388112173746117,
+        0.35219701075367943
+      ],
+      "candidateRatioBounds": [
+        0.3485305417783828,
+        0.3576440333591422
+      ]
+    },
+    "wide/OneShot16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 425.6303638888889,
+          "candidateUs": 397.92409511718745,
+          "savedUs": 27.706268771701435,
+          "savedFraction": 0.06509467162670324,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 425630.3638888889,
+            "StandardError": 482.79488951655077,
+            "Level": 12,
+            "Margin": 2142.1509488650254,
+            "Lower": 423488.21294002386,
+            "Upper": 427772.51483775396
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 397924.0951171875,
+            "StandardError": 146.12826016397182,
+            "Level": 12,
+            "Margin": 698.626437986175,
+            "Lower": 397225.4686792013,
+            "Upper": 398622.72155517363
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 425.63177222222225,
+          "candidateUs": 401.5919861653646,
+          "savedUs": 24.039786056857672,
+          "savedFraction": 0.05648024331300738,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 425631.77222222224,
+            "StandardError": 482.7948895165489,
+            "Level": 12,
+            "Margin": 2142.1509488650167,
+            "Lower": 423489.62127335725,
+            "Upper": 427773.9231710872
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 401591.98616536456,
+            "StandardError": 2829.7072252259086,
+            "Level": 12,
+            "Margin": 12555.352488502464,
+            "Lower": 389036.6336768621,
+            "Upper": 414147.338653867
+          }
+        }
+      },
+      "normalizedGain": 0.0032365485795730065,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.062058979950538884,
+      "baselineRatioBounds": [
+        0.6508420908039444,
+        0.6678216066577617
+      ],
+      "candidateRatioBounds": [
+        0.5948528470739929,
+        0.6940848307276855
+      ]
+    },
+    "narrow/Repeated8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 409.35334455645165,
+          "candidateUs": 436.53234985632173,
+          "savedUs": -27.1790052998701,
+          "savedFraction": -0.066394975542021,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 409353.34455645166,
+            "StandardError": 92.75352574425264,
+            "Level": 12,
+            "Margin": 443.44649849832933,
+            "Lower": 408909.89805795334,
+            "Upper": 409796.79105495
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 436532.34985632176,
+            "StandardError": 326.6738262243605,
+            "Level": 12,
+            "Margin": 1449.4450169441836,
+            "Lower": 435082.90483937756,
+            "Upper": 437981.79487326596
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 409.57609375,
+          "candidateUs": 436.5339145114943,
+          "savedUs": -26.95782076149428,
+          "savedFraction": -0.06581883360103769,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 409576.09375,
+            "StandardError": 174.90517013314064,
+            "Level": 12,
+            "Margin": 776.0506258408969,
+            "Lower": 408800.0431241591,
+            "Upper": 410352.1443758409
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 436533.9145114943,
+            "StandardError": 326.6738262243638,
+            "Level": 12,
+            "Margin": 1449.4450169441982,
+            "Lower": 435084.4694945501,
+            "Upper": 437983.3595284385
+          }
+        }
+      },
+      "normalizedGain": 0.025674412263868462,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.09449550434143372,
+      "baselineRatioBounds": [
+        0.9528199285074206,
+        0.9894714911627984
+      ],
+      "candidateRatioBounds": [
+        0.9469383416642259,
+        0.9684680996002326
+      ]
+    },
+    "narrow/Repeated16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 423.3011029513889,
+          "candidateUs": 396.32990641801075,
+          "savedUs": 26.971196533378098,
+          "savedFraction": 0.06371633890232364,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 423301.10295138886,
+            "StandardError": 770.4013282904644,
+            "Level": 12,
+            "Margin": 3418.2547749352666,
+            "Lower": 419882.8481764536,
+            "Upper": 426719.3577263241
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 396329.90641801077,
+            "StandardError": 3835.9760308965383,
+            "Level": 12,
+            "Margin": 17020.146386878474,
+            "Lower": 379309.7600311323,
+            "Upper": 413350.0528048892
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 423.30261545138893,
+          "candidateUs": 396.3313902889786,
+          "savedUs": 26.971225162410352,
+          "savedFraction": 0.0637161788704036,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 423302.61545138893,
+            "StandardError": 770.4013282904668,
+            "Level": 12,
+            "Margin": 3418.2547749352775,
+            "Lower": 419884.3606764537,
+            "Upper": 426720.8702263242
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 396331.3902889786,
+            "StandardError": 3835.9760308965374,
+            "Level": 12,
+            "Margin": 17020.14638687847,
+            "Lower": 379311.24390210013,
+            "Upper": 413351.53667585703
+          }
+        }
+      },
+      "normalizedGain": -0.017952396529407055,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.08022844261693485,
+      "baselineRatioBounds": [
+        0.6701475405695551,
+        0.6882179158064651
+      ],
+      "candidateRatioBounds": [
+        0.6050327540093022,
+        0.7261721453510882
+      ]
+    },
+    "narrow/OneShot8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 482.5059114583333,
+          "candidateUs": 494.5266899181548,
+          "savedUs": -12.020778459821479,
+          "savedFraction": -0.024913225256639304,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 482505.9114583333,
+            "StandardError": 5759.629928296607,
+            "Level": 12,
+            "Margin": 25555.35898146456,
+            "Lower": 456950.55247686873,
+            "Upper": 508061.2704397979
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 494526.6899181548,
+            "StandardError": 472.4946483031851,
+            "Level": 12,
+            "Margin": 2096.4489914336937,
+            "Lower": 492430.2409267211,
+            "Upper": 496623.1389095885
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 482.5073258101852,
+          "candidateUs": 494.52813188244045,
+          "savedUs": -12.020806072255306,
+          "savedFraction": -0.02491320945660469,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 482507.32581018517,
+            "StandardError": 5759.629928296607,
+            "Level": 12,
+            "Margin": 25555.35898146456,
+            "Lower": 456951.9668287206,
+            "Upper": 508062.68479164975
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 494528.1318824405,
+            "StandardError": 472.4946483031867,
+            "Level": 12,
+            "Margin": 2096.4489914337005,
+            "Lower": 492431.68289100676,
+            "Upper": 496624.5808738742
+          }
+        }
+      },
+      "normalizedGain": -0.006286556786329944,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.018510302403119905,
+      "baselineRatioBounds": [
+        0.4042947346238228,
+        0.49337981251818186
+      ],
+      "candidateRatioBounds": [
+        0.4338426412492488,
+        0.4896958081826408
+      ]
+    },
+    "narrow/OneShot16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 506.6261512500001,
+          "candidateUs": 452.3217033279221,
+          "savedUs": 54.30444792207796,
+          "savedFraction": 0.10718840270699104,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 506626.15125000005,
+            "StandardError": 214.35778345556514,
+            "Level": 12,
+            "Margin": 951.1010559489384,
+            "Lower": 505675.0501940511,
+            "Upper": 507577.252305949
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 452321.7033279221,
+            "StandardError": 290.884532966952,
+            "Level": 12,
+            "Margin": 1334.2564774607238,
+            "Lower": 450987.44685046136,
+            "Upper": 453655.9598053828
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 506.62777875,
+          "candidateUs": 453.12312109374994,
+          "savedUs": 53.50465765625005,
+          "savedFraction": 0.10560940378804695,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 506627.77875,
+            "StandardError": 214.3577834555651,
+            "Level": 12,
+            "Margin": 951.1010559489382,
+            "Lower": 505676.67769405106,
+            "Upper": 507578.87980594893
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 453123.12109374994,
+            "StandardError": 842.8954814522367,
+            "Level": 12,
+            "Margin": 3739.909834578008,
+            "Lower": 449383.21125917195,
+            "Upper": 456863.03092832793
+          }
+        }
+      },
+      "normalizedGain": 0.027082798072255665,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.08233547980857336,
+      "baselineRatioBounds": [
+        0.6429300036165373,
+        0.6562918873241017
+      ],
+      "candidateRatioBounds": [
+        0.62549269681728,
+        0.6439567460464941
+      ]
+    }
+  },
+  "earlierPrimaryComparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 435.53971316614417,
+        "candidateUs": 452.28084821428564,
+        "savedUs": -16.74113504814147,
+        "savedFraction": -0.03843767753448302,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": true,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 435539.71316614415,
+          "StandardError": 432.87061229501217,
+          "Level": 12,
+          "Margin": 1985.5315525580986,
+          "Lower": 433554.181613586,
+          "Upper": 437525.2447187023
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 452280.8482142856,
+          "StandardError": 265.6491891627805,
+          "Level": 12,
+          "Margin": 1178.6799632450682,
+          "Lower": 451102.16825104057,
+          "Upper": 453459.5281775307
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 436.69679579741387,
+        "candidateUs": 452.28231250000005,
+        "savedUs": -15.585516702586203,
+        "savedFraction": -0.035689560474394755,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": true,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 436696.79579741386,
+          "StandardError": 1221.3794454530905,
+          "Level": 12,
+          "Margin": 5419.235362291223,
+          "Lower": 431277.56043512264,
+          "Upper": 442116.0311597051
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 452282.31250000006,
+          "StandardError": 265.64918916278,
+          "Level": 12,
+          "Margin": 1178.679963245066,
+          "Lower": 451103.632536755,
+          "Upper": 453460.9924632451
+        }
+      }
+    },
+    "normalizedGain": 0.042945833843636705,
+    "normalizedGainSeparated": true,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": 0.08503542877302861,
+    "baselineRatioBounds": [
+      1.02258348154011,
+      1.0631319204487184
+    ],
+    "candidateRatioBounds": [
+      0.9851288144404193,
+      1.0045260173664554
+    ]
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CWQ827B",
+    "sources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "792206efeeea5bcb7d6a2f2c65de7ad7cca3bbbf4d6cd0c6c6deaba740d78920",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "725f6f0b5df25ec67501fb774050af95839ba01ad3cb1e51add500dc3c2aed42",
+      "tests/Lokad.Image.Tests/CachedHorizontalQuartetTests.cs": "7e51017c56a823c6b00c433e0eab8e3d11b0774ea8e1f53d8056723c439cc044"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+      "src/Lokad.Image/BicubicResizePlan.cs": "01860845dbe0472d9c47935d5ac683f2139ac2a809b62f8d8655f537448553fe"
+    },
+    "wholeFactoryUnchangedExceptSharedPreparedQuartetCalls": true,
+    "allOriginalPairAdjacentIndexedOddAndWidePublicationBodiesVerbatim": true,
+    "workspaceExecutorMathPublicApiAndOtherKernelsUnchanged": true,
+    "paddingProof": "Only four equal8/16tap records qualify, using the original contiguous pair proofs and exact group start. Marker14/30 is dead and original15/31 marker stays unchanged. All old per-pair max-count reads remain below8/16; original repair uses live counts. Color/alpha normalization and workspace regions stay disjoint. Clamped/9-or17tap/unequal/shifted/short cases cannot acquire a marker or write padding.",
+    "numericProof": "One closed generic source emits two fixed schedules. Narrow4/wide7 two-pixel blocks supply14/28pixels; every lane consumes t0..7/15 Add(Multiply) in original order. Four eight/sixteen-double padding tails hold32/64interleaved coefficients. Entry and between-pair cancellation remain; one operation-private output cannot escape failed execution.",
+    "bLiteralViewProof": "Static type-selected branches bind14/28 sourcepixels and64/128 coefficient views with literal ranges. Type-selected loop comparison is literal8/16. No arithmetic/data/cancellation reordering from A; source-only ordered models and focused actual JIT tests verify exactbits/pixels. Codegen and complete workloads still determine CPU gains.",
+    "storage": {
+      "newArrays": 0,
+      "newOwners": 0,
+      "newReservations": 0,
+      "newPools": 0,
+      "newOwnedCapacityBytes": 0,
+      "newRetainedCapacityBytes": 0,
+      "wideWorkspaceBytes": 198432,
+      "narrowWorkspaceBytes": 199840,
+      "canonicalNarrowGroups": 62,
+      "narrowPaddingReusedBytes": 15872,
+      "physicalNativeJitPeakMeasured": false
+    },
+    "newTests": 19,
+    "retainedPreviousTests": 19,
+    "productionVersionsEachOs": 2,
+    "embeddedVersionsEachOs": 2,
+    "compileFailures": 0,
+    "publicationPostponed": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "full": [
+        3074,
+        2379,
+        948
+      ],
+      "total": 6401,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 492,
+        "public-normal": 789,
+        "internal-scalar": 492,
+        "public-scalar": 789
+      },
+      "isa": {
+        "internal-avx512-off": 492,
+        "public-avx512-off": 789,
+        "internal-avx2-off": 492,
+        "public-avx2-off": 789
+      },
+      "resizeInternalEachMode": 492,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "792206efeeea5bcb7d6a2f2c65de7ad7cca3bbbf4d6cd0c6c6deaba740d78920",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "725f6f0b5df25ec67501fb774050af95839ba01ad3cb1e51add500dc3c2aed42",
+        "tests/Lokad.Image.Tests/CachedHorizontalQuartetTests.cs": "7e51017c56a823c6b00c433e0eab8e3d11b0774ea8e1f53d8056723c439cc044"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+        "src/Lokad.Image/BicubicResizePlan.cs": "01860845dbe0472d9c47935d5ac683f2139ac2a809b62f8d8655f537448553fe"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "132873f18ae6bba8c30f0ecfd6e95bd0cdf7d87c656fa99b9ec731367668337c",
+      "full": [
+        3074,
+        2379,
+        948
+      ],
+      "total": 6401,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 492,
+        "public-normal": 789,
+        "internal-scalar": 492,
+        "public-scalar": 789
+      },
+      "isa": {
+        "internal-avx512-off": 492,
+        "public-avx512-off": 789,
+        "internal-avx2-off": 492,
+        "public-avx2-off": 789
+      },
+      "resizeInternalEachMode": 492,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "792206efeeea5bcb7d6a2f2c65de7ad7cca3bbbf4d6cd0c6c6deaba740d78920",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "725f6f0b5df25ec67501fb774050af95839ba01ad3cb1e51add500dc3c2aed42",
+        "tests/Lokad.Image.Tests/CachedHorizontalQuartetTests.cs": "7e51017c56a823c6b00c433e0eab8e3d11b0774ea8e1f53d8056723c439cc044"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+        "src/Lokad.Image/BicubicResizePlan.cs": "01860845dbe0472d9c47935d5ac683f2139ac2a809b62f8d8655f537448553fe"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "5ba30ae2f57cad85b3880a6dcda207e36d79c13866f386beffe6d5b68a30236d",
+      "symbolsSha256": "ccd1c777c9cde0bc6510c8db7f868d31907b347c3c09c3a0bcbdbede5930de1c",
+      "bytes": 452019,
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "5ba30ae2f57cad85b3880a6dcda207e36d79c13866f386beffe6d5b68a30236d",
+      "librarySha256": "550e5b4ee68f0013e2d19de38a31bb6fdae7a5da3dda81125cb9f0ef881d9209",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "fullChecksEachOs": 6401,
+    "sameActualPackageBothOS": true,
+    "threeNamedStorageSuitesIncluded": true,
+    "usageExamplesEachOs": 3,
+    "resizeInternalEachModeEachOs": 492,
+    "resizePublicEachModeEachOs": 789,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "codecAndTextIsaReused": true,
+    "unchangedEvidence": "cached-bicubic-horizontal-quartets-evidence.json"
+  },
+  "raw": {
+    "file": "cached-bicubic-shared-horizontal-schedule.tar.xz",
+    "sha256": "e9f8a4afeb1c72ca8d63fb902afed33f674f516233313facb25b32244a4870ce",
+    "bytes": 2469368,
+    "members": 358,
+    "dependencies": [
+      {
+        "file": "cached-bicubic-horizontal-quartets-qualified-v2.tar.xz",
+        "sha256": "1ca4d419934b2626963d3bb69f1748534fbd8613497e35c98531f9b5843f347c",
+        "scope": "Previous current cached owner; actual immutable predecessor, frozen tools/fixtures/native/reference identities and transitive raw evidence."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "storage": {
+    "newArrays": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "newPools": 0,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "wideWorkspaceBytes": 198432,
+    "narrowWorkspaceBytes": 199840,
+    "canonicalNarrowGroups": 62,
+    "narrowPaddingReusedBytes": 15872,
+    "physicalNativeJitPeakMeasured": false,
+    "coarseGovernedConsumerPeaks": {
+      "windows": {
+        "wide/8": {
+          "retained": 0,
+          "peak": 32768,
+          "result": 32768
+        },
+        "narrow/8": {
+          "retained": 0,
+          "peak": 132096,
+          "result": 132096
+        },
+        "wide/16": {
+          "retained": 0,
+          "peak": 65536,
+          "result": 65536
+        },
+        "narrow/16": {
+          "retained": 0,
+          "peak": 264192,
+          "result": 264192
+        }
+      },
+      "linux": {
+        "wide/8": {
+          "retained": 198432,
+          "peak": 231200,
+          "result": 32768
+        },
+        "narrow/8": {
+          "retained": 199840,
+          "peak": 331936,
+          "result": 132096
+        },
+        "wide/16": {
+          "retained": 198432,
+          "peak": 263968,
+          "result": 65536
+        },
+        "narrow/16": {
+          "retained": 199840,
+          "peak": 464032,
+          "result": 264192
+        }
+      }
+    }
+  },
+  "workflow": {
+    "productionVersionsEachOS": 2,
+    "embeddedVersionsEachOS": 2,
+    "newTests": 19,
+    "retainedEarlierTests": 19,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "compileFailures": 0,
+    "fullQualificationMilestonesEachOS": 1,
+    "actualPackageProofEachOS": 1,
+    "completeExistingCandidateCosts": 24,
+    "newBenchmarkImagesOrSettings": 0,
+    "originalAAdverseWideScreenRetained": true,
+    "contemporaryPredecessorMeasuredOnceBeforeB": true,
+    "startupPrivateKernelDisassemblyOnly": true,
+    "noLoopInstrumentation": true,
+    "noSuccessfulFavorableRepeats": true
+  },
+  "code": {
+    "A": {
+      "Down8": {
+        "file": "tmp/cwq827-candidate-Down8-confirm-kernel-jit.txt",
+        "sha256": "e098c2be1e7fcbf4b326821bddbadceddb4356462fb18356ed8672de90b8d9e9",
+        "codeBytes": [
+          "538"
+        ],
+        "stackReservations": [
+          "48"
+        ],
+        "vectorStackAccesses": [],
+        "fusedMultiplyAddInstructions": 0
+      },
+      "Wide8": {
+        "file": "tmp/cwq827-candidate-Wide8-short-kernel-jit.txt",
+        "sha256": "be53099293cbe386e1c6d3215cf22cf3667169df95ddbb759b648af89feca169",
+        "codeBytes": [
+          "616"
+        ],
+        "stackReservations": [
+          "48"
+        ],
+        "vectorStackAccesses": [],
+        "fusedMultiplyAddInstructions": 0
+      }
+    },
+    "B": {
+      "Down8": {
+        "file": "tmp/cwq827b-candidate-Down8-short-kernel-jit.txt",
+        "sha256": "dd308d76fd4d1ee505c184b177ce367e53cf7ada6d0abf873b197ae80e85226f",
+        "codeBytes": [
+          "497"
+        ],
+        "stackReservations": [
+          "16"
+        ],
+        "vectorStackAccesses": [],
+        "fusedMultiplyAddInstructions": 0
+      },
+      "Wide8": {
+        "file": "tmp/cwq827b-candidate-Wide8-short-kernel-jit.txt",
+        "sha256": "afd5cd6f3b71e3e220f7bf489f61a5ed447d4100dad827f73d71fd755496e30e",
+        "codeBytes": [
+          "579"
+        ],
+        "stackReservations": [
+          "16"
+        ],
+        "vectorStackAccesses": [],
+        "fusedMultiplyAddInstructions": 0
+      }
+    },
+    "codeSizeIsNotTimingProof": true
+  },
+  "next": "Stop passing cases. Down8 and Wide8 current confidence bounds determine follow-up; do not assume uncertainty is a tuning need. Select the next demonstrated material gap from current WARM-COVERAGE. No new grid or repeated favorable sampling."
+}

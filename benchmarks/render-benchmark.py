@@ -1843,18 +1843,18 @@ def render():
                    'Validate PNG16, async nonseekable']
     # One current owner for the shared cached family. Superseded preparation,
     # publication and boundary studies retain history outside renderer inputs.
-    cached_horizontal = json.loads((ROOT / 'benchmarks/cached-bicubic-horizontal-quartets-evidence.json').read_text(encoding='utf-8'))
+    cached_horizontal = json.loads((ROOT / 'benchmarks/cached-bicubic-shared-horizontal-schedule-evidence.json').read_text(encoding='utf-8'))
     assert cached_horizontal['productionAccepted'] and cached_horizontal['requiredMaterialPaths'] == 289
     assert cached_horizontal['allAffectedPerformanceReconciled'] and not cached_horizontal['materialPassToGapContradictions']
     assert cached_horizontal['raw']['mirrored'] and cached_horizontal['raw']['allMembersVerified']
     assert len(cached_horizontal['cases']) == 24
     assert cached_horizontal['statusCounts'] == {state: sum(c['status'] == state for c in cached_horizontal['cases'].values())
                                                for state in ('pass', 'gap', 'uncertain')}
-    assert cached_horizontal['statusCounts'] == {'pass': 22, 'gap': 2, 'uncertain': 0}
-    assert cached_horizontal['storage']['newOwnedCapacityBytes'] == cached_horizontal['storage']['newRetainedStateBytes'] == 0
-    assert cached_horizontal['sourceProof']['wholeFactoryRestoresAfterOnlyPreparedQuartetCallRemoval']
-    assert cached_horizontal['sourceProof']['originalPairIndexedAndOddBodiesVerbatim']
-    effect = cached_horizontal['comparison']['Wide8']
+    assert cached_horizontal['statusCounts'] == {'pass': 22, 'gap': 0, 'uncertain': 2}
+    assert cached_horizontal['storage']['newOwnedCapacityBytes'] == cached_horizontal['storage']['newRetainedCapacityBytes'] == 0
+    assert cached_horizontal['sourceProof']['wholeFactoryUnchangedExceptSharedPreparedQuartetCalls']
+    assert cached_horizontal['sourceProof']['allOriginalPairAdjacentIndexedOddAndWidePublicationBodiesVerbatim']
+    effect = cached_horizontal['comparison']['Down8']
     assert effect['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in effect['views'].values())
     for cost in cached_horizontal['cases'].values():
         assert cost['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
@@ -2029,7 +2029,7 @@ def render():
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     current_build_qualification = cached_horizontal['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6382
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6401
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == cached_horizontal['producers']['actualPackageSha256']
     assert current_build_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
@@ -2096,22 +2096,23 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [Prepared horizontal quartets](../benchmarks/CACHED-BICUBIC-HORIZONTAL-QUARTETS.md)
-  save 23.82 µs/6.36% raw/6.25% reference-normalized on cached Wide8, with
-  separated filtered/all-actual and normalized confidence; native moves −.124%.
-  Current 350.57/zimg 347.95 µs, upper 1.014 remains a small gap. All 24 existing shared
-  factory/executor costs refresh: 22 pass / 2 gaps / 0 uncertain. The other gap is default
-  Down8, upper 1.063. All eight equivalent wide/narrow one-shot/prepared boundaries pass;
-  narrow prepared byte uncertainty is resolved. Stop passing cases.
-  Live coefficients, every ordered double and original repair are unchanged.
-  Four-output source/weight reuse uses existing dead padding, with no new capacity
-  or owner. Wide/narrow plans still retain 198,432/199,840 B, prepared GC 137 B/op;
-  ordinary Wide8 total GC 198,449 B/op includes amortized measurement overhead.
-  Linux actual-package coarse governed owned peaks are 231,200/263,968 B for wide
-  byte/word, excluding borrowed source. Windows uses the portable fallback with
-  zero plan retention and peaks 32,768/65,536 B; physical/native/JIT peaks unmeasured.
-  Other raw costs move adversely alongside native clocks; no uniform gain claim.
-  Original native-prepared asymmetry stays separate from equivalent boundaries.
+- **Resizing:** [Shared horizontal preparation/execution](../benchmarks/CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
+  saves 22.70 µs/4.78% raw/5.11% reference-normalized on narrow Down8,
+  with separated filtered/all-actual and normalized intervals. Native time moves
+  +0.35%. Current 452.28/zimg 454.42 µs, upper 1.005, remains uncertain;
+  Wide8 378.51/375.02 µs upper 1.020 is also uncertain. Neither is a presumed tuning need.
+  All 24 existing shared cached controls refresh: 22 pass / 0 gaps / 2 uncertain.
+  All eight equivalent one-shot/prepared boundaries pass; stop passing cases.
+  One shared prepared-layout body and one closed numeric source retain fixed wide/narrow
+  schedules and original exact tap order, certificates and repair. Existing padding
+  holds coefficients; no new owner, array or capacity. Down8 GC 199,982 B/op;
+  prepared GC 137–138 B/op, wide/narrow retained plans 198,432/199,840 B.
+  The same actual package verifies all four frozen byte/word wide/narrow plans,
+  cancellation, prompt admission release and independent surviving outputs on both OSes.
+  Its coarse governed peaks and portable/cached differences are reported separately;
+  physical/native/JIT peaks remain unmeasured. Other raw/native clock movements stay
+  visible; no uniform gain claim. The native-prepared asymmetry remains explicit
+  alongside equivalent boundaries. Earlier quartet results retain linked history.
   [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
   [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
   allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,

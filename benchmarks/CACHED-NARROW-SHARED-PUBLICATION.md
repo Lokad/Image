@@ -1,9 +1,8 @@
 # Shared cached-narrow bicubic publication
 
-[Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) supersede
-the affected cached costs and package qualification below. The current 24-control
-scope has 22 passes/two gaps; all equivalent wide/narrow one-shot/prepared views
-pass. Earlier mechanism results and raw evidence remain retained history.
+For current cached costs and package proof, see the
+[family status](WARM-COVERAGE.md#current-family-status). Measurements below retain
+this stage's design, incremental effects and raw evidence as history.
 
 CNP789 replaces the cached narrow byte row’s private division, certificate and
 packing block with the existing shared certified byte publisher. It removes
