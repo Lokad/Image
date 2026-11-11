@@ -8,10 +8,34 @@ public sealed partial class Vp8CoefficientBlockTests
 {
     private static ReadOnlySpan<Vp8BooleanReader.CoefficientModelRow> Model(byte[] bytes)
     {
-        var rows = new Vp8BooleanReader.CoefficientModelRow[bytes.Length / 11];
+        var rows = new Vp8BooleanReader.CoefficientModelRow[4 * 16 * 3];
         System.Runtime.InteropServices.MemoryMarshal.AsBytes(rows.AsSpan()).Fill(0xA5);
-        for (var i = 0; i < rows.Length; i++) bytes.AsSpan(i * 11, 11).CopyTo(rows[i]);
+        for (var i = 0; i < bytes.Length / 11; i++) bytes.AsSpan(i * 11, 11).CopyTo(rows[i]);
+        Vp8BooleanReader.ExpandCoefficientModel(rows);
         return rows;
+    }
+
+    [Fact]
+    public void PositionExpansionPreservesEveryProbabilityPaddingAndGuards()
+    {
+        var storage = new Vp8BooleanReader.CoefficientModelRow[194];
+        var raw = System.Runtime.InteropServices.MemoryMarshal.AsBytes(storage.AsSpan());
+        raw.Fill(0xA5);
+        var model = storage.AsSpan(1, 192);
+        var original = new byte[96 * 16]; new Random(6386788).NextBytes(original);
+        original.AsSpan().CopyTo(System.Runtime.InteropServices.MemoryMarshal.AsBytes(model));
+        Vp8BooleanReader.ExpandCoefficientModel(model);
+        int[] bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
+        for (var plane = 0; plane < 4; plane++)
+        for (var coefficient = 0; coefficient < 16; coefficient++)
+        for (var predictor = 0; predictor < 3; predictor++)
+        {
+            var at = ((plane * 8 + bands[coefficient]) * 3 + predictor) * 16;
+            ReadOnlySpan<byte> actual = model[(plane * 16 + coefficient) * 3 + predictor];
+            Assert.Equal(original.AsSpan(at, 16).ToArray(), actual.ToArray());
+        }
+        Assert.All(raw[..16].ToArray(), value => Assert.Equal((byte)0xA5, value));
+        Assert.All(raw[^16..].ToArray(), value => Assert.Equal((byte)0xA5, value));
     }
 
     private static readonly FieldInfo[] Fields = new[] { "position", "end", "shift", "range", "value" }

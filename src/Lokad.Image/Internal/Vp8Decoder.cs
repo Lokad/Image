@@ -41,13 +41,14 @@ internal ref struct Vp8Decoder
         var firstLength = (data[0] | data[1] << 8 | data[2] << 16) >> 5;
         if (firstLength < 1 || firstLength > data.Length - 10) throw new ImageDataException("Invalid VP8 first partition length.");
         header = new Vp8BooleanReader(data, 10, firstLength);
-        probabilities = new Vp8BooleanReader.CoefficientModelRow[4 * 8 * 3];
-        for (var i = 0; i < probabilities.Length; i++)
+        probabilities = new Vp8BooleanReader.CoefficientModelRow[4 * 16 * 3];
+        for (var i = 0; i < 4 * 8 * 3; i++)
             Vp8Tables.CoefficientProbabilities.Slice(i * 11, 11).CopyTo(probabilities[i]);
         partitions = [];
         segmentQuantizers = new int[4]; segmentFilters = new int[4]; segmentProbabilities = [255, 255, 255];
         referenceDeltas = new int[4]; modeDeltas = new int[4]; quantizerDeltas = new int[5];
         ReadHeader(firstLength);
+        Vp8BooleanReader.ExpandCoefficientModel(probabilities);
     }
 
     private int Bit(int probability = 128) => header.Read(data, probability, context);
@@ -85,7 +86,7 @@ internal ref struct Vp8Decoder
         // RFC6386 section13.2: update eleven values per row in encoded order;
         // padding belongs to storage, never to the probability syntax.
         var probabilityIndex = 0;
-        for (var row = 0; row < probabilities.Length; row++)
+        for (var row = 0; row < 4 * 8 * 3; row++)
             for (var column = 0; column < 11; column++)
                 if (Bit(Vp8Tables.CoefficientUpdateProbabilities[probabilityIndex++]) != 0)
                     probabilities[row][column] = (byte)Literal(8);
@@ -294,12 +295,11 @@ internal ref struct Vp8Decoder
             return tokens.ReadCoefficientBlock<TMode>(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
         if (tokens.CanReadCancellableCoefficientBlock(data, context))
             return tokens.ReadCancellableCoefficientBlock<TMode>(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
-        ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         var previousZero = false; var predictor = initialContext; nonzero = 0;
         for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
-            ref readonly var p = ref probabilities[(plane * 8 + bands[c]) * 3 + predictor];
+            ref readonly var p = ref probabilities[(plane * 16 + c) * 3 + predictor];
             var token = tokens.CoefficientToken(data, p, context, previousZero);
             if (token == 11) break;
             var value = token < 5 ? token : Category(ref tokens, token - 5);

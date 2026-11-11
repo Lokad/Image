@@ -11,6 +11,24 @@ internal partial struct Vp8BooleanReader
     internal readonly struct PixelMode { }
     internal readonly struct ValidationMode { }
 
+    // RFC6386 section13.2 assigns bands to coefficient positions. Prepare their
+    // three contexts once, instead of mapping every coefficient in every block.
+    // The header's96 encoded rows occupy the beginning of this192-row array.
+    internal static void ExpandCoefficientModel(Span<CoefficientModelRow> rows)
+    {
+        ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
+        Span<CoefficientModelRow> source = stackalloc CoefficientModelRow[24];
+        // Descending planes protect still-unread encoded rows. Within a plane,
+        // band order is not monotone, so preserve its384bytes before expansion.
+        for (var plane = 3; plane >= 0; plane--)
+        {
+            rows.Slice(plane * 24, 24).CopyTo(source);
+            for (var coefficient = 0; coefficient < 16; coefficient++)
+                source.Slice(bands[coefficient] * 3, 3)
+                    .CopyTo(rows.Slice((plane * 16 + coefficient) * 3, 3));
+        }
+    }
+
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
     // The initial normalized range and32bit refills need at most269bytes,
@@ -62,16 +80,15 @@ internal partial struct Vp8BooleanReader
             int plane, int initialContext, int dc, int ac, out byte nonzero)
             where TMode : struct
         {
-            ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
             ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
             // The admitted window/full private model exclude mid-block failure.
             // Only the completed block publishes arithmetic state to its window.
             var position = Position; var bits = Bits; var range = Range; var value = Value;
-            var planeBase = plane * 24;
+            var planeBase = plane * 48;
             var previousZero = false; var predictor = initialContext; nonzero = 0;
             for (var c = plane == 0 ? 1 : 0; c < 16; c++)
             {
-                ref readonly var p = ref model[planeBase + bands[c] * 3 + predictor];
+                ref readonly var p = ref model[planeBase + c * 3 + predictor];
                 if (!previousZero && TokenRead(in data, p[0], ref position, ref bits, ref range, ref value) == 0) break;
                 if (TokenRead(in data, p[1], ref position, ref bits, ref range, ref value) == 0)
                 {

@@ -7,13 +7,14 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [shared JPEG block support](JPEG-SHARED-BLOCK-SUPPORT.md)
-passes 6,246 full/live checks per OS, current JPEG normal/scalar/feature paths and
-the SAME actual Release-package consumer/all three examples. Unchanged text/resize
-ISA qualification and other production paths are reused. Encoder packets, exact
-managed pixels and cooperative ownership remain unchanged. No new case or grid
-is added; the finite 289-path objective is unchanged. This is not a whole-release
-timing refresh. Historical evidence remains reproducible in linked family reports.
+The latest accepted [VP8 position preparation](VP8-POSITION-MODEL-PREPARATION.md)
+passes 6,247 full/live checks per OS, 1,041 internal/433 public shared VP8/memory
+checks per normal/scalar mode, and the SAME actual Release-package consumer/all
+three examples. Unchanged numerical ISA and JPEG/resize/text evidence are reused.
+Exact packets, managed pixels and cooperative ownership remain unchanged. All six
+affected VP8 costs refresh, with 1,536 B/op more frame preparation and unchanged
+8 KiB admission. No case/grid is added; the finite 289-path objective remains.
+This is not a whole-release timing refresh. Linked family reports retain history.
 Unchanged performance/qualification is reused only within its source scope.
 
 ## Current family status
@@ -26,7 +27,7 @@ Unchanged performance/qualification is reused only within its source scope.
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 4 pass / 4 uncertain; photograph allocation about5.3 MB supersedes20–30 MB. Selected candidates remain independently owned. Prior matching/clustering/counting gains are retained, not work to replay. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 5 pass / 4 uncertain. Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
-| WebP reading | [Output-owned palettes](WEBP-PALETTE-OUTPUT.md): lossless6 controls, 3 pass / 3 uncertain. VP8 combined6 controls: 2 pass / 3 gaps / 1 uncertain. Live opaque upper1.028 remains a gap; [window experiments](VP8-LIVE-MACROBLOCK-WINDOW-EXPERIMENT.md) establish no useful gain and restore production. |
+| WebP reading | [Position preparation](VP8-POSITION-MODEL-PREPARATION.md): six refreshed VP8 controls, 4 pass / 0 gaps / 2 uncertain. Ordinary opaque has a confirmed 2.02% normalized gain; live 4,803.55/native 4,786.85 µs, upper 1.009, and stream remain uncertain. Every VP8 total grows 1,536 B/op, within unchanged 8 KiB admission; no retained scratch. Prior window failures remain history. Unchanged [output-owned palettes](WEBP-PALETTE-OUTPUT.md) retains six lossless controls, 3 pass / 3 uncertain. |
 | Bicubic enlargement/shared byte publication | [Shared quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md): 15 affected enlargement/mixed controls, 9 pass / 2 gaps / 4 uncertain. Complete bounded byte enlargement saves159.58µs/5.10% raw/5.12% normalized, upper.981 passes; same116B/op/4KiB. Horizontal byte and default mixed byte remain gaps. Word horizontal and tight mixed uncertainty remain explicit. |
 | Mixed-axis RGBA16 bicubic | [Result-backed bands](BICUBIC-RESULT-BACKED-BANDS.md) retain unchanged word paths: default/vertical pass; bounded mixed893.16/zimg851.29µs upper1.056 is a gap. Byte mixed costs are owned by the quartet stage above. |
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
@@ -202,6 +203,11 @@ Current invalidation and next execution:
   costs plus Mixed8/TightMixed8/TightVertical8. Other BicubicMath bodies, codec,
   Lanczos and other unchanged providers retain their source scope. Earlier word
   mixed and other unchanged providers stay valid within their tested scope.
+- VPP788 replaces repeated coefficient-position/band addressing with one frame
+  model preparation shared by ordinary/live/window/scalar/validation decoding.
+  Six named VP8 cost paths refresh; exact probability syntax, numerical operations,
+  polling and ownership remain. Encoder/VP8L and other codec/editing/text evidence
+  is unaffected. No profile or fixture is repeated.
 - JPEG's current shared-support owner refreshes all 27 pixel-decode paths,
   including DC-only and caller samples, plus the existing fresh-context view.
   Two coding-only validation paths retain unchanged source-valid evidence.

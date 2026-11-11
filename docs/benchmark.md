@@ -21,8 +21,13 @@ Current scope and remaining work:
   has 4 passes / 4 uncertain encode controls; the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
-  VP8 has 2 passes / 3 gaps / 1 uncertain. Live opaque decode remains 4,881.47/native 4,792.22µs,
-  upper1.028. Selected codes/results retain independent ownership; scratch0.
+  [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
+  4 passes / 0 gaps / 2 uncertain.
+  Ordinary opaque decoding improves 2.02% after reference normalization, with separated
+  raw/all-actual/normalized intervals. Live 4,803.55/native4,786.85µs,
+  upper1.009, and stream remain uncertain. All six allocation totals grow
+  1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
+  Selected codes/results retain independent ownership.
 - **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
   has 49 passes / 1 gap / 1 uncertain across 51 controls. Live materialized RGBA16 remains
   2,919.94/native2,894.87µs, upper1.012. [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
@@ -78,11 +83,12 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,246 full/live checks per OS**
+The current immutable build passes **6,247 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
+Windows/Linux**. Current VP8/shared-memory checks pass 1,041 internal/433 public per
+normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
 Unchanged resize qualification is reused: 362 internal/776 public per
-normal/scalar/disabled-AVX2/AVX512 mode. Current JPEG checks pass
+normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
 The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
@@ -119,7 +125,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,868.76 | 5,999.20 | 0.978 / 0.995 | 238,960 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,740.96 | 6,025.29 | 0.953 / 1.001 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -258,7 +264,7 @@ settings do not establish matched quality.
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,265.372 | 3,067.735 | 0.738 / 0.750 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,418.355 | 5,461.091 | 0.809 / 0.822 | 14,064 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,605.581 | 5,742.915 | 0.802 / 0.809 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,759.145 | 3,611.996 | 0.764 / 0.765 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

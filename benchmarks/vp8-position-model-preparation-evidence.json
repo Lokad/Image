@@ -1,0 +1,500 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VPP788",
+  "date": "2026-11-11",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 289,
+  "producers": {
+    "windowsSha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+    "linuxSha256": "0fe25c1038a2c7da5855c96be9d32ff7395257e4dfb668049ddba804987842fe",
+    "timedArtifactSha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+    "actualPackageSha256": "616a651525e5949473701b8e5a72ea9b61337f57dd2e78f36d4ac8c8452403c6"
+  },
+  "baseline": {
+    "commit": "6bb2c62b67f89a6dfc6d784c625bfb03f31b5b78",
+    "windowsSha256": "84e5de5b5af920627f241dc321e7e73c8b03cfc1adfeebcf3ffc9bd1f19b7069",
+    "linuxSha256": "32ae5c0e7ee7ed8b4bde62b5a6cb2ea44a49dd13b81e9d0cce57b3082ddec1c3",
+    "packageSha256": "1bf157eae4f9ac07818a612af420d1dc38865e676ec7ad8beea2586f6abc5225"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8Decoder.cs": "3a83590d365bb767da0d353968d22a55336d45a446c88e39598bf3385f59b85e",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "e27aeca0bcf7e02465c2dab47a57218ba5d35955ed9bad63d869360aa3704aa5",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "59717460867c7fc551f0d4bc6eaa25a2d59742daca036021f0e4cd6c3e17e2d7",
+    "tests/Lokad.Image.Tests/Vp8CoefficientBlockTests.cs": "985a551c4263b345b000be7063054157e504e61817e9d3df6ccb37a83a8940fb"
+  },
+  "design": {
+    "repeatedWork": "Each coefficient repeatedly maps position to band, multiplies its band row and combines plane/context. Frozen profile locates1441/1997samples in live core, not a cost estimate.",
+    "endState": "Expand encoded96band/context rows in-place to192position/context rows once per frame; share same model across ordinary/window/live/scalar/validation. One array, unchanged arithmetic/polls.",
+    "ownership": "Array grows1536bytes; existing8192B header/arithmetic/fixed-stack admission must demonstrably cover model, bounded384B preparation and overlapping users. No new pool, root, session, output or reservation framework.",
+    "completeControls": [
+      "OpaqueCancelable8",
+      "Opaque8"
+    ],
+    "correctness": "Original scalar block oracle retains canonical encoded bands and probability syntax. Exact coefficients/cursor/following reads, all polls, partition bounds, managed/native pixels and complete output ownership. Encoder untouched.",
+    "temporaryCosts": "1536B/frame allocation and once-per-frame expansion, plus changed indexing/JIT pressure; later stages only if meaningful complete operation evidence supports them. No assumption that reduced addressing is faster."
+  },
+  "sourceProof": {
+    "stage": "VPP788",
+    "originalProductionSourcesReconstructedExactlyAfterRevertingOnlyModelPreparationAndAddressing": {
+      "Vp8BooleanReader.Block.cs": true,
+      "Vp8BooleanReader.CancellableBlock.cs": true,
+      "Vp8Decoder.cs": true
+    },
+    "probabilitySyntaxArithmeticPollOrderPartitionBoundsStoresAndOwnershipUnchanged": true,
+    "preparation": "In-place descending planes preserve all original rows; per-plane384B stack protects nonmonotone band mapping. Independent scalar-oracle and192row+padding+guard tests pass.",
+    "storage": {
+      "originalConservativeFixedBound": 5108,
+      "newArrayCapacityBytes": 3072,
+      "additionalArrayCapacityBytes": 1536,
+      "additionalPreparationStackBytes": 384,
+      "conservativelySummedFixedBound": 7028,
+      "existingReservedBytes": 8192,
+      "boundFits": true,
+      "modelAllocatedBeforeUseUnderExistingCoarseAdmission": true,
+      "escapingResultsOrCrossOperationRetentionAdded": false,
+      "physicalPeakUnmeasured": true
+    }
+  },
+  "cases": {
+    "Native8": {
+      "project": "Lokad.Image",
+      "caseId": "Native8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-Native8-confirm",
+      "managedUs": 5812.6974291666675,
+      "nativeUs": 5963.212052083333,
+      "ratio": 0.9747594716401069,
+      "upper": 0.9808213635579045,
+      "lower": 0.9699037133725493,
+      "allocatedBytes": 240400,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-Native8-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-Native8-confirm-observation.json",
+      "inputBytes": 98590,
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "descriptorSha256": null,
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 531468,
+      "alphaExact": true,
+      "decoderMaximum": 0
+    },
+    "StreamNative8": {
+      "project": "Lokad.Image",
+      "caseId": "StreamNative8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-StreamNative8-confirm",
+      "managedUs": 5740.964751157408,
+      "nativeUs": 6025.289145833333,
+      "ratio": 0.952811493723493,
+      "upper": 1.0009860610718937,
+      "lower": 0.9256012098659442,
+      "allocatedBytes": 240496,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "uncertain",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-StreamNative8-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-StreamNative8-confirm-observation.json",
+      "inputBytes": 98590,
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "descriptorSha256": null,
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 531468,
+      "alphaExact": true,
+      "decoderMaximum": 0
+    },
+    "Opaque8": {
+      "project": "Lokad.Image",
+      "caseId": "Opaque8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-Opaque8-confirm",
+      "managedUs": 4732.175366666667,
+      "nativeUs": 4789.112614583333,
+      "ratio": 0.9881111069004128,
+      "upper": 0.9948729817686178,
+      "lower": 0.9838762591479706,
+      "allocatedBytes": 230880,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-Opaque8-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-Opaque8-confirm-observation.json",
+      "inputBytes": 72380,
+      "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "descriptorSha256": null,
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 531468,
+      "alphaExact": true,
+      "decoderMaximum": 0
+    },
+    "OpaqueCancelable8": {
+      "project": "Lokad.Image",
+      "caseId": "OpaqueCancelable8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-OpaqueCancelable8-confirm",
+      "managedUs": 4803.552598484847,
+      "nativeUs": 4786.854645833333,
+      "ratio": 1.0034882932294695,
+      "upper": 1.0089607205959024,
+      "lower": 0.9994559232570103,
+      "allocatedBytes": 230880,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "uncertain",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-OpaqueCancelable8-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-OpaqueCancelable8-confirm-observation.json",
+      "inputBytes": 72380,
+      "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "descriptorSha256": null,
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 531468,
+      "alphaExact": true,
+      "decoderMaximum": 0
+    },
+    "SimpleOpaque8": {
+      "project": "Lokad.Image",
+      "caseId": "SimpleOpaque8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-SimpleOpaque8-confirm",
+      "managedUs": 4989.305611111112,
+      "nativeUs": 5247.99653125,
+      "ratio": 0.9507067280630859,
+      "upper": 0.9945373847887493,
+      "lower": 0.9057303110120155,
+      "allocatedBytes": 230880,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-SimpleOpaque8-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-SimpleOpaque8-confirm-observation.json",
+      "inputBytes": 76128,
+      "inputSha256": "ef21a8b737cb3ffbef80939df713024482e53f102475aa4bdb0bcdda8df19319",
+      "managedOutputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+      "nativeOutputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+      "descriptorSha256": null,
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 531468,
+      "alphaExact": true,
+      "decoderMaximum": 0
+    },
+    "ValidateVp8Alpha": {
+      "project": "Lokad.Image",
+      "caseId": "ValidateVp8Alpha",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "vpp788-candidate-ValidateVp8Alpha-confirm",
+      "managedUs": 4605.580572916667,
+      "nativeUs": 5742.914552083333,
+      "ratio": 0.8019587495422372,
+      "upper": 0.808717935583148,
+      "lower": 0.7888025780873552,
+      "allocatedBytes": 15600,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "pass",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "vpp788-candidate-ValidateVp8Alpha-confirm-receipt.json",
+      "observationFile": "vpp788-candidate-ValidateVp8Alpha-confirm-observation.json",
+      "inputBytes": 115542,
+      "inputSha256": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+      "managedOutputSha256": null,
+      "nativeOutputSha256": null,
+      "descriptorSha256": "eec73486a786152f1f3d0067a8023bfc632fbf38aaa7fbb9d608e75aaebaf9c6",
+      "outputBytes": 36,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedOutputBytes": 36,
+      "descriptorExact": true,
+      "prefixAndCodingScopesVerified": true
+    }
+  },
+  "statusCounts": {
+    "pass": 4,
+    "uncertain": 2
+  },
+  "comparison": {
+    "OpaqueCancelable8": {
+      "baselineUs": 5283.813682291666,
+      "candidateUs": 4803.552598484847,
+      "savedUs": 480.26108380681853,
+      "rawGain": 0.0908928877292513,
+      "normalizedGain": 0.0354273521683357,
+      "baselineBounds": [
+        0.9924146348153547,
+        1.0925470113976041
+      ],
+      "candidateBounds": [
+        0.9994559232570103,
+        1.0089607205959024
+      ],
+      "normalizedGainSeparated": false,
+      "normalizedLossSeparated": false,
+      "views": {
+        "statistics": {
+          "baselineUs": 5283.813682291666,
+          "candidateUs": 4803.552598484847,
+          "rawGain": 0.0908928877292513,
+          "rawGainSeparated": true,
+          "rawLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 5283.817223958334,
+          "candidateUs": 4806.967942708334,
+          "rawGain": 0.09024711889878201,
+          "rawGainSeparated": true,
+          "rawLossSeparated": false
+        }
+      },
+      "baselineAllocated": 229344,
+      "candidateAllocated": 230880,
+      "candidateReferenceStatus": "uncertain"
+    },
+    "Opaque8": {
+      "baselineUs": 5215.678265151515,
+      "candidateUs": 4732.175366666667,
+      "savedUs": 483.5028984848477,
+      "rawGain": 0.09270182589968512,
+      "normalizedGain": 0.02017363653483295,
+      "baselineBounds": [
+        0.9996891278996873,
+        1.0171105254600983
+      ],
+      "candidateBounds": [
+        0.9838762591479706,
+        0.9948729817686178
+      ],
+      "normalizedGainSeparated": true,
+      "normalizedLossSeparated": false,
+      "views": {
+        "statistics": {
+          "baselineUs": 5215.678265151515,
+          "candidateUs": 4732.175366666667,
+          "rawGain": 0.09270182589968512,
+          "rawGainSeparated": true,
+          "rawLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 5218.882637152777,
+          "candidateUs": 4738.367939236111,
+          "rawGain": 0.09207233259010716,
+          "rawGainSeparated": true,
+          "rawLossSeparated": false
+        }
+      },
+      "baselineAllocated": 229344,
+      "candidateAllocated": 230880,
+      "candidateReferenceStatus": "pass"
+    }
+  },
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "qualification": {
+    "fullChecksEachOs": 6247,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "full": [
+        2938,
+        2361,
+        948
+      ],
+      "total": 6247,
+      "fullLivePassed": true,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "2e1e4c31d9f38691bb37fc38086eb7cc447c01d5a1506d9acf3eb35eebfc9d34",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "16cd60802ebc76d6746d0c95084911ae31a40db3e9c92f12702ace487b7c3b5c"
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8Decoder.cs": "3a83590d365bb767da0d353968d22a55336d45a446c88e39598bf3385f59b85e",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "e27aeca0bcf7e02465c2dab47a57218ba5d35955ed9bad63d869360aa3704aa5",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "59717460867c7fc551f0d4bc6eaa25a2d59742daca036021f0e4cd6c3e17e2d7",
+        "tests/Lokad.Image.Tests/Vp8CoefficientBlockTests.cs": "985a551c4263b345b000be7063054157e504e61817e9d3df6ccb37a83a8940fb"
+      },
+      "focusedInternalVp8": 1041,
+      "focusedPublicVp8": 433,
+      "focusedFilter": "FullyQualifiedName~Vp8|FullyQualifiedName~Webp|FullyQualifiedName~Memory",
+      "unchangedNumericalIsaPathsReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "0fe25c1038a2c7da5855c96be9d32ff7395257e4dfb668049ddba804987842fe",
+      "full": [
+        2938,
+        2361,
+        948
+      ],
+      "total": 6247,
+      "fullLivePassed": true,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "0fe25c1038a2c7da5855c96be9d32ff7395257e4dfb668049ddba804987842fe",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "f9662d5943ea3e6ca1dd82b1417709776cb2d200ff3ebb41874900819fb1c3f0",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "bc752e7229313fe0b119ff5a92726e8a2dffa581afcc05f95bb05828c9e30c0e"
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8Decoder.cs": "3a83590d365bb767da0d353968d22a55336d45a446c88e39598bf3385f59b85e",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "e27aeca0bcf7e02465c2dab47a57218ba5d35955ed9bad63d869360aa3704aa5",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "59717460867c7fc551f0d4bc6eaa25a2d59742daca036021f0e4cd6c3e17e2d7",
+        "tests/Lokad.Image.Tests/Vp8CoefficientBlockTests.cs": "985a551c4263b345b000be7063054157e504e61817e9d3df6ccb37a83a8940fb"
+      },
+      "focusedInternalVp8": 1041,
+      "focusedPublicVp8": 433,
+      "focusedFilter": "FullyQualifiedName~Vp8|FullyQualifiedName~Webp|FullyQualifiedName~Memory",
+      "unchangedNumericalIsaPathsReused": true,
+      "additionalBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "616a651525e5949473701b8e5a72ea9b61337f57dd2e78f36d4ac8c8452403c6",
+      "symbolsSha256": "a7d3473d5c34464ea9897bbc0a1b4e4f6ba23137aa04a4f67a1b96992131b5be",
+      "bytes": 449106,
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "616a651525e5949473701b8e5a72ea9b61337f57dd2e78f36d4ac8c8452403c6",
+      "librarySha256": "72d7e81f0c3c8078e6f52158c3d8b17789a7412481d733d2bdaad9e345949815",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "allThreeExamplesBothOS": true,
+    "vp8InternalEachModeEachOs": 1041,
+    "vp8PublicEachModeEachOs": 433,
+    "focusedFilter": "FullyQualifiedName~Vp8|FullyQualifiedName~Webp|FullyQualifiedName~Memory",
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "resizeInternalEachModeEachOs": 362,
+    "resizePublicEachModeEachOs": 776,
+    "textInternalEachModeEachOs": 170,
+    "textPublicEachModeEachOs": 126,
+    "unchangedNumericalIsaEvidenceReused": true,
+    "priorQualification": "jpeg-shared-block-support-evidence.json"
+  },
+  "storage": {
+    "modelPayloadBytes": 3072,
+    "additionalModelArrayBytes": 1536,
+    "preparationStackBytes": 384,
+    "coarseHeaderWorkspaceBytes": 8192,
+    "conservativelySummedFixedBoundBytes": 7028,
+    "newRetainedStateBytes": 0,
+    "admittedPeaksUnchanged": true,
+    "physicalNativeAndJitStackPeaksUnmeasured": true
+  },
+  "workflow": {
+    "mainBuildsPerOS": 1,
+    "embeddedBuildsPerOS": 1,
+    "publicHarnessAndNativeBuilds": 0,
+    "packagePacks": 1,
+    "newImages": 0,
+    "newWorkloadCases": 0,
+    "allCompletedActualsRetained": true,
+    "initialSourceManifestAndDependencyFailuresBeforeAnyTimedActual": true
+  },
+  "reusedAttribution": {
+    "file": "vp8-live-current-attribution-evidence.json",
+    "allNineRelevantSourcePinsMatchedBeforePrototype": true,
+    "newProfiles": 0,
+    "scope": "1441/1997 sampled locations in live reader; sampled locations are not phase costs. Prior window implementation failures preserved, not repeated."
+  },
+  "referenceBoundary": "Native VP8 retains decoder, three conversion contexts and packet/frame wrappers; each call resets and fully decodes, allocates U/V/RGBA16/RGBA output, expands chroma, converts BT601 and reduces precision, merges alpha when present, and releases actual planes/output. Managed preparation, normalization, output ownership/disposal and live cancellation stay timed. Retained and complete one-shot state costs are not equivalent; this round preserves and labels the retained comparison.",
+  "invalidation": {
+    "refreshed": "Existing six ordinary/live/simple/alpha/stream/coding-validation VP8 controls that consume the frame coefficient model.",
+    "unchanged": "VP8 encoders, VP8L, PNG, JPEG, editing/text and their numerical/ISA paths retain scoped evidence. JPEG current source remains JBS787. No packet or pixel contract changes."
+  },
+  "raw": {
+    "file": "vp8-position-model-preparation.tar.xz",
+    "sha256": "b44c7d3cb3dba4b615fa28a2fda3cf7b0311f55069fdb1c0bc6f003637e95a87",
+    "bytes": 19826504,
+    "members": 863,
+    "dependencies": [
+      {
+        "file": "jpeg-shared-block-support.tar.xz",
+        "sha256": "79706f7519aa0218907cec5e6b2c87dcafb8d6d8c22c164a7d7cb7ee08d66367"
+      },
+      {
+        "file": "vp8-live-macroblock-attribution-avp769.tar.xz",
+        "sha256": "53fdfd0217c9d16f6afe7ec046949591cc5f2d53a69edd81fa6f44e8f7352831"
+      },
+      {
+        "file": "vp8-live-macroblock-window-vmc770-experiment.tar.xz",
+        "sha256": "91704b067e3fa8ebcd8946ca27e1529e25b2548e63de660166139c9cdef91265"
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Stop passing VP8 cases. Live and stream comparisons remain uncertain; do not assume optimization need or repeat unchanged sampling for favorable bounds. Continue independent preparation/resizing attribution; publication postponed."
+}

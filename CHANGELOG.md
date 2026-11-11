@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare VP8 coefficient positions once per frame for shared ordinary, cancelable
+  and validation decoding, preserving exact samples and memory admission.
+
 - Reuse exact JPEG block-support information across inverse-transform decisions,
   reducing repeated scans while preserving decoded samples and encoder packets.
 

@@ -32,10 +32,10 @@ internal partial struct Vp8BooleanReader
         var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        var previousZero = false; var predictor = initialContext; var planeBase = plane * 24;
+        var previousZero = false; var predictor = initialContext; var planeBase = plane * 48;
         for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
-            ref readonly var p = ref model[planeBase + bands[c] * 3 + predictor];
+            ref readonly var p = ref model[planeBase + c * 3 + predictor];
             // RFC6386 section13.2. Traverse coefficient classes directly;
             // zero skips the next EOB decision, while nonzero classes already
             // determine the next context before sign and quantization.

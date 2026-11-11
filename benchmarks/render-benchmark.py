@@ -40,35 +40,35 @@ def render():
     assert vp8_current['qualification']['fullChecksEachOs'] == 5939
     assert vp8_current['qualification']['sameActualPackageBothOs']
     assert vp8_current['qualification']['actualPackage']['sha256'] == vp8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    prepared_model = json.loads((ROOT / 'benchmarks/vp8-frame-quantizer-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 283
+    prepared_model = json.loads((ROOT / 'benchmarks/vp8-position-model-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 289
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
-    assert set(prepared_model['costs']) == {'Native8', 'Vp8Stream', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
-    for name, cost in prepared_model['costs'].items():
-        if name not in {'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8'}:
-            continue  # Alpha callers are refreshed by the current palette/output owner.
+    assert prepared_model['allAffectedPerformanceReconciled'] and not prepared_model['materialPassToGapContradictions']
+    assert set(prepared_model['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
+    vp8_costs = {('Vp8Stream' if name == 'StreamNative8' else name): cost for name, cost in prepared_model['cases'].items()}
+    for cost in vp8_costs.values():
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
-        assert cost['librarySha256'] == prepared_model['producers']['linuxSha256']
+        assert cost['librarySha256'] == prepared_model['producers']['timedArtifactSha256']
         assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
         assert cost['sourceUnchanged'] and cost['independentOwnedOutput']
-        if name.startswith('Validate'):
+        if cost['caseId'] == 'ValidateVp8Alpha':
             assert cost['descriptorExact'] and cost['prefixAndCodingScopesVerified']
         else:
             assert cost['managedOutputSha256'] == cost['nativeOutputSha256'] and cost['alphaExact']
             assert cost['decoderMaximum'] == 0 and cost['managedOutputBytes'] == 531468
         assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
-    model_proof = prepared_model['sourceProof']
-    assert model_proof['originalReconstructedOutsideFrameQuantizerPreparation']
-    assert model_proof['allCoefficientReaderContextTransformPredictionFilteringColorOwnershipBodiesExact']
-    assert prepared_model['storage']['modelPayloadBytes'] == 1536
-    assert prepared_model['storage']['operationStackTableBytes'] == 96
-    assert prepared_model['storage']['coarseHeaderWorkspaceBytes'] == 8192
-    assert prepared_model['storage']['newOwnedHeapCapacityBytes'] == prepared_model['storage']['newRetainedStateBytes'] == 0
+    assert all(prepared_model['sourceProof']['originalProductionSourcesReconstructedExactlyAfterRevertingOnlyModelPreparationAndAddressing'].values())
+    assert prepared_model['storage']['modelPayloadBytes'] == 3072
+    assert prepared_model['storage']['additionalModelArrayBytes'] == 1536
+    assert prepared_model['storage']['conservativelySummedFixedBoundBytes'] <= prepared_model['storage']['coarseHeaderWorkspaceBytes'] == 8192
+    assert prepared_model['storage']['newRetainedStateBytes'] == 0
+    assert prepared_model['comparison']['Opaque8']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in prepared_model['comparison']['Opaque8']['views'].values())
     q = prepared_model['qualification']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 5955
-    assert q['sameActualPackageBothOs'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
-    live = prepared_model['costs']['OpaqueCancelable8']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6247
+    assert q['sameActualPackageBothOS'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
+    live = vp8_costs['OpaqueCancelable8']
     assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
     assert all(v['normalizedGainSeparated'] for v in vp8_current['comparison']['views'].values())
     assert vp8_current['storage']['newOwnedHeapCapacityBytes'] == vp8_current['storage']['newRetainedStateBytes'] == 0
@@ -489,8 +489,8 @@ def render():
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in resident_decode['comparison']['views'].values())
     assert resident_decode['storage']['newRetainedScratchBytes'] == 0
-    lpf = {**prepared_model['costs'], **resident_decode['costs']}
-    vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in prepared_model['costs'])
+    lpf = {**resident_decode['costs'], **vp8_costs}
+    vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in vp8_costs)
                          for state in ('pass', 'gap', 'uncertain')}
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
@@ -1885,6 +1885,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
+    current_build_qualification = prepared_model['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1910,8 +1911,13 @@ Current scope and remaining work:
   has 4 passes / 4 uncertain encode controls; the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
   has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
-  VP8 has 2 passes / 3 gaps / 1 uncertain. Live opaque decode remains 4,881.47/native 4,792.22µs,
-  upper1.028. Selected codes/results retain independent ownership; scratch0.
+  [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
+  {vp8_decode_counts['pass']} passes / {vp8_decode_counts['gap']} gaps / {vp8_decode_counts['uncertain']} uncertain.
+  Ordinary opaque decoding improves 2.02% after reference normalization, with separated
+  raw/all-actual/normalized intervals. Live {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
+  upper{live['upper']:.3f}, and stream remain uncertain. All six allocation totals grow
+  1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
+  Selected codes/results retain independent ownership.
 - **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
   has 49 passes / 1 gap / 1 uncertain across 51 controls. Live materialized RGBA16 remains
   2,919.94/native2,894.87µs, upper1.012. [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
@@ -1969,9 +1975,10 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
+Windows/Linux**. Current VP8/shared-memory checks pass 1,041 internal/433 public per
+normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
 Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
-normal/scalar/disabled-AVX2/AVX512 mode. Current JPEG checks pass
+normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
 The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
