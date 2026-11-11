@@ -1,5 +1,8 @@
 # Vector normalization and certified bilinear publication
 
+[Subsequent same-package adjacent measurement](WARM-ADJACENT-CONFIDENCE.md)
+owns the current Up16 cost. This stage retains its independently confirmed gain.
+
 BVC804 keeps RGBA16 enlargement's alpha normalization and certification in vector
 lanes. One Normalize helper and one combined Classify helper replace repeated
 scalar extraction/vector construction, margin-lane insertion and four tiny-alpha

@@ -1,8 +1,9 @@
 # WebP Huffman construction workspace
 
 [A subsequent current-package photograph confirmation](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
-now passes on the actual current-package DLL. It supersedes the photograph cost
-below; the other seven stage comparisons remain source-valid.
+now passes on the actual package DLL. A [current adjacent alpha confirmation](WARM-ADJACENT-CONFIDENCE.md)
+also passes. Those supersede photograph/byte-alpha costs below; six other stage
+comparisons remain source-valid.
 
 WHS677 replaces fresh tree-building arrays and a priority queue per alphabet with
 one admitted operation-owned workspace across an image's five alphabets and
@@ -33,8 +34,8 @@ Direct screen counters and aggregate benchmark allocation counters are distinct.
 Each comparison has twelve actuals, native brackets, quiet guards and frozen
 packet/source/ownership checks on the intended actual-package DLL. Normalization,
 preparation, candidate selection, fresh output ownership and disposal stay timed.
-References retain their labeled context/input/scratch boundaries. The current photograph confirmation raises this scope to five passes/three
-uncertain; opaque and both alpha cases remain open. The original stage had four
+References retain their labeled context/input/scratch boundaries. The current photograph and byte-alpha confirmations raise this scope to six passes/two
+uncertain; opaque and word alpha remain open. The original stage had four
 passes/four uncertain and is retained below as historical comparison. Earlier passing
 photo/alpha16 costs are superseded. This stage claims allocation savings, **no
 causal CPU gain, regression or equivalence**, and no complete 283-path parity.

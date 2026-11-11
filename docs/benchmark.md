@@ -9,7 +9,7 @@ performance proof. Publication is postponed.
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
 workstation GC. Times are **µs per complete operation**. Ratios use the faster
-reference bracket; **upper** includes conservative filtered/all-actual confidence.
+reference bracket; **upper** includes conservative all-actual and relevant filtered/paired confidence.
 Short screens do not establish independent parity. **B/op** is total managed
 allocation, separate from peak live capacity and retained storage. Native
 allocations are unmeasured. Normalization, output ownership and disposal stay
@@ -18,9 +18,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has 5 passes / 3 uncertain encode controls; [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
-  passes on the actual package DLL (adjacent complete-operation batches, no production speedup claim); the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
-  has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
+  has 6 passes / 2 uncertain encode controls;
+  [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and
+  [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
+  package DLL. Alpha costs 52.99/FFmpeg 53.66 ms,
+  upper 0.998, exact 98,590 B and 6,241,792 B/op; this resolves uncertainty, with no production speedup claim.
+  The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
+  6 passes / 3 uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   4 passes / 0 gaps / 2 uncertain.
@@ -75,9 +79,10 @@ Current scope and remaining work:
   25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
   Up8 passes/stops; Down8/16 remain gaps. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
   independently saves 769.82 µs/27.67% raw/18.12% normalized on existing Up16.
-  Its current complete cost is 2,012.69/FFmpeg 1,956.52 µs,
-  conservative 0.919–1.038: **uncertain**, not a parity pass or demonstrated remaining gap.
-  Measured GC 4,498,935 B/op includes the 4,264,104 B result; admitted capacity
+  Its [current adjacent complete cost](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) is
+  1,830.73/FFmpeg 1,884.92 µs, conservative
+  0.884–1.013: **uncertain**, not a parity pass or demonstrated remaining gap.
+  Measured direct GC 4,498,558 B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -147,7 +152,7 @@ settings do not establish matched quality.
 | VP8 opaque text/diagram † | 5,476.34 | 5,803.20 | 0.944 / 0.952 | 741,196 | 7,100 / 7,100 |
 | VP8 diagram, effort2 / distortion-only search † | 2,525.56 | 2,511.68 | 1.006 / 1.013 | 406,705 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
-| VP8 RGBA8 + lossless alpha † | 54,544.68 | 53,351.23 | 1.022 / 1.065 | 6,242,608 | 98,590 / 98,590 |
+| VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 57,605.21 | 58,080.66 | 0.992 / 1.002 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 74,977.27 | 75,349.65 | 0.995 / 1.013 | 4,823,168 | 121,896 / 121,896 |

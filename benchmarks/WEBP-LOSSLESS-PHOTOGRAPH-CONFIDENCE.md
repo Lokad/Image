@@ -40,5 +40,5 @@ confidence views and exact boundaries. Mirrored/member-verified raw
 `175e9e30b3a8e4d790080584a3867cf057dbf96711a1b3dc3e96b6da7efe2876`.
 Its pinned dependencies retain the driver/current package/tools/fixtures. The
 [earlier uncertain global-bracket observation](https://github.com/lokad/image/blob/768ffa10cf5c131e361ff6f4cc6588113bd2aafb/benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
-and raw e9d0187b remain history. Other opaque/alpha uncertainties remain open;
-continue independent demonstrated gaps without retuning passing photograph work.
+and raw e9d0187b remain history. Opaque lossless and word-alpha uncertainty remain open; [byte alpha now passes](WARM-ADJACENT-CONFIDENCE.md).
+Continue independent demonstrated gaps without retuning passing photograph work.

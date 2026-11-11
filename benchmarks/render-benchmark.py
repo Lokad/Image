@@ -1341,7 +1341,8 @@ def render():
     assert qualification['actualPackage']['actualConsumerPassed'] and qualification['samePackageLinux']['actualConsumerPassed']
     assert webp_owned['raw']['mirrored'] and webp_owned['raw']['allMembersVerified']
     assert set(webp_owned['cases']) == {'ordinary', 'opaque', 'photograph', 'diagram', 'rgba16', 'async', 'alpha', 'alpha16'}
-    for current in webp_owned['cases'].values():
+    for name in ['ordinary', 'opaque', 'diagram', 'rgba16', 'async', 'alpha16']:
+        current = webp_owned['cases'][name]
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['completePacketExact']
@@ -1349,6 +1350,22 @@ def render():
         assert current['packetSha256'] == current['nativePacketSha256']
         assert current['managedPacketBytes'] == current['nativePacketBytes']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    adjacent_confidence = json.loads((ROOT / 'benchmarks/warm-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not adjacent_confidence['productionChanged'] and not adjacent_confidence['productionSpeedupClaim']
+    assert adjacent_confidence['raw']['mirrored'] and adjacent_confidence['raw']['allMembersVerified']
+    assert set(adjacent_confidence['cases']) == {'alpha', 'Up16'}
+    for case in adjacent_confidence['cases'].values():
+        assert case['actualPairs'] == case['nativeBatchesEachBracket'] == 12 and case['allActualsRetained']
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['independentOwnedOutputs']
+        assert case['librarySha256'] == adjacent_confidence['producers']['windowsSha256']
+        assert case['retainedOperationScratchBytes'] == 0
+    alpha_current = adjacent_confidence['cases']['alpha']
+    assert alpha_current['upper'] <= 1 and alpha_current['status'] == 'pass'
+    assert alpha_current['completePacketExact'] and alpha_current['alphaExact']
+    assert alpha_current['operationsPerSubject'] == 4
+    assert alpha_current['managedPacketBytes'] == alpha_current['nativePacketBytes'] == 98590
+    assert alpha_current['packetSha256'] == alpha_current['nativeOutputSha256']
+    webp_owned['cases']['alpha'] = alpha_current
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
     current_build_qualification = streaming['qualification']
@@ -1393,6 +1410,10 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
+    lossless_status_counts = {state: sum((photo if name == 'photograph' else case)['status'] == state
+                                         for name, case in webp_owned['cases'].items())
+                              for state in ('pass', 'gap', 'uncertain')}
+    assert lossless_status_counts == {'pass': 6, 'gap': 0, 'uncertain': 2}
     vp8_labels = {
         'opaque8': 'VP8 opaque RGBA8',
         'opaque16': 'VP8 opaque RGBA16, including normalization',
@@ -1466,6 +1487,10 @@ def render():
     assert bvc['lower'] <= 1 < bvc['upper'] and bvc['status'] == 'uncertain'
     assert bilinear_vector['comparison']['normalizedGainSeparated']
     assert all(v['rawGainSeparated'] for v in bilinear_vector['comparison']['views'].values())
+    assert adjacent_confidence['producers'] == bilinear_vector['producers']
+    bv_current = adjacent_confidence['cases']['Up16']
+    assert bv_current['managedRationalReferenceExact'] and bv_current['operationsPerSubject'] == 64
+    assert bv_current['lower'] <= 1 < bv_current['upper'] and bv_current['status'] == 'uncertain'
     current = bicubic_overlap['cases']['TightDown8']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -1919,7 +1944,7 @@ performance proof. Publication is postponed.
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
 workstation GC. Times are **µs per complete operation**. Ratios use the faster
-reference bracket; **upper** includes conservative filtered/all-actual confidence.
+reference bracket; **upper** includes conservative all-actual and relevant filtered/paired confidence.
 Short screens do not establish independent parity. **B/op** is total managed
 allocation, separate from peak live capacity and retained storage. Native
 allocations are unmeasured. Normalization, output ownership and disposal stay
@@ -1928,9 +1953,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has 5 passes / 3 uncertain encode controls; [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
-  passes on the actual package DLL (adjacent complete-operation batches, no production speedup claim); the [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
-  has 5 passes / 4 uncertain. Resolve uncertainty before tuning. Complete packets remain
+  has {lossless_status_counts['pass']} passes / {lossless_status_counts['uncertain']} uncertain encode controls;
+  [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and
+  [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
+  package DLL. Alpha costs {alpha_current['managedUs']/1000:.2f}/FFmpeg {alpha_current['nativeUs']/1000:.2f} ms,
+  upper {alpha_current['upper']:.3f}, exact {alpha_current['managedPacketBytes']:,} B and {alpha_current['allocatedBytes']:,} B/op; this resolves uncertainty, with no production speedup claim.
+  The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
+  {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   {vp8_decode_counts['pass']} passes / {vp8_decode_counts['gap']} gaps / {vp8_decode_counts['uncertain']} uncertain.
@@ -1985,9 +2014,10 @@ Current scope and remaining work:
   25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
   Up8 passes/stops; Down8/16 remain gaps. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
   independently saves 769.82 µs/27.67% raw/18.12% normalized on existing Up16.
-  Its current complete cost is {bvc['managedUs']:,.2f}/FFmpeg {bvc['nativeUs']:,.2f} µs,
-  conservative {bvc['lower']:.3f}–{bvc['upper']:.3f}: **uncertain**, not a parity pass or demonstrated remaining gap.
-  Measured GC {bvc['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
+  Its [current adjacent complete cost](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) is
+  {bv_current['managedUs']:,.2f}/FFmpeg {bv_current['nativeUs']:,.2f} µs, conservative
+  {bv_current['lower']:.3f}–{bv_current['upper']:.3f}: **uncertain**, not a parity pass or demonstrated remaining gap.
+  Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
