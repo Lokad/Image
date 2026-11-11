@@ -34,11 +34,32 @@ workspace. This profile does not identify allocation as the dominant CPU cost;
 do not enlarge the pool for this fixture or infer time savings from GC alone.
 No new retention/admission policy. Physical/native/JIT peaks remain unmeasured.
 
-Next: source/JIT-justified mask-publication candidate, focused exact/ownership
-checks and one complete-operation screen; independent confirmation only if useful.
-Preserve unfavorable results. Qualification/package work waits for affected
-performance reconciliation. Unchanged 6,251 Windows/Linux checks and SAME actual
-package/all three examples remain valid. Publication stays postponed.
+## Bounded mask-publication trial
+
+BPM803 replaced only the mask extraction expression. Actual JIT emits direct
+compare→kmov and removes vector expansion/two-half extraction; main code falls
+2,822→2,764 B. Focused 363 internal/779 public resize/shared-memory checks pass
+normal/scalar on Windows/Linux, with one main/embedded build per OS and no harness
+or fixture build. Exact predicates, margins and repair remain verbatim.
+
+The complete twelve-actual candidate screen costs 2,663.02/native2,050.86 µs,
+upper1.331; its native brackets move 2,224.09→2,050.86 µs. One justified current
+baseline counter costs 2,766.17/native2,205.62 µs, upper1.265. The raw candidate
+point is 103.14 µs/3.73% lower, while its normalized point is adverse and conservative
+intervals overlap. All actuals remain. **Effect inconclusive**: no gain, equivalence
+or confirmed regression claim, and no further sampling for a favorable result.
+Allocation remains 4,498,923 B/op; no capacity or retention change.
+
+Qualified source, production/embedded modules and source manifest are restored
+exactly on both OSes; the package is unchanged. No independent confirmation,
+broad test or package repeat. Existing 6,251 Windows/Linux/SAME-package proof is
+reused. A missing artifact transfer failed before timing; completed JIT output
+was recovered after a download-list mismatch, without rerunning it.
+
+The one-expression trial stops, not the family. A materially revised combined
+certification/publication boundary could reuse alpha classification and avoid
+scalar lane extraction; row preparation also remains visible. Either needs a
+concrete design and complete-operation evidence. Publication stays postponed.
 
 [Evidence](bilinear-up16-current-attribution-evidence.json) pins actual-module
 source, code annotations, frozen receipt and sample map. Mirrored/member-verified
@@ -47,3 +68,9 @@ SHA256 `b14f0e6643452827bf5391d55fe6f84e9fb7e480636f6351ffd43b2a2d87661f`. Its [
 retains current complete costs, actual package, fixtures/selectors/reference and
 qualification. This diagnostic supplies no displayed result and is not a renderer
 dependency. All 289 required paths remain.
+
+The restored trial's mirrored/member-verified raw `bilinear-fullwidth-mask-trial.tar.xz` retains
+both modules/screens, source proof, JIT, focused checks and exact restoration:
+5,728,068 B / 75 members, SHA256
+`e5b080cd8f8bd4a5bfdf3a69130ddd3e3506c27ab9ea32f085f0f18476f2e894`. It is separate from current performance proof
+and supplies no renderer dependency.
