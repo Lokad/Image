@@ -7,7 +7,20 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [enlargement horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+The latest accepted [live PNG run preparation](PNG-LIVE-RUN-PREPARATION.md)
+passes6,351full/live checks per OS,712internal/246public PNG/admission checks in
+normal/scalar modes, and SAME actual Release-package/all three examples on
+Windows/Linux. Word decoding saves93.08µs/2.89%raw/1.86%normalized against a
+contemporary predecessor, with separated filtered/all-actual/normalized confidence;
+native time moves−1.05%. Current3126.33/native3153.78µs upper1.001253 remains
+uncertain. Byte1529.69/1535.97µs upper1.012 also stays uncertain; raw+9.90%
+tracks native+10.19% with normalized overlap, not a byte speedup or uniform gain.
+GC4,472/8,568B/op and4KiB framing admission are unchanged. Both cancellation
+polls remain per symbol; no new storage/owner/pool. The51read/validation controls
+now have49pass/0gap/2uncertain; stop unchanged passing paths. Resize/codec/text
+ISA evidence is reused.
+
+Unchanged [enlargement horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 passes 6,351 full/live checks per OS, 442 internal/789 public resize checks in
 normal/scalar/AVX2off/AVX512off modes, and SAME actual Release-package/all three
 examples on Windows/Linux. Four frozen horizontal/vertical byte/word frames cover
@@ -71,7 +84,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | --- | --- |
 | JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
-| PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md): 51 controls, 49 pass / 1 gap / 1 uncertain. Materialized live RGBA16 upper1.012 is a gap; live byte upper1.004 is uncertain. [Cached literal-run trials](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md) show no useful lead and restore production; three independent behavior tests remain. Other affected historical stream/composition costs remain H. |
+| PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md):51controls,49pass/0gap/2uncertain. [Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md) save93.08µs/2.89%raw/1.86%normalized on RGBA16 with separated confidence; current3126.33/native3153.78µs upper1.001253 remains uncertain. Byte1529.69/1535.97µs upper1.012 stays uncertain; clock movement and raw adverse view are explicit. Same4,472/8,568B/op/4KiB, no new capacity/retention and original cancellation checkpoints. Old two-symbol trials are history; no favorable repeat. Other affected historical stream/composition costs remain H. |
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |

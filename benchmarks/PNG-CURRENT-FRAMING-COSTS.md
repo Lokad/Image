@@ -1,16 +1,18 @@
 # Current PNG decode and coding-validation costs
 
 All **47 existing resident decode controls and four coding validators** have
-independent evidence: **49 pass and stop, one gap, one uncertain**.
+independent evidence: **49 pass and stop, two uncertain**.
 [Ordinary/slab publication](PNG-NORMAL-CURSOR-PUBLICATION.md) refreshes43 affected
-controls and closes four former gaps. Eight unchanged paths reuse their explicit
-providers, including the two [materialized live controls](PNG-LIVE-PREPARED-CURSOR.md).
+controls and closes four former gaps. [Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md)
+now own the two materialized live costs, saving93.08µs/2.89%raw/1.86%normalized
+on RGBA16 with separated confidence; its upper1.001253 remains uncertain. Byte
+also stays uncertain. Six other unchanged paths reuse their explicit providers.
 The separate two-retained-image shared-root operation also now passes.
 Frozen workers, harnesses, fixtures and settings are reused; no new workload grid.
 
 | Existing case | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | --- |
-| DecodeCancelable8 | 1,391.93 / 1,393.91 | 0.999 / 1.004 | 4,472 | uncertain |
+| DecodeCancelable8 | 1,529.69 / 1,535.97 | 0.996 / 1.011744 | 4,472 | uncertain |
 | DecodeTight8 | 1,184.46 / 1,395.39 | 0.849 / 0.855 | 68,224 | pass |
 | DecodeTight16 | 2,826.77 / 2,894.02 | 0.977 / 0.981 | 70,272 | pass |
 | ValidatePng8 | 1,169.54 / 1,380.85 | 0.847 / 0.857 | 240 | pass |
@@ -34,7 +36,7 @@ Frozen workers, harnesses, fixtures and settings are reused; no new workload gri
 | DecodeSub16 | 271.06 / 742.62 | 0.365 / 0.378 | 8,568 | pass |
 | DecodeAverage8 | 1,470.63 / 1,851.85 | 0.794 / 0.797 | 4,472 | pass |
 | DecodeAverage16 | 3,438.64 / 4,478.17 | 0.768 / 0.771 | 8,568 | pass |
-| DecodeCancelable16 | 2,919.94 / 2,894.87 | 1.009 / 1.012 | 8,568 | gap |
+| DecodeCancelable16 | 3,126.33 / 3,153.78 | 0.991 / 1.001253 | 8,568 | uncertain |
 | DecodeTightCancelable16 | 2,789.14 / 2,893.47 | 0.964 / 0.976 | 70,272 | pass |
 | DecodeNoCompression8 | 92.78 / 135.99 | 0.682 / 0.686 | 4,472 | pass |
 | DecodeNoCompression16 | 208.13 / 296.12 | 0.703 / 0.708 | 8,568 | pass |
@@ -78,12 +80,13 @@ their separate frozen natural-frame worker and metadata adapter. The existing on
 control includes its declared native filter/one filter thread; other controls retain
 their declared conversions and threading. Native contexts/wrappers remain prepared.
 
-DLL `23d65df3…` supplies43 refreshed costs; `bad642c2…` supplies the unchanged
+DLL `23d65df3…` supplies43 source-valid costs; `8e44e29f…` supplies the refreshed
 materialized-live pair and `05f30275…` the six unchanged stored/counting/BCL cases.
 The [scope audit and evidence](png-normal-cursor-publication-evidence.json) identify
-each provider and first-compressed-tree/routing reason. Windows/Linux each pass
-5,907full/live checks, focused normal/scalar checks and the same actual private
-Release package/all three examples. Passing cases stop. No broader speedup follows
+each earlier provider and routing reason. Current qualification passes6,351
+full/live checks per OS,712internal/246public PNG/admission cases in normal/scalar
+modes, and SAME actual Release-package/all three examples on Windows/Linux.
+Other source-valid ISA evidence is reused. Passing cases stop. No broader speedup follows
 from refreshing costs; grayscale16, for example, is effectively unchanged.
 
 B/op measures total managed allocation, separately from peak live capacity and
@@ -92,12 +95,14 @@ retained storage. All51 allocation counts are unchanged; framing admission remai
 unmeasured. The two-image shared-root operation retains its own peak/output-pair
 figures in the new report. Older stream/composition costs remain historical;
 prefix/Identify and encoding do not enter the changed cursor. This inventory does
-not establish all PNG or283-path parity.
+not establish all PNG or289-path parity.
 
-The new report owns current costs and qualification. Earlier
+[Live-run preparation](PNG-LIVE-RUN-PREPARATION.md) owns the two current live costs
+and latest package qualification; the other49 costs remain source-valid. Earlier
 [framing evidence](png-current-framing-costs-evidence.json),
 [live evidence](png-live-prepared-cursor-evidence.json) and their raw archives retain
 superseded measurements, adverse results and reproducibility. The new mirrored,
 member-verified archive and its dependencies are identified in
-[current evidence](png-normal-cursor-publication-evidence.json). Publication remains
+[current live evidence](png-live-run-preparation-evidence.json) and
+[ordinary cursor evidence](png-normal-cursor-publication-evidence.json). Publication remains
 postponed; uncertainty is resolved before assuming further optimization.

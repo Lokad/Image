@@ -411,6 +411,12 @@ cached >>= length; bits -= length; count++;
         {
             var cached = buffer; var bits = available; var offset = position;
             var cancellation = this.cancellation;
+            // The sole dispatcher selects a live token and the full prepared
+            // lookup. Make these run invariants visible to the single-symbol
+            // loop without changing either of its cancellation checkpoints.
+            if (!cancellation.CanBeCanceled || destination.IsEmpty) return 0;
+            lookup = lookup[..512];
+            var bytes = data;
 var count = 0;
             while (count < destination.Length)
             {
@@ -421,8 +427,8 @@ var count = 0;
                 if (cancellation.IsCancellationRequested) break;
                 if (bits < 9)
                 {
-                    if (data.Length - offset < 4) break;
-                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(offset, 4)) << bits;
+                    if (bytes.Length - offset < 4) break;
+                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(bytes.Slice(offset, 4)) << bits;
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;

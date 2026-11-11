@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare live PNG literal-run invariants once, preserving exact pixels,
+  cancellation checkpoints and shared memory ownership.
+
 - Prepare ordered horizontal pairs and bypass exact identity-width filtering in
   bicubic enlargement, preserving pixel precision and shared memory ownership.
 

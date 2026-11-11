@@ -36,8 +36,14 @@ Current scope and remaining work:
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
 - **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
-  has 49 passes / 1 gap / 1 uncertain across 51 controls. Live materialized RGBA16 remains
-  2,919.94/native2,894.87µs, upper1.012. [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
+  has 49 passes / 0 gaps / 2 uncertain across 51 controls. [Prepared live-run invariants](../benchmarks/PNG-LIVE-RUN-PREPARATION.md)
+  save93.08µs/2.89% raw/1.86% normalized on RGBA16, with separated filtered/all-actual
+  and normalized confidence; native moves−1.05%. Current3,126.33/native3,153.78µs,
+  upper1.001253 remains uncertain. Byte1,529.69/native1,535.97µs, upper1.012 also
+  remains uncertain; raw+9.90% tracks native+10.19%, with overlapping normalized
+  intervals, not a byte speedup or uniform raw-gain claim. GC4,472/8,568B/op and
+  4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
+  [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
   has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
@@ -146,7 +152,8 @@ and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current resize qualification: 442 internal/789 public per
+Current PNG/admission checks pass712internal/246public per normal/scalar mode.
+Unchanged resize qualification is reused: 442 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -215,7 +222,7 @@ settings do not establish matched quality.
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,704.74 | 5,506.13 | 0.854 / 0.875 | 822,740 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,874.42 | 10,487.03 | 0.942 / 0.950 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † | 1,391.93 | 1,393.91 | 0.999 / 1.004 | 4,472 | — |
+| PNG RGBA8 decode, live token † | 1,529.69 | 1,535.97 | 0.996 / 1.012 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,184.46 | 1,395.39 | 0.849 / 0.855 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 2,826.77 | 2,894.02 | 0.977 / 0.981 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |

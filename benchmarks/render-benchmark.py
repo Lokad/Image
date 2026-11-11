@@ -435,6 +435,24 @@ def render():
     assert png_q['actualPackage']['sha256'] == png_q['samePackageLinux']['sameActualPackageSha256']
     assert all(q['sharedOrdinaryPngCursorAndRowsOwnershipPassed']
                for q in (png_q['actualPackage'], png_q['samePackageLinux']))
+    png_live = json.loads((ROOT / 'benchmarks/png-live-run-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert png_live['productionAccepted'] and png_live['allAffectedPerformanceReconciled']
+    assert png_live['requiredMaterialPaths'] == 289 and png_live['familyStatusCounts'] == {'pass': 49, 'gap': 0, 'uncertain': 2}
+    assert png_live['raw']['mirrored'] and png_live['raw']['allMembersVerified']
+    assert png_live['sourceProof']['wholeOriginalSourceReconstructsFromOnlyRunGuardAndBorrowedViews']
+    assert png_live['sourceProof']['oldSingleSymbolOrderAndTwoCancellationPollsPreserved']
+    assert png_live['sourceProof']['ordinaryRollingCountingCursorEncoderAndOwnersVerbatim']
+    assert png_live['comparison']['word']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in png_live['comparison']['word']['views'].values())
+    assert not png_live['comparison']['byte']['normalizedAdverseSeparated']
+    assert png_live['storage']['newOwnedCapacityBytes'] == png_live['storage']['newRetainedStateBytes'] == 0
+    for live_case in png_live['cases'].values():
+        assert live_case['actualIterations'] == live_case['nativeSamplesEachBracket'] == len(live_case['managedActualNanoseconds']) == 12
+        assert live_case['quietGuardsPassed'] and live_case['allOriginalGatesPassed']
+        assert live_case['managedExact'] and live_case['alphaExact'] and live_case['hiddenRgbExact']
+        assert live_case['sourceUnchanged'] and live_case['independentOwnedOutput']
+        assert live_case['librarySha256'] == png_live['producers']['windowsSha256']
+        assert live_case['status'] == 'uncertain' and live_case['lower'] <= 1 < live_case['upper']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -574,7 +592,7 @@ def render():
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
     for case, limit in [('DecodeCancelable8', None), ('DecodeTight8', 1235173), ('DecodeTight16', 3254193)]:
-        framing_case = png_framing['cases'][case]
+        framing_case = png_live['cases'].get(case, png_framing['cases'][case])
         assert framing_case['tightWorkingBytes'] == limit
         assert framing_case['cancellationCanBeCanceled'] == (case == 'DecodeCancelable8')
         assert not framing_case['cancellationRequested']
@@ -2027,13 +2045,15 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = enlargement_modes['qualification']
+    current_build_qualification = png_live['qualification']
     assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6351
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == enlargement_modes['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == enlargement_modes['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_live['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == png_live['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['actualPackageFourFrozenEnlargementFramesPassedBothOs']
     assert current_build_qualification['threeNamedStorageSuitesIncluded']
+    assert current_build_qualification['pngInternalEachModeEachOs'] == 712 and current_build_qualification['pngPublicEachModeEachOs'] == 246
+    assert current_build_qualification['unchangedResizeCodecTextIsaEvidenceReused'] and current_build_qualification['additionalResizeIsaRuns'] == 0
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2074,8 +2094,14 @@ Current scope and remaining work:
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
 - **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
-  has 49 passes / 1 gap / 1 uncertain across 51 controls. Live materialized RGBA16 remains
-  2,919.94/native2,894.87µs, upper1.012. [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
+  has 49 passes / 0 gaps / 2 uncertain across 51 controls. [Prepared live-run invariants](../benchmarks/PNG-LIVE-RUN-PREPARATION.md)
+  save93.08µs/2.89% raw/1.86% normalized on RGBA16, with separated filtered/all-actual
+  and normalized confidence; native moves−1.05%. Current3,126.33/native3,153.78µs,
+  upper1.001253 remains uncertain. Byte1,529.69/native1,535.97µs, upper1.012 also
+  remains uncertain; raw+9.90% tracks native+10.19%, with overlapping normalized
+  intervals, not a byte speedup or uniform raw-gain claim. GC4,472/8,568B/op and
+  4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
+  [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
   has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
@@ -2184,7 +2210,8 @@ and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current resize qualification: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+Current PNG/admission checks pass712internal/246public per normal/scalar mode.
+Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.

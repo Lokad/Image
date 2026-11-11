@@ -1,0 +1,482 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PIP822",
+  "date": "2026-11-11",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 289,
+  "allAffectedPerformanceReconciled": true,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+    "linuxSha256": "b785b1c8f5b15190fe530d7811ea10d1a83f8b196013f74ec2adb7f0468eafe5",
+    "actualPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f"
+  },
+  "cases": {
+    "DecodeCancelable16": {
+      "managedUs": 3126.3340638020836,
+      "nativeUs": 3153.7816354166666,
+      "ratio": 0.9912969334000967,
+      "lower": 0.9792147699499776,
+      "upper": 1.0012532901492444,
+      "allocatedBytes": 8568,
+      "status": "uncertain",
+      "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "DecodeCancelable16",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        3139455.515625,
+        3127205.40625,
+        3129947.0625,
+        3120179.765625,
+        3119048.84375,
+        3099735.53125,
+        3130139.0625,
+        3110344.5625,
+        3131450.578125,
+        3131934.75,
+        3137070.953125,
+        3139535.265625
+      ],
+      "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "inputBytes": null,
+      "outputBytes": 1062936,
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 548352 64",
+      "receipt": "tmp/pip822-candidate-DecodeCancelable16-confirm-receipt.json",
+      "observation": "tmp/pip822-candidate-DecodeCancelable16-confirm-observation.json",
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": true,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 1062936,
+      "packetSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "caseId": "DecodeCancelable16",
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "metadataAndOriginalBoundaryRetainedExactly": true
+    },
+    "DecodeCancelable8": {
+      "managedUs": 1529.6873469065658,
+      "nativeUs": 1535.974375,
+      "ratio": 0.9959068144652907,
+      "lower": 0.9813997900172247,
+      "upper": 1.0117443325054187,
+      "allocatedBytes": 4472,
+      "status": "uncertain",
+      "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "PNG RGBA8 decode, live token",
+      "actualIterations": 12,
+      "filteredResults": 11,
+      "managedActualNanoseconds": [
+        1522856.423611111,
+        1526988.861111111,
+        1558739.0902777778,
+        1534696.2291666667,
+        1527507.076388889,
+        1528364.0625,
+        1526983.5069444445,
+        1525023.8055555555,
+        1527659.25,
+        1532264.701388889,
+        1539081.4027777778,
+        1535159.2152777778
+      ],
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "rawGc": "// GC:  0 0 0 643968 144",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "receipt": "tmp/pip822-candidate-DecodeCancelable8-confirm-receipt.json",
+      "observation": "tmp/pip822-candidate-DecodeCancelable8-confirm-observation.json",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "inputBytes": 218775,
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": false,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 531468,
+      "packetSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "caseId": "DecodeCancelable8",
+      "filteredIterations": 11,
+      "allActualsRetained": true,
+      "metadataAndOriginalBoundaryRetainedExactly": true
+    }
+  },
+  "familyStatusCounts": {
+    "pass": 49,
+    "gap": 0,
+    "uncertain": 2
+  },
+  "comparison": {
+    "word": {
+      "views": {
+        "statistics": {
+          "baselineUs": 3219.4140390625,
+          "candidateUs": 3126.3340638020836,
+          "savedUs": 93.07997526041652,
+          "savedFraction": 0.028912085904775897,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 3219414.0390625,
+            "StandardError": 3155.4410331414315,
+            "Level": 12,
+            "Margin": 14000.626663633795,
+            "Lower": 3205413.4123988664,
+            "Upper": 3233414.6657261336
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 3126334.0638020835,
+            "StandardError": 3483.3567668954774,
+            "Level": 12,
+            "Margin": 15455.581998625841,
+            "Lower": 3110878.4818034577,
+            "Upper": 3141789.6458007093
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 3219.41725,
+          "candidateUs": 3126.3372747395833,
+          "savedUs": 93.07997526041652,
+          "savedFraction": 0.0289120570688427,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 3219417.25,
+            "StandardError": 3155.4410331414315,
+            "Level": 12,
+            "Margin": 14000.626663633795,
+            "Lower": 3205416.6233363664,
+            "Upper": 3233417.8766636336
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 3126337.2747395835,
+            "StandardError": 3483.3567668954774,
+            "Level": 12,
+            "Margin": 15455.581998625841,
+            "Lower": 3110881.6927409577,
+            "Upper": 3141792.8567382093
+          }
+        }
+      },
+      "normalizedGain": 0.01858056916874362,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.010527116553298299,
+      "baselineRatioBounds": [
+        1.0025232708793077,
+        1.0166970417443755
+      ],
+      "candidateRatioBounds": [
+        0.9792147699499776,
+        1.0012532901492444
+      ]
+    },
+    "byte": {
+      "views": {
+        "statistics": {
+          "baselineUs": 1391.9256741898146,
+          "candidateUs": 1529.6873469065658,
+          "savedUs": -137.76167271675124,
+          "savedFraction": -0.09897200351371982,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 1391925.6741898146,
+            "StandardError": 1308.879461738859,
+            "Level": 12,
+            "Margin": 5807.47112655119,
+            "Lower": 1386118.2030632633,
+            "Upper": 1397733.1453163659
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 1529687.3469065658,
+            "StandardError": 1487.9570527960634,
+            "Level": 12,
+            "Margin": 6825.101065452908,
+            "Lower": 1522862.245841113,
+            "Upper": 1536512.4479720187
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 1391.9275144675926,
+          "candidateUs": 1532.110302083333,
+          "savedUs": -140.18278761574044,
+          "savedFraction": -0.10071126991793089,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 1391927.5144675926,
+            "StandardError": 1308.8794617388535,
+            "Level": 12,
+            "Margin": 5807.471126551165,
+            "Lower": 1386120.0433410413,
+            "Upper": 1397734.9855941439
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 1532110.302083333,
+            "StandardError": 2775.8387806770797,
+            "Level": 12,
+            "Margin": 12316.33931311507,
+            "Lower": 1519793.962770218,
+            "Upper": 1544426.641396448
+          }
+        }
+      },
+      "normalizedGain": 0.002674794587766205,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.10191941159200057,
+      "baselineRatioBounds": [
+        0.9923391747636829,
+        1.0038148976969725
+      ],
+      "candidateRatioBounds": [
+        0.9813997900172247,
+        1.0117443325054187
+      ]
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "PIP822",
+    "wholeOriginalSourceReconstructsFromOnlyRunGuardAndBorrowedViews": true,
+    "oldSingleSymbolOrderAndTwoCancellationPollsPreserved": true,
+    "ordinaryRollingCountingCursorEncoderAndOwnersVerbatim": true,
+    "caller": "Only CopyStreamingLiteralRun selects the helper when token.CanBeCanceled; only InflateLiveCursor calls that dispatcher. Walk chooses the live cursor for nonempty materialized output with a live token. All paths prepare a1024entry lookup. Empty destination returns0 with unchanged cursor; existing pre-cancel/tails tests pass.",
+    "actualTimedModuleCodeBytes": 296,
+    "predecessorProfileCodeBytes": 305,
+    "actualCode": "One cancellation-source null test and lookup length guard before the loop. Both cancellation state loads stay inside the loop; masked0..511 lookup has no per-symbol bounds failure. Input field/length loaded once. Extra register preservation/loop layout may offset saved checks; no gain inferred.",
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "newExplicitStackArrayCapacityBytes": 0,
+    "admittedFramingScratchBytes": 4096,
+    "sources": {
+      "src/Lokad.Image/Internal/ZlibFraming.cs": "5f2bbb676e6da223bc1c1b6f6330f147ef038e7c2bf08cd7e431d6c54885e252"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/Adler32.cs": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+      "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+      "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+      "src/Lokad.Image/Internal/PngRowPrediction.cs": "4f2dc5562baf7f4db5a3426396706c5f50b2c2eb898c2e9bd37845e136d7122c",
+      "src/Lokad.Image/Internal/ZlibFraming.LiveCursor.cs": "bc8733d76ba8586855c7c275461c8f3611558538e7fb7dec7d1b4cc271b7fb99",
+      "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "66081d4740f55cccd52aabd0ff123410dd3c4775b4539f6f160f066d09dae56c"
+    },
+    "performanceScope": [
+      "DecodeCancelable16",
+      "DecodeCancelable8"
+    ],
+    "physicalNativeJitPeakMeasured": false
+  },
+  "qualification": {
+    "fullChecksEachOs": 6351,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "full": [
+        3024,
+        2379,
+        948
+      ],
+      "total": 6351,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 712,
+        "public-normal": 246,
+        "internal-scalar": 712,
+        "public-scalar": 246
+      },
+      "isa": {},
+      "resizeInternalEachMode": 442,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Zlib|FullyQualifiedName~Deflate|FullyQualifiedName~CooperativeMemory",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/ZlibFraming.cs": "5f2bbb676e6da223bc1c1b6f6330f147ef038e7c2bf08cd7e431d6c54885e252"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/Adler32.cs": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+        "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+        "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+        "src/Lokad.Image/Internal/PngRowPrediction.cs": "4f2dc5562baf7f4db5a3426396706c5f50b2c2eb898c2e9bd37845e136d7122c",
+        "src/Lokad.Image/Internal/ZlibFraming.LiveCursor.cs": "bc8733d76ba8586855c7c275461c8f3611558538e7fb7dec7d1b4cc271b7fb99",
+        "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "66081d4740f55cccd52aabd0ff123410dd3c4775b4539f6f160f066d09dae56c"
+      },
+      "codecAndTextIsaReused": true,
+      "resizeIsaQualificationReused": true,
+      "pngInternalEachMode": 712,
+      "pngPublicEachMode": 246,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "b785b1c8f5b15190fe530d7811ea10d1a83f8b196013f74ec2adb7f0468eafe5",
+      "full": [
+        3024,
+        2379,
+        948
+      ],
+      "total": 6351,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 712,
+        "public-normal": 246,
+        "internal-scalar": 712,
+        "public-scalar": 246
+      },
+      "isa": {},
+      "resizeInternalEachMode": 442,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Zlib|FullyQualifiedName~Deflate|FullyQualifiedName~CooperativeMemory",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/ZlibFraming.cs": "5f2bbb676e6da223bc1c1b6f6330f147ef038e7c2bf08cd7e431d6c54885e252"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/Adler32.cs": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+        "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+        "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+        "src/Lokad.Image/Internal/PngRowPrediction.cs": "4f2dc5562baf7f4db5a3426396706c5f50b2c2eb898c2e9bd37845e136d7122c",
+        "src/Lokad.Image/Internal/ZlibFraming.LiveCursor.cs": "bc8733d76ba8586855c7c275461c8f3611558538e7fb7dec7d1b4cc271b7fb99",
+        "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "66081d4740f55cccd52aabd0ff123410dd3c4775b4539f6f160f066d09dae56c"
+      },
+      "codecAndTextIsaReused": true,
+      "resizeIsaQualificationReused": true,
+      "pngInternalEachMode": 712,
+      "pngPublicEachMode": 246,
+      "additionalBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+      "symbolsSha256": "ba75b8a2e8f7c345f0b11b1530070f72b6ab2bd8d9d9eafab6d86846f74c8bf6",
+      "bytes": 451108,
+      "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+      "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "allThreeExamplesBothOS": true,
+    "resizeInternalEachModeEachOs": 442,
+    "resizePublicEachModeEachOs": 789,
+    "threeNamedStorageSuitesIncluded": true,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "unchangedCodecAndTextIsaReused": true,
+    "unchangedCodecAndResizeIsaReused": true,
+    "currentTextInternalEachModeEachOs": 183,
+    "currentTextPublicEachModeEachOs": 162,
+    "additionalProductionOrEmbeddedBuildsAfterFocused": 0,
+    "currentTextEvidenceReused": true,
+    "actualPackageByteWordReductionVsFallbackPassedBothOs": true,
+    "actualPackageIdentityAndGeneralWordFrozenOwnersPassedBothOs": true,
+    "actualPackageFourFrozenEnlargementFramesPassedBothOs": true,
+    "pngInternalEachModeEachOs": 712,
+    "pngPublicEachModeEachOs": 246,
+    "unchangedResizeCodecTextIsaEvidenceReused": true,
+    "additionalResizeIsaRuns": 0
+  },
+  "raw": {
+    "file": "png-live-run-preparation.tar.xz",
+    "sha256": "8e86848221b82b699e6d228925e6de0ca3a535ec68b43ba2556b3032e12eb10d",
+    "bytes": 2463116,
+    "members": 129,
+    "dependencies": [
+      {
+        "file": "png-live-word-current-attribution-pwa777.tar.xz",
+        "sha256": "1bd1a3117265854b35b36cc02b5c6193db4c14a366d9db27fc07641b9e880ed2",
+        "scope": "Source-valid original live loop attribution, all seven pins and complete frozen controls/harness/native identities"
+      },
+      {
+        "file": "png-cached-literal-run-experiment.tar.xz",
+        "sha256": "fffe693e7d8f130b6f6518f9631e8adbd26c194418eb68608736296c05fa007f",
+        "scope": "Unselected prior two-symbol experiments and retained independent prefix/phase/cut/output/cancel/zero-allocation tests"
+      },
+      {
+        "file": "bicubic-enlargement-horizontal-modes.tar.xz",
+        "sha256": "856e6d3f68e8a8f5e5faacb5d50c49b08fec2cb9fefe3761a7d3df741a904cfd",
+        "scope": "Verified preceding actual package/core/internal modules, unchanged resize/text/codec/ISA qualification and original current289path scope"
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "newExplicitStackArrayCapacityBytes": 0,
+    "admittedFramingScratchBytes": 4096,
+    "framingArraysPayloadBytes": 4063,
+    "byteAllocatedBytes": 4472,
+    "wordAllocatedBytes": 8568,
+    "byteRetainedResultBytes": 531468,
+    "wordRetainedResultBytes": 1062936,
+    "operationScratchRetentionBytes": 0,
+    "defaultPoolGovernedBypassAndMaterializedWorkspaceUnchanged": true,
+    "physicalNativeJitPeakMeasured": false
+  },
+  "workflow": {
+    "coreEmbeddedVersionsEachOS": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "productionCompileFailures": 0,
+    "screens": "Three original three-actual jobs: word candidate and contemporary predecessor, byte candidate. No new workload or settings.",
+    "independentConfirmations": "Twelve actuals each for word candidate/contemporary predecessor and affected byte candidate; all actuals/native brackets retained.",
+    "actualTimedModulePublicCodegenCasesLinux": 16,
+    "fullQualificationMilestonesEachOS": 1,
+    "packageProofEachOS": 1,
+    "qualification": "One W/L6351full/live, PNG712/246normal/scalar, SAMEactualReleasepackage/all3examples after both affected costs reconcile. Reuse unchanged resize/codec/text ISA evidence; no unrelated repeat."
+  },
+  "decision": "Retain once-per-run live cancellation/lookup/input-view preparation in original single-symbol loop. Independent word raw/all-actual/normalized intervals separate; standalone upper1.001253 remains uncertain, not a parity pass. Byte current uncertainty has no separated normalized regression versus source-valid prior; raw+9.9% accompanies native+10.2%, no uniform raw gain/nonregression or byte speedup claim. No extra byte baseline/favorable repeat/new grid. Both affected costs reconciled before one coherent W/L full/live/SAMEactualpackage milestone. Preserve original cancellation polls and exact complete pixels/ownership.",
+  "next": "Keep both live PNG uncertainties visible; no parity claim or unchanged favorable repetition. Forty-nine unchanged passing read/validation cases stop. Choose the next demonstrated material independent codec/resizing gap from current coverage; all289paths remain required and publication is postponed."
+}

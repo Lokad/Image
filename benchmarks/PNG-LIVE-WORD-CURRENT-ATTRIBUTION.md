@@ -1,5 +1,9 @@
 # Live RGBA16 PNG attribution
 
+[Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md) supersede the two
+live costs below. Earlier exact traversal/profile evidence and raw archives remain
+history and motivation, not current affected timing proof.
+
 The subsequent [cached-run experiment](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md)
 finds no useful gain in two bounded implementations and restores production.
 The capture below remains attribution, without a displayed timing replacement.

@@ -1,5 +1,9 @@
 # Prepared live PNG cursor
 
+[Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md) supersede the two
+live costs below. Earlier exact traversal/profile evidence and raw archives remain
+history and motivation, not current affected timing proof.
+
 PLK571 holds a materialized live block's cache, bit count and input offset locally.
 It reuses the existing prepared ten-bit table when full maximum-depth lookahead
 is already cached. Unknown/refill/deeper prefixes keep the canonical helper.
