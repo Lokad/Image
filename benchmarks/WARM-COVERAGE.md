@@ -39,6 +39,21 @@ source/modules/package are restored exactly; no broad/package repeats or passing
 word retuning. Both local edits are closed; further resize work needs a revised
 preparation/scheduling hypothesis, while independent codec/coverage work continues.
 
+The [current predictable/stored PNG confirmations](PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
+replace the three displayed historical PNG costs using the unchanged actual
+package DLL. Predictable16 277.00/FFmpeg407.42ms upper0.706 and stored8
+94.11/190.82µs upper0.674 pass/stop. Stored16 post-GC4op507.69/405.03µs upper1.343
+and natural-GC matched64op351.54/405.42µs upper0.902 are distinct views; general
+word parity remains sampling-sensitive. Actual selector/default GC behavior is
+verified; no claim that GC alone explains the difference. All packets/samples,
+ownership/quiet guards remain exact; GC2,495,988/810,524/1,348,268B peroperation,
+zero retained operation scratch, peaks/pool retention unremeasured. No production/
+embedded/harness/native/fixture build or broad/package repeat; one allowlist-only
+owned-driver build. The initial reference preflight fails before timing and is
+retained; an ignored matching provenance view preserves reference identities.
+Next resolve the remaining historical Tight32x16_8 bicubic control on this actual
+package before assuming optimization is needed. All289paths remain; no global pass.
+
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and the SAME actual Release-package/all

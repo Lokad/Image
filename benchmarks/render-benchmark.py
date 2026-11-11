@@ -1840,6 +1840,29 @@ def render():
     current_build_qualification = lanczos_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
+    # Current actual-package costs for the three remaining historical PNG rows.
+    png_historical = json.loads((ROOT / 'benchmarks/png-historical-current-confirmation-evidence.json').read_text(encoding='utf-8'))
+    assert not png_historical['productionChanged'] and png_historical['requiredMaterialPaths'] == 289
+    assert png_historical['raw']['mirrored'] and png_historical['raw']['allMembersVerified']
+    assert png_historical['qualification']['fullChecksEachOs'] == 6417 and png_historical['qualification']['sameActualPackageBothOS']
+    assert png_historical['qualification']['actualPackageSha256'] == png_historical['producers']['actualPackageSha256']
+    assert png_historical['gcInspection']['resolvedDefaultGcForce'] and not png_historical['gcInspection']['unresolvedSelectorMembers']
+    assert png_historical['wordGeneralStatus'] == 'sampling-sensitive-open'
+    assert png_historical['warmWord']['status'] == 'pass' and not png_historical['warmWord']['generalWarmPassAccepted']
+    for case, prefix, label in [
+        ('EncodePredictable16', '| PNG predictable RGBA16 3000², Optimal6 / mixed6', 'PNG predictable RGBA16 3000², Optimal6 / mixed6'),
+        ('EncodeNoCompression8', '| PNG RGBA8, stored0 / native0', 'PNG RGBA8, stored0 / native0'),
+        ('EncodeNoCompression16', '| PNG RGBA16, NoCompression0 / native0', 'PNG RGBA16, stored0 / native0 (post-GC 4-op gap)')]:
+        cost = png_historical['cases'][case]
+        assert cost['librarySha256'] == png_historical['producers']['timedArtifactSha256'] == png_historical['qualification']['librarySha256']
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed'] and cost['completePacketExact']
+        assert cost['sourceUnchanged'] and cost['independentOwnedOutput'] and cost['retainedOperationScratchBytes'] == 0
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
+        assert len(positions) == 1
+        rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
+                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
                          *(row for kind, row in rows if kind == 'codec')])
     read_labels = ['Probe PNG dimensions, seekable', 'Probe JPEG dimensions, seekable',
@@ -2092,6 +2115,13 @@ Current scope and remaining work:
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
+  [Current predictable/stored controls](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
+  replace three H rows on the actual package DLL. Predictable16 277.00/407.42 ms
+  upper0.706 and stored8 94.11/190.82 µs upper0.674 pass/stop. Stored16's post-GC
+  four-op507.69/405.03 µs upper1.343 is a distinct diagnostic; natural-GC matched
+  64-op351.54/405.42 µs upper0.902 passes its scope. Preserve both; general word
+  parity remains sampling-sensitive, with no presumed kernel gap. GC2,495,988 /
+  810,524 /1,348,268 B/op; exact573,041 /533,444 /1,066,552 B packets.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
