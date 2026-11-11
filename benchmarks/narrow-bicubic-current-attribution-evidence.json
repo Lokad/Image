@@ -1,0 +1,1374 @@
+{
+  "project": "Lokad.Image",
+  "stage": "NCA792",
+  "productionChanged": false,
+  "newStatisticalTiming": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "NCA792",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "caseId": "TightDown8",
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "e7936e917435cb6ed0bc03db9110f8f0e8a9a31a1490e5dbf16a0376bd35770d",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee"
+    },
+    "columnAndGeometryByteExactToLoanStage": true,
+    "sharedMathPinnedToCurrentQualification": true,
+    "costReused": {
+      "caseId": "TightDown8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 667660,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "managedUs": 472.44259760802464,
+      "nativeUs": 417.1070865885417,
+      "ratio": 1.132664998506892,
+      "lower": 1.0912657841874096,
+      "upper": 1.1652182821478303,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "68ca82a66bdad61ea7b61e011113630e75aced7d1391a642d9d87146b66acc7a",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "runId": "nlr765-candidate-TightDown8-recheck",
+      "receiptFile": "nlr765-candidate-TightDown8-recheck-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeRgbMaximum": 1,
+      "nativeAlphaMaximum": 1,
+      "nativeRgbRmse": 0.003177053548595931,
+      "nativeAlphaRmse": 0.005502818164535149,
+      "filteredIterations": 12,
+      "allActualsRetained": true,
+      "reusedUnchangedPath": false,
+      "reuseProof": null
+    },
+    "qualificationReused": "cached-narrow-shared-publication-evidence.json",
+    "scope": "NCA792 read-only current-package bounded narrow byte attribution after row-loan scheduling and later shared-math consolidation. Existing 513x259->256x129 RGBA8 public4KiB Resize includes preparation, premultiplication/filtering, exact publication/repair, independent output and disposal. Reuse declared current472.44/native417.11us(~55us pointgap), not a new timing confirmation. Column executor and geometry byte-identical to NLR765; current shared math pinned to accepted CNP789. Native graph/input/scratch retained, approved float bounds unchanged. One2secondCPU0capture/CPU1sampler; discard instrumented elapsed. No build, fixture, matrix, full/package repeat. Actual accepted CNP789 package/DLL proof reused; no candidate production change."
+  },
+  "profile": {
+    "totalSampleLocations": 1996,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,valuetype Lokad.Image.Internal.ColumnBicubicGeometry,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1901
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        20
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        19
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        11
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        11
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::PreparePairedByteWeights(valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<float64>)[Optimized]",
+        10
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.BicubicMath::PrepareOverlappingPairs(valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        8
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        2
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteOriginalByte(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "valuetype Lokad.Image.Internal.ColumnBicubicGeometry [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,int32,float64,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ]
+    ],
+    "instances": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,valuetype Lokad.Image.Internal.ColumnBicubicGeometry,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x755a2a2b81e0",
+        "codeBytes": 6151,
+        "samples": 1706
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::ApplyRange(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,valuetype Lokad.Image.Internal.ColumnBicubicGeometry,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x755a2a2bad00",
+        "codeBytes": 6177,
+        "samples": 195
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "address": "0x755a2a2b39f0",
+        "codeBytes": 39,
+        "samples": 20
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "address": "0x755a2a2b7fc0",
+        "codeBytes": 184,
+        "samples": 19
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        "address": "0x755a2a2b7e40",
+        "codeBytes": 316,
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+        "address": "0x755a2a2b9ed0",
+        "codeBytes": 287,
+        "samples": 11
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicResize::PreparePairedByteWeights(valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<float64>)[Optimized]",
+        "address": "0x755a2a2b9d20",
+        "codeBytes": 385,
+        "samples": 10
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.BicubicMath::PrepareOverlappingPairs(valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x755a2a2b9ae0",
+        "codeBytes": 539,
+        "samples": 8
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "address": "0x755a2a2b3980",
+        "codeBytes": 82,
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteOriginalByte(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x755a2a2ba380",
+        "codeBytes": 1444,
+        "samples": 1
+      },
+      {
+        "method": "stub ReportStubBlock<MethodCallThunk>",
+        "address": "0x755a2a291048",
+        "codeBytes": 1024,
+        "samples": 1
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.ColumnBicubicGeometry [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,int32,float64,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "address": "0x755a2a2b7ba0",
+        "codeBytes": 639,
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "address": "0x755a2a2b6d20",
+        "codeBytes": 209,
+        "samples": 1
+      }
+    ],
+    "hotBodies": [
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowLoanStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 6151,
+        "samples": 1706,
+        "hotLocations": [
+          {
+            "offset": "0x927",
+            "samples": 64,
+            "instruction": "vmovaps  zmm0, zmm2",
+            "nearby": [
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm0, zmm3, zmm0"
+              },
+              {
+                "offset": "0x921",
+                "instruction": "vaddpd   zmm1, zmm0, zmm1"
+              },
+              {
+                "offset": "0x927",
+                "instruction": "vmovaps  zmm0, zmm2"
+              },
+              {
+                "offset": "0x92d",
+                "instruction": "mov      ecx, edx"
+              },
+              {
+                "offset": "0x92f",
+                "instruction": "cmp      ecx, 4"
+              }
+            ]
+          },
+          {
+            "offset": "0xd2e",
+            "samples": 51,
+            "instruction": "kmovb    esi, k1",
+            "nearby": [
+              {
+                "offset": "0xd1d",
+                "instruction": "vsubpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0xd23",
+                "instruction": "vcmplepd k1, zmm0, qword ptr [reloc @RWD104] {1to8}"
+              },
+              {
+                "offset": "0xd2e",
+                "instruction": "kmovb    esi, k1"
+              },
+              {
+                "offset": "0xd32",
+                "instruction": "test     rsi, rsi"
+              },
+              {
+                "offset": "0xd35",
+                "instruction": "jne      G_M000_IG65"
+              }
+            ]
+          },
+          {
+            "offset": "0x90d",
+            "samples": 35,
+            "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18",
+            "nearby": [
+              {
+                "offset": "0x901",
+                "instruction": "vmulpd   zmm4, zmm5, zmm4"
+              },
+              {
+                "offset": "0x907",
+                "instruction": "vaddpd   zmm1, zmm4, zmm1"
+              },
+              {
+                "offset": "0x90d",
+                "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18"
+              },
+              {
+                "offset": "0x914",
+                "instruction": "vpermpd  zmm3, zmm3, 85"
+              },
+              {
+                "offset": "0x91b",
+                "instruction": "vmulpd   zmm0, zmm3, zmm0"
+              }
+            ]
+          },
+          {
+            "offset": "0x8e2",
+            "samples": 34,
+            "instruction": "shl      rcx, 5",
+            "nearby": [
+              {
+                "offset": "0x8d7",
+                "instruction": "shl      rsi, 6"
+              },
+              {
+                "offset": "0x8db",
+                "instruction": "vmovups  zmm2, zmmword ptr [rax+rsi]"
+              },
+              {
+                "offset": "0x8e2",
+                "instruction": "shl      rcx, 5"
+              },
+              {
+                "offset": "0x8e6",
+                "instruction": "vmovupd  ymm3, ymmword ptr [r14+rcx]"
+              },
+              {
+                "offset": "0x8ec",
+                "instruction": "vshuff64x2 zmm3, zmm3, zmm3, 80"
+              }
+            ]
+          },
+          {
+            "offset": "0xcaa",
+            "samples": 34,
+            "instruction": "vmulpd   zmm0, zmm1, zmm0",
+            "nearby": [
+              {
+                "offset": "0xc9a",
+                "instruction": "vfnmadd213pd zmm1, zmm2, qword ptr [reloc @RWD72] {1to8}"
+              },
+              {
+                "offset": "0xca4",
+                "instruction": "vmulpd   zmm1, zmm1, zmm2"
+              },
+              {
+                "offset": "0xcaa",
+                "instruction": "vmulpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0xcb0",
+                "instruction": "vextractf32x4 xmm1, zmm0"
+              },
+              {
+                "offset": "0xcb7",
+                "instruction": "vunpckhpd xmm1, xmm1, xmm1"
+              }
+            ]
+          },
+          {
+            "offset": "0xd37",
+            "samples": 31,
+            "instruction": "jne      G_M000_IG65",
+            "nearby": [
+              {
+                "offset": "0xd2e",
+                "instruction": "kmovb    esi, k1"
+              },
+              {
+                "offset": "0xd32",
+                "instruction": "test     rsi, rsi"
+              },
+              {
+                "offset": "0xd35",
+                "instruction": "jne      G_M000_IG65"
+              },
+              {
+                "offset": "0xd3b",
+                "instruction": "vcvttpd2dq zmm0, zmm1"
+              },
+              {
+                "offset": "0xd41",
+                "instruction": "vmovaps  ymm1, ymm0"
+              }
+            ]
+          },
+          {
+            "offset": "0xcb0",
+            "samples": 27,
+            "instruction": "vextractf32x4 xmm1, zmm0",
+            "nearby": [
+              {
+                "offset": "0xca4",
+                "instruction": "vmulpd   zmm1, zmm1, zmm2"
+              },
+              {
+                "offset": "0xcaa",
+                "instruction": "vmulpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0xcb0",
+                "instruction": "vextractf32x4 xmm1, zmm0"
+              },
+              {
+                "offset": "0xcb7",
+                "instruction": "vunpckhpd xmm1, xmm1, xmm1"
+              },
+              {
+                "offset": "0xcbb",
+                "instruction": "vucomisd xmm1, qword ptr [reloc @RWD80]"
+              }
+            ]
+          },
+          {
+            "offset": "0xb94",
+            "samples": 27,
+            "instruction": "jae      G_M000_IG127",
+            "nearby": [
+              {
+                "offset": "0xb8b",
+                "instruction": "vmovups  zmm1, zmmword ptr [rdi]"
+              },
+              {
+                "offset": "0xb91",
+                "instruction": "cmp      ecx, 10"
+              },
+              {
+                "offset": "0xb94",
+                "instruction": "jae      G_M000_IG127"
+              },
+              {
+                "offset": "0xb9a",
+                "instruction": "mov      r12, bword ptr [rbp-0x1B0]"
+              },
+              {
+                "offset": "0xba1",
+                "instruction": "vmulpd   zmm1, zmm1, qword ptr [r12+8*rcx] {1to8}"
+              }
+            ]
+          },
+          {
+            "offset": "0xcc3",
+            "samples": 26,
+            "instruction": "jb       G_M000_IG65",
+            "nearby": [
+              {
+                "offset": "0xcb7",
+                "instruction": "vunpckhpd xmm1, xmm1, xmm1"
+              },
+              {
+                "offset": "0xcbb",
+                "instruction": "vucomisd xmm1, qword ptr [reloc @RWD80]"
+              },
+              {
+                "offset": "0xcc3",
+                "instruction": "jb       G_M000_IG65"
+              },
+              {
+                "offset": "0xcc9",
+                "instruction": "vextractf32x4 xmm1, zmm0"
+              },
+              {
+                "offset": "0xcd0",
+                "instruction": "vunpckhpd xmm1, xmm1, xmm1"
+              }
+            ]
+          },
+          {
+            "offset": "0x40e",
+            "samples": 26,
+            "instruction": "jae      G_M000_IG127",
+            "nearby": [
+              {
+                "offset": "0x404",
+                "instruction": "vcvtudq2pd zmm0, zmm0"
+              },
+              {
+                "offset": "0x40a",
+                "instruction": "cmp      r10d, 80"
+              },
+              {
+                "offset": "0x40e",
+                "instruction": "jae      G_M000_IG127"
+              },
+              {
+                "offset": "0x414",
+                "instruction": "mov      r8, r10"
+              },
+              {
+                "offset": "0x417",
+                "instruction": "shl      r8, 5"
+              }
+            ]
+          },
+          {
+            "offset": "0xd23",
+            "samples": 26,
+            "instruction": "vcmplepd k1, zmm0, qword ptr [reloc @RWD104] {1to8}",
+            "nearby": [
+              {
+                "offset": "0xd13",
+                "instruction": "vbroadcastsd zmm2, qword ptr [reloc @RWD00]"
+              },
+              {
+                "offset": "0xd1d",
+                "instruction": "vsubpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0xd23",
+                "instruction": "vcmplepd k1, zmm0, qword ptr [reloc @RWD104] {1to8}"
+              },
+              {
+                "offset": "0xd2e",
+                "instruction": "kmovb    esi, k1"
+              },
+              {
+                "offset": "0xd32",
+                "instruction": "test     rsi, rsi"
+              }
+            ]
+          },
+          {
+            "offset": "0xb6e",
+            "samples": 23,
+            "instruction": "add      edi, dword ptr [r8+4*rcx]",
+            "nearby": [
+              {
+                "offset": "0xb64",
+                "instruction": "mov      r8, bword ptr [rbp-0x1B8]"
+              },
+              {
+                "offset": "0xb6b",
+                "instruction": "mov      edi, r11d"
+              },
+              {
+                "offset": "0xb6e",
+                "instruction": "add      edi, dword ptr [r8+4*rcx]"
+              },
+              {
+                "offset": "0xb72",
+                "instruction": "mov      esi, edi"
+              },
+              {
+                "offset": "0xb74",
+                "instruction": "add      rsi, 2"
+              }
+            ]
+          },
+          {
+            "offset": "0xb91",
+            "samples": 23,
+            "instruction": "cmp      ecx, 10",
+            "nearby": [
+              {
+                "offset": "0xb88",
+                "instruction": "add      rdi, rbx"
+              },
+              {
+                "offset": "0xb8b",
+                "instruction": "vmovups  zmm1, zmmword ptr [rdi]"
+              },
+              {
+                "offset": "0xb91",
+                "instruction": "cmp      ecx, 10"
+              },
+              {
+                "offset": "0xb94",
+                "instruction": "jae      G_M000_IG127"
+              },
+              {
+                "offset": "0xb9a",
+                "instruction": "mov      r12, bword ptr [rbp-0x1B0]"
+              }
+            ]
+          },
+          {
+            "offset": "0x444",
+            "samples": 23,
+            "instruction": "vextractf64x4 ymm0, zmm0, 1",
+            "nearby": [
+              {
+                "offset": "0x43c",
+                "instruction": "lea      r8d, [r10+0x01]"
+              },
+              {
+                "offset": "0x440",
+                "instruction": "shl      r8, 5"
+              },
+              {
+                "offset": "0x444",
+                "instruction": "vextractf64x4 ymm0, zmm0, 1"
+              },
+              {
+                "offset": "0x44b",
+                "instruction": "vmovups  ymmword ptr [r9+r8], ymm0"
+              },
+              {
+                "offset": "0x451",
+                "instruction": "add      r10d, 2"
+              }
+            ]
+          },
+          {
+            "offset": "0xba8",
+            "samples": 23,
+            "instruction": "vaddpd   zmm0, zmm1, zmm0",
+            "nearby": [
+              {
+                "offset": "0xb9a",
+                "instruction": "mov      r12, bword ptr [rbp-0x1B0]"
+              },
+              {
+                "offset": "0xba1",
+                "instruction": "vmulpd   zmm1, zmm1, qword ptr [r12+8*rcx] {1to8}"
+              },
+              {
+                "offset": "0xba8",
+                "instruction": "vaddpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0xbae",
+                "instruction": "inc      ecx"
+              },
+              {
+                "offset": "0xbb0",
+                "instruction": "cmp      ecx, dword ptr [rbp-0xA0]"
+              }
+            ]
+          },
+          {
+            "offset": "0x436",
+            "samples": 21,
+            "instruction": "jae      G_M000_IG127",
+            "nearby": [
+              {
+                "offset": "0x42e",
+                "instruction": "lea      r8d, [r10+0x01]"
+              },
+              {
+                "offset": "0x432",
+                "instruction": "cmp      r8d, 80"
+              },
+              {
+                "offset": "0x436",
+                "instruction": "jae      G_M000_IG127"
+              },
+              {
+                "offset": "0x43c",
+                "instruction": "lea      r8d, [r10+0x01]"
+              },
+              {
+                "offset": "0x440",
+                "instruction": "shl      r8, 5"
+              }
+            ]
+          },
+          {
+            "offset": "0xba1",
+            "samples": 21,
+            "instruction": "vmulpd   zmm1, zmm1, qword ptr [r12+8*rcx] {1to8}",
+            "nearby": [
+              {
+                "offset": "0xb94",
+                "instruction": "jae      G_M000_IG127"
+              },
+              {
+                "offset": "0xb9a",
+                "instruction": "mov      r12, bword ptr [rbp-0x1B0]"
+              },
+              {
+                "offset": "0xba1",
+                "instruction": "vmulpd   zmm1, zmm1, qword ptr [r12+8*rcx] {1to8}"
+              },
+              {
+                "offset": "0xba8",
+                "instruction": "vaddpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0xbae",
+                "instruction": "inc      ecx"
+              }
+            ]
+          },
+          {
+            "offset": "0xc9a",
+            "samples": 21,
+            "instruction": "vfnmadd213pd zmm1, zmm2, qword ptr [reloc @RWD72] {1to8}",
+            "nearby": [
+              {
+                "offset": "0xc8d",
+                "instruction": "vinsertf64x4 zmm1, zmm1, ymm2, 1"
+              },
+              {
+                "offset": "0xc94",
+                "instruction": "vrcp14pd zmm2, zmm1"
+              },
+              {
+                "offset": "0xc9a",
+                "instruction": "vfnmadd213pd zmm1, zmm2, qword ptr [reloc @RWD72] {1to8}"
+              },
+              {
+                "offset": "0xca4",
+                "instruction": "vmulpd   zmm1, zmm1, zmm2"
+              },
+              {
+                "offset": "0xcaa",
+                "instruction": "vmulpd   zmm0, zmm1, zmm0"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "header": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowTailStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 6177,
+        "samples": 195,
+        "hotLocations": [
+          {
+            "offset": "0xe15",
+            "samples": 9,
+            "instruction": "vmovaps  zmm0, zmm2",
+            "nearby": [
+              {
+                "offset": "0xe09",
+                "instruction": "vmulpd   zmm0, zmm3, zmm0"
+              },
+              {
+                "offset": "0xe0f",
+                "instruction": "vaddpd   zmm1, zmm0, zmm1"
+              },
+              {
+                "offset": "0xe15",
+                "instruction": "vmovaps  zmm0, zmm2"
+              },
+              {
+                "offset": "0xe1b",
+                "instruction": "mov      ecx, edx"
+              },
+              {
+                "offset": "0xe1d",
+                "instruction": "cmp      ecx, 4"
+              }
+            ]
+          },
+          {
+            "offset": "0x11e4",
+            "samples": 7,
+            "instruction": "kmovb    esi, k1",
+            "nearby": [
+              {
+                "offset": "0x11d3",
+                "instruction": "vsubpd   zmm0, zmm2, zmm0"
+              },
+              {
+                "offset": "0x11d9",
+                "instruction": "vcmplepd k1, zmm0, qword ptr [reloc @RWD104] {1to8}"
+              },
+              {
+                "offset": "0x11e4",
+                "instruction": "kmovb    esi, k1"
+              },
+              {
+                "offset": "0x11e8",
+                "instruction": "test     rsi, rsi"
+              },
+              {
+                "offset": "0x11eb",
+                "instruction": "jne      G_M000_IG101"
+              }
+            ]
+          },
+          {
+            "offset": "0xdfb",
+            "samples": 6,
+            "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18",
+            "nearby": [
+              {
+                "offset": "0xdef",
+                "instruction": "vmulpd   zmm4, zmm5, zmm4"
+              },
+              {
+                "offset": "0xdf5",
+                "instruction": "vaddpd   zmm1, zmm4, zmm1"
+              },
+              {
+                "offset": "0xdfb",
+                "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18"
+              },
+              {
+                "offset": "0xe02",
+                "instruction": "vpermpd  zmm3, zmm3, 85"
+              },
+              {
+                "offset": "0xe09",
+                "instruction": "vmulpd   zmm0, zmm3, zmm0"
+              }
+            ]
+          },
+          {
+            "offset": "0x68a",
+            "samples": 6,
+            "instruction": "mov      edx, dword ptr [rbp-0x7C]",
+            "nearby": [
+              {
+                "offset": "0x67e",
+                "instruction": "vmovsd   qword ptr [rax+8*rdx], xmm0"
+              },
+              {
+                "offset": "0x683",
+                "instruction": "vaddsd   xmm3, xmm0, qword ptr [rbp-0x88]"
+              },
+              {
+                "offset": "0x68a",
+                "instruction": "mov      edx, dword ptr [rbp-0x7C]"
+              },
+              {
+                "offset": "0x68d",
+                "instruction": "lea      ecx, [rdx+rdi]"
+              },
+              {
+                "offset": "0x690",
+                "instruction": "mov      r8d, dword ptr [r15+0x18]"
+              }
+            ]
+          },
+          {
+            "offset": "0x8f8",
+            "samples": 6,
+            "instruction": "ja       G_M000_IG09",
+            "nearby": [
+              {
+                "offset": "0x8f2",
+                "instruction": "mov      r8d, edx"
+              },
+              {
+                "offset": "0x8f5",
+                "instruction": "cmp      r11, r8"
+              },
+              {
+                "offset": "0x8f8",
+                "instruction": "ja       G_M000_IG09"
+              },
+              {
+                "offset": "0x8fe",
+                "instruction": "mov      r8d, r9d"
+              },
+              {
+                "offset": "0x901",
+                "instruction": "add      r8, rdi"
+              }
+            ]
+          },
+          {
+            "offset": "0xdd0",
+            "samples": 5,
+            "instruction": "shl      rcx, 5",
+            "nearby": [
+              {
+                "offset": "0xdc5",
+                "instruction": "shl      rsi, 6"
+              },
+              {
+                "offset": "0xdc9",
+                "instruction": "vmovups  zmm2, zmmword ptr [rax+rsi]"
+              },
+              {
+                "offset": "0xdd0",
+                "instruction": "shl      rcx, 5"
+              },
+              {
+                "offset": "0xdd4",
+                "instruction": "vmovupd  ymm3, ymmword ptr [r15+rcx]"
+              },
+              {
+                "offset": "0xdda",
+                "instruction": "vshuff64x2 zmm3, zmm3, zmm3, 80"
+              }
+            ]
+          },
+          {
+            "offset": "0x102d",
+            "samples": 5,
+            "instruction": "cmp      rsi, 72",
+            "nearby": [
+              {
+                "offset": "0x1027",
+                "instruction": "mov      esi, edi"
+              },
+              {
+                "offset": "0x1029",
+                "instruction": "add      rsi, 2"
+              },
+              {
+                "offset": "0x102d",
+                "instruction": "cmp      rsi, 72"
+              },
+              {
+                "offset": "0x1031",
+                "instruction": "ja       G_M000_IG09"
+              },
+              {
+                "offset": "0x1037",
+                "instruction": "shl      rdi, 5"
+              }
+            ]
+          },
+          {
+            "offset": "0x103b",
+            "samples": 5,
+            "instruction": "add      rdi, rbx",
+            "nearby": [
+              {
+                "offset": "0x1031",
+                "instruction": "ja       G_M000_IG09"
+              },
+              {
+                "offset": "0x1037",
+                "instruction": "shl      rdi, 5"
+              },
+              {
+                "offset": "0x103b",
+                "instruction": "add      rdi, rbx"
+              },
+              {
+                "offset": "0x103e",
+                "instruction": "vmovups  zmm1, zmmword ptr [rdi]"
+              },
+              {
+                "offset": "0x1044",
+                "instruction": "cmp      ecx, 10"
+              }
+            ]
+          },
+          {
+            "offset": "0x1061",
+            "samples": 5,
+            "instruction": "inc      ecx",
+            "nearby": [
+              {
+                "offset": "0x1054",
+                "instruction": "vmulpd   zmm1, zmm1, qword ptr [rdx+8*rcx] {1to8}"
+              },
+              {
+                "offset": "0x105b",
+                "instruction": "vaddpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0x1061",
+                "instruction": "inc      ecx"
+              },
+              {
+                "offset": "0x1063",
+                "instruction": "cmp      ecx, dword ptr [rbp-0xA8]"
+              },
+              {
+                "offset": "0x1069",
+                "instruction": "jl       SHORT G_M000_IG84"
+              }
+            ]
+          },
+          {
+            "offset": "0x8eb",
+            "samples": 5,
+            "instruction": "mov      r11d, r9d",
+            "nearby": [
+              {
+                "offset": "0x8de",
+                "instruction": "jmp      G_M000_IG45"
+              },
+              {
+                "offset": "0x8e3",
+                "instruction": "lea      r9d, [4*r10]"
+              },
+              {
+                "offset": "0x8eb",
+                "instruction": "mov      r11d, r9d"
+              },
+              {
+                "offset": "0x8ee",
+                "instruction": "add      r11, 8"
+              },
+              {
+                "offset": "0x8f2",
+                "instruction": "mov      r8d, edx"
+              }
+            ]
+          },
+          {
+            "offset": "0x96a",
+            "samples": 4,
+            "instruction": "add      r10d, 2",
+            "nearby": [
+              {
+                "offset": "0x95d",
+                "instruction": "vextractf64x4 ymm0, zmm0, 1"
+              },
+              {
+                "offset": "0x964",
+                "instruction": "vmovups  ymmword ptr [r9+r8], ymm0"
+              },
+              {
+                "offset": "0x96a",
+                "instruction": "add      r10d, 2"
+              },
+              {
+                "offset": "0x96e",
+                "instruction": "lea      r8d, [r10+0x01]"
+              },
+              {
+                "offset": "0x972",
+                "instruction": "cmp      r8d, eax"
+              }
+            ]
+          },
+          {
+            "offset": "0x1044",
+            "samples": 4,
+            "instruction": "cmp      ecx, 10",
+            "nearby": [
+              {
+                "offset": "0x103b",
+                "instruction": "add      rdi, rbx"
+              },
+              {
+                "offset": "0x103e",
+                "instruction": "vmovups  zmm1, zmmword ptr [rdi]"
+              },
+              {
+                "offset": "0x1044",
+                "instruction": "cmp      ecx, 10"
+              },
+              {
+                "offset": "0x1047",
+                "instruction": "jae      G_M000_IG126"
+              },
+              {
+                "offset": "0x104d",
+                "instruction": "mov      rdx, bword ptr [rbp-0x1B8]"
+              }
+            ]
+          },
+          {
+            "offset": "0x1160",
+            "samples": 4,
+            "instruction": "vmulpd   zmm0, zmm1, zmm0",
+            "nearby": [
+              {
+                "offset": "0x1150",
+                "instruction": "vfnmadd213pd zmm1, zmm2, qword ptr [reloc @RWD72] {1to8}"
+              },
+              {
+                "offset": "0x115a",
+                "instruction": "vmulpd   zmm1, zmm1, zmm2"
+              },
+              {
+                "offset": "0x1160",
+                "instruction": "vmulpd   zmm0, zmm1, zmm0"
+              },
+              {
+                "offset": "0x1166",
+                "instruction": "vextractf32x4 xmm1, zmm0"
+              },
+              {
+                "offset": "0x116d",
+                "instruction": "vunpckhpd xmm1, xmm1, xmm1"
+              }
+            ]
+          },
+          {
+            "offset": "0x112d",
+            "samples": 4,
+            "instruction": "vmovaps  xmm3, xmm4",
+            "nearby": [
+              {
+                "offset": "0x1123",
+                "instruction": "vunpcklpd xmm1, xmm3, xmm1"
+              },
+              {
+                "offset": "0x1127",
+                "instruction": "vinsertf128 ymm1, ymm5, xmm1"
+              },
+              {
+                "offset": "0x112d",
+                "instruction": "vmovaps  xmm3, xmm4"
+              },
+              {
+                "offset": "0x1131",
+                "instruction": "vmovaps  xmm5, xmm4"
+              },
+              {
+                "offset": "0x1135",
+                "instruction": "vunpcklpd xmm3, xmm3, xmm5"
+              }
+            ]
+          },
+          {
+            "offset": "0xe20",
+            "samples": 4,
+            "instruction": "jl       SHORT G_M000_IG68",
+            "nearby": [
+              {
+                "offset": "0xe1b",
+                "instruction": "mov      ecx, edx"
+              },
+              {
+                "offset": "0xe1d",
+                "instruction": "cmp      ecx, 4"
+              },
+              {
+                "offset": "0xe20",
+                "instruction": "jl       SHORT G_M000_IG68"
+              },
+              {
+                "offset": "0xe22",
+                "instruction": "mov      eax, dword ptr [rbp-0x114]"
+              },
+              {
+                "offset": "0xe28",
+                "instruction": "lea      ecx, [rax+rdi]"
+              }
+            ]
+          },
+          {
+            "offset": "0x909",
+            "samples": 3,
+            "instruction": "vpshufd  ymm1, ymm0, -1",
+            "nearby": [
+              {
+                "offset": "0x901",
+                "instruction": "add      r8, rdi"
+              },
+              {
+                "offset": "0x904",
+                "instruction": "vpmovzxbd ymm0, qword ptr [r8]"
+              },
+              {
+                "offset": "0x909",
+                "instruction": "vpshufd  ymm1, ymm0, -1"
+              },
+              {
+                "offset": "0x90e",
+                "instruction": "vpblendd ymm1, ymm1, ymmword ptr [reloc @RWD32], -120"
+              },
+              {
+                "offset": "0x918",
+                "instruction": "vpmulld  ymm0, ymm1, ymm0"
+              }
+            ]
+          },
+          {
+            "offset": "0x1020",
+            "samples": 3,
+            "instruction": "mov      edi, r11d",
+            "nearby": [
+              {
+                "offset": "0x1013",
+                "instruction": "jae      G_M000_IG126"
+              },
+              {
+                "offset": "0x1019",
+                "instruction": "mov      r8, bword ptr [rbp-0x1C0]"
+              },
+              {
+                "offset": "0x1020",
+                "instruction": "mov      edi, r11d"
+              },
+              {
+                "offset": "0x1023",
+                "instruction": "add      edi, dword ptr [r8+4*rcx]"
+              },
+              {
+                "offset": "0x1027",
+                "instruction": "mov      esi, edi"
+              }
+            ]
+          },
+          {
+            "offset": "0xbc2",
+            "samples": 3,
+            "instruction": "mov      r15d, eax",
+            "nearby": [
+              {
+                "offset": "0xbbe",
+                "instruction": "add      edx, edx"
+              },
+              {
+                "offset": "0xbc0",
+                "instruction": "mov      eax, edx"
+              },
+              {
+                "offset": "0xbc2",
+                "instruction": "mov      r15d, eax"
+              },
+              {
+                "offset": "0xbc5",
+                "instruction": "mov      r10d, esi"
+              },
+              {
+                "offset": "0xbc8",
+                "instruction": "add      r10, r15"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "instrumentedElapsedDiscarded": true,
+    "sampledLocationsAreNotPhaseCosts": true
+  },
+  "frozenChecks": {
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "librarySha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/nca792-profile-runtime/Rwp413BicubicConfirm.runtimeconfig.json",
+      "tmp/nca792-profile-runtime/Rwp413BicubicConfirm.dll",
+      "--benchmarkName",
+      "WarmBicubicResize.Managed(Case: TightDown8)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "identities": {
+      "tmp/nca792-profile-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/nca792-profile-runtime/Lokad.Image.pdb": "718911b596cd4ca18d521d222c1ab273e0ab58aaae9b2f7d552b9ab2bbc6932b",
+      "tmp/nca792-profile-runtime/Bcax1HorizontalConfirm.dll": "87ad328d2a703949211524fb341824e03d0fda6264bfadd5507fb85f67690ddf",
+      "tmp/nca792-profile-runtime/E248RootAudit.runtimeconfig.json": "82350457dc711d130b4992f95f63d54e39868bc7eb6e4bcb1eda9a954d3c3def",
+      "tmp/nca792-profile-runtime/PngSmallest16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "cf55fb108b01370eaa147279400822513d443793507a67c9c067008bdd71cf67",
+      "tmp/nca792-profile-runtime/ImageProbe.deps.json": "ee0d46b1d50f5ba033306ffbd8120a9c2ac7b8a9759e3e8ed2d183ee4d8072d3",
+      "tmp/nca792-profile-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/nca792-profile-runtime/JpegEncode422Host.dll": "7c11ebabadd0a8ce2ed2c2a0c632fdd7e48ea5398cbff2f51129c8e70035f56f",
+      "tmp/nca792-profile-runtime/JpegEncodeHost.dll": "f20603257d83f37a320ad25111513f5ce939856186b0000457ca97629c8a8583",
+      "tmp/nca792-profile-runtime/Vp8EncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Lokad.Image.xml": "4e56734e7d4685b05a846bd92cf04312d9e1fbd0a77acf74b34586a59eff1311",
+      "tmp/nca792-profile-runtime/PngStored16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/nca792-profile-runtime/Parser.dll": "dcf554cd3306fa60e597a37d48ecb0c5300d5825d3c882f20ba7598b5f9ad093",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks.pdb": "33837410ef004f49b5d70d329ce8cbb2466d1ddc9d1cb696194abef944517be4",
+      "tmp/nca792-profile-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/nca792-profile-runtime/Vp8lEncodeConfirmHost.dll": "cace0f379f560b3e0440fa3a20bcab5fbe4793a9493743617095a55832ebfd7a",
+      "tmp/nca792-profile-runtime/PngStored16ShortHost.dll": "656ba455ed62577e7a470edd97338e5ba28b5e0b2cd87234ac9088455d85fc61",
+      "tmp/nca792-profile-runtime/Rwp413BicubicConfirm.dll": "bb128357d2b9ff419fab351bc3adf684b4c0c9b95ed907b9788e8aee20396505",
+      "tmp/nca792-profile-runtime/Vp8lEncode16Host.dll": "7119d94d194bbcaea9a02afb2308f4ba2bb91cae8cd161833d90f32f944d4483",
+      "tmp/nca792-profile-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/nca792-profile-runtime/Vp8lEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/nca792-profile-runtime/JpegGrayShortHost.dll": "6b852be8ca2ebc245b2726d7f560f519b02aa9fb294387825dcf89466f82321f",
+      "tmp/nca792-profile-runtime/Bcax1HorizontalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Bcut1TightUp8Confirm.dll": "d5813d0a138a4b2de7498d674578307d4bdf13fb9ea31605baf9a3b7168a0c95",
+      "tmp/nca792-profile-runtime/JpegEncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegEncode16ConfirmHost.dll": "3bb4a7cb9fbaaabdb9d7b34513d307abf2f69073a79f9f39765ef7ab76cc5a15",
+      "tmp/nca792-profile-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/nca792-profile-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/nca792-profile-runtime/E141CombinedPopulationProof.dll": "0739caf9b8af8857297b13685aa69fae59b084938ada962aa244ea3d0b88b575",
+      "tmp/nca792-profile-runtime/Vp8Opaque16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/BicubicGeneralHost.dll": "7d02fdd4583e40f943b430b17b38faabec87a2f0658dbf7621deae3ec618d178",
+      "tmp/nca792-profile-runtime/LanczosShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegEncode444StreamConfirmHost.dll": "21bd4803a9438a3b1ad3b78a02f118976020a1de31aa4941f3f308f8247974f7",
+      "tmp/nca792-profile-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/nca792-profile-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/nca792-profile-runtime/JpegEncode444StreamHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/PngFast8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E152GrayQualityInspect.dll": "cdc3fc65c16b8a0fd3327f44343c6e0c46fa94eb2c9cfbc53b2af8497b1c4e20",
+      "tmp/nca792-profile-runtime/Bcax1VerticalConfirm.dll": "8ed624d29097d9b15a374f9dc53e34baf5a05969f99ffea5dc66e9fee14617a8",
+      "tmp/nca792-profile-runtime/ImageProbe.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/nca792-profile-runtime/E249RootAudit.runtimeconfig.json": "82350457dc711d130b4992f95f63d54e39868bc7eb6e4bcb1eda9a954d3c3def",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/nca792-profile-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/nca792-profile-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/nca792-profile-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/nca792-profile-runtime/LanczosShortHost.dll": "361a156f86758cc41373f710d09ab4f909c0058d88add72e3b2d343d1f7182c5",
+      "tmp/nca792-profile-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Rwp413BicubicConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/nca792-profile-runtime/BicubicGeneralHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/nca792-profile-runtime/Vp8DecodeStreamConfirmHost.dll": "c4b90abb6b59a6b377ec5dc254827e059217e3b1dd5e48a61c90b07c858afad7",
+      "tmp/nca792-profile-runtime/BicubicCrossShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks.dll": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "tmp/nca792-profile-runtime/PngEncodeHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E229CallerQualityDiagnostic.dll": "cf1844d753ceef276865331f2259197c57ab47e51bfd5fd2deb6a5a8c2a27913",
+      "tmp/nca792-profile-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/nca792-profile-runtime/Vp8DecodeStreamHost.dll": "cf55fb108b01370eaa147279400822513d443793507a67c9c067008bdd71cf67",
+      "tmp/nca792-profile-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/nca792-profile-runtime/Bcax1VerticalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E249RootAudit.dll": "81c8da55944922a9243455c387f7c6cb447e42fe144afccfaf04abcdc983162d",
+      "tmp/nca792-profile-runtime/BicubicCrossConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Vp8lEncode16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegGrayShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Lokad.Image.dll": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+      "tmp/nca792-profile-runtime/E137AllocationAudit.dll": "c8a94e7458c83a2c917552e1926d03d52222ea605f15c290aab0aebc91366954",
+      "tmp/nca792-profile-runtime/E139AllocationAudit.dll": "dd5ab3c4de3eedccf1aa19195d98d261926c739a9eeda1ccc137d63291140305",
+      "tmp/nca792-profile-runtime/E238NativeOffsets.dll": "aefe3fee3badaa8fc200ff242d00e1f1d0c277c35de0041d53945da48ce706c8",
+      "tmp/nca792-profile-runtime/BicubicCrossShortHost.dll": "7df5beed9e6d17ed66d41515c08309af9c261b292f0951b1ebc9dc7ced4e01c2",
+      "tmp/nca792-profile-runtime/PngSmallest16ConfirmHost.dll": "ebf4776791299f5676b82eae4f2645afa9102e01248f3f4717baf31d7ab39483",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/nca792-profile-runtime/JpegEncode444StreamHost.dll": "54bcad7b990b94467d33e2513a5793fa12527d00035c1a26e39791833551cdd1",
+      "tmp/nca792-profile-runtime/E163Sampler.dll": "e3deabf3bfd3d292c414832c555f9bb48cad2635f51326a1db2d367a1a870016",
+      "tmp/nca792-profile-runtime/E235NativeOffsets.dll": "9406c0f9bce9e555d2372b4cf17ead77c309a9ffdc75dabdaa77682024b63d2c",
+      "tmp/nca792-profile-runtime/JpegEncode44416Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/BilinearDown16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/PngEncodeHost.dll": "4c7fc3333e6dab2c0c7e8ce8cf624f53e8c0a534f818f7024af8e09504e4dc55",
+      "tmp/nca792-profile-runtime/E139ForwardProof.dll": "16a40a97a9b521bd385d15a31a268d5a239b7bfbb3e1865938ad0948e25ca546",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/nca792-profile-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/nca792-profile-runtime/JpegEncode444StreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/BicubicCrossConfirmHost.dll": "4577d24e42f33b99eddece3e142b430d351b6add285178e9f83d040fd4d6f845",
+      "tmp/nca792-profile-runtime/E152JpegSparseProof.dll": "5ce87e4c1d7ce4683f2cdddb10a672b169abd393dc55b45ea51166e3727c2e34",
+      "tmp/nca792-profile-runtime/Vp8DecodeStreamHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/nca792-profile-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/nca792-profile-runtime/JpegGrayConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E150JpegDeliveryAudit.dll": "ca3264116b2932d188ad3903e443f30370bb0f72d42b64c83232dbcb49bbaa8b",
+      "tmp/nca792-profile-runtime/JpegGrayConfirmHost.dll": "19abf8cf10f399606078f9bf768e87563ae2e50d6cd399657a3dd5be378a9d69",
+      "tmp/nca792-profile-runtime/Bcut1TightUp8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E205NativeOffsets.dll": "4e2cf64c5abc5ede46f1c998d698443cc6562b01ba5293d7acce7ad44e154610",
+      "tmp/nca792-profile-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/nca792-profile-runtime/JpegEncodeConfirmHost.dll": "b2091ae520783db6e88aea02172dc3e55ed0c44cb93327ea28aee1edcd44f861",
+      "tmp/nca792-profile-runtime/Vp8Opaque16ShortHost.dll": "c6a5f7003b5f5edd8ab165fbf386011f58579fbe817dc9a17b2cc72685d58fc2",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/nca792-profile-runtime/JpegProfile.dll": "e6736415701c0f491e27d0d3169379c8f2e14eeedb2f6431c5f5c952a4fb0984",
+      "tmp/nca792-profile-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/nca792-profile-runtime/Vp8lEncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegEncode16Host.dll": "ce7560aa71c18e3561fb22afdd3e11d8a0055d7f67c3ad78a44e3459ac4d0a93",
+      "tmp/nca792-profile-runtime/Vp8EncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E200NativeOffsets.dll": "919d68c258a4e03b6da0ef3500b90706bdefe261a17463adeecbcd889e562570",
+      "tmp/nca792-profile-runtime/Vp8DecodeStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/JpegEncode16Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E196NativeOffsets.dll": "97883018fa4655493463256516aa68f7a10c8a769051992cccc5f88d9d0dd599",
+      "tmp/nca792-profile-runtime/EventProfile.dll": "17fcb82380a5f708c08db9bf42d001af2fed8e4133444ac43e836e217acabbcc",
+      "tmp/nca792-profile-runtime/JpegEncode44416Host.dll": "d2d50b429a4214644860c2e041ea384ed01b61312d00617aa3376d0557bb9fa2",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/nca792-profile-runtime/PngFast8ShortHost.dll": "a5a0f29fd092cb7a45973374e9f8c01ca641d6589f407cccedf439d02312b0a0",
+      "tmp/nca792-profile-runtime/Vp8EncodeHost.dll": "391e89d3b6ba09cfccce58222102d0089d23f3e081801a38274931e50be8adac",
+      "tmp/nca792-profile-runtime/Vp8lEncodeHost.dll": "3a3e94d57ea9836c099cd6e1fadddce230d60d89f1607edce6f7721d463492e0",
+      "tmp/nca792-profile-runtime/E248RootAudit.dll": "422a49cff294878a89de0b4c4b17ad7da59471cc95297f7bddd1ec1c86c3a7ea",
+      "tmp/nca792-profile-runtime/BilinearDown16Host.dll": "c881116813950f0ebdc8b91536fc96f6e2241ac89ced632da9447ff657d14340",
+      "tmp/nca792-profile-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/nca792-profile-runtime/JpegEncode16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/nca792-profile-runtime/E146JpegOwnerAudit.dll": "df4677d8f065a485926d7439f8052eb07746c184f2bd400a1a20ca4e06cfc0f7",
+      "tmp/nca792-profile-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/nca792-profile-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+      "tmp/nca792-profile-runtime/Vp8EncodeConfirmHost.dll": "cd64b290c4a86825c37fbd3db62be5ee7987c26b845930cbc8507f00d44bd918",
+      "tmp/nca792-profile-runtime/JpegEncode422Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+    }
+  },
+  "proposal": {
+    "repeatedWork": "Two adjacent column pairs independently loop over the same vertical rows and coefficients. Existing exact enlargement quartet shares that traversal; horizontal filtering and certified pair publication stay intact.",
+    "endState": "Move the existing ordered quartet accumulator verbatim into BicubicMath. All existing enlargement callers and bounded narrow byte/word strips share it. Keep one existing publication/repair loop using one pending second-pair vector, with original pair/scalar tails.",
+    "primary": "Existing TightDown8, 513x259->256x129 RGBA8/4KiB; TightDown16 companion because the generic schedule changes both depths.",
+    "verticalTapCounts": [
+      8,
+      9
+    ],
+    "pairedVerticalIterations": 132736,
+    "quartetVerticalIterations": 66368,
+    "physicalLoadsAndArithmeticUnchanged": true,
+    "correctness": "Per-pixel multiply/add order, original normalizers, ordinary byte/word certificates, exact repair, tiny-alpha unwind, source/ownership/cancel/admission boundaries unchanged. Quartet4 values are readonly before publication; private-result cache loans stay disjoint and retire before tail writes.",
+    "temporaryCosts": "Pending64B vector, schedule branch and JIT/code/register-pressure risk; shared helper movement may affect imports. Small exact lane/canary model and complete short screens first; no assumed elapsed gain.",
+    "invalidation": "Both bounded narrow complete costs change; actual enlarged call sites bind the moved helper and require source/code reconciliation. No numerical-policy, allocated capacity or owner change; wider cached/codec/text paths remain independent.",
+    "decision": "Continue only if meaningful complete-operation evidence supports the shared schedule; revise or discard without fixed cutoff. Preserve adverse and uncertain screens."
+  },
+  "qualificationReused": "cached-narrow-shared-publication-evidence.json",
+  "raw": {
+    "file": "narrow-bicubic-current-attribution.tar.xz",
+    "sha256": "c9fbd51acf95b16e36ff7fd4613d861d24fc360b80d6bbb1b121b5e7a2d67757",
+    "bytes": 119260,
+    "members": 24,
+    "dependency": {
+      "file": "cached-narrow-shared-publication.tar.xz",
+      "sha256": "39ca3f401345b7d61d66e170df8963a9ac3ce86f4c10f0e27f8c2d81cce750dd",
+      "scope": "Unchanged actual DLL, package, fixture, reference/managed benchmark modules and qualification. Profile receipt pins original runtime identities."
+    },
+    "mirrored": true,
+    "allMembersVerified": true
+  }
+}

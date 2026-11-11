@@ -42,7 +42,11 @@ historical evidence and its source scope.
 
 [Preparation/storage attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md) explains
 complete one-shot versus retained native state. Current owners link their earlier
-milestones and raw evidence. The [previous coverage narrative](https://github.com/lokad/image/blob/54112a2147d325eb69faac255e9e71ad5c808fe6/benchmarks/WARM-COVERAGE.md)
+milestones and raw evidence. The [exact coefficient trial](CACHED-CUBIC-WEIGHT-PREPARATION-EXPERIMENT.md)
+adds no production gain or current cost; accepted builds are restored. The
+[current bounded narrow attribution](NARROW-BICUBIC-CURRENT-ATTRIBUTION.md) selects
+shared ordered vertical traversal for the next complete-operation experiment.
+Neither diagnostic becomes a renderer dependency. The [previous coverage narrative](https://github.com/lokad/image/blob/54112a2147d325eb69faac255e9e71ad5c808fe6/benchmarks/WARM-COVERAGE.md)
 retains superseded costs, qualification and experiment links in Git history;
 those do not govern current status or permanently close algorithm families.
 
@@ -79,10 +83,11 @@ Two additional prepared narrow boundaries, `BicubicPreparedNarrow8` and
 `BicubicPreparedNarrow16`, use existing Down8/16 rasters and256×129 outputs.
 Their byte/word row certificates and execution differ from the wide prepared
 kernels. [Equivalent narrow comparisons](BICUBIC-NARROW-BOUNDARIES.md) qualify
-both complete one-shot controls and prepared word; prepared byte retains20.30µs
-point gap, upper1.054. Plans retain199840B; current package/qualification are
-unchanged. Two new prepared paths extend285→287; fresh-native views reuse existing
-one-shot operations. No new source image, filter or settings grid.
+both complete one-shot controls and prepared word. The later
+[current shared publication](CACHED-NARROW-SHARED-PUBLICATION.md) supersedes the
+byte cost: prepared413.36/native418.98µs, upper1.011 is uncertain; one-shot byte
+passes. Plans retain199840B. Two new prepared paths extend285→287; fresh-native
+views reuse existing one-shot operations. No new source image, filter or settings grid.
 
 Four required algorithm additions retain their frozen recipes:
 

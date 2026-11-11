@@ -1,0 +1,444 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CBG791",
+  "date": "2026-11-11",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "outcome": "Do not retain this implementation: complete-operation short screens do not show a useful gain. Wide normalized point is adverse with broad uncertainty; this is not a proven regression or permanent coefficient-preparation ban. No independent timing or broad/package qualification justified.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "CBG791",
+    "productionAccepted": false,
+    "baselineCommit": "9020443af705f9957acad3dcb25fabc8a3cf07a5",
+    "baselineWindowsSha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+    "baselineLinuxSha256": "eb2ad53013df4701da0a7b036e51ee89c1380d477a21a8711054f5e14be96dfa",
+    "baselinePackageSha256": "565088e0b39ef05cb13b9d0ed7eed204fb0b1ee7050ea017f33ff56ec01ccccd",
+    "baselinePreparationSourceSha256": "ada2961d807390c7d61b8ac54fdc6d2b2fed0a9a8e3a3e200ade6a460cd26a52",
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8b3879f5a6be81b9f39148db582dea6a2938c3863b7769e060eb7ba90f72d572",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+    },
+    "repeatedWork": "Repeated scalar coordinate division, absolute value, branch and unfactored cubic evaluation for every horizontal coefficient in shared cached workspace creation.",
+    "endState": "One exact eight-lane weight builder used by shared cached preparation for count>=8; scalar tails and short fused loop retained. Original scalar normalizer order and unchanged offset/clamp preparation. No prepared execution work is excluded or claimed improved.",
+    "numericalProof": {
+      "project": "Lokad.Image",
+      "stage": "CBG791",
+      "untimed": true,
+      "productionChanged": false,
+      "weightsChecked": 21243,
+      "normalizersChecked": 2073,
+      "boundaryLanesChecked": 4128,
+      "cases": [
+        {
+          "source": 513,
+          "target": 2,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 3,
+          "weights": 2055
+        },
+        {
+          "source": 513,
+          "target": 16,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 32,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 64,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 128,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 256,
+          "weights": 2052
+        },
+        {
+          "source": 513,
+          "target": 513,
+          "weights": 2565
+        },
+        {
+          "source": 513,
+          "target": 1027,
+          "weights": 4109
+        },
+        {
+          "source": 37,
+          "target": 19,
+          "weights": 149
+        },
+        {
+          "source": 7,
+          "target": 13,
+          "weights": 53
+        }
+      ],
+      "canariesPassed": true,
+      "everyWeightAndNormalizerBitExact": true,
+      "librarySha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc"
+    },
+    "temporaryCosts": "Extra weight-to-normalizer read and separate offsets loop; vector setup/call/JIT costs. Existing16cached controls/completeoneShot views affected; prepared execution unchanged. Complete existing Down8 primary/Wide8 companion and equivalent oneShot prove or reject useful preparation savings.",
+    "ownership": "Same capacity, arrays, admission before allocation, private until TryPrepare succeeds, cancellation perx and root forwarding. Weight computation is bounded by existing<=2048tap guard. No new owner/root/session/pool/cache/retained capacity.",
+    "next": "Freeze one production/embedded candidate perOS; source/weightbit/canary/normalizer/alloc tests and resize normal/scalar, including named storage suites. Short complete DefaultDown8/Wide8, independent confirmation if useful. Reconcile actual affected existing cases before full/ISA/SAMEpackage qualification. Reuse unchanged prepared execution and other codec/pixel paths.",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "0c9fdb4d47f33efd006547a4449c11c400fd2d6fb03bc59cd81aad800a887b9c",
+      "tests/Lokad.Image.Tests/CachedCubicWeightTests.cs": "9e081151acebb2b85eb315355c46c7899d6a43e5735ff2aa40a0bc6bd151ea7b"
+    },
+    "candidateWindowsSha256": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768"
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CBG791",
+    "entireBaselineReconstructed": true,
+    "change": "Only weight-builder helper/using plus count>=8 preparation branch; original short loop unchanged. Scalar normalizer sums keep exact tap order. No execution, storage, owner, admission or public API changes.",
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8b3879f5a6be81b9f39148db582dea6a2938c3863b7769e060eb7ba90f72d572",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee",
+      "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+    }
+  },
+  "candidateFocused": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "candidateSha256": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768",
+      "focused": {
+        "internal-normal": 364,
+        "public-normal": 776,
+        "internal-scalar": 364,
+        "public-scalar": 776
+      },
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedCubicWeightTests|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "publicAddsCooperativeMemory": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "0c9fdb4d47f33efd006547a4449c11c400fd2d6fb03bc59cd81aad800a887b9c",
+        "tests/Lokad.Image.Tests/CachedCubicWeightTests.cs": "9e081151acebb2b85eb315355c46c7899d6a43e5735ff2aa40a0bc6bd151ea7b"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8b3879f5a6be81b9f39148db582dea6a2938c3863b7769e060eb7ba90f72d572",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee",
+        "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+      },
+      "productionBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicBuilds": 0,
+      "harnessBuilds": 0,
+      "nativeBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "candidateSha256": "4b01743732885fe2e0729bfcd170c7639d911c6e3066f1ae3e4d41bebb6169ec",
+      "focused": {
+        "internal-normal": 364,
+        "public-normal": 776,
+        "internal-scalar": 364,
+        "public-scalar": 776
+      },
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedCubicWeightTests|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "publicAddsCooperativeMemory": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "0c9fdb4d47f33efd006547a4449c11c400fd2d6fb03bc59cd81aad800a887b9c",
+        "tests/Lokad.Image.Tests/CachedCubicWeightTests.cs": "9e081151acebb2b85eb315355c46c7899d6a43e5735ff2aa40a0bc6bd151ea7b"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8b3879f5a6be81b9f39148db582dea6a2938c3863b7769e060eb7ba90f72d572",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "fa02c3f8821b2667eac57146f54faf7229cd0b738c0be8c4c5e8a5ca2fa1faee",
+        "src/Lokad.Image/ImageTransforms.cs": "1c8ac3cc62205122dab1745dc2a19db5e4865fd3a9b4bef9a13445a368e0cd25"
+      },
+      "productionBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicBuilds": 0,
+      "harnessBuilds": 0,
+      "nativeBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "cases": {
+    "Down8": {
+      "baseline": {
+        "managedUs": 439.6509755747127,
+        "nativeUs": 420.0504166666667,
+        "ratio": 1.0466623960608998,
+        "upper": 1.1582086682423678,
+        "lower": 0.9310583021587886,
+        "allocatedBytes": 199983,
+        "status": "screen-only",
+        "librarySha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "managedExact": true,
+        "receiptFile": "cbg791-default-baseline-Down8-short-receipt.json",
+        "actualIterations": 3,
+        "completeBoundariesAndFrozenOutputsPreserved": true
+      },
+      "candidate": {
+        "managedUs": 477.517875,
+        "nativeUs": 456.7582942708333,
+        "ratio": 1.0454498166526065,
+        "upper": 1.1676517346055608,
+        "lower": 0.9316828529320851,
+        "allocatedBytes": 199980,
+        "status": "screen-only",
+        "librarySha256": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "managedExact": true,
+        "receiptFile": "cbg791-default-candidate-Down8-short-receipt.json",
+        "actualIterations": 3,
+        "completeBoundariesAndFrozenOutputsPreserved": true
+      },
+      "rawChangePercent": 8.612945615732492,
+      "referenceNormalizedChangePercent": -0.11585200852317623
+    },
+    "Wide8": {
+      "baseline": {
+        "managedUs": 394.967822265625,
+        "nativeUs": 346.3077513020833,
+        "ratio": 1.1405110650298314,
+        "upper": 1.2877706611923827,
+        "lower": 0.9959504748623311,
+        "allocatedBytes": 198450,
+        "status": "screen-only",
+        "librarySha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "managedExact": true,
+        "receiptFile": "cbg791-default-baseline-Wide8-short-receipt.json",
+        "actualIterations": 3,
+        "completeBoundariesAndFrozenOutputsPreserved": true
+      },
+      "candidate": {
+        "managedUs": 431.4852507183909,
+        "nativeUs": 366.8882174479167,
+        "ratio": 1.1760673420362548,
+        "upper": 1.6902457253266128,
+        "lower": 0.891730862164916,
+        "allocatedBytes": 198447,
+        "status": "screen-only",
+        "librarySha256": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "managedExact": true,
+        "receiptFile": "cbg791-default-candidate-Wide8-short-receipt.json",
+        "actualIterations": 3,
+        "completeBoundariesAndFrozenOutputsPreserved": true
+      },
+      "rawChangePercent": 9.24567177227087,
+      "referenceNormalizedChangePercent": 3.1175740504975735
+    }
+  },
+  "phaseDiagnostic": {
+    "project": "Lokad.Image",
+    "stage": "CBG791",
+    "results": [
+      {
+        "subject": "baseline",
+        "diagnostic": {
+          "project": "Lokad.Image",
+          "stage": "CPA790",
+          "diagnosticOnly": true,
+          "publicApiPhaseAttribution": true,
+          "newStatisticalTiming": false,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+          "librarySha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+          "interpretation": "Instrumented public-plan create/execute/checksum+dispose phases; actual immutable package DLL. Diagnostic caller/JIT/timestamp overhead may perturb execution. Not default-Resize phase proof, native parity or an additive saving forecast.",
+          "observed": 0,
+          "batches": [
+            {
+              "batch": 0,
+              "operations": 381,
+              "creationUs": 38.24500524934383,
+              "executionUs": 486.8508320209974,
+              "cleanupUs": 0.08083989501312336,
+              "instrumentedTotalUs": 525.1766771653544,
+              "allocatedBytesPerOperation": 200056
+            },
+            {
+              "batch": 1,
+              "operations": 380,
+              "creationUs": 38.382944736842106,
+              "executionUs": 487.98592368421055,
+              "cleanupUs": 0.08058684210526317,
+              "instrumentedTotalUs": 526.4494552631579,
+              "allocatedBytesPerOperation": 200056
+            },
+            {
+              "batch": 2,
+              "operations": 381,
+              "creationUs": 37.48400524934383,
+              "executionUs": 487.7700656167979,
+              "cleanupUs": 0.081249343832021,
+              "instrumentedTotalUs": 525.3353202099738,
+              "allocatedBytesPerOperation": 200056
+            }
+          ]
+        },
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790.dll",
+          "artifacts/warm-reference/webp-decode/source.rgba",
+          "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+        ],
+        "identities": {
+          "tmp/cbg791-phase-baseline-runtime/Lokad.Image.pdb": "718911b596cd4ca18d521d222c1ab273e0ab58aaae9b2f7d552b9ab2bbc6932b",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790": "bf3533510b8653ca5c3be379d456e686958eb5ddc356d6963e20d2e88d562b81",
+          "tmp/cbg791-phase-baseline-runtime/Lokad.Image.xml": "4e56734e7d4685b05a846bd92cf04312d9e1fbd0a77acf74b34586a59eff1311",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790.deps.json": "f5eb0e2b960ee9ec5eb16f89d6e983b90178471be2ce003fe6d5c25a4e3f4050",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790.dll": "894b49ef1d663dade111f45105742bc92ebae09b3ad223224e9a0831845e7f56",
+          "tmp/cbg791-phase-baseline-runtime/Lokad.Image.dll": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+          "tmp/cbg791-phase-baseline-runtime/Cpa790.pdb": "8584a5a9afad646193286bfdc32d368f43c8e8038045ff8c48ae620ea05a40a3"
+        },
+        "quietGuardsPassed": true
+      },
+      {
+        "subject": "candidate",
+        "diagnostic": {
+          "project": "Lokad.Image",
+          "stage": "CPA790",
+          "diagnosticOnly": true,
+          "publicApiPhaseAttribution": true,
+          "newStatisticalTiming": false,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+          "librarySha256": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768",
+          "interpretation": "Instrumented public-plan create/execute/checksum+dispose phases; actual immutable package DLL. Diagnostic caller/JIT/timestamp overhead may perturb execution. Not default-Resize phase proof, native parity or an additive saving forecast.",
+          "observed": 0,
+          "batches": [
+            {
+              "batch": 0,
+              "operations": 415,
+              "creationUs": 31.375127710843376,
+              "executionUs": 450.5969108433735,
+              "cleanupUs": 0.0689855421686747,
+              "instrumentedTotalUs": 482.04102409638557,
+              "allocatedBytesPerOperation": 200056
+            },
+            {
+              "batch": 1,
+              "operations": 416,
+              "creationUs": 31.00050480769231,
+              "executionUs": 450.2378798076923,
+              "cleanupUs": 0.06821875000000001,
+              "instrumentedTotalUs": 481.30660336538466,
+              "allocatedBytesPerOperation": 200056
+            },
+            {
+              "batch": 2,
+              "operations": 415,
+              "creationUs": 31.06105060240964,
+              "executionUs": 450.7961855421687,
+              "cleanupUs": 0.06814939759036145,
+              "instrumentedTotalUs": 481.9253855421687,
+              "allocatedBytesPerOperation": 200056
+            }
+          ]
+        },
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790.dll",
+          "artifacts/warm-reference/webp-decode/source.rgba",
+          "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"
+        ],
+        "identities": {
+          "tmp/cbg791-phase-candidate-runtime/Lokad.Image.pdb": "e59d8872cf05cfec2893e07a530c3f3fcaa5a45b521cd88e3a98f8b78290af41",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790": "bf3533510b8653ca5c3be379d456e686958eb5ddc356d6963e20d2e88d562b81",
+          "tmp/cbg791-phase-candidate-runtime/Lokad.Image.xml": "4e56734e7d4685b05a846bd92cf04312d9e1fbd0a77acf74b34586a59eff1311",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790.deps.json": "f5eb0e2b960ee9ec5eb16f89d6e983b90178471be2ce003fe6d5c25a4e3f4050",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790.dll": "894b49ef1d663dade111f45105742bc92ebae09b3ad223224e9a0831845e7f56",
+          "tmp/cbg791-phase-candidate-runtime/Lokad.Image.dll": "53854eb460940a3e0e2d8ff45e8615af7b2b1e2f861da94cf10e99b98f82f768",
+          "tmp/cbg791-phase-candidate-runtime/Cpa790.pdb": "8584a5a9afad646193286bfdc32d368f43c8e8038045ff8c48ae620ea05a40a3"
+        },
+        "quietGuardsPassed": true
+      }
+    ],
+    "allBuilds": 0,
+    "purpose": "Reuse unchanged CPA790 public-plan diagnostic to attribute short-screen outcome. Not official timing, native parity or direct default Resize phase proof."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionRestored": true,
+      "baselineSha256": "9a1498d806db8e60808c6b90f2b58fb2f936262ca72c19e73059c00eae2b12bc",
+      "embeddedSha256": "1adf4ffda49f79bb1277839bbf686730022e7783ea39c1a4df45016473caaadb",
+      "packageUnchanged": true,
+      "allBuilds": 0,
+      "candidateSymbolsArchivedAndRemoved": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionRestored": true,
+      "baselineSha256": "eb2ad53013df4701da0a7b036e51ee89c1380d477a21a8711054f5e14be96dfa",
+      "embeddedSha256": "858135185fd9f9b34aa805e2fbbbaf47a7905e8910e0bfaef4fa8c09408cd6b0",
+      "manifestVerified": true,
+      "allBuilds": 0,
+      "candidateSymbolsArchivedAndRemoved": true
+    }
+  },
+  "qualificationReused": "cached-narrow-shared-publication-evidence.json",
+  "raw": {
+    "file": "cached-cubic-weight-preparation-experiment.tar.xz",
+    "sha256": "014f9ffc9d6bb73f56c343fe5607edbd3c57ae74949e63f23677734b141c4e9f",
+    "bytes": 7761524,
+    "members": 385,
+    "dependencies": [
+      {
+        "file": "cached-narrow-shared-publication.tar.xz",
+        "sha256": "39ca3f401345b7d61d66e170df8963a9ac3ce86f4c10f0e27f8c2d81cce750dd",
+        "scope": "Accepted production source/DLL/package, original control fixtures, workers and qualification."
+      },
+      {
+        "file": "cached-narrow-plan-attribution.tar.xz",
+        "sha256": "93102b4a9479b920d6d0781a90bacea2fcd414563fc69bc58cb39101065e04df",
+        "scope": "Unchanged public-plan diagnostic tool and original phase observations."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "workflow": {
+    "productionBuildsEachOs": 1,
+    "embeddedBuildsEachOs": 1,
+    "publicBuilds": 0,
+    "benchmarkHarnessBuilds": 0,
+    "nativeBuilds": 0,
+    "packageBuilds": 0,
+    "independentConfirmations": 0,
+    "completeScreens": 4,
+    "diagnosticRerun": "Unchanged CPA790 tool, two subject invocations of three 200ms public-plan phase batches. Not a new official cost or native comparison.",
+    "candidateOnlyTestRemoved": true,
+    "restorationBuilds": 0
+  },
+  "next": "Current immutable-package attribution of bounded narrow RGBA8/4KiB Resize (~55us declared point gap), preserving original frozen workload. Distinguish row-loan scheduling, geometry, horizontal filtering, exact publication and repair. No source changes or new image/settings grid unless attribution supports a coherent shared design."
+}
