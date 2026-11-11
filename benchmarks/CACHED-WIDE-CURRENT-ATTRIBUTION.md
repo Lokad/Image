@@ -1,5 +1,8 @@
 # Cached wide bicubic execution attribution
 
+[The subsequent cached-wide quartet stage](CACHED-WIDE-SHARED-QUARTETS.md)
+owns current costs. This profile remains scoped attribution of its predecessor.
+
 WPA808 inspects the actual qualified package on the existing 513×259→128×64
 RGBA8 control. Its source-valid complete cost remains 391.10/prepared-zimg
 345.95 µs, upper1.134: a gap. Equivalent fresh-state and prepared byte/word

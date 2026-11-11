@@ -1,8 +1,8 @@
 # Shared bicubic preparation
 
-[Current actual-package wide attribution](CACHED-WIDE-CURRENT-ATTRIBUTION.md)
-selects reuse of shared vertical accumulation before another arithmetic trial.
-It supplies no new timing result; these source-valid costs remain.
+[Cached-wide quartets](CACHED-WIDE-SHARED-QUARTETS.md) owns the current eight
+ordinary wide costs and four equivalent wide boundaries. The unchanged narrow
+costs below remain valid unless superseded by their linked current owner.
 
 CBP780B adds caller-owned `BicubicResizePlan` and shares preparation/execution
 with ordinary resizing. Eligible SIMD two-axis reductions retain horizontal

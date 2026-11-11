@@ -77,8 +77,18 @@ internal static partial class CachedBicubicResize
                     WriteWideRow<WordSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
                         normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,false,context);
                 else
-                    WriteWideRow<ByteSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
-                        normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,tapsX<=20 && tapsY<=20,context);
+                {
+                    var ordinary=tapsX<=20 && tapsY<=20;
+                    var firstColumn=ordinary && width>=4
+                        ?WriteWideByteQuartetPrefix(result,y,storage.AsSpan(0,cacheElements),rows[..count],
+                            vertical[..count],normalizers,normalizerY,context):0;
+                    if(firstColumn==0)
+                        WriteWideRow<ByteSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,ordinary,context);
+                    else if(firstColumn<width)
+                        WriteWideRow<ByteSuffixSamples>(source,result,y,storage.AsSpan(0,cacheElements),rows[..count],vertical[..count],
+                            normalizers,normalizerY,weights,offsets,counts,first,capacity,bounds,ordinary,context,firstColumn);
+                }
                 continue;
             }
             if(mixed)

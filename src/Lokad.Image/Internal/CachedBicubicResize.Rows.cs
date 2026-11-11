@@ -241,18 +241,50 @@ internal static partial class CachedBicubicResize
     }
 
     private readonly struct ByteSamples { }
+    private readonly struct ByteSuffixSamples { }
     private readonly struct WordSamples { }
+
+    // Keep quartet accumulators and the small ordinary-byte certificate out
+    // of the general publisher's frame. False certificates write no pixels.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static int WriteWideByteQuartetPrefix(ImageBuffer result,int y,ReadOnlySpan<double> cached,
+        Span<int> rows,ReadOnlySpan<double> vertical,ReadOnlySpan<double> normalizers,double normalizerY,
+        OperationContext context)
+    {
+        var width=result.Width;var count=vertical.Length;
+        var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
+        // The caller's ordinary domain has capacity32 and private stack rows.
+        for(var t=0;t<count;t++)rows[t]>>=2;
+        var pixels=MemoryMarshal.Cast<double,Vector256<double>>(cached);
+        var x=0;
+        for(;x+3<width;x+=4)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            BicubicMath.FilterVerticalQuartet(pixels,vertical,rows,x,out var first,out var second);
+            if(!BicubicMath.TryWriteOrdinaryBytePair(first,normalizers[x]*normalizerY,
+                normalizers[x+1]*normalizerY,destination.Slice(x*4,8)))break;
+            context.Cancellation.ThrowIfCancellationRequested();
+            if(!BicubicMath.TryWriteOrdinaryBytePair(second,normalizers[x+2]*normalizerY,
+                normalizers[x+3]*normalizerY,destination.Slice((x+2)*4,8)))
+            {
+                x+=2;break;
+            }
+        }
+        // The unchanged general suffix consumes channel offsets again.
+        for(var t=0;t<count;t++)rows[t]<<=2;
+        return x;
+    }
 
     private static void WriteWideRow<TSamples>(ImageBuffer source,ImageBuffer result,int y,ReadOnlySpan<double> cached,
         ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,ReadOnlySpan<double> normalizers,double normalizerY,
         ReadOnlySpan<double> weights,ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int first,int capacity,
-        WideErrorBounds bounds,bool ordinaryCertificate,OperationContext context) where TSamples : struct
+        WideErrorBounds bounds,bool ordinaryCertificate,OperationContext context,int firstX=0) where TSamples : struct
     {
         var width=result.Width;var count=vertical.Length;var wide16=typeof(TSamples)==typeof(WordSamples);
         var maximum=bounds.Maximum;var alphaMargin=bounds.AlphaMargin;var wordColorBound=bounds.WordColorBound;
         var byteColorMargin=bounds.ByteColorMargin;var unitError=bounds.UnitError;
         var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
-        for(var x=0;x+1<width;x+=2)
+        for(var x=typeof(TSamples)==typeof(ByteSuffixSamples)?firstX:0;x+1<width;x+=2)
         {
             context.Cancellation.ThrowIfCancellationRequested();
             var sum=Vector512<double>.Zero;
@@ -261,7 +293,7 @@ internal static partial class CachedBicubicResize
             var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
             // Public caller tap bounds <=20 cover the shared 400-term proof.
             // Keep the explicit type guard so word import never sees byte locals.
-            if(typeof(TSamples)==typeof(ByteSamples) && ordinaryCertificate
+            if((typeof(TSamples)==typeof(ByteSamples) || typeof(TSamples)==typeof(ByteSuffixSamples)) && ordinaryCertificate
                 && BicubicMath.TryWriteOrdinaryBytePair(sum,n0,n1,destination.Slice(x*4,8)))continue;
             var a0=sum.GetElement(3);var a1=sum.GetElement(7);
             var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));

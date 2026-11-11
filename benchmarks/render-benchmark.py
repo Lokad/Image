@@ -1783,6 +1783,18 @@ def render():
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert bicubic_preparation['sourceProof']['isolatedWordRowVerbatimAfterDedent']
     assert bicubic_preparation['codeProof']['wordAccumulatorRegisterResident']
+    cached_wide = json.loads((ROOT / 'benchmarks/cached-wide-shared-quartets-evidence.json').read_text(encoding='utf-8'))
+    assert cached_wide['productionAccepted'] and cached_wide['requiredMaterialPaths'] == 289
+    assert cached_wide['raw']['mirrored'] and cached_wide['raw']['allMembersVerified']
+    assert cached_wide['allAffectedPerformanceReconciled'] and not cached_wide['materialPassToGapContradictions']
+    assert len(cached_wide['cases']) == 8 and len(cached_wide['boundaries']) == 4
+    assert cached_wide['sourceProof']['originalGeneralWriterAndRestOfRowsRestoredExactly']
+    assert cached_wide['sourceProof']['originalCallerRestoredAfterOnlyByteWideBranchReplacement']
+    assert cached_wide['comparison']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in cached_wide['comparison']['views'].values())
+    assert cached_wide['storage']['newOwnedCapacityBytes'] == cached_wide['storage']['newRetainedStateBytes'] == 0
+    assert cached_wide['qualification']['fullChecksEachOs'] == 6264
+    assert cached_wide['qualification']['actualPackage']['sha256'] == cached_wide['qualification']['samePackageLinux']['sameActualPackageSha256']
     labels = {
         'Down8': 'Bicubic resize RGBA8',
         'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
@@ -1791,8 +1803,8 @@ def render():
         'Cross16': 'Bicubic RGBA16, width down / height up, default workspace',
     }
     for case, current in {**bicubic_preparation['cases'], **bicubic_preparation['boundaries']}.items():
-        current = cached_publication['cases'].get(case, current)
-        owner = cached_publication if case in cached_publication['cases'] else bicubic_preparation
+        current = cached_wide['cases'].get(case, cached_publication['cases'].get(case, current))
+        owner = cached_wide if case in cached_wide['cases'] else cached_publication if case in cached_publication['cases'] else bicubic_preparation
         assert current['librarySha256'] == owner['producers']['timedArtifactSha256']
         assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
@@ -1809,7 +1821,10 @@ def render():
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / '
             f'{current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
-        current = bicubic_preparation['boundaries'][case]
+        current = cached_wide['boundaries'][case]
+        assert current['librarySha256'] == cached_wide['producers']['timedArtifactSha256']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['status'] == 'pass'
         prepared = case.startswith('Repeated')
         label = f'Bicubic {"prepared" if prepared else "one-shot"} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
@@ -1938,7 +1953,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = bilinear_vector['qualification']
+    current_build_qualification = cached_wide['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1997,11 +2012,13 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [cached preparation](../benchmarks/BICUBIC-SHARED-PREPARATION.md)
-  and [current narrow publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
-  retain the current cached costs: default managed-fresh/native-prepared Wide8 and
-  Down8 remain gaps; Down64x32_16 is uncertain. Both equivalent wide one-shot and
-  prepared comparisons pass. The four equivalent narrow boundaries have three
+- **Resizing:** [Shared cached-wide quartets](../benchmarks/CACHED-WIDE-SHARED-QUARTETS.md)
+  save52.83µs/12.33% raw/4.68% reference-normalized, with separated filtered/all-actual
+  raw and normalized intervals; native time also moves−8.02%. Default managed-fresh/
+  native-prepared Wide8 remains a gap, upper{cached_wide['cases']['Wide8']['upper']:.3f}.
+  All four equivalent wide one-shot/prepared comparisons and the six deeper
+  reductions pass. [Narrow publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
+  retains the Down8 gap. The four equivalent narrow boundaries have three
   passes and one prepared-byte uncertainty, upper1.011; its one-shot view passes.
   Preparation is excluded only from explicitly prepared execution. Wide/narrow
   plans retain 198,432/199,840 B and allocate 137–138 B/op. Governed owned peaks are
