@@ -1,5 +1,9 @@
 # Shared bicubic word preparation
 
+The horizontal-height-identity and tight reverse-mixed word controls are now
+owned by [exact identity-height execution](BICUBIC-IDENTITY-HEIGHT.md). Their
+older costs here are history; unchanged execution paths retain source-valid evidence.
+
 RPA503 shares SIMD divisor and conservative-margin preparation across pair,
 quartet and cached mixed-word publication. Integer exponent construction is
 bit-identical; hardware division, error bounds, rounding, repair and portable

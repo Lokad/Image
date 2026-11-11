@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Avoid zero-weight vertical work in height-preserving RGBA16 bicubic resizing,
+  preserving exact samples and shared admission with a smaller borrowed workspace.
+
 - Reuse ordered source windows across byte/word bilinear reduction, preserving
   exact samples, admission and independently owned outputs.
 

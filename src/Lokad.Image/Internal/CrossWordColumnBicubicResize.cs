@@ -11,6 +11,12 @@ internal static class CrossWordColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
+    // Up to this bound (y + .5) * height is an exact half-integer below
+    // 2^52. Division and subtraction recover y exactly, so the five original
+    // vertical weights are +0,+0,1,+0,+0, with normalizer one.
+    internal static bool IsIdentityHeight(int sourceHeight, int resultHeight) =>
+        sourceHeight > 0 && sourceHeight <= 1 << 26 && sourceHeight == resultHeight;
+
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
@@ -20,7 +26,8 @@ internal static class CrossWordColumnBicubicResize
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
         // Resize owns this unpublished output independently of the source. Its
         // charged suffix can hold workspace until final tail rows overwrite it.
-        var workspaceBytes = 292L * result.Width + 32L * source.Width;
+        var cacheRows = IsIdentityHeight(source.Height, result.Height) ? 1 : 5;
+        var workspaceBytes = (132L + 32L * cacheRows) * result.Width + 32L * source.Width;
         var tailRows = (workspaceBytes + result.Stride - 1) / result.Stride;
         var prefixRows = tailRows <= result.Height / 2 ? result.Height - (int)tailRows : 0;
         context.Reserve(WorkspaceBytes);
@@ -38,17 +45,19 @@ internal static class CrossWordColumnBicubicResize
     private static bool ApplyStrips(ImageBuffer source, ImageBuffer result, int startY,
         double scaleX, double scaleY, OperationContext context)
     {
-        // Fixed arrays occupy 3,440 bytes within the admitted charge. This
+        var identity = IsIdentityHeight(source.Height, result.Height);
+        var cacheRows = identity ? 1 : 5;
+        // Fixed arrays occupy at most 3,440 bytes within the admitted charge. This
         // frame unwinds before direct replay can need tiny-alpha scratch.
-        Span<Vector256<double>> cache = stackalloc Vector256<double>[5 * 8];
-        Span<int> rowIds = stackalloc int[5];
+        Span<Vector256<double>> cache = stackalloc Vector256<double>[cacheRows * 8];
+        Span<int> rowIds = stackalloc int[cacheRows];
         Span<Vector256<double>> decoded = stackalloc Vector256<double>[32];
         Span<double> weights = stackalloc double[8 * 10];
         Span<int> offsets = stackalloc int[8 * 10];
         Span<int> counts = stackalloc int[8];
         Span<double> normalizers = stackalloc double[8];
-        Span<double> vertical = stackalloc double[5];
-        Span<int> rows = stackalloc int[5];
+        Span<double> vertical = stackalloc double[cacheRows];
+        Span<int> rows = stackalloc int[cacheRows];
         var input = source.Pixels;
         var stride = source.Stride;
         for (var tile = 0; tile < result.Width; tile += 8)
@@ -80,16 +89,16 @@ internal static class CrossWordColumnBicubicResize
             for (var y = startY; y < result.Height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var center = (y + .5) * source.Height / result.Height - .5;
-                var first = (int)Math.Ceiling(center - 2 * scaleY);
-                var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+                var center = identity ? 0 : (y + .5) * source.Height / result.Height - .5;
+                var first = identity ? y : (int)Math.Ceiling(center - 2 * scaleY);
+                var count = identity ? 1 : (int)Math.Floor(center + 2 * scaleY) - first + 1;
                 double normalizerY = 0;
                 for (var t = 0; t < count; t++)
                 {
-                    var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
+                    var wy = identity ? 1 : ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                     vertical[t] = wy; normalizerY += wy;
                     var sy = Math.Clamp(first + t, 0, source.Height - 1);
-                    var slot = sy % 5; rows[t] = slot * 8;
+                    var slot = identity ? 0 : sy % 5; rows[t] = slot * 8;
                     if (rowIds[slot] == sy) continue;
                     rowIds[slot] = sy;
                     var row = input.Slice(sy * stride + sourceFirst * 8, sourceCount * 8);
@@ -165,14 +174,17 @@ internal static class CrossWordColumnBicubicResize
     private static bool ApplyRows(ImageBuffer source, ImageBuffer result, int height, Span<byte> workspace,
         double scaleX, double scaleY, OperationContext context)
     {
+        var identity = IsIdentityHeight(source.Height, result.Height);
+        var cacheRows = identity ? 1 : 5;
         var width = result.Width;
-        var doubleCount = 31 * width + 4 * source.Width;
+        var cacheElements = cacheRows * 4 * width;
+        var doubleCount = cacheElements + 11 * width + 4 * source.Width;
         var storage = MemoryMarshal.Cast<byte, double>(workspace[..(doubleCount * sizeof(double))]);
         var geometry = MemoryMarshal.Cast<byte, int>(workspace[(doubleCount * sizeof(double))..]);
-        var cache = MemoryMarshal.Cast<double, Vector256<double>>(storage[..(width * 20)]);
-        var decoded = MemoryMarshal.Cast<double, Vector256<double>>(storage.Slice(width * 20, source.Width * 4));
-        var weights = storage.Slice(width * 20 + source.Width * 4, width * 10);
-        var normalizers = storage.Slice(width * 30 + source.Width * 4, width);
+        var cache = MemoryMarshal.Cast<double, Vector256<double>>(storage[..cacheElements]);
+        var decoded = MemoryMarshal.Cast<double, Vector256<double>>(storage.Slice(cacheElements, source.Width * 4));
+        var weights = storage.Slice(cacheElements + source.Width * 4, width * 10);
+        var normalizers = storage.Slice(cacheElements + source.Width * 4 + width * 10, width);
         var offsets = geometry[..(width * 10)];
         var counts = geometry.Slice(width * 10, width);
         for (var x = 0; x < width; x++)
@@ -191,22 +203,22 @@ internal static class CrossWordColumnBicubicResize
             }
             normalizers[x] = normalizer;
         }
-        Span<int> rowIds = stackalloc int[5]; rowIds.Fill(-1);
-        Span<int> rows = stackalloc int[5];
-        Span<double> vertical = stackalloc double[5];
+        Span<int> rowIds = stackalloc int[cacheRows]; rowIds.Fill(-1);
+        Span<int> rows = stackalloc int[cacheRows];
+        Span<double> vertical = stackalloc double[cacheRows];
         for (var y = 0; y < height; y++)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var center = (y + .5) * source.Height / result.Height - .5;
-            var first = (int)Math.Ceiling(center - 2 * scaleY);
-            var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+            var center = identity ? 0 : (y + .5) * source.Height / result.Height - .5;
+            var first = identity ? y : (int)Math.Ceiling(center - 2 * scaleY);
+            var count = identity ? 1 : (int)Math.Floor(center + 2 * scaleY) - first + 1;
             double normalizerY = 0;
             for (var t = 0; t < count; t++)
             {
-                var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
+                var wy = identity ? 1 : ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                 vertical[t] = wy; normalizerY += wy;
                 var sy = Math.Clamp(first + t, 0, source.Height - 1);
-                var slot = sy % 5; rows[t] = slot * width;
+                var slot = identity ? 0 : sy % 5; rows[t] = slot * width;
                 if (rowIds[slot] == sy) continue;
                 rowIds[slot] = sy;
                 var row = source.Pixels.Slice(sy * source.Stride, source.Stride);

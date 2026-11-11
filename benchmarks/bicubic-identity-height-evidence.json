@@ -1,0 +1,440 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CIH816B",
+  "date": "2026-11-11",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 289,
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "producers": {
+    "windowsSha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+    "linuxSha256": "52d29bded3385119ba1edc3a6da039c640620c2ca1d76e9dbfe070f9be69218a",
+    "actualPackageSha256": "4430c8fec3cc4eee40cf08c27b9d4c5784edd932e4eb9ceb9483c5b957f6cb20"
+  },
+  "cases": {
+    "TightHorizontal16": {
+      "managedUs": 527.6026859374998,
+      "nativeUs": 580.0745162760417,
+      "ratio": 0.9095429485932255,
+      "lower": 0.9023140589250308,
+      "upper": 0.919989773498188,
+      "status": "pass",
+      "allocatedBytes": 113,
+      "librarySha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ef78fb7dbfb05cb1a756a64702961cbe60abd5046fa5f2b7cc6fb91b3072cceb",
+      "nativeOutputSha256": "6473a287135dc19141f06f1bbca47771f89977c01ab7fb406881b4ecd1710861",
+      "outputWidth": 256,
+      "outputHeight": 259,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1597464 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "caseId": "TightHorizontal16",
+      "receipt": "tmp/cih816b-candidate-TightHorizontal16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedRationalReferenceExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true
+    },
+    "TightCross16": {
+      "managedUs": 941.7713660714285,
+      "nativeUs": 889.8040234375,
+      "ratio": 1.0584031328979249,
+      "lower": 1.049428182080941,
+      "upper": 1.067468118970614,
+      "status": "gap",
+      "allocatedBytes": 114,
+      "librarySha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+      "nativeOutputSha256": "fb741bb37e310921a0c588ab79c72ec5c6e17ac156c11a686a95eaf8e16afd70",
+      "outputWidth": 256,
+      "outputHeight": 519,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2129944 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "caseId": "TightCross16",
+      "receipt": "tmp/cih816b-candidate-TightCross16-confirm-receipt.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "managedRationalReferenceExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true
+    }
+  },
+  "comparison": {
+    "TightHorizontal16": {
+      "baselineProvider": "tmp/rpa503-candidate-TightHorizontal16-confirm-observation.json",
+      "views": {
+        "statistics": {
+          "baselineUs": 662.0089509320176,
+          "candidateUs": 527.6026859374998,
+          "savedUs": 134.40626499451767,
+          "savedFraction": 0.20302786662520522,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineConfidenceInterval": {
+            "N": 12,
+            "Mean": 662008.9509320175,
+            "StandardError": 108.83240959839569,
+            "Level": 12,
+            "Margin": 482.88715259998264,
+            "Lower": 661526.0637794175,
+            "Upper": 662491.8380846175
+          },
+          "candidateConfidenceInterval": {
+            "N": 10,
+            "Mean": 527602.6859374999,
+            "StandardError": 121.73063568249957,
+            "Level": 12,
+            "Margin": 581.9835280679354,
+            "Lower": 527020.7024094319,
+            "Upper": 528184.6694655678
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 662.0104838267544,
+          "candidateUs": 528.5138038194444,
+          "savedUs": 133.49668000731,
+          "savedFraction": 0.20165342282139076,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineConfidenceInterval": {
+            "N": 12,
+            "Mean": 662010.4838267544,
+            "StandardError": 108.83240959839539,
+            "Level": 12,
+            "Margin": 482.8871525999813,
+            "Lower": 661527.5966741544,
+            "Upper": 662493.3709793544
+          },
+          "candidateConfidenceInterval": {
+            "N": 12,
+            "Mean": 528513.8038194444,
+            "StandardError": 639.5208919092139,
+            "Level": 12,
+            "Margin": 2837.540983074897,
+            "Lower": 525676.2628363695,
+            "Upper": 531351.3448025193
+          }
+        }
+      },
+      "normalizedGain": 0.19486968442276376,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "baselineRatioBounds": [
+        1.114119270664387,
+        1.1365567781230597
+      ],
+      "candidateRatioBounds": [
+        0.9023140589250308,
+        0.919989773498188
+      ],
+      "nativeClockChange": -0.010132747512547002,
+      "baselineUs": 662.0089509320176,
+      "candidateUs": 527.6026859374998,
+      "baselineNativeUs": 586.0124322916666,
+      "candidateNativeUs": 580.0745162760417
+    },
+    "TightCross16": {
+      "baselineProvider": "tmp/cih816b-baseline-TightCross16-confirm-observation.json",
+      "views": {
+        "statistics": {
+          "baselineUs": 921.544934375,
+          "candidateUs": 941.7713660714285,
+          "savedUs": -20.226431696428453,
+          "savedFraction": -0.021948394421099193,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineConfidenceInterval": {
+            "N": 12,
+            "Mean": 921544.9343750001,
+            "StandardError": 10624.80781696069,
+            "Level": 12,
+            "Margin": 47142.05274501076,
+            "Lower": 874402.8816299892,
+            "Upper": 968686.9871200109
+          },
+          "candidateConfidenceInterval": {
+            "N": 12,
+            "Mean": 941771.3660714285,
+            "StandardError": 772.944943524236,
+            "Level": 12,
+            "Margin": 3429.5407431691633,
+            "Lower": 938341.8253282594,
+            "Upper": 945200.9068145977
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 921.5466031249999,
+          "candidateUs": 941.7731540178571,
+          "savedUs": -20.226550892857254,
+          "savedFraction": -0.021948484020523962,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineConfidenceInterval": {
+            "N": 12,
+            "Mean": 921546.6031249999,
+            "StandardError": 10624.807816960692,
+            "Level": 12,
+            "Margin": 47142.05274501077,
+            "Lower": 874404.5503799891,
+            "Upper": 968688.6558700107
+          },
+          "candidateConfidenceInterval": {
+            "N": 12,
+            "Mean": 941773.1540178572,
+            "StandardError": 772.9449435242414,
+            "Level": 12,
+            "Margin": 3429.540743169187,
+            "Lower": 938343.613274688,
+            "Upper": 945202.6947610263
+          }
+        }
+      },
+      "normalizedGain": 0.05020680009975986,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "baselineRatioBounds": [
+        0.9774002331804779,
+        1.176206865202458
+      ],
+      "candidateRatioBounds": [
+        1.049428182080941,
+        1.067468118970614
+      ],
+      "nativeClockChange": 0.07596937367885759,
+      "baselineUs": 921.544934375,
+      "candidateUs": 941.7713660714285,
+      "baselineNativeUs": 826.9789505208333,
+      "candidateNativeUs": 889.8040234375
+    }
+  },
+  "statusCounts": {
+    "pass": 1,
+    "gap": 1,
+    "uncertain": 0
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CIH816B",
+    "originalWordRepairVerbatim": true,
+    "horizontalMathCertifiedPackingRepairCancellationCheckpointsAndFallbacksShared": true,
+    "sources": {
+      "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "db664bb136bb78af1b8b3b813abd9f493233d7a60c7faf89141063020dcf7285",
+      "tests/Lokad.Image.Tests/CrossWordIdentityResizeTests.cs": "80109135556a10c4469944fbd8587069abfb19c094ccc2f1b987bf8b73f73611"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+      "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "3bd79ab0c4f2cfc6eaca59076c91f544c0a37b134c3eadcb1288fe9d614c4a55",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+    },
+    "identityHeightUpperBound": 67108864,
+    "guardAndGeometryTests": 12,
+    "newPoisonCleanupTests": 6,
+    "existingPublicFrozenRationalTinyAlphaAndOwnerTestsReused": true,
+    "newHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "identityBorrowedBytes": 58400,
+    "oldBorrowedBytes": 91168,
+    "identityExplicitStripStackBytes": 2352,
+    "generalExplicitStripStackBytes": 3440,
+    "admittedStackAllowanceBytes": 4096,
+    "physicalNativeJitPeakMeasured": false,
+    "extraEmbeddedBuildsPerOS": 2,
+    "testCorrection": "New direct-kernel tests initially passed an unclamped enlargement scale and used alpha inputs which could deliberately decline into public exact replay. Corrected tests pass the public Max(1,ratio) scale and use opaque data when requiring direct-core success. Existing frozen/rational/tiny-alpha public checks retained unchanged; failed logs preserved. Core was built once per OS and unchanged through test corrections.",
+    "originalGeneralRowsAndStripsReconstructVerbatimAfterRemovingOnlyIdentityAndCacheCapacitySelection": true,
+    "coreVersionsBuiltPerOS": 2,
+    "embeddedBuildsPerOS": 4,
+    "sourceBodiesRowsAndStrips": 2,
+    "noGenericModeOrDuplicatedKernel": true
+  },
+  "storage": {
+    "identityAllocatedBytes": 113,
+    "generalAllocatedBytes": 114,
+    "allocationSavingClaim": false,
+    "admittedStackAllowanceBytes": 4096,
+    "identityExplicitStripStackBytes": 2352,
+    "generalExplicitStripStackBytes": 3440,
+    "oldBorrowedOutputWorkspaceBytes": 91168,
+    "identityBorrowedOutputWorkspaceBytes": 58400,
+    "oldPrefixRows": 214,
+    "identityPrefixRows": 230,
+    "identityOutputPayloadBytes": 530432,
+    "generalOutputPayloadBytes": 1062912,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "defaultPixelPoolUnchanged": true,
+    "governedPoolBypassUnchanged": true,
+    "physicalNativeJitPeakMeasured": false
+  },
+  "scope": "Exactly two existing complete tight-workspace RGBA16 bicubic controls: horizontal513x259->256x259 and reverse-mixed513x259->256x519, input+output+4096. Original complete Resize preparation, filtering/repair, output acquisition/disposal stay timed; explicitly labeled zimg worker retains prepared graph/scratch. Original input/settings/exact managed hashes/native tolerances preserved. Defaults/other kernels/codec/text source paths are unchanged.",
+  "revision": "A generic specialization passes primary533.96/native630.50us but companion948.14/native866.04us shows raw27.39us/2.97%regression versus contemporary unchanged920.75/native870.21. A is not accepted. B removes generic specialization and shares one non-generic row/strip body. Final primary527.60/native580.07 passes, companion941.77/native889.80 stays gap. Companion raw+2.28% tracks native+2.25%, normalized+0.0304% with normalized overlap; raw/all-actual intervals narrowly separate. An adjacent unchanged predecessor921.54/native826.98us has wide raw/all-actual and normalized intervals overlapping B. Its incremental effect remains inconclusive; retain the possible~20us companion cost and claim neither regression-free execution nor a speedup. Preserve adverse A and all screens; no favorable candidate repeats.",
+  "decision": "Retain exact one-row identity-height preparation/execution and smaller result-backed view. Stop primary pass. General companion still has a demonstrated parity gap and no claimed gain; subsequent work may target it independently. Reconcile before one W/L/full/affectedISA/SAMEactualpackage milestone. Compression correctness remains first; no new performance matrix.",
+  "qualification": {
+    "fullChecksEachOs": 6309,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+      "full": [
+        2982,
+        2379,
+        948
+      ],
+      "total": 6309,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 400,
+        "public-normal": 789,
+        "internal-scalar": 400,
+        "public-scalar": 789
+      },
+      "isa": {
+        "internal-avx512-off": 400,
+        "public-avx512-off": 789,
+        "internal-avx2-off": 400,
+        "public-avx2-off": 789
+      },
+      "resizeInternalEachMode": 400,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "db664bb136bb78af1b8b3b813abd9f493233d7a60c7faf89141063020dcf7285",
+        "tests/Lokad.Image.Tests/CrossWordIdentityResizeTests.cs": "80109135556a10c4469944fbd8587069abfb19c094ccc2f1b987bf8b73f73611"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "3bd79ab0c4f2cfc6eaca59076c91f544c0a37b134c3eadcb1288fe9d614c4a55",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "52d29bded3385119ba1edc3a6da039c640620c2ca1d76e9dbfe070f9be69218a",
+      "full": [
+        2982,
+        2379,
+        948
+      ],
+      "total": 6309,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 400,
+        "public-normal": 789,
+        "internal-scalar": 400,
+        "public-scalar": 789
+      },
+      "isa": {
+        "internal-avx512-off": 400,
+        "public-avx512-off": 789,
+        "internal-avx2-off": 400,
+        "public-avx2-off": 789
+      },
+      "resizeInternalEachMode": 400,
+      "resizePublicEachMode": 789,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "db664bb136bb78af1b8b3b813abd9f493233d7a60c7faf89141063020dcf7285",
+        "tests/Lokad.Image.Tests/CrossWordIdentityResizeTests.cs": "80109135556a10c4469944fbd8587069abfb19c094ccc2f1b987bf8b73f73611"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "3bd79ab0c4f2cfc6eaca59076c91f544c0a37b134c3eadcb1288fe9d614c4a55",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "4430c8fec3cc4eee40cf08c27b9d4c5784edd932e4eb9ceb9483c5b957f6cb20",
+      "symbolsSha256": "e06b50b3a7f97730bce0806da28c231d6fbdadfd2a9c327a83070d01199d5ed1",
+      "bytes": 449938,
+      "librarySha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "4430c8fec3cc4eee40cf08c27b9d4c5784edd932e4eb9ceb9483c5b957f6cb20",
+      "librarySha256": "8a780eb3afde3254a26c51b8d027ae4a93702a85be010c7ef1d28ddb140fa7dd",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "allThreeExamplesBothOS": true,
+    "resizeInternalEachModeEachOs": 400,
+    "resizePublicEachModeEachOs": 789,
+    "threeNamedStorageSuitesIncluded": true,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "unchangedCodecAndTextIsaReused": true,
+    "unchangedCodecAndResizeIsaReused": true,
+    "currentTextInternalEachModeEachOs": 183,
+    "currentTextPublicEachModeEachOs": 162,
+    "additionalProductionOrEmbeddedBuildsAfterFocused": 0,
+    "currentTextEvidenceReused": true,
+    "actualPackageByteWordReductionVsFallbackPassedBothOs": true,
+    "actualPackageIdentityAndGeneralWordFrozenOwnersPassedBothOs": true
+  },
+  "raw": {
+    "file": "bicubic-identity-height.tar.xz",
+    "sha256": "b3eb9212016559f03abf064170c3c35df26255d55895dcce32d1abf2f7e70790",
+    "bytes": 4576020,
+    "members": 241,
+    "dependencies": [
+      {
+        "file": "bilinear-ordered-horizontal-windows.tar.xz",
+        "sha256": "9826b52fcab268ffa0c31af4dbe9fc3e791b96f6254111ece0054fc39700da8e",
+        "scope": "Verified37ac predecessor c910/c45/package5a14;6291W/L and source-valid other families/qualification. Original baseline modules and sources also included here."
+      },
+      {
+        "file": "bicubic-shared-word-preparation-qualified.tar.xz",
+        "sha256": "1c9528ea15b55ccb329dd9b6a64fc8d9ab1af52192b368e867d087474ace77aa",
+        "scope": "Original exact frozen controls/native bounds, existing selectors/worker/runtime/fixture identities and source-valid primary predecessor costs."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "workflow": {
+    "coreVersionsEachOs": 2,
+    "embeddedBuildsEachOs": 4,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "productionCompileFailures": 0,
+    "newPerformanceControls": 0,
+    "screens": "Three actuals per existing control and variant, then independent twelve-actual confirmations. Original verified predecessor frozen; one immutable build throughout each variant.",
+    "countercheck": "One unchanged companion predecessor per variant addresses concrete raw/native-clock contradiction. Final countercheck is wide/inconclusive, not a passing or speedup claim. All subjects/screens/adverse data retained.",
+    "milestone": "Both complete costs reconciled before one full/live W/L, affected scalar/AVX2off/AVX512off, SAME actual package/all3examples, including identity/general word frozen pixels and owner cleanup. Source-valid other families reused."
+  },
+  "next": "Stop height-preserving TightHorizontal16 pass. TightCross16 remains a demonstrated complete-operation gap; do not infer an incremental gain or regression-free execution from inconclusive predecessor comparisons. Consider ordered horizontal reuse/actual attribution independently, without replaying rejected implementations or expanding the matrix. Compression correctness remains first; publication postponed."
+}

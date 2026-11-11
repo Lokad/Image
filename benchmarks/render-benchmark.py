@@ -1568,6 +1568,27 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
+    identity_height = json.loads((ROOT / 'benchmarks/bicubic-identity-height-evidence.json').read_text(encoding='utf-8'))
+    assert identity_height['productionAccepted'] and identity_height['allAffectedPerformanceReconciled']
+    assert identity_height['requiredMaterialPaths'] == 289 and not identity_height['materialPassToGapContradictions']
+    assert identity_height['raw']['mirrored'] and identity_height['raw']['allMembersVerified']
+    assert identity_height['statusCounts'] == {'pass': 1, 'gap': 1, 'uncertain': 0}
+    assert identity_height['sourceProof']['originalGeneralRowsAndStripsReconstructVerbatimAfterRemovingOnlyIdentityAndCacheCapacitySelection']
+    assert identity_height['sourceProof']['originalWordRepairVerbatim'] and identity_height['sourceProof']['noGenericModeOrDuplicatedKernel']
+    for cost in identity_height['cases'].values():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['librarySha256'] == identity_height['producers']['windowsSha256']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+    identity_gain = identity_height['comparison']['TightHorizontal16']
+    assert identity_gain['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in identity_gain['views'].values())
+    cost = identity_height['cases']['TightCross16']
+    label = word_labels['TightCross16']
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| {label} † → {cost["outputWidth"]}×{cost["outputHeight"]} | '
+        f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |')
     vq = word_prep['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
@@ -1981,10 +2002,10 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = bilinear_windows['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6291
+    current_build_qualification = identity_height['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6309
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == bilinear_windows['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == identity_height['producers']['windowsSha256']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2073,6 +2094,15 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
+  [Exact identity-height bicubic](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md) saves
+  134.41 µs/20.30%raw/19.49%normalized with separated confidence; the existing
+  RGBA16 513×259→256×259 control passes/stops, upper{identity_height['cases']['TightHorizontal16']['upper']:.3f},
+  GC113 B/op. Borrowed output workspace91,168→58,400 B and explicit strip arrays
+  3,440→2,352 B; admission stays4KiB with no added capacity or retained state.
+  Its height-enlarging companion remains a gap, upper{identity_height['cases']['TightCross16']['upper']:.3f};
+  incremental effect is inconclusive and a possible~20 µs cost is disclosed.
+  Adverse generic specialization and wide predecessor counterchecks are retained;
+  no companion speedup or regression-free claim. Other kernels reuse valid evidence.
   [Ordered bilinear horizontal windows](../benchmarks/BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
   save28.77/32.94 µs on byte/word reduction:6.42%/7.08%raw and6.35%/6.88%normalized,
   with separated raw/all-actual and normalized confidence. Native clocks move−.072%/−.208%.

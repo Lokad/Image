@@ -1,5 +1,9 @@
 # Ordered bilinear horizontal windows
 
+Current source-valid costs below are retained. The latest immutable build/package
+and resize regression milestone is [exact identity-height bicubic](BICUBIC-IDENTITY-HEIGHT.md);
+its changes do not affect these bilinear kernels.
+
 Existing ordered-window filtering now serves both byte and word triangle
 reduction. Complete Down8 saves **28.77µs/6.42%raw/6.35%reference-normalized**;
 Down16 saves **32.94µs/7.08%raw/6.88%normalized**. Filtered/all-actual raw and
