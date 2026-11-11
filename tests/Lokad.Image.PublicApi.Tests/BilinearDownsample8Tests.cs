@@ -25,6 +25,8 @@ public sealed class BilinearDownsample8Tests
         using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear, limits);
         using var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear, limits);
         var bytes = OriginalPixels.Bytes(expected);
+        Assert.Equal(ExactResizeReference.Resize(input, sourceWidth, sourceHeight, 8,
+            width, height, ResizeFilter.Bilinear), bytes);
         Assert.Equal(bytes, OriginalPixels.Bytes(first));
         Assert.Equal(bytes, OriginalPixels.Bytes(second));
         first.GetRow8(0)[0] ^= 255;

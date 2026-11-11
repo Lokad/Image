@@ -17,13 +17,22 @@ internal static class BilinearDownsample8
         var scaleX = (double)source.Width / result.Width;
         if (source.BitDepth != 8 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
             || scaleX > 2.5 || scaleY > 2.5
-            || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
-            || context.RemainingWorkingBytes < WorkspaceBytes) return false;
+            || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported) return false;
+        var planElements = (long)result.Height * BilinearVerticalGeometry.Taps;
+        var ownedBytes = WorkspaceBytes + BilinearVerticalGeometry.StorageBytes(result.Height);
+        if (planElements > Array.MaxLength || context.RemainingWorkingBytes < ownedBytes) return false;
         const int sampleBytes = 1;
-        context.Reserve(WorkspaceBytes);
+        context.Reserve(ownedBytes);
         try
         {
-            // Fixed arrays occupy 3,640 bytes within the admitted charge. This
+            context.Cancellation.ThrowIfCancellationRequested();
+            var verticalWeights = new double[(int)planElements];
+            var verticalFirst = new int[result.Height];
+            var verticalCounts = new int[result.Height];
+            var verticalNormalizers = new double[result.Height];
+            BilinearVerticalGeometry.Prepare(source.Height, result.Height, scaleY,
+                verticalWeights, verticalFirst, verticalCounts, verticalNormalizers, context.Cancellation);
+            // Fixed arrays occupy 3,560 bytes within the admitted charge. This
             // frame unwinds before direct replay can need tiny-alpha scratch.
             Span<Vector256<double>> cache = stackalloc Vector256<double>[10 * 6];
             Span<int> rowIds = stackalloc int[10];
@@ -32,7 +41,6 @@ internal static class BilinearDownsample8
             Span<int> offsets = stackalloc int[6 * 10];
             Span<int> counts = stackalloc int[6];
             Span<double> normalizers = stackalloc double[6];
-            Span<double> vertical = stackalloc double[10];
             Span<int> rows = stackalloc int[10];
             var input = source.Pixels;
             for (var tile = 0; tile < result.Width; tile += 6)
@@ -64,14 +72,12 @@ internal static class BilinearDownsample8
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - scaleY);
-                    var count = (int)Math.Floor(center + scaleY) - first + 1;
-                    double normalizerY = 0;
+                    var first = verticalFirst[y];
+                    var count = verticalCounts[y];
+                    var vertical = verticalWeights.AsSpan(y * BilinearVerticalGeometry.Taps, count);
+                    var normalizerY = verticalNormalizers[y];
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bilinear);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % 10; rows[t] = slot * 6;
                         if (rowIds[slot] == sy) continue;
@@ -151,7 +157,7 @@ internal static class BilinearDownsample8
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
-        finally { context.Release(WorkspaceBytes); }
+        finally { context.Release(ownedBytes); }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)

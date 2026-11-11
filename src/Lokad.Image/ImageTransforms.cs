@@ -170,8 +170,9 @@ public static class ImageTransforms
                 result.Orientation = source.Orientation;
                 return result;
             }
-            if (filter == ResizeFilter.Bilinear && source.BitDepth == 16
-                && BilinearDownsample16.TryApply(source, result, scaleY, context))
+            if (filter == ResizeFilter.Bilinear && (source.BitDepth == 8
+                ? BilinearDownsample8.TryApply(source, result, scaleY, context)
+                : BilinearDownsample16.TryApply(source, result, scaleY, context)))
             {
                 result.Orientation = source.Orientation;
                 return result;

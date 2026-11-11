@@ -29,8 +29,6 @@ OperationContext context) where T : unmanaged, INumberBase<T>
             && result.Width > source.Width && result.Height > source.Height
             && BilinearUpsample16.TryApply(source, result, horizontalWeights, horizontalOffsets,
                 horizontalCounts, context)) return;
-        if (paired && typeof(T) == typeof(byte) && filter == ResizeFilter.Bilinear
-            && BilinearDownsample8.TryApply(source, result, scaleY, context)) return;
         ReadOnlySpan<byte> packedInput = packed8 || paired ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         Span<byte> pairedOutput = paired ? MemoryMarshal.Cast<T, byte>(output) : default;

@@ -70,9 +70,12 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
-  [Current bilinear reduction](../benchmarks/BILINEAR-DOWNSIZE-CURRENT-COSTS.md)
-  confirms byte488.55/FFmpeg386.73µs and word443.43/420.90µs gaps, with25,785/8,473B/op.
-  Shared preparation is the next lead; these replace historical costs, not a speedup claim.
+  [Shared bilinear preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md)
+  saves 68.39 µs/14.00% raw/13.72% normalized on byte reduction; allocation falls
+  25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
+  All four affected complete controls refresh: Up8 passes/stops; Down8/16 and Up16
+  remain gaps. Existing Up16 costs 2,724.96/FFmpeg2,146.42 µs, upper1.316 and
+  4,498,923 B/op; its larger absolute gap is next for attribution. No new retained scratch.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
@@ -85,11 +88,11 @@ Current scope and remaining work:
   upper 2.396 gap, 176 B/op; 757,076 B idle pooled capacity is separate. These cases do
   not block codec/resizing work. Existing pools and governed bypass remain.
 
-The current immutable build passes **6,248 full/live checks per OS**
+The current immutable build passes **6,251 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
-Current resize qualification: 363 internal/776 public per
+Current resize qualification: 363 internal/779 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -239,9 +242,9 @@ settings do not establish matched quality.
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
-| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,027.72 | 2,165.52 | 0.936 / 0.993 | 102,891 |
-| Bilinear resize RGBA8 (gap) † → 256×129 | 488.55 | 386.73 | 1.263 / 1.278 | 25,785 |
-| Bilinear resize RGBA16 (gap) † → 256×129 | 443.43 | 420.90 | 1.054 / 1.066 | 8,473 |
+| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | 2,091.11 | 2,296.62 | 0.911 / 0.916 | 102,891 |
+| Bilinear resize RGBA8 (gap) † → 256×129 | 420.16 | 385.48 | 1.090 / 1.101 | 8,473 |
+| Bilinear resize RGBA16 (gap) † → 256×129 | 465.51 | 449.98 | 1.035 / 1.051 | 8,473 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 389.10 | 997.60 | 0.390 / 0.393 | 198,457 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 318.85 | 368.80 | 0.865 / 0.870 | 137 |

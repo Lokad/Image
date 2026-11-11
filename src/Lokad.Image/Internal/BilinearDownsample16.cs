@@ -18,35 +18,21 @@ internal static class BilinearDownsample16
         if (source.BitDepth != 16 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
             || scaleX > 2.5 || scaleY > 2.5
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported) return false;
-        const int verticalTaps = 6; // At scale <=2.5, inclusive triangle support has at most six taps.
-        var planElements = (long)result.Height * verticalTaps;
-        var ownedBytes = WorkspaceBytes + planElements * sizeof(double)
-            + (long)result.Height * (2 * sizeof(int) + sizeof(double)) + 4 * 64;
+        var planElements = (long)result.Height * BilinearVerticalGeometry.Taps;
+        var ownedBytes = WorkspaceBytes + BilinearVerticalGeometry.StorageBytes(result.Height);
         if (planElements > Array.MaxLength || context.RemainingWorkingBytes < ownedBytes) return false;
         const int sampleBytes = 2;
         context.Reserve(ownedBytes);
         try
         {
+            context.Cancellation.ThrowIfCancellationRequested();
             var verticalWeights = new double[(int)planElements];
             var verticalFirst = new int[result.Height];
             var verticalCounts = new int[result.Height];
             var verticalNormalizers = new double[result.Height];
-            for (var y = 0; y < result.Height; y++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var center = (y + .5) * source.Height / result.Height - .5;
-                var first = (int)Math.Ceiling(center - scaleY);
-                var count = (int)Math.Floor(center + scaleY) - first + 1;
-                verticalFirst[y] = first; verticalCounts[y] = count;
-                double normalizer = 0;
-                for (var t = 0; t < count; t++)
-                {
-                    var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bilinear);
-                    verticalWeights[y * verticalTaps + t] = wy; normalizer += wy;
-                }
-                verticalNormalizers[y] = normalizer;
-            }
-            // Fixed arrays occupy 3,640 bytes within the admitted charge. This
+            BilinearVerticalGeometry.Prepare(source.Height, result.Height, scaleY,
+                verticalWeights, verticalFirst, verticalCounts, verticalNormalizers, context.Cancellation);
+            // Fixed arrays occupy 3,560 bytes within the admitted charge. This
             // frame unwinds before direct replay can need tiny-alpha scratch.
             Span<Vector256<double>> cache = stackalloc Vector256<double>[10 * 6];
             Span<int> rowIds = stackalloc int[10];
@@ -88,7 +74,7 @@ internal static class BilinearDownsample16
                     context.Cancellation.ThrowIfCancellationRequested();
                     var first = verticalFirst[y];
                     var count = verticalCounts[y];
-                    var vertical = verticalWeights.AsSpan(y * verticalTaps, count);
+                    var vertical = verticalWeights.AsSpan(y * BilinearVerticalGeometry.Taps, count);
                     var normalizerY = verticalNormalizers[y];
                     for (var t = 0; t < count; t++)
                     {

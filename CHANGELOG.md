@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share byte/word bilinear reduction preparation and remove unused horizontal
+  storage, preserving exact pixels, cancellation and shared memory ownership.
+
 - Share certified bicubic byte publication and ordered vertical quartets across
   cached, bounded and enlargement execution, preserving exact rounding, repair
   and memory ownership.

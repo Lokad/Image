@@ -1423,33 +1423,29 @@ def render():
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | {stream["managedUs"]:,.2f} | '
         f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | '
         f'{stream["allocatedBytes"]:,} | — |'))
-    bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
-    current = bilinear['current']
-    bilinear_up8 = current
-    assert bilinear['productionAccepted'] and bilinear['productionChanged']
-    bq = bilinear['qualification']
-    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 6036
-    assert bq['sameActualPackageBothOS']
-    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
+    bilinear = json.loads((ROOT / 'benchmarks/bilinear-shared-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear['productionAccepted'] and bilinear['allAffectedPerformanceReconciled']
+    assert not bilinear['materialPassToGapContradictions']
+    assert set(bilinear['cases']) == {'Down8', 'Down16', 'Up8', 'Up16'}
+    assert bilinear['statusCounts'] == {'pass': 1, 'gap': 3, 'uncertain': 0}
     assert bilinear['raw']['mirrored'] and bilinear['raw']['allMembersVerified']
-    assert current['librarySha256'] == current['receipt']['librarySha256']
-    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['receipt']['managedRationalReferenceExact'] and current['receipt']['independentOwnedOutput']
+    bilinear_qualification = bilinear['qualification']
+    assert bilinear_qualification['fullChecksEachOs'] == bilinear_qualification['windows']['total'] == bilinear_qualification['linux']['total'] == 6251
+    assert bilinear_qualification['sameActualPackageBothOS'] and bilinear_qualification['threeNamedStorageSuitesIncluded']
+    assert bilinear_qualification['actualPackage']['sha256'] == bilinear_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert bilinear['comparison']['Down8']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in bilinear['comparison']['Down8']['views'].values())
+    for cost in bilinear['cases'].values():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
+        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
+        assert cost['librarySha256'] == bilinear['producers']['windowsSha256'] == bilinear_qualification['actualPackage']['librarySha256']
+    current = bilinear['cases']['Up8']
     assert current['upper'] <= 1 and current['status'] == 'pass'
-    assert current['librarySha256'] == bq['actualPackage']['librarySha256']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in bilinear['comparison']['views'].values())
     rows.append(('editing', f'| Bilinear upscale RGBA8 (parity confirmed) † → 1027×519 | {current["managedUs"]:,.2f} | '
                  f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    bilinear_down = json.loads((ROOT / 'benchmarks/bilinear-downsize-current-evidence.json').read_text(encoding='utf-8'))
-    assert not bilinear_down['productionChanged'] and bilinear_down['allBuilds'] == 0
-    assert set(bilinear_down['cases']) == {'Down8', 'Down16'}
-    assert bilinear_down['raw']['mirrored'] and bilinear_down['raw']['allMembersVerified']
-    for name, cost in bilinear_down['cases'].items():
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
-        assert cost['managedExact'] and cost['independentOwnedOutput']
-        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
-        assert cost['librarySha256'] == bilinear_down['producers']['windowsSha256']
+    for name in ['Down8', 'Down16']:
+        cost = bilinear['cases'][name]
         assert cost['status'] == 'gap' and cost['lower'] > 1
         depth = 8 if name == 'Down8' else 16
         rows.append(('editing', f'| Bilinear resize RGBA{depth} (gap) † → 256×129 | {cost["managedUs"]:,.2f} | '
@@ -1893,7 +1889,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = wide_quartet['qualification']
+    current_build_qualification = bilinear_qualification
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1968,9 +1964,12 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
-  [Current bilinear reduction](../benchmarks/BILINEAR-DOWNSIZE-CURRENT-COSTS.md)
-  confirms byte488.55/FFmpeg386.73µs and word443.43/420.90µs gaps, with25,785/8,473B/op.
-  Shared preparation is the next lead; these replace historical costs, not a speedup claim.
+  [Shared bilinear preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md)
+  saves 68.39 µs/14.00% raw/13.72% normalized on byte reduction; allocation falls
+  25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
+  All four affected complete controls refresh: Up8 passes/stops; Down8/16 and Up16
+  remain gaps. Existing Up16 costs 2,724.96/FFmpeg2,146.42 µs, upper1.316 and
+  4,498,923 B/op; its larger absolute gap is next for attribution. No new retained scratch.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
