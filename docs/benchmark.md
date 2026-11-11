@@ -87,8 +87,11 @@ Current scope and remaining work:
   with no extra heap capacity or retention. Original exact arithmetic/repair remain.
   [Packed bicubic](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) retains
   its source-scoped costs and remaining gaps; passing cases stop.
-  [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
-  1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
+  [Current Lanczos3 byte confidence](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md)
+  is 489.94/zimg 491.00 µs, upper 1.015: uncertain on the unchanged actual package,
+  superseding the former byte gap. The eight controls now have 6 passes / 2 uncertain;
+  word plans retain 156,248 B. Row-product experiments are unselected; no CPU gain
+  or candidate capacity is claimed. Current byte GC 138 B/op/plan 139,800 B is unchanged.
   [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
   saves49.41/34.44 µs on reverse-mixed/horizontal RGBA16:5.25%/6.53% raw and
   6.36%/15.36% normalized, with separated raw/all-actual/normalized confidence.
@@ -258,7 +261,7 @@ settings do not establish matched quality.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 667.33 | 1,629.83 | 0.409 / 0.436 | 138,647 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 504.32 | 491.61 | 1.026 / 1.039 | 138 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 489.94 | 491.00 | 0.998 / 1.015 | 138 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 698.00 | 1,963.30 | 0.356 / 0.360 | 155,077 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 550.80 | 552.29 | 0.997 / 1.012 | 139 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,769.63 | 5,231.96 | 0.720 / 0.726 | 319,224 |

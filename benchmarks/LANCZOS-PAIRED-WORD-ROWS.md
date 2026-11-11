@@ -1,5 +1,11 @@
 # Shared preparation for Lanczos word rows
 
+[Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md) supersedes the
+prepared-byte cost below: 489.94/zimg 491.00 µs upper 1.015, uncertain on the
+unchanged actual package. Other seven costs remain source-valid here; the current
+eight-control scope has six passes and two uncertainties. Row-product candidates
+are unselected, with exact production restoration and adverse evidence retained.
+
 LWP776C extends the existing row scheduler to share Q30 coefficient loading,
 conversion and lane preparation across two immediately required missing RGBA16
 rows. Their products and original four FMA chains remain independent. No new
@@ -13,7 +19,7 @@ Those scoped mechanism results do not replace final-build costs below.
 | Existing complete operation / explicitly labeled zimg | Lokad µs | Native µs | Ratio / upper | GC B/op | Retained plan B | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | OneShot8 | 667.33 | 1,629.83 | 0.409 / 0.436 | 138,647 | 0 | pass |
-| Repeated8 | 504.32 | 491.61 | 1.026 / 1.039 | 138 | 139,800 | gap |
+| Repeated8 (superseded) | 504.32 | 491.61 | 1.026 / 1.039 | 138 | 139,800 | historical gap |
 | OneShot16 | 698.00 | 1,963.30 | 0.356 / 0.360 | 155,077 | 0 | pass |
 | Repeated16 | 550.80 | 552.29 | 0.997 / 1.012 | 139 | 156,248 | uncertain |
 | OneShotEnlarge8 | 3,769.63 | 5,231.96 | 0.720 / 0.726 | 319,224 | 0 | pass |
@@ -84,4 +90,5 @@ Private0.2.1 package SHA256 `d1b2574906275ce426d4a72cef7e71b3a0cd397e496f395e532
 packages stay immutable. Raw `tmp/lanczos-paired-word-rows.tar.xz`, SHA256
 `b4d9cc9ca790793ec9875850ebf88bae8148eba4c209d92c484562a538432d50`, 49,186,292 B/531members, is mirrored and
 member-verified; its pinned dependencies retain unchanged tooling and history.
-The renderer reads this single current provider for the eight Lanczos costs.
+This report supplies seven current costs; the linked byte-confidence owner supplies
+the remaining prepared-byte cost. Earlier measurements stay retained history.

@@ -1243,6 +1243,23 @@ def render():
     assert len(lanczos_current['cases']) == 8
     assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
     assert lanczos_current['cases']['RepeatedEnlarge16']['upper'] <= 1
+    # Only the current displayed confidence depends on this read-only owner;
+    # its unselected implementations remain linked history, not renderer gates.
+    lanczos_confidence = json.loads((ROOT / 'benchmarks/lanczos-byte-product-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert lanczos_confidence['measurementAccepted'] and not lanczos_confidence['productionChanged']
+    assert lanczos_confidence['requiredMaterialPaths'] == 289
+    assert lanczos_confidence['raw']['mirrored'] and lanczos_confidence['raw']['allMembersVerified']
+    byte_confidence = lanczos_confidence['case']
+    assert byte_confidence['librarySha256'] == lanczos_confidence['producers']['windowsSha256']
+    assert byte_confidence['actualIterations'] == byte_confidence['nativeSamplesEachBracket'] == 12
+    assert byte_confidence['managedExact'] and byte_confidence['sourceUnchanged'] and byte_confidence['independentOwnedOutput']
+    assert byte_confidence['allOriginalGatesPassed'] and byte_confidence['quietGuardsPassed']
+    assert byte_confidence['status'] == 'uncertain' and byte_confidence['lower'] <= 1 < byte_confidence['upper']
+    assert byte_confidence['retainedBytes'] == 139800 and byte_confidence['allocatedBytes'] == 138
+    assert math.isclose(byte_confidence['ratio'], byte_confidence['managedUs'] / byte_confidence['nativeUs'], rel_tol=1e-12)
+    assert all(lanczos_current['sources'][name] == digest
+               for name, digest in lanczos_confidence['sourceProof']['restoredExactly'].items())
+    lanczos_costs = {**lanczos_current['cases'], 'Repeated8': byte_confidence}
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
     for case, label, size in [
@@ -1254,7 +1271,7 @@ def render():
             ('RepeatedEnlarge8', 'Lanczos3 prepared RGBA8 / zimg prepared', '1027×519'),
             ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '1027×519'),
             ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
-        observation = lanczos_current['cases'][case]
+        observation = lanczos_costs[case]
         assert observation['managedExact'] and observation['allOriginalGatesPassed'] and observation['quietGuardsPassed']
         assert observation['reusedUnchangedPath'] or observation['librarySha256'] == lanczos_current['producers']['timedArtifactSha256']
         assert observation['actualIterations'] == 12
@@ -2145,8 +2162,11 @@ Current scope and remaining work:
   with no extra heap capacity or retention. Original exact arithmetic/repair remain.
   [Packed bicubic](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) retains
   its source-scoped costs and remaining gaps; passing cases stop.
-  [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
-  1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
+  [Current Lanczos3 byte confidence](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md)
+  is 489.94/zimg 491.00 µs, upper 1.015: uncertain on the unchanged actual package,
+  superseding the former byte gap. The eight controls now have 6 passes / 2 uncertain;
+  word plans retain 156,248 B. Row-product experiments are unselected; no CPU gain
+  or candidate capacity is claimed. Current byte GC 138 B/op/plan 139,800 B is unchanged.
   [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
   saves49.41/34.44 µs on reverse-mixed/horizontal RGBA16:5.25%/6.53% raw and
   6.36%/15.36% normalized, with separated raw/all-actual/normalized confidence.
