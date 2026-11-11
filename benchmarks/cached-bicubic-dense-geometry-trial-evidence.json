@@ -1,0 +1,576 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CGD823",
+  "date": "2026-11-11",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "decision": {
+    "project": "Lokad.Image",
+    "stage": "CGD823",
+    "productionAccepted": false,
+    "selectedImplementation": null,
+    "decision": "Close this bounded implementation round. A has separated primary gains and lower capacity but material raw nonwide word adverse observations. B adds two compiled schedules and does not resolve the vertical-word adverse result. C restores one original workspace/schedule and removes the large nonwide slowdown, but its independent primary confirmation supplies no useful CPU gain. The memory reduction alone does not justify accepting this transition against the current performance objective. Confidence overlap is not called a proven normalized regression; no successful measurement is repeated for a favorable result.",
+    "productionVersionsEachOS": 3,
+    "coreRestoredWithoutBuild": true,
+    "sharedAdmissionAndExactContractsPreserved": true,
+    "retainedTests": "Ten public-plan exact rational/low-alpha, stack/heap row metadata, borrowed source/root, cancellation/recovery and independent surviving output cases cover existing production behavior. Remove private dense-only inputs and charge expectations with the unselected implementation.",
+    "qualification": "Reuse source-identical current full/live/ISA/actual-package evidence; rebuild the embedded internal assembly for the ten retained tests and run focused resize/admission and ISA checks only. No broad or package campaign for unchanged production.",
+    "priorPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+    "priorWindowsSha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+    "priorLinuxSha256": "b785b1c8f5b15190fe530d7811ea10d1a83f8b196013f74ec2adb7f0468eafe5",
+    "next": "Choose a distinct justified codec/resizing task from current costs and attribution; do not blind-replay A/B/C or silently treat either screens or historical stage costs as current standalone proof.",
+    "publicationPostponed": true,
+    "cCases": {
+      "Wide8": {
+        "managedUs": 384.2424360795454,
+        "nativeUs": 349.1373515625,
+        "ratio": 1.1005480632763556,
+        "lower": 0.9896064627453147,
+        "upper": 1.1348974733473711,
+        "allocatedBytes": 178474,
+        "status": "uncertain",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79"
+      },
+      "Horizontal16": {
+        "managedUs": 554.5840897253788,
+        "nativeUs": 579.5995240885417,
+        "ratio": 0.9568401399181594,
+        "lower": 0.9118687978894958,
+        "upper": 0.9630891176920822,
+        "allocatedBytes": 199931,
+        "status": "pass",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79"
+      },
+      "Vertical16": {
+        "managedUs": 444.6700398706896,
+        "nativeUs": 584.737916015625,
+        "ratio": 0.7604604177212402,
+        "lower": 0.7482798826812003,
+        "upper": 0.7713360227996228,
+        "allocatedBytes": 367597,
+        "status": "pass",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79"
+      }
+    }
+  },
+  "cases": {
+    "predecessor": {
+      "Wide8": {
+        "managedUs": 374.60266209893047,
+        "nativeUs": 347.5241253255208,
+        "ratio": 1.0779184373114976,
+        "lower": 1.0692414086319824,
+        "upper": 1.0864421296955256,
+        "allocatedBytes": 198451,
+        "status": "gap",
+        "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+        "receipt": "tmp/cgd823-baseline-Wide8-confirm-receipt.json",
+        "observation": "tmp/cgd823-baseline-Wide8-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Horizontal16": {
+        "managedUs": 553.6841648550725,
+        "nativeUs": 594.42683203125,
+        "ratio": 0.9314589029621133,
+        "lower": 0.8805844624403781,
+        "upper": 0.9698348322149923,
+        "allocatedBytes": 199933,
+        "status": "pass",
+        "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+        "receipt": "tmp/cgd823-baseline-Horizontal16-confirm-receipt.json",
+        "observation": "tmp/cgd823-baseline-Horizontal16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Vertical16": {
+        "managedUs": 442.2616473354232,
+        "nativeUs": 588.43816796875,
+        "ratio": 0.7515855894631741,
+        "lower": 0.7426831898663394,
+        "upper": 0.7598882785867275,
+        "allocatedBytes": 367597,
+        "status": "pass",
+        "librarySha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+        "receipt": "tmp/cgd823-baseline-Vertical16-confirm-receipt.json",
+        "observation": "tmp/cgd823-baseline-Vertical16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    },
+    "A": {
+      "Wide8": {
+        "managedUs": 363.15096323051944,
+        "nativeUs": 348.3320537109375,
+        "ratio": 1.0425424802618921,
+        "lower": 1.0272632463894558,
+        "upper": 1.0538748954873711,
+        "allocatedBytes": 178476,
+        "status": "gap",
+        "librarySha256": "c613f70e67a3f1eae07debd42146dfd65aa804cd717e34b5b10a34e42baaf930",
+        "receipt": "tmp/cgd823-candidate-Wide8-confirm-receipt.json",
+        "observation": "tmp/cgd823-candidate-Wide8-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Horizontal16": {
+        "managedUs": 576.3375025568183,
+        "nativeUs": 584.5054615885416,
+        "ratio": 0.9860258636257653,
+        "lower": 0.894674110219403,
+        "upper": 1.0028541815076648,
+        "allocatedBytes": 199930,
+        "status": "uncertain",
+        "librarySha256": "c613f70e67a3f1eae07debd42146dfd65aa804cd717e34b5b10a34e42baaf930",
+        "receipt": "tmp/cgd823-candidate-Horizontal16-confirm-receipt.json",
+        "observation": "tmp/cgd823-candidate-Horizontal16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Vertical16": {
+        "managedUs": 466.2936551724139,
+        "nativeUs": 592.706794921875,
+        "ratio": 0.786718929439431,
+        "lower": 0.7031576333122613,
+        "upper": 0.8206803712259658,
+        "allocatedBytes": 367597,
+        "status": "pass",
+        "librarySha256": "c613f70e67a3f1eae07debd42146dfd65aa804cd717e34b5b10a34e42baaf930",
+        "receipt": "tmp/cgd823-candidate-Vertical16-confirm-receipt.json",
+        "observation": "tmp/cgd823-candidate-Vertical16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    },
+    "B": {
+      "Wide8": {
+        "managedUs": 394.9929690755208,
+        "nativeUs": 376.81187109375,
+        "ratio": 1.0482498014964274,
+        "lower": 1.034980593371588,
+        "upper": 1.0608590582475743,
+        "allocatedBytes": 178477,
+        "status": "gap",
+        "librarySha256": "c5edcaa7e8dcbbfabb684117479daa375d118a02184183edf42be65b836edba5",
+        "receipt": "tmp/cgd823b-candidate-Wide8-confirm-receipt.json",
+        "observation": "tmp/cgd823b-candidate-Wide8-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Horizontal16": {
+        "managedUs": 556.3203042534723,
+        "nativeUs": 588.967666015625,
+        "ratio": 0.9445684990094403,
+        "lower": 0.87349873591648,
+        "upper": 1.0202212349459805,
+        "allocatedBytes": 199931,
+        "status": "uncertain",
+        "librarySha256": "c5edcaa7e8dcbbfabb684117479daa375d118a02184183edf42be65b836edba5",
+        "receipt": "tmp/cgd823b-candidate-Horizontal16-confirm-receipt.json",
+        "observation": "tmp/cgd823b-candidate-Horizontal16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Vertical16": {
+        "managedUs": 479.51778198653204,
+        "nativeUs": 594.9117578125,
+        "ratio": 0.8060317781408902,
+        "lower": 0.751260805761283,
+        "upper": 0.8186218086302764,
+        "allocatedBytes": 367596,
+        "status": "pass",
+        "librarySha256": "c5edcaa7e8dcbbfabb684117479daa375d118a02184183edf42be65b836edba5",
+        "receipt": "tmp/cgd823b-candidate-Vertical16-confirm-receipt.json",
+        "observation": "tmp/cgd823b-candidate-Vertical16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    },
+    "C": {
+      "Wide8": {
+        "managedUs": 384.2424360795454,
+        "nativeUs": 349.1373515625,
+        "ratio": 1.1005480632763556,
+        "lower": 0.9896064627453147,
+        "upper": 1.1348974733473711,
+        "allocatedBytes": 178474,
+        "status": "uncertain",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79",
+        "receipt": "tmp/cgd823c-candidate-Wide8-confirm-receipt.json",
+        "observation": "tmp/cgd823c-candidate-Wide8-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Horizontal16": {
+        "managedUs": 554.5840897253788,
+        "nativeUs": 579.5995240885417,
+        "ratio": 0.9568401399181594,
+        "lower": 0.9118687978894958,
+        "upper": 0.9630891176920822,
+        "allocatedBytes": 199931,
+        "status": "pass",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79",
+        "receipt": "tmp/cgd823c-candidate-Horizontal16-confirm-receipt.json",
+        "observation": "tmp/cgd823c-candidate-Horizontal16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "Vertical16": {
+        "managedUs": 444.6700398706896,
+        "nativeUs": 584.737916015625,
+        "ratio": 0.7604604177212402,
+        "lower": 0.7482798826812003,
+        "upper": 0.7713360227996228,
+        "allocatedBytes": 367597,
+        "status": "pass",
+        "librarySha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79",
+        "receipt": "tmp/cgd823c-candidate-Vertical16-confirm-receipt.json",
+        "observation": "tmp/cgd823c-candidate-Vertical16-confirm-observation.json",
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    }
+  },
+  "comparison": {
+    "A": {
+      "Wide8": {
+        "rawFraction": -0.0305702549048803,
+        "normalizedFraction": -0.032818769792860025,
+        "nativeClockFraction": 0.002324812369961071,
+        "normalizedGainSeparated": true,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": true
+        },
+        "rawAdverseSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        }
+      },
+      "Horizontal16": {
+        "rawFraction": 0.040913826220179805,
+        "normalizedFraction": 0.05858225251819982,
+        "nativeClockFraction": -0.01669065040150608,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": true
+        }
+      },
+      "Vertical16": {
+        "rawFraction": 0.054338891879458284,
+        "normalizedFraction": 0.046745627469189754,
+        "nativeClockFraction": 0.007254163964006688,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": true
+        }
+      }
+    },
+    "B": {
+      "Wide8": {
+        "rawFraction": 0.05443182614437858,
+        "normalizedFraction": -0.027524008114258147,
+        "nativeClockFraction": 0.08427543193093667,
+        "normalizedGainSeparated": true,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": true
+        }
+      },
+      "Horizontal16": {
+        "rawFraction": 0.00476108865979552,
+        "normalizedFraction": 0.014074261361008533,
+        "nativeClockFraction": -0.00918391586895595,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        }
+      },
+      "Vertical16": {
+        "rawFraction": 0.08424003047872874,
+        "normalizedFraction": 0.07244176769887867,
+        "nativeClockFraction": 0.01100130854206216,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": true
+        }
+      }
+    },
+    "C": {
+      "Wide8": {
+        "rawFraction": 0.025733330154683154,
+        "normalizedFraction": 0.020993820294325616,
+        "nativeClockFraction": 0.004642055383832888,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        }
+      },
+      "Horizontal16": {
+        "rawFraction": 0.0016253397287275817,
+        "normalizedFraction": 0.02724890693011983,
+        "nativeClockFraction": -0.02494387390293451,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        }
+      },
+      "Vertical16": {
+        "rawFraction": 0.005445628283114123,
+        "normalizedFraction": 0.01180814052649004,
+        "nativeClockFraction": -0.00628825959046464,
+        "normalizedGainSeparated": false,
+        "normalizedAdverseSeparated": false,
+        "rawGainSeparated": {
+          "statistics": false,
+          "unfilteredActualStatistics": false
+        },
+        "rawAdverseSeparated": {
+          "statistics": true,
+          "unfilteredActualStatistics": false
+        }
+      }
+    }
+  },
+  "attempts": {
+    "A": {
+      "windowsSha256": "c613f70e67a3f1eae07debd42146dfd65aa804cd717e34b5b10a34e42baaf930",
+      "linuxSha256": "e5d4acdd64449d8ab14390925a15f3702cf4e679d9815dd37be1e0c65b10e0c4",
+      "focusedEachOS": {
+        "internal-normal": 455,
+        "public-normal": 789,
+        "internal-scalar": 455,
+        "public-scalar": 789
+      },
+      "preparationRecords": [
+        "tmp/cgd823-preparation-windows.json",
+        "tmp/cgd823-preparation-linux.json"
+      ],
+      "sourceProofRecord": "tmp/cgd823-source-proof.json",
+      "completeControlsMeasured": 24,
+      "currentCostsAccepted": false
+    },
+    "B": {
+      "windowsSha256": "c5edcaa7e8dcbbfabb684117479daa375d118a02184183edf42be65b836edba5",
+      "linuxSha256": "83eaf4843edb7f5d0b4226efb96eb3001516c32dfecd505a779c184e00e877a0",
+      "focusedEachOS": {
+        "internal-normal": 455,
+        "public-normal": 789,
+        "internal-scalar": 455,
+        "public-scalar": 789
+      },
+      "preparationRecords": [
+        "tmp/cgd823b-preparation-windows.json",
+        "tmp/cgd823b-preparation-linux.json"
+      ],
+      "sourceProofRecord": "tmp/cgd823b-source-proof.json",
+      "completeControlsMeasured": 24,
+      "currentCostsAccepted": false
+    },
+    "C": {
+      "windowsSha256": "3b88fe9da99dd91390938212a064bc2033b24f701f4768c8b3ed2e75431c2b79",
+      "linuxSha256": "3054f9e98d0a1facb89ac8794fcae5fff0fd3203a9d27065af2cf75e839a32c2",
+      "focusedEachOS": {
+        "internal-normal": 460,
+        "public-normal": 789,
+        "internal-scalar": 460,
+        "public-scalar": 789
+      },
+      "preparationRecords": [
+        "tmp/cgd823c-preparation-windows.json",
+        "tmp/cgd823c-preparation-linux.json"
+      ],
+      "sourceProofRecord": "tmp/cgd823c-source-proof.json",
+      "completeControlsMeasured": 3,
+      "currentCostsAccepted": false
+    }
+  },
+  "scope": {
+    "ordinaryExistingControls": 16,
+    "equivalentWideBoundaries": 4,
+    "equivalentNarrowBoundaries": 4,
+    "newFixtures": 0,
+    "newSettings": 0,
+    "harnessNativeBuilds": 0,
+    "allSuccessfulMeasurementsRetained": true,
+    "allActualAndNativeBracketSamplesRetained": true,
+    "shortsNotParityProof": true,
+    "reference": "Explicitly labeled zimg backend; ordinary retained native graph/scratch is asymmetric with complete fresh managed Resize. Four wide and four narrow one-shot/repeated comparisons retain their original equivalent boundaries."
+  },
+  "storage": {
+    "originalDeclaredWideBytes": 198432,
+    "candidateDeclaredWideBytes": 178464,
+    "unselectedArrayPayloadReductionBytes": 19968,
+    "powerOfTwoRowsAndBoundsUnchanged": true,
+    "selectedCapacityReductionBytes": 0,
+    "actualPhysicalNativeJitPeakMeasured": false,
+    "allocationMeaning": "Total GC per operation is separate from admitted/retained capacity; paired candidate primary totals178474..178477B/op versus predecessor198451B/op are unselected. Independent outputs remain owned until disposal."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredExactly": true,
+      "productionSha256": "8e44e29f453cee05d471045e2b382574a8ca4fd452f5b5c77499a276a014e150",
+      "originalProductionAndTestSources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "ada2961d807390c7d61b8ac54fdc6d2b2fed0a9a8e3a3e200ade6a460cd26a52",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "eedfc96b133147d7606cd2a2ee2554bd5bfb0394bdabc3b13188f398f7714453",
+        "tests/Lokad.Image.Tests/CachedBicubicAdmissionTests.cs": "482fe7dce25cf857d952c46e9d49344be1887f1ee3d454418d031bd70dfc92d0",
+        "tests/Lokad.Image.Tests/CachedWidePreparedGeometryTests.cs": "c5b79295ed35c3f2d4f1eae83d55bfaee7b0da8ba79a1ac4f28ec13477ab9f8c",
+        "tests/Lokad.Image.Tests/CachedWidePublicationTests.cs": "bd9255ae59f31bec7a8d1a210121e1a86ff90bcb80ab268d96b2c228b9045f68"
+      },
+      "retainedTestPath": "tests/Lokad.Image.Tests/BicubicPlanOwnershipTests.cs",
+      "retainedTestSha256": "4ea6f62cd6735f3628ffad0e02d0c4aad47582fff21d7a18c279d04bdc904165",
+      "newCases": 10,
+      "focused": {
+        "normal": 452,
+        "scalar": 452,
+        "avx512-off": 452,
+        "avx2-off": 452
+      },
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "actualPackageUnchanged": true,
+      "actualPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+      "coreBuilds": 0,
+      "embeddedBuilds": 1,
+      "fullAndPackageQualificationReused": "PNG-LIVE-RUN-PREPARATION.md:6351full/live eachOS plus same actual package/all3examples; production unchanged",
+      "publicationPostponed": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredExactly": true,
+      "productionSha256": "b785b1c8f5b15190fe530d7811ea10d1a83f8b196013f74ec2adb7f0468eafe5",
+      "originalProductionAndTestSources": {
+        "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "ada2961d807390c7d61b8ac54fdc6d2b2fed0a9a8e3a3e200ade6a460cd26a52",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "eedfc96b133147d7606cd2a2ee2554bd5bfb0394bdabc3b13188f398f7714453",
+        "tests/Lokad.Image.Tests/CachedBicubicAdmissionTests.cs": "482fe7dce25cf857d952c46e9d49344be1887f1ee3d454418d031bd70dfc92d0",
+        "tests/Lokad.Image.Tests/CachedWidePreparedGeometryTests.cs": "c5b79295ed35c3f2d4f1eae83d55bfaee7b0da8ba79a1ac4f28ec13477ab9f8c",
+        "tests/Lokad.Image.Tests/CachedWidePublicationTests.cs": "bd9255ae59f31bec7a8d1a210121e1a86ff90bcb80ab268d96b2c228b9045f68"
+      },
+      "retainedTestPath": "tests/Lokad.Image.Tests/BicubicPlanOwnershipTests.cs",
+      "retainedTestSha256": "4ea6f62cd6735f3628ffad0e02d0c4aad47582fff21d7a18c279d04bdc904165",
+      "newCases": 10,
+      "focused": {
+        "normal": 452,
+        "scalar": 452,
+        "avx512-off": 452,
+        "avx2-off": 452
+      },
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "actualPackageUnchanged": true,
+      "actualPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+      "coreBuilds": 0,
+      "embeddedBuilds": 1,
+      "fullAndPackageQualificationReused": "PNG-LIVE-RUN-PREPARATION.md:6351full/live eachOS plus same actual package/all3examples; production unchanged",
+      "publicationPostponed": true
+    }
+  },
+  "qualificationReused": {
+    "evidence": "png-live-run-preparation-evidence.json",
+    "fullChecksEachOS": 6351,
+    "actualPackageSha256": "2787274463cf81f9737b65869b0aa01990efac23b561b17c93ed70b0ada2712f",
+    "sameActualPackageBothOS": true,
+    "allThreeExamplesBothOS": true,
+    "productionSourcesAndModulesRestoredExactly": true,
+    "newFullSuiteCountClaimed": false
+  },
+  "raw": {
+    "file": "cached-bicubic-dense-geometry-trial.tar.xz",
+    "sha256": "73bbeaa9d5aa5c67f267aff1530f682577aa0286b735a709f905f8e0f5a8088b",
+    "bytes": 3346556,
+    "members": 685,
+    "dependencies": [
+      {
+        "file": "png-live-run-preparation.tar.xz",
+        "sha256": "8e86848221b82b699e6d228925e6de0ca3a535ec68b43ba2556b3032e12eb10d",
+        "scope": "Unchanged current actual package/DLL/full/live/ISA qualification, frozen original source pins and shared-owner contracts"
+      },
+      {
+        "file": "cached-wide-shared-quartets-final.tar.xz",
+        "sha256": "08150ae4d84bd660ae3028a6ceace301844947d16db4e5690369455913d61ce9",
+        "scope": "Original exact wide/deep controls, native worker/harness/settings and current retained-context/equivalent one-shot/prepared boundaries"
+      },
+      {
+        "file": "bicubic-shared-preparation.tar.xz",
+        "sha256": "e1a00262fa927a14f1dd363115cd4f8c0b8b86a2500ef47bce8f6fd13a03f88d",
+        "scope": "Original shared narrow factory/executor and complete asymmetric and equivalent one-shot/prepared controls"
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "correctnessFinding": "Source inspection found A/B compact stride could be <=16 when only vertical support is wide, losing the Original repair offset representation convention. C clamps wide stride>=17 and adds four rational public-plan cases plus one private ordered-window case. A/B are not claimed generally correct; original production and C preserve the convention. No timing or tolerance relaxation.",
+  "workflow": {
+    "attemptedCoreVersionsEachOs": 3,
+    "attemptedEmbeddedVersionsEachOs": 3,
+    "initialInternalBindingCompileFailureRetained": true,
+    "initialNormalizedTestSourcePreflightFailureRetained": true,
+    "firstPreparedDataGuardFailureHadZeroActuals": true,
+    "onlyPreparedDataAdjustment": "Two expected retainedBytes values198432->178464 in isolated copied reference data; native/harness/settings/input/output original data untouched.",
+    "fullAndPackageRepeatForUnchangedProduction": 0,
+    "restorationCoreBuilds": 0,
+    "retainedEmbeddedBuildsEachOs": 1,
+    "retainedCases": 10
+  },
+  "publicationPostponed": true
+}

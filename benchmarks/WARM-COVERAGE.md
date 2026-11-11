@@ -20,6 +20,14 @@ polls remain per symbol; no new storage/owner/pool. The51read/validation control
 now have49pass/0gap/2uncertain; stop unchanged passing paths. Resize/codec/text
 ISA evidence is reused.
 
+[Compact cached geometry trial](CACHED-BICUBIC-DENSE-GEOMETRY-TRIAL.md) is closed
+without a production change: three bounded designs reduce candidate workspace
+19,968 B but do not establish a useful combined CPU/storage result. All attempted
+measurements and adverse observations remain retained; no favorable repeats.
+Production/modules/actual package are restored exactly. Ten useful plan/rational/
+ownership cases now pass452resize checks per normal/scalar/AVX2off/AVX512off mode
+on each OS; unchanged full/package proof is reused. Current costs remain unchanged.
+
 Unchanged [enlargement horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 passes 6,351 full/live checks per OS, 442 internal/789 public resize checks in
 normal/scalar/AVX2off/AVX512off modes, and SAME actual Release-package/all three

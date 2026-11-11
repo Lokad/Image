@@ -1,5 +1,9 @@
 # Shared cached-wide vertical quartets
 
+The later [compact-geometry trial](CACHED-BICUBIC-DENSE-GEOMETRY-TRIAL.md) is
+unselected; its sources/modules are restored exactly and the costs below remain
+current. Candidate capacity reductions are not production claims.
+
 Cached ordinary RGBA8 wide reduction now reuses the existing bounded path's
 ordered four-pixel vertical primitive. Each accepted quartet shares its tap loop
 and weight broadcast across two independent ordered pair sums. A byte-only prefix
