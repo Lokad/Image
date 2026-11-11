@@ -53,6 +53,12 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 accepted quartet stage above. Horizontal staging remains a lead without a timing
 claim; the diagnostic is not a renderer dependency. Geometry preparation is already linear.
 
+[Canvas/text attribution](TEXT-CANVAS-ATTRIBUTION.md) separates fresh ownership/
+clear/disposal (80.66/ImageSharp5.66µs,491657/1049B) from existing-canvas clear/draw
+(95.42/72.27µs,57/32433B) on the same frozen control. These are not additive phase
+costs or a gain forecast. Cleared-storage ownership is the next material text-path
+lead before kernel tuning; no production change or new renderer dependency.
+
 [Preparation/storage attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md) explains
 complete one-shot versus retained native state. Current owners link their earlier
 milestones and raw evidence. The [exact coefficient trial](CACHED-CUBIC-WEIGHT-PREPARATION-EXPERIMENT.md)
