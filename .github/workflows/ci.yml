@@ -41,10 +41,10 @@ jobs:
           # indexes to an archive mirror whose package pool has not caught up.
           archive_uri=https://archive.ubuntu.com/ubuntu
           security_uri=https://security.ubuntu.com/ubuntu
-          # Some runners cannot resolve the direct archive hosts. Ubuntu's
-          # Azure mirror serves the same signed suites; keep signature checks.
+          # Some runners cannot resolve ubuntu.com archive hosts, including
+          # Azure's alias. Use an alternate mirror with Ubuntu signature checks.
           if ! getent ahosts archive.ubuntu.com >/dev/null || ! getent ahosts security.ubuntu.com >/dev/null; then
-            archive_uri=https://azure.archive.ubuntu.com/ubuntu
+            archive_uri=https://mirrors.edge.kernel.org/ubuntu
             security_uri=$archive_uri
           fi
           sudo tee /etc/apt/sources.list.d/ubuntu.sources >/dev/null <<EOF
