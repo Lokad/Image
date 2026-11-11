@@ -1,8 +1,13 @@
 # Shared bicubic preparation
 
-[Cached-wide quartets](CACHED-WIDE-SHARED-QUARTETS.md) owns the current eight
-ordinary wide costs and four equivalent wide boundaries. The unchanged narrow
-costs below remain valid unless superseded by their linked current owner.
+[Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) supersede
+the affected cached costs and package qualification below. The current 24-control
+scope has 22 passes/two gaps; all equivalent wide/narrow one-shot/prepared views
+pass. Earlier mechanism results and raw evidence remain retained history.
+
+[Cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) record an
+intermediate stage. The horizontal-quartet report above owns all current affected
+wide/narrow costs; the measurements below describe the original preparation stage.
 
 CBP780B adds caller-owned `BicubicResizePlan` and shares preparation/execution
 with ordinary resizing. Eligible SIMD two-axis reductions retain horizontal

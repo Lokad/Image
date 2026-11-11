@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse prepared bicubic coefficients and overlapping source windows without
+  additional working storage, preserving exact samples and ownership.
+
 - Prepare live PNG literal-run invariants once, preserving exact pixels,
   cancellation checkpoints and shared memory ownership.
 

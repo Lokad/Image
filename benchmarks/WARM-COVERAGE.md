@@ -7,7 +7,21 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [live PNG run preparation](PNG-LIVE-RUN-PREPARATION.md)
+The latest accepted [horizontal bicubic quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md)
+passes 6,382 full/live checks per OS, 473 internal/789 public resize checks in
+normal/scalar/AVX2-off/AVX512-off modes and SAME actual Release-package/all three
+examples on Windows/Linux. Wide8 saves 23.82 µs/6.36% raw/6.25% normalized with
+separated confidence; native moves −0.124%. Current 350.57/zimg 347.95 µs upper
+1.014 remains a small gap. All 24 shared cached controls refresh: 22 pass / 2 gaps;
+Down8 upper 1.063 is the other gap. All eight equivalent one-shot/prepared
+boundaries pass, resolving narrow prepared-byte uncertainty. Stop passing cases.
+Existing dead coefficient padding holds the prepared layout: no new capacity,
+owner or pool. Exact ordered doubles, rational pixels and repair remain unchanged.
+Other raw/native clock movements are explicit; no uniform gain claim. Old cached
+preparation/publication reports retain history; one current renderer input owns
+their affected costs. Earlier unrelated codec/text ISA evidence is reused.
+
+Unchanged [live PNG run preparation](PNG-LIVE-RUN-PREPARATION.md)
 passes6,351full/live checks per OS,712internal/246public PNG/admission checks in
 normal/scalar modes, and SAME actual Release-package/all three examples on
 Windows/Linux. Word decoding saves93.08µs/2.89%raw/1.86%normalized against a
@@ -67,12 +81,9 @@ Geometry borrows36,972 instead of86,268B from output, with unchanged114B/op,
 4/8KiB scratch and owners. Unchanged [cleared canvas storage](CLEARED-CANVAS-STORAGE.md)
 retains183internal/162public normal/scalar coverage and its eight-draw gain:
 665.54µs/24.46%raw/29.86%normalized, allocations4,217,697→284,623B, separate retention.
-Unchanged [cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) retain
-366internal/789public resize checks in normal/scalar/disabled-AVX2/AVX512 modes.
-Wide8 saves52.83µs/12.33% raw/4.68% normalized with
-separated confidence views; its fresh-managed/prepared-zimg upper1.088 remains
-a gap. All4 equivalent wide one-shot/prepared boundaries and all6 deeper reductions
-pass. No new owned capacity or retention. Unchanged
+[Earlier cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) retain
+their design and incremental evidence; the horizontal quartet stage above owns
+all current affected costs and qualification. Unchanged
 [vector bilinear normalization/certification](BILINEAR-VECTOR-CERTIFICATION.md)
 Up16 confirmation saves 769.82 µs/
 27.67% raw/18.12% normalized; both raw/all-actual and normalized intervals separate.
@@ -103,16 +114,16 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. [Current word attribution](PACKED-WORD-CURRENT-ATTRIBUTION.md) records the temporary return-buffer lead and an inconclusive direct-cache implementation. Production is restored exactly; no verified gain, favorable repeat or broad/package rerun. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
 | Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |
-| Cached wider/other bicubic | [Shared wide quartets](CACHED-WIDE-SHARED-QUARTETS.md) refresh all8 ordinary wide controls plus4 equivalent public boundaries; ordinary wide7 pass/1 gap. Wide8 saves52.83µs/12.33% raw/4.68% normalized, with separated raw/all-actual/normalized intervals; native clock moves−8.02%. Current375.61/zimg346.77µs upper1.088 retains the fresh-managed/native-prepared gap. All6 deeper reductions and all4 equivalent wide one-shot/prepared controls pass/stop. Plans retain198432B, prepared137B/op, no added owned capacity or retention. [Narrow publication](CACHED-NARROW-SHARED-PUBLICATION.md) retains Down8 upper1.064 gap and passing Horizontal8/Vertical8. Combined16 cached controls14 pass/2 gaps; older costs are superseded only on affected paths. |
-| Prepared narrow bicubic | [Shared certified publication](CACHED-NARROW-SHARED-PUBLICATION.md): prepared/one-shot byte saves 24.97/23.62 µs, with separated raw/all-actual/normalized intervals. Prepared byte 413.36/zimg418.98 µs, upper1.011 is uncertain; one-shot byte and unchanged word boundaries pass. Narrow plans retain199840 B; controlled byte peak331936 B excludes borrowed input. Aggregate totals137–138 B/op prepared, with no added owned capacity or allocation-saving claim. Four equivalent boundaries now3 pass/1 uncertain. |
+| Cached wider/other bicubic | [Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) owns all 24 current shared costs: 22 pass / 2 gaps. Wide8 350.57/zimg347.95 µs, upper1.014, saves23.82 µs/6.36% raw/6.25% normalized with separated confidence views. Native moves−.124%. Default narrow Down8 435.54/418.81 µs, upper1.063, is the other gap. All six deeper reductions and all eight equivalent wide/narrow one-shot/prepared boundaries pass/stop. Wide plans retain198432 B, prepared137 B/op; no added owned capacity or retention. Older preparation/publication costs are superseded only on affected paths. |
+| Prepared narrow bicubic | [Current horizontal-quartet owner](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) refreshes all four equivalent narrow boundaries: all pass/stop. Prepared byte409.35/zimg416.50 µs upper.989 resolves its former uncertainty. Plans retain199840 B, prepared137 B/op; no added owned capacity or allocation-saving claim. Earlier [shared publication](CACHED-NARROW-SHARED-PUBLICATION.md) retains design and historical incremental evidence. |
 | Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
 | Bilinear resizing | [Ordered horizontal windows](BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md): Down8 419.27/417.88µs upper1.013 remains uncertain; Down16 432.57/449.05µs upper.974 passes/stops. Byte/word gains28.77/32.94µs,6.42%/7.08%raw and6.35%/6.88%normalized, both confidence views separated;8,473B/op,12,608B admitted scratch, no added capacity/retention. Unchanged[shared preparation](BILINEAR-SHARED-PREPARATION.md) retains Up8 pass. [Vector normalization/classification](BILINEAR-VECTOR-CERTIFICATION.md) retains Up16's769.82µs/27.67%raw/18.12%normalized gain;[current adjacent view](WARM-ADJACENT-CONFIDENCE.md)1830.73/1884.92µs range.884–1.013 is uncertain,4,498,558B/op. Combined4cases:2pass/0gaps/2uncertain. Do not optimize a presumed Down8/Up16 gap or repeat solely for a favorable bound. |
 | Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
 
-[Scoped cached-wide attribution](CACHED-WIDE-CURRENT-ATTRIBUTION.md) motivates the
-accepted quartet stage above. Horizontal staging remains a lead without a timing
-claim; the diagnostic is not a renderer dependency. Geometry preparation is already linear.
+[Scoped cached-wide attribution](CACHED-WIDE-CURRENT-ATTRIBUTION.md) motivated
+the vertical and horizontal quartet stages. It remains a diagnostic, not a
+renderer dependency or current timing proof. Geometry preparation is already linear.
 
 [Canvas/text attribution](TEXT-CANVAS-ATTRIBUTION.md) retains the original lead.
 Its accepted [cleared-rental stage](CLEARED-CANVAS-STORAGE.md) reduces fresh canvas
@@ -163,10 +174,10 @@ Two additional prepared narrow boundaries, `BicubicPreparedNarrow8` and
 `BicubicPreparedNarrow16`, use existing Down8/16 rasters and256×129 outputs.
 Their byte/word row certificates and execution differ from the wide prepared
 kernels. [Equivalent narrow comparisons](BICUBIC-NARROW-BOUNDARIES.md) qualify
-both complete one-shot controls and prepared word. The later
-[current shared publication](CACHED-NARROW-SHARED-PUBLICATION.md) supersedes the
-byte cost: prepared413.36/native418.98µs, upper1.011 is uncertain; one-shot byte
-passes. Plans retain199840B. Two new prepared paths extend285→287; fresh-native
+both complete one-shot controls and prepared word. The latest
+[horizontal-quartet owner](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) refreshes all
+four boundaries: all pass, including prepared byte409.35/native416.50µs upper.989.
+Plans retain199840B. Two new prepared paths extend285→287; fresh-native
 views reuse existing one-shot operations. No new source image, filter or settings grid.
 
 Four required algorithm additions retain their frozen recipes:

@@ -78,6 +78,8 @@ internal static partial class CachedBicubicResize
             if (!wide && !identityHorizontal)
                 PrepareOverlappingHorizontalPairs(offsets, counts, width, sourceWidth, context);
             if (wide) PrepareWideHorizontalPairs(offsets, counts, width, sourceWidth, capacity, context);
+            if (wide && capacity == 32)
+                PrepareWideHorizontalQuartets(weights, offsets, counts, width, sourceWidth, context);
             workspace = new(storage, geometry, capacity, (int)cacheWidth, wide, mixed, horizontalUp, identityHorizontal, bytes);
             return true;
         }

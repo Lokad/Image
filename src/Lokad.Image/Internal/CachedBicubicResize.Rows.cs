@@ -142,6 +142,73 @@ internal static partial class CachedBicubicResize
     }
 
     private const int OverlappingWidePair = -2;
+    private const int PreparedWideQuartet = -3;
+
+    // Four live sixteen-tap records each leave sixteen doubles unused. Store
+    // four interleaved coefficients per tap in those tails, without extra storage.
+    private static void PrepareWideHorizontalQuartets(Span<double> weights, Span<int> offsets,
+        ReadOnlySpan<int> counts, int width, int sourceWidth, OperationContext context)
+    {
+        for (var x = 0; x + 3 < width; x += 2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var at = x * 32;
+            if (counts[x] != 16 || counts[x + 1] != 16 || counts[x + 2] != 16 || counts[x + 3] != 16
+                || offsets[at + 31] != OverlappingWidePair || offsets[at + 95] != OverlappingWidePair)
+                continue;
+            var first = offsets[at];
+            if (sourceWidth < 28 || (uint)first > (uint)(sourceWidth - 28) || offsets[at + 64] != first + 8)
+                continue;
+            for (var tap = 0; tap < 16; tap++)
+            {
+                var target = at + (tap / 4) * 32 + 16 + (tap % 4) * 4;
+                weights[target] = weights[at + tap]; weights[target + 1] = weights[at + 32 + tap];
+                weights[target + 2] = weights[at + 64 + tap]; weights[target + 3] = weights[at + 96 + tap];
+            }
+            offsets[at + 30] = PreparedWideQuartet;
+            x += 2;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void FilterWideHorizontalQuartet(ReadOnlySpan<Vector256<double>> decoded,
+        ReadOnlySpan<double> weights, Span<Vector256<double>> cached, OperationContext context)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        decoded = decoded[..28]; weights = weights[..128]; cached = cached[..4];
+        var b0 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded[..2]));
+        var b1 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(2, 2)));
+        var b2 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(4, 2)));
+        var b3 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(6, 2)));
+        var b4 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(8, 2)));
+        var b5 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(10, 2)));
+        var b6 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(12, 2)));
+        var first = Vector512<double>.Zero; var second = Vector512<double>.Zero;
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
+        for (var tap = 0; tap < 16; tap += 2)
+        {
+            // Fixed nonnegative taps0,2,..14 select four16-double padding chunks.
+            var at = ((tap & 12) << 3) + 16 + ((tap & 2) << 2);
+            var even = MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(weights.Slice(at, 4)));
+            var odd = MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(weights.Slice(at + 4, 4)));
+            var evenWide = Vector512.Create(even, even); var oddWide = Vector512.Create(odd, odd);
+            var even01 = Avx512F.PermuteVar8x64(evenWide, replicate01);
+            var even23 = Avx512F.PermuteVar8x64(evenWide, replicate23);
+            var odd01 = Avx512F.PermuteVar8x64(oddWide, replicate01);
+            var odd23 = Avx512F.PermuteVar8x64(oddWide, replicate23);
+            first = Avx512F.Add(first, Avx512F.Multiply(Avx512F.Shuffle4x128(b0, b2, 0x44), even01));
+            second = Avx512F.Add(second, Avx512F.Multiply(Avx512F.Shuffle4x128(b4, b6, 0x44), even23));
+            first = Avx512F.Add(first, Avx512F.Multiply(Avx512F.Shuffle4x128(b0, b2, 0xee), odd01));
+            second = Avx512F.Add(second, Avx512F.Multiply(Avx512F.Shuffle4x128(b4, b6, 0xee), odd23));
+            b0 = b1; b1 = b2; b2 = b3; b3 = b4; b4 = b5; b5 = b6;
+            if (tap + 2 < 16)
+                b6 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 14, 2)));
+        }
+        MemoryMarshal.Write(MemoryMarshal.AsBytes(cached[..2]), in first);
+        context.Cancellation.ThrowIfCancellationRequested();
+        MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(2, 2)), in second);
+    }
 
     // Geometry proves shared windows once. Other prepared layouts retain
     // independent windows; irregular layouts keep indexed taps.
@@ -181,6 +248,13 @@ internal static partial class CachedBicubicResize
         var x=0;
         for(;x+1<width;x+=2)
         {
+            if (Avx512F.IsSupported && capacity == 32 && x + 3 < width && offsets[x * 32 + 30] == PreparedWideQuartet)
+            {
+                FilterWideHorizontalQuartet(decodedPixels.Slice(offsets[x * 32], 28),
+                    weights.Slice(x * 32, 128), cachedPixels.Slice(x, 4), context);
+                x += 2;
+                continue;
+            }
             context.Cancellation.ThrowIfCancellationRequested();
             var sum0=Vector256<double>.Zero;
             var sum1=Vector256<double>.Zero;

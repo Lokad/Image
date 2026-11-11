@@ -1,5 +1,10 @@
 # Narrow bicubic preparation boundaries
 
+[Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) supersede
+the affected cached costs and package qualification below. The current 24-control
+scope has 22 passes/two gaps; all equivalent wide/narrow one-shot/prepared views
+pass. Earlier mechanism results and raw evidence remain retained history.
+
 CBN781 makes no production change. It qualifies equivalent complete one-shot
 and caller-owned prepared use on the existing original513×259→256×129 RGBA8/16
 controls. These use the narrow-support row certificates, distinct from the wide

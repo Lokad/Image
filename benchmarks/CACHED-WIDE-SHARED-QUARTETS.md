@@ -1,8 +1,13 @@
 # Shared cached-wide vertical quartets
 
+[Prepared horizontal quartets](CACHED-BICUBIC-HORIZONTAL-QUARTETS.md) supersede
+the affected cached costs and package qualification below. The current 24-control
+scope has 22 passes/two gaps; all equivalent wide/narrow one-shot/prepared views
+pass. Earlier mechanism results and raw evidence remain retained history.
+
 The later [compact-geometry trial](CACHED-BICUBIC-DENSE-GEOMETRY-TRIAL.md) is
-unselected; its sources/modules are restored exactly and the costs below remain
-current. Candidate capacity reductions are not production claims.
+unselected; it restored its sources/modules exactly. Candidate capacity reductions
+are not production claims. Subsequent horizontal-quartet costs supersede this history.
 
 Cached ordinary RGBA8 wide reduction now reuses the existing bounded path's
 ordered four-pixel vertical primitive. Each accepted quartet shares its tap loop

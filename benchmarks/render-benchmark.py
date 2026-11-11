@@ -1841,45 +1841,27 @@ def render():
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
-    cached_publication = json.loads((ROOT / 'benchmarks/cached-narrow-shared-publication-evidence.json').read_text(encoding='utf-8'))
-    assert cached_publication['productionAccepted'] and cached_publication['requiredMaterialPaths'] == 289
-    assert cached_publication['raw']['mirrored'] and cached_publication['raw']['allMembersVerified']
-    assert cached_publication['allAffectedPerformanceReconciled'] and not cached_publication['materialPassToGapContradictions']
-    assert set(cached_publication['cases']) == {'Repeated8', 'OneShot8', 'Down8', 'Horizontal8', 'Vertical8'}
-    assert cached_publication['sourceProof']['entireOriginalSourceReconstructedByRestoringOnlyDuplicateBytePublisher']
-    assert cached_publication['storage']['newOwnedCapacityBytes'] == cached_publication['storage']['newRetainedStateBytes'] == 0
-    for current in cached_publication['cases'].values():
-        assert current['librarySha256'] == cached_publication['producers']['timedArtifactSha256']
-        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
-    assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values())
-               for c in cached_publication['comparison'].values())
-    assert cached_publication['qualification']['fullChecksEachOs'] == 6248
-    # Current shared preparation owns the affected cached rows; historical
-    # native-prepared observations remain distinct from equivalent new boundaries.
-    bicubic_preparation = json.loads((ROOT / 'benchmarks/bicubic-shared-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert bicubic_preparation['productionAccepted'] and bicubic_preparation['requiredMaterialPaths'] == 285
-    assert bicubic_preparation['raw']['mirrored'] and bicubic_preparation['raw']['allMembersVerified']
-    assert len(bicubic_preparation['cases']) == 16 and len(bicubic_preparation['boundaries']) == 4
-    current_build_qualification = bicubic_preparation['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6229
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert bicubic_preparation['sourceProof']['isolatedWordRowVerbatimAfterDedent']
-    assert bicubic_preparation['codeProof']['wordAccumulatorRegisterResident']
-    cached_wide = json.loads((ROOT / 'benchmarks/cached-wide-shared-quartets-evidence.json').read_text(encoding='utf-8'))
-    assert cached_wide['productionAccepted'] and cached_wide['requiredMaterialPaths'] == 289
-    assert cached_wide['raw']['mirrored'] and cached_wide['raw']['allMembersVerified']
-    assert cached_wide['allAffectedPerformanceReconciled'] and not cached_wide['materialPassToGapContradictions']
-    assert len(cached_wide['cases']) == 8 and len(cached_wide['boundaries']) == 4
-    assert cached_wide['sourceProof']['originalGeneralWriterAndRestOfRowsRestoredExactly']
-    assert cached_wide['sourceProof']['originalCallerRestoredAfterOnlyByteWideBranchReplacement']
-    assert cached_wide['comparison']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in cached_wide['comparison']['views'].values())
-    assert cached_wide['storage']['newOwnedCapacityBytes'] == cached_wide['storage']['newRetainedStateBytes'] == 0
-    assert cached_wide['qualification']['fullChecksEachOs'] == 6264
-    assert cached_wide['qualification']['actualPackage']['sha256'] == cached_wide['qualification']['samePackageLinux']['sameActualPackageSha256']
+    # One current owner for the shared cached family. Superseded preparation,
+    # publication and boundary studies retain history outside renderer inputs.
+    cached_horizontal = json.loads((ROOT / 'benchmarks/cached-bicubic-horizontal-quartets-evidence.json').read_text(encoding='utf-8'))
+    assert cached_horizontal['productionAccepted'] and cached_horizontal['requiredMaterialPaths'] == 289
+    assert cached_horizontal['allAffectedPerformanceReconciled'] and not cached_horizontal['materialPassToGapContradictions']
+    assert cached_horizontal['raw']['mirrored'] and cached_horizontal['raw']['allMembersVerified']
+    assert len(cached_horizontal['cases']) == 24
+    assert cached_horizontal['statusCounts'] == {state: sum(c['status'] == state for c in cached_horizontal['cases'].values())
+                                               for state in ('pass', 'gap', 'uncertain')}
+    assert cached_horizontal['statusCounts'] == {'pass': 22, 'gap': 2, 'uncertain': 0}
+    assert cached_horizontal['storage']['newOwnedCapacityBytes'] == cached_horizontal['storage']['newRetainedStateBytes'] == 0
+    assert cached_horizontal['sourceProof']['wholeFactoryRestoresAfterOnlyPreparedQuartetCallRemoval']
+    assert cached_horizontal['sourceProof']['originalPairIndexedAndOddBodiesVerbatim']
+    effect = cached_horizontal['comparison']['Wide8']
+    assert effect['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in effect['views'].values())
+    for cost in cached_horizontal['cases'].values():
+        assert cost['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['managedExact'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
     labels = {
         'Down8': 'Bicubic resize RGBA8',
         'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
@@ -1887,17 +1869,8 @@ def render():
         'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
         'Cross16': 'Bicubic RGBA16, width down / height up, default workspace',
     }
-    for case, current in {**bicubic_preparation['cases'], **bicubic_preparation['boundaries']}.items():
-        current = cached_wide['cases'].get(case, cached_publication['cases'].get(case, current))
-        owner = cached_wide if case in cached_wide['cases'] else cached_publication if case in cached_publication['cases'] else bicubic_preparation
-        assert current['librarySha256'] == owner['producers']['timedArtifactSha256']
-        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
-        if case not in labels:
-            continue
-        label = labels[case]
+    for case, label in labels.items():
+        current = cached_horizontal['cases'][case]
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
         assert len(positions) == 1, label
         if case == 'Wide8':
@@ -1905,34 +1878,16 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / '
             f'{current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
-        current = cached_wide['boundaries'][case]
-        assert current['librarySha256'] == cached_wide['producers']['timedArtifactSha256']
-        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['status'] == 'pass'
-        prepared = case.startswith('Repeated')
-        label = f'Bicubic {"prepared" if prepared else "one-shot"} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
-        rows.append(('editing', f'| {label} † → 128×64 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    narrow_boundaries = json.loads((ROOT / 'benchmarks/bicubic-narrow-boundaries-evidence.json').read_text(encoding='utf-8'))
-    assert not narrow_boundaries['productionChanged'] and narrow_boundaries['requiredMaterialPaths'] == 287
-    assert narrow_boundaries['raw']['mirrored'] and narrow_boundaries['raw']['allMembersVerified']
-    assert narrow_boundaries['raw']['dependency']['sha256'] == bicubic_preparation['raw']['sha256']
-    assert narrow_boundaries['packageSha256'] == current_build_qualification['actualPackage']['sha256']
-    for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
-        current = cached_publication['cases'].get(case, narrow_boundaries['cases'][case])
-        owner_sha = cached_publication['producers']['timedArtifactSha256'] if case in cached_publication['cases'] else bicubic_preparation['producers']['timedArtifactSha256']
-        assert current['librarySha256'] == owner_sha
-        assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
-        prepared = case.startswith('Repeated')
-        assert current['retainedBytes'] == (199840 if prepared else 0)
-        label = f'Bicubic {"prepared" if prepared else "one-shot"} narrow RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
-        rows.append(('editing', f'| {label} † → 256×129 | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    for family, size, retained in [('wide', '128×64', 198432), ('narrow', '256×129', 199840)]:
+        for case in ['OneShot8', 'Repeated8', 'OneShot16', 'Repeated16']:
+            current = cached_horizontal['cases'][family + '/' + case]
+            assert current['status'] == 'pass'
+            prepared = case.startswith('Repeated')
+            assert current['retainedBytes'] == (retained if prepared else 0)
+            qualifier = ' narrow' if family == 'narrow' else ''
+            label = f'Bicubic {"prepared" if prepared else "one-shot"}{qualifier} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
+            rows.append(('editing', f'| {label} † → {size} | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     current_build_qualification = raster['qualification']
     compact_rows = [row for kind, row in rows if kind == 'editing' and row.startswith(compact_geometry_prefixes)]
     assert len(compact_rows) == 2 and all(' H ' not in row for row in compact_rows)
@@ -2073,6 +2028,12 @@ def render():
     assert current_build_qualification['unchangedResizeCodecTextIsaEvidenceReused'] and current_build_qualification['additionalResizeIsaRuns'] == 0
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
+    current_build_qualification = cached_horizontal['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6382
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == cached_horizontal['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['threeNamedStorageSuitesIncluded']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-11. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2135,18 +2096,22 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [Shared cached-wide quartets](../benchmarks/CACHED-WIDE-SHARED-QUARTETS.md)
-  save52.83µs/12.33% raw/4.68% reference-normalized, with separated filtered/all-actual
-  raw and normalized intervals; native time also moves−8.02%. Default managed-fresh/
-  native-prepared Wide8 remains a gap, upper{cached_wide['cases']['Wide8']['upper']:.3f}.
-  All four equivalent wide one-shot/prepared comparisons and the six deeper
-  reductions pass. [Narrow publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
-  retains the Down8 gap. The four equivalent narrow boundaries have three
-  passes and one prepared-byte uncertainty, upper1.011; its one-shot view passes.
-  Preparation is excluded only from explicitly prepared execution. Wide/narrow
-  plans retain 198,432/199,840 B and allocate 137–138 B/op. Governed owned peaks are
-  231,200/263,968 B for wide byte/word and 331,936 B for narrow byte, excluding
-  borrowed input; native graph/total capacity remains unmeasured.
+- **Resizing:** [Prepared horizontal quartets](../benchmarks/CACHED-BICUBIC-HORIZONTAL-QUARTETS.md)
+  save 23.82 µs/6.36% raw/6.25% reference-normalized on cached Wide8, with
+  separated filtered/all-actual and normalized confidence; native moves −.124%.
+  Current 350.57/zimg 347.95 µs, upper 1.014 remains a small gap. All 24 existing shared
+  factory/executor costs refresh: 22 pass / 2 gaps / 0 uncertain. The other gap is default
+  Down8, upper 1.063. All eight equivalent wide/narrow one-shot/prepared boundaries pass;
+  narrow prepared byte uncertainty is resolved. Stop passing cases.
+  Live coefficients, every ordered double and original repair are unchanged.
+  Four-output source/weight reuse uses existing dead padding, with no new capacity
+  or owner. Wide/narrow plans still retain 198,432/199,840 B, prepared GC 137 B/op;
+  ordinary Wide8 total GC 198,449 B/op includes amortized measurement overhead.
+  Linux actual-package coarse governed owned peaks are 231,200/263,968 B for wide
+  byte/word, excluding borrowed source. Windows uses the portable fallback with
+  zero plan retention and peaks 32,768/65,536 B; physical/native/JIT peaks unmeasured.
+  Other raw costs move adversely alongside native clocks; no uniform gain claim.
+  Original native-prepared asymmetry stays separate from equivalent boundaries.
   [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
   [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
   allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
@@ -2231,7 +2196,7 @@ Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 publ
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+Current resize qualification passes {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
