@@ -7,17 +7,17 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [shared bounded quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md)
+The latest accepted [wide vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md)
 passes 6,248 full/live checks per OS, 363 internal/776 public resize checks in
 normal/scalar/disabled-AVX2/disabled-AVX512 modes, and the SAME actual Release
 package consumer/all three examples. All three named storage suites are included.
-Two changed bounded costs refresh: byte improves but retains a small gap; word
-passes. The moved enlargement helper/callers have identical resolved IL, locals,
-max stack and inline flags; unchanged enlargement costs are reused, without a
-JIT identity or new timing claim. Other source-scoped codec/text/resize evidence
-remains valid. No case/grid, heap buffer or owner is added. Exact packets, managed
-pixels and cooperative ownership remain. This is not a whole-release timing refresh;
-all 289 required paths remain open until valid passing evidence covers each one.
+Two changed bounded-wide costs refresh: byte gains 5.35% normalized but retains
+a gap; word passes with inconclusive CPU effect. The shared helper, narrow executor,
+geometry and other resize/codec/text paths reuse unchanged evidence. No new case,
+heap buffer, owner or retained scratch; working admission remains 4 KiB.
+Exact packets, managed pixels and cooperative ownership remain. This is not a
+whole-release timing refresh; completion still requires valid passing evidence
+for each of the 289 named material paths.
 
 ## Current family status
 
@@ -34,7 +34,7 @@ all 289 required paths remain open until valid passing evidence covers each one.
 | Mixed-axis RGBA16 bicubic | [Result-backed bands](BICUBIC-RESULT-BACKED-BANDS.md) retain unchanged word paths: default/vertical pass; bounded mixed893.16/zimg851.29µs upper1.056 is a gap. Byte mixed costs are owned by the quartet stage above. |
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
-| Bounded wide bicubic | [Result-row loan](BICUBIC-RESULT-ROW-LOAN.md): byte406.16/zimg367.01µs upper1.119 remains a gap; word upper1.003 is uncertain. No substitution of an older pass over a changed driver. |
+| Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |
 | Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 retains its native-prepared gap; [current narrow byte publication](CACHED-NARROW-SHARED-PUBLICATION.md) refreshes Down8 to438.33/native419.09 µs, upper1.064 gap, plus passing Horizontal8/Vertical8; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
 | Prepared narrow bicubic | [Shared certified publication](CACHED-NARROW-SHARED-PUBLICATION.md): prepared/one-shot byte saves 24.97/23.62 µs, with separated raw/all-actual/normalized intervals. Prepared byte 413.36/zimg418.98 µs, upper1.011 is uncertain; one-shot byte and unchanged word boundaries pass. Narrow plans retain199840 B; controlled byte peak331936 B excludes borrowed input. Aggregate totals137–138 B/op prepared, with no added owned capacity or allocation-saving claim. Four equivalent boundaries now3 pass/1 uncertain. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |

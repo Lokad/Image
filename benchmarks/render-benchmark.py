@@ -1683,17 +1683,21 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → 256×129 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    row_loan = json.loads((ROOT / 'benchmarks/bicubic-result-row-loan-evidence.json').read_text(encoding='utf-8'))
-    row_loan_qualification = row_loan['qualification']
-    assert row_loan['productionAccepted'] and row_loan['requiredMaterialPaths'] == 283
-    assert row_loan_qualification['fullChecksEachOs'] == row_loan_qualification['windows']['total'] == row_loan_qualification['linux']['total'] == 6167
-    assert row_loan_qualification['sameActualPackageBothOS']
-    assert row_loan_qualification['actualPackage']['sha256'] == row_loan_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in row_loan['comparison']['views'].values())
-    assert row_loan['storage']['newOwnedCapacityBytes'] == row_loan['storage']['retainedOperationScratchBytes'] == 0
-    assert row_loan['raw']['mirrored'] and row_loan['raw']['allMembersVerified']
-    for case, current in row_loan['cases'].items():
-        assert current['librarySha256'] == row_loan_qualification['actualPackage']['librarySha256']
+    wide_quartet = json.loads((ROOT / 'benchmarks/wide-bicubic-shared-quartets-evidence.json').read_text(encoding='utf-8'))
+    wide_quartet_qualification = wide_quartet['qualification']
+    assert wide_quartet['productionAccepted'] and wide_quartet['requiredMaterialPaths'] == 289
+    assert wide_quartet_qualification['fullChecksEachOs'] == wide_quartet_qualification['windows']['total'] == wide_quartet_qualification['linux']['total'] == 6248
+    assert wide_quartet_qualification['sameActualPackageBothOS']
+    assert wide_quartet_qualification['actualPackage']['sha256'] == wide_quartet_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert wide_quartet['comparison']['TightWide8']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in wide_quartet['comparison']['TightWide8']['views'].values())
+    assert wide_quartet['sourceProof']['entireWideSourceReconstructed']
+    assert wide_quartet['sourceProof']['actualOrderedLaneComparisons'] == 81920
+    assert wide_quartet['allAffectedPerformanceReconciled'] and not wide_quartet['materialPassToGapContradictions']
+    assert wide_quartet['storage']['newOwnedCapacityBytes'] == wide_quartet['storage']['retainedOperationScratchBytes'] == 0
+    assert wide_quartet['raw']['mirrored'] and wide_quartet['raw']['allMembersVerified']
+    for case, current in wide_quartet['cases'].items():
+        assert current['librarySha256'] == wide_quartet_qualification['actualPackage']['librarySha256']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allocatedBytes'] == 113
@@ -1907,7 +1911,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = bounded_quartet['qualification']
+    current_build_qualification = wide_quartet['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1960,37 +1964,28 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [shared bicubic preparation](../benchmarks/BICUBIC-SHARED-PREPARATION.md)
-  has {bicubic_preparation['statusCounts']['pass']} passes / {bicubic_preparation['statusCounts']['gap']} gaps /
-  {bicubic_preparation['statusCounts']['uncertain']} uncertain across 16 cached controls; three byte costs refresh below. Both equivalent fresh
-  one-shot and both prepared comparisons pass. Prepared plans retain198,432 B and
-  allocate137 B/op; preparation and its disposal are excluded only for explicitly
-  prepared comparisons. Governed owned peaks are231,200/263,968 B for RGBA8/16,
-  excluding borrowed input; native graph/total capacity remains unmeasured.
-  Isolating the unchanged word-row kernel saves338.94µs/43.26% raw against the
-  contemporary vertical-word baseline. Ordinary wide-byte resizing costs11.83µs
-  more; its retained-native gap stays visible separately from fresh-native results.
-  [Shared narrow byte publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
-  saves 24.97/23.62 µs for prepared/one-shot calls, with separated raw/all-actual/
-  normalized intervals. It removes the duplicate division/certificate/packing body
-  without adding capacity or changing managed precision. All five affected byte costs
-  refresh: 3 pass / 1 gap / 1 uncertain. Prepared byte 413.36/zimg418.98 µs, upper1.011,
-  is uncertain; its equivalent complete one-shot passes. Default managed-fresh/native-
-  prepared Down8 remains 438.33/419.09 µs, upper1.064 gap. Narrow retention 199,840 B
-  and governed byte peak 331,936 B remain; borrowed source is excluded. Prepared
-  totals 137–138 B/op show no added allocation; unchanged word boundaries pass.
-  [Bounded row reuse](../benchmarks/BICUBIC-RESULT-ROW-LOAN.md),
-  [shared narrow quartets](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md),
-  [packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
-  [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain their
-  source-valid costs and gaps. Shared bounded vertical traversal saves 46.34 µs
-  (9.04% normalized) for byte and 74.66 µs (5.71% normalized) for word; raw/all-actual
-  and normalized intervals separate. Allocation stays 113 B/op and working admission
-  4 KiB, with no new owned capacity or retained scratch. Byte 459.65/zimg451.35 µs,
-  upper1.027 remains a gap; word506.31/574.04 µs, upper.888 passes. The existing large managed default/compact screen
-  is20.40/21.89ms, three actuals each, without a native or historical-gain claim.
-  [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains6 pass /
-  1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain156,248 B.
+- **Resizing:** [cached preparation](../benchmarks/BICUBIC-SHARED-PREPARATION.md)
+  and [current narrow publication](../benchmarks/CACHED-NARROW-SHARED-PUBLICATION.md)
+  retain the current cached costs: default managed-fresh/native-prepared Wide8 and
+  Down8 remain gaps; Down64x32_16 is uncertain. Both equivalent wide one-shot and
+  prepared comparisons pass. The four equivalent narrow boundaries have three
+  passes and one prepared-byte uncertainty, upper1.011; its one-shot view passes.
+  Preparation is excluded only from explicitly prepared execution. Wide/narrow
+  plans retain 198,432/199,840 B and allocate 137–138 B/op. Governed owned peaks are
+  231,200/263,968 B for wide byte/word and 331,936 B for narrow byte, excluding
+  borrowed input; native graph/total capacity remains unmeasured.
+  [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
+  [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
+  allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
+  word upper.888 passes. Wide byte {wide_quartet['cases']['TightWide8']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide8']['nativeUs']:.2f} µs,
+  upper{wide_quartet['cases']['TightWide8']['upper']:.3f} remains a gap after a 5.35% normalized gain; word
+  upper{wide_quartet['cases']['TightWide16']['upper']:.3f} passes, with inconclusive CPU effect. No new owned capacity or retention.
+  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md),
+  [mixed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) and
+  [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain the
+  source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
+  [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
+  1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
