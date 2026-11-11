@@ -1,0 +1,1459 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPA808",
+  "date": "2026-11-11",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "producers": {
+    "windowsSha256": "6ef75b8185e03309b29dacbe9cf50e757e3b49336e996c60078b756970e4a272",
+    "linuxSha256": "29ca7c976cdba35357c7f1cb779936decb36cfbb5189169a5ec1263cb894cd81",
+    "packageSha256": "f22ab4015ca38494228059978b8fa7e0899f7786ae5fec485cb7c52c9976f98f"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8b3879f5a6be81b9f39148db582dea6a2938c3863b7769e060eb7ba90f72d572",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Preparation.cs": "ada2961d807390c7d61b8ac54fdc6d2b2fed0a9a8e3a3e200ade6a460cd26a52",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "82631ea0f296f7091c12495479a7ec952b96e864ebe12088c96da49930901f72",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "b5ee595015a201fb8873b4fcc28a6bf8ca57dc98420f4acad950657768b9d357",
+    "src/Lokad.Image/BicubicResizePlan.cs": "01860845dbe0472d9c47935d5ac683f2139ac2a809b62f8d8655f537448553fe",
+    "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+  },
+  "sourceValidity": "CBP780B factory/plan unchanged; CNP789 entire original cached source restores after only narrow-byte publisher, whose domain excludes Wide8. No current cost invalidation from unrelated JPEG/bilinear changes.",
+  "sourceValidCompleteCostReused": {
+    "managedUs": 391.10178759765626,
+    "nativeUs": 345.9460885416667,
+    "ratio": 1.1305281387812278,
+    "lower": 1.1209417681362162,
+    "upper": 1.133512803706282,
+    "allocatedBytes": 198450,
+    "librarySha256": "fb28f6500d948dc929247fee8a08e6ec3b29dc3a2be1fb0706923f4ca18cdafe",
+    "status": "gap",
+    "caseId": "Wide8",
+    "actualIterations": 12,
+    "filteredIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "receipt": "cbp780b-candidate-Wide8-confirm-receipt.json",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "depth": 8,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+    "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+    "outputWidth": 128,
+    "outputHeight": 64
+  },
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "totalSampleLocations": 1766,
+  "methodLocations": [
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::Execute(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,int64,int64,valuetype Lokad.Image.Internal.CachedBicubicResize/Workspace&,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      972
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::WriteWideRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,float64,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,valuetype Lokad.Image.Internal.CachedBicubicResize/WideErrorBounds,bool,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      412
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::DecodePremultipliedRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<float64>,int32,bool,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      256
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryPrepare(int32,int32,int32,int32,int32,float64,int64,int64,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.CachedBicubicResize/Workspace&)[Optimized]",
+      29
+    ],
+    [
+      "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+      18
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::Original(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      7
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      5
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::PrepareWideHorizontalPairs(valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      3
+    ],
+    [
+      "instance int32 [Lokad.Image.Benchmarks] WarmBicubicResize::Managed()[Optimized]",
+      1
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.BicubicMath::Round(float64,int32)[Optimized]",
+      1
+    ]
+  ],
+  "codeBodies": [
+    {
+      "header": "Lokad.Image.Internal.CachedBicubicResize:TryPrepare(int,int,int,int,int,double,long,long,Lokad.Image.Internal.OperationContext,byref):bool (FullOpts)",
+      "codeBytes": 1855,
+      "samples": 29,
+      "hotLocations": [
+        {
+          "offset": "0x5f6",
+          "samples": 10,
+          "instruction": "vmovsd   qword ptr [rdx], xmm0",
+          "nearby": [
+            {
+              "offset": "0x5ee",
+              "instruction": "lea      rdx, bword ptr [rdi+8*rcx]"
+            },
+            {
+              "offset": "0x5f2",
+              "instruction": "vaddsd   xmm0, xmm0, qword ptr [rdx]"
+            },
+            {
+              "offset": "0x5f6",
+              "instruction": "vmovsd   qword ptr [rdx], xmm0"
+            },
+            {
+              "offset": "0x5fa",
+              "instruction": "mov      rdx, bword ptr [rbp-0xD8]"
+            },
+            {
+              "offset": "0x601",
+              "instruction": "lea      rsi, bword ptr [rdx+4*rsi]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5ad",
+          "samples": 5,
+          "instruction": "mov      edi, 2",
+          "nearby": [
+            {
+              "offset": "0x5a4",
+              "instruction": "vmovsd   qword ptr [rbp-0x30], xmm1"
+            },
+            {
+              "offset": "0x5a9",
+              "instruction": "vdivsd   xmm0, xmm2, xmm1"
+            },
+            {
+              "offset": "0x5ad",
+              "instruction": "mov      edi, 2"
+            },
+            {
+              "offset": "0x5b2",
+              "instruction": "call     [Lokad.Image.ImageTransforms:Kernel(double,int):double]"
+            },
+            {
+              "offset": "0x5b8",
+              "instruction": "mov      r12d, dword ptr [rbp-0x8C]"
+            }
+          ]
+        },
+        {
+          "offset": "0x58c",
+          "samples": 2,
+          "instruction": "mov      dword ptr [rbp-0x8C], r10d",
+          "nearby": [
+            {
+              "offset": "0x584",
+              "instruction": "mov      eax, r9d"
+            },
+            {
+              "offset": "0x587",
+              "instruction": "vmovsd   xmm1, qword ptr [rbp-0x30]"
+            },
+            {
+              "offset": "0x58c",
+              "instruction": "mov      dword ptr [rbp-0x8C], r10d"
+            },
+            {
+              "offset": "0x593",
+              "instruction": "lea      r12d, [rax+r10]"
+            },
+            {
+              "offset": "0x597",
+              "instruction": "vxorps   xmm2, xmm2, xmm2"
+            }
+          ]
+        },
+        {
+          "offset": "0x569",
+          "samples": 2,
+          "instruction": "mov      esi, dword ptr [rbp-0x80]",
+          "nearby": [
+            {
+              "offset": "0x563",
+              "instruction": "mov      dword ptr [rsi], r10d"
+            },
+            {
+              "offset": "0x566",
+              "instruction": "inc      r12d"
+            },
+            {
+              "offset": "0x569",
+              "instruction": "mov      esi, dword ptr [rbp-0x80]"
+            },
+            {
+              "offset": "0x56c",
+              "instruction": "cmp      r12d, esi"
+            },
+            {
+              "offset": "0x56f",
+              "instruction": "mov      r10d, r12d"
+            }
+          ]
+        },
+        {
+          "offset": "0x5e0",
+          "samples": 2,
+          "instruction": "mov      rdi, bword ptr [rbp-0xD0]",
+          "nearby": [
+            {
+              "offset": "0x5d3",
+              "instruction": "mov      r8, bword ptr [rbp-0xC8]"
+            },
+            {
+              "offset": "0x5da",
+              "instruction": "vmovsd   qword ptr [r8+8*rdi], xmm0"
+            },
+            {
+              "offset": "0x5e0",
+              "instruction": "mov      rdi, bword ptr [rbp-0xD0]"
+            },
+            {
+              "offset": "0x5e7",
+              "instruction": "mov      rcx, qword ptr [rbp-0xB0]"
+            },
+            {
+              "offset": "0x5ee",
+              "instruction": "lea      rdx, bword ptr [rdi+8*rcx]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5fa",
+          "samples": 2,
+          "instruction": "mov      rdx, bword ptr [rbp-0xD8]",
+          "nearby": [
+            {
+              "offset": "0x5f2",
+              "instruction": "vaddsd   xmm0, xmm0, qword ptr [rdx]"
+            },
+            {
+              "offset": "0x5f6",
+              "instruction": "vmovsd   qword ptr [rdx], xmm0"
+            },
+            {
+              "offset": "0x5fa",
+              "instruction": "mov      rdx, bword ptr [rbp-0xD8]"
+            },
+            {
+              "offset": "0x601",
+              "instruction": "lea      rsi, bword ptr [rdx+4*rsi]"
+            },
+            {
+              "offset": "0x605",
+              "instruction": "mov      r9d, dword ptr [rbp-0x7C]"
+            }
+          ]
+        },
+        {
+          "offset": "0x626",
+          "samples": 1,
+          "instruction": "jg       G_M000_IG39",
+          "nearby": [
+            {
+              "offset": "0x61d",
+              "instruction": "jl       G_M000_IG40"
+            },
+            {
+              "offset": "0x623",
+              "instruction": "cmp      r10d, r11d"
+            },
+            {
+              "offset": "0x626",
+              "instruction": "jg       G_M000_IG39"
+            },
+            {
+              "offset": "0x62c",
+              "instruction": "jmp      G_M000_IG41"
+            },
+            {
+              "offset": "0x631",
+              "instruction": "mov      r12d, dword ptr [rbp-0x34]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5f2",
+          "samples": 1,
+          "instruction": "vaddsd   xmm0, xmm0, qword ptr [rdx]",
+          "nearby": [
+            {
+              "offset": "0x5e7",
+              "instruction": "mov      rcx, qword ptr [rbp-0xB0]"
+            },
+            {
+              "offset": "0x5ee",
+              "instruction": "lea      rdx, bword ptr [rdi+8*rcx]"
+            },
+            {
+              "offset": "0x5f2",
+              "instruction": "vaddsd   xmm0, xmm0, qword ptr [rdx]"
+            },
+            {
+              "offset": "0x5f6",
+              "instruction": "vmovsd   qword ptr [rdx], xmm0"
+            },
+            {
+              "offset": "0x5fa",
+              "instruction": "mov      rdx, bword ptr [rbp-0xD8]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5da",
+          "samples": 1,
+          "instruction": "vmovsd   qword ptr [r8+8*rdi], xmm0",
+          "nearby": [
+            {
+              "offset": "0x5cd",
+              "instruction": "jae      G_M000_IG54"
+            },
+            {
+              "offset": "0x5d3",
+              "instruction": "mov      r8, bword ptr [rbp-0xC8]"
+            },
+            {
+              "offset": "0x5da",
+              "instruction": "vmovsd   qword ptr [r8+8*rdi], xmm0"
+            },
+            {
+              "offset": "0x5e0",
+              "instruction": "mov      rdi, bword ptr [rbp-0xD0]"
+            },
+            {
+              "offset": "0x5e7",
+              "instruction": "mov      rcx, qword ptr [rbp-0xB0]"
+            }
+          ]
+        },
+        {
+          "offset": "0x61d",
+          "samples": 1,
+          "instruction": "jl       G_M000_IG40",
+          "nearby": [
+            {
+              "offset": "0x614",
+              "instruction": "jl       G_M000_IG53"
+            },
+            {
+              "offset": "0x61a",
+              "instruction": "test     r10d, r10d"
+            },
+            {
+              "offset": "0x61d",
+              "instruction": "jl       G_M000_IG40"
+            },
+            {
+              "offset": "0x623",
+              "instruction": "cmp      r10d, r11d"
+            },
+            {
+              "offset": "0x626",
+              "instruction": "jg       G_M000_IG39"
+            }
+          ]
+        },
+        {
+          "offset": "0x5e7",
+          "samples": 1,
+          "instruction": "mov      rcx, qword ptr [rbp-0xB0]",
+          "nearby": [
+            {
+              "offset": "0x5da",
+              "instruction": "vmovsd   qword ptr [r8+8*rdi], xmm0"
+            },
+            {
+              "offset": "0x5e0",
+              "instruction": "mov      rdi, bword ptr [rbp-0xD0]"
+            },
+            {
+              "offset": "0x5e7",
+              "instruction": "mov      rcx, qword ptr [rbp-0xB0]"
+            },
+            {
+              "offset": "0x5ee",
+              "instruction": "lea      rdx, bword ptr [rdi+8*rcx]"
+            },
+            {
+              "offset": "0x5f2",
+              "instruction": "vaddsd   xmm0, xmm0, qword ptr [rdx]"
+            }
+          ]
+        },
+        {
+          "offset": "0x3e1",
+          "samples": 1,
+          "instruction": "cmp      gword ptr [rbp-0x88], 0",
+          "nearby": [
+            {
+              "offset": "0x3d6",
+              "instruction": "mov      rax, gword ptr [r10+0x28]"
+            },
+            {
+              "offset": "0x3da",
+              "instruction": "mov      gword ptr [rbp-0x88], rax"
+            },
+            {
+              "offset": "0x3e1",
+              "instruction": "cmp      gword ptr [rbp-0x88], 0"
+            },
+            {
+              "offset": "0x3e9",
+              "instruction": "jne      G_M000_IG35"
+            },
+            {
+              "offset": "0x3ef",
+              "instruction": "vxorps   xmm0, xmm0, xmm0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "header": "Lokad.Image.Internal.CachedBicubicResize:Execute(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,long,long,byref,Lokad.Image.Internal.OperationContext) (FullOpts)",
+      "codeBytes": 7372,
+      "samples": 972,
+      "hotLocations": [
+        {
+          "offset": "0xdf9",
+          "samples": 96,
+          "instruction": "vmovaps  zmm0, zmm1",
+          "nearby": [
+            {
+              "offset": "0xded",
+              "instruction": "vmulpd   zmm0, zmm0, zmm6"
+            },
+            {
+              "offset": "0xdf3",
+              "instruction": "vaddpd   zmm3, zmm0, zmm3"
+            },
+            {
+              "offset": "0xdf9",
+              "instruction": "vmovaps  zmm0, zmm1"
+            },
+            {
+              "offset": "0xdff",
+              "instruction": "vmovaps  zmm1, zmm2"
+            },
+            {
+              "offset": "0xe05",
+              "instruction": "lea      ebx, [rdx+0x02]"
+            }
+          ]
+        },
+        {
+          "offset": "0xde7",
+          "samples": 87,
+          "instruction": "vaddpd   zmm3, zmm4, zmm3",
+          "nearby": [
+            {
+              "offset": "0xdda",
+              "instruction": "vinsertf64x4 zmm6, zmm6, ymm7, 1"
+            },
+            {
+              "offset": "0xde1",
+              "instruction": "vmulpd   zmm4, zmm4, zmm5"
+            },
+            {
+              "offset": "0xde7",
+              "instruction": "vaddpd   zmm3, zmm4, zmm3"
+            },
+            {
+              "offset": "0xded",
+              "instruction": "vmulpd   zmm0, zmm0, zmm6"
+            },
+            {
+              "offset": "0xdf3",
+              "instruction": "vaddpd   zmm3, zmm0, zmm3"
+            }
+          ]
+        },
+        {
+          "offset": "0xdb4",
+          "samples": 61,
+          "instruction": "vbroadcastsd ymm6, qword ptr [r9+8*rdx]",
+          "nearby": [
+            {
+              "offset": "0xda6",
+              "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18"
+            },
+            {
+              "offset": "0xdad",
+              "instruction": "vbroadcastsd zmm5, qword ptr [r10+8*rdx]"
+            },
+            {
+              "offset": "0xdb4",
+              "instruction": "vbroadcastsd ymm6, qword ptr [r9+8*rdx]"
+            },
+            {
+              "offset": "0xdba",
+              "instruction": "vinsertf64x4 zmm5, zmm5, ymm6, 1"
+            },
+            {
+              "offset": "0xdc1",
+              "instruction": "lea      ebx, [rdx+0x01]"
+            }
+          ]
+        },
+        {
+          "offset": "0xe1b",
+          "samples": 45,
+          "instruction": "ja       G_M000_IG97",
+          "nearby": [
+            {
+              "offset": "0xe13",
+              "instruction": "add      r15, 2"
+            },
+            {
+              "offset": "0xe17",
+              "instruction": "cmp      r15, 20"
+            },
+            {
+              "offset": "0xe1b",
+              "instruction": "ja       G_M000_IG97"
+            },
+            {
+              "offset": "0xe21",
+              "instruction": "shl      rdx, 5"
+            },
+            {
+              "offset": "0xe25",
+              "instruction": "add      rdx, r8"
+            }
+          ]
+        },
+        {
+          "offset": "0xded",
+          "samples": 32,
+          "instruction": "vmulpd   zmm0, zmm0, zmm6",
+          "nearby": [
+            {
+              "offset": "0xde1",
+              "instruction": "vmulpd   zmm4, zmm4, zmm5"
+            },
+            {
+              "offset": "0xde7",
+              "instruction": "vaddpd   zmm3, zmm4, zmm3"
+            },
+            {
+              "offset": "0xded",
+              "instruction": "vmulpd   zmm0, zmm0, zmm6"
+            },
+            {
+              "offset": "0xdf3",
+              "instruction": "vaddpd   zmm3, zmm0, zmm3"
+            },
+            {
+              "offset": "0xdf9",
+              "instruction": "vmovaps  zmm0, zmm1"
+            }
+          ]
+        },
+        {
+          "offset": "0xe13",
+          "samples": 30,
+          "instruction": "add      r15, 2",
+          "nearby": [
+            {
+              "offset": "0xe0d",
+              "instruction": "add      edx, 6"
+            },
+            {
+              "offset": "0xe10",
+              "instruction": "mov      r15d, edx"
+            },
+            {
+              "offset": "0xe13",
+              "instruction": "add      r15, 2"
+            },
+            {
+              "offset": "0xe17",
+              "instruction": "cmp      r15, 20"
+            },
+            {
+              "offset": "0xe1b",
+              "instruction": "ja       G_M000_IG97"
+            }
+          ]
+        },
+        {
+          "offset": "0xe25",
+          "samples": 27,
+          "instruction": "add      rdx, r8",
+          "nearby": [
+            {
+              "offset": "0xe1b",
+              "instruction": "ja       G_M000_IG97"
+            },
+            {
+              "offset": "0xe21",
+              "instruction": "shl      rdx, 5"
+            },
+            {
+              "offset": "0xe25",
+              "instruction": "add      rdx, r8"
+            },
+            {
+              "offset": "0xe28",
+              "instruction": "vmovups  zmm2, zmmword ptr [rdx]"
+            },
+            {
+              "offset": "0xe2e",
+              "instruction": "mov      edx, ebx"
+            }
+          ]
+        },
+        {
+          "offset": "0xda6",
+          "samples": 23,
+          "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18",
+          "nearby": [
+            {
+              "offset": "0xd9d",
+              "instruction": "xor      edx, edx"
+            },
+            {
+              "offset": "0xd9f",
+              "instruction": "vshuff64x2 zmm4, zmm0, zmm2, 68"
+            },
+            {
+              "offset": "0xda6",
+              "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18"
+            },
+            {
+              "offset": "0xdad",
+              "instruction": "vbroadcastsd zmm5, qword ptr [r10+8*rdx]"
+            },
+            {
+              "offset": "0xdb4",
+              "instruction": "vbroadcastsd ymm6, qword ptr [r9+8*rdx]"
+            }
+          ]
+        },
+        {
+          "offset": "0xdd4",
+          "samples": 22,
+          "instruction": "vbroadcastsd ymm7, qword ptr [r9+8*rbx]",
+          "nearby": [
+            {
+              "offset": "0xdc7",
+              "instruction": "jae      G_M000_IG128"
+            },
+            {
+              "offset": "0xdcd",
+              "instruction": "vbroadcastsd zmm6, qword ptr [r10+8*rbx]"
+            },
+            {
+              "offset": "0xdd4",
+              "instruction": "vbroadcastsd ymm7, qword ptr [r9+8*rbx]"
+            },
+            {
+              "offset": "0xdda",
+              "instruction": "vinsertf64x4 zmm6, zmm6, ymm7, 1"
+            },
+            {
+              "offset": "0xde1",
+              "instruction": "vmulpd   zmm4, zmm4, zmm5"
+            }
+          ]
+        },
+        {
+          "offset": "0xdda",
+          "samples": 21,
+          "instruction": "vinsertf64x4 zmm6, zmm6, ymm7, 1",
+          "nearby": [
+            {
+              "offset": "0xdcd",
+              "instruction": "vbroadcastsd zmm6, qword ptr [r10+8*rbx]"
+            },
+            {
+              "offset": "0xdd4",
+              "instruction": "vbroadcastsd ymm7, qword ptr [r9+8*rbx]"
+            },
+            {
+              "offset": "0xdda",
+              "instruction": "vinsertf64x4 zmm6, zmm6, ymm7, 1"
+            },
+            {
+              "offset": "0xde1",
+              "instruction": "vmulpd   zmm4, zmm4, zmm5"
+            },
+            {
+              "offset": "0xde7",
+              "instruction": "vaddpd   zmm3, zmm4, zmm3"
+            }
+          ]
+        },
+        {
+          "offset": "0xdba",
+          "samples": 20,
+          "instruction": "vinsertf64x4 zmm5, zmm5, ymm6, 1",
+          "nearby": [
+            {
+              "offset": "0xdad",
+              "instruction": "vbroadcastsd zmm5, qword ptr [r10+8*rdx]"
+            },
+            {
+              "offset": "0xdb4",
+              "instruction": "vbroadcastsd ymm6, qword ptr [r9+8*rdx]"
+            },
+            {
+              "offset": "0xdba",
+              "instruction": "vinsertf64x4 zmm5, zmm5, ymm6, 1"
+            },
+            {
+              "offset": "0xdc1",
+              "instruction": "lea      ebx, [rdx+0x01]"
+            },
+            {
+              "offset": "0xdc4",
+              "instruction": "cmp      ebx, 16"
+            }
+          ]
+        },
+        {
+          "offset": "0xe33",
+          "samples": 19,
+          "instruction": "jl       G_M000_IG71",
+          "nearby": [
+            {
+              "offset": "0xe2e",
+              "instruction": "mov      edx, ebx"
+            },
+            {
+              "offset": "0xe30",
+              "instruction": "cmp      edx, 16"
+            },
+            {
+              "offset": "0xe33",
+              "instruction": "jl       G_M000_IG71"
+            },
+            {
+              "offset": "0xe39",
+              "instruction": "vmovaps  zmm0, zmm3"
+            },
+            {
+              "offset": "0xe3f",
+              "instruction": "vextractf64x4 ymm1, zmm3, 1"
+            }
+          ]
+        },
+        {
+          "offset": "0xe46",
+          "samples": 18,
+          "instruction": "jmp      G_M000_IG63",
+          "nearby": [
+            {
+              "offset": "0xe39",
+              "instruction": "vmovaps  zmm0, zmm3"
+            },
+            {
+              "offset": "0xe3f",
+              "instruction": "vextractf64x4 ymm1, zmm3, 1"
+            },
+            {
+              "offset": "0xe46",
+              "instruction": "jmp      G_M000_IG63"
+            },
+            {
+              "offset": "0xe4b",
+              "instruction": "test     r14d, r14d"
+            },
+            {
+              "offset": "0xe4e",
+              "instruction": "je       G_M000_IG128"
+            }
+          ]
+        },
+        {
+          "offset": "0xe2e",
+          "samples": 14,
+          "instruction": "mov      edx, ebx",
+          "nearby": [
+            {
+              "offset": "0xe25",
+              "instruction": "add      rdx, r8"
+            },
+            {
+              "offset": "0xe28",
+              "instruction": "vmovups  zmm2, zmmword ptr [rdx]"
+            },
+            {
+              "offset": "0xe2e",
+              "instruction": "mov      edx, ebx"
+            },
+            {
+              "offset": "0xe30",
+              "instruction": "cmp      edx, 16"
+            },
+            {
+              "offset": "0xe33",
+              "instruction": "jl       G_M000_IG71"
+            }
+          ]
+        },
+        {
+          "offset": "0xdff",
+          "samples": 14,
+          "instruction": "vmovaps  zmm1, zmm2",
+          "nearby": [
+            {
+              "offset": "0xdf3",
+              "instruction": "vaddpd   zmm3, zmm0, zmm3"
+            },
+            {
+              "offset": "0xdf9",
+              "instruction": "vmovaps  zmm0, zmm1"
+            },
+            {
+              "offset": "0xdff",
+              "instruction": "vmovaps  zmm1, zmm2"
+            },
+            {
+              "offset": "0xe05",
+              "instruction": "lea      ebx, [rdx+0x02]"
+            },
+            {
+              "offset": "0xe08",
+              "instruction": "cmp      ebx, 16"
+            }
+          ]
+        },
+        {
+          "offset": "0xd9d",
+          "samples": 13,
+          "instruction": "xor      edx, edx",
+          "nearby": [
+            {
+              "offset": "0xd93",
+              "instruction": "vmovups  zmm2, zmmword ptr [rdx]"
+            },
+            {
+              "offset": "0xd99",
+              "instruction": "vxorps   ymm3, ymm3, ymm3"
+            },
+            {
+              "offset": "0xd9d",
+              "instruction": "xor      edx, edx"
+            },
+            {
+              "offset": "0xd9f",
+              "instruction": "vshuff64x2 zmm4, zmm0, zmm2, 68"
+            },
+            {
+              "offset": "0xda6",
+              "instruction": "vshuff64x2 zmm0, zmm0, zmm2, -18"
+            }
+          ]
+        },
+        {
+          "offset": "0xdc4",
+          "samples": 13,
+          "instruction": "cmp      ebx, 16",
+          "nearby": [
+            {
+              "offset": "0xdba",
+              "instruction": "vinsertf64x4 zmm5, zmm5, ymm6, 1"
+            },
+            {
+              "offset": "0xdc1",
+              "instruction": "lea      ebx, [rdx+0x01]"
+            },
+            {
+              "offset": "0xdc4",
+              "instruction": "cmp      ebx, 16"
+            },
+            {
+              "offset": "0xdc7",
+              "instruction": "jae      G_M000_IG128"
+            },
+            {
+              "offset": "0xdcd",
+              "instruction": "vbroadcastsd zmm6, qword ptr [r10+8*rbx]"
+            }
+          ]
+        },
+        {
+          "offset": "0xc66",
+          "samples": 13,
+          "instruction": "mov      r11d, r14d",
+          "nearby": [
+            {
+              "offset": "0xc60",
+              "instruction": "mov      r10d, r15d"
+            },
+            {
+              "offset": "0xc63",
+              "instruction": "mov      ebx, r10d"
+            },
+            {
+              "offset": "0xc66",
+              "instruction": "mov      r11d, r14d"
+            },
+            {
+              "offset": "0xc69",
+              "instruction": "add      r11, rbx"
+            },
+            {
+              "offset": "0xc6c",
+              "instruction": "mov      qword ptr [rbp-0x260], r11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "header": "Lokad.Image.Internal.CachedBicubicResize:WriteWideRow[Lokad.Image.Internal.CachedBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[double],double,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[int],System.ReadOnlySpan`1[int],int,int,Lokad.Image.Internal.CachedBicubicResize+WideErrorBounds,bool,Lokad.Image.Internal.OperationContext) (FullOpts)",
+      "codeBytes": 2632,
+      "samples": 412,
+      "hotLocations": [
+        {
+          "offset": "0x5c4",
+          "samples": 47,
+          "instruction": "vmulpd   zmm1, zmm1, qword ptr [rbx+2*r9] {1to8}",
+          "nearby": [
+            {
+              "offset": "0x5ba",
+              "instruction": "lea      rsi, bword ptr [r15+8*r10]"
+            },
+            {
+              "offset": "0x5be",
+              "instruction": "vmovups  zmm1, zmmword ptr [rsi]"
+            },
+            {
+              "offset": "0x5c4",
+              "instruction": "vmulpd   zmm1, zmm1, qword ptr [rbx+2*r9] {1to8}"
+            },
+            {
+              "offset": "0x5cb",
+              "instruction": "vaddpd   zmm0, zmm1, zmm0"
+            },
+            {
+              "offset": "0x5d1",
+              "instruction": "add      r9, 4"
+            }
+          ]
+        },
+        {
+          "offset": "0x2b9",
+          "samples": 26,
+          "instruction": "kmovb    r10d, k1",
+          "nearby": [
+            {
+              "offset": "0x2a8",
+              "instruction": "vsubpd   zmm3, zmm6, zmm3"
+            },
+            {
+              "offset": "0x2ae",
+              "instruction": "vcmplepd k1, zmm3, qword ptr [reloc @RWD40] {1to8}"
+            },
+            {
+              "offset": "0x2b9",
+              "instruction": "kmovb    r10d, k1"
+            },
+            {
+              "offset": "0x2bd",
+              "instruction": "test     r10, r10"
+            },
+            {
+              "offset": "0x2c0",
+              "instruction": "je       SHORT G_M000_IG13"
+            }
+          ]
+        },
+        {
+          "offset": "0x5cb",
+          "samples": 22,
+          "instruction": "vaddpd   zmm0, zmm1, zmm0",
+          "nearby": [
+            {
+              "offset": "0x5be",
+              "instruction": "vmovups  zmm1, zmmword ptr [rsi]"
+            },
+            {
+              "offset": "0x5c4",
+              "instruction": "vmulpd   zmm1, zmm1, qword ptr [rbx+2*r9] {1to8}"
+            },
+            {
+              "offset": "0x5cb",
+              "instruction": "vaddpd   zmm0, zmm1, zmm0"
+            },
+            {
+              "offset": "0x5d1",
+              "instruction": "add      r9, 4"
+            },
+            {
+              "offset": "0x5d5",
+              "instruction": "dec      r11d"
+            }
+          ]
+        },
+        {
+          "offset": "0x5d1",
+          "samples": 20,
+          "instruction": "add      r9, 4",
+          "nearby": [
+            {
+              "offset": "0x5c4",
+              "instruction": "vmulpd   zmm1, zmm1, qword ptr [rbx+2*r9] {1to8}"
+            },
+            {
+              "offset": "0x5cb",
+              "instruction": "vaddpd   zmm0, zmm1, zmm0"
+            },
+            {
+              "offset": "0x5d1",
+              "instruction": "add      r9, 4"
+            },
+            {
+              "offset": "0x5d5",
+              "instruction": "dec      r11d"
+            },
+            {
+              "offset": "0x5d8",
+              "instruction": "jne      SHORT G_M000_IG28"
+            }
+          ]
+        },
+        {
+          "offset": "0x23f",
+          "samples": 18,
+          "instruction": "vextractf32x4 xmm5, zmm3",
+          "nearby": [
+            {
+              "offset": "0x233",
+              "instruction": "mov      rdx, qword ptr [rbp-0x1C8]"
+            },
+            {
+              "offset": "0x23a",
+              "instruction": "jmp      G_M000_IG32"
+            },
+            {
+              "offset": "0x23f",
+              "instruction": "vextractf32x4 xmm5, zmm3"
+            },
+            {
+              "offset": "0x246",
+              "instruction": "vunpckhpd xmm5, xmm5, xmm5"
+            },
+            {
+              "offset": "0x24a",
+              "instruction": "vucomisd xmm5, qword ptr [reloc @RWD08]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5be",
+          "samples": 16,
+          "instruction": "vmovups  zmm1, zmmword ptr [rsi]",
+          "nearby": [
+            {
+              "offset": "0x5b4",
+              "instruction": "ja       G_M000_IG44"
+            },
+            {
+              "offset": "0x5ba",
+              "instruction": "lea      rsi, bword ptr [r15+8*r10]"
+            },
+            {
+              "offset": "0x5be",
+              "instruction": "vmovups  zmm1, zmmword ptr [rsi]"
+            },
+            {
+              "offset": "0x5c4",
+              "instruction": "vmulpd   zmm1, zmm1, qword ptr [rbx+2*r9] {1to8}"
+            },
+            {
+              "offset": "0x5cb",
+              "instruction": "vaddpd   zmm0, zmm1, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x20b",
+          "samples": 16,
+          "instruction": "vmulpd   zmm3, zmm3, zmm0",
+          "nearby": [
+            {
+              "offset": "0x1fb",
+              "instruction": "vfnmadd213pd zmm3, zmm5, qword ptr [reloc @RWD00] {1to8}"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vmulpd   zmm3, zmm3, zmm5"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vmulpd   zmm3, zmm3, zmm0"
+            },
+            {
+              "offset": "0x211",
+              "instruction": "vextractf32x4 xmm5, zmm3"
+            },
+            {
+              "offset": "0x218",
+              "instruction": "vunpckhpd xmm5, xmm5, xmm5"
+            }
+          ]
+        },
+        {
+          "offset": "0x5aa",
+          "samples": 15,
+          "instruction": "lea      r8, [r10+0x08]",
+          "nearby": [
+            {
+              "offset": "0x5a2",
+              "instruction": "mov      r10d, dword ptr [r9+r13]"
+            },
+            {
+              "offset": "0x5a6",
+              "instruction": "lea      r10d, [r10+4*rdx]"
+            },
+            {
+              "offset": "0x5aa",
+              "instruction": "lea      r8, [r10+0x08]"
+            },
+            {
+              "offset": "0x5ae",
+              "instruction": "mov      esi, r14d"
+            },
+            {
+              "offset": "0x5b1",
+              "instruction": "cmp      r8, rsi"
+            }
+          ]
+        },
+        {
+          "offset": "0x5ae",
+          "samples": 14,
+          "instruction": "mov      esi, r14d",
+          "nearby": [
+            {
+              "offset": "0x5a6",
+              "instruction": "lea      r10d, [r10+4*rdx]"
+            },
+            {
+              "offset": "0x5aa",
+              "instruction": "lea      r8, [r10+0x08]"
+            },
+            {
+              "offset": "0x5ae",
+              "instruction": "mov      esi, r14d"
+            },
+            {
+              "offset": "0x5b1",
+              "instruction": "cmp      r8, rsi"
+            },
+            {
+              "offset": "0x5b4",
+              "instruction": "ja       G_M000_IG44"
+            }
+          ]
+        },
+        {
+          "offset": "0x1fb",
+          "samples": 14,
+          "instruction": "vfnmadd213pd zmm3, zmm5, qword ptr [reloc @RWD00] {1to8}",
+          "nearby": [
+            {
+              "offset": "0x1ee",
+              "instruction": "vinsertf64x4 zmm3, zmm3, ymm5, 1"
+            },
+            {
+              "offset": "0x1f5",
+              "instruction": "vrcp14pd zmm5, zmm3"
+            },
+            {
+              "offset": "0x1fb",
+              "instruction": "vfnmadd213pd zmm3, zmm5, qword ptr [reloc @RWD00] {1to8}"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vmulpd   zmm3, zmm3, zmm5"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vmulpd   zmm3, zmm3, zmm0"
+            }
+          ]
+        },
+        {
+          "offset": "0x211",
+          "samples": 13,
+          "instruction": "vextractf32x4 xmm5, zmm3",
+          "nearby": [
+            {
+              "offset": "0x205",
+              "instruction": "vmulpd   zmm3, zmm3, zmm5"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vmulpd   zmm3, zmm3, zmm0"
+            },
+            {
+              "offset": "0x211",
+              "instruction": "vextractf32x4 xmm5, zmm3"
+            },
+            {
+              "offset": "0x218",
+              "instruction": "vunpckhpd xmm5, xmm5, xmm5"
+            },
+            {
+              "offset": "0x21c",
+              "instruction": "vucomisd xmm5, qword ptr [reloc @RWD08]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5b4",
+          "samples": 12,
+          "instruction": "ja       G_M000_IG44",
+          "nearby": [
+            {
+              "offset": "0x5ae",
+              "instruction": "mov      esi, r14d"
+            },
+            {
+              "offset": "0x5b1",
+              "instruction": "cmp      r8, rsi"
+            },
+            {
+              "offset": "0x5b4",
+              "instruction": "ja       G_M000_IG44"
+            },
+            {
+              "offset": "0x5ba",
+              "instruction": "lea      rsi, bword ptr [r15+8*r10]"
+            },
+            {
+              "offset": "0x5be",
+              "instruction": "vmovups  zmm1, zmmword ptr [rsi]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5b1",
+          "samples": 12,
+          "instruction": "cmp      r8, rsi",
+          "nearby": [
+            {
+              "offset": "0x5aa",
+              "instruction": "lea      r8, [r10+0x08]"
+            },
+            {
+              "offset": "0x5ae",
+              "instruction": "mov      esi, r14d"
+            },
+            {
+              "offset": "0x5b1",
+              "instruction": "cmp      r8, rsi"
+            },
+            {
+              "offset": "0x5b4",
+              "instruction": "ja       G_M000_IG44"
+            },
+            {
+              "offset": "0x5ba",
+              "instruction": "lea      rsi, bword ptr [r15+8*r10]"
+            }
+          ]
+        },
+        {
+          "offset": "0x205",
+          "samples": 10,
+          "instruction": "vmulpd   zmm3, zmm3, zmm5",
+          "nearby": [
+            {
+              "offset": "0x1f5",
+              "instruction": "vrcp14pd zmm5, zmm3"
+            },
+            {
+              "offset": "0x1fb",
+              "instruction": "vfnmadd213pd zmm3, zmm5, qword ptr [reloc @RWD00] {1to8}"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vmulpd   zmm3, zmm3, zmm5"
+            },
+            {
+              "offset": "0x20b",
+              "instruction": "vmulpd   zmm3, zmm3, zmm0"
+            },
+            {
+              "offset": "0x211",
+              "instruction": "vextractf32x4 xmm5, zmm3"
+            }
+          ]
+        },
+        {
+          "offset": "0x1f5",
+          "samples": 9,
+          "instruction": "vrcp14pd zmm5, zmm3",
+          "nearby": [
+            {
+              "offset": "0x1e8",
+              "instruction": "vinsertf128 ymm5, ymm6, xmm5"
+            },
+            {
+              "offset": "0x1ee",
+              "instruction": "vinsertf64x4 zmm3, zmm3, ymm5, 1"
+            },
+            {
+              "offset": "0x1f5",
+              "instruction": "vrcp14pd zmm5, zmm3"
+            },
+            {
+              "offset": "0x1fb",
+              "instruction": "vfnmadd213pd zmm3, zmm5, qword ptr [reloc @RWD00] {1to8}"
+            },
+            {
+              "offset": "0x205",
+              "instruction": "vmulpd   zmm3, zmm3, zmm5"
+            }
+          ]
+        },
+        {
+          "offset": "0x2c0",
+          "samples": 9,
+          "instruction": "je       SHORT G_M000_IG13",
+          "nearby": [
+            {
+              "offset": "0x2b9",
+              "instruction": "kmovb    r10d, k1"
+            },
+            {
+              "offset": "0x2bd",
+              "instruction": "test     r10, r10"
+            },
+            {
+              "offset": "0x2c0",
+              "instruction": "je       SHORT G_M000_IG13"
+            },
+            {
+              "offset": "0x2c2",
+              "instruction": "mov      eax, dword ptr [rbp-0x1B8]"
+            },
+            {
+              "offset": "0x2c8",
+              "instruction": "mov      rcx, bword ptr [rbp-0x1E0]"
+            }
+          ]
+        },
+        {
+          "offset": "0x224",
+          "samples": 8,
+          "instruction": "jae      SHORT G_M000_IG09",
+          "nearby": [
+            {
+              "offset": "0x218",
+              "instruction": "vunpckhpd xmm5, xmm5, xmm5"
+            },
+            {
+              "offset": "0x21c",
+              "instruction": "vucomisd xmm5, qword ptr [reloc @RWD08]"
+            },
+            {
+              "offset": "0x224",
+              "instruction": "jae      SHORT G_M000_IG09"
+            },
+            {
+              "offset": "0x226",
+              "instruction": "mov      eax, dword ptr [rbp-0x1B8]"
+            },
+            {
+              "offset": "0x22c",
+              "instruction": "mov      rcx, bword ptr [rbp-0x1E0]"
+            }
+          ]
+        },
+        {
+          "offset": "0x5a6",
+          "samples": 8,
+          "instruction": "lea      r10d, [r10+4*rdx]",
+          "nearby": [
+            {
+              "offset": "0x59f",
+              "instruction": "mov      r11d, r12d"
+            },
+            {
+              "offset": "0x5a2",
+              "instruction": "mov      r10d, dword ptr [r9+r13]"
+            },
+            {
+              "offset": "0x5a6",
+              "instruction": "lea      r10d, [r10+4*rdx]"
+            },
+            {
+              "offset": "0x5aa",
+              "instruction": "lea      r8, [r10+0x08]"
+            },
+            {
+              "offset": "0x5ae",
+              "instruction": "mov      esi, r14d"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "noPhaseCostOrSpeedupClaim": true,
+  "storage": {
+    "totalAllocatedBytesPerOperationReused": 198450,
+    "ordinaryOwnedWorkspaceBytes": 198432,
+    "publicPlanRetainedBytes": 198432,
+    "outputPayloadBytes": 32768,
+    "ordinaryRetainedOperationScratchBytes": 0,
+    "physicalNativeAndJitStackPeaksUnmeasured": true
+  },
+  "findings": [
+    "Main Execute972 includes inlined horizontal filtering; current hotspots surround two scalar weight broadcasts/vector insertion and ordered products/additions. This is a lead, not a measured removable fraction.",
+    "WriteWideRow412 includes vertical filtering and certification/publication. Cached wide rows still accumulate two pixels per tap loop; bounded execution already uses the shared exact vertical quartet primitive.",
+    "DecodePremultipliedRow256, TryPrepare29, Kernel18 and PrepareWideHorizontalPairs3 are sample locations. Inlining/skid/unmapped allocation code prevent phase-time attribution. No allocation gain follows source capacity alone.",
+    "Geometry pair preparation is already linear and proves contiguous overlap once. Do not propose that as new work.",
+    "Equivalent one-shot and prepared byte/word controls already pass; retain the original fresh-managed/prepared-zimg gap as a labeled required comparison, not fresh-graph equivalence."
+  ],
+  "nextHypothesis": {
+    "repeatedWork": "Cached wide byte vertical execution repeats the tap loop/weight broadcast per two pixels; reuse the existing shared quartet primitive before another marginal arithmetic kernel.",
+    "endState": "One shared ordered vertical accumulation loop serves bounded and cached execution. Keep the existing pair publisher/error margins/original replay verbatim by carrying the second pair sum to the next iteration. Private row offsets may be adapted in place without new storage, with exact tail restoration.",
+    "completeControls": "Existing Wide8 plus affected Repeated8/OneShot8 complete controls. Confirm Wide16 only if generated code/source evidence leaves a material concern; passing word numerical branches stay unchanged. No new image/settings grid.",
+    "correctness": "Same per-lane multiply/add order, normalizers/certificates/repair and independent ownership. Exercise width4/5/6/7/8, tail restoration, lowalpha repair and repeated plan use; preserve cooperative cancellation and terminal admission.",
+    "temporaryRisks": "Extra carried vectors and row-index adaptation can cost registers or negate loop savings. A credible coherent stage may revise those boundaries; complete operation evidence governs acceptance. No gain forecast from profile counts.",
+    "alternatives": "Horizontal coefficient staging remains a stronger-location lead but may need new layout/specialization. Default-versus-bounded comparison is another lead; old large4097x2051 diagnostic favored default20.40ms over compact21.89ms, so no fixture-based dispatch swap. Only use a bounded additional generalization if that design becomes a candidate."
+  },
+  "raw": {
+    "file": "cached-wide-current-attribution.tar.xz",
+    "sha256": "406462e031d962a7e3961c7669845544931d75c6c80051dfe45613f42d446483",
+    "bytes": 548124,
+    "members": 28,
+    "dependencies": [
+      {
+        "file": "bilinear-vector-certification.tar.xz",
+        "sha256": "8cddc33d352357b64ee0c493182746fc78cd6e276aa951387a6dff8d5681b6a5",
+        "scope": "Actual immutable6ef/29ca/packagef22 and6253W/L/SAMEpackage proof; current production source/module qualification."
+      },
+      {
+        "file": "bicubic-shared-preparation.tar.xz",
+        "sha256": "e1a00262fa927a14f1dd363115cd4f8c0b8b86a2500ef47bce8f6fd13a03f88d"
+      },
+      {
+        "file": "cached-narrow-shared-publication.tar.xz",
+        "sha256": "39ca3f401345b7d61d66e170df8963a9ac3ce86f4c10f0e27f8c2d81cce750dd"
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  }
+}

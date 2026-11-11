@@ -1,14 +1,15 @@
 # Current adjacent-operation confidence
 
-WAC805/BCC806 resolve consequential confidence questions on the actual immutable
+WAC805/BCC806/WAC807 examine consequential confidence questions on the actual immutable
 package DLL. These are read-only measurements, **not production speedup claims**.
-The one parameterized development driver reuses the authored Wpc299 methodology
+The same parameterized development driver reuses the authored Wpc299 methodology
 and existing complete benchmark methods, fixtures, native settings and checks.
 No new workload grid, production dependency or native-reference relaxation.
 
 | Existing complete operation | Lokad µs | FFmpeg µs | Ratio / conservative upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Transparent VP8 RGBA8, exact 98,590 B packet | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | pass |
+| Transparent VP8 RGBA16, normalized exact 98,590 B packet | 53,395.51 | 53,304.90 | 1.002 / 1.008 | 6,241,792 | uncertain |
 | Bilinear RGBA16 enlargement, 1027×519 | 1,830.73 | 1,884.92 | 0.971 / 1.013 | 4,498,558 | uncertain |
 
 **Transparent alpha passes/stops**, range .977–.998. Native before/paired/after
@@ -19,6 +20,16 @@ sanity and independently surviving outputs remain frozen. Exact packets, rather
 than equal numerical quality, establish codec parity. The lossless/alpha family
 now has six passes/two uncertain; opaque lossless and word alpha stay open.
 
+**Word alpha remains uncertain**, range .991–1.008: 53.396/FFmpeg 53.305 ms.
+All sixteen-bit channel normalization is timed on both sides; normalized alpha
+and the same frozen 98,590 B packet remain exact. Native bracket means are
+53.417/53.475/53.305 ms. No remaining-gap or speedup claim follows the point ratio;
+do not repeat an unchanged job for a favorable result. Direct allocation is
+6,241,792 B/op, no added capacity/retention; governed peak is not remeasured for
+this depth. The case-specific frozen harness differs from byte alpha: preflight
+caught that difference before timing, then reused the correct harness without
+any build. All packet/settings/source/quality/owner/quiet gates pass.
+
 **Up16 remains uncertain**, range .884–1.013. Native bracket means are
 1.885/1.907/2.050 ms; all observations remain. No pass, confirmed gap or causal
 gain claim from its point ratio. Do not repeat an unchanged job for a favorable
@@ -26,12 +37,12 @@ result or tune a presumed gap. The accepted vector redesign's independently
 confirmed 18.12% normalized gain remains separately valid.
 
 Each job retains twelve alternating adjacent pairs and twelve native batches
-before/after: four complete operations per alpha subject, 64 per Up16 subject.
+before/after: four complete operations per alpha/word-alpha subject, 64 per Up16 subject.
 The bound takes the worse of paired log-ratio and all-actual/diagnostic managed
 confidence against the fastest before/paired/after native bracket. All twelve
 managed observations remain in the all-actual view. These change adjacency from
 the original global-bracket captures, not acceptance thresholds or operation
-boundaries. No successful timing repeat follows either result.
+boundaries. No successful timing repeat follows these results.
 
 Managed source normalization/preparation, complete processing, fresh independent
 output and disposal remain timed. Native conversion/repacking/filtering/encoding
@@ -48,7 +59,7 @@ owned result. Operation scratch retention is zero; default pools/governed bypass
 are unchanged. Physical/native/JIT peaks are not remeasured.
 
 Reuse the source-valid **6,253 Windows/Linux full/live checks**, affected ISA
-and SAME actual-package/all three examples. One offline driver build serves both
+and SAME actual-package/all three examples. One offline driver build serves all three
 controls, with no production/embedded/harness/native/fixture rebuild or package
 repeat. A receipt-prefix assertion failed after the completed alpha capture;
 the saved log/receipt were recovered without remeasurement.
@@ -68,3 +79,9 @@ dependencies retain fixtures/reference tools and qualification.
 [original adjacent photograph methodology](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)
 remain separate history. Photograph stays passed/stopped. All 289 required paths
 remain; continue independent demonstrated gaps without a global blocker.
+
+The added word-alpha capture is separately mirrored/member-verified in
+`webp-alpha16-current-confidence.tar.xz`: 442,280 B / 24 members,
+SHA256 `a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b`. It pins the exact case-specific harness,
+all actuals/brackets and unchanged current-package qualification; no successful
+capture, build or package proof was repeated.

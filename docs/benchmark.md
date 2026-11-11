@@ -24,7 +24,9 @@ Current scope and remaining work:
   package DLL. Alpha costs 52.99/FFmpeg 53.66 ms,
   upper 0.998, exact 98,590 B and 6,241,792 B/op; this resolves uncertainty, with no production speedup claim.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
-  6 passes / 3 uncertain. Resolve uncertainty before tuning. Complete packets remain
+  6 passes / 3 uncertain. The current word-alpha view is
+  53.40/FFmpeg 53.30 ms, upper 1.008: uncertain,
+  exact normalized alpha/packet and 6,241,792 B/op. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   4 passes / 0 gaps / 2 uncertain.
@@ -153,7 +155,7 @@ settings do not establish matched quality.
 | VP8 diagram, effort2 / distortion-only search † | 2,525.56 | 2,511.68 | 1.006 / 1.013 | 406,705 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
-| VP8 RGBA16 + alpha, including normalization † | 57,605.21 | 58,080.66 | 0.992 / 1.002 | 6,241,792 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 53,395.51 | 53,304.90 | 1.002 / 1.008 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 74,977.27 | 75,349.65 | 0.995 / 1.013 | 4,823,168 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |

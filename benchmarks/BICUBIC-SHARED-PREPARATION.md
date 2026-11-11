@@ -1,5 +1,9 @@
 # Shared bicubic preparation
 
+[Current actual-package wide attribution](CACHED-WIDE-CURRENT-ATTRIBUTION.md)
+selects reuse of shared vertical accumulation before another arithmetic trial.
+It supplies no new timing result; these source-valid costs remain.
+
 CBP780B adds caller-owned `BicubicResizePlan` and shares preparation/execution
 with ordinary resizing. Eligible SIMD two-axis reductions retain horizontal
 geometry and working rows. Other geometries, tight local limits and portable

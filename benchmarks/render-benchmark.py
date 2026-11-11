@@ -1341,7 +1341,7 @@ def render():
     assert qualification['actualPackage']['actualConsumerPassed'] and qualification['samePackageLinux']['actualConsumerPassed']
     assert webp_owned['raw']['mirrored'] and webp_owned['raw']['allMembersVerified']
     assert set(webp_owned['cases']) == {'ordinary', 'opaque', 'photograph', 'diagram', 'rgba16', 'async', 'alpha', 'alpha16'}
-    for name in ['ordinary', 'opaque', 'diagram', 'rgba16', 'async', 'alpha16']:
+    for name in ['ordinary', 'opaque', 'diagram', 'rgba16', 'async']:
         current = webp_owned['cases'][name]
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
@@ -1353,7 +1353,7 @@ def render():
     adjacent_confidence = json.loads((ROOT / 'benchmarks/warm-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
     assert not adjacent_confidence['productionChanged'] and not adjacent_confidence['productionSpeedupClaim']
     assert adjacent_confidence['raw']['mirrored'] and adjacent_confidence['raw']['allMembersVerified']
-    assert set(adjacent_confidence['cases']) == {'alpha', 'Up16'}
+    assert set(adjacent_confidence['cases']) == {'alpha', 'alpha16', 'Up16'}
     for case in adjacent_confidence['cases'].values():
         assert case['actualPairs'] == case['nativeBatchesEachBracket'] == 12 and case['allActualsRetained']
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['independentOwnedOutputs']
@@ -1366,6 +1366,14 @@ def render():
     assert alpha_current['managedPacketBytes'] == alpha_current['nativePacketBytes'] == 98590
     assert alpha_current['packetSha256'] == alpha_current['nativeOutputSha256']
     webp_owned['cases']['alpha'] = alpha_current
+    alpha16_current = adjacent_confidence['cases']['alpha16']
+    assert alpha16_current['lower'] <= 1 < alpha16_current['upper'] and alpha16_current['status'] == 'uncertain'
+    assert alpha16_current['operationsPerSubject'] == 4 and alpha16_current['fullSourceNormalizationTimed']
+    assert alpha16_current['completePacketExact'] and alpha16_current['alphaExact']
+    assert alpha16_current['managedPacketBytes'] == alpha16_current['nativePacketBytes'] == 98590
+    assert alpha16_current['packetSha256'] == alpha16_current['nativeOutputSha256']
+    assert alpha16_current['raw']['mirrored'] and alpha16_current['raw']['allMembersVerified']
+    webp_owned['cases']['alpha16'] = alpha16_current
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
     current_build_qualification = streaming['qualification']
@@ -1959,7 +1967,9 @@ Current scope and remaining work:
   package DLL. Alpha costs {alpha_current['managedUs']/1000:.2f}/FFmpeg {alpha_current['nativeUs']/1000:.2f} ms,
   upper {alpha_current['upper']:.3f}, exact {alpha_current['managedPacketBytes']:,} B and {alpha_current['allocatedBytes']:,} B/op; this resolves uncertainty, with no production speedup claim.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
-  {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. Resolve uncertainty before tuning. Complete packets remain
+  {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. The current word-alpha view is
+  {alpha16_current['managedUs']/1000:.2f}/FFmpeg {alpha16_current['nativeUs']/1000:.2f} ms, upper {alpha16_current['upper']:.3f}: uncertain,
+  exact normalized alpha/packet and {alpha16_current['allocatedBytes']:,} B/op. Resolve uncertainty before tuning. Complete packets remain
   exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
   [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   {vp8_decode_counts['pass']} passes / {vp8_decode_counts['gap']} gaps / {vp8_decode_counts['uncertain']} uncertain.
