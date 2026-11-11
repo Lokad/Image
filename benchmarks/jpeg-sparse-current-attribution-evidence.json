@@ -1,157 +1,150 @@
 {
   "project": "Lokad.Image",
-  "stage": "JSC767",
+  "stage": "JDA798",
   "productionChanged": false,
-  "productionAccepted": false,
+  "statisticalTiming": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
   "publicationPostponed": true,
-  "requiredMaterialPaths": 283,
-  "producers": {
-    "windowsSha256": "d316aa6e1dc0209fe3d4cd7adf0f965004d8eb911b840ca5e58a991226982f84",
-    "linuxSha256": "ded6450d37ff05f2d87fccdf3e89f6ab850f7ffe2c225b016ea1d584ea137ec4"
-  },
-  "sources": {
+  "sourcePins": {
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "0abe2287ebaec941a7592583ebe74162f949f12ecfb18c9250e9b1fb47c7740d",
+    "src/Lokad.Image/Internal/JpegNonzeroMask.cs": "9dbdb2b45cb86b1167fc2c1eecce8b16ddb66edb8f9d0b4b26d3cf8bb3df61cd",
     "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
-    "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
-    "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "53955fdc1de1e311334dd74d3cea442d66bfb0c14b4fa5906ed274c747b2844d",
-    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d",
-    "src/Lokad.Image/Internal/JpegHuffman.BaselinePairs.cs": "6d63b8e5909763d56524af84321c39780836abaa19a552d6d2dd176875a6c230",
-    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "1c5e0cf63e0bb549c4b15b0e723ac7050350dfa24bc594aeeb34d7a1af1a4f97",
-    "tests/Lokad.Image.Tests/JpegBaselinePairTests.cs": "893d954e3f580a8e559583b31fb5d072257ddadc027406ce9a639268e2f789bd",
-    "tests/Lokad.Image.Tests/JpegBaselineSingleTokenTests.cs": "d1608bc087c4206bce9d16fc7da592017c2cb2efe8baf591ecbdc2a484a8be79"
+    "src/Lokad.Image/Internal/JpegDecoder.CmykPlanes.cs": "da8c54194e1f5c1629a011a3484c53d27f3f59316ab9f5a8580d9dd96df33fda"
   },
-  "currentCase": {
-    "managedMicroseconds": 484.9622088068182,
-    "nativeMicroseconds": 437.67622721354167,
-    "ratio": 1.1080387250966814,
-    "lower": 1.099017468840143,
-    "upper": 1.1206263320474543,
+  "librarySha256": "55b93e0028ad9916d2a02fc1ddedd5cee5b749e4d38c28b3ade038af3d363fc8",
+  "packageSha256": "a88e69e45e371daaab3f0695a95e4012aefd83e3463068aa3860db76fb7063df",
+  "reusedCost": {
+    "caseId": "CmykAdobeSparse2D",
+    "managedUs": 471.28,
+    "nativeUs": 432.85,
+    "upper": 1.104,
+    "status": "gap",
     "allocatedBytes": 20944,
-    "status": "confirmed-gap",
-    "managedActuals": 12,
-    "nativeSamplesEachBracket": 12,
-    "quietGuardsPassed": true,
-    "allOriginalGatesPassed": true,
-    "librarySha256": "1b58529c1c7abb45daf334c91061e96d173d2ee7f736161fe259c471c0ae5f19",
+    "provider": "jpeg-shared-block-support-evidence.json",
+    "note": "Reused source-valid cost, not a new statistical measurement."
+  },
+  "profile": {
+    "totalSampledLocations": 1995,
+    "topLocations": [
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,uint64)[Optimized]",
+        "count": 432
+      },
+      {
+        "name": "uint64 [Lokad.Image] Lokad.Image.Internal.JpegNonzeroMask::Natural(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>)[Optimized]",
+        "count": 258
+      },
+      {
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "count": 230
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::StoreTwoRowColumnsAvx512(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int16>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "count": 217
+      },
+      {
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlockCore(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "count": 207
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "count": 188
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmykInPlace(valuetype [System.Runtime]System.Span`1<uint8>,bool)[Optimized]",
+        "count": 91
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "count": 83
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "count": 72
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32)[Optimized]",
+        "count": 54
+      },
+      {
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::PrepareBaselinePairs(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "count": 46
+      },
+      {
+        "name": "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        "count": 41
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "count": 31
+      },
+      {
+        "name": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "count": 23
+      },
+      {
+        "name": "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libcoreclr.so)",
+        "count": 9
+      },
+      {
+        "name": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "count": 4
+      },
+      {
+        "name": "(/usr/lib/x86_64-linux-gnu/libc.so.6)",
+        "count": 2
+      },
+      {
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::PackCmykSamples(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "count": 2
+      }
+    ],
+    "interpretation": "Sample locations include inlining/skid; attribution only, not phase costs or removable CPU percentages. Instrumented elapsed is discarded."
+  },
+  "correctness": {
+    "caseId": "CmykAdobeSparse2D",
+    "width": 513,
+    "height": 259,
     "inputBytes": 22708,
     "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "managedOutputBytes": 531468,
     "managedOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
     "nativeOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
-    "descriptorSha256": null,
-    "outputBytes": 531468,
-    "runId": "jtp763b-candidate-CmykAdobeSparse2D-confirm",
-    "receiptFile": "jtp763b-candidate-CmykAdobeSparse2D-confirm-receipt.json",
-    "reusedUnchangedPath": false,
-    "measurementOwner": "JTP763B",
-    "allActualsRetained": true
+    "decoderMaximum": 0,
+    "decoderRmse": 0,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "alphaExact": true,
+    "blackIsNotAlpha": true,
+    "nativeCliPixelsExact": true,
+    "scalarCliAgreementWithinBounds": true
   },
-  "reusedQualification": {
-    "fullChecksEachOS": 6181,
-    "actualPackageSha256": "754785736730b2d9aeeed90e8be68fe7df85bea5c48f33b73fcad13b0ba2bbd0",
-    "sameActualPackageBothOS": true,
-    "source": "packed-bicubic-four-pixel-preparation-evidence.json"
+  "allFrozenPixelSourceOwnershipGatesPassed": true,
+  "quietGuardsPassed": true,
+  "bodies": {
+    "nonzeroNaturalBytes": 132,
+    "dequantizeBytes": 227
   },
-  "capture": {
-    "totalSamples": 1994,
-    "selectedMethodLocations": {
-      "inverse": 611,
-      "entropy": 263,
-      "baselineScheduler": 205,
-      "dequantization": 158,
-      "componentPacking": 80,
-      "cmykConversion": 79
-    },
-    "inverseCodeBytes": 1772,
-    "inverseMappedSamples": 611,
-    "traceSha256": "82593f62cd39303949099d26aef520ea45480007663ef51d0d50f4384ca9bcc4",
-    "traceBytes": 731108,
-    "seconds": 2,
-    "operationCpu": 0,
-    "samplerCpu": 1,
-    "quietGuardsPassed": true,
-    "instrumentedElapsedDiscarded": true,
-    "inputBytes": 22708,
-    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
-    "outputBytes": 531468,
-    "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
-    "notes": "Inlining/skid/sample locations are not phase costs, removable percentages or CPU savings."
-  },
-  "model": {
-    "project": "Lokad.Image",
-    "stage": "JSC767",
-    "productionChanged": false,
-    "allProductionHarnessFixtureBuilds": 0,
-    "performanceMeasured": false,
-    "cases": {
-      "SparseCmyk": {
-        "inputPath": "artifacts/warm-reference/jpeg-cmyk-adobe-sparse2d/input.jpg",
-        "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
-        "inputBytes": 22708,
-        "counts": {
-          "blocks": 8580,
-          "low2x2NonDcBlocks": 8580,
-          "low2x2NonconstantRows": 8580,
-          "twoLowRowsBlocks": 8580
-        },
-        "finalLogicalCursor": 22706,
-        "finalPendingBits": 1,
-        "paddingAndEoiVerified": true
-      },
-      "DirectRgb444": {
-        "inputPath": "tmp/jar509-direct-rgb-input.jpg",
-        "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
-        "inputBytes": 133057,
-        "counts": {
-          "blocks": 6630,
-          "fullRowsBlocks": 6433,
-          "low2x2NonDcBlocks": 2,
-          "low2x2NonconstantRows": 2,
-          "twoLowRowsBlocks": 194,
-          "globalDcOnlyBlocks": 3
-        },
-        "finalLogicalCursor": 133055,
-        "finalPendingBits": 1,
-        "paddingAndEoiVerified": true
-      }
-    },
-    "sources": {
-      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "e6cc7ef13ae6bc546e8a29c126fe83e14d6b7b49485a19b1dda2db62ee81cb00",
-      "src/Lokad.Image/Internal/JpegDecoder.cs": "9c90e2683dcea27509ba03f59f27eb05c33d8a719855627521047741c0c908cf",
-      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "53955fdc1de1e311334dd74d3cea442d66bfb0c14b4fa5906ed274c747b2844d",
-      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "270383d5e65b351b043987f20fcfbcf28fcdf7702cbdbcbc5c6402faac7dba8d"
-    },
-    "scope": "Independent existing canonical T81 parser/dequantization applied to two frozen packets, additionally classifying nonDC top-left2x2 support after exact word conversion. Older fused-destination counters are discarded; this is not a new fusion proposal. Counts identify algebraically zero row terms and intermediate storage, not runtime phase costs or predicted savings. Preserve DC-only wordwrap versus nonconstant row saturation, signedword bias, Int32 modular sums and clipping."
-  },
-  "proposal": {
-    "repeatedWork": "Existing two-low-row inverse publishes eight reflected rows through repeated narrow/pack/scalar-store and span-boundary paths; dynamic column weights are loaded within the loop. Low2x2 support also repeats zero row dot products and stack round trips.",
-    "endState": "Investigate one exact batched two-row column publisher with prepared format-derived weight pairs and retained AVX2/scalar fallbacks. Preserve signedword bias before widening, moduloInt32 pair sums, shift/clipping and output order. Consider low2x2 row preparation only if complete evidence justifies that coherent extension; not a fixture-specific gate or a replay of failed entropy/dequantization fusion.",
-    "evidence": "Inverse611/1994 locations; publishing/loop regions are material but skid prevents phase attribution. Model8580 sparse blocks versus2 RGB blocks have nonDC top-left2x2 support. Zero vector pair terms and intermediate storage are logical work, not predicted CPU savings.",
-    "risks": "New packing/lane order, compiled weight retention, eligibility/dispatch costs, code size and register pressure. Exact full-domain scalar oracles, fixed packet outputs and portable paths remain mandatory; no arithmetic relaxation.",
-    "acceptance": "Focused actual publisher tests/extreme words and existing sparse/RGB complete screens first. Independent confirmation only if useful. Enumerate changed inverse callers before refreshing costs; reuse unchanged DC-only/validation paths where proved. Broad W/L/affectedISA/SAMEactualpackage at coherent acceptance. No new image/settings grid."
-  },
-  "workflow": {
-    "allBuilds": 0,
-    "profileCaptures": 1,
-    "fullOrPackageQualificationRepeats": 0,
-    "newImagesOrSettings": 0,
-    "sourceChanges": 0,
-    "model": "Reuses existing canonical parser/dequantization; only additional support classification. Inherited fusion counters removed from current model; no second parse."
-  },
+  "hypothesis": "Dequantization materializes64signed words; support then reloads them. Investigate sharing materialized register results with support-mask construction, preserving post-product modular AC zeros and saturating shifted DC. Source repetition alone is not a speedup forecast; inspect actual current execution before a candidate. Existing inverse/transform numerical order and all public paths remain exact.",
+  "qualificationReused": "BWF7946248full/live eachOS, resizeISA and SAME actual package/all3examples; no source change in this attribution.",
   "raw": {
-    "file": "jpeg-sparse-current-attribution.tar.xz",
-    "sha256": "3d1d2dcf7c467fc9f86564719c93f2494131f8b1859a3778e97d74b401635170",
-    "bytes": 300248,
-    "members": 33,
+    "file": "jpeg-current-support-attribution.tar.xz",
+    "sha256": "fa2b968c102b4faade2d9013287c6d8d56f02c0b1c1ae19cd4dcf4bd52a4ccbc",
+    "bytes": 111936,
+    "members": 22,
+    "dependency": {
+      "file": "wide-bicubic-shared-quartets.tar.xz",
+      "sha256": "e955203ad4e4102b11a89bd392b835a30289b18d6cfabc6eafcc3ac456c14736",
+      "scope": "Actual accepted BWF794 DLL55b93e00/packagea88e69e4, unchanged fixtures/reference/managed workers and6248/ISA/SAMEpackage qualification. Profile receipt pins module identities."
+    },
     "mirrored": true,
-    "allMembersVerified": true,
-    "dependencies": [
-      {
-        "file": "packed-bicubic-four-pixel-preparation.tar.xz",
-        "sha256": "ea62895c444987b31495ed85de986e508eacb077e57060c5afa79e42db9ee5fa"
-      },
-      {
-        "file": "jpeg-prepared-token-descriptors.tar.xz",
-        "sha256": "bcb777111e6a2586d1e2a1d9bb202efc5424e05730e6bbb7eb78e94c8281b2d5"
-      }
-    ]
-  }
+    "allMembersVerified": true
+  },
+  "history": {
+    "report": "https://github.com/lokad/image/blob/5d2981693f0cedce544d380c40e8d717761db8f8/benchmarks/JPEG-SPARSE-CURRENT-ATTRIBUTION.md",
+    "file": "jpeg-sparse-current-attribution.tar.xz",
+    "sha256": "3d1d2dcf7c467fc9f86564719c93f2494131f8b1859a3778e97d74b401635170"
+  },
+  "next": "JDF799 proposed product/support publication fusion; leave entropy grammar and exact inverse arithmetic unchanged. Focused source/actual mask and pixel checks, complete sparse/dense screens first. Not accepted or merge authorization."
 }

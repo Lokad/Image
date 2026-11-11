@@ -1,58 +1,45 @@
-# Sparse JPEG inverse attribution
+# Current JPEG dequantization and support attribution
 
-JSC767 reuses the current qualified package for one two-second sparse-CMYK
-capture after the accepted token-descriptor change. Complete decode remains
-484.96/native 437.68 µs, upper 1.121 gap, 20,944 B/op. This adds **no timing or
-allocation result**, production build, fixture or qualification repeat.
+JDA798 reuses the accepted actual package DLL on the existing sparse Adobe CMYK
+control. Its source-valid complete cost remains **471.28 / FFmpeg 432.85 µs**, upper
+**1.104: gap**, 20,944 B/op. This adds no statistical timing, allocation saving,
+production build, fixture or qualification repeat.
 
-Of 1,994 sampled locations, inverse AVX2 has 611, plain entropy 263, baseline
-scheduling 205, dequantization 158, component packing 80 and CMYK conversion 79.
-CPU0 executes and CPU1 samples; both idle-v2 guards, the frozen 22,708 B packet,
-exact 531,468 B managed/native output and source/ownership checks pass.
-Instrumented elapsed is discarded. Inlining/skid make these locations attribution,
-not phase costs, removable percentages or predicted CPU savings.
+One two-second CPU0 capture, sampled from CPU1, has 1,995 locations: inverse 432,
+natural support 258, plain entropy 230, two-row columns 217, baseline scheduling 207,
+dequantization 188 and CMYK conversion 91. Inlining/skid prevent treating these as
+phase costs, removable percentages or a gain forecast. Instrumented elapsed is
+discarded. The exact 22,708 B packet / 531,468 B independent RGBA output, native/normal/
+scalar, source/ownership and both idle-v2 checks pass. Native contexts remain
+retained as declared; this is not an equivalent fresh-context comparison.
 
-The actual 1,772 B inverse body retains a useful two-low-row path. Its column
-execution loads weights, checks/publishes reflected output rows and repeatedly
-narrows complete vectors to scalar eight-byte stores. Mapped regions 20/22/23
-have 207/136/66 samples, including skid. This identifies a larger coherent lead
-than replaying the [unselected coefficient fusion](JPEG-COEFFICIENT-FUSION-EXPERIMENT.md).
+The current 227 B natural dequantizer uses four 16-word batches. A separate 132 B
+non-inlined support query reloads the 64 materialized words, with its own span
+checks and call boundary. This follows the shared-mask stage; earlier profiles
+predate that change. Removing 128 B of logical rereads per block is a source model,
+not a measured bandwidth or elapsed saving. Existing column/entropy work remains.
 
-## Bounded design lead
+**Next candidate:** publish two 32-word SIMD products and exact support together,
+using the same multiplied values before their register lifetimes end. Support
+must reflect wrapped AC products, not raw coefficient bits. DC must replace its
+mask bit only after the original full-width product, level shift and saturation.
+Share that publication between natural and scan order; retain AVX2/scalar conversion,
+original inverse arithmetic, stores and cancellation. No heap owner or retained
+scratch is needed. Extra live vectors, ABI/register pressure or new branches may
+lose; existing complete sparse-CMYK/dense-RGB444 screens decide the lead.
 
-Investigate one exact batched column publisher for the existing two-row case,
-with format-derived prepared weight pairs and retained AVX2/scalar fallbacks.
-Signed-word bias must precede widening; pair products/sums, shift, clipping,
-reflection and byte order must match every existing result. Preserve DC-only
-shortcuts and cooperative cancellation. Preparing/retaining weights has a cost
-that must be recorded; no caller budget, output lifetime or numerical contract
-changes. No speed or allocation gain is assumed from fewer stores or checks.
+This differs from [unselected entropy/coefficient fusion](JPEG-COEFFICIENT-FUSION-EXPERIMENT.md):
+reader grammar, token stores and Int32 coefficient storage remain unchanged.
+Extend the existing exhaustive coefficient/quantizer/guard and independent-matrix
+checks to the returned mask. Reconcile every actually affected decode/caller path
+before an accepted W/L/full/ISA/SAME-package milestone. No new image/settings grid
+or broader numerical policy. The candidate is not accepted by this attribution.
 
-A separate support classification reuses the existing independent T.81 parser
-and exact dequantization on two frozen packets. All 8,580 non-DC sparse blocks
-have top-left 2×2 support; only 2 of 6,630 RGB blocks do. On those sparse blocks,
-three zero row-pair terms repeat 8,580 times, alongside intermediate row storage.
-These logical counts may justify a later row-preparation extension; they do not
-establish its cost or make a fixture-specific gate acceptable. Earlier fusion
-counters are excluded from the current model, without another parse.
-
-Start with actual publisher lane/extreme-word oracles and existing sparse/RGB
-complete screens. Preserve word wrapping versus saturation at the distinct row
-boundaries. New packing/eligibility, code size, register pressure or prepared
-storage may offset the benefit. Revise or abandon based on complete evidence;
-do not treat this profile as merge authorization.
-
-Enumerate changed inverse callers before refreshing performance. Reuse unchanged
-DC-only/validation paths where proved; retain all existing packet/pixel, input,
-memory/admission, cancellation and surviving-output checks. Broad Windows/Linux,
-affected scalar/ISA and same actual Release-package checks belong at a coherent
-accepted stage. No image/settings grid is added.
-
-[Evidence](jpeg-sparse-current-attribution-evidence.json) pins the current sources,
-mapped instructions, support counts and actual package. Existing 6,181 full/live
-checks/OS, affected ISA and same-package/all-three-example evidence are reused.
-Mirrored/member-verified raw `jpeg-sparse-current-attribution.tar.xz`:
-300,248 B / 33 members, SHA256
-`3d1d2dcf7c467fc9f86564719c93f2494131f8b1859a3778e97d74b401635170`.
-No benchmark-renderer dependency or displayed comparison changes. All 283 required
-paths remain open for qualification; publication is postponed.
+[Evidence](jpeg-sparse-current-attribution-evidence.json) pins current sources,
+locations, actual-module bodies and frozen checks. Reuse BWF794 6,248 full/live per OS
+and SAME actual package/all three examples; package a88e69e4 is unchanged. Mirrored/member-
+verified raw `jpeg-current-support-attribution.tar.xz`: 111,936 B / 22 members, SHA256
+`fa2b968c102b4faade2d9013287c6d8d56f02c0b1c1ae19cd4dcf4bd52a4ccbc`.
+[Earlier attribution](https://github.com/lokad/image/blob/5d2981693f0cedce544d380c40e8d717761db8f8/benchmarks/JPEG-SPARSE-CURRENT-ATTRIBUTION.md)
+and raw 3d1d2dcf remain history. No renderer dependency/displayed cost changes;
+all 289 paths remain required and publication is postponed.
