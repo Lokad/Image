@@ -1,0 +1,459 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WLG829",
+  "productionAccepted": false,
+  "conclusion": "Inconclusive; original production source and qualified modules restored.",
+  "caseId": "TightWide8",
+  "baseline": {
+    "managedUs": 398.0294153053977,
+    "nativeUs": 376.0482223307292,
+    "ratio": 1.0584531229490466,
+    "lower": 1.039503110447113,
+    "upper": 1.0784392037028325,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c"
+  },
+  "candidate": {
+    "managedUs": 392.23215055338545,
+    "nativeUs": 372.2223118489583,
+    "ratio": 1.0537577626795966,
+    "lower": 1.0338164119219977,
+    "upper": 1.067668126510884,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "4e13734e8d0cdfa6beadda81d05c706d8b6689bded1edd8171d1dbbdf577a578"
+  },
+  "comparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 398.0294153053977,
+        "candidateUs": 392.23215055338545,
+        "savedUs": 5.79726475201227,
+        "savedFraction": 0.014564915378337484,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 398029.4153053977,
+          "StandardError": 699.8429033256214,
+          "Level": 12,
+          "Margin": 3210.1051143658333,
+          "Lower": 394819.3101910319,
+          "Upper": 401239.5204197635
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 392232.15055338544,
+          "StandardError": 698.6291024018993,
+          "Level": 12,
+          "Margin": 3099.8028916866683,
+          "Lower": 389132.34766169876,
+          "Upper": 395331.9534450721
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 398.5277861328125,
+        "candidateUs": 392.2335978190104,
+        "savedUs": 6.294188313802064,
+        "savedFraction": 0.01579359967564342,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 398527.7861328125,
+          "StandardError": 809.3600496767187,
+          "Level": 12,
+          "Margin": 3591.1138167277377,
+          "Lower": 394936.6723160848,
+          "Upper": 402118.8999495402
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 392233.59781901044,
+          "StandardError": 698.6291024018993,
+          "Level": 12,
+          "Margin": 3099.8028916866683,
+          "Lower": 389133.79492732376,
+          "Upper": 395333.4007106971
+        }
+      }
+    },
+    "normalizedGain": 0.004436058780163843,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.010173989011457163,
+    "baselineRatioBounds": [
+      1.039503110447113,
+      1.0784392037028325
+    ],
+    "candidateRatioBounds": [
+      1.0338164119219977,
+      1.067668126510884
+    ]
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "WLG829-source-model",
+    "productionChanged": false,
+    "commit": "f626bf4eabe404e3a429c83b65e14bbae4e13413",
+    "sources": {
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "f1601c6a5cb9017c50b7588a89cc8a1cd7dce3df44d5f6be1613d48753f08c3d",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a"
+    },
+    "currentGap": {
+      "project": "Lokad.Image",
+      "caseId": "TightWide8",
+      "subject": "candidate",
+      "mode": "confirm",
+      "runId": "bwf794-default-candidate-TightWide8-confirm",
+      "managedUs": 371.6249419117647,
+      "nativeUs": 351.6961809895833,
+      "ratio": 1.0566647066399952,
+      "upper": 1.0686601407617526,
+      "lower": 1.0463505780339435,
+      "allocatedBytes": 113,
+      "retainedOperationScratchBytes": 0,
+      "librarySha256": "55b93e0028ad9916d2a02fc1ddedd5cee5b749e4d38c28b3ade038af3d363fc8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "status": "gap",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "managedMaxWorkingBytes": 568332,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "receiptFile": "bwf794-default-candidate-TightWide8-confirm-receipt.json",
+      "allActualsRetained": true
+    },
+    "rows": [
+      {
+        "tile": 0,
+        "columns": 16,
+        "sourceCount": 70,
+        "preparedPairs": [
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 16,
+        "columns": 16,
+        "sourceCount": 76,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 32,
+        "columns": 16,
+        "sourceCount": 76,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 48,
+        "columns": 16,
+        "sourceCount": 77,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 64,
+        "columns": 16,
+        "sourceCount": 77,
+        "preparedPairs": [
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 80,
+        "columns": 16,
+        "sourceCount": 76,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 96,
+        "columns": 16,
+        "sourceCount": 76,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "consumedPairsCurrently": []
+      },
+      {
+        "tile": 112,
+        "columns": 16,
+        "sourceCount": 70,
+        "preparedPairs": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12
+        ],
+        "consumedPairsCurrently": []
+      }
+    ],
+    "firstTailRow": 42,
+    "decodedRowVisitsPerRowLoanStrip": 176,
+    "preparedRowLoanPairs": 60,
+    "currentlyConsumedRowLoanPairs": 0,
+    "hypotheticalEligiblePairInvocations": 10560,
+    "logicalDecodedPixelLoadsPerPairBefore": 32,
+    "logicalDecodedPixelLoadsPerPairAfter": 20,
+    "hypothesis": "The existing linear preparation proves eligible16tap/+4 windows for every17-slot mode, including RowLoanColumns16. Execution accepts those proofs only when columns==4. Qualify the existing fast path by taps==17 instead, allowing the row-loan mode to consume its prepared proofs. Keep ThreeColumns20 excluded: its slot16 can be ordinary data and has no prepared marker.",
+    "intendedEndState": "One existing overlap primitive and one existing preparation rule across four/sixteen-column17-slot execution. No new kernel, owner, array, cache, reservation, retained capacity or public API. Original pair/indexed/odd paths, vertical quartets, geometry/tail loans, exact repair and per-lane arithmetic stay.",
+    "affected": "Existing TightWide8 is the primary demonstrated gap. TightWide16 passes and stops; its four-column constant guard is semantically unchanged, but inspect generated code/complete companion as needed. No new image, shape/depth/settings grid.",
+    "storage": "Existing4KiB admission and3296/4068/3776B explicit frames; source/result loans and lifetimes unchanged. Additional live vectors may change emitted frame/spills; do not infer memory or CPU gains from source counts.",
+    "acceptance": "First source-proof and focused exact-bit/frozen/rational/row-loan/tail/odd/count17/three-column/cancellation/refusal/survivor checks. Reuse immutable predecessor and reference tools. One short complete TightWide8 screen; independent confirmation if promising. Reconcile affected code/reference costs before one W/L/scalar/ISA/SAMEactualpackage milestone. No favorable sampling or blind repeat of failed implementations.",
+    "notEvidence": "Logical geometry/invocation/load counts are not sampled frequencies, phase costs or forecasts. Enabling inline overlap in the larger frame can regress from register pressure/code size; judge complete operations."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "WLG829",
+    "entireOriginalFileReconstructedExactly": true,
+    "onlyChange": "Consume existing prepared16tap/+4 pair proofs in RowLoanColumns16 as well as FourColumns4/TailColumns4. Exclude ThreeColumns20 because slot16 is live and unprepared there.",
+    "allKernelGeometryRepairDecodePublicationCancellationOwnershipBodiesVerbatim": true,
+    "newCapacityBytes": 0,
+    "newRetainedBytes": 0,
+    "newArrays": 0,
+    "newHelpers": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "newPools": 0,
+    "workingAdmissionBytes": 4096,
+    "explicitPhasePayloadBytes": [
+      3296,
+      4068,
+      3776
+    ],
+    "numeric": "Existing shared exact pair primitive, ordered Add(Multiply) for each t0..15 lane;20pixel overlapping union rather than32logicalpixel loads. Existing scalar/indexed/odd/full/clamped and ThreeColumns fallback remains.",
+    "ownership": "Operation-private unpublished result loans/cache; existing finally/refusal/cancel cleanup and independent returned owner unchanged.",
+    "tests": "Existing actual row-loan and poisoned-tail phase tests, public frozen/rational pixels, overlap bits/preparation, budgets/refusal/cancellation/survivors. No implementation-mirroring test added.",
+    "focusedInternalEachModeEachOS": 508,
+    "focusedPublicEachModeEachOS": 789,
+    "sources": {
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "6d1a89904d471d3fdfd5b6e47f218544a19cc92661eadd1b160ead93683c6917"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49"
+    }
+  },
+  "codegen": {
+    "short": {
+      "file": "tmp/wlg829-candidate-TightWide8-short-kernel-jit.txt",
+      "sha256": "3fad60743054cb7c6b9c30f188f3c1ca00e80d453dcd6a498269a7c91da09692",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+RowLoanColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6617"
+          ],
+          "stackReservations": [
+            "616",
+            "80",
+            "0xA00",
+            "272",
+            "64",
+            "128",
+            "144",
+            "80"
+          ],
+          "vectorStackAccessCount": 31,
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+TailColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6512"
+          ],
+          "stackReservations": [
+            "616",
+            "0x880",
+            "80",
+            "960",
+            "544",
+            "80",
+            "16",
+            "32",
+            "144",
+            "80"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    },
+    "confirm": {
+      "file": "tmp/wlg829-candidate-TightWide8-confirm-kernel-jit.txt",
+      "sha256": "db41dfcc629edcfeb8f7c1dc7b932891e65a017aecf59d0e188e93ef89a21b25",
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+RowLoanColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6617"
+          ],
+          "stackReservations": [
+            "616",
+            "80",
+            "0xA00",
+            "272",
+            "64",
+            "128",
+            "144",
+            "80"
+          ],
+          "vectorStackAccessCount": 31,
+          "fusedMultiplyAddInstructions": 0
+        },
+        {
+          "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+TailColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+          "codeBytes": [
+            "6512"
+          ],
+          "stackReservations": [
+            "616",
+            "0x880",
+            "80",
+            "960",
+            "544",
+            "80",
+            "16",
+            "32",
+            "144",
+            "80"
+          ],
+          "vectorStackAccessCount": 32,
+          "fusedMultiplyAddInstructions": 0
+        }
+      ]
+    }
+  },
+  "focusedEachOS": {
+    "windows": {
+      "internal-normal": 508,
+      "public-normal": 789,
+      "internal-scalar": 508,
+      "public-scalar": 789
+    },
+    "linux": {
+      "internal-normal": 508,
+      "public-normal": 789,
+      "internal-scalar": 508,
+      "public-scalar": 789
+    }
+  },
+  "restored": {
+    "sources": {
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "f1601c6a5cb9017c50b7588a89cc8a1cd7dce3df44d5f6be1613d48753f08c3d"
+    },
+    "windowsSha256": "be95c47fbc66c5c58c83ae9f5b38d7ada81b8485055913caf689ddf04783267c",
+    "linux": {
+      "restoredSources": {
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "f1601c6a5cb9017c50b7588a89cc8a1cd7dce3df44d5f6be1613d48753f08c3d"
+      },
+      "productionSha256": "6b890a03402c13edf383b29b2315e77c3831f8c8e3d1ebc74e0b81d357610066",
+      "manifestSha256": "1d5bb905d2b71cac0edd0d47ed6051654268660e0baf6dc67d9d35b4325f7dea"
+    },
+    "actualPackageSha256": "86c09ae78a81b22d64291c7bf94f5cb5e68c873a5de69bc265b98b540cb1f4e6"
+  },
+  "qualification": "Unchanged restored production keeps6,417full/live checks perOS and SAMEactualpackage/all3examples from packed-horizontal-window-reuse-evidence.json. No broad/package rerun.",
+  "raw": {
+    "file": "tmp/wide-row-loan-overlap-trial.tar.xz",
+    "sha256": "f65de0c9182c1a4440981608604c22a96cf312ef97bba62bfbb3256486edd8ee",
+    "bytes": 1388768,
+    "members": 82,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "packed-horizontal-window-reuse.tar.xz",
+        "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+        "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+      },
+      {
+        "file": "wide-bicubic-shared-quartets.tar.xz",
+        "sha256": "e955203ad4e4102b11a89bd392b835a30289b18d6cfabc6eafcc3ac456c14736",
+        "scope": "benchmarks/wide-bicubic-shared-quartets-evidence.json"
+      }
+    ]
+  },
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "next": "Retain existing wide-byte gap; no word retuning, favorable resampling, broad qualification or package generation. Examine next demonstrated narrow-byte gap using existing attribution and actual source. Reconsider overlap only with materially revised attribution/design."
+}

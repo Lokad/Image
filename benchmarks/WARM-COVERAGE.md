@@ -24,6 +24,13 @@ precision-decline cleanup/public replay. One production/embedded build per OS,
 one allowlist-only diagnostic-driver build and one full/package milestone.
 Unchanged cached/bilinear/Lanczos/codecs/text costs and ISA evidence are reused.
 
+The [wide row-loan overlap trial](WIDE-ROW-LOAN-OVERLAP-TRIAL.md) is closed
+without a production change. Independent raw1.46%/normalized0.44% improvements
+have overlapping confidence; the promising short screen did not confirm.
+Original qualified source/modules/package are restored exactly. The wide-byte
+gap remains; no favorable repeats or broad/package rerun. Next inspect the
+independent demonstrated bounded narrow-byte gap using existing attribution.
+
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and the SAME actual Release-package/all
