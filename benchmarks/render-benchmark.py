@@ -1071,12 +1071,13 @@ def render():
     jpeg_qualification = jpeg_read['qualification']
     assert jpeg_read['productionAccepted'] and jpeg_read['requiredMaterialPaths'] == 289
     assert jpeg_read['allAffectedPerformanceReconciled'] and not jpeg_read['materialPassToGapContradictions']
-    assert jpeg_qualification['fullChecksEachOs'] == jpeg_qualification['windows']['total'] == jpeg_qualification['linux']['total'] == 6246
+    assert jpeg_qualification['fullChecksEachOs'] == jpeg_qualification['windows']['total'] == jpeg_qualification['linux']['total'] == 6248
     assert jpeg_qualification['sameActualPackageBothOS']
     assert jpeg_qualification['actualPackage']['sha256'] == jpeg_qualification['samePackageLinux']['sameActualPackageSha256']
     assert jpeg_read['raw']['mirrored'] and jpeg_read['raw']['allMembersVerified']
-    assert all(jpeg_read['sourceProof'][key] for key in ('inverseSourceExactAfterRestoringOnlySupportQueriesAndMaskArgument',
-        'encoderAcAndFormatScanVerbatim', 'scalarArithmeticAndQueriesVerbatim', 'allNumericalOperationsPackingAndCancellationUnchanged'))
+    assert all(jpeg_read['sourceProof'][key] for key in ('entireInverseSourceReconstructedAfterOnlyDequantizationSupportProducersAndCallPreludeRestored',
+        'entropyGrammarInt32CoefficientsAndDecoderCallSitesUnchanged', 'scalarMatrixAndAllInverseNumericalOperationsVerbatim',
+        'encoderAndFormatScanUnchanged', 'supportReflectsActualProductsAndCorrectedSaturatedDc'))
     assert jpeg_read['storage']['newPerImageOwnedCapacityBytes'] == jpeg_read['storage']['retainedOperationScratchBytes'] == 0
     assert len(jpeg_read['refreshedCases']) == 27 and len(jpeg_read['reusedCases']) == 2 and len(jpeg_read['cases']) == 29
     for case, cost in jpeg_read['cases'].items():
@@ -1966,15 +1967,14 @@ Current scope and remaining work:
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
-  removes repeated inverse zero searches without changing arithmetic. Complete
-  horizontal CMYK saves **54.29 µs/11.94% raw**, dense RGB444 **430.76 µs/27.55%**,
+  forms exact support alongside dequantization and reuses inverse decisions.
+  Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
   with separated filtered/all-actual raw and normalized intervals. All 27 pixel
   decode costs refresh; two unchanged coding-only validations are reused.
   Across 29 reads: **{jpeg_counts['confirmed-pass-stop']} pass / {jpeg_counts['confirmed-gap']} gaps /
-  {jpeg_counts['confirmed-confidence-open']} uncertain**. Sparse CMYK and caller CMYK remain gaps;
-  retained-reference horizontal CMYK is uncertain. Sparse's adverse 0.61% filtered
-  change is retained; all-actual intervals overlap. No added owned storage or
-  retention; horizontal CMYK/RGB allocations remain 20,944/42,936 B/op.
+  {jpeg_counts['confirmed-confidence-open']} uncertain**. Sparse and caller CMYK pass/stop;
+  retained-context horizontal CMYK stays uncertain and its equivalent fresh view passes.
+  No added owned capacity or retention; sparse CMYK/RGB allocations remain 20,944/42,936 B/op.
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.

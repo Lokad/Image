@@ -7,23 +7,24 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [wide vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md)
-passes 6,248 full/live checks per OS, 363 internal/776 public resize checks in
-normal/scalar/disabled-AVX2/disabled-AVX512 modes, and the SAME actual Release
-package consumer/all three examples. All three named storage suites are included.
-Two changed bounded-wide costs refresh: byte gains 5.35% normalized but retains
-a gap; word passes with inconclusive CPU effect. The shared helper, narrow executor,
-geometry and other resize/codec/text paths reuse unchanged evidence. No new case,
-heap buffer, owner or retained scratch; working admission remains 4 KiB.
-Exact packets, managed pixels and cooperative ownership remain. This is not a
-whole-release timing refresh; completion still requires valid passing evidence
-for each of the 289 named material paths.
+The latest accepted [JPEG product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md)
+passes 6,248 full/live checks per OS, affected 464 internal/341 public JPEG checks
+in normal/scalar/disabled-AVX2/AVX512/BMI2 modes, and the SAME actual Release
+package consumer/all three examples. Independent complete sparse-CMYK/dense-RGB
+confirmations save 16.85/45.35 µs raw; both confidence views separate. All 27 affected
+pixel-decode costs refresh: 28 pass / 0 gaps / 1 uncertain across 29 reads, reusing two coding-
+only validations. The equivalent fresh-CMYK view also refreshes and passes.
+Exact pixels/packets, admission/cancellation and ownership remain. No new owned
+capacity/retention. Unchanged [wide quartets](WIDE-BICUBIC-SHARED-QUARTETS.md),
+other resizing/text/codec paths and their ISA/storage-suite evidence are reused.
+This is not a whole-release timing refresh; all 289 named paths still require valid
+passing evidence.
 
 ## Current family status
 
 | Required family/boundary | Current owner and remaining work |
 | --- | --- |
-| JPEG decoding and coding validation | [Shared block support](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 26 pass / 2 gaps / 1 uncertain. All 27 pixel-decode costs refresh; two unchanged coding-only validations reused. Horizontal CMYK saves 54.29 µs/11.94% raw; dense RGB444 saves 430.76 µs/27.55%, both confidence views separate. Sparse CMYK and caller CMYK remain gaps; retained-reference horizontal CMYK is uncertain. Separate fresh-context CMYK 434.28/752.29 µs, upper .588 passes. Sparse predecessor also has a gap; current 0.61% filtered adverse difference retained, all-actual intervals overlap. Allocations/owned capacity/retention unchanged. |
+| JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md): 51 controls, 49 pass / 1 gap / 1 uncertain. Materialized live RGBA16 upper1.012 is a gap; live byte upper1.004 is uncertain. [Cached literal-run trials](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md) show no useful lead and restore production; three independent behavior tests remain. Other affected historical stream/composition costs remain H. |
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |

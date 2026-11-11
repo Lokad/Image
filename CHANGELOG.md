@@ -9,8 +9,8 @@
 - Prepare VP8 coefficient positions once per frame for shared ordinary, cancelable
   and validation decoding, preserving exact samples and memory admission.
 
-- Reuse exact JPEG block-support information across inverse-transform decisions,
-  reducing repeated scans while preserving decoded samples and encoder packets.
+- Prepare exact JPEG block support alongside dequantization and reuse it across
+  inverse-transform decisions, preserving decoded samples and encoder packets.
 
 - Add caller-owned text render plans with independently owned geometry and
   admitted reusable workspace, preserving exact drawing and per-call cancellation.

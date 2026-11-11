@@ -65,9 +65,8 @@ internal static class JpegInverseTransform
         context.Cancellation.ThrowIfCancellationRequested();
         Span<short> input = stackalloc short[64];
         Span<short> rows = stackalloc short[64];
-        if (scanOrder) DequantizeScanOrder(coefficients, quantization, input);
-        else Dequantize(coefficients, quantization, input);
-        var support = Avx2.IsSupported ? JpegNonzeroMask.Natural(input) : 0;
+        var support = scanOrder ? DequantizeScanOrder(coefficients, quantization, input)
+            : Dequantize(coefficients, quantization, input);
         if (Avx2.IsSupported ? (support & ~1UL) == 0 : !input[1..].ContainsAnyExcept((short)0))
         {
             // Both matrix passes are constant. Preserve the row word wrap
@@ -114,8 +113,16 @@ internal static class JpegInverseTransform
     // The caller validates complete 64-sample blocks. AC only retains the low
     // word, so truncating operands before word multiplication is exact modulo
     // 65536 for the entire Int32 coefficient/UInt16 quantizer domain.
-    internal static void Dequantize(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization, Span<short> input)
+    internal static ulong Dequantize(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization, Span<short> input)
     {
+        if (Avx512BW.IsSupported)
+        {
+            var low = Vector512.Narrow(Vector512.Create(coefficients), Vector512.Create(coefficients[16..]));
+            var high = Vector512.Narrow(Vector512.Create(coefficients[32..]), Vector512.Create(coefficients[48..]));
+            low = Avx512BW.MultiplyLow(low, Vector512.Create(quantization).AsInt16());
+            high = Avx512BW.MultiplyLow(high, Vector512.Create(quantization[32..]).AsInt16());
+            return StoreDequantized(low, high, coefficients[0], quantization[0], input);
+        }
         if (Avx2.IsSupported)
         {
             for (var i = 0; i < 64; i += 16)
@@ -133,6 +140,20 @@ internal static class JpegInverseTransform
         // DC saturates after the original full-width product and level shift;
         // a previously narrowed product cannot replace this calculation.
         input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
+        return Avx2.IsSupported ? JpegNonzeroMask.Natural(input) : 0;
+    }
+
+    private static ulong StoreDequantized(Vector512<short> low, Vector512<short> high,
+        int dc, ushort quantizer, Span<short> input)
+    {
+        low.CopyTo(input); high.CopyTo(input[32..]);
+        // Support describes actual modular AC words, not coefficient support.
+        // DC instead saturates its full-width product after the level shift.
+        var shifted = (short)Math.Clamp((long)dc * quantizer + 1024, short.MinValue, short.MaxValue);
+        input[0] = shifted;
+        var first = ~Vector512.ExtractMostSignificantBits(Vector512.Equals(low, Vector512<short>.Zero)) & uint.MaxValue;
+        var last = ~Vector512.ExtractMostSignificantBits(Vector512.Equals(high, Vector512<short>.Zero)) & uint.MaxValue;
+        return (first & ~1UL) | (last << 32) | (shifted != 0 ? 1UL : 0);
     }
 
     // Inverse of the T.81 diagonal geometry generated in JpegTransform.
@@ -143,7 +164,7 @@ internal static class JpegInverseTransform
         10, 19, 23, 32, 39, 45, 52, 54, 20, 22, 33, 38, 46, 51, 55, 60,
         21, 34, 37, 47, 50, 56, 59, 61, 35, 36, 48, 49, 57, 58, 62, 63];
 
-    internal static void DequantizeScanOrder(ReadOnlySpan<int> coefficients,
+    internal static ulong DequantizeScanOrder(ReadOnlySpan<int> coefficients,
         ReadOnlySpan<ushort> quantization, Span<short> input)
     {
         if (Avx512BW.IsSupported)
@@ -155,8 +176,9 @@ internal static class JpegInverseTransform
             var high = Vector512.Narrow(Vector512.Create(coefficients[32..]), Vector512.Create(coefficients[48..]));
             var first = Avx512BW.PermuteVar32x16x2(low, Vector512.Create(NaturalToScan), high);
             var last = Avx512BW.PermuteVar32x16x2(low, Vector512.Create(NaturalToScan[32..]), high);
-            Avx512BW.MultiplyLow(first, Vector512.Create(quantization).AsInt16()).CopyTo(input);
-            Avx512BW.MultiplyLow(last, Vector512.Create(quantization[32..]).AsInt16()).CopyTo(input[32..]);
+            first = Avx512BW.MultiplyLow(first, Vector512.Create(quantization).AsInt16());
+            last = Avx512BW.MultiplyLow(last, Vector512.Create(quantization[32..]).AsInt16());
+            return StoreDequantized(first, last, coefficients[0], quantization[0], input);
         }
         else
             for (var k = 0; k < 64; k++)
@@ -167,6 +189,7 @@ internal static class JpegInverseTransform
         // DC uses the original full-width coefficient and unsigned quantizer;
         // it saturates after the level shift, independently of AC narrowing.
         input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
+        return Avx2.IsSupported ? JpegNonzeroMask.Natural(input) : 0;
     }
 
     private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels, ulong support)

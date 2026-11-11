@@ -1,4 +1,7 @@
-# Current JPEG dequantization and support attribution
+# JPEG dequantization and support attribution
+
+[The subsequent qualified stage](JPEG-SHARED-BLOCK-SUPPORT.md) implements this
+lead and owns current costs. This predecessor trace remains motivating evidence.
 
 JDA798 reuses the accepted actual package DLL on the existing sparse Adobe CMYK
 control. Its source-valid complete cost remains **471.28 / FFmpeg 432.85 µs**, upper

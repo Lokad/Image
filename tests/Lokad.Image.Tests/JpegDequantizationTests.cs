@@ -1,4 +1,5 @@
 using Lokad.Image.Internal;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Tests;
 
@@ -21,9 +22,14 @@ public sealed class JpegDequantizationTests
                 source[1] = int.MaxValue;
                 for (var i = 1; i < 64; i++)
                     source[i + 1] = unchecked((int)((0x13570000u ^ ((i & 1) == 0 ? 0u : 0x80000000u)) | (uint)((start + i - 1) & 65535)));
-                JpegInverseTransform.Dequantize(source.AsSpan(1, 64), scales.AsSpan(1, 64), output.AsSpan(3, 64));
+                var support = JpegInverseTransform.Dequantize(source.AsSpan(1, 64), scales.AsSpan(1, 64), output.AsSpan(3, 64));
+                ulong expectedSupport = 0;
                 for (var i = 0; i < 64; i++)
+                {
                     Assert.Equal(Expected(source[i + 1], q, i == 0), output[i + 3]);
+                    if (Expected(source[i + 1], q, i == 0) != 0) expectedSupport |= 1UL << i;
+                }
+                Assert.Equal(Avx2.IsSupported ? expectedSupport : 0, support);
             }
             Assert.All(scales, value => Assert.Equal(q, value));
             Assert.Equal(1234567, source[0]); Assert.Equal(-7654321, source[^1]);
@@ -43,13 +49,16 @@ public sealed class JpegDequantizationTests
             for (var start = 0; start < 65536; start += 63)
             {
                 for (var i = 0; i < 64; i++) scales[i + 1] = (ushort)((start + Math.Max(0, i - 1)) & 65535);
-                JpegInverseTransform.Dequantize(source.AsSpan(1, 64), scales.AsSpan(1, 64), output.AsSpan(3, 64));
+                var support = JpegInverseTransform.Dequantize(source.AsSpan(1, 64), scales.AsSpan(1, 64), output.AsSpan(3, 64));
+                ulong expectedSupport = 0;
                 for (var i = 0; i < 64; i++)
                 {
                     Assert.Equal(Expected(coefficient, scales[i + 1], i == 0), output[i + 3]);
+                    if (Expected(coefficient, scales[i + 1], i == 0) != 0) expectedSupport |= 1UL << i;
                     Assert.Equal(coefficient, source[i + 1]);
                     Assert.Equal((ushort)((start + Math.Max(0, i - 1)) & 65535), scales[i + 1]);
                 }
+                Assert.Equal(Avx2.IsSupported ? expectedSupport : 0, support);
             }
         }
         Assert.All(output.Take(3), value => Assert.Equal((short)0x5a5a, value));

@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
 
@@ -81,7 +82,11 @@ public sealed class JpegPackedInverseTests
             }
             var before = scan.ToArray(); var beforeQuantizers = quantizers.ToArray();
             JpegInverseTransform.Dequantize(natural, quantizers, expected);
-            JpegInverseTransform.DequantizeScanOrder(scan, quantizers, guarded.AsSpan(2, 64));
+            var support = JpegInverseTransform.DequantizeScanOrder(scan, quantizers, guarded.AsSpan(2, 64));
+            ulong expectedSupport = 0;
+            for (var i = 0; i < 64; i++)
+                if (expected[i] != 0) expectedSupport |= 1UL << i;
+            Assert.Equal(Avx2.IsSupported ? expectedSupport : 0, support);
             Assert.Equal(expected, guarded.AsSpan(2, 64).ToArray());
             Assert.All(guarded.Take(2).Concat(guarded.Skip(66)), value => Assert.Equal((short)12345, value));
             Assert.Equal(before, scan); Assert.Equal(beforeQuantizers, quantizers);
