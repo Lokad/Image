@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse exact JPEG block-support information across inverse-transform decisions,
+  reducing repeated scans while preserving decoded samples and encoder packets.
+
 - Add caller-owned text render plans with independently owned geometry and
   admitted reusable workspace, preserving exact drawing and per-call cancellation.
 

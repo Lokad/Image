@@ -1065,21 +1065,20 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    # One current JPEG provider owns all29 read costs, including four explicitly
-    # reused DC-only/validation paths. Historical stages stay in their reports.
-    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-batched-two-row-columns-evidence.json').read_text(encoding='utf-8'))
+    # Current JPEG costs have one owner; superseded algorithms/experiments remain
+    # linked history rather than prerequisites of every summary rendering.
+    jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-shared-block-support-evidence.json').read_text(encoding='utf-8'))
     jpeg_qualification = jpeg_read['qualification']
-    assert jpeg_read['productionAccepted'] and jpeg_read['requiredMaterialPaths'] == 283
-    assert jpeg_qualification['fullChecksEachOs'] == jpeg_qualification['windows']['total'] == jpeg_qualification['linux']['total'] == 6182
+    assert jpeg_read['productionAccepted'] and jpeg_read['requiredMaterialPaths'] == 289
+    assert jpeg_read['allAffectedPerformanceReconciled'] and not jpeg_read['materialPassToGapContradictions']
+    assert jpeg_qualification['fullChecksEachOs'] == jpeg_qualification['windows']['total'] == jpeg_qualification['linux']['total'] == 6246
     assert jpeg_qualification['sameActualPackageBothOS']
     assert jpeg_qualification['actualPackage']['sha256'] == jpeg_qualification['samePackageLinux']['sameActualPackageSha256']
     assert jpeg_read['raw']['mirrored'] and jpeg_read['raw']['allMembersVerified']
-    assert jpeg_read['sourceProof']['originalReconstructedExactlyAfterRemovingPublisherAndRestoringRecordedDriver']
-    assert jpeg_read['sourceProof']['allOtherValidationDequantizationRowTransformScalarGlobalDcAndFullColumnSourcesVerbatim']
-    assert jpeg_read['sourceProof']['actualCode']['StoreTwoRowColumnsAvx512']['pairMultiply512'] == 4
-    assert jpeg_read['sourceProof']['actualCode']['StoreTwoRowColumnsAvx512']['final64ByteStore'] == 1
+    assert all(jpeg_read['sourceProof'][key] for key in ('inverseSourceExactAfterRestoringOnlySupportQueriesAndMaskArgument',
+        'encoderAcAndFormatScanVerbatim', 'scalarArithmeticAndQueriesVerbatim', 'allNumericalOperationsPackingAndCancellationUnchanged'))
     assert jpeg_read['storage']['newPerImageOwnedCapacityBytes'] == jpeg_read['storage']['retainedOperationScratchBytes'] == 0
-    assert len(jpeg_read['refreshedCases']) == 25 and len(jpeg_read['reusedCases']) == 4 and len(jpeg_read['cases']) == 29
+    assert len(jpeg_read['refreshedCases']) == 27 and len(jpeg_read['reusedCases']) == 2 and len(jpeg_read['cases']) == 29
     for case, cost in jpeg_read['cases'].items():
         assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
@@ -1087,7 +1086,8 @@ def render():
         assert cost['reusedUnchangedPath'] or cost['librarySha256'] == jpeg_qualification['actualPackage']['librarySha256']
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in jpeg_read['comparison']['views'].values())
+    assert all(c['normalizedIntervalsSeparate'] and all(v['rawIntervalsSeparate'] for v in c['views'].values())
+               for c in jpeg_read['comparison'].values())
     jpeg_current = jpeg_read['cases']
     jpeg_counts = {state: sum(c['status'] == state for c in jpeg_current.values())
                    for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
@@ -1870,17 +1870,12 @@ def render():
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     assert refreshed_png_reads == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
-    cmyk_boundary = json.loads((ROOT / 'benchmarks/jpeg-cmyk-context-boundaries-evidence.json').read_text(encoding='utf-8'))
-    assert not cmyk_boundary['productionChanged'] and cmyk_boundary['referenceToolingAccepted']
-    assert cmyk_boundary['requiredMaterialPaths'] == 289
-    assert cmyk_boundary['raw']['mirrored'] and cmyk_boundary['raw']['allMembersVerified']
-    assert cmyk_boundary['sourceProof']['applyExactAfterOnlySetupAndTeardownCallsRemoved']
-    assert cmyk_boundary['producers']['nativeReady']['freshDecoderFrameAndPackingContextTimed']
-    assert cmyk_boundary['producers']['nativeReady']['residentPaddedPacketBorrowed']
-    assert cmyk_boundary['producers']['actualPackageSha256'] == current_build_qualification['actualPackage']['sha256']
-    current = cmyk_boundary['case']
+    current_build_qualification = jpeg_qualification
+    current = jpeg_read['freshContextCase']
+    assert current['nativeReady']['freshDecoderFrameAndPackingContextTimed']
+    assert current['nativeReady']['residentPaddedPacketBorrowed']
     assert current['status'] == 'pass' and current['upper'] <= 1
-    assert current['librarySha256'] == raster['producers']['timedArtifactSha256']
+    assert current['librarySha256'] == jpeg_qualification['actualPackage']['librarySha256']
     assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
     assert current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['managedOutputSha256'] == current['nativeOutputSha256']
@@ -1924,15 +1919,16 @@ Current scope and remaining work:
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
-- **JPEG:** [batched two-row columns](../benchmarks/JPEG-BATCHED-TWO-ROW-COLUMNS.md)
-  save **{jpeg_read['comparison']['savedUs']:.2f} µs/{100*jpeg_read['comparison']['rawReduction']:.2f}% raw/{100*jpeg_read['comparison']['normalizedReduction']:.2f}% normalized** on complete sparse CMYK,
-  with separated filtered/all-actual raw/normalized intervals. Sparse upper{jpeg_current['CmykAdobeSparse2D']['upper']:.3f}
-  and RGB444 upper{jpeg_current['DirectRgb444']['upper']:.3f} remain uncertain; no causal RGB companion gain is claimed.
-  Twenty-five decode costs refresh; four unchanged DC-only/validation costs are reused.
+- **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
+  removes repeated inverse zero searches without changing arithmetic. Complete
+  horizontal CMYK saves **54.29 µs/11.94% raw**, dense RGB444 **430.76 µs/27.55%**,
+  with separated filtered/all-actual raw and normalized intervals. All 27 pixel
+  decode costs refresh; two unchanged coding-only validations are reused.
   Across 29 reads: **{jpeg_counts['confirmed-pass-stop']} pass / {jpeg_counts['confirmed-gap']} gaps /
-  {jpeg_counts['confirmed-confidence-open']} uncertain**. The linked case table identifies each status.
-  GC remains 20,944/42,936 B/op for sparse/RGB, with no added image capacity or retained scratch.
-  Fixed format weights (256 B) and observed helper JIT constant data (384 B) are separate.
+  {jpeg_counts['confirmed-confidence-open']} uncertain**. Sparse CMYK and caller CMYK remain gaps;
+  retained-reference horizontal CMYK is uncertain. Sparse's adverse 0.61% filtered
+  change is retained; all-actual intervals overlap. No added owned storage or
+  retention; horizontal CMYK/RGB allocations remain 20,944/42,936 B/op.
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
@@ -1973,10 +1969,13 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Affected text checks pass170 internal/126 public per normal/scalar mode.
+Windows/Linux**. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
 Unchanged resize qualification is reused: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
-normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG ISA evidence
-({current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per mode) is reused. Exact packets/pixels, shared admission,
+normal/scalar/disabled-AVX2/AVX512 mode. Current JPEG checks pass
+{current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
+AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
+The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
+Exact packets/pixels, shared admission,
 refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
 paths and family-specific ISA evidence are reused; this is not a whole-release
 performance refresh. Total GC, admitted capacity and retained state are separate;
@@ -1988,7 +1987,7 @@ labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
 The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
-disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-CMYK-CONTEXT-BOUNDARIES.md)
+disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
 also times decoder/frame/packing-context setup and disposal; its original
 retained-context comparison remains separate. Other native codec workers retain
 their documented wrappers/contexts.

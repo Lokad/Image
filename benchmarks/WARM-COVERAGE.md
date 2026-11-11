@@ -7,19 +7,20 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [owned text render preparation](TEXT-RENDER-PREPARATION.md)
-passes6,244 full/live checks per OS, affected normal/scalar and the same actual
-Release-package consumer/all three examples. Unchanged resize/JPEG ISA evidence
-is reused. Compression packets, exact managed pixels and cooperative ownership
-remain unchanged. The new byte/word prepared public boundary adds two named paths.
-This is not a whole-release timing refresh.
-Unchanged performance/qualification evidence is reused only within its source scope.
+The latest accepted [shared JPEG block support](JPEG-SHARED-BLOCK-SUPPORT.md)
+passes 6,246 full/live checks per OS, current JPEG normal/scalar/feature paths and
+the SAME actual Release-package consumer/all three examples. Unchanged text/resize
+ISA qualification and other production paths are reused. Encoder packets, exact
+managed pixels and cooperative ownership remain unchanged. No new case or grid
+is added; the finite 289-path objective is unchanged. This is not a whole-release
+timing refresh. Historical evidence remains reproducible in linked family reports.
+Unchanged performance/qualification is reused only within its source scope.
 
 ## Current family status
 
 | Required family/boundary | Current owner and remaining work |
 | --- | --- |
-| JPEG decoding and coding validation | [Batched two-row columns](JPEG-BATCHED-TWO-ROW-COLUMNS.md): 29 reads, 22 pass / 2 gaps / 5 uncertain. Horizontal CMYK and caller CMYK remain gaps against retained FFmpeg state; [fresh CMYK contexts](JPEG-CMYK-CONTEXT-BOUNDARIES.md) confirm427.75/750.55µs, upper.573 pass as a separate equivalent one-shot view, without closing retained-state gaps; RGB444/422/420, sparse CMYK and progressive live444 remain uncertain. Sparse saves26.08µs/5.38% raw; no blanket RGB gain. |
+| JPEG decoding and coding validation | [Shared block support](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 26 pass / 2 gaps / 1 uncertain. All 27 pixel-decode costs refresh; two unchanged coding-only validations reused. Horizontal CMYK saves 54.29 µs/11.94% raw; dense RGB444 saves 430.76 µs/27.55%, both confidence views separate. Sparse CMYK and caller CMYK remain gaps; retained-reference horizontal CMYK is uncertain. Separate fresh-context CMYK 434.28/752.29 µs, upper .588 passes. Sparse predecessor also has a gap; current 0.61% filtered adverse difference retained, all-actual intervals overlap. Allocations/owned capacity/retention unchanged. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md): 51 controls, 49 pass / 1 gap / 1 uncertain. Materialized live RGBA16 upper1.012 is a gap; live byte upper1.004 is uncertain. [Cached literal-run trials](PNG-CACHED-LITERAL-RUN-EXPERIMENT.md) show no useful lead and restore production; three independent behavior tests remain. Other affected historical stream/composition costs remain H. |
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |
@@ -201,8 +202,11 @@ Current invalidation and next execution:
   costs plus Mixed8/TightMixed8/TightVertical8. Other BicubicMath bodies, codec,
   Lanczos and other unchanged providers retain their source scope. Earlier word
   mixed and other unchanged providers stay valid within their tested scope.
-- JPEG's current owner refreshes25 changed pixel-decode paths; four unchanged
-  DC-only/coding-validation cases retain their source-valid confirmations.
+- JPEG's current shared-support owner refreshes all 27 pixel-decode paths,
+  including DC-only and caller samples, plus the existing fresh-context view.
+  Two coding-only validation paths retain unchanged source-valid evidence.
+  Encoder Ac and scalar arithmetic/query bodies remain verbatim; older JPEG
+  pixel CPU costs are superseded on these affected paths.
 - Reuse passing evidence only where the relevant actual production paths and
   complete boundaries are unchanged. Current uncertainties are not demonstrated
   optimization needs; resolve them before tuning. Every named H/missing case

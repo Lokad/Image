@@ -67,7 +67,8 @@ internal static class JpegInverseTransform
         Span<short> rows = stackalloc short[64];
         if (scanOrder) DequantizeScanOrder(coefficients, quantization, input);
         else Dequantize(coefficients, quantization, input);
-        if (!input[1..].ContainsAnyExcept((short)0))
+        var support = Avx2.IsSupported ? JpegNonzeroMask.Natural(input) : 0;
+        if (Avx2.IsSupported ? (support & ~1UL) == 0 : !input[1..].ContainsAnyExcept((short)0))
         {
             // Both matrix passes are constant. Preserve the row word wrap
             // and the column's word bias before its widened multiplication.
@@ -78,7 +79,7 @@ internal static class JpegInverseTransform
         }
         if (Avx2.IsSupported)
         {
-            InverseAvx2(input, rows, pixels);
+            InverseAvx2(input, rows, pixels, support);
             return;
         }
         for (var y = 0; y < 8; y++)
@@ -168,14 +169,14 @@ internal static class JpegInverseTransform
         input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
     }
 
-    private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels)
+    private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels, ulong support)
     {
-        var twoLowRows = !input[16..].ContainsAnyExcept((short)0);
+        var twoLowRows = (support >> 16) == 0;
         var rowCount = twoLowRows ? 2 : 8;
         for (var y = 0; y < rowCount; y++)
         {
             var row = input.Slice(y * 8, 8);
-            if (!row[1..].ContainsAnyExcept((short)0))
+            if (((support >> (y * 8)) & 0xfe) == 0)
             {
                 rows.Slice(y * 8, 8).Fill(unchecked((short)(row[0] * 8)));
                 continue;
