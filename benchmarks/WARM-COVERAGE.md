@@ -7,19 +7,20 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
-The latest accepted [source-driven deep reduction](SOURCE-DRIVEN-DEEP-BICUBIC.md)
-passes6,430full/live checks perOS,519internal/791public affected checks in normal/
-scalar/AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Complete32×16 byte
-Resize saves86.87µs/17.39%raw/10.31%normalized with separated confidence and
-native−7.89%. Current412.57/zimg376.47µs upper1.100 remains a gap. Two columns
-share exact UInt16source products and vertical coefficients, with ordered doubles
-and verbatim72term certificates/repair.3,536/4,032Brow/column frames do not overlap;
-same4KiB/113B perop/zero retained scratch, no new heap/pool/owner/capacity.
-Odd generalization,17row fallback, poison, cancellation/tiny-alpha cleanup and
-actual packaged frozen pixels/root/surviving ownership pass. One immutable
-core/embedded/public-test build perOS, one full/package milestone; unchanged
-families and ISA evidence reused. Next investigate shared conversion of overlapping
-prepared horizontal samples; preserve exact arithmetic and complete boundaries.
+The latest accepted [shared deep-pair conversions](PREPARED-DEEP-PAIR-CONVERSIONS.md)
+pass 6,435 full/live checks per OS, 524 internal/791 public affected checks in
+normal/scalar/AVX2-off/AVX512-off and SAME actual package/all three examples.
+Complete 32×16 byte Resize saves 97.90µs/23.73% raw/23.80% normalized with
+separated confidence and native +0.085%. Current 314.66/zimg376.79µs upper0.846
+passes/stops. Overlapping even contiguous windows share exact sample conversion
+without changing either column's ordered double streams or certificates/repair.
+Same 4KiB admission/113B per op/zero retained operation scratch; no new capacity,
+heap, owner or pool. Code/prologue growth and unmeasured physical peaks are
+disclosed. Exact-bit/poison/refusal and existing generalization/fallback/cancellation/
+ownership checks pass. One immutable core/embedded build per OS, unchanged public
+tests/harnesses and other family evidence reused, one full/package milestone.
+[Source-driven scheduling](SOURCE-DRIVEN-DEEP-BICUBIC.md) retains the earlier gain.
+Select the next independent demonstrated gap; do not retune this passing control.
 
 Unchanged [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
 passes 6,417 full/live checks per OS, 508 internal/789 public affected checks in
@@ -54,8 +55,8 @@ zero retained operation scratch, peaks/pool retention unremeasured. No productio
 embedded/harness/native/fixture build or broad/package repeat; one allowlist-only
 owned-driver build. The initial reference preflight fails before timing and is
 retained; an ignored matching provenance view preserves reference identities.
-Next resolve the remaining historical Tight32x16_8 bicubic control on this actual
-package before assuming optimization is needed. All289paths remain; no global pass.
+The formerly historical Tight32x16_8 control is now confirmed passing above.
+All 289 paths remain; this is not a global pass.
 
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
@@ -344,6 +345,12 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- PDC835 changes only the prepared horizontal producer inside small-height deep
+  byte reduction. Tight32x16_8 refreshes to upper0.846 and stops. Its prior timing
+  is superseded; entry/admission, row scheduling, vertical arithmetic, exact
+  certificate/repair and original larger-height fallback are unchanged. Word,
+  cached/packed/other bounded resizing and codec/text providers retain source-valid
+  evidence. No new named workload or timing grid is added.
 - CBP780B refreshes all16 cached executor controls: Wide8/16, Down64x32_8/16,
   Down32x16_8/16, Down16x8_8/16, Down8/16, Horizontal8/16, Vertical8/16 and
   Cross8/16. Preparation/execution and the word-row call boundary changed;

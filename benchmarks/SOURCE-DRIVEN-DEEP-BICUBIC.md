@@ -1,5 +1,9 @@
 # Source-driven bounded deep bicubic reduction
 
+The [shared-conversion stage](PREPARED-DEEP-PAIR-CONVERSIONS.md) supersedes this
+control's current cost and now passes. This report retains the scheduling change,
+its independently verified gain and raw evidence.
+
 The existing complete RGBA8 513×259→32×16 Resize saves **86.87µs /
 17.39% raw / 10.31% reference-normalized**.
 Filtered/all-actual raw and normalized confidence separate. Native time moves

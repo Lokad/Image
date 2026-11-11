@@ -44,6 +44,63 @@ namespace Lokad.Image.Tests
             Assert.Equal(allocation, GC.GetAllocatedBytesForCurrentThread());
         }
 
+        [Theory]
+        [InlineData(8, 2)] [InlineData(16, 4)] [InlineData(64, 16)] [InlineData(72, 18)]
+        public void OverlappingPairsPreserveEveryOrderedDoubleAndIgnorePadding(int taps, int shift)
+        {
+            if (!Avx512F.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported) return;
+            var samples = Enumerable.Repeat(ushort.MaxValue, (taps + shift + 2) * 4).ToArray();
+            var left = Enumerable.Repeat(double.NaN, taps + 2).ToArray();
+            var right = left.ToArray();
+            for (var t = 0; t < taps; t++)
+            {
+                left[t + 1] = (t % 4) switch { 0 => .1, 1 => -1d / 3, 2 => .75, _ => -0d };
+                right[t + 1] = (t % 4) switch { 0 => 1d / 7, 1 => .125, 2 => -0d, _ => -1d / 11 };
+            }
+            for (var phase = 0; phase < 8; phase++)
+            {
+                for (var p = 0; p < taps + shift; p++) for (var c = 0; c < 4; c++)
+                    samples[4 + p * 4 + c] = (ushort)((p * 1709 + c * 719 + phase * 8191) % 65536);
+                var original = samples.ToArray();
+                var actual = DeepColumnBicubicResize.FilterPreparedPair(samples.AsSpan(4, (taps + shift) * 4),
+                    left.AsSpan(1, taps), right.AsSpan(1, taps), shift);
+                for (var column = 0; column < 2; column++) for (var c = 0; c < 4; c++)
+                {
+                    var weights = column == 0 ? left : right; double even = 0, odd = 0;
+                    for (var t = 0; t < taps; t += 2)
+                    {
+                        even += Product(samples[4 + (t + column * shift) * 4 + c], weights[t + 1]);
+                        odd += Product(samples[4 + (t + 1 + column * shift) * 4 + c], weights[t + 2]);
+                    }
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(even + odd), BitConverter.DoubleToInt64Bits(actual.GetElement(column * 4 + c)));
+                }
+                Assert.Equal(original, samples);
+                var allocation = GC.GetAllocatedBytesForCurrentThread();
+                for (var repeat = 0; repeat < 4; repeat++)
+                    DeepColumnBicubicResize.FilterPreparedPair(samples.AsSpan(4, (taps + shift) * 4), left.AsSpan(1, taps), right.AsSpan(1, taps), shift);
+                Assert.Equal(allocation, GC.GetAllocatedBytesForCurrentThread());
+            }
+        }
+
+        [Fact]
+        public void PairEligibilityRequiresBoundedContiguousEvenWindows()
+        {
+            ushort[] left = [3, 4, 5, 6, 7, 8, 9, 10], right = [5, 6, 7, 8, 9, 10, 11, 12];
+            Assert.Equal(2, DeepColumnBicubicResize.PreparedPairShift(left, right, 13));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, right, 12));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left.AsSpan(0, 7), right.AsSpan(0, 7), 13));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, right.AsSpan(0, 6), 13));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift([], [], 13));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, left, 13));
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(right, left, 13));
+            right[0] = 6;
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, right, 14));
+            right[0] = 5; right[7] = 11;
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, right, 13));
+            right[7] = 12; left[1] = 3;
+            Assert.Equal(0, DeepColumnBicubicResize.PreparedPairShift(left, right, 13));
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static double Product(double a, double b) => a * b;
 

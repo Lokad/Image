@@ -178,6 +178,8 @@ internal static partial class DeepColumnBicubicResize
                 if (column == 0) { count0 = count; normalizer0 = normalizer; }
                 else { count1 = count; normalizer1 = normalizer; }
             }
+            var pairShift = columns == 2 ? PreparedPairShift(offsets[..count0],
+                offsets.Slice(Capacity, count1), sourceCount) : 0;
             totals.Clear(); normalizers.Clear();
             var firstActive = 0; var endActive = 0; var lastPhysical = -1;
             var filtered = Vector512<double>.Zero;
@@ -204,10 +206,17 @@ internal static partial class DeepColumnBicubicResize
                         prepared[pixel * 4 + 3] = (ushort)a;
                     }
                     var pixels = prepared[..(sourceCount * 4)];
-                    var left = FilterPreparedColumn(pixels, offsets[..count0], weights[..count0]);
-                    var right = columns == 2 ? FilterPreparedColumn(pixels,
-                        offsets.Slice(Capacity, count1), weights.Slice(Capacity, count1)) : Vector256<double>.Zero;
-                    filtered = Vector512.Create(left, right); lastPhysical = physical;
+                    if (pairShift != 0)
+                        filtered = FilterPreparedPair(pixels.Slice(offsets[0] * 4, (count0 + pairShift) * 4),
+                            weights[..count0], weights.Slice(Capacity, count1), pairShift);
+                    else
+                    {
+                        var left = FilterPreparedColumn(pixels, offsets[..count0], weights[..count0]);
+                        var right = columns == 2 ? FilterPreparedColumn(pixels,
+                            offsets.Slice(Capacity, count1), weights.Slice(Capacity, count1)) : Vector256<double>.Zero;
+                        filtered = Vector512.Create(left, right);
+                    }
+                    lastPhysical = physical;
                 }
                 for (var y = firstActive; y < endActive; y++)
                 {
@@ -237,6 +246,55 @@ internal static partial class DeepColumnBicubicResize
         }
         return true;
     }
+
+    internal static int PreparedPairShift(ReadOnlySpan<ushort> left, ReadOnlySpan<ushort> right, int sourceCount)
+    {
+        var count = left.Length;
+        if (count == 0 || (count & 1) != 0 || right.Length != count) return 0;
+        var first = left[0]; var shift = right[0] - first;
+        if (shift <= 0 || shift >= count || (shift & 1) != 0 || first + count + shift > sourceCount) return 0;
+        for (var t = 1; t < count; t++)
+            if (left[t] != first + t || right[t] != first + shift + t) return 0;
+        return shift;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector512<double> FilterPreparedPair(ReadOnlySpan<ushort> prepared,
+        ReadOnlySpan<double> leftWeights, ReadOnlySpan<double> rightWeights, int shift)
+    {
+        // Even contiguous windows share exact UInt16-to-double conversion.
+        // Each output retains its independent even/odd addition streams and
+        // final fold; overlap never changes a tap's order or coefficient.
+        var left = Vector512<double>.Zero; var right = Vector512<double>.Zero;
+        var count = leftWeights.Length; var t = 0;
+        for (; t < shift; t += 2)
+        {
+            var values = PreparedPairValues(prepared, t);
+            var w = Avx512F.InsertVector256(Vector512.Create(leftWeights[t]), Vector256.Create(leftWeights[t + 1]), 1);
+            left = Avx512F.Add(left, Avx512F.Multiply(values, w));
+        }
+        for (; t < count; t += 2)
+        {
+            var values = PreparedPairValues(prepared, t);
+            var lw = Avx512F.InsertVector256(Vector512.Create(leftWeights[t]), Vector256.Create(leftWeights[t + 1]), 1);
+            var rt = t - shift;
+            var rw = Avx512F.InsertVector256(Vector512.Create(rightWeights[rt]), Vector256.Create(rightWeights[rt + 1]), 1);
+            left = Avx512F.Add(left, Avx512F.Multiply(values, lw));
+            right = Avx512F.Add(right, Avx512F.Multiply(values, rw));
+        }
+        for (; t < count + shift; t += 2)
+        {
+            var values = PreparedPairValues(prepared, t); var rt = t - shift;
+            var w = Avx512F.InsertVector256(Vector512.Create(rightWeights[rt]), Vector256.Create(rightWeights[rt + 1]), 1);
+            right = Avx512F.Add(right, Avx512F.Multiply(values, w));
+        }
+        return Vector512.Create(Avx.Add(left.GetLower(), left.GetUpper()), Avx.Add(right.GetLower(), right.GetUpper()));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> PreparedPairValues(ReadOnlySpan<ushort> prepared, int pixel)
+        => Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(
+            MemoryMarshal.Read<Vector128<ushort>>(MemoryMarshal.AsBytes(prepared.Slice(pixel * 4, 8)))).AsUInt32());
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static Vector256<double> FilterPreparedColumn(ReadOnlySpan<ushort> prepared,

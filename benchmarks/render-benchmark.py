@@ -1863,21 +1863,21 @@ def render():
         assert len(positions) == 1
         rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                              f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
-    deep_current = json.loads((ROOT / 'benchmarks/source-driven-deep-bicubic-evidence.json').read_text(encoding='utf-8'))
+    deep_current = json.loads((ROOT / 'benchmarks/prepared-deep-pair-conversions-evidence.json').read_text(encoding='utf-8'))
     assert deep_current['productionAccepted'] and deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
     assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
-    assert deep_current['qualification']['fullChecksEachOs'] == 6430 and deep_current['qualification']['sameActualPackageBothOS']
+    assert deep_current['qualification']['fullChecksEachOs'] == 6435 and deep_current['qualification']['sameActualPackageBothOS']
     assert deep_current['comparison']['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in deep_current['comparison']['views'].values())
     deep = deep_current['case']
     assert deep['librarySha256'] == deep_current['producers']['timedArtifactSha256'] == deep_current['qualification']['actualPackage']['librarySha256']
     assert deep['actualIterations'] == deep['nativeSamplesEachBracket'] == 12 and deep['allActualsRetained']
     assert deep['allOriginalGatesPassed'] and deep['quietGuardsPassed'] and deep['managedExact']
     assert deep['sourceUnchanged'] and deep['independentOwnedOutput'] and deep['retainedOperationScratchBytes'] == 0
-    assert deep['status'] == 'gap' and deep['lower'] > 1 and deep['allocatedBytes'] == 113
+    assert deep['status'] == 'pass' and deep['upper'] <= 1 and deep['allocatedBytes'] == 113
     label = 'Bicubic RGBA8, 32×16 / input+output+4 KiB'
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' H ')]
     assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| {label} (gap) † → 32×16 | {deep["managedUs"]:,.2f} | {deep["nativeUs"]:,.2f} | '
+    rows[positions[0]] = ('editing', f'| {label} (parity confirmed) † → 32×16 | {deep["managedUs"]:,.2f} | {deep["nativeUs"]:,.2f} | '
                          f'{deep["ratio"]:.3f} / {deep["upper"]:.3f} | {deep["allocatedBytes"]:,} |')
     assert not any(re.search(r'\sH(?:\s|\|)', row) for _, row in rows), 'Historical marked rows remain.'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -2082,7 +2082,7 @@ def render():
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['threeNamedStorageSuitesIncluded']
     current_build_qualification = deep_current['qualification']
-    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6430
+    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6435
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
     return f"""# Lokad.Image benchmarks
 
@@ -2234,13 +2234,13 @@ Current scope and remaining work:
   explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
   [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
   unaccepted capacity trials remain history; original exact arithmetic/repair remain.
-- **Deep bounded bicubic:** [source-driven paired columns](../benchmarks/SOURCE-DRIVEN-DEEP-BICUBIC.md)
-  save86.87µs/17.39%raw/10.31%normalized, with separated raw/all-actual/normalized
-  confidence and native−7.89%. Current32×16 byte412.57/zimg376.47µs upper1.100
-  remains a gap. Same113B/op/4KiB, zero retained scratch;3,536Brow and4,032Bcolumn
-  frames do not overlap. Exact pixels/certificates/repair and ownership remain.
-  Next investigate shared conversion across overlapping horizontal windows;
-  passing word/other families stay stopped.
+- **Deep bounded bicubic:** [shared prepared conversions](../benchmarks/PREPARED-DEEP-PAIR-CONVERSIONS.md)
+  save97.90µs/23.73%raw/23.80%normalized, with separated raw/all-actual/normalized
+  confidence and native+0.085%. Current32×16 byte{deep['managedUs']:,.2f}/zimg{deep['nativeUs']:,.2f}µs,
+  upper{deep['upper']:.3f} passes/stops. Same113B/op/4KiB, zero retained scratch;
+  3,536Brow and4,032Bcolumn frames remain separate. Exact double streams,
+  certificates/repair and ownership remain. Code/prologue growth is disclosed;
+  peaks and pool retention remain unmeasured. Other source-valid costs are reused.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
