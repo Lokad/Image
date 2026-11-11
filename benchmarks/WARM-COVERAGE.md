@@ -7,19 +7,26 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The [current horizontal byte enlargement](ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
-refresh remains a gap: 1,682.98/zimg1,641.69 µs, upper1.031,114 B/op and4KiB
-admission on the unchanged actual package. [Capacity trials and sampling](ENLARGEMENT-IDENTITY-CAPACITY-TRIALS.md)
-did not establish an incremental benefit; production is restored exactly. Eight
-new focused rational/poison/ownership cases supplement reused Windows/Linux and
-same-package proof. No broad/package repeat or expanded workload matrix. Sampling
-points to horizontal filtering/publication before further storage tuning; it
-does not establish elapsed phase costs or a gain forecast. Other costs remain valid.
+The latest accepted [enlargement horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+passes 6,351 full/live checks per OS, 442 internal/789 public resize checks in
+normal/scalar/AVX2off/AVX512off modes, and SAME actual Release-package/all three
+examples on Windows/Linux. Four frozen horizontal/vertical byte/word frames cover
+owner cleanup, refusal, cancellation and recovery. All twelve affected default/
+bounded full/horizontal/vertical controls refresh: **11 pass / 1 uncertain**.
+Tight vertical byte/word save286.55/232.95 µs,16.42%/15.15% raw and15.98%/19.18%
+normalized; tight full word saves78.84 µs,2.91% raw/2.97% normalized. All three
+confidence views separate. Native clocks move−.52%/+4.98%/+.063%; some other raw
+times move adversely, so no uniform raw-gain claim. Tight horizontal byte is
+1,499.15/zimg1,521.64 µs, upper1.048: uncertain, not a presumed gap or pass.
+Exact identity-width direct-cache decode and ordered paired interpolation keep
+the same4KiB admission,114–116 B/op except full word4,264,573 B/op, with no new
+owned capacity or retention. Stop the eleven confirmed cases. Prepared native
+graph/scratch versus complete managed Resize remains explicit.
+[Prior confidence and capacity trials](ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
+retain history and sampling motivation; they are superseded for current costs.
 
-The latest accepted [ordered word bicubic windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
-passes 6,321 full/live and 412 internal/789 public resize checks per OS in normal/scalar/
-AVX2off/AVX512off modes, then SAME actual Release-package/all three examples on
-Windows/Linux, including frozen identity/general word pixels and owner cleanup.
+Unchanged [ordered word bicubic windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
+retain exact arithmetic, ownership and source-valid cost evidence.
 Reverse-mixed/horizontal word controls pass 892.36/zimg900.40 µs upper.999 and
 493.16/640.62 µs upper.774; both stop. Savings 49.41/34.44 µs, 5.25%/6.53% raw,
 6.36%/15.36% normalized, with separated confidence. Native moves +1.19%/+10.44%.
@@ -69,7 +76,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Position preparation](VP8-POSITION-MODEL-PREPARATION.md): six refreshed VP8 controls, 4 pass / 0 gaps / 2 uncertain. Ordinary opaque has a confirmed 2.02% normalized gain; live 4,803.55/native 4,786.85 µs, upper 1.009, and stream remain uncertain. Every VP8 total grows 1,536 B/op, within unchanged 8 KiB admission; no retained scratch. Prior window failures remain history. Unchanged [output-owned palettes](WEBP-PALETTE-OUTPUT.md) retains six lossless controls, 3 pass / 3 uncertain. |
-| Bicubic enlargement/shared byte publication | [Shared quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md) retains12 unchanged controls; [current horizontal byte](ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md) refreshes the thirteenth:1,682.98/zimg1,641.69 µs upper1.031 remains a gap. Combined9pass/1gap/3uncertain. Bounded byte full enlargement retains159.58µs/5.10%raw/5.12%normalized gain, upper.981 passes; same116B/op/4KiB. Horizontal word remains uncertain. Unaccepted capacity trials are history; two mixed byte costs belong to compact geometry below. |
+| Bicubic enlargement/shared byte publication | [Horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md) owns all12 refreshed enlargement controls:11pass/0gap/1uncertain. Tight vertical byte/word save286.55/232.95 µs; tight full word saves78.84 µs, with separated raw/all-actual/normalized confidence. Tight horizontal byte1,499.15/zimg1,521.64 µs upper1.048 remains uncertain. Same4KiB,114–116 B/op except full word4,264,573 B/op; no added owned capacity/retention. With unchanged TightVertical8 from [quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md), family totals12pass/0gap/1uncertain. Stop passing controls; two mixed byte costs belong to compact geometry below. |
 | Mixed-axis byte/word bicubic | [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md): all4affected default/tight controls refresh. Byte846.46/zimg867.46µs upper.989 and850.67/893.27µs upper.978 pass/stop; word921.81/918.99µs upper1.012 and923.05/914.24µs upper1.016 remain uncertain. Current default predecessor is also uncertain; raw/native movement and normalized overlap are retained. Exact geometry shrinks84→36B/column without changing filtering/repair or owned capacity;114B/op, scratch4/8KiB, no added retention. Unchanged vertical pass and previous row-band design remain in[result-backed history](BICUBIC-RESULT-BACKED-BANDS.md). |
 | Horizontal/reverse-mixed word bicubic | [Ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md): existing TightCross16 513×259→256×519 passes 892.36/zimg900.40 µs upper.999; TightHorizontal16→256×259 passes 493.16/640.62 µs upper.774. Savings 49.41/34.44 µs, 5.25%/6.53% raw and 6.36%/15.36% normalized, with separated confidence. Native +1.19%/+10.44% is explicit.114/113 B/op, same4KiB admission, no added capacity/retention. Both pass/stop; defaults and other kernels unchanged. |
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare ordered horizontal pairs and bypass exact identity-width filtering in
+  bicubic enlargement, preserving pixel precision and shared memory ownership.
+
 - Reuse ordered horizontal source windows across bounded RGBA16 bicubic resizing,
   preserving exact samples and existing working-storage ownership.
 

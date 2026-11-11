@@ -1,14 +1,14 @@
 # Shared bicubic quartet execution
 
-[Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md) now owns Mixed8/TightMixed8
-costs; [current horizontal confidence](ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
-owns TightHorizontalUp8. The other twelve costs and this stage's exact arithmetic
-evidence remain valid.
+[Horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md) now
+owns all twelve enlargement costs below. [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md)
+owns Mixed8/TightMixed8. TightVertical8 and this stage's exact arithmetic evidence
+remain source-valid. Other timings below are retained history.
 
 Complete bounded RGBA8 enlargement improves **3,129.13 → 2,969.56 µs**, saving
 **159.58 µs / 5.10% raw / 5.12% reference-normalized**. Filtered/all-actual raw and
-normalized confidence intervals separate; native time moves +0.019%. The current
-conservative upper **0.981 passes**. Allocation remains **116 B/op**. This is the
+normalized confidence intervals separate; native time moves +0.019%. The then-current
+conservative upper **0.981 passed**. Allocation remains **116 B/op**. This is the
 existing 513×259→1027×519 control and its declared repeated-reference boundary.
 
 Both depths now share four-pixel vertical accumulation. Byte enlargement reuses

@@ -1,9 +1,13 @@
-# Current horizontal byte enlargement
+# Horizontal byte enlargement confidence history
 
-The existing control independently remains a **gap**, conservative upper 1.031,
+[Horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+supersedes these costs on changed production code. The following measurement and
+its raw evidence remain history, not current parity proof.
+
+At this checkpoint, the existing control independently remained a **gap**, conservative upper 1.031,
 on the unchanged actual 0.2.1 package DLL. This is a measurement refresh, not a
 production change or a speedup. All twelve enlargement controls remain in scope;
-the other eleven retain source-valid evidence.
+the other eleven then retained source-valid evidence.
 
 | Complete public Resize | Lokad µs | zimg µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |

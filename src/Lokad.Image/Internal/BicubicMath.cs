@@ -112,6 +112,59 @@ internal static class BicubicMath
         return sum;
     }
 
+    // Four taps in a common window or windows shifted by one pixel. Every
+    // half keeps its original t0,t1,t2,t3 multiply/add sequence.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector512<double> FilterAdjacentHorizontalPair(
+        ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> firstWeights,
+        ReadOnlySpan<double> secondWeights, bool shifted)
+    {
+        var early = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded[..2]));
+        var late = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(2, 2)));
+        var t0 = shifted ? early : Avx512F.Shuffle4x128(early, early, 0x44);
+        var t1 = shifted ? Avx512F.Shuffle4x128(early, late, 0x4e) : Avx512F.Shuffle4x128(early, early, 0xee);
+        var t2 = shifted ? late : Avx512F.Shuffle4x128(late, late, 0x44);
+        var t3 = shifted ? MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(3, 2)))
+            : Avx512F.Shuffle4x128(late, late, 0xee);
+        var w0 = Avx512F.InsertVector256(Vector512.Create(firstWeights[0]), Vector256.Create(secondWeights[0]), 1);
+        var w1 = Avx512F.InsertVector256(Vector512.Create(firstWeights[1]), Vector256.Create(secondWeights[1]), 1);
+        var w2 = Avx512F.InsertVector256(Vector512.Create(firstWeights[2]), Vector256.Create(secondWeights[2]), 1);
+        var w3 = Avx512F.InsertVector256(Vector512.Create(firstWeights[3]), Vector256.Create(secondWeights[3]), 1);
+        var sum = Avx512F.Add(Vector512<double>.Zero, Avx512F.Multiply(t0, w0));
+        sum = Avx512F.Add(sum, Avx512F.Multiply(t1, w1));
+        sum = Avx512F.Add(sum, Avx512F.Multiply(t2, w2));
+        return Avx512F.Add(sum, Avx512F.Multiply(t3, w3));
+    }
+
+    internal static bool PrepareAdjacentFourTapPairs(Span<int> offsets, ReadOnlySpan<int> counts,
+        int sourceCount, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        for (var x = 0; x < counts.Length; x++)
+        {
+            if ((x & 255) == 0) cancellation.ThrowIfCancellationRequested();
+            if (counts[x] < 5) offsets[x * 5 + 4] = 0;
+        }
+        var paired = false;
+        for (var x = 0; x + 1 < counts.Length; x += 2)
+        {
+            if ((x & 255) == 0) cancellation.ThrowIfCancellationRequested();
+            if (counts[x] != 4 || counts[x + 1] != 4) continue;
+            var at = x * 5; var first = offsets[at]; var second = offsets[at + 5];
+            if (first < 0 || second < first || second - first > 1) continue;
+            var shift = second - first;
+            if (sourceCount < 4 + shift || first > sourceCount - 4 - shift) continue;
+            var contiguous = true;
+            for (var t = 0; t < 4; t++)
+                contiguous &= offsets[at + t] == first + t && offsets[at + 5 + t] == second + t;
+            if (!contiguous) continue;
+            // Only dead padding carries the proof: -1 common, -2 adjacent.
+            offsets[at + 4] = -1 - shift;
+            paired = true;
+        }
+        return paired;
+    }
+
     // Each vector already contains a source-column pair. Delay two decoded
     // rows so both output rows reuse ten loads and retain their own tap order.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

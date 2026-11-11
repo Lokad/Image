@@ -79,9 +79,8 @@ Current scope and remaining work:
   clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
   scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
   with no extra heap capacity or retention. Original exact arithmetic/repair remain.
-  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
-  [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain the
-  source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
+  [Packed bicubic](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) retains
+  its source-scoped costs and remaining gaps; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
   [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
@@ -107,11 +106,21 @@ Current scope and remaining work:
   Measured direct GC 4,498,558 B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
-  [Current horizontal byte enlargement](../benchmarks/ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
-  remains a gap on the unchanged actual package: 1,682.98/zimg1,641.69 µs,
-  upper1.031,114 B/op,4KiB scratch allowance. Eight new focused rational/ownership
-  cases supplement reused qualification; no production or package change.
-  Unaccepted capacity trials and sampling attribution remain in linked history.
+  [Enlargement horizontal preparation/execution](../benchmarks/BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+  refreshes all twelve existing default/bounded byte/word full/horizontal/vertical
+  controls: **11 pass / 1 uncertain**. Exact identity-width cache decoding removes
+  redundant horizontal filtering; common/adjacent four-tap windows share input
+  preparation without changing multiply/add order. Tight vertical byte/word save
+  286.55/232.95 µs,16.42%/15.15% raw and15.98%/19.18% normalized;
+  tight full word saves78.84 µs,2.91% raw/2.97% normalized. All three confidence
+  views separate; native clocks move−.52%/+4.98%/+.063%. No uniform raw-gain claim.
+  Tight horizontal byte 1,499.15/zimg1,521.64 µs,
+  upper1.048 remains uncertain; an earlier implementation's pass is
+  not current proof. GC114–116 B/op except full word4,264,573 B/op; same4KiB
+  admission, no new owned capacity or retention. Prepared zimg graph/scratch remains
+  explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
+  [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
+  unaccepted capacity trials remain history; original exact arithmetic/repair remain.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
@@ -132,12 +141,12 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,321 full/live checks per OS**
+The current immutable build passes **6,351 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current resize qualification: 412 internal/789 public per
+Current resize qualification: 442 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -250,14 +259,14 @@ settings do not establish matched quality.
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,084.94 | 5,070.48 | 0.806 / 0.811 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
 | Bicubic resize RGBA8 † → 256×129 | 438.33 | 419.09 | 1.046 / 1.064 | 199,983 |
-| Bicubic upscale RGBA16 † → 1027×519 | 2,722.27 | 2,874.11 | 0.947 / 0.952 | 4,264,573 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 2,940.49 | 3,048.98 | 0.964 / 0.971 | 116 |
+| Bicubic upscale RGBA16 † → 1027×519 | 2,893.73 | 3,105.31 | 0.932 / 0.940 | 4,264,573 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,113.60 | 3,291.86 | 0.946 / 0.955 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 892.36 | 900.40 | 0.991 / 0.999 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 308.62 | 376.78 | 0.819 / 0.821 | 197,300 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,969.56 | 3,040.59 | 0.977 / 0.981 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,682.98 | 1,641.69 | 1.025 / 1.031 | 114 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,722.39 | 1,743.04 | 0.988 / 0.994 | 114 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,064.21 | 3,289.31 | 0.932 / 0.939 | 116 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,499.15 | 1,521.64 | 0.985 / 1.048 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,458.80 | 1,744.79 | 0.836 / 0.845 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 459.65 | 451.35 | 1.018 / 1.027 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 506.31 | 574.04 | 0.882 / 0.888 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 375.61 | 346.77 | 1.083 / 1.088 | 198,451 |

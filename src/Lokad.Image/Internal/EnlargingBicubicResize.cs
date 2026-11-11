@@ -12,6 +12,7 @@ internal static class EnlargingBicubicResize
     private const int WorkspaceBytes = 4096;
     private readonly struct ByteSamples { }
     private readonly struct WordSamples { }
+    private enum HorizontalMode { Filter, Paired, Identity }
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
@@ -71,6 +72,12 @@ internal static class EnlargingBicubicResize
         var normalizers = MemoryMarshal.Cast<byte, double>(storage.Slice(width * 224, width * 8));
         var decoded = MemoryMarshal.Cast<byte, Vector256<double>>(storage[(width * 232)..]);
         PrepareHorizontal(0, width, source.Width, width, scaleX, weights, offsets, counts, normalizers, context);
+        var mode = HorizontalMode.Filter;
+        // The guarded cardinal coordinates have weights +0,+0,1,+0,+0.
+        // Decoded unsigned premultiplied samples already have canonical +0.
+        if (source.Width == width && width <= 1 << 26) mode = HorizontalMode.Identity;
+        else if (source.Width != width
+            && BicubicMath.PrepareAdjacentFourTapPairs(offsets, counts, source.Width, context.Cancellation)) mode = HorizontalMode.Paired;
         Span<int> rowIds = stackalloc int[5]; rowIds.Fill(-1);
         Span<double> vertical = stackalloc double[5]; Span<int> rows = stackalloc int[5];
         for (var y = 0; y < prefixRows; y++)
@@ -82,8 +89,14 @@ internal static class EnlargingBicubicResize
                 var sy = rows[t]; var slot = sy % 5; rows[t] = slot * width;
                 if (rowIds[slot] == sy) continue;
                 rowIds[slot] = sy;
-                DecodeRow<TSamples>(source, sy, 0, source.Width, decoded, context);
-                FilterHorizontal(decoded, weights, offsets, counts, cache.Slice(slot * width, width), context);
+                var filtered = cache.Slice(slot * width, width);
+                if (mode == HorizontalMode.Identity) DecodeRow<TSamples>(source, sy, 0, width, filtered, context);
+                else
+                {
+                    DecodeRow<TSamples>(source, sy, 0, source.Width, decoded, context);
+                    if (mode == HorizontalMode.Paired) FilterHorizontalPairs(decoded, weights, offsets, counts, filtered, context);
+                    else FilterHorizontal(decoded, weights, offsets, counts, filtered, context);
+                }
             }
             if (!WriteRow<TSamples>(source, result, 0, y, width, cache, normalizers, weights, offsets, counts,
                 0, vertical[..count], rows, first, normalizerY, context, ref deferred)) return false;
@@ -116,6 +129,10 @@ internal static class EnlargingBicubicResize
             if (sourceCount > decoded.Length) return false;
             for (var x = 0; x < length; x++)
                 for (var t = 0; t < counts[x]; t++) offsets[x * 5 + t] -= sourceFirst;
+            var mode = HorizontalMode.Filter;
+            if (source.Width == result.Width && result.Width <= 1 << 26) mode = HorizontalMode.Identity;
+            else if (source.Width != result.Width
+                && BicubicMath.PrepareAdjacentFourTapPairs(offsets, counts[..length], sourceCount, context.Cancellation)) mode = HorizontalMode.Paired;
             rowIds.Fill(-1);
             for (var y = firstRow; y < result.Height; y++)
             {
@@ -126,8 +143,14 @@ internal static class EnlargingBicubicResize
                     var sy = rows[t]; var slot = sy % 5; rows[t] = slot * 14;
                     if (rowIds[slot] == sy) continue;
                     rowIds[slot] = sy;
-                    DecodeRow<TSamples>(source, sy, sourceFirst, sourceCount, decoded[..sourceCount], context);
-                    FilterHorizontal(decoded, weights, offsets, counts[..length], cache.Slice(slot * 14, length), context);
+                    var filtered = cache.Slice(slot * 14, length);
+                    if (mode == HorizontalMode.Identity) DecodeRow<TSamples>(source, sy, tile, length, filtered, context);
+                    else
+                    {
+                        DecodeRow<TSamples>(source, sy, sourceFirst, sourceCount, decoded[..sourceCount], context);
+                        if (mode == HorizontalMode.Paired) FilterHorizontalPairs(decoded, weights, offsets, counts[..length], filtered, context);
+                        else FilterHorizontal(decoded, weights, offsets, counts[..length], filtered, context);
+                    }
                 }
                 if (!WriteRow<TSamples>(source, result, tile, y, length, cache, normalizers, weights, offsets, counts,
                     sourceFirst, vertical[..count], rows, first, normalizerY, context, ref deferred)) return false;
@@ -192,6 +215,31 @@ internal static class EnlargingBicubicResize
         for (var x = 0; x < cache.Length; x++)
         {
             if ((x & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var tapWeights = weights.Slice(x * 5, counts[x]);
+            var tapOffsets = offsets.Slice(x * 5, counts[x]);
+            var sum = Vector256<double>.Zero;
+            for (var tx = 0; tx < tapWeights.Length; tx++)
+                sum = Avx.Add(sum, Avx.Multiply(decoded[tapOffsets[tx]], Vector256.Create(tapWeights[tx])));
+            cache[x] = sum;
+        }
+    }
+
+    private static void FilterHorizontalPairs(ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> weights,
+        ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, Span<Vector256<double>> cache, OperationContext context)
+    {
+        for (var x = 0; x < cache.Length; x++)
+        {
+            if ((x & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var marker = offsets[x * 5 + 4];
+            if (x + 1 < cache.Length && marker < 0)
+            {
+                var shifted = marker == -2;
+                var pair = BicubicMath.FilterAdjacentHorizontalPair(decoded.Slice(offsets[x * 5], shifted ? 5 : 4),
+                    weights.Slice(x * 5, 4), weights.Slice((x + 1) * 5, 4), shifted);
+                cache[x] = pair.GetLower(); cache[x + 1] = pair.GetUpper();
+                x++;
+                continue;
+            }
             var tapWeights = weights.Slice(x * 5, counts[x]);
             var tapOffsets = offsets.Slice(x * 5, counts[x]);
             var sum = Vector256<double>.Zero;

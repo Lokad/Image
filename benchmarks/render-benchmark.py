@@ -711,30 +711,47 @@ def render():
     assert quartet['statusCounts'] == {state: sum(c['status'] == state for c in quartet['cases'].values())
                                      for state in ('pass', 'gap', 'uncertain')}
     for current in quartet['cases'].values():
-        if current['caseId'] == 'TightHorizontalUp8':
-            continue  # Current immutable-package confirmation below owns this cost.
+        if current['caseId'] in {'Up8', 'TightUp8', 'HorizontalUp8', 'TightHorizontalUp8', 'VerticalUp8', 'TightVerticalUp8',
+                                  'Up16', 'TightUp16', 'HorizontalUp16', 'TightHorizontalUp16', 'VerticalUp16', 'TightVerticalUp16'}:
+            continue  # Current horizontal preparation/execution below owns these costs.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['librarySha256'] == qq['actualPackage']['librarySha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
         assert current['managedRationalReferenceExact'] or current['certifiedExactRationalAlphaHalves'] + current['certifiedExactRationalRgbHalves'] > 0
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    horizontal_confidence = json.loads((ROOT / 'benchmarks/enlargement-horizontal-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not horizontal_confidence['productionChanged'] and horizontal_confidence['currentCostBuilds'] == 0
-    assert horizontal_confidence['productionSourceRestoredExactly'] and horizontal_confidence['newPerformanceControls'] == 0
-    assert horizontal_confidence['raw']['mirrored'] and horizontal_confidence['raw']['allMembersVerified']
-    hc = horizontal_confidence['case']
-    assert hc['actualIterations'] == hc['nativeSamplesEachBracket'] == 12
-    assert hc['allOriginalGatesPassed'] and hc['quietGuardsPassed']
-    assert hc['managedExact'] and hc['managedRationalReferenceExact'] and hc['sourceUnchanged'] and hc['independentOwnedOutput']
-    assert hc['librarySha256'] == horizontal_confidence['producers']['windowsSha256']
-    assert hc['status'] == 'gap' and hc['lower'] > 1
-    assert horizontal_confidence['qualificationReuse']['prior6321FullAndSameActualPackageProofReused']
+    enlargement_modes = json.loads((ROOT / 'benchmarks/bicubic-enlargement-horizontal-modes-evidence.json').read_text(encoding='utf-8'))
+    assert enlargement_modes['productionAccepted'] and enlargement_modes['allAffectedPerformanceReconciled']
+    assert enlargement_modes['requiredMaterialPaths'] == 289 and not enlargement_modes['materialPassToGapContradictions']
+    assert enlargement_modes['raw']['mirrored'] and enlargement_modes['raw']['allMembersVerified']
+    assert len(enlargement_modes['cases']) == 12 and enlargement_modes['workflow']['newPerformanceControls'] == 0
+    assert enlargement_modes['statusCounts'] == {'pass': 11, 'gap': 0, 'uncertain': 1}
+    es = enlargement_modes['sourceProof']
+    assert es['wholeSharedMathReconstructsByRemovingOnlyNewFourTapHelpers']
+    assert es['wholeScheduleReconstructsByRemovingOnlyHorizontalModesAndNewPairedFilter']
+    assert es['originalNoPairFilterBodyAndSignatureVerbatim'] and es['preparedDeadSlotOnly'] and es['fullFiveTapLiveLastSlotPreserved']
+    assert es['identityRemovesEntireHorizontalFilterAndIntermediateCopy'] and es['identityWidthGuard'] == 2**26
+    assert es['simdExactLanes'] == 2048 and es['additionalIdentityRationalFrames'] == 4
+    assert enlargement_modes['storage']['newOwnedCapacityBytes'] == enlargement_modes['storage']['newRetainedStateBytes'] == 0
+    assert enlargement_modes['storage']['admittedScratchBytes'] == 4096
+    for current in enlargement_modes['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['managedExact'] and current['managedRationalReferenceExact']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['librarySha256'] == enlargement_modes['producers']['windowsSha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    for case in ('TightVerticalUp8', 'TightVerticalUp16', 'TightUp16'):
+        effect = enlargement_modes['comparison'][case]
+        assert effect['normalizedGainSeparated'] and not effect['normalizedAdverseSeparated']
+        assert all(v['rawGainSeparated'] for v in effect['views'].values())
+    he = enlargement_modes['cases']['TightHorizontalUp8']
+    assert he['status'] == 'uncertain'
     labels = {'TightUp8': 'Bicubic RGBA8 enlargement,',
               'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
               'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
     for case, label in labels.items():
-        current = hc if case == 'TightHorizontalUp8' else quartet['cases'][case]
+        current = enlargement_modes['cases'][case]
         rows.append(('editing', f'| {label} input+output+4 KiB † → {current["outputWidth"]}×{current["outputHeight"]} | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} |'))
@@ -1320,7 +1337,7 @@ def render():
         if case == 'Down32x16_8':
             continue  # The current reduction owner below supplies this row.
         if case in {'Up8', 'Up16'}:
-            current = quartet['cases'][case]
+            current = enlargement_modes['cases'][case]
             row = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
                    f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                    f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
@@ -2010,12 +2027,13 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = bicubic_windows['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6321
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == bicubic_windows['producers']['windowsSha256']
-    assert horizontal_confidence['producers']['actualPackageSha256'] == current_build_qualification['actualPackage']['sha256']
-    assert horizontal_confidence['producers']['windowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
+    current_build_qualification = enlargement_modes['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6351
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == enlargement_modes['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == enlargement_modes['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['actualPackageFourFrozenEnlargementFramesPassedBothOs']
+    assert current_build_qualification['threeNamedStorageSuitesIncluded']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2099,9 +2117,8 @@ Current scope and remaining work:
   clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
   scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
   with no extra heap capacity or retention. Original exact arithmetic/repair remain.
-  [Packed](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) and
-  [enlargement](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) retain the
-  source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
+  [Packed bicubic](../benchmarks/PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md) retains
+  its source-scoped costs and remaining gaps; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
   [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
@@ -2127,11 +2144,21 @@ Current scope and remaining work:
   Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
-  [Current horizontal byte enlargement](../benchmarks/ENLARGEMENT-HORIZONTAL-CURRENT-CONFIDENCE.md)
-  remains a gap on the unchanged actual package: {hc['managedUs']:,.2f}/zimg{hc['nativeUs']:,.2f} µs,
-  upper{hc['upper']:.3f},114 B/op,4KiB scratch allowance. Eight new focused rational/ownership
-  cases supplement reused qualification; no production or package change.
-  Unaccepted capacity trials and sampling attribution remain in linked history.
+  [Enlargement horizontal preparation/execution](../benchmarks/BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+  refreshes all twelve existing default/bounded byte/word full/horizontal/vertical
+  controls: **11 pass / 1 uncertain**. Exact identity-width cache decoding removes
+  redundant horizontal filtering; common/adjacent four-tap windows share input
+  preparation without changing multiply/add order. Tight vertical byte/word save
+  286.55/232.95 µs,16.42%/15.15% raw and15.98%/19.18% normalized;
+  tight full word saves78.84 µs,2.91% raw/2.97% normalized. All three confidence
+  views separate; native clocks move−.52%/+4.98%/+.063%. No uniform raw-gain claim.
+  Tight horizontal byte {he['managedUs']:,.2f}/zimg{he['nativeUs']:,.2f} µs,
+  upper{he['upper']:.3f} remains uncertain; an earlier implementation's pass is
+  not current proof. GC114–116 B/op except full word4,264,573 B/op; same4KiB
+  admission, no new owned capacity or retention. Prepared zimg graph/scratch remains
+  explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
+  [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
+  unaccepted capacity trials remain history; original exact arithmetic/repair remain.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
