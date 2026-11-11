@@ -1,5 +1,8 @@
 # Canvas ownership and prepared text attribution
 
+Predecessor diagnostic. The resulting [cleared canvas stage](CLEARED-CANVAS-STORAGE.md)
+records current affected costs, retention and qualification; original evidence follows.
+
 TCA811 follows the [complete public pipeline comparison](TEXT-COMPLETE-PUBLIC-PIPELINES.md)
 on the same actual package, font, text,384×160RGBA16 canvas and exact full-word
 frames. It changes no production code or library numerical policy.

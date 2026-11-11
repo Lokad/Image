@@ -73,10 +73,11 @@ placements/outlines and rendering edges/rows. Memory admission is coarse logical
 capacity rather than measured GC allocation or process RSS. Minor objects/runtime
 storage are approximate; allow runtime/collection headroom. Calls with a shared
 root bypass uncharged global pixel/coefficient/input/output pools, including font
-copies. Caller-root storage never enters those caches. Default font copies share
-the existing two-array, 4 MiB pixel-storage ceiling; only disposed owners return
-storage, and every font byte is overwritten before parsing. Other default caches
-remain bounded independently.
+copies. Caller-root storage never enters those caches. Default font copies and
+zeroed public canvases share the existing two-array, 4 MiB pixel-storage ceiling.
+Only disposed owners return storage; canvas rentals are cleared before publication
+and every font byte is overwritten before parsing. Idle capacity is separate from
+live result ownership. Other default caches remain bounded independently.
 
 Dimension-only probes admit512 bytes; other probing and complete header inspection
 use8448-byte workspace without a raster. Identify/Decode stream

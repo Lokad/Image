@@ -2,6 +2,40 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyClearedCanvases()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            using var first = ImageBuffer.Create(23, 11, depth);
+            using var survivor = ImageBuffer.Create(23, 11, depth);
+            for (var y = 0; y < first.Height; y++)
+            {
+                if (depth == 8) { first.GetRow8(y).Fill(0xa5); survivor.GetRow8(y).Fill(0x36); }
+                else { first.GetRow16(y).Fill(0xa5a5); survivor.GetRow16(y).Fill(0x3636); }
+            }
+            first.Dispose();
+            using var next = ImageBuffer.Create(23, 11, depth);
+            for (var y = 0; y < next.Height; y++)
+            {
+                if (depth == 8)
+                {
+                    foreach (var sample in next.GetRow8(y))
+                        if (sample != 0) throw new Exception("Packaged canvas exposed previous storage.");
+                    foreach (var sample in survivor.GetRow8(y))
+                        if (sample != 0x36) throw new Exception("Packaged canvas aliased a live sibling.");
+                }
+                else
+                {
+                    foreach (var sample in next.GetRow16(y))
+                        if (sample != 0) throw new Exception("Packaged word canvas exposed previous storage.");
+                    foreach (var sample in survivor.GetRow16(y))
+                        if (sample != 0x3636) throw new Exception("Packaged word canvas aliased a live sibling.");
+                }
+            }
+        }
+        Console.WriteLine("Packaged cleared canvases preserve byte/word zeroes and independent surviving owners.");
+    }
+
     private static void VerifyBicubicPlans()
     {
         foreach (var depth in new[] { 8, 16 })
@@ -1111,6 +1145,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        VerifyClearedCanvases();
         VerifyBicubicPlans();
         VerifyBicubicSchedule(4096);
         VerifyBicubicSchedule(8192);

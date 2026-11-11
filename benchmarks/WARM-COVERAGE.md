@@ -7,10 +7,14 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md)
-passes 6,264 full/live checks per OS, 366 internal/789 public resize checks in
-normal/scalar/disabled-AVX2/AVX512 modes and the SAME actual Release-package
-consumer/all three examples. Wide8 saves52.83µs/12.33% raw/4.68% normalized with
+The latest accepted [cleared canvas storage](CLEARED-CANVAS-STORAGE.md) passes
+6,275 full/live checks and183internal/162public focused normal/scalar checks per OS,
+then the SAME actual Release-package consumer/all three examples on Windows/Linux.
+The complete eight-draw text pipeline saves665.54µs/24.46%raw/29.86%normalized,
+with allocations4,217,697→284,623B and separately disclosed idle retention.
+Unchanged [cached-wide vertical quartets](CACHED-WIDE-SHARED-QUARTETS.md) retain
+366internal/789public resize checks in normal/scalar/disabled-AVX2/AVX512 modes.
+Wide8 saves52.83µs/12.33% raw/4.68% normalized with
 separated confidence views; its fresh-managed/prepared-zimg upper1.088 remains
 a gap. All4 equivalent wide one-shot/prepared boundaries and all6 deeper reductions
 pass. No new owned capacity or retention. Unchanged
@@ -46,18 +50,18 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | Prepared narrow bicubic | [Shared certified publication](CACHED-NARROW-SHARED-PUBLICATION.md): prepared/one-shot byte saves 24.97/23.62 µs, with separated raw/all-actual/normalized intervals. Prepared byte 413.36/zimg418.98 µs, upper1.011 is uncertain; one-shot byte and unchanged word boundaries pass. Narrow plans retain199840 B; controlled byte peak331936 B excludes borrowed input. Aggregate totals137–138 B/op prepared, with no added owned capacity or allocation-saving claim. Four equivalent boundaries now3 pass/1 uncertain. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
 | Bilinear resizing | [Shared reduction preparation](BILINEAR-SHARED-PREPARATION.md) retains Down8 420.16/385.48 µs upper1.101 and Down16 465.51/449.98 µs upper1.051 gaps, 8,473 B/op each; Up8 upper.916 passes/stops. [Vector normalization/classification](BILINEAR-VECTOR-CERTIFICATION.md) independently saves 769.82 µs/27.67% raw/18.12% normalized on Up16. [Current adjacent view](WARM-ADJACENT-CONFIDENCE.md) 1830.73/1884.92 µs, range .884–1.013 remains uncertain,4,498,558 B/op with unchanged capacity/retention. Combined four cases: 1 pass / 2 gaps / 1 uncertain. No tuning of a presumed Up16 gap; resolve consequential uncertainty through a justified changed design. |
-| Text, drawing and composition | [Complete public pipelines](TEXT-COMPLETE-PUBLIC-PIPELINES.md) pass on the existing ConstrainedFit RGBA16 control: one-shot1470.18/ImageSharp6791.52µs upper.261; preparation+8fresh-canvas draws2720.53/7089.27µs upper.452, measured amortization340.07/886.16µs/draw. This is complete public integration, not FFmpeg or bare shaping; includes all fitting/layout calls, output clearing/ownership/disposal. GC774915/9256953B one-shot and4217697/9494633B per batch; active managed preparation39904B, approximate live heap33920/22504B separate. Steady fresh-canvas draw209.76/79.97µs upper3.122 remains a scoped gap; no arbitrary-repeat-count or broad-font claim. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain their labeled validation/preparation differences and do not establish overall slowdown. Separate integration/composition controls pass. Exact full-word frames, layout/fitting/visual/owner gates and unchanged package qualification are reused; no broad repeat. Independent codec/resizing work continues. |
+| Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
 
 [Scoped cached-wide attribution](CACHED-WIDE-CURRENT-ATTRIBUTION.md) motivates the
 accepted quartet stage above. Horizontal staging remains a lead without a timing
 claim; the diagnostic is not a renderer dependency. Geometry preparation is already linear.
 
-[Canvas/text attribution](TEXT-CANVAS-ATTRIBUTION.md) separates fresh ownership/
-clear/disposal (80.66/ImageSharp5.66µs,491657/1049B) from existing-canvas clear/draw
-(95.42/72.27µs,57/32433B) on the same frozen control. These are not additive phase
-costs or a gain forecast. Cleared-storage ownership is the next material text-path
-lead before kernel tuning; no production change or new renderer dependency.
+[Canvas/text attribution](TEXT-CANVAS-ATTRIBUTION.md) retains the original lead.
+Its accepted [cleared-rental stage](CLEARED-CANVAS-STORAGE.md) reduces fresh canvas
+ownership/clear/disposal80.66→7.18µs,491657→113B, with separate live/idle ownership.
+The two complete public comparisons precede further text tuning and pass/stop;
+diagnostics remain scoped, never additive phases or an overall slowdown claim.
 
 [Preparation/storage attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md) explains
 complete one-shot versus retained native state. Current owners link their earlier

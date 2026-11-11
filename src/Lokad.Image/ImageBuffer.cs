@@ -35,7 +35,20 @@ public sealed class ImageBuffer : IDisposable
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        return Allocate(width, height, bitDepth, context);
+        if (context.HasMemoryBudget) return Allocate(width, height, bitDepth, context);
+        var length = context.PixelBytes(width, height, bitDepth);
+        context.ReserveBorrowed(length);
+        byte[]? data = null;
+        try
+        {
+            data = PixelStoragePool.Shared.RentCleared(length, context.Cancellation);
+            return new ImageBuffer(width, height, bitDepth, data, reusableStorage: true);
+        }
+        catch
+        {
+            if (data is not null) PixelStoragePool.Shared.Return(data);
+            throw;
+        }
     }
 
     internal static ImageBuffer Allocate(int width, int height, int bitDepth, OperationContext context)

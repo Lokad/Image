@@ -89,16 +89,19 @@ Current scope and remaining work:
   Measured direct GC 4,498,558 B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
-- **Text/drawing:** [Complete public pipelines](../benchmarks/TEXT-COMPLETE-PUBLIC-PIPELINES.md)
+- **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
-  1,470.18/ImageSharp 6,791.52 µs, upper 0.261;
-  preparation plus eight fresh-canvas draws/disposal 2,720.53/7,089.27 µs,
-  upper 0.452, measured amortization 340.07/886.16 µs/draw.
-  GC totals are 774,915/9,256,953 B one-shot and
-  4,217,697/9,494,633 B per eight-draw batch.
-  Managed active preparation owns39,904 B; approximate live-heap deltas33,920/22,504 B
-  are separate from allocations and unchanged pools. Steady fresh-canvas drawing remains
-  a scoped gap (209.76/79.97 µs, upper 3.122);
+  1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
+  preparation plus eight fresh-canvas draws/disposal 2,055.00/7,634.49 µs,
+  upper 0.302, measured amortization 256.87/954.31 µs/draw.
+  GC totals are 283,275/9,256,953 B one-shot and
+  284,623/9,494,633 B per eight-draw batch.
+  The eight-draw batch saves665.54 µs/24.46% raw/29.86% normalized with separated
+  confidence; reference time moves+7.69%. Managed active preparation owns39,904 B;
+  approximate live-heap deltas34,256/22,504 B are separate from allocations.
+  Default disposed font/canvas storage may retain1,248,596 B in this sequence,
+  within the existing two-array/4MiB ceiling; governed calls still bypass it.
+  Steady fresh-canvas drawing is uncertain (105.65/81.93 µs, upper 2.006);
   no general-font or arbitrary-repeat-count claim. Parser validation, retained paths/workspace,
   all fitting/layout calls and full16-bit visual gates remain explicit. Earlier
   [font-load](../benchmarks/FONT-OWNED-STORAGE.md) and [drawing](../benchmarks/TEXT-RENDER-PREPARATION.md)
@@ -106,10 +109,11 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,264 full/live checks per OS**
+The current immutable build passes **6,275 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
-normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
+normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
+checks pass183internal/162public per normal/scalar mode on each OS.
 Current resize qualification: 366 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables

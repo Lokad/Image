@@ -1,0 +1,623 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CCR812B",
+  "date": "2026-11-11",
+  "productionChanged": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 289,
+  "scope": "Two complete public-API comparisons using the existing frozen ConstrainedFit control only: supplied DejaVuSans Regular2.37,384x160RGBA16, AV To AV To, OpenType/kerning/wrap96,height30,max24/min8/step.25,selected16.75 after30trials,origin8/8,RGB20/40/60. These results do not establish broader font/script/parser equivalence or arbitrary draw-count parity.",
+  "references": {
+    "name": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 complete public integration",
+    "notFFmpeg": true,
+    "libraries": {
+      "SixLabors.Fonts.dll": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+      "SixLabors.ImageSharp.dll": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+      "SixLabors.ImageSharp.Drawing.dll": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308"
+    },
+    "winningLayoutPublicCalls": [
+      "TextRenderer.RenderText",
+      "TextMeasurer.TryMeasureCharacterAdvances",
+      "TextMeasurer.CountLines",
+      "TextMeasurer.MeasureAdvance"
+    ],
+    "fittingPublicCallsPerTrial": 3,
+    "fittingTrials": 30,
+    "referenceMetricsFromItsOwnPublicFontApi": true,
+    "managedFontNotLoadedInReferenceTimer": true
+  },
+  "producers": {
+    "actualPackageSha256": "aabb3a2b416b39694b79c20f064b2f77687b4a47be7eca8af94d0dd6dd482c45",
+    "librarySha256": "8e01913c3a55e91a897a0b70ac029cfb07702c869401535131255adc537a287c",
+    "linuxLibrarySha256": "96929df5986882e34d30866f2cb78ac44f3163ded6a4a61e92bc152bf5ca50cc",
+    "harnessSha256": "ac294992b5f63d127052f41624b8581c8ebb1b9f5afa29ba7e4451e3b5e1a6f9"
+  },
+  "cases": {
+    "OneShot": {
+      "managedUs": 1313.8820364583332,
+      "referenceUs": 6739.694455729167,
+      "ratio": 0.19494682512520287,
+      "lower": 0.16743134847675217,
+      "upper": 0.21780553440505007,
+      "status": "pass",
+      "managedAllocatedBytes": 283274.25,
+      "referenceAllocatedBytes": 9256953,
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null,
+      "operationsPerSample": 32,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": true
+    },
+    "Preparation": {
+      "managedUs": 1167.3616510416668,
+      "referenceUs": 6679.2347890625,
+      "ratio": 0.1747747590716927,
+      "lower": 0.14711048817680974,
+      "upper": 0.19743001066542154,
+      "status": "pass",
+      "managedAllocatedBytes": 283281.25,
+      "referenceAllocatedBytes": 9227176,
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null,
+      "operationsPerSample": 32,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": false
+    },
+    "PreparedDraw": {
+      "managedUs": 105.653984375,
+      "referenceUs": 81.92550520833333,
+      "ratio": 1.2896348225906704,
+      "lower": 0.8500697293540462,
+      "upper": 2.0060971341299796,
+      "status": "uncertain",
+      "managedAllocatedBytes": 169,
+      "referenceAllocatedBytes": 33433,
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null,
+      "operationsPerSample": 32,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": false
+    },
+    "PrepareDraw8": {
+      "managedUs": 2054.9958671875,
+      "referenceUs": 7634.488591145833,
+      "ratio": 0.26917269475925343,
+      "lower": 0.24160112952411245,
+      "upper": 0.30167006157558846,
+      "status": "pass",
+      "managedAllocatedBytes": 284622.4166666667,
+      "referenceAllocatedBytes": 9494633,
+      "amortizedManagedUs": 256.8744833984375,
+      "amortizedReferenceUs": 954.3110738932291,
+      "operationsPerSample": 32,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": true
+    }
+  },
+  "canvasDiagnostics": {
+    "CanvasOnly": {
+      "managedUs": 7.183193359375,
+      "referenceUs": 6.105925130208333,
+      "ratio": 1.1764299768166189,
+      "lower": 1.1504227231568205,
+      "upper": 1.1975825295190647,
+      "status": "gap",
+      "managedAllocatedBytes": 112.25,
+      "referenceAllocatedBytes": 1048.25,
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null,
+      "operationsPerSample": 128,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": false
+    },
+    "ExistingCanvasDraw": {
+      "managedUs": 103.39259635416667,
+      "referenceUs": 78.812197265625,
+      "ratio": 1.3118857225322247,
+      "lower": 1.0458547364593647,
+      "upper": 1.6093160192673581,
+      "status": "gap",
+      "managedAllocatedBytes": 56.25,
+      "referenceAllocatedBytes": 32432.25,
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null,
+      "operationsPerSample": 128,
+      "pairs": 12,
+      "referenceBracketSamples": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "allFrozenChecksPassed": true,
+      "completeWorkload": false
+    }
+  },
+  "effects": {
+    "OneShot": {
+      "baselineManagedUs": 1470.1750911458332,
+      "candidateManagedUs": 1313.8820364583332,
+      "savedUs": 156.2930546875,
+      "rawSavedFraction": 0.10630914346786235,
+      "normalizedSavedFraction": 0.09943720331988326,
+      "referenceClockChange": -0.007630717339548232,
+      "baselineRatioBounds": [
+        0.1750223326034624,
+        0.260525727065105
+      ],
+      "candidateRatioBounds": [
+        0.16743134847675217,
+        0.21780553440505007
+      ],
+      "normalizedGainSeparated": false,
+      "rawGainSeparated": false,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 1470175.0911458333,
+        "StandardError": 37672.460511258985,
+        "Level": 12,
+        "Margin": 167151.92886793625,
+        "Lower": 1303023.162277897,
+        "Upper": 1637327.0200137696
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 1313882.0364583333,
+        "StandardError": 14466.215638032309,
+        "Level": 12,
+        "Margin": 64186.29987265978,
+        "Lower": 1249695.7365856734,
+        "Upper": 1378068.336330993
+      },
+      "baselineGcBytes": 774914.0833333334,
+      "candidateGcBytes": 283274.25
+    },
+    "Preparation": {
+      "baselineManagedUs": 1174.2867630208332,
+      "candidateManagedUs": 1167.3616510416668,
+      "savedUs": 6.925111979166331,
+      "rawSavedFraction": 0.005897292039085622,
+      "normalizedSavedFraction": 0.0004747810245706585,
+      "referenceClockChange": -0.0054250867427572125,
+      "baselineRatioBounds": [
+        0.15494579205799752,
+        0.19214254473026504
+      ],
+      "candidateRatioBounds": [
+        0.14711048817680974,
+        0.19743001066542154
+      ],
+      "normalizedGainSeparated": false,
+      "rawGainSeparated": false,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 1174286.7630208333,
+        "StandardError": 9433.101636512845,
+        "Level": 12,
+        "Margin": 41854.47704641349,
+        "Lower": 1132432.2859744197,
+        "Upper": 1216141.2400672468
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 1167361.6510416667,
+        "StandardError": 9639.920256500889,
+        "Level": 12,
+        "Margin": 42772.12698983767,
+        "Lower": 1124589.524051829,
+        "Upper": 1210133.7780315045
+      },
+      "baselineGcBytes": 283281.25,
+      "candidateGcBytes": 283281.25
+    },
+    "PreparedDraw": {
+      "baselineManagedUs": 209.7593671875,
+      "candidateManagedUs": 105.653984375,
+      "savedUs": 104.10538281250001,
+      "rawSavedFraction": 0.49630862358314676,
+      "normalizedSavedFraction": 0.5083296595751952,
+      "referenceClockChange": 0.024449382042573964,
+      "baselineRatioBounds": [
+        1.7604644782266212,
+        3.122045232685433
+      ],
+      "candidateRatioBounds": [
+        0.8500697293540462,
+        2.0060971341299796
+      ],
+      "normalizedGainSeparated": false,
+      "rawGainSeparated": true,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 209759.3671875,
+        "StandardError": 8537.72611739878,
+        "Level": 12,
+        "Margin": 37881.71436911727,
+        "Lower": 171877.65281838272,
+        "Upper": 247641.08155661728
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 105653.984375,
+        "StandardError": 115.00044102841775,
+        "Level": 12,
+        "Margin": 510.25458060586277,
+        "Lower": 105143.72979439414,
+        "Upper": 106164.23895560586
+      },
+      "baselineGcBytes": 491713,
+      "candidateGcBytes": 169
+    },
+    "PrepareDraw8": {
+      "baselineManagedUs": 2720.5311171875,
+      "candidateManagedUs": 2054.9958671875,
+      "savedUs": 665.5352499999999,
+      "rawSavedFraction": 0.244634309012438,
+      "normalizedSavedFraction": 0.2985787959422458,
+      "referenceClockChange": 0.0769074082986605,
+      "baselineRatioBounds": [
+        0.3123615709712184,
+        0.45152588030706253
+      ],
+      "candidateRatioBounds": [
+        0.24160112952411245,
+        0.30167006157558846
+      ],
+      "normalizedGainSeparated": true,
+      "rawGainSeparated": true,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 2720531.1171875,
+        "StandardError": 42415.10609055704,
+        "Level": 12,
+        "Margin": 188194.9493066925,
+        "Lower": 2532336.1678808075,
+        "Upper": 2908726.0664941925
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 2054995.8671875,
+        "StandardError": 13351.681016219189,
+        "Level": 12,
+        "Margin": 59241.13278514021,
+        "Lower": 1995754.7344023597,
+        "Upper": 2114236.99997264
+      },
+      "baselineGcBytes": 4217697,
+      "candidateGcBytes": 284622.4166666667
+    },
+    "CanvasOnly": {
+      "baselineManagedUs": 80.66165494791667,
+      "candidateManagedUs": 7.183193359375,
+      "savedUs": 73.47846158854168,
+      "rawSavedFraction": 0.9109466156625078,
+      "normalizedSavedFraction": 0.9174352431757613,
+      "referenceClockChange": 0.0785883440202737,
+      "baselineRatioBounds": [
+        12.71699664553784,
+        14.757392990367283
+      ],
+      "candidateRatioBounds": [
+        1.1504227231568205,
+        1.1975825295190647
+      ],
+      "normalizedGainSeparated": true,
+      "rawGainSeparated": true,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 80661.65494791667,
+        "StandardError": 288.83453019927464,
+        "Level": 12,
+        "Margin": 1281.5528423486953,
+        "Lower": 79380.10210556797,
+        "Upper": 81943.20779026537
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 7183.193359375,
+        "StandardError": 15.607336284868728,
+        "Level": 12,
+        "Margin": 69.2494286038646,
+        "Lower": 7113.9439307711355,
+        "Upper": 7252.4427879788645
+      },
+      "baselineGcBytes": 491656.25,
+      "candidateGcBytes": 112.25
+    },
+    "ExistingCanvasDraw": {
+      "baselineManagedUs": 95.41611263020833,
+      "candidateManagedUs": 103.39259635416667,
+      "savedUs": -7.976483723958339,
+      "rawSavedFraction": -0.08359682137619395,
+      "normalizedSavedFraction": 0.006366899954566851,
+      "referenceClockChange": 0.09054018160893351,
+      "baselineRatioBounds": [
+        1.0392743100771533,
+        1.5461601076831053
+      ],
+      "candidateRatioBounds": [
+        1.0458547364593647,
+        1.6093160192673581
+      ],
+      "normalizedGainSeparated": false,
+      "rawGainSeparated": false,
+      "baselineManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 95416.11263020833,
+        "StandardError": 81.71035400252786,
+        "Level": 12,
+        "Margin": 362.54715234016936,
+        "Lower": 95053.56547786816,
+        "Upper": 95778.6597825485
+      },
+      "candidateManagedConfidenceNs": {
+        "N": 12,
+        "Mean": 103392.59635416667,
+        "StandardError": 169.1376881172975,
+        "Level": 12,
+        "Margin": 750.4604273092349,
+        "Lower": 102642.13592685743,
+        "Upper": 104143.05678147591
+      },
+      "baselineGcBytes": 56.25,
+      "candidateGcBytes": 56.25
+    }
+  },
+  "checks": {
+    "project": "Lokad.Image",
+    "caseId": "ConstrainedFit16",
+    "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "selectedSize": 16.75,
+    "fittingTrials": 30,
+    "fullWordSamplesPreserved": true,
+    "managedSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+    "historicalDirectDrawTextSha256": "9cf3afc8852807237c02b8b319899f480877c6ff143e302527631f1bd925707f",
+    "referenceOneShotLayoutFillSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "referencePreparedSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "managedExactGlyphsClustersLinesPositionsBoundsAndFit": true,
+    "referenceFrozenGlyphsClustersLinesAndFit": true,
+    "referencePositionBoundsTolerance": 0.0001,
+    "managedOwnedPreparedBytes": 39904,
+    "managedGovernedPeakBytes": 807708,
+    "borrowedRootAndInputPreserved": true,
+    "independentSurvivingOwners": true,
+    "oneShotVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "preparedVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "newFontsImagesOrSettings": 0,
+    "timingClaim": false
+  },
+  "footprint": {
+    "managedOwnedPreparedCapacityBytes": 39904,
+    "ownedFontAndLayoutRetainedAfterPreparation": 0,
+    "managedHeapBefore": 5040304,
+    "managedHeapRetained": 5074560,
+    "managedHeapAfterDispose": 5040304,
+    "referenceHeapBefore": 5040304,
+    "referenceHeapRetained": 5062808,
+    "referenceHeapAfterRelease": 5040304,
+    "managedApproximateLiveHeapDelta": 34256,
+    "referenceApproximateLiveHeapDelta": 22504,
+    "method": "Untimed warmed-process full-GC heap observations around one live prepared owner. Raw signed values retained; includes approximate managed backing graphs, excludes unchanged idle pools in baseline. No object census or allocation-to-retention equivalence. Production's explicit admitted capacity and governed peak are separate; no reference admission model. Physical/native/JIT stack peaks unmeasured."
+  },
+  "retention": {
+    "defaultPoolArrayCap": 2,
+    "defaultPoolByteCap": 4194304,
+    "caseCanvasPayloadBytes": 491520,
+    "caseFontBytes": 757076,
+    "caseIdleCombinedCapacityBytes": 1248596,
+    "caseIdleCapacityMethod": "Source-derived successful repeated font/canvas disposal occupancy, supported by zero pixel/font array allocations in warmed samples. Not a physical heap census.",
+    "managedPreparedOwnedCapacityBytes": 39904,
+    "governedOwnedPeakBytes": 807708,
+    "governedPoolBypassUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CCR812B",
+    "entireOriginalImageBufferRestoredByRevertingOnlyPublicCreate": true,
+    "originalFieldsConstructorDisposeInternalAllocateOverwriteCloneRowsSamplesVerbatim": true,
+    "oldPoolRentReturnFontPreservationAndLatestReturnVerbatim": true,
+    "governedCreateUsesOriginalAllocateBeforePoolAccess": true,
+    "onlyPoolAddition": "RentCleared clears a private exact-size hit, cold miss uses CLR-zero array. On retained-size miss it leaves one bounded slot for ordinary Return and keeps the recent other size only when combined bytes fit. Cancellation/failure returns private leases via old Return.",
+    "globalRetainedArrayCap": 2,
+    "globalRetainedByteCap": 4194304,
+    "noNewOwnerFieldsOrDisposalBranch": true,
+    "noPixelArithmeticOrCodecChange": true,
+    "sources": {
+      "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+      "tests/Lokad.Image.Tests/ClearedStoragePoolTests.cs": "f9b27c68aebbd2b78c3710610d44bbdd4111c358dc2bf930d98923273787f4d5",
+      "tests/Lokad.Image.PublicApi.Tests/ClearedImageBufferTests.cs": "03351f91875cca6b4ae5551da325263e4fe1ac5e119a80bb538e4a09861e0431"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+      "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0"
+    }
+  },
+  "invalidation": "Only public Create and new cleared-rental helper change. All original ImageBuffer fields/ctor/dispose/internal Allocate/overwrite/Clone/rows/samples and pool Rent/Return/font methods reconstruct the accepted source verbatim. Complete text OneShot/PrepareDraw8 plus fresh/borrowed canvas diagnostics refreshed on this immutable core. Public Create calls in existing codec/resize benchmark code prepare fixtures outside clocks; actual codecs and resize allocation remain unchanged. Reuse their costs/ISA/correctness evidence. Mixed font+image reuse is measured in complete pipelines. Canvas-only deliberately includes a retained sibling, exercising independent ownership.",
+  "preparationDifferences": {
+    "managed": "Font load validates ranges/mapping/glyph headers but not every outline/checksum. TextRenderPlan owns admitted copied geometry/raster workspace; font/layout disposed before prepared drawing. Allocation/release are prompt via managed owners.",
+    "reference": "Different/eager parser validation. FontCollection/FontFamily have no IDisposable; release owning references and rely on GC. Prepared owner retains positioned/flattened paths; raster working storage is still per-draw. Every required public layout/fitting call is included.",
+    "canvas": "Every draw creates, explicitly clears and disposes its own full-word canvas on both sides. Configuration/options are supplied reusable inputs. Neither side excludes required canvas/output work."
+  },
+  "measurement": {
+    "method": "Twelve alternating adjacent pairs,32complete operations/sample,12reference brackets before/after. Worse paired-log/all-actual/upper-outlier diagnostic confidence vs fastest reference bracket; no favorable repeat. Same immutable actual-package core, fixed original fixtures/reference DLLs, CPU0/tieringoff/nonconcurrentGC, idle-v2 before/after.",
+    "completeBatchDraws": 8,
+    "amortization": "Measured complete8draw batch divided by8; no historical stage addition.",
+    "screenPairs": 3,
+    "confirmationPairs": 12,
+    "canvasPairs": 12,
+    "canvasOperationsPerSample": 128,
+    "allValidActualsPreserved": true,
+    "quietGuardsPassed": true,
+    "oneImmutableFinalBuildReusedThroughout": true,
+    "noHistoricalStageAddition": true,
+    "receipts": [
+      "ccr812b-pipeline-candidate-screen-receipt.json",
+      "ccr812b-pipeline-candidate-confirm-receipt.json",
+      "ccr812b-canvas-candidate-screen-receipt.json",
+      "ccr812b-canvas-candidate-confirm-receipt.json"
+    ]
+  },
+  "workflow": {
+    "A": "Independent canvas and complete-pipeline confirmations showed useful gain. Preserve all results/modules; A added an unnecessary per-image latest-return flag to common ctor/disposal.",
+    "B": "Use a bounded slot on cleared size misses and original Return. Original fields/constructor/disposal and every old pool method remain verbatim. Narrow change scope without a CPU-gain prediction over A. Focused183/162 normal/scalar each OS; no public/harness/native rebuild for B.",
+    "qualification": "Reconcile affected complete costs first; then one full/live6275 per OS, SAME actual Release-package/all3examples once. Reuse valid unchanged codec/resize numerical/ISA evidence.",
+    "newFontsImagesSettings": 0,
+    "rawToolMetadata": "The unmodified measurement-only harness still emits productionChanged=false and attribution boundary text mentioning predecessor cdd. The pinned rebind receipts and this owner identify the current production DLL; no reference/input/method/timing code changed."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6275,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "8e01913c3a55e91a897a0b70ac029cfb07702c869401535131255adc537a287c",
+      "full": [
+        2948,
+        2379,
+        948
+      ],
+      "total": 6275,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 183,
+        "public-normal": 162,
+        "internal-scalar": 183,
+        "public-scalar": 162
+      },
+      "filter": "FullyQualifiedName~ClearedStoragePoolTests|FullyQualifiedName~ClearedImageBufferTests|FullyQualifiedName~PixelStoragePoolTests|FullyQualifiedName~FontStorageTests|FullyQualifiedName~CooperativeMemoryTests|FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~AllocationCounterTests",
+      "sources": {
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+        "tests/Lokad.Image.Tests/ClearedStoragePoolTests.cs": "f9b27c68aebbd2b78c3710610d44bbdd4111c358dc2bf930d98923273787f4d5",
+        "tests/Lokad.Image.PublicApi.Tests/ClearedImageBufferTests.cs": "03351f91875cca6b4ae5551da325263e4fe1ac5e119a80bb538e4a09861e0431"
+      },
+      "numericalIsaQualificationReused": true,
+      "resizeAndCodecBodiesUnchanged": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "96929df5986882e34d30866f2cb78ac44f3163ded6a4a61e92bc152bf5ca50cc",
+      "full": [
+        2948,
+        2379,
+        948
+      ],
+      "total": 6275,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 183,
+        "public-normal": 162,
+        "internal-scalar": 183,
+        "public-scalar": 162
+      },
+      "filter": "FullyQualifiedName~ClearedStoragePoolTests|FullyQualifiedName~ClearedImageBufferTests|FullyQualifiedName~PixelStoragePoolTests|FullyQualifiedName~FontStorageTests|FullyQualifiedName~CooperativeMemoryTests|FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~AllocationCounterTests",
+      "sources": {
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+        "tests/Lokad.Image.Tests/ClearedStoragePoolTests.cs": "f9b27c68aebbd2b78c3710610d44bbdd4111c358dc2bf930d98923273787f4d5",
+        "tests/Lokad.Image.PublicApi.Tests/ClearedImageBufferTests.cs": "03351f91875cca6b4ae5551da325263e4fe1ac5e119a80bb538e4a09861e0431"
+      },
+      "numericalIsaQualificationReused": true,
+      "resizeAndCodecBodiesUnchanged": true,
+      "additionalBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "aabb3a2b416b39694b79c20f064b2f77687b4a47be7eca8af94d0dd6dd482c45",
+      "symbolsSha256": "bab848987c3ae5418eaca683296d355fc669c2424791cacbcee3ed927009c758",
+      "bytes": 449154,
+      "librarySha256": "8e01913c3a55e91a897a0b70ac029cfb07702c869401535131255adc537a287c",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "aabb3a2b416b39694b79c20f064b2f77687b4a47be7eca8af94d0dd6dd482c45",
+      "librarySha256": "8e01913c3a55e91a897a0b70ac029cfb07702c869401535131255adc537a287c",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "allThreeExamplesBothOS": true,
+    "resizeInternalEachModeEachOs": 366,
+    "resizePublicEachModeEachOs": 789,
+    "threeNamedStorageSuitesIncluded": true,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "unchangedCodecAndTextIsaReused": true,
+    "unchangedCodecAndResizeIsaReused": true,
+    "currentTextInternalEachModeEachOs": 183,
+    "currentTextPublicEachModeEachOs": 162,
+    "additionalProductionOrEmbeddedBuildsAfterFocused": 0
+  },
+  "raw": {
+    "file": "cleared-canvas-storage.tar.xz",
+    "sha256": "2fd988788447e31dafed4345889e4da114339bf53c394b7ee13caace8d992bf7",
+    "bytes": 5048284,
+    "members": 274,
+    "dependencies": [
+      {
+        "file": "text-complete-public-pipelines.tar.xz",
+        "sha256": "174875e70b16d363625b6457e4fe354b44f49701eaca26544af1a48b7f9a0dec",
+        "scope": "Immutable public pipeline tool/source/all runtime dependencies, font/license/fullword fixtures/adapters and predecessor complete costs."
+      },
+      {
+        "file": "text-canvas-attribution.tar.xz",
+        "sha256": "691530cf0c95bd9505e5f06ed467b853a01245827e0c542b692b7e76bcb28e2f",
+        "scope": "Unmodified canvas attribution tool/source/identities and predecessor costs; its shared dependencies come from parent public-pipeline archive."
+      },
+      {
+        "file": "cached-wide-shared-quartets-final.tar.xz",
+        "sha256": "08150ae4d84bd660ae3028a6ceace301844947d16db4e5690369455913d61ce9",
+        "scope": "Prior accepted full library/codecs/resize/scalar/ISA and actual package evidence, source-valid unchanged paths reused."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Stop both complete passing controls; steady fresh-canvas draw is uncertain and existing-canvas draw still has a scoped gap. Do not tune a presumed broad text slowdown or add historical stages. Continue material independent codec/resize architectural work; publication postponed."
+}

@@ -1,5 +1,8 @@
 # Complete public text pipelines
 
+Predecessor evidence: public canvas creation has since changed. Current affected
+costs and qualification are in [cleared canvas storage](CLEARED-CANVAS-STORAGE.md).
+
 The existing ConstrainedFit control measures two complete public workloads on
 the unchanged actual 0.2.1 package DLL. Both pass the warm single-CPU target.
 The reference is **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**,

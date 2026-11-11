@@ -1953,12 +1953,15 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = cached_wide['qualification']
-    text_pipeline = json.loads((ROOT / 'benchmarks/text-complete-public-pipelines-evidence.json').read_text(encoding='utf-8'))
-    assert not text_pipeline['productionChanged'] and text_pipeline['requiredMaterialPaths'] == 289
+    text_pipeline = json.loads((ROOT / 'benchmarks/cleared-canvas-storage-evidence.json').read_text(encoding='utf-8'))
+    current_build_qualification = text_pipeline['qualification']
+    assert text_pipeline['productionChanged'] and text_pipeline['requiredMaterialPaths'] == 289
     assert text_pipeline['raw']['mirrored'] and text_pipeline['raw']['allMembersVerified']
-    assert text_pipeline['qualificationReuse']['focusedNewHarnessWindowsLinux']
-    assert text_pipeline['qualificationReuse']['newBroadSuites'] == text_pipeline['qualificationReuse']['newPacks'] == 0
+    assert current_build_qualification['fullChecksEachOs'] == 6275
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == text_pipeline['producers']['librarySha256']
+    assert text_pipeline['sourceProof']['originalFieldsConstructorDisposeInternalAllocateOverwriteCloneRowsSamplesVerbatim']
+    assert text_pipeline['sourceProof']['oldPoolRentReturnFontPreservationAndLatestReturnVerbatim']
     assert set(text_pipeline['cases']) == {'OneShot', 'PrepareDraw8', 'Preparation', 'PreparedDraw'}
     for case, cost in text_pipeline['cases'].items():
         assert cost['pairs'] == cost['referenceBracketSamples'] == 12 and cost['operationsPerSample'] == 32
@@ -1969,7 +1972,8 @@ def render():
     tp_one = text_pipeline['cases']['OneShot']
     tp_batch = text_pipeline['cases']['PrepareDraw8']
     tp_draw = text_pipeline['cases']['PreparedDraw']
-    assert tp_one['status'] == tp_batch['status'] == 'pass'
+    assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
+    assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
@@ -2064,16 +2068,19 @@ Current scope and remaining work:
   Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
   and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
-- **Text/drawing:** [Complete public pipelines](../benchmarks/TEXT-COMPLETE-PUBLIC-PIPELINES.md)
+- **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
   preparation plus eight fresh-canvas draws/disposal {tp_batch['managedUs']:,.2f}/{tp_batch['referenceUs']:,.2f} µs,
   upper {tp_batch['upper']:.3f}, measured amortization {tp_batch['amortizedManagedUs']:,.2f}/{tp_batch['amortizedReferenceUs']:,.2f} µs/draw.
   GC totals are {math.ceil(tp_one['managedAllocatedBytes']):,}/{math.ceil(tp_one['referenceAllocatedBytes']):,} B one-shot and
   {math.ceil(tp_batch['managedAllocatedBytes']):,}/{math.ceil(tp_batch['referenceAllocatedBytes']):,} B per eight-draw batch.
-  Managed active preparation owns39,904 B; approximate live-heap deltas33,920/22,504 B
-  are separate from allocations and unchanged pools. Steady fresh-canvas drawing remains
-  a scoped gap ({tp_draw['managedUs']:,.2f}/{tp_draw['referenceUs']:,.2f} µs, upper {tp_draw['upper']:.3f});
+  The eight-draw batch saves665.54 µs/24.46% raw/29.86% normalized with separated
+  confidence; reference time moves+7.69%. Managed active preparation owns39,904 B;
+  approximate live-heap deltas{text_pipeline['footprint']['managedApproximateLiveHeapDelta']:,}/{text_pipeline['footprint']['referenceApproximateLiveHeapDelta']:,} B are separate from allocations.
+  Default disposed font/canvas storage may retain1,248,596 B in this sequence,
+  within the existing two-array/4MiB ceiling; governed calls still bypass it.
+  Steady fresh-canvas drawing is uncertain ({tp_draw['managedUs']:,.2f}/{tp_draw['referenceUs']:,.2f} µs, upper {tp_draw['upper']:.3f});
   no general-font or arbitrary-repeat-count claim. Parser validation, retained paths/workspace,
   all fitting/layout calls and full16-bit visual gates remain explicit. Earlier
   [font-load](../benchmarks/FONT-OWNED-STORAGE.md) and [drawing](../benchmarks/TEXT-RENDER-PREPARATION.md)
@@ -2084,7 +2091,8 @@ Current scope and remaining work:
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
-normal/scalar mode; numerical ISA paths remain unchanged. Unchanged text checks pass 170 internal/126 public per normal/scalar mode.
+normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
+checks pass183internal/162public per normal/scalar mode on each OS.
 Current resize qualification: {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables

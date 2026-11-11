@@ -85,4 +85,52 @@ internal sealed class PixelStoragePool
             }
         }
     }
+
+    // Public zeroed canvases share the bounded storage, not parsed or rendered
+    // state. On a miss, keep one recent size when it fits alongside the new
+    // canvas, leaving space for the existing return policy without growing it.
+    public byte[] RentCleared(int length, CancellationToken cancellation)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+        cancellation.ThrowIfCancellationRequested();
+        byte[]? buffer = null;
+        if (length <= maxRetainedBytes)
+        {
+            lock (gate)
+            {
+                if (first?.Length == length)
+                {
+                    buffer = first; first = second; second = null;
+                }
+                else if (second?.Length == length)
+                {
+                    buffer = second; second = null;
+                }
+                else
+                {
+                    second = null;
+                    if (first is not null && first.Length > maxRetainedBytes - length) first = null;
+                }
+            }
+        }
+        // Keep CLR zero-initialization on cold misses, including large buffers.
+        // Do not touch every page merely to repeat a guaranteed initialization.
+        if (buffer is null) return new byte[length];
+        try
+        {
+            if (!cancellation.CanBeCanceled) buffer.AsSpan().Clear();
+            else
+            {
+                for (var offset = 0; offset < buffer.Length;)
+                {
+                    cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(16384, buffer.Length - offset);
+                    buffer.AsSpan(offset, count).Clear(); offset += count;
+                }
+                cancellation.ThrowIfCancellationRequested();
+            }
+            return buffer;
+        }
+        catch { Return(buffer); throw; }
+    }
 }
