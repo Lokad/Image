@@ -146,5 +146,130 @@
       }
     ]
   },
-  "next": "Implement only a bounded direct-cache producer experiment if actual code and focused correctness support it; measure complete affected byte/word operations. No automatic acceptance, new grid, numerical relaxation, font/text tuning or repeated broad/package checks."
+  "next": "Direct-cache implementation was inconclusive and is restored exactly; do not repeat unchanged screens. Existing packed byte/word gaps remain. Current scope/costs/6351qualification/SAMEpackage remain valid. Choose next material independent codec/resizing lead, or materially revise architecture only with new attribution.",
+  "trial": {
+    "project": "Lokad.Image",
+    "stage": "PSC821",
+    "productionAccepted": false,
+    "productionRestoredExactly": true,
+    "timedCandidateWindowsSha256": "04a1134dc5f05e67bcf35c6c6c99584785f79ff22c077652ed45e679e086f084",
+    "candidateLinuxSha256": "526d95674bfe05002d03eacda2b6c4365f626873ff7f5ee93251a485aae0b82e",
+    "screens": {
+      "candidate-Tight64x32_16": {
+        "managedUs": 441.46331824712644,
+        "nativeUs": 424.6160911458333,
+        "ratio": 1.0396763746183773,
+        "lower": 0.9373195238324846,
+        "upper": 1.122668581387334,
+        "allocatedBytes": 113,
+        "actuals": 3,
+        "independentConfirmation": false
+      },
+      "baseline-Tight64x32_16": {
+        "managedUs": 433.3986954022988,
+        "nativeUs": 419.05746875,
+        "ratio": 1.0342225773831857,
+        "lower": 0.8348957144657303,
+        "upper": 1.2740283757968456,
+        "allocatedBytes": 113,
+        "actuals": 3,
+        "independentConfirmation": false
+      },
+      "candidate-Tight64x32_8": {
+        "managedUs": 406.40011155913976,
+        "nativeUs": 394.5725625,
+        "ratio": 1.0299755993782251,
+        "lower": 0.9728169817587559,
+        "upper": 1.0874974478226318,
+        "allocatedBytes": 113,
+        "actuals": 3,
+        "independentConfirmation": false
+      }
+    },
+    "sourceProof": {
+      "project": "Lokad.Image",
+      "stage": "PSC821",
+      "originalSourceReconstructsByRemovingOnlyDirectDestinationDispatchAndStore": true,
+      "allOrderedMathBodiesVerbatim": true,
+      "indexedUnequalOddFallbackVerbatim": true,
+      "geometryScheduleSourceDecodePublicationRepairAndOwnersVerbatim": true,
+      "eligibility": "PrepareContiguousPairs proves counts equal and both offset streams contiguous, so original shared count equals both counts and remainder loops are empty. Destination is exactly selectedCache[cacheAt+column..+2], original two adjacent vector slots. Original ordered512bits become one64B store, equivalent to its two256bit halves.",
+      "sources": {
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "4df1e5d118665dbb1a84ef6fb9ddbf89717490aa6397419b9f0413d21472b55d",
+        "tests/Lokad.Image.Tests/PackedColumnStorageTests.cs": "5dde4048c0c2569874ccd3d30baf146e8f84df3eb487800f65d2c50f0a78d21b"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+      },
+      "newOwnedCapacityBytes": 0,
+      "newStackArrayCapacityBytes": 0,
+      "newRetainedStateBytes": 0,
+      "admittedScratchBytes": 4096,
+      "focusedNewCases": 4,
+      "simdExactLanes": 128,
+      "scope": "Only existing packed byte/word bounded64x32 complete controls; other paths do not call the converted private helper. No new performance fixture or numerical policy. Internal visibility allows actual producer guard/bit/borrowed view testing; no duplicate/unused implementation."
+    },
+    "focus": {
+      "windows": {
+        "internal-normal": 446,
+        "public-normal": 789,
+        "internal-scalar": 446,
+        "public-scalar": 789
+      },
+      "linux": {
+        "internal-normal": 446,
+        "public-normal": 789,
+        "internal-scalar": 446,
+        "public-scalar": 789
+      }
+    },
+    "actualTimedModulePublicCodegenChecksLinux": 18,
+    "coreEmbeddedVersionsEachOS": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "productionCompileFailures": 0,
+    "independentConfirmations": 0,
+    "fullOrPackageQualificationRepeats": 0,
+    "restorationBuilds": 0,
+    "restoration": {
+      "windows": {
+        "project": "Lokad.Image",
+        "productionSourceRestoredExactly": true,
+        "librarySha256": "8a0fff84ae5f4bb66c605614c1bdbdfa3bf5600bc0446b4dd5ed7fe927ca8dda",
+        "internalEmbeddedRestoredExactly": true,
+        "publicLibraryRestoredExactly": true,
+        "actualPackageUnchanged": true,
+        "buildsForRestoration": 0,
+        "unacceptedDirectProducerOnlyTestsRemoved": true,
+        "allAttemptedSourcesAndModulesPreserved": true
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "productionSourceRestoredExactly": true,
+        "librarySha256": "745929aaa3c681a71936a9d56f0319913af37966cdaf00a8c27194338ad75509",
+        "internalEmbeddedRestoredExactly": true,
+        "publicLibraryRestoredExactly": true,
+        "actualPackageUnchanged": true,
+        "sourceManifestAllFileBytesVerified": true,
+        "buildsForRestoration": 0
+      }
+    },
+    "decision": "Unselected inconclusive implementation. Word candidate441.46/native424.62us versus contemporary predecessor433.40/native419.06us: no useful raw or normalized gain. Byte406.40/native394.57us also supplies no verified benefit against retained405.59/native398.21us. Wide three-actual intervals establish no regression or parity; no independent confirmation is warranted. No allocation/retention saving or simplification compensates. Preserve changed JIT: direct cache store removes ABI copy but adds destination guard and grows word prefix6986->7175B. Restore exact original production/test/build/package bytes; remove four producer-only tests with their unaccepted helper. A materially revised architecture remains open; do not repeat unchanged implementation or sample for favorable bounds.",
+    "raw": {
+      "file": "packed-direct-cache-transfer-trial.tar.xz",
+      "sha256": "1a319195bcb43feee8da7ec999eccdc401bf0aafcf2d959180dc751b424970eb",
+      "bytes": 3895956,
+      "members": 79,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        "packed-word-current-attribution.tar.xz",
+        "bicubic-enlargement-horizontal-modes.tar.xz"
+      ],
+      "candidateLinuxModulesAndFocusedLogsIncluded": true
+    }
+  }
 }
