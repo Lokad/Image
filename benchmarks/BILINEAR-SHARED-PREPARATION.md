@@ -1,5 +1,8 @@
 # Shared bilinear preparation
 
+[Subsequent vector certification](BILINEAR-VECTOR-CERTIFICATION.md) supersedes
+this stage’s Up16 cost. The other three comparisons remain source-valid.
+
 BGI801B moves byte reduction ahead of an unused horizontal plan and shares
 vertical geometry preparation with word reduction. Caller-local arrays preserve
 execution facts for the JIT; the pixel loops, ordered weights, certificates,

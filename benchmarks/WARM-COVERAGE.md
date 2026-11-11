@@ -7,19 +7,19 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [bilinear preparation](BILINEAR-SHARED-PREPARATION.md)
-passes 6,251 full/live checks per OS, 363 internal/779 public resize checks in
+The latest accepted [vector bilinear normalization/certification](BILINEAR-VECTOR-CERTIFICATION.md)
+passes 6,253 full/live checks per OS, 365 internal/779 public resize checks in
 normal/scalar/disabled-AVX2/AVX512 modes and the SAME actual Release-package
-consumer/all three examples. Byte reduction independently saves 68.39 µs/14.00%
-raw/13.72% normalized; raw/all-actual and normalized intervals separate, allocations
-fall 25,785→8,473 B/op. Word causal effect remains inconclusive with material
-native movement. Four complete bilinear controls refresh: one pass/three gaps;
-Up8 passes/stops, Up16's approximately 579 µs gap is next for attribution.
-Exact pixels/packets, terminal admission/cancellation and ownership remain.
-No new retained scratch. Unchanged [JPEG product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md),
-[wide quartets](WIDE-BICUBIC-SHARED-QUARTETS.md) and other codec/resize/text
-paths and affected ISA evidence are reused. This is not a whole-release timing
-refresh; all 289 named paths still require valid passing evidence.
+consumer/all three examples. Independent Up16 confirmation saves 769.82 µs/
+27.67% raw/18.12% normalized; both raw/all-actual and normalized intervals separate.
+Native time moves −11.66%, so raw and normalized views remain distinct. Current
+Up16 2012.69/native1956.52 µs, range .919–1.038, stays uncertain. No parity pass or
+presumed remaining-gap claim. Measured GC 4,498,935 B/op includes the 4,264,104 B
+result; capacity and retained state are unchanged. Three other bilinear costs
+reuse [shared preparation](BILINEAR-SHARED-PREPARATION.md): Up8 passes/stops,
+Down8/16 remain gaps. Exact pixels/packets, admission/cancellation and owners remain.
+Unchanged JPEG, other resizing/text/codec paths and their ISA evidence are reused.
+This is not a whole-release timing refresh; all 289 paths still need valid passing proof.
 
 ## Current family status
 
@@ -40,7 +40,7 @@ refresh; all 289 named paths still require valid passing evidence.
 | Cached wider/other bicubic | [Shared preparation](BICUBIC-SHARED-PREPARATION.md):16 refreshed controls,13 pass/2 gaps/1 uncertain. Ordinary Wide8 retains its native-prepared gap; [current narrow byte publication](CACHED-NARROW-SHARED-PUBLICATION.md) refreshes Down8 to438.33/native419.09 µs, upper1.064 gap, plus passing Horizontal8/Vertical8; Down64x32_16 needs confidence. Both equivalent one-shot and both caller-owned prepared controls pass. Plans retain198432B, prepared137B/op. Narrow word-row isolation saves338.94µs versus contemporary original vertical-word cost; ordinary Wide8 costs11.83µs more. Older cache/word-preparation observations are superseded only on these16 affected paths. |
 | Prepared narrow bicubic | [Shared certified publication](CACHED-NARROW-SHARED-PUBLICATION.md): prepared/one-shot byte saves 24.97/23.62 µs, with separated raw/all-actual/normalized intervals. Prepared byte 413.36/zimg418.98 µs, upper1.011 is uncertain; one-shot byte and unchanged word boundaries pass. Narrow plans retain199840 B; controlled byte peak331936 B excludes borrowed input. Aggregate totals137–138 B/op prepared, with no added owned capacity or allocation-saving claim. Four equivalent boundaries now3 pass/1 uncertain. |
 | Lanczos3 | [Paired word rows](LANCZOS-PAIRED-WORD-ROWS.md): 8 refreshed controls, 6 pass / 1 prepared-byte gap (upper1.039) / 1 prepared-word uncertainty (upper1.012). The paired study saves41.10/41.15µs prepared/one-shot; final costs and clock reconciliation are separate. Word plan retains156248 B, up8208 B; same exact Q30/rational output and explicit prepared/one-shot boundaries. |
-| Bilinear resizing | [Shared preparation](BILINEAR-SHARED-PREPARATION.md): four complete current controls, 1 pass / 3 gaps. Up8 upper.916 passes/stops. Down8 420.16/385.48 µs upper1.101 and Down16 465.51/449.98 µs upper1.051 remain gaps; 8,473 B/op each. Byte saves68.39 µs and17,312 B/op with separated confidence views; word causal effect is inconclusive. Up16 2724.96/2146.42 µs upper1.316,4,498,923 B/op is the next larger gap; [current actual-module attribution](BILINEAR-UP16-CURRENT-ATTRIBUTION.md) selects certified-mask publication, with row preparation also visible. No new retained scratch or numerical-policy change. |
+| Bilinear resizing | [Shared reduction preparation](BILINEAR-SHARED-PREPARATION.md) retains Down8 420.16/385.48 µs upper1.101 and Down16 465.51/449.98 µs upper1.051 gaps, 8,473 B/op each; Up8 upper.916 passes/stops. [Vector normalization/classification](BILINEAR-VECTOR-CERTIFICATION.md) independently saves 769.82 µs/27.67% raw/18.12% normalized on Up16. Current 2012.69/1956.52 µs, range .919–1.038 remains uncertain, 4,498,935 B/op with unchanged capacity/retention. Combined four cases: 1 pass / 2 gaps / 1 uncertain. No tuning of a presumed Up16 gap; resolve consequential uncertainty through a justified changed design. |
 | Text, drawing and composition | [Complete integration](TEXT-DRAWING-CURRENT.md) and [RGBA8 composition](BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. [Owned render preparation](TEXT-RENDER-PREPARATION.md): ordinary byte/word87.12/92.57µs remain gaps,59,304B/op (+304), CPU change inconclusive. Prepared53.81/56.80µs save33.30/35.77µs versus current ordinary,56B/op with40,408B idle ownership; byte parity uncertain/word gap against explicitly prepared ImageSharp.Drawing. All8 frozen frames exact. [Font loading](FONT-OWNED-STORAGE.md) upper2.396 remains a gap; capacity/parser differences stay labeled. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
 

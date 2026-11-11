@@ -56,20 +56,10 @@ OperationContext context)
                         Avx512DQ.MultiplyLow(Read(cache, row1 + at), Vector512.Create((long)fy)));
                     var second = Avx512F.Add(Avx512DQ.MultiplyLow(Read(cache, row0 + at + 8), Vector512.Create((long)wy0)),
                         Avx512DQ.MultiplyLow(Read(cache, row1 + at + 8), Vector512.Create((long)fy)));
-                    var sums01 = Avx512DQ.ConvertToVector512Double(first);
-                    var sums23 = Avx512DQ.ConvertToVector512Double(second);
-                    var a0 = sums01.GetElement(3); var a1 = sums01.GetElement(7);
-                    var a2 = sums23.GetElement(3); var a3 = sums23.GetElement(7);
-                    var v01 = Avx512F.Divide(sums01, Vector512.Create(a0, a0, a0, (double)denominator,
-                        a1, a1, a1, (double)denominator));
-                    var v23 = Avx512F.Divide(sums23, Vector512.Create(a2, a2, a2, (double)denominator,
-                        a3, a3, a3, (double)denominator));
-                    var mask01 = Ambiguous(v01, Errors(v01, colorError, alphaError));
-                    var mask23 = Ambiguous(v23, Errors(v23, colorError, alphaError));
-                    if (v01.GetElement(3) <= 1 + alphaError) mask01 |= 15;
-                    if (v01.GetElement(7) <= 1 + alphaError) mask01 |= 240;
-                    if (v23.GetElement(3) <= 1 + alphaError) mask23 |= 15;
-                    if (v23.GetElement(7) <= 1 + alphaError) mask23 |= 240;
+                    var v01 = Normalize(Avx512DQ.ConvertToVector512Double(first), denominator);
+                    var v23 = Normalize(Avx512DQ.ConvertToVector512Double(second), denominator);
+                    var mask01 = Classify(v01, colorError, alphaError);
+                    var mask23 = Classify(v23, colorError, alphaError);
                     // All unambiguous nonnegative values round the same with
                     // nearest-even and away-from-zero. Explicit rounding avoids
                     // dependence on the host's floating-point rounding mode.
@@ -166,17 +156,16 @@ OperationContext context)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int Ambiguous(Vector512<double> values, Vector512<double> errors)
+    internal static Vector512<double> Normalize(Vector512<double> sums, double denominator)
     {
-        var fraction = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(0x8000000000000000UL),
-            Avx512F.Subtract(fraction, Vector512.Create(0.5)).AsUInt64()).AsDouble();
-        var near = Avx512F.CompareLessThanOrEqual(distance, errors);
-        return Avx.MoveMask(near.GetLower()) | (Avx.MoveMask(near.GetUpper()) << 4);
+        var alpha = Avx512F.PermuteVar8x64(sums, Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7));
+        var divisors = Avx512F.BlendVariable(alpha, Vector512.Create(denominator),
+            Vector512.Create(0L, 0, 0, long.MinValue, 0, 0, 0, long.MinValue).AsDouble());
+        return Avx512F.Divide(sums, divisors);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Vector512<double> Errors(Vector512<double> values, double colorError, double alphaError)
+    internal static int Classify(Vector512<double> values, double colorError, double alphaError)
     {
         var alpha = Avx512F.PermuteVar8x64(values, Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7));
         var safeAlpha = Avx512F.Subtract(alpha, Vector512.Create(alphaError));
@@ -184,7 +173,16 @@ OperationContext context)
         // The reciprocal of alpha's lower power-of-two bounds 1/alpha above.
         // Tiny/negative lanes are discarded by the original-alpha fallback.
         var reciprocal = Avx512F.ShiftLeftLogical(Avx512F.Subtract(Vector512.Create(2046UL), exponent), 52).AsDouble();
-        return Avx512F.Multiply(Vector512.Create(colorError), reciprocal).WithElement(3, alphaError).WithElement(7, alphaError);
+        var errors = Avx512F.BlendVariable(Avx512F.Multiply(Vector512.Create(colorError), reciprocal),
+            Vector512.Create(alphaError),
+            Vector512.Create(0L, 0, 0, long.MinValue, 0, 0, 0, long.MinValue).AsDouble());
+        var fraction = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
+        var distance = Avx512F.AndNot(Vector512.Create(0x8000000000000000UL),
+            Avx512F.Subtract(fraction, Vector512.Create(0.5)).AsUInt64()).AsDouble();
+        var near = Avx512F.CompareLessThanOrEqual(distance, errors);
+        // The broadcast alpha selects all four repair bits for each tiny pixel.
+        var tiny = Avx512F.CompareLessThanOrEqual(alpha, Vector512.Create(1 + alphaError));
+        return (int)Vector512.ExtractMostSignificantBits(Avx512F.Or(near.AsUInt64(), tiny.AsUInt64()));
     }
 
     private static void Scalar(ImageBuffer source, Span<byte> output,

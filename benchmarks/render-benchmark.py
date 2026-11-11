@@ -1426,8 +1426,7 @@ def render():
     bilinear = json.loads((ROOT / 'benchmarks/bilinear-shared-preparation-evidence.json').read_text(encoding='utf-8'))
     assert bilinear['productionAccepted'] and bilinear['allAffectedPerformanceReconciled']
     assert not bilinear['materialPassToGapContradictions']
-    assert set(bilinear['cases']) == {'Down8', 'Down16', 'Up8', 'Up16'}
-    assert bilinear['statusCounts'] == {'pass': 1, 'gap': 3, 'uncertain': 0}
+    assert {'Down8', 'Down16', 'Up8'} <= set(bilinear['cases'])
     assert bilinear['raw']['mirrored'] and bilinear['raw']['allMembersVerified']
     bilinear_qualification = bilinear['qualification']
     assert bilinear_qualification['fullChecksEachOs'] == bilinear_qualification['windows']['total'] == bilinear_qualification['linux']['total'] == 6251
@@ -1435,7 +1434,8 @@ def render():
     assert bilinear_qualification['actualPackage']['sha256'] == bilinear_qualification['samePackageLinux']['sameActualPackageSha256']
     assert bilinear['comparison']['Down8']['normalizedGainSeparated']
     assert all(v['rawGainSeparated'] for v in bilinear['comparison']['Down8']['views'].values())
-    for cost in bilinear['cases'].values():
+    for name in ['Down8', 'Down16', 'Up8']:
+        cost = bilinear['cases'][name]
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
         assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
@@ -1450,6 +1450,22 @@ def render():
         depth = 8 if name == 'Down8' else 16
         rows.append(('editing', f'| Bilinear resize RGBA{depth} (gap) † → 256×129 | {cost["managedUs"]:,.2f} | '
                      f'{cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
+    bilinear_vector = json.loads((ROOT / 'benchmarks/bilinear-vector-certification-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear_vector['productionAccepted'] and bilinear_vector['allAffectedPerformanceReconciled']
+    assert not bilinear_vector['materialPassToGapContradictions']
+    assert bilinear_vector['raw']['mirrored'] and bilinear_vector['raw']['allMembersVerified']
+    bvq = bilinear_vector['qualification']
+    assert bvq['fullChecksEachOs'] == bvq['windows']['total'] == bvq['linux']['total'] == 6253
+    assert bvq['sameActualPackageBothOS'] and bvq['threeNamedStorageSuitesIncluded']
+    assert bvq['actualPackage']['sha256'] == bvq['samePackageLinux']['sameActualPackageSha256']
+    bvc = bilinear_vector['case']
+    assert bvc['actualIterations'] == bvc['nativeSamplesEachBracket'] == 12
+    assert bvc['managedExact'] and bvc['managedRationalReferenceExact'] and bvc['independentOwnedOutput']
+    assert bvc['quietGuardsPassed'] and bvc['allOriginalGatesPassed']
+    assert bvc['librarySha256'] == bvq['actualPackage']['librarySha256']
+    assert bvc['lower'] <= 1 < bvc['upper'] and bvc['status'] == 'uncertain'
+    assert bilinear_vector['comparison']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in bilinear_vector['comparison']['views'].values())
     current = bicubic_overlap['cases']['TightDown8']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -1889,7 +1905,7 @@ def render():
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    current_build_qualification = bilinear_qualification
+    current_build_qualification = bilinear_vector['qualification']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1967,9 +1983,12 @@ Current scope and remaining work:
   [Shared bilinear preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md)
   saves 68.39 µs/14.00% raw/13.72% normalized on byte reduction; allocation falls
   25,785→8,473 B/op. Word CPU effect is inconclusive with material native movement.
-  All four affected complete controls refresh: Up8 passes/stops; Down8/16 and Up16
-  remain gaps. Existing Up16 costs 2,724.96/FFmpeg2,146.42 µs, upper1.316 and
-  4,498,923 B/op; its larger absolute gap is next for attribution. No new retained scratch.
+  Up8 passes/stops; Down8/16 remain gaps. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
+  independently saves 769.82 µs/27.67% raw/18.12% normalized on existing Up16.
+  Its current complete cost is {bvc['managedUs']:,.2f}/FFmpeg {bvc['nativeUs']:,.2f} µs,
+  conservative {bvc['lower']:.3f}–{bvc['upper']:.3f}: **uncertain**, not a parity pass or demonstrated remaining gap.
+  Measured GC {bvc['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
+  and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
   Exact managed Q30/rational/certified results remain distinct from native float.
 - **Text/drawing:** [complete layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop, as does [exact RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md).
