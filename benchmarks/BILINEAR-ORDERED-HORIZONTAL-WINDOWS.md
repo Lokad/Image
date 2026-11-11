@@ -1,7 +1,7 @@
 # Ordered bilinear horizontal windows
 
 Current source-valid costs below are retained. The latest immutable build/package
-and resize regression milestone is [exact identity-height bicubic](BICUBIC-IDENTITY-HEIGHT.md);
+and resize regression milestone is [ordered word bicubic windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md);
 its changes do not affect these bilinear kernels.
 
 Existing ordered-window filtering now serves both byte and word triangle

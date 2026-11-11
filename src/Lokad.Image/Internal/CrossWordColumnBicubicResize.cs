@@ -85,6 +85,7 @@ internal static class CrossWordColumnBicubicResize
             if (sourceCount > decoded.Length) return false;
             for (var x = 0; x < length; x++)
                 for (var t = 0; t < counts[x]; t++) offsets[x * 10 + t] -= sourceFirst;
+            BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 10, 8, 2, context.Cancellation);
             rowIds.Fill(-1);
             for (var y = startY; y < result.Height; y++)
             {
@@ -122,6 +123,14 @@ internal static class CrossWordColumnBicubicResize
                     }
                     for (var x = 0; x < length; x++)
                     {
+                        if (x + 1 < length && counts[x] == 8 && counts[x + 1] == 8 && offsets[x * 10 + 9] != 0)
+                        {
+                            var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(offsets[x * 10 + 9] - 1, 10),
+                                weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2);
+                            cache[slot * 8 + x] = pair.GetLower(); cache[slot * 8 + x + 1] = pair.GetUpper();
+                            x++;
+                            continue;
+                        }
                         var tapWeights = weights.Slice(x * 10, counts[x]);
                         var tapOffsets = offsets.Slice(x * 10, counts[x]);
                         var sum = Vector256<double>.Zero;
@@ -203,6 +212,7 @@ internal static class CrossWordColumnBicubicResize
             }
             normalizers[x] = normalizer;
         }
+        BicubicMath.PrepareOverlappingPairs(offsets, counts, width, source.Width, 10, 8, 2, context.Cancellation);
         Span<int> rowIds = stackalloc int[cacheRows]; rowIds.Fill(-1);
         Span<int> rows = stackalloc int[cacheRows];
         Span<double> vertical = stackalloc double[cacheRows];
@@ -245,6 +255,14 @@ internal static class CrossWordColumnBicubicResize
                 for (var x = 0; x < width; x++)
                 {
                     if ((x & 127) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    if (x + 1 < width && counts[x] == 8 && counts[x + 1] == 8 && offsets[x * 10 + 9] != 0)
+                    {
+                        var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(offsets[x * 10 + 9] - 1, 10),
+                            weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2);
+                        filtered[x] = pair.GetLower(); filtered[x + 1] = pair.GetUpper();
+                        x++;
+                        continue;
+                    }
                     var tapWeights = weights.Slice(x * 10, counts[x]);
                     var tapOffsets = offsets.Slice(x * 10, counts[x]);
                     var sum = Vector256<double>.Zero;

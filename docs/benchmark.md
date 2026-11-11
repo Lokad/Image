@@ -84,15 +84,15 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
-  [Exact identity-height bicubic](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md) saves
-  134.41 µs/20.30%raw/19.49%normalized with separated confidence; the existing
-  RGBA16 513×259→256×259 control passes/stops, upper0.920,
-  GC113 B/op. Borrowed output workspace91,168→58,400 B and explicit strip arrays
-  3,440→2,352 B; admission stays4KiB with no added capacity or retained state.
-  Its height-enlarging companion remains a gap, upper1.067;
-  incremental effect is inconclusive and a possible~20 µs cost is disclosed.
-  Adverse generic specialization and wide predecessor counterchecks are retained;
-  no companion speedup or regression-free claim. Other kernels reuse valid evidence.
+  [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
+  saves49.41/34.44 µs on reverse-mixed/horizontal RGBA16:5.25%/6.53% raw and
+  6.36%/15.36% normalized, with separated raw/all-actual/normalized confidence.
+  Native clocks move+1.19%/+10.44%; both independently pass/stop, upper
+  0.999/0.774,
+  GC114/113 B/op. Both keep4KiB admission and existing output-backed workspace;
+  no added array capacity or retention. [Identity-height history](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md)
+  retains the one-row design and adverse/inconclusive experiments separately.
+  Other kernels reuse valid evidence; no repeated passing-case tuning.
   [Ordered bilinear horizontal windows](../benchmarks/BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
   save28.77/32.94 µs on byte/word reduction:6.42%/7.08%raw and6.35%/6.88%normalized,
   with separated raw/all-actual and normalized confidence. Native clocks move−.072%/−.208%.
@@ -127,12 +127,12 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,309 full/live checks per OS**
+The current immutable build passes **6,321 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current resize qualification: 400 internal/789 public per
+Current resize qualification: 412 internal/789 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -247,7 +247,7 @@ settings do not establish matched quality.
 | Bicubic resize RGBA8 † → 256×129 | 438.33 | 419.09 | 1.046 / 1.064 | 199,983 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,722.27 | 2,874.11 | 0.947 / 0.952 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 2,940.49 | 3,048.98 | 0.964 / 0.971 | 116 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 941.77 | 889.80 | 1.058 / 1.067 | 114 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 892.36 | 900.40 | 0.991 / 0.999 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 308.62 | 376.78 | 0.819 / 0.821 | 197,300 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,969.56 | 3,040.59 | 0.977 / 0.981 | 116 |

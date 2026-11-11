@@ -155,6 +155,33 @@ internal static class BicubicMath
         }
     }
 
+    internal static void PrepareOverlappingPairs(Span<int> offsets, ReadOnlySpan<int> counts,
+        int columns, int sourceCount, int capacity, int taps, int stride, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        if (taps >= capacity) return;
+        // Full-row word preparation needs int indexes. Keep the same dead-slot
+        // proof as the byte-index strips; never overwrite a live final tap.
+        for (var x = 0; x < columns; x++)
+        {
+            if ((x & 127) == 0) cancellation.ThrowIfCancellationRequested();
+            if (counts[x] < capacity) offsets[x * capacity + capacity - 1] = 0;
+        }
+        for (var x = 0; x + 1 < columns; x += 2)
+        {
+            if ((x & 127) == 0) cancellation.ThrowIfCancellationRequested();
+            if (counts[x] != taps || counts[x + 1] != taps) continue;
+            var base0 = x * capacity; var base1 = base0 + capacity;
+            var first = offsets[base0]; var sourcePixels = taps + stride;
+            if (first < 0 || sourceCount < sourcePixels || first > sourceCount - sourcePixels
+                || offsets[base1] != first + stride) continue;
+            var contiguous = true;
+            for (var tap = 0; tap < taps; tap++)
+                contiguous &= offsets[base0 + tap] == first + tap && offsets[base1 + tap] == first + tap + stride;
+            if (contiguous) offsets[base0 + capacity - 1] = first + 1;
+        }
+    }
+
     internal const int StreamingWorkspaceBytes = 4096;
     internal const int StreamingTapCapacity = 304;
     internal const int PackedStreamingTapCapacity = 544;

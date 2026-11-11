@@ -1,7 +1,7 @@
 # Shared bicubic word preparation
 
 The horizontal-height-identity and tight reverse-mixed word controls are now
-owned by [exact identity-height execution](BICUBIC-IDENTITY-HEIGHT.md). Their
+owned by [ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md). Their
 older costs here are history; unchanged execution paths retain source-valid evidence.
 
 RPA503 shares SIMD divisor and conservative-margin preparation across pair,

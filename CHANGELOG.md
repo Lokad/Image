@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse ordered horizontal source windows across bounded RGBA16 bicubic resizing,
+  preserving exact samples and existing working-storage ownership.
+
 - Avoid zero-weight vertical work in height-preserving RGBA16 bicubic resizing,
   preserving exact samples and shared admission with a smaller borrowed workspace.
 

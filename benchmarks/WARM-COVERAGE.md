@@ -7,17 +7,17 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence and affected historical H rows remain open.
 
-The latest accepted [exact identity-height bicubic](BICUBIC-IDENTITY-HEIGHT.md)
-passes6,309full/live and400internal/789public resize checks per OS in normal/scalar/
+The latest accepted [ordered word bicubic windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
+passes 6,321 full/live and 412 internal/789 public resize checks per OS in normal/scalar/
 AVX2off/AVX512off modes, then SAME actual Release-package/all three examples on
 Windows/Linux, including frozen identity/general word pixels and owner cleanup.
-Height-preserving word reduction527.60/zimg580.07µs upper.920 passes/stops,
-saving134.41µs/20.30%raw/19.49%normalized with separated confidence. Result-backed
-workspace91,168→58,400B, explicit strip arrays3,440→2,352B, same4KiB admission,
-113B/op and no added owned capacity/retention. Height-enlarging companion remains
-a gap941.77/889.80µs upper1.067; incremental effect is inconclusive, possible~20µs
-cost disclosed. Adverse generic specialization and wide predecessor counterchecks
-are retained; no uniform speedup/regression-free claim or favorable repeat.
+Reverse-mixed/horizontal word controls pass 892.36/zimg900.40 µs upper.999 and
+493.16/640.62 µs upper.774; both stop. Savings 49.41/34.44 µs, 5.25%/6.53% raw,
+6.36%/15.36% normalized, with separated confidence. Native moves +1.19%/+10.44%.
+Same 4 KiB admission, 114/113 B/op and no added owned capacity/retention.
+The [identity-height design and history](BICUBIC-IDENTITY-HEIGHT.md) retain the
+smaller one-row view and adverse/inconclusive experiments; their older affected
+timings are superseded. Original exact arithmetic/repair, cancellation and owners remain.
 Unchanged [ordered bilinear windows](BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
 byte/word reduction saves28.77/32.94µs,6.42%/7.08%raw and6.35%/6.88%normalized,
 with separated raw/all-actual and normalized confidence. Word passes; byte remains
@@ -62,7 +62,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | WebP reading | [Position preparation](VP8-POSITION-MODEL-PREPARATION.md): six refreshed VP8 controls, 4 pass / 0 gaps / 2 uncertain. Ordinary opaque has a confirmed 2.02% normalized gain; live 4,803.55/native 4,786.85 µs, upper 1.009, and stream remain uncertain. Every VP8 total grows 1,536 B/op, within unchanged 8 KiB admission; no retained scratch. Prior window failures remain history. Unchanged [output-owned palettes](WEBP-PALETTE-OUTPUT.md) retains six lossless controls, 3 pass / 3 uncertain. |
 | Bicubic enlargement/shared byte publication | [Shared quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md) retains13 unchanged controls:9pass/1gap/3uncertain. Complete bounded byte enlargement saves159.58µs/5.10%raw/5.12%normalized, upper.981 passes; same116B/op/4KiB. Horizontal byte remains a gap and word horizontal remains uncertain. Two mixed byte costs are now owned by compact geometry below. |
 | Mixed-axis byte/word bicubic | [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md): all4affected default/tight controls refresh. Byte846.46/zimg867.46µs upper.989 and850.67/893.27µs upper.978 pass/stop; word921.81/918.99µs upper1.012 and923.05/914.24µs upper1.016 remain uncertain. Current default predecessor is also uncertain; raw/native movement and normalized overlap are retained. Exact geometry shrinks84→36B/column without changing filtering/repair or owned capacity;114B/op, scratch4/8KiB, no added retention. Unchanged vertical pass and previous row-band design remain in[result-backed history](BICUBIC-RESULT-BACKED-BANDS.md). |
-| Horizontal/reverse-mixed word bicubic | [Exact identity height](BICUBIC-IDENTITY-HEIGHT.md): existing TightHorizontal16 513×259→256×259 passes527.60/zimg580.07µs upper.920;134.41µs/20.30%raw/19.49%normalized gain, separated confidence. TightCross16→256×519 remains a gap941.77/889.80µs upper1.067, with inconclusive incremental effect and possible~20µs cost disclosed.113/114B/op, same4KiB admission and independently owned results; smaller result-backed identity view, no added capacity/retention. Defaults and other kernels unchanged; stop horizontal pass. |
+| Horizontal/reverse-mixed word bicubic | [Ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md): existing TightCross16 513×259→256×519 passes 892.36/zimg900.40 µs upper.999; TightHorizontal16→256×259 passes 493.16/640.62 µs upper.774. Savings 49.41/34.44 µs, 5.25%/6.53% raw and 6.36%/15.36% normalized, with separated confidence. Native +1.19%/+10.44% is explicit.114/113 B/op, same4KiB admission, no added capacity/retention. Both pass/stop; defaults and other kernels unchanged. |
 | Bounded packed bicubic | [Four-pixel preparation](PACKED-BICUBIC-FOUR-PIXEL-PREPARATION.md): byte405.59/zimg398.21µs upper1.028 and word422.81/397.48µs upper1.098 remain gaps. Same113B/op/4KiB; earlier indexed clocks are history. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
 | Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |

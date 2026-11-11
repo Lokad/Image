@@ -1,5 +1,9 @@
 # Exact identity-height bicubic execution
 
+Both affected costs below are superseded by [ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md).
+This report retains the one-row design, its proof and the adverse/inconclusive
+experiments; it is not current performance evidence for either control.
+
 Height-preserving RGBA16 bicubic reduction saves **134.41 µs / 20.30% raw /
 19.49% reference-normalized** against its source-valid predecessor; filtered,
 all-actual and normalized intervals separate. Native time moves−1.01%.

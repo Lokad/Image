@@ -1552,43 +1552,38 @@ def render():
     assert word_prep['sourceProof']['all2048ExponentConstructionsBitIdentical']
     assert word_prep['storage']['newOwnedCapacityBytes'] == word_prep['storage']['newCrossOperationRetainedBytes'] == 0
     for current in word_prep['cases'].values():
-        if current['caseId'] == 'TightVertical16' or current['caseId'] in quartet['cases']:
+        if current['caseId'] in {'TightVertical16', 'TightHorizontal16', 'TightCross16'} or current['caseId'] in quartet['cases']:
             continue  # Refreshed by identity geometry below.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['librarySha256'] == word_prep['producers']['linuxSha256']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    bicubic_windows = json.loads((ROOT / 'benchmarks/bicubic-ordered-horizontal-windows-evidence.json').read_text(encoding='utf-8'))
     word_labels = {'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, label in word_labels.items():
-        current = quartet['cases'].get(case, word_prep['cases'][case])
+        current = bicubic_windows['cases'].get(case, quartet['cases'].get(case, word_prep['cases'][case]))
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
         assert len(positions) == 1, label
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    identity_height = json.loads((ROOT / 'benchmarks/bicubic-identity-height-evidence.json').read_text(encoding='utf-8'))
-    assert identity_height['productionAccepted'] and identity_height['allAffectedPerformanceReconciled']
-    assert identity_height['requiredMaterialPaths'] == 289 and not identity_height['materialPassToGapContradictions']
-    assert identity_height['raw']['mirrored'] and identity_height['raw']['allMembersVerified']
-    assert identity_height['statusCounts'] == {'pass': 1, 'gap': 1, 'uncertain': 0}
-    assert identity_height['sourceProof']['originalGeneralRowsAndStripsReconstructVerbatimAfterRemovingOnlyIdentityAndCacheCapacitySelection']
-    assert identity_height['sourceProof']['originalWordRepairVerbatim'] and identity_height['sourceProof']['noGenericModeOrDuplicatedKernel']
-    for cost in identity_height['cases'].values():
+    assert bicubic_windows['productionAccepted'] and bicubic_windows['allAffectedPerformanceReconciled']
+    assert bicubic_windows['requiredMaterialPaths'] == 289 and not bicubic_windows['materialPassToGapContradictions']
+    assert bicubic_windows['raw']['mirrored'] and bicubic_windows['raw']['allMembersVerified']
+    assert bicubic_windows['statusCounts'] == {'pass': 2, 'gap': 0, 'uncertain': 0}
+    assert bicubic_windows['sourceProof']['wholeCrossWordSourceReconstructsByRemovingOnlyEligibilityAndPairedHorizontalDispatch']
+    assert bicubic_windows['sourceProof']['wholeSharedMathReconstructsByRemovingOnlyIntEligibilityOverload']
+    assert bicubic_windows['sourceProof']['existingOrderedFourEightSixteenTapFilterAndAllOtherMathBodiesVerbatim']
+    for name, cost in bicubic_windows['cases'].items():
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['managedExact'] and cost['managedRationalReferenceExact'] and cost['independentOwnedOutput']
         assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == identity_height['producers']['windowsSha256']
-        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-    identity_gain = identity_height['comparison']['TightHorizontal16']
-    assert identity_gain['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in identity_gain['views'].values())
-    cost = identity_height['cases']['TightCross16']
-    label = word_labels['TightCross16']
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('editing', f'| {label} † → {cost["outputWidth"]}×{cost["outputHeight"]} | '
-        f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |')
+        assert cost['librarySha256'] == bicubic_windows['producers']['windowsSha256']
+        assert cost['status'] == 'pass' and cost['upper'] <= 1
+        gain = bicubic_windows['comparison'][name]
+        assert gain['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in gain['views'].values())
     vq = word_prep['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
@@ -2002,10 +1997,10 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = identity_height['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6309
+    current_build_qualification = bicubic_windows['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == 6321
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == identity_height['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == bicubic_windows['producers']['windowsSha256']
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2094,15 +2089,15 @@ Current scope and remaining work:
   source-scoped costs and remaining gaps/uncertainty shown below; passing cases stop.
   [Lanczos3](../benchmarks/LANCZOS-PAIRED-WORD-ROWS.md) remains 6 pass /
   1 prepared-byte gap / 1 prepared-word uncertainty; word plans retain 156,248 B.
-  [Exact identity-height bicubic](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md) saves
-  134.41 µs/20.30%raw/19.49%normalized with separated confidence; the existing
-  RGBA16 513×259→256×259 control passes/stops, upper{identity_height['cases']['TightHorizontal16']['upper']:.3f},
-  GC113 B/op. Borrowed output workspace91,168→58,400 B and explicit strip arrays
-  3,440→2,352 B; admission stays4KiB with no added capacity or retained state.
-  Its height-enlarging companion remains a gap, upper{identity_height['cases']['TightCross16']['upper']:.3f};
-  incremental effect is inconclusive and a possible~20 µs cost is disclosed.
-  Adverse generic specialization and wide predecessor counterchecks are retained;
-  no companion speedup or regression-free claim. Other kernels reuse valid evidence.
+  [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
+  saves49.41/34.44 µs on reverse-mixed/horizontal RGBA16:5.25%/6.53% raw and
+  6.36%/15.36% normalized, with separated raw/all-actual/normalized confidence.
+  Native clocks move+1.19%/+10.44%; both independently pass/stop, upper
+  {bicubic_windows['cases']['TightCross16']['upper']:.3f}/{bicubic_windows['cases']['TightHorizontal16']['upper']:.3f},
+  GC114/113 B/op. Both keep4KiB admission and existing output-backed workspace;
+  no added array capacity or retention. [Identity-height history](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md)
+  retains the one-row design and adverse/inconclusive experiments separately.
+  Other kernels reuse valid evidence; no repeated passing-case tuning.
   [Ordered bilinear horizontal windows](../benchmarks/BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
   save28.77/32.94 µs on byte/word reduction:6.42%/7.08%raw and6.35%/6.88%normalized,
   with separated raw/all-actual and normalized confidence. Native clocks move−.072%/−.208%.
