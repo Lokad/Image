@@ -46,16 +46,49 @@ margin 2^-32 is 2.328e-10. This arithmetic bound does not prove all clipping,
 invalid-value, conservative-acceptance or repaired-pixel behavior, and establishes
 no CPU gain. Extra dependent instructions, register pressure and refusals may hurt.
 
-**Next:** inspect those boundaries and reuse the current word pair/quartet controls
-for an untimed hardware model before a production candidate. Existing controls
-cover 24,576 preparation cases and 1,008 pairs in both quartet positions, with
-independent rounded-word checks. Cached mixed-word publication also consumes
-prepared values directly; its separate guard must be included. Preserve exact
-rational/qualified pixels, all 16-bit samples, original repair, admission and
-cancellation; no visual tolerance or broader numerical policy is proposed.
-No new API, owner, cache or workspace is justified by this audit. Accepted 6,248
-full/live/resize-ISA and SAME actual-package/all three examples from
-[wide quartets](WIDE-BICUBIC-SHARED-QUARTETS.md) are reused. Publication stays postponed.
+## Bounded quotient experiment
+
+RWP796 tried two materially distinct reciprocal/certificate strategies. Both
+retain the original exact repair, extreme-divisor division and independent output
+ownership. Hardware models reuse25,584 original numerical controls and30,000
+clipped endpoints. A duplicate cached predicate can classify a synthetic clipped
+endpoint differently after quotient approximation; this is an acceptance-model
+finding, not a demonstrated complete-image pixel defect. The candidates use the
+shared conservative writer instead. Actual row/repair and all focused Windows/Linux
+normal/scalar checks pass (364 internal/776 public, all named storage suites).
+
+| Existing complete operation | Qualified division µs | Two corrections µs | One correction µs |
+| --- | ---: | ---: | ---: |
+| TightMixed16 | 935.28 | 980.13 | 1,140.48 |
+| Cross16 | 778.82 | 839.41 | 941.56 |
+
+These are three-actual screens, not independent regression confirmations. Native
+points stay~846–852/~821–824µs. Reference-normalized adverse point changes are
+4.94%/7.72% for two corrections and22.85%/20.38% for one. No favorable repeat,
+broad/package qualification or CPU gain claim follows. The shorter dependency
+chain and larger rejection margin lose at complete-operation level. Models are
+conditional arithmetic bounds, not a broader numerical-policy change.
+
+Both variants preserve exact frozen pixels, source/reference/ownership and idle-v2
+checks. TightMixed16 allocates114B/op; Cross16~199.9kB is not an allocation-saving
+claim (the aggregate counters vary by a few bytes). No owned capacity or retained
+scratch is added; physical/JIT-stack peaks are unmeasured. All attempted sources,
+models, actual row tests and immutable binaries remain in the raw archive.
+
+The accepted full-division sources, embedded tests and production binaries are
+restored byte-for-byte. Unchanged6,248 full/live/resize-ISA and SAME actual-package/
+all three examples from [wide quartets](WIDE-BICUBIC-SHARED-QUARTETS.md) are reused;
+no package or release is changed. This rejects these implementations, not all
+future word-publication designs. No renderer dependency or displayed cost changes.
+
+Mirrored/member-verified raw `bicubic-word-reciprocal-experiment.tar.xz`:
+4,586,624B/323members, SHA256
+`5f4933ee3466b04fe3723ff285740c5d21ad57d75f2fa09af8965a277c5c83aa`.
+It depends on the attribution and qualified baseline archives below. Next resolve
+the existing substantial WebP photograph uncertainty with the already prepared
+adjacent counterbalanced driver; retain its stricter confidence policy, exact
+packet/settings and earlier global-bracket observations. No production tuning
+need is assumed from an uncertain measurement. Publication stays postponed.
 
 [Evidence](bicubic-mixed-current-execution-attribution-evidence.json) pins current
 source/modules, profile, logical model and conditional bounds. Mirrored/member-
