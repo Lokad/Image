@@ -1,5 +1,9 @@
 # Stored PNG workspace
 
+Historical stage: [current IDAT publication](PNG-IDAT-FORWARDING.md) supersedes
+these affected encoder costs and transport ownership. Its deflater algorithms and
+the reference boundaries qualified here remain; raw evidence is retained.
+
 Uncompressed PNG now omits unused matching heads, links and tokens. This removes
 three arrays/196,604B payload per encode and reduces the deflater reservation
 from384KiB to72KiB. History64KiB and output4KiB remain operation-owned.

@@ -7,39 +7,26 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
-[Stored PNG workspace](PNG-STORED-WORKSPACE.md) removes three unused arrays:
-196,604B payload/196,680B complete byte and natural-word allocation,384→72KiB
-deflater admission. Post-GC word saves196,272 measured B/op; counter boundaries
-remain separate. Byte92.72/FFmpeg190.15µs upper0.535 passes/stops. Word post-GC4op
-501.70/405.21µs upper1.255 remains a gap; natural-GC64op350.36/405.10µs upper0.904
-passes its scope. No CPU gain, general word pass or physical-peak claim.
-Complete533,444/1,066,552B packets and all pixel/owner/quiet gates stay exact.
-No retained operation scratch. Full6,449checks perOS,690internal/246public
-normal/scalar/AVX2-off/AVX512-off and SAMEactualpackage/all3examples pass.
-Nonzero modes retain allocation order, field layout, hot bodies and384KiB
-admission; unchanged family performance/ISA evidence reused. One core build
-perOS; no fixture/native/harness rebuild or workload expansion. Historical
-[Predictable16](PNG-HISTORICAL-CURRENT-CONFIRMATION.md) remains valid and stopped;
-earlier stored-mode results retain their original sampling/provenance context.
-
-[The first adjacent Fastest8 view](PNG-FASTEST-ADJACENT-CONFIDENCE.md) remains
-uncertain:4.398/FFmpeg4.375ms,range0.944–1.044,exact236,828B packet. All12pairs
-and before/paired/after brackets remain. Fresh codec/zlib/preparation/output/
-disposal on both sides, same original settings/input/owners; natural-GC4op
-sampling is distinct from the earlier global capture. Direct allocation820,843.67B,
-384KiB deflater admission/zero scratch retention, no storage or CPU saving claim.
-Original driver/harness/native/fixtures and current actual package reused;
-zero builds/broad/package repeats/new workloads. Thirteen fresh PNG encode
-controls pass/two uncertain. Stop unchanged repeats or tuning a presumed gap.
-
-[Grayscale8's first adjacent capture](PNG-GRAY-ADJACENT-CONFIDENCE.md) remains
-uncertain:2.109/FFmpeg1.997ms,range0.963–1.143,exact72,586B packet. Fresh codec/
-conversion/zlib/independent output/disposal are timed on both sides. All12pairs
-and native brackets remain; natural-GC4op sampling differs from the original
-global-bracket result. Direct allocation551,260.67B/op,384KiB admission/zero
-scratch retention; no gain/regression/equivalence or presumed-gap claim.
-Current immutable package and qualification reused,zero builds/new workloads/
-broad or package repeats. Stop unchanged timing repeats; independent work continues.
+[Bufferless PNG IDAT publication](PNG-IDAT-FORWARDING.md) removes a duplicated
+4KiB payload array/copy and count/flush state; obsolete64KiB transport admission
+becomes4KiB minor codec allowance. All17fresh-state encodes refresh:14pass/1gap/
+2uncertain, with4,136B less allocation on every nonzero encode. Gray8 is a small
+demonstrated gap; gray-alpha8/16 are uncertain, Fastest8 passes/stops. Fresh stored
+byte88.62/FFmpeg562.79µs upper.174 andword519.81/1457.84µs upper.367 pass. Their
+original retained-native word post-GC4scope528.10/433.88µs upper1.246 remains a
+gap; natural-GC64scope355.50/431.83µs upper.857 passes only that scope.
+Predictable16 now253.65/402.64ms upper.656 passes. No CPU gain or preparation-time
+subtraction is claimed. Three contemporary baseline captures reconcile historical
+adverse comparisons; raw/native shifts and current uncertainty remain visible.
+Complete packets/managed pixels/owners/cancellation stay exact, retained operation
+scratch is zero, physical/native peaks unmeasured. BothOSes6509full/live plus
+702internal/246public PNG/admission cases in normal/scalar/AVX512-off/AVX2-off
+modes and SAMEactualpackage/all3examples pass. One core/embedded build eachOS,
+no harness/native/fixture rebuild or new workload. Historical [workspace](PNG-STORED-WORKSPACE.md),
+[one-shot boundaries](PNG-STORED-ONE-SHOT-BOUNDARIES.md) and [Fastest](PNG-FASTEST-ADJACENT-CONFIDENCE.md)/
+[gray](PNG-GRAY-ADJACENT-CONFIDENCE.md) sampling reports retain evidence; their
+affected CPU costs are superseded, not proof for this sink. Independent codec,
+resizing and ownership paths retain source validity. All289paths remain required.
 
 [Output-backed Cross rows](CROSS-BICUBIC-OUTPUT-PREFIX.md) close both byte
 Cross gaps:793.42/zimg875.67µs upper.913 and same-height496.61/573.93µs
@@ -152,7 +139,7 @@ scope is17existingcontrols,15pass/2uncertain; all289paths and older scopes remai
 | JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md):51controls,49pass/0gap/2uncertain. [Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md) save93.08µs/2.89%raw/1.86%normalized on RGBA16 with separated confidence; current3126.33/native3153.78µs upper1.001253 remains uncertain. Byte1529.69/1535.97µs upper1.012 stays uncertain; clock movement and raw adverse view are explicit. Same4,472/8,568B/op/4KiB, no new capacity/retention and original cancellation checkpoints. Old two-symbol trials are history; no favorable repeat. Other affected historical stream/composition costs remain H. |
-| PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md) plus [matched stored one-shot controls](PNG-STORED-ONE-SHOT-BOUNDARIES.md):17complete fresh-state controls,15pass/2uncertain. Stored8/16upper.187/.374, exact533444/1066552B packets,613844/1151588B/op on unchanged actual package. Original retained-native word post-GC gap/natural-GC pass remain distinct, without retrospective pass or preparation-time subtraction. First adjacent[Fastest8](PNG-FASTEST-ADJACENT-CONFIDENCE.md)/[Gray8](PNG-GRAY-ADJACENT-CONFIDENCE.md) remain uncertain. Independent outputs/disposal and [72KiB stored workspace](PNG-STORED-WORKSPACE.md) unchanged. |
+| PNG encoding | [Current IDAT publication](PNG-IDAT-FORWARDING.md):17complete equivalent fresh-state controls,14pass/1gap/2uncertain. Gray8 gap; gray-alpha8/16 uncertain; Fastest8 passes. Stored8/16 upper.174/.367 pass with exact533444/1066552B packets and609708/1147860B/op. Retained-native word postGC4gap/natural64pass remain separate; predictable16passes. One4KiB buffer removed; codec allowance64→4KiB, stored deflater72KiB unchanged. No CPUgain/physicalpeak claim; raw/native shifts and three contemporary baseline checks retained. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
@@ -366,12 +353,13 @@ Current invalidation and next execution:
   validators. The primary matched HFR baseline remains the valid incremental
   comparator. Three opaque VP8 controls do not use this reader and retain their
   prior evidence; unrelated codecs/editing/text remain source-valid.
-- PSS840 changes only stored-PNG preparation/reservation and matching cleanup.
-  Existing NoCompression8/16 costs refresh with exact full packets; word retains
-  both post-GC4op and natural-GC64op scopes. Nonzero allocation order, instance
-  fields, packet/hot arithmetic and384KiB admission remain unchanged. Other
-  compressed, decoder, resizing and text evidence remains source-valid. No
-  general CPU gain or physical-peak claim; independent work continues.
+- PIF873 removes the private PNG IDAT duplicate payload/state and right-sizes
+  transport admission. All17one-shot encodes, two retained-native stored controls,
+  predictable16 and natural64word costs supersede affected PSS840/PSB871/PHC832/
+  LSF584 observations. Historical adjacent Fastest/Gray views remain separate
+  history. Deflater/checksum/packing math, PNG reading/inspection, other codecs,
+  resizing and font/text/drawing sources remain unchanged. Current uncertainty
+  is not presumed to need optimization; no global parity or causal CPU gain.
 - VPP788 replaces repeated coefficient-position/band addressing with one frame
   model preparation shared by ordinary/live/window/scalar/validation decoding.
   Six named VP8 cost paths refresh; exact probability syntax, numerical operations,

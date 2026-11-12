@@ -21,11 +21,11 @@ public sealed class PngEncoderAdmissionTests
             opaque: color is PngColorType.Grayscale or PngColorType.Rgb);
         var sourcePixels = OriginalPixels.Bytes(source);
         var channels = color switch { PngColorType.Grayscale => 1, PngColorType.Rgb => 3, PngColorType.GrayscaleAlpha => 2, _ => 4 };
-        // Public admission policy: supplied pixels + one packed scanline + 64 KiB
-        // IDAT transport buffer + 72 KiB stored or 384 KiB compressed workspace. The inflater
+        // Public admission policy: supplied pixels + one packed scanline + 4 KiB
+        // minor codec state + 72 KiB stored or 384 KiB compressed workspace. The inflater
         // has a separate 256 KiB allowance; this test only constrains encoding.
         var workspace = compression == CompressionLevel.NoCompression ? 72 * 1024 : 384 * 1024;
-        var peak = sourcePixels.Length + 9L * channels * (depth / 8) + 65536 + workspace;
+        var peak = sourcePixels.Length + 9L * channels * (depth / 8) + 4096 + workspace;
         var options = new PngEncodeOptions { ColorType = color, Compression = compression, Limits = new ImageLimits { MaxWorkingBytes = peak } };
         using var rejected = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, rejected, options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));

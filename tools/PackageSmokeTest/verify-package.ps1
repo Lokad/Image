@@ -355,9 +355,9 @@ if ((exampleWebpPixels.Width, exampleWebpPixels.Height, exampleWebpPixels.BitDep
 for (var x = 0; x < 2; x++)
     if (exampleWebpPixels.GetRow8(0)[x * 4 + 3] != (flipped.GetRow16(0)[x * 4 + 3] + 128) / 257)
         throw new Exception("README WebP alpha differs.");
-// Verify the source + row + IDAT + managed compressor admission through
+// Verify the source + row + minor codec state + compressor admission through
 // the actual restored package, including rejection before any output is written.
-var pngLimits = new ImageLimits { MaxWorkingBytes = 16 + 16 + 65536 + 384 * 1024 };
+var pngLimits = new ImageLimits { MaxWorkingBytes = 16 + 16 + 4096 + 384 * 1024 };
 using var admittedPng = new MemoryStream();
 ImageCodec.EncodePng(flipped, admittedPng, new PngEncodeOptions { Limits = pngLimits });
 if (!admittedPng.ToArray().AsSpan().SequenceEqual(encoded.ToArray()))

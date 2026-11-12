@@ -1729,8 +1729,8 @@ internal static class PngCodec
             CompressionLevel.SmallestSize => 9,
             _ => throw new ArgumentOutOfRangeException(nameof(options))
         };
-        // Establish row/chunk and compressor owners before writing the signature.
-        context.Reserve(rowBytes + 65536L);
+        // Admit the packed row, minor codec state and compressor before output.
+        context.Reserve(rowBytes + 4096L);
         var row = new byte[rowBytes];
         var predict = level != 0 && PngRowPrediction.Useful(source, color, context.Cancellation);
         byte[] previous = [], filteredRow = [];
@@ -1740,7 +1740,7 @@ internal static class PngCodec
             context.Cancellation.ThrowIfCancellationRequested();
             previous = new byte[rowBytes]; filteredRow = new byte[rowBytes];
         }
-        using var chunks = new IdatWriter(output, 4096, false);
+        using var chunks = new IdatWriter(output);
         using var deflater = new PngDeflater(chunks, context, level);
         output.Write(Signature);
         Span<byte> header = stackalloc byte[13];
@@ -1798,7 +1798,6 @@ internal static class PngCodec
             else deflater.WriteRow(row);
         }
         deflater.Complete();
-        chunks.Flush();
         context.Cancellation.ThrowIfCancellationRequested();
         WriteChunk(output, "IEND"u8, []);
     }
@@ -1973,10 +1972,11 @@ internal static class PngCodec
         return crc;
     }
 
-    private sealed class IdatWriter(Stream output, int capacity, bool flushOnDispose) : Stream
+    // PngDeflater publishes full 4 KiB buffers and at most one final tail.
+    // Each synchronous write is already one complete reference IDAT payload.
+    // The producer keeps its buffer owned/charged through header, data and CRC.
+    private sealed class IdatWriter(Stream output) : Stream
     {
-        private readonly byte[] buffer = new byte[capacity];
-        private int count;
         public override bool CanRead => false;
         public override bool CanSeek => false;
         public override bool CanWrite => true;
@@ -1984,16 +1984,10 @@ internal static class PngCodec
         public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
         public override void Write(ReadOnlySpan<byte> data)
         {
-            while (!data.IsEmpty)
-            {
-                var copy = Math.Min(buffer.Length - count, data.Length);
-                data[..copy].CopyTo(buffer.AsSpan(count)); count += copy; data = data[copy..];
-                if (count == buffer.Length) Flush();
-            }
+            if (!data.IsEmpty) WriteChunk(output, "IDAT"u8, data);
         }
         public override void Write(byte[] data, int offset, int count) => Write(data.AsSpan(offset, count));
-        public override void Flush() { if (count == 0) return; WriteChunk(output, "IDAT"u8, buffer.AsSpan(0, count)); count = 0; }
-        protected override void Dispose(bool disposing) { if (disposing && flushOnDispose) Flush(); base.Dispose(disposing); }
+        public override void Flush() { }
         public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
         public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
         public override void SetLength(long value) => throw new NotSupportedException();

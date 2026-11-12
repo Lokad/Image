@@ -42,7 +42,7 @@ public sealed class PngPredictableCompressionTests
     public void PredictionRowsShareTheCallerRootAndRefusalCleanupAdmitsTheNextEncode()
     {
         const int sourceBytes = 128 * 128 * 4, rowBytes = 128 * 4;
-        const int owned = rowBytes * 3 + 65536 + 384 * 1024;
+        const int owned = rowBytes * 3 + 4096 + 384 * 1024;
         using var root = new TestMemoryBudget(sourceBytes + owned);
         using var source = OriginalPngGradient.Create(128, 8, budget: root);
         var options = new PngEncodeOptions { Limits = ImageLimits.Default with { MemoryBudget = root } };
@@ -61,7 +61,7 @@ public sealed class PngPredictableCompressionTests
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024); using var cancellation = new CancellationTokenSource();
         using var source = OriginalPngGradient.Create(128, 8, budget: root); var retained = root.Bytes;
-        root.Admitted = bytes => { if (bytes == retained + 128 * 4 * 3 + 65536) cancellation.Cancel(); };
+        root.Admitted = bytes => { if (bytes == retained + 128 * 4 * 3 + 4096) cancellation.Cancel(); };
         using var output = new MemoryStream();
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodePng(source, output,
             new() { Limits = ImageLimits.Default with { MemoryBudget = root } }, cancellation.Token));

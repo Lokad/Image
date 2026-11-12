@@ -28,7 +28,7 @@ public sealed class PngFastCompressionTests
         using var source = OriginalPixels.Buffer(513, 259, 16); using var live = new CancellationTokenSource();
         var cancelable = Encode(source, token: live.Token); var adapted = Encode(source);
         var rowBytes = 513 * 8;
-        var peak = 513L * 259 * 8 + rowBytes + 65536 + 384 * 1024;
+        var peak = 513L * 259 * 8 + rowBytes + 4096 + 384 * 1024;
         Assert.Equal(cancelable, adapted);
         Assert.Equal(adapted, Encode(source, ImageLimits.Default with { MaxWorkingBytes = peak }));
         using var rejected = new MemoryStream();
@@ -44,7 +44,7 @@ public sealed class PngFastCompressionTests
         var cancelable = Encode(source, token: live.Token);
         var limits = constraint switch
         {
-            "memory" => ImageLimits.Default with { MaxWorkingBytes = 513L * 259 * 8 + 513 * 8 + 65536 + 384 * 1024 - 1 },
+            "memory" => ImageLimits.Default with { MaxWorkingBytes = 513L * 259 * 8 + 513 * 8 + 4096 + 384 * 1024 - 1 },
             _ => ImageLimits.Default with { MaxOutputBytes = cancelable.Length - 1 }
         };
         using var actual = new MemoryStream(); using var reference = new MemoryStream();

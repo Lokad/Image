@@ -1787,56 +1787,29 @@ def render():
     assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5948
     assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
-    png = json.loads((ROOT / 'benchmarks/png-length-classification-evidence.json').read_text(encoding='utf-8'))
-    assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
-    pq = png['qualification']
-    assert pq['fullChecksEachOs'] == pq['windows']['total'] == pq['linux']['total'] == 5907
-    assert pq['actualPackage']['sha256'] == pq['samePackageLinux']['sameActualPackageSha256']
-    assert pq['actualPackage']['actualConsumerPassed'] and pq['samePackageLinux']['actualConsumerPassed']
-    assert pq['sameActualPackageBothOs']
-    assert pq['actualPackage']['fastestPngExactByteWordSyncAsyncAdmissionPassed']
-    assert pq['samePackageLinux']['fastestPngExactByteWordSyncAsyncAdmissionPassed']
-    assert set(png['cases']) == {'Encode8', 'Encode16', 'EncodeFast8', 'EncodeFast16',
-        'EncodeSmallest8', 'EncodeSmallest16', 'EncodeGray8', 'EncodeRgb8',
-        'EncodeGrayAlpha8', 'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16',
-        'EncodeFastCancelable16', 'EncodeFastForward16', 'Png8AsyncNonSeekable'}
-    assert png['storage']['workspaceAdmissionBytes'] == 393216 and png['storage']['retainedOperationScratchBytes'] == 0
-    assert png['sourceProof']['wholeSourceUndoReconstructsOriginalOutsideExactLengthClassifier']
-    assert png['sourceProof']['all256LegalLengthMappingsExact']
-    assert png['sourceProof']['originalTokenOrderTreesBlockChoiceBitOutputPollsOwnershipAndFieldLayoutExact']
-    assert not png['materialReview']['separatedRegressions']
-    assert {t: sum(c['status'] == t for c in png['cases'].values()) for t in ['pass', 'gap', 'uncertain']} == png['statusCounts']
-    rows = [(kind, row.replace(' † |', ' † H |', 1)
-             if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
-             else row) for kind, row in rows]
+    # One current owner for all affected complete PNG encodes. Superseded cost
+    # providers and adjacent sampling studies remain linked from its report.
+    png_current = json.loads((ROOT / 'benchmarks/png-idat-forwarding-evidence.json').read_text(encoding='utf-8'))
+    assert png_current['productionAccepted'] and png_current['allAffectedPerformanceReconciled']
+    assert png_current['requiredMaterialPaths'] == 289 and not png_current['cpuGainClaimed']
+    assert png_current['raw']['mirrored'] and png_current['raw']['allMembersVerified']
+    assert png_current['storage']['removedOwnedArrayPayloadBytes'] == 4096
+    assert png_current['storage']['reservationReductionBytes'] == 61440
+    assert png_current['oneShotStatusCounts'] == {'pass': 14, 'gap': 1, 'uncertain': 2}
+    assert not png_current['issues'] and not png_current['materialPassToGapContradictions']
     def png_label(label):
-        return label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ').replace(', red-plane reference', '')
-    png_fast = json.loads((ROOT / 'benchmarks/png-fastest-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not png_fast['productionChanged'] and png_fast['allBuilds'] == 0
-    assert png_fast['raw']['mirrored'] and png_fast['raw']['allMembersVerified']
-    assert png_fast['sourceProof']['classificationSourceMatches']
-    assert png_fast['qualificationReused']['packageSha256'] == resident_decode['qualification']['actualPackage']['sha256']
-    for case, current in png['cases'].items():
-        assert current['caseId'] == case
-        assert not current['reusedUnchangedPath']
-        assert current['librarySha256'] == png['producers']['linuxSha256']
+        return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
+                .replace(', red-plane reference', '').replace('NoCompression0', 'stored0'))
+    for case, current in png_current['cases'].items():
+        assert current['librarySha256'] == png_current['qualification']['actualPackage']['librarySha256']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == len(current['managedActualNanoseconds']) == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['completePacketExact']
-        assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
-        assert current['nativeSamplesEachBracket'] == 12
-        assert current['packetSha256'] == current['nativePacketSha256'] and current['packetBytes'] == current['nativePacketBytes']
-        assert current['equivalentOneShotBoundary'] and current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
+        assert current['packetBytes'] == current['nativePacketBytes'] and current['packetSha256'] == current['nativePacketSha256']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['retainedOperationScratchBytes'] == 0
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        if case == 'EncodeFast8':
-            fresh = png_fast['current']
-            assert fresh['librarySha256'] == png_fast['qualificationReused']['librarySha256']
-            assert fresh['actualIterations'] == fresh['nativeSamplesEachBracket'] == len(fresh['managedActualNanoseconds']) == 12
-            assert fresh['allOriginalGatesPassed'] and fresh['quietGuardsPassed'] and fresh['completePacketExact']
-            assert fresh['codecPreparationTimed'] and not fresh['nativeCodecRetainedBetweenOperations']
-            for field in ('inputSha256', 'packetBytes', 'packetSha256', 'nativePacketBytes', 'nativePacketSha256', 'allocatedBytes', 'depth', 'level'):
-                assert fresh[field] == current[field]
-            assert fresh['status'] == 'uncertain' and fresh['lower'] < 1 < fresh['upper']
-            assert math.isclose(fresh['managedUs'] / fresh['nativeUs'], fresh['ratio'], rel_tol=1e-12)
-            current = png['cases'][case] = fresh
+        if current['boundaryKind'] != 'equivalent-one-shot':
+            continue
+        assert current['codecPreparationTimed'] and not current['referenceCodecRetained']
         label = current['label']; target = png_label(label)
         positions = [i for i, (kind, row) in enumerate(rows)
                      if kind == 'codec' and png_label(row.split('|')[1].strip()) == target]
@@ -1849,37 +1822,6 @@ def render():
         else:
             position = max(i for i, (_, old) in enumerate(rows) if old.startswith('| PNG ')) + 1
             rows.insert(position, row)
-    png_adjacent = json.loads((ROOT / 'benchmarks/png-fastest-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not png_adjacent['productionChanged'] and png_adjacent['allBuilds'] == 0 and png_adjacent['requiredMaterialPaths'] == 289
-    assert png_adjacent['raw']['mirrored'] and png_adjacent['raw']['allMembersVerified']
-    current = png_adjacent['current']
-    assert current['status'] == 'uncertain' and current['lower'] < 1 < current['upper']
-    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12 and current['operationsPerSubject'] == 4
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
-    assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
-    assert current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
-    assert current['librarySha256'] == png_adjacent['producers']['windowsSha256'] == png_adjacent['qualificationReused']['actualPackage']['librarySha256']
-    assert current['packetBytes'] == current['nativePacketBytes'] == 236828 and current['retainedOperationScratchBytes'] == 0
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + current['label'] + ' ')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    png_gray_adjacent = json.loads((ROOT / 'benchmarks/png-gray-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not png_gray_adjacent['productionChanged'] and png_gray_adjacent['allBuilds'] == 0
-    assert png_gray_adjacent['requiredMaterialPaths'] == 289 and png_gray_adjacent['raw']['mirrored'] and png_gray_adjacent['raw']['allMembersVerified']
-    current = png_gray_adjacent['current']
-    assert current['status'] == 'uncertain' and current['lower'] < 1 < current['upper']
-    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12 and current['operationsPerSubject'] == 4
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
-    assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256'] == png['cases']['EncodeGray8']['packetSha256']
-    assert current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
-    assert current['nativeReady']['colorWorkspacePreparationTimed'] and not current['nativeReady']['colorWorkspaceRetainedBetweenOperations']
-    assert current['librarySha256'] == png_gray_adjacent['producers']['windowsSha256'] == png_gray_adjacent['qualificationReused']['actualPackage']['librarySha256']
-    assert current['packetBytes'] == current['nativePacketBytes'] == 72586 and current['retainedOperationScratchBytes'] == 0
-    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + current['label'] + ' ')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["nativePacketBytes"]:,} |')
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
         if label == 'PNG8 decode, two retained images / shared caller root':
@@ -1978,65 +1920,12 @@ def render():
     current_build_qualification = lanczos_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
-    # Current actual-package costs for the three remaining historical PNG rows.
-    png_historical = json.loads((ROOT / 'benchmarks/png-historical-current-confirmation-evidence.json').read_text(encoding='utf-8'))
-    assert not png_historical['productionChanged'] and png_historical['requiredMaterialPaths'] == 289
-    assert png_historical['raw']['mirrored'] and png_historical['raw']['allMembersVerified']
-    assert png_historical['qualification']['fullChecksEachOs'] == 6417 and png_historical['qualification']['sameActualPackageBothOS']
-    assert png_historical['qualification']['actualPackageSha256'] == png_historical['producers']['actualPackageSha256']
-    assert png_historical['gcInspection']['resolvedDefaultGcForce'] and not png_historical['gcInspection']['unresolvedSelectorMembers']
-    assert png_historical['wordGeneralStatus'] == 'sampling-sensitive-open'
-    assert png_historical['warmWord']['status'] == 'pass' and not png_historical['warmWord']['generalWarmPassAccepted']
-    for case, prefix, label in [
-        ('EncodePredictable16', '| PNG predictable RGBA16 3000², Optimal6 / mixed6', 'PNG predictable RGBA16 3000², Optimal6 / mixed6'),
-        ('EncodeNoCompression8', '| PNG RGBA8, stored0 / native0', 'PNG RGBA8, stored0 / native0'),
-        ('EncodeNoCompression16', '| PNG RGBA16, NoCompression0 / native0', 'PNG RGBA16, stored0 / native0 (post-GC 4-op gap)')]:
-        cost = png_historical['cases'][case]
-        assert cost['librarySha256'] == png_historical['producers']['timedArtifactSha256'] == png_historical['qualification']['librarySha256']
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
-        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed'] and cost['completePacketExact']
-        assert cost['sourceUnchanged'] and cost['independentOwnedOutput'] and cost['retainedOperationScratchBytes'] == 0
-        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
-        assert len(positions) == 1
-        rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
-                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
-    png_stored = json.loads((ROOT / 'benchmarks/png-stored-workspace-evidence.json').read_text(encoding='utf-8'))
-    assert png_stored['productionAccepted'] and png_stored['allAffectedPerformanceReconciled']
-    assert png_stored['requiredMaterialPaths'] == 289 and not png_stored['cpuGainClaimed']
-    assert png_stored['raw']['mirrored'] and png_stored['raw']['allMembersVerified']
-    assert png_stored['sourceProof']['entireOriginalFileReconstructed']
-    assert png_stored['storage']['newReservationBytes'] == 73728 and png_stored['storage']['removedArrayPayloadBytes'] == 196604
-    assert png_stored['wordGeneralStatus'] == 'sampling-sensitive-open'
-    assert png_stored['warmWord']['status'] == 'pass' and not png_stored['warmWord']['generalWarmPassAccepted']
-    for case, prefix, label in [
-        ('EncodeNoCompression8', '| PNG RGBA8, stored0 / native0', 'PNG RGBA8, stored0 / native0'),
-        ('EncodeNoCompression16', '| PNG RGBA16, stored0 / native0', 'PNG RGBA16, stored0 / native0 (post-GC 4-op gap)')]:
-        cost = png_stored['cases'][case]
-        assert cost['librarySha256'] == png_stored['producers']['timedArtifactSha256'] == png_stored['qualification']['actualPackage']['librarySha256']
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
-        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed'] and cost['completePacketExact']
-        assert cost['sourceUnchanged'] and cost['independentOwnedOutput'] and cost['retainedOperationScratchBytes'] == 0
-        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
-        assert len(positions) == 1
-        rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
-                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
-    png_stored_one_shot = json.loads((ROOT / 'benchmarks/png-stored-one-shot-boundaries-evidence.json').read_text(encoding='utf-8'))
-    assert png_stored_one_shot['boundaryQualified'] and not png_stored_one_shot['productionChanged']
-    assert png_stored_one_shot['raw']['mirrored'] and png_stored_one_shot['raw']['allMembersVerified']
-    assert not png_stored_one_shot['originalRetainedViews']['retrospectivelyPassed']
-    for case, depth in [('EncodeNoCompression8', 8), ('EncodeNoCompression16', 16)]:
-        cost = png_stored_one_shot['cases'][case]
-        assert cost['status'] == 'pass' and cost['upper'] <= 1 and cost['completePacketExact']
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
-        assert cost['equivalentOneShotBoundary'] and cost['codecPreparationTimed'] and not cost['nativeCodecRetainedBetweenOperations']
-        assert cost['librarySha256'] == png_stored_one_shot['qualificationReused']['librarySha256']
-        prefix = f'| PNG RGBA{depth}, stored0 / native0'
-        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
-        assert len(positions) == 1
-        rows[positions[0]] = ('codec', f'| PNG RGBA{depth}, one-shot stored0 / native0 † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
-                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
+    predictable = png_current['cases']['EncodePredictable16']
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| PNG predictable RGBA16 3000²')]
+    assert len(positions) == 1 and predictable['status'] == 'pass'
+    rows[positions[0]] = ('codec', f'| {predictable["label"]} † | {predictable["managedUs"]:,.2f} | {predictable["nativeUs"]:,.2f} | '
+                         f'{predictable["ratio"]:.3f} / {predictable["upper"]:.3f} | {predictable["allocatedBytes"]:,} | '
+                         f'{predictable["packetBytes"]:,} / {predictable["nativePacketBytes"]:,} |')
     deep_current = json.loads((ROOT / 'benchmarks/prepared-deep-pair-conversions-evidence.json').read_text(encoding='utf-8'))
     assert deep_current['productionAccepted'] and deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
     assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
@@ -2323,11 +2212,6 @@ def render():
     current_build_qualification = wide_quartet_qualification
     assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6439
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
-    current_build_qualification = png_stored['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6449
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_stored['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['actualPackage']['storedPngExactWorkspaceAndOwnershipPassed'] and current_build_qualification['samePackageLinux']['storedPngExactWorkspaceAndOwnershipPassed']
     current_build_qualification = huffman_front['qualification']
     assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6449
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == huffman_front['producers']['actualPackageSha256']
@@ -2350,6 +2234,16 @@ def render():
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert all(q['actualConsumerPassed'] and q['streamingByteFrozenControls'] == 3
                for q in (current_build_qualification['actualPackage'], current_build_qualification['samePackageLinux']))
+    current_build_qualification = png_current['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6509
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['allFourPngModesPassed'] and current_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
+    stored_byte = png_current['cases']['EncodeNoCompression8']
+    stored_word = png_current['cases']['EncodeNoCompression16']
+    retained_word = png_current['cases']['EncodeNoCompression16Retained']
+    natural_word = png_current['warmWord']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2408,32 +2302,32 @@ Current scope and remaining work:
   remains uncertain; raw+9.90% tracks native+10.19%, with overlapping normalized
   intervals, not a byte speedup or uniform raw-gain claim. GC4,472/8,568B/op and
   4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
-  [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md) plus the
-  [two stored controls](../benchmarks/PNG-STORED-ONE-SHOT-BOUNDARIES.md) has
-  15 passes / 2 uncertain across17controls; ByteFastest/Gray8 need confidence resolution.
-  [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
-  uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
-  Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
-  no causal gain, allocation saving or presumed gap.
-  [Grayscale8's first adjacent view](../benchmarks/PNG-GRAY-ADJACENT-CONFIDENCE.md)
-  also stays uncertain:2.109/1.997ms,range0.963–1.143,551,260.67directB/op,exact72,586B packet.
-  Fresh native codec/conversion/zlib state, normalization and independent packets
-  are timed. Exact packets and existing admission remain; no global parity claim.
-  [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
-  unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
-  [Stored-mode workspace](../benchmarks/PNG-STORED-WORKSPACE.md) removes three unused
-  arrays:196,604B payload and384→72KiB admission, preserving complete packets.
-  Complete fresh-state RGBA8: {png_stored_one_shot['cases']['EncodeNoCompression8']['managedUs']:.2f}/FFmpeg{png_stored_one_shot['cases']['EncodeNoCompression8']['nativeUs']:.2f} µs,
-  upper {png_stored_one_shot['cases']['EncodeNoCompression8']['upper']:.3f},{png_stored_one_shot['cases']['EncodeNoCompression8']['allocatedBytes']:,} B/op;
-  RGBA16: {png_stored_one_shot['cases']['EncodeNoCompression16']['managedUs']:.2f}/{png_stored_one_shot['cases']['EncodeNoCompression16']['nativeUs']:.2f} µs,
-  upper {png_stored_one_shot['cases']['EncodeNoCompression16']['upper']:.3f},{png_stored_one_shot['cases']['EncodeNoCompression16']['allocatedBytes']:,} B/op passes.
+  [Bufferless IDAT publication](../benchmarks/PNG-IDAT-FORWARDING.md) removes
+  one 4 KiB payload buffer, its copy/count/flush state and 60 KiB of obsolete admission.
+  All 17 complete fresh-state encodes refresh: 14 pass / 1 gap / 2 uncertain. Fastest8 now
+  passes; grayscale8 has a small demonstrated gap, while gray-alpha8/16 need
+  confidence resolution. All complete packets remain exact. Each nonzero encode
+  allocates 4,136 B less. This storage/ownership simplification establishes no CPU
+  gain or equivalence: raw/native clock shifts, two historical normalized adverse
+  comparisons and three contemporary baseline checks remain in the report.
+  [Earlier adjacent Fastest/Gray studies](../benchmarks/PNG-IDAT-FORWARDING.md)
+  retain their original natural-GC sampling as history; they are not current proof.
+  Predictable16 now costs {predictable['managedUs']/1000:.2f}/FFmpeg {predictable['nativeUs']/1000:.2f} ms,
+  upper {predictable['upper']:.3f}, {predictable['allocatedBytes']:,} B/op, exact 573,041 B packet.
+  Stored fresh-state RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
+  upper {stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,} B/op;
+  RGBA16 costs {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f} µs,
+  upper {stored_word['upper']:.3f}, {stored_word['allocatedBytes']:,} B/op. Both pass.
   Native codec/zlib/packet preparation and word-frame allocation/conversion/disposal
-  are included; actual package/fixtures/packets are unchanged. Original retained-native
-  RGBA16 post-GC (4 operations): {png_stored['cases']['EncodeNoCompression16']['managedUs']:.2f}/{png_stored['cases']['EncodeNoCompression16']['nativeUs']:.2f}µs upper{png_stored['cases']['EncodeNoCompression16']['upper']:.3f}
-  remains a scoped gap; natural-GC (64 operations): {png_stored['warmWord']['managedUs']:.2f}/{png_stored['warmWord']['nativeUs']:.2f}µs
-  upper{png_stored['warmWord']['upper']:.3f} passes only that scope.
-  Production is unchanged. These lifetimes/sampling views stand separately;
-  their historical differences do not measure preparation time. Existing capacity/72KiB admission and zero scratch retention are unchanged.
+  stay timed. Retained-native word post-GC4 remains a distinct gap:
+  {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f} µs, upper {retained_word['upper']:.3f};
+  natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f} µs,
+  upper {natural_word['upper']:.3f}, {natural_word['directAllocatedBytes']:,.3f} direct B/op.
+  No subtraction of historical times measures preparation cost. The earlier
+  [stored deflater](../benchmarks/PNG-STORED-WORKSPACE.md) still owns 69,632 B of
+  arrays/72 KiB admission; codec minor-state allowance is now 4 KiB rather than 64 KiB.
+  Total allocation, reserved capacity and physical peak remain separate; no
+  operation scratch survives disposal and physical/native peaks are unmeasured.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -2507,7 +2401,7 @@ Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass690internal/246public per
+Current PNG/admission checks pass 702 internal / 246 public per
 normal/scalar/disabled-AVX2/AVX512 mode.
 Current resize qualification passes569 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.

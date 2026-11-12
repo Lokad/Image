@@ -1,5 +1,9 @@
 # Stored PNG operation boundaries
 
+Historical stage: [current IDAT publication](PNG-IDAT-FORWARDING.md) supersedes
+these affected encoder costs and transport ownership. Its deflater algorithms and
+the reference boundaries qualified here remain; raw evidence is retained.
+
 The two existing 513x259 stored controls now have equivalent complete one-shot
 comparisons. Managed stream creation/growth, codec storage, packing, encoding and
 disposal remain timed. Native codec/options/zlib and packet-wrapper creation,
