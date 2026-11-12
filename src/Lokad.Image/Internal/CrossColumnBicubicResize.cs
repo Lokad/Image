@@ -119,6 +119,27 @@ internal static class CrossColumnBicubicResize
                     }
                     var destination = result.Pixels.Slice(y * result.Stride, result.Stride);
                     var outputX = 0;
+                    for (; outputX + 3 < length; outputX += 4)
+                    {
+                        BicubicMath.FilterVerticalQuartet(cache, vertical[..count], rows[..count], outputX,
+                            out var firstSum, out var secondSum);
+                        var n0 = normalizers[outputX] * normalizerY;
+                        var n1 = normalizers[outputX + 1] * normalizerY;
+                        var n2 = normalizers[outputX + 2] * normalizerY;
+                        var n3 = normalizers[outputX + 3] * normalizerY;
+                        var accepted = BicubicMath.WriteByteQuartet(firstSum, secondSum, n0, n1, n2, n3,
+                            destination.Slice((tile + outputX) * 4, 16));
+                        if ((accepted & 1) == 0 && (!(n0 >= .5 && n1 >= .5)
+                            || !OriginalByte(source, result, tile + outputX, y, weights.Slice(outputX * 10, counts[outputX]),
+                                offsets.Slice(outputX * 10, counts[outputX]), sourceFirst, vertical[..count], first, context, ref deferred)
+                            || !OriginalByte(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * 10, counts[outputX + 1]),
+                                offsets.Slice((outputX + 1) * 10, counts[outputX + 1]), sourceFirst, vertical[..count], first, context, ref deferred))) return false;
+                        if ((accepted & 2) == 0 && (!(n2 >= .5 && n3 >= .5)
+                            || !OriginalByte(source, result, tile + outputX + 2, y, weights.Slice((outputX + 2) * 10, counts[outputX + 2]),
+                                offsets.Slice((outputX + 2) * 10, counts[outputX + 2]), sourceFirst, vertical[..count], first, context, ref deferred)
+                            || !OriginalByte(source, result, tile + outputX + 3, y, weights.Slice((outputX + 3) * 10, counts[outputX + 3]),
+                                offsets.Slice((outputX + 3) * 10, counts[outputX + 3]), sourceFirst, vertical[..count], first, context, ref deferred))) return false;
+                    }
                     for (; outputX + 1 < length; outputX += 2)
                     {
                         var sum = Vector512<double>.Zero;
@@ -153,8 +174,6 @@ internal static class CrossColumnBicubicResize
                     }
                 }
             }
-            // Admission bounds complete original tap cost. Failed speculative
-            // strips leave the counter untouched for original-order replay.
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }

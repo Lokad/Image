@@ -1,0 +1,161 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CXP857",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "sourcePins": {
+    "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": "f7f498a8f7bd032dcf2f705cdc7c3c85d8ff9784426f1949ef7ebb53b31ad27a",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "src/Lokad.Image/ImageTransforms.cs": "0f36c6478a6a78e5477d2baf8538206e0c34dbce3d094fb095e8dd1228436c48"
+  },
+  "producers": {
+    "windowsSha256": "c6d232cb36f5c51511ec39bb98b3bb597d072ff0a744b74ac0e501e1b6266902",
+    "linuxSha256": "cf33ed61ec4abc7114e39ba65cb5ee3b8b048c682d3982b87369cfe2d719b6bd",
+    "actualPackageSha256": "885373762cdf7588ba76145876601097377ca4dabf62544708d4118367dfd010"
+  },
+  "reference": "tmp/cbg854-candidate-TightCross8-confirm-receipt.json",
+  "currentCost": {
+    "managedUs": 1063.4901484375,
+    "nativeUs": 841.6597408854167,
+    "ratio": 1.2635630490282455,
+    "lower": 1.2569415422811445,
+    "upper": 1.2702516136744828,
+    "allocatedBytes": 114,
+    "status": "gap",
+    "librarySha256": "d16ea5e7fb398fecc373b0ad530b2cb35d4e03bd26da1c421458f6c2f23eb12d",
+    "receipt": "tmp/cbg854-candidate-TightCross8-confirm-receipt.json",
+    "observation": "tmp/cbg854-candidate-TightCross8-confirm-observation.json",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e",
+    "nativeOutputSha256": "cb4ca24bfa2efdece339afc582e8ea1c768809464ba9e653bc10cb2bf27983c7",
+    "managedMaxWorkingBytes": 1067020,
+    "depth": 8,
+    "outputWidth": 256,
+    "outputHeight": 519,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1067020 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+  },
+  "purpose": "First actual-current-package attribution after CBG854 shared geometry for the largest remaining resize gap: bounded513x259->256x519RGBA8,1063.49/zimg841.66us. RBR856 changes no Cross/Math/dispatcher source; current cost remains source-valid. Establish execution/preparation/certificate/repair locations before a coherent redesign. One2second CPU0operation/CPU1sampler capture, frozen exact pixels/native/settings/source/ownership/idle-v2 gates; instrumented elapsed discarded. Reuse verified package/build/runtime/reference/fixtures, zero builds/timing confirmations/qualification/package repeats. VM immutable source view reused without resynchronizing unrelated docs. Baseline sizes/times are scoped to prepared zimg graph/scratch, not a fresh-graph comparison.",
+  "allBuilds": 0,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "instrumentedElapsedDiscarded": true,
+  "totalSampleLocations": 1996,
+  "methods": [
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.CrossColumnBicubicResize::TryApplyCore(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext,bool&)[Optimized]",
+      1788
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      80
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      42
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      40
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      17
+    ],
+    [
+      "valuetype Lokad.Image.Internal.ColumnBicubicGeometry [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,int32,float64,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      8
+    ]
+  ],
+  "instances": [
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.CrossColumnBicubicResize::TryApplyCore(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext,bool&)[Optimized]",
+      "address": "0x7f5f1c2a9ea0",
+      "codeBytes": 4709,
+      "samples": 1788
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Read(int32,bool,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      "address": "0x7f5f1c2ab7f0",
+      "codeBytes": 287,
+      "samples": 80
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Build(int32,valuetype [System.Runtime]System.Span`1<float64>,int32&,int32&,float64&)[Optimized]",
+      "address": "0x7f5f1c2ab600",
+      "codeBytes": 362,
+      "samples": 42
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      "address": "0x7f5f1c2a3c50",
+      "codeBytes": 39,
+      "samples": 40
+    },
+    {
+      "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      "address": "0x7f5f1c2a3be0",
+      "codeBytes": 82,
+      "samples": 17
+    },
+    {
+      "method": "valuetype Lokad.Image.Internal.ColumnBicubicGeometry [Lokad.Image] Lokad.Image.Internal.ColumnBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,int32,float64,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "address": "0x7f5f1c2ab360",
+      "codeBytes": 639,
+      "samples": 8
+    }
+  ],
+  "raw": {
+    "file": "byte-cross-current-attribution.tar.xz",
+    "sha256": "81c7b0306b1ea8cd6cd106e4d017ec6d07315ad4877a9ee439ac50ebb5df5101",
+    "bytes": 103860,
+    "members": 24,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "generated-bicubic-row-reuse-qualified.tar.xz",
+        "sha256": "e060557b6121a4af4af2893e46018cd0039b26690f42213bd2fbf1de1e16579f"
+      }
+    ]
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "CQX858-proposed",
+    "productionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "sources": {
+      "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": "f7f498a8f7bd032dcf2f705cdc7c3c85d8ff9784426f1949ef7ebb53b31ad27a",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/ImageTransforms.cs": "0f36c6478a6a78e5477d2baf8538206e0c34dbce3d094fb095e8dd1228436c48"
+    },
+    "primary": "TightCross8",
+    "affectedExistingCases": [
+      "TightCross8",
+      "TightHorizontal8"
+    ],
+    "repeatedWork": "Actual current core has1788of1996mapped locations, including inlined pair quotient/certificate and horizontal filtering. Pair loop reconstructs vertical traversal/weight/bounds and serially completes each two-pixel quotient before next. Counts/skid/inlining are not phase times, CPU forecasts or removable percentages.",
+    "intendedEndState": "Route each full four-pixel Cross byte prefix through existing unmodified BicubicMath.FilterVerticalQuartet and WriteByteQuartet. Share vertical row/tap/weight scheduling; both independent quotients prepare before certificate/publication. Preserve per-pixel add order, original exact envelope/repair/NoInlining tiny-alpha unwind and per-pair acceptance. Original pair/scalar tails retained. This aligns Cross with existing Enlargement/Mixed common execution, no global math change.",
+    "storage": "Existing3440B explicit arrays and4096B preadmission unchanged. Second vector adds64B value lifetime, physical/JIT frame remains unmeasured. No owned heap/cache/API/session/pool/retained state. Repair frame unwinds before exact scratch; terminal refusal/cancellation/actual-user ownership unchanged.",
+    "completeBoundaries": "Two existing complete public513x259RGBA8->256x519 and256x259 controls; same frozen rasters/settings/prepared-zimg/native bounds/source/owners/idle-v2. Other71resize costs retain qualifiedRBR/CMP source-valid proof; no new workload matrix.",
+    "correctness": "Shared helper already has ordered lanes and four acceptance-mask tests. Focused direct Cross quartet/pair/scalar tails, poisoned result, zero/low alpha/rational pixels; retain verifier, original certificates/repair and resource tests. Whole original Cross file must reconstruct after removing new prefix and restoring stale comment. One immutable build eachOS, narrow3actual screens then independent12only if useful. Reconcile both affected complete costs before one fullW/L/scalar/SAMEpackage milestone.",
+    "temporaryCosts": "Larger live SIMD state and inlining can increase register pressure/code size; existing narrow/enlargement gains do not prove Cross helps. Failed unrelated horizontal four-column implementation remains adverse history, not a family ban. Abandon/revise on complete evidence; no arithmetic approximation or favorable repeated timing."
+  },
+  "qualificationReused": "generated-bicubic-row-reuse-evidence.json",
+  "limitation": "One2second CPU0operation/CPU1sampler capture; inlining/skid/locations are not phase costs, removable percentages or CPU gains. Existing complete Cross cost remains source-valid. Zero new timing/build/qualification/package proof."
+}
