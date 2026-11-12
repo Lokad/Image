@@ -66,10 +66,16 @@ public modules and actual package restore exactly, zero broad/package repeats.
 No confirmation or word recapture. Its follow-up ownership model preserves the
 live geometry footer/completed outputs within3,975B raw array payload, but adds
 11.3%decoded samples/29.1%kernel evaluations on the primary. Defer that layout
-before a production prototype; no CPU claim from logical counts. Next consolidate
-fixed bicubic coefficient preparation to remove generic per-tap dispatch/calls,
-preserving the original polynomial/order and inspecting actual generic code
-before reusing costs. No new storage/numerical policy or presumed word gap.
+before a production prototype; no CPU claim from logical counts. The
+[coefficient round](BICUBIC-COEFFICIENT-PREPARATION-ROUND.md) preserves three
+unaccepted variants. Simplest A saves13.66µs/3.82%raw/2.57%normalized on its
+independent wide-byte control,343.67/zimg346.22µs upper0.995. Its dispatcher IL
+shrinks163→44, potentially affecting other resize callers. B/C non-inlining
+controls give mixed costs and are unselected. Qualified source/modules/package
+restore exactly; zero broad/package runs while unsettled. Reuse immutable A,
+its focused checks and primary capture; screen six existing cached/packed/narrow
+controls before reconciling its broader affected scope. No new grid/storage/
+numerical policy or presumed word gap; current qualified costs remain unchanged.
 
 [Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
 7.18%normalized on complete live-token VP8L decode, with separated confidence
