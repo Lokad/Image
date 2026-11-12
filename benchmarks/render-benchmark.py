@@ -1878,6 +1878,27 @@ def render():
         assert len(positions) == 1
         rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                              f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
+    png_stored = json.loads((ROOT / 'benchmarks/png-stored-workspace-evidence.json').read_text(encoding='utf-8'))
+    assert png_stored['productionAccepted'] and png_stored['allAffectedPerformanceReconciled']
+    assert png_stored['requiredMaterialPaths'] == 289 and not png_stored['cpuGainClaimed']
+    assert png_stored['raw']['mirrored'] and png_stored['raw']['allMembersVerified']
+    assert png_stored['sourceProof']['entireOriginalFileReconstructed']
+    assert png_stored['storage']['newReservationBytes'] == 73728 and png_stored['storage']['removedArrayPayloadBytes'] == 196604
+    assert png_stored['wordGeneralStatus'] == 'sampling-sensitive-open'
+    assert png_stored['warmWord']['status'] == 'pass' and not png_stored['warmWord']['generalWarmPassAccepted']
+    for case, prefix, label in [
+        ('EncodeNoCompression8', '| PNG RGBA8, stored0 / native0', 'PNG RGBA8, stored0 / native0'),
+        ('EncodeNoCompression16', '| PNG RGBA16, stored0 / native0', 'PNG RGBA16, stored0 / native0 (post-GC 4-op gap)')]:
+        cost = png_stored['cases'][case]
+        assert cost['librarySha256'] == png_stored['producers']['timedArtifactSha256'] == png_stored['qualification']['actualPackage']['librarySha256']
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed'] and cost['completePacketExact']
+        assert cost['sourceUnchanged'] and cost['independentOwnedOutput'] and cost['retainedOperationScratchBytes'] == 0
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
+        assert len(positions) == 1
+        rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
+                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
     deep_current = json.loads((ROOT / 'benchmarks/prepared-deep-pair-conversions-evidence.json').read_text(encoding='utf-8'))
     assert deep_current['productionAccepted'] and deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
     assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
@@ -2102,6 +2123,11 @@ def render():
     current_build_qualification = wide_quartet_qualification
     assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6439
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
+    current_build_qualification = png_stored['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6449
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_stored['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['actualPackage']['storedPngExactWorkspaceAndOwnershipPassed'] and current_build_qualification['samePackageLinux']['storedPngExactWorkspaceAndOwnershipPassed']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2156,13 +2182,15 @@ Current scope and remaining work:
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
-  [Current predictable/stored controls](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
-  replace three historical rows on the actual package DLL. Predictable16 277.00/407.42 ms
-  upper0.706 and stored8 94.11/190.82 µs upper0.674 pass/stop. Stored16's post-GC
-  four-op507.69/405.03 µs upper1.343 is a distinct diagnostic; natural-GC matched
-  64-op351.54/405.42 µs upper0.902 passes its scope. Preserve both; general word
-  parity remains sampling-sensitive, with no presumed kernel gap. GC2,495,988 /
-  810,524 /1,348,268 B/op; exact573,041 /533,444 /1,066,552 B packets.
+  [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
+  unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
+  [Stored-mode workspace](../benchmarks/PNG-STORED-WORKSPACE.md) removes three unused
+  arrays:196,604B payload and384→72KiB admission, preserving complete packets.
+  Stored8 now92.72/190.15µs upper0.535,613,844B/op. Stored16 post-GC4op
+  501.70/405.21µs upper1.255 remains a gap; natural-GC64op350.36/405.10µs upper0.904
+  passes that scope,1,151,529.875 direct B/op. Its post-GC allocation is1,151,996B/op.
+  Both sampling views remain; general word parity stays open. No CPU gain or
+  physical-peak claim. Existing output capacity is unchanged; scratch retention is zero.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -2294,10 +2322,11 @@ and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Current resize qualification passes {current_build_qualification['resizeInternalEachModeEachOs']} internal/{current_build_qualification['resizePublicEachModeEachOs']} public per
+Current PNG/admission checks pass690internal/246public per
+normal/scalar/disabled-AVX2/AVX512 mode.
+Unchanged resize qualification retains {wide_quartet_qualification['resizeInternalEachModeEachOs']} internal/{wide_quartet_qualification['resizePublicEachModeEachOs']} public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
-{current_build_qualification['jpegInternalEachModeEachOs']} internal/{current_build_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
+{wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
 The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
 Exact packets/pixels, shared admission,

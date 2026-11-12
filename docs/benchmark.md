@@ -52,13 +52,15 @@ Current scope and remaining work:
   [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
   uncertain. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
-  [Current predictable/stored controls](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
-  replace three historical rows on the actual package DLL. Predictable16 277.00/407.42 ms
-  upper0.706 and stored8 94.11/190.82 µs upper0.674 pass/stop. Stored16's post-GC
-  four-op507.69/405.03 µs upper1.343 is a distinct diagnostic; natural-GC matched
-  64-op351.54/405.42 µs upper0.902 passes its scope. Preserve both; general word
-  parity remains sampling-sensitive, with no presumed kernel gap. GC2,495,988 /
-  810,524 /1,348,268 B/op; exact573,041 /533,444 /1,066,552 B packets.
+  [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
+  unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
+  [Stored-mode workspace](../benchmarks/PNG-STORED-WORKSPACE.md) removes three unused
+  arrays:196,604B payload and384→72KiB admission, preserving complete packets.
+  Stored8 now92.72/190.15µs upper0.535,613,844B/op. Stored16 post-GC4op
+  501.70/405.21µs upper1.255 remains a gap; natural-GC64op350.36/405.10µs upper0.904
+  passes that scope,1,151,529.875 direct B/op. Its post-GC allocation is1,151,996B/op.
+  Both sampling views remain; general word parity stays open. No CPU gain or
+  physical-peak claim. Existing output capacity is unchanged; scratch retention is zero.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -185,13 +187,14 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,439 full/live checks per OS**
+The current immutable build passes **6,449 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Current resize qualification passes 528 internal/791 public per
+Current PNG/admission checks pass690internal/246public per
+normal/scalar/disabled-AVX2/AVX512 mode.
+Unchanged resize qualification retains 528 internal/791 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -250,7 +253,7 @@ settings do not establish matched quality.
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,757.43 | 4,717.98 | 1.008 / 1.028 | 820,916 | 236,828 / 236,828 |
-| PNG RGBA16, stored0 / native0 (post-GC 4-op gap) † | 507.69 | 405.03 | 1.253 / 1.343 | 1,348,268 | 1,066,552 / 1,066,552 |
+| PNG RGBA16, stored0 / native0 (post-GC 4-op gap) † | 501.70 | 405.21 | 1.238 / 1.255 | 1,151,996 | 1,066,552 / 1,066,552 |
 | PNG grayscale8, one-shot Optimal6 / native6 † | 1,993.15 | 1,968.89 | 1.012 / 1.047 | 551,364 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,370.01 | 9,793.98 | 0.957 / 0.972 | 819,884 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,162.99 | 4,444.97 | 0.937 / 0.955 | 552,332 | 120,366 / 120,366 |
@@ -259,7 +262,7 @@ settings do not establish matched quality.
 | PNG RGB16, one-shot Optimal6 / native6 † | 15,330.07 | 16,071.79 | 0.954 / 0.963 | 2,431,492 | 739,472 / 739,472 |
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,704.74 | 5,506.13 | 0.854 / 0.875 | 822,740 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,874.42 | 10,487.03 | 0.942 / 0.950 | 1,360,900 | 506,887 / 506,887 |
-| PNG RGBA8, stored0 / native0 † | 94.11 | 190.82 | 0.493 / 0.674 | 810,524 | 533,444 / 533,444 |
+| PNG RGBA8, stored0 / native0 † | 92.72 | 190.15 | 0.488 / 0.535 | 613,844 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,529.69 | 1,535.97 | 0.996 / 1.012 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,184.46 | 1,395.39 | 0.849 / 0.855 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 2,826.77 | 2,894.02 | 0.977 / 0.981 | 70,272 | — |

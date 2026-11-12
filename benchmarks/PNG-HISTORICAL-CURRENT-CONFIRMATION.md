@@ -1,5 +1,9 @@
 # Current predictable and stored PNG costs
 
+Stored-mode costs and qualification are superseded by
+[mode-specific workspace](PNG-STORED-WORKSPACE.md). Predictable16 remains valid
+for its unchanged compressed path. The measurements below retain their original scope.
+
 PHC832 refreshes three historical controls on the **actual verified package DLL**,
 without production changes. PredictableRGBA16 and storedRGBA8 pass/stop.
 StoredRGBA16 remains **sampling-sensitive**: retain both current views.

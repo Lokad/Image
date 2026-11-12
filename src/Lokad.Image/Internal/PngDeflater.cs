@@ -12,6 +12,7 @@ namespace Lokad.Image.Internal;
 internal sealed partial class PngDeflater : Stream
 {
     internal const int WorkspaceBytes = 384 * 1024;
+    internal const int StoredWorkspaceBytes = 72 * 1024;
     private const int Window = 32768, Minimum = 3, Maximum = 258, Lookahead = 262, TokenCapacity = 16383;
     private readonly Stream output;
     private readonly OperationContext context;
@@ -31,16 +32,22 @@ internal sealed partial class PngDeflater : Stream
     {
         if (level is not (0 or 1 or 6 or 9)) throw new ArgumentOutOfRangeException(nameof(level));
         this.output = output; this.context = context; this.level = level;
-        // <261 KiB fixed arrays plus <64 KiB overlapping tree/code storage;
-        // 384 KiB covers retained capacities, metadata and small owners.
-        context.Reserve(WorkspaceBytes);
+        // Stored blocks need only the 64 KiB history and 4 KiB output buffer.
+        // Compressed modes also own dictionaries, tokens and tree/code storage.
+        var workspaceBytes = level == 0 ? StoredWorkspaceBytes : WorkspaceBytes;
+        context.Reserve(workspaceBytes);
         try
         {
-            history = new byte[2 * Window]; heads = new ushort[Window]; older = new ushort[Window];
-            tokens = new uint[TokenCapacity]; encoded = new byte[4096];
+            history = new byte[2 * Window];
+            if (level != 0)
+            {
+                heads = new ushort[Window]; older = new ushort[Window];
+                tokens = new uint[TokenCapacity];
+            }
+            encoded = new byte[4096];
             if (level != 0) treeWorkspace = new();
         }
-        catch { context.Release(WorkspaceBytes); throw; }
+        catch { context.Release(workspaceBytes); throw; }
     }
 
     public override void Write(ReadOnlySpan<byte> data)
@@ -410,7 +417,7 @@ internal sealed partial class PngDeflater : Stream
         {
             disposed = true; history = []; heads = []; older = []; tokens = []; encoded = [];
             treeWorkspace = null;
-            context.Release(WorkspaceBytes);
+            context.Release(level == 0 ? StoredWorkspaceBytes : WorkspaceBytes);
         }
         base.Dispose(disposing);
     }

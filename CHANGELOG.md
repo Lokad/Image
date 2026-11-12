@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Omit unused matching/token storage from uncompressed PNG encoding, reducing
+  temporary allocation and memory admission while preserving exact packets.
+
 - Share bounded bicubic source preparation, contiguous windows and sample conversions
   across output columns, including deep reductions with small output heights,
   preserving exact pixels and working-memory limits.

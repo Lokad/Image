@@ -1231,6 +1231,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyWebpAlphaCoefficientStorage();
         await VerifyLanczosPlans();
         await VerifyCompactPngDictionary(budget, limits);
+        await VerifyStoredPngWorkspace();
         await VerifyDirectRgbResult();
         await VerifyGroupedJpegResult(false);
         await VerifyGroupedJpegResult(true);
@@ -1583,6 +1584,43 @@ internal static class CooperativeMemoryConsumer
         if (budget.Bytes != 0 || budget.IsDisposed)
             throw new Exception("Packaged JPEG444 retained storage leaked.");
         Console.WriteLine("Packaged JPEG444 byte/word normalization, exact packets, async and shared ownership passed.");
+    }
+
+    private static async Task VerifyStoredPngWorkspace()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            const int width = 19, height = 13;
+            var sourceBytes = width * height * 4 * (depth / 8);
+            var working = sourceBytes + width * 4 * (depth / 8) + 65536 + 72 * 1024;
+            using var root = new TestMemoryBudget(2 * 1024 * 1024);
+            var limits = new ImageLimits { MaxWorkingBytes = working, MemoryBudget = root };
+            using var seed = OriginalPixels.Buffer(width, height, depth);
+            using var source = seed.Clone(limits); var pixels = OriginalPixels.Bytes(source);
+            var options = new PngEncodeOptions { Compression = System.IO.Compression.CompressionLevel.NoCompression, Limits = limits };
+            using var rejected = new MemoryStream();
+            try
+            {
+                ImageCodec.EncodePng(source, rejected, options with { Limits = limits with { MaxWorkingBytes = working - 1 } });
+                throw new Exception("Packaged stored PNG ignored its smaller working boundary.");
+            }
+            catch (ImageLimitException e) when (e.Scope == ImageLimitScope.Operation && e.Limit == ImageLimitKind.WorkingBytes) { }
+            if (rejected.Length != 0 || root.Bytes != sourceBytes) throw new Exception("Packaged stored PNG refusal changed output or ownership.");
+            using var synchronous = new MemoryStream(); using var asynchronous = new MemoryStream();
+            ImageCodec.EncodePng(source, synchronous, options);
+            if (root.Peak != working || root.Bytes != sourceBytes) throw new Exception("Packaged stored PNG workspace charge differs.");
+            await ImageCodec.EncodePngAsync(source, asynchronous, options with { Limits = limits with { MaxWorkingBytes = 1024 * 1024 } });
+            if (!synchronous.ToArray().AsSpan().SequenceEqual(asynchronous.ToArray())
+                || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)) || root.Bytes != sourceBytes
+                || !synchronous.CanWrite || !asynchronous.CanWrite) throw new Exception("Packaged stored PNG async packet or borrowed owners differ.");
+            source.Dispose();
+            if (root.Bytes != 0) throw new Exception("Packaged stored PNG retained work after completion.");
+            using (var decoded = ImageCodec.Decode(asynchronous.ToArray(), new() { Limits = limits with { MaxWorkingBytes = 1024 * 1024 } }))
+                if (decoded.BitDepth != depth || root.Bytes != sourceBytes || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(decoded)))
+                    throw new Exception("Packaged stored PNG lost exact samples or independent retained ownership.");
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged stored PNG leaked or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged stored PNG byte/word exact pixels, bounded workspace, async and ownership passed.");
     }
 
     private static async Task VerifyCompactPngDictionary(TestMemoryBudget budget, ImageLimits limits)

@@ -50,7 +50,7 @@ public sealed class PngDeflaterTests
     [InlineData(0)] [InlineData(1)] [InlineData(6)] [InlineData(9)]
     public void SharedRefusalIsTerminalAndReleasedCapacityAdmitsSubsequentEncoding(int level)
     {
-        using var root = new TestMemoryBudget(PngDeflater.WorkspaceBytes);
+        using var root = new TestMemoryBudget(level == 0 ? PngDeflater.StoredWorkspaceBytes : PngDeflater.WorkspaceBytes);
         using var blocker = root.CreateScope(); Assert.True(blocker.TryReserve(1, out var held));
         using var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root }, default);
         using var output = new MemoryStream();

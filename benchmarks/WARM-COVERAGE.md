@@ -7,7 +7,22 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
-The latest accepted [contiguous wide views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
+[Stored PNG workspace](PNG-STORED-WORKSPACE.md) removes three unused arrays:
+196,604B payload/196,680B complete byte and natural-word allocation,384→72KiB
+deflater admission. Post-GC word saves196,272 measured B/op; counter boundaries
+remain separate. Byte92.72/FFmpeg190.15µs upper0.535 passes/stops. Word post-GC4op
+501.70/405.21µs upper1.255 remains a gap; natural-GC64op350.36/405.10µs upper0.904
+passes its scope. No CPU gain, general word pass or physical-peak claim.
+Complete533,444/1,066,552B packets and all pixel/owner/quiet gates stay exact.
+No retained operation scratch. Full6,449checks perOS,690internal/246public
+normal/scalar/AVX2-off/AVX512-off and SAMEactualpackage/all3examples pass.
+Nonzero modes retain allocation order, field layout, hot bodies and384KiB
+admission; unchanged family performance/ISA evidence reused. One core build
+perOS; no fixture/native/harness rebuild or workload expansion. Historical
+[Predictable16](PNG-HISTORICAL-CURRENT-CONFIRMATION.md) remains valid and stopped;
+earlier stored-mode results retain their original sampling/provenance context.
+
+Unchanged [contiguous wide views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
 pass6,439full/live checks perOS,528internal/791public affected normal/scalar/
 AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Byte saves14.15µs/
 3.81%raw/4.01%normalized with separated confidence;357.33/zimg350.73µs upper1.033
@@ -70,21 +85,6 @@ The [narrow quartet-preparation screen](NARROW-BYTE-QUARTET-PREPARATION-TRIAL.md
 also establishes no useful gain; original source/modules/package are restored
 exactly. Both short screens/JIT and passing exact-value/root checks remain; no
 independent confirmation, broad/package repeat or current-cost replacement.
-
-The [current predictable/stored PNG confirmations](PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
-replace the three displayed historical PNG costs using the unchanged actual
-package DLL. Predictable16 277.00/FFmpeg407.42ms upper0.706 and stored8
-94.11/190.82µs upper0.674 pass/stop. Stored16 post-GC4op507.69/405.03µs upper1.343
-and natural-GC matched64op351.54/405.42µs upper0.902 are distinct views; general
-word parity remains sampling-sensitive. Actual selector/default GC behavior is
-verified; no claim that GC alone explains the difference. All packets/samples,
-ownership/quiet guards remain exact; GC2,495,988/810,524/1,348,268B peroperation,
-zero retained operation scratch, peaks/pool retention unremeasured. No production/
-embedded/harness/native/fixture build or broad/package repeat; one allowlist-only
-owned-driver build. The initial reference preflight fails before timing and is
-retained; an ignored matching provenance view preserves reference identities.
-The formerly historical Tight32x16_8 control is now confirmed passing above.
-All 289 paths remain; this is not a global pass.
 
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
@@ -373,6 +373,12 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- PSS840 changes only stored-PNG preparation/reservation and matching cleanup.
+  Existing NoCompression8/16 costs refresh with exact full packets; word retains
+  both post-GC4op and natural-GC64op scopes. Nonzero allocation order, instance
+  fields, packet/hot arithmetic and384KiB admission remain unchanged. Other
+  compressed, decoder, resizing and text evidence remains source-valid. No
+  general CPU gain or physical-peak claim; independent work continues.
 - WCD837B changes only proven byte row-loan horizontal addressing and adds a
   numerical helper; all existing numerical methods reconstruct verbatim. New
   generic locals also alter word JIT layout, so both existing TightWide8/16 costs
