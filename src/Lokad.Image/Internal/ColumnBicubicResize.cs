@@ -379,18 +379,27 @@ internal static partial class ColumnBicubicResize
         ReadOnlySpan<double> weights)
     {
         var pairs = MemoryMarshal.Cast<Vector256<double>, Vector512<double>>(decoded[..10]);
-        var groups = MemoryMarshal.Cast<double, Vector256<double>>(weights[..16]);
+        var groups = MemoryMarshal.Cast<double, Vector512<double>>(weights[..16]);
         var window = pairs[0];
         var sum = Vector512<double>.Zero;
-        for (var group = 0; group < 4; group++)
+        for (var group = 0; group < 2; group++)
         {
-            var next = pairs[group + 1];
-            var coefficients = groups[group].ToVector512Unsafe();
-            var paired = Avx512F.Shuffle4x128(coefficients, coefficients, 0x50);
-            var evenWeights = Avx512F.Permute4x64(paired, 0x00);
-            var oddWeights = Avx512F.Permute4x64(paired, 0x55);
+            // The existing packed load contains two taps from both columns,
+            // followed by their next two taps. Select each coefficient directly.
+            var coefficients = groups[group];
+            var next = pairs[group * 2 + 1];
+            var evenWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(0L, 0, 0, 0, 2, 2, 2, 2));
+            var oddWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(1L, 1, 1, 1, 3, 3, 3, 3));
             var even = Avx512F.Shuffle4x128(window, next, 0x44);
             var odd = Avx512F.Shuffle4x128(window, next, 0xee);
+            sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
+            window = next;
+            next = pairs[group * 2 + 2];
+            evenWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(4L, 4, 4, 4, 6, 6, 6, 6));
+            oddWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(5L, 5, 5, 5, 7, 7, 7, 7));
+            even = Avx512F.Shuffle4x128(window, next, 0x44);
+            odd = Avx512F.Shuffle4x128(window, next, 0xee);
             sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
             sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
             window = next;

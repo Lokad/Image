@@ -2082,12 +2082,21 @@ def render():
     assert all(c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
                and c['managedRationalReferenceExact'] and c['independentOwnedOutput']
                for c in scaler_confidence['cases'].values())
+    compact_paired = json.loads((ROOT / 'benchmarks/compact-bicubic-paired-weights-evidence.json').read_text(encoding='utf-8'))
+    assert compact_paired['productionAccepted'] and compact_paired['allAffectedPerformanceReconciled']
+    assert set(compact_paired['cases']) == {'TightDown8'}
+    assert compact_paired['raw']['mirrored'] and compact_paired['raw']['allMembersVerified']
+    assert compact_paired['sourceProof']['performanceScope']['other72ResizeCostsReused']
+    assert compact_paired['sourceProof']['actualSharedCaller']['exact']
+    assert all(v['rawGainSeparated'] for v in compact_paired['comparison']['views'].values())
+    assert not compact_paired['comparison']['normalizedAdverseSeparated']
     current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
+    assert resize_status_counts == compact_paired['currentResizeStatusCounts']
     resize_case_owners = {case: (owner, view)
-                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'))
+                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'))
                           for case in owner['cases']}
     rows = apply_current_resize_weights(rows, resize_weights, resize_case_owners, bilinear_metadata)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
@@ -2273,9 +2282,16 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == bilinear_metadata['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
+    current_build_qualification = compact_paired['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6512
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == compact_paired['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == compact_paired['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
+    assert current_build_qualification['affectedNarrowByteConsumerPassedBothOS']
     bilinear_byte = bilinear_metadata['cases']['Down8']
     bilinear_word = bilinear_metadata['cases']['Down16']
-    scaler_tight = scaler_confidence['cases']['TightDown8']
+    scaler_tight = compact_paired['cases']['TightDown8']
     scaler_wide = scaler_confidence['cases']['Wide8']
     stored_byte = png_current['cases']['EncodeNoCompression8']
     stored_word = png_current['cases']['EncodeNoCompression16']
@@ -2411,16 +2427,21 @@ Current scope and remaining work:
   upper {bilinear_byte['upper']:.3f}, also passes. Its baseline already passed on the
   contemporary reference clock, so no causal byte-gap closure claim follows.
   Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
-  scratch. Arithmetic/repair and ownership stay exact; 71 other costs reuse valid
-  shared-caller proof. [Current adjacent confidence](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
-  on the unchanged actual package gives TightDown8
+  scratch. Arithmetic/repair and ownership stay exact.
+  [Compact paired weights](../benchmarks/COMPACT-BICUBIC-PAIRED-WEIGHTS.md)
+  independently confirms TightDown8
   {scaler_tight['managedUs']:.2f}/prepared-zimg {scaler_tight['nativeUs']:.2f} µs,
-  range {scaler_tight['lower']:.3f}–{scaler_tight['upper']:.3f}: a gap. Wide8
+  upper {scaler_tight['upper']:.3f}, pass. Raw5.77µs/1.38% gain and all-actual
+  6.24µs/1.48% gain have separated intervals; normalized confidence overlaps,
+  native clock−0.36%. Its contemporary baseline was uncertain, so historical
+  gap closure is not attributed solely to this code. No new preparation state,
+  loan/tail work or owned/retained capacity;113B/op, same4KiB admission.
+  The other72resize costs reuse source/shared-caller proof. Unchanged Wide8
   {scaler_wide['managedUs']:.2f}/{scaler_wide['nativeUs']:.2f} µs,
   range {scaler_wide['lower']:.3f}–{scaler_wide['upper']:.3f} remains uncertain.
-  Twelve alternating adjacent pairs retain all actuals and native brackets;
-  direct allocations {scaler_tight['allocatedBytes']:,}/{scaler_wide['allocatedBytes']:,} B/op.
-  No production speedup, build or broad/package repeat is claimed.
+  Its [adjacent capture](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
+  retains every actual/native bracket, with direct198350B/op, separate from
+  unchanged retained capacity. Stop confirmed passes; uncertainty is not a gap.
   [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
   without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six

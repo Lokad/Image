@@ -1,0 +1,396 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CPW885",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "productionChanged": true,
+  "productionAccepted": true,
+  "qualificationPending": false,
+  "allAffectedCostsCaptured": true,
+  "allAffectedPerformanceReconciled": true,
+  "cases": {
+    "TightDown8": {
+      "managedUs": 414.18496337365593,
+      "nativeUs": 418.1286295572917,
+      "ratio": 0.9905682942882642,
+      "lower": 0.972272640918306,
+      "upper": 0.9983203508703143,
+      "allocatedBytes": 113,
+      "librarySha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "status": "pass",
+      "caseId": "TightDown8",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "receipt": "tmp/cpw885-candidate-TightDown8-confirm-receipt.json",
+      "observation": "tmp/cpw885-candidate-TightDown8-confirm-observation.json",
+      "managedActualNanoseconds": [
+        414084.5362903226,
+        414087.6875,
+        414209.28225806454,
+        414359.04637096776,
+        414081.6693548387,
+        414216.18951612903,
+        414404.2358870968,
+        414000.2358870968,
+        414448.89919354836,
+        414208.51612903224,
+        414253.4637096774,
+        413881.42741935485
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 667660,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    }
+  },
+  "comparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 419.95989223484855,
+        "candidateUs": 414.18496337365593,
+        "savedUs": 5.77492886119266,
+        "savedFraction": 0.013751143782947839,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 419959.8922348486,
+          "StandardError": 223.4306654040672,
+          "Level": 12,
+          "Margin": 1024.8527466828416,
+          "Lower": 418935.03948816576,
+          "Upper": 420984.7449815314
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 414184.9633736559,
+          "StandardError": 48.56398183926581,
+          "Level": 12,
+          "Margin": 215.4773839503966,
+          "Lower": 413969.48598970554,
+          "Upper": 414400.4407576063
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 420.4293956597222,
+        "candidateUs": 414.18626579301076,
+        "savedUs": 6.243129866711446,
+        "savedFraction": 0.014849413316866067,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 420429.3956597222,
+          "StandardError": 510.6112206785994,
+          "Level": 12,
+          "Margin": 2265.5714354662687,
+          "Lower": 418163.8242242559,
+          "Upper": 422694.9670951885
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 414186.26579301077,
+          "StandardError": 48.56398183926281,
+          "Level": 12,
+          "Margin": 215.47738395038326,
+          "Lower": 413970.7884090604,
+          "Upper": 414401.74317696114
+        }
+      }
+    },
+    "normalizedGain": 0.010222733377897364,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.003564852946251418,
+    "baselineRatioBounds": [
+      0.9810827935369937,
+      1.0124443842313968
+    ],
+    "candidateRatioBounds": [
+      0.972272640918306,
+      0.9983203508703143
+    ]
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CPW885",
+    "onlyProductionMethodChanged": "ColumnBicubicResize.FilterPreparedBytePair",
+    "wholeOriginalSourceReconstructedOutsideThatMethod": true,
+    "lineEndingsNormalized": true,
+    "exactCoefficientSelections": 64,
+    "tapOrder": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "arithmetic": "Same eight ordered separate multiply/add operations on identical coefficient/sample bits; no reassociation, FMA or numerical-policy change.",
+    "callBoundary": "One existing production call in the guarded8-tap overlapping-pair branch, selected only forByteSamples. Caller/repair/cancellation and all geometry/arrays/admission/loan/storage source remain verbatim. AVX512F guard remains; new intrinsic requires the same ISA.",
+    "newOwnedCapacityBytes": 0,
+    "newRetainedOperationScratchBytes": 0,
+    "workspaceAndOwnershipUnchanged": true,
+    "unchangedPins": {
+      "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+      "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+      "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524"
+    },
+    "testsReused": "Existing independent ordered-bit/original-overlap oracle includes negative and signed-zero weights,12source/alpha patterns, borrowed guards and allocation check. Complete exact pixels/repair/cancellation/ownership/storage suites also reused. No prototype-only tests added.",
+    "actualSharedCallerJitPending": false,
+    "actualSharedCaller": {
+      "codeBytes": 9388,
+      "instructionAndLabelLines": 2204,
+      "exact": true,
+      "normalization": "Process addresses/method-number prefixes only; offsets/immediates retained."
+    },
+    "actualByteLoops": {
+      "RowLoanStrip": {
+        "baselineCodeBytes": 6612,
+        "candidateCodeBytes": 6730
+      },
+      "RowTailStrip": {
+        "baselineCodeBytes": 6528,
+        "candidateCodeBytes": 6638
+      }
+    },
+    "performanceScope": {
+      "requiredResizeControls": 73,
+      "existingBicubicOrdinaryControls": 61,
+      "geometryAndDepthCandidates": [
+        "Down8",
+        "TightDown8"
+      ],
+      "changedExistingControl": "TightDown8",
+      "unchangedDefaultDown8": "Existing default working allowance admits CachedBicubicResize before Column dispatch; current cached allocation/preparation evidence remains. No source or public caller change.",
+      "preparedControls": "All eight existing prepared/one-shot controls retain successful CachedBicubicResize workspace and execute that unchanged path. Their ordinary fallback is not used on the qualified scope.",
+      "other72ResizeCostsReused": true,
+      "unrelatedCodecTextDrawingEditingCostsReused": true,
+      "reason": "One production call site in byteColumn overlapping8-tap filtering; all other source outside the leaf reconstructs. ByteColumn guard requires two-axis reduction and taps<=10. Catalog filters leave only Down8/TightDown8; defaultDown8 cached dispatch precedes the bounded primitive. Shared actual9388Bpublic caller is exact; other arithmetic, state, guards and portable fallbacks remain unchanged."
+    },
+    "storage": {
+      "newOwnedCapacityBytes": 0,
+      "newRetainedOperationScratchBytes": 0,
+      "allocationBytesPerOperation": 113,
+      "rowLoanOutputCapacityBytes": 11776,
+      "tenSlotOutputLoanCapacityBytes": 12800,
+      "rowLoanLocalPayloadBytes": 3424,
+      "smallLocalPayloadBytes": 4080,
+      "largeLocalPayloadBytes": 3232,
+      "scratchAdmissionBytes": 4096,
+      "physicalNativeAndJitPeaksMeasured": false,
+      "ownershipAndReplacementLifetimesUnchanged": true
+    }
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedOperationScratchBytes": 0,
+    "allocationBytesPerOperation": 113,
+    "rowLoanOutputCapacityBytes": 11776,
+    "tenSlotOutputLoanCapacityBytes": 12800,
+    "rowLoanLocalPayloadBytes": 3424,
+    "smallLocalPayloadBytes": 4080,
+    "largeLocalPayloadBytes": 3232,
+    "scratchAdmissionBytes": 4096,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "ownershipAndReplacementLifetimesUnchanged": true
+  },
+  "acceptance": "Retain5.7749us/1.3751%raw gain,6.2431us/1.4849%allactual, with separated raw intervals. Normalized1.0223%point gain has overlapping confidence; native clock moves-.3565%. Current standaloneupper.998320passes; contemporary baseline was uncertain, not a causal claim that production alone closed its historical gap. Same ownership/storage/shape and exact samples, no allocation saving claim or blanket speedup.",
+  "isaReuse": "Only the byteColumn AVX512F paired kernel changes. Existing hardware guards, scalar/disabled-ISA/word paths and all source outside that leaf remain; actual shared9388BResizecaller exact. Current normal/scalar570internal/791public and three named storage suites pass bothOS; reuse prior AVX512off/AVX2off qualification of unchanged paths.",
+  "workflow": {
+    "coreAndEmbeddedBuildsEachOs": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "newTests": 0,
+    "shortActuals": 3,
+    "independentConfirmationActuals": 12,
+    "other72ResizeCostsReused": true,
+    "allocationSavingsClaimed": false
+  },
+  "producers": {
+    "windowsSha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+    "linuxSha256": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+    "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "5495114ab308c2d816c8d36afa0cfe1353fd014edad186f4409130e56edfda9e"
+  },
+  "unchangedPins": {
+    "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+    "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+    "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524"
+  },
+  "qualification": {
+    "fullChecksEachOs": 6512,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "full": [
+        3183,
+        2381,
+        948
+      ],
+      "total": 6512,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 570,
+        "public-normal": 791,
+        "internal-scalar": 570,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "Only the byteColumn AVX512F paired kernel changes. Existing hardware guards, scalar/disabled-ISA/word paths and all source outside that leaf remain; actual shared9388BResizecaller exact. Current normal/scalar570internal/791public and three named storage suites pass bothOS; reuse prior AVX512off/AVX2off qualification of unchanged paths."
+      },
+      "resizeInternalNormalScalar": 570,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "5495114ab308c2d816c8d36afa0cfe1353fd014edad186f4409130e56edfda9e"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+        "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+      "full": [
+        3183,
+        2381,
+        948
+      ],
+      "total": 6512,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 570,
+        "public-normal": 791,
+        "internal-scalar": 570,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "Only the byteColumn AVX512F paired kernel changes. Existing hardware guards, scalar/disabled-ISA/word paths and all source outside that leaf remain; actual shared9388BResizecaller exact. Current normal/scalar570internal/791public and three named storage suites pass bothOS; reuse prior AVX512off/AVX2off qualification of unchanged paths."
+      },
+      "resizeInternalNormalScalar": 570,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "5495114ab308c2d816c8d36afa0cfe1353fd014edad186f4409130e56edfda9e"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+        "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633",
+      "symbolsSha256": "5e4268634eea98a0fc7c4ffb7d9861555e4a53da2d9bac265a6371ffc133a135",
+      "bytes": 455748,
+      "librarySha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633",
+      "librarySha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "threeNamedStorageSuitesIncluded": true,
+    "disabledResizeIsaReused": true,
+    "codecAndTextIsaReused": true,
+    "affectedNarrowByteConsumerPassedBothOS": true
+  },
+  "currentResizeStatusCounts": {
+    "pass": 64,
+    "gap": 0,
+    "uncertain": 9
+  },
+  "next": "Stop confirmed bounded byte reduction. Preserve nine remaining resize uncertainties without assuming tuning is required. Select the next demonstrated material gap or justified uncertainty-resolution task from current family evidence; compression/exact packets/pixels and all289required paths remain. Publication postponed.",
+  "raw": {
+    "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+    "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+    "bytes": 1422452,
+    "members": 93,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "bilinear-operation-metadata-qualified.tar.xz",
+        "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+      },
+      {
+        "file": "resize-current-adjacent-confidence.tar.xz",
+        "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+      },
+      {
+        "file": "column-coefficient-preparation-trial.tar.xz",
+        "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+      }
+    ]
+  }
+}
