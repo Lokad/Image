@@ -17,6 +17,9 @@ TightDown8 trial passes its standalone ratio gate while its contemporary baselin
 is uncertain, but this does not establish a causal improvement. No further
 sampling is taken to obtain favorable bounds. These results do not replace
 current costs, establish an overall raster speedup or prohibit revised designs.
+Contemporary baseline ratio uppers are 1.022 / 1.014, both uncertain. The older
+source-valid gap captures remain recorded, but this mixed evidence must be
+resolved before assuming that either current path requires optimization.
 
 All original rational/exact pixels, approved native bounds, input identities,
 independent outputs, cancellation/admission and idle-v2 guards pass. Boundaries

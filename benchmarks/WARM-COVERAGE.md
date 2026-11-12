@@ -29,6 +29,9 @@ on both OSes. Original sources/DLLs/package are restored exactly, retaining curr
 costs and qualification above. Preserve all trial evidence without another timing
 or broad/package repeat; next inspect shared coefficient preparation and row/tail
 workspace using current bounded-byte attribution. This is not a closed-family ban.
+Its contemporary unchanged-production baselines are both uncertain (uppers
+1.022 / 1.014). The two older gap labels above describe retained confirmations;
+do not assume that current optimization is needed from those labels alone.
 
 [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) improves the retained-native stored-word
 complete encode by 29.48 µs/6.23% raw and 6.86% normalized, with separated
