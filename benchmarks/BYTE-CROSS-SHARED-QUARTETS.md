@@ -1,5 +1,8 @@
 # Shared byte cross-resize quartets
 
+Current follow-up: [prepared horizontal overlap](BYTE-CROSS-HORIZONTAL-OVERLAP.md).
+Costs and next-action statements below retain their original checkpoint.
+
 Bounded byte reverse-mixed/identity-height resizing now uses the existing common
 vertical quartet filter and byte publisher. Four pixels share the tap traversal;
 both independent quotients prepare before certification. The same execution is

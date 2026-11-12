@@ -76,6 +76,8 @@ internal static class CrossColumnBicubicResize
                 if (sourceCount > decoded.Length) return false;
                 for (var x = 0; x < length; x++)
                     for (var t = 0; t < counts[x]; t++) offsets[x * 10 + t] -= sourceFirst;
+                BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount,
+                    10, 8, 2, context.Cancellation);
                 rowIds.Fill(-1);
                 for (var y = 0; y < result.Height; y++)
                 {
@@ -109,6 +111,18 @@ internal static class CrossColumnBicubicResize
                         }
                         for (var x = 0; x < length; x++)
                         {
+                            // Only an eight-tap pair can interpret the dead last
+                            // slot as a proof; full columns keep a live offset there.
+                            if (x + 1 < length && counts[x] == 8 && counts[x + 1] == 8
+                                && offsets[x * 10 + 9] != 0)
+                            {
+                                var start = offsets[x * 10 + 9] - 1;
+                                var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(start, 10),
+                                    weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2);
+                                MemoryMarshal.Write(MemoryMarshal.AsBytes(cache.Slice(slot * 8 + x, 2)), in pair);
+                                x++;
+                                continue;
+                            }
                             var tapWeights = weights.Slice(x * 10, counts[x]);
                             var tapOffsets = offsets.Slice(x * 10, counts[x]);
                             var sum = Vector256<double>.Zero;
