@@ -8,7 +8,8 @@ namespace Lokad.Image.Internal;
 /// <summary>Streaming source rows feed a bounded set of output accumulators.</summary>
 internal static class GeneratedBicubicResize
 {
-    private const int OutputRowsPerBlock = 8;
+    private const int OutputRowsPerBlock = 16;
+    private const int SourceRowsPerBlock = 16;
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
@@ -22,14 +23,18 @@ internal static class GeneratedBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 512 bytes. Only the last horizontal result
-            // is retained, including repeated clamped edge rows.
+            // Fixed arrays occupy 1,824 bytes inside the existing 4 KiB charge.
+            // A bounded group of rows shares coefficient/index preparation;
+            // no full-height intermediate or coefficient table is retained.
             Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
             Span<double> centers = stackalloc double[OutputRowsPerBlock];
             Span<int> first = stackalloc int[OutputRowsPerBlock];
             Span<int> last = stackalloc int[OutputRowsPerBlock];
             Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
             Span<double> verticalMagnitudes = stackalloc double[OutputRowsPerBlock];
+            Span<Vector256<double>> horizontal = stackalloc Vector256<double>[SourceRowsPerBlock];
+            Span<Vector512<double>> pairWeights = stackalloc Vector512<double>[4];
+            Span<int> offsets = stackalloc int[8];
             var input = source.Pixels;
             var stride = source.Stride;
             for (var x = 0; x < result.Width; x++)
@@ -65,27 +70,34 @@ internal static class GeneratedBicubicResize
                         last[y] = (int)Math.Floor(centers[y] + 2 * scaleY);
                     }
                     totals.Clear(); normalizers.Clear(); verticalMagnitudes.Clear();
-                    var previousRow = -1;
-                    var horizontal = Vector256<double>.Zero;
                     // Unclamped coordinates are visited in increasing order. Each
                     // output receives exactly its original vertical taps, including
                     // separate contributions from duplicated clamped edge samples.
-                    for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
+                    var coordinate = first[0];
+                    var lastSourceRow = Math.Clamp(last[height - 1], 0, source.Height - 1);
+                    while (coordinate <= last[height - 1])
                     {
                         context.Cancellation.ThrowIfCancellationRequested();
-                        var sy = Math.Clamp(coordinate, 0, source.Height - 1);
-                        if (sy != previousRow)
+                        var firstSourceRow = Math.Clamp(coordinate, 0, source.Height - 1);
+                        var rowCount = Math.Min(SourceRowsPerBlock, lastSourceRow - firstSourceRow + 1);
+                        var rows = horizontal[..rowCount];
+                        rows.Clear();
+                        FilterRows(input, stride, firstSourceRow, rows, offsets, pairWeights,
+                            firstX, countX, centerX, scaleX, source.Width, context);
+                        var lastRow = firstSourceRow + rowCount - 1;
+                        while (coordinate <= last[height - 1]
+                            && Math.Clamp(coordinate, 0, source.Height - 1) <= lastRow)
                         {
-                            previousRow = sy;
-                            var row = input.Slice(sy * stride, stride);
-                            horizontal = FilterRow(row, firstX, countX, centerX, scaleX, source.Width, context);
-                        }
-                        for (var y = 0; y < height; y++)
-                        {
-                            if (coordinate < first[y] || coordinate > last[y]) continue;
-                            var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
-                            normalizers[y] += w; verticalMagnitudes[y] += Math.Abs(w);
-                            totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            var sum = rows[Math.Clamp(coordinate, 0, source.Height - 1) - firstSourceRow];
+                            for (var y = 0; y < height; y++)
+                            {
+                                if (coordinate < first[y] || coordinate > last[y]) continue;
+                                var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                                normalizers[y] += w; verticalMagnitudes[y] += Math.Abs(w);
+                                totals[y] = Avx.Add(totals[y], Avx.Multiply(sum, Vector256.Create(w)));
+                            }
+                            coordinate++;
                         }
                     }
                     for (var y = 0; y < height; y++)
@@ -111,41 +123,51 @@ internal static class GeneratedBicubicResize
         finally { context.Release(WorkspaceBytes); }
     }
 
-    private static Vector256<double> FilterRow(ReadOnlySpan<byte> row, int firstX, int countX,
+    private static void FilterRows(ReadOnlySpan<byte> input, int stride, int firstRow,
+        Span<Vector256<double>> sums, Span<int> offsets, Span<Vector512<double>> pairWeights,
+        int firstX, int countX,
         double centerX, double scaleX, int sourceWidth, OperationContext context)
     {
-        var sum = Vector256<double>.Zero;
         for (var t = 0; t < countX; t += 8)
         {
-            if ((t & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            context.Cancellation.ThrowIfCancellationRequested();
             var weights = BicubicMath.Coefficients(firstX + t, centerX, scaleX);
             var count = Math.Min(8, countX - t);
+            for (var i = 0; i < count; i++)
+                offsets[i] = Math.Clamp(firstX + t + i, 0, sourceWidth - 1) * 4;
             var lane = 0;
             for (; lane + 1 < count; lane += 2)
             {
-                var sx0 = Math.Clamp(firstX + t + lane, 0, sourceWidth - 1);
-                var sx1 = Math.Clamp(firstX + t + lane + 1, 0, sourceWidth - 1);
-                var p0 = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx0 * 4, 4));
-                var p1 = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx1 * 4, 4));
-                var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar((ulong)p0 | ((ulong)p1 << 32)).AsByte());
-                var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-                var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors));
                 var w0 = weights.GetElement(lane); var w1 = weights.GetElement(lane + 1);
-                var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
-                sum = Avx.Add(sum, products.GetLower()); sum = Avx.Add(sum, products.GetUpper());
+                pairWeights[lane / 2] = Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1);
             }
-            if (lane < count)
+            for (var r = 0; r < sums.Length; r++)
             {
-                var sx = Math.Clamp(firstX + t + lane, 0, sourceWidth - 1);
-                var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx * 4, 4));
-                var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
-                var alpha = (int)(packed >> 24);
-                var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1));
-                var values = Avx.ConvertToVector256Double(products);
-                sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(weights.GetElement(lane))));
+                var row = input.Slice((firstRow + r) * stride, stride);
+                var sum = sums[r];
+                for (var pair = 0; pair < lane; pair += 2)
+                {
+                    var p0 = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(offsets[pair], 4));
+                    var p1 = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(offsets[pair + 1], 4));
+                    var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar((ulong)p0 | ((ulong)p1 << 32)).AsByte());
+                    var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+                    var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors));
+                    var products = Avx512F.Multiply(values, pairWeights[pair / 2]);
+                    // Preserve the original per-row lower-then-upper tap order.
+                    sum = Avx.Add(sum, products.GetLower()); sum = Avx.Add(sum, products.GetUpper());
+                }
+                if (lane < count)
+                {
+                    var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(offsets[lane], 4));
+                    var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
+                    var alpha = (int)(packed >> 24);
+                    var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1));
+                    var values = Avx.ConvertToVector256Double(products);
+                    sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(weights.GetElement(lane))));
+                }
+                sums[r] = sum;
             }
         }
-        return sum;
     }
 
     private static bool TryWrite(Vector256<double> sum, double normalizer, double unitError, Span<byte> output)
