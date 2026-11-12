@@ -1,5 +1,9 @@
 # Prepared live PNG run invariants
 
+Historical stage: [current block Adler sums](PNG-BLOCK-ADLER.md) supersedes
+the affected CPU costs. Its format, ownership and non-checksum implementation
+changes remain qualified; raw evidence and original boundaries are retained.
+
 Complete live RGBA16 decoding saves **93.08 µs / 2.89% raw / 1.86%
 reference-normalized** against a contemporary unchanged predecessor. Filtered,
 all-actual and normalized confidence intervals separate. Native time moves −1.05%;

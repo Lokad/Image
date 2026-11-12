@@ -41,6 +41,34 @@ public sealed class Adler32Tests
     }
 
     [Fact]
+    public void EveryVectorCountAndUnalignedTailMatchesIndependentScalarChecksum()
+    {
+        var bytes = new byte[4096 + 64];
+        foreach (var maximum in new[] { false, true })
+        {
+            for (var i = 0; i < bytes.Length; i++) bytes[i] = maximum ? (byte)255 : (byte)(i * 73 + i / 17);
+            var original = bytes.ToArray();
+            foreach (var offset in new[] { 0, 1, 15, 31 })
+            foreach (var tail in new[] { 0, 1, 15, 31 })
+            foreach (var seed in new uint[] { 0, 65520 })
+            for (var groups = 0; groups <= 128; groups++)
+            {
+                var data = bytes.AsSpan(offset, groups * 32 + tail);
+                uint expectedA = seed, expectedB = seed;
+                foreach (var value in data)
+                {
+                    expectedA = (expectedA + value) % 65521;
+                    expectedB = (expectedB + expectedA) % 65521;
+                }
+                uint a = seed, b = seed;
+                Adler32.Append(data, ref a, ref b);
+                Assert.Equal(expectedA, a); Assert.Equal(expectedB, b);
+            }
+            Assert.Equal(original, bytes);
+        }
+    }
+
+    [Fact]
     public void CancellationPreservesStateAndSourceBeforeAnyProcessing()
     {
         var bytes = Enumerable.Range(0, 8193).Select(i => (byte)i).ToArray(); var original = bytes.ToArray();

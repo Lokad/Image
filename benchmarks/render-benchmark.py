@@ -703,8 +703,13 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
+    png_adler = json.loads((ROOT / 'benchmarks/png-block-adler-evidence.json').read_text(encoding='utf-8'))
+    assert png_adler['productionAccepted'] and png_adler['allAffectedPerformanceReconciled']
+    assert len(png_adler['readCases']) == 51 and png_adler['readStatusCounts'] == {'pass': 49, 'gap': 0, 'uncertain': 2}
+    assert not png_adler['generalCpuGainClaimed'] and not png_adler['normalizedGainConfirmed']
+    assert all(v['rawGainSeparated'] for v in png_adler['primaryEffect']['views'].values())
     for case, limit in [('DecodeCancelable8', None), ('DecodeTight8', 1235173), ('DecodeTight16', 3254193)]:
-        framing_case = png_live['cases'].get(case, png_framing['cases'][case])
+        framing_case = png_adler['readCases'][case]
         assert framing_case['tightWorkingBytes'] == limit
         assert framing_case['cancellationCanBeCanceled'] == (case == 'DecodeCancelable8')
         assert not framing_case['cancellationRequested']
@@ -1716,9 +1721,9 @@ def render():
     rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    current = png_framing['currentSharedRoot']
+    current = png_adler['sharedRoot']
     assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
-    assert current['librarySha256'] == png_framing['producers']['linuxSha256']
+    assert current['librarySha256'] == png_adler['producers']['windowsSha256']
     assert current['managedExact'] and current['independentOwnedOutputs'] and current['sourceUnchanged']
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['status'] == 'pass' and current['upper'] <= 1
@@ -1789,14 +1794,14 @@ def render():
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
     # One current owner for all affected complete PNG encodes. Superseded cost
     # providers and adjacent sampling studies remain linked from its report.
-    png_current = json.loads((ROOT / 'benchmarks/png-idat-forwarding-evidence.json').read_text(encoding='utf-8'))
+    png_current = png_adler
     assert png_current['productionAccepted'] and png_current['allAffectedPerformanceReconciled']
-    assert png_current['requiredMaterialPaths'] == 289 and not png_current['cpuGainClaimed']
+    assert png_current['requiredMaterialPaths'] == 289 and png_current['cpuGainClaimed'] and not png_current['generalCpuGainClaimed']
     assert png_current['raw']['mirrored'] and png_current['raw']['allMembersVerified']
-    assert png_current['storage']['removedOwnedArrayPayloadBytes'] == 4096
-    assert png_current['storage']['reservationReductionBytes'] == 61440
+    assert png_current['storage']['newOwnedCapacityBytes'] == 0
+    assert png_current['storage']['newRetainedCapacityBytes'] == 0 and not png_current['storage']['workspaceAdmissionChanged']
     assert png_current['oneShotStatusCounts'] == {'pass': 14, 'gap': 1, 'uncertain': 2}
-    assert not png_current['issues'] and not png_current['materialPassToGapContradictions']
+    assert not png_current['issues']
     def png_label(label):
         return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
                 .replace(', red-plane reference', '').replace('NoCompression0', 'stored0'))
@@ -1825,7 +1830,7 @@ def render():
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
         if label == 'PNG8 decode, two retained images / shared caller root':
-            current = png_framing['currentSharedRoot']
+            current = png_adler['sharedRoot']
             rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                            f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
     overlap = json.loads((ROOT / 'benchmarks/bicubic-identity-cache-rows-evidence.json').read_text(encoding='utf-8'))
@@ -2067,8 +2072,8 @@ def render():
     read_rows = []
     refreshed_png_reads = set()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        if case in png_framing['cases']:
-            current = png_framing['cases'][case]
+        if case in png_adler['readCases']:
+            current = png_adler['readCases'][case]
             assert current['descriptorExact'] and current['prefixAndCodingScopesVerified'] and current['outputBytes'] == 36
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
             read_rows.append(f'| {label} † | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
@@ -2235,7 +2240,7 @@ def render():
     assert all(q['actualConsumerPassed'] and q['streamingByteFrozenControls'] == 3
                for q in (current_build_qualification['actualPackage'], current_build_qualification['samePackageLinux']))
     current_build_qualification = png_current['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6509
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6510
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
     assert current_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
@@ -2294,40 +2299,37 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
-  has 49 passes / 0 gaps / 2 uncertain across 51 controls. [Prepared live-run invariants](../benchmarks/PNG-LIVE-RUN-PREPARATION.md)
-  save93.08µs/2.89% raw/1.86% normalized on RGBA16, with separated filtered/all-actual
-  and normalized confidence; native moves−1.05%. Current3,126.33/native3,153.78µs,
-  upper1.001253 remains uncertain. Byte1,529.69/native1,535.97µs, upper1.012 also
-  remains uncertain; raw+9.90% tracks native+10.19%, with overlapping normalized
-  intervals, not a byte speedup or uniform raw-gain claim. GC4,472/8,568B/op and
-  4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
-  [Bufferless IDAT publication](../benchmarks/PNG-IDAT-FORWARDING.md) removes
-  one 4 KiB payload buffer, its copy/count/flush state and 60 KiB of obsolete admission.
-  All 17 complete fresh-state encodes refresh: 14 pass / 1 gap / 2 uncertain. Fastest8 now
-  passes; grayscale8 has a small demonstrated gap, while gray-alpha8/16 need
-  confidence resolution. All complete packets remain exact. Each nonzero encode
-  allocates 4,136 B less. This storage/ownership simplification establishes no CPU
-  gain or equivalence: raw/native clock shifts, two historical normalized adverse
-  comparisons and three contemporary baseline checks remain in the report.
-  [Earlier adjacent Fastest/Gray studies](../benchmarks/PNG-IDAT-FORWARDING.md)
-  retain their original natural-GC sampling as history; they are not current proof.
-  Predictable16 now costs {predictable['managedUs']/1000:.2f}/FFmpeg {predictable['nativeUs']/1000:.2f} ms,
-  upper {predictable['upper']:.3f}, {predictable['allocatedBytes']:,} B/op, exact 573,041 B packet.
+- **PNG:** [block Adler sums](../benchmarks/PNG-BLOCK-ADLER.md) reduce SIMD lanes
+  once per 4 KiB block, preserving exact arithmetic and cancellation. Complete
+  stored-word encoding saves **19.70 µs / 3.98% raw** against its current baseline;
+  filtered/all-actual intervals separate. Native time moves −0.18%; normalized
+  point gain is 3.81%, with overlapping confidence. Byte's filtered gain is
+  6.72 µs / 7.81%; all-actual/normalized intervals overlap. No uniform gain claim.
+  All 51 existing reads refresh: 49 pass / two uncertain. Live word now passes,
+  {png_adler['readCases']['DecodeCancelable16']['managedUs']:.2f}/FFmpeg {png_adler['readCases']['DecodeCancelable16']['nativeUs']:.2f} µs,
+  upper {png_adler['readCases']['DecodeCancelable16']['upper']:.3f}. Live byte and tight-memory
+  cancelable word remain uncertain. Three historical adverse comparisons are
+  reconciled against the unchanged current baseline; raw clock shifts remain
+  disclosed. [Current read costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
+  preserve full-depth pixels, hidden RGB, independent outputs and validation scope.
+  All 17 fresh-state encodes refresh: 14 pass / one gap / two uncertain.
+  Grayscale8 remains a small gap; Fastest8 and ordinary RGBA8 need confidence
+  resolution. Both gray-alpha encodes now pass. Complete packets remain exact.
   Stored fresh-state RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
   upper {stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,} B/op;
   RGBA16 costs {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f} µs,
   upper {stored_word['upper']:.3f}, {stored_word['allocatedBytes']:,} B/op. Both pass.
-  Native codec/zlib/packet preparation and word-frame allocation/conversion/disposal
-  stay timed. Retained-native word post-GC4 remains a distinct gap:
+  Native codec/zlib/packet preparation and word-frame conversion remain timed.
+  The retained-native word post-GC4 scope stays a distinct gap:
   {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f} µs, upper {retained_word['upper']:.3f};
   natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f} µs,
   upper {natural_word['upper']:.3f}, {natural_word['directAllocatedBytes']:,.3f} direct B/op.
-  No subtraction of historical times measures preparation cost. The earlier
-  [stored deflater](../benchmarks/PNG-STORED-WORKSPACE.md) still owns 69,632 B of
-  arrays/72 KiB admission; codec minor-state allowance is now 4 KiB rather than 64 KiB.
-  Total allocation, reserved capacity and physical peak remain separate; no
-  operation scratch survives disposal and physical/native peaks are unmeasured.
+  Predictable16 is {predictable['managedUs']/1000:.2f}/{predictable['nativeUs']/1000:.2f} ms,
+  upper {predictable['upper']:.3f}, exact 573,041 B. These lifetimes/sampling views
+  are separate; historical subtraction measures no preparation cost.
+  Allocation/admission and zero retained scratch remain unchanged; no owned storage
+  is added. Physical/native/JIT peaks are unmeasured. Earlier [IDAT ownership](../benchmarks/PNG-IDAT-FORWARDING.md)
+  and [stored deflater storage](../benchmarks/PNG-STORED-WORKSPACE.md) stay qualified.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -2401,7 +2403,7 @@ Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass 702 internal / 246 public per
+Current PNG/admission checks pass 703 internal / 246 public per
 normal/scalar/disabled-AVX2/AVX512 mode.
 Current resize qualification passes569 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.

@@ -1,5 +1,9 @@
 # PNG IDAT publication and ownership
 
+Historical stage: [current block Adler sums](PNG-BLOCK-ADLER.md) supersedes
+the affected CPU costs. Its format, ownership and non-checksum implementation
+changes remain qualified; raw evidence and original boundaries are retained.
+
 The encoder now forwards each already prepared IDAT payload synchronously from
 its deflater to the caller output. The private sink no longer copies it through
 another4KiB array or retains count/flush/disposal state. Deflate emits full4KiB

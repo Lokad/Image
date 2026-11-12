@@ -1,108 +1,82 @@
 # Current PNG decode and coding-validation costs
 
-All **47 existing resident decode controls and four coding validators** have
-independent evidence: **49 pass and stop, two uncertain**.
-[Ordinary/slab publication](PNG-NORMAL-CURSOR-PUBLICATION.md) refreshes43 affected
-controls and closes four former gaps. [Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md)
-now own the two materialized live costs, saving93.08µs/2.89%raw/1.86%normalized
-on RGBA16 with separated confidence; its upper1.001253 remains uncertain. Byte
-also stays uncertain. Six other unchanged paths reuse their explicit providers.
-The separate two-retained-image shared-root operation also now passes.
-Frozen workers, harnesses, fixtures and settings are reused; no new workload grid.
+[Block Adler sums](PNG-BLOCK-ADLER.md) now owns all **51 existing controls**:
+**49 pass and two uncertain**. Live byte and tight-memory cancelable word remain
+uncertain; live word now passes. Original inputs, full-depth pixels, metadata,
+hidden RGB, independent outputs, cancellation and frozen native gates remain.
+These are complete operations with the recorded retained native contexts.
+No workload grid or additional source image is added.
 
 | Existing case | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | --- |
-| DecodeCancelable8 | 1,529.69 / 1,535.97 | 0.996 / 1.011744 | 4,472 | uncertain |
-| DecodeTight8 | 1,184.46 / 1,395.39 | 0.849 / 0.855 | 68,224 | pass |
-| DecodeTight16 | 2,826.77 / 2,894.02 | 0.977 / 0.981 | 70,272 | pass |
-| ValidatePng8 | 1,169.54 / 1,380.85 | 0.847 / 0.857 | 240 | pass |
-| ValidatePng16 | 2,768.71 / 2,962.79 | 0.934 / 0.938 | 240 | pass |
-| ValidateIndexedAdam7 | 1.76 / 3.94 | 0.447 / 0.463 | 792 | pass |
-| ValidatePng16Async | 2,759.14 / 3,612.00 | 0.764 / 0.765 | 8,544 | pass |
-| Decode8 | 1,177.08 / 1,395.32 | 0.844 / 0.846 | 4,472 | pass |
-| Decode16 | 2,827.31 / 2,897.12 | 0.976 / 0.978 | 8,568 | pass |
-| DecodeAdam7_16 | 2,929.79 / 3,922.87 | 0.747 / 0.749 | 23,240 | pass |
-| DecodePaeth8 | 2,596.55 / 2,845.71 | 0.912 / 0.917 | 4,472 | pass |
-| DecodePaeth16 | 4,549.40 / 5,508.52 | 0.826 / 0.832 | 8,568 | pass |
-| DecodeRgb8 | 952.16 / 1,528.39 | 0.623 / 0.625 | 3,448 | pass |
-| DecodeRgb16 | 2,120.01 / 2,229.39 | 0.951 / 0.957 | 6,520 | pass |
-| DecodeGray8 | 297.48 / 361.84 | 0.822 / 0.828 | 1,400 | pass |
-| DecodeGray16 | 725.93 / 958.81 | 0.757 / 0.760 | 2,424 | pass |
-| DecodeGrayAlpha8 | 646.19 / 1,159.00 | 0.558 / 0.559 | 2,424 | pass |
-| DecodeGrayAlpha16 | 1,455.73 / 1,800.48 | 0.809 / 0.812 | 4,472 | pass |
-| DecodeUp8 | 995.15 / 1,517.87 | 0.656 / 0.658 | 4,472 | pass |
-| DecodeUp16 | 1,368.23 / 1,909.14 | 0.717 / 0.720 | 8,568 | pass |
-| DecodeSub8 | 466.63 / 682.41 | 0.684 / 0.688 | 4,472 | pass |
-| DecodeSub16 | 271.06 / 742.62 | 0.365 / 0.378 | 8,568 | pass |
-| DecodeAverage8 | 1,470.63 / 1,851.85 | 0.794 / 0.797 | 4,472 | pass |
-| DecodeAverage16 | 3,438.64 / 4,478.17 | 0.768 / 0.771 | 8,568 | pass |
-| DecodeCancelable16 | 3,126.33 / 3,153.78 | 0.991 / 1.001253 | 8,568 | uncertain |
-| DecodeTightCancelable16 | 2,789.14 / 2,893.47 | 0.964 / 0.976 | 70,272 | pass |
-| DecodeNoCompression8 | 92.78 / 135.99 | 0.682 / 0.686 | 4,472 | pass |
-| DecodeNoCompression16 | 208.13 / 296.12 | 0.703 / 0.708 | 8,568 | pass |
-| DecodeTightCancelable8 | 1,181.56 / 1,395.83 | 0.846 / 0.851 | 68,224 | pass |
-| DecodeGray1 | 48.24 / 308.58 | 0.156 / 0.158 | 504 | pass |
-| DecodeGray2 | 55.89 / 106.54 | 0.525 / 0.531 | 632 | pass |
-| DecodeGray4 | 79.72 / 172.65 | 0.462 / 0.465 | 888 | pass |
-| DecodePalette1 | 42.92 / 83.71 | 0.513 / 0.515 | 568 | pass |
-| DecodePalette2 | 50.75 / 97.89 | 0.518 / 0.528 | 704 | pass |
-| DecodePalette4 | 72.16 / 137.17 | 0.526 / 0.530 | 1,000 | pass |
-| DecodePalette8 | 291.03 / 365.30 | 0.797 / 0.806 | 2,472 | pass |
-| DecodeGray1Adam7 | 253.99 / 1,158.69 | 0.219 / 0.222 | 1,440 | pass |
-| DecodeGrayAlphaPaeth8 | 1,718.20 / 2,007.33 | 0.856 / 0.867 | 2,424 | pass |
-| DecodeGrayPaeth8 | 920.63 / 1,027.51 | 0.896 / 0.900 | 1,400 | pass |
-| DecodeRgbPaeth16 | 3,636.13 / 4,465.35 | 0.814 / 0.819 | 6,520 | pass |
-| DecodeRgbPaeth8 | 2,155.95 / 2,627.73 | 0.820 / 0.823 | 3,448 | pass |
-| DecodePalette4Adam7 | 493.33 / 1,133.13 | 0.435 / 0.437 | 2,608 | pass |
-| DecodePalette8Adam7 | 779.66 / 1,336.12 | 0.584 / 0.590 | 4,976 | pass |
-| DecodePalette8PartialAlpha | 303.65 / 365.36 | 0.831 / 0.846 | 2,224 | pass |
-| DecodePalette8Short | 66.73 / 110.58 | 0.603 / 0.609 | 1,512 | pass |
-| DecodeGray1Transparency | 51.90 / 690.15 | 0.075 / 0.077 | 536 | pass |
-| DecodeGray2Transparency | 55.62 / 498.38 | 0.112 / 0.112 | 664 | pass |
-| DecodeGray16Transparency | 720.33 / 2,052.70 | 0.351 / 0.352 | 2,456 | pass |
-| DecodeGray8Transparency | 296.27 / 757.27 | 0.391 / 0.394 | 1,432 | pass |
-| DecodeRgb16Transparency | 2,158.25 / 3,181.97 | 0.678 / 0.680 | 6,552 | pass |
-| DecodeRgb8Transparency | 985.47 / 1,281.73 | 0.769 / 0.773 | 3,480 | pass |
+| DecodeCancelable8 | 1,499.29 / 1,505.44 | 0.996 / 1.010 | 4,472 | uncertain |
+| DecodeTight8 | 1,283.58 / 1,506.58 | 0.852 / 0.861 | 68,224 | pass |
+| DecodeTight16 | 3,052.97 / 3,142.15 | 0.972 / 0.989 | 70,272 | pass |
+| ValidatePng8 | 1,276.83 / 1,437.38 | 0.888 / 0.935 | 240 | pass |
+| ValidatePng16 | 2,972.99 / 3,204.75 | 0.928 / 0.932 | 240 | pass |
+| ValidateIndexedAdam7 | 1.80 / 3.97 | 0.454 / 0.472 | 792 | pass |
+| ValidatePng16Async | 2,748.50 / 3,615.58 | 0.760 / 0.763 | 8,544 | pass |
+| Decode8 | 1,222.99 / 1,396.63 | 0.876 / 0.893 | 4,472 | pass |
+| Decode16 | 2,993.24 / 3,116.95 | 0.960 / 0.993 | 8,568 | pass |
+| DecodeAdam7_16 | 3,117.24 / 4,251.72 | 0.733 / 0.738 | 23,240 | pass |
+| DecodePaeth8 | 2,578.85 / 2,846.40 | 0.906 / 0.936 | 4,472 | pass |
+| DecodePaeth16 | 4,632.07 / 5,522.34 | 0.839 / 0.879 | 8,568 | pass |
+| DecodeRgb8 | 1,022.33 / 1,650.23 | 0.620 / 0.622 | 3,448 | pass |
+| DecodeRgb16 | 2,103.96 / 2,228.21 | 0.944 / 0.957 | 6,520 | pass |
+| DecodeGray8 | 291.53 / 363.89 | 0.801 / 0.811 | 1,400 | pass |
+| DecodeGray16 | 770.37 / 1,035.06 | 0.744 / 0.749 | 2,424 | pass |
+| DecodeGrayAlpha8 | 655.17 / 1,163.63 | 0.563 / 0.591 | 2,424 | pass |
+| DecodeGrayAlpha16 | 1,449.64 / 1,795.33 | 0.807 / 0.826 | 4,472 | pass |
+| DecodeUp8 | 1,063.46 / 1,612.81 | 0.659 / 0.682 | 4,472 | pass |
+| DecodeUp16 | 1,451.81 / 2,041.51 | 0.711 / 0.720 | 8,568 | pass |
+| DecodeSub8 | 481.13 / 728.53 | 0.660 / 0.666 | 4,472 | pass |
+| DecodeSub16 | 271.71 / 756.82 | 0.359 / 0.386 | 8,568 | pass |
+| DecodeAverage8 | 1,461.76 / 1,849.03 | 0.791 / 0.807 | 4,472 | pass |
+| DecodeAverage16 | 3,763.89 / 4,838.21 | 0.778 / 0.782 | 8,568 | pass |
+| DecodeCancelable16 | 2,859.45 / 2,902.44 | 0.985 / 0.988 | 8,568 | pass |
+| DecodeTightCancelable16 | 3,054.27 / 3,092.17 | 0.988 / 1.008 | 70,272 | uncertain |
+| DecodeNoCompression8 | 84.72 / 136.59 | 0.620 / 0.647 | 4,472 | pass |
+| DecodeNoCompression16 | 184.83 / 297.00 | 0.622 / 0.629 | 8,568 | pass |
+| DecodeTightCancelable8 | 1,249.30 / 1,397.89 | 0.894 / 0.927 | 68,224 | pass |
+| DecodeGray1 | 56.20 / 328.46 | 0.171 / 0.174 | 504 | pass |
+| DecodeGray2 | 59.91 / 115.57 | 0.518 / 0.522 | 632 | pass |
+| DecodeGray4 | 84.68 / 183.72 | 0.461 / 0.467 | 888 | pass |
+| DecodePalette1 | 43.03 / 86.75 | 0.496 / 0.501 | 568 | pass |
+| DecodePalette2 | 50.34 / 98.09 | 0.513 / 0.524 | 704 | pass |
+| DecodePalette4 | 74.81 / 145.42 | 0.514 / 0.545 | 1,000 | pass |
+| DecodePalette8 | 296.51 / 366.64 | 0.809 / 0.827 | 2,472 | pass |
+| DecodeGray1Adam7 | 278.10 / 1,249.11 | 0.223 / 0.228 | 1,440 | pass |
+| DecodeGrayAlphaPaeth8 | 1,928.43 / 2,170.76 | 0.888 / 0.894 | 2,424 | pass |
+| DecodeGrayPaeth8 | 901.26 / 1,032.38 | 0.873 / 0.879 | 1,400 | pass |
+| DecodeRgbPaeth16 | 3,539.15 / 4,467.94 | 0.792 / 0.796 | 6,520 | pass |
+| DecodeRgbPaeth8 | 2,294.99 / 2,840.60 | 0.808 / 0.812 | 3,448 | pass |
+| DecodePalette4Adam7 | 494.33 / 1,223.49 | 0.404 / 0.416 | 2,608 | pass |
+| DecodePalette8Adam7 | 837.60 / 1,439.85 | 0.582 / 0.585 | 4,976 | pass |
+| DecodePalette8PartialAlpha | 325.25 / 396.31 | 0.821 / 0.828 | 2,224 | pass |
+| DecodePalette8Short | 68.97 / 120.06 | 0.574 / 0.584 | 1,512 | pass |
+| DecodeGray1Transparency | 50.80 / 687.84 | 0.074 / 0.076 | 536 | pass |
+| DecodeGray2Transparency | 60.32 / 541.04 | 0.111 / 0.112 | 664 | pass |
+| DecodeGray16Transparency | 727.26 / 2,042.53 | 0.356 / 0.364 | 2,456 | pass |
+| DecodeGray8Transparency | 319.47 / 820.42 | 0.389 / 0.393 | 1,432 | pass |
+| DecodeRgb16Transparency | 2,281.19 / 3,445.71 | 0.662 / 0.666 | 6,552 | pass |
+| DecodeRgb8Transparency | 943.84 / 1,284.04 | 0.735 / 0.741 | 3,480 | pass |
 
-Each control retains twelve actuals, twelve samples in each native bracket,
-filtered/all-actual confidence and idle-v2 guards on one pinned CPU. Inputs,
-sampling/filter/transparency settings and native output are frozen. Decode includes
-parsing, preparation, workspace, full-depth RGBA normalization, independent output
-and disposal. Live cancellation and exact tight-memory ceilings remain. Validation
-checks complete coding and returns metadata without RGBA normalization.
+Every control retains12actuals and both12-sample native brackets, with
+conservative filtered/all-actual confidence and quiet idle-v2 guards. Validators
+return equivalent36-byte typed metadata after complete coding validation;
+decodes include full RGBA normalization, ownership and disposal. The separate
+two-retained-image shared-root operation also refreshes and passes.
 
-Decode samples, alpha/hidden RGB, normal/scalar native CLI output, source
-immutability and independent output ownership pass their original gates. Coding
-validators retain exact metadata and prefix/coding scope checks. The resident
-decode worker `cfb2403d…`, source `a75eaefa…`, compiler/static archives and settings
-remain unchanged in the prepared isolated root; the four coding validators keep
-their separate frozen natural-frame worker and metadata adapter. The existing one-bit grayscale transparency
-control includes its declared native filter/one filter thread; other controls retain
-their declared conversions and threading. Native contexts/wrappers remain prepared.
+Allocation/admission and zero retained operation scratch remain unchanged.
+Physical/native/JIT peaks are unmeasured. After affected costs reconcile,
+Windows/Linux each pass6,510full/live checks,703internal/246public PNG/admission
+cases in normal/scalar/AVX512-off/AVX2-off modes, and the SAMEactual package/all
+three usage examples. Reuse qualified unchanged other-family paths.
 
-DLL `23d65df3…` supplies43 source-valid costs; `8e44e29f…` supplies the refreshed
-materialized-live pair and `05f30275…` the six unchanged stored/counting/BCL cases.
-The [scope audit and evidence](png-normal-cursor-publication-evidence.json) identify
-each earlier provider and routing reason. Current qualification passes6,351
-full/live checks per OS,712internal/246public PNG/admission cases in normal/scalar
-modes, and SAME actual Release-package/all three examples on Windows/Linux.
-Other source-valid ISA evidence is reused. Passing cases stop. No broader speedup follows
-from refreshing costs; grayscale16, for example, is effectively unchanged.
-
-B/op measures total managed allocation, separately from peak live capacity and
-retained storage. All51 allocation counts are unchanged; framing admission remains
-4KiB with no new owned capacity or retained scratch. Physical/native peaks are
-unmeasured. The two-image shared-root operation retains its own peak/output-pair
-figures in the new report. Older stream/composition costs remain historical;
-prefix/Identify and encoding do not enter the changed cursor. This inventory does
-not establish all PNG or289-path parity.
-
-[Live-run preparation](PNG-LIVE-RUN-PREPARATION.md) owns the two current live costs
-and latest package qualification; the other49 costs remain source-valid. Earlier
-[framing evidence](png-current-framing-costs-evidence.json),
-[live evidence](png-live-prepared-cursor-evidence.json) and their raw archives retain
-superseded measurements, adverse results and reproducibility. The new mirrored,
-member-verified archive and its dependencies are identified in
-[current live evidence](png-live-run-preparation-evidence.json) and
-[ordinary cursor evidence](png-normal-cursor-publication-evidence.json). Publication remains
-postponed; uncertainty is resolved before assuming further optimization.
+[The current owner](PNG-BLOCK-ADLER.md) retains source/module identities, all
+comparisons, adverse evidence, raw archives and reproducibility. Earlier
+[ordinary framing](PNG-NORMAL-CURSOR-PUBLICATION.md) and
+[live preparation](PNG-LIVE-RUN-PREPARATION.md) remain implementation history;
+their affected CPU costs are superseded. Historical stream/composition costs
+already marked H remain historical. All289paths and publication postponement
+remain; this does not establish complete PNG or release performance parity.
