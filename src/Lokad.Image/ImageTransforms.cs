@@ -165,7 +165,7 @@ public static class ImageTransforms
                     || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
-                    || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || GeneratedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)))
             {
                 result.Orientation = source.Orientation;

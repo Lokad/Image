@@ -1,5 +1,8 @@
 # Paired word bicubic weights
 
+Current generated-path follow-up: [shared8/16-bit execution](GENERATED-BICUBIC-SHARED-EXECUTION.md).
+Costs and next-action statements below retain their original checkpoint.
+
 Bounded word32×16 resizing now constructs the same paired weight vector with
 two broadcasts and upper-half insertion. It replaces repeated eight-scalar
 construction; every lane bit stays identical. No new floating arithmetic,

@@ -41,90 +41,39 @@ scratch retention; no gain/regression/equivalence or presumed-gap claim.
 Current immutable package and qualification reused,zero builds/new workloads/
 broad or package repeats. Stop unchanged timing repeats; independent work continues.
 
-[Paired word weight construction](DEEP-WORD-VECTOR-WEIGHTS.md) is accepted:
-bounded word32×16now441.45/zimg414.55µs,range.999–1.072 remains uncertain.
-Independent112.44µs/20.30%raw/14.21%normalized savings have separated filtered/
-all-actual/normalized confidence; native−7.09%, views remain distinct. Original
-screen/all twelve independent actuals retained, no favorable repeat or presumed
-residual gap. Same paired lane bits, source arithmetic/cache/geometry/certificate/
-repair and4032B arrays/4KiB; no owned/retained capacity added. GC113B/op, physical/
-JIT/native peaks unmeasured. Actual JIT3050→2989B uses two broadcasts/insertion;
-instruction shape is not a CPU forecast. One complete bounded control changes;
-default cached32×16 remains unchanged. BothOSes6480full/live,552internal/791public
-normal/scalar, three storage suites and SAMEactualpackage/all3examples pass.
-Unchanged disabled-ISA proof reused. One core/embedded eachOS, no public/frozen
-harness/native/fixture builds/newtests, onepack. Other72resize costs source-valid.
-Across73standalone controls58pass/8gaps/7uncertain; adjacent views stay separate.
-Next byte Cross81.81µs and word2×9about75µs; the latter retains repeated work
-removed by byte row-group reuse. Attribute its actual current path before
-selecting shared execution; stop unaffected passes. All289paths remain required.
+[Shared generated bicubic execution](GENERATED-BICUBIC-SHARED-EXECUTION.md)
+unifies the 8/16-bit schedule and removes the duplicated word implementation.
+Word2×9now462.67/zimg1269.67µs, upper.380: independent862.29µs/65.08%raw/
+65.62%normalized saved, native+1.58%; filtered/all-actual/normalized intervals
+separate. All five affected word2×9/2×2 and byte2×9/2×2/1×1controls pass/stop,
+113B/op. Byte1×1increment is inconclusive, no uniform gain claim. Exact managed
+pixels, original native bounds, source/owner/cancellation gates remain. Shared
+explicit arrays1824B (word previously512B), unchanged4KiB admission, no new heap/
+retained scratch; physical/JIT/native peaks unmeasured. Scoped root IL/actual
+timed JIT match after only the Word callee remap. BothOSes6487full/live,
+559internal/791public normal/scalar, three storage suites and SAMEactualpackage/
+all3examples pass; disabled-ISA/family evidence reused. One core/embedded eachOS,
+seven new Word tests, no public/frozen-harness/native/fixture build, onepack.
 
-[Prepared byte cross overlap](BYTE-CROSS-HORIZONTAL-OVERLAP.md) is accepted:
-current standalone reverse-mixed971.84/zimg890.03µs upper1.111 and identity-
-height638.33/614.89µs upper1.048 both remain gaps,GC114/113B/op unchanged.
-Historical between-capture increments remain inconclusive with native+5.83%/
-+6.33%; one contemporary predecessor primary has contradictory raw/normalized
-views. Candidate captures are never repeated. One twelve-pair16operation
-counterbalanced immutable-DLL comparison per control supports scoped3.64%/
-12.67%gains (37.48/87.03µs in that diagnostic),112B/op eachsubject. All pairs
-and adverse/inconclusive clocks remain; paired gains are not new parity costs.
-Known8tap/+2 windows reuse an unchanged shared helper after once-per-strip
-proof in dead padding; full-count guards precede flag use. Original unmatched
-loop, geometry, vertical quartets/certification/repair/unwind remain verbatim.
-Same3440B arrays/4KiB, zero new owned/retained capacity; SIMD value lifetimes
-change,physical/JIT/native peaks unmeasured. BothOSes6480full/live,552internal/
-791public normal/scalar, three named storage suites and SAMEactualpackage/all3
-examples pass; unchanged disabled-ISA proof reused. Five new rational/poison/
-alpha/odd-strip/window-tail tests pass. One core/embedded eachOS, no frozen
-harness/native/fixture/public builds, one adapted paired tool build and onepack.
-Its two costs remain source-valid after this word-only change; historical73-path scope58pass/9gaps/
-6uncertain is superseded by the current word round above. Historical clocks and
-source-valid predecessor scope remain in the linked report.
-The [vertical quartet round](BYTE-CROSS-SHARED-QUARTETS.md) retains its structural
-change/initial clocks; its two costs are superseded here.
+Current73standalone resize controls:59pass/7gaps/7uncertain; eight equivalent
+prepared/one-shot boundaries pass, retained plans198432B wide/199840B narrow.
+Other68costs remain source-valid:65[base](SHARED-RESIZE-FILTER-WEIGHTS.md),
+two[byte-Cross overlap](BYTE-CROSS-HORIZONTAL-OVERLAP.md) and one
+[DeepWord](DEEP-WORD-VECTOR-WEIGHTS.md). Byte-Cross971.84/zimg890.03µs upper1.111
+and same-height638.33/614.89µs upper1.048 remain gaps; scoped DLL gains are
+separate from original standalone/native costs. DeepWord32×16range.999–1.072
+remains uncertain. Adjacent Mixed8passing view and bilinear-word uncertainty
+keep their distinct boundaries. Next largest demonstrated excess:byte-Cross
+81.81µs; establish current attributable work before redesign, stop passes and
+do not assume uncertain cases need tuning. All289paths remain required.
 
-[Generated byte row reuse](GENERATED-BICUBIC-ROW-REUSE.md) is accepted:
-2×9now460.45/zimg1049.03µs upper.442,2×2now464.56/1632.25µs upper.288,
-1×1now446.66/4883.13µs upper.093;113B/op each. Independent raw gains are
-65.60%/58.31%/57.21%, normalized65.59%/58.21%/57.32%, with separated filtered/
-all-actual/normalized confidence and native−.050%/−.241%/+.260%. All three pass/stop.
-Each16-row group reuses original coefficients/index/pair preparation and16output
-states remove overlapping source-row work. Every row's tap/lowerthenupper and
-vertical virtual-coordinate order, clamped duplicates, verifier/certificates/
-repair remain exact. Explicit arrays512→1824B within unchanged4KiB admission;
-zero new heap/retained capacity, physical/JIT/native peaks unmeasured.
-BothOSes6470full/live,542internal/791public normal/scalar and SAMEactualpackage/
-all3examples pass; disabled-ISA evidence reused after the unchanged rejection
-guard. Seven new rational/poison/block-tail/low-alpha/refusal/cancel/recovery
-checks pass. One core/embedded build eachOS, no public/native/harness/fixture
-builds, onepack. Its three measured costs remain source-valid after the Cross-only stage above;
-current full/package proof is the overlap milestone. Original other70-path reuse
-and source-valid predecessor costs remain in the linked owner. Scoped adjacent
-views stay separate; stop these three passing generated controls.
-
-[Shared byte cross geometry](BYTE-CROSS-SHARED-GEOMETRY.md) retains its exact
-output-footer design and original raw evidence. Its two costs are superseded by
-the overlap round above. [Generated-byte attribution](GENERATED-BYTE-CURRENT-ATTRIBUTION.md)
-and [byte-cross attribution](BYTE-CROSS-CURRENT-ATTRIBUTION.md) remain diagnostic
-history; sample locations are not phase times or gains.
-
-[Shared resize filter weights](SHARED-RESIZE-FILTER-WEIGHTS.md) are accepted.
-Its61existing bicubic controls, eight prepared/one-shot boundaries and four
-bilinear controls establish the source-valid base. Five later costs are
-superseded by the two scoped rounds above; current58pass/9gaps/6uncertain. Exact outputs/native gates, cancellation,
-admission and independent ownership pass. Bounded wide byte343.67/zimg346.22µs
-upper.995 passes after13.66µs/3.82%raw/2.57%normalized saved; narrow/packed word
-gains generalize. Two slower passing deep controls and all raw/native movement
-remain explicit. No uniform speedup or full-parity claim. All eight equivalent
-prepared/one-shot boundaries pass; retained plans198432B wide/199840B narrow,
-no new capacity or retention. Mixed byte's targeted64-operation adjacent view
-passes upper.998 while its original standalone stays uncertain; bilinear word
-enlargement stays uncertain upper1.001. No favorable repeat. BothOSes pass6456
-full/live,528internal/791public normal/scalar/AVX512-off/AVX2-off and SAMEactual
-package/all3examples. Original A core/embedded/focused evidence is reused, zero
-additional builds, onepack; raw4681cb0a/1489632B/855members mirrored/memberverified.
-Publication remains postponed. Previous coefficient variants, profiles and
-per-family CPU costs are retained history, linked from the current owner.
+Historical [byte row reuse](GENERATED-BICUBIC-ROW-REUSE.md),
+[shared Cross quartets](BYTE-CROSS-SHARED-QUARTETS.md),
+[Cross geometry](BYTE-CROSS-SHARED-GEOMETRY.md),
+[byte attribution](GENERATED-BYTE-CURRENT-ATTRIBUTION.md) and
+[Cross attribution](BYTE-CROSS-CURRENT-ATTRIBUTION.md) retain original clocks,
+sources, adverse views and reproducibility. Their superseded costs do not own
+the current summary. Sample counts/instruction shape are not phase timings.
 
 [Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
 7.18%normalized on complete live-token VP8L decode, with separated confidence
@@ -179,7 +128,7 @@ ISA evidence is reused.
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
-| Bicubic/bilinear resizing | [Paired word weights](DEEP-WORD-VECTOR-WEIGHTS.md) resolve the demonstrated bounded32×16gap to uncertainty (.999–1.072) after112.44µs/14.21%normalized saved. [Byte overlap](BYTE-CROSS-HORIZONTAL-OVERLAP.md) owns two current standalone gaps, upper1.111/1.048; its3.64%/12.67%scoped DLL gains are separate from native costs. [Generated byte row reuse](GENERATED-BICUBIC-ROW-REUSE.md) owns three passes. Other67[base costs](SHARED-RESIZE-FILTER-WEIGHTS.md) remain source-valid:73standalone controls58pass/8gaps/7uncertain, plus scoped adjacent views. All eight equivalent prepared/one-shot boundaries pass, retention198432B wide/199840B narrow. Next byte Cross81.81µs and word2×9about75µs; attribute repeated word generation before shared execution. Exact pixels/native bounds/4KiB/shared admission remain; stop passes, no presumed uncertainty gap. |
+| Bicubic/bilinear resizing | [Shared generated execution](GENERATED-BICUBIC-SHARED-EXECUTION.md) owns five passing word/byte controls, exact pixels and4KiB; word2×9saves862.29µs/65.62%normalized. Other68costs remain source-valid:65[base](SHARED-RESIZE-FILTER-WEIGHTS.md), two[byte-Cross](BYTE-CROSS-HORIZONTAL-OVERLAP.md), one[DeepWord](DEEP-WORD-VECTOR-WEIGHTS.md). Across73standalone controls59pass/7gaps/7uncertain, plus scoped adjacent views. All eight equivalent prepared/one-shot boundaries pass, retention198432B wide/199840B narrow. Largest demonstrated excess:byte Cross81.81µs; attribute current work before redesign. Stop passes; no presumed uncertainty gap. |
 | Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
 | Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |

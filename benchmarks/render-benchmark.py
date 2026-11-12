@@ -25,7 +25,7 @@ def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows, dee
         'Bicubic RGBA8, fresh managed / prepared zimg † → 128×64': ('cases', 'Wide8'),
         'Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129': ('cases', 'TightMixed8'),
         'Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129': ('cases', 'TightMixed16'),
-        'Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32': ('cases', 'Tight64x32_8'),
+        'Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32': ('cases', 'Tight2x9_16'),
         'Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32': ('cases', 'Tight64x32_16'),
         'Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64': ('cases', 'TightWide8'),
         'Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64': ('cases', 'TightWide16'),
@@ -58,7 +58,7 @@ def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows, dee
             size = '256×519' if case == 'TightCross8' else '256×259'
             label = f'Bicubic RGBA8, width reduction / ' + ('height enlargement' if case == 'TightCross8' else 'same height') + f', input+output+4 KiB † → {size}'
         if generated:
-            label = 'Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9'
+            label = f"Bicubic RGBA{current['depth']} extreme reduction, input+output+4 KiB † → {current['outputWidth']}×{current['outputHeight']}"
         if deep:
             label = 'Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16'
         assert (field, case) not in seen; seen.add((field, case))
@@ -2115,16 +2115,19 @@ def render():
     assert all(c['scopedIncrementOnly'] and not c['newNativeCostOrParityProof'] and c['pairs'] == 12
                and c['logRatioUpper'] < 1 for c in byte_cross['paired'].values())
     assert all(not c['normalizedAdverseSeparated'] for c in byte_cross['comparison'].values())
-    generated_rows = json.loads((ROOT / 'benchmarks/generated-bicubic-row-reuse-evidence.json').read_text(encoding='utf-8'))
+    generated_rows = json.loads((ROOT / 'benchmarks/generated-bicubic-shared-execution-evidence.json').read_text(encoding='utf-8'))
     assert generated_rows['productionAccepted'] and generated_rows['allAffectedPerformanceReconciled']
-    assert set(generated_rows['cases']) == {'Tight2x9_8', 'Tight2x2_8', 'Down1x1_8'}
+    assert set(generated_rows['cases']) == {'Tight2x9_16', 'Tight2x2_16', 'Tight2x9_8', 'Tight2x2_8', 'Down1x1_8'}
     assert generated_rows['raw']['mirrored'] and generated_rows['raw']['allMembersVerified']
     assert not generated_rows['materialPassToGapContradictions']
     assert generated_rows['storage']['explicitStackArrayBytes'] == 1824
     assert generated_rows['storage']['workspaceAdmissionBytes'] == 4096
     assert generated_rows['storage']['newRetainedCapacityBytes'] == 0
     assert all(c['status'] == 'pass' and c['managedExact'] for c in generated_rows['cases'].values())
-    assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values()) for c in generated_rows['comparison'].values())
+    generated_primary = generated_rows['comparison']['Tight2x9_16']
+    assert generated_primary['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in generated_primary['views'].values())
+    assert generated_rows['sourceProof']['rootActualTimedModuleJit']['normalizedRootInstructionsAndBlockOffsetsExact']
+    assert generated_rows['sourceProof']['duplicatedWordScheduleRemoved']
     deep_word = json.loads((ROOT / 'benchmarks/deep-word-vector-weights-evidence.json').read_text(encoding='utf-8'))
     assert deep_word['productionAccepted'] and deep_word['allAffectedPerformanceReconciled']
     assert set(deep_word['cases']) == {'Tight32x16_16'}
@@ -2307,8 +2310,8 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
-    current_build_qualification = deep_word['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6480
+    current_build_qualification = generated_rows['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6487
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     return f"""# Lokad.Image benchmarks
@@ -2425,24 +2428,27 @@ Current scope and remaining work:
   original standalone view remains uncertain. Bilinear word enlargement's adjacent
  1836.05/1967.62µs upper1.001 remains uncertain, directGC4498558B/op. No historical
   stage sums, favorable repeats or full-parity claim.
-  [Generated byte row reuse](../benchmarks/GENERATED-BICUBIC-ROW-REUSE.md) removes
-  repeated coefficient/index preparation across16source rows and overlapping work
-  across16output rows. The2×9control is now{generated_rows['cases']['Tight2x9_8']['managedUs']:.2f}/zimg{generated_rows['cases']['Tight2x9_8']['nativeUs']:.2f}µs,
-  upper{generated_rows['cases']['Tight2x9_8']['upper']:.3f},113B/op; all three affected2×9/2×2/1×1controls pass/stop.
-  Explicit arrays grow512→1824B inside unchanged4KiB admission, with zero retained
-  scratch; physical/JIT peaks remain unmeasured. Its three costs remain source-valid
-  after the Cross-only change; other68base resize costs are reused.
-  The table replaces a comfortable passing32×16summary with the current2×9cost;
-  all73remain in evidence. [Paired word weights](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md)
+  [Shared generated resizing](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md)
+  removes duplicated8/16-bit scheduling and reuses coefficients/indexes across
+  16source/16output rows. Word2×9is now{generated_rows['cases']['Tight2x9_16']['managedUs']:.2f}/zimg{generated_rows['cases']['Tight2x9_16']['nativeUs']:.2f}µs,
+  upper{generated_rows['cases']['Tight2x9_16']['upper']:.3f}; independent primary savings are
+  {generated_primary['views']['statistics']['savedUs']:.2f}µs/{100*generated_primary['views']['statistics']['savedFraction']:.2f}%raw/{100*generated_primary['normalizedGain']:.2f}%normalized.
+  All five affected word2×9/2×2and byte2×9/2×2/1×1controls pass/stop,113B/op;
+  raw/native clocks and nonuniform byte increments remain in the report.
+  Word explicit arrays grow512→1824B, byte stays1824B, within unchanged4KiB
+  admission; no heap/retained scratch added, physical/JIT peaks unmeasured.
+  Scoped root IL/actual timed JIT prove unrelated dispatch unchanged after the
+  Word callee remap. Other68resize costs remain source-valid. The table replaces
+  a comfortable64×32pass with this material word2×9result; all73remain in evidence.
+  [Paired word weights](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md)
   save112.44µs/20.30%raw/14.21%normalized on bounded word32×16, with separated
   raw/all-actual/normalized confidence and native−7.09%. Lane bits and all
   arithmetic/cache/certification stay unchanged; same4032B arrays/4KiB,113B/op.
   Its441.45/zimg414.55µs interval.999–1.072 is uncertain; no residual gap is
   presumed or favorable repeat made. The table replaces a comfortable passing
-  byte32×16row with this uncertainty; all required cases remain. Largest
-  demonstrated resize gaps are byte Cross81.81µs and word2×9about75µs; the latter
-  still repeats preparation addressed by the byte row-group design. Attribute
-  its actual current path before selecting shared execution; stop unaffected passes.
+  byte32×16row with this uncertainty; all required cases remain. The largest
+  demonstrated resize excess is byte Cross81.81µs. Attribute its current
+  preparation/execution before another coherent design; stop confirmed passes.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
   six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
   Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
@@ -2474,7 +2480,7 @@ evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes552 internal/791 public per normal/scalar mode;
+Current resize qualification passes559 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
 {wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
