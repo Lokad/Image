@@ -2462,8 +2462,8 @@ Current scope and remaining work:
   retained-context horizontal CMYK stays uncertain and its equivalent fresh view passes.
   No added owned capacity or retention; sparse CMYK/RGB allocations remain 20,944/42,936 B/op.
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
-  gains and 15 unchanged color costs. Default/CompactColor and content/sampling
-  claims remain distinct in the packet table. Frozen packets/metadata gates apply.
+  gains and 15 unchanged color costs. Content and sampling scopes remain explicit
+  in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** across73named warm controls, **{resize_status_counts['pass']}pass /
   {resize_status_counts['gap']} gaps / {resize_status_counts['uncertain']}uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
