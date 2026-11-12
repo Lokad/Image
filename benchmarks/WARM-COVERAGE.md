@@ -66,6 +66,11 @@ Unselected [wide overlap](WIDE-ROW-LOAN-OVERLAP-TRIAL.md) and
 [narrow decoded stores](NARROW-BICUBIC-DECODED-PAIR-TRIAL.md) retain their
 inconclusive evidence and exact restoration. They impose no permanent strategy ban.
 
+The [narrow quartet-preparation screen](NARROW-BYTE-QUARTET-PREPARATION-TRIAL.md)
+also establishes no useful gain; original source/modules/package are restored
+exactly. Both short screens/JIT and passing exact-value/root checks remain; no
+independent confirmation, broad/package repeat or current-cost replacement.
+
 The [current predictable/stored PNG confirmations](PNG-HISTORICAL-CURRENT-CONFIRMATION.md)
 replace the three displayed historical PNG costs using the unchanged actual
 package DLL. Predictable16 277.00/FFmpeg407.42ms upper0.706 and stored8

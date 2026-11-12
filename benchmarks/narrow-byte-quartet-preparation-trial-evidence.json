@@ -1,0 +1,297 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BQP839",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "restoredQualifiedProduction": true,
+  "measurementOutcome": "Inconclusive short screens; no useful verified gain, no independent confirmation. Not a proven CPU regression or a permanent strategy ban.",
+  "baseline": {
+    "managedUs": 451.3594405864198,
+    "nativeUs": 439.5969010416667,
+    "ratio": 1.0267575579283672,
+    "lower": 0.3786480108802393,
+    "upper": 2.1323072646328383,
+    "allocatedBytes": 113,
+    "librarySha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4"
+  },
+  "candidate": {
+    "managedUs": 448.56999652777773,
+    "nativeUs": 421.1463333333333,
+    "ratio": 1.0651167089058777,
+    "lower": 0.9035354958652932,
+    "upper": 1.0957716545844978,
+    "allocatedBytes": 113,
+    "librarySha256": "9513b1af4c43627aa8815de396c4da3ad30744f7779cf7dd337158b30722bb7d"
+  },
+  "comparison": {
+    "views": {
+      "statistics": {
+        "baselineUs": 451.3594405864198,
+        "candidateUs": 448.56999652777773,
+        "savedUs": 2.789444058642024,
+        "savedFraction": 0.006180094638140066,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 3,
+          "Mean": 451359.4405864198,
+          "StandardError": 7642.264037925457,
+          "Level": 12,
+          "Margin": 241488.317444768,
+          "Lower": 209871.12314165177,
+          "Upper": 692847.7580311878
+        },
+        "candidateCI": {
+          "N": 3,
+          "Mean": 448569.99652777775,
+          "StandardError": 129.32446818180608,
+          "Level": 12,
+          "Margin": 4086.53091160947,
+          "Lower": 444483.4656161683,
+          "Upper": 452656.5274393872
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 451.3609475308642,
+        "candidateUs": 448.57131111111113,
+        "savedUs": 2.7896364197530783,
+        "savedFraction": 0.006180500185081539,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 3,
+          "Mean": 451360.9475308642,
+          "StandardError": 7642.264037925457,
+          "Level": 12,
+          "Margin": 241488.317444768,
+          "Lower": 209872.6300860962,
+          "Upper": 692849.2649756322
+        },
+        "candidateCI": {
+          "N": 3,
+          "Mean": 448571.31111111114,
+          "StandardError": 129.32446818178866,
+          "Level": 12,
+          "Margin": 4086.5309116089197,
+          "Lower": 444484.7801995022,
+          "Upper": 452657.8420227201
+        }
+      }
+    },
+    "normalizedGain": -0.03735950194017135,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.041971560001021424,
+    "baselineRatioBounds": [
+      0.3786480108802393,
+      2.1323072646328383
+    ],
+    "candidateRatioBounds": [
+      0.9035354958652932,
+      1.0957716545844978
+    ]
+  },
+  "codegen": [
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": [
+        "274"
+      ],
+      "stackReservations": [
+        "24"
+      ],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyPrepared[Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": [
+        "813"
+      ],
+      "stackReservations": [
+        "200"
+      ],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:TryLocateRowLoan(Lokad.Image.ImageBuffer,int,byref,byref):bool (FullOpts)",
+      "codeBytes": [
+        "197"
+      ],
+      "stackReservations": [],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowLoanStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": [
+        "6801"
+      ],
+      "stackReservations": [
+        "616",
+        "0xD60"
+      ],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:PreparePairedByteWeights(System.Span`1[double],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[int],System.Span`1[double]) (FullOpts)",
+      "codeBytes": [
+        "385"
+      ],
+      "stackReservations": [],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:TryRepairBytePair(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[int],int,System.ReadOnlySpan`1[double],int,System.Span`1[double],Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": [
+        "827"
+      ],
+      "stackReservations": [
+        "120"
+      ],
+      "quadCalls": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowTailStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+      "codeBytes": [
+        "6769"
+      ],
+      "stackReservations": [
+        "664",
+        "0xFF0"
+      ],
+      "quadCalls": 0
+    }
+  ],
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "BQP839",
+    "entireOriginalFileReconstructed": true,
+    "existingPairSingleWordSourcePathsAndAllHorizontalVerticalGeometryCertificationRepairVerbatim": true,
+    "numeric": "Reuse qualified four-byte-pixel UInt16 products, which are exact through65025; zero-extend lower/upper halves before binary64 conversion. Original alpha lanes and all double values preserved. Same two256bit stores per pair; no changed accumulation, FMA, rounding or certificates.",
+    "ownership": "Private inline producer borrows only four decoded entries. Existing result/cache/source loans,4KiB reservation/refusal/cleanup and row cancellation remain. No heap, owner, pool, reservation, output alias or retained state added.",
+    "workingAdmissionBytes": 4096,
+    "rowPayloadBytes": 3424,
+    "largePayloadBytes": 3232,
+    "smallPayloadBytes": 4080,
+    "newHeapArrays": 0,
+    "newReservations": 0,
+    "newOwners": 0,
+    "newPools": 0,
+    "retainedOperationScratchBytes": 0,
+    "tests": {
+      "newInternal": 4,
+      "newPublic": 0,
+      "focusedInternalEachMode": 532,
+      "focusedPublicEachMode": 791,
+      "actualQuartetBitsHighZeroTinyAndMixedAlpha": true,
+      "unalignedInputsCanariesAndNoAllocation": true,
+      "existingActualRowTailAndOddAndSurvivingRootTestsReused": true
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "fb0b69ddbb30f58a9cb2cee3a41315580795e49de7b2d527e8c184fb544819be",
+      "tests/Lokad.Image.Tests/ColumnBicubicQuartetDecodeTests.cs": "3414429ac5cee13bb029321684b2fb1644c9ce6922c68be2b97e73ec2116658c"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "11010fb918296a089a7040e519315a1118f969b96db03cf75afeed4df14c621c",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+    },
+    "publicationPostponed": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "BQP839",
+      "platform": "windows",
+      "productionSourcesRestored": true,
+      "coreSha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+      "embeddedSha256": "9f462bdcf1bfd43529e7173cb42d30505d411016c7060e054c2a0778a51e4227",
+      "actualPackageUnchangedSha256": "bdbeb55726a8863035b157ee8d6a6515d5d951515c65a079ae00e288596d0c88",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": null
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "BQP839",
+      "platform": "linux",
+      "productionSourcesRestored": true,
+      "coreSha256": "6ceb90136823195d6495fd5a95c5319a866ec18219be77a6ddf4c15587e04543",
+      "embeddedSha256": "9e0acaffa5a22e74c4ac023e92ad5e7536f0f1e9dc689aaaedd273ab714ecc76",
+      "actualPackageUnchangedSha256": "bdbeb55726a8863035b157ee8d6a6515d5d951515c65a079ae00e288596d0c88",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": "0f3827178a2db0b040f169da9cd867448b0858cb63681397453ecec89b4ba186"
+    }
+  },
+  "workflow": {
+    "productionVersionsEachOs": 1,
+    "embeddedVersionsEachOs": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "candidateAndBaselineShorts": 1,
+    "independentConfirmations": 0,
+    "broadOrPackageQualificationRepeated": false,
+    "focusedInternalEachModeEachOs": 532,
+    "focusedPublicEachModeEachOs": 791,
+    "quadTestsRemovedWithUnselectedProducer": 4,
+    "initialPatchAnchorPreflightCorrectedBeforeMutation": true
+  },
+  "decision": "Restore original narrow source and actual6439-check qualified Windows/Linux core/embedded/public modules and unchanged package. Retain attempted source/modules/4passing tests/model/JIT and both screens. No transfer of screens into current benchmark costs and no renderer dependency. Inspect substantial codec preparation/ownership work next; no unchanged favorable repeat.",
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "narrow-byte-quartet-preparation-trial.tar.xz",
+    "sha256": "9a5263197fd30aa384c65ba559b9e1bea072c244f949360dffda859e05f2bf56",
+    "bytes": 1382620,
+    "members": 61,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "scope": "benchmarks/contiguous-wide-source-views-evidence.json",
+        "file": "contiguous-wide-source-views-qualified.tar.xz",
+        "sha256": "faa3bcdb364d10bdb8f9ee293d5fa4339f6ddf1c6400a87df640951ca196402e",
+        "bytes": 2754152,
+        "members": 191,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "prepared-deep-pair-conversions-qualified.tar.xz",
+            "sha256": "bf854cc7a05705884732cc237320cb28714da21a5cdb76f301efa8bccf3d850b",
+            "scope": "benchmarks/prepared-deep-pair-conversions-evidence.json"
+          },
+          {
+            "file": "wide-bicubic-prepared-attribution.tar.xz",
+            "sha256": "f9fa9b0ba7d9933db351dd6620ea0308ac13907bfc1c321c507122d934591a25",
+            "scope": "benchmarks/wide-bicubic-prepared-attribution-evidence.json"
+          }
+        ]
+      },
+      {
+        "scope": "benchmarks/narrow-bicubic-quartet-attribution-evidence.json",
+        "file": "narrow-bicubic-quartet-attribution.tar.xz",
+        "sha256": "0b58f43eb7c32d11d945d3dcc70f0bd8891a1bd8cee4eef0dc2ca1a8083acdba",
+        "bytes": 125488,
+        "members": 25,
+        "dependencies": [
+          {
+            "file": "packed-horizontal-window-reuse.tar.xz",
+            "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+            "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+          },
+          {
+            "file": "bounded-bicubic-shared-quartets.tar.xz",
+            "sha256": "f6d85f6a6b402094b61341fcc550e7ed77be4daffd10ff5564ce66fbf6cb5340",
+            "scope": "benchmarks/bounded-bicubic-shared-quartets-evidence.json"
+          }
+        ],
+        "mirrored": true,
+        "allMembersVerified": true
+      }
+    ]
+  }
+}
