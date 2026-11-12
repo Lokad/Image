@@ -43,19 +43,15 @@ superseded above. The [stride](RASTER-STRIDE-PREPARATION-TRIAL.md) and
 their adverse/inconclusive results and raw evidence as separate history; neither
 is a renderer dependency or a permanent design-family ban.
 
-[Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) improves the retained-native stored-word
-complete encode by 29.48 µs/6.23% raw and 6.86% normalized, with separated
-filtered/all-actual/normalized confidence. Current word 443.92/
-406.92 µs upper 1.105 remains a gap. Fresh stored byte/word
-upper 0.136/0.328 pass on equivalent one-shot boundaries;
-natural-GC64 passes only its separate scope. All 20 encoder views preserve exact
-complete packets; 17 fresh-state controls have 15 passes / 0 gaps /
-2 uncertain. Gray8 and RGB16 need confidence resolution before tuning.
-No new substantial owned/retained storage or allocation saving is claimed.
-Windows/Linux each pass 6,510 full/live checks, 703 internal/246 public PNG checks
-per normal/scalar/AVX512-off/AVX2-off mode and the same actual Release-package
-consumer/all three usage examples. Two core/embedded builds per OS cover untimed A
-and measured B; public/harness/native/fixture builds are reused. Publication postponed.
+[Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) retains its accepted29.48µs/6.23%raw/
+6.86%normalized stored-word gain, with separated confidence. Retained-native
+post-GC4word443.92/406.92µs upper1.105 remains a gap; equivalent fresh stored
+byte/word and natural-GC64 scopes pass separately. [Current RGB16 confidence](PNG-RGB16-CURRENT-CONFIDENCE.md)
+now passes15.42/FFmpeg16.09ms upper.977, exact739472B, on the actual package.
+All12adjacent pairs/native brackets and original post-GC uncertainty remain.
+Current17fresh encodes:16pass/one Gray8uncertainty. No production gain, allocation
+saving, build or broad/package repeat from this measurement. Source-valid other
+PNG costs and6512Windows/Linux/SAME-package qualification are reused.
 
 [Adler evidence](PNG-BLOCK-ADLER.md) still owns 51 unchanged read/validation controls:
 49 pass/two uncertain (live8/tight cancelable16), plus shared-root passing evidence.
@@ -180,7 +176,7 @@ remain separate and historical subtraction measures no preparation time.
 | JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current block Adler costs](PNG-CURRENT-FRAMING-COSTS.md):51controls,49pass/0gap/2uncertain. Live16passes, upper.988; live8/tight cancelable16 remain uncertain. Complete full-depth pixels/metadata/owners/limits remain exact, allocation/admission unchanged. Three historical adverse comparisons reconcile against current baselines; no uniform gain or favorable repeat. Two-retained-image shared-root also passes. Historical stream/composition costs remain H. |
-| PNG encoding | [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md): 17 fresh controls, 15 pass / 0 gaps / 2 uncertain. Exact complete packets, original settings and output ownership. Stored-word saves 29.48 µs/6.23% raw and 6.86% normalized, with separated filtered/all-actual/normalized confidence. Fresh stored8/16 upper 0.136/0.328 pass; retained-native word post-GC4 upper 1.105 remains a gap. Natural64 passes only its scope. No new owned/retained storage; allocation/admission unchanged. All affected costs reconcile before W/L/scalar/ISA/SAME-package qualification; read and other-family evidence is reused through explicit source/JIT scope. |
+| PNG encoding | [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md): 17 fresh controls, 16 pass / 0 gaps / 1 uncertain after [current RGB16 confidence](PNG-RGB16-CURRENT-CONFIDENCE.md). Exact complete packets, original settings and output ownership. Stored-word saves 29.48 µs/6.23% raw and 6.86% normalized, with separated filtered/all-actual/normalized confidence. Fresh stored8/16 upper 0.136/0.328 pass; retained-native word post-GC4 upper 1.105 remains a gap. Natural64 passes only its scope. No new owned/retained storage; allocation/admission unchanged. All affected costs reconcile before W/L/scalar/ISA/SAME-package qualification; read and other-family evidence is reused through explicit source/JIT scope. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; [current opaque lossless](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |

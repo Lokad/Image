@@ -55,8 +55,14 @@ Current scope and remaining work:
   confidence intervals separate. Native time moves +0.68%; normalized gain is
   6.86%. This is a scoped gain, with no new owned/retained storage or general claim.
   All 20 encoder views retain exact complete packets. The 17 fresh-state controls
-  have 15 passes / 0 gaps /
-  2 uncertain; uncertain cases are not presumed slowdowns.
+  have 16 passes / 0 gaps /
+  1 uncertain; uncertain cases are not presumed slowdowns.
+  [Current RGB16 confidence](../benchmarks/PNG-RGB16-CURRENT-CONFIDENCE.md) passes/stops:
+  15418.18/16086.09µs, upper0.977,
+  exact739,472B. All12natural-GC adjacent pairs and native brackets remain;
+  original post-GC global uncertainty stays historical. Complete fresh codec/conversion/
+  word-frame/output setup/disposal on both sides; no production speedup claim or
+  build/qualification repeat. Direct2,427,377B/op is different instrumentation, not a saving.
   Fresh stored RGBA8 costs 64.50/541.91 µs,
   upper 0.136, 609,708 B/op;
   RGBA16 costs 439.04/1380.79 µs,
@@ -246,7 +252,7 @@ settings do not establish matched quality.
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,251.53 | 4,497.15 | 0.945 / 0.976 | 548,196 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 16,817.14 | 17,274.99 | 0.973 / 0.978 | 816,316 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot Optimal6 / native6 † | 20,453.36 | 20,758.67 | 0.985 / 0.992 | 2,433,524 | 963,202 / 963,202 |
-| PNG RGB16, one-shot Optimal6 / native6 † | 15,921.31 | 16,071.65 | 0.991 / 1.005 | 2,427,356 | 739,472 / 739,472 |
+| PNG RGB16, one-shot Optimal6 / native6 † | 15,418.18 | 16,086.09 | 0.958 / 0.977 | 2,427,377 | 739,472 / 739,472 |
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,851.23 | 5,410.67 | 0.897 / 0.916 | 818,604 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,117.32 | 10,495.66 | 0.964 / 0.976 | 1,356,764 | 506,887 / 506,887 |
 | PNG RGBA8, one-shot stored0 / native0 † | 64.50 | 541.91 | 0.119 / 0.136 | 609,708 | 533,444 / 533,444 |

@@ -1,5 +1,8 @@
 # Wide PNG chunk CRC
 
+Current RGB16 follow-up: [adjacent confidence](PNG-RGB16-CURRENT-CONFIDENCE.md).
+Other costs and the original qualification below retain their checkpoint.
+
 PNG encoding now advances its four existing 128-bit CRC residues together using
 guarded 512-bit carryless multiplication, byte reversal and lane shuffling. The
 same polynomial powers, seed, lane order, serial combination, reduction and tails

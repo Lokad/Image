@@ -1805,11 +1805,23 @@ def render():
     assert png_current['oneShotStatusCounts'] == {'pass': 15, 'gap': 0, 'uncertain': 2}
     assert png_current['normalizedGainConfirmed'] and png_current['reusedPerformance']['pngReadCases'] == 51
     assert not png_current['issues']
+    png_adjacent = json.loads((ROOT / 'benchmarks/png-rgb16-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert png_adjacent['measurementAccepted'] and not png_adjacent['productionChanged'] and not png_adjacent['productionSpeedupClaim']
+    assert png_adjacent['allBuilds'] == png_adjacent['broadOrPackageRepeats'] == 0
+    assert png_adjacent['raw']['mirrored'] and png_adjacent['raw']['allMembersVerified']
+    assert set(png_adjacent['cases']) == {'EncodeRgb16'}
+    png_rgb16 = png_adjacent['cases']['EncodeRgb16']
+    assert png_rgb16['status'] == 'pass' and png_rgb16['upper'] <= 1
+    assert png_rgb16['operationsPerSubject'] == 4 and png_rgb16['codecPreparationTimed'] and not png_rgb16['referenceCodecRetained']
+    png_cases = {**png_current['cases'], **png_adjacent['cases']}
+    png_oneshot_status = {status: sum(c['status'] == status and c['boundaryKind'] == 'equivalent-one-shot' for c in png_cases.values()) for status in ('pass', 'gap', 'uncertain')}
+    assert png_oneshot_status == png_adjacent['oneShotStatusCounts'] == {'pass': 16, 'gap': 0, 'uncertain': 1}
     def png_label(label):
         return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
                 .replace(', red-plane reference', '').replace('NoCompression0', 'stored0'))
-    for case, current in png_current['cases'].items():
-        assert current['librarySha256'] == png_current['qualification']['actualPackage']['librarySha256']
+    for case, current in png_cases.items():
+        owner = png_adjacent if case in png_adjacent['cases'] else png_current
+        assert current['librarySha256'] == owner['qualification']['actualPackage']['librarySha256']
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == len(current['managedActualNanoseconds']) == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['completePacketExact']
         assert current['packetBytes'] == current['nativePacketBytes'] and current['packetSha256'] == current['nativePacketSha256']
@@ -2365,8 +2377,14 @@ Current scope and remaining work:
   confidence intervals separate. Native time moves +0.68%; normalized gain is
   6.86%. This is a scoped gain, with no new owned/retained storage or general claim.
   All 20 encoder views retain exact complete packets. The 17 fresh-state controls
-  have {png_current['oneShotStatusCounts']['pass']} passes / {png_current['oneShotStatusCounts']['gap']} gaps /
-  {png_current['oneShotStatusCounts']['uncertain']} uncertain; uncertain cases are not presumed slowdowns.
+  have {png_oneshot_status['pass']} passes / {png_oneshot_status['gap']} gaps /
+  {png_oneshot_status['uncertain']} uncertain; uncertain cases are not presumed slowdowns.
+  [Current RGB16 confidence](../benchmarks/PNG-RGB16-CURRENT-CONFIDENCE.md) passes/stops:
+  {png_rgb16['managedUs']:.2f}/{png_rgb16['nativeUs']:.2f}µs, upper{png_rgb16['upper']:.3f},
+  exact739,472B. All12natural-GC adjacent pairs and native brackets remain;
+  original post-GC global uncertainty stays historical. Complete fresh codec/conversion/
+  word-frame/output setup/disposal on both sides; no production speedup claim or
+  build/qualification repeat. Direct2,427,377B/op is different instrumentation, not a saving.
   Fresh stored RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
   upper {stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,} B/op;
   RGBA16 costs {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f} µs,
