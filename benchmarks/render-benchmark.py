@@ -507,11 +507,31 @@ def render():
     assert live_cost['cancellationCanBeCanceled'] and not live_cost['cancellationRequested'] and live_cost['alreadyCanceledRejected']
     assert live_cost['allRgbaSamplesExact'] and live_cost['hiddenRgbExact']
     lpf.update(huffman_front['costs'])
+    color_tiles = json.loads((ROOT / 'benchmarks/webp-inverse-color-tiles-evidence.json').read_text(encoding='utf-8'))
+    assert color_tiles['productionAccepted'] and color_tiles['allAffectedPerformanceReconciled']
+    assert color_tiles['requiredMaterialPaths'] == 289 and not color_tiles['materialPassToGapContradictions']
+    assert color_tiles['sourceProof']['entireOriginalFileReconstructsAfterReplacingOnlyInverseColorLoop']
+    assert color_tiles['raw']['mirrored'] and color_tiles['raw']['allMembersVerified']
+    assert color_tiles['storage']['newOwnedCapacityBytes'] == color_tiles['storage']['newRetainedCapacityBytes'] == 0
+    assert set(color_tiles['costs']) == set(huffman_front['costs']) - {'ValidateVp8lAlpha', 'ValidateVp8Alpha'}
+    assert color_tiles['validationReuse']['sourceValid'] and color_tiles['validationReuse']['additionalTimingJobs'] == 0
+    assert color_tiles['validationReuse']['costs'] == {name: huffman_front['costs'][name] for name in ('ValidateVp8lAlpha', 'ValidateVp8Alpha')}
+    for name, cost in color_tiles['costs'].items():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['sourceUnchanged'] and cost['independentOwnedOutput'] and cost['alphaExact']
+        assert cost['managedOutputSha256'] == huffman_front['costs'][name]['managedOutputSha256']
+        assert cost['librarySha256'] == color_tiles['producers']['windowsSha256']
+        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
+    assert color_tiles['comparison']['normalizedGainSeparated']
+    assert all(view['rawGainSeparated'] for view in color_tiles['comparison']['views'].values())
+    lpf.update(color_tiles['costs'])
     lossless_read_counts = {state: sum(lpf[name]['status'] == state for name in ('WebpResident', 'Lossless8', 'IndexedNative16Colors8', 'NativeLosslessCancelable8', 'WebpStream', 'ValidateVp8lAlpha')) for state in ('pass', 'gap', 'uncertain')}
-    assert lossless_read_counts == {'pass': 3, 'gap': 1, 'uncertain': 2}
+    assert lossless_read_counts == {'pass': 6, 'gap': 0, 'uncertain': 0}
     vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in vp8_costs)
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_decode_counts == {'pass': 4, 'gap': 0, 'uncertain': 2}
+    assert vp8_decode_counts == {'pass': 5, 'gap': 0, 'uncertain': 1}
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -2194,6 +2214,12 @@ def render():
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['actualPackage']['losslessHuffmanPaletteOwnersPassed'] and current_build_qualification['samePackageLinux']['losslessHuffmanPaletteOwnersPassed']
     assert current_build_qualification['huffmanInternalEachModeEachOs'] == 1026 and current_build_qualification['huffmanPublicEachModeEachOs'] == 239
+    current_build_qualification = color_tiles['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6456
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == color_tiles['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2223,25 +2249,24 @@ Current scope and remaining work:
   {opaque['managedUs']/1000:.2f}/libwebp{opaque['nativeUs']/1000:.2f}ms, range{opaque['lower']:.3f}–{opaque['upper']:.3f},
   {opaque['allocatedBytes']:,}B/op and exact121,896B packet. All adjacent pairs/brackets remain;
   no codec change, presumed gap or favorable repeat follows the first adjacent capture.
-  [Inline Huffman reads](../benchmarks/WEBP-HUFFMAN-READ-FRONTEND.md) save82.02µs/
-  2.56%raw/2.54%normalized on live-token VP8L decoding. Current3.125/FFmpeg3.025ms,
-  range1.018–1.043 remains a gap; allocation stays152,728B/op.
+  [Per-tile inverse color](../benchmarks/WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/
+  6.14%raw/7.18%normalized on live-token VP8L decoding. Current2.933/FFmpeg3.059ms,
+  range0.907–0.989 passes/stops; allocation stays152,728B/op.
   All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
   conversion contexts and has no equivalent cancellation token. Across six lossless
   reads/validators:{lossless_read_counts['pass']}pass/{lossless_read_counts['gap']}gap/{lossless_read_counts['uncertain']}uncertain.
-  Attribute the remaining approximately100µs gap before another substantial decoder change.
+  All six pass/stop. Two validators bypass inverse arithmetic and reuse source-valid evidence.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. The current word-alpha view is
   {alpha16_current['managedUs']/1000:.2f}/FFmpeg {alpha16_current['nativeUs']/1000:.2f} ms, upper {alpha16_current['upper']:.3f}: uncertain,
   exact normalized alpha/packet and {alpha16_current['allocatedBytes']:,} B/op. Resolve uncertainty before tuning. Complete packets remain
-  exact. The same [Huffman round](../benchmarks/WEBP-HUFFMAN-READ-FRONTEND.md)
-  refreshes all eight affected companion reads/validators without a uniform causal
-  gain claim. VP8/ALPH plus unchanged opaque [position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
+  exact. The same [color-tile round](../benchmarks/WEBP-INVERSE-COLOR-TILES.md)
+  refreshes six affected companion decodes without a uniform causal gain claim.
+  VP8/ALPH plus unchanged opaque [position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   {vp8_decode_counts['pass']} passes / {vp8_decode_counts['gap']} gaps / {vp8_decode_counts['uncertain']} uncertain.
   Ordinary opaque decoding improves 2.02% after reference normalization, with separated
   raw/all-actual/normalized intervals. Live {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
-  upper{live['upper']:.3f}, and resident ALPH remain uncertain; stream ALPH now passes.
-  The current resident interval supersedes its older pass without establishing a regression.
+  upper{live['upper']:.3f}, remains uncertain. Resident and stream ALPH now pass.
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
@@ -2400,8 +2425,8 @@ Current scope and remaining work:
 
 The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Current Huffman/VP8 checks pass1,026internal/239public per
-normal/scalar/BMI2-off mode; unchanged broader VP8/shared-memory and numerical ISA
+Windows/Linux**. Current WebP checks pass1,033internal/239public per
+normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per

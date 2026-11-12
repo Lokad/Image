@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare lossless WebP inverse color coefficients per tile and restore pixels
+  in SIMD batches, preserving exact samples and the portable scalar path.
+
 - Inline common lossless WebP Huffman reads while keeping the bounded fallback,
   preserving exact decoded pixels, cancellation and memory ownership.
 

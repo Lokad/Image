@@ -1,5 +1,9 @@
 # Current inverse-color attribution
 
+Historical attribution for the accepted [inverse color tiles](WEBP-INVERSE-COLOR-TILES.md),
+which owns current affected costs, generated code and qualification. The original
+profile and hypothesis below are retained.
+
 One two-second capture on the accepted [Huffman build](WEBP-HUFFMAN-READ-FRONTEND.md)
 finds1,998sample locations: main decoder1,247(includes inlined readers), scalar
 transform210, cold canonical reader183, predictor145 and PredictAndAdd96.

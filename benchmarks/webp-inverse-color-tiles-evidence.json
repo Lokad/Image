@@ -1,0 +1,606 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CIT849",
+  "allAffectedPerformanceReconciled": true,
+  "costs": {
+    "NativeLosslessCancelable8": {
+      "caseId": "NativeLosslessCancelable8",
+      "managedUs": 2933.1024375,
+      "nativeUs": 3059.181875,
+      "ratio": 0.9587865505708123,
+      "lower": 0.9073512760148219,
+      "upper": 0.9885118096831095,
+      "status": "pass",
+      "allocatedBytes": 152728,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerSubject": 4,
+      "naturalGc": true,
+      "allActualsRetained": true,
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "receipt": "tmp/cit849-live-adjacent-receipt.json",
+      "observation": "tmp/cit849-live-adjacent.json",
+      "measurement": "adjacent4op",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 183812,
+      "inputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "alreadyCanceledRejected": true,
+      "boundary": "Identical resident frozen VP8L input. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. This one frozen exact native encoder input exercises adaptive coding; no profile/strategy sweep. Live cancelable token, never signaled; token/source creation and disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed."
+    },
+    "IndexedNative16Colors8": {
+      "managedUs": 420.08994715909097,
+      "nativeUs": 544.270259765625,
+      "ratio": 0.771840716301477,
+      "lower": 0.7659496994097839,
+      "upper": 0.7780390185296365,
+      "allocatedBytes": 288465,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "IndexedNative16Colors8",
+      "harnessCase": "IndexedNative16Colors8",
+      "receipt": "tmp/cit849-candidate-IndexedNative16Colors8-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-IndexedNative16Colors8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 11810,
+      "inputSha256": "84a122705665915c34a83e46f58d4077e23d0ed56ba0f85a48f66b8a31285830",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "04895e12f5e10749802e957fb806c776e768f9b7978a442339407e997bd44415",
+      "nativeOutputSha256": "04895e12f5e10749802e957fb806c776e768f9b7978a442339407e997bd44415",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "boundary": "Identical resident frozen VP8L input. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. Existing sixteen-color PNG projection and frozen native type3 color-index transform, two packed indices per coded green byte; complete inverse palette expansion and output packing timed. No extra original raster."
+    },
+    "WebpResident": {
+      "managedUs": 2719.464055,
+      "nativeUs": 3020.828453125,
+      "ratio": 0.9002378311773237,
+      "lower": 0.8963065471315151,
+      "upper": 0.9071602013181376,
+      "allocatedBytes": 152728,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "WebpResident",
+      "harnessCase": "NativeLossless8",
+      "receipt": "tmp/cit849-candidate-WebpResident-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-WebpResident-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 183812,
+      "inputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "boundary": "Identical resident frozen VP8L input. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. This one frozen exact native encoder input exercises adaptive coding; no profile/strategy sweep."
+    },
+    "Lossless8": {
+      "managedUs": 1552.01144453125,
+      "nativeUs": 2318.2000989583335,
+      "ratio": 0.669489853455116,
+      "lower": 0.6647412189774848,
+      "upper": 0.6745422764562399,
+      "allocatedBytes": 10840,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "Lossless8",
+      "harnessCase": "Lossless8",
+      "receipt": "tmp/cit849-candidate-Lossless8-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-Lossless8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 533100,
+      "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "boundary": "Identical resident frozen VP8L input. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. Only this literal/run VP8L profile is measured."
+    },
+    "WebpStream": {
+      "managedUs": 2906.3306916666666,
+      "nativeUs": 3151.61709375,
+      "ratio": 0.9221712553311875,
+      "lower": 0.8661667400693355,
+      "upper": 0.9833418322534193,
+      "allocatedBytes": 152824,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "WebpStream",
+      "harnessCase": "StreamNativeLossless8",
+      "receipt": "tmp/cit849-candidate-WebpStream-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-WebpStream-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 183812,
+      "inputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "boundary": "Fresh read-only seekable MemoryStream with non-exposed buffer; complete public Decode(Stream) input reads, buffering, copies, stream creation/disposal and output release timed. Native fresh AVIO context/8192-byte scratch, length query, complete acquisition into a fresh padded owned packet, EOF check and input/scratch release timed; no prepared input view. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. This one frozen exact native encoder input exercises adaptive coding; no profile/strategy sweep."
+    },
+    "Native8": {
+      "managedUs": 5789.88149375,
+      "nativeUs": 5965.871171875,
+      "ratio": 0.9705005902650613,
+      "lower": 0.9667683681055099,
+      "upper": 0.9748583418700798,
+      "allocatedBytes": 240400,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "Native8",
+      "harnessCase": "Native8",
+      "receipt": "tmp/cit849-candidate-Native8-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-Native8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 98590,
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "alphaExact": true,
+      "boundary": "Identical resident frozen VP8/ALPH input to independent owned RGBA8. Complete public managed Decode and disposal; native software webp decode, state reset, centered bilinear chroma expansion, limited BT.601 conversion through RGBA16, RGBA8 reduction, exact alpha merge and scratch/output allocation/release. One codec/conversion thread, normal SIMD. Native contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded output rows exposed without a packing copy. Startup, I/O, IPC, hashing, validation and encoding excluded. One existing raster/input; no regeneration or quality enumeration. Decode does not require a matched encoder quality. Only this native keyframe/alpha profile is measured."
+    },
+    "Vp8Stream": {
+      "managedUs": 6187.89590625,
+      "nativeUs": 6465.8205,
+      "ratio": 0.9570163456053258,
+      "lower": 0.9477332604552519,
+      "upper": 0.964348047697373,
+      "allocatedBytes": 240496,
+      "status": "pass",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "caseId": "Vp8Stream",
+      "harnessCase": "StreamNative8",
+      "receipt": "tmp/cit849-candidate-StreamNative8-confirm-receipt.json",
+      "observation": "tmp/cit849-candidate-StreamNative8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "measurement": "existing-global-selector",
+      "retainedOperationScratchBytes": 0,
+      "inputBytes": 98590,
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "alphaExact": true,
+      "boundary": "Fresh non-exposed seekable VP8/ALPH Stream to independent owned RGBA8. Complete default managed input buffering/copies and EOF reading, full public Decode/disposal. Native fresh AVIO/owned packet acquisition, complete reading/EOF, software webp state reset/decode, centered chroma expansion, limited BT601 through RGBA16/no-dither reduction, exact alpha merge and all input/scratch/output acquisition/release timed. Decoder/conversion/frame/packet wrappers reused; every call reacquires input and decodes/converts all pixels. No demux, exposed input-buffer shortcut, output cache or redundant packing. One CPU/codec/conversion thread, normal SIMD. Startup/I/O/IPC/generation/hashing/validation excluded. Existing frozen input and exact per-decoder pixel anchors reused; no encoding or quality search."
+    }
+  },
+  "validationReuse": {
+    "project": "Lokad.Image",
+    "stage": "CIT849",
+    "costs": {
+      "ValidateVp8lAlpha": {
+        "managedUs": 2225.117523674243,
+        "nativeUs": 3204.19378125,
+        "ratio": 0.6944391243422843,
+        "lower": 0.6646900602910417,
+        "upper": 0.7304069313811908,
+        "allocatedBytes": 297070,
+        "status": "pass",
+        "librarySha256": "89db6a18b65a6e3fb7c87b113d6302870d504b2d8fa88b86073cae5685113f30",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "caseId": "ValidateVp8lAlpha",
+        "harnessCase": "ValidateVp8lAlpha",
+        "receipt": "tmp/hfr847-candidate-ValidateVp8lAlpha-confirm-receipt.json",
+        "observation": "tmp/hfr847-candidate-ValidateVp8lAlpha-confirm-observation.json",
+        "actualIterations": 12,
+        "nativeSamplesEachBracket": 12,
+        "allActualsRetained": true,
+        "measurement": "existing-global-selector",
+        "retainedOperationScratchBytes": 0,
+        "inputBytes": 183310,
+        "inputSha256": "db796bb9ad5d480eb273db8ae966d4fa1a8f5995bceaa724475c09d6201dbfb7",
+        "managedOutputBytes": 36,
+        "nativeOutputBytes": 36,
+        "descriptorSha256": "ee76119ca8c5b7c9e1d68c48bab664c4d7edea414425c759e5f9220fbb08997e",
+        "descriptorExact": true,
+        "prefixAndCodingScopesVerified": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded."
+      },
+      "ValidateVp8Alpha": {
+        "managedUs": 4350.107989583332,
+        "nativeUs": 5453.133875,
+        "ratio": 0.7977262413318859,
+        "lower": 0.7946075270151455,
+        "upper": 0.8009926877098288,
+        "allocatedBytes": 15600,
+        "status": "pass",
+        "librarySha256": "89db6a18b65a6e3fb7c87b113d6302870d504b2d8fa88b86073cae5685113f30",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "caseId": "ValidateVp8Alpha",
+        "harnessCase": "ValidateVp8Alpha",
+        "receipt": "tmp/hfr847-candidate-ValidateVp8Alpha-confirm-receipt.json",
+        "observation": "tmp/hfr847-candidate-ValidateVp8Alpha-confirm-observation.json",
+        "actualIterations": 12,
+        "nativeSamplesEachBracket": 12,
+        "allActualsRetained": true,
+        "measurement": "existing-global-selector",
+        "retainedOperationScratchBytes": 0,
+        "inputBytes": 115542,
+        "inputSha256": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+        "managedOutputBytes": 36,
+        "nativeOutputBytes": 36,
+        "descriptorSha256": "eec73486a786152f1f3d0067a8023bfc632fbf38aaa7fbb9d608e75aaebaf9c6",
+        "descriptorExact": true,
+        "prefixAndCodingScopesVerified": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded."
+      }
+    },
+    "sourceValid": true,
+    "reason": "DecodePixels(validateOnly) releases each transform and continues before any Apply/ApplyColorTransform call. Full coded validation, auxiliary decoding, Huffman/bit readers, lookup scheduling/admission, owners/cancellation, descriptors and output boundaries remain verbatim. ReadImageCore generated code remains8245B. Inverse color arithmetic is not executed by these two complete validators; reuse HFR847 receipts/qualification rather than repeating them.",
+    "additionalTimingJobs": 0
+  },
+  "comparison": {
+    "savedUs": 191.79225,
+    "rawPercent": 6.13755883573276,
+    "normalizedPercent": 7.184041228696836,
+    "normalizedGainSeparated": true,
+    "nativeClockChangePercent": 1.1274811000364648,
+    "views": {
+      "allActual": {
+        "baseline": {
+          "N": 12,
+          "Mean": 3124894.6875,
+          "StandardError": 5521.81890272006,
+          "Level": 12,
+          "Margin": 24500.19637483572,
+          "Lower": 3100394.491125164,
+          "Upper": 3149394.883874836
+        },
+        "candidate": {
+          "N": 12,
+          "Mean": 2933102.4375,
+          "StandardError": 9668.212590945488,
+          "Level": 12,
+          "Margin": 42897.659493168,
+          "Lower": 2890204.778006832,
+          "Upper": 2976000.096993168
+        },
+        "rawGainSeparated": true
+      },
+      "upperOutlierDiagnostic": {
+        "baseline": {
+          "N": 11,
+          "Mean": 3120188.75,
+          "StandardError": 3164.421509318309,
+          "Level": 12,
+          "Margin": 14514.865583120161,
+          "Lower": 3105673.8844168796,
+          "Upper": 3134703.6155831204
+        },
+        "candidate": {
+          "N": 12,
+          "Mean": 2933102.4375,
+          "StandardError": 9668.212590945488,
+          "Level": 12,
+          "Margin": 42897.659493168,
+          "Lower": 2890204.778006832,
+          "Upper": 2976000.096993168
+        },
+        "rawGainSeparated": true
+      }
+    },
+    "baselineRatioBounds": [
+      1.017950633735998,
+      1.0426920871945236
+    ],
+    "candidateRatioBounds": [
+      0.9073512760148219,
+      0.9885118096831095
+    ],
+    "baselineReused": "tmp/hfr847-live-adjacent-receipt.json"
+  },
+  "materialPassToGapContradictions": [],
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CIT849",
+    "entireOriginalFileReconstructsAfterReplacingOnlyInverseColorLoop": true,
+    "otherTransformReaderPrefixCacheAndEncoderBodiesUnchanged": true,
+    "perRowCancellationAndIntegerPrecisionPreserved": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "f315c067a9388914896b55fc9752ef90bd6ff2b55db59125f3ae0afe0c0859af",
+      "tests/Lokad.Image.Tests/WebpInverseColorTests.cs": "a56ffb9d157ebae9d5af3d0a43efc1e3914b52a84806f24403e12e0dec08f693"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/WebpHuffman.cs": "d82b85df2748776fe104971448277e16c7e5c48d6b6b6343b912cccc11a425e1",
+      "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+    }
+  },
+  "codegen": {
+    "file": "tmp/cit849-candidate-NativeLosslessCancelable8-short-jit.txt",
+    "sha256": "179dd76dfbcea369ffd6cc8e8b93aee150b30dcf8f6b5b9245d01a1714468904",
+    "methods": [
+      {
+        "method": "Lokad.Image.Internal.WebpLosslessDecoder:ReadImageCore(int,int,bool,bool,byref,byref,bool):System.Span`1[uint]:this (FullOpts)",
+        "codeBytes": [
+          "8245"
+        ],
+        "stackReservations": [
+          "600"
+        ],
+        "vectorSignedMultiplyCount": 0
+      },
+      {
+        "method": "Lokad.Image.Internal.WebpLosslessDecoder:Apply(Lokad.Image.Internal.WebpLosslessDecoder+Transform,System.Span`1[uint],int):this (FullOpts)",
+        "codeBytes": [
+          "699"
+        ],
+        "stackReservations": [
+          "88"
+        ],
+        "vectorSignedMultiplyCount": 0
+      },
+      {
+        "method": "Lokad.Image.Internal.WebpLosslessDecoder:ApplyColorTransform(System.Span`1[uint],int,int,int,System.ReadOnlySpan`1[uint],Lokad.Image.Internal.OperationContext) (FullOpts)",
+        "codeBytes": [
+          "897"
+        ],
+        "stackReservations": [
+          "72"
+        ],
+        "vectorSignedMultiplyCount": 3
+      },
+      {
+        "method": "Lokad.Image.Internal.WebpLosslessDecoder:ApplyPredictor(Lokad.Image.Internal.WebpLosslessDecoder+Transform,System.Span`1[uint],int):this (FullOpts)",
+        "codeBytes": [
+          "837"
+        ],
+        "stackReservations": [
+          "104"
+        ],
+        "vectorSignedMultiplyCount": 0
+      }
+    ]
+  },
+  "losslessStatusCounts": {
+    "pass": 6,
+    "gap": 0,
+    "uncertain": 0
+  },
+  "qualificationPending": false,
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "scope": "Seven complete decode costs refreshed: primary independent matched4op adjacent, six original global-selector companions. Two coded validators bypass inverse arithmetic and reuse source-valid HFR847 evidence. No uniform causal gain claim from companion/native raw changes. PureVP8 without ALPH, encoders, other codecs/resizing/text remain source-valid.",
+  "workflow": "One immutable production/embedded build eachOS, seven exact signed-arithmetic/tile-boundary/cancellation tests;1033internal/239public focused normal/scalar pass. Zero public/harness/native/fixture/tool builds. Short screen kept separate from causal adjacent comparison; qualification follows complete affected reconciliation.",
+  "productionChanged": true,
+  "productionAccepted": true,
+  "newMaterialPaths": 0,
+  "raw": {
+    "file": "webp-inverse-color-tiles-qualified.tar.xz",
+    "sha256": "b3c16dcb02daea7d98332a85d07e42bb91069a5b90d1cb87ad933b2a8f0f8a8d",
+    "bytes": 2578468,
+    "members": 143,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "webp-huffman-read-frontend-qualified-final.tar.xz",
+        "sha256": "0f600b54c131d48cfb072c6bc7372244274d823ce5159cdf36bcc268b0e99b27",
+        "scope": "benchmarks/webp-huffman-read-frontend-evidence.json"
+      },
+      {
+        "file": "webp-inverse-color-current-attribution.tar.xz",
+        "sha256": "df28181378a81d28901a88eab1ca8b4b7b6ba6a61802bdfb1d192fe9ae3ef44e",
+        "scope": "benchmarks/webp-inverse-color-current-attribution-evidence.json"
+      }
+    ]
+  },
+  "producers": {
+    "windowsSha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+    "linuxSha256": "b3d7de22e36f170dd7abea3817f19bde13448a47f8d4b1fb92f191736ef3c692",
+    "timedArtifactSha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+    "actualPackageSha256": "212f5d1dc774e662c78a7a60a852a520295fb8cfdbe77d7e75d05746e5641a62"
+  },
+  "qualification": {
+    "fullChecksEachOs": 6456,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "full": [
+        3127,
+        2381,
+        948
+      ],
+      "total": 6456,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 1033,
+        "internal-scalar": 1033,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "isa": {
+        "internal-avx512-off": 1033,
+        "public-avx512-off": 239,
+        "internal-avx2-off": 1033,
+        "public-avx2-off": 239
+      },
+      "webpInternalEachMode": 1033,
+      "webpPublicEachMode": 239,
+      "filter": "FullyQualifiedName~Webp|FullyQualifiedName~Vp8",
+      "unchangedResizeIncludingThreeNamedStorageSuitesReused": true,
+      "sources": {
+        "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "f315c067a9388914896b55fc9752ef90bd6ff2b55db59125f3ae0afe0c0859af",
+        "tests/Lokad.Image.Tests/WebpInverseColorTests.cs": "a56ffb9d157ebae9d5af3d0a43efc1e3914b52a84806f24403e12e0dec08f693"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/WebpHuffman.cs": "d82b85df2748776fe104971448277e16c7e5c48d6b6b6343b912cccc11a425e1",
+        "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+      },
+      "unchangedResizePngJpegTextAndNumericalIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "b3d7de22e36f170dd7abea3817f19bde13448a47f8d4b1fb92f191736ef3c692",
+      "full": [
+        3127,
+        2381,
+        948
+      ],
+      "total": 6456,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 1033,
+        "internal-scalar": 1033,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "isa": {
+        "internal-avx512-off": 1033,
+        "public-avx512-off": 239,
+        "internal-avx2-off": 1033,
+        "public-avx2-off": 239
+      },
+      "webpInternalEachMode": 1033,
+      "webpPublicEachMode": 239,
+      "filter": "FullyQualifiedName~Webp|FullyQualifiedName~Vp8",
+      "unchangedResizeIncludingThreeNamedStorageSuitesReused": true,
+      "sources": {
+        "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "f315c067a9388914896b55fc9752ef90bd6ff2b55db59125f3ae0afe0c0859af",
+        "tests/Lokad.Image.Tests/WebpInverseColorTests.cs": "a56ffb9d157ebae9d5af3d0a43efc1e3914b52a84806f24403e12e0dec08f693"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/WebpHuffman.cs": "d82b85df2748776fe104971448277e16c7e5c48d6b6b6343b912cccc11a425e1",
+        "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+      },
+      "unchangedResizePngJpegTextAndNumericalIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "212f5d1dc774e662c78a7a60a852a520295fb8cfdbe77d7e75d05746e5641a62",
+      "symbolsSha256": "f8c69ced60093de917e1d2bc01daa86364ea73fd4b705a89e4f67f9aa29b505f",
+      "bytes": 454669,
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "212f5d1dc774e662c78a7a60a852a520295fb8cfdbe77d7e75d05746e5641a62",
+      "librarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOS": 3,
+    "webpInternalEachModeEachOs": 1033,
+    "webpPublicEachModeEachOs": 239,
+    "modes": [
+      "normal",
+      "scalar",
+      "avx512-off",
+      "avx2-off"
+    ],
+    "unchangedHuffmanBmi2AndResizePngJpegTextQualificationReused": true
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "existingTablesAndOwnersUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "nextAction": "Stop all six passing lossless read/validation controls and passing ALPH companions. Preserve the unchanged live-opaque VP8 uncertainty without assuming a gap. Continue the next independent demonstrated material resizing path, using current source-valid attribution before another coherent experiment; no favorable unchanged repeat or workload expansion."
+}

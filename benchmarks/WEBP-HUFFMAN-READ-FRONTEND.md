@@ -1,5 +1,9 @@
 # Lossless WebP Huffman read front end
 
+The following [inverse-color round](WEBP-INVERSE-COLOR-TILES.md) owns seven current
+decode costs and package qualification. Its validators reuse this report's two
+source-valid observations. These matched samples remain the incremental baseline.
+
 The common single-leaf/short-prefix read now inlines; the original canonical and
 per-bit fallback stays private and non-inlined. This removes repeated entry into
 the combined method without changing read order, bit-cache publication, truncation,

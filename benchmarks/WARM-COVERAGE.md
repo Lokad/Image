@@ -53,31 +53,26 @@ raw and normalized intervals overlap. Do not assume a word gap or claim a word g
 Both candidate versions, source proofs and adverse/inconclusive views are retained.
 Other numerical bodies/geometry/owners remain exact and source-valid evidence reused.
 
-[Inline Huffman reads](WEBP-HUFFMAN-READ-FRONTEND.md) save82.02µs/2.56%raw/
-2.54%normalized on complete live-token VP8L decode, with separated confidence
-and native−0.019%. Current3,124.89/FFmpeg3,025.07µs,range1.018–1.043 remains
-a gap; allocation stays152,728B/op. All12matched adjacent pairs/brackets,
-frozen RGBA/alpha/hiddenRGB/source/owner/cancellation/idle-v2 gates pass.
-Native retains contexts and has no equivalent cancellation token. All eight
-affected companions refresh once before qualification; no uniform causal gain
-claim or previous-pass-to-gap contradiction. Six lossless reads/validators remain
-3pass/1gap/2uncertain; VP8/ALPH plus three unchanged opaque controls remain4pass/
-2uncertain. Stream ALPH passes; resident ALPH is now uncertain, superseding its
-older pass without establishing a regression. Entire original read order/publication/failure/checkpoints and
-storage/owners reconstruct exactly. No new owned/retained capacity or allocation
-saving; main generated decoder grows5,723→8,245B, cold fallback924B.
-One immutable core/embedded build perOS, zero new tests/harness/native/fixture
-builds. Full6,449checks perOS,1,026internal/239public normal/scalar/BMI2-off and
-SAMEactualpackage/all3examples pass; unchanged family/ISA evidence reused.
-The [current two-second profile](WEBP-INVERSE-COLOR-CURRENT-ATTRIBUTION.md)
-finds repeated tile indexing/coefficient loads and signed products in the scalar
-inverse color transform. Next, test per-tile preparation with exact SIMD batches
-and a portable scalar tail, without new workspace. Profile counts are not phase
-costs or gain predictions; complete measurements must decide retention.
-[Prior baseline](WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md) and
-[two-second attribution](WEBP-LOSSLESS-LIVE-CURRENT-ATTRIBUTION.md) retain the
-original samples, source/JIT identities and hypothesis; they are historical
-attribution, not current costs. Do not tune uncertainties as presumed gaps.
+[Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
+7.18%normalized on complete live-token VP8L decode, with separated confidence
+and native+1.127%. Current2,933.10/FFmpeg3,059.18µs,range0.907–0.989 passes/stops;
+allocation stays152,728B/op. Seven actual decode costs refresh before qualification;
+two validators bypass inverse transforms and reuse source-valid HFR847 evidence.
+All six lossless reads/validators now pass; VP8/ALPH plus unchanged opaque controls
+have5passes/1uncertain (live opaque). All frozen pixels/alpha/hiddenRGB/owners/
+cancellation/idle-v2 gates pass. Native retains contexts and has no equivalent
+cancellation token. Coefficients prepare once per tile; AVX2 batches and scalar
+tails/fallback preserve exact signed/modulo arithmetic. No new owned/retained
+capacity or allocation saving. One immutable core/embedded build perOS;
+seven new oracle/boundary/cancellation tests. Full6,456checks perOS,1,033internal/
+239public normal/scalar/AVX512-off/AVX2-off and SAMEactualpackage/all3examples
+pass. Unchanged Huffman BMI2 and other family/ISA evidence reused.
+Stop all six confirmed lossless controls; continue independent demonstrated
+resizing work without assuming gaps in uncertain controls. The
+[Huffman predecessor](WEBP-HUFFMAN-READ-FRONTEND.md) and
+[current-build attribution](WEBP-INVERSE-COLOR-CURRENT-ATTRIBUTION.md) retain
+their original sources/samples/JIT and hypothesis. No historical-stage sum or
+uniform causal companion gain is claimed; profile counts are not phase times.
 
 [Current opaque lossless confidence](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains
 uncertain after its first adjacent capture:73.41/libwebp73.50ms, range.915–1.070.
@@ -249,7 +244,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. First adjacent [Fastest8](PNG-FASTEST-ADJACENT-CONFIDENCE.md) and [Gray8](PNG-GRAY-ADJACENT-CONFIDENCE.md) captures both remain uncertain; preserve all brackets and stop unchanged repeats. Fresh codec/conversion/zlib, independent output/disposal and exact complete packets remain required. [Stored-mode workspace](PNG-STORED-WORKSPACE.md) separately owns the level0 controls and reduced admission. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
-| WebP reading | [Huffman front end](WEBP-HUFFMAN-READ-FRONTEND.md): live-token VP8L3.125/FFmpeg3.025ms,range1.018–1.043 remains a gap after a verified82.02µs/2.54%normalized gain;152,728B/op unchanged. All eight affected companions refreshed. Six lossless reads/validators3pass/1gap/2uncertain; VP8/ALPH plus unchanged opaque controls4pass/2uncertain. Stream ALPH passes; resident ALPH is uncertain, superseding its older pass. Earlier1,536B VP8 preparation increase remains within8KiB admission; no new owned/retained capacity. Attribute the remaining live-token gap; stop passes and do not presume gaps for uncertainties. |
+| WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
 | Bicubic enlargement/shared byte publication | [Horizontal preparation/execution](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md) owns all12 refreshed enlargement controls:11pass/0gap/1uncertain. Tight vertical byte/word save286.55/232.95 µs; tight full word saves78.84 µs, with separated raw/all-actual/normalized confidence. Tight horizontal byte1,499.15/zimg1,521.64 µs upper1.048 remains uncertain. Same4KiB,114–116 B/op except full word4,264,573 B/op; no added owned capacity/retention. With unchanged TightVertical8 from [quartet execution](BICUBIC-SHARED-QUARTET-EXECUTION.md), family totals12pass/0gap/1uncertain. Stop passing controls; two mixed byte costs belong to compact geometry below. |
 | Mixed-axis byte/word bicubic | [Compact geometry](COMPACT-MIXED-BICUBIC-GEOMETRY.md): all4affected default/tight controls refresh. Byte846.46/zimg867.46µs upper.989 and850.67/893.27µs upper.978 pass/stop; word921.81/918.99µs upper1.012 and923.05/914.24µs upper1.016 remain uncertain. Current default predecessor is also uncertain; raw/native movement and normalized overlap are retained. Exact geometry shrinks84→36B/column without changing filtering/repair or owned capacity;114B/op, scratch4/8KiB, no added retention. Unchanged vertical pass and previous row-band design remain in[result-backed history](BICUBIC-RESULT-BACKED-BANDS.md). |
 | Horizontal/reverse-mixed word bicubic | [Ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md): existing TightCross16 513×259→256×519 passes 892.36/zimg900.40 µs upper.999; TightHorizontal16→256×259 passes 493.16/640.62 µs upper.774. Savings 49.41/34.44 µs, 5.25%/6.53% raw and 6.36%/15.36% normalized, with separated confidence. Native +1.19%/+10.44% is explicit.114/113 B/op, same4KiB admission, no added capacity/retention. Both pass/stop; defaults and other kernels unchanged. |
@@ -432,6 +427,13 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- CIT849 replaces only inverse-color traversal with per-tile preparation and
+  exact SIMD batches/scalar tails. Seven decode costs supersede affected HFR847
+  observations; two validators bypass inverse transforms and retain HFR847 proof.
+  Reader/prefix/cache/other-transform/encoder bodies reconstruct verbatim, and
+  generated ReadImageCore remains8,245B. Other codecs/editing/text and Huffman
+  BMI2 evidence remain valid. All six lossless reads pass/stop; continue an
+  independent demonstrated resizing path rather than retuning this family.
 - HFR847 changes only the common VP8L Huffman call boundary. Nine complete
   VP8L/ALPH/validation costs supersede WLR845 and the affected WPP695/VPP788
   observations; the primary matched baseline remains valid for the incremental

@@ -465,6 +465,11 @@ internal ref struct WebpLosslessDecoder
 
     private void Apply(Transform transform, Span<uint> pixels, int imageWidth)
     {
+        if (transform.Type == 1)
+        {
+            ApplyColorTransform(pixels, imageWidth, height, transform.Bits, transform.Data, context);
+            return;
+        }
         var tileWidth = Ceil(imageWidth, transform.Bits);
         for (var y = 0; y < height; y++)
         {
@@ -476,14 +481,6 @@ internal ref struct WebpLosslessDecoder
                 {
                     var green = (pixel >> 8) & 255;
                     pixels[position] = pixel & 0xFF00FF00 | ((pixel >> 16) + green & 255) << 16 | (pixel + green & 255);
-                }
-                else if (transform.Type == 1)
-                {
-                    var multipliers = transform.Data[(y >> transform.Bits) * tileWidth + (x >> transform.Bits)];
-                    var green = (sbyte)(pixel >> 8); var red = (int)(pixel >> 16) & 255; var blue = (int)pixel & 255;
-                    red = (red + ((sbyte)multipliers * green >> 5)) & 255;
-                    blue = (blue + ((sbyte)(multipliers >> 8) * green >> 5) + ((sbyte)(multipliers >> 16) * (sbyte)red >> 5)) & 255;
-                    pixels[position] = pixel & 0xFF00FF00 | (uint)(red << 16 | blue);
                 }
                 else
                 {
@@ -499,6 +496,57 @@ internal ref struct WebpLosslessDecoder
                     }
                     pixels[position] = Add(pixel, prediction);
                 }
+            }
+        }
+    }
+
+    // RFC 9649 section 3.3: each tile shares three signed coefficients. Red is
+    // restored modulo 256 before its signed sample participates in blue.
+    internal static void ApplyColorTransform(Span<uint> pixels, int imageWidth, int imageHeight,
+        int tileBits, ReadOnlySpan<uint> multipliers, OperationContext context)
+    {
+        var tileWidth = Ceil(imageWidth, tileBits); var tileSize = 1 << tileBits;
+        var byteMask = Vector256.Create(255u); var preserved = Vector256.Create(0xFF00FF00u);
+        for (var y = 0; y < imageHeight; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var row = pixels.Slice(y * imageWidth, imageWidth);
+            var tileRow = (y >> tileBits) * tileWidth;
+            for (var start = 0; start < imageWidth;)
+            {
+                var coefficients = multipliers[tileRow + (start >> tileBits)];
+                var greenToRed = (int)(sbyte)coefficients;
+                var greenToBlue = (int)(sbyte)(coefficients >> 8);
+                var redToBlue = (int)(sbyte)(coefficients >> 16);
+                var end = start + Math.Min(tileSize, imageWidth - start); var x = start;
+                if (Avx2.IsSupported && end - x >= 8)
+                {
+                    var gr = Vector256.Create(greenToRed); var gb = Vector256.Create(greenToBlue);
+                    var rb = Vector256.Create(redToBlue);
+                    for (; x <= end - 8; x += 8)
+                    {
+                        var storage = MemoryMarshal.AsBytes(row.Slice(x, 8));
+                        var pixel = MemoryMarshal.Read<Vector256<uint>>(storage);
+                        var green = Avx2.ShiftRightArithmetic(Avx2.ShiftLeftLogical(pixel, 16).AsInt32(), 24);
+                        var red = Avx2.And(Avx2.ShiftRightLogical(pixel, 16), byteMask).AsInt32();
+                        red = Avx2.And(Avx2.Add(red, Avx2.ShiftRightArithmetic(Avx2.MultiplyLow(gr, green), 5)), byteMask.AsInt32());
+                        var signedRed = Avx2.ShiftRightArithmetic(Avx2.ShiftLeftLogical(red.AsUInt32(), 24).AsInt32(), 24);
+                        var blue = Avx2.Add(Avx2.And(pixel, byteMask).AsInt32(),
+                            Avx2.Add(Avx2.ShiftRightArithmetic(Avx2.MultiplyLow(gb, green), 5),
+                                Avx2.ShiftRightArithmetic(Avx2.MultiplyLow(rb, signedRed), 5)));
+                        var restored = Avx2.Or(Avx2.And(pixel, preserved),
+                            Avx2.Or(Avx2.ShiftLeftLogical(red.AsUInt32(), 16), Avx2.And(blue.AsUInt32(), byteMask)));
+                        MemoryMarshal.Write(storage, in restored);
+                    }
+                }
+                for (; x < end; x++)
+                {
+                    var pixel = row[x]; var green = (sbyte)(pixel >> 8);
+                    var red = ((int)(pixel >> 16) + (greenToRed * green >> 5)) & 255;
+                    var blue = (((int)pixel & 255) + (greenToBlue * green >> 5) + (redToBlue * (sbyte)red >> 5)) & 255;
+                    row[x] = pixel & 0xFF00FF00 | (uint)(red << 16 | blue);
+                }
+                start = end;
             }
         }
     }
