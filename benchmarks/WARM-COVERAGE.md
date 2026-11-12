@@ -56,12 +56,20 @@ Other numerical bodies/geometry/owners remain exact and source-valid evidence re
 The [current wide profile](WIDE-BICUBIC-CURRENT-TAIL-ATTRIBUTION.md) retains1,994
 locations:row-loan1,071/tail754/Build69/Kernel56; code6,498/6,512B. Locations are
 not phase times or gain forecasts; all original exact/native/source/owner/quiet
-gates pass and instrumented elapsed is discarded. Next, test sharing the accepted
-contiguous pair helper with proven byte tails, which still construct shuffled
-AVX512 pairs and coefficient vectors. Keep exact arithmetic/certification,
-scheduling/storage and real fallbacks; no new workspace/kernel/API. Current
-package qualification is reused, zero builds or qualification repeats. Inspect
-actual word code and complete costs; its uncertainty is not a presumed gap.
+gates pass and instrumented elapsed is discarded. The
+[contiguous-tail trial](WIDE-BYTE-CONTIGUOUS-TAIL-TRIAL.md) is unselected:
+367.20/zimg346.25µs versus source-valid357.33/350.73µs, same113B/op. Raw+2.76%
+has separated intervals; normalized+4.09% intervals overlap. Tail code grows
+6,512→6,787B. One immutable candidate eachOS passes528internal/791public
+normal/scalar, including named storage suites; qualified source/core/embedded/
+public modules and actual package restore exactly, zero broad/package repeats.
+No confirmation or word recapture. Its follow-up ownership model preserves the
+live geometry footer/completed outputs within3,975B raw array payload, but adds
+11.3%decoded samples/29.1%kernel evaluations on the primary. Defer that layout
+before a production prototype; no CPU claim from logical counts. Next consolidate
+fixed bicubic coefficient preparation to remove generic per-tap dispatch/calls,
+preserving the original polynomial/order and inspecting actual generic code
+before reusing costs. No new storage/numerical policy or presumed word gap.
 
 [Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
 7.18%normalized on complete live-token VP8L decode, with separated confidence
