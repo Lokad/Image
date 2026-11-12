@@ -84,7 +84,9 @@ internal sealed partial class PngDeflater : Stream
         {
             var count = Math.Min(data.Length, 65531 - storedCount);
             data[..count].CopyTo(history.AsSpan(storedCount));
-            Adler32.Append(data[..count], ref adlerA, ref adlerB, context.Cancellation);
+            if (Avx512BW.IsSupported && Avx512F.IsSupported && count >= 64)
+                AppendStoredAdler(data[..count], ref adlerA, ref adlerB, context.Cancellation);
+            else Adler32.Append(data[..count], ref adlerA, ref adlerB, context.Cancellation);
             storedCount += count; data = data[count..];
             if (storedCount == 65531) StoredBlock(false);
         }
@@ -96,6 +98,50 @@ internal sealed partial class PngDeflater : Stream
         OutputByte((byte)~storedCount); OutputByte((byte)(~storedCount >> 8));
         OutputBytes(history.AsSpan(0, storedCount));
         storedCount = 0;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void AppendStoredAdler(ReadOnlySpan<byte> bytes, ref uint stateA, ref uint stateB,
+        CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        var a = stateA; var b = stateB;
+        while (!bytes.IsEmpty)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var block = bytes[..Math.Min(4096, bytes.Length)]; var i = 0;
+            if (block.Length >= 64)
+            {
+                // RFC 1950: byte k contributes (64-k)*byte to b and byte to a.
+                var weights = Vector512.Create((sbyte)64, 63, 62, 61, 60, 59, 58, 57,
+                    56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41,
+                    40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25,
+                    24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9,
+                    8, 7, 6, 5, 4, 3, 2, 1);
+                var sums = Vector512<ulong>.Zero;
+                var prefixes = Vector512<ulong>.Zero;
+                var weightedSums = Vector512<int>.Zero;
+                for (; i <= block.Length - 64; i += 64)
+                {
+                    var value = Vector512.Create(block.Slice(i, 64));
+                    // 255*(64+63)=32385 cannot saturate signed16. With at most
+                    // 64 groups, weighted int lanes <=4080000; full b <2^32.
+                    var pairs = Avx512BW.MultiplyAddAdjacent(value, weights);
+                    var weighted = Avx512BW.MultiplyAddAdjacent(pairs, Vector512.Create((short)1));
+                    weightedSums = Avx512F.Add(weightedSums, weighted);
+                    prefixes = Avx512F.Add(prefixes, sums);
+                    sums = Avx512F.Add(sums, Avx512BW.SumAbsoluteDifferences(value, Vector512<byte>.Zero).AsUInt64());
+                }
+                b += (uint)i * a + (uint)Vector512.Sum(weightedSums) + 64 * (uint)Vector512.Sum(prefixes);
+                a += (uint)Vector512.Sum(sums);
+                // Keep the common helper's normalized-state precondition for
+                // its original 32-byte/scalar tail; no wider path enters it.
+                a %= 65521; b %= 65521;
+            }
+            if (i < block.Length) Adler32.Append(block[i..], ref a, ref b, cancellation);
+            bytes = bytes[block.Length..];
+        }
+        stateA = a; stateB = b;
     }
 
     public override void WriteByte(byte value) { Span<byte> one = stackalloc byte[1]; one[0] = value; Write(one); }

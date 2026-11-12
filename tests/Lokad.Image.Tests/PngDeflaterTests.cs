@@ -8,6 +8,44 @@ namespace Lokad.Image.Tests;
 
 public sealed class PngDeflaterTests
 {
+    [Fact]
+    public void StoredTrailerMatchesLiteralChecksumForUnalignedBoundaryPayloads()
+    {
+        foreach (var length in new[] { 63, 64, 65, 4095, 4096, 4097, 65530, 65531, 65532 })
+        foreach (var pattern in new[] { 0, 1, 2 })
+        {
+            var input = new byte[length + 2]; input[0] = 0xa7; input[^1] = 0x5a;
+            uint a = 1, b = 0;
+            for (var i = 0; i < length; i++)
+            {
+                var value = pattern == 0 ? (byte)0 : pattern == 1 ? (byte)255
+                    : (byte)(i * 71 + (i >> 8) * 19 + 17);
+                input[i + 1] = value;
+                a = (a + value) % 65521; b = (b + a) % 65521;
+            }
+            byte[]? original = null;
+            foreach (var chunk in new[] { 65, 65536 })
+            {
+                using var root = new TestMemoryBudget(PngDeflater.StoredWorkspaceBytes);
+                using var context = new OperationContext(new() { MemoryBudget = root }, default);
+                using var output = new MemoryStream();
+                using (var deflater = new PngDeflater(output, context, 0))
+                {
+                    for (var at = 0; at < length; at += chunk)
+                        deflater.Write(input.AsSpan(at + 1, Math.Min(chunk, length - at)));
+                    deflater.Complete();
+                }
+                var packet = output.ToArray();
+                Assert.Equal((b << 16) | a,
+                    System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(packet.AsSpan(packet.Length - 4)));
+                if (original is null) original = packet;
+                else Assert.Equal(original, packet);
+                Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+                Assert.Equal(0xa7, input[0]); Assert.Equal(0x5a, input[^1]);
+            }
+        }
+    }
+
     [Theory]
     [InlineData(0, false)] [InlineData(262, false)] [InlineData(70000, false)]
     [InlineData(16384, true)] [InlineData(140000, true)]
