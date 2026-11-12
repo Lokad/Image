@@ -2022,6 +2022,21 @@ def render():
         assert len(positions) == 1
         rows[positions[0]] = ('codec', f'| {label} † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                              f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
+    png_stored_one_shot = json.loads((ROOT / 'benchmarks/png-stored-one-shot-boundaries-evidence.json').read_text(encoding='utf-8'))
+    assert png_stored_one_shot['boundaryQualified'] and not png_stored_one_shot['productionChanged']
+    assert png_stored_one_shot['raw']['mirrored'] and png_stored_one_shot['raw']['allMembersVerified']
+    assert not png_stored_one_shot['originalRetainedViews']['retrospectivelyPassed']
+    for case, depth in [('EncodeNoCompression8', 8), ('EncodeNoCompression16', 16)]:
+        cost = png_stored_one_shot['cases'][case]
+        assert cost['status'] == 'pass' and cost['upper'] <= 1 and cost['completePacketExact']
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
+        assert cost['equivalentOneShotBoundary'] and cost['codecPreparationTimed'] and not cost['nativeCodecRetainedBetweenOperations']
+        assert cost['librarySha256'] == png_stored_one_shot['qualificationReused']['librarySha256']
+        prefix = f'| PNG RGBA{depth}, stored0 / native0'
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith(prefix)]
+        assert len(positions) == 1
+        rows[positions[0]] = ('codec', f'| PNG RGBA{depth}, one-shot stored0 / native0 † | {cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
+                             f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} | {cost["packetBytes"]:,} / {cost["packetBytes"]:,} |')
     deep_current = json.loads((ROOT / 'benchmarks/prepared-deep-pair-conversions-evidence.json').read_text(encoding='utf-8'))
     assert deep_current['productionAccepted'] and deep_current['productionChanged'] and deep_current['requiredMaterialPaths'] == 289
     assert deep_current['raw']['mirrored'] and deep_current['raw']['allMembersVerified']
@@ -2393,8 +2408,9 @@ Current scope and remaining work:
   remains uncertain; raw+9.90% tracks native+10.19%, with overlapping normalized
   intervals, not a byte speedup or uniform raw-gain claim. GC4,472/8,568B/op and
   4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
-  [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
-  has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
+  [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md) plus the
+  [two stored controls](../benchmarks/PNG-STORED-ONE-SHOT-BOUNDARIES.md) has
+  15 passes / 2 uncertain across17controls; ByteFastest/Gray8 need confidence resolution.
   [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
   uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
   Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
@@ -2407,11 +2423,17 @@ Current scope and remaining work:
   unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
   [Stored-mode workspace](../benchmarks/PNG-STORED-WORKSPACE.md) removes three unused
   arrays:196,604B payload and384→72KiB admission, preserving complete packets.
-  Stored8 now92.72/190.15µs upper0.535,613,844B/op. Stored16 post-GC4op
-  501.70/405.21µs upper1.255 remains a gap; natural-GC64op350.36/405.10µs upper0.904
-  passes that scope,1,151,529.875 direct B/op. Its post-GC allocation is1,151,996B/op.
-  Both sampling views remain; general word parity stays open. No CPU gain or
-  physical-peak claim. Existing output capacity is unchanged; scratch retention is zero.
+  Complete fresh-state RGBA8: {png_stored_one_shot['cases']['EncodeNoCompression8']['managedUs']:.2f}/FFmpeg{png_stored_one_shot['cases']['EncodeNoCompression8']['nativeUs']:.2f} µs,
+  upper {png_stored_one_shot['cases']['EncodeNoCompression8']['upper']:.3f},{png_stored_one_shot['cases']['EncodeNoCompression8']['allocatedBytes']:,} B/op;
+  RGBA16: {png_stored_one_shot['cases']['EncodeNoCompression16']['managedUs']:.2f}/{png_stored_one_shot['cases']['EncodeNoCompression16']['nativeUs']:.2f} µs,
+  upper {png_stored_one_shot['cases']['EncodeNoCompression16']['upper']:.3f},{png_stored_one_shot['cases']['EncodeNoCompression16']['allocatedBytes']:,} B/op passes.
+  Native codec/zlib/packet preparation and word-frame allocation/conversion/disposal
+  are included; actual package/fixtures/packets are unchanged. Original retained-native
+  RGBA16 post-GC (4 operations): {png_stored['cases']['EncodeNoCompression16']['managedUs']:.2f}/{png_stored['cases']['EncodeNoCompression16']['nativeUs']:.2f}µs upper{png_stored['cases']['EncodeNoCompression16']['upper']:.3f}
+  remains a scoped gap; natural-GC (64 operations): {png_stored['warmWord']['managedUs']:.2f}/{png_stored['warmWord']['nativeUs']:.2f}µs
+  upper{png_stored['warmWord']['upper']:.3f} passes only that scope.
+  Production is unchanged. These lifetimes/sampling views stand separately;
+  their historical differences do not measure preparation time. Existing capacity/72KiB admission and zero scratch retention are unchanged.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -2503,7 +2525,7 @@ Historical/adverse experiments remain in the linked family reports and raw archi
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The seventeen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
 also times decoder/frame/packing-context setup and disposal; its original

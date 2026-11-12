@@ -86,8 +86,8 @@ public partial class WarmPng
         var oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_PNG_ONE_SHOT");
         if (oneShot is not (null or "1")) throw new InvalidOperationException("PNG one-shot flag must be1.");
         pngOneShot = oneShot == "1";
-        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.EncodeGrayAlpha16))
-            throw new InvalidOperationException("PNG one-shot reference requires an existing RGBA Optimal/Fastest/Smallest or RGB/gray/gray-alpha Optimal encode control.");
+        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.EncodeGrayAlpha16))
+            throw new InvalidOperationException("PNG one-shot reference requires an existing RGBA Optimal/Fastest/Smallest/Stored or RGB/gray/gray-alpha Optimal encode control.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
