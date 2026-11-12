@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image;
@@ -350,9 +351,13 @@ public static class ImageTransforms
     {
         var x = Math.Abs(distance);
         if (filter == ResizeFilter.Bilinear) return Math.Max(0, 1 - x);
-        // Catmull-Rom: Mitchell-Netravali B=0, C=1/2. These coefficients are derived
-        // from the piecewise cubic interpolation conditions, not an upstream table.
-        return x < 1 ? 1.5 * x * x * x - 2.5 * x * x + 1
-            : x < 2 ? -0.5 * x * x * x + 2.5 * x * x - 4 * x + 2 : 0;
+        return BicubicWeight(x);
     }
+
+    // Catmull-Rom at an absolute normalized distance, B=0, C=1/2. Coefficients
+    // follow the piecewise cubic interpolation conditions. Keep operation order.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static double BicubicWeight(double x)
+        => x < 1 ? 1.5 * x * x * x - 2.5 * x * x + 1
+            : x < 2 ? -0.5 * x * x * x + 2.5 * x * x - 4 * x + 2 : 0;
 }

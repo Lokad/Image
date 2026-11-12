@@ -1,9 +1,9 @@
 # Bicubic coefficient preparation: bounded round
 
-No variant is accepted into production yet. **A**, the simplest shared-polynomial
-design, remains the useful broader lead. B/C non-inlining controls are unselected;
-do not keep a dispatcher policy merely to narrow qualification. Qualified CIT849
-source/core/embedded/public artifacts and actual package restore exactly bothOSes.
+**A is now accepted:** [current shared filter weights](SHARED-RESIZE-FILTER-WEIGHTS.md)
+reconciles all73affected controls and qualifies the same package bothOSes. B/C
+remain unselected. The measurements and exact CIT849 restorations below record
+the earlier unaccepted checkpoints; their raw evidence remains immutable.
 
 The original Catmull-Rom expression is shared without changing division/absolute
 value, coefficient/normalizer order, rational pixels, certificates/repair or owners.
@@ -93,8 +93,8 @@ are reused. No full/ISA/package runs or production acceptance yet. Qualified
 CIT849 source/core/embedded/public modules and actual package restore exactly.
 
 The eight completed confirmations are retained; do not repeat them without a new
-reason. Next reconcile the remaining required shared-dispatch resize callers,
-then qualify one coherent production stage. The full289-path objective remains.
+reason. That broader reconciliation and qualification is now complete in the current
+shared-filter owner; these figures retain the earlier checkpoint. The full289-path objective remains.
 The evidence's `generalization` section records this scope. Raw
 `bicubic-coefficient-generalization.tar.xz`, SHA256
 `9cd26680027e470c136c3f6f555f500e513198a3ff1a80ab15f335939cb03795`

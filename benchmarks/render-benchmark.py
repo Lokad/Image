@@ -8,6 +8,58 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def apply_current_resize_weights(rows, evidence):
+    """Replace every displayed affected resize cost from one current owner."""
+    mapping = {
+        'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
+        'Bicubic upscale RGBA16 † → 1027×519': ('cases', 'Up16'),
+        'Bicubic upscale RGBA8, default workspace † → 1027×519': ('cases', 'Up8'),
+        'Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519': ('cases', 'TightCross16'),
+        'Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16': ('cases', 'Tight32x16_8'),
+        'Bicubic RGBA8, 32×16 / default workspace † → 32×16': ('cases', 'Down32x16_8'),
+        'Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519': ('cases', 'TightUp8'),
+        'Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259': ('cases', 'TightHorizontalUp8'),
+        'Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519': ('cases', 'TightVerticalUp8'),
+        'Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129': ('cases', 'TightDown8'),
+        'Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129': ('cases', 'TightDown16'),
+        'Bicubic RGBA8, fresh managed / prepared zimg † → 128×64': ('cases', 'Wide8'),
+        'Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129': ('cases', 'TightMixed8'),
+        'Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129': ('cases', 'TightMixed16'),
+        'Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32': ('cases', 'Tight64x32_8'),
+        'Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32': ('cases', 'Tight64x32_16'),
+        'Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64': ('cases', 'TightWide8'),
+        'Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64': ('cases', 'TightWide16'),
+        'Bicubic RGBA8, width down / height up, default workspace † → 256×519': ('cases', 'Cross8'),
+        'Bicubic RGBA16, width down / height up, default workspace † → 256×519': ('cases', 'Cross16'),
+        'Bilinear upscale RGBA8 † → 1027×519': ('bilinear', 'Up8'),
+        'Bilinear resize RGBA8 † → 256×129': ('bilinear', 'Down8'),
+        'Bilinear resize RGBA16 † → 256×129': ('bilinear', 'Down16'),
+        'Bicubic RGBA16 height reduction, input+output+4 KiB † → 513×129': ('cases', 'TightVertical16'),
+    }
+    for family, adjective, size in [('wide', '', '128×64'), ('narrow', ' narrow', '256×129')]:
+        for depth in (8, 16):
+            mapping[f'Bicubic one-shot{adjective} RGBA{depth} / zimg one-shot † → {size}'] = ('prepared', f'{family}/OneShot{depth}')
+            mapping[f'Bicubic prepared{adjective} RGBA{depth} / zimg prepared † → {size}'] = ('prepared', f'{family}/Repeated{depth}')
+    assert len(mapping) == 32
+    seen = set()
+    result = []
+    for kind, row in rows:
+        label = row.split(' | ')[0].removeprefix('| ')
+        label = re.sub(r' \((?:parity confirmed|confidence open|pass|gap|uncertain)\)', '', label)
+        if kind != 'editing' or label not in mapping:
+            result.append((kind, row)); continue
+        field, case = mapping[label]; current = evidence[field][case]
+        assert (field, case) not in seen; seen.add((field, case))
+        assert current['actualIterations'] == 12 and current['allActualsRetained']
+        assert current['librarySha256'] == evidence['qualification']['actualPackage']['librarySha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+        if current['status'] != 'pass': label = label.replace(' † →', f" ({current['status']}) † →")
+        result.append((kind, f"| {label} | {current['managedUs']:,.2f} | {current['nativeUs']:,.2f} | {current['ratio']:.3f} / {current['upper']:.3f} | {current['allocatedBytes']:,} |"))
+    assert len(seen) == 32
+    return result
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -1636,26 +1688,6 @@ def render():
         qualifier = 'parity confirmed' if cost['status'] == 'pass' else 'confidence open'
         rows.append(('editing', f'| Bilinear resize RGBA{depth} ({qualifier}) † → 256×129 | {cost["managedUs"]:,.2f} | '
                      f'{cost["nativeUs"]:,.2f} | {cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
-    bilinear_vector = json.loads((ROOT / 'benchmarks/bilinear-vector-certification-evidence.json').read_text(encoding='utf-8'))
-    assert bilinear_vector['productionAccepted'] and bilinear_vector['allAffectedPerformanceReconciled']
-    assert not bilinear_vector['materialPassToGapContradictions']
-    assert bilinear_vector['raw']['mirrored'] and bilinear_vector['raw']['allMembersVerified']
-    bvq = bilinear_vector['qualification']
-    assert bvq['fullChecksEachOs'] == bvq['windows']['total'] == bvq['linux']['total'] == 6253
-    assert bvq['sameActualPackageBothOS'] and bvq['threeNamedStorageSuitesIncluded']
-    assert bvq['actualPackage']['sha256'] == bvq['samePackageLinux']['sameActualPackageSha256']
-    bvc = bilinear_vector['case']
-    assert bvc['actualIterations'] == bvc['nativeSamplesEachBracket'] == 12
-    assert bvc['managedExact'] and bvc['managedRationalReferenceExact'] and bvc['independentOwnedOutput']
-    assert bvc['quietGuardsPassed'] and bvc['allOriginalGatesPassed']
-    assert bvc['librarySha256'] == bvq['actualPackage']['librarySha256']
-    assert bvc['lower'] <= 1 < bvc['upper'] and bvc['status'] == 'uncertain'
-    assert bilinear_vector['comparison']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in bilinear_vector['comparison']['views'].values())
-    assert adjacent_confidence['producers'] == bilinear_vector['producers']
-    bv_current = adjacent_confidence['cases']['Up16']
-    assert bv_current['managedRationalReferenceExact'] and bv_current['operationsPerSubject'] == 64
-    assert bv_current['lower'] <= 1 < bv_current['upper'] and bv_current['status'] == 'uncertain'
     current = bicubic_overlap['cases']['TightDown8']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
                  and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
@@ -2053,6 +2085,14 @@ def render():
     current_build_qualification = raster['qualification']
     compact_rows = [row for kind, row in rows if kind == 'editing' and row.startswith(compact_geometry_prefixes)]
     assert len(compact_rows) == 2 and all(' H ' not in row for row in compact_rows)
+    resize_weights = json.loads((ROOT / 'benchmarks/shared-resize-filter-weights-evidence.json').read_text(encoding='utf-8'))
+    assert resize_weights['productionAccepted'] and resize_weights['allAffectedPerformanceReconciled']
+    assert resize_weights['requiredMaterialPaths'] == 289 and resize_weights['newMaterialPaths'] == 0
+    assert [len(resize_weights[k]) for k in ('cases', 'prepared', 'bilinear')] == [61, 8, 4]
+    assert resize_weights['raw']['mirrored'] and resize_weights['raw']['allMembersVerified']
+    assert not resize_weights['materialPassToGapContradictions']
+    assert resize_weights['storage']['newOwnedCapacityBytes'] == resize_weights['storage']['newRetainedCapacityBytes'] == 0
+    rows = apply_current_resize_weights(rows, resize_weights)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2220,6 +2260,10 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
+    current_build_qualification = resize_weights['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6456
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2309,100 +2353,22 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [Shared horizontal preparation/execution](../benchmarks/CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
-  saves 22.70 µs/4.78% raw/5.11% reference-normalized on narrow Down8,
-  with separated filtered/all-actual and normalized intervals. Native time moves
-  +0.35%. Current 452.28/zimg 454.42 µs, upper 1.005, remains uncertain;
-  Wide8 378.51/375.02 µs upper 1.020 is also uncertain. Neither is a presumed tuning need.
-  All 24 existing shared cached controls refresh: 22 pass / 0 gaps / 2 uncertain.
-  All eight equivalent one-shot/prepared boundaries pass; stop passing cases.
-  One shared prepared-layout body and one closed numeric source retain fixed wide/narrow
-  schedules and original exact tap order, certificates and repair. Existing padding
-  holds coefficients; no new owner, array or capacity. Down8 GC 199,982 B/op;
-  prepared GC 137–138 B/op, wide/narrow retained plans 198,432/199,840 B.
-  The same actual package verifies all four frozen byte/word wide/narrow plans,
-  cancellation, prompt admission release and independent surviving outputs on both OSes.
-  Its coarse governed peaks and portable/cached differences are reported separately;
-  physical/native/JIT peaks remain unmeasured. Other raw/native clock movements stay
-  visible; no uniform gain claim. The native-prepared asymmetry remains explicit
-  alongside equivalent boundaries. Earlier quartet results retain linked history.
-  [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
-  [contiguous wide source views](../benchmarks/CONTIGUOUS-WIDE-SOURCE-VIEWS.md) keep bounded
-  allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
-  word upper.888 passes. Wide byte {wide_quartet['cases']['TightWide8']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide8']['nativeUs']:.2f} µs,
-  upper{wide_quartet['cases']['TightWide8']['upper']:.3f} remains a gap after14.15µs/3.81%raw/4.01%normalized saved;
-  raw/all-actual/normalized confidence separate, native+0.21%. Current word
-  {wide_quartet['cases']['TightWide16']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide16']['nativeUs']:.2f}µs,
-  upper{wide_quartet['cases']['TightWide16']['upper']:.3f} is uncertain, superseding its older pass.
-  Raw cost+2.35µs/.58% and normalized cost+2.51% are recorded; all-actual raw and normalized
-  confidence overlap, native−1.88%. No word gain or established normalized regression.
-  Same113B/op/4KiB/zero retained scratch, no new capacity or owner. Word JIT layout
-  changes despite the folded guard; its complete companion was refreshed before qualification.
-  [Compact mixed geometry](../benchmarks/COMPACT-MIXED-BICUBIC-GEOMETRY.md)
-  uses36 rather than84 B/column. Default/bounded byte save35.35/13.27 µs,
-  4.01%/1.54% raw and4.07%/4.10% normalized, with separated confidence; both pass/stop.
-  Native clocks move+0.063%/+2.673%. Both word controls remain uncertain; raw/native
-  clock movement and contemporary predecessor checks are explicit. GC stays114 B/op,
-  scratch4/8KiB; geometry borrows36,972 rather than86,268 B of existing output,
-  with no extra heap capacity or retention. Original exact arithmetic/repair remain.
-  [Bounded horizontal window reuse](../benchmarks/PACKED-HORIZONTAL-WINDOW-REUSE.md)
-  saves 14.21 µs/3.76% raw/3.68% normalized on byte 64×32, with separated
-  confidence and native -0.08%. Byte 364.04/zimg 372.99 µs upper 0.982 passes/stops.
-  Word 386.57/378.04 µs upper 1.027 remains uncertain. A matched 64-operation
-  adjacent view 397.04/410.52 µs upper 0.979 passes its scope; both views remain
-  visible and broader word parity stays open. No causal word gain or favorable
-  repeat is claimed. Same 113 B/op (112 direct in the adjacent tool), 4 KiB
-  admission and 8,192/16,384 B independently owned results; no added capacity or retention.
-  [Current Lanczos3 byte confidence](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md)
-  is 489.94/zimg 491.00 µs, upper 1.015: uncertain on the unchanged actual package,
-  superseding the former byte gap. The eight controls now have 6 passes / 2 uncertain;
-  word plans retain 156,248 B. Row-product experiments are unselected; no CPU gain
-  or candidate capacity is claimed. Current byte GC 138 B/op/plan 139,800 B is unchanged.
-  [Ordered word bicubic windows](../benchmarks/BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md)
-  saves49.41/34.44 µs on reverse-mixed/horizontal RGBA16:5.25%/6.53% raw and
-  6.36%/15.36% normalized, with separated raw/all-actual/normalized confidence.
-  Native clocks move+1.19%/+10.44%; both independently pass/stop, upper
-  {bicubic_windows['cases']['TightCross16']['upper']:.3f}/{bicubic_windows['cases']['TightHorizontal16']['upper']:.3f},
-  GC114/113 B/op. Both keep4KiB admission and existing output-backed workspace;
-  no added array capacity or retention. [Identity-height history](../benchmarks/BICUBIC-IDENTITY-HEIGHT.md)
-  retains the one-row design and adverse/inconclusive experiments separately.
-  Other kernels reuse valid evidence; no repeated passing-case tuning.
-  [Ordered bilinear horizontal windows](../benchmarks/BILINEAR-ORDERED-HORIZONTAL-WINDOWS.md)
-  save28.77/32.94 µs on byte/word reduction:6.42%/7.08%raw and6.35%/6.88%normalized,
-  with separated raw/all-actual and normalized confidence. Native clocks move−.072%/−.208%.
-  Down16 passes/stops; Down8 is uncertain (upper{bilinear_windows['cases']['Down8']['upper']:.3f}).
-  GC stays8,473 B/op and admitted scratch12,608 B, with no added capacity or retention.
-  [Earlier shared preparation](../benchmarks/BILINEAR-SHARED-PREPARATION.md) retains
-  the unchanged Up8 pass. [Vector normalization/certification](../benchmarks/BILINEAR-VECTOR-CERTIFICATION.md)
-  independently saves 769.82 µs/27.67% raw/18.12% normalized on existing Up16.
-  Its [current adjacent complete cost](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) is
-  {bv_current['managedUs']:,.2f}/FFmpeg {bv_current['nativeUs']:,.2f} µs, conservative
-  {bv_current['lower']:.3f}–{bv_current['upper']:.3f}: **uncertain**, not a parity pass or demonstrated remaining gap.
-  Measured direct GC {bv_current['allocatedBytes']:,} B/op includes the 4,264,104 B result; admitted capacity
-  and retention are unchanged. Native-clock movement remains explicit; no favorable repeat.
-  Exact managed Q30/rational/certified results remain distinct from native float.
-  [Enlargement horizontal preparation/execution](../benchmarks/BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
-  refreshes all twelve existing default/bounded byte/word full/horizontal/vertical
-  controls: **11 pass / 1 uncertain**. Exact identity-width cache decoding removes
-  redundant horizontal filtering; common/adjacent four-tap windows share input
-  preparation without changing multiply/add order. Tight vertical byte/word save
-  286.55/232.95 µs,16.42%/15.15% raw and15.98%/19.18% normalized;
-  tight full word saves78.84 µs,2.91% raw/2.97% normalized. All three confidence
-  views separate; native clocks move−.52%/+4.98%/+.063%. No uniform raw-gain claim.
-  Tight horizontal byte {he['managedUs']:,.2f}/zimg{he['nativeUs']:,.2f} µs,
-  upper{he['upper']:.3f} remains uncertain; an earlier implementation's pass is
-  not current proof. GC114–116 B/op except full word4,264,573 B/op; same4KiB
-  admission, no new owned capacity or retention. Prepared zimg graph/scratch remains
-  explicitly distinct from complete managed Resize. Stop the eleven confirmed cases.
-  [Earlier quartet costs](../benchmarks/BICUBIC-SHARED-QUARTET-EXECUTION.md) and
-  unaccepted capacity trials remain history; original exact arithmetic/repair remain.
-- **Deep bounded bicubic:** [shared prepared conversions](../benchmarks/PREPARED-DEEP-PAIR-CONVERSIONS.md)
-  save97.90µs/23.73%raw/23.80%normalized, with separated raw/all-actual/normalized
-  confidence and native+0.085%. Current32×16 byte{deep['managedUs']:,.2f}/zimg{deep['nativeUs']:,.2f}µs,
-  upper{deep['upper']:.3f} passes/stops. Same113B/op/4KiB, zero retained scratch;
-  3,536Brow and4,032Bcolumn frames remain separate. Exact double streams,
-  certificates/repair and ownership remain. Code/prologue growth is disclosed;
-  peaks and pool retention remain unmeasured. Other source-valid costs are reused.
+- **Resizing:** [Shared filter weights](../benchmarks/SHARED-RESIZE-FILTER-WEIGHTS.md)
+  reconcile all61existing bicubic, eight prepared/one-shot and four bilinear controls:
+  **57pass / 10gaps / 6uncertain** in the standalone protocol. The same immutable
+  package DLL supplies every affected cost. Bounded wide byte343.67/zimg346.22µs,
+  upper.995 passes after13.66µs/3.82%raw/2.57%normalized saved; narrow/packed word
+  gains generalize, with separate raw/native views and disclosed slower passing controls.
+  Exact pixels/repair,4KiB bounds and ownership remain; no new owned capacity or retention.
+  Prepared plans retain198432B wide/199840B narrow; all eight equivalent boundaries pass.
+  Mixed byte's scoped64-operation adjacent854.87/866.15µs upper.998 passes; its
+  original standalone view remains uncertain. Bilinear word enlargement's adjacent
+ 1836.05/1967.62µs upper1.001 remains uncertain, directGC4498558B/op. No historical
+  stage sums, favorable repeats or full-parity claim. Largest remaining gaps are bounded
+  byte reverse-mixed,2×9 and identity-height reduction; passing paths stop.
+  [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
+  six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
+  Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
@@ -2431,7 +2397,7 @@ evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Unchanged resize qualification retains {wide_quartet_qualification['resizeInternalEachModeEachOs']} internal/{wide_quartet_qualification['resizePublicEachModeEachOs']} public per
+Current resize qualification passes528 internal/791 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 {wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.

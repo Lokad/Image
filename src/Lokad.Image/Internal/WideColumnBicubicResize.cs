@@ -110,7 +110,7 @@ internal static partial class WideColumnBicubicResize
                 double normalizer = 0;
                 for (var t = 0; t < count; t++)
                 {
-                    var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
+                    var w = ImageTransforms.BicubicWeight(Math.Abs((first + t - center) / scaleX));
                     weights[x * taps + t] = w; normalizer += w;
                     var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
                     if ((uint)relative >= (uint)decoded.Length) return false;

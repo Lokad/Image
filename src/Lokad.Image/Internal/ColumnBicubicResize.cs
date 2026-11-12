@@ -161,7 +161,7 @@ internal static partial class ColumnBicubicResize
                 double normalizer = 0;
                 for (var t = 0; t < count; t++)
                 {
-                    var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
+                    var w = ImageTransforms.BicubicWeight(Math.Abs((first + t - center) / scaleX));
                     weights[x * 10 + t] = w; normalizer += w;
                     var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
                     if ((uint)relative >= (uint)sourceCapacity) return false;

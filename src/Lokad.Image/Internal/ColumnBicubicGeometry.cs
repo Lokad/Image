@@ -91,7 +91,7 @@ internal readonly ref struct ColumnBicubicGeometry
         normalizer = 0;
         for (var t = 0; t < count; t++)
         {
-            var weight = ImageTransforms.Kernel((first + t - center) / scale, ResizeFilter.Bicubic);
+            var weight = ImageTransforms.BicubicWeight(Math.Abs((first + t - center) / scale));
             weights[t] = weight; normalizer += weight;
         }
     }
