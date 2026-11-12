@@ -46,14 +46,57 @@ core/embedded versions perOS each pass528internal/791public normal/scalar checks
 including all three named resize storage suites. No new tests, public/harness/
 native/fixture builds, broad qualification or package proof while scope is unsettled.
 
-Next reuse A's verified immutable builds, focused correctness and primary capture.
-Screen six existing cached/packed/narrow byte/word controls, without adding images
-or settings. If useful beyond the primary, reconcile its actual broader resize
-scope before one full/ISA/SAMEpackage milestone. A prospective change in dispatch
-must include its other callers, not silently reuse their older costs.
+The follow-up below reuses A's verified immutable builds, focused correctness and
+primary capture. Its remaining broader resize scope must reconcile before one
+full/ISA/SAMEpackage milestone. Include the dispatcher's other callers rather
+than silently reusing their older costs.
 
 [Evidence](bicubic-coefficient-preparation-round-evidence.json) preserves all three
 variants, actual boundaries, costs/confidence and exact restoration. Raw`bicubic-coefficient-preparation-round.tar.xz`,
 SHA256`bbd9ef586ef8ae4b6df8b39f6c51fbd5f0c32570cccb88e8217510a30f5938df` (1744860B/247members), is mirrored/member-verified.
 All289required paths remain; current qualified costs are unchanged and publication
 is postponed. This is a lead and an execution checkpoint, not a completion claim.
+
+## Generalization checkpoint
+
+Six existing cached/packed/narrow byte/word controls have short screens and
+independent confirmations; the existing wide-word companion also confirms.
+No new image, shape, setting, build or correctness campaign. Complete public
+Resize preparation, admission, independent output and disposal remain timed;
+zimg retains its graph and scratch. All frozen pixel/native/ownership/idle-v2
+gates pass. The original wide-byte confirmation above is reused.
+
+| A / existing complete Resize | Lokad / zimg µs | Conservative upper; scoped status | GC B/op |
+| --- | ---: | ---: | ---: |
+| TightDown8 | 426.33 / 418.60 | 1.024; gap | 113 |
+| TightDown16 | 488.42 / 571.80 | 0.859; pass | 113 |
+| Down8 | 416.53 / 418.55 | 1.004; uncertain | 199,985 |
+| Down16 | 416.07 / 571.44 | 0.731; pass | 199,958 |
+| Tight64x32_8 | 361.90 / 368.76 | 0.991; pass | 113 |
+| Tight64x32_16 | 364.87 / 387.63 | 0.945; pass | 113 |
+| TightWide16 | 405.22 / 413.66 | 0.990; pass | 113 |
+
+Narrow-word and packed-word independent gains generalize the lead: 17.89µs/
+3.53%raw/3.16%normalized and21.69µs/5.61%raw/7.95%normalized, respectively.
+Filtered/all-actual raw and normalized intervals separate. Native clocks move
+−0.39%/+2.54%; these views stay distinct. Other raw reductions do not establish
+causal gains when normalized intervals overlap. No pass is inferred for bounded
+byte reduction or ordinary byte reduction. Current cached CWQ827B receipts are the
+incremental baselines; superseded CWQ826B receipts supplied identical validation
+gates only. Correcting that baseline selection requires no timing repeat.
+
+No new owned or retained capacity. Bounded controls keep4KiB extra admission;
+cached allocations, admitted capacity and zero retained operation scratch remain
+separate. Physical/native/JIT peaks are unmeasured. The existing528internal/
+791public normal/scalar checks perOS, three storage suites and immutable DLLs
+are reused. No full/ISA/package runs or production acceptance yet. Qualified
+CIT849 source/core/embedded/public modules and actual package restore exactly.
+
+The eight completed confirmations are retained; do not repeat them without a new
+reason. Next reconcile the remaining required shared-dispatch resize callers,
+then qualify one coherent production stage. The full289-path objective remains.
+The evidence's `generalization` section records this scope. Raw
+`bicubic-coefficient-generalization.tar.xz`, SHA256
+`9cd26680027e470c136c3f6f555f500e513198a3ff1a80ab15f335939cb03795`
+(343,552B/199members), is mirrored/member-verified and retains all actuals,
+brackets, frozen gates, current baseline references, recipes and restoration.

@@ -360,5 +360,495 @@
         "scope": "benchmarks/wide-byte-contiguous-tail-trial-evidence.json"
       }
     ]
+  },
+  "generalization": {
+    "project": "Lokad.Image",
+    "stage": "CMP853A-generalization",
+    "productionAccepted": false,
+    "immutableOriginalAReused": true,
+    "additionalBuilds": 0,
+    "packageUnchanged": true,
+    "broadOrPackageQualificationRepeated": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "sourceManifestSha256": "9b42aa6752718065a58aa7355d75e0dd29aaf53b0257653408401bb5eeaf1c5e",
+    "cases": {
+      "TightWide8": {
+        "managedUs": 343.6720199887388,
+        "nativeUs": 346.223353515625,
+        "ratio": 0.9926309606184001,
+        "lower": 0.9865331690348673,
+        "upper": 0.9949488653705958,
+        "allocatedBytes": 113,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-TightWide8-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-TightWide8-confirm-observation.json",
+        "baselineReceipt": "tmp/wcd837b-candidate-TightWide8-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.02571942168578001,
+          "normalizedGainSeparated": true,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.01284433489043435,
+          "baselineRatioBounds": [
+            1.0044864925399453,
+            1.0334743010445555
+          ],
+          "candidateRatioBounds": [
+            0.9865331690348673,
+            0.9949488653705958
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 357.3341211309524,
+              "candidateUs": 343.6720199887388,
+              "savedUs": 13.662101142213622,
+              "savedFraction": 0.038233407710893785,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 357.33547113095244,
+              "candidateUs": 343.67329701576574,
+              "savedUs": 13.662174115186673,
+              "savedFraction": 0.03823346748070222,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "TightDown8": {
+        "managedUs": 426.32770659722223,
+        "nativeUs": 418.6027018229167,
+        "ratio": 1.0184542640089636,
+        "lower": 1.0114331867676414,
+        "upper": 1.0240213376553091,
+        "allocatedBytes": 113,
+        "status": "gap",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-TightDown8-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-TightDown8-confirm-observation.json",
+        "baselineReceipt": "tmp/bqf793-default-candidate-TightDown8-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": -7.682721143842386e-05,
+          "normalizedGainSeparated": false,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.07255775949782284,
+          "baselineRatioBounds": [
+            1.0063375396007832,
+            1.0265368743738479
+          ],
+          "candidateRatioBounds": [
+            1.0114331867676414,
+            1.0240213376553091
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 459.64582690746744,
+              "candidateUs": 426.32770659722223,
+              "savedUs": 33.3181203102452,
+              "savedFraction": 0.07248650669671486,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 459.9055794270833,
+              "candidateUs": 426.3289899305555,
+              "savedUs": 33.576589496527795,
+              "savedFraction": 0.07300757155056703,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "TightDown16": {
+        "managedUs": 488.4220845716782,
+        "nativeUs": 571.8000345052084,
+        "ratio": 0.8541833772261329,
+        "lower": 0.8478402137003315,
+        "upper": 0.8591226757827971,
+        "allocatedBytes": 113,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-TightDown16-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-TightDown16-confirm-observation.json",
+        "baselineReceipt": "tmp/bqf793-default-candidate-TightDown16-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.03155653210942411,
+          "normalizedGainSeparated": true,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.0039048815576999685,
+          "baselineRatioBounds": [
+            0.8741982712942509,
+            0.8877942135739214
+          ],
+          "candidateRatioBounds": [
+            0.8478402137003315,
+            0.8591226757827971
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 506.314315625,
+              "candidateUs": 488.4220845716782,
+              "savedUs": 17.892231053321737,
+              "savedFraction": 0.03533818914686493,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 506.31567812500003,
+              "candidateUs": 488.7422147435898,
+              "savedUs": 17.573463381410228,
+              "savedFraction": 0.034708511193034086,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "Down8": {
+        "managedUs": 416.5328606854839,
+        "nativeUs": 418.54969921875,
+        "ratio": 0.9951813642751849,
+        "lower": 0.987995312819201,
+        "upper": 1.0039464272413856,
+        "allocatedBytes": 199985,
+        "status": "uncertain",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-Down8-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-Down8-confirm-observation.json",
+        "baselineReceipt": "tmp/cwq827b-candidate-Down8-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.00010984042852213438,
+          "normalizedGainSeparated": false,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.07893818740250436,
+          "baselineRatioBounds": [
+            0.9851288144404193,
+            1.0045260173664554
+          ],
+          "candidateRatioBounds": [
+            0.987995312819201,
+            1.0039464272413856
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 452.28084821428564,
+              "candidateUs": 416.5328606854839,
+              "savedUs": 35.74798752880172,
+              "savedFraction": 0.07903935722669542,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 452.28231250000005,
+              "candidateUs": 416.9626619623655,
+              "savedUs": 35.31965053763456,
+              "savedFraction": 0.07809204464000474,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "Down16": {
+        "managedUs": 416.0656300403226,
+        "nativeUs": 571.4369212239584,
+        "ratio": 0.7281042134084604,
+        "lower": 0.7208332198371478,
+        "upper": 0.7312079038318666,
+        "allocatedBytes": 199958,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-Down16-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-Down16-confirm-observation.json",
+        "baselineReceipt": "tmp/cwq827b-candidate-Down16-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.002530338760324491,
+          "normalizedGainSeparated": false,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.07263769587069546,
+          "baselineRatioBounds": [
+            0.7225747570591797,
+            0.7371476150916053
+          ],
+          "candidateRatioBounds": [
+            0.7208332198371478,
+            0.7312079038318666
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 449.7930159970239,
+              "candidateUs": 416.0656300403226,
+              "savedUs": 33.72738595670124,
+              "savedFraction": 0.07498423665369758,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 449.7945249255952,
+              "candidateUs": 416.0670030241935,
+              "savedUs": 33.727521901401694,
+              "savedFraction": 0.07498428734093832,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "Tight64x32_8": {
+        "managedUs": 361.8974657142857,
+        "nativeUs": 368.7611731770833,
+        "ratio": 0.981387120005984,
+        "lower": 0.971969096165412,
+        "upper": 0.9913890737274876,
+        "allocatedBytes": 113,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-Tight64x32_8-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-Tight64x32_8-confirm-observation.json",
+        "baselineReceipt": "tmp/phq828-candidate-Tight64x32_8-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": -0.005501743574760631,
+          "normalizedGainSeparated": false,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": -0.0113367957024475,
+          "baselineRatioBounds": [
+            0.9687289982465067,
+            0.9823458233666867
+          ],
+          "candidateRatioBounds": [
+            0.971969096165412,
+            0.9913890737274876
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 364.044389935065,
+              "candidateUs": 361.8974657142857,
+              "savedUs": 2.1469242207792703,
+              "savedFraction": 0.005897424270601248,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 364.3045477678572,
+              "candidateUs": 362.51474598214287,
+              "savedUs": 1.789801785714284,
+              "savedFraction": 0.004912927375407827,
+              "rawGainSeparated": false,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "Tight64x32_16": {
+        "managedUs": 364.87498944805196,
+        "nativeUs": 387.6297356770833,
+        "ratio": 0.941297727870941,
+        "lower": 0.9301226106430927,
+        "upper": 0.9454015099869467,
+        "allocatedBytes": 113,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-Tight64x32_16-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-Tight64x32_16-confirm-observation.json",
+        "baselineReceipt": "tmp/phq828-candidate-Tight64x32_16-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.07945687920826128,
+          "normalizedGainSeparated": true,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": 0.025358825137259178,
+          "baselineRatioBounds": [
+            0.9908238466658855,
+            1.0268559907869284
+          ],
+          "candidateRatioBounds": [
+            0.9301226106430927,
+            0.9454015099869467
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 386.5663839962121,
+              "candidateUs": 364.87498944805196,
+              "savedUs": 21.69139454816014,
+              "savedFraction": 0.0561129871767968,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 386.56780634469703,
+              "candidateUs": 365.01025550595244,
+              "savedUs": 21.557550838744557,
+              "savedFraction": 0.05576654466544484,
+              "rawGainSeparated": true,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      },
+      "TightWide16": {
+        "managedUs": 405.2181195014663,
+        "nativeUs": 413.66390885416666,
+        "ratio": 0.9795829677863488,
+        "lower": 0.966781426637228,
+        "upper": 0.9902506823134981,
+        "allocatedBytes": 113,
+        "status": "pass",
+        "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+        "receipt": "tmp/cmp853-candidate-TightWide16-confirm-receipt.json",
+        "observation": "tmp/cmp853-candidate-TightWide16-confirm-observation.json",
+        "baselineReceipt": "tmp/wcd837b-candidate-TightWide16-confirm-receipt.json",
+        "allActualsRetained": true,
+        "actualIterations": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "exactManagedPixels": true,
+        "retainedOperationScratchBytes": 0,
+        "comparison": {
+          "normalizedGain": 0.014857296351891591,
+          "normalizedGainSeparated": false,
+          "normalizedAdverseSeparated": false,
+          "nativeClockChange": 0.016196461984231636,
+          "baselineRatioBounds": [
+            0.9697364319059403,
+            1.0115098530767574
+          ],
+          "candidateRatioBounds": [
+            0.966781426637228,
+            0.9902506823134981
+          ],
+          "rawViews": {
+            "statistics": {
+              "baselineUs": 404.7734637096774,
+              "candidateUs": 405.2181195014663,
+              "savedUs": -0.4446557917888858,
+              "savedFraction": -0.0010985299967880557,
+              "rawGainSeparated": false,
+              "rawAdverseSeparated": false
+            },
+            "unfilteredActualStatistics": {
+              "baselineUs": 405.1487234543011,
+              "candidateUs": 405.6644060819892,
+              "savedUs": -0.515682627688162,
+              "savedFraction": -0.0012728230346907843,
+              "rawGainSeparated": false,
+              "rawAdverseSeparated": false
+            }
+          }
+        }
+      }
+    },
+    "currentBaselineCorrection": "Down8/16 incremental comparisons use current CWQ827B receipts from the tracked family owner. Earlier CWQ826B controls provided identical frozen validation gates only; they are superseded CPU evidence and are not the incremental baseline.",
+    "scope": "Eight existing complete narrow/wide/cached/packed byte/word controls, with primary confirmation and focused correctness reused. A thin shared dispatcher can change other resize callers; these controls do not establish global parity or acceptance. Reconcile remaining affected required paths before full/ISA/SAMEpackage qualification.",
+    "publicationPostponed": true,
+    "raw": {
+      "file": "bicubic-coefficient-generalization.tar.xz",
+      "sha256": "9cd26680027e470c136c3f6f555f500e513198a3ff1a80ab15f335939cb03795",
+      "bytes": 343552,
+      "members": 199,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "bicubic-coefficient-preparation-round.tar.xz",
+          "sha256": "bbd9ef586ef8ae4b6df8b39f6c51fbd5f0c32570cccb88e8217510a30f5938df"
+        },
+        {
+          "file": "cached-bicubic-shared-horizontal-schedule.tar.xz",
+          "sha256": "e9f8a4afeb1c72ca8d63fb902afed33f674f516233313facb25b32244a4870ce"
+        }
+      ]
+    },
+    "restoredQualifiedProduction": true,
+    "restoration": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "restoredQualifiedLibrarySha256": "073239eb3e3debf722667452df8bc18adaf372475a8f9b97472dbe2dc56796f8",
+        "productionSourcesRestored": true,
+        "embeddedSha256": "f8593c5a41fb14d464748c617770524e0361d13b4dceddf3df50c592045c705b",
+        "immutableOriginalAReused": true,
+        "newBuilds": 0,
+        "focusedEvidenceReused": true,
+        "packageUnchangedSha256": "212f5d1dc774e662c78a7a60a852a520295fb8cfdbe77d7e75d05746e5641a62",
+        "productionAccepted": false,
+        "completeSourceManifestSha256": null
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "restoredQualifiedLibrarySha256": "b3d7de22e36f170dd7abea3817f19bde13448a47f8d4b1fb92f191736ef3c692",
+        "productionSourcesRestored": true,
+        "embeddedSha256": "60cece61ff6fa99ff70e8807219a9246e761adf463bb7fa0eac534468fb6f4c6",
+        "immutableOriginalAReused": true,
+        "newBuilds": 0,
+        "focusedEvidenceReused": true,
+        "packageUnchangedSha256": "212f5d1dc774e662c78a7a60a852a520295fb8cfdbe77d7e75d05746e5641a62",
+        "productionAccepted": false,
+        "completeSourceManifestSha256": "060cc998e52656a29dae29537185a5db96549f262d2f1aac4f3aa0eb8c3a2458"
+      }
+    },
+    "workflow": {
+      "newCoreBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newHarnessNativeFixtureBuilds": 0,
+      "newTests": 0,
+      "newShortScreens": 6,
+      "newIndependentConfirmations": 7,
+      "reusedPrimaryConfirmation": true,
+      "reusedFocusedEachOs": {
+        "internalNormal": 528,
+        "internalScalar": 528,
+        "publicNormal": 791,
+        "publicScalar": 791
+      },
+      "broadQualificationRuns": 0,
+      "packageProofRuns": 0
+    },
+    "next": "Keep A as the selected broader lead. Resolve the actual remaining shared-dispatch resize callers and refresh their existing complete controls before full/ISA/SAMEpackage qualification. No retiming of the eight completed controls without a new reason; no new shape/depth/filter/settings grid."
   }
 }

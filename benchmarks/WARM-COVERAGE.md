@@ -71,11 +71,19 @@ before a production prototype; no CPU claim from logical counts. The
 unaccepted variants. Simplest A saves13.66µs/3.82%raw/2.57%normalized on its
 independent wide-byte control,343.67/zimg346.22µs upper0.995. Its dispatcher IL
 shrinks163→44, potentially affecting other resize callers. B/C non-inlining
-controls give mixed costs and are unselected. Qualified source/modules/package
-restore exactly; zero broad/package runs while unsettled. Reuse immutable A,
-its focused checks and primary capture; screen six existing cached/packed/narrow
-controls before reconciling its broader affected scope. No new grid/storage/
-numerical policy or presumed word gap; current qualified costs remain unchanged.
+controls give mixed costs and are unselected. Six existing cached/packed/narrow
+controls now have short screens and independent confirmations; the wide-word
+companion confirms too. Narrow-word488.42/zimg571.80µs upper.859 and packed-word
+364.87/387.63µs upper.945 show separated raw/all-actual/normalized gains. Cached
+byte416.53/418.55µs upper1.004 remains uncertain; bounded byte426.33/418.60µs
+upper1.024 remains a gap. Raw reductions with matching reference movement are
+not causal gains. Current CWQ827B cached baselines supersede the older CPU
+evidence; original identical validation gates remain valid. Eight confirmations,
+immutable A and focused correctness are reused. Qualified source/modules/package
+restore exactly, zero new builds/full/ISA/package campaigns. Reconcile remaining
+required shared-dispatch callers before acceptance; no new grid/storage/numerical
+policy or repeat of completed controls. Raw9cd26680/343552B/199members is mirrored/
+member-verified. Current qualified costs remain unchanged; publication is postponed.
 
 [Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
 7.18%normalized on complete live-token VP8L decode, with separated confidence
