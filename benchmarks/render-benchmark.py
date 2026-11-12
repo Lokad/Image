@@ -1757,6 +1757,21 @@ def render():
         else:
             position = max(i for i, (_, old) in enumerate(rows) if old.startswith('| PNG ')) + 1
             rows.insert(position, row)
+    png_adjacent = json.loads((ROOT / 'benchmarks/png-fastest-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not png_adjacent['productionChanged'] and png_adjacent['allBuilds'] == 0 and png_adjacent['requiredMaterialPaths'] == 289
+    assert png_adjacent['raw']['mirrored'] and png_adjacent['raw']['allMembersVerified']
+    current = png_adjacent['current']
+    assert current['status'] == 'uncertain' and current['lower'] < 1 < current['upper']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12 and current['operationsPerSubject'] == 4
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
+    assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
+    assert current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
+    assert current['librarySha256'] == png_adjacent['producers']['windowsSha256'] == png_adjacent['qualificationReused']['actualPackage']['librarySha256']
+    assert current['packetBytes'] == current['nativePacketBytes'] == 236828 and current['retainedOperationScratchBytes'] == 0
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + current['label'] + ' ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["nativePacketBytes"]:,} |')
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
         if label == 'PNG8 decode, two retained images / shared caller root':
@@ -2179,8 +2194,10 @@ Current scope and remaining work:
   4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
   [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
   has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
-  [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
-  uncertain. Fresh native codec/zlib state, normalization and independent packets
+  [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
+  uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
+  Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
+  no causal gain, allocation saving or presumed gap. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
   unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.

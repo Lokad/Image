@@ -49,8 +49,10 @@ Current scope and remaining work:
   4KiB framing admission are unchanged; both per-symbol cancellation polls remain.
   [One-shot encoding](../benchmarks/PNG-LENGTH-CLASSIFICATION.md)
   has 13 passes / 2 uncertain across 15 controls; ByteFastest/Gray8 need confidence resolution.
-  [The current Fastest check](../benchmarks/PNG-FASTEST-CURRENT-CONFIDENCE.md) stays
-  uncertain. Fresh native codec/zlib state, normalization and independent packets
+  [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
+  uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
+  Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
+  no causal gain, allocation saving or presumed gap. Fresh native codec/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
   unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
@@ -252,7 +254,7 @@ settings do not establish matched quality.
 | VP8L opaque RGBA8 / libwebp exact=1 † | 73,406.90 | 73,496.23 | 0.999 / 1.070 | 4,822,760 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 4,757.43 | 4,717.98 | 1.008 / 1.028 | 820,916 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 4,397.62 | 4,374.65 | 1.005 / 1.044 | 820,844 | 236,828 / 236,828 |
 | PNG RGBA16, stored0 / native0 (post-GC 4-op gap) † | 501.70 | 405.21 | 1.238 / 1.255 | 1,151,996 | 1,066,552 / 1,066,552 |
 | PNG grayscale8, one-shot Optimal6 / native6 † | 1,993.15 | 1,968.89 | 1.012 / 1.047 | 551,364 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,370.01 | 9,793.98 | 0.957 / 0.972 | 819,884 | 168,729 / 168,729 |

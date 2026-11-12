@@ -22,6 +22,16 @@ perOS; no fixture/native/harness rebuild or workload expansion. Historical
 [Predictable16](PNG-HISTORICAL-CURRENT-CONFIRMATION.md) remains valid and stopped;
 earlier stored-mode results retain their original sampling/provenance context.
 
+[The first adjacent Fastest8 view](PNG-FASTEST-ADJACENT-CONFIDENCE.md) remains
+uncertain:4.398/FFmpeg4.375ms,range0.944–1.044,exact236,828B packet. All12pairs
+and before/paired/after brackets remain. Fresh codec/zlib/preparation/output/
+disposal on both sides, same original settings/input/owners; natural-GC4op
+sampling is distinct from the earlier global capture. Direct allocation820,843.67B,
+384KiB deflater admission/zero scratch retention, no storage or CPU saving claim.
+Original driver/harness/native/fixtures and current actual package reused;
+zero builds/broad/package repeats/new workloads. Thirteen fresh PNG encode
+controls pass/two uncertain. Stop unchanged repeats or tuning a presumed gap.
+
 Unchanged [contiguous wide views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
 pass6,439full/live checks perOS,528internal/791public affected normal/scalar/
 AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Byte saves14.15µs/

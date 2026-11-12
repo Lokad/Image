@@ -1,5 +1,9 @@
 # Current-package PNG Fastest confidence
 
+The [first current-package adjacent view](PNG-FASTEST-ADJACENT-CONFIDENCE.md)
+also remains uncertain. The original global-bracket result below is retained
+with its distinct sampling scope.
+
 PFC696 performs one independent confirmation of the existing RGBA8 Fastest1
 control using the qualified immutable package DLL. It remains **uncertain**.
 
