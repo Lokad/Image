@@ -1,5 +1,9 @@
 # Output-owned VP8L palette expansion
 
+[Current live-token VP8L decoding](WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md)
+supersedes that cost and resolves its uncertainty into a gap. The other source-valid
+costs below retain their current owners; this report preserves the original round.
+
 WPP695 removes a full-frame ARGB intermediate and its subsequent copy when the
 last inverse transform is a palette. On little-endian RGBA decoding, establish the
 returned image owner before allocation, convert the retired palette's at-most256

@@ -27,6 +27,12 @@ Current scope and remaining work:
   73.41/libwebp73.50ms, range0.915–1.070,
   4,822,760B/op and exact121,896B packet. All adjacent pairs/brackets remain;
   no codec change, presumed gap or favorable repeat follows the first adjacent capture.
+  [Live-token VP8L decoding](../benchmarks/WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md)
+  now has a demonstrated gap:3.207/FFmpeg3.026ms,range1.048–1.070,152,728B/op.
+  All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
+  conversion contexts and has no equivalent cancellation token. Across six lossless
+  reads/validators:3pass/1gap/2uncertain.
+  Prioritize this approximately181µs gap for current attribution; no production CPU-change claim.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   6 passes / 3 uncertain. The current word-alpha view is
   53.40/FFmpeg 53.30 ms, upper 1.008: uncertain,

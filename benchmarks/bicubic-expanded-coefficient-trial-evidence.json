@@ -1,0 +1,264 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CEP844B",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "screens": {
+    "baseline": {
+      "managedUs": 430.0126831896552,
+      "nativeUs": 418.4487916666667,
+      "ratio": 1.027635141391925,
+      "lower": 0.951947240447832,
+      "upper": 1.105859560866601,
+      "allocatedBytes": 113,
+      "librarySha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "observation": "tmp/nwr842-baseline-TightDown8-short-observation.json"
+    },
+    "A": {
+      "managedUs": 575.3848570075758,
+      "nativeUs": 416.61080208333334,
+      "ratio": 1.381108828984428,
+      "lower": 1.260014086655751,
+      "upper": 1.5070504922094523,
+      "allocatedBytes": 113,
+      "librarySha256": "dc067dc0dd5c9543c9bc06241a8f5545dff390abeb3503f831edebfef9673d67",
+      "observation": "tmp/cep844-candidate-TightDown8-short-observation.json"
+    },
+    "B": {
+      "managedUs": 549.7549873188406,
+      "nativeUs": 420.5937317708333,
+      "ratio": 1.307092678257941,
+      "lower": 1.2156512056603221,
+      "upper": 1.4037743985870248,
+      "allocatedBytes": 113,
+      "librarySha256": "29d3e321b178c86be74c37cd03495e06227a7246fe2f08a6168f278909697471",
+      "observation": "tmp/cep844b-candidate-TightDown8-short-observation.json"
+    }
+  },
+  "comparison": {
+    "A": {
+      "views": {
+        "statistics": {
+          "baselineUs": 430.0126831896552,
+          "candidateUs": 575.3848570075758,
+          "savedUs": -145.3721738179206,
+          "savedFraction": -0.33806485134254727,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430012.6831896552,
+            "StandardError": 155.86362326759996,
+            "Level": 12,
+            "Margin": 4925.14311818456,
+            "Lower": 425087.5400714706,
+            "Upper": 434937.8263078398
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 575384.8570075758,
+            "StandardError": 1270.8236878800712,
+            "Level": 12,
+            "Margin": 40156.826907857074,
+            "Lower": 535228.0300997187,
+            "Upper": 615541.6839154329
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 430.01409698275864,
+          "candidateUs": 575.3861950757577,
+          "savedUs": -145.372098092999,
+          "savedFraction": -0.33806356375992874,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430014.09698275867,
+            "StandardError": 155.8636232676,
+            "Level": 12,
+            "Margin": 4925.143118184561,
+            "Lower": 425088.9538645741,
+            "Upper": 434939.24010094325
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 575386.1950757577,
+            "StandardError": 1270.8236878800712,
+            "Level": 12,
+            "Margin": 40156.826907857074,
+            "Lower": 535229.3681679006,
+            "Upper": 615543.0219836148
+          }
+        }
+      },
+      "normalizedGain": -0.3439680810386898,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": true,
+      "nativeClockChange": -0.004392388315933915,
+      "baselineRatioBounds": [
+        0.951947240447832,
+        1.105859560866601
+      ],
+      "candidateRatioBounds": [
+        1.260014086655751,
+        1.5070504922094523
+      ]
+    },
+    "B": {
+      "views": {
+        "statistics": {
+          "baselineUs": 430.0126831896552,
+          "candidateUs": 549.7549873188406,
+          "savedUs": -119.74230412918538,
+          "savedFraction": -0.2784622612546839,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430012.6831896552,
+            "StandardError": 155.86362326759996,
+            "Level": 12,
+            "Margin": 4925.14311818456,
+            "Lower": 425087.5400714706,
+            "Upper": 434937.8263078398
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 549754.9873188406,
+            "StandardError": 766.6905808830353,
+            "Level": 12,
+            "Margin": 24226.697410530105,
+            "Lower": 525528.2899083105,
+            "Upper": 573981.6847293706
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 430.01409698275864,
+          "candidateUs": 549.7564302536232,
+          "savedUs": -119.7423332708645,
+          "savedFraction": -0.27846141350027787,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430014.09698275867,
+            "StandardError": 155.8636232676,
+            "Level": 12,
+            "Margin": 4925.143118184561,
+            "Lower": 425088.9538645741,
+            "Upper": 434939.24010094325
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 549756.4302536232,
+            "StandardError": 766.6905808830353,
+            "Level": 12,
+            "Margin": 24226.697410530105,
+            "Lower": 525529.7328430931,
+            "Upper": 573983.1276641532
+          }
+        }
+      },
+      "normalizedGain": -0.27194237099316476,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": true,
+      "nativeClockChange": 0.005125932125705113,
+      "baselineRatioBounds": [
+        0.951947240447832,
+        1.105859560866601
+      ],
+      "candidateRatioBounds": [
+        1.2156512056603221,
+        1.4037743985870248
+      ]
+    }
+  },
+  "raw": {
+    "file": "bicubic-expanded-coefficient-trial.tar.xz",
+    "sha256": "1700c547977dbdbfd9c7496f2360871b8e0b02200bcfaee698a26718cb48403b",
+    "bytes": 1640068,
+    "members": 102,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "scope": "benchmarks/png-stored-workspace-evidence.json",
+        "file": "png-stored-workspace-qualified.tar.xz",
+        "sha256": "df812f63165dc437aa54b333c60993c398a15a34005626d547f19e62b5aaf6cc"
+      },
+      {
+        "scope": "benchmarks/narrow-byte-weight-routing-trial-evidence.json",
+        "file": "narrow-byte-weight-routing-trial.tar.xz",
+        "sha256": "1cf8af7e9ef10263a31fef0d5b8f697875dab971f12035e7d43bd28ce8451fd3"
+      }
+    ]
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa",
+    "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "ab10e6a1a3cd326d7172d601c8d7d6d084eab36cbda6fdd9399afbe63d45acc3",
+    "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168"
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "CEP844B",
+      "platform": "windows",
+      "productionSourcesRestored": true,
+      "coreSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "embeddedSha256": "a7be3bbb7c4ea17c77422a7741b4abddef006352096542ce8a85a83cf79309c9",
+      "actualPackageUnchangedSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": null
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "CEP844B",
+      "platform": "linux",
+      "productionSourcesRestored": true,
+      "coreSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+      "embeddedSha256": "946280dafa4deba31466ffd3f15d954474f3639ab5abe1079d128590793d35cc",
+      "actualPackageUnchangedSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": "339c5e0e94f76e75ba6ebde483499c70efee45ec789faef1a0ec0c66573e51e4"
+    }
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "expandedBorrowedPayloadBytes": 8192,
+    "oldFirstTailRow": 117,
+    "candidateFirstTailRow": 109,
+    "totalAllocatedBytesEachScreen": 113,
+    "physicalNativeAndJitPeaksNotMeasured": true
+  },
+  "workflow": {
+    "candidateVersionsEachOS": 2,
+    "coreBuildsEachOS": 2,
+    "embeddedBuildsEachOS": 2,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "newInternalCases": 7,
+    "internalFocusedEachNormalScalarModeEachOS": 535,
+    "publicFocusedEachNormalScalarModeEachOS": 791,
+    "baselineShortReused": true,
+    "independentConfirmations": 0,
+    "wordRecaptures": 0,
+    "broadOrPackageQualificationRepeated": false
+  },
+  "qualificationReused": {
+    "evidence": "png-stored-workspace-evidence.json",
+    "fullChecksEachOS": 6449,
+    "sameActualPackageBothOS": true,
+    "actualPackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+    "windowsSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+    "linuxSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b"
+  },
+  "decision": "Both complete three-actual candidate screens show a separated adverse result relative to valid immutable baseline, with small native-clock changes. A\u2192B improves code/liveness but does not repay preparation/traffic/tail/generated-code costs. Do not infer causal phase percentages. No independent confirmation/word recapture/broad/package repeat. Preserve both candidate versions/seven new passing cases and restore all qualified production/test sources and modules/package exactly.",
+  "next": "Continue finite coverage with an existing material unresolved read path and a first justified adjacent comparison, before assuming a kernel gap. No new workload/fixture/settings grid or unchanged favorable repeats."
+}

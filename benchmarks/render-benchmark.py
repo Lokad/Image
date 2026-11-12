@@ -482,6 +482,22 @@ def render():
                for v in resident_decode['comparison']['views'].values())
     assert resident_decode['storage']['newRetainedScratchBytes'] == 0
     lpf = {**resident_decode['costs'], **vp8_costs}
+    lossless_live = json.loads((ROOT / 'benchmarks/webp-lossless-live-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not lossless_live['productionChanged'] and lossless_live['requiredMaterialPaths'] == 289
+    assert lossless_live['decoderSourceMatchesPriorOwner'] and lossless_live['raw']['mirrored'] and lossless_live['raw']['allMembersVerified']
+    live_cost = lossless_live['current']
+    assert live_cost['status'] == 'gap' and live_cost['lower'] > 1 and live_cost['upper'] > live_cost['lower']
+    assert live_cost['actualIterations'] == live_cost['nativeSamplesEachBracket'] == 12 and live_cost['operationsPerSubject'] == 4
+    assert live_cost['allActualsRetained'] and live_cost['allOriginalGatesPassed'] and live_cost['quietGuardsPassed']
+    assert live_cost['allRgbaSamplesExact'] and live_cost['alphaExact'] and live_cost['hiddenRgbExact']
+    assert live_cost['sourceUnchanged'] and live_cost['independentOwnedOutput'] and live_cost['managedOutputSha256'] == live_cost['nativeOutputSha256']
+    assert live_cost['cancellationCanBeCanceled'] and not live_cost['cancellationRequested'] and live_cost['alreadyCanceledRejected']
+    assert live_cost['allocatedBytes'] == 152728 and live_cost['retainedOperationScratchBytes'] == 0
+    assert live_cost['librarySha256'] == lossless_live['producers']['windowsSha256'] == lossless_live['qualificationReused']['librarySha256']
+    assert lossless_live['producers']['actualPackageSha256'] == lossless_live['qualificationReused']['actualPackageSha256']
+    lpf['NativeLosslessCancelable8'] = live_cost
+    lossless_read_counts = {state: sum(lpf[name]['status'] == state for name in ('WebpResident', 'Lossless8', 'IndexedNative16Colors8', 'NativeLosslessCancelable8', 'WebpStream', 'ValidateVp8lAlpha')) for state in ('pass', 'gap', 'uncertain')}
+    assert lossless_read_counts == {'pass': 3, 'gap': 1, 'uncertain': 2}
     vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in vp8_costs)
                          for state in ('pass', 'gap', 'uncertain')}
     jpeg_decode = baseline_blocks
@@ -2188,6 +2204,12 @@ Current scope and remaining work:
   {opaque['managedUs']/1000:.2f}/libwebp{opaque['nativeUs']/1000:.2f}ms, range{opaque['lower']:.3f}–{opaque['upper']:.3f},
   {opaque['allocatedBytes']:,}B/op and exact121,896B packet. All adjacent pairs/brackets remain;
   no codec change, presumed gap or favorable repeat follows the first adjacent capture.
+  [Live-token VP8L decoding](../benchmarks/WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md)
+  now has a demonstrated gap:3.207/FFmpeg3.026ms,range1.048–1.070,152,728B/op.
+  All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
+  conversion contexts and has no equivalent cancellation token. Across six lossless
+  reads/validators:{lossless_read_counts['pass']}pass/{lossless_read_counts['gap']}gap/{lossless_read_counts['uncertain']}uncertain.
+  Prioritize this approximately181µs gap for current attribution; no production CPU-change claim.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. The current word-alpha view is
   {alpha16_current['managedUs']/1000:.2f}/FFmpeg {alpha16_current['nativeUs']/1000:.2f} ms, upper {alpha16_current['upper']:.3f}: uncertain,

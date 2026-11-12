@@ -1,0 +1,146 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WLA846",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "allBuilds": 0,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "sourcePins": {
+    "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "841e7363ccb99e01a13c8564565bbccbbed0bd02d2c62e32edf7617ee6c5a93d",
+    "src/Lokad.Image/Internal/WebpHuffman.cs": "14086caa9759f0a2056fd380b681d2c91eac283e608c528ca5be34538d4cf33c",
+    "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+  },
+  "librarySha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+  "actualPackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+  "totalSampleLocations": 1995,
+  "methods": [
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+      724
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&,bool)[Optimized]",
+      696
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::Apply(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+      212
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+      133
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+      115
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.WebpHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      40
+    ],
+    [
+      "instance class Lokad.Image.Internal.WebpHuffman [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadHuffman(int32)[Optimized]",
+      17
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpBitReader::Read(int32)[Optimized]",
+      17
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.WebpHuffman::BuildWideGreen(valuetype [System.Runtime]System.Span`1<uint32>)[Optimized]",
+      10
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.WebpDistances::Resolve(int32,int32)[Optimized]",
+      8
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PublishSubtractGreenRgba(valuetype [System.Runtime]System.Span`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      5
+    ],
+    [
+      "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+      2
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::CountEntropyGroups(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1
+    ],
+    [
+      "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+      1
+    ]
+  ],
+  "bodies": [
+    {
+      "header": "Lokad.Image.Internal.WebpLosslessDecoder:ReadImageCore(int,int,bool,bool,byref,byref,bool):System.Span`1[uint]:this (FullOpts)",
+      "codeBytes": 5723,
+      "samples": 696
+    },
+    {
+      "header": "Lokad.Image.Internal.WebpHuffman:Read(byref):int:this (FullOpts)",
+      "codeBytes": 1278,
+      "samples": 724
+    },
+    {
+      "header": "Lokad.Image.Internal.WebpLosslessDecoder:Apply(Lokad.Image.Internal.WebpLosslessDecoder+Transform,System.Span`1[uint],int):this (FullOpts)",
+      "codeBytes": 786,
+      "samples": 212
+    },
+    {
+      "header": "Lokad.Image.Internal.WebpLosslessDecoder:ApplyPredictor(Lokad.Image.Internal.WebpLosslessDecoder+Transform,System.Span`1[uint],int):this (FullOpts)",
+      "codeBytes": 837,
+      "samples": 133
+    }
+  ],
+  "raw": {
+    "file": "webp-lossless-live-current-attribution.tar.xz",
+    "sha256": "51242680a50e223eab9937fb087b5919d92159b203cecbcc26ca04939bc45716",
+    "bytes": 129004,
+    "members": 26,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-lossless-live-current-confidence.tar.xz",
+        "sha256": "cabe120fd49fdcba00ef4d4c6bf901b5aa4ebea60ebcb6fb7d82729453e47942",
+        "scope": "webp-lossless-live-current-confidence-evidence.json"
+      }
+    ]
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "HFR847-proposed",
+    "productionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "sources": {
+      "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "841e7363ccb99e01a13c8564565bbccbbed0bd02d2c62e32edf7617ee6c5a93d",
+      "src/Lokad.Image/Internal/WebpHuffman.cs": "14086caa9759f0a2056fd380b681d2c91eac283e608c528ca5be34538d4cf33c",
+      "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+    },
+    "producers": {
+      "windowsSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "linuxSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+      "timedArtifactSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "actualPackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084"
+    },
+    "primary": "NativeLosslessCancelable8",
+    "purpose": "Address current3206.92/FFmpeg3025.66us gap,ratio1.060 interval1.048\u20131.070, exact frozen live-token VP8L control. No presumed gaps in other two uncertain reads.",
+    "repeatedWork": "Every nontrivial Huffman.Read enters a1278B generated method combining common prefix lookup with canonical/per-bit fallback. Current724sample locations are in that method; common lookups/refill/state publication are visible in annotated code. Sample counts are not component times or expected gains.",
+    "intendedEndState": "Keep a small aggressive-inline single/prefix front end and move canonical/per-bit fallback into a non-inlined private helper. Preserve original code/order, bit-cache success publication, truncation and cancellation behavior, arrays/admission and owner cleanup. No new state/lookup table/buffer/pool/cache/API or encoder change.",
+    "scope": "Existing complete public Decode with live token, frozen input/FFmpeg retained context+conversion/owned output boundary. Current immutable c345/b96 baseline. Relevant other VP8L/ALPH/validation costs must reconcile if production is accepted; pureVP8 without ALPH, encoding, PNG/JPEG/resizing/text remain source-scoped. Do not widen input/settings grid.",
+    "risks": "Inlining may grow main-loop code or register pressure instead of helping. Inspect generated actual caller and complete short screens before independent confirmation. Keep entire baseline method reconstructed through source proof; no exception-time state shortcut or removed checkpoint. Scalar/exact/direct-reader/truncation/owner tests first, one immutable core+embedded version eachOS; broad/package milestone only after affected performance reconciliation."
+  },
+  "qualificationReused": "png-stored-workspace-evidence.json",
+  "limitation": "One2second CPU0operation/CPU1collector capture. Inlining/skid/unknown locations are not phase costs, removable percentages or gain forecasts. WLR845 owns current standalone timing; this profile adds no cost or allocation claim."
+}
