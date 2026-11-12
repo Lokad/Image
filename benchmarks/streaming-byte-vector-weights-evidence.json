@@ -1,0 +1,680 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SBW870",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "qualificationPending": false,
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "issues": [],
+  "cases": {
+    "Tight16x8_8": {
+      "managedUs": 463.9837548701298,
+      "nativeUs": 483.7153932291667,
+      "ratio": 0.9592081653070553,
+      "lower": 0.9440885924594783,
+      "upper": 0.9695814428948007,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "receipt": "tmp/sbw870-candidate-Tight16x8_8-confirm-receipt.json",
+      "observation": "tmp/sbw870-candidate-Tight16x8_8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "nativeOutputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "managedMaxWorkingBytes": 536076,
+      "depth": 8,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 536076 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Tight8x17_8": {
+      "managedUs": 457.3994425223214,
+      "nativeUs": 516.7538287760417,
+      "ratio": 0.8851399197286952,
+      "lower": 0.8798924288391661,
+      "upper": 0.8897769442512434,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "receipt": "tmp/sbw870-candidate-Tight8x17_8-confirm-receipt.json",
+      "observation": "tmp/sbw870-candidate-Tight8x17_8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "481df76194da6537d6ecfbc24f37c842ae750b7752791f35d40d43454532eee1",
+      "nativeOutputSha256": "481df76194da6537d6ecfbc24f37c842ae750b7752791f35d40d43454532eee1",
+      "managedMaxWorkingBytes": 536108,
+      "depth": 8,
+      "outputWidth": 8,
+      "outputHeight": 17,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 8x17 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 536108 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, 128-pixel clamped halo (198.069% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Tight8x4_8": {
+      "managedUs": 380.48240134297515,
+      "nativeUs": 663.4397135416666,
+      "ratio": 0.5734995864384284,
+      "lower": 0.5679343655007157,
+      "upper": 0.5772332934059093,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "receipt": "tmp/sbw870-candidate-Tight8x4_8-confirm-receipt.json",
+      "observation": "tmp/sbw870-candidate-Tight8x4_8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5ebc1d60ad1c4bcaeeb105d2f5f83285b0dbac88ebbc83cb2f04732ee134b4bc",
+      "nativeOutputSha256": "5ebc1d60ad1c4bcaeeb105d2f5f83285b0dbac88ebbc83cb2f04732ee134b4bc",
+      "managedMaxWorkingBytes": 535692,
+      "depth": 8,
+      "outputWidth": 8,
+      "outputHeight": 4,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 8x4 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 535692 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, 128-pixel clamped halo (198.069% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    }
+  },
+  "comparison": {
+    "Tight16x8_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 511.0301438636364,
+          "candidateUs": 463.9837548701298,
+          "savedUs": 47.04638899350661,
+          "savedFraction": 0.09206186671849337,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 511.23211395833334,
+          "candidateUs": 464.4208681175595,
+          "savedUs": 46.8112458407738,
+          "savedFraction": 0.09156554246627202,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        }
+      },
+      "normalizedGain": 0.15239056403896067,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.07117511292458079,
+      "baselineRatioBounds": [
+        1.1250224733489547,
+        1.1363493096227155
+      ],
+      "candidateRatioBounds": [
+        0.9440885924594783,
+        0.9695814428948007
+      ]
+    },
+    "Tight8x17_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 545.8860480072462,
+          "candidateUs": 457.3994425223214,
+          "savedUs": 88.48660548492481,
+          "savedFraction": 0.16209721022902968,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 545.8876539855073,
+          "candidateUs": 457.4009291294643,
+          "savedUs": 88.486724856043,
+          "savedFraction": 0.1620969520193476,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        }
+      },
+      "normalizedGain": 0.17963605883832245,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.021379350955451404,
+      "baselineRatioBounds": [
+        1.0600543470789752,
+        1.0868819874937468
+      ],
+      "candidateRatioBounds": [
+        0.8798924288391661,
+        0.8897769442512434
+      ]
+    },
+    "Tight8x4_8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 501.90197479166665,
+          "candidateUs": 380.48240134297515,
+          "savedUs": 121.41957344869152,
+          "savedFraction": 0.24191889960004898,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 501.90340229166674,
+          "candidateUs": 380.63837421085856,
+          "savedUs": 121.26502808080818,
+          "savedFraction": 0.2416102929908781,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        }
+      },
+      "normalizedGain": 0.23472698846749895,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.00939783714330622,
+      "baselineRatioBounds": [
+        0.7402759246210907,
+        0.7548245436204699
+      ],
+      "candidateRatioBounds": [
+        0.5679343655007157,
+        0.5772332934059093
+      ]
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "SBW870",
+    "wholeOriginalStreamingFileReconstructsExactly": true,
+    "onlyPairedWeightConstructionChanges": true,
+    "noNewFloatingArithmetic": true,
+    "lowerFourLanesBroadcastW0UpperFourW1": true,
+    "coefficientProductAddCacheGeometryCertificateRepairCancellationAndUnwindVerbatim": true,
+    "allOtherProductionSourcesUnchanged": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "additionalExplicitStackArrayBytes": 0,
+    "physicalJitFrameUnmeasured": true,
+    "callerJitScopePending": false,
+    "actualCallerJit": {
+      "Lokad.Image.Internal.StreamingBicubicResize:TryApply": {
+        "instructionsAndLabelLines": 662,
+        "baselineCodeBytes": 2579,
+        "candidateCodeBytes": 2579,
+        "exact": true,
+        "gsCookie": {
+          "baseline": {
+            "value": "0xB366B3D7",
+            "instructionPositions": [
+              11,
+              616,
+              634
+            ],
+            "savedSlot": "[rbp-0x110]",
+            "bothExitGuardsUnchanged": true
+          },
+          "candidate": {
+            "value": "0xB36EA40C",
+            "instructionPositions": [
+              11,
+              616,
+              634
+            ],
+            "savedSlot": "[rbp-0x110]",
+            "bothExitGuardsUnchanged": true
+          }
+        }
+      },
+      "Lokad.Image.ImageTransforms:Resize": {
+        "instructionsAndLabelLines": 2204,
+        "baselineCodeBytes": 9388,
+        "candidateCodeBytes": 9388,
+        "exact": true
+      },
+      "byteFilter": {
+        "baselineCodeBytes": 460,
+        "candidateCodeBytes": 410
+      }
+    },
+    "callerAndWordPathsUnchanged": true,
+    "scope": "Shared StreamingTryApply and public root Resize only. Preserve all opcodes/registers/arithmetic operands/branches/stack and block offsets/code size. Normalize virtual addresses/method-number prefix, plus proven prologue stored GS cookie and exactly two matching fail-fast exit loads. Initial address-only comparison exposed that process cookie; original disassembly retained. No whole-library audit or timing inference.",
+    "actualIndependentConfirmationJit": {
+      "Tight16x8_8": {
+        "Lokad.Image.Internal.StreamingBicubicResize:TryApply": {
+          "codeBytes": 2579,
+          "instructionsAndLabelLines": 662,
+          "exact": true,
+          "gsCookie": {
+            "baseline": {
+              "value": "0xB366B3D7",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            },
+            "candidate": {
+              "value": "0xB36FB7D6",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            }
+          }
+        },
+        "Lokad.Image.ImageTransforms:Resize": {
+          "codeBytes": 9388,
+          "instructionsAndLabelLines": 2204,
+          "exact": true,
+          "gsCookie": {}
+        },
+        "byteFilter": {
+          "baselineCodeBytes": 460,
+          "candidateCodeBytes": 410,
+          "remainsNoninlined": true
+        }
+      },
+      "Tight8x17_8": {
+        "Lokad.Image.Internal.StreamingBicubicResize:TryApply": {
+          "codeBytes": 2579,
+          "instructionsAndLabelLines": 662,
+          "exact": true,
+          "gsCookie": {
+            "baseline": {
+              "value": "0xB366B3D7",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            },
+            "candidate": {
+              "value": "0xB3700EC7",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            }
+          }
+        },
+        "Lokad.Image.ImageTransforms:Resize": {
+          "codeBytes": 9388,
+          "instructionsAndLabelLines": 2204,
+          "exact": true,
+          "gsCookie": {}
+        },
+        "byteFilter": {
+          "baselineCodeBytes": 460,
+          "candidateCodeBytes": 410,
+          "remainsNoninlined": true
+        }
+      },
+      "Tight8x4_8": {
+        "Lokad.Image.Internal.StreamingBicubicResize:TryApply": {
+          "codeBytes": 2579,
+          "instructionsAndLabelLines": 662,
+          "exact": true,
+          "gsCookie": {
+            "baseline": {
+              "value": "0xB366B3D7",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            },
+            "candidate": {
+              "value": "0xB3707670",
+              "instructionPositions": [
+                11,
+                616,
+                634
+              ],
+              "savedSlot": "[rbp-0x110]",
+              "bothExitGuardsUnchanged": true
+            }
+          }
+        },
+        "Lokad.Image.ImageTransforms:Resize": {
+          "codeBytes": 9388,
+          "instructionsAndLabelLines": 2204,
+          "exact": true,
+          "gsCookie": {}
+        },
+        "byteFilter": {
+          "baselineCodeBytes": 460,
+          "candidateCodeBytes": 410,
+          "remainsNoninlined": true
+        }
+      }
+    }
+  },
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "scope": "Three existing byte Streaming controls:16x8/8x17 gaps close,8x4remains passing. Only paired weight bit construction changes; whole original file reconstructs. Source-valid word/prepared/cached/other paths reuse current evidence, confirmed by actual independent module root9388B/sharedStreamingcaller2579B instruction/block identity after addresses/methodnumber/provenGScookie normalization. Other70materialresizecosts reused; no grid or broad reference refresh.",
+  "decision": "Retain separated filtered/all-actual raw and reference-normalized gains on all3existing controls. All3originalstandalone confirmations independently pass with exact pixels/ownership/quiet gates. Native clocks/effects retained separately, no uniform release claim.",
+  "isaReuse": "New expression is behind unchanged AVX512F/AVX2/AVX/SSE41 rejection guards, adds no ISA requirement or scratch.569internal/791public normal/scalar eachOS pass. DisabledAVX512/AVX2 fallback sources remain unchanged; reuse qualified CMP853528internal/791public disabled-mode evidence without broad repeats.",
+  "producers": {
+    "windowsSha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+    "linuxSha256": "751c3f1a44530f2bda733b707a58e5d381253bc487e7d572315467fe9f4bc656",
+    "actualPackageSha256": "c6990f1defbea977fcad1f77ebfa0ff627c0a97bdd9ce21497c35345240227a2"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "80802c2a454ba36f45e3556e14311b570583f483db0eda301dafacc6ca2f664f"
+  },
+  "unchangedPins": {
+    "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+    "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "f56343c46438b083c2c22b38407c85dbb6ef31fb3d5ef3a5c7cb7c29169c48c7",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+    "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61"
+  },
+  "raw": {
+    "file": "streaming-byte-vector-weights-qualified.tar.xz",
+    "sha256": "6c9d2c3cf6be0ae0a9dbfa419a807dd924e53c0aaf24eebbf1c1353ff71b279d",
+    "bytes": 1247800,
+    "members": 107,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "shared-resize-filter-weights-qualified.tar.xz",
+        "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+      },
+      {
+        "file": "cross-bicubic-output-prefix-qualified.tar.xz",
+        "sha256": "287d74ff255a4c51efb454f0e39a11f9dd6fef6fc23ae8be7e0b62d7cc7f6239"
+      },
+      {
+        "file": "streaming-byte-current-attribution.tar.xz",
+        "sha256": "fb08f4134fb750a40df803a37ff2882c706fab6820f630a04a97b00505803a33"
+      }
+    ]
+  },
+  "qualification": {
+    "fullChecksEachOs": 6497,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "full": [
+        3168,
+        2381,
+        948
+      ],
+      "total": 6497,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 569,
+        "public-normal": 791,
+        "internal-scalar": 569,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "New expression is behind unchanged AVX512F/AVX2/AVX/SSE41 rejection guards, adds no ISA requirement or scratch.569internal/791public normal/scalar eachOS pass. DisabledAVX512/AVX2 fallback sources remain unchanged; reuse qualified CMP853528internal/791public disabled-mode evidence without broad repeats."
+      },
+      "resizeInternalNormalScalar": 569,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "80802c2a454ba36f45e3556e14311b570583f483db0eda301dafacc6ca2f664f"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+        "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "f56343c46438b083c2c22b38407c85dbb6ef31fb3d5ef3a5c7cb7c29169c48c7",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "751c3f1a44530f2bda733b707a58e5d381253bc487e7d572315467fe9f4bc656",
+      "full": [
+        3168,
+        2381,
+        948
+      ],
+      "total": 6497,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 569,
+        "public-normal": 791,
+        "internal-scalar": 569,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "New expression is behind unchanged AVX512F/AVX2/AVX/SSE41 rejection guards, adds no ISA requirement or scratch.569internal/791public normal/scalar eachOS pass. DisabledAVX512/AVX2 fallback sources remain unchanged; reuse qualified CMP853528internal/791public disabled-mode evidence without broad repeats."
+      },
+      "resizeInternalNormalScalar": 569,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "80802c2a454ba36f45e3556e14311b570583f483db0eda301dafacc6ca2f664f"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+        "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "f56343c46438b083c2c22b38407c85dbb6ef31fb3d5ef3a5c7cb7c29169c48c7",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": "8f39bb61e462b887ead10a5d228ec673aa85e16b0f0e5a8d422efef372d8a7ba",
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "c6990f1defbea977fcad1f77ebfa0ff627c0a97bdd9ce21497c35345240227a2",
+      "symbolsSha256": "57d2f9eef3a6a092435343a17bff96742ee16cdb14134ae1002b2772f0627e42",
+      "bytes": 455515,
+      "librarySha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1,
+      "streamingByteFrozenControls": 3,
+      "streamingByteConsumerSourceSha256": "ad3ed7ca141860571b355119bb3103956862117a1e436886c104353546db02a8",
+      "streamingByteAdmissionCancellationSurvivorsPassed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "c6990f1defbea977fcad1f77ebfa0ff627c0a97bdd9ce21497c35345240227a2",
+      "librarySha256": "53fb04e33b5778b3cf95e479f1cedfa3254803a5765ffee510848f1da8976e43",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "streamingByteFrozenControls": 3,
+      "streamingByteConsumerSourceSha256": "ad3ed7ca141860571b355119bb3103956862117a1e436886c104353546db02a8",
+      "streamingByteAdmissionCancellationSurvivorsPassed": true
+    },
+    "sameActualPackageBothOS": true,
+    "threeNamedStorageSuitesIncluded": true
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "explicitStackArrayBytes": 4048,
+    "workspaceAdmissionBytes": 4096,
+    "retainedOperationScratchBytes": 0,
+    "physicalJitFrameMeasured": false,
+    "nativePeakRemeasured": false
+  },
+  "workflow": {
+    "coreAndEmbeddedBuildsEachOs": 1,
+    "newTests": 0,
+    "newPublicHarnessNativeFixtureBuilds": 0,
+    "shortScreens": 1,
+    "independentConfirmations": 3,
+    "fullAndPackageMilestones": 1,
+    "packCalls": 1
+  },
+  "reuse": {
+    "baseProvider": "benchmarks/shared-resize-filter-weights-evidence.json",
+    "baseUnchangedMaterialResizeCosts": 50,
+    "crossPrefixProvider": "benchmarks/cross-bicubic-output-prefix-evidence.json",
+    "crossPrefixUnchangedMaterialResizeCosts": 14,
+    "generatedProvider": "benchmarks/generated-bicubic-shared-execution-evidence.json",
+    "generatedUnchangedMaterialResizeCosts": 5,
+    "deepWordProvider": "benchmarks/deep-word-vector-weights-evidence.json",
+    "deepWordUnchangedMaterialResizeCosts": 1,
+    "unaffectedMaterialResizeCosts": 70,
+    "disabledIsaEvidenceReused": true,
+    "allOtherProductionSourcesUnchanged": true,
+    "callerAndWordJitVerified": true,
+    "scope": "Only noninlined byte Streaming paired weights change. Shared Streaming2579B and public root9388B remain instruction/block exact after declared address/methodnumber/GScookie normalization on all3independent confirmations; word/prepared/cache and other70resizecosts source-valid. No new grid or release-wide refresh."
+  },
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "STA869",
+    "productionChanged": false,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "sourcePins": {
+      "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "a3f319f102a973e5699d53952d40560ff678492d80aefd4c43ebe5d9a0a3e355",
+      "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+      "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "f56343c46438b083c2c22b38407c85dbb6ef31fb3d5ef3a5c7cb7c29169c48c7",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61"
+    },
+    "producers": {
+      "windowsSha256": "ffac070bd6d1baf1fcbdc4ef9e0c0a47d6d8e14bc00b5eaef3ef0468b0ee0b81",
+      "linuxSha256": "2197ce8cb869c21073186a623fb690e92e83e6cbf6991e65376aa136325203af",
+      "actualPackageSha256": "a5e9e6a1fe75b716e8619ef3f451a48ba55b1f9063d92c2bea1b44483504156c"
+    },
+    "reference": "tmp/cmp853-candidate-Tight16x8_8-confirm-receipt.json",
+    "currentCost": {
+      "managedUs": 511.0301438636364,
+      "nativeUs": 451.574525390625,
+      "ratio": 1.1316629152664903,
+      "lower": 1.1250224733489547,
+      "upper": 1.1363493096227155,
+      "allocatedBytes": 113,
+      "status": "gap",
+      "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+      "receipt": "tmp/cmp853-candidate-Tight16x8_8-confirm-receipt.json",
+      "observation": "tmp/cmp853-candidate-Tight16x8_8-confirm-observation.json",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "caseId": "Tight16x8_8",
+      "depth": 8,
+      "width": 513,
+      "height": 259,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "nativeOutputSha256": "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd",
+      "managedMaxWorkingBytes": 536076,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 536076 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "purpose": "First actual current qualified-package attribution of existing513x259RGBA8->16x8bicubic at input+output+4KiB. Reuse unchanged source-valid511.03/zimg451.57us upper1.136gap, about59.46us excess. Streaming executor has129/130tap supports and bounded output-row groups; establish actual filtering/coefficient/preparation/repair costs before a coherent schedule change. Do not infer source loop cost from names or sample locations alone. Native graph/scratch explicitly prepared; managed setup and independent output/cleanup remain complete. One2secondCPU0operation/CPU1sampler, exactrational/native/input/owner/idle-v2gates, instrumentedelapseddiscarded. Zero builds/newworkloads/statisticalcaptures/qualification/package repeat; restored actual CRPpackage verified.",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "instrumentedElapsedDiscarded": true,
+    "allBuilds": 0,
+    "sampleLocations": 1995,
+    "methods": [
+      [
+        "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64> [Lokad.Image] Lokad.Image.Internal.StreamingBicubicResize::FilterRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        1635
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.StreamingBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        348
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.StreamingBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        4
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        2
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.StreamingBicubicResize::WriteBlock(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,float64,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,float64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        1
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.BicubicMath::PrepareStreamingRows(int32,int32,int32,float64,valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        1
+      ]
+    ],
+    "raw": {
+      "file": "streaming-byte-current-attribution.tar.xz",
+      "sha256": "fb08f4134fb750a40df803a37ff2882c706fab6820f630a04a97b00505803a33",
+      "bytes": 94068,
+      "members": 20,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "finding": "Actual StreamingByte FilterRow460B has1635of1995sample locations, TryApply348, TryWrite4. JIT constructs paired horizontal weights through12moves/unpacks/inserts before zmm insertion for every tap pair. Source uses eight-scalar Vector512.Create; the same lane identity can use two broadcasts and one half insert, already qualified in the separate DeepWord path. These locations/inlining/skid are not component times or a removable fraction.",
+    "next": "One scoped paired-weight expression change in StreamingByte, preserving arithmetic/tap order/certificates/repair/4KiB/output owners and portable rejection guards. Measure all existing affected Streaming controls at original standalone boundaries, starting Tight16x8_8; no newgrid or broadqualification before reconciliation."
+  },
+  "next": "Stop all3confirmed Stream byte passes. Current73standalonecontrols62pass/3gaps/8uncertain; remaining resize excesses bilinearDown8about16.63us,bicubicTightDown8about7.73us,Wide8about2.47us. Existing-canvas text has a scoped24.58usgap while complete one-shot/eight-draw pipelines pass and stage comparisons retain preparation differences. Stored-wordPNGpostGC4scope96.49usremains open; naturalGC64passes and discarded direct-stream prototype supplies no CPUgain. Select next justified preparation/reuse redesign or resolve material uncertainty, preserving boundaries and all289requiredpaths; publication postponed."
+}

@@ -561,6 +561,8 @@ internal static class CooperativeMemoryConsumer
     {
         foreach (var (depth, width, height, expectedHash) in new[]
         {
+            (8, 16, 8, "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd"),
+            (8, 8, 4, "5ebc1d60ad1c4bcaeeb105d2f5f83285b0dbac88ebbc83cb2f04732ee134b4bc"),
             (8, 8, 17, "481df76194da6537d6ecfbc24f37c842ae750b7752791f35d40d43454532eee1"),
             (16, 8, 17, "9f1aaa6ef72a650982022d0a36563789f9ae50d79a094f97141af8ed50051b6c"),
             (8, 4, 9, "df49ddc41185b3feaa2a0fc283fb3cd2432e463aa4aa7294a041cd76036effd1"),

@@ -2142,7 +2142,20 @@ def render():
     assert deep_word['cases']['Tight32x16_16']['status'] == 'uncertain'
     assert deep_word['comparison']['Tight32x16_16']['normalizedGainSeparated']
     assert all(v['rawGainSeparated'] for v in deep_word['comparison']['Tight32x16_16']['views'].values())
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases']}
+    streaming_weights = json.loads((ROOT / 'benchmarks/streaming-byte-vector-weights-evidence.json').read_text(encoding='utf-8'))
+    assert streaming_weights['productionAccepted'] and streaming_weights['allAffectedPerformanceReconciled']
+    assert set(streaming_weights['cases']) == {'Tight16x8_8', 'Tight8x17_8', 'Tight8x4_8'}
+    assert streaming_weights['sourceProof']['callerAndWordPathsUnchanged']
+    assert streaming_weights['raw']['mirrored'] and streaming_weights['raw']['allMembersVerified']
+    for case in streaming_weights['cases'].values():
+        assert case['status'] == 'pass' and case['upper'] <= 1 and case['managedExact']
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12 and case['allActualsRetained']
+        assert case['allocatedBytes'] == 113
+        assert case['librarySha256'] == streaming_weights['qualification']['actualPackage']['librarySha256']
+    sw_primary = streaming_weights['cases']['Tight16x8_8']
+    sw_seventeen = streaming_weights['cases']['Tight8x17_8']
+    sw_four = streaming_weights['cases']['Tight8x4_8']
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *resize_weights['bilinear'].values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
     rows = apply_current_resize_weights(rows, resize_weights, cross_prefix, generated_rows, deep_word)
@@ -2317,6 +2330,11 @@ def render():
     assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6497
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    current_build_qualification = streaming_weights['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6497
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert all(q['actualConsumerPassed'] and q['streamingByteFrozenControls'] == 3
+               for q in (current_build_qualification['actualPackage'], current_build_qualification['samePackageLinux']))
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2429,8 +2447,16 @@ Current scope and remaining work:
   upper.998 passes while its standalone view stays uncertain. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
   stay separate. No historical stage sums or favorable repeats.
-  Next substantial distinct-boundary attribution is stored-word PNG post-GC;
-  remaining resize gaps include byte16×8(59.46µs) and byte8×17(39.95µs).
+  [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the
+  16×8 and 8×17 gaps: {sw_primary['managedUs']:.2f}/prepared-zimg{sw_primary['nativeUs']:.2f}µs,
+  upper{sw_primary['upper']:.3f}, and {sw_seventeen['managedUs']:.2f}/{sw_seventeen['nativeUs']:.2f}µs,
+  upper{sw_seventeen['upper']:.3f};113B/op each. Raw47.05/88.49µs savings and
+  15.24%/17.96%normalized gains retain separate native shifts/all actuals.
+  Affected8×4 also passes,upper{sw_four['upper']:.3f}. Exact pixels/4KiB/owners
+  stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
+  Remaining resize gaps:bilinearDown8(16.63µs),TightDown8(7.73µs),Wide8(2.47µs).
+  [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
+  without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
   passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)

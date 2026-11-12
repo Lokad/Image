@@ -87,8 +87,8 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73standalone controls, **60pass /
-  5gaps / 8uncertain**.
+- **Resizing:** across73standalone controls, **62pass /
+  3gaps / 8uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: 793.42/zimg875.67µs,
   upper0.913, and same-height
@@ -110,8 +110,16 @@ Current scope and remaining work:
   upper.998 passes while its standalone view stays uncertain. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
   stay separate. No historical stage sums or favorable repeats.
-  Next substantial distinct-boundary attribution is stored-word PNG post-GC;
-  remaining resize gaps include byte16×8(59.46µs) and byte8×17(39.95µs).
+  [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the
+  16×8 and 8×17 gaps: 463.98/prepared-zimg483.72µs,
+  upper0.970, and 457.40/516.75µs,
+  upper0.890;113B/op each. Raw47.05/88.49µs savings and
+  15.24%/17.96%normalized gains retain separate native shifts/all actuals.
+  Affected8×4 also passes,upper0.577. Exact pixels/4KiB/owners
+  stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
+  Remaining resize gaps:bilinearDown8(16.63µs),TightDown8(7.73µs),Wide8(2.47µs).
+  [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
+  without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
   passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)

@@ -133,7 +133,7 @@ internal static class StreamingBicubicResize
             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
             var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
             var w0 = weights[t]; var w1 = weights[t + 1];
-            var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
+            var products = Avx512F.Multiply(values, Avx512F.InsertVector256(Vector512.Create(w0), Vector256.Create(w1), 1));
             sum = Avx.Add(sum, products.GetLower());
             sum = Avx.Add(sum, products.GetUpper());
         }
