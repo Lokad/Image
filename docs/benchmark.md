@@ -102,8 +102,8 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73standalone controls, **65pass /
-  0 gaps / 8uncertain**.
+- **Resizing:** across73named warm controls, **66pass /
+  0 gaps / 7uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: 793.42/zimg875.67µs,
   upper0.913, and same-height
@@ -126,6 +126,12 @@ Current scope and remaining work:
   its6512checks/SAMEpackage and new word consumer pass bothOSes;
   latest PNG milestone6517checks/SAMEpackage requalifies unchanged resize paths.
   Superseded DeepWord costs/attribution stay linked history.
+  [Horizontal enlargement confidence](../benchmarks/RESIZE-HORIZONTAL-CONFIDENCE.md)
+  passes/stops at1431.47/prepared-zimg1514.24µs,
+  upper0.953,112directB/op. Twelve alternating64-operation
+  pairs retain every actual/native bracket and exact pixels/owners. Original
+  standalone uncertainty remains separately visible; no production gain or
+  broader conditioning claim. Zero builds/broad/package repeats.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
   upper.998 passes while its standalone view stays uncertain. The existing

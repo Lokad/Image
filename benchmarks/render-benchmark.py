@@ -2097,7 +2097,7 @@ def render():
     mixed_confidence = json.loads((ROOT / 'benchmarks/resize-mixed-word-confidence-evidence.json').read_text(encoding='utf-8'))
     assert mixed_confidence['measurementAccepted'] and not mixed_confidence['productionChanged']
     assert mixed_confidence['allBuilds'] == mixed_confidence['broadOrPackageRepeats'] == 0
-    assert mixed_confidence['producers']['windowsSha256'] == png_stored['baselineWindowsSha256']
+    assert mixed_confidence['producers']['windowsSha256'] == mixed_confidence['qualification']['actualPackage']['librarySha256']
     assert mixed_confidence['raw']['mirrored'] and mixed_confidence['raw']['allMembersVerified']
     assert set(mixed_confidence['cases']) == {'TightMixed16'}
     mixed_word_adjacent = mixed_confidence['cases']['TightMixed16']
@@ -2128,11 +2128,25 @@ def render():
     assert deep_cost['managedRationalReferenceExact'] and deep_cost['managedQualifiedOriginalPixelsExact']
     assert deep_cost['allOriginalGatesPassed'] and deep_cost['quietGuardsPassed']
     assert deep_cost['allActualsRetained'] and deep_cost['independentOwnedOutput']
+    horizontal_confidence = json.loads((ROOT / 'benchmarks/resize-horizontal-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert horizontal_confidence['measurementAccepted'] and not horizontal_confidence['productionChanged']
+    assert not horizontal_confidence['productionSpeedupClaim']
+    assert horizontal_confidence['allBuilds'] == horizontal_confidence['broadOrPackageRepeats'] == 0
+    assert horizontal_confidence['producers']['windowsSha256'] == horizontal_confidence['qualification']['actualPackage']['librarySha256']
+    assert horizontal_confidence['qualification']['fullChecksEachOs'] == 6517
+    assert horizontal_confidence['raw']['mirrored'] and horizontal_confidence['raw']['allMembersVerified']
+    assert set(horizontal_confidence['cases']) == {'HorizontalUp8'}
+    horizontal_cost = horizontal_confidence['cases']['HorizontalUp8']
+    assert horizontal_cost['status'] == 'pass' and horizontal_cost['upper'] <= 1
+    assert horizontal_cost['actualIterations'] == 12 and horizontal_cost['operationsPerSubject'] == 64
+    assert horizontal_cost['allActualsRetained'] and horizontal_cost['allOriginalGatesPassed'] and horizontal_cost['quietGuardsPassed']
+    assert horizontal_cost['managedRationalReferenceExact'] and horizontal_cost['managedQualifiedOriginalPixelsExact']
+    assert horizontal_cost['sourceUnchanged'] and horizontal_cost['independentOwnedOutput']
     current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases'], **word_views['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases'], **word_views['cases'], **horizontal_confidence['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    assert resize_status_counts == word_views['currentResizeStatusCounts']
+    assert resize_status_counts == horizontal_confidence['currentResizeStatusCounts'] == {'pass': 66, 'gap': 0, 'uncertain': 7}
     resize_case_owners = {case: (owner, view)
                           for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'), (word_views, 'deep'))
                           for case in owner['cases']}
@@ -2450,7 +2464,7 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73standalone controls, **{resize_status_counts['pass']}pass /
+- **Resizing:** across73named warm controls, **{resize_status_counts['pass']}pass /
   {resize_status_counts['gap']} gaps / {resize_status_counts['uncertain']}uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: {cross_prefix['cases']['TightCross8']['managedUs']:.2f}/zimg{cross_prefix['cases']['TightCross8']['nativeUs']:.2f}µs,
@@ -2474,6 +2488,12 @@ Current scope and remaining work:
   its6512checks/SAMEpackage and new word consumer pass bothOSes;
   latest PNG milestone6517checks/SAMEpackage requalifies unchanged resize paths.
   Superseded DeepWord costs/attribution stay linked history.
+  [Horizontal enlargement confidence](../benchmarks/RESIZE-HORIZONTAL-CONFIDENCE.md)
+  passes/stops at{horizontal_cost['managedUs']:.2f}/prepared-zimg{horizontal_cost['nativeUs']:.2f}µs,
+  upper{horizontal_cost['upper']:.3f},112directB/op. Twelve alternating64-operation
+  pairs retain every actual/native bracket and exact pixels/owners. Original
+  standalone uncertainty remains separately visible; no production gain or
+  broader conditioning claim. Zero builds/broad/package repeats.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
   upper.998 passes while its standalone view stays uncertain. The existing

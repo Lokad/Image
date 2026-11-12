@@ -1,0 +1,158 @@
+{
+  "project": "Lokad.Image",
+  "stage": "HAC900",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "allBuilds": 0,
+  "broadOrPackageRepeats": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "e4927a8eacfbc26f4d18527da3e46d2e13e5baef43de58c6b9117d5386c11a38",
+    "linuxSha256": "9a4ee933cefd44e1a6cb7d8cb3e5326536c53c89b6ce8b14d12a456010e05fb3",
+    "timedArtifactSha256": "e4927a8eacfbc26f4d18527da3e46d2e13e5baef43de58c6b9117d5386c11a38",
+    "actualPackageSha256": "ef218829ea19644bb5badb3e39d064d81defc87b96a147b0d3c1184108bcc82e",
+    "actualPackageBytes": 456416,
+    "symbolsSha256": "86bbac5950c5b2c337f733ee3f53adfee1bdd762554a3ee99cbe972e4e4e371c",
+    "sources": {
+      "src/Lokad.Image/Internal/PngDeflater.cs": "a798f18bfd976d2069c748fecd0aef16e4910064a4aded8cbb9835c4f46f513d",
+      "tests/Lokad.Image.Tests/PngDeflaterTests.cs": "2e4f1bcc4e96ad1608e9127d31fb9b3f7ce3111a44a630466d3e573f22ebd4d5"
+    }
+  },
+  "cases": {
+    "HorizontalUp8": {
+      "managedUs": 1431.4706692708332,
+      "nativeUs": 1514.2418645833332,
+      "ratio": 0.9453381938193369,
+      "lower": 0.9349547063527951,
+      "upper": 0.9533721845196654,
+      "allocatedBytes": 112,
+      "managedAllocatedBytesEachPair": [
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112
+      ],
+      "status": "pass",
+      "librarySha256": "e4927a8eacfbc26f4d18527da3e46d2e13e5baef43de58c6b9117d5386c11a38",
+      "actualIterations": 12,
+      "operationsPerSubject": 64,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBracketMeansUs": [
+        1514.8941822916668,
+        1518.1813190104167,
+        1514.2418645833332
+      ],
+      "receipt": "tmp/hac900-horizontalup8-adjacent-receipt.json",
+      "observation": "tmp/hac900-horizontalup8-adjacent.json",
+      "caseId": "HorizontalUp8",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 1027,
+      "outputHeight": 259,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724",
+      "nativeOutputSha256": "b60875ade7f8b211bac8c6e3c10ef31dfc0274f371646c3e1e0c2508f3cd8fa1",
+      "managedMaxWorkingBytes": null,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 1027x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    }
+  },
+  "qualification": {
+    "reusedFrom": "benchmarks/png-stored-forwarding-evidence.json",
+    "fullChecksEachOs": 6517,
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "ef218829ea19644bb5badb3e39d064d81defc87b96a147b0d3c1184108bcc82e",
+      "symbolsSha256": "86bbac5950c5b2c337f733ee3f53adfee1bdd762554a3ee99cbe972e4e4e371c",
+      "bytes": 456416,
+      "librarySha256": "e4927a8eacfbc26f4d18527da3e46d2e13e5baef43de58c6b9117d5386c11a38",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "deepWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    }
+  },
+  "storage": {
+    "allocationCounter": "Direct complete-operation GC counter; no saving inferred from114B BDN history.",
+    "retainedOperationScratchBytes": 0,
+    "localWorkspaceBytes": 4096,
+    "outputPayloadBytes": 1063972,
+    "changedOwnedCapacityBytes": 0,
+    "changedRetainedCapacityBytes": 0,
+    "physicalNativeJitAndPoolPeaksMeasured": false
+  },
+  "reason": "Resolve one existing current uncertainty before assuming optimization: horizontal byte enlargement1486.10/native1518.51us range.854-1.025. No prior adjacent capture for this case; existing byte-mixed and bilinear-Up16 captures are reused, not repeated. One twelve-pair counterbalanced comparison separates managed/reference clock variation; all actuals/adverse results and original standalone uncertainty remain. No new case, input, filter, depth, quality or numerical policy.",
+  "currentResizeStatusCounts": {
+    "pass": 66,
+    "gap": 0,
+    "uncertain": 7
+  },
+  "next": "Stop confirmed HorizontalUp8 in its current64operationwarmconditioning; originalstandaloneuncertainty remainsdiagnostic, no codegain inferred. Current73namedcontrolshave66passes/zero demonstratedgaps/sevenuncertainties. Reuseunchangedqualifiedbuild/evidence; continueindependentmaterialworkacross289requiredpaths, publicationpostponed.",
+  "priorStandalone": {
+    "managedUs": 1486.1044936342591,
+    "nativeUs": 1518.5114479166668,
+    "ratio": 0.9786587356144937,
+    "lower": 0.8537523149936784,
+    "upper": 1.0253557918700962,
+    "status": "uncertain",
+    "allocatedBytes": 114,
+    "librarySha256": "ffac070bd6d1baf1fcbdc4ef9e0c0a47d6d8e14bc00b5eaef3ef0468b0ee0b81",
+    "observation": "tmp/crp867-candidate-HorizontalUp8-confirm-observation.json"
+  },
+  "raw": {
+    "file": "resize-horizontal-confidence.tar.xz",
+    "sha256": "28fabd85d6751b402fafb87a301f688c9e127d9e50b629ac519437e84ac8a538",
+    "bytes": 36120,
+    "members": 19,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "png-stored-forwarding-qualified.tar.xz",
+        "sha256": "0cbf99026e7bf67e311d197d7ada66714f972f8bb5d4311af8eae8dc5ffa7165"
+      },
+      {
+        "file": "shared-resize-filter-weights-qualified.tar.xz",
+        "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+      },
+      {
+        "file": "resize-current-adjacent-confidence.tar.xz",
+        "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+      },
+      {
+        "file": "cross-bicubic-output-prefix-qualified.tar.xz",
+        "sha256": "287d74ff255a4c51efb454f0e39a11f9dd6fef6fc23ae8be7e0b62d7cc7f6239"
+      }
+    ]
+  }
+}
