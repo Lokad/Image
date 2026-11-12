@@ -143,6 +143,30 @@ public sealed class Crc32Tests
         }
     }
 
+    [Fact]
+    public void ChunkStridesAndNonperiodicTailsMatchTheIndependentPolynomial()
+    {
+        var bytes = new byte[32 * 128 + 127 + 64];
+        uint state = 0x9e3779b9;
+        for (var i = 0; i < bytes.Length; i++)
+        {
+            state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+            bytes[i] = unchecked((byte)state);
+        }
+        var original = bytes.ToArray();
+        foreach (var type in new[] { "IDAT"u8.ToArray(), "tEXt"u8.ToArray() })
+        foreach (var offset in new[] { 1, 31 })
+        for (var groups = 1; groups <= 32; groups++)
+        foreach (var tail in new[] { 0, 1, 15, 63, 64, 65, 127 })
+        {
+            var payload = bytes.AsSpan(offset, groups * 128 + tail);
+            var joined = new byte[type.Length + payload.Length];
+            type.CopyTo(joined, 0); payload.CopyTo(joined.AsSpan(type.Length));
+            Assert.Equal(Bitwise(joined), Crc32.ComputeChunk(type, payload));
+        }
+        Assert.Equal(original, bytes);
+    }
+
     private static uint Bitwise(ReadOnlySpan<byte> bytes)
     {
         // Independent literal PNG polynomial recurrence, with no production tables.

@@ -1,0 +1,2808 @@
+{
+  "project": "Lokad.Image",
+  "stage": "IWC878",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "productionAccepted": false,
+  "qualificationPending": false,
+  "allAffectedCostsCaptured": true,
+  "allAffectedPerformanceReconciled": false,
+  "cases": {
+    "EncodeSmallest8": {
+      "managedUs": 16871.42075,
+      "nativeUs": 17236.6573125,
+      "ratio": 0.9788104760755943,
+      "lower": 0.9514938234116552,
+      "upper": 0.9832009260207393,
+      "allocatedBytes": 816316,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeSmallest8",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeSmallest8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeSmallest8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        17007201.75,
+        16866032.75,
+        16882748,
+        16839292.25,
+        16879660.75,
+        16874936.25,
+        16890675,
+        16893609.5,
+        16860299.25,
+        16869603.25,
+        16868248.75,
+        16860797.5
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA8, one-shot SmallestSize9 / native9",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "nativePacketSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "packetBytes": 210973,
+      "nativePacketBytes": 210973,
+      "independentOwnedOutput": true
+    },
+    "EncodeSmallest16": {
+      "managedUs": 21564.65535416667,
+      "nativeUs": 20897.692125,
+      "ratio": 1.0319156405012195,
+      "lower": 0.9211997739699689,
+      "upper": 1.0726811482402259,
+      "allocatedBytes": 2433524,
+      "status": "uncertain",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeSmallest16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeSmallest16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeSmallest16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        21859582.25,
+        21726861.25,
+        21726185.25,
+        21758689,
+        21379741.75,
+        20605023.75,
+        20547023.25,
+        20713428,
+        22077458.25,
+        22003221,
+        22231619,
+        22147226.5
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot SmallestSize9 / native9",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "nativePacketSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "packetBytes": 963202,
+      "nativePacketBytes": 963202,
+      "independentOwnedOutput": true
+    },
+    "EncodeFast8": {
+      "managedUs": 4222.289340909091,
+      "nativeUs": 4364.633026041667,
+      "ratio": 0.96738702102026,
+      "lower": 0.9454668230307364,
+      "upper": 0.9954318017077384,
+      "allocatedBytes": 816780,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeFast8",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeFast8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeFast8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        4365312.25,
+        4226830,
+        4231166.5,
+        4216747.5,
+        4227741.25,
+        4211724.75,
+        4217065.25,
+        4228432.5,
+        4221462,
+        4220633.25,
+        4220973.75,
+        4222571
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA8, one-shot Fastest1 / native1",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "nativePacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828,
+      "nativePacketBytes": 236828,
+      "independentOwnedOutput": true
+    },
+    "EncodeFast16": {
+      "managedUs": 18390.052958333334,
+      "nativeUs": 20136.741145833334,
+      "ratio": 0.9132586462302803,
+      "lower": 0.8642058476863331,
+      "upper": 0.961856561733302,
+      "allocatedBytes": 2433524,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeFast16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeFast16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeFast16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        19264735.75,
+        19204462,
+        19054347,
+        18851577.5,
+        17991292.5,
+        17737988.75,
+        17719518.25,
+        17701854,
+        17727510.25,
+        17732100,
+        18712840,
+        18982681
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot Fastest1 / native1",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "packetBytes": 968216,
+      "nativePacketBytes": 968216,
+      "independentOwnedOutput": true
+    },
+    "EncodeFastCancelable16": {
+      "managedUs": 18129.193916666667,
+      "nativeUs": 18595.388291666666,
+      "ratio": 0.9749295702951833,
+      "lower": 0.9577211477578047,
+      "upper": 0.9865886881914665,
+      "allocatedBytes": 2433524,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeFastCancelable16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeFastCancelable16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeFastCancelable16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        18102573,
+        17977345.75,
+        17975756,
+        17995315.5,
+        17977961.75,
+        18199607.25,
+        18231821.25,
+        18232677.5,
+        18251516,
+        18192604.25,
+        18198999,
+        18214344.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Managed receives a live cancelable token; token-source creation and cancellation correctness checks are outside timing. Native has no equivalent caller token. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot Fastest1, live cancelable token",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "packetBytes": 968216,
+      "nativePacketBytes": 968216,
+      "independentOwnedOutput": true
+    },
+    "EncodeFastForward16": {
+      "managedUs": 19177.43375,
+      "nativeUs": 20126.16327083333,
+      "ratio": 0.952860885203678,
+      "lower": 0.9430072114455983,
+      "upper": 0.9655472027430579,
+      "allocatedBytes": 2433556,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeFastForward16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeFastForward16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeFastForward16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        19299071.5,
+        19209621.25,
+        19181694,
+        19378006.25,
+        19170732.25,
+        19161443.25,
+        19161939,
+        19167066.75,
+        19156388,
+        19153806.75,
+        19229458.75,
+        19182350
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Managed forward-only wrapper creation/disposal and span callbacks remain timed; Length/Position/Seek unavailable, caller remains open. Native independent packet acquisition needs no seeking or equivalent wrapper. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot Fastest1, forward-only output",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "packetBytes": 968216,
+      "nativePacketBytes": 968216,
+      "independentOwnedOutput": true
+    },
+    "EncodeGray8": {
+      "managedUs": 2034.1338863636365,
+      "nativeUs": 1983.2681510416667,
+      "ratio": 1.025647432141364,
+      "lower": 1.0024957970952402,
+      "upper": 1.0592365863218378,
+      "allocatedBytes": 547228,
+      "status": "gap",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeGray8",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeGray8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeGray8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        2171615.75,
+        2038306.5,
+        2040464.75,
+        2030975.5,
+        2026829.25,
+        2036867,
+        2033479.25,
+        2033419,
+        2034097.5,
+        2033041.25,
+        2035332,
+        2032825.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color0 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG grayscale8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "nativePacketSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "packetBytes": 72586,
+      "nativePacketBytes": 72586,
+      "independentOwnedOutput": true
+    },
+    "EncodeRgb8": {
+      "managedUs": 9508.030550000001,
+      "nativeUs": 9783.11721875,
+      "ratio": 0.9718814910831511,
+      "lower": 0.9613701991473586,
+      "upper": 0.9862987603046356,
+      "allocatedBytes": 815748,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeRgb8",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeRgb8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeRgb8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        9670237.5,
+        9565974.75,
+        9521757.75,
+        9497195.5,
+        9500595.75,
+        9516515,
+        9493069.25,
+        9512811.75,
+        9520123,
+        9500813.75,
+        9500943.75,
+        9516555
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color2 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGB8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+      "nativePacketSha256": "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+      "packetBytes": 168729,
+      "nativePacketBytes": 168729,
+      "independentOwnedOutput": true
+    },
+    "EncodeGrayAlpha8": {
+      "managedUs": 4559.339477272728,
+      "nativeUs": 4734.495989583333,
+      "ratio": 0.9630041903729608,
+      "lower": 0.9165381743428997,
+      "upper": 1.020439467486458,
+      "allocatedBytes": 548196,
+      "status": "uncertain",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeGrayAlpha8",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeGrayAlpha8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeGrayAlpha8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        4762256.25,
+        4579679.75,
+        4552911.75,
+        4569156.5,
+        4575508.5,
+        4557346,
+        4557376,
+        4549952.25,
+        4581755.5,
+        4532873.75,
+        4541845,
+        4554521.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "a2a2e4edd7a51693352b26525a6e8bf96bb9d74047c8ffc7b207f11881bc0e5e",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color4 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native fresh gray-alpha frame allocation, direct red/alpha packing, endian conversion and disposal timed; no SWS context or retained workspace. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG gray-alpha8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "nativePacketSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "packetBytes": 120366,
+      "nativePacketBytes": 120366,
+      "independentOwnedOutput": true
+    },
+    "Encode8": {
+      "managedUs": 16776.044477272728,
+      "nativeUs": 17264.8078125,
+      "ratio": 0.9716901954232354,
+      "lower": 0.9665693289819627,
+      "upper": 0.9771487554861056,
+      "allocatedBytes": 816316,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "Encode8",
+      "receipt": "tmp/iwc878-compressed-candidate-Encode8-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-Encode8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        16913999,
+        16733295.25,
+        16720128,
+        16720443.25,
+        16794162.5,
+        16806263.25,
+        16815878,
+        16805672.25,
+        16790241.5,
+        16781721,
+        16779370,
+        16789520.5
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "nativePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973,
+      "nativePacketBytes": 210973,
+      "independentOwnedOutput": true
+    },
+    "Encode16": {
+      "managedUs": 21942.9795625,
+      "nativeUs": 22164.934458333333,
+      "ratio": 0.9899862146558307,
+      "lower": 0.9735623456429325,
+      "upper": 1.000481499203302,
+      "allocatedBytes": 2433524,
+      "status": "uncertain",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "Encode16",
+      "receipt": "tmp/iwc878-compressed-candidate-Encode16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-Encode16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        22023713,
+        21946786.5,
+        21968374.5,
+        21924145,
+        21904823.25,
+        21840072.5,
+        21885857,
+        21882141.25,
+        22055281,
+        22053626,
+        21935146.5,
+        21896029.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "nativePacketSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "packetBytes": 963202,
+      "nativePacketBytes": 963202,
+      "independentOwnedOutput": true
+    },
+    "EncodeRgb16": {
+      "managedUs": 16692.706295454544,
+      "nativeUs": 17259.1029375,
+      "ratio": 0.9671827299427708,
+      "lower": 0.955628208858388,
+      "upper": 0.9795005027557147,
+      "allocatedBytes": 2427356,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeRgb16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeRgb16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeRgb16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        16932684.25,
+        16743530.25,
+        16749406.75,
+        16758370.25,
+        16675807.75,
+        16658777,
+        16595040.25,
+        16672230,
+        16675787.5,
+        16699346,
+        16685560,
+        16706023.5
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color2 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Native identical single-thread RGB conversion context/options/initialization and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGB16, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "nativePacketSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "packetBytes": 739472,
+      "nativePacketBytes": 739472,
+      "independentOwnedOutput": true
+    },
+    "EncodeGray16": {
+      "managedUs": 5177.099045454546,
+      "nativeUs": 5751.457828125,
+      "ratio": 0.9001368348974407,
+      "lower": 0.8842189852792788,
+      "upper": 0.9171767385466495,
+      "allocatedBytes": 818604,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeGray16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeGray16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeGray16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        5286897.5,
+        5153232.75,
+        5138104.75,
+        5155967,
+        5137371.25,
+        5165346.25,
+        5161793.25,
+        5185526.75,
+        5197224.25,
+        5241811.75,
+        5208551.5,
+        5203283.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "346f1646546bce543afb6e800a81610727af1e5f0cb39eaa123f1f77b584ccd1",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color0 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG grayscale16, one-shot Optimal6 / native6, red-plane reference",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+      "nativePacketSha256": "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+      "packetBytes": 265433,
+      "nativePacketBytes": 265433,
+      "independentOwnedOutput": true
+    },
+    "EncodeGrayAlpha16": {
+      "managedUs": 10953.681454545454,
+      "nativeUs": 11302.03753125,
+      "ratio": 0.9691775862766917,
+      "lower": 0.9578976896530974,
+      "upper": 0.9830220497916599,
+      "allocatedBytes": 1356764,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeGrayAlpha16",
+      "receipt": "tmp/iwc878-compressed-candidate-EncodeGrayAlpha16-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-EncodeGrayAlpha16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        11142924,
+        10936529,
+        10963960.75,
+        11012822,
+        11032006.25,
+        10971592,
+        10886223,
+        10920284.5,
+        10951203.75,
+        10941309,
+        10915640,
+        10959090.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "9d0ed2b90676c863eb54a8adfca3d0d9e975af34b1986bc26308ea980e883280",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color4 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Native fresh gray-alpha frame allocation, direct red/alpha packing, endian conversion and disposal timed; no SWS context or retained workspace. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG gray-alpha16, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+      "nativePacketSha256": "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+      "packetBytes": 506887,
+      "nativePacketBytes": 506887,
+      "independentOwnedOutput": true
+    },
+    "Png8AsyncNonSeekable": {
+      "managedUs": 16752.339863636364,
+      "nativeUs": 17517.33916666667,
+      "ratio": 0.9563290237317547,
+      "lower": 0.9511989782080983,
+      "upper": 0.9619300187110468,
+      "allocatedBytes": 878076,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "Png8AsyncNonSeekable",
+      "receipt": "tmp/iwc878-compressed-candidate-Png8AsyncNonSeekable-confirm-receipt.json",
+      "observation": "tmp/iwc878-compressed-candidate-Png8AsyncNonSeekable-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        16918509.75,
+        16722029.75,
+        16796835.5,
+        16763793.25,
+        16758895.75,
+        16757774,
+        16743264.5,
+        16768630.5,
+        16710732.75,
+        16756752.5,
+        16763031.75,
+        16734190.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Fresh native codec/options/zlib and packet wrapper preparation/disposal also timed. Both sources are borrowed resident frames; no codec state survives an operation. Managed default Optimal maps to level6/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet byte equality. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, source preparation/hashing and validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "label": "PNG RGBA8 async, one-shot Optimal6, nonseekable output",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "nativePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973,
+      "nativePacketBytes": 210973,
+      "independentOwnedOutput": true
+    },
+    "EncodeNoCompression8": {
+      "managedUs": 58.20246590909091,
+      "nativeUs": 537.1129739583333,
+      "ratio": 0.10836168316724738,
+      "lower": 0.09884990449245228,
+      "upper": 0.12306355801488118,
+      "allocatedBytes": 609708,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeNoCompression8",
+      "receipt": "tmp/iwc878-fresh-EncodeNoCompression8-confirm-receipt.json",
+      "observation": "tmp/iwc878-fresh-EncodeNoCompression8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        74453,
+        58033,
+        61070,
+        57309.5,
+        57409.5,
+        59417.75,
+        57314.25,
+        57402,
+        60426.75,
+        57284.25,
+        57462.25,
+        57236.75
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 0/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA8, one-shot stored0 / native0",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "c8f17d7b3b3c1aff850539b1be0ee318956a58ec6ce555da332838ed0cc1cd3c",
+      "nativePacketSha256": "c8f17d7b3b3c1aff850539b1be0ee318956a58ec6ce555da332838ed0cc1cd3c",
+      "packetBytes": 533444,
+      "nativePacketBytes": 533444,
+      "independentOwnedOutput": true
+    },
+    "EncodeNoCompression8Retained": {
+      "managedUs": 58.85506818181818,
+      "nativeUs": 190.45019498697917,
+      "ratio": 0.30903128340636266,
+      "lower": 0.28248068496409345,
+      "upper": 0.3491336635910202,
+      "allocatedBytes": 609708,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeNoCompression8Retained",
+      "receipt": "tmp/iwc878-candidate-EncodeNoCompression8-confirm-receipt.json",
+      "observation": "tmp/iwc878-candidate-EncodeNoCompression8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        74460.25,
+        58090.5,
+        61222.75,
+        57737.5,
+        57895,
+        59808,
+        57650,
+        57677.5,
+        60857,
+        57772.5,
+        57790,
+        61070
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Warm original RGBA8 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "EncodeNoCompression8Retained",
+      "boundaryKind": "managed-fresh/native-retained",
+      "codecPreparationTimed": false,
+      "referenceCodecRetained": true,
+      "completePacketExact": true,
+      "packetSha256": "c8f17d7b3b3c1aff850539b1be0ee318956a58ec6ce555da332838ed0cc1cd3c",
+      "nativePacketSha256": "c8f17d7b3b3c1aff850539b1be0ee318956a58ec6ce555da332838ed0cc1cd3c",
+      "packetBytes": 533444,
+      "nativePacketBytes": 533444,
+      "independentOwnedOutput": true
+    },
+    "EncodeNoCompression16": {
+      "managedUs": 430.9423409090909,
+      "nativeUs": 1380.2739947916668,
+      "ratio": 0.3122150692798756,
+      "lower": 0.30601906896341263,
+      "upper": 0.32106005768273715,
+      "allocatedBytes": 1147452,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeNoCompression16",
+      "receipt": "tmp/iwc878-fresh-EncodeNoCompression16-confirm-receipt.json",
+      "observation": "tmp/iwc878-fresh-EncodeNoCompression16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        452099,
+        435128.25,
+        429174,
+        432582,
+        429029,
+        430473.75,
+        430984.25,
+        431770.75,
+        428415.5,
+        431643,
+        429965.5,
+        431340
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 0/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGBA16, one-shot stored0 / native0",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+      "nativePacketSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+      "packetBytes": 1066552,
+      "nativePacketBytes": 1066552,
+      "independentOwnedOutput": true
+    },
+    "EncodeNoCompression16Retained": {
+      "managedUs": 429.0021931818182,
+      "nativeUs": 404.6547018229167,
+      "ratio": 1.06016856161369,
+      "lower": 1.0497848573723465,
+      "upper": 1.074352215870331,
+      "allocatedBytes": 1147452,
+      "status": "gap",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodeNoCompression16Retained",
+      "receipt": "tmp/iwc878-candidate-EncodeNoCompression16-confirm-receipt.json",
+      "observation": "tmp/iwc878-candidate-EncodeNoCompression16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        439738,
+        430416.5,
+        431075,
+        428826.5,
+        428974.25,
+        426285.25,
+        429194.5,
+        428431,
+        429537.75,
+        429968.25,
+        427131.5,
+        429405
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Warm original RGBA16 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "EncodeNoCompression16Retained",
+      "boundaryKind": "managed-fresh/native-retained",
+      "codecPreparationTimed": false,
+      "referenceCodecRetained": true,
+      "completePacketExact": true,
+      "packetSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+      "nativePacketSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+      "packetBytes": 1066552,
+      "nativePacketBytes": 1066552,
+      "independentOwnedOutput": true
+    },
+    "EncodePredictable16": {
+      "managedUs": 262117.15185416664,
+      "nativeUs": 387345.08416666667,
+      "ratio": 0.6767018933984534,
+      "lower": 0.5605902258974043,
+      "upper": 0.7131771095018827,
+      "allocatedBytes": 2491852,
+      "status": "pass",
+      "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+      "caseId": "EncodePredictable16",
+      "receipt": "tmp/iwc878-candidate-EncodePredictable16-confirm-receipt.json",
+      "observation": "tmp/iwc878-candidate-EncodePredictable16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        272230388.5,
+        278065580.5,
+        277843978,
+        274952475.75,
+        258922577.5,
+        249084558.5,
+        249533567.25,
+        255262592,
+        257738837.75,
+        257694311,
+        257940372.25,
+        256136766.25
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "14c4457890991939f2798e6897275eb6c0d5dc53d88e9ede82b3657aaf2bfc95",
+      "boundary": "Identical borrowed resident RGBA64LE to a complete fresh independently owned PNG. Managed public EncodePng includes wire-byte packing, bounded probe, row prediction, Deflate and MemoryStream acquisition/growth/disposal; no final snapshot copy. Native pinned FFmpeg n8.1 level6/pred=mixed includes LE-to-BE conversion into a prepared frame and fresh independently owned packet acquisition/encode/release; reusable codec/frame/wrappers. One CPU/thread, optimized JIT, nonconcurrent workstation GC. Preparation, IO, IPC, hashing, correctness decoding and startup excluded. Exact pixels and <2MiB gate; packet identity is observed, not required for this new practical-compression control.",
+      "sourceUnchanged": true,
+      "width": 3000,
+      "height": 3000,
+      "depth": 16,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "label": "PNG predictable RGBA16 3000\u00b2, Optimal6 / mixed6",
+      "boundaryKind": "managed-fresh/native-retained",
+      "codecPreparationTimed": false,
+      "referenceCodecRetained": true,
+      "completePacketExact": true,
+      "packetSha256": "4b1794a8886a95c14a899be3e15418bf198e22fc0e59a3af7d15c33df4c8e205",
+      "nativePacketSha256": "4b1794a8886a95c14a899be3e15418bf198e22fc0e59a3af7d15c33df4c8e205",
+      "packetBytes": 573041,
+      "nativePacketBytes": 573041,
+      "independentOwnedOutput": true
+    }
+  },
+  "warmWord": {
+    "receipt": "tmp/iwc878-word-natural-receipt.json",
+    "data": "tmp/iwc878-word-natural.json",
+    "managedUs": 279.81913932291667,
+    "nativeUs": 404.7373033854167,
+    "ratio": 0.6913598943867426,
+    "lower": 0.6284516730771578,
+    "upper": 0.7283784412019775,
+    "status": "pass",
+    "pairs": 12,
+    "operationsPerSubject": 64,
+    "referenceBracketSamples": 12,
+    "allActualsRetained": true,
+    "directAllocatedBytes": 1147393.875,
+    "naturalGc": true,
+    "librarySha256": "8b7cb7e34a13be731e5e3f2d84195aaabfacbe9c08cc18a0a967079011a00161",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "retainedOperationScratchBytes": 0,
+    "completePacketExact": true,
+    "packetBytes": 1066552,
+    "packetSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+    "generalWarmPassAccepted": false
+  },
+  "comparison": {
+    "EncodeSmallest8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 16909.375275,
+          "candidateUs": 16871.42075,
+          "savedUs": 37.95452499999851,
+          "savedFraction": 0.00224458469829536,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 16909375.275,
+            "StandardError": 9168.223657197874,
+            "Level": 12,
+            "Margin": 43832.475861284074,
+            "Lower": 16865542.799138714,
+            "Upper": 16953207.750861283
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 16871420.75,
+            "StandardError": 4654.225818592663,
+            "Level": 12,
+            "Margin": 21348.43981796627,
+            "Lower": 16850072.310182035,
+            "Upper": 16892769.189817965
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 16936.014916666667,
+          "candidateUs": 16882.75875,
+          "savedUs": 53.25616666666791,
+          "savedFraction": 0.0031445512376266915,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 16936014.916666668,
+            "StandardError": 19482.678039802136,
+            "Level": 12,
+            "Margin": 86444.2398948865,
+            "Lower": 16849570.676771782,
+            "Upper": 17022459.156561553
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 16882758.75,
+            "StandardError": 12084.51422173762,
+            "Level": 12,
+            "Margin": 53618.73990130689,
+            "Lower": 16829140.010098692,
+            "Upper": 16936377.489901308
+          }
+        }
+      },
+      "normalizedGain": 0.0014194823926763078,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.0008262751887010422,
+      "baselineRatioBounds": [
+        0.9680183788155104,
+        0.9897860369097559
+      ],
+      "candidateRatioBounds": [
+        0.9514938234116552,
+        0.9832009260207393
+      ]
+    },
+    "EncodeSmallest16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 20292.318708333332,
+          "candidateUs": 21564.65535416667,
+          "savedUs": -1272.3366458333358,
+          "savedFraction": -0.06270040718958514,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 20292318.708333332,
+            "StandardError": 13714.44989996151,
+            "Level": 12,
+            "Margin": 60850.73082646471,
+            "Lower": 20231467.97750687,
+            "Upper": 20353169.439159796
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21564655.354166668,
+            "StandardError": 176922.74532710057,
+            "Level": 12,
+            "Margin": 785002.5652876371,
+            "Lower": 20779652.78887903,
+            "Upper": 22349657.919454306
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 20292.33620833333,
+          "candidateUs": 21564.67160416667,
+          "savedUs": -1272.3353958333357,
+          "savedFraction": -0.0627002915174859,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 20292336.208333332,
+            "StandardError": 13714.44989996151,
+            "Level": 12,
+            "Margin": 60850.73082646471,
+            "Lower": 20231485.47750687,
+            "Upper": 20353186.939159796
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21564671.604166668,
+            "StandardError": 176922.74532710057,
+            "Level": 12,
+            "Margin": 785002.5652876371,
+            "Lower": 20779669.03887903,
+            "Upper": 22349674.169454306
+          }
+        }
+      },
+      "normalizedGain": -0.06264611046565016,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 5.1095772525044936e-05,
+      "baselineRatioBounds": [
+        0.963585595316961,
+        0.9777689137035129
+      ],
+      "candidateRatioBounds": [
+        0.9211997739699689,
+        1.0726811482402259
+      ]
+    },
+    "EncodeFast8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 4231.4269772727275,
+          "candidateUs": 4222.289340909091,
+          "savedUs": 9.137636363636702,
+          "savedFraction": 0.0021594692317072894,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 4231426.9772727275,
+            "StandardError": 2089.8601555689584,
+            "Level": 12,
+            "Margin": 9585.966710274539,
+            "Lower": 4221841.010562453,
+            "Upper": 4241012.943983002
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 4222289.340909091,
+            "StandardError": 1762.5697375863942,
+            "Level": 12,
+            "Margin": 8084.720302464753,
+            "Lower": 4214204.620606626,
+            "Upper": 4230374.061211555
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 4243.050604166667,
+          "candidateUs": 4234.221666666667,
+          "savedUs": 8.8289375,
+          "savedFraction": 0.002080799482176765,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 4243050.604166667,
+            "StandardError": 11759.411265816661,
+            "Level": 12,
+            "Margin": 52176.264803440245,
+            "Lower": 4190874.3393632267,
+            "Upper": 4295226.868970107
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 4234221.666666667,
+            "StandardError": 12025.453419534393,
+            "Level": 12,
+            "Margin": 53356.68834229586,
+            "Lower": 4180864.978324371,
+            "Upper": 4287578.355008963
+          }
+        }
+      },
+      "normalizedGain": 0.005612604724779646,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.003472625969999088,
+      "baselineRatioBounds": [
+        0.9407394828299435,
+        0.9911500302818175
+      ],
+      "candidateRatioBounds": [
+        0.9454668230307364,
+        0.9954318017077384
+      ]
+    },
+    "EncodeFast16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 17901.68809090909,
+          "candidateUs": 18390.052958333334,
+          "savedUs": -488.3648674242422,
+          "savedFraction": -0.027280380763211154,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 17901688.09090909,
+            "StandardError": 53750.262550112166,
+            "Level": 12,
+            "Margin": 246546.7491214103,
+            "Lower": 17655141.34178768,
+            "Upper": 18148234.8400305
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 18390052.958333332,
+            "StandardError": 193008.87452965943,
+            "Level": 12,
+            "Margin": 856376.388174065,
+            "Lower": 17533676.570159268,
+            "Upper": 19246429.346507397
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 17940.228979166666,
+          "candidateUs": 18390.07558333333,
+          "savedUs": -449.8466041666642,
+          "savedFraction": -0.025074741503525733,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 17940228.979166668,
+            "StandardError": 62382.906684034206,
+            "Level": 12,
+            "Margin": 276791.667948219,
+            "Lower": 17663437.311218448,
+            "Upper": 18217020.647114888
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 18390075.583333332,
+            "StandardError": 193008.87452965943,
+            "Level": 12,
+            "Margin": 856376.388174065,
+            "Lower": 17533699.195159268,
+            "Upper": 19246451.971507397
+          }
+        }
+      },
+      "normalizedGain": 0.0512318443590174,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0827517498931929,
+      "baselineRatioBounds": [
+        0.9455577814293269,
+        0.9809341966410328
+      ],
+      "candidateRatioBounds": [
+        0.8642058476863331,
+        0.961856561733302
+      ]
+    },
+    "EncodeFastCancelable16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 18063.07578409091,
+          "candidateUs": 18129.193916666667,
+          "savedUs": -66.1181325757578,
+          "savedFraction": -0.0036604027667310746,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 18063075.78409091,
+            "StandardError": 9637.019215178467,
+            "Level": 12,
+            "Margin": 44203.98424114968,
+            "Lower": 18018871.79984976,
+            "Upper": 18107279.76833206
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 18129193.916666668,
+            "StandardError": 33190.287497390054,
+            "Level": 12,
+            "Margin": 147264.61981988265,
+            "Lower": 17981929.296846785,
+            "Upper": 18276458.53648655
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 18072.719979166668,
+          "candidateUs": 18129.210166666668,
+          "savedUs": -56.4901875,
+          "savedFraction": -0.003125715861537204,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 18072719.979166668,
+            "StandardError": 13042.715974262512,
+            "Level": 12,
+            "Margin": 57870.26127807773,
+            "Lower": 18014849.71788859,
+            "Upper": 18130590.240444746
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 18129210.166666668,
+            "StandardError": 33190.287497390054,
+            "Level": 12,
+            "Margin": 147264.61981988265,
+            "Lower": 17981945.546846785,
+            "Upper": 18276474.78648655
+          }
+        }
+      },
+      "normalizedGain": -0.004915331013089608,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.0012487900299953392,
+      "baselineRatioBounds": [
+        0.95959951339581,
+        0.9756784165909033
+      ],
+      "candidateRatioBounds": [
+        0.9577211477578047,
+        0.9865886881914665
+      ]
+    },
+    "EncodeFastForward16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 17722.360397727272,
+          "candidateUs": 19177.43375,
+          "savedUs": -1455.0733522727267,
+          "savedFraction": -0.0821038123375104,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 17722360.397727273,
+            "StandardError": 6382.481243736866,
+            "Level": 12,
+            "Margin": 29275.764011471165,
+            "Lower": 17693084.6337158,
+            "Upper": 17751636.161738746
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 19177433.75,
+            "StandardError": 7770.513543643331,
+            "Level": 12,
+            "Margin": 37150.145989744175,
+            "Lower": 19140283.604010254,
+            "Upper": 19214583.895989746
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 17736.7419375,
+          "candidateUs": 19204.29814583333,
+          "savedUs": -1467.556208333332,
+          "savedFraction": -0.08274102501488967,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 17736741.9375,
+            "StandardError": 15504.080539555136,
+            "Level": 12,
+            "Margin": 68791.2849954665,
+            "Lower": 17667950.652504534,
+            "Upper": 17805533.222495466
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 19204298.145833332,
+            "StandardError": 19809.510022150193,
+            "Level": 12,
+            "Margin": 87894.38664728357,
+            "Lower": 19116403.759186048,
+            "Upper": 19292192.532480616
+          }
+        }
+      },
+      "normalizedGain": -0.001101824420987274,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.08091283617765099,
+      "baselineRatioBounds": [
+        0.9318992134069483,
+        0.9649943415539151
+      ],
+      "candidateRatioBounds": [
+        0.9430072114455983,
+        0.9655472027430579
+      ]
+    },
+    "EncodeGray8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 2035.508068181818,
+          "candidateUs": 2034.1338863636365,
+          "savedUs": 1.3741818181816488,
+          "savedFraction": 0.0006751050706514938,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 2035508.0681818181,
+            "StandardError": 1302.031970129639,
+            "Level": 12,
+            "Margin": 5972.28244584524,
+            "Lower": 2029535.785735973,
+            "Upper": 2041480.3506276633
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 2034133.8863636365,
+            "StandardError": 1101.9510689535032,
+            "Level": 12,
+            "Margin": 5054.532589269786,
+            "Lower": 2029079.3537743667,
+            "Upper": 2039188.4189529063
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 2048.1174791666667,
+          "candidateUs": 2045.6044583333332,
+          "savedUs": 2.5130208333334885,
+          "savedFraction": 0.0012269905700702521,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 2048117.4791666667,
+            "StandardError": 12652.861563149634,
+            "Level": 12,
+            "Margin": 56140.48531147434,
+            "Lower": 1991976.9938551923,
+            "Upper": 2104257.964478141
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 2045604.4583333333,
+            "StandardError": 11499.65402167445,
+            "Level": 12,
+            "Margin": 51023.727278507045,
+            "Lower": 1994580.7310548262,
+            "Upper": 2096628.1856118403
+          }
+        }
+      },
+      "normalizedGain": -0.0020771649827049377,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.002746564984747346,
+      "baselineRatioBounds": [
+        0.9918743440103432,
+        1.0592400324989069
+      ],
+      "candidateRatioBounds": [
+        1.0024957970952402,
+        1.0592365863218378
+      ]
+    },
+    "EncodeRgb8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 9496.0305,
+          "candidateUs": 9508.030550000001,
+          "savedUs": -12.000050000000744,
+          "savedFraction": -0.001263691181278448,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 9496030.5,
+            "StandardError": 6448.920931231265,
+            "Level": 12,
+            "Margin": 29580.51580592267,
+            "Lower": 9466449.984194078,
+            "Upper": 9525611.015805922
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 9508030.55,
+            "StandardError": 3334.9909396845105,
+            "Level": 12,
+            "Margin": 15944.30015312261,
+            "Lower": 9492086.249846878,
+            "Upper": 9523974.850153124
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 9508.439333333334,
+          "candidateUs": 9526.382729166666,
+          "savedUs": -17.94339583333209,
+          "savedFraction": -0.0018871020999660093,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 9508439.333333334,
+            "StandardError": 13724.329618892323,
+            "Level": 12,
+            "Margin": 60894.56693521755,
+            "Lower": 9447544.766398117,
+            "Upper": 9569333.900268551
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 9526382.729166666,
+            "StandardError": 14203.070131605802,
+            "Level": 12,
+            "Margin": 63018.72869798233,
+            "Lower": 9463364.000468684,
+            "Upper": 9589401.457864648
+          }
+        }
+      },
+      "normalizedGain": -0.011376006212714396,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.009998571223084007,
+      "baselineRatioBounds": [
+        0.9496831317693092,
+        0.9703095820628623
+      ],
+      "candidateRatioBounds": [
+        0.9613701991473586,
+        0.9862987603046356
+      ]
+    },
+    "EncodeGrayAlpha8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 4251.533090909091,
+          "candidateUs": 4559.339477272728,
+          "savedUs": -307.8063863636367,
+          "savedFraction": -0.07239891582210856,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 4251533.090909091,
+            "StandardError": 4033.0855724123717,
+            "Level": 12,
+            "Margin": 18499.335438216523,
+            "Lower": 4233033.755470875,
+            "Upper": 4270032.426347307
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 4559339.4772727275,
+            "StandardError": 4710.7029889939495,
+            "Level": 12,
+            "Margin": 21607.49460395976,
+            "Lower": 4537731.982668768,
+            "Upper": 4580946.971876687
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 4263.2515625,
+          "candidateUs": 4576.26525,
+          "savedUs": -313.0136875,
+          "savedFraction": -0.07342135056098975,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 4263251.5625,
+            "StandardError": 12276.060916749608,
+            "Level": 12,
+            "Margin": 54468.62862917385,
+            "Lower": 4208782.933870826,
+            "Upper": 4317720.191129174
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 4576265.25,
+            "StandardError": 17446.545660825388,
+            "Level": 12,
+            "Margin": 77409.96260167104,
+            "Lower": 4498855.287398329,
+            "Upper": 4653675.212601671
+          }
+        }
+      },
+      "normalizedGain": -0.018638645676871013,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.052776586057673436,
+      "baselineRatioBounds": [
+        0.9211954443952669,
+        0.9756510213730653
+      ],
+      "candidateRatioBounds": [
+        0.9165381743428997,
+        1.020439467486458
+      ]
+    },
+    "Encode8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 16817.141056818182,
+          "candidateUs": 16776.044477272728,
+          "savedUs": 41.09657954545692,
+          "savedFraction": 0.002443731631114221,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 16817141.056818184,
+            "StandardError": 4489.476010639026,
+            "Level": 12,
+            "Margin": 20592.74993586613,
+            "Lower": 16796548.306882318,
+            "Upper": 16837733.80675405
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 16776044.477272727,
+            "StandardError": 10521.853253167825,
+            "Level": 12,
+            "Margin": 48262.62405476658,
+            "Lower": 16727781.85321796,
+            "Upper": 16824307.101327494
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 16829.788145833332,
+          "candidateUs": 16787.557875,
+          "savedUs": 42.23027083333209,
+          "savedFraction": 0.0025092574230524134,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 16829788.145833332,
+            "StandardError": 13275.405177056457,
+            "Level": 12,
+            "Margin": 58902.69846285163,
+            "Lower": 16770885.44737048,
+            "Upper": 16888690.844296183
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 16787557.875,
+            "StandardError": 14979.477837197623,
+            "Level": 12,
+            "Margin": 66463.63364489483,
+            "Lower": 16721094.241355104,
+            "Upper": 16854021.508644894
+          }
+        }
+      },
+      "normalizedGain": 0.0018554134080254192,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.0005894118256931646,
+      "baselineRatioBounds": [
+        0.9693966293465911,
+        0.9784228740994992
+      ],
+      "candidateRatioBounds": [
+        0.9665693289819627,
+        0.9771487554861056
+      ]
+    },
+    "Encode16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 20453.36275,
+          "candidateUs": 21942.9795625,
+          "savedUs": -1489.6168125,
+          "savedFraction": -0.0728299219403421,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 20453362.75,
+            "StandardError": 7732.149000996496,
+            "Level": 12,
+            "Margin": 36966.72846500083,
+            "Lower": 20416396.021534998,
+            "Upper": 20490329.478465002
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21942979.5625,
+            "StandardError": 20162.589740733918,
+            "Level": 12,
+            "Margin": 89460.99406300517,
+            "Lower": 21853518.568436995,
+            "Upper": 22032440.556563005
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 20481.278520833333,
+          "candidateUs": 21942.9996875,
+          "savedUs": -1461.7211666666678,
+          "savedFraction": -0.0713686484552134,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 20481278.520833332,
+            "StandardError": 19858.57165013105,
+            "Level": 12,
+            "Margin": 88112.0720768814,
+            "Lower": 20393166.44875645,
+            "Upper": 20569390.592910215
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21942999.6875,
+            "StandardError": 20162.589740733918,
+            "Level": 12,
+            "Margin": 89460.99406300517,
+            "Lower": 21853538.693436995,
+            "Upper": 22032460.681563005
+          }
+        }
+      },
+      "normalizedGain": -0.004763893570223665,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.06774330646800975,
+      "baselineRatioBounds": [
+        0.9795919836845477,
+        0.9922656228598177
+      ],
+      "candidateRatioBounds": [
+        0.9735623456429325,
+        1.000481499203302
+      ]
+    },
+    "EncodeRgb16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 15921.3145,
+          "candidateUs": 16692.706295454544,
+          "savedUs": -771.391795454545,
+          "savedFraction": -0.04845025801447145,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 15921314.5,
+            "StandardError": 4946.402690339718,
+            "Level": 12,
+            "Margin": 23648.31887083041,
+            "Lower": 15897666.181129169,
+            "Upper": 15944962.818870831
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 16692706.295454545,
+            "StandardError": 14162.438015062067,
+            "Level": 12,
+            "Margin": 64961.59993621734,
+            "Lower": 16627744.695518328,
+            "Upper": 16757667.895390762
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 15974.262708333334,
+          "candidateUs": 16712.713625,
+          "savedUs": -738.450916666666,
+          "savedFraction": -0.046227543026535756,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 15974262.708333334,
+            "StandardError": 37642.080026173,
+            "Level": 12,
+            "Margin": 167017.13128335722,
+            "Lower": 15807245.577049976,
+            "Upper": 16141279.839616692
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 16712713.625,
+            "StandardError": 23812.575061472013,
+            "Level": 12,
+            "Margin": 105655.90351200936,
+            "Lower": 16607057.721487992,
+            "Upper": 16818369.52851201
+          }
+        }
+      },
+      "normalizedGain": 0.023684693429567028,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.07388489247129759,
+      "baselineRatioBounds": [
+        0.9719789172012703,
+        1.0051984876016975
+      ],
+      "candidateRatioBounds": [
+        0.955628208858388,
+        0.9795005027557147
+      ]
+    },
+    "EncodeGray16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 4851.235,
+          "candidateUs": 5177.099045454546,
+          "savedUs": -325.8640454545459,
+          "savedFraction": -0.0671713585209841,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 4851235,
+            "StandardError": 5243.062233583279,
+            "Level": 12,
+            "Margin": 24049.36995286361,
+            "Lower": 4827185.630047136,
+            "Upper": 4875284.369952864
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 5177099.045454546,
+            "StandardError": 9920.635169067953,
+            "Level": 12,
+            "Margin": 45504.900517888396,
+            "Lower": 5131594.1449366575,
+            "Upper": 5222603.945972434
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 4860.436395833333,
+          "candidateUs": 5186.259229166667,
+          "savedUs": -325.82283333333396,
+          "savedFraction": -0.06703571589017177,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 4860436.395833333,
+            "StandardError": 10362.90702551043,
+            "Level": 12,
+            "Margin": 45980.004344963556,
+            "Lower": 4814456.39148837,
+            "Upper": 4906416.4001782965
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 5186259.229166667,
+            "StandardError": 12873.18232607014,
+            "Level": 12,
+            "Margin": 57118.04398409705,
+            "Lower": 5129141.18518257,
+            "Upper": 5243377.273150764
+          }
+        }
+      },
+      "normalizedGain": -0.0039392417603054675,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.06298400752799282,
+      "baselineRatioBounds": [
+        0.8675443309505269,
+        0.9163079563934012
+      ],
+      "candidateRatioBounds": [
+        0.8842189852792788,
+        0.9171767385466495
+      ]
+    },
+    "EncodeGrayAlpha16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 10117.318227272726,
+          "candidateUs": 10953.681454545454,
+          "savedUs": -836.3632272727284,
+          "savedFraction": -0.0826664940733195,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 10117318.227272727,
+            "StandardError": 8319.911556597668,
+            "Level": 12,
+            "Margin": 38162.55121255267,
+            "Lower": 10079155.676060174,
+            "Upper": 10155480.77848528
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 10953681.454545455,
+            "StandardError": 12668.738378109132,
+            "Level": 12,
+            "Margin": 58110.15824677003,
+            "Lower": 10895571.296298685,
+            "Upper": 11011791.612792226
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 10132.217875,
+          "candidateUs": 10969.465416666666,
+          "savedUs": -837.247541666666,
+          "savedFraction": -0.08263220866306775,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 10132217.875,
+            "StandardError": 16711.49478866257,
+            "Level": 12,
+            "Margin": 74148.55707013285,
+            "Lower": 10058069.317929868,
+            "Upper": 10206366.432070132
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 10969465.416666666,
+            "StandardError": 19555.24507110651,
+            "Level": 12,
+            "Margin": 86766.21831334209,
+            "Lower": 10882699.198353324,
+            "Upper": 11056231.634980008
+          }
+        }
+      },
+      "normalizedGain": -0.005420106978262451,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0768299604900653,
+      "baselineRatioBounds": [
+        0.9543179276335048,
+        0.9758375320633513
+      ],
+      "candidateRatioBounds": [
+        0.9578976896530974,
+        0.9830220497916599
+      ]
+    },
+    "Png8AsyncNonSeekable": {
+      "views": {
+        "statistics": {
+          "baselineUs": 16786.835545454545,
+          "candidateUs": 16752.339863636364,
+          "savedUs": 34.49568181818351,
+          "savedFraction": 0.002054924629765864,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 16786835.545454547,
+            "StandardError": 6396.082247415404,
+            "Level": 12,
+            "Margin": 29338.150371697877,
+            "Lower": 16757497.395082848,
+            "Upper": 16816173.695826244
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 16752339.863636363,
+            "StandardError": 7163.244504489223,
+            "Level": 12,
+            "Margin": 32857.04221625128,
+            "Lower": 16719482.821420113,
+            "Upper": 16785196.905852616
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 16798.723791666667,
+          "candidateUs": 16766.203395833334,
+          "savedUs": 32.52039583333396,
+          "savedFraction": 0.0019358849062967032,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 16798723.791666668,
+            "StandardError": 13230.111519700271,
+            "Level": 12,
+            "Margin": 58701.73144105842,
+            "Lower": 16740022.06022561,
+            "Upper": 16857425.523107726
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 16766203.395833334,
+            "StandardError": 15312.500366000564,
+            "Level": 12,
+            "Margin": 67941.24772399786,
+            "Lower": 16698262.148109335,
+            "Upper": 16834144.643557332
+          }
+        }
+      },
+      "normalizedGain": 0.00031618009767853117,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.001739294462380303,
+      "baselineRatioBounds": [
+        0.9460037567110402,
+        0.9622702417885567
+      ],
+      "candidateRatioBounds": [
+        0.9511989782080983,
+        0.9619300187110468
+      ]
+    },
+    "EncodeNoCompression8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 64.50040909090909,
+          "candidateUs": 58.20246590909091,
+          "savedUs": 6.297943181818177,
+          "savedFraction": 0.09764191065736716,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 64500.40909090909,
+            "StandardError": 334.553086004855,
+            "Level": 12,
+            "Margin": 1534.5594951491166,
+            "Lower": 62965.84959575997,
+            "Upper": 66034.96858605821
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 58202.46590909091,
+            "StandardError": 424.83767792257385,
+            "Level": 12,
+            "Margin": 1948.6853352287626,
+            "Lower": 56253.78057386215,
+            "Upper": 60151.15124431968
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 66.12647916666667,
+          "candidateUs": 59.56825,
+          "savedUs": 6.558229166666671,
+          "savedFraction": 0.09917705054486814,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 66126.47916666667,
+            "StandardError": 1640.9897926212273,
+            "Level": 12,
+            "Margin": 7281.037802329256,
+            "Lower": 58845.441364337414,
+            "Upper": 73407.51696899593
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 59568.25,
+            "StandardError": 1407.6382356493878,
+            "Level": 12,
+            "Margin": 6245.661765754162,
+            "Lower": 53322.588234245835,
+            "Upper": 65813.91176575416
+          }
+        }
+      },
+      "normalizedGain": 0.08957725357064894,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.008858145425680086,
+      "baselineRatioBounds": [
+        0.1081492963985913,
+        0.13564417337802337
+      ],
+      "candidateRatioBounds": [
+        0.09884990449245228,
+        0.12306355801488118
+      ]
+    },
+    "EncodeNoCompression8Retained": {
+      "views": {
+        "statistics": {
+          "baselineUs": 64.34225,
+          "candidateUs": 58.85506818181818,
+          "savedUs": 5.487181818181816,
+          "savedFraction": 0.08528116157240095,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 64342.25,
+            "StandardError": 201.41098461162,
+            "Level": 12,
+            "Margin": 962.928311009871,
+            "Lower": 63379.32168899013,
+            "Upper": 65305.17831100987
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 58855.068181818184,
+            "StandardError": 460.48995163613637,
+            "Level": 12,
+            "Margin": 2112.218530525633,
+            "Lower": 56742.84965129255,
+            "Upper": 60967.28671234382
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 66.0655,
+          "candidateUs": 60.16925,
+          "savedUs": 5.89625,
+          "savedFraction": 0.08924854878870214,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 66065.5,
+            "StandardError": 1481.3706053061644,
+            "Level": 12,
+            "Margin": 6572.810766400152,
+            "Lower": 59492.68923359985,
+            "Upper": 72638.31076640016
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 60169.25,
+            "StandardError": 1365.4971840538856,
+            "Level": 12,
+            "Margin": 6058.68279057928,
+            "Lower": 54110.56720942072,
+            "Upper": 66227.93279057927
+          }
+        }
+      },
+      "normalizedGain": 0.08620308558820045,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0010088937719745505,
+      "baselineRatioBounds": [
+        0.3108635311074858,
+        0.3821133920531201
+      ],
+      "candidateRatioBounds": [
+        0.28248068496409345,
+        0.3491336635910202
+      ]
+    },
+    "EncodeNoCompression16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 439.0399204545455,
+          "candidateUs": 430.9423409090909,
+          "savedUs": 8.097579545454588,
+          "savedFraction": 0.018443834303429663,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 439039.92045454547,
+            "StandardError": 614.1053422535074,
+            "Level": 12,
+            "Margin": 2816.836022141018,
+            "Lower": 436223.08443240443,
+            "Upper": 441856.7564766865
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 430942.3409090909,
+            "StandardError": 571.2205923132015,
+            "Level": 12,
+            "Margin": 2620.128226066356,
+            "Lower": 428322.2126830245,
+            "Upper": 433562.46913515724
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 441.3502708333333,
+          "candidateUs": 432.71708333333333,
+          "savedUs": 8.6331875,
+          "savedFraction": 0.019560852389870043,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 441350.2708333333,
+            "StandardError": 2366.3387194341217,
+            "Level": 12,
+            "Margin": 10499.396002819702,
+            "Lower": 430850.8748305136,
+            "Upper": 451849.666836153
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 432717.0833333333,
+            "StandardError": 1837.5331581561277,
+            "Level": 12,
+            "Margin": 8153.096654060907,
+            "Lower": 424563.98667927244,
+            "Upper": 440870.1799873942
+          }
+        }
+      },
+      "normalizedGain": 0.018075412685819692,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.00037520357710740804,
+      "baselineRatioBounds": [
+        0.3090671632775345,
+        0.32770851805615325
+      ],
+      "candidateRatioBounds": [
+        0.30601906896341263,
+        0.32106005768273715
+      ]
+    },
+    "EncodeNoCompression16Retained": {
+      "views": {
+        "statistics": {
+          "baselineUs": 443.9233295454545,
+          "candidateUs": 429.0021931818182,
+          "savedUs": 14.921136363636354,
+          "savedFraction": 0.03361196713611447,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 443923.32954545453,
+            "StandardError": 746.0619283476085,
+            "Level": 12,
+            "Margin": 3422.1068763313338,
+            "Lower": 440501.2226691232,
+            "Upper": 447345.43642178585
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 429002.1931818182,
+            "StandardError": 415.066726687777,
+            "Level": 12,
+            "Margin": 1903.8670190295245,
+            "Lower": 427098.32616278867,
+            "Upper": 430906.0602008477
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 444.6176041666667,
+          "candidateUs": 429.9152916666667,
+          "savedUs": 14.7023125,
+          "savedFraction": 0.033067319787204785,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 444617.6041666667,
+            "StandardError": 960.9309187177112,
+            "Level": 12,
+            "Margin": 4263.63063077601,
+            "Lower": 440353.9735358907,
+            "Upper": 448881.2347974427
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 429915.2916666667,
+            "StandardError": 970.0353778661214,
+            "Level": 12,
+            "Margin": 4304.026927893404,
+            "Lower": 425611.2647387733,
+            "Upper": 434219.3185945601
+          }
+        }
+      },
+      "normalizedGain": 0.028191544594084017,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.005577665549088562,
+      "baselineRatioBounds": [
+        1.0801487903241442,
+        1.1045780124279019
+      ],
+      "candidateRatioBounds": [
+        1.0497848573723465,
+        1.074352215870331
+      ]
+    },
+    "EncodePredictable16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 257701.583475,
+          "candidateUs": 262117.15185416664,
+          "savedUs": -4415.568379166662,
+          "savedFraction": -0.017134424707929696,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 257701583.475,
+            "StandardError": 895904.5320138084,
+            "Level": 12,
+            "Margin": 4283241.251720559,
+            "Lower": 253418342.22327945,
+            "Upper": 261984824.72672054
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 262117151.85416666,
+            "StandardError": 3072403.5286178477,
+            "Level": 12,
+            "Margin": 13632190.971854417,
+            "Lower": 248484960.88231224,
+            "Upper": 275749342.8260211
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 258129.75625,
+          "candidateUs": 262117.16710416667,
+          "savedUs": -3987.410854166657,
+          "savedFraction": -0.015447311894971172,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 258129756.25,
+            "StandardError": 794952.4401136074,
+            "Level": 12,
+            "Margin": 3527187.5507985335,
+            "Lower": 254602568.69920146,
+            "Upper": 261656943.80079854
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 262117167.10416666,
+            "StandardError": 3072403.5286178477,
+            "Level": 12,
+            "Margin": 13632190.971854417,
+            "Lower": 248484976.13231224,
+            "Upper": 275749358.0760211
+          }
+        }
+      },
+      "normalizedGain": -0.016556295041760816,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0005687138715178008,
+      "baselineRatioBounds": [
+        0.6170537899111275,
+        0.6840988379146179
+      ],
+      "candidateRatioBounds": [
+        0.5605902258974043,
+        0.7131771095018827
+      ]
+    }
+  },
+  "primaryEffect": {
+    "views": {
+      "statistics": {
+        "baselineUs": 439.39790909090914,
+        "candidateUs": 429.0021931818182,
+        "savedUs": 10.39571590909094,
+        "savedFraction": 0.023659001770397814,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 439397.9090909091,
+          "StandardError": 596.6345246394442,
+          "Level": 12,
+          "Margin": 2736.6992361444004,
+          "Lower": 436661.2098547647,
+          "Upper": 442134.60832705355
+        },
+        "candidateCI": {
+          "N": 11,
+          "Mean": 429002.1931818182,
+          "StandardError": 415.066726687777,
+          "Level": 12,
+          "Margin": 1903.8670190295245,
+          "Lower": 427098.32616278867,
+          "Upper": 430906.0602008477
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 440.2521666666667,
+        "candidateUs": 429.9152916666667,
+        "savedUs": 10.336875,
+        "savedFraction": 0.023479441517039623,
+        "rawGainSeparated": true,
+        "rawAdverseSeparated": false,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 440252.1666666667,
+          "StandardError": 999.4501790252156,
+          "Level": 12,
+          "Margin": 4434.539792842587,
+          "Lower": 435817.6268738241,
+          "Upper": 444686.70645950927
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 429915.2916666667,
+          "StandardError": 970.0353778661214,
+          "Level": 12,
+          "Margin": 4304.026927893404,
+          "Lower": 425611.2647387733,
+          "Upper": 434219.3185945601
+        }
+      }
+    },
+    "normalizedGain": 0.02265804389799031,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.0010241634119542153,
+    "baselineRatioBounds": [
+      0.9963159131447936,
+      1.0990694749710832
+    ],
+    "candidateRatioBounds": [
+      1.0497848573723465,
+      1.074352215870331
+    ]
+  },
+  "issues": [],
+  "cpuGainClaimed": true,
+  "generalCpuGainClaimed": false,
+  "normalizedGainConfirmed": false,
+  "oneShotStatusCounts": {
+    "pass": 13,
+    "gap": 1,
+    "uncertain": 3
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "IWC878",
+    "wholeOriginalSourceReconstructed": true,
+    "originalTestsReconstructed": true,
+    "changedBoundary": "Only an encoder128byte stride branch plus one16byte format factor; four-lane remainder/serial combination/reduction/tails/128fallback unchanged. One nonperiodic independent test added.",
+    "oldFieldsAndInitializationExpressionsVerbatim": true,
+    "newFormatConstantBytes": 16,
+    "newFormatConstantHeapArrays": 0,
+    "oldStandaloneComputeReadFoldReduceVerbatim": true,
+    "allPublicCallSitesAndOwnershipVerbatim": true,
+    "actualSharedJit": {
+      "Compute": {
+        "codeBytes": 1045,
+        "instructionsAndLabels": 282,
+        "exact": true,
+        "normalization": "Process addresses/method-number prefixes only; every immediate/block offset/instruction preserved."
+      },
+      "Reduce": {
+        "codeBytes": 293,
+        "instructionsAndLabels": 70,
+        "exact": true,
+        "normalization": "Process addresses/method-number prefixes only; every immediate/block offset/instruction preserved."
+      }
+    },
+    "actualEightResidueHotLoop": true,
+    "wideCarrylessInstructionsPer128Bytes": 4,
+    "wideByteReversalsPer128Bytes": 2,
+    "noHotLoopStackSpills": true,
+    "encoderKernelCodeBytes": 1104,
+    "independentPolynomialModel": {
+      "independentPolynomialModel": true,
+      "inputSeedCases": 160,
+      "comparedStates": 5752,
+      "exact": true,
+      "power1024": "0x567fddeb",
+      "power1088": "0x10bd4d7c",
+      "scope": "At each 128-byte boundary, eight lane residues advanced by x^1024, joined pairwise by x^512 then serially by x^128, equal direct polynomial concatenation modulo the PNG polynomial. Arbitrary seed, nonperiodic/all255 input; final runtime checksum still requires independent bitwise tests."
+    },
+    "independentRuntimeOracleCases": 896,
+    "commonScanIdentifyCrcCostsReused": true,
+    "commonReadControls": 51,
+    "storage": {
+      "newImageOwnedCapacityBytes": 0,
+      "newImageRetainedCapacityBytes": 0,
+      "newFormatConstantBytes": 16,
+      "newHeapArrays": 0,
+      "workspaceAdmissionChanged": false,
+      "physicalJitOrNativePeakMeasured": false
+    },
+    "selected": "A",
+    "unretainedB": "tmp/iwc878b-design.json",
+    "scope": "51 unchanged PNG reads/sharedroot and other-family evidence are source-valid; only20existing encode views/natural64 costs need reconciliation. No whole-library audit."
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "newHeapArrays": 0,
+    "workspaceAdmissionChanged": false,
+    "retainedOperationScratchBytes": 0,
+    "physicalJitFrameMeasured": false,
+    "nativePeakMeasured": false,
+    "newStaticFormatConstantBytes": 16
+  },
+  "reusedPerformance": {
+    "provider": "benchmarks/png-wide-chunk-crc-evidence.json",
+    "pngReadCases": 51,
+    "readStatusCounts": {
+      "pass": 49,
+      "gap": 0,
+      "uncertain": 2
+    },
+    "sharedRoot": true,
+    "reason": "Encoder-only ComputeChunk body; standalone Compute/Reduce actual generated code and common fields/constructor/read/fold/reduce source unchanged. Other codec/resize/text/drawing paths unchanged."
+  },
+  "workflow": {
+    "coreAndEmbeddedBuildsEachOs": 2,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "newFocusedTests": 0,
+    "firstPrototypeTimed": false,
+    "finalProducerBuildsEachOs": 1,
+    "restoreBuilds": 0,
+    "nonperiodicBitwiseOracleCases": 896,
+    "additionalTestCases": 1
+  },
+  "productionChanged": false,
+  "productionRestored": true,
+  "actualPackageUnchanged": true,
+  "decision": "Do not retain A or B. A has a scoped raw10.40us/2.37% gain, with overlapping normalized confidence. Smallest16 has a material1253.99us/6.17% raw adverse capture against a contemporary unchanged baseline; normalized confidence overlaps. Unresolved material adversity outweighs this small gain. B has no demonstrated additional benefit; no uniform causal regression/family ban claimed. Keep independent896case test only.",
+  "materialConcern": {
+    "views": {
+      "statistics": {
+        "baselineUs": 20310.66204545455,
+        "candidateUs": 21564.65535416667,
+        "savedUs": -1253.993308712121,
+        "savedFraction": -0.06174064173318072,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": true,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 20310662.045454547,
+          "StandardError": 11423.82685979268,
+          "Level": 12,
+          "Margin": 52399.88125047506,
+          "Lower": 20258262.164204072,
+          "Upper": 20363061.92670502
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 21564655.354166668,
+          "StandardError": 176922.74532710057,
+          "Level": 12,
+          "Margin": 785002.5652876371,
+          "Lower": 20779652.78887903,
+          "Upper": 22349657.919454306
+        }
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 20323.623375,
+        "candidateUs": 21564.67160416667,
+        "savedUs": -1241.0482291666679,
+        "savedFraction": -0.06106431940149393,
+        "rawGainSeparated": false,
+        "rawAdverseSeparated": true,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 20323623.375,
+          "StandardError": 16622.151086343067,
+          "Level": 12,
+          "Margin": 73752.14090903701,
+          "Lower": 20249871.23409096,
+          "Upper": 20397375.51590904
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 21564671.604166668,
+          "StandardError": 176922.74532710057,
+          "Level": 12,
+          "Margin": 785002.5652876371,
+          "Lower": 20779669.03887903,
+          "Upper": 22349674.169454306
+        }
+      }
+    },
+    "normalizedGain": -0.06520132362583664,
+    "normalizedGainSeparated": false,
+    "normalizedAdverseSeparated": false,
+    "nativeClockChange": -0.003248852414936998,
+    "baselineRatioBounds": [
+      0.8718150726620806,
+      0.9762621820589162
+    ],
+    "candidateRatioBounds": [
+      0.9211997739699689,
+      1.0726811482402259
+    ]
+  },
+  "restoredProducers": {
+    "windowsSha256": "35af6635763162656916cb87481399da2925e602d83235d01b0c9fa6871fe3fb",
+    "linuxSha256": "9634d1ffe9f9ba7258027dd1736b7bad72743e1badbc190be56435d1c18ac24e",
+    "actualPackageSha256": "fac8aa89245861169d15ec474ac4862d50b084c4a4566d8f96f90a822c654ac8"
+  },
+  "retainedTest": {
+    "path": "tests/Lokad.Image.Tests/Crc32Tests.cs",
+    "sha256": "7b9ddc7741e255d25b27f93c1fec2a6d1eb0854eddd78bf902d665ccc20242c2",
+    "newTestCases": 1,
+    "independentScalarOracleCases": 896
+  },
+  "fullAndPackageRepeats": 0,
+  "next": "Independent demonstrated bilinear byte reduction gap; preserve current WCF876B costs. No more CRC sampling or unchanged prototype retries.",
+  "raw": {
+    "file": "png-interleaved-crc-trial.tar.xz",
+    "sha256": "f29e33af687835b6656a51e42886d6d7ceb9751b7d75790db73ed6d8f2f7bca3",
+    "bytes": 3144040,
+    "members": 342,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "mainAAndFrozenHarnessSourceManifestsVerified": true,
+    "dependencies": [
+      {
+        "file": "png-wide-chunk-crc-qualified.tar.xz",
+        "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+      },
+      {
+        "file": "png-stored-wide-crc-attribution.tar.xz",
+        "sha256": "1c97b6038a2f0772d0812aa63c64cd34b73d3ad554b1f5f779f83da5a807addc"
+      }
+    ]
+  },
+  "retainedTestQualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionChanged": false,
+      "productionSha256": "35af6635763162656916cb87481399da2925e602d83235d01b0c9fa6871fe3fb",
+      "actualPackageSha256": "fac8aa89245861169d15ec474ac4862d50b084c4a4566d8f96f90a822c654ac8",
+      "packageUnchanged": true,
+      "internalFullChecks": 3182,
+      "newIndependentTestPassedAllFourModes": true,
+      "independentCasesPerMode": 896,
+      "modes": {
+        "scalar": 1,
+        "no-avx512": 1,
+        "no-avx2": 1
+      },
+      "embeddedTestSha256": "6bfec9d7aff670e3ca6d5eab84f581bb2b500730738252415f28f47e0f0c9ca3",
+      "additionalProductionBuilds": 0,
+      "additionalEmbeddedBuilds": 1,
+      "publicDifferentialAndPackageProofReused": "benchmarks/png-wide-chunk-crc-evidence.json",
+      "publicChecks": 2381,
+      "liveChecks": 948,
+      "sourceValidTotal": 6511,
+      "packageConsumerRepeats": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionChanged": false,
+      "productionSha256": "9634d1ffe9f9ba7258027dd1736b7bad72743e1badbc190be56435d1c18ac24e",
+      "actualPackageSha256": "fac8aa89245861169d15ec474ac4862d50b084c4a4566d8f96f90a822c654ac8",
+      "packageUnchanged": true,
+      "internalFullChecks": 3182,
+      "newIndependentTestPassedAllFourModes": true,
+      "independentCasesPerMode": 896,
+      "modes": {
+        "scalar": 1,
+        "no-avx512": 1,
+        "no-avx2": 1
+      },
+      "embeddedTestSha256": "44fb28eb990b07b500a7738e96e3eaec48d01e460b5b31c3f69e9ce99a475198",
+      "additionalProductionBuilds": 0,
+      "additionalEmbeddedBuilds": 1,
+      "publicDifferentialAndPackageProofReused": "benchmarks/png-wide-chunk-crc-evidence.json",
+      "publicChecks": 2381,
+      "liveChecks": 948,
+      "sourceValidTotal": 6511,
+      "packageConsumerRepeats": 0
+    }
+  },
+  "productionRestorationVerified": true,
+  "qualificationReused": "benchmarks/png-wide-chunk-crc-evidence.json",
+  "newProductionOrPackageQualification": false
+}
