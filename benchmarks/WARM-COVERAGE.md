@@ -268,6 +268,17 @@ approved scopes and current evidence above.
 
 ## Evidence and execution rules
 
+The [current generated-byte profile](GENERATED-BYTE-CURRENT-ATTRIBUTION.md)
+confirms2×9 executes `GeneratedBicubicResize`:1,241instruction locations in row
+filtering,731in coefficient generation and20in its scheduler, not phase costs.
+Proposed next step: prepare one coefficient/index block for a bounded group of
+source rows, preserving per-row tap order, vertical/clamped order, certificates,
+exact repair and4KiB. Check nested storage and affected existing2×2/1×1 controls;
+no full table, pool/session or new grid. Actual current package/harness/fixtures
+and qualification are reused, zero builds or timing/qualification repeats.
+Rawe16ae8b6/99868B/23members is mirrored/memberverified; instrumented elapsed is
+discarded. This supplies no displayed result and is not a renderer dependency.
+
 - Resolve missing or uncertain measurements before assuming optimization is
   needed. Stop cases with applicable confirmed passing evidence; changes to their
   actual production paths can invalidate that evidence.
