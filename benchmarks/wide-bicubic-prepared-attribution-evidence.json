@@ -1,0 +1,127 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPA836",
+  "productionChanged": false,
+  "commit": "1df14ca1d99872c1ae8e3c34d6db434a3c75a30f",
+  "sources": {
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "f1601c6a5cb9017c50b7588a89cc8a1cd7dce3df44d5f6be1613d48753f08c3d",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "56b86db18bcef3b32d511ecc6d50bf831b9ca6920659bf325e57a8ca1b57a75a",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+    "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b"
+  },
+  "producers": {
+    "windowsSha256": "f5be649c6ff5a280f17116affe03e220746e7314054716192b569be22959bdfc",
+    "linuxSha256": "cd7d44c22496bb2c539a156c0a988486d1be02f909efc4bf5d95868120a5d470",
+    "timedArtifactSha256": "f5be649c6ff5a280f17116affe03e220746e7314054716192b569be22959bdfc",
+    "actualPackageSha256": "e302c04aa439bec0a8de734504884bc5c69873c915977ced5d9436251ee40099"
+  },
+  "existingPrimary": "TightWide8",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "firstTailRow": 42,
+  "rowLoanPreparedPairs": 60,
+  "decodedVisitsPerStrip": 176,
+  "eligiblePairInvocations": 10560,
+  "orderedPortableDoubleComparisons": 3840,
+  "allBitsEqual": true,
+  "logicalIndexedOffsetLoadsAndDecodedBoundsAvoidable": 337920,
+  "logicalDecodedPixelLoadsUnchanged": 32,
+  "repeatedWork": "Row-loan horizontal pairs repeatedly load byte offset metadata, check each decoded source index and shift it by32 before every multiply. Existing17-slot proof already establishes16 contiguous taps with+4shift once per tile.",
+  "intendedEndState": "Use two prebounded contiguous source spans and the original independent AVX256 multiply/add chains for proven RowLoanColumns byte pairs. Keep indexed/clamped/odd/count17/other modes as real production paths. Existing four-column overlap helper unchanged; do not activate the previously inconclusive shuffled AVX512 overlap implementation.",
+  "numerical": "Same double inputs, original t0..t15 ordered Add(Multiply), no reassociation/FMA/numerical policy. Geometry and original certification/repair remain verbatim. Portable model is not actual SIMD proof.",
+  "storage": "No new buffer, coefficient layout, result loan, pool, owner, reservation, retained state or API; existing4KiBadmission and3296Brow/4068Btail payloads. Code size/JIT spills still require actual measurement.",
+  "costs": "Retain source-valid current371.62/native351.70us upper1.069 gap and original complete operation boundaries. This profile supplies no statistical timing or component costs. Preserve all raw/historical WLG829 adverse/inconclusive evidence.",
+  "acceptance": "Actual ordered-bit/poison/noallocation and production row/tail/odd/refusal/cancellation/exact-root checks, one primary short then independent confirmation if promising. Reuse immutable PDC835 baseline. Inspect actual generated word and other modes; reconcile affected complete costs before one accepted W/L/scalar/ISA/SAMEpackage milestone. No new workload grid or passing family tuning.",
+  "risks": "Two spans/inline guard may increase code or register pressure. Existing indexed loop already folds coefficient broadcasts into multiplies. Eliminating offsets/checks may have little complete effect. Revise/abandon from evidence; logical counts/sample locations are not a gain forecast.",
+  "publicationPostponed": true,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "instrumentedElapsedDiscarded": true,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "diagnostic": {
+    "totalLocations": 1998,
+    "methods": [
+      {
+        "mode": "rowLoan",
+        "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+RowLoanColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 6204,
+        "locations": 1124,
+        "address": "0x70ea7b8b7fa0"
+      },
+      {
+        "mode": "tail",
+        "method": "Lokad.Image.Internal.WideColumnBicubicResize:ApplyRange[Lokad.Image.Internal.WideColumnBicubicResize+TailColumns,Lokad.Image.Internal.WideColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": 6512,
+        "locations": 710,
+        "address": "0x70ea7b8ba220"
+      }
+    ],
+    "hotLoop": {
+      "firstOffset": "0x91a",
+      "endOffsetExclusive": "0x96a",
+      "locations": 509,
+      "indexedOffsets": 2,
+      "decodedRangeChecks": 2,
+      "independentOrderedAvx256MultiplyAddChains": 2,
+      "coefficientBroadcastsFoldIntoMultiply": true
+    },
+    "scope": "One2secondCPU0capture/CPU1sampler on qualified actual package, exact frozen/native/source/owner/idle-v2 gates. Instrumented elapsed discarded. Locations/skid/inlining are not phase costs, removable fractions or gains."
+  },
+  "raw": {
+    "file": "wide-bicubic-prepared-attribution.tar.xz",
+    "sha256": "f9fa9b0ba7d9933db351dd6620ea0308ac13907bfc1c321c507122d934591a25",
+    "bytes": 88500,
+    "members": 21,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "scope": "benchmarks/prepared-deep-pair-conversions-evidence.json",
+        "file": "prepared-deep-pair-conversions-qualified.tar.xz",
+        "sha256": "bf854cc7a05705884732cc237320cb28714da21a5cdb76f301efa8bccf3d850b",
+        "bytes": 2533136,
+        "members": 96,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "source-driven-deep-bicubic-qualified.tar.xz",
+            "sha256": "7b230636b0cc24562ff61abfb5617b5a37aaf0e2323314d951074a51abc50a9d",
+            "scope": "benchmarks/source-driven-deep-bicubic-evidence.json"
+          },
+          {
+            "file": "deep-bicubic-current-confirmation-v2.tar.xz",
+            "sha256": "0e8d11394a5fcebea6b06c6d1411d0a721c39eded13ecd1ba258ccd5a703089e",
+            "scope": "benchmarks/deep-bicubic-current-confirmation-evidence.json"
+          }
+        ]
+      },
+      {
+        "scope": "benchmarks/wide-row-loan-overlap-trial-evidence.json",
+        "file": "tmp/wide-row-loan-overlap-trial.tar.xz",
+        "sha256": "f65de0c9182c1a4440981608604c22a96cf312ef97bba62bfbb3256486edd8ee",
+        "bytes": 1388768,
+        "members": 82,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "packed-horizontal-window-reuse.tar.xz",
+            "sha256": "6413c4d2d752a1777f7b4273aa0bae2ac99dd0a6bda9438d1ff468d180dacf0a",
+            "scope": "benchmarks/packed-horizontal-window-reuse-evidence.json"
+          },
+          {
+            "file": "wide-bicubic-shared-quartets.tar.xz",
+            "sha256": "e955203ad4e4102b11a89bd392b835a30289b18d6cfabc6eafcc3ac456c14736",
+            "scope": "benchmarks/wide-bicubic-shared-quartets-evidence.json"
+          }
+        ]
+      }
+    ]
+  },
+  "qualificationReused": "prepared-deep-pair-conversions-evidence.json",
+  "newBuilds": 0,
+  "newBenchmarks": 0,
+  "broadOrPackageQualificationRepeated": false
+}

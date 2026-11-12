@@ -22,6 +22,12 @@ tests/harnesses and other family evidence reused, one full/package milestone.
 [Source-driven scheduling](SOURCE-DRIVEN-DEEP-BICUBIC.md) retains the earlier gain.
 Select the next independent demonstrated gap; do not retune this passing control.
 
+The [current bounded-wide profile](WIDE-BICUBIC-PREPARED-ATTRIBUTION.md) motivates
+prebounded contiguous source views to remove repeated indexed addressing while
+preserving ordered AVX256 arithmetic. This is a revised hypothesis, not a gain or
+a replay of the inconclusive overlap kernel. No production/build/qualification
+repeat; unchanged source-valid wide-byte gap and passing word evidence remain.
+
 Unchanged [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
 passes 6,417 full/live checks per OS, 508 internal/789 public affected checks in
 normal/scalar/AVX2-off/AVX512-off modes and SAME actual Release-package/all three
