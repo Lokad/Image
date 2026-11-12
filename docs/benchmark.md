@@ -57,12 +57,16 @@ Current scope and remaining work:
   All 20 encoder views retain exact complete packets. The 17 fresh-state controls
   have 16 passes / 0 gaps /
   1 uncertain; uncertain cases are not presumed slowdowns.
-  [Current RGB16 confidence](../benchmarks/PNG-RGB16-CURRENT-CONFIDENCE.md) passes/stops:
+  [Current encode confidence](../benchmarks/PNG-CURRENT-ENCODE-CONFIDENCE.md) passes/stops:
   15418.18/16086.09µs, upper0.977,
   exact739,472B. All12natural-GC adjacent pairs and native brackets remain;
   original post-GC global uncertainty stays historical. Complete fresh codec/conversion/
   word-frame/output setup/disposal on both sides; no production speedup claim or
   build/qualification repeat. Direct2,427,377B/op is different instrumentation, not a saving.
+  Current Gray8 remains uncertain at2054.47/2009.79µs,
+  range0.951–1.068;64-operation adjacency/all actuals,
+  exact72,586B and547,123B/op. Older gray adjacency predates IDAT/
+  Adler/CRC changes. No presumed gap, favorable repeat or allocation-saving claim.
   Fresh stored RGBA8 costs 64.50/541.91 µs,
   upper 0.136, 609,708 B/op;
   RGBA16 costs 439.04/1380.79 µs,
@@ -247,7 +251,7 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,292.32 | 20,896.62 | 0.971 / 0.978 | 2,433,524 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,231.43 | 4,349.53 | 0.973 / 0.991 | 816,780 | 236,828 / 236,828 |
 | PNG RGBA16, one-shot stored0 / native0 † | 439.04 | 1,380.79 | 0.318 / 0.328 | 1,147,452 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 2,035.51 | 1,988.73 | 1.024 / 1.059 | 547,228 | 72,586 / 72,586 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 2,054.47 | 2,009.79 | 1.022 / 1.068 | 547,123 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,496.03 | 9,881.92 | 0.961 / 0.970 | 815,748 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,251.53 | 4,497.15 | 0.945 / 0.976 | 548,196 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 16,817.14 | 17,274.99 | 0.973 / 0.978 | 816,316 | 210,973 / 210,973 |

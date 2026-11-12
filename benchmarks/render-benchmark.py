@@ -1805,14 +1805,17 @@ def render():
     assert png_current['oneShotStatusCounts'] == {'pass': 15, 'gap': 0, 'uncertain': 2}
     assert png_current['normalizedGainConfirmed'] and png_current['reusedPerformance']['pngReadCases'] == 51
     assert not png_current['issues']
-    png_adjacent = json.loads((ROOT / 'benchmarks/png-rgb16-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    png_adjacent = json.loads((ROOT / 'benchmarks/png-current-encode-confidence-evidence.json').read_text(encoding='utf-8'))
     assert png_adjacent['measurementAccepted'] and not png_adjacent['productionChanged'] and not png_adjacent['productionSpeedupClaim']
     assert png_adjacent['allBuilds'] == png_adjacent['broadOrPackageRepeats'] == 0
     assert png_adjacent['raw']['mirrored'] and png_adjacent['raw']['allMembersVerified']
-    assert set(png_adjacent['cases']) == {'EncodeRgb16'}
+    assert set(png_adjacent['cases']) == {'EncodeGray8', 'EncodeRgb16'}
     png_rgb16 = png_adjacent['cases']['EncodeRgb16']
     assert png_rgb16['status'] == 'pass' and png_rgb16['upper'] <= 1
     assert png_rgb16['operationsPerSubject'] == 4 and png_rgb16['codecPreparationTimed'] and not png_rgb16['referenceCodecRetained']
+    png_gray8 = png_adjacent['cases']['EncodeGray8']
+    assert png_gray8['status'] == 'uncertain' and png_gray8['lower'] <= 1 < png_gray8['upper']
+    assert png_gray8['operationsPerSubject'] == 64 and png_gray8['codecPreparationTimed'] and not png_gray8['referenceCodecRetained']
     png_cases = {**png_current['cases'], **png_adjacent['cases']}
     png_oneshot_status = {status: sum(c['status'] == status and c['boundaryKind'] == 'equivalent-one-shot' for c in png_cases.values()) for status in ('pass', 'gap', 'uncertain')}
     assert png_oneshot_status == png_adjacent['oneShotStatusCounts'] == {'pass': 16, 'gap': 0, 'uncertain': 1}
@@ -2379,12 +2382,16 @@ Current scope and remaining work:
   All 20 encoder views retain exact complete packets. The 17 fresh-state controls
   have {png_oneshot_status['pass']} passes / {png_oneshot_status['gap']} gaps /
   {png_oneshot_status['uncertain']} uncertain; uncertain cases are not presumed slowdowns.
-  [Current RGB16 confidence](../benchmarks/PNG-RGB16-CURRENT-CONFIDENCE.md) passes/stops:
+  [Current encode confidence](../benchmarks/PNG-CURRENT-ENCODE-CONFIDENCE.md) passes/stops:
   {png_rgb16['managedUs']:.2f}/{png_rgb16['nativeUs']:.2f}µs, upper{png_rgb16['upper']:.3f},
   exact739,472B. All12natural-GC adjacent pairs and native brackets remain;
   original post-GC global uncertainty stays historical. Complete fresh codec/conversion/
   word-frame/output setup/disposal on both sides; no production speedup claim or
   build/qualification repeat. Direct2,427,377B/op is different instrumentation, not a saving.
+  Current Gray8 remains uncertain at{png_gray8['managedUs']:.2f}/{png_gray8['nativeUs']:.2f}µs,
+  range{png_gray8['lower']:.3f}–{png_gray8['upper']:.3f};64-operation adjacency/all actuals,
+  exact72,586B and{png_gray8['allocatedBytes']:,}B/op. Older gray adjacency predates IDAT/
+  Adler/CRC changes. No presumed gap, favorable repeat or allocation-saving claim.
   Fresh stored RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
   upper {stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,} B/op;
   RGBA16 costs {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f} µs,

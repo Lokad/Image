@@ -1,5 +1,8 @@
 # Grayscale PNG adjacent confidence
 
+Current family status: [encode confidence](PNG-CURRENT-ENCODE-CONFIDENCE.md).
+The original checkpoint and sampling scope below remain retained.
+
 The existing513×259 grayscale8 Optimal6 control remains **uncertain** after
 its first matched adjacent capture on the current actual package DLL.
 

@@ -49,6 +49,9 @@ post-GC4word443.92/406.92µs upper1.105 remains a gap; equivalent fresh stored
 byte/word and natural-GC64 scopes pass separately. [Current RGB16 confidence](PNG-RGB16-CURRENT-CONFIDENCE.md)
 now passes15.42/FFmpeg16.09ms upper.977, exact739472B, on the actual package.
 All12adjacent pairs/native brackets and original post-GC uncertainty remain.
+[Current encode confidence](PNG-CURRENT-ENCODE-CONFIDENCE.md) retains Gray8uncertainty:
+2.05/2.01ms,range.951–1.068,64-operation adjacent batches,exact72586B,547123B/op.
+Its older adjacency predates IDAT/Adler/CRC changes. No favorable repeat or presumed gap.
 Current17fresh encodes:16pass/one Gray8uncertainty. No production gain, allocation
 saving, build or broad/package repeat from this measurement. Source-valid other
 PNG costs and6512Windows/Linux/SAME-package qualification are reused.

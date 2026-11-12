@@ -1,0 +1,378 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PGC893",
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "measurementAccepted": true,
+  "allBuilds": 0,
+  "broadOrPackageRepeats": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "c00a022ea3d708708adb793f0858faceeb5b169cf2b6776da9c3f63288ef7f4b",
+    "linuxSha256": "630b056269afef20133d7000752699d2a3a5fda7599ab9daf0b8451ea3c3dc90",
+    "timedArtifactSha256": "c00a022ea3d708708adb793f0858faceeb5b169cf2b6776da9c3f63288ef7f4b",
+    "actualPackageSha256": "5c4d569cbb69d1474d15595c40fa444bc788375d43bb35cdcb5232c59fd2111d",
+    "actualPackageBytes": 455796,
+    "symbolsSha256": "a0a1e34e3d39900fd726a9f6fce829e2129cca510b809e77df08144823b6e62f",
+    "sources": {
+      "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "39e8dc7c022b2010fed7871305970d68264e2ef181e7dc8acb274f37e6086848"
+    }
+  },
+  "cases": {
+    "EncodeGray8": {
+      "managedUs": 2054.465067708333,
+      "nativeUs": 2009.7940299479167,
+      "ratio": 1.0222266745222515,
+      "lower": 0.9509424246896764,
+      "upper": 1.067695127937785,
+      "allocatedBytes": 547123,
+      "status": "uncertain",
+      "librarySha256": "c00a022ea3d708708adb793f0858faceeb5b169cf2b6776da9c3f63288ef7f4b",
+      "caseId": "EncodeGray8",
+      "receipt": "tmp/pgc893-gray-adjacent-receipt.json",
+      "observation": "tmp/pgc893-gray-adjacent.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        2040077.734375,
+        2022274.84375,
+        2014130,
+        2032286.40625,
+        2023556.625,
+        2033127.6875,
+        2020127.53125,
+        2063877.375,
+        2049395.75,
+        2120299.515625,
+        2110567.28125,
+        2123860.0625
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color0 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG grayscale8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "nativePacketSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "packetBytes": 72586,
+      "nativePacketBytes": 72586,
+      "independentOwnedOutput": true,
+      "directAllocatedMeanBytes": 547122.7291666666,
+      "allocatedBytesEachPair": [
+        547127.25,
+        547119.5,
+        547119.5,
+        547127.25,
+        547119.5,
+        547119.5,
+        547127.25,
+        547119.5,
+        547127.25,
+        547119.5,
+        547119.5,
+        547127.25
+      ],
+      "operationsPerSubject": 64,
+      "nativeBracketMeansUs": [
+        2013.73072265625,
+        2039.3197265625,
+        2009.7940299479167
+      ],
+      "sampling": "NaturalGC64adjacent12pairs; oldpostGCglobalbrackets retained as separate history."
+    },
+    "EncodeRgb16": {
+      "managedUs": 15418.176125,
+      "nativeUs": 16086.086916666665,
+      "ratio": 0.9584789765760466,
+      "lower": 0.9362864139514849,
+      "upper": 0.9765402273820335,
+      "allocatedBytes": 2427377,
+      "status": "pass",
+      "librarySha256": "c00a022ea3d708708adb793f0858faceeb5b169cf2b6776da9c3f63288ef7f4b",
+      "caseId": "EncodeRgb16",
+      "receipt": "tmp/pra892-rgb16-adjacent-receipt.json",
+      "observation": "tmp/pra892-rgb16-adjacent.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        15313443.75,
+        15748655,
+        15355752.75,
+        15614421.75,
+        15317807.75,
+        15458097.5,
+        15365800.25,
+        15431887.75,
+        15360282,
+        15263340.25,
+        15393209.5,
+        15395415.25
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color2 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Native identical single-thread RGB conversion context/options/initialization and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG RGB16, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "nativePacketSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "packetBytes": 739472,
+      "nativePacketBytes": 739472,
+      "independentOwnedOutput": true,
+      "directAllocatedMeanBytes": 2427376.6666666665,
+      "allocatedBytesEachPair": [
+        2427480,
+        2427232,
+        2427480,
+        2427356,
+        2427356,
+        2427356,
+        2427356,
+        2427356,
+        2427356,
+        2427480,
+        2427356,
+        2427356
+      ],
+      "operationsPerSubject": 4,
+      "nativeBracketMeansUs": [
+        16098.325291666666,
+        16124.116666666667,
+        16086.086916666665
+      ],
+      "sampling": "NaturalGC4adjacent12pairs; oldpostGCglobalbrackets retained as separate history."
+    }
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/PngCodec.cs": "dbce48b45a088307674c8b7d50affe11517d3f60697a4e91211def1ed0a5ea30",
+    "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+    "src/Lokad.Image/Internal/Adler32.cs": "3c76a614c5de3a261442224f8a69218f345b3ab1730038a08eefb4c861a05c54",
+    "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+    "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07"
+  },
+  "oneShotStatusCounts": {
+    "pass": 16,
+    "gap": 0,
+    "uncertain": 1
+  },
+  "qualification": {
+    "provider": "benchmarks/deep-word-horizontal-views-evidence.json",
+    "fullChecksEachOs": 6512,
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "sha256": "5c4d569cbb69d1474d15595c40fa444bc788375d43bb35cdcb5232c59fd2111d",
+      "librarySha256": "c00a022ea3d708708adb793f0858faceeb5b169cf2b6776da9c3f63288ef7f4b",
+      "bytes": 455796
+    },
+    "productionInputsUnchanged": true
+  },
+  "confidence": {
+    "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+    "pairedRatioConfidence": [
+      0.9902942634632906,
+      1.0250828480891716
+    ],
+    "views": [
+      {
+        "view": "allActual",
+        "statistics": {
+          "OriginalValues": [
+            2040077.734375,
+            2022274.84375,
+            2014130,
+            2032286.40625,
+            2023556.625,
+            2033127.6875,
+            2020127.53125,
+            2063877.375,
+            2049395.75,
+            2120299.515625,
+            2110567.28125,
+            2123860.0625
+          ],
+          "N": 12,
+          "Min": 2014130,
+          "LowerFence": 1944765.671875,
+          "Q1": 2023236.1796875,
+          "Median": 2036602.7109375,
+          "Mean": 2054465.0677083333,
+          "Q3": 2075549.8515625,
+          "UpperFence": 2154020.359375,
+          "Max": 2123860.0625,
+          "InterquartileRange": 52313.671875,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 11794.73634989009,
+          "Variance": 1669389666.761023,
+          "StandardDeviation": 40858.165239778245,
+          "Skewness": 0.7381933608096274,
+          "Kurtosis": 1.7464758507863265,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2054465.0677083333,
+            "StandardError": 11794.73634989009,
+            "Level": 12,
+            "Margin": 52333.00147155702,
+            "Lower": 2002132.0662367763,
+            "Upper": 2106798.06917989
+          },
+          "Percentiles": {
+            "P0": 2014130,
+            "P25": 2023236.1796875,
+            "P50": 2036602.7109375,
+            "P67": 2054753.95125,
+            "P80": 2101229.3000000003,
+            "P85": 2113973.56328125,
+            "P90": 2119326.2921875003,
+            "P95": 2121901.76171875,
+            "P100": 2123860.0625
+          }
+        },
+        "nativeConfidenceLower": 1973220.6451565393,
+        "nativeConfidenceUpper": 2105418.807968461,
+        "ratioLower": 0.9509424246896764,
+        "ratioUpper": 1.067695127937785
+      },
+      {
+        "view": "upperOutlierDiagnostic",
+        "statistics": {
+          "OriginalValues": [
+            2040077.734375,
+            2022274.84375,
+            2014130,
+            2032286.40625,
+            2023556.625,
+            2033127.6875,
+            2020127.53125,
+            2063877.375,
+            2049395.75,
+            2120299.515625,
+            2110567.28125,
+            2123860.0625
+          ],
+          "N": 12,
+          "Min": 2014130,
+          "LowerFence": 1944765.671875,
+          "Q1": 2023236.1796875,
+          "Median": 2036602.7109375,
+          "Mean": 2054465.0677083333,
+          "Q3": 2075549.8515625,
+          "UpperFence": 2154020.359375,
+          "Max": 2123860.0625,
+          "InterquartileRange": 52313.671875,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 11794.73634989009,
+          "Variance": 1669389666.761023,
+          "StandardDeviation": 40858.165239778245,
+          "Skewness": 0.7381933608096274,
+          "Kurtosis": 1.7464758507863265,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2054465.0677083333,
+            "StandardError": 11794.73634989009,
+            "Level": 12,
+            "Margin": 52333.00147155702,
+            "Lower": 2002132.0662367763,
+            "Upper": 2106798.06917989
+          },
+          "Percentiles": {
+            "P0": 2014130,
+            "P25": 2023236.1796875,
+            "P50": 2036602.7109375,
+            "P67": 2054753.95125,
+            "P80": 2101229.3000000003,
+            "P85": 2113973.56328125,
+            "P90": 2119326.2921875003,
+            "P95": 2121901.76171875,
+            "P100": 2123860.0625
+          }
+        },
+        "nativeConfidenceLower": 1973220.6451565393,
+        "nativeConfidenceUpper": 2105418.807968461,
+        "ratioLower": 0.9509424246896764,
+        "ratioUpper": 1.067695127937785
+      }
+    ]
+  },
+  "scope": "ExistingGray8naturalGC64adjacent scope and source-validRGB16naturalGC4scope; fresh complete codec/conversion/zlib/packet/output/disposal on bothsides, frozen inputs/settings/exactpackets. OlderpostGCglobal and pre-current-adler/CRCgray4operation results retained separately. No production speedup or pooling claim. Generic retained-wrapper driver prose does not override frozenReady.",
+  "storage": {
+    "logicalDeflaterWorkspaceBytes": 393216,
+    "retainedOperationScratchBytes": 0,
+    "newCapacityBytes": 0,
+    "physicalNativeJitPoolPeaksRemeasured": false,
+    "allocation": "Direct64operation allocation differs from priorBDN/old4operation instrumentation; no allocation saving/design change. Owned capacity unchanged."
+  },
+  "next": "Gray8remainsuncertain after current-code/longer-batch comparison; no gain, gap or favorable retry. Stop passingRGB16. Next demonstrated retainednative storedword gap needs a materially revised design isolating a wider kernel from common compression/read paths, not another globalAdler trial.",
+  "history": {
+    "grayPrior": "benchmarks/png-gray-adjacent-confidence-evidence.json",
+    "invalidatedGrayPaths": [
+      "PIF873PngCodecIDATforwarding1cc625->dbce48",
+      "ABP875sharedAdler",
+      "WCF876BencoderchunkCRC"
+    ],
+    "rgbProvider": "benchmarks/png-rgb16-current-confidence-evidence.json",
+    "rgbSourceValidUnchanged": true
+  },
+  "raw": {
+    "file": "png-gray-current-confidence.tar.xz",
+    "sha256": "68fd5d1f0302a11bbb7cb681c32e01869e9aef204931895f59e37b608f0ba0b0",
+    "bytes": 383348,
+    "members": 20,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "deep-word-horizontal-views-qualified.tar.xz",
+        "sha256": "6e6728b4febc29b14f9de9686a339950a883db882141d5bae65d971b3a6e0f44"
+      },
+      {
+        "file": "png-wide-chunk-crc-qualified.tar.xz",
+        "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+      },
+      {
+        "file": "png-gray-adjacent-confidence.tar.xz",
+        "sha256": "11bdd521c69d032ccac68e7ee5b61d8d398706d5cb238a8228634219160e85bd"
+      },
+      {
+        "file": "png-rgb16-current-confidence.tar.xz",
+        "sha256": "aedc11766ae8c5960200fb2254d3043c1b32414f7d2cd555596feaeab1a34b5e"
+      }
+    ]
+  }
+}

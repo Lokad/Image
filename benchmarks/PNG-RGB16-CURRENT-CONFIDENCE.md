@@ -1,5 +1,8 @@
 # Current RGB16 PNG confidence
 
+Current family status: [encode confidence](PNG-CURRENT-ENCODE-CONFIDENCE.md).
+The original checkpoint and sampling scope below remain retained.
+
 The existing 513×259 RGB16 level 6/filter None complete encode now **passes/stops**
 on the actual development-package DLL. This resolves measurement uncertainty;
 no production speedup or allocation saving is claimed.
