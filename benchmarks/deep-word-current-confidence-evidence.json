@@ -1,0 +1,169 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DWA889",
+  "date": "2026-11-12",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "allBuilds": 0,
+  "broadOrPackageRepeats": 0,
+  "newMaterialPaths": 0,
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+    "linuxSha256": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+    "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633"
+  },
+  "cases": {
+    "Tight32x16_16": {
+      "caseId": "Tight32x16_16",
+      "depth": 16,
+      "width": 513,
+      "height": 259,
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053",
+      "nativeOutputSha256": "19b7a2d543d60ffabb34791677cf64fb93fa176eddf2c9ba2e3528aad4bf1a44",
+      "managedMaxWorkingBytes": 1071128,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1071128 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedUs": 444.725328125,
+      "nativeUs": 411.7128580729167,
+      "ratio": 1.0801832379163554,
+      "lower": 1.0653348252008654,
+      "upper": 1.0912733172278748,
+      "status": "gap",
+      "allocatedBytes": 112,
+      "managedAllocatedBytesEachPair": [
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112
+      ],
+      "librarySha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "receipt": "tmp/dwa889-deepword-adjacent-receipt.json",
+      "observation": "tmp/dwa889-deepword-adjacent.json",
+      "nativeBracketsUs": [
+        411.7128580729167,
+        412.94141015625,
+        412.1542565104167
+      ],
+      "pairedRatioConfidence": [
+        1.0683967248294644,
+        1.085599202332156
+      ]
+    }
+  },
+  "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "5495114ab308c2d816c8d36afa0cfe1353fd014edad186f4409130e56edfda9e",
+    "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+    "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+    "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524",
+    "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "39ec109219fabc5fa192583b2e0ca36ebdc7b41fd3ca85d2acd1e68e871e886e"
+  },
+  "qualification": {
+    "provider": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+    "fullChecksEachOs": 6512,
+    "sameActualPackageBothOs": true,
+    "actualPackage": {
+      "sha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633",
+      "librarySha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "bytes": 455748
+    },
+    "unchangedProductionInputs": true
+  },
+  "storage": {
+    "explicitArraysBytes": 4032,
+    "preadmittedScratchBytes": 4096,
+    "retainedOperationScratchBytes": 0,
+    "newCapacityBytes": 0,
+    "physicalNativeJitPeaksRemeasured": false,
+    "allocation": "Direct64-operation counter112B/op differs from113B/op BDN instrumentation; no design or allocation saving."
+  },
+  "currentResizeStatusCounts": {
+    "gap": 1,
+    "uncertain": 8,
+    "pass": 64
+  },
+  "history": {
+    "provider": "benchmarks/deep-word-vector-weights-evidence.json",
+    "unchangedStandaloneResult": "441.45/zimg414.55us,.999..1.072uncertain; earlier112.44us/20.30%raw/14.21%normalized production gain remains valid."
+  },
+  "next": "A demonstrated33.01us bounded word excess now justifies current actual-package attribution before choosing a redesign. All64passing resize controls stop. Other8uncertainties remain; no unchanged favorable repeats, broader numerical-policy change or new matrix.",
+  "raw": {
+    "file": "deep-word-current-adjacent-confidence.tar.xz",
+    "sha256": "d9bdb5386a5ca4749a713ba86a19b143651c3b30fdff4936a720f4ae93046fd3",
+    "bytes": 386308,
+    "members": 23,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+        "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+        "bytes": 1422452,
+        "members": 93,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "bilinear-operation-metadata-qualified.tar.xz",
+            "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+          },
+          {
+            "file": "resize-current-adjacent-confidence.tar.xz",
+            "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+          },
+          {
+            "file": "column-coefficient-preparation-trial.tar.xz",
+            "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+          }
+        ]
+      },
+      {
+        "file": "deep-word-vector-weights-qualified.tar.xz",
+        "sha256": "6df91d8bd8387ac86bcc8892090779a5607c0ef479f3338d44ee6a47040837db",
+        "bytes": 891220,
+        "members": 77,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "shared-resize-filter-weights-qualified.tar.xz",
+            "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+          },
+          {
+            "file": "byte-cross-horizontal-overlap-qualified.tar.xz",
+            "sha256": "422ca254d22a69ec7b1c7399e58ef66db1dbc0c327a9252866635aa7a1f7a4b4"
+          },
+          {
+            "file": "deep-word-current-attribution.tar.xz",
+            "sha256": "8339fb0bf7510ba603461275b3f89d45d50bdbdc0d838f172a934b8139194b5b"
+          }
+        ]
+      }
+    ]
+  }
+}

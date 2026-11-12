@@ -2090,13 +2090,24 @@ def render():
     assert compact_paired['sourceProof']['actualSharedCaller']['exact']
     assert all(v['rawGainSeparated'] for v in compact_paired['comparison']['views'].values())
     assert not compact_paired['comparison']['normalizedAdverseSeparated']
+    deep_confidence = json.loads((ROOT / 'benchmarks/deep-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert deep_confidence['measurementAccepted'] and not deep_confidence['productionChanged']
+    assert deep_confidence['allBuilds'] == deep_confidence['broadOrPackageRepeats'] == 0
+    assert deep_confidence['producers'] == compact_paired['producers']
+    assert deep_confidence['raw']['mirrored'] and deep_confidence['raw']['allMembersVerified']
+    assert set(deep_confidence['cases']) == {'Tight32x16_16'}
+    deep_cost = deep_confidence['cases']['Tight32x16_16']
+    assert deep_cost['status'] == 'gap' and deep_cost['lower'] > 1
+    assert deep_cost['managedRationalReferenceExact'] and deep_cost['managedQualifiedOriginalPixelsExact']
+    assert deep_cost['allOriginalGatesPassed'] and deep_cost['quietGuardsPassed']
+    assert deep_cost['allActualsRetained'] and deep_cost['independentOwnedOutput']
     current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases'], **deep_confidence['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    assert resize_status_counts == compact_paired['currentResizeStatusCounts']
+    assert resize_status_counts == deep_confidence['currentResizeStatusCounts']
     resize_case_owners = {case: (owner, view)
-                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'))
+                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'), (deep_confidence, 'deep'))
                           for case in owner['cases']}
     rows = apply_current_resize_weights(rows, resize_weights, resize_case_owners, bilinear_metadata)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
@@ -2388,7 +2399,7 @@ Current scope and remaining work:
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** across73standalone controls, **{resize_status_counts['pass']}pass /
-  {resize_status_counts['gap']}gaps / {resize_status_counts['uncertain']}uncertain**.
+  {resize_status_counts['gap']} gap / {resize_status_counts['uncertain']}uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: {cross_prefix['cases']['TightCross8']['managedUs']:.2f}/zimg{cross_prefix['cases']['TightCross8']['nativeUs']:.2f}µs,
   upper{cross_prefix['cases']['TightCross8']['upper']:.3f}, and same-height
@@ -2404,8 +2415,10 @@ Current scope and remaining work:
   checks and all clock shifts remain in the report, with no uniform gain claim.
   Unchanged59resize costs reuse source-valid proof, including five passing
   [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
-  [DeepWord32×16](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md) remains uncertain,
-  range.999–1.072. All eight equivalent prepared/one-shot controls pass; plans
+  [Current DeepWord32×16](../benchmarks/DEEP-WORD-CURRENT-CONFIDENCE.md) confirms
+  {deep_cost['managedUs']:.2f}/prepared-zimg{deep_cost['nativeUs']:.2f}µs,
+  range{deep_cost['lower']:.3f}–{deep_cost['upper']:.3f},112B/op: gap.
+  No production change or broad/package repeat. All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
   upper.998 passes while its standalone view stays uncertain. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries

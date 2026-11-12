@@ -89,7 +89,7 @@ Current scope and remaining work:
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** across73standalone controls, **64pass /
-  0gaps / 9uncertain**.
+  1 gap / 8uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: 793.42/zimg875.67µs,
   upper0.913, and same-height
@@ -105,8 +105,10 @@ Current scope and remaining work:
   checks and all clock shifts remain in the report, with no uniform gain claim.
   Unchanged59resize costs reuse source-valid proof, including five passing
   [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
-  [DeepWord32×16](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md) remains uncertain,
-  range.999–1.072. All eight equivalent prepared/one-shot controls pass; plans
+  [Current DeepWord32×16](../benchmarks/DEEP-WORD-CURRENT-CONFIDENCE.md) confirms
+  444.73/prepared-zimg411.71µs,
+  range1.065–1.091,112B/op: gap.
+  No production change or broad/package repeat. All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
   upper.998 passes while its standalone view stays uncertain. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
@@ -292,7 +294,7 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA16 † → 1027×519 | 2,608.17 | 2,873.02 | 0.908 / 0.912 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 793.42 | 875.67 | 0.906 / 0.913 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 811.25 | 819.63 | 0.990 / 0.993 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 32×16 | 441.45 | 414.55 | 1.065 / 1.072 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB (gap) † → 32×16 | 444.73 | 411.71 | 1.080 / 1.091 | 112 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 437.49 | 1,049.53 | 0.417 / 0.419 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,824.41 | 3,041.97 | 0.928 / 0.937 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,450.22 | 1,518.97 | 0.955 / 0.989 | 114 |
