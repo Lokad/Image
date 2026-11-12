@@ -1794,13 +1794,14 @@ def render():
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
     # One current owner for all affected complete PNG encodes. Superseded cost
     # providers and adjacent sampling studies remain linked from its report.
-    png_current = png_adler
+    png_current = json.loads((ROOT / 'benchmarks/png-wide-chunk-crc-evidence.json').read_text(encoding='utf-8'))
     assert png_current['productionAccepted'] and png_current['allAffectedPerformanceReconciled']
     assert png_current['requiredMaterialPaths'] == 289 and png_current['cpuGainClaimed'] and not png_current['generalCpuGainClaimed']
     assert png_current['raw']['mirrored'] and png_current['raw']['allMembersVerified']
     assert png_current['storage']['newOwnedCapacityBytes'] == 0
     assert png_current['storage']['newRetainedCapacityBytes'] == 0 and not png_current['storage']['workspaceAdmissionChanged']
-    assert png_current['oneShotStatusCounts'] == {'pass': 14, 'gap': 1, 'uncertain': 2}
+    assert png_current['oneShotStatusCounts'] == {'pass': 15, 'gap': 0, 'uncertain': 2}
+    assert png_current['normalizedGainConfirmed'] and png_current['reusedPerformance']['pngReadCases'] == 51
     assert not png_current['issues']
     def png_label(label):
         return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
@@ -2299,37 +2300,34 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [block Adler sums](../benchmarks/PNG-BLOCK-ADLER.md) reduce SIMD lanes
-  once per 4 KiB block, preserving exact arithmetic and cancellation. Complete
-  stored-word encoding saves **19.70 µs / 3.98% raw** against its current baseline;
-  filtered/all-actual intervals separate. Native time moves −0.18%; normalized
-  point gain is 3.81%, with overlapping confidence. Byte's filtered gain is
-  6.72 µs / 7.81%; all-actual/normalized intervals overlap. No uniform gain claim.
-  All 51 existing reads refresh: 49 pass / two uncertain. Live word now passes,
-  {png_adler['readCases']['DecodeCancelable16']['managedUs']:.2f}/FFmpeg {png_adler['readCases']['DecodeCancelable16']['nativeUs']:.2f} µs,
-  upper {png_adler['readCases']['DecodeCancelable16']['upper']:.3f}. Live byte and tight-memory
-  cancelable word remain uncertain. Three historical adverse comparisons are
-  reconciled against the unchanged current baseline; raw clock shifts remain
-  disclosed. [Current read costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
-  preserve full-depth pixels, hidden RGB, independent outputs and validation scope.
-  All 17 fresh-state encodes refresh: 14 pass / one gap / two uncertain.
-  Grayscale8 remains a small gap; Fastest8 and ordinary RGBA8 need confidence
-  resolution. Both gray-alpha encodes now pass. Complete packets remain exact.
-  Stored fresh-state RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
+- **PNG:** [wide chunk CRC](../benchmarks/PNG-WIDE-CHUNK-CRC.md) packs the existing
+  four exact polynomial residues into guarded SIMD lanes, with shared preparation
+  once per chunk and the original portable fallbacks. Retained-native stored-word
+  encoding saves **29.48 µs / 6.23% raw**; filtered/all-actual and normalized
+  confidence intervals separate. Native time moves +0.68%; normalized gain is
+  6.86%. This is a scoped gain, with no new owned/retained storage or general claim.
+  All 20 encoder views retain exact complete packets. The 17 fresh-state controls
+  have {png_current['oneShotStatusCounts']['pass']} passes / {png_current['oneShotStatusCounts']['gap']} gaps /
+  {png_current['oneShotStatusCounts']['uncertain']} uncertain; uncertain cases are not presumed slowdowns.
+  Fresh stored RGBA8 costs {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f} µs,
   upper {stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,} B/op;
   RGBA16 costs {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f} µs,
   upper {stored_word['upper']:.3f}, {stored_word['allocatedBytes']:,} B/op. Both pass.
   Native codec/zlib/packet preparation and word-frame conversion remain timed.
-  The retained-native word post-GC4 scope stays a distinct gap:
-  {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f} µs, upper {retained_word['upper']:.3f};
-  natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f} µs,
+  Retained-native word post-GC4 remains a distinct gap:
+  {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f} µs, upper {retained_word['upper']:.3f}.
+  Natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f} µs,
   upper {natural_word['upper']:.3f}, {natural_word['directAllocatedBytes']:,.3f} direct B/op.
   Predictable16 is {predictable['managedUs']/1000:.2f}/{predictable['nativeUs']/1000:.2f} ms,
-  upper {predictable['upper']:.3f}, exact 573,041 B. These lifetimes/sampling views
+  upper {predictable['upper']:.3f}, exact 573,041 B. These lifetime/sampling views
   are separate; historical subtraction measures no preparation cost.
-  Allocation/admission and zero retained scratch remain unchanged; no owned storage
-  is added. Physical/native/JIT peaks are unmeasured. Earlier [IDAT ownership](../benchmarks/PNG-IDAT-FORWARDING.md)
-  and [stored deflater storage](../benchmarks/PNG-STORED-WORKSPACE.md) stay qualified.
+  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) reuse source-valid
+  Adler-stage evidence: 49 passes / two uncertain across 51 controls. The changed
+  CRC is encode-only; common scan/identify generated code is identical. Full-depth
+  pixels, hidden RGB, metadata, owners and two-retained-image shared-root gates remain.
+  No allocation-saving or physical/native/JIT-peak claim follows. Earlier
+  [IDAT ownership](../benchmarks/PNG-IDAT-FORWARDING.md) and
+  [stored deflater storage](../benchmarks/PNG-STORED-WORKSPACE.md) stay qualified.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,

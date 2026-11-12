@@ -1,5 +1,8 @@
 # Block Adler sums for PNG
 
+Encoder costs are superseded by [wide chunk CRC](PNG-WIDE-CHUNK-CRC.md).
+The unchanged read/validation and shared-root paths retain this evidence.
+
 The shared checksum now accumulates SIMD byte sums, local weights and prefixes
 through each existing 4 KiB block, then reduces lanes once. The recurrence is exact:
 for 32-byte group sums s and weighted sums t, a += sum(s),

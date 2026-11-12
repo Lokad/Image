@@ -111,17 +111,37 @@ internal static class PngIdentificationCrc32
         seed = ((seed & 0x33333333) << 2) | ((seed >> 2) & 0x33333333);
         seed = ((seed & 0x0f0f0f0f) << 4) | ((seed >> 4) & 0x0f0f0f0f);
         seed = BinaryPrimitives.ReverseEndianness(seed);
-        var first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)seed << 32));
-        var second = Read(bytes.Slice(16, 16));
-        var third = Read(bytes.Slice(32, 16));
-        var fourth = Read(bytes.Slice(48, 16));
+        Vector128<ulong> first, second, third, fourth;
         var i = 64;
-        for (; i <= bytes.Length - 64; i += 64)
+        if (Pclmulqdq.V512.IsSupported && Gfni.V512.IsSupported && Avx512BW.IsSupported && Avx512F.IsSupported)
         {
-            first = Sse2.Xor(Fold(first, Fold512), Read(bytes.Slice(i, 16)));
-            second = Sse2.Xor(Fold(second, Fold512), Read(bytes.Slice(i + 16, 16)));
-            third = Sse2.Xor(Fold(third, Fold512), Read(bytes.Slice(i + 32, 16)));
-            fourth = Sse2.Xor(Fold(fourth, Fold512), Read(bytes.Slice(i + 48, 16)));
+            // Four independent 128-bit residues advance by the same x^512.
+            // Wider instructions pack those lanes without changing polynomial order.
+            var orderPair = Vector256.Create(ByteOrder, ByteOrder);
+            var order = Vector512.Create(orderPair, orderPair);
+            var value = Avx512F.Xor(ReadFour(bytes, order), Vector512.Create(0UL, (ulong)seed << 32, 0, 0, 0, 0, 0, 0));
+            var pair = Vector256.Create(Fold512, Fold512);
+            var factors = Vector512.Create(pair, pair);
+            for (; i <= bytes.Length - 64; i += 64)
+                value = Avx512F.Xor(Avx512F.Xor(
+                    Pclmulqdq.V512.CarrylessMultiply(value, factors, 0),
+                    Pclmulqdq.V512.CarrylessMultiply(value, factors, 0x11)), ReadFour(bytes.Slice(i, 64), order));
+            var lower = value.GetLower(); var upper = value.GetUpper();
+            first = lower.GetLower(); second = lower.GetUpper(); third = upper.GetLower(); fourth = upper.GetUpper();
+        }
+        else
+        {
+            first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)seed << 32));
+            second = Read(bytes.Slice(16, 16));
+            third = Read(bytes.Slice(32, 16));
+            fourth = Read(bytes.Slice(48, 16));
+            for (; i <= bytes.Length - 64; i += 64)
+            {
+                first = Sse2.Xor(Fold(first, Fold512), Read(bytes.Slice(i, 16)));
+                second = Sse2.Xor(Fold(second, Fold512), Read(bytes.Slice(i + 16, 16)));
+                third = Sse2.Xor(Fold(third, Fold512), Read(bytes.Slice(i + 32, 16)));
+                fourth = Sse2.Xor(Fold(fourth, Fold512), Read(bytes.Slice(i + 48, 16)));
+            }
         }
         first = Sse2.Xor(Fold(first, Fold128), second);
         first = Sse2.Xor(Fold(first, Fold128), third);
@@ -172,5 +192,13 @@ internal static class PngIdentificationCrc32
             crc = TailTable[(crc ^ bytes[i]) & 255] ^ (crc >> 8);
         }
         return ~crc;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<ulong> ReadFour(ReadOnlySpan<byte> bytes, Vector512<byte> order)
+    {
+        var input = MemoryMarshal.Read<Vector512<byte>>(bytes);
+        return Avx512BW.Shuffle(Gfni.V512.GaloisFieldAffineTransform(input,
+            Vector512.Create(0x8040201008040201UL).AsByte(), 0), order).AsUInt64();
     }
 }
