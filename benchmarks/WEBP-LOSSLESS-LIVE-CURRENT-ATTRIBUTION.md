@@ -1,5 +1,9 @@
 # Current VP8L live-token attribution
 
+Historical attribution for the accepted
+[Huffman front end](WEBP-HUFFMAN-READ-FRONTEND.md). That round owns current
+costs and generated code; the original counts and hypothesis below are retained.
+
 One two-second CPU0 capture on the current actual package DLL investigates the
 [demonstrated live-token decode gap](WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md).
 CPU1 collects samples; every original packet/pixel/native/source/owner/cancellation

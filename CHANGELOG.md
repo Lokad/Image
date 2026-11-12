@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Inline common lossless WebP Huffman reads while keeping the bounded fallback,
+  preserving exact decoded pixels, cancellation and memory ownership.
+
 - Omit unused matching/token storage from uncompressed PNG encoding, reducing
   temporary allocation and memory admission while preserving exact packets.
 

@@ -27,22 +27,26 @@ Current scope and remaining work:
   73.41/libwebp73.50ms, range0.915–1.070,
   4,822,760B/op and exact121,896B packet. All adjacent pairs/brackets remain;
   no codec change, presumed gap or favorable repeat follows the first adjacent capture.
-  [Live-token VP8L decoding](../benchmarks/WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md)
-  now has a demonstrated gap:3.207/FFmpeg3.026ms,range1.048–1.070,152,728B/op.
+  [Inline Huffman reads](../benchmarks/WEBP-HUFFMAN-READ-FRONTEND.md) save82.02µs/
+  2.56%raw/2.54%normalized on live-token VP8L decoding. Current3.125/FFmpeg3.025ms,
+  range1.018–1.043 remains a gap; allocation stays152,728B/op.
   All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
   conversion contexts and has no equivalent cancellation token. Across six lossless
   reads/validators:3pass/1gap/2uncertain.
-  Prioritize this approximately181µs gap for current attribution; no production CPU-change claim.
+  Attribute the remaining approximately100µs gap before another substantial decoder change.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   6 passes / 3 uncertain. The current word-alpha view is
   53.40/FFmpeg 53.30 ms, upper 1.008: uncertain,
   exact normalized alpha/packet and 6,241,792 B/op. Resolve uncertainty before tuning. Complete packets remain
-  exact. [Lossless decoding](../benchmarks/WEBP-PALETTE-OUTPUT.md) has 3 passes / 3 uncertain;
-  [VP8 position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
+  exact. The same [Huffman round](../benchmarks/WEBP-HUFFMAN-READ-FRONTEND.md)
+  refreshes all eight affected companion reads/validators without a uniform causal
+  gain claim. VP8/ALPH plus unchanged opaque [position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
   4 passes / 0 gaps / 2 uncertain.
   Ordinary opaque decoding improves 2.02% after reference normalization, with separated
   raw/all-actual/normalized intervals. Live 4,803.55/native4,786.85µs,
-  upper1.009, and stream remain uncertain. All six allocation totals grow
+  upper1.009, and resident ALPH remain uncertain; stream ALPH now passes.
+  The current resident interval supersedes its older pass without establishing a regression.
+  All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
 - **PNG:** [current decoding](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md)
@@ -200,8 +204,9 @@ Current scope and remaining work:
 
 The current immutable build passes **6,449 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
-normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
+Windows/Linux**. Current Huffman/VP8 checks pass1,026internal/239public per
+normal/scalar/BMI2-off mode; unchanged broader VP8/shared-memory and numerical ISA
+evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
@@ -243,7 +248,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,740.96 | 6,025.29 | 0.953 / 1.001 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 6,196.90 | 6,487.75 | 0.955 / 0.961 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -284,9 +289,9 @@ settings do not establish matched quality.
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,825.68 | 18,080.22 | 0.931 / 0.941 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode (confirmed pass) † | 668.74 | 1,013.98 | 0.660 / 0.670 | 258,454 | — |
 | JPEG DC-only, caller CMYK decode (confirmed pass) † | 318.93 | 330.45 | 0.965 / 0.972 | 1,085,981 | — |
-| VP8L RGBA8, resident decode (confidence open) † | 3,085.86 | 3,021.48 | 1.021 / 1.035 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode (confidence open) † | 3,290.70 | 3,268.51 | 1.007 / 1.021 | 152,824 | — |
-| VP8L palette16 RGBA8, resident decode (confirmed pass) † | 461.31 | 590.92 | 0.781 / 0.789 | 288,462 | — |
+| VP8L RGBA8, resident decode (confidence open) † | 3,044.22 | 3,025.72 | 1.006 / 1.035 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode (confidence open) † | 3,317.83 | 3,219.68 | 1.030 / 1.068 | 152,824 | — |
+| VP8L palette16 RGBA8, resident decode (confirmed pass) † | 417.53 | 544.48 | 0.767 / 0.780 | 288,465 | — |
 | JPEG CMYK sparse-2D, resident decode (confirmed pass) † | 419.25 | 433.52 | 0.967 / 0.978 | 20,944 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 420.81 | 709.56 | 0.593 / 0.598 | 895,563 | — |
 | JPEG 4:1:1, resident decode (confirmed pass) † | 382.03 | 448.23 | 0.852 / 0.863 | 219,551 | — |
@@ -381,8 +386,8 @@ settings do not establish matched quality.
 | Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
-| Validate VP8L+alpha, span † | 2,265.372 | 3,067.735 | 0.738 / 0.750 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,605.581 | 5,742.915 | 0.802 / 0.809 | 15,600 | Confirmed pass |
+| Validate VP8L+alpha, span † | 2,225.118 | 3,204.194 | 0.694 / 0.730 | 297,070 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,350.108 | 5,453.134 | 0.798 / 0.801 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,759.145 | 3,611.996 | 0.764 / 0.765 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

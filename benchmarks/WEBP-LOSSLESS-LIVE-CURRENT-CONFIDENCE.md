@@ -1,5 +1,10 @@
 # Current live-cancelable VP8L decoding
 
+This is the unchanged baseline for the accepted
+[Huffman front-end round](WEBP-HUFFMAN-READ-FRONTEND.md), which owns current
+affected costs and qualification. These original samples remain the matched
+incremental comparator; they are no longer current production timings.
+
 The existing live-token lossless decode control has a **demonstrated gap** on
 the current actual package DLL. Its first adjacent capture resolves the earlier
 uncertainty, without a production change or CPU-gain claim.

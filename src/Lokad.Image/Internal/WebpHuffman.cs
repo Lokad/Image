@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned canonical complete prefix tree, including VP8L's zero-bit single leaf.</summary>
@@ -74,10 +76,17 @@ internal sealed class WebpHuffman
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Read(ref WebpBitReader reader)
     {
         if (single >= 0) return single;
         if (shortCodes.Length != 0 && reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
+        return ReadSlow(ref reader);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private int ReadSlow(ref WebpBitReader reader)
+    {
         if (reader.TryReadCanonical(firstCode, counts, firstSymbol, symbols, out var canonical)) return canonical;
         var code = 0;
         for (var length = 1; length <= 15; length++)
