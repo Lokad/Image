@@ -89,7 +89,7 @@ Current scope and remaining work:
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** across73standalone controls, **63pass /
-  2gaps / 8uncertain**.
+  1gaps / 9uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: 793.42/zimg875.67µs,
   upper0.913, and same-height
@@ -129,7 +129,15 @@ Current scope and remaining work:
   contemporary reference clock, so no causal byte-gap closure claim follows.
   Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
   scratch. Arithmetic/repair and ownership stay exact; 71 other costs reuse valid
-  shared-caller proof. Remaining resize gaps: TightDown8(7.73µs), Wide8(2.47µs).
+  shared-caller proof. [Current adjacent confidence](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
+  on the unchanged actual package gives TightDown8
+  466.97/prepared-zimg 421.51 µs,
+  range 1.004–1.172: a gap. Wide8
+  371.91/377.37 µs,
+  range 0.953–1.012 remains uncertain.
+  Twelve alternating adjacent pairs retain all actuals and native brackets;
+  direct allocations 112/198,350 B/op.
+  No production speedup, build or broad/package repeat is claimed.
   [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
   without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
@@ -284,9 +292,9 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,824.41 | 3,041.97 | 0.928 / 0.937 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,450.22 | 1,518.97 | 0.955 / 0.989 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,451.78 | 1,745.61 | 0.832 / 0.867 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 256×129 | 426.33 | 418.60 | 1.018 / 1.024 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 256×129 | 466.97 | 421.51 | 1.108 / 1.172 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 488.42 | 571.80 | 0.854 / 0.859 | 113 |
-| Bicubic RGBA8, fresh managed / prepared zimg (gap) † → 128×64 | 349.08 | 346.62 | 1.007 / 1.011 | 198,452 |
+| Bicubic RGBA8, fresh managed / prepared zimg (uncertain) † → 128×64 | 371.91 | 377.37 | 0.986 / 1.012 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB (uncertain) † → 1027×129 | 900.25 | 870.63 | 1.034 / 1.091 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB (uncertain) † → 1027×129 | 857.10 | 848.80 | 1.010 / 1.023 | 114 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 462.67 | 1,269.67 | 0.364 / 0.380 | 113 |

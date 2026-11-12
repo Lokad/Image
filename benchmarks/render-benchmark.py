@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, deep_word, bilinear_metadata):
+def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata):
     """Replace every displayed affected resize cost from one current owner."""
     mapping = {
         'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
@@ -49,11 +49,12 @@ def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, d
         if kind != 'editing' or label not in mapping:
             result.append((kind, row)); continue
         field, case = mapping[label]
-        scoped = field == 'cases' and case in cross_prefix['cases']
-        generated = field == 'cases' and case in generated_rows['cases']
-        deep = field == 'cases' and case in deep_word['cases']
+        owner, view = case_owners.get(case, (evidence, 'base')) if field == 'cases' else (evidence, 'base')
+        scoped = view == 'cross'
+        generated = view == 'generated'
+        deep = view == 'deep'
         metadata = field == 'bilinear' and case in bilinear_metadata['cases']
-        owner = bilinear_metadata if metadata else deep_word if deep else generated_rows if generated else cross_prefix if scoped else evidence
+        if metadata: owner = bilinear_metadata
         current = owner['cases'][case] if metadata else owner[field][case]
         if scoped and case in {'TightCross8', 'TightHorizontal8'}:
             size = '256×519' if case == 'TightCross8' else '256×259'
@@ -2072,11 +2073,23 @@ def render():
     assert bilinear_metadata['raw']['mirrored'] and bilinear_metadata['raw']['allMembersVerified']
     assert bilinear_metadata['sourceProof']['other71ResizeCostsReused']
     assert bilinear_metadata['comparison']['Down16']['normalizedGainSeparated']
+    scaler_confidence = json.loads((ROOT / 'benchmarks/resize-current-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert scaler_confidence['measurementAccepted'] and not scaler_confidence['productionChanged']
+    assert scaler_confidence['allBuilds'] == scaler_confidence['broadOrPackageRepeats'] == 0
+    assert set(scaler_confidence['cases']) == {'TightDown8', 'Wide8'}
+    assert scaler_confidence['producers'] == bilinear_metadata['producers']
+    assert scaler_confidence['raw']['mirrored'] and scaler_confidence['raw']['allMembersVerified']
+    assert all(c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
+               and c['managedRationalReferenceExact'] and c['independentOwnedOutput']
+               for c in scaler_confidence['cases'].values())
     current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    rows = apply_current_resize_weights(rows, resize_weights, cross_prefix, generated_rows, deep_word, bilinear_metadata)
+    resize_case_owners = {case: (owner, view)
+                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'))
+                          for case in owner['cases']}
+    rows = apply_current_resize_weights(rows, resize_weights, resize_case_owners, bilinear_metadata)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2262,6 +2275,8 @@ def render():
     assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
     bilinear_byte = bilinear_metadata['cases']['Down8']
     bilinear_word = bilinear_metadata['cases']['Down16']
+    scaler_tight = scaler_confidence['cases']['TightDown8']
+    scaler_wide = scaler_confidence['cases']['Wide8']
     stored_byte = png_current['cases']['EncodeNoCompression8']
     stored_word = png_current['cases']['EncodeNoCompression16']
     retained_word = png_current['cases']['EncodeNoCompression16Retained']
@@ -2397,7 +2412,15 @@ Current scope and remaining work:
   contemporary reference clock, so no causal byte-gap closure claim follows.
   Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
   scratch. Arithmetic/repair and ownership stay exact; 71 other costs reuse valid
-  shared-caller proof. Remaining resize gaps: TightDown8(7.73µs), Wide8(2.47µs).
+  shared-caller proof. [Current adjacent confidence](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
+  on the unchanged actual package gives TightDown8
+  {scaler_tight['managedUs']:.2f}/prepared-zimg {scaler_tight['nativeUs']:.2f} µs,
+  range {scaler_tight['lower']:.3f}–{scaler_tight['upper']:.3f}: a gap. Wide8
+  {scaler_wide['managedUs']:.2f}/{scaler_wide['nativeUs']:.2f} µs,
+  range {scaler_wide['lower']:.3f}–{scaler_wide['upper']:.3f} remains uncertain.
+  Twelve alternating adjacent pairs retain all actuals and native brackets;
+  direct allocations {scaler_tight['allocatedBytes']:,}/{scaler_wide['allocatedBytes']:,} B/op.
+  No production speedup, build or broad/package repeat is claimed.
   [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
   without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six

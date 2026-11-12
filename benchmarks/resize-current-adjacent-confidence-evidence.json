@@ -1,0 +1,580 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CSC883",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "allBuilds": 0,
+  "broadOrPackageRepeats": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+    "linuxSha256": "077c518e4d972e92c5b697df676b34ef31e69a49e06ebc1d6f798b4a172d2a0d",
+    "actualPackageSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b"
+  },
+  "cases": {
+    "TightDown8": {
+      "managedUs": 466.9695169270833,
+      "nativeUs": 421.51445703125,
+      "ratio": 1.1078374872738075,
+      "lower": 1.0038439701876705,
+      "upper": 1.172218476839865,
+      "allocatedBytes": 112,
+      "managedAllocatedBytesEachPair": [
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112,
+        112
+      ],
+      "status": "gap",
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "receipt": "tmp/csc883-tightdown8-adjacent-receipt.json",
+      "observation": "tmp/csc883-tightdown8-adjacent.json",
+      "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+      "nativeStatistics": [
+        {
+          "OriginalValues": [
+            416220.671875,
+            417759.875,
+            416056.046875,
+            415085.828125,
+            415011.96875,
+            418388.171875,
+            416164.1875,
+            415985.328125,
+            414416.21875,
+            418589.890625,
+            446292.453125,
+            448202.84375
+          ],
+          "N": 12,
+          "Min": 414416.21875,
+          "LowerFence": 411743.23046875,
+          "Q1": 415760.453125,
+          "Median": 416192.4296875,
+          "Mean": 421514.45703125,
+          "Q3": 418438.6015625,
+          "UpperFence": 422455.82421875,
+          "Max": 448202.84375,
+          "InterquartileRange": 2678.1484375,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            446292.453125,
+            448202.84375
+          ],
+          "AllOutliers": [
+            446292.453125,
+            448202.84375
+          ],
+          "StandardError": 3492.038968980979,
+          "Variance": 146332033.93058082,
+          "StandardDeviation": 12096.777832570988,
+          "Skewness": 1.533858126689339,
+          "Kurtosis": 3.479538108565082,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 421514.45703125,
+            "StandardError": 3492.038968980979,
+            "Level": 12,
+            "Margin": 15494.104749880144,
+            "Lower": 406020.35228136985,
+            "Upper": 437008.56178113015
+          },
+          "Percentiles": {
+            "P0": 414416.21875,
+            "P25": 415760.453125,
+            "P50": 416192.4296875,
+            "P67": 417992.34484375,
+            "P80": 418549.546875,
+            "P85": 428285.7875,
+            "P90": 443522.196875,
+            "P95": 447152.12890625,
+            "P100": 448202.84375
+          }
+        },
+        {
+          "OriginalValues": [
+            450939.796875,
+            450896.453125,
+            447751.375,
+            446397.296875,
+            446241.75,
+            450549.671875,
+            447994.265625,
+            446306.375,
+            446605.90625,
+            447985.96875,
+            451329.453125,
+            453509.9375
+          ],
+          "N": 12,
+          "Min": 446241.75,
+          "LowerFence": 440023.451171875,
+          "Q1": 446553.75390625,
+          "Median": 447990.1171875,
+          "Mean": 448875.6875,
+          "Q3": 450907.2890625,
+          "UpperFence": 457437.591796875,
+          "Max": 453509.9375,
+          "InterquartileRange": 4353.53515625,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 708.7622949540629,
+          "Variance": 6028127.8889826,
+          "StandardDeviation": 2455.2246106991106,
+          "Skewness": 0.4001904745367302,
+          "Kurtosis": 1.6029225401446119,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 448875.6875,
+            "StandardError": 708.7622949540629,
+            "Level": 12,
+            "Margin": 3144.763657659948,
+            "Lower": 445730.92384234007,
+            "Upper": 452020.45115765993
+          },
+          "Percentiles": {
+            "P0": 446241.75,
+            "P25": 446553.75390625,
+            "P50": 447990.1171875,
+            "P67": 450677.9809375,
+            "P80": 450931.128125,
+            "P85": 451076.1765625,
+            "P90": 451290.48750000005,
+            "P95": 452310.67109375,
+            "P100": 453509.9375
+          }
+        },
+        {
+          "OriginalValues": [
+            454752.921875,
+            452369.9375,
+            455068.859375,
+            452622.03125,
+            451309.125,
+            456094.171875,
+            454667.796875,
+            456626.703125,
+            454462.015625,
+            455181.234375,
+            451687.03125,
+            451640.234375
+          ],
+          "N": 12,
+          "Min": 451309.125,
+          "LowerFence": 447852.59765625,
+          "Q1": 452199.2109375,
+          "Median": 454564.90625,
+          "Mean": 453873.5052083333,
+          "Q3": 455096.953125,
+          "UpperFence": 459443.56640625,
+          "Max": 456626.703125,
+          "InterquartileRange": 2897.7421875,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 533.5147861266482,
+          "Variance": 3415656.3241891577,
+          "StandardDeviation": 1848.1494323211957,
+          "Skewness": -0.08797153057127936,
+          "Kurtosis": 1.3314002984182474,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 453873.5052083333,
+            "StandardError": 533.5147861266482,
+            "Level": 12,
+            "Margin": 2367.1940821062517,
+            "Lower": 451506.3111262271,
+            "Upper": 456240.69929043954
+          },
+          "Percentiles": {
+            "P0": 451309.125,
+            "P25": 452199.2109375,
+            "P50": 454564.90625,
+            "P67": 454869.81875000003,
+            "P80": 455158.759375,
+            "P85": 455500.76249999995,
+            "P90": 456002.87812500005,
+            "P95": 456333.8109375,
+            "P100": 456626.703125
+          }
+        }
+      ],
+      "pairedRatioConfidence": [
+        1.0192851502951759,
+        1.061580328931842
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "productionChanged": false,
+      "earlierContemporaryBaseline": "tmp/rsm882-baseline-TightDown8-confirm-observation.json",
+      "caseId": "TightDown8",
+      "depth": 8,
+      "width": 513,
+      "height": 259,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "managedMaxWorkingBytes": 667660,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 667660 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    },
+    "Wide8": {
+      "managedUs": 371.912125,
+      "nativeUs": 377.36881119791667,
+      "ratio": 0.9855401770469716,
+      "lower": 0.953421969314216,
+      "upper": 1.0119024155848673,
+      "allocatedBytes": 198350,
+      "managedAllocatedBytesEachPair": [
+        198351.5,
+        198347.625,
+        198351.5,
+        198347.625,
+        198351.5,
+        198347.625,
+        198351.5,
+        198351.5,
+        198347.625,
+        198351.5,
+        198347.625,
+        198351.5
+      ],
+      "status": "uncertain",
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "receipt": "tmp/csc883-wide8-adjacent-receipt.json",
+      "observation": "tmp/csc883-wide8-adjacent.json",
+      "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+      "nativeStatistics": [
+        {
+          "OriginalValues": [
+            381310.28125,
+            378572.53125,
+            378060.359375,
+            378237.1875,
+            377656.453125,
+            376767.9375,
+            379347.609375,
+            378657.65625,
+            381562.6875,
+            377574.15625,
+            377016.578125,
+            377727.984375
+          ],
+          "N": 12,
+          "Min": 376767.9375,
+          "LowerFence": 375844.48046875,
+          "Q1": 377635.87890625,
+          "Median": 378148.7734375,
+          "Mean": 378540.9518229167,
+          "Q3": 378830.14453125,
+          "UpperFence": 380621.54296875,
+          "Max": 381562.6875,
+          "InterquartileRange": 1194.265625,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            381310.28125,
+            381562.6875
+          ],
+          "AllOutliers": [
+            381310.28125,
+            381562.6875
+          ],
+          "StandardError": 440.67673586713636,
+          "Variance": 2330351.826414166,
+          "StandardDeviation": 1526.5489924709807,
+          "Skewness": 0.8894226491766055,
+          "Kurtosis": 2.4533965821471027,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 378540.9518229167,
+            "StandardError": 440.67673586713636,
+            "Level": 12,
+            "Margin": 1955.2735714037979,
+            "Lower": 376585.6782515129,
+            "Upper": 380496.2253943205
+          },
+          "Percentiles": {
+            "P0": 376767.9375,
+            "P25": 377635.87890625,
+            "P50": 378148.7734375,
+            "P67": 378604.0275,
+            "P80": 379209.61875,
+            "P85": 380034.54453125,
+            "P90": 381114.01406250003,
+            "P95": 381423.86406249995,
+            "P100": 381562.6875
+          }
+        },
+        {
+          "OriginalValues": [
+            381258.796875,
+            378401.65625,
+            379946.953125,
+            378698.96875,
+            382212.109375,
+            381388.671875,
+            379953.0625,
+            375516.34375,
+            380890.578125,
+            377984.15625,
+            382262.328125,
+            378859.375
+          ],
+          "N": 12,
+          "Min": 375516.34375,
+          "LowerFence": 374624.703125,
+          "Q1": 378624.640625,
+          "Median": 379950.0078125,
+          "Mean": 379781.0833333333,
+          "Q3": 381291.265625,
+          "UpperFence": 385291.203125,
+          "Max": 382262.328125,
+          "InterquartileRange": 2666.625,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 573.8149701390337,
+          "Variance": 3951163.4394679205,
+          "StandardDeviation": 1987.7533648488488,
+          "Skewness": -0.5267465273930267,
+          "Kurtosis": 2.309900243746316,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 379781.0833333333,
+            "StandardError": 573.8149701390337,
+            "Level": 12,
+            "Margin": 2546.005165852421,
+            "Lower": 377235.0781674809,
+            "Upper": 382327.08849918575
+          },
+          "Percentiles": {
+            "P0": 375516.34375,
+            "P25": 378624.640625,
+            "P50": 379950.0078125,
+            "P67": 381026.8190625,
+            "P80": 381362.696875,
+            "P85": 381676.875,
+            "P90": 382129.765625,
+            "P95": 382234.70781249995,
+            "P100": 382262.328125
+          }
+        },
+        {
+          "OriginalValues": [
+            377403.625,
+            375156.03125,
+            376158.015625,
+            376686.3125,
+            377420.515625,
+            376535.140625,
+            378330.953125,
+            376740.921875,
+            378303.875,
+            382941.484375,
+            376369.890625,
+            376378.96875
+          ],
+          "N": 12,
+          "Min": 375156.03125,
+          "LowerFence": 374479.71484375,
+          "Q1": 376376.69921875,
+          "Median": 376713.6171875,
+          "Mean": 377368.8111979167,
+          "Q3": 377641.35546875,
+          "UpperFence": 379538.33984375,
+          "Max": 382941.484375,
+          "InterquartileRange": 1264.65625,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            382941.484375
+          ],
+          "AllOutliers": [
+            382941.484375
+          ],
+          "StandardError": 569.1150798816377,
+          "Variance": 3886703.6897841943,
+          "StandardDeviation": 1971.4724674172335,
+          "Skewness": 1.7296820570289542,
+          "Kurtosis": 5.488543992336436,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 377368.8111979167,
+            "StandardError": 569.1150798816377,
+            "Level": 12,
+            "Margin": 2525.1518498934975,
+            "Lower": 374843.6593480232,
+            "Upper": 379893.9630478102
+          },
+          "Percentiles": {
+            "P0": 375156.03125,
+            "P25": 376376.69921875,
+            "P50": 376713.6171875,
+            "P67": 377409.87453125,
+            "P80": 378127.203125,
+            "P85": 378313.35234375,
+            "P90": 378328.24531250005,
+            "P95": 380405.6921875,
+            "P100": 382941.484375
+          }
+        }
+      ],
+      "pairedRatioConfidence": [
+        0.9580774310412243,
+        1.0007581703896524
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "productionChanged": false,
+      "earlierContemporaryBaseline": "tmp/rsm882-baseline-Wide8-confirm-observation.json",
+      "caseId": "Wide8",
+      "depth": 8,
+      "width": 513,
+      "height": 259,
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "managedMaxWorkingBytes": null,
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 128x64 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, eight-pixel clamped halo (9.489% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+    }
+  },
+  "reason": "Resolve contemporary uncertain resize baselines after rejecting immutable-stride storage. Existing counterbalanced adjacent driver reduces separated-job clock confounding, preserving all original confidence/pixel/ownership gates. This is current confidence evidence, not a speedup or favorable repeat.",
+  "qualification": {
+    "reusedFrom": "benchmarks/bilinear-operation-metadata-evidence.json",
+    "fullChecksEachOs": 6511,
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "sha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b",
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347"
+    }
+  },
+  "storage": "No production change, new owned capacity, retention, pool, geometry or admission. Direct complete-operation allocations reported separately from unchanged retained storage. Actual/native/JIT physical peaks are unmeasured; source-valid parent ownership/admission evidence is reused.",
+  "interpretation": "TightDown8 remains a demonstrated gap on the unchanged actual package. Wide8 remains uncertain; do not tune it as a demonstrated current gap. No further sampling solely to seek favorable numbers. Earlier adverse/uncertain source-valid captures are retained, not reinterpreted as speedups.",
+  "currentResizeStatusCounts": {
+    "passCount": 63,
+    "gap": 1,
+    "uncertain": 9
+  },
+  "next": "Investigate shared horizontal coefficient expansion/preparation on TightDown8 only, using existing actual-module attribution. Account for output-backed workspace, additional tail rows and complete execution; keep exact tap/lane bits, repair, cancellation and ownership. No production acceptance from samples/instruction counts. Independent passing paths stop; all289required paths remain.",
+  "raw": {
+    "file": "resize-current-adjacent-confidence.tar.xz",
+    "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6",
+    "bytes": 45728,
+    "members": 33,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "bilinear-operation-metadata-qualified.tar.xz",
+        "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850",
+        "bytes": 2956104,
+        "members": 116,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "png-wide-chunk-crc-qualified.tar.xz",
+            "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+          },
+          {
+            "file": "shared-resize-filter-weights-qualified.tar.xz",
+            "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+          },
+          {
+            "file": "bilinear-byte-current-attribution.tar.xz",
+            "sha256": "0f5417ee6dc651f4c576772c92ccdce2b96f4d891b991defece1620c0226d554"
+          }
+        ]
+      },
+      {
+        "file": "raster-stride-preparation-trial.tar.xz",
+        "sha256": "c0f9756ff0b626e174c866aa61e6d59e71cf676a6e8d249fa4ccbc8335bd55bc",
+        "bytes": 1429268,
+        "members": 102,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "bilinear-operation-metadata-qualified.tar.xz",
+            "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850",
+            "bytes": 2956104,
+            "members": 116,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "png-wide-chunk-crc-qualified.tar.xz",
+                "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+              },
+              {
+                "file": "shared-resize-filter-weights-qualified.tar.xz",
+                "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+              },
+              {
+                "file": "bilinear-byte-current-attribution.tar.xz",
+                "sha256": "0f5417ee6dc651f4c576772c92ccdce2b96f4d891b991defece1620c0226d554"
+              }
+            ]
+          },
+          {
+            "file": "bounded-bicubic-byte-current-attribution.tar.xz",
+            "sha256": "10ab1ee4521153e5371ea7f9ce7d009ed506846ce9bb79a32d8a0c067c0ff60f",
+            "bytes": 107868,
+            "members": 21,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "bilinear-operation-metadata-qualified.tar.xz",
+                "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850",
+                "bytes": 2956104,
+                "members": 116,
+                "allMembersVerified": true,
+                "mirrored": true,
+                "dependencies": [
+                  {
+                    "file": "png-wide-chunk-crc-qualified.tar.xz",
+                    "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+                  },
+                  {
+                    "file": "shared-resize-filter-weights-qualified.tar.xz",
+                    "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+                  },
+                  {
+                    "file": "bilinear-byte-current-attribution.tar.xz",
+                    "sha256": "0f5417ee6dc651f4c576772c92ccdce2b96f4d891b991defece1620c0226d554"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
