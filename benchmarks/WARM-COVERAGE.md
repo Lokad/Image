@@ -19,6 +19,14 @@ raw and normalized intervals overlap. Do not assume a word gap or claim a word g
 Both candidate versions, source proofs and adverse/inconclusive views are retained.
 Other numerical bodies/geometry/owners remain exact and source-valid evidence reused.
 
+[Current opaque lossless confidence](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains
+uncertain after its first adjacent capture:73.41/libwebp73.50ms, range.915–1.070.
+Complete121,896B packets and all pixels/owners/settings/quiet guards pass. Native
+bracket variation remains visible; no presumed gap, speedup or favorable repeat.
+Direct allocation4,822,760B/op, zero retained operation scratch; peaks unremeasured.
+One allowlist-only driver build, unchanged production/frozen harnesses/current
+package and6,439-check qualification reused. No new workload or broad campaign.
+
 Unchanged [shared deep-pair conversions](PREPARED-DEEP-PAIR-CONVERSIONS.md)
 pass 6,435 full/live checks per OS, 524 internal/791 public affected checks in
 normal/scalar/AVX2-off/AVX512-off and SAME actual package/all three examples.

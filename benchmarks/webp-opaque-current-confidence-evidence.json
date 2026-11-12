@@ -1,0 +1,326 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OWC838",
+  "recordedOn": "2026-11-12",
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "current": {
+    "caseId": "opaque",
+    "harness": "WarmWebpLossless",
+    "harnessCase": "EncodeOpaque8",
+    "managedUs": 73406.90310416667,
+    "nativeUs": 73496.23320833333,
+    "ratio": 0.9987845621432946,
+    "lower": 0.9151903343019585,
+    "upper": 1.070325974388124,
+    "status": "uncertain",
+    "allocatedBytes": 4822760,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "actualPairs": 12,
+    "pairedOperationsPerSubject": 4,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "independentOwnedOutput": true,
+    "managedExact": true,
+    "completePacketExact": true,
+    "alphaExact": true,
+    "hiddenRgbExact": true,
+    "sourceUnchanged": true,
+    "librarySha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+    "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+    "driverSha256": "1da4451c6df6039b070e1ea2c1d85197b46ce4d4a62bee1690c3cc5c0d761324",
+    "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+    "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+    "nativePacketSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+    "managedPacketBytes": 121896,
+    "nativePacketBytes": 121896,
+    "nativeBracketMeansUs": [
+      73496.23320833333,
+      76703.13877083334,
+      75009.7815625
+    ],
+    "pairedRatioConfidence": [
+      0.9422606027374903,
+      0.9716961731361814
+    ],
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only libwebp exact=1 FFmpeg encoder-backend worker",
+      "sourceSha256": "bb2b3525a4d93305c5780d81bc8f73ea7335fdb5b2fde29cce71fd53cf6116c0",
+      "buildScriptSha256": "260bff49dd7711f1884873859b1c333e20accf86e08bbb0c80adea3051c89db1",
+      "workerSha256": "d2475ce3bceac9120e4958ab1e718f46745ad959c5c2cafcfbb28cf7d09906b1",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lwebp -lm -L{native-prefix}/lib -lsharpyuv -lm"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "webp-lossless-encode",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "threadType": 0,
+      "activeThreadType": 0,
+      "conversionThreads": 1,
+      "quality": 75,
+      "effort": 4,
+      "lossless": true,
+      "exactRgb": true,
+      "baselineBackend": "libwebp exact=1 (FFmpeg encoder backend)",
+      "inputFormat": "BGRA",
+      "repackingTimed": true,
+      "fullSourceNormalizationTimed": false,
+      "normalizedReferenceExact": false,
+      "inputImportAllocationTimed": true,
+      "outputBytes": 121896,
+      "initialCompletedOperations": 3,
+      "independentLiveOutputs": true,
+      "bitstreamDeterministic": true,
+      "libwebpEncoderVersion": 67072
+    },
+    "boundary": "One resident original 513x259 RGBA8 raster with RGB unchanged and alpha255 to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration.",
+    "receiptFile": "owc838-opaque-counterbalanced-receipt.json",
+    "rawStatisticsFile": "owc838-opaque-counterbalanced.json",
+    "retainedOperationScratchBytes": 0,
+    "newCapacityOrRetentionAddedBytes": 0,
+    "governedPeakNotRemeasuredForThisControl": true
+  },
+  "raw": {
+    "file": "webp-opaque-current-confidence.tar.xz",
+    "sha256": "d7ab510f3ef974ace51fd76a09593f37504dc8cb4caf2bb06bfd1bc2224ba99d",
+    "bytes": 900612,
+    "members": 33,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "scope": "benchmarks/contiguous-wide-source-views-evidence.json",
+        "file": "contiguous-wide-source-views-qualified.tar.xz",
+        "sha256": "faa3bcdb364d10bdb8f9ee293d5fa4339f6ddf1c6400a87df640951ca196402e",
+        "bytes": 2754152,
+        "members": 191,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "prepared-deep-pair-conversions-qualified.tar.xz",
+            "sha256": "bf854cc7a05705884732cc237320cb28714da21a5cdb76f301efa8bccf3d850b",
+            "scope": "benchmarks/prepared-deep-pair-conversions-evidence.json"
+          },
+          {
+            "file": "wide-bicubic-prepared-attribution.tar.xz",
+            "sha256": "f9fa9b0ba7d9933db351dd6620ea0308ac13907bfc1c321c507122d934591a25",
+            "scope": "benchmarks/wide-bicubic-prepared-attribution-evidence.json"
+          }
+        ]
+      },
+      {
+        "scope": "benchmarks/webp-huffman-workspace-evidence.json",
+        "file": "webp-huffman-workspace-qualified.tar.xz",
+        "sha256": "83757ae5ab3160e288d61f6fc70168a643ec8f7541152275526f3edc10fc0fc1",
+        "bytes": 13625672,
+        "members": 305,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "lanczos-word-certified-rows-qualified.tar.xz",
+            "sha256": "f96d748f83c144316e23d557e7ffcc80d7b6ca655ceed1102f522baf4bf29c1e"
+          },
+          {
+            "file": "webp-clustering-storage-qualified.tar.xz",
+            "sha256": "1d3b2c5fddf29df61300395b468daa1de13551384c5763070128eb79f452b6eb"
+          },
+          {
+            "file": "webp-current-lifetime-audit.tar.xz",
+            "sha256": "6c39b732294b0e04d38605f0ae5273b2c4df86cfee386fd51c08ec9583ea6377"
+          }
+        ]
+      }
+    ]
+  },
+  "producers": {
+    "windows": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+    "linux": "6ceb90136823195d6495fd5a95c5319a866ec18219be77a6ddf4c15587e04543",
+    "actualPackageSha256": "bdbeb55726a8863035b157ee8d6a6515d5d951515c65a079ae00e288596d0c88",
+    "actualPackageContainsTimedDll": true
+  },
+  "qualificationReused": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+      "full": [
+        3110,
+        2381,
+        948
+      ],
+      "total": 6439,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 528,
+        "public-normal": 791,
+        "internal-scalar": 528,
+        "public-scalar": 791
+      },
+      "isa": {
+        "internal-avx512-off": 528,
+        "public-avx512-off": 791,
+        "internal-avx2-off": 528,
+        "public-avx2-off": 791
+      },
+      "resizeInternalEachMode": 528,
+      "resizePublicEachMode": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "11010fb918296a089a7040e519315a1118f969b96db03cf75afeed4df14c621c",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "tests/Lokad.Image.Tests/BicubicOverlappingPairTests.cs": "8f74553bbaa55eb7a95eb183fa9cc5e4c408a77dce5dcfc97abfb89947157d6a"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa",
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "6d556ad2c23aba0eb7352e5c20064b29252d7ffa29318d9ec7c2ffe58245a2cd",
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b",
+        "tests/Lokad.Image.Tests/WideColumnRowLoanTests.cs": "0fff88123a0d0c8ee924bb20e9f09db0b95fb62daeb2baa8174766a79ac01c10"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "6ceb90136823195d6495fd5a95c5319a866ec18219be77a6ddf4c15587e04543",
+      "full": [
+        3110,
+        2381,
+        948
+      ],
+      "total": 6439,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 528,
+        "public-normal": 791,
+        "internal-scalar": 528,
+        "public-scalar": 791
+      },
+      "isa": {
+        "internal-avx512-off": 528,
+        "public-avx512-off": 791,
+        "internal-avx2-off": 528,
+        "public-avx2-off": 791
+      },
+      "resizeInternalEachMode": 528,
+      "resizePublicEachMode": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "11010fb918296a089a7040e519315a1118f969b96db03cf75afeed4df14c621c",
+        "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+        "tests/Lokad.Image.Tests/BicubicOverlappingPairTests.cs": "8f74553bbaa55eb7a95eb183fa9cc5e4c408a77dce5dcfc97abfb89947157d6a"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa",
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "6d556ad2c23aba0eb7352e5c20064b29252d7ffa29318d9ec7c2ffe58245a2cd",
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+        "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b",
+        "tests/Lokad.Image.Tests/WideColumnRowLoanTests.cs": "0fff88123a0d0c8ee924bb20e9f09db0b95fb62daeb2baa8174766a79ac01c10"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "bdbeb55726a8863035b157ee8d6a6515d5d951515c65a079ae00e288596d0c88",
+      "symbolsSha256": "43e0c4ac6aeb8a4e4e2a9a02e4178d7654c683aaa00eab123ae83e3648dcb785",
+      "bytes": 454324,
+      "librarySha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "bdbeb55726a8863035b157ee8d6a6515d5d951515c65a079ae00e288596d0c88",
+      "librarySha256": "60dd553a555885a8d16a7331e937dc65f9aa6eac7281fe5539ad904cea30bfc4",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "fullChecksEachOs": 6439,
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOs": 3,
+    "threeNamedStorageSuitesIncluded": true,
+    "resizeInternalEachModeEachOs": 528,
+    "resizePublicEachModeEachOs": 791,
+    "jpegInternalEachModeEachOs": 464,
+    "jpegPublicEachModeEachOs": 341,
+    "codecAndTextIsaReused": true,
+    "unchangedEvidence": "prepared-deep-pair-conversions-evidence.json",
+    "packagedDeepFrozenPixelsAndSharedAdmissionBothOS": true
+  },
+  "workflow": {
+    "driverBuilds": 1,
+    "onlyDriverAllowlistExtended": true,
+    "productionEmbeddedPublicHarnessNativeFixtureOrPackageBuilds": 0,
+    "completeControlCaptures": 1,
+    "allPairsAndNativeBracketsRetained": true,
+    "broadOrPackageQualificationRepeated": false,
+    "unchangedFavorableRepeats": 0
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/Vp8lHuffmanWorkspace.cs": "982f2407094e5cb90fc62b1bb7637b7a722df45b24549d88febb11a87e98b8d4",
+    "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "4f5bef92277ae92c5f9780a5de080806e0c90eaa8dc7354a01e6f556a61ec902",
+    "src/Lokad.Image/Internal/WebpLosslessEncoder.cs": "84eec5fba3cd7ab9b1ae8d56071e041206cd52536d07689f2ec11ff20c0bf5c0",
+    "src/Lokad.Image/Internal/Vp8Encoder.cs": "6d5b8a910d9e6f5e0a4abe51c5f0d6bcfbf89d1eefba4bf97141715a4f720e17",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+  },
+  "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+  "decision": "Opaque remains uncertain after its first adjacent-pair capture. Retain all views; do not assume a gap or repeat unchanged timing for a favorable bound. Photograph/bytealpha confirmed controls stay stopped; continue independent demonstrated codec/resizing work.",
+  "storage": "Direct managed total4822760B/op is measured; retained operation scratch zero and no new retained capacity. Governed peak for this opaque control, physical/native/JIT peaks and default-pool retention are not remeasured. Complete MemoryStream growth/disposal and independent packet ownership remain timed; no allocation-saving claim."
+}

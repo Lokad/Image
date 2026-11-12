@@ -23,6 +23,10 @@ Current scope and remaining work:
   [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
   package DLL. Alpha costs 52.99/FFmpeg 53.66 ms,
   upper 0.998, exact 98,590 B and 6,241,792 B/op; this resolves uncertainty, with no production speedup claim.
+  [Opaque lossless](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain:
+  73.41/libwebp73.50ms, range0.915–1.070,
+  4,822,760B/op and exact121,896B packet. All adjacent pairs/brackets remain;
+  no codec change, presumed gap or favorable repeat follows the first adjacent capture.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   6 passes / 3 uncertain. The current word-alpha view is
   53.40/FFmpeg 53.30 ms, upper 1.008: uncertain,
@@ -242,7 +246,7 @@ settings do not establish matched quality.
 | VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 53,395.51 | 53,304.90 | 1.002 / 1.008 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 74,977.27 | 75,349.65 | 0.995 / 1.013 | 4,823,168 | 121,896 / 121,896 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 73,406.90 | 73,496.23 | 0.999 / 1.070 | 4,822,760 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,757.43 | 4,717.98 | 1.008 / 1.028 | 820,916 | 236,828 / 236,828 |

@@ -1493,6 +1493,21 @@ def render():
     assert photo['packetSha256'] == photo['nativePacketSha256']
     assert photo['librarySha256'] == photo_evidence['producers']['windows']
     assert photo_evidence['producers']['actualPackageContainsTimedDll']
+    opaque_evidence = json.loads((ROOT / 'benchmarks/webp-opaque-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    opaque = opaque_evidence['current']
+    assert not opaque_evidence['productionChanged'] and not opaque_evidence['productionSpeedupClaim']
+    assert opaque_evidence['requiredMaterialPaths'] == 289 and opaque_evidence['workflow']['driverBuilds'] == 1
+    assert opaque_evidence['workflow']['onlyDriverAllowlistExtended'] and opaque_evidence['workflow']['productionEmbeddedPublicHarnessNativeFixtureOrPackageBuilds'] == 0
+    assert opaque_evidence['raw']['mirrored'] and opaque_evidence['raw']['allMembersVerified']
+    assert opaque['status'] == 'uncertain' and opaque['lower'] <= 1 < opaque['upper']
+    assert opaque['actualIterations'] == opaque['nativeSamplesEachBracket'] == 12 and opaque['pairedOperationsPerSubject'] == 4
+    assert opaque['allActualsRetained'] and opaque['allOriginalGatesPassed'] and opaque['quietGuardsPassed']
+    assert opaque['managedExact'] and opaque['completePacketExact'] and opaque['independentOwnedOutput']
+    assert opaque['managedPacketBytes'] == opaque['nativePacketBytes'] == 121896
+    assert opaque['packetSha256'] == opaque['nativePacketSha256']
+    assert opaque['librarySha256'] == opaque_evidence['producers']['windows'] == opaque_evidence['qualificationReused']['actualPackage']['librarySha256']
+    assert opaque['retainedOperationScratchBytes'] == 0
+    webp_owned['cases']['opaque'] = opaque
     for case, label in current_labels.items():
         owner = webp_owned
         current = photo if case == 'photograph' else owner['cases'][case]
@@ -2112,6 +2127,10 @@ Current scope and remaining work:
   [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
   package DLL. Alpha costs {alpha_current['managedUs']/1000:.2f}/FFmpeg {alpha_current['nativeUs']/1000:.2f} ms,
   upper {alpha_current['upper']:.3f}, exact {alpha_current['managedPacketBytes']:,} B and {alpha_current['allocatedBytes']:,} B/op; this resolves uncertainty, with no production speedup claim.
+  [Opaque lossless](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain:
+  {opaque['managedUs']/1000:.2f}/libwebp{opaque['nativeUs']/1000:.2f}ms, range{opaque['lower']:.3f}–{opaque['upper']:.3f},
+  {opaque['allocatedBytes']:,}B/op and exact121,896B packet. All adjacent pairs/brackets remain;
+  no codec change, presumed gap or favorable repeat follows the first adjacent capture.
   The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
   {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. The current word-alpha view is
   {alpha16_current['managedUs']/1000:.2f}/FFmpeg {alpha16_current['nativeUs']/1000:.2f} ms, upper {alpha16_current['upper']:.3f}: uncertain,

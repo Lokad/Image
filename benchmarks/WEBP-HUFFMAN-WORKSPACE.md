@@ -5,6 +5,10 @@ now passes on the actual package DLL. A [current adjacent alpha confirmation](WA
 also passes. Those supersede photograph/byte-alpha costs below; six other stage
 comparisons remain source-valid.
 
+[Current opaque confidence](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) supersedes the
+opaque cost below and remains uncertain. The remaining unchanged costs retain
+their source scope; this report preserves the workspace design and original evidence.
+
 WHS677 replaces fresh tree-building arrays and a priority queue per alphabet with
 one admitted operation-owned workspace across an image's five alphabets and
 histogram groups. Integer regions share one array; protected-run flags are cleared
