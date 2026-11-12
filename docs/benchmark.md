@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-12. These **138 tabulated comparisons** combine qualified
+Updated 2026-11-13. These **138 tabulated comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs. Retained release costs apply only to unchanged production
@@ -48,13 +48,13 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [wide chunk CRC](../benchmarks/PNG-WIDE-CHUNK-CRC.md) packs the existing
-  four exact polynomial residues into guarded SIMD lanes, with shared preparation
-  once per chunk and the original portable fallbacks. Retained-native stored-word
-  encoding saves **29.48 µs / 6.23% raw**; filtered/all-actual and normalized
-  confidence intervals separate. Native time moves +0.68%; normalized gain is
-  6.86%. This is a scoped gain, with no new owned/retained storage or general claim.
-  All 20 encoder views retain exact complete packets. The 17 fresh-state controls
+- **PNG:** [stored output forwarding](../benchmarks/PNG-STORED-FORWARDING.md)
+  delivers complete4KiB payloads directly from admitted history, preserving
+  exact chunks, cancellation and failed pending-buffer state. Independent
+  **8.55µs/2.01% filtered raw** and7.70µs/1.81%all-actual gains have separated
+  confidence. The normalized1.65%point overlaps; native clock moves−0.36%.
+  No normalized or general encoder gain is claimed. All20encoder views retain
+  exact complete packets. The17fresh-state controls
   have 16 passes / 0 gaps /
   1 uncertain; uncertain cases are not presumed slowdowns.
   [Current encode confidence](../benchmarks/PNG-CURRENT-ENCODE-CONFIDENCE.md) passes/stops:
@@ -67,21 +67,19 @@ Current scope and remaining work:
   range0.951–1.068;64-operation adjacency/all actuals,
   exact72,586B and547,123B/op. Older gray adjacency predates IDAT/
   Adler/CRC changes. No presumed gap, favorable repeat or allocation-saving claim.
-  Fresh stored RGBA8 costs 62.15/538.45 µs,
-  upper 0.131, 609,708 B/op;
-  RGBA16 costs 430.41/1378.65 µs,
-  upper 0.320, 1,147,452 B/op. Both pass.
+  Fresh stored RGBA8 costs 58.64/537.90 µs,
+  upper 0.127, 609,708 B/op;
+  RGBA16 costs 427.83/1380.52 µs,
+  upper 0.319, 1,147,452 B/op. Both pass.
   Native codec/zlib/packet preparation and word-frame conversion remain timed.
   Retained-native word post-GC4 remains a distinct gap:
-  422.80/405.96 µs, upper 1.063.
-  [Stored-only checksum](../benchmarks/PNG-STORED-CHECKSUM.md) independently saves
-  14.06µs/3.22% raw,3.37% normalized; both filtered/all-actual and normalized
-  confidence separate, native clock+0.16%. Packets, allocations and72KiB admission
-  stay unchanged. Common Adler/Write/constructor generated bodies are exact;
-  15compressed encodes/51reads reuse valid evidence. Copy fusion was inconclusive
-  in a short screen and was reverted; no family-wide speedup claim follows.
-  Natural-GC64 passes only its scope: 284.59/405.76 µs,
-  upper 0.736, 1,147,393.875 direct B/op.
+  417.77/404.34 µs, upper 1.051.
+  Packets, allocations and72KiB admission stay unchanged. Eight common generated
+  bodies match, including generic OutputBytes/Flush/Complete;
+  15compressed encodes/51reads reuse valid evidence. Original forwarding-screen
+  evidence and [checksum history](../benchmarks/PNG-STORED-CHECKSUM.md) remain linked.
+  Natural-GC64 passes only its scope: 275.24/406.09 µs,
+  upper 0.708, 1,147,393.875 direct B/op.
   Predictable16 is 257.70/387.12 ms,
   upper 0.684, exact 573,041 B. These lifetime/sampling views
   are separate; historical subtraction measures no preparation cost.
@@ -126,7 +124,7 @@ Current scope and remaining work:
   upper0.985,113B/op: pass/stop. Independent37.68µs/8.53%raw/
   8.45%normalized gains have separated confidence. Same4KiB admission/ordered pixels;
   its6512checks/SAMEpackage and new word consumer pass bothOSes;
-  latest PNG milestone6513checks/SAMEpackage requalifies unchanged resize paths.
+  latest PNG milestone6517checks/SAMEpackage requalifies unchanged resize paths.
   Superseded DeepWord costs/attribution stay linked history.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
@@ -193,15 +191,15 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,513 full/live checks per OS**
+The current immutable build passes **6,517 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass 703 internal / 246 public per
+Current PNG/admission checks pass 709 internal / 246 public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes569 internal/791 public per normal/scalar mode;
+Current resize qualification passes570 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
@@ -261,7 +259,7 @@ settings do not establish matched quality.
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,909.38 | 17,250.91 | 0.980 / 0.990 | 816,316 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,292.32 | 20,896.62 | 0.971 / 0.978 | 2,433,524 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,231.43 | 4,349.53 | 0.973 / 0.991 | 816,780 | 236,828 / 236,828 |
-| PNG RGBA16, one-shot stored0 / native0 † | 430.41 | 1,378.65 | 0.312 / 0.320 | 1,147,452 | 1,066,552 / 1,066,552 |
+| PNG RGBA16, one-shot stored0 / native0 † | 427.83 | 1,380.52 | 0.310 / 0.319 | 1,147,452 | 1,066,552 / 1,066,552 |
 | PNG grayscale8, one-shot Optimal6 / native6 † | 2,054.47 | 2,009.79 | 1.022 / 1.068 | 547,123 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,496.03 | 9,881.92 | 0.961 / 0.970 | 815,748 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,251.53 | 4,497.15 | 0.945 / 0.976 | 548,196 | 120,366 / 120,366 |
@@ -270,7 +268,7 @@ settings do not establish matched quality.
 | PNG RGB16, one-shot Optimal6 / native6 † | 15,418.18 | 16,086.09 | 0.958 / 0.977 | 2,427,377 | 739,472 / 739,472 |
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,851.23 | 5,410.67 | 0.897 / 0.916 | 818,604 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,117.32 | 10,495.66 | 0.964 / 0.976 | 1,356,764 | 506,887 / 506,887 |
-| PNG RGBA8, one-shot stored0 / native0 † | 62.15 | 538.45 | 0.115 / 0.131 | 609,708 | 533,444 / 533,444 |
+| PNG RGBA8, one-shot stored0 / native0 † | 58.64 | 537.90 | 0.109 / 0.127 | 609,708 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,499.29 | 1,505.44 | 0.996 / 1.010 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,283.58 | 1,506.58 | 0.852 / 0.861 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 3,052.97 | 3,142.15 | 0.972 / 0.989 | 70,272 | — |

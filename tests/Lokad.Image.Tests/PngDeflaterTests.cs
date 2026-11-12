@@ -8,6 +8,60 @@ namespace Lokad.Image.Tests;
 
 public sealed class PngDeflaterTests
 {
+    [Theory]
+    [InlineData(2, false)] [InlineData(9, false)]
+    [InlineData(2, true)] [InlineData(9, true)]
+    public void StoredChunkFailurePreservesPublishedPrefixPendingBytesAndAdmission(int stopAt, bool cancel)
+    {
+        var input = new byte[65531];
+        for (var i = 0; i < input.Length; i++) input[i] = (byte)(i * 31 + 11);
+        var original = input.ToArray();
+        // RFC1950 header and one nonfinal RFC1951 stored block, LEN=65531.
+        var expected = new byte[7 + input.Length];
+        new byte[] { 0x78, 0x01, 0, 0xfb, 0xff, 4, 0 }.CopyTo(expected, 0);
+        input.CopyTo(expected, 7);
+        using var root = new TestMemoryBudget(PngDeflater.StoredWorkspaceBytes);
+        using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+        using var output = new StoredChunkFailureOutput(stopAt, cancel ? cancellation : null,
+            () => Assert.Equal(PngDeflater.StoredWorkspaceBytes, root.Bytes));
+        var deflater = new PngDeflater(output, context, 0);
+        try
+        {
+            var error = Record.Exception(() => deflater.Write(input));
+            if (cancel) Assert.Equal(cancellation.Token, Assert.IsType<OperationCanceledException>(error).CancellationToken);
+            else Assert.Same(output.Failure, error);
+            Assert.Equal(PngDeflater.StoredWorkspaceBytes, root.Bytes);
+            var published = (cancel ? stopAt : stopAt - 1) * 4096;
+            Assert.Equal(expected[..published], output.ToArray());
+            if (!cancel)
+            {
+                deflater.Flush();
+                Assert.Equal(expected[..(stopAt * 4096)], output.ToArray());
+            }
+        }
+        finally { var writes = output.Writes; deflater.Dispose(); Assert.Equal(writes, output.Writes); }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.Equal(original, input);
+        using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
+        using var nextOutput = new MemoryStream();
+        using (var next = new PngDeflater(nextOutput, nextContext, 0)) { next.Write(input); next.Complete(); }
+        Assert.Equal(0, root.Bytes);
+    }
+
+    private sealed class StoredChunkFailureOutput(int stopAt, CancellationTokenSource? cancellation,
+        Action observeAdmission) : MemoryStream
+    {
+        internal int Writes { get; private set; }
+        internal IOException Failure { get; } = new("Authored stored-chunk failure.");
+        public override void Write(ReadOnlySpan<byte> data)
+        {
+            observeAdmission(); Writes++;
+            if (Writes == stopAt && cancellation is null) throw Failure;
+            base.Write(data);
+            if (Writes == stopAt) cancellation!.Cancel();
+        }
+    }
+
     [Fact]
     public void StoredTrailerMatchesLiteralChecksumForUnalignedBoundaryPayloads()
     {

@@ -1364,7 +1364,6 @@ def render():
     assert not any(v['normalizedLossSeparated'] for v in lanczos_current['currentComparisons']['Repeated8']['views'].values())
     assert lanczos_qualification['fullChecksEachOs'] == 6197
     assert lanczos_qualification['actualPackage']['sha256'] == lanczos_qualification['samePackageLinux']['sameActualPackageSha256']
-    current_build_qualification = jpeg_qualification
     assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
     assert len(lanczos_current['cases']) == 8
     assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
@@ -1578,18 +1577,17 @@ def render():
     webp_owned['cases']['alpha16'] = alpha16_current
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
-    current_build_qualification = streaming['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == 6155
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['resizeInternalEachModeEachOs'] == 329
+    streaming_qualification = streaming['qualification']
+    assert streaming_qualification['fullChecksEachOs'] == 6155
+    assert streaming_qualification['actualPackage']['sha256'] == streaming_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert streaming_qualification['resizeInternalEachModeEachOs'] == 329
     assert streaming['raw']['mirrored'] and streaming['raw']['allMembersVerified']
     assert len(streaming['cases']) == 8 and streaming['statusCounts'] == {'pass': 7, 'gap': 1, 'uncertain': 0}
     for current in streaming['cases'].values():
         assert current['actualIterations'] == 12 and current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         if not current['reusedUnchangedPath']:
-            assert current['librarySha256'] == streaming['timedWindowsSha256'] == current_build_qualification['actualPackage']['librarySha256']
+            assert current['librarySha256'] == streaming['timedWindowsSha256'] == streaming_qualification['actualPackage']['librarySha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    current_build_qualification = cached_publication_qualification
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1816,14 +1814,14 @@ def render():
     png_gray8 = png_adjacent['cases']['EncodeGray8']
     assert png_gray8['status'] == 'uncertain' and png_gray8['lower'] <= 1 < png_gray8['upper']
     assert png_gray8['operationsPerSubject'] == 64 and png_gray8['codecPreparationTimed'] and not png_gray8['referenceCodecRetained']
-    png_stored = json.loads((ROOT / 'benchmarks/png-stored-checksum-evidence.json').read_text(encoding='utf-8'))
+    png_stored = json.loads((ROOT / 'benchmarks/png-stored-forwarding-evidence.json').read_text(encoding='utf-8'))
     assert png_stored['productionAccepted'] and png_stored['allAffectedPerformanceReconciled']
     assert png_stored['raw']['mirrored'] and png_stored['raw']['allMembersVerified']
     assert not png_stored['compressionChanged'] and not png_stored['managedPacketsChanged']
     assert png_stored['storage']['newOwnedCapacityBytes'] == png_stored['storage']['newRetainedCapacityBytes'] == 0
     assert png_stored['sourceProof']['allCompressedAndReadCostsReusable']
     assert all(v['exact'] for v in png_stored['sourceProof']['actualCommonBodies'].values())
-    assert png_stored['comparison']['normalizedGainSeparated']
+    assert not png_stored['comparison']['normalizedAdverseSeparated']
     assert all(v['rawGainSeparated'] for v in png_stored['comparison']['views'].values())
     assert set(png_stored['cases']) == {'EncodeNoCompression8Retained', 'EncodeNoCompression16Retained',
                                        'EncodeNoCompression8', 'EncodeNoCompression16'}
@@ -1952,7 +1950,6 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} ({status}) † → 128×64 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    current_build_qualification = lanczos_qualification
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     predictable = png_current['cases']['EncodePredictable16']
@@ -2033,7 +2030,6 @@ def render():
             label = f'Bicubic {"prepared" if prepared else "one-shot"}{qualifier} RGBA{current["depth"]} / zimg {"prepared" if prepared else "one-shot"}'
             rows.append(('editing', f'| {label} † → {size} | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    current_build_qualification = raster['qualification']
     compact_rows = [row for kind, row in rows if kind == 'editing' and row.startswith(compact_geometry_prefixes)]
     assert len(compact_rows) == 2 and all(' H ' not in row for row in compact_rows)
     resize_weights = json.loads((ROOT / 'benchmarks/shared-resize-filter-weights-evidence.json').read_text(encoding='utf-8'))
@@ -2101,7 +2097,7 @@ def render():
     mixed_confidence = json.loads((ROOT / 'benchmarks/resize-mixed-word-confidence-evidence.json').read_text(encoding='utf-8'))
     assert mixed_confidence['measurementAccepted'] and not mixed_confidence['productionChanged']
     assert mixed_confidence['allBuilds'] == mixed_confidence['broadOrPackageRepeats'] == 0
-    assert mixed_confidence['producers'] == png_stored['producers']
+    assert mixed_confidence['producers']['windowsSha256'] == png_stored['baselineWindowsSha256']
     assert mixed_confidence['raw']['mirrored'] and mixed_confidence['raw']['allMembersVerified']
     assert set(mixed_confidence['cases']) == {'TightMixed16'}
     mixed_word_adjacent = mixed_confidence['cases']['TightMixed16']
@@ -2230,7 +2226,6 @@ def render():
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     assert refreshed_png_reads == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
-    current_build_qualification = jpeg_qualification
     current = jpeg_read['freshContextCase']
     assert current['nativeReady']['freshDecoderFrameAndPackingContextTimed']
     assert current['nativeReady']['residentPaddedPacketBorrowed']
@@ -2246,12 +2241,12 @@ def render():
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
     text_pipeline = json.loads((ROOT / 'benchmarks/cleared-canvas-storage-evidence.json').read_text(encoding='utf-8'))
-    current_build_qualification = text_pipeline['qualification']
+    text_pipeline_qualification = text_pipeline['qualification']
     assert text_pipeline['productionChanged'] and text_pipeline['requiredMaterialPaths'] == 289
     assert text_pipeline['raw']['mirrored'] and text_pipeline['raw']['allMembersVerified']
-    assert current_build_qualification['fullChecksEachOs'] == 6275
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == text_pipeline['producers']['librarySha256']
+    assert text_pipeline_qualification['fullChecksEachOs'] == 6275
+    assert text_pipeline_qualification['actualPackage']['sha256'] == text_pipeline_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert text_pipeline_qualification['actualPackage']['librarySha256'] == text_pipeline['producers']['librarySha256']
     assert text_pipeline['sourceProof']['originalFieldsConstructorDisposeInternalAllocateOverwriteCloneRowsSamplesVerbatim']
     assert text_pipeline['sourceProof']['oldPoolRentReturnFontPreservationAndLatestReturnVerbatim']
     assert set(text_pipeline['cases']) == {'OneShot', 'PrepareDraw8', 'Preparation', 'PreparedDraw'}
@@ -2267,79 +2262,78 @@ def render():
     assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
     assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
     assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
-    current_build_qualification = png_live['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6351
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_live['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == png_live['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['actualPackageFourFrozenEnlargementFramesPassedBothOs']
-    assert current_build_qualification['threeNamedStorageSuitesIncluded']
-    assert current_build_qualification['pngInternalEachModeEachOs'] == 712 and current_build_qualification['pngPublicEachModeEachOs'] == 246
-    assert current_build_qualification['unchangedResizeCodecTextIsaEvidenceReused'] and current_build_qualification['additionalResizeIsaRuns'] == 0
+    png_live_qualification = png_live['qualification']
+    assert png_live_qualification['fullChecksEachOs'] == png_live_qualification['windows']['total'] == png_live_qualification['linux']['total'] == 6351
+    assert png_live_qualification['actualPackage']['sha256'] == png_live_qualification['samePackageLinux']['sameActualPackageSha256'] == png_live['producers']['actualPackageSha256']
+    assert png_live_qualification['actualPackage']['librarySha256'] == png_live['producers']['windowsSha256']
+    assert png_live_qualification['actualPackage']['actualConsumerPassed'] and png_live_qualification['samePackageLinux']['actualConsumerPassed']
+    assert png_live_qualification['actualPackageFourFrozenEnlargementFramesPassedBothOs']
+    assert png_live_qualification['threeNamedStorageSuitesIncluded']
+    assert png_live_qualification['pngInternalEachModeEachOs'] == 712 and png_live_qualification['pngPublicEachModeEachOs'] == 246
+    assert png_live_qualification['unchangedResizeCodecTextIsaEvidenceReused'] and png_live_qualification['additionalResizeIsaRuns'] == 0
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
-    current_build_qualification = cached_horizontal['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6401
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == cached_horizontal['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['threeNamedStorageSuitesIncluded']
-    current_build_qualification = deep_current['qualification']
-    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6435
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
-    current_build_qualification = wide_quartet_qualification
-    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6439
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
-    current_build_qualification = huffman_front['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6449
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == huffman_front['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == huffman_front['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['actualPackage']['losslessHuffmanPaletteOwnersPassed'] and current_build_qualification['samePackageLinux']['losslessHuffmanPaletteOwnersPassed']
-    assert current_build_qualification['huffmanInternalEachModeEachOs'] == 1026 and current_build_qualification['huffmanPublicEachModeEachOs'] == 239
-    current_build_qualification = color_tiles['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6456
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == color_tiles['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
-    current_build_qualification = cross_prefix['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6497
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    current_build_qualification = streaming_weights['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6497
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
+    cached_horizontal_qualification = cached_horizontal['qualification']
+    assert cached_horizontal_qualification['fullChecksEachOs'] == cached_horizontal_qualification['windows']['total'] == cached_horizontal_qualification['linux']['total'] == 6401
+    assert cached_horizontal_qualification['actualPackage']['sha256'] == cached_horizontal_qualification['samePackageLinux']['sameActualPackageSha256'] == cached_horizontal['producers']['actualPackageSha256']
+    assert cached_horizontal_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
+    assert cached_horizontal_qualification['actualPackage']['actualConsumerPassed'] and cached_horizontal_qualification['samePackageLinux']['actualConsumerPassed']
+    assert cached_horizontal_qualification['threeNamedStorageSuitesIncluded']
+    deep_current_qualification = deep_current['qualification']
+    assert deep_current_qualification['windows']['total'] == deep_current_qualification['linux']['total'] == 6435
+    assert deep_current_qualification['actualPackage']['sha256'] == deep_current_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
+    assert wide_quartet_qualification['windows']['total'] == wide_quartet_qualification['linux']['total'] == 6439
+    assert wide_quartet_qualification['actualPackage']['sha256'] == wide_quartet_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
+    huffman_front_qualification = huffman_front['qualification']
+    assert huffman_front_qualification['fullChecksEachOs'] == huffman_front_qualification['windows']['total'] == huffman_front_qualification['linux']['total'] == 6449
+    assert huffman_front_qualification['actualPackage']['sha256'] == huffman_front_qualification['samePackageLinux']['sameActualPackageSha256'] == huffman_front['producers']['actualPackageSha256']
+    assert huffman_front_qualification['actualPackage']['librarySha256'] == huffman_front['producers']['windowsSha256']
+    assert huffman_front_qualification['actualPackage']['actualConsumerPassed'] and huffman_front_qualification['samePackageLinux']['actualConsumerPassed']
+    assert huffman_front_qualification['actualPackage']['losslessHuffmanPaletteOwnersPassed'] and huffman_front_qualification['samePackageLinux']['losslessHuffmanPaletteOwnersPassed']
+    assert huffman_front_qualification['huffmanInternalEachModeEachOs'] == 1026 and huffman_front_qualification['huffmanPublicEachModeEachOs'] == 239
+    color_tiles_qualification = color_tiles['qualification']
+    assert color_tiles_qualification['fullChecksEachOs'] == color_tiles_qualification['windows']['total'] == color_tiles_qualification['linux']['total'] == 6456
+    assert color_tiles_qualification['actualPackage']['sha256'] == color_tiles_qualification['samePackageLinux']['sameActualPackageSha256'] == color_tiles['producers']['actualPackageSha256']
+    assert color_tiles_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
+    assert color_tiles_qualification['actualPackage']['actualConsumerPassed'] and color_tiles_qualification['samePackageLinux']['actualConsumerPassed']
+    assert color_tiles_qualification['webpInternalEachModeEachOs'] == 1033 and color_tiles_qualification['webpPublicEachModeEachOs'] == 239
+    cross_prefix_qualification = cross_prefix['qualification']
+    assert cross_prefix_qualification['fullChecksEachOs'] == cross_prefix_qualification['windows']['total'] == cross_prefix_qualification['linux']['total'] == 6497
+    assert cross_prefix_qualification['actualPackage']['sha256'] == cross_prefix_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert cross_prefix_qualification['actualPackage']['actualConsumerPassed'] and cross_prefix_qualification['samePackageLinux']['actualConsumerPassed']
+    streaming_weights_qualification = streaming_weights['qualification']
+    assert streaming_weights_qualification['fullChecksEachOs'] == streaming_weights_qualification['windows']['total'] == streaming_weights_qualification['linux']['total'] == 6497
+    assert streaming_weights_qualification['actualPackage']['sha256'] == streaming_weights_qualification['samePackageLinux']['sameActualPackageSha256']
     assert all(q['actualConsumerPassed'] and q['streamingByteFrozenControls'] == 3
-               for q in (current_build_qualification['actualPackage'], current_build_qualification['samePackageLinux']))
-    current_build_qualification = png_current['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6510
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['allFourPngModesPassed'] and current_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
-    current_build_qualification = bilinear_metadata['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6511
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == bilinear_metadata['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == bilinear_metadata['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
-    current_build_qualification = compact_paired['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6512
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == compact_paired['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == compact_paired['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
-    assert current_build_qualification['affectedNarrowByteConsumerPassedBothOS']
-    current_build_qualification = word_views['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6512
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == word_views['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == word_views['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['affectedDeepWordConsumerPassedBothOS']
-    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
+               for q in (streaming_weights_qualification['actualPackage'], streaming_weights_qualification['samePackageLinux']))
+    png_current_qualification = png_current['qualification']
+    assert png_current_qualification['fullChecksEachOs'] == png_current_qualification['windows']['total'] == png_current_qualification['linux']['total'] == 6510
+    assert png_current_qualification['actualPackage']['sha256'] == png_current_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
+    assert png_current_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
+    assert png_current_qualification['actualPackage']['actualConsumerPassed'] and png_current_qualification['samePackageLinux']['actualConsumerPassed']
+    assert png_current_qualification['allFourPngModesPassed'] and png_current_qualification['unchangedResizeIsaAndStorageSuitesReused']
+    bilinear_metadata_qualification = bilinear_metadata['qualification']
+    assert bilinear_metadata_qualification['fullChecksEachOs'] == bilinear_metadata_qualification['windows']['total'] == bilinear_metadata_qualification['linux']['total'] == 6511
+    assert bilinear_metadata_qualification['actualPackage']['sha256'] == bilinear_metadata_qualification['samePackageLinux']['sameActualPackageSha256'] == bilinear_metadata['producers']['actualPackageSha256']
+    assert bilinear_metadata_qualification['actualPackage']['librarySha256'] == bilinear_metadata['producers']['windowsSha256']
+    assert bilinear_metadata_qualification['actualPackage']['actualConsumerPassed'] and bilinear_metadata_qualification['samePackageLinux']['actualConsumerPassed']
+    assert bilinear_metadata_qualification['threeNamedStorageSuitesIncluded'] and bilinear_metadata_qualification['disabledResizeIsaReused']
+    compact_paired_qualification = compact_paired['qualification']
+    assert compact_paired_qualification['fullChecksEachOs'] == compact_paired_qualification['windows']['total'] == compact_paired_qualification['linux']['total'] == 6512
+    assert compact_paired_qualification['actualPackage']['sha256'] == compact_paired_qualification['samePackageLinux']['sameActualPackageSha256'] == compact_paired['producers']['actualPackageSha256']
+    assert compact_paired_qualification['actualPackage']['librarySha256'] == compact_paired['producers']['windowsSha256']
+    assert compact_paired_qualification['actualPackage']['actualConsumerPassed'] and compact_paired_qualification['samePackageLinux']['actualConsumerPassed']
+    assert compact_paired_qualification['threeNamedStorageSuitesIncluded'] and compact_paired_qualification['disabledResizeIsaReused']
+    assert compact_paired_qualification['affectedNarrowByteConsumerPassedBothOS']
+    word_views_qualification = word_views['qualification']
+    assert word_views_qualification['fullChecksEachOs'] == word_views_qualification['windows']['total'] == word_views_qualification['linux']['total'] == 6512
+    assert word_views_qualification['actualPackage']['sha256'] == word_views_qualification['samePackageLinux']['sameActualPackageSha256'] == word_views['producers']['actualPackageSha256']
+    assert word_views_qualification['actualPackage']['librarySha256'] == word_views['producers']['windowsSha256']
+    assert word_views_qualification['actualPackage']['actualConsumerPassed'] and word_views_qualification['samePackageLinux']['actualConsumerPassed']
+    assert word_views_qualification['affectedDeepWordConsumerPassedBothOS']
+    assert word_views_qualification['threeNamedStorageSuitesIncluded'] and word_views_qualification['disabledResizeIsaReused']
     current_build_qualification = png_stored['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6513
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6517
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_stored['producers']['actualPackageSha256']
     assert current_build_qualification['actualPackage']['librarySha256'] == png_stored['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
@@ -2354,7 +2348,7 @@ def render():
     natural_word = png_stored['naturalWord']
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
+Updated 2026-11-13. These **{displayed_count} tabulated comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs. Retained release costs apply only to unchanged production
@@ -2402,13 +2396,13 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [wide chunk CRC](../benchmarks/PNG-WIDE-CHUNK-CRC.md) packs the existing
-  four exact polynomial residues into guarded SIMD lanes, with shared preparation
-  once per chunk and the original portable fallbacks. Retained-native stored-word
-  encoding saves **29.48 µs / 6.23% raw**; filtered/all-actual and normalized
-  confidence intervals separate. Native time moves +0.68%; normalized gain is
-  6.86%. This is a scoped gain, with no new owned/retained storage or general claim.
-  All 20 encoder views retain exact complete packets. The 17 fresh-state controls
+- **PNG:** [stored output forwarding](../benchmarks/PNG-STORED-FORWARDING.md)
+  delivers complete4KiB payloads directly from admitted history, preserving
+  exact chunks, cancellation and failed pending-buffer state. Independent
+  **8.55µs/2.01% filtered raw** and7.70µs/1.81%all-actual gains have separated
+  confidence. The normalized1.65%point overlaps; native clock moves−0.36%.
+  No normalized or general encoder gain is claimed. All20encoder views retain
+  exact complete packets. The17fresh-state controls
   have {png_oneshot_status['pass']} passes / {png_oneshot_status['gap']} gaps /
   {png_oneshot_status['uncertain']} uncertain; uncertain cases are not presumed slowdowns.
   [Current encode confidence](../benchmarks/PNG-CURRENT-ENCODE-CONFIDENCE.md) passes/stops:
@@ -2428,12 +2422,10 @@ Current scope and remaining work:
   Native codec/zlib/packet preparation and word-frame conversion remain timed.
   Retained-native word post-GC4 remains a distinct gap:
   {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f} µs, upper {retained_word['upper']:.3f}.
-  [Stored-only checksum](../benchmarks/PNG-STORED-CHECKSUM.md) independently saves
-  14.06µs/3.22% raw,3.37% normalized; both filtered/all-actual and normalized
-  confidence separate, native clock+0.16%. Packets, allocations and72KiB admission
-  stay unchanged. Common Adler/Write/constructor generated bodies are exact;
-  15compressed encodes/51reads reuse valid evidence. Copy fusion was inconclusive
-  in a short screen and was reverted; no family-wide speedup claim follows.
+  Packets, allocations and72KiB admission stay unchanged. Eight common generated
+  bodies match, including generic OutputBytes/Flush/Complete;
+  15compressed encodes/51reads reuse valid evidence. Original forwarding-screen
+  evidence and [checksum history](../benchmarks/PNG-STORED-CHECKSUM.md) remain linked.
   Natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f} µs,
   upper {natural_word['upper']:.3f}, {natural_word['allocatedBytes']:,.3f} direct B/op.
   Predictable16 is {predictable['managedUs']/1000:.2f}/{predictable['nativeUs']/1000:.2f} ms,
@@ -2480,7 +2472,7 @@ Current scope and remaining work:
   upper{deep_cost['upper']:.3f},113B/op: pass/stop. Independent37.68µs/8.53%raw/
   8.45%normalized gains have separated confidence. Same4KiB admission/ordered pixels;
   its6512checks/SAMEpackage and new word consumer pass bothOSes;
-  latest PNG milestone6513checks/SAMEpackage requalifies unchanged resize paths.
+  latest PNG milestone6517checks/SAMEpackage requalifies unchanged resize paths.
   Superseded DeepWord costs/attribution stay linked history.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
@@ -2553,9 +2545,9 @@ Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass 703 internal / 246 public per
+Current PNG/admission checks pass {current_build_qualification['windows']['pngInternalEachMode']} internal / {current_build_qualification['windows']['pngPublicEachMode']} public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes569 internal/791 public per normal/scalar mode;
+Current resize qualification passes570 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
 {wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables

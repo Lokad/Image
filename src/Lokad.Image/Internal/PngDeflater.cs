@@ -96,8 +96,43 @@ internal sealed partial class PngDeflater : Stream
         Put(final ? 1 : 0, 3); Align();
         OutputByte((byte)storedCount); OutputByte((byte)(storedCount >> 8));
         OutputByte((byte)~storedCount); OutputByte((byte)(~storedCount >> 8));
-        OutputBytes(history.AsSpan(0, storedCount));
+        OutputStoredBytes(history.AsSpan(0, storedCount));
         storedCount = 0;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void OutputStoredBytes(ReadOnlySpan<byte> bytes)
+    {
+        if (encodedCount != 0)
+        {
+            var prefix = Math.Min(bytes.Length, encoded.Length - encodedCount);
+            OutputBytes(bytes[..prefix]); bytes = bytes[prefix..];
+        }
+        while (bytes.Length >= encoded.Length)
+        {
+            FlushStoredPayload(bytes[..encoded.Length]); bytes = bytes[encoded.Length..];
+        }
+        OutputBytes(bytes);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void FlushStoredPayload(ReadOnlySpan<byte> bytes)
+    {
+        // Full chunks already live in admitted history. Keep it owned through
+        // the synchronous writer instead of copying via the output buffer.
+        ObjectDisposedException.ThrowIf(disposed, this);
+        try
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            output.Write(bytes);
+        }
+        catch
+        {
+            // Flush leaves a complete pending buffer when publication fails.
+            // Preserve that state, including an explicit subsequent Flush.
+            bytes.CopyTo(encoded); encodedCount = bytes.Length; throw;
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
