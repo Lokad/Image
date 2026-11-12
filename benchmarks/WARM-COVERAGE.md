@@ -22,6 +22,14 @@ all three storage suites, SAME actual package/all three examples. Disabled paths
 reuse valid guard/fallback evidence. One core/embedded build per OS, no public/
 harness/native/fixture rebuilds; publication remains postponed.
 
+[Raster stride preparation trial](RASTER-STRIDE-PREPARATION-TRIAL.md) is not retained.
+TightDown8 shows no clear raw gain; Wide8 improves 7.65% raw while native improves
+8.39%, with overlapping normalized confidence. Allocation controls are unchanged
+on both OSes. Original sources/DLLs/package are restored exactly, retaining current
+costs and qualification above. Preserve all trial evidence without another timing
+or broad/package repeat; next inspect shared coefficient preparation and row/tail
+workspace using current bounded-byte attribution. This is not a closed-family ban.
+
 [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) improves the retained-native stored-word
 complete encode by 29.48 µs/6.23% raw and 6.86% normalized, with separated
 filtered/all-actual/normalized confidence. Current word 443.92/
