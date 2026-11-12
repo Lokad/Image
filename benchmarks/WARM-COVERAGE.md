@@ -53,6 +53,16 @@ raw and normalized intervals overlap. Do not assume a word gap or claim a word g
 Both candidate versions, source proofs and adverse/inconclusive views are retained.
 Other numerical bodies/geometry/owners remain exact and source-valid evidence reused.
 
+The [current wide profile](WIDE-BICUBIC-CURRENT-TAIL-ATTRIBUTION.md) retains1,994
+locations:row-loan1,071/tail754/Build69/Kernel56; code6,498/6,512B. Locations are
+not phase times or gain forecasts; all original exact/native/source/owner/quiet
+gates pass and instrumented elapsed is discarded. Next, test sharing the accepted
+contiguous pair helper with proven byte tails, which still construct shuffled
+AVX512 pairs and coefficient vectors. Keep exact arithmetic/certification,
+scheduling/storage and real fallbacks; no new workspace/kernel/API. Current
+package qualification is reused, zero builds or qualification repeats. Inspect
+actual word code and complete costs; its uncertainty is not a presumed gap.
+
 [Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
 7.18%normalized on complete live-token VP8L decode, with separated confidence
 and native+1.127%. Current2,933.10/FFmpeg3,059.18µs,range0.907–0.989 passes/stops;
@@ -435,12 +445,11 @@ Current invalidation and next execution:
   BMI2 evidence remain valid. All six lossless reads pass/stop; continue an
   independent demonstrated resizing path rather than retuning this family.
 - HFR847 changes only the common VP8L Huffman call boundary. Nine complete
-  VP8L/ALPH/validation costs supersede WLR845 and the affected WPP695/VPP788
-  observations; the primary matched baseline remains valid for the incremental
-  comparison. Three opaque VP8 controls do not use this reader and retain their
-  prior evidence. Encoders, other decoders, numerical editing and text are
-  unchanged. Full/package qualification is current; attribute the remaining
-  live-token gap using this accepted build before another decoder change.
+  VP8L/ALPH/validation costs originally superseded WLR845 and affected WPP695/
+  VPP788 observations; CIT849 now owns seven current costs and reuses two
+  validators. The primary matched HFR baseline remains the valid incremental
+  comparator. Three opaque VP8 controls do not use this reader and retain their
+  prior evidence; unrelated codecs/editing/text remain source-valid.
 - PSS840 changes only stored-PNG preparation/reservation and matching cleanup.
   Existing NoCompression8/16 costs refresh with exact full packets; word retains
   both post-GC4op and natural-GC64op scopes. Nonzero allocation order, instance
