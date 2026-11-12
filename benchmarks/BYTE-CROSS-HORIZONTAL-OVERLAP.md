@@ -1,5 +1,9 @@
 # Prepared byte cross-resize overlap
 
+Current follow-up: [output-backed Cross rows](CROSS-BICUBIC-OUTPUT-PREFIX.md)
+supersedes the Cross costs below. The overlap kernel remains in prefix/strip
+execution; earlier clocks and next actions retain their original checkpoint.
+
 Bounded byte reverse-mixed/identity-height resizing now reuses the existing
 eight-tap/+2 horizontal pair kernel. Eligibility prepares once per strip in dead
 offset padding. Each output preserves tap order; unmatched/clamped/full-count

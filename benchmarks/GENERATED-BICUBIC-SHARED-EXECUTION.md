@@ -1,5 +1,9 @@
 # Shared generated bicubic execution
 
+Current follow-up: [output-backed Cross rows](CROSS-BICUBIC-OUTPUT-PREFIX.md).
+Cross/enlargement costs and next actions below retain their original checkpoint;
+the five generated costs remain source-valid.
+
 Extreme 8/16-bit reductions now share geometry, coefficient verification,
 16-source-row preparation and 16-output-row scheduling. Sample expansion is
 statically specialized; unsigned full-range word products stay unsigned.

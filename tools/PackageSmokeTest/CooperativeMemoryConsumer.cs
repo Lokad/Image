@@ -115,6 +115,9 @@ internal static class CooperativeMemoryConsumer
         if (depth == 16) source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         else source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
+        if (crossHeight > 0 && depth == 8 && Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(input))
+            != "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80")
+            throw new Exception("Packaged byte cross input differs from the frozen control.");
         if (vertical && depth == 16 && Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(input))
             != "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9")
             throw new Exception("Packaged vertical word input differs from the frozen control.");
@@ -134,6 +137,9 @@ internal static class CooperativeMemoryConsumer
             : horizontal ? (depth == 8
             ? "ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724"
             : "12073f9f1f3c8aa21fd50826350ec72021c8252923f9f52055302cb811405a35")
+            : crossHeight > 0 && depth == 8 ? (crossHeight == 259
+            ? "a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20"
+            : "46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e")
             : crossHeight > 0 ? (crossHeight == 259
             ? "ef78fb7dbfb05cb1a756a64702961cbe60abd5046fa5f2b7cc6fb91b3072cceb"
             : "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1")
@@ -182,6 +188,8 @@ internal static class CooperativeMemoryConsumer
             ? "Packaged vertical byte/word enlargement preserves frozen pixels, aggregate admission, cancellation and independent survivors."
             : horizontal
             ? "Packaged horizontal byte/word enlargement preserves frozen pixels, aggregate admission, cancellation and independent survivors."
+            : crossHeight > 0 && depth == 8
+            ? "Packaged output-backed byte cross prefix preserves frozen pixels, aggregate admission, cancellation and independent survivors."
             : crossHeight > 0
             ? "Packaged identity/general word bicubic preserves frozen pixels, aggregate admission, cancellation and independent survivors."
             : packedReduction
@@ -1176,6 +1184,8 @@ internal static class CooperativeMemoryConsumer
         VerifyBicubicSchedule(4096, packedReduction: true);
         VerifyBicubicSchedule(4096, crossHeight: 259);
         VerifyBicubicSchedule(4096, crossHeight: 519);
+        VerifyBicubicSchedule(4096, depth: 8, crossHeight: 259);
+        VerifyBicubicSchedule(4096, depth: 8, crossHeight: 519);
         VerifyBicubicSchedule(4096, depth: 8, horizontal: true);
         VerifyBicubicSchedule(4096, horizontal: true);
         VerifyBicubicSchedule(4096, vertical: true, depth: 8, heightOverride: 519);

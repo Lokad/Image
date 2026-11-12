@@ -34,11 +34,12 @@ internal static class EnlargingColumnBicubicResize
         }
     }
 
-    internal static bool WriteRow(ImageBuffer source, ImageBuffer result, int tile, int y, int length,
+    internal static bool WriteRow<TSamples>(ImageBuffer source, ImageBuffer result, int tile, int y, int length,
         ReadOnlySpan<Vector256<double>> cache, ReadOnlySpan<double> normalizers, ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, int sourceFirst, ReadOnlySpan<double> vertical,
         ReadOnlySpan<int> rows, int first, double normalizerY, OperationContext context, ref bool deferred)
     {
+        var tapCapacity = typeof(TSamples) == typeof(EnlargingBicubicResize.CrossByteSamples) ? 10 : 5;
         var destination = result.GetRow8(y); var outputX = 0;
         for (; outputX + 3 < length; outputX += 4)
         {
@@ -53,10 +54,10 @@ internal static class EnlargingColumnBicubicResize
             var accepted = BicubicMath.WriteByteQuartet(firstSum, secondSum, n0, n1, n2, n3,
                 destination.Slice((tile + outputX) * 4, 16));
             if ((accepted & 1) == 0 && (!(n0 >= .5 && n1 >= .5)
-                || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                || !RepairPair<TSamples>(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
                     vertical, first, context, ref deferred))) return false;
             if ((accepted & 2) == 0 && (!(n2 >= .5 && n3 >= .5)
-                || !RepairPair(source, result, tile, y, outputX + 2, weights, offsets, counts, sourceFirst,
+                || !RepairPair<TSamples>(source, result, tile, y, outputX + 2, weights, offsets, counts, sourceFirst,
                     vertical, first, context, ref deferred))) return false;
         }
         for (; outputX + 1 < length; outputX += 2)
@@ -72,7 +73,7 @@ internal static class EnlargingColumnBicubicResize
             if (!BicubicMath.TryWriteBytePair(sum, n0, n1, destination.Slice((tile + outputX) * 4, 8)))
             {
                 if (!(n0 >= .5 && n1 >= .5)
-                    || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                    || !RepairPair<TSamples>(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
                         vertical, first, context, ref deferred)) return false;
             }
         }
@@ -85,20 +86,21 @@ internal static class EnlargingColumnBicubicResize
             if (!BicubicMath.TryWriteByte(sum, normalizer, destination.Slice((tile + x) * 4, 4)))
             {
                 if (!(normalizer >= .5)
-                    || !OriginalByte(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
-                        offsets.Slice(x * 5, counts[x]), sourceFirst, vertical, first, context, ref deferred)) return false;
+                    || !OriginalByte(source, result, tile + x, y, weights.Slice(x * tapCapacity, counts[x]),
+                        offsets.Slice(x * tapCapacity, counts[x]), sourceFirst, vertical, first, context, ref deferred)) return false;
             }
         }
         return true;
     }
-    private static bool RepairPair(ImageBuffer source, ImageBuffer result, int tile, int y, int x,
+    private static bool RepairPair<TSamples>(ImageBuffer source, ImageBuffer result, int tile, int y, int x,
         ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, int sourceFirst,
         ReadOnlySpan<double> vertical, int first, OperationContext context, ref bool deferred)
     {
-        return OriginalByte(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
-                offsets.Slice(x * 5, counts[x]), sourceFirst, vertical, first, context, ref deferred)
-            && OriginalByte(source, result, tile + x + 1, y, weights.Slice((x + 1) * 5, counts[x + 1]),
-                offsets.Slice((x + 1) * 5, counts[x + 1]), sourceFirst, vertical, first, context, ref deferred);
+        var tapCapacity = typeof(TSamples) == typeof(EnlargingBicubicResize.CrossByteSamples) ? 10 : 5;
+        return OriginalByte(source, result, tile + x, y, weights.Slice(x * tapCapacity, counts[x]),
+                offsets.Slice(x * tapCapacity, counts[x]), sourceFirst, vertical, first, context, ref deferred)
+            && OriginalByte(source, result, tile + x + 1, y, weights.Slice((x + 1) * tapCapacity, counts[x + 1]),
+                offsets.Slice((x + 1) * tapCapacity, counts[x + 1]), sourceFirst, vertical, first, context, ref deferred);
     }
 
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,

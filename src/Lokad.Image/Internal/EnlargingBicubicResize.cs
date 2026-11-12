@@ -12,6 +12,7 @@ internal static class EnlargingBicubicResize
     private const int WorkspaceBytes = 4096;
     private readonly struct ByteSamples { }
     private readonly struct WordSamples { }
+    internal readonly struct CrossByteSamples { }
     private enum HorizontalMode { Filter, Paired, Identity }
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
@@ -49,6 +50,12 @@ internal static class EnlargingBicubicResize
         return true;
     }
 
+    // The caller owns the admitted output and scratch. No borrowed view escapes
+    // the non-inlined prefix frame; only the first unpublished row is returned.
+    internal static bool TryApplyCrossPrefix(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context, out int firstRow, ref bool deferred)
+        => TryApplyPrefix<CrossByteSamples>(source, result, scaleX, scaleY, context, out firstRow, ref deferred);
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool TryApplyPrefix<TSamples>(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         OperationContext context, out int firstRow, ref bool deferred)
@@ -57,7 +64,13 @@ internal static class EnlargingBicubicResize
         var width = result.Width;
         // Owned result capacity is charged before entry. No completed pixels
         // overlap these views, and nothing borrows them after this call returns.
-        var bytes = (long)width * 232 + (long)source.Width * 32;
+        var cross = typeof(TSamples) == typeof(CrossByteSamples);
+        var tapCapacity = cross ? 10 : 5;
+        // The ten-tap layout needs up to four alignment bytes for odd widths.
+        // Five-tap offsets stay identical to the enlargement layout.
+        var normalizerOffset = cross ? ((long)width * 284 + 7) & ~7L : (long)width * 224;
+        var decodedOffset = normalizerOffset + (long)width * 8;
+        var bytes = decodedOffset + (long)source.Width * 32;
         var output = result.Pixels;
         var end = output.Length & ~7;
         if (bytes > end) return true;
@@ -66,17 +79,19 @@ internal static class EnlargingBicubicResize
         if (prefixRows == 0) return true;
         var storage = output.Slice(start, (int)bytes);
         var cache = MemoryMarshal.Cast<byte, Vector256<double>>(storage[..(width * 160)]);
-        var weights = MemoryMarshal.Cast<byte, double>(storage.Slice(width * 160, width * 40));
-        var offsets = MemoryMarshal.Cast<byte, int>(storage.Slice(width * 200, width * 20));
-        var counts = MemoryMarshal.Cast<byte, int>(storage.Slice(width * 220, width * 4));
-        var normalizers = MemoryMarshal.Cast<byte, double>(storage.Slice(width * 224, width * 8));
-        var decoded = MemoryMarshal.Cast<byte, Vector256<double>>(storage[(width * 232)..]);
-        PrepareHorizontal(0, width, source.Width, width, scaleX, weights, offsets, counts, normalizers, context);
+        var weights = MemoryMarshal.Cast<byte, double>(storage.Slice(width * 160, width * tapCapacity * 8));
+        var offsets = MemoryMarshal.Cast<byte, int>(storage.Slice(width * (160 + tapCapacity * 8), width * tapCapacity * 4));
+        var counts = MemoryMarshal.Cast<byte, int>(storage.Slice(width * (160 + tapCapacity * 12), width * 4));
+        var normalizers = MemoryMarshal.Cast<byte, double>(storage.Slice((int)normalizerOffset, width * 8));
+        var decoded = MemoryMarshal.Cast<byte, Vector256<double>>(storage[(int)decodedOffset..]);
+        PrepareHorizontal<TSamples>(0, width, source.Width, width, scaleX, weights, offsets, counts, normalizers, context);
+        if (cross)
+            BicubicMath.PrepareOverlappingPairs(offsets, counts, width, source.Width, 10, 8, 2, context.Cancellation);
         var mode = HorizontalMode.Filter;
         // The guarded cardinal coordinates have weights +0,+0,1,+0,+0.
         // Decoded unsigned premultiplied samples already have canonical +0.
         if (source.Width == width && width <= 1 << 26) mode = HorizontalMode.Identity;
-        else if (source.Width != width
+        else if (!cross && source.Width != width
             && BicubicMath.PrepareAdjacentFourTapPairs(offsets, counts, source.Width, context.Cancellation)) mode = HorizontalMode.Paired;
         Span<int> rowIds = stackalloc int[5]; rowIds.Fill(-1);
         Span<double> vertical = stackalloc double[5]; Span<int> rows = stackalloc int[5];
@@ -95,7 +110,7 @@ internal static class EnlargingBicubicResize
                 {
                     DecodeRow<TSamples>(source, sy, 0, source.Width, decoded, context);
                     if (mode == HorizontalMode.Paired) FilterHorizontalPairs(decoded, weights, offsets, counts, filtered, context);
-                    else FilterHorizontal(decoded, weights, offsets, counts, filtered, context);
+                    else FilterHorizontal<TSamples>(decoded, weights, offsets, counts, filtered, context);
                 }
             }
             if (!WriteRow<TSamples>(source, result, 0, y, width, cache, normalizers, weights, offsets, counts,
@@ -122,7 +137,7 @@ internal static class EnlargingBicubicResize
         for (var tile = 0; tile < result.Width; tile += 14)
         {
             var length = Math.Min(14, result.Width - tile);
-            PrepareHorizontal(tile, length, source.Width, result.Width, scaleX, weights, offsets, counts, normalizers, context);
+            PrepareHorizontal<TSamples>(tile, length, source.Width, result.Width, scaleX, weights, offsets, counts, normalizers, context);
             var sourceFirst = offsets[0];
             var sourceLast = offsets[(length - 1) * 5 + counts[length - 1] - 1];
             var sourceCount = sourceLast - sourceFirst + 1;
@@ -149,7 +164,7 @@ internal static class EnlargingBicubicResize
                     {
                         DecodeRow<TSamples>(source, sy, sourceFirst, sourceCount, decoded[..sourceCount], context);
                         if (mode == HorizontalMode.Paired) FilterHorizontalPairs(decoded, weights, offsets, counts[..length], filtered, context);
-                        else FilterHorizontal(decoded, weights, offsets, counts[..length], filtered, context);
+                        else FilterHorizontal<TSamples>(decoded, weights, offsets, counts[..length], filtered, context);
                     }
                 }
                 if (!WriteRow<TSamples>(source, result, tile, y, length, cache, normalizers, weights, offsets, counts,
@@ -160,9 +175,10 @@ internal static class EnlargingBicubicResize
         return true;
     }
 
-    private static void PrepareHorizontal(int tile, int length, int sourceWidth, int width, double scaleX,
+    private static void PrepareHorizontal<TSamples>(int tile, int length, int sourceWidth, int width, double scaleX,
         Span<double> weights, Span<int> offsets, Span<int> counts, Span<double> normalizers, OperationContext context)
     {
+        var tapCapacity = typeof(TSamples) == typeof(CrossByteSamples) ? 10 : 5;
         for (var x = 0; x < length; x++)
         {
             context.Cancellation.ThrowIfCancellationRequested();
@@ -173,8 +189,8 @@ internal static class EnlargingBicubicResize
             for (var t = 0; t < count; t++)
             {
                 var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
-                weights[x * 5 + t] = w; normalizer += w;
-                offsets[x * 5 + t] = Math.Clamp(first + t, 0, sourceWidth - 1);
+                weights[x * tapCapacity + t] = w; normalizer += w;
+                offsets[x * tapCapacity + t] = Math.Clamp(first + t, 0, sourceWidth - 1);
             }
             normalizers[x] = normalizer;
         }
@@ -209,14 +225,25 @@ internal static class EnlargingBicubicResize
             EnlargingColumnBicubicResize.DecodeRow(source.GetRow8(y).Slice(first * 4, count * 4), decoded, context);
     }
 
-    private static void FilterHorizontal(ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> weights,
+    private static void FilterHorizontal<TSamples>(ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, Span<Vector256<double>> cache, OperationContext context)
     {
+        var cross = typeof(TSamples) == typeof(CrossByteSamples);
+        var tapCapacity = cross ? 10 : 5;
         for (var x = 0; x < cache.Length; x++)
         {
             if ((x & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
-            var tapWeights = weights.Slice(x * 5, counts[x]);
-            var tapOffsets = offsets.Slice(x * 5, counts[x]);
+            if (cross && x + 1 < cache.Length && counts[x] == 8 && counts[x + 1] == 8
+                && offsets[x * 10 + 9] != 0)
+            {
+                var start = offsets[x * 10 + 9] - 1;
+                var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(start, 10),
+                    weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2);
+                cache[x] = pair.GetLower(); cache[x + 1] = pair.GetUpper(); x++;
+                continue;
+            }
+            var tapWeights = weights.Slice(x * tapCapacity, counts[x]);
+            var tapOffsets = offsets.Slice(x * tapCapacity, counts[x]);
             var sum = Vector256<double>.Zero;
             for (var tx = 0; tx < tapWeights.Length; tx++)
                 sum = Avx.Add(sum, Avx.Multiply(decoded[tapOffsets[tx]], Vector256.Create(tapWeights[tx])));
@@ -258,7 +285,7 @@ internal static class EnlargingBicubicResize
         return typeof(TSamples) == typeof(WordSamples)
             ? EnlargingWordColumnBicubicResize.WriteRow(source, result, tile, y, length, cache, normalizers, weights,
                 offsets, counts, sourceFirst, vertical, rows, first, normalizerY, context, ref deferred)
-            : EnlargingColumnBicubicResize.WriteRow(source, result, tile, y, length, cache, normalizers, weights,
+            : EnlargingColumnBicubicResize.WriteRow<TSamples>(source, result, tile, y, length, cache, normalizers, weights,
                 offsets, counts, sourceFirst, vertical, rows, first, normalizerY, context, ref deferred);
     }
 }

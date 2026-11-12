@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows, deep_word):
+def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, deep_word):
     """Replace every displayed affected resize cost from one current owner."""
     mapping = {
         'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
@@ -49,12 +49,12 @@ def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows, dee
         if kind != 'editing' or label not in mapping:
             result.append((kind, row)); continue
         field, case = mapping[label]
-        scoped = field == 'cases' and case in byte_cross['cases']
+        scoped = field == 'cases' and case in cross_prefix['cases']
         generated = field == 'cases' and case in generated_rows['cases']
         deep = field == 'cases' and case in deep_word['cases']
-        owner = deep_word if deep else generated_rows if generated else byte_cross if scoped else evidence
+        owner = deep_word if deep else generated_rows if generated else cross_prefix if scoped else evidence
         current = owner[field][case]
-        if scoped:
+        if scoped and case in {'TightCross8', 'TightHorizontal8'}:
             size = '256×519' if case == 'TightCross8' else '256×259'
             label = f'Bicubic RGBA8, width reduction / ' + ('height enlargement' if case == 'TightCross8' else 'same height') + f', input+output+4 KiB † → {size}'
         if generated:
@@ -2104,17 +2104,20 @@ def render():
     assert resize_weights['raw']['mirrored'] and resize_weights['raw']['allMembersVerified']
     assert not resize_weights['materialPassToGapContradictions']
     assert resize_weights['storage']['newOwnedCapacityBytes'] == resize_weights['storage']['newRetainedCapacityBytes'] == 0
-    byte_cross = json.loads((ROOT / 'benchmarks/byte-cross-horizontal-overlap-evidence.json').read_text(encoding='utf-8'))
-    assert byte_cross['productionAccepted'] and byte_cross['allAffectedPerformanceReconciled']
-    assert set(byte_cross['cases']) == {'TightCross8', 'TightHorizontal8'}
-    assert byte_cross['raw']['mirrored'] and byte_cross['raw']['allMembersVerified']
-    assert byte_cross['sourceProof']['wholeOriginalCrossByteFileReconstructsExactly']
-    assert byte_cross['reuse']['allOtherProductionSourcesUnchanged']
-    assert byte_cross['reuse']['newCodeAfterUnchangedIsaRejectionGuard']
-    assert byte_cross['storage']['newOwnedCapacityBytes'] == byte_cross['storage']['newRetainedCapacityBytes'] == 0
+    cross_prefix = json.loads((ROOT / 'benchmarks/cross-bicubic-output-prefix-evidence.json').read_text(encoding='utf-8'))
+    assert cross_prefix['productionAccepted'] and cross_prefix['allAffectedPerformanceReconciled']
+    assert set(cross_prefix['cases']) == {'TightCross8', 'TightHorizontal8', 'Up8', 'TightUp8', 'HorizontalUp8', 'TightHorizontalUp8', 'VerticalUp8', 'TightVerticalUp8', 'Up16', 'TightUp16', 'HorizontalUp16', 'TightHorizontalUp16', 'VerticalUp16', 'TightVerticalUp16'}
+    assert cross_prefix['raw']['mirrored'] and cross_prefix['raw']['allMembersVerified']
+    assert cross_prefix['sourceProof']['originalCrossStripBodyExactAfterOnlyPrepareTailAndStartRowRemap']
+    assert cross_prefix['sourceProof']['actualTimedRootJit']['normalizedRootInstructionsAndBlockOffsetsExact']
+    assert cross_prefix['reuse']['allOtherProductionSourcesUnchanged']
+    assert cross_prefix['reuse']['newCodeAfterUnchangedIsaRejectionGuard']
+    assert cross_prefix['storage']['newOwnedCapacityBytes'] == cross_prefix['storage']['newRetainedCapacityBytes'] == 0
     assert all(c['scopedIncrementOnly'] and not c['newNativeCostOrParityProof'] and c['pairs'] == 12
-               and c['logRatioUpper'] < 1 for c in byte_cross['paired'].values())
-    assert all(not c['normalizedAdverseSeparated'] for c in byte_cross['comparison'].values())
+               for c in cross_prefix['paired'].values())
+    assert all(cross_prefix['cases'][n]['status'] == 'pass' and cross_prefix['comparison'][n]['normalizedGainSeparated']
+               for n in ('TightCross8', 'TightHorizontal8'))
+    assert all(not c['normalizedAdverseSeparated'] for c in cross_prefix['comparison'].values())
     generated_rows = json.loads((ROOT / 'benchmarks/generated-bicubic-shared-execution-evidence.json').read_text(encoding='utf-8'))
     assert generated_rows['productionAccepted'] and generated_rows['allAffectedPerformanceReconciled']
     assert set(generated_rows['cases']) == {'Tight2x9_16', 'Tight2x2_16', 'Tight2x9_8', 'Tight2x2_8', 'Down1x1_8'}
@@ -2139,10 +2142,10 @@ def render():
     assert deep_word['cases']['Tight32x16_16']['status'] == 'uncertain'
     assert deep_word['comparison']['Tight32x16_16']['normalizedGainSeparated']
     assert all(v['rawGainSeparated'] for v in deep_word['comparison']['Tight32x16_16']['views'].values())
-    current_resize_cases = {**resize_weights['cases'], **byte_cross['cases'], **generated_rows['cases'], **deep_word['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *resize_weights['bilinear'].values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    rows = apply_current_resize_weights(rows, resize_weights, byte_cross, generated_rows, deep_word)
+    rows = apply_current_resize_weights(rows, resize_weights, cross_prefix, generated_rows, deep_word)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2310,8 +2313,8 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
-    current_build_qualification = generated_rows['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6487
+    current_build_qualification = cross_prefix['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6497
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     return f"""# Lokad.Image benchmarks
@@ -2403,55 +2406,33 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** [Shared filter weights](../benchmarks/SHARED-RESIZE-FILTER-WEIGHTS.md)
-  reconcile all61existing bicubic, eight prepared/one-shot and four bilinear controls:
-  **{resize_status_counts['pass']}pass / {resize_status_counts['gap']}gaps / {resize_status_counts['uncertain']}uncertain** in the standalone protocol.
-  [Prepared byte cross overlap](../benchmarks/BYTE-CROSS-HORIZONTAL-OVERLAP.md)
-  refreshes the two affected cross/identity costs on the actual package DLL.
-  Twelve counterbalanced immutable-DLL pairs support scoped3.64%/12.67%gains,
-  saving37.48/87.03µs in that diagnostic boundary,112B/op both subjects.
-  Original standalone captures remain the current costs; their between-capture
-  increments are inconclusive with native+5.83%/+6.33%, and one contemporary
-  predecessor capture gives contradictory raw/normalized views. No raw gain or
-  new parity claim follows those clocks. Both standalone costs remain gaps,
-  upper{byte_cross['cases']['TightCross8']['upper']:.3f}/{byte_cross['cases']['TightHorizontal8']['upper']:.3f}.
-  Eligible eight-tap/+2 windows share the existing exact horizontal pair kernel.
-  Original unmatched loop, geometry, vertical quartets/repair and4KiB remain;
-  same3440B arrays, no added storage/retention; physical/JIT peaks unmeasured.
-  The table replaces two comfortable passing summaries with these material gaps;
-  all73controls remain in the linked evidence. Bounded wide byte343.67/zimg346.22µs,
-  upper.995 passes after13.66µs/3.82%raw/2.57%normalized saved; narrow/packed word
-  gains generalize, with separate raw/native views and disclosed slower passing controls.
-  Exact pixels/repair,4KiB bounds and ownership remain; no new owned capacity or retention.
-  Prepared plans retain198432B wide/199840B narrow; all eight equivalent boundaries pass.
-  Mixed byte's scoped64-operation adjacent854.87/866.15µs upper.998 passes; its
-  original standalone view remains uncertain. Bilinear word enlargement's adjacent
- 1836.05/1967.62µs upper1.001 remains uncertain, directGC4498558B/op. No historical
-  stage sums, favorable repeats or full-parity claim.
-  [Shared generated resizing](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md)
-  removes duplicated8/16-bit scheduling and reuses coefficients/indexes across
-  16source/16output rows. Word2×9is now{generated_rows['cases']['Tight2x9_16']['managedUs']:.2f}/zimg{generated_rows['cases']['Tight2x9_16']['nativeUs']:.2f}µs,
-  upper{generated_rows['cases']['Tight2x9_16']['upper']:.3f}; independent primary savings are
-  {generated_primary['views']['statistics']['savedUs']:.2f}µs/{100*generated_primary['views']['statistics']['savedFraction']:.2f}%raw/{100*generated_primary['normalizedGain']:.2f}%normalized.
-  All five affected word2×9/2×2and byte2×9/2×2/1×1controls pass/stop,113B/op;
-  raw/native clocks and nonuniform byte increments remain in the report.
-  Word explicit arrays grow512→1824B, byte stays1824B, within unchanged4KiB
-  admission; no heap/retained scratch added, physical/JIT peaks unmeasured.
-  Scoped root IL/actual timed JIT prove unrelated dispatch unchanged after the
-  Word callee remap. Other68resize costs remain source-valid. The table replaces
-  a comfortable64×32pass with this material word2×9result; all73remain in evidence.
-  [Paired word weights](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md)
-  save112.44µs/20.30%raw/14.21%normalized on bounded word32×16, with separated
-  raw/all-actual/normalized confidence and native−7.09%. Lane bits and all
-  arithmetic/cache/certification stay unchanged; same4032B arrays/4KiB,113B/op.
-  Its441.45/zimg414.55µs interval.999–1.072 is uncertain; no residual gap is
-  presumed or favorable repeat made. The table replaces a comfortable passing
-  byte32×16row with this uncertainty; all required cases remain. The largest
-  demonstrated resize excess is byte Cross81.81µs. Attribute its current
-  preparation/execution before another coherent design; stop confirmed passes.
-  [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
-  six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
-  Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
+- **Resizing:** across73standalone controls, **{resize_status_counts['pass']}pass /
+  {resize_status_counts['gap']}gaps / {resize_status_counts['uncertain']}uncertain**.
+  [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
+  two gaps: {cross_prefix['cases']['TightCross8']['managedUs']:.2f}/zimg{cross_prefix['cases']['TightCross8']['nativeUs']:.2f}µs,
+  upper{cross_prefix['cases']['TightCross8']['upper']:.3f}, and same-height
+  {cross_prefix['cases']['TightHorizontal8']['managedUs']:.2f}/{cross_prefix['cases']['TightHorizontal8']['nativeUs']:.2f}µs,
+  upper{cross_prefix['cases']['TightHorizontal8']['upper']:.3f};113B/op each.
+  Independent savings178.42/141.71µs,18.36%/22.20%raw and17.02%/16.65%normalized
+  retain separate native clocks/all actuals. The shared prefix borrows91168B from
+  already admitted output, then unwinds before the strip tail. Same4KiB charge,
+  no new heap/retention; physical/JIT/native peaks unmeasured.
+  All14affectedcosts reconcile. Enlargement has11passes/1uncertain:
+  HorizontalUp8's first source-affected1486.10/zimg1518.51µs upper1.025 is uncertain,
+  not a presumed gap. Four passing raw captures are slower; two scoped paired
+  checks and all clock shifts remain in the report, with no uniform gain claim.
+  Unchanged59resize costs reuse source-valid proof, including five passing
+  [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
+  [DeepWord32×16](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md) remains uncertain,
+  range.999–1.072. All eight equivalent prepared/one-shot controls pass; plans
+  retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
+  upper.998 passes while its standalone view stays uncertain. Bilinear word
+  enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
+  stay separate. No historical stage sums or favorable repeats.
+  Next substantial distinct-boundary attribution is stored-word PNG post-GC;
+  remaining resize gaps include byte16×8(59.46µs) and byte8×17(39.95µs).
+  [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
+  passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
 - **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
   pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
   {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
@@ -2480,7 +2461,7 @@ evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes559 internal/791 public per normal/scalar mode;
+Current resize qualification passes569 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
 {wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
