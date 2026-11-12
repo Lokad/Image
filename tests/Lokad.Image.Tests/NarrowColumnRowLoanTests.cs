@@ -37,6 +37,7 @@ namespace Lokad.Image.Tests
         [InlineData(144, 144, 64, 64)] // Ten row slots and six-column tail strips.
         [InlineData(307, 259, 151, 129)] // Unaligned row stride and a partial32-column strip.
         [InlineData(64, 256, 32, 128)] // No retained row-footer geometry.
+        [InlineData(513, 43, 256, 21)] // Minimum original loan: nine live rows above twelve borrowed rows.
         public void ActualRowLoanRetiresBeforePoisonedTailAndCancellation(int width, int height, int outputWidth, int outputHeight)
             => ColumnBicubicResize.VerifyRowLoanPhases(width, height, outputWidth, outputHeight);
 

@@ -45,6 +45,15 @@ no production speedup or allocation saving is claimed. Current73resize controls:
 ownership, admission and quiet-VM gates remain. Next investigate bounded shared
 coefficient preparation and its complete tail cost; earlier evidence is retained.
 
+[Expanded coefficient preparation](COLUMN-COEFFICIENT-PREPARATION-TRIAL.md) is not
+retained: 16/32-column screens cost633.76/640.26µs versus native446.13/462.24µs,
+with exact pixels and113B/op. Original production sources/DLLs/package are restored,
+so current costs above remain. One minimum-loan oracle/ownership test remains;
+3,183 internal checks pass each OS, public/live/ISA/SAME-package evidence reused.
+All trials/preflight/JIT evidence is retained without confirmation or package work.
+Next inspect compact coefficient loading without extending shared-loop live state
+or output-loan/tail bounds; these failed layouts are not a preparation-family ban.
+
 [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) improves the retained-native stored-word
 complete encode by 29.48 µs/6.23% raw and 6.86% normalized, with separated
 filtered/all-actual/normalized confidence. Current word 443.92/

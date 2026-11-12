@@ -1,0 +1,264 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CPE884",
+  "productionAccepted": false,
+  "productionSourcesRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "qualifiedProducer": {
+    "windowsSha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+    "linuxSha256": "077c518e4d972e92c5b697df676b34ef31e69a49e06ebc1d6f798b4a172d2a0d",
+    "packageSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b"
+  },
+  "variants": {
+    "A": {
+      "design": "tmp/cpe884-design.json",
+      "hypothesis": {
+        "repeatedWork": "Each decoded source row expands the same horizontal paired weights into wide per-tap coefficients. Prepare these exact vectors once per strip.",
+        "endState": "Share the existing large16-column shape with output-backed row-loan execution, removing its32-column capacity specializations. Borrow prepared coefficients, original packed weights and row cache from disjoint unpublished output. No pool, new owner, public API or numerical-policy change.",
+        "storage": "9row slots: old loan11776B and3424B local payload; candidate9984B loan and1952B local payload, within the same existing4096B reservation. For256x129 byte result: first tail row117->119. Ten slots: old12800B->10496B. Every borrower retires before tail geometry rebuild/publication. Retained operation scratch remainszero; no GC saving claimed until measured.",
+        "workloads": "Start with existing complete TightDown8 which current actual-package confidence shows as a gap. Existing poisoned phase, low-alpha/repair, admission/refusal/cancellation/survivor tests plus new coefficient-bit and minimal-loan boundary cases. Reconcile genuinely affected existing controls before full/package acceptance; no shape/settings performance grid.",
+        "correctness": "Keep every original tap/lane bit and multiply/add order, normalizer, certificate, original repair and source/output ownership. Per-column/per-row cancellation remains, plus bounded coefficient preparation checkpoints. No changes to encoder packets or other decoder/editing contracts.",
+        "risks": "More strips and prepared coefficient loads may outweigh removed shuffles; tail work and code layout can shift. Actual complete-operation screen/confirmation and JIT determine continuation, not sample percentages. Temporary regressions may justify revised coherent layouts; preserve adverse evidence, avoid favorable repeats."
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "ecf3da5383eeabe853898bf0ec58cd2c6f599e564a57e2b32175e2b7af863a42",
+        "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "5826bea815d584f6e3d92c62135d866aa46c3427b155ecfa55a4467d34f7df45",
+        "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "204f703233d36cbd65f20156265a6cac866908488cb7ff240662bc64410d8294"
+      },
+      "windowsSha256": "0cf2156fd91170b984c4e338a036a4cd3e7cc1fd4f2772ec04abfe6f8e5e7753",
+      "linuxSha256": "6fcab76cec151e175f568d682424b38fe916e07f8a9a5030aa4a2082866758a7",
+      "screen": {
+        "managedUs": 633.7640130208333,
+        "nativeUs": 446.1310208333333,
+        "ratio": 1.4205782234936684,
+        "lower": 1.310345715073692,
+        "upper": 1.5221073150671716,
+        "allocatedBytes": 113,
+        "status": "screen-only"
+      },
+      "receipt": "tmp/cpe884-candidate-TightDown8-short-receipt.json",
+      "observation": "tmp/cpe884-candidate-TightDown8-short-observation.json",
+      "focused": {
+        "windows": {
+          "internal-normal": 571,
+          "public-normal": 791,
+          "internal-scalar": 571,
+          "public-scalar": 791
+        },
+        "linux": {
+          "internal-normal": 571,
+          "public-normal": 791,
+          "internal-scalar": 571,
+          "public-scalar": 791
+        }
+      },
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "independentConfirmation": false,
+      "storage": "No new owned image capacity, pools/owners or scratch retention; original4096B admission remains. Total GC113B/op on both screens. Output-backed loan/local capacities are reported in the hypothesis. Physical/native/JIT peaks unmeasured."
+    },
+    "B": {
+      "design": "tmp/cpe884b-design.json",
+      "hypothesis": {
+        "repeatedWork": "Each decoded source row expands the same horizontal paired weights into wide per-tap coefficients. Prepare these exact vectors once per strip.",
+        "endState": "Original32-column shared row scheduling with per-strip wide coefficient preparation. No generic pixel-loop abstraction, new owner/pool/API or numerical-policy change.",
+        "storage": "9row slots: disjoint output loan11776->19968B, original3424B local payload within same4096B reservation. For256x129: tail starts117->109, eight extra rows use existing tail execution. Ten slots:12800->20992B. No additional owned image capacity or scratch retention. Borrowers return before tail geometry/pixel publication. Smaller results retain the original11776/12800B loan and packed kernel. The enlarged region is selected only when it leaves the original required row slots; scope and owned/admitted capacity stay unchanged.",
+        "workloads": "Start with existing complete TightDown8 which current actual-package confidence shows as a gap. Existing poisoned phase, low-alpha/repair, admission/refusal/cancellation/survivor tests plus new coefficient-bit and minimal-loan boundary cases. Reconcile genuinely affected existing controls before full/package acceptance; no shape/settings performance grid.",
+        "correctness": "Keep every original tap/lane bit and multiply/add order, normalizer, certificate, original repair and source/output ownership. Per-column/per-row cancellation remains, plus bounded coefficient preparation checkpoints. No changes to encoder packets or other decoder/editing contracts.",
+        "risks": "More output-backed coefficient storage and eight additional tail rows can offset removed repeated shuffles. Preserve all complete costs; if no useful effect, abandon this layout without further favorable repeats. In-place reuse remains a future distinct design only if material attribution justifies its complexity."
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "265430e66cb155b7d4333db84bda4a7722a1c298f6deb1d76c77c6fe16cab3fb",
+        "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "5826bea815d584f6e3d92c62135d866aa46c3427b155ecfa55a4467d34f7df45",
+        "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "658513dde9c77c8a9d61614b76568a1ab1277375a2dded087aaf0d553fea86c0"
+      },
+      "windowsSha256": "00f0f89fcbd7ec274b4e145ffb3583a017c00cba21426e950bc94aa5056264b8",
+      "linuxSha256": "58cd5ec51529ca0b2fc52fb03d8b19e78942ac106f00da7edcd21246c4f08a7e",
+      "screen": {
+        "managedUs": 640.2551218750001,
+        "nativeUs": 462.2447916666667,
+        "ratio": 1.3850996991583195,
+        "lower": 1.205614826927618,
+        "upper": 1.5898348595252898,
+        "allocatedBytes": 113,
+        "status": "screen-only"
+      },
+      "receipt": "tmp/cpe884b-candidate-TightDown8-short-receipt.json",
+      "observation": "tmp/cpe884b-candidate-TightDown8-short-observation.json",
+      "focused": {
+        "windows": {
+          "internal-normal": 572,
+          "public-normal": 791,
+          "internal-scalar": 572,
+          "public-scalar": 791
+        },
+        "linux": {
+          "internal-normal": 572,
+          "public-normal": 791,
+          "internal-scalar": 572,
+          "public-scalar": 791
+        }
+      },
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "independentConfirmation": false,
+      "storage": "No new owned image capacity, pools/owners or scratch retention; original4096B admission remains. Total GC113B/op on both screens. Output-backed loan/local capacities are reported in the hypothesis. Physical/native/JIT peaks unmeasured."
+    }
+  },
+  "jit": {
+    "project": "Lokad.Image",
+    "stage": "CPE884",
+    "profilingOnly": true,
+    "statisticalGainProof": false,
+    "variants": {
+      "A": {
+        "sharedActualResizeCaller": {
+          "codeBytes": 9388,
+          "instructionAndLabelLines": 2204,
+          "exact": true,
+          "normalization": "Process addresses/method-number prefixes only; offsets/immediates retained."
+        },
+        "bodies": {
+          "RowLoanStrip": {
+            "baselineCodeBytes": 6612,
+            "candidateCodeBytes": 7152,
+            "baselineInstructionAndLabelLines": 1562,
+            "candidateInstructionAndLabelLines": 1664
+          },
+          "RowTailStrip": {
+            "baselineCodeBytes": 6528,
+            "candidateCodeBytes": 7057,
+            "baselineInstructionAndLabelLines": 1554,
+            "candidateInstructionAndLabelLines": 1646
+          }
+        }
+      },
+      "B": {
+        "sharedActualResizeCaller": {
+          "codeBytes": 9388,
+          "instructionAndLabelLines": 2204,
+          "exact": true,
+          "normalization": "Process addresses/method-number prefixes only; offsets/immediates retained."
+        },
+        "bodies": {
+          "RowLoanStrip": {
+            "baselineCodeBytes": 6612,
+            "candidateCodeBytes": 7529,
+            "baselineInstructionAndLabelLines": 1562,
+            "candidateInstructionAndLabelLines": 1743
+          },
+          "RowTailStrip": {
+            "baselineCodeBytes": 6528,
+            "candidateCodeBytes": 7057,
+            "baselineInstructionAndLabelLines": 1554,
+            "candidateInstructionAndLabelLines": 1646
+          }
+        }
+      }
+    },
+    "interpretation": "Both shared actual9388BResize callers remain exact, but loop bodies grow, including the row tail which does not consume expanded coefficients. Generated-code size and span/register changes are diagnostics, not causal CPU percentages. Both complete-operation screens are adverse; no useful gain or broad acceptance is inferred.",
+    "nextLead": "Prefer a compact paired-weight layout/loader that avoids repeated coefficient expansion without extending shared-loop live preparation state, output loans or tail work. Compare exact ordered bits and complete operations before acceptance. This rejects these implementations, not preparation/reuse or revised code-generation designs."
+  },
+  "selection": "Neither expanded-coefficient layout is retained. Both complete-operation screens are adverse versus the unchanged labeled native boundary and establish no useful gain. No independent confirmation, broad qualification, package proof or favorable retry. Preserve both implementations, their exact/ownership checks and the pre-timing eligibility failure. These results reject these implementations, not preparation/reuse as a family.",
+  "preflight": "B initial Windows normal suite passed570/571; bounds test exposed reduced small-result eligibility before any timing. Corrected B retains packed coefficients where expanded storage does not fit and passes572internal/791public per normal/scalar perOS. Failed sources/modules/logs are archived, not current production.",
+  "builds": {
+    "windows": {
+      "production": 3,
+      "embedded": 4
+    },
+    "linux": {
+      "production": 2,
+      "embedded": 3
+    },
+    "public": 0,
+    "harness": 0,
+    "native": 0,
+    "fixtures": 0,
+    "packages": 0
+  },
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionAccepted": false,
+      "coreRestoredSha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "actualPackageUnchangedSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b",
+      "newTestSourceSha256": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524",
+      "embeddedTestsSha256": "72593c120fcc0e53a8274790bbad9fa646941fbefd38150a00b370d80dedf5c3",
+      "originalProductionSourcesRestored": true,
+      "newTest": "ActualRowLoanRetiresBeforePoisonedTailAndCancellation(513,43,256,21)",
+      "fullInternal": 3183,
+      "publicAndLiveReused": {
+        "public": 2381,
+        "live": 948
+      },
+      "totalWithReused": 6512,
+      "qualificationReused": "benchmarks/bilinear-operation-metadata-evidence.json",
+      "sameActualPackageBothOS": true,
+      "disabledIsaEvidenceReused": true,
+      "productionRebuildsAfterRestoration": 0,
+      "embeddedRebuildsAfterRestoration": 1,
+      "broadPublicLiveAndPackageRepeats": 0,
+      "logs": {
+        "internal-build": "tmp/cpe884-restored-windows-internal-build.log",
+        "internal-full": "tmp/cpe884-restored-windows-internal-full.log"
+      },
+      "scope": "Only one additional original-kernel minimum-loan theory case retained. Production sources/core/package exactly restored; original public/live/ISA and actual-package checks remain valid. SIMD-gated new phase test exercises the actual fast path on the AVX512 quiet VM; disabled-ISA behavior is reused, not inferred from gated early returns."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionAccepted": false,
+      "coreRestoredSha256": "077c518e4d972e92c5b697df676b34ef31e69a49e06ebc1d6f798b4a172d2a0d",
+      "actualPackageUnchangedSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b",
+      "newTestSourceSha256": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524",
+      "embeddedTestsSha256": "5e563279caad11d0bca16bb84835b1eb1bba17c462669f6a8cf0b869c9eaf145",
+      "originalProductionSourcesRestored": true,
+      "newTest": "ActualRowLoanRetiresBeforePoisonedTailAndCancellation(513,43,256,21)",
+      "fullInternal": 3183,
+      "publicAndLiveReused": {
+        "public": 2381,
+        "live": 948
+      },
+      "totalWithReused": 6512,
+      "qualificationReused": "benchmarks/bilinear-operation-metadata-evidence.json",
+      "sameActualPackageBothOS": true,
+      "disabledIsaEvidenceReused": true,
+      "productionRebuildsAfterRestoration": 0,
+      "embeddedRebuildsAfterRestoration": 1,
+      "broadPublicLiveAndPackageRepeats": 0,
+      "logs": {
+        "internal-build": "tmp/cpe884-restored-linux-internal-build.log",
+        "internal-full": "tmp/cpe884-restored-linux-internal-full.log"
+      },
+      "scope": "Only one additional original-kernel minimum-loan theory case retained. Production sources/core/package exactly restored; original public/live/ISA and actual-package checks remain valid. SIMD-gated new phase test exercises the actual fast path on the AVX512 quiet VM; disabled-ISA behavior is reused, not inferred from gated early returns."
+    }
+  },
+  "retainedChange": "One original-kernel minimum-loan theory case,513x43->256x21RGBA8, verifies exact oracle pixels, poisoned tail/cancellation/cleanup, source immutability and surviving output. Prototype-only helpers and their dedicated tests are removed.",
+  "currentEvidenceUnchanged": "benchmarks/resize-current-adjacent-confidence-evidence.json",
+  "next": "Inspect compact paired coefficient loading/expansion without extending shared-loop live preparation state or changing output-loan/tail bounds. Use exact ordered-bit oracle and complete-operation evidence. Do not infer CPU gains from fewer instructions, added preparation or allocation counts; all289required paths remain.",
+  "raw": {
+    "file": "column-coefficient-preparation-trial.tar.xz",
+    "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827",
+    "bytes": 2236700,
+    "members": 137,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "bilinear-operation-metadata-qualified.tar.xz",
+        "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+      },
+      {
+        "file": "resize-current-adjacent-confidence.tar.xz",
+        "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+      },
+      {
+        "file": "bounded-bicubic-byte-current-attribution.tar.xz",
+        "sha256": "10ab1ee4521153e5371ea7f9ce7d009ed506846ce9bb79a32d8a0c067c0ff60f"
+      }
+    ]
+  }
+}
