@@ -32,6 +32,15 @@ Original driver/harness/native/fixtures and current actual package reused;
 zero builds/broad/package repeats/new workloads. Thirteen fresh PNG encode
 controls pass/two uncertain. Stop unchanged repeats or tuning a presumed gap.
 
+[Grayscale8's first adjacent capture](PNG-GRAY-ADJACENT-CONFIDENCE.md) remains
+uncertain:2.109/FFmpeg1.997ms,range0.963–1.143,exact72,586B packet. Fresh codec/
+conversion/zlib/independent output/disposal are timed on both sides. All12pairs
+and native brackets remain; natural-GC4op sampling differs from the original
+global-bracket result. Direct allocation551,260.67B/op,384KiB admission/zero
+scratch retention; no gain/regression/equivalence or presumed-gap claim.
+Current immutable package and qualification reused,zero builds/new workloads/
+broad or package repeats. Stop unchanged timing repeats; independent work continues.
+
 Unchanged [contiguous wide views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
 pass6,439full/live checks perOS,528internal/791public affected normal/scalar/
 AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Byte saves14.15µs/
@@ -95,6 +104,13 @@ The [narrow quartet-preparation screen](NARROW-BYTE-QUARTET-PREPARATION-TRIAL.md
 also establishes no useful gain; original source/modules/package are restored
 exactly. Both short screens/JIT and passing exact-value/root checks remain; no
 independent confirmation, broad/package repeat or current-cost replacement.
+
+[Direct coefficient routing](NARROW-BYTE-WEIGHT-ROUTING-TRIAL.md) also shows no
+useful screen gain:430.61versus430.01µs,normalized essentially unchanged.
+Exact original source/core/embedded/public/package restoration is verified;
+all passing focused checks, attempted code and both screens remain retained.
+No independent confirmation, word recapture, broad/package repeat or current-cost
+replacement. Source instruction counts do not establish speed; no family ban.
 
 Unchanged [shared horizontal bicubic schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
 passes 6,401 full/live checks per OS, 492 internal/789 public affected checks in
@@ -197,7 +213,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
 | JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
 | PNG reading | [Current framing costs](PNG-CURRENT-FRAMING-COSTS.md):51controls,49pass/0gap/2uncertain. [Prepared live-run invariants](PNG-LIVE-RUN-PREPARATION.md) save93.08µs/2.89%raw/1.86%normalized on RGBA16 with separated confidence; current3126.33/native3153.78µs upper1.001253 remains uncertain. Byte1529.69/1535.97µs upper1.012 stays uncertain; clock movement and raw adverse view are explicit. Same4,472/8,568B/op/4KiB, no new capacity/retention and original cancellation checkpoints. Old two-symbol trials are history; no favorable repeat. Other affected historical stream/composition costs remain H. |
-| PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. ByteFastest/Gray8 need confidence resolution; the [bounded Fastest check](PNG-FASTEST-CURRENT-CONFIDENCE.md) remains uncertain. Exact complete packets are required. |
+| PNG encoding | [Length classification](PNG-LENGTH-CLASSIFICATION.md): 15 complete fresh-state controls, 13 pass / 2 uncertain. First adjacent [Fastest8](PNG-FASTEST-ADJACENT-CONFIDENCE.md) and [Gray8](PNG-GRAY-ADJACENT-CONFIDENCE.md) captures both remain uncertain; preserve all brackets and stop unchanged repeats. Fresh codec/conversion/zlib, independent output/disposal and exact complete packets remain required. [Stored-mode workspace](PNG-STORED-WORKSPACE.md) separately owns the level0 controls and reduced admission. |
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Position preparation](VP8-POSITION-MODEL-PREPARATION.md): six refreshed VP8 controls, 4 pass / 0 gaps / 2 uncertain. Ordinary opaque has a confirmed 2.02% normalized gain; live 4,803.55/native 4,786.85 µs, upper 1.009, and stream remain uncertain. Every VP8 total grows 1,536 B/op, within unchanged 8 KiB admission; no retained scratch. Prior window failures remain history. Unchanged [output-owned palettes](WEBP-PALETTE-OUTPUT.md) retains six lossless controls, 3 pass / 3 uncertain. |

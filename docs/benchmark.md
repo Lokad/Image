@@ -52,7 +52,10 @@ Current scope and remaining work:
   [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
   uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
   Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
-  no causal gain, allocation saving or presumed gap. Fresh native codec/zlib state, normalization and independent packets
+  no causal gain, allocation saving or presumed gap.
+  [Grayscale8's first adjacent view](../benchmarks/PNG-GRAY-ADJACENT-CONFIDENCE.md)
+  also stays uncertain:2.109/1.997ms,range0.963–1.143,551,260.67directB/op,exact72,586B packet.
+  Fresh native codec/conversion/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
   unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.
@@ -256,7 +259,7 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,397.62 | 4,374.65 | 1.005 / 1.044 | 820,844 | 236,828 / 236,828 |
 | PNG RGBA16, stored0 / native0 (post-GC 4-op gap) † | 501.70 | 405.21 | 1.238 / 1.255 | 1,151,996 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 1,993.15 | 1,968.89 | 1.012 / 1.047 | 551,364 | 72,586 / 72,586 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 2,109.25 | 1,997.37 | 1.056 / 1.143 | 551,261 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,370.01 | 9,793.98 | 0.957 / 0.972 | 819,884 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,162.99 | 4,444.97 | 0.937 / 0.955 | 552,332 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 16,744.89 | 17,271.29 | 0.970 / 0.975 | 820,452 | 210,973 / 210,973 |

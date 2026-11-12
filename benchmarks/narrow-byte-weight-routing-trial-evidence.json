@@ -1,0 +1,290 @@
+{
+  "project": "Lokad.Image",
+  "stage": "NWR842",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "restoredQualifiedProduction": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "raw": {
+    "file": "narrow-byte-weight-routing-trial.tar.xz",
+    "sha256": "1cf8af7e9ef10263a31fef0d5b8f697875dab971f12035e7d43bd28ce8451fd3",
+    "bytes": 1380800,
+    "members": 56,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "scope": "benchmarks/png-stored-workspace-evidence.json",
+        "file": "png-stored-workspace-qualified.tar.xz",
+        "sha256": "df812f63165dc437aa54b333c60993c398a15a34005626d547f19e62b5aaf6cc"
+      },
+      {
+        "scope": "benchmarks/narrow-bicubic-quartet-attribution-evidence.json",
+        "file": "narrow-bicubic-quartet-attribution.tar.xz",
+        "sha256": "0b58f43eb7c32d11d945d3dcc70f0bd8891a1bd8cee4eef0dc2ca1a8083acdba"
+      }
+    ]
+  },
+  "analysis": {
+    "project": "Lokad.Image",
+    "stage": "NWR842",
+    "candidateJit": "tmp/nwr842-candidate-TightDown8-short-kernel-jit.txt",
+    "jitSha256": "ddd7784f83836c70e90bc228db0a9f6687f9d36b34d3dea63f436050e24dcf73",
+    "methods": [
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:TryApply(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,long,long,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": [
+          "274"
+        ],
+        "stackReservations": [
+          "24"
+        ],
+        "variablePermutations": 0,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyPrepared[Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": [
+          "813"
+        ],
+        "stackReservations": [
+          "200"
+        ],
+        "variablePermutations": 0,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:TryLocateRowLoan(Lokad.Image.ImageBuffer,int,byref,byref):bool (FullOpts)",
+        "codeBytes": [
+          "197"
+        ],
+        "stackReservations": [],
+        "variablePermutations": 0,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowLoanStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": [
+          "6627"
+        ],
+        "stackReservations": [
+          "632",
+          "0xD60"
+        ],
+        "variablePermutations": 2,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:PreparePairedByteWeights(System.Span`1[double],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[int],System.Span`1[double]) (FullOpts)",
+        "codeBytes": [
+          "385"
+        ],
+        "stackReservations": [],
+        "variablePermutations": 0,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:TryRepairBytePair(Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,int,int,System.ReadOnlySpan`1[double],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[int],int,System.ReadOnlySpan`1[double],int,System.Span`1[double],Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": [
+          "827"
+        ],
+        "stackReservations": [
+          "120"
+        ],
+        "variablePermutations": 0,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      },
+      {
+        "method": "Lokad.Image.Internal.ColumnBicubicResize:ApplyRange[Lokad.Image.Internal.ColumnBicubicResize+RowTailStrip,Lokad.Image.Internal.ColumnBicubicResize+ByteSamples](Lokad.Image.ImageBuffer,Lokad.Image.ImageBuffer,double,double,int,Lokad.Image.Internal.ColumnBicubicGeometry,System.Span`1[System.Runtime.Intrinsics.Vector256`1[double]],int,int,int,Lokad.Image.Internal.OperationContext):bool (FullOpts)",
+        "codeBytes": [
+          "6573"
+        ],
+        "stackReservations": [
+          "664",
+          "0xFF0"
+        ],
+        "variablePermutations": 2,
+        "immediateCoefficientShuffle": 0,
+        "constant128BytesPresent": false
+      }
+    ],
+    "comparison": {
+      "views": {
+        "statistics": {
+          "baselineUs": 430.0126831896552,
+          "candidateUs": 430.61328807471267,
+          "savedUs": -0.600604885057488,
+          "savedFraction": -0.0013967143494524326,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430012.6831896552,
+            "StandardError": 155.86362326759996,
+            "Level": 12,
+            "Margin": 4925.14311818456,
+            "Lower": 425087.5400714706,
+            "Upper": 434937.8263078398
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 430613.2880747127,
+            "StandardError": 278.64884681897587,
+            "Level": 12,
+            "Margin": 8805.040082664536,
+            "Lower": 421808.24799204816,
+            "Upper": 439418.3281573772
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 430.01409698275864,
+          "candidateUs": 430.61472341954016,
+          "savedUs": -0.6006264367814874,
+          "savedFraction": -0.0013967598760036282,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 3,
+            "Mean": 430014.09698275867,
+            "StandardError": 155.8636232676,
+            "Level": 12,
+            "Margin": 4925.143118184561,
+            "Lower": 425088.9538645741,
+            "Upper": 434939.24010094325
+          },
+          "candidateCI": {
+            "N": 3,
+            "Mean": 430614.72341954015,
+            "StandardError": 278.6488468189902,
+            "Level": 12,
+            "Margin": 8805.04008266499,
+            "Lower": 421809.68333687517,
+            "Upper": 439419.76350220514
+          }
+        }
+      },
+      "normalizedGain": -0.00014313336974236535,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0012534015761187511,
+      "baselineRatioBounds": [
+        0.951947240447832,
+        1.105859560866601
+      ],
+      "candidateRatioBounds": [
+        0.8969552613758368,
+        1.1702850095851145
+      ]
+    },
+    "decision": "No useful short-screen gain: baseline430.01/candidate430.61us, normalized essentially unchanged. Preserve all actuals and generated code; no independent confirmation, word comparison or broad/package qualification needed for an unselected byte-only candidate. Restore qualified source/modules/package, no production gain/regression claim and no permanent strategy ban."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "NWR842",
+    "wholeOriginalFileReconstructs": true,
+    "onlyPreparedBytePairBodyChanged": true,
+    "allCallersFieldsStoragePreparationSchedulingArithmeticAndRepairVerbatim": true,
+    "definedCoefficientLaneMappingExact": true,
+    "noCapacityOrRetentionAdded": true,
+    "sources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "a739289b4932a315ba2db8e59b582d8a6cec37b32a08bb992bd11d50c3111930"
+    },
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "11010fb918296a089a7040e519315a1118f969b96db03cf75afeed4df14c621c",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b",
+      "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168"
+    }
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "NWR842",
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "originalSources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "dab737aa85b125c7fff51b86fa07a10758f96c47666ebd23045170d9f77d85fa"
+    },
+    "newPaths": [],
+    "unchangedPins": {
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "ca4f8b76eb9914c3c145e86088931085250e7bdbdd0977e15e35d9eb051c1e89",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "11010fb918296a089a7040e519315a1118f969b96db03cf75afeed4df14c621c",
+      "src/Lokad.Image/ImageTransforms.cs": "b8174a7a5b741f0cd8058529503940276c32e71acd30e01c23f9ac1c90b1b67b",
+      "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168"
+    },
+    "baselineWindowsSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+    "baselineLinuxSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+    "baselinePackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+    "baselineWindowsFolder": "tmp/pss840-candidate-windows",
+    "baselineLinuxFolder": "tmp/pss840-candidate-linux",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "a739289b4932a315ba2db8e59b582d8a6cec37b32a08bb992bd11d50c3111930"
+    },
+    "toolingSources": {},
+    "hypothesis": {
+      "primary": "TightDown8",
+      "current": "459.65/zimg451.35us upper1.027 demonstrated gap; previous quartet/store attempts remain inconclusive, not gains or a family ban.",
+      "repeatedWork": "Each8tap horizontal pair repeats three coefficient-lane shuffle instructions per group over four groups and hundreds of rows. Actual current JIT confirms them in the hot row/tail loops.",
+      "intendedEndState": "Route defined lower-four double coefficient lanes directly with two constant AVX512F variable permutations per group. Keep compact16double coefficient preparation, ordered eight Add(Multiply), original sample shuffles, source/cache storage, row/tail scheduling, certificates, repair and cancellation verbatim. No new owner/capacity/retention or API.",
+      "rejectedAlternative": "Expanding all coefficient vectors once could remove more repeated routing but adds8192B per tile to borrowed result loans, changes tail scheduling and increases L1 traffic. No timing forecast or permanent rejection; prefer bounded direct lane selection first.",
+      "numerical": "Selectors use only lower lanes0..3, so no undefined upper lane is observed. Exact bitwise routing, original ordered floating operations, no FMA/reassociation or numerical policy change.",
+      "workloads": "Existing complete TightDown8 public Resize, input/output/4KiB, all setup/preparation/independent output/disposal timed against original prepared zimg. Check current generated word companion before reusing its pass. No workload/image/settings grid.",
+      "risks": "Two64byte index constants (128B total), register lifetime and instruction lowering may offset a removed shuffle. Counts are not predicted time savings. Existing full-bit/canary/noallocation tests plus actual row/tail/odd/root tests; one core/embedded build perOS, short screens then independent confirmation only if promising; affected reconciliation before broad/package acceptance. Temporary adverse or inconclusive stage may be revised or abandoned without replaying unchanged timings."
+    },
+    "candidateWindowsSha256": "215c73f81eb335f255f22005fc59007c924a4d29e538a832d92b7b5fd0a04781",
+    "candidateLinuxSha256": "89e9325c42c00766f6d4a60922ec8ae3afb6d1a87ab0f185f8d8cf0403e21129"
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "NWR842",
+      "platform": "windows",
+      "productionSourcesRestored": true,
+      "coreSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "embeddedSha256": "a7be3bbb7c4ea17c77422a7741b4abddef006352096542ce8a85a83cf79309c9",
+      "actualPackageUnchangedSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": null
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "NWR842",
+      "platform": "linux",
+      "productionSourcesRestored": true,
+      "coreSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+      "embeddedSha256": "946280dafa4deba31466ffd3f15d954474f3639ab5abe1079d128590793d35cc",
+      "actualPackageUnchangedSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "obsoleteCandidateOnlyTestsRemoved": true,
+      "additionalBuilds": 0,
+      "broadOrPackageQualificationRepeated": false,
+      "completeSourceManifestSha256": "41370fd1796eaa725bf273a80046f3766b43d98a6ac29d053b341ff63f0b7e55"
+    }
+  },
+  "workflow": {
+    "coreVersionsEachOS": 1,
+    "embeddedVersionsEachOS": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "focusedInternalEachModeEachOS": 528,
+    "focusedPublicEachModeEachOS": 791,
+    "independentConfirmations": 0,
+    "wordRecapture": 0,
+    "broadOrPackageQualificationRepeated": false,
+    "candidateOnlyTestsAddedOrRemoved": 0
+  },
+  "decision": "No useful short-screen gain: baseline430.01/candidate430.61us, normalized essentially unchanged. Preserve all actuals and generated code; no independent confirmation, word comparison or broad/package qualification needed for an unselected byte-only candidate. Restore qualified source/modules/package, no production gain/regression claim and no permanent strategy ban.",
+  "next": "Resolve existing Gray8 fresh PNG uncertainty with its first matched adjacent capture. Reuse original fixtures/settings/tools, current package and qualification; no presumed kernel gap or new workload grid."
+}

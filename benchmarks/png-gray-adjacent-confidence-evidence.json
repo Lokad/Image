@@ -1,0 +1,312 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PGA843",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "current": {
+    "caseId": "EncodeGray8",
+    "label": "PNG grayscale8, one-shot Optimal6 / native6",
+    "managedUs": 2109.2488541666667,
+    "nativeUs": 1997.3694583333333,
+    "ratio": 1.0560133706693848,
+    "lower": 0.9633475749786985,
+    "upper": 1.1431123148961357,
+    "status": "uncertain",
+    "directAllocatedBytes": 551260.6666666666,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerSubject": 4,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "completePacketExact": true,
+    "packetBytes": 72586,
+    "nativePacketBytes": 72586,
+    "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+    "nativePacketSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+    "inputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+    "librarySha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+    "depth": 8,
+    "level": 6,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "retainedOperationScratchBytes": 0,
+    "codecPreparationTimed": true,
+    "nativeCodecRetainedBetweenOperations": false,
+    "nativeBracketMeansUs": [
+      1997.3694583333333,
+      2011.3199791666668,
+      2001.9703125
+    ],
+    "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color0 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Complete one-shot color PNG FFmpeg adapter",
+      "oneShotCodec": true,
+      "scope": "Existing RGB8, gray8/16 and gray-alpha8 Optimal6 controls",
+      "encoderLevel": 6,
+      "colorWorkspacePreparationTimed": true,
+      "colorWorkspaceRetainedBetweenOperations": false,
+      "wordWorkspacePreparationTimed": true,
+      "wordWorkspaceRetainedBetweenOperations": false,
+      "identicalConversionOrPackingPreserved": true,
+      "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+      "buildScriptSha256": "9bbb92a3f7019930000216ca8b511226cc7f880147b3b856fc1cf8a480a3f1e1",
+      "compiledSourceSha256": "fdc85dd4f77df91145de0f1e21f12b8bb6eba062ba661434560ccea7af0c941c",
+      "workerSha256": "bf7976e2be9c7932dcd39fd55b9d47f1e50f67191cf91af502b84df714219f29",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "png-gray-encode",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "codedDepth": 8,
+      "cpu": 0,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "threadType": 0,
+      "activeThreadType": 0,
+      "compressionLevel": 6,
+      "filter": 0,
+      "colorType": 0,
+      "conversionThreads": 1,
+      "rgbExpansionTimed": false,
+      "rgbTransparencyExpansionTimed": false,
+      "rgbPackingTimed": false,
+      "grayExpansionTimed": false,
+      "grayTransparencyExpansionTimed": false,
+      "grayPackingTimed": true,
+      "grayPlaneExtractionTimed": false,
+      "grayFilterOutputAllocationTimed": false,
+      "grayAlphaExpansionTimed": false,
+      "grayAlphaPackingTimed": false,
+      "grayAlphaStoragePackingTimed": false,
+      "paletteExpansionTimed": false,
+      "packedTransparencyFilterTimed": false,
+      "filterThreads": 0,
+      "scalarMode": false,
+      "cpuFlags": 8377307,
+      "outputBytes": 72586,
+      "initialCompletedOperations": 3,
+      "codecPreparationTimed": true,
+      "packetWrapperPreparationTimed": true,
+      "codecRetainedBetweenOperations": false,
+      "borrowedResidentSource": true,
+      "colorWorkspacePreparationTimed": true,
+      "colorWorkspaceRetainedBetweenOperations": false,
+      "wordWorkspacePreparationTimed": true,
+      "wordWorkspaceRetainedBetweenOperations": false,
+      "independentLiveOutputs": true,
+      "ffmpegVersion": "n8.1",
+      "avcodecVersion": 4070500,
+      "avutilVersion": 3938916
+    },
+    "allocatedBytes": 551261
+  },
+  "raw": {
+    "file": "png-gray-adjacent-confidence.tar.xz",
+    "sha256": "11bdd521c69d032ccac68e7ee5b61d8d398706d5cb238a8228634219160e85bd",
+    "bytes": 502332,
+    "members": 25,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "png-stored-workspace-qualified.tar.xz",
+        "sha256": "df812f63165dc437aa54b333c60993c398a15a34005626d547f19e62b5aaf6cc",
+        "scope": "benchmarks/png-stored-workspace-evidence.json"
+      },
+      {
+        "file": "png-length-classification-qualified.tar.xz",
+        "sha256": "4358bf7b5a731d9daa43d7023e5e186a04fc150a73bf9ae1dabaf07b91a569fb",
+        "scope": "benchmarks/png-length-classification-evidence.json"
+      },
+      {
+        "file": "png-historical-current-confirmation.tar.xz",
+        "sha256": "30179fa480b53a2822e535b2872f95e5ba261e8c29ac75af1777f8dfc37ebc04",
+        "scope": "benchmarks/png-historical-current-confirmation-evidence.json"
+      }
+    ]
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+    "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f",
+    "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+    "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+  },
+  "producers": {
+    "windowsSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+    "linuxSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+    "actualPackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084"
+  },
+  "qualificationReused": {
+    "fullChecksEachOs": 6449,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "full": [
+        3120,
+        2381,
+        948
+      ],
+      "total": 6449,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 690,
+        "public-normal": 246,
+        "internal-scalar": 690,
+        "public-scalar": 246
+      },
+      "isa": {
+        "internal-avx512-off": 690,
+        "public-avx512-off": 246,
+        "internal-avx2-off": 690,
+        "public-avx2-off": 246
+      },
+      "pngInternalEachMode": 690,
+      "pngPublicEachMode": 246,
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Deflate|FullyQualifiedName~Adler|FullyQualifiedName~Crc32",
+      "unchangedResizeIncludingThreeNamedStorageSuitesReused": true,
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+        "tests/Lokad.Image.Tests/PngDeflaterTests.cs": "d5e3be541a19f93668b6630fa94cb4c96232d2ff304324fb7ece173d99aefa1a",
+        "tests/Lokad.Image.PublicApi.Tests/PngEncoderAdmissionTests.cs": "d2dce3631fce8681f9ac02d8a3b6d96f8d097f6900cdbf0a68ed3fe06130878a",
+        "tests/Lokad.Image.Tests/PngStoredWorkspaceTests.cs": "5a8361f4346196ebef5300189c2ff112283245c35b6c39dc2357772158c4783a",
+        "tests/Lokad.Image.PublicApi.Tests/PngStoredCapacityTests.cs": "63a23f5bc91dbf0519f10b488b0c2b2b149c56e3c25998b93ab256dd4fe6c60b",
+        "tests/Lokad.Image.PublicApi.Tests/PngManagedAdmissionTests.cs": "3960f6eeffd8c63da4830afc5c6e5478d2edf87d32aa721dffb8ca6be5bbc6c5"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f",
+        "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+        "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+      },
+      "unchangedResizeCodecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "b96cf68c5e999ac0c9d6be922f3a5c7860f85d4b65f3a917e02bf816069d865b",
+      "full": [
+        3120,
+        2381,
+        948
+      ],
+      "total": 6449,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 690,
+        "public-normal": 246,
+        "internal-scalar": 690,
+        "public-scalar": 246
+      },
+      "isa": {
+        "internal-avx512-off": 690,
+        "public-avx512-off": 246,
+        "internal-avx2-off": 690,
+        "public-avx2-off": 246
+      },
+      "pngInternalEachMode": 690,
+      "pngPublicEachMode": 246,
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Deflate|FullyQualifiedName~Adler|FullyQualifiedName~Crc32",
+      "unchangedResizeIncludingThreeNamedStorageSuitesReused": true,
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+        "tests/Lokad.Image.Tests/PngDeflaterTests.cs": "d5e3be541a19f93668b6630fa94cb4c96232d2ff304324fb7ece173d99aefa1a",
+        "tests/Lokad.Image.PublicApi.Tests/PngEncoderAdmissionTests.cs": "d2dce3631fce8681f9ac02d8a3b6d96f8d097f6900cdbf0a68ed3fe06130878a",
+        "tests/Lokad.Image.Tests/PngStoredWorkspaceTests.cs": "5a8361f4346196ebef5300189c2ff112283245c35b6c39dc2357772158c4783a",
+        "tests/Lokad.Image.PublicApi.Tests/PngStoredCapacityTests.cs": "63a23f5bc91dbf0519f10b488b0c2b2b149c56e3c25998b93ab256dd4fe6c60b",
+        "tests/Lokad.Image.PublicApi.Tests/PngManagedAdmissionTests.cs": "3960f6eeffd8c63da4830afc5c6e5478d2edf87d32aa721dffb8ca6be5bbc6c5"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f",
+        "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+        "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+        "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+      },
+      "unchangedResizeCodecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "symbolsSha256": "a6a5e7939642dac60df46d2e4e526701bc4dfe4e794983bd23b534cdf7d93af7",
+      "bytes": 454369,
+      "librarySha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "016a1ec540a677ce38a2328d9ac91f49a6c610f046146b713e069f688eca4084",
+      "librarySha256": "c3456a3ca7ae0c5958c8bbd90f8e7ddd1f25291439c7a43e707a84f8a2de03b3",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOS": 3,
+    "pngInternalEachModeEachOS": 690,
+    "pngPublicEachModeEachOS": 246,
+    "unchangedResizeCodecTextQualificationReused": true
+  },
+  "workflow": {
+    "completeControlCaptures": 1,
+    "firstAdjacentCapture": true,
+    "operationsPerSubject": 4,
+    "broadOrPackageQualificationRepeated": false,
+    "driverBuilds": 0,
+    "allPairsAndBracketsRetained": true
+  },
+  "decision": "Gray8 remains uncertain after first matched adjacent capture. Preserve original global result separately; no gain, gap, allocation saving, equivalence or broad parity claim. Do not repeat unchanged or tune presumed gap. Continue independent demonstrated work.",
+  "methodBoundary": "Complete fresh codec/zlib/workspace/packet preparation and disposal on both sides. NativeReady codecPreparationTimed=true and codecRetainedBetweenOperations=false; generic existing driver prose about documented retained wrappers does not override this frozen actual public boundary. NaturalGC4-operation adjacent view differs from the older post-GC global-bracket capture.",
+  "storage": "Direct total allocation separate from BDN instrumentation, logical384KiB deflater capacity and zero retained operation scratch. Source/output capacity unchanged. Physical/native/JIT/pool peaks not remeasured; no saving inferred."
+}

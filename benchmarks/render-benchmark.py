@@ -1772,6 +1772,22 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["nativePacketBytes"]:,} |')
+    png_gray_adjacent = json.loads((ROOT / 'benchmarks/png-gray-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not png_gray_adjacent['productionChanged'] and png_gray_adjacent['allBuilds'] == 0
+    assert png_gray_adjacent['requiredMaterialPaths'] == 289 and png_gray_adjacent['raw']['mirrored'] and png_gray_adjacent['raw']['allMembersVerified']
+    current = png_gray_adjacent['current']
+    assert current['status'] == 'uncertain' and current['lower'] < 1 < current['upper']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12 and current['operationsPerSubject'] == 4
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
+    assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256'] == png['cases']['EncodeGray8']['packetSha256']
+    assert current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
+    assert current['nativeReady']['colorWorkspacePreparationTimed'] and not current['nativeReady']['colorWorkspaceRetainedBetweenOperations']
+    assert current['librarySha256'] == png_gray_adjacent['producers']['windowsSha256'] == png_gray_adjacent['qualificationReused']['actualPackage']['librarySha256']
+    assert current['packetBytes'] == current['nativePacketBytes'] == 72586 and current['retainedOperationScratchBytes'] == 0
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + current['label'] + ' ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["nativePacketBytes"]:,} |')
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
         if label == 'PNG8 decode, two retained images / shared caller root':
@@ -2197,7 +2213,10 @@ Current scope and remaining work:
   [The first adjacent Fastest check](../benchmarks/PNG-FASTEST-ADJACENT-CONFIDENCE.md) stays
   uncertain:4.398/4.375ms,range0.944–1.044,820,843.67directB/op,exact236,828B packet.
   Its natural-GC4op pairs remain distinct from the earlier global-bracket view;
-  no causal gain, allocation saving or presumed gap. Fresh native codec/zlib state, normalization and independent packets
+  no causal gain, allocation saving or presumed gap.
+  [Grayscale8's first adjacent view](../benchmarks/PNG-GRAY-ADJACENT-CONFIDENCE.md)
+  also stays uncertain:2.109/1.997ms,range0.963–1.143,551,260.67directB/op,exact72,586B packet.
+  Fresh native codec/conversion/zlib state, normalization and independent packets
   are timed. Exact packets and existing admission remain; no global parity claim.
   [Predictable16](../benchmarks/PNG-HISTORICAL-CURRENT-CONFIRMATION.md) retains its
   unchanged compressed-path pass:277.00/407.42ms upper0.706,2,495,988B/op,573,041B packet.

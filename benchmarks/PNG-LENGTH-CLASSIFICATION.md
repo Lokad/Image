@@ -1,7 +1,8 @@
 # Exact constant-time PNG length classification
 
-[Current-package Fastest8 confidence](PNG-FASTEST-CURRENT-CONFIDENCE.md) supersedes
-that cost below and remains uncertain. The other14 costs retain valid evidence.
+[Current Fastest8](PNG-FASTEST-ADJACENT-CONFIDENCE.md) and
+[Gray8](PNG-GRAY-ADJACENT-CONFIDENCE.md) supersede those displayed costs and remain
+uncertain after their first adjacent captures. The other13 costs retain valid evidence.
 
 LSF584 replaces the repeated Deflate length-range search with its exact integer
 logarithm formula and permits inlining. Lengths 3–10 keep their direct mapping;
