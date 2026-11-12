@@ -89,7 +89,7 @@ Current scope and remaining work:
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** [Shared filter weights](../benchmarks/SHARED-RESIZE-FILTER-WEIGHTS.md)
   reconcile all61existing bicubic, eight prepared/one-shot and four bilinear controls:
-  **58pass / 9gaps / 6uncertain** in the standalone protocol.
+  **58pass / 8gaps / 7uncertain** in the standalone protocol.
   [Prepared byte cross overlap](../benchmarks/BYTE-CROSS-HORIZONTAL-OVERLAP.md)
   refreshes the two affected cross/identity costs on the actual package DLL.
   Twelve counterbalanced immutable-DLL pairs support scoped3.64%/12.67%gains,
@@ -120,9 +120,16 @@ Current scope and remaining work:
   scratch; physical/JIT peaks remain unmeasured. Its three costs remain source-valid
   after the Cross-only change; other68base resize costs are reused.
   The table replaces a comfortable passing32×16summary with the current2×9cost;
-  all73remain in evidence. Largest remaining resize gap is bounded word32×16,
-  about108µs; byte reverse-mixed follows at82µs. Establish current word-path
-  attribution before choosing its next preparation/execution change.
+  all73remain in evidence. [Paired word weights](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md)
+  save112.44µs/20.30%raw/14.21%normalized on bounded word32×16, with separated
+  raw/all-actual/normalized confidence and native−7.09%. Lane bits and all
+  arithmetic/cache/certification stay unchanged; same4032B arrays/4KiB,113B/op.
+  Its441.45/zimg414.55µs interval.999–1.072 is uncertain; no residual gap is
+  presumed or favorable repeat made. The table replaces a comfortable passing
+  byte32×16row with this uncertainty; all required cases remain. Largest
+  demonstrated resize gaps are byte Cross81.81µs and word2×9about75µs; the latter
+  still repeats preparation addressed by the byte row-group design. Attribute
+  its actual current path before selecting shared execution; stop unaffected passes.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
   six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
   Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
@@ -271,7 +278,7 @@ settings do not establish matched quality.
 | Bicubic upscale RGBA16 † → 1027×519 | 2,823.87 | 3,104.13 | 0.910 / 0.920 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB (gap) † → 256×519 | 971.84 | 890.03 | 1.092 / 1.111 | 114 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 811.25 | 819.63 | 0.990 / 0.993 | 113 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16 | 289.79 | 375.72 | 0.771 / 0.773 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 32×16 | 441.45 | 414.55 | 1.065 / 1.072 | 113 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 460.45 | 1,049.03 | 0.439 / 0.442 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,004.30 | 3,272.75 | 0.918 / 0.938 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,424.98 | 1,521.11 | 0.937 / 0.942 | 114 |

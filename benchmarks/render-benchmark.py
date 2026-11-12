@@ -8,14 +8,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows):
+def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows, deep_word):
     """Replace every displayed affected resize cost from one current owner."""
     mapping = {
         'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
         'Bicubic upscale RGBA16 † → 1027×519': ('cases', 'Up16'),
         'Bicubic upscale RGBA8, default workspace † → 1027×519': ('cases', 'TightCross8'),
         'Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519': ('cases', 'TightCross16'),
-        'Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16': ('cases', 'Tight32x16_8'),
+        'Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16': ('cases', 'Tight32x16_16'),
         'Bicubic RGBA8, 32×16 / default workspace † → 32×16': ('cases', 'Tight2x9_8'),
         'Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519': ('cases', 'TightUp8'),
         'Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259': ('cases', 'TightHorizontalUp8'),
@@ -51,13 +51,16 @@ def apply_current_resize_weights(rows, evidence, byte_cross, generated_rows):
         field, case = mapping[label]
         scoped = field == 'cases' and case in byte_cross['cases']
         generated = field == 'cases' and case in generated_rows['cases']
-        owner = generated_rows if generated else byte_cross if scoped else evidence
+        deep = field == 'cases' and case in deep_word['cases']
+        owner = deep_word if deep else generated_rows if generated else byte_cross if scoped else evidence
         current = owner[field][case]
         if scoped:
             size = '256×519' if case == 'TightCross8' else '256×259'
             label = f'Bicubic RGBA8, width reduction / ' + ('height enlargement' if case == 'TightCross8' else 'same height') + f', input+output+4 KiB † → {size}'
         if generated:
             label = 'Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9'
+        if deep:
+            label = 'Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16'
         assert (field, case) not in seen; seen.add((field, case))
         assert current['actualIterations'] == 12 and current['allActualsRetained']
         assert current['librarySha256'] == owner['qualification']['actualPackage']['librarySha256']
@@ -2122,10 +2125,21 @@ def render():
     assert generated_rows['storage']['newRetainedCapacityBytes'] == 0
     assert all(c['status'] == 'pass' and c['managedExact'] for c in generated_rows['cases'].values())
     assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values()) for c in generated_rows['comparison'].values())
-    current_resize_cases = {**resize_weights['cases'], **byte_cross['cases'], **generated_rows['cases']}
+    deep_word = json.loads((ROOT / 'benchmarks/deep-word-vector-weights-evidence.json').read_text(encoding='utf-8'))
+    assert deep_word['productionAccepted'] and deep_word['allAffectedPerformanceReconciled']
+    assert set(deep_word['cases']) == {'Tight32x16_16'}
+    assert deep_word['sourceProof']['wholeOriginalDeepWordFileReconstructsExactly']
+    assert deep_word['sourceProof']['noNewFloatingArithmetic']
+    assert deep_word['raw']['mirrored'] and deep_word['raw']['allMembersVerified']
+    assert deep_word['storage']['explicitStackArrayBytes'] == 4032
+    assert deep_word['storage']['newOwnedCapacityBytes'] == deep_word['storage']['newRetainedCapacityBytes'] == 0
+    assert deep_word['cases']['Tight32x16_16']['status'] == 'uncertain'
+    assert deep_word['comparison']['Tight32x16_16']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in deep_word['comparison']['Tight32x16_16']['views'].values())
+    current_resize_cases = {**resize_weights['cases'], **byte_cross['cases'], **generated_rows['cases'], **deep_word['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *resize_weights['bilinear'].values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    rows = apply_current_resize_weights(rows, resize_weights, byte_cross, generated_rows)
+    rows = apply_current_resize_weights(rows, resize_weights, byte_cross, generated_rows, deep_word)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2293,7 +2307,7 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
-    current_build_qualification = byte_cross['qualification']
+    current_build_qualification = deep_word['qualification']
     assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6480
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
@@ -2419,9 +2433,16 @@ Current scope and remaining work:
   scratch; physical/JIT peaks remain unmeasured. Its three costs remain source-valid
   after the Cross-only change; other68base resize costs are reused.
   The table replaces a comfortable passing32×16summary with the current2×9cost;
-  all73remain in evidence. Largest remaining resize gap is bounded word32×16,
-  about108µs; byte reverse-mixed follows at82µs. Establish current word-path
-  attribution before choosing its next preparation/execution change.
+  all73remain in evidence. [Paired word weights](../benchmarks/DEEP-WORD-VECTOR-WEIGHTS.md)
+  save112.44µs/20.30%raw/14.21%normalized on bounded word32×16, with separated
+  raw/all-actual/normalized confidence and native−7.09%. Lane bits and all
+  arithmetic/cache/certification stay unchanged; same4032B arrays/4KiB,113B/op.
+  Its441.45/zimg414.55µs interval.999–1.072 is uncertain; no residual gap is
+  presumed or favorable repeat made. The table replaces a comfortable passing
+  byte32×16row with this uncertainty; all required cases remain. Largest
+  demonstrated resize gaps are byte Cross81.81µs and word2×9about75µs; the latter
+  still repeats preparation addressed by the byte row-group design. Attribute
+  its actual current path before selecting shared execution; stop unaffected passes.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
   six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
   Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.

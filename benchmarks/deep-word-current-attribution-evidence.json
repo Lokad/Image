@@ -1,0 +1,125 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPA860",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "sourcePins": {
+    "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+    "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "a3f319f102a973e5699d53952d40560ff678492d80aefd4c43ebe5d9a0a3e355",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "ff11743385dcc1bcd997d1c069bb0050f295afe79c2aad957fe891a78047ab92",
+    "src/Lokad.Image/ImageTransforms.cs": "0f36c6478a6a78e5477d2baf8538206e0c34dbce3d094fb095e8dd1228436c48"
+  },
+  "producers": {
+    "windowsSha256": "c544c8fb19798ecb26bf95d0e9ce8e341ec527e436e3f2e9d91b2fc561512b45",
+    "linuxSha256": "a375b6d65ebdac070266386e1220564468c8c8e168dc2ec7bed627da7b54a792",
+    "actualPackageSha256": "d7ef6fecbbc54b289c8af43b0766404dbd0e908d0ae08c8c2c906a4f79573a5a"
+  },
+  "reference": "tmp/cmp853-candidate-Tight32x16_16-confirm-receipt.json",
+  "currentCost": {
+    "managedUs": 553.8878435235507,
+    "nativeUs": 446.1962024739583,
+    "ratio": 1.2413549027367117,
+    "lower": 1.2150849173611924,
+    "upper": 1.2681073439370414,
+    "allocatedBytes": 113,
+    "status": "gap",
+    "librarySha256": "43ced2089e03cf8f214d08487ee16b2c8c3e3cca855f66d09b3fdbda7372ec00",
+    "receipt": "tmp/cmp853-candidate-Tight32x16_16-confirm-receipt.json",
+    "observation": "tmp/cmp853-candidate-Tight32x16_16-confirm-observation.json",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "caseId": "Tight32x16_16",
+    "depth": 16,
+    "width": 513,
+    "height": 259,
+    "outputWidth": 32,
+    "outputHeight": 16,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053",
+    "nativeOutputSha256": "19b7a2d543d60ffabb34791677cf64fb93fa176eddf2c9ba2e3528aad4bf1a44",
+    "managedMaxWorkingBytes": 1071128,
+    "managedRationalReferenceExact": true,
+    "managedQualifiedOriginalPixelsExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1071128 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+  },
+  "purpose": "First actual-current-package attribution for bounded513x259->32x16RGBA16, now largest remaining resize gap107.69us (553.89/zimg446.20us). Subsequent Generated/Cross-byte stages change no relevant word/Math/dispatcher source; qualified complete cost reused. Establish actual selected/rejected path, horizontal decoding/filtering versus vertical preparation/cache/publication before coherent redesign. One2second CPU0operation/CPU1sampler capture, original exact/native/source/ownership/idle-v2 gates; instrumented elapsed discarded. Reuse verified package/build/runtime/reference/fixtures; zero builds/timing confirmations/package or broad repeats. VM immutable source view reused without synchronizing unrelated docs. Native graph/scratch retained, not fresh-graph parity.",
+  "allBuilds": 0,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "instrumentedElapsedDiscarded": true,
+  "totalSampleLocations": 1997,
+  "methods": [
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.DeepWordColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1957
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.DeepWordColumnBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      36
+    ]
+  ],
+  "instances": [
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.DeepWordColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "address": "0x7a4a05697f20",
+      "codeBytes": 3050,
+      "samples": 1957
+    },
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.DeepWordColumnBicubicResize::TryWrite(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "address": "0x7a4a05698d20",
+      "codeBytes": 488,
+      "samples": 36
+    }
+  ],
+  "raw": {
+    "file": "deep-word-current-attribution.tar.xz",
+    "sha256": "8339fb0bf7510ba603461275b3f89d45d50bdbdc0d838f172a934b8139194b5b",
+    "bytes": 103000,
+    "members": 27,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "byte-cross-horizontal-overlap-qualified.tar.xz",
+        "sha256": "422ca254d22a69ec7b1c7399e58ef66db1dbc0c327a9252866635aa7a1f7a4b4"
+      }
+    ]
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "DWV861-proposed",
+    "productionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "primary": "Tight32x16_16",
+    "affectedExistingCases": [
+      "Tight32x16_16"
+    ],
+    "repeatedWork": "Actual current DeepWord core3050B has1957of1997sample locations; TryWrite488B has36. Instruction mapping identifies repeated horizontal unsigned decode/products/weights/ordered adds, not costly exact repair. Eight-scalar repeated weight construction expands into multiple moves/unpacks/inserts for every source pair. Samples/skid/inlining are not phase times or removable percentages.",
+    "intendedEndState": "Construct the same paired weight vector from two Vector256 broadcast halves, as existing shared kernels already do, instead of eight scalar arguments. Preserve every lane bit, coefficient/sample arithmetic, original per-row lowerthenupper tap adds, vertical cache/geometry, certificates/repair, admission/cancellation and publication. No new helper/API or global math change. If a material gap remains, consider coherent multi-column/source-row reuse rather than repeated micro-tuning.",
+    "storage": "Existing4032B explicit arrays/4096B preadmission, no new array/owned capacity/retention/pool/session. Physical/JIT frame unmeasured. Input/output owners and terminal refusal cleanup unchanged.",
+    "completeBoundaries": "One existing complete513x259RGBA16->32x16 Resize with input+output+4096, source/rational/frozen pixels, native graph/scratch explicitly prepared, independent output/disposal and all original idle/settings/native/owner gates. Default32x16word takes earlier cached workspace, not DeepWord; dispatch unchanged. Other72material resize costs reuse applicable unchanged paths. No new matrix.",
+    "correctness": "Whole original DeepWord file reconstructs after one constructor-expression substitution. Shared math/decoder/dispatcher/default cached sources unchanged. Exact double-lane equivalence follows broadcast/concatenation without floating arithmetic; existing full-word/rational/half/tail/resource tests and frozen complete output remain acceptance. One immutable core/embedded build eachOS; narrow3actual screen then independent12if useful. Reconcile actual native boundary before one fullW/L/scalar/SAMEpackage milestone.",
+    "temporaryCosts": "JIT may already recognize the expression or choose worse registers/spills; instruction shape/count alone authorizes no gain or merge. Completed timings decide; retain inconclusive/adverse evidence without favorable repetitions or a family ban. Broader row reuse remains a distinct alternative, not a requirement to keep an ineffective constructor change.",
+    "sources": {
+      "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49",
+      "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "a3f319f102a973e5699d53952d40560ff678492d80aefd4c43ebe5d9a0a3e355",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+      "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "ff11743385dcc1bcd997d1c069bb0050f295afe79c2aad957fe891a78047ab92",
+      "src/Lokad.Image/ImageTransforms.cs": "0f36c6478a6a78e5477d2baf8538206e0c34dbce3d094fb095e8dd1228436c48"
+    }
+  },
+  "qualificationReused": "byte-cross-horizontal-overlap-evidence.json",
+  "limitation": "One2second CPU0operation/CPU1sampler capture; inlining/skid/locations are not phase costs, removable percentages or CPU gains. Existing complete Cross cost remains source-valid. Zero new timing/build/qualification/package proof."
+}
