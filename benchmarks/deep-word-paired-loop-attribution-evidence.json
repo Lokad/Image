@@ -1,0 +1,116 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DPA890",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+    "linuxSha256": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+    "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "5495114ab308c2d816c8d36afa0cfe1353fd014edad186f4409130e56edfda9e",
+    "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+    "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "243740383bea7e4850884b686b8b1227731db829a6e3d5e1c065d2a79e04819e",
+    "tests/Lokad.Image.Tests/ColumnPairedBicubicWeightsTests.cs": "456400d8162718a65403c778470e4218dd38ca8c7f6ecbfdc327050ef076a168",
+    "tests/Lokad.Image.Tests/NarrowColumnRowLoanTests.cs": "05286cd7f78b5e6c4dc6c82b8d7eea4c050c71fee500143ca8cb48805c90f524",
+    "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "39ec109219fabc5fa192583b2e0ca36ebdc7b41fd3ca85d2acd1e68e871e886e"
+  },
+  "reference": "tmp/dwv861-candidate-Tight32x16_16-confirm-receipt.json",
+  "currentCostProvider": "benchmarks/deep-word-current-confidence-evidence.json",
+  "receipt": "tmp/dpa890-deepword-profile-receipt.json",
+  "instructionMap": "tmp/dpa890-instruction-attribution.txt",
+  "totalUserLocations": 1996,
+  "mappedManagedLocations": 1991,
+  "otherLocations": 5,
+  "coreLocations": 1929,
+  "publisherLocations": 56,
+  "coreJitBytes": 2989,
+  "interpretation": "The current exact two-pixel loop dominates mapped locations. Samples occur around72-capacity tap/offset checks, repeated byte-slice address/range preparation, source packing/widening, weight broadcasts and ordered pair sums. Existing112us weight construction gain is present; old3050B profile is historical. Locations/inlining/skid and profiler batching are not phase costs/removable percentages, predicted CPU savings or evidence to relax pixel arithmetic.",
+  "storage": "Existing4032B explicit arrays/4096B preadmission, no new capacity, owners, retention or allocations. Physical/native/JIT peaks unmeasured.",
+  "hypothesis": {
+    "repeatedWork": "Repeated fixed-capacity tap validation and byte-address/slice construction in the horizontal pair loop.",
+    "design": "Prepare exact-length horizontal weight/offset views once per column and a typed64bit sample view once per selected source row; retain clamped offset semantics, uint premultiplication, unsigned widening, eight-lane products, sequential pair sums and all exact certification/repair. No new owner/storage/cache/kernel family. Compare generated bounds/address work before a bounded complete control screen. A contiguous-source four-pixel preparation is a later materially revised option if attribution/JIT justifies it, not automatic merge authorization.",
+    "correctness": "Prove each new view denotes identical words/weight/offset bits, relying on unchanged x86 little endian ISA guard. Preserve original file outside load/view preparation; no numerical reassociation, newfloatingpolicy or mutable output alias. Existing word/edge/alpha/oracle/storage/admission/cancel/recovery checks normal/scalar/affectedISA, then actual standalone reference before accepted W/L/package milestone.",
+    "risks": "Extra views may increase register pressure or preserve bounds rather than remove them. Repeated72capacity/source guards may not be the throughput limiter; do not infer gain from sample counts or smaller JIT. No perfixture dispatch or changes to passing families.",
+    "continuation": "Judge completed view/load stage by complete elapsed, exact results, allocations and simpler loop. If inconclusive/adverse, preserve evidence and restore without broad/package repeats."
+  },
+  "qualificationReused": {
+    "provider": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+    "fullChecksEachOs": 6512,
+    "sameActualPackageBothOs": true,
+    "broadAndPackageRepeats": 0
+  },
+  "next": "One bounded view/load preparation stage on this demonstrated word32x16gap, before considering wider decoded-source reuse. Keep all other current passing costs source-valid and preserve eight remaining uncertainties.",
+  "raw": {
+    "file": "deep-word-paired-loop-current-attribution.tar.xz",
+    "sha256": "1e788f7cc417ae825e65efa5b13e5382fdaf9968c4e643bee64e595f8e215c99",
+    "bytes": 93116,
+    "members": 23,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "deep-word-current-adjacent-confidence.tar.xz",
+        "sha256": "d9bdb5386a5ca4749a713ba86a19b143651c3b30fdff4936a720f4ae93046fd3",
+        "bytes": 386308,
+        "members": 23,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+            "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+            "bytes": 1422452,
+            "members": 93,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "bilinear-operation-metadata-qualified.tar.xz",
+                "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+              },
+              {
+                "file": "resize-current-adjacent-confidence.tar.xz",
+                "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+              },
+              {
+                "file": "column-coefficient-preparation-trial.tar.xz",
+                "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+              }
+            ]
+          },
+          {
+            "file": "deep-word-vector-weights-qualified.tar.xz",
+            "sha256": "6df91d8bd8387ac86bcc8892090779a5607c0ef479f3338d44ee6a47040837db",
+            "bytes": 891220,
+            "members": 77,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "shared-resize-filter-weights-qualified.tar.xz",
+                "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+              },
+              {
+                "file": "byte-cross-horizontal-overlap-qualified.tar.xz",
+                "sha256": "422ca254d22a69ec7b1c7399e58ef66db1dbc0c327a9252866635aa7a1f7a4b4"
+              },
+              {
+                "file": "deep-word-current-attribution.tar.xz",
+                "sha256": "8339fb0bf7510ba603461275b3f89d45d50bdbdc0d838f172a934b8139194b5b"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -14,6 +14,8 @@ actuals/exact pixels/native bounds/owners/quiet guards. No production/build or
 broad/package repeat; current6512Windows/Linux/SAME-package proof is reused.
 Across73resize controls:64pass/1gap/8uncertain. Attribute this33.01µs excess
 before choosing a redesign. The preceding112.44µs production gain remains valid.
+[Current paired-loop attribution](DEEP-WORD-PAIRED-LOOP-ATTRIBUTION.md) now supplies
+the bounded tap-view/word-load preparation hypothesis; samples are not phase costs.
 
 [Compact paired weights](COMPACT-BICUBIC-PAIRED-WEIGHTS.md) is accepted: the bounded
 byte reduction independently confirms414.18/prepared-zimg418.13µs, upper.998,
