@@ -1,5 +1,8 @@
 # Current paired word loop attribution
 
+Current follow-up: [qualified horizontal views](DEEP-WORD-HORIZONTAL-VIEWS.md).
+Costs and next actions below retain their original checkpoint.
+
 The [current bounded word gap](DEEP-WORD-CURRENT-CONFIDENCE.md) justifies one
 read-only profile of the actual development-package DLL. A two-second CPU0
 operation/CPU1 sampler capture records 1,996 user locations: 1,929 in the 2,989-byte

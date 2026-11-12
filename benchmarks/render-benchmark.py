@@ -2043,17 +2043,6 @@ def render():
     assert generated_primary['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in generated_primary['views'].values())
     assert generated_rows['sourceProof']['rootActualTimedModuleJit']['normalizedRootInstructionsAndBlockOffsetsExact']
     assert generated_rows['sourceProof']['duplicatedWordScheduleRemoved']
-    deep_word = json.loads((ROOT / 'benchmarks/deep-word-vector-weights-evidence.json').read_text(encoding='utf-8'))
-    assert deep_word['productionAccepted'] and deep_word['allAffectedPerformanceReconciled']
-    assert set(deep_word['cases']) == {'Tight32x16_16'}
-    assert deep_word['sourceProof']['wholeOriginalDeepWordFileReconstructsExactly']
-    assert deep_word['sourceProof']['noNewFloatingArithmetic']
-    assert deep_word['raw']['mirrored'] and deep_word['raw']['allMembersVerified']
-    assert deep_word['storage']['explicitStackArrayBytes'] == 4032
-    assert deep_word['storage']['newOwnedCapacityBytes'] == deep_word['storage']['newRetainedCapacityBytes'] == 0
-    assert deep_word['cases']['Tight32x16_16']['status'] == 'uncertain'
-    assert deep_word['comparison']['Tight32x16_16']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in deep_word['comparison']['Tight32x16_16']['views'].values())
     streaming_weights = json.loads((ROOT / 'benchmarks/streaming-byte-vector-weights-evidence.json').read_text(encoding='utf-8'))
     assert streaming_weights['productionAccepted'] and streaming_weights['allAffectedPerformanceReconciled']
     assert set(streaming_weights['cases']) == {'Tight16x8_8', 'Tight8x17_8', 'Tight8x4_8'}
@@ -2090,24 +2079,28 @@ def render():
     assert compact_paired['sourceProof']['actualSharedCaller']['exact']
     assert all(v['rawGainSeparated'] for v in compact_paired['comparison']['views'].values())
     assert not compact_paired['comparison']['normalizedAdverseSeparated']
-    deep_confidence = json.loads((ROOT / 'benchmarks/deep-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert deep_confidence['measurementAccepted'] and not deep_confidence['productionChanged']
-    assert deep_confidence['allBuilds'] == deep_confidence['broadOrPackageRepeats'] == 0
-    assert deep_confidence['producers'] == compact_paired['producers']
-    assert deep_confidence['raw']['mirrored'] and deep_confidence['raw']['allMembersVerified']
-    assert set(deep_confidence['cases']) == {'Tight32x16_16'}
-    deep_cost = deep_confidence['cases']['Tight32x16_16']
-    assert deep_cost['status'] == 'gap' and deep_cost['lower'] > 1
+    word_views = json.loads((ROOT / 'benchmarks/deep-word-horizontal-views-evidence.json').read_text(encoding='utf-8'))
+    assert word_views['productionAccepted'] and word_views['allAffectedPerformanceReconciled']
+    assert word_views['baselineWindowsSha256'] == compact_paired['producers']['windowsSha256']
+    assert word_views['raw']['mirrored'] and word_views['raw']['allMembersVerified']
+    assert word_views['sourceProof']['wholeOriginalSourceReconstructed']
+    assert word_views['sourceProof']['actualSharedCallers']['Lokad.Image.ImageTransforms:Resize']['exact']
+    assert word_views['sourceProof']['performanceScope']['other72ResizeCostsReused']
+    assert word_views['comparison']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in word_views['comparison']['views'].values())
+    assert set(word_views['cases']) == {'Tight32x16_16'}
+    deep_cost = word_views['cases']['Tight32x16_16']
+    assert deep_cost['status'] == 'pass' and deep_cost['upper'] <= 1
     assert deep_cost['managedRationalReferenceExact'] and deep_cost['managedQualifiedOriginalPixelsExact']
     assert deep_cost['allOriginalGatesPassed'] and deep_cost['quietGuardsPassed']
     assert deep_cost['allActualsRetained'] and deep_cost['independentOwnedOutput']
     current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
-    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases'], **deep_confidence['cases']}
+    current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **streaming_weights['cases'], **scaler_confidence['cases'], **compact_paired['cases'], **word_views['cases']}
     resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    assert resize_status_counts == deep_confidence['currentResizeStatusCounts']
+    assert resize_status_counts == word_views['currentResizeStatusCounts']
     resize_case_owners = {case: (owner, view)
-                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (deep_word, 'deep'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'), (deep_confidence, 'deep'))
+                          for owner, view in ((cross_prefix, 'cross'), (generated_rows, 'generated'), (scaler_confidence, 'confidence'), (compact_paired, 'compact'), (word_views, 'deep'))
                           for case in owner['cases']}
     rows = apply_current_resize_weights(rows, resize_weights, resize_case_owners, bilinear_metadata)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
@@ -2300,6 +2293,13 @@ def render():
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
     assert current_build_qualification['affectedNarrowByteConsumerPassedBothOS']
+    current_build_qualification = word_views['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6512
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == word_views['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == word_views['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['affectedDeepWordConsumerPassedBothOS']
+    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
     bilinear_byte = bilinear_metadata['cases']['Down8']
     bilinear_word = bilinear_metadata['cases']['Down16']
     scaler_tight = compact_paired['cases']['TightDown8']
@@ -2399,7 +2399,7 @@ Current scope and remaining work:
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** across73standalone controls, **{resize_status_counts['pass']}pass /
-  {resize_status_counts['gap']} gap / {resize_status_counts['uncertain']}uncertain**.
+  {resize_status_counts['gap']} gaps / {resize_status_counts['uncertain']}uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: {cross_prefix['cases']['TightCross8']['managedUs']:.2f}/zimg{cross_prefix['cases']['TightCross8']['nativeUs']:.2f}µs,
   upper{cross_prefix['cases']['TightCross8']['upper']:.3f}, and same-height
@@ -2415,10 +2415,13 @@ Current scope and remaining work:
   checks and all clock shifts remain in the report, with no uniform gain claim.
   Unchanged59resize costs reuse source-valid proof, including five passing
   [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
-  [Current DeepWord32×16](../benchmarks/DEEP-WORD-CURRENT-CONFIDENCE.md) confirms
+  [Word tap/sample views](../benchmarks/DEEP-WORD-HORIZONTAL-VIEWS.md) confirm
   {deep_cost['managedUs']:.2f}/prepared-zimg{deep_cost['nativeUs']:.2f}µs,
-  range{deep_cost['lower']:.3f}–{deep_cost['upper']:.3f},112B/op: gap.
-  No production change or broad/package repeat. All eight equivalent prepared/one-shot controls pass; plans
+  upper{deep_cost['upper']:.3f},113B/op: pass/stop. Independent37.68µs/8.53%raw/
+  8.45%normalized gains have separated confidence. Same4KiB admission/ordered pixels;
+  current6512checks/SAMEpackage and new word consumer pass bothOSes.
+  Superseded DeepWord costs/attribution stay linked history.
+  All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
   upper.998 passes while its standalone view stays uncertain. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries

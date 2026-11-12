@@ -1,5 +1,8 @@
 # Current bounded word reduction confidence
 
+Current follow-up: [qualified horizontal views](DEEP-WORD-HORIZONTAL-VIEWS.md).
+Costs and next actions below retain their original checkpoint.
+
 The existing 513×259→32×16 RGBA16 bicubic control now has a **confirmed gap**:
 
 | Complete operation | Lokad µs | Prepared zimg µs | Ratio / conservative range | Allocated B/op |

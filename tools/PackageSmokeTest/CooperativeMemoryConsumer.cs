@@ -106,9 +106,11 @@ internal static class CooperativeMemoryConsumer
     }
 
     private static void VerifyBicubicSchedule(int workspaceBytes, bool vertical = false, int depth = 16,
-        bool reduction = false, bool packedReduction = false, int crossHeight = 0, bool horizontal = false, int heightOverride = 0)
+        bool reduction = false, bool packedReduction = false, int crossHeight = 0, bool horizontal = false,
+        int heightOverride = 0, int widthOverride = 0)
     {
-        var width = crossHeight > 0 ? 256 : packedReduction ? 64 : reduction ? 256 : vertical ? 513 : 1027;
+        var width = widthOverride > 0 ? widthOverride
+            : crossHeight > 0 ? 256 : packedReduction ? 64 : reduction ? 256 : vertical ? 513 : 1027;
         var height = heightOverride > 0 ? heightOverride : horizontal ? 259 : crossHeight > 0 ? crossHeight : packedReduction ? 32 : 129;
         var outputBytes = width * height * (depth / 2);
         using var source = OriginalPixels.Buffer(513, 259, depth);
@@ -118,7 +120,8 @@ internal static class CooperativeMemoryConsumer
         if (crossHeight > 0 && depth == 8 && Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(input))
             != "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80")
             throw new Exception("Packaged byte cross input differs from the frozen control.");
-        if (vertical && depth == 16 && Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(input))
+        if ((vertical || widthOverride > 0) && depth == 16
+            && Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(input))
             != "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9")
             throw new Exception("Packaged vertical word input differs from the frozen control.");
         using var root = new TestMemoryBudget(2L * outputBytes + workspaceBytes);
@@ -131,7 +134,9 @@ internal static class CooperativeMemoryConsumer
             && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
         // Hashes are frozen by the existing independently checked complete
         // bicubic controls on this exact original raster, before this change.
-        var expectedHash = vertical && heightOverride > 0 ? (depth == 8
+        var expectedHash = widthOverride == 32 && heightOverride == 16 && depth == 16
+            ? "56948d8eacf081102f915276cdbd5daac3b2414f07ac93e3cf9f91fac5e5f053"
+            : vertical && heightOverride > 0 ? (depth == 8
             ? "705c36dd72e49076298952566b7e68b7922cb649c45d4dbf4cf68d9c6cd2887d"
             : "c9f1c8cc6a1a0bbfc4f8b5de0bfabc79484c81d5aa062a3b2630a81fba0f6676")
             : horizontal ? (depth == 8
@@ -157,12 +162,21 @@ internal static class CooperativeMemoryConsumer
             || vectorBands && root.Peak != 2L * outputBytes + workspaceBytes
             || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first)))
             throw new Exception($"Packaged mixed-word rows changed frozen pixels or retained admission: workspace={workspaceBytes}, hash={Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected))}, retained={root.Bytes}, peak={root.Peak}.");
-        try
+        using (var caller = root.CreateScope())
         {
-            using var unexpected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
-            throw new Exception("Packaged mixed-word rows ignored aggregate admission.");
+            // Fill spare capacity explicitly: portable paths may need less scratch.
+            if (!caller.TryReserve(workspaceBytes, out var held))
+                throw new Exception("Packaged bicubic refusal setup differs.");
+            using (held)
+            {
+                try
+                {
+                    using var unexpected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+                    throw new Exception("Packaged mixed-word rows ignored aggregate admission.");
+                }
+                catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+            }
         }
-        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
         if (root.Bytes != 2L * outputBytes) throw new Exception("Packaged mixed-word refusal changed surviving ownership.");
         if (depth == 16) first.GetRow16(0)[0] ^= 65535;
         else first.GetRow8(0)[0] ^= 255;
@@ -184,7 +198,9 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged mixed-word recovery changed pixels.");
         if (root.Bytes != 0 || root.IsDisposed || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
             throw new Exception("Packaged mixed-word rows lost source or borrowed-root ownership.");
-        Console.WriteLine(vertical && heightOverride > 0
+        Console.WriteLine(widthOverride == 32
+            ? "Packaged deep word bicubic preserves frozen pixels, aggregate admission, cancellation and independent survivors."
+            : vertical && heightOverride > 0
             ? "Packaged vertical byte/word enlargement preserves frozen pixels, aggregate admission, cancellation and independent survivors."
             : horizontal
             ? "Packaged horizontal byte/word enlargement preserves frozen pixels, aggregate admission, cancellation and independent survivors."
@@ -1192,6 +1208,7 @@ internal static class CooperativeMemoryConsumer
         VerifyBicubicSchedule(4096, horizontal: true);
         VerifyBicubicSchedule(4096, vertical: true, depth: 8, heightOverride: 519);
         VerifyBicubicSchedule(4096, vertical: true, heightOverride: 519);
+        VerifyBicubicSchedule(4096, widthOverride: 32, heightOverride: 16);
         await VerifyPngCursors(cancellable: true);
         await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();

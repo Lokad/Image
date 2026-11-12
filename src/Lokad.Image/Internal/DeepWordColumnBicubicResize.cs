@@ -48,6 +48,8 @@ internal static class DeepWordColumnBicubicResize
                     offsets[t] = (ushort)relative;
                 }
                 var sourceCount = offsets[countX - 1] + 1;
+                var columnWeights = weights[..countX];
+                var columnOffsets = offsets[..countX];
                 rowIds.Fill(-1);
                 for (var y = 0; y < result.Height; y++)
                 {
@@ -65,16 +67,18 @@ internal static class DeepWordColumnBicubicResize
                         if (rowIds[slot] == sy) continue;
                         rowIds[slot] = sy;
                         var row = input.Slice(sy * stride + sourceFirst * 8, sourceCount * 8);
+                        // The guarded x86 path reads the same little endian words.
+                        ReadOnlySpan<ulong> packedRow = MemoryMarshal.Cast<byte, ulong>(row);
                         var sum = Vector256<double>.Zero;
                         var tx = 0;
-                        for (; tx + 1 < countX; tx += 2)
+                        for (; tx + 1 < columnWeights.Length; tx += 2)
                         {
-                            var p0 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[tx] * 8, 8));
-                            var p1 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[tx + 1] * 8, 8));
+                            var p0 = packedRow[columnOffsets[tx]];
+                            var p1 = packedRow[columnOffsets[tx + 1]];
                             var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
                             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
                             var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
-                            var w0 = weights[tx]; var w1 = weights[tx + 1];
+                            var w0 = columnWeights[tx]; var w1 = columnWeights[tx + 1];
                             var products = Avx512F.Multiply(values,
                                 Avx512F.InsertVector256(Vector512.Create(w0), Vector256.Create(w1), 1));
                             // Separate additions preserve the original horizontal
@@ -82,14 +86,14 @@ internal static class DeepWordColumnBicubicResize
                             sum = Avx.Add(sum, products.GetLower());
                             sum = Avx.Add(sum, products.GetUpper());
                         }
-                        if (tx < countX)
+                        if (tx < columnWeights.Length)
                         {
-                            var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[tx] * 8, 8));
+                            var packed = packedRow[columnOffsets[tx]];
                             var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsUInt16());
                             var alpha = (int)(packed >> 48);
                             var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1)).AsUInt32();
                             var values = Avx512F.ConvertToVector512Double(Vector256.Create(products, Vector128<uint>.Zero)).GetLower();
-                            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(weights[tx])));
+                            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(columnWeights[tx])));
                         }
                         cache[slot] = sum;
                     }
@@ -100,7 +104,7 @@ internal static class DeepWordColumnBicubicResize
                     if (!TryWrite(total, normalizer, result.Pixels.Slice(y * result.Stride + x * 8, 8)))
                     {
                         if (!(normalizer >= .5 && total.GetElement(3) / normalizer >= 2)
-                            || !OriginalWord(source, result, x, y, weights[..countX], offsets[..countX],
+                            || !OriginalWord(source, result, x, y, columnWeights, columnOffsets,
                                 sourceFirst, vertical[..countY], firstY, context)) return false;
                     }
                 }
