@@ -33,6 +33,14 @@ Stop this control. [Former gap](DEEP-WORD-CURRENT-CONFIDENCE.md) and
 [attribution](DEEP-WORD-PAIRED-LOOP-ATTRIBUTION.md) remain linked history, outside
 current renderer dependencies. Publication stays postponed.
 
+[Bounded mixed-word confidence](RESIZE-MIXED-WORD-CONFIDENCE.md) remains uncertain:
+862.61/prepared-zimg840.93µs,range.999440–1.041560,112directB/op. One existing
+12-pair64-operation adjacent capture retains all actuals/native brackets and
+exact managed pixels/approved native bounds/owners. Prior standalone uncertainty
+is preserved; no new case, assumed gap or favorable repeat. Current immutable
+package/6513qualification is reused with zero builds/broad/package repeats.
+The73-control status remains65pass/zero gaps/eight uncertain; publication postponed.
+
 [Compact paired weights](COMPACT-BICUBIC-PAIRED-WEIGHTS.md) is accepted: the bounded
 byte reduction independently confirms414.18/prepared-zimg418.13µs, upper.998,
 113B/op and exact managed pixels. Raw5.77µs/1.38% and all-actual6.24µs/1.48% gains

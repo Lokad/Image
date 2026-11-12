@@ -2098,6 +2098,17 @@ def render():
     assert all(c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
                and c['managedRationalReferenceExact'] and c['independentOwnedOutput']
                for c in scaler_confidence['cases'].values())
+    mixed_confidence = json.loads((ROOT / 'benchmarks/resize-mixed-word-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert mixed_confidence['measurementAccepted'] and not mixed_confidence['productionChanged']
+    assert mixed_confidence['allBuilds'] == mixed_confidence['broadOrPackageRepeats'] == 0
+    assert mixed_confidence['producers'] == png_stored['producers']
+    assert mixed_confidence['raw']['mirrored'] and mixed_confidence['raw']['allMembersVerified']
+    assert set(mixed_confidence['cases']) == {'TightMixed16'}
+    mixed_word_adjacent = mixed_confidence['cases']['TightMixed16']
+    assert mixed_word_adjacent['status'] == 'uncertain' and mixed_word_adjacent['lower'] <= 1 < mixed_word_adjacent['upper']
+    assert mixed_word_adjacent['allOriginalGatesPassed'] and mixed_word_adjacent['quietGuardsPassed']
+    assert mixed_word_adjacent['allActualsRetained'] and mixed_word_adjacent['managedRationalReferenceExact']
+    assert mixed_word_adjacent['independentOwnedOutput']
     compact_paired = json.loads((ROOT / 'benchmarks/compact-bicubic-paired-weights-evidence.json').read_text(encoding='utf-8'))
     assert compact_paired['productionAccepted'] and compact_paired['allAffectedPerformanceReconciled']
     assert set(compact_paired['cases']) == {'TightDown8'}
@@ -2473,7 +2484,11 @@ Current scope and remaining work:
   Superseded DeepWord costs/attribution stay linked history.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
-  upper.998 passes while its standalone view stays uncertain. Bilinear word
+  upper.998 passes while its standalone view stays uncertain. The existing
+  [bounded mixed-word adjacent case](../benchmarks/RESIZE-MIXED-WORD-CONFIDENCE.md)
+  stays uncertain at{mixed_word_adjacent['managedUs']:.2f}/{mixed_word_adjacent['nativeUs']:.2f}µs,
+  range{mixed_word_adjacent['lower']:.6f}–{mixed_word_adjacent['upper']:.6f},112directB/op.
+  No presumed gap, saving, new build or favorable repeat follows. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
   stay separate. No historical stage sums or favorable repeats.
   [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the

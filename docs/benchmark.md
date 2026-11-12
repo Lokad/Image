@@ -130,7 +130,11 @@ Current scope and remaining work:
   Superseded DeepWord costs/attribution stay linked history.
   All eight equivalent prepared/one-shot controls pass; plans
   retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
-  upper.998 passes while its standalone view stays uncertain. Bilinear word
+  upper.998 passes while its standalone view stays uncertain. The existing
+  [bounded mixed-word adjacent case](../benchmarks/RESIZE-MIXED-WORD-CONFIDENCE.md)
+  stays uncertain at862.61/840.93µs,
+  range0.999440–1.041560,112directB/op.
+  No presumed gap, saving, new build or favorable repeat follows. Bilinear word
   enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
   stay separate. No historical stage sums or favorable repeats.
   [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the
