@@ -1,5 +1,8 @@
 # Bounded wide bicubic: prepared source addressing
 
+[Contiguous source views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md) now record the
+implementation and complete results. This report retains the prior attribution.
+
 The existing complete 513×259→128×64 RGBA8/4KiB Resize retains its source-valid
 371.62/zimg351.70µs, upper1.069 demonstrated gap. WPA836 profiles the actual
 [qualified package](PREPARED-DEEP-PAIR-CONVERSIONS.md); the wide executor and its

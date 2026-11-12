@@ -1810,16 +1810,16 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → 256×129 | '
                              f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
-    wide_quartet = json.loads((ROOT / 'benchmarks/wide-bicubic-shared-quartets-evidence.json').read_text(encoding='utf-8'))
+    wide_quartet = json.loads((ROOT / 'benchmarks/contiguous-wide-source-views-evidence.json').read_text(encoding='utf-8'))
     wide_quartet_qualification = wide_quartet['qualification']
     assert wide_quartet['productionAccepted'] and wide_quartet['requiredMaterialPaths'] == 289
-    assert wide_quartet_qualification['fullChecksEachOs'] == wide_quartet_qualification['windows']['total'] == wide_quartet_qualification['linux']['total'] == 6248
+    assert wide_quartet_qualification['fullChecksEachOs'] == wide_quartet_qualification['windows']['total'] == wide_quartet_qualification['linux']['total'] == 6439
     assert wide_quartet_qualification['sameActualPackageBothOS']
     assert wide_quartet_qualification['actualPackage']['sha256'] == wide_quartet_qualification['samePackageLinux']['sameActualPackageSha256']
     assert wide_quartet['comparison']['TightWide8']['normalizedGainSeparated']
     assert all(v['rawGainSeparated'] for v in wide_quartet['comparison']['TightWide8']['views'].values())
-    assert wide_quartet['sourceProof']['entireWideSourceReconstructed']
-    assert wide_quartet['sourceProof']['actualOrderedLaneComparisons'] == 81920
+    assert wide_quartet['sourceProof']['entireOriginalFilesReconstructed']
+    assert wide_quartet['sourceProof']['tests']['orderedBitsAndPoisonAndNoAllocation']
     assert wide_quartet['allAffectedPerformanceReconciled'] and not wide_quartet['materialPassToGapContradictions']
     assert wide_quartet['storage']['newOwnedCapacityBytes'] == wide_quartet['storage']['retainedOperationScratchBytes'] == 0
     assert wide_quartet['raw']['mirrored'] and wide_quartet['raw']['allMembersVerified']
@@ -2084,6 +2084,9 @@ def render():
     current_build_qualification = deep_current['qualification']
     assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6435
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
+    current_build_qualification = wide_quartet_qualification
+    assert current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6439
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-11-12. These **{displayed_count} tabulated comparisons** combine qualified
@@ -2171,11 +2174,17 @@ Current scope and remaining work:
   visible; no uniform gain claim. The native-prepared asymmetry remains explicit
   alongside equivalent boundaries. Earlier quartet results retain linked history.
   [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
-  [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
+  [contiguous wide source views](../benchmarks/CONTIGUOUS-WIDE-SOURCE-VIEWS.md) keep bounded
   allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
   word upper.888 passes. Wide byte {wide_quartet['cases']['TightWide8']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide8']['nativeUs']:.2f} µs,
-  upper{wide_quartet['cases']['TightWide8']['upper']:.3f} remains a gap after a 5.35% normalized gain; word
-  upper{wide_quartet['cases']['TightWide16']['upper']:.3f} passes, with inconclusive CPU effect. No new owned capacity or retention.
+  upper{wide_quartet['cases']['TightWide8']['upper']:.3f} remains a gap after14.15µs/3.81%raw/4.01%normalized saved;
+  raw/all-actual/normalized confidence separate, native+0.21%. Current word
+  {wide_quartet['cases']['TightWide16']['managedUs']:.2f}/zimg{wide_quartet['cases']['TightWide16']['nativeUs']:.2f}µs,
+  upper{wide_quartet['cases']['TightWide16']['upper']:.3f} is uncertain, superseding its older pass.
+  Raw cost+2.35µs/.58% and normalized cost+2.51% are recorded; all-actual raw and normalized
+  confidence overlap, native−1.88%. No word gain or established normalized regression.
+  Same113B/op/4KiB/zero retained scratch, no new capacity or owner. Word JIT layout
+  changes despite the folded guard; its complete companion was refreshed before qualification.
   [Compact mixed geometry](../benchmarks/COMPACT-MIXED-BICUBIC-GEOMETRY.md)
   uses36 rather than84 B/column. Default/bounded byte save35.35/13.27 µs,
   4.01%/1.54% raw and4.07%/4.10% normalized, with separated confidence; both pass/stop.

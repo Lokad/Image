@@ -2,7 +2,7 @@
 
 ## 0.2.1 — Unreleased
 
-- Share bounded bicubic source preparation and overlapping sample conversions
+- Share bounded bicubic source preparation, contiguous windows and sample conversions
   across output columns, including deep reductions with small output heights,
   preserving exact pixels and working-memory limits.
 

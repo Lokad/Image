@@ -85,11 +85,17 @@ Current scope and remaining work:
   visible; no uniform gain claim. The native-prepared asymmetry remains explicit
   alongside equivalent boundaries. Earlier quartet results retain linked history.
   [Shared narrow](../benchmarks/BOUNDED-BICUBIC-SHARED-QUARTETS.md) and
-  [wide traversal](../benchmarks/WIDE-BICUBIC-SHARED-QUARTETS.md) keep bounded
+  [contiguous wide source views](../benchmarks/CONTIGUOUS-WIDE-SOURCE-VIEWS.md) keep bounded
   allocation 113 B/op and admission 4 KiB. Narrow byte upper1.027 remains a gap,
-  word upper.888 passes. Wide byte 371.62/zimg351.70 µs,
-  upper1.069 remains a gap after a 5.35% normalized gain; word
-  upper0.988 passes, with inconclusive CPU effect. No new owned capacity or retention.
+  word upper.888 passes. Wide byte 357.33/zimg350.73 µs,
+  upper1.033 remains a gap after14.15µs/3.81%raw/4.01%normalized saved;
+  raw/all-actual/normalized confidence separate, native+0.21%. Current word
+  404.77/zimg407.07µs,
+  upper1.012 is uncertain, superseding its older pass.
+  Raw cost+2.35µs/.58% and normalized cost+2.51% are recorded; all-actual raw and normalized
+  confidence overlap, native−1.88%. No word gain or established normalized regression.
+  Same113B/op/4KiB/zero retained scratch, no new capacity or owner. Word JIT layout
+  changes despite the folded guard; its complete companion was refreshed before qualification.
   [Compact mixed geometry](../benchmarks/COMPACT-MIXED-BICUBIC-GEOMETRY.md)
   uses36 rather than84 B/column. Default/bounded byte save35.35/13.27 µs,
   4.01%/1.54% raw and4.07%/4.10% normalized, with separated confidence; both pass/stop.
@@ -175,13 +181,13 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,435 full/live checks per OS**
+The current immutable build passes **6,439 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Unchanged VP8/shared-memory checks pass 1,041 internal/433 public per
 normal/scalar mode; numerical ISA paths remain unchanged. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass712internal/246public per normal/scalar mode.
-Current resize qualification passes 524 internal/791 public per
+Current resize qualification passes 528 internal/791 public per
 normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
@@ -309,8 +315,8 @@ settings do not establish matched quality.
 | Bicubic RGBA16, width up / height down, input+output+4 KiB (confidence open) † → 1027×129 | 923.05 | 914.24 | 1.010 / 1.016 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 364.04 | 372.99 | 0.976 / 0.982 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB (confidence open) † → 64×32 | 386.57 | 378.04 | 1.023 / 1.027 | 113 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 371.62 | 351.70 | 1.057 / 1.069 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB (pass) † → 128×64 | 407.47 | 417.67 | 0.976 / 0.988 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 357.33 | 350.73 | 1.019 / 1.033 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB (confidence open) † → 128×64 | 404.77 | 407.07 | 0.994 / 1.012 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 768.30 | 840.72 | 0.914 / 0.918 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 821.70 | 889.98 | 0.923 / 0.936 | 199,891 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |

@@ -48,6 +48,46 @@ public sealed class BicubicOverlappingPairTests
         }
     }
 
+    [Theory]
+    [InlineData(255, false)] [InlineData(255, true)]
+    [InlineData(65535, false)] [InlineData(65535, true)]
+    public void ContiguousWindowsKeepOrderedBitsPoisonGuardsAndNoAllocation(int maximum, bool tinyAlpha)
+    {
+        if (!Avx512F.IsSupported || !Avx.IsSupported) return;
+        var random = new Random(837);
+        var input = Enumerable.Repeat(Vector256.Create(double.NaN), 22).ToArray();
+        var first = Enumerable.Repeat(double.NaN, 18).ToArray(); var second = first.ToArray();
+        for (var trial = 0; trial < 16; trial++)
+        {
+            for (var p = 1; p <= 20; p++)
+            {
+                var a = tinyAlpha ? random.Next(3) : random.Next(maximum + 1);
+                input[p] = Vector256.Create((double)a * random.Next(maximum + 1),
+                    (double)a * random.Next(maximum + 1), (double)a * random.Next(maximum + 1), a);
+            }
+            for (var t = 1; t <= 16; t++)
+            {
+                first[t] = (t % 4) switch { 0 => .1, 1 => -1d / 3, 2 => .75, _ => -0d };
+                second[t] = (t % 4) switch { 0 => 1d / 7, 1 => .125, 2 => -0d, _ => -1d / 11 };
+            }
+            var original = input.ToArray(); var firstCopy = first.ToArray(); var secondCopy = second.ToArray();
+            BicubicMath.FilterContiguousHorizontalPair(input.AsSpan(1, 20), first.AsSpan(1, 16), second.AsSpan(1, 16), 4,
+                out var firstSum, out var secondSum);
+            for (var c = 0; c < 8; c++)
+            {
+                double expected = 0;
+                for (var t = 0; t < 16; t++)
+                    expected += Product(input[1 + t + (c >= 4 ? 4 : 0)].GetElement(c & 3), (c < 4 ? first : second)[t + 1]);
+                Assert.Equal(BitConverter.DoubleToInt64Bits(expected), BitConverter.DoubleToInt64Bits((c < 4 ? firstSum : secondSum).GetElement(c & 3)));
+            }
+            Assert.Equal(original, input); Assert.Equal(firstCopy, first); Assert.Equal(secondCopy, second);
+            var allocated = GC.GetAllocatedBytesForCurrentThread();
+            for (var repeat = 0; repeat < 4; repeat++)
+                BicubicMath.FilterContiguousHorizontalPair(input.AsSpan(1, 20), first.AsSpan(1, 16), second.AsSpan(1, 16), 4, out _, out _);
+            Assert.Equal(allocated, GC.GetAllocatedBytesForCurrentThread());
+        }
+    }
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static double Product(double a, double b) => a * b;
 

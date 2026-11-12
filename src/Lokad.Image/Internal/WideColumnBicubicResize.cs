@@ -182,6 +182,15 @@ internal static partial class WideColumnBicubicResize
                         var count0 = counts[x]; var count1 = counts[x + 1];
                         var weights0 = weights.Slice(x * taps, count0); var weights1 = weights.Slice((x + 1) * taps, count1);
                         var offsets0 = offsets.Slice(x * taps, count0); var offsets1 = offsets.Slice((x + 1) * taps, count1);
+                        if (typeof(TWidth) == typeof(RowLoanColumns) && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
+                        {
+                            var firstPixel = offsets[x * taps + 16] - 1;
+                            BicubicMath.FilterContiguousHorizontalPair(
+                                decoded.Slice(firstPixel, 20), weights0, weights1, 4, out var firstSum, out var secondSum);
+                            cache[slot * columns + x] = firstSum;
+                            cache[slot * columns + x + 1] = secondSum;
+                            continue;
+                        }
                         if (columns == 4 && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
                         {
                             var firstPixel = offsets[x * taps + 16] - 1;

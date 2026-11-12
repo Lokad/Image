@@ -78,6 +78,25 @@ internal static class BicubicMath
         return true;
     }
 
+    // Proven contiguous windows need no per-tap offset loads or source checks.
+    // Each output keeps its original t0..tn multiply/add sequence.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void FilterContiguousHorizontalPair(
+        ReadOnlySpan<Vector256<double>> decoded, ReadOnlySpan<double> firstWeights,
+        ReadOnlySpan<double> secondWeights, int stride, out Vector256<double> firstSum, out Vector256<double> secondSum)
+    {
+        var first = decoded[..firstWeights.Length];
+        var second = decoded.Slice(stride, firstWeights.Length);
+        var rightWeights = secondWeights[..firstWeights.Length];
+        var left = Vector256<double>.Zero; var right = Vector256<double>.Zero;
+        for (var t = 0; t < firstWeights.Length; t++)
+        {
+            left = Avx.Add(left, Avx.Multiply(first[t], Vector256.Create(firstWeights[t])));
+            right = Avx.Add(right, Avx.Multiply(second[t], Vector256.Create(rightWeights[t])));
+        }
+        firstSum = left; secondSum = right;
+    }
+
     // Callers select fixed four/eight-tap/+2 or sixteen-tap/+4 geometry. Reuse
     // overlapping source windows without changing either lane's tap order.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

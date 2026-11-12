@@ -1,5 +1,9 @@
 # Shared wide bicubic vertical quartets
 
+[Contiguous source views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md) own the current byte/
+word costs and qualification. This report retains the earlier traversal change,
+its independently verified gain and raw evidence.
+
 BWF794 reuses the shared exact four-pixel vertical accumulator in bounded wide
 byte/word resizing. It keeps one publication/repair loop: the second pair waits
 in a vector while the first is published in its original order. The shared helper,

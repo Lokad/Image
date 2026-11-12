@@ -7,7 +7,19 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
-The latest accepted [shared deep-pair conversions](PREPARED-DEEP-PAIR-CONVERSIONS.md)
+The latest accepted [contiguous wide views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
+pass6,439full/live checks perOS,528internal/791public affected normal/scalar/
+AVX2-off/AVX512-off and SAMEactualpackage/all3examples. Byte saves14.15µs/
+3.81%raw/4.01%normalized with separated confidence;357.33/zimg350.73µs upper1.033
+remains a gap. Same113B/op/4KiB/zero retained scratch, no new owned capacity.
+Word generated layout changes despite its folded guard, so the complete existing
+companion refreshes:404.77/407.07µs upper1.012 is uncertain, superseding the older
+pass. Raw cost+2.35µs/.58%, normalized cost+2.51% and native−1.88% are retained; all-actual
+raw and normalized intervals overlap. Do not assume a word gap or claim a word gain.
+Both candidate versions, source proofs and adverse/inconclusive views are retained.
+Other numerical bodies/geometry/owners remain exact and source-valid evidence reused.
+
+Unchanged [shared deep-pair conversions](PREPARED-DEEP-PAIR-CONVERSIONS.md)
 pass 6,435 full/live checks per OS, 524 internal/791 public affected checks in
 normal/scalar/AVX2-off/AVX512-off and SAME actual package/all three examples.
 Complete 32×16 byte Resize saves 97.90µs/23.73% raw/23.80% normalized with
@@ -22,11 +34,8 @@ tests/harnesses and other family evidence reused, one full/package milestone.
 [Source-driven scheduling](SOURCE-DRIVEN-DEEP-BICUBIC.md) retains the earlier gain.
 Select the next independent demonstrated gap; do not retune this passing control.
 
-The [current bounded-wide profile](WIDE-BICUBIC-PREPARED-ATTRIBUTION.md) motivates
-prebounded contiguous source views to remove repeated indexed addressing while
-preserving ordered AVX256 arithmetic. This is a revised hypothesis, not a gain or
-a replay of the inconclusive overlap kernel. No production/build/qualification
-repeat; unchanged source-valid wide-byte gap and passing word evidence remain.
+The [bounded-wide profile](WIDE-BICUBIC-PREPARED-ATTRIBUTION.md) retains attribution
+behind the accepted views. This is distinct from the inconclusive overlap kernel.
 
 Unchanged [bounded horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md)
 passes 6,417 full/live checks per OS, 508 internal/789 public affected checks in
@@ -174,7 +183,7 @@ This is not a whole-release timing refresh; all 289 paths still need valid passi
 | Horizontal/reverse-mixed word bicubic | [Ordered horizontal windows](BICUBIC-ORDERED-HORIZONTAL-WINDOWS.md): existing TightCross16 513×259→256×519 passes 892.36/zimg900.40 µs upper.999; TightHorizontal16→256×259 passes 493.16/640.62 µs upper.774. Savings 49.41/34.44 µs, 5.25%/6.53% raw and 6.36%/15.36% normalized, with separated confidence. Native +1.19%/+10.44% is explicit.114/113 B/op, same4KiB admission, no added capacity/retention. Both pass/stop; defaults and other kernels unchanged. |
 | Bounded packed bicubic | [Horizontal window reuse](PACKED-HORIZONTAL-WINDOW-REUSE.md): byte364.04/zimg372.99µs upper0.982 passes/stops after14.21µs/3.76%raw/3.68%normalized gain; both confidence views separate. Word386.57/378.04µs upper1.027 stays uncertain. Matched64-operation adjacent397.04/410.52µs upper0.979 passes its scope; retain both and leave broader word confirmation open. Same113B/op/4KiB, no new owned capacity or retention. Earlier return-transfer trial/profile remain history. |
 | Bounded narrow bicubic | [Shared vertical quartets](BOUNDED-BICUBIC-SHARED-QUARTETS.md): byte459.65/zimg451.35µs upper1.027 remains a gap; word506.31/574.04µs upper.888 passes/stops. Paired confirms save46.34/74.66µs raw and9.04%/5.71% normalized; both confidence views separate. Same113B/op/4KiB, no added owned capacity or retention; extra64B vector lifetime/JIT physical peak remains unmeasured. |
-| Bounded wide bicubic | [Shared vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md): byte371.62/zimg351.70µs upper1.069 remains a gap; word407.47/417.67µs upper.988 passes/stops. Paired byte saves44.34µs/10.66% raw/5.35% normalized with both confidence views separate; word CPU effect is inconclusive. Same113B/op/4KiB and no added owned capacity or retention; extra64B vector lifetime/physical JIT peak remains unmeasured. |
+| Bounded wide bicubic | [Contiguous source views](CONTIGUOUS-WIDE-SOURCE-VIEWS.md): byte357.33/zimg350.73µs upper1.033 remains a gap after14.15µs/3.81%raw/4.01%normalized saved with separated confidence. Current word404.77/407.07µs upper1.012 is uncertain, superseding its prior pass; no normalized adverse effect established. Same113B/op/4KiB/zero retained scratch, no new owned capacity. [Vertical quartets](WIDE-BICUBIC-SHARED-QUARTETS.md) retain the earlier design/gain. |
 | Cached wider/other bicubic | [Shared horizontal schedules](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md): all 24 shared controls refresh, 22 pass / 0 gaps / 2 uncertain. Down8 452.28/zimg454.42 µs upper1.005 and Wide8 378.51/375.02 µs upper1.020 are uncertain. Down8 saves22.70 µs/4.78% raw/5.11% normalized with separated confidence and native+0.35%. No presumed gap or favorable repeat. All eight equivalent boundaries pass/stop. Same owned capacity/retention; earlier costs are history. |
 | Prepared narrow bicubic | [Current shared-schedule owner](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md): all four equivalent boundaries pass/stop. Prepared byte436.53/zimg455.85 µs upper0.968, 138 B/op and199840 B retained plan. Same capacity; GC and governed/physical peaks remain separate. [Earlier publication](CACHED-NARROW-SHARED-PUBLICATION.md) retains design and incremental evidence. |
 | Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
@@ -351,6 +360,12 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- WCD837B changes only proven byte row-loan horizontal addressing and adds a
+  numerical helper; all existing numerical methods reconstruct verbatim. New
+  generic locals also alter word JIT layout, so both existing TightWide8/16 costs
+  are refreshed. Byte remains a demonstrated gap; word is uncertain, and the old
+  word pass is superseded. Other numerical/geometry/codec/filter/text paths retain
+  source validity. No new image/profile/settings grid or timing repeats.
 - PDC835 changes only the prepared horizontal producer inside small-height deep
   byte reduction. Tight32x16_8 refreshes to upper0.846 and stops. Its prior timing
   is superseded; entry/admission, row scheduling, vertical arithmetic, exact
