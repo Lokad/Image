@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, deep_word):
+def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, deep_word, bilinear_metadata):
     """Replace every displayed affected resize cost from one current owner."""
     mapping = {
         'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
@@ -52,8 +52,9 @@ def apply_current_resize_weights(rows, evidence, cross_prefix, generated_rows, d
         scoped = field == 'cases' and case in cross_prefix['cases']
         generated = field == 'cases' and case in generated_rows['cases']
         deep = field == 'cases' and case in deep_word['cases']
-        owner = deep_word if deep else generated_rows if generated else cross_prefix if scoped else evidence
-        current = owner[field][case]
+        metadata = field == 'bilinear' and case in bilinear_metadata['cases']
+        owner = bilinear_metadata if metadata else deep_word if deep else generated_rows if generated else cross_prefix if scoped else evidence
+        current = owner['cases'][case] if metadata else owner[field][case]
         if scoped and case in {'TightCross8', 'TightHorizontal8'}:
             size = '256×519' if case == 'TightCross8' else '256×259'
             label = f'Bicubic RGBA8, width reduction / ' + ('height enlargement' if case == 'TightCross8' else 'same height') + f', input+output+4 KiB † → {size}'
@@ -2065,10 +2066,17 @@ def render():
     sw_primary = streaming_weights['cases']['Tight16x8_8']
     sw_seventeen = streaming_weights['cases']['Tight8x17_8']
     sw_four = streaming_weights['cases']['Tight8x4_8']
+    bilinear_metadata = json.loads((ROOT / 'benchmarks/bilinear-operation-metadata-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear_metadata['productionAccepted'] and bilinear_metadata['allAffectedPerformanceReconciled']
+    assert set(bilinear_metadata['cases']) == {'Down8', 'Down16'}
+    assert bilinear_metadata['raw']['mirrored'] and bilinear_metadata['raw']['allMembersVerified']
+    assert bilinear_metadata['sourceProof']['other71ResizeCostsReused']
+    assert bilinear_metadata['comparison']['Down16']['normalizedGainSeparated']
+    current_bilinear_cases = {**resize_weights['bilinear'], **bilinear_metadata['cases']}
     current_resize_cases = {**resize_weights['cases'], **cross_prefix['cases'], **generated_rows['cases'], **deep_word['cases'], **streaming_weights['cases']}
-    resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *resize_weights['bilinear'].values()]) for s in ('pass', 'gap', 'uncertain')}
+    resize_status_counts = {s: sum(c['status'] == s for c in [*current_resize_cases.values(), *resize_weights['prepared'].values(), *current_bilinear_cases.values()]) for s in ('pass', 'gap', 'uncertain')}
     assert sum(resize_status_counts.values()) == 73
-    rows = apply_current_resize_weights(rows, resize_weights, cross_prefix, generated_rows, deep_word)
+    rows = apply_current_resize_weights(rows, resize_weights, cross_prefix, generated_rows, deep_word, bilinear_metadata)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2246,6 +2254,14 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['allFourPngModesPassed'] and current_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
+    current_build_qualification = bilinear_metadata['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6511
+    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == bilinear_metadata['producers']['actualPackageSha256']
+    assert current_build_qualification['actualPackage']['librarySha256'] == bilinear_metadata['producers']['windowsSha256']
+    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert current_build_qualification['threeNamedStorageSuitesIncluded'] and current_build_qualification['disabledResizeIsaReused']
+    bilinear_byte = bilinear_metadata['cases']['Down8']
+    bilinear_word = bilinear_metadata['cases']['Down16']
     stored_byte = png_current['cases']['EncodeNoCompression8']
     stored_word = png_current['cases']['EncodeNoCompression16']
     retained_word = png_current['cases']['EncodeNoCompression16Retained']
@@ -2370,7 +2386,18 @@ Current scope and remaining work:
   15.24%/17.96%normalized gains retain separate native shifts/all actuals.
   Affected8×4 also passes,upper{sw_four['upper']:.3f}. Exact pixels/4KiB/owners
   stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
-  Remaining resize gaps:bilinearDown8(16.63µs),TightDown8(7.73µs),Wide8(2.47µs).
+  [Bilinear metadata preparation](../benchmarks/BILINEAR-OPERATION-METADATA.md)
+  reuses immutable strides/private destination views once per operation. Word saves
+  **50.44 µs / 11.55% raw / 12.31% normalized**, with separated filtered/all-actual
+  and normalized intervals; native time moves +0.87%. Current word
+  {bilinear_word['managedUs']:.2f}/FFmpeg {bilinear_word['nativeUs']:.2f} µs,
+  upper {bilinear_word['upper']:.3f}, passes. Byte costs 4.55 µs/1.16% more raw;
+  normalized intervals overlap, and current {bilinear_byte['managedUs']:.2f}/{bilinear_byte['nativeUs']:.2f} µs,
+  upper {bilinear_byte['upper']:.3f}, also passes. Its baseline already passed on the
+  contemporary reference clock, so no causal byte-gap closure claim follows.
+  Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
+  scratch. Arithmetic/repair and ownership stay exact; 71 other costs reuse valid
+  shared-caller proof. Remaining resize gaps: TightDown8(7.73µs), Wide8(2.47µs).
   [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
   without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six

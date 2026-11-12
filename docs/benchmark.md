@@ -88,8 +88,8 @@ Current scope and remaining work:
   [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
   gains and 15 unchanged color costs. Default/CompactColor and content/sampling
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73standalone controls, **62pass /
-  3gaps / 8uncertain**.
+- **Resizing:** across73standalone controls, **63pass /
+  2gaps / 8uncertain**.
   [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
   two gaps: 793.42/zimg875.67µs,
   upper0.913, and same-height
@@ -118,7 +118,18 @@ Current scope and remaining work:
   15.24%/17.96%normalized gains retain separate native shifts/all actuals.
   Affected8×4 also passes,upper0.577. Exact pixels/4KiB/owners
   stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
-  Remaining resize gaps:bilinearDown8(16.63µs),TightDown8(7.73µs),Wide8(2.47µs).
+  [Bilinear metadata preparation](../benchmarks/BILINEAR-OPERATION-METADATA.md)
+  reuses immutable strides/private destination views once per operation. Word saves
+  **50.44 µs / 11.55% raw / 12.31% normalized**, with separated filtered/all-actual
+  and normalized intervals; native time moves +0.87%. Current word
+  386.50/FFmpeg 425.37 µs,
+  upper 0.949, passes. Byte costs 4.55 µs/1.16% more raw;
+  normalized intervals overlap, and current 398.01/414.98 µs,
+  upper 0.966, also passes. Its baseline already passed on the
+  contemporary reference clock, so no causal byte-gap closure claim follows.
+  Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
+  scratch. Arithmetic/repair and ownership stay exact; 71 other costs reuse valid
+  shared-caller proof. Remaining resize gaps: TightDown8(7.73µs), Wide8(2.47µs).
   [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
   without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
@@ -143,7 +154,7 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,510 full/live checks per OS**
+The current immutable build passes **6,511 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
@@ -303,8 +314,8 @@ settings do not establish matched quality.
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,959.44 | 1,981.62 | 0.989 / 0.993 | 102,891 |
-| Bilinear resize RGBA8 (gap) † → 256×129 | 396.27 | 379.65 | 1.044 / 1.056 | 8,473 |
-| Bilinear resize RGBA16 † → 256×129 | 398.05 | 417.42 | 0.954 / 0.962 | 8,473 |
+| Bilinear resize RGBA8 † → 256×129 | 398.01 | 414.98 | 0.959 / 0.966 | 8,473 |
+| Bilinear resize RGBA16 † → 256×129 | 386.50 | 425.37 | 0.909 / 0.949 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 496.61 | 573.93 | 0.865 / 0.872 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 348.81 | 988.82 | 0.353 / 0.355 | 198,455 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.80 | 347.32 | 0.748 / 0.750 | 137 |

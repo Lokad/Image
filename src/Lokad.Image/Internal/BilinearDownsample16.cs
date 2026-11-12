@@ -43,6 +43,10 @@ internal static class BilinearDownsample16
             Span<double> normalizers = stackalloc double[6];
             Span<int> rows = stackalloc int[10];
             var input = source.Pixels;
+            // Shape is immutable; Resize owns the result until publication.
+            var output = result.Pixels;
+            var sourceStride = source.Stride;
+            var resultStride = result.Stride;
             for (var tile = 0; tile < result.Width; tile += 6)
             {
                 var length = Math.Min(6, result.Width - tile);
@@ -83,7 +87,7 @@ internal static class BilinearDownsample16
                         var slot = sy % 10; rows[t] = slot * 6;
                         if (rowIds[slot] == sy) continue;
                         rowIds[slot] = sy;
-                        var row = input.Slice(sy * source.Stride + sourceFirst * 4 * sampleBytes, sourceCount * 4 * sampleBytes);
+                        var row = input.Slice(sy * sourceStride + sourceFirst * 4 * sampleBytes, sourceCount * 4 * sampleBytes);
                         var px = 0;
                         for (; px + 1 < sourceCount; px += 2)
                         {
@@ -131,7 +135,7 @@ internal static class BilinearDownsample16
                             cache[slot * 6 + x] = sum;
                         }
                     }
-                    var destination = result.Pixels.Slice(y * result.Stride, result.Stride);
+                    var destination = output.Slice(y * resultStride, resultStride);
                     var outputX = 0;
                     for (; outputX + 1 < length; outputX += 2)
                     {

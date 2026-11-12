@@ -1,0 +1,431 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BRM880",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "productionChanged": true,
+  "productionAccepted": true,
+  "qualificationPending": false,
+  "allAffectedCostsCaptured": true,
+  "allAffectedPerformanceReconciled": true,
+  "cases": {
+    "Down8": {
+      "managedUs": 398.0086611328125,
+      "nativeUs": 414.9844049479167,
+      "ratio": 0.9590930559975266,
+      "lower": 0.9509340114799497,
+      "upper": 0.9655787617808963,
+      "allocatedBytes": 8473,
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "status": "pass",
+      "caseId": "Down8",
+      "receipt": "tmp/brm880-candidate-Down8-confirm-receipt.json",
+      "observation": "tmp/brm880-candidate-Down8-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        399193.130859375,
+        395618.0078125,
+        397988.27734375,
+        398127.47265625,
+        399285.75,
+        398519.21875,
+        397960.08984375,
+        398588.640625,
+        397615.76171875,
+        396991.982421875,
+        398833.3671875,
+        397399.73046875
+      ],
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "7eaf17aa8280f7bbafdc079dd591dfa8533d4fa81f5078a54837c94fcfe581d5",
+      "nativeOutputSha256": "ee66dd653ec30392d5e25c257e5dcd719c436a56a8829717ecabade1988ef453",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured."
+    },
+    "Down16": {
+      "managedUs": 386.4981844696969,
+      "nativeUs": 425.36952278645833,
+      "ratio": 0.9086174814262015,
+      "lower": 0.855532076105908,
+      "upper": 0.9491956636491009,
+      "allocatedBytes": 8473,
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "status": "pass",
+      "caseId": "Down16",
+      "receipt": "tmp/brm880-candidate-Down16-confirm-receipt.json",
+      "observation": "tmp/brm880-candidate-Down16-confirm-observation.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        389275.5871212121,
+        385638.5227272727,
+        386150.8522727273,
+        386708.8390151515,
+        386487.76515151514,
+        385774.4109848485,
+        396147.89204545453,
+        395800.3958333333,
+        387271.6022727273,
+        385864.89015151514,
+        385816.7689393939,
+        386007.70075757575
+      ],
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ba7595d3a09eecd38c01a4e76f3267da40afa58b999c50dd3ea6134ffa9ea833",
+      "nativeOutputSha256": "5defb979d13d28e69f8e7ec76fd897eb180d02fe372b4789f8b907d4788b4780",
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x129 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured."
+    }
+  },
+  "comparison": {
+    "Down8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 393.4537121803977,
+          "candidateUs": 398.0086611328125,
+          "savedUs": -4.554948952414794,
+          "savedFraction": -0.011576835626159632,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 393.9739840494792,
+          "candidateUs": 398.010119140625,
+          "savedUs": -4.036135091145814,
+          "savedFraction": -0.010244674152491529,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true
+        }
+      },
+      "normalizedGain": -0.01104878644930829,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0005222786317817807,
+      "baselineRatioBounds": [
+        0.9401038205804354,
+        0.9587624945160442
+      ],
+      "candidateRatioBounds": [
+        0.9509340114799497,
+        0.9655787617808963
+      ]
+    },
+    "Down16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 436.94244923020534,
+          "candidateUs": 386.4981844696969,
+          "savedUs": 50.444264760508375,
+          "savedFraction": 0.11544830411734974,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 437.5859848790322,
+          "candidateUs": 388.078768939394,
+          "savedUs": 49.507215939638144,
+          "savedFraction": 0.11313711510510127,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false
+        }
+      },
+      "normalizedGain": 0.12311387310138977,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.008741806659835927,
+      "baselineRatioBounds": [
+        0.9558614788458097,
+        1.047601464222684
+      ],
+      "candidateRatioBounds": [
+        0.855532076105908,
+        0.9491956636491009
+      ]
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "BRM880",
+    "wholeSiblingSourcesReconstructed": {
+      "8": {
+        "wholeOriginalSourceReconstructed": true,
+        "allFilterGeometryArithmeticRepairAndPollingVerbatim": true,
+        "newSpanDoesNotEscape": true,
+        "newOwnedOrRetainedCapacity": 0
+      },
+      "16": {
+        "wholeOriginalSourceReconstructed": true,
+        "allFilterGeometryArithmeticRepairAndPollingVerbatim": true,
+        "newSpanDoesNotEscape": true,
+        "newOwnedOrRetainedCapacity": 0
+      }
+    },
+    "privateResultLifetime": "ImageTransforms.Resize validates/allocates an admitted private result before dispatch, returns it only on success and disposes it on failure. Immutable Width/BitDepth make Stride invariant. Borrowed input view already spans the operation; destination view has the same operation-local lifetime. No async use, owner change, early release or new shared allowance.",
+    "actualSharedCaller": {
+      "Lokad.Image.ImageTransforms:Resize": {
+        "codeBytes": 9388,
+        "instructionAndLabelLines": 2204,
+        "exact": true,
+        "normalization": "Process addresses/method-number prefixes only; all offsets/immediates preserved."
+      }
+    },
+    "byteKernel": {
+      "baselineCodeBytes": 5130,
+      "candidateCodeBytes": 5142,
+      "oldStrideCallSites": 3,
+      "newStrideCallSites": 2
+    },
+    "affectedExistingControls": [
+      "Down8",
+      "Down16"
+    ],
+    "other71ResizeCostsReused": true,
+    "otherCodecsTextDrawingAndEditingSourcesUnchanged": true,
+    "storage": {
+      "newOwnedCapacityBytes": 0,
+      "newRetainedCapacityBytes": 0,
+      "newHeapArrays": 0,
+      "newOwnerPoolOrCache": false,
+      "workspaceAdmissionChanged": false,
+      "physicalJitOrNativePeakMeasured": false
+    },
+    "newTests": 0,
+    "actualStandaloneConfirmationSharedCaller": {
+      "Down8": {
+        "codeBytes": 9388,
+        "instructionsAndLabelLines": 2204,
+        "exact": true,
+        "normalization": "Addresses/method-number prefixes only; all offsets/immediates retained."
+      },
+      "Down16": {
+        "codeBytes": 9388,
+        "instructionsAndLabelLines": 2204,
+        "exact": true,
+        "normalization": "Addresses/method-number prefixes only; all offsets/immediates retained."
+      }
+    }
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "newHeapArrays": 0,
+    "newOwnerPoolOrCache": false,
+    "workspaceAdmissionChanged": false,
+    "physicalJitOrNativePeakMeasured": false
+  },
+  "acceptance": "Retain shared per-operation metadata preparation for50.44us/11.55%word raw and12.31%normalized gain; all raw/allactual/normalized intervals separate. Byte costs4.55us/1.16%more raw with separated raw intervals; normalized intervals overlap, current upper.966passes. Both current controls pass; no byte speedup or uniform gain claim. Byte baseline itself passes on its contemporary native clock, so do not attribute closing historical parity solely to this code. Same arrays/charges/math/repair/polling, no new owned or retained capacity.",
+  "isaReuse": "Both changed downscale bodies require AVX512F and AVX2 and return before the changed locals when either is disabled. Guards, shared caller/fallback bodies are unchanged; actual9388bytecaller instructions match. Reuse existing disabled-ISA/filter/storage proof for those unchanged paths; normal/scalar focused569/791 and all three named storage suites pass on current module.",
+  "otherFamiliesReused": {
+    "resizeControls": 71,
+    "otherCodecsTextDrawingEditing": true,
+    "reason": "Only two noninlined reduction kernels change; whole original sibling sources reconstruct by metadata substitutions. Shared caller code exact in both current standalone confirmations."
+  },
+  "workflow": {
+    "coreAndEmbeddedBuildsEachOs": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "newTests": 0,
+    "existingScreenActuals": 12,
+    "independentConfirmationActuals": 12,
+    "allocationSavingsClaimed": false
+  },
+  "producers": {
+    "windowsSha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+    "linuxSha256": "077c518e4d972e92c5b697df676b34ef31e69a49e06ebc1d6f798b4a172d2a0d",
+    "actualPackageSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/BilinearDownsample8.cs": "d7e7bc7b34e48b41fc8c6e04e3841f5721d2b807b72567a07fcec842df4742b7",
+    "src/Lokad.Image/Internal/BilinearDownsample16.cs": "699d36420c679b700b6c9d5bd04c22e6d8cedeae450266285b170b0cfad70640"
+  },
+  "unchangedPins": {
+    "src/Lokad.Image/Internal/BilinearVerticalGeometry.cs": "81c064d720a56418bebdfbba812831363012b0f7915b478361c497c796009e15",
+    "src/Lokad.Image/Internal/BilinearHorizontalPairs.cs": "beaabb1af9324bb1b9ac6757fcb59f601c743bf12757f7553641976cb3f804da",
+    "src/Lokad.Image/Internal/ResizeSampling.cs": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+    "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+    "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281"
+  },
+  "raw": {
+    "file": "bilinear-operation-metadata-qualified.tar.xz",
+    "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850",
+    "bytes": 2956104,
+    "members": 116,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "png-wide-chunk-crc-qualified.tar.xz",
+        "sha256": "eff9069bde7a59f90b484eaaa31b2d756ebf0ef756423a4b0da96138a189909e"
+      },
+      {
+        "file": "shared-resize-filter-weights-qualified.tar.xz",
+        "sha256": "4681cb0a8d7e5a0ac20218b471473a3eaf2df8af78c81fa44ec097470e203a6e"
+      },
+      {
+        "file": "bilinear-byte-current-attribution.tar.xz",
+        "sha256": "0f5417ee6dc651f4c576772c92ccdce2b96f4d891b991defece1620c0226d554"
+      }
+    ]
+  },
+  "qualification": {
+    "fullChecksEachOs": 6511,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "full": [
+        3182,
+        2381,
+        948
+      ],
+      "total": 6511,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 569,
+        "public-normal": 791,
+        "internal-scalar": 569,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "Both changed downscale bodies require AVX512F and AVX2 and return before the changed locals when either is disabled. Guards, shared caller/fallback bodies are unchanged; actual9388bytecaller instructions match. Reuse existing disabled-ISA/filter/storage proof for those unchanged paths; normal/scalar focused569/791 and all three named storage suites pass on current module."
+      },
+      "resizeInternalNormalScalar": 569,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/BilinearDownsample8.cs": "d7e7bc7b34e48b41fc8c6e04e3841f5721d2b807b72567a07fcec842df4742b7",
+        "src/Lokad.Image/Internal/BilinearDownsample16.cs": "699d36420c679b700b6c9d5bd04c22e6d8cedeae450266285b170b0cfad70640"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/BilinearVerticalGeometry.cs": "81c064d720a56418bebdfbba812831363012b0f7915b478361c497c796009e15",
+        "src/Lokad.Image/Internal/BilinearHorizontalPairs.cs": "beaabb1af9324bb1b9ac6757fcb59f601c743bf12757f7553641976cb3f804da",
+        "src/Lokad.Image/Internal/ResizeSampling.cs": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+        "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "077c518e4d972e92c5b697df676b34ef31e69a49e06ebc1d6f798b4a172d2a0d",
+      "full": [
+        3182,
+        2381,
+        948
+      ],
+      "total": 6511,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 569,
+        "public-normal": 791,
+        "internal-scalar": 569,
+        "public-scalar": 791
+      },
+      "isa": {
+        "reusedFrom": "benchmarks/shared-resize-filter-weights-evidence.json",
+        "internalEachDisabledMode": 528,
+        "publicEachDisabledMode": 791,
+        "reason": "Both changed downscale bodies require AVX512F and AVX2 and return before the changed locals when either is disabled. Guards, shared caller/fallback bodies are unchanged; actual9388bytecaller instructions match. Reuse existing disabled-ISA/filter/storage proof for those unchanged paths; normal/scalar focused569/791 and all three named storage suites pass on current module."
+      },
+      "resizeInternalNormalScalar": 569,
+      "resizePublicNormalScalar": 791,
+      "filter": "FullyQualifiedName~Resize|FullyQualifiedName~Bicubic|FullyQualifiedName~Lanczos|FullyQualifiedName~Bilinear|FullyQualifiedName~PackedHorizontalQuartetTests|FullyQualifiedName~CachedHorizontalQuartetTests|FullyQualifiedName~CachedWide|FullyQualifiedName~CachedNarrowPublicationTests|FullyQualifiedName~PackedColumnStorageTests|FullyQualifiedName~EnlargingStripBoundaryTests|FullyQualifiedName~EnlargementVerticalStorageTests|FullyQualifiedName~EnlargementQuartetExecutionTests",
+      "threeNamedStorageSuitesIncluded": true,
+      "sources": {
+        "src/Lokad.Image/Internal/BilinearDownsample8.cs": "d7e7bc7b34e48b41fc8c6e04e3841f5721d2b807b72567a07fcec842df4742b7",
+        "src/Lokad.Image/Internal/BilinearDownsample16.cs": "699d36420c679b700b6c9d5bd04c22e6d8cedeae450266285b170b0cfad70640"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/BilinearVerticalGeometry.cs": "81c064d720a56418bebdfbba812831363012b0f7915b478361c497c796009e15",
+        "src/Lokad.Image/Internal/BilinearHorizontalPairs.cs": "beaabb1af9324bb1b9ac6757fcb59f601c743bf12757f7553641976cb3f804da",
+        "src/Lokad.Image/Internal/ResizeSampling.cs": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+        "src/Lokad.Image/Internal/PixelStoragePool.cs": "f877b4d3634e1282cee6b3dd914274bb0cf285d7971d744ac5888884ed2134ca",
+        "src/Lokad.Image/ImageTransforms.cs": "af93526c47e7b237b8520dd7f99da56eaac4bd0bf4b669c875bc3ebb8772ad61",
+        "src/Lokad.Image/ImageBuffer.cs": "587aa75bf65e9a6a656a6bf4334504097eeb62fef40cb4fe4d7998b959f8d281"
+      },
+      "codecAndTextIsaReused": true,
+      "additionalBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b",
+      "symbolsSha256": "b41d22d7a2f47fd4f67433a31ed8c92126d0c9bf63a58e39551fb4a22802ac97",
+      "bytes": 455744,
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "packCalls": 1
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "9df7cae28bd764adb54be1f34938e4c866cd6a8f9a8242af93336e922e4e0f0b",
+      "librarySha256": "0fe58e956a4e8c4fb7f4499be2ba4f7f6bf0a16b0e235768db6aaab6666be347",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "textPlanFrozenAndRetainedOwnershipPassed": true,
+      "storedPngExactWorkspaceAndOwnershipPassed": true,
+      "losslessHuffmanPaletteOwnersPassed": true,
+      "boundedWideByteWordConsumersPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOS": true,
+    "resizeInternalEachModeEachOs": 569,
+    "resizePublicEachModeEachOs": 791,
+    "threeNamedStorageSuitesIncluded": true,
+    "disabledResizeIsaReused": true,
+    "otherCodecTextIsaReused": true
+  },
+  "attribution": {
+    "provider": "tmp/pca879-retained-evidence.json",
+    "rawFile": "bilinear-byte-current-attribution.tar.xz",
+    "sha256": "0f5417ee6dc651f4c576772c92ccdce2b96f4d891b991defece1620c0226d554",
+    "interpretation": "One1995locationcapture locates TryApply1894, Stride75, Pixels9 and vertical preparation2; not phase costs, removable percentages or gain forecasts."
+  },
+  "next": "Keep every289requiredpath and stop passing downscale controls. Two known resize gaps remain: TightDown8 and Wide8. Resolve material uncertainties before optimization; preserve exact packets/pixels, admission, cancellation and independent owners. No font/text global blocker; publication postponed."
+}

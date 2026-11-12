@@ -7,6 +7,21 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
+[Bilinear operation metadata](BILINEAR-OPERATION-METADATA.md) retains immutable
+strides/private destination views once per operation. Word saves 50.44 µs/11.55%
+raw and 12.31% normalized with separated raw/all-actual/normalized confidence;
+native moves +0.87%. Byte costs 4.55 µs/1.16% more raw, normalized overlap; both
+current controls pass. Byte's contemporary baseline itself passes, so historical
+gap closure is not attributed solely to this code. Allocation remains 8,473 B/op,
+scratch admission 12,608 B and retained operation scratch zero. Exact arithmetic,
+repair, ownership/cancellation and shared admission remain unchanged. Other 71
+resize costs reuse exact shared-caller/source proof. Current 73 controls now have
+63 passes/two gaps/eight uncertain; remaining gaps are TightDown8 and Wide8.
+Windows/Linux each pass 6,511 full/live checks, 569/791 resize normal/scalar and
+all three storage suites, SAME actual package/all three examples. Disabled paths
+reuse valid guard/fallback evidence. One core/embedded build per OS, no public/
+harness/native/fixture rebuilds; publication remains postponed.
+
 [Wide chunk CRC](PNG-WIDE-CHUNK-CRC.md) improves the retained-native stored-word
 complete encode by 29.48 µs/6.23% raw and 6.86% normalized, with separated
 filtered/all-actual/normalized confidence. Current word 443.92/
@@ -79,11 +94,11 @@ Raw47.05/88.49/121.42µs gains and normalized15.24%/17.96%/23.47% retain every
 actual and separate native clocks. Same lane bits/products/add order/repair.
 Actual shared2579Bcaller/root9388B instructions and block offsets match after
 addresses/method-number/proven GS-cookie normalization, so70other costs remain
-valid. Current73standalonecontrols62pass/3gaps/8uncertain. BothOSes6497full/live,
+valid. At that stage73standalonecontrols62pass/3gaps/8uncertain; current bilinear metadata preparation above supersedes two costs. BothOSes6497full/live,
 569internal/791public normal/scalar/3storage suites and SAMEactualpackage/all3
 examples pass; existing package consumer explicitly covers all3frozen controls.
 One core/embedded build eachOS, zero public/harness/native/fixture builds,onepack.
-Remaining resize gaps:bilinearDown8(~16.63µs),TightDown8(~7.73µs),Wide8(~2.47µs).
+Current remaining resize gaps: TightDown8(~7.73µs), Wide8(~2.47µs).
 Choose the next justified material preparation/reuse improvement; uncertainties
 are not presumed gaps, and passing controls stop unless actually affected.
 All289paths remain required; publication postponed. Historical
@@ -150,7 +165,7 @@ remain separate and historical subtraction measures no preparation time.
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
-| Bicubic/bilinear resizing | [Streaming byte paired weights](STREAMING-BYTE-VECTOR-WEIGHTS.md) closes16×8/8×17 gaps,upper.970/.890;affected8×4passes,upper.577. All113B/op, exact pixels/4KiB/zero added capacity. Actual caller/root codegen proof reuses70other costs, including[Cross prefix](CROSS-BICUBIC-OUTPUT-PREFIX.md),[generated](GENERATED-BICUBIC-SHARED-EXECUTION.md),[DeepWord](DEEP-WORD-VECTOR-WEIGHTS.md). Across73standalonecontrols62pass/3gaps/8uncertain; adjacent views remain separate. All8equivalent prepared/one-shot cases pass,198432B/199840Bretained. Remaining resize gaps:bilinearDown8(16.63µs),TightDown8(7.73µs),Wide8(2.47µs). Stop passes and resolve uncertainty before tuning. |
+| Bicubic/bilinear resizing | [Bilinear metadata](BILINEAR-OPERATION-METADATA.md): word50.44µs/11.55%raw/12.31%normalized gain; byte4.55µs/1.16%raw cost, normalized overlap. Both pass, 8,473B/op, unchanged12,608B admission and zero retained scratch. Exact shared caller/source reuses71other costs, including [streaming byte weights](STREAMING-BYTE-VECTOR-WEIGHTS.md), Cross/generated/DeepWord. Across73controls63pass/2gaps/8uncertain; eight equivalent prepared/one-shot controls pass. Remaining gaps:TightDown8(7.73µs),Wide8(2.47µs). Stop passing controls; resolve uncertainty before tuning. |
 | Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
 | Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
