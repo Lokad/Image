@@ -1,5 +1,10 @@
 # Shared resize filter weights
 
+The [shared byte-geometry follow-up](BYTE-CROSS-SHARED-GEOMETRY.md) now owns the
+two bounded byte cross/identity costs; the other71 costs below remain source-valid.
+The current gap snapshot includes those two updates. The filter-weight stage's
+original captures and qualification remain in its evidence.
+
 The Catmull–Rom polynomial used by the generic filter dispatcher and fixed
 bounded-column preparation now shares one inline implementation. Division,
 absolute value, coefficients, normalization and operation
@@ -27,9 +32,9 @@ tradeoffs are retained explicitly. Stop passing cases rather than retuning them.
 
 | Largest current gaps, complete public Resize | Lokad / zimg µs | Ratio / upper | GC B/op |
 | --- | ---: | ---: | ---: |
-| RGBA8, bounded width reduction / height enlargement | 1,212.50 / 836.52 | 1.449 / 1.461 | 114 |
 | RGBA8, bounded2×9 | 1,338.67 / 1,049.55 | 1.275 / 1.280 | 114 |
-| RGBA8, bounded width reduction / same height | 805.37 / 572.63 | 1.406 / 1.415 | 113 |
+| RGBA8, bounded width reduction / height enlargement | 1,063.49 / 841.66 | 1.264 / 1.270 | 114 |
+| RGBA8, bounded width reduction / same height | 690.55 / 576.22 | 1.198 / 1.212 | 113 |
 | RGBA16, bounded32×16 | 553.89 / 446.20 | 1.241 / 1.268 | 113 |
 
 Ordinary Resize includes all managed preparation, workspace, filtering, exact
@@ -74,7 +79,6 @@ control, reference, confidence and qualification. Raw
 [original variants](BICUBIC-COEFFICIENT-PREPARATION-ROUND.md) retain earlier
 diagnostics; B/C remain unselected. All289 required paths stay in scope.
 
-Next investigate shared result-backed row/geometry preparation for bounded byte
-reverse-mixed and identity-height resizing, before smaller kernel gaps. Their
-current absolute gaps are375.98/232.74µs. Preserve exact arithmetic and the
-4KiB boundary; reuse the existing geometry ownership strategy and measured kernels.
+The geometry follow-up completes the first shared-preparation step. Next inspect
+bounded byte2×9's current path, with a289.11µs gap; cross/identity gaps remain
+221.83/114.33µs. Preserve exact arithmetic,4KiB and useful measured kernels.

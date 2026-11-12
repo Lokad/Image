@@ -41,6 +41,21 @@ scratch retention; no gain/regression/equivalence or presumed-gap claim.
 Current immutable package and qualification reused,zero builds/new workloads/
 broad or package repeats. Stop unchanged timing repeats; independent work continues.
 
+[Shared byte cross geometry](BYTE-CROSS-SHARED-GEOMETRY.md) is accepted:
+reverse-mixed1063.49/zimg841.66µs upper1.270 and identity-height690.55/576.22µs
+upper1.212. Independent149.01/114.82µs savings are12.29%/14.26%raw and
+12.83%/14.79%normalized, with separated filtered/all-actual/normalized confidence;
+native+0.614%/+0.627%. Both remain gaps. The existing private output-row footer
+view removes repeated geometry, with original filtering/repair/unwind unchanged;
+no added capacity, explicit arrays or retention, same3440B arrays/4KiB admission.
+Seven rational/poison/threshold/low-alpha/refusal/cancel/recovery checks pass.
+BothOSes6463full/live,535internal/791public normal/scalar and SAMEactualpackage/
+all3examples pass. Unchanged disabled-ISA proof and other71resize costs are reused.
+One core/embedded eachOS, no public/native/harness/fixture rebuild, onepack;
+raw1d9f5c6a/904908B/104members mirrored/memberverified. Current largest gap is
+bounded byte2×9:1338.67/zimg1049.55µs. Establish actual current path/workspace
+attribution before redesign; do not retune passes or smaller kernel gaps first.
+
 [Shared resize filter weights](SHARED-RESIZE-FILTER-WEIGHTS.md) are accepted.
 All61existing bicubic controls, eight prepared/one-shot boundaries and all four
 bilinear controls refresh or reuse the same immutable timed DLL:57pass/10gaps/
@@ -112,7 +127,7 @@ ISA evidence is reused.
 | WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; opaque lossless remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
 | WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
 | WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
-| Bicubic/bilinear resizing | [Shared filter weights](SHARED-RESIZE-FILTER-WEIGHTS.md): all73existing standalone controls reconciled on the actual package DLL;57pass/10gaps/6uncertain, plus scoped adjacent results. All eight equivalent prepared/one-shot boundaries pass, retention198432B wide/199840B narrow, no new capacity. Largest gaps: bounded byte reverse-mixed375.98µs,2×9 289.11µs and identity-height232.74µs. Inspect shared output-backed geometry/row scheduling before smaller kernels; passing paths stop. Exact pixels, native bounds,4KiB and shared admission remain. |
+| Bicubic/bilinear resizing | [Shared filter weights](SHARED-RESIZE-FILTER-WEIGHTS.md): all73existing standalone controls reconciled;57pass/10gaps/6uncertain, plus scoped adjacent results. [Shared byte geometry](BYTE-CROSS-SHARED-GEOMETRY.md) refreshes two costs on the new actual package DLL; other71remain source-valid. All eight equivalent prepared/one-shot boundaries pass, retention198432B wide/199840B narrow, no new capacity. Largest gaps: bounded byte2×9 289.11µs, reverse-mixed221.83µs and identity-height114.33µs. Attribute2×9 before a coherent redesign; passing paths stop. Exact pixels, native bounds,4KiB and shared admission remain. |
 | Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
 | Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
 | Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
@@ -282,6 +297,12 @@ approved scopes and current evidence above.
 
 Current invalidation and next execution:
 
+- CBG854 changes only byte cross vertical-geometry routing. Two complete bounded
+  byte reverse-mixed/identity costs supersede CMP853; original helper, decoding,
+  numerical loops, repair, word paths, cached/prepared and other filters/codecs/text
+  remain unchanged. Seven focused cases and actual package6463eachOS pass. New
+  code follows the unchanged ISA guard; disabled fallback proof is reused.
+  Inspect current byte2×9 before the next redesign; no new workload matrix.
 - CMP853 extracts only the unchanged filter polynomial and three fixed bicubic
   preparation calls. Its thin dispatcher changes caller inlining, so all61existing
   bicubic, eight prepared and four bilinear controls are reconciled, not silently
@@ -290,9 +311,8 @@ Current invalidation and next execution:
   scopes retain original uncertain standalone results; a contemporary previous-DLL
   byte-bilinear comparison is inconclusive. Historical raw time alone is not a
   gain claim. Codec/text/orientation/Lanczos paths retain relevant source validity.
-  Next inspect CrossColumn byte result-backed geometry and row reuse for the two
-  demonstrated375.98/232.74µs reverse-mixed/identity gaps, preserving exact pixels
-  and4KiB. No new matrix or global blocker; all289paths remain required.
+  CBG854 now owns the two updated byte cross costs; the other71paths retain
+  applicable source validity. No new matrix or global blocker; all289paths remain required.
 - CIT849 replaces only inverse-color traversal with per-tile preparation and
   exact SIMD batches/scalar tails. Seven decode costs supersede affected HFR847
   observations; two validators bypass inverse transforms and retain HFR847 proof.

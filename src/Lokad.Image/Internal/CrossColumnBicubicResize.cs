@@ -47,6 +47,8 @@ internal static class CrossColumnBicubicResize
             Span<double> normalizers = stackalloc double[8];
             Span<double> vertical = stackalloc double[5];
             Span<int> rows = stackalloc int[5];
+            var geometry = ColumnBicubicGeometry.Prepare(result, source.Height,
+                scaleY, 5, 8, context.Cancellation);
             var input = source.Pixels;
             var stride = source.Stride;
             for (var tile = 0; tile < result.Width; tile += 8)
@@ -78,14 +80,10 @@ internal static class CrossColumnBicubicResize
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleY);
-                    var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
-                    double normalizerY = 0;
+                    geometry.Read(y, tile < geometry.PrefixColumns, vertical,
+                        out var first, out var count, out var normalizerY);
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % 5; rows[t] = slot * 8;
                         if (rowIds[slot] == sy) continue;

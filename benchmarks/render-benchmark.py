@@ -8,12 +8,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_current_resize_weights(rows, evidence):
+def apply_current_resize_weights(rows, evidence, byte_cross):
     """Replace every displayed affected resize cost from one current owner."""
     mapping = {
         'Bicubic resize RGBA8 † → 256×129': ('cases', 'Down8'),
         'Bicubic upscale RGBA16 † → 1027×519': ('cases', 'Up16'),
-        'Bicubic upscale RGBA8, default workspace † → 1027×519': ('cases', 'Up8'),
+        'Bicubic upscale RGBA8, default workspace † → 1027×519': ('cases', 'TightCross8'),
         'Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519': ('cases', 'TightCross16'),
         'Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16': ('cases', 'Tight32x16_8'),
         'Bicubic RGBA8, 32×16 / default workspace † → 32×16': ('cases', 'Down32x16_8'),
@@ -34,7 +34,7 @@ def apply_current_resize_weights(rows, evidence):
         'Bilinear upscale RGBA8 † → 1027×519': ('bilinear', 'Up8'),
         'Bilinear resize RGBA8 † → 256×129': ('bilinear', 'Down8'),
         'Bilinear resize RGBA16 † → 256×129': ('bilinear', 'Down16'),
-        'Bicubic RGBA16 height reduction, input+output+4 KiB † → 513×129': ('cases', 'TightVertical16'),
+        'Bicubic RGBA16 height reduction, input+output+4 KiB † → 513×129': ('cases', 'TightHorizontal8'),
     }
     for family, adjective, size in [('wide', '', '128×64'), ('narrow', ' narrow', '256×129')]:
         for depth in (8, 16):
@@ -48,10 +48,16 @@ def apply_current_resize_weights(rows, evidence):
         label = re.sub(r' \((?:parity confirmed|confidence open|pass|gap|uncertain)\)', '', label)
         if kind != 'editing' or label not in mapping:
             result.append((kind, row)); continue
-        field, case = mapping[label]; current = evidence[field][case]
+        field, case = mapping[label]
+        scoped = field == 'cases' and case in byte_cross['cases']
+        current = byte_cross['cases'][case] if scoped else evidence[field][case]
+        owner = byte_cross if scoped else evidence
+        if scoped:
+            size = '256×519' if case == 'TightCross8' else '256×259'
+            label = f'Bicubic RGBA8, width reduction / ' + ('height enlargement' if case == 'TightCross8' else 'same height') + f', input+output+4 KiB † → {size}'
         assert (field, case) not in seen; seen.add((field, case))
         assert current['actualIterations'] == 12 and current['allActualsRetained']
-        assert current['librarySha256'] == evidence['qualification']['actualPackage']['librarySha256']
+        assert current['librarySha256'] == owner['qualification']['actualPackage']['librarySha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
         if current['status'] != 'pass': label = label.replace(' † →', f" ({current['status']}) † →")
@@ -2092,7 +2098,16 @@ def render():
     assert resize_weights['raw']['mirrored'] and resize_weights['raw']['allMembersVerified']
     assert not resize_weights['materialPassToGapContradictions']
     assert resize_weights['storage']['newOwnedCapacityBytes'] == resize_weights['storage']['newRetainedCapacityBytes'] == 0
-    rows = apply_current_resize_weights(rows, resize_weights)
+    byte_cross = json.loads((ROOT / 'benchmarks/byte-cross-shared-geometry-evidence.json').read_text(encoding='utf-8'))
+    assert byte_cross['productionAccepted'] and byte_cross['allAffectedPerformanceReconciled']
+    assert set(byte_cross['cases']) == {'TightCross8', 'TightHorizontal8'}
+    assert byte_cross['raw']['mirrored'] and byte_cross['raw']['allMembersVerified']
+    assert byte_cross['sourceProof']['wholeOriginalCrossByteFileReconstructsExactly']
+    assert byte_cross['reuse']['allOtherProductionSourcesUnchanged']
+    assert byte_cross['reuse']['newCodeAfterUnchangedIsaRejectionGuard']
+    assert byte_cross['storage']['newOwnedCapacityBytes'] == byte_cross['storage']['newRetainedCapacityBytes'] == 0
+    assert all(c['normalizedGainSeparated'] and all(v['rawGainSeparated'] for v in c['views'].values()) for c in byte_cross['comparison'].values())
+    rows = apply_current_resize_weights(rows, resize_weights, byte_cross)
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
@@ -2260,8 +2275,8 @@ def render():
     assert current_build_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     assert current_build_qualification['webpInternalEachModeEachOs'] == 1033 and current_build_qualification['webpPublicEachModeEachOs'] == 239
-    current_build_qualification = resize_weights['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6456
+    current_build_qualification = byte_cross['qualification']
+    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6463
     assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256']
     assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
     return f"""# Lokad.Image benchmarks
@@ -2355,8 +2370,13 @@ Current scope and remaining work:
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** [Shared filter weights](../benchmarks/SHARED-RESIZE-FILTER-WEIGHTS.md)
   reconcile all61existing bicubic, eight prepared/one-shot and four bilinear controls:
-  **57pass / 10gaps / 6uncertain** in the standalone protocol. The same immutable
-  package DLL supplies every affected cost. Bounded wide byte343.67/zimg346.22µs,
+  **57pass / 10gaps / 6uncertain** in the standalone protocol. [Shared byte geometry](../benchmarks/BYTE-CROSS-SHARED-GEOMETRY.md)
+  refreshes the two affected byte cross/identity costs on the new actual package DLL;
+  other71costs remain source-valid. It saves149.01/114.82µs,12.29%/14.26%raw and
+  12.83%/14.79%normalized, with separated confidence and native+0.614%/+0.627%.
+  Both remain gaps, upper1.270/1.212; numerical loops,4KiB and ownership are unchanged.
+  The table replaces two comfortable passing summaries with these material gaps;
+  all73controls remain in the linked evidence. Bounded wide byte343.67/zimg346.22µs,
   upper.995 passes after13.66µs/3.82%raw/2.57%normalized saved; narrow/packed word
   gains generalize, with separate raw/native views and disclosed slower passing controls.
   Exact pixels/repair,4KiB bounds and ownership remain; no new owned capacity or retention.
@@ -2364,8 +2384,8 @@ Current scope and remaining work:
   Mixed byte's scoped64-operation adjacent854.87/866.15µs upper.998 passes; its
   original standalone view remains uncertain. Bilinear word enlargement's adjacent
  1836.05/1967.62µs upper1.001 remains uncertain, directGC4498558B/op. No historical
-  stage sums, favorable repeats or full-parity claim. Largest remaining gaps are bounded
-  byte reverse-mixed,2×9 and identity-height reduction; passing paths stop.
+  stage sums, favorable repeats or full-parity claim. The largest remaining gap is bounded
+  byte2×9,1338.67/zimg1049.55µs; establish current-path attribution before redesign.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
   six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
   Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
@@ -2397,8 +2417,9 @@ evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes528 internal/791 public per
-normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
+Current resize qualification passes535 internal/791 public per normal/scalar mode;
+unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
+Unchanged JPEG checks pass
 {wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
 The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.

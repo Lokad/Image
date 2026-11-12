@@ -89,8 +89,13 @@ Current scope and remaining work:
   claims remain distinct in the packet table. Frozen packets/metadata gates apply.
 - **Resizing:** [Shared filter weights](../benchmarks/SHARED-RESIZE-FILTER-WEIGHTS.md)
   reconcile all61existing bicubic, eight prepared/one-shot and four bilinear controls:
-  **57pass / 10gaps / 6uncertain** in the standalone protocol. The same immutable
-  package DLL supplies every affected cost. Bounded wide byte343.67/zimg346.22µs,
+  **57pass / 10gaps / 6uncertain** in the standalone protocol. [Shared byte geometry](../benchmarks/BYTE-CROSS-SHARED-GEOMETRY.md)
+  refreshes the two affected byte cross/identity costs on the new actual package DLL;
+  other71costs remain source-valid. It saves149.01/114.82µs,12.29%/14.26%raw and
+  12.83%/14.79%normalized, with separated confidence and native+0.614%/+0.627%.
+  Both remain gaps, upper1.270/1.212; numerical loops,4KiB and ownership are unchanged.
+  The table replaces two comfortable passing summaries with these material gaps;
+  all73controls remain in the linked evidence. Bounded wide byte343.67/zimg346.22µs,
   upper.995 passes after13.66µs/3.82%raw/2.57%normalized saved; narrow/packed word
   gains generalize, with separate raw/native views and disclosed slower passing controls.
   Exact pixels/repair,4KiB bounds and ownership remain; no new owned capacity or retention.
@@ -98,8 +103,8 @@ Current scope and remaining work:
   Mixed byte's scoped64-operation adjacent854.87/866.15µs upper.998 passes; its
   original standalone view remains uncertain. Bilinear word enlargement's adjacent
  1836.05/1967.62µs upper1.001 remains uncertain, directGC4498558B/op. No historical
-  stage sums, favorable repeats or full-parity claim. Largest remaining gaps are bounded
-  byte reverse-mixed,2×9 and identity-height reduction; passing paths stop.
+  stage sums, favorable repeats or full-parity claim. The largest remaining gap is bounded
+  byte2×9,1338.67/zimg1049.55µs; establish current-path attribution before redesign.
   [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains source-valid
   six passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
   Its byte489.94/zimg491.00µs upper1.015 is uncertain; no presumed gap or retuning.
@@ -123,7 +128,7 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,456 full/live checks per OS**
+The current immutable build passes **6,463 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
@@ -131,8 +136,9 @@ evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
 Current PNG/admission checks pass690internal/246public per
 normal/scalar/disabled-AVX2/AVX512 mode.
-Current resize qualification passes528 internal/791 public per
-normal/scalar/disabled-AVX2/AVX512 mode. Unchanged JPEG checks pass
+Current resize qualification passes535 internal/791 public per normal/scalar mode;
+unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
+Unchanged JPEG checks pass
 464 internal/341 public per normal/scalar mode; Linux also disables
 AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
 The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
@@ -245,7 +251,7 @@ settings do not establish matched quality.
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
 | Bicubic resize RGBA8 (uncertain) † → 256×129 | 416.53 | 418.55 | 0.995 / 1.004 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,823.87 | 3,104.13 | 0.910 / 0.920 | 4,264,573 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 2,810.49 | 3,049.40 | 0.922 / 0.927 | 116 |
+| Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB (gap) † → 256×519 | 1,063.49 | 841.66 | 1.264 / 1.270 | 114 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 811.25 | 819.63 | 0.990 / 0.993 | 113 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB † → 32×16 | 289.79 | 375.72 | 0.771 / 0.773 | 113 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 306.36 | 375.84 | 0.815 / 0.817 | 197,300 |
@@ -284,7 +290,7 @@ settings do not establish matched quality.
 | Bilinear upscale RGBA8 † → 1027×519 | 1,959.44 | 1,981.62 | 0.989 / 0.993 | 102,891 |
 | Bilinear resize RGBA8 (gap) † → 256×129 | 396.27 | 379.65 | 1.044 / 1.056 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 398.05 | 417.42 | 0.954 / 0.962 | 8,473 |
-| Bicubic RGBA16 height reduction, input+output+4 KiB † → 513×129 | 501.07 | 617.69 | 0.811 / 0.819 | 113 |
+| Bicubic RGBA8, width reduction / same height, input+output+4 KiB (gap) † → 256×259 | 690.55 | 576.22 | 1.198 / 1.212 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 348.81 | 988.82 | 0.353 / 0.355 | 198,455 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.80 | 347.32 | 0.748 / 0.750 | 137 |
 | Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 396.85 | 594.42 | 0.668 / 0.674 | 198,453 |
