@@ -51,17 +51,15 @@ resize and text costs remain source-valid. Prior [IDAT](PNG-IDAT-FORWARDING.md) 
 [stored workspace](PNG-STORED-WORKSPACE.md) ownership qualification remains valid;
 superseded encoder timings and original raw evidence are retained as history.
 
-[Eight-residue CRC trial](PNG-INTERLEAVED-CRC-TRIAL.md) is not retained: a scoped
-10.40 µs/2.37% raw stored-word gain accompanies a material 1,253.99 µs/6.17% raw
-adverse compressed-word capture against the unchanged contemporary baseline.
-Normalized confidence overlaps; no uniform causal regression or family ban is
-claimed. Exact packets pass, but this concern prevents acceptance. Production
-source/DLLs/package are restored byte-for-byte, so current costs above remain.
-One useful nonperiodic checksum test is retained: 896 independent comparisons per
-normal/scalar/AVX512-off/AVX2-off mode; 3,182 internal checks each OS. Unchanged
-public/live/SAME-package qualification is reused, with no repeated package proof.
-All raw evidence is retained; rejected results are not renderer inputs. Continue
-the independent demonstrated byte bilinear gap, without more CRC sampling.
+[Wider Adler trial](PNG-WIDE-ADLER-TRIAL.md) is not retained. The scoped stored-word
+39.20µs/8.26% raw gain has overlapping normalized confidence; SmallestSize16's
+contemporary1,570.62µs/7.75% raw adverse and2.51% normalized adverse separate.
+The batch stops after20exact encoder/11read-validation views, without measuring
+remaining controls or broad/package qualification. Source/core/embedded modules
+are restored byte-for-byte on both OSes; current costs/6512qualification and SAME
+actual package remain valid. All adverse results/raw evidence are retained outside
+renderer dependencies. The earlier [eight-residue CRC trial](PNG-INTERLEAVED-CRC-TRIAL.md)
+also remains unretained history. Neither establishes a permanent SIMD-family ban.
 
 [Output-backed Cross rows](CROSS-BICUBIC-OUTPUT-PREFIX.md) close both byte
 Cross gaps:793.42/zimg875.67µs upper.913 and same-height496.61/573.93µs

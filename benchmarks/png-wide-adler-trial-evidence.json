@@ -1,0 +1,993 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAD887",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "decision": "Do not retain the64byte Adler implementation. A39.20us/8.26% raw storedword gain has overlapping normalized confidence/native movement. Smallest16 has1570.62us/7.75% raw adverse and2.51% normalized adverse against unchanged contemporary baseline, both separated. This material concern outweighs the scoped benefit. No favorable resampling, general ISA-family ban or uniform causal regression claim.",
+  "capturedExistingControls": {
+    "encode/EncodeSmallest8": {
+      "managedUs": 18036.094727272728,
+      "nativeUs": 18399.76683333333,
+      "status": "pass",
+      "upper": 0.9862720582677461,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeSmallest8-confirm-observation.json"
+    },
+    "encode/EncodeSmallest16": {
+      "managedUs": 21838.9213125,
+      "nativeUs": 21938.150125,
+      "status": "uncertain",
+      "upper": 1.004121168599873,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": true,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeSmallest16-confirm-observation.json"
+    },
+    "encode/EncodeFast8": {
+      "managedUs": 4311.572375,
+      "nativeUs": 4344.214135416667,
+      "status": "uncertain",
+      "upper": 1.011119555254677,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeFast8-confirm-observation.json"
+    },
+    "encode/EncodeFast16": {
+      "managedUs": 17793.345136363638,
+      "nativeUs": 18607.4835625,
+      "status": "pass",
+      "upper": 0.9631246605399603,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeFast16-confirm-observation.json"
+    },
+    "encode/EncodeFastCancelable16": {
+      "managedUs": 18172.858666666667,
+      "nativeUs": 18610.57516666667,
+      "status": "pass",
+      "upper": 0.9814331687058077,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeFastCancelable16-confirm-observation.json"
+    },
+    "encode/EncodeFastForward16": {
+      "managedUs": 17700.93740909091,
+      "nativeUs": 18607.87039583333,
+      "status": "pass",
+      "upper": 0.9567967943895754,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeFastForward16-confirm-observation.json"
+    },
+    "encode/EncodeGray8": {
+      "managedUs": 2051.433229166667,
+      "nativeUs": 1998.2452526041668,
+      "status": "uncertain",
+      "upper": 1.1003590170432627,
+      "historicalStatus": "uncertain",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeGray8-confirm-observation.json"
+    },
+    "encode/EncodeRgb8": {
+      "managedUs": 9921.738590909092,
+      "nativeUs": 10093.169802083334,
+      "status": "uncertain",
+      "upper": 1.0302649370435515,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeRgb8-confirm-observation.json"
+    },
+    "encode/EncodeGrayAlpha8": {
+      "managedUs": 4608.694208333333,
+      "nativeUs": 4846.152479166667,
+      "status": "pass",
+      "upper": 0.9823850457119816,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeGrayAlpha8-confirm-observation.json"
+    },
+    "encode/Encode8": {
+      "managedUs": 17090.33441666667,
+      "nativeUs": 17473.506145833333,
+      "status": "uncertain",
+      "upper": 1.0173762710104295,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-Encode8-confirm-observation.json"
+    },
+    "encode/Encode16": {
+      "managedUs": 20721.921645833332,
+      "nativeUs": 20804.670625,
+      "status": "uncertain",
+      "upper": 1.0090285292792436,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-Encode16-confirm-observation.json"
+    },
+    "encode/EncodeRgb16": {
+      "managedUs": 16438.432125,
+      "nativeUs": 16212.0563125,
+      "status": "uncertain",
+      "upper": 1.054974335340525,
+      "historicalStatus": "uncertain",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeRgb16-confirm-observation.json"
+    },
+    "encode/EncodeGray16": {
+      "managedUs": 4787.465954545454,
+      "nativeUs": 5428.93059375,
+      "status": "pass",
+      "upper": 0.9007138651617683,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeGray16-confirm-observation.json"
+    },
+    "encode/EncodeGrayAlpha16": {
+      "managedUs": 9918.981045454544,
+      "nativeUs": 10479.703260416665,
+      "status": "pass",
+      "upper": 0.9547331063642024,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-EncodeGrayAlpha16-confirm-observation.json"
+    },
+    "encode/Png8AsyncNonSeekable": {
+      "managedUs": 16784.45114772727,
+      "nativeUs": 17518.162916666668,
+      "status": "pass",
+      "upper": 0.9665139943365016,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-compressed-candidate-Png8AsyncNonSeekable-confirm-observation.json"
+    },
+    "encode/EncodeNoCompression8": {
+      "managedUs": 61.68595454545454,
+      "nativeUs": 539.2477421875,
+      "status": "pass",
+      "upper": 0.12772717773623143,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-fresh-EncodeNoCompression8-confirm-observation.json"
+    },
+    "encode/EncodeNoCompression8Retained": {
+      "managedUs": 62.51238636363636,
+      "nativeUs": 189.4855945638021,
+      "status": "pass",
+      "upper": 0.3745212783419741,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-candidate-EncodeNoCompression8-confirm-observation.json"
+    },
+    "encode/EncodeNoCompression16": {
+      "managedUs": 458.33227500000004,
+      "nativeUs": 1479.1303528645833,
+      "status": "pass",
+      "upper": 0.3188459321523539,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-fresh-EncodeNoCompression16-confirm-observation.json"
+    },
+    "encode/EncodeNoCompression16Retained": {
+      "managedUs": 435.425975,
+      "nativeUs": 406.234376953125,
+      "status": "gap",
+      "upper": 1.0900546208703827,
+      "historicalStatus": "gap",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-candidate-EncodeNoCompression16-confirm-observation.json"
+    },
+    "encode/EncodePredictable16": {
+      "managedUs": 276696.5129375,
+      "nativeUs": 387562.868,
+      "status": "pass",
+      "upper": 0.7318026252703839,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-candidate-EncodePredictable16-confirm-observation.json"
+    },
+    "read/DecodeCancelable8": {
+      "managedUs": 1374.094433125,
+      "nativeUs": 1394.9667330729167,
+      "status": "pass",
+      "upper": 0.9946303211021906,
+      "historicalStatus": "uncertain",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-DecodeCancelable8-confirm-observation.json"
+    },
+    "read/DecodeTight8": {
+      "managedUs": 1188.803385588843,
+      "nativeUs": 1400.4006953125,
+      "status": "pass",
+      "upper": 0.8589273787870413,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-DecodeTight8-confirm-observation.json"
+    },
+    "read/DecodeTight16": {
+      "managedUs": 2814.6774250000003,
+      "nativeUs": 2902.7466276041664,
+      "status": "pass",
+      "upper": 0.9841798111884086,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-DecodeTight16-confirm-observation.json"
+    },
+    "read/ValidatePng8": {
+      "managedUs": 1163.5919741735536,
+      "nativeUs": 1379.8168828125,
+      "status": "pass",
+      "upper": 0.848574779262172,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-ValidatePng8-confirm-observation.json"
+    },
+    "read/ValidatePng16": {
+      "managedUs": 2749.743065625,
+      "nativeUs": 2963.1102239583333,
+      "status": "pass",
+      "upper": 0.9373873019697417,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-ValidatePng16-confirm-observation.json"
+    },
+    "read/ValidateIndexedAdam7": {
+      "managedUs": 1.779340616453294,
+      "nativeUs": 3.918321034749349,
+      "status": "pass",
+      "upper": 0.4588126446787415,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-ValidateIndexedAdam7-confirm-observation.json"
+    },
+    "read/ValidatePng16Async": {
+      "managedUs": 2732.2843270833337,
+      "nativeUs": 3610.8970520833336,
+      "status": "pass",
+      "upper": 0.7632408253591291,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-ValidatePng16Async-confirm-observation.json"
+    },
+    "read/Decode8": {
+      "managedUs": 1159.3131980888431,
+      "nativeUs": 1396.9810520833332,
+      "status": "pass",
+      "upper": 0.8363146183015884,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-Decode8-confirm-observation.json"
+    },
+    "read/Decode16": {
+      "managedUs": 2790.583084375,
+      "nativeUs": 2905.1269036458334,
+      "status": "pass",
+      "upper": 0.9640445892257263,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-Decode16-confirm-observation.json"
+    },
+    "read/DecodeAdam7_16": {
+      "managedUs": 2864.079865909091,
+      "nativeUs": 3936.7115572916664,
+      "status": "pass",
+      "upper": 0.7366670102876713,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-DecodeAdam7_16-confirm-observation.json"
+    },
+    "read/DecodePaeth8": {
+      "managedUs": 2561.3841113636363,
+      "nativeUs": 2845.9242604166666,
+      "status": "pass",
+      "upper": 0.9047884434441524,
+      "historicalStatus": "pass",
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "allActualsRetained": true,
+      "observation": "tmp/wad887-read-candidate-DecodePaeth8-confirm-observation.json"
+    }
+  },
+  "uncapturedExistingControls": [
+    "read/DecodePaeth16",
+    "read/DecodeRgb8",
+    "read/DecodeRgb16",
+    "read/DecodeGray8",
+    "read/DecodeGray16",
+    "read/DecodeGrayAlpha8",
+    "read/DecodeGrayAlpha16",
+    "read/DecodeUp8",
+    "read/DecodeUp16",
+    "read/DecodeSub8",
+    "read/DecodeSub16",
+    "read/DecodeAverage8",
+    "read/DecodeAverage16",
+    "read/DecodeCancelable16",
+    "read/DecodeTightCancelable16",
+    "read/DecodeNoCompression8",
+    "read/DecodeNoCompression16",
+    "read/DecodeTightCancelable8",
+    "read/DecodeGray1",
+    "read/DecodeGray2",
+    "read/DecodeGray4",
+    "read/DecodePalette1",
+    "read/DecodePalette2",
+    "read/DecodePalette4",
+    "read/DecodePalette8",
+    "read/DecodeGray1Adam7",
+    "read/DecodeGrayAlphaPaeth8",
+    "read/DecodeGrayPaeth8",
+    "read/DecodeRgbPaeth16",
+    "read/DecodeRgbPaeth8",
+    "read/DecodePalette4Adam7",
+    "read/DecodePalette8Adam7",
+    "read/DecodePalette8PartialAlpha",
+    "read/DecodePalette8Short",
+    "read/DecodeGray1Transparency",
+    "read/DecodeGray2Transparency",
+    "read/DecodeGray16Transparency",
+    "read/DecodeGray8Transparency",
+    "read/DecodeRgb16Transparency",
+    "read/DecodeRgb8Transparency"
+  ],
+  "allAffectedPerformanceReconciled": false,
+  "completeCandidateAcceptanceNotClaimed": true,
+  "exactCapturedEncoderViews": 20,
+  "exactCapturedReadValidationViews": 11,
+  "proof": {
+    "project": "Lokad.Image",
+    "stage": "WAD887",
+    "bounds": {
+      "maximumSigned16Pair": 32385,
+      "maximumWeightedInt32Lane": 4080000,
+      "maximumSadUInt64Lane": 130560,
+      "maximumPrefixUInt64Lane": 4112640,
+      "maximumWeightedScalarSum": 33945600,
+      "maximumA": 1110000,
+      "maximumB": 2408052720
+    },
+    "exactGroupCoefficientChecks": 133120,
+    "independentScalarRecurrenceProof": true,
+    "positivePrefixBoundsCoverAllIntermediates": true,
+    "mixed64Byte32ByteScalarTailCompositionExact": true,
+    "wholeOriginalSourceReconstructed": true,
+    "unchangedStatePublicationModuloAndCancellation": true,
+    "newOwnedOrRetainedCapacityBytes": 0,
+    "scope": "Only a new64byte group branch and relative32byte remainder accounting differ. Same4096byte normalization/cancellation boundaries, local state publication only on success, no changes to input/output/owner/admission or asynchronous storage. Existing recurrence/split/unaligned/maxseed/all255 tests exercise actual code.",
+    "preflight": "Local staging-script quote syntax failed before build/measurement; corrected. Qualified original source recovered byte-for-byte from Git after matching prior actual-package source pin; no baseline identity changed.",
+    "performanceScopePending": true
+  },
+  "effects": {
+    "word": {
+      "views": {
+        "statistics": {
+          "baselineUs": 474.6288977272727,
+          "candidateUs": 435.425975,
+          "savedUs": 39.20292272727273,
+          "savedFraction": 0.08259699928721831,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 474628.8977272727,
+            "StandardError": 893.1904608649633,
+            "Level": 12,
+            "Margin": 4096.969838374332,
+            "Lower": 470531.92788889835,
+            "Upper": 478725.86756564706
+          },
+          "candidateCI": {
+            "N": 10,
+            "Mean": 435425.975,
+            "StandardError": 362.6551381631192,
+            "Level": 12,
+            "Margin": 1733.8225139202104,
+            "Lower": 433692.1524860798,
+            "Upper": 437159.7975139202
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 475.6584375,
+          "candidateUs": 436.9214791666667,
+          "savedUs": 38.73695833333331,
+          "savedFraction": 0.08143860232340205,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 475658.4375,
+            "StandardError": 1295.6472098349998,
+            "Level": 12,
+            "Margin": 5748.759898269845,
+            "Lower": 469909.67760173016,
+            "Upper": 481407.19739826984
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 436921.4791666667,
+            "StandardError": 1197.9102864619288,
+            "Level": 12,
+            "Margin": 5315.103188787225,
+            "Lower": 431606.37597787945,
+            "Upper": 442236.5823554539
+          }
+        }
+      },
+      "normalizedGain": 0.01966493510023115,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.06419444375726924,
+      "baselineRatioBounds": [
+        1.0719908678390138,
+        1.114120862345179
+      ],
+      "candidateRatioBounds": [
+        1.059610957583723,
+        1.0900546208703827
+      ]
+    },
+    "byte": {
+      "views": {
+        "statistics": {
+          "baselineUs": 69.51518181818183,
+          "candidateUs": 62.51238636363636,
+          "savedUs": 7.002795454545463,
+          "savedFraction": 0.10073764135237961,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 69515.18181818182,
+            "StandardError": 323.0415451238943,
+            "Level": 12,
+            "Margin": 1481.7572789937435,
+            "Lower": 68033.42453918808,
+            "Upper": 70996.93909717556
+          },
+          "candidateCI": {
+            "N": 11,
+            "Mean": 62512.38636363636,
+            "StandardError": 363.4976918828127,
+            "Level": 12,
+            "Margin": 1667.325330053788,
+            "Lower": 60845.06103358257,
+            "Upper": 64179.71169369015
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 71.00670833333332,
+          "candidateUs": 63.8283125,
+          "savedUs": 7.178395833333329,
+          "savedFraction": 0.10109461488673888,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 71006.70833333333,
+            "StandardError": 1502.009941204963,
+            "Level": 12,
+            "Margin": 6664.3870733155545,
+            "Lower": 64342.32126001777,
+            "Upper": 77671.09540664888
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 63828.3125,
+            "StandardError": 1342.5787210727951,
+            "Level": 12,
+            "Margin": 5956.994043893017,
+            "Lower": 57871.31845610698,
+            "Upper": 69785.30654389302
+          }
+        }
+      },
+      "normalizedGain": 0.03607268817425535,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.06708488532775825,
+      "baselineRatioBounds": [
+        0.31426745711480275,
+        0.38549295364402
+      ],
+      "candidateRatioBounds": [
+        0.29564607576953605,
+        0.3745212783419741
+      ]
+    },
+    "liveWord": {
+      "views": {
+        "statistics": {
+          "baselineUs": 2812.114735416666,
+          "candidateUs": 2790.583084375,
+          "savedUs": 21.531651041666045,
+          "savedFraction": 0.007656746992037555,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 2812114.735416666,
+            "StandardError": 2197.3110890445128,
+            "Level": 12,
+            "Margin": 9749.423899374115,
+            "Lower": 2802365.311517292,
+            "Upper": 2821864.15931604
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 2790583.084375,
+            "StandardError": 1371.8333372462728,
+            "Level": 12,
+            "Margin": 6086.796171370899,
+            "Lower": 2784496.288203629,
+            "Upper": 2796669.880546371
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 2812.117110416666,
+          "candidateUs": 2790.585403125,
+          "savedUs": 21.531707291665953,
+          "savedFraction": 0.007656760528182871,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 2812117.110416666,
+            "StandardError": 2197.3110890445128,
+            "Level": 12,
+            "Margin": 9749.423899374115,
+            "Lower": 2802367.686517292,
+            "Upper": 2821866.53431604
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 2790585.403125,
+            "StandardError": 1371.8333372462628,
+            "Level": 12,
+            "Margin": 6086.796171370855,
+            "Lower": 2784498.6069536293,
+            "Upper": 2796672.199296371
+          }
+        }
+      },
+      "normalizedGain": 0.008575667834675893,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.0009268693664512551,
+      "baselineRatioBounds": [
+        0.9610798868369789,
+        0.9750758055383903
+      ],
+      "candidateRatioBounds": [
+        0.9568824803372521,
+        0.9640445892257263
+      ]
+    },
+    "smallest16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 20268.305954545453,
+          "candidateUs": 21838.9213125,
+          "savedUs": -1570.6153579545469,
+          "savedFraction": -0.07749120037347335,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 20268305.954545453,
+            "StandardError": 4580.096003586182,
+            "Level": 12,
+            "Margin": 21008.414224867443,
+            "Lower": 20247297.540320586,
+            "Upper": 20289314.36877032
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21838921.3125,
+            "StandardError": 21534.675280897944,
+            "Level": 12,
+            "Margin": 95548.90925351091,
+            "Lower": 21743372.40324649,
+            "Upper": 21934470.22175351
+          }
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 20279.85414583333,
+          "candidateUs": 21838.9350625,
+          "savedUs": -1559.080916666668,
+          "savedFraction": -0.0768783101424324,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 20279854.145833332,
+            "StandardError": 12267.663487852595,
+            "Level": 12,
+            "Margin": 54431.36941067265,
+            "Lower": 20225422.77642266,
+            "Upper": 20334285.515244003
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 21838935.0625,
+            "StandardError": 21534.675280897944,
+            "Level": 12,
+            "Margin": 95548.90925351091,
+            "Lower": 21743386.15324649,
+            "Upper": 21934483.97175351
+          }
+        }
+      },
+      "normalizedGain": -0.025122318876557248,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": true,
+      "nativeClockChange": 0.05108549539171858,
+      "baselineRatioBounds": [
+        0.9670875032060411,
+        0.9753615616787091
+      ],
+      "candidateRatioBounds": [
+        0.9796820708682488,
+        1.004121168599873
+      ]
+    }
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "candidateSha256": "aac9b1013a97cb485b552e5f380e980e20bd19ca4e923b5150fc9217c795f482",
+      "focused": {
+        "internal-normal": 704,
+        "public-normal": 246,
+        "internal-scalar": 704,
+        "public-scalar": 246,
+        "internal-avx512off": 704,
+        "public-avx512off": 246,
+        "internal-avx2off": 704,
+        "public-avx2off": 246
+      },
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Deflate|FullyQualifiedName~Adler|FullyQualifiedName~Crc32",
+      "publicAddsCooperativeMemory": true,
+      "sources": {
+        "src/Lokad.Image/Internal/Adler32.cs": "3e27ccbee8dc963605ba0e53799af181daf9378423149e0d9c2df8d2166cfebd"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/PngCodec.cs": "dbce48b45a088307674c8b7d50affe11517d3f60697a4e91211def1ed0a5ea30",
+        "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+        "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+        "src/Lokad.Image/Internal/Crc32.cs": "12fe3e223ec2bf550de02cdc9c8fdd244a80136df88f46cc438c184925f6630e",
+        "src/Lokad.Image/Internal/PngRowInflation.cs": "534dd0e30bbe7aa5da75100d802f455c87347099f4acc21fc83a8b949bd1e510",
+        "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+        "tests/Lokad.Image.Tests/Adler32Tests.cs": "02e18a76d9de95eb35cf5116338ade8c47dccfbb1f3d2bb34b70fbc765eaddee"
+      },
+      "productionBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicBuilds": 0,
+      "harnessBuilds": 0,
+      "nativeBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "candidateSha256": "9c005e37cd15d19bfcefef03d184a7930f0ef400f43c269ba959293256f22820",
+      "focused": {
+        "internal-normal": 704,
+        "public-normal": 246,
+        "internal-scalar": 704,
+        "public-scalar": 246,
+        "internal-avx512off": 704,
+        "public-avx512off": 246,
+        "internal-avx2off": 704,
+        "public-avx2off": 246
+      },
+      "filter": "FullyQualifiedName~Png|FullyQualifiedName~Deflate|FullyQualifiedName~Adler|FullyQualifiedName~Crc32",
+      "publicAddsCooperativeMemory": true,
+      "sources": {
+        "src/Lokad.Image/Internal/Adler32.cs": "3e27ccbee8dc963605ba0e53799af181daf9378423149e0d9c2df8d2166cfebd"
+      },
+      "unchangedPins": {
+        "src/Lokad.Image/Internal/PngCodec.cs": "dbce48b45a088307674c8b7d50affe11517d3f60697a4e91211def1ed0a5ea30",
+        "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+        "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+        "src/Lokad.Image/Internal/Crc32.cs": "12fe3e223ec2bf550de02cdc9c8fdd244a80136df88f46cc438c184925f6630e",
+        "src/Lokad.Image/Internal/PngRowInflation.cs": "534dd0e30bbe7aa5da75100d802f455c87347099f4acc21fc83a8b949bd1e510",
+        "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+        "tests/Lokad.Image.Tests/Adler32Tests.cs": "02e18a76d9de95eb35cf5116338ade8c47dccfbb1f3d2bb34b70fbc765eaddee"
+      },
+      "productionBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicBuilds": 0,
+      "harnessBuilds": 0,
+      "nativeBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "WAD887",
+      "platform": "windows",
+      "productionRestored": true,
+      "sourcePins": {
+        "src/Lokad.Image/Internal/Adler32.cs": "3c76a614c5de3a261442224f8a69218f345b3ab1730038a08eefb4c861a05c54"
+      },
+      "restored": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "0c7ad14e0230ae4890e7a31888f3911b9f87a20ba04386438753671d331d7d22",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "9234e6823b53fa7c1cb7b61226bc71ef2e4e0abfeb2082efd05f6d9f76452c69",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "0c7ad14e0230ae4890e7a31888f3911b9f87a20ba04386438753671d331d7d22",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "9234e6823b53fa7c1cb7b61226bc71ef2e4e0abfeb2082efd05f6d9f76452c69",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "0c7ad14e0230ae4890e7a31888f3911b9f87a20ba04386438753671d331d7d22",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "9234e6823b53fa7c1cb7b61226bc71ef2e4e0abfeb2082efd05f6d9f76452c69",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "0c7ad14e0230ae4890e7a31888f3911b9f87a20ba04386438753671d331d7d22",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "9234e6823b53fa7c1cb7b61226bc71ef2e4e0abfeb2082efd05f6d9f76452c69",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "1da40517a7c8209edd6891c2e28df11f05e835f9727a27c19d3ebceec26d14b6",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "c7c8662956c98d8127e63f1f79dc4b88ce98c96f6a6d4c06fe830d436fa9c855"
+      },
+      "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633",
+      "qualificationReused": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+      "fullChecksEachOs": 6512,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newFullOrPackageRepeats": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "WAD887",
+      "platform": "linux",
+      "productionRestored": true,
+      "sourcePins": {
+        "src/Lokad.Image/Internal/Adler32.cs": "3c76a614c5de3a261442224f8a69218f345b3ab1730038a08eefb4c861a05c54"
+      },
+      "restored": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "6cc2db9ca1c80f4c8814f1c887c924295a739c9440445c01b0e36e7399b20519",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffa06dc8566a34217f9cd6ac2fb46299354bf18beb657ab492b26b1db893054b",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "6cc2db9ca1c80f4c8814f1c887c924295a739c9440445c01b0e36e7399b20519",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffa06dc8566a34217f9cd6ac2fb46299354bf18beb657ab492b26b1db893054b",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "6cc2db9ca1c80f4c8814f1c887c924295a739c9440445c01b0e36e7399b20519",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffa06dc8566a34217f9cd6ac2fb46299354bf18beb657ab492b26b1db893054b",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "6cc2db9ca1c80f4c8814f1c887c924295a739c9440445c01b0e36e7399b20519",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffa06dc8566a34217f9cd6ac2fb46299354bf18beb657ab492b26b1db893054b",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "11deacf69c9205b84a465485e48a0a0627ea6542dc0c5b8b53bcbd0c14e4731a",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "512cddb3e8bd60aa662785f6f68aea1bbbec5b7996b939848703d30e43558605"
+      },
+      "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633",
+      "qualificationReused": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+      "fullChecksEachOs": 6512,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newFullOrPackageRepeats": 0
+    }
+  },
+  "allocations": "No new arrays, owners, pool/cache or retained operation capacity; allocations stay unchanged on captured complete controls. Physical/native/JIT peaks unmeasured.",
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "PCA886",
+    "productionChanged": false,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "publicationPostponed": true,
+    "producers": {
+      "windowsSha256": "4dbb6fbf9911787e1f37a54d562f00aec4031d4edc4701daf9f23371a34e5ec8",
+      "linuxSha256": "beb1d1ecac98838c56066c670bb1733ac105b4e5a855b277332b2edf4df639f4",
+      "actualPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633"
+    },
+    "sourcePins": {
+      "src/Lokad.Image/Internal/PngCodec.cs": "dbce48b45a088307674c8b7d50affe11517d3f60697a4e91211def1ed0a5ea30",
+      "src/Lokad.Image/Internal/PngDeflater.cs": "137846f6a00d9d2a77811ab7cfee4425605898e29c5aa0be189b5a8b7a9fb8ff",
+      "src/Lokad.Image/Internal/Adler32.cs": "3c76a614c5de3a261442224f8a69218f345b3ab1730038a08eefb4c861a05c54",
+      "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+      "src/Lokad.Image/Internal/Crc32.cs": "12fe3e223ec2bf550de02cdc9c8fdd244a80136df88f46cc438c184925f6630e"
+    },
+    "receipt": "tmp/pca886-storedword-profile-receipt.json",
+    "summary": "tmp/pca886-storedword-profile-summary.json",
+    "allBuilds": 0,
+    "broadAndPackageRepeats": 0,
+    "scope": "One2second actual-package CPU0/CPU1 attribution of the existing retained-native postGC4 storedRGBA16 encode gap443.92/406.92us,upper1.105, after wideCRC. Equivalent fresh-state and naturalGC64 views already pass/stop. Keep frozen exact1066552Bpacket/input/settings/source/owner/native/quiet gates. Reuse current immutable package, existing generic12x200ms selector and reference worker; zero builds/newcases or broad/package repeats. Profiling batching differs from4-op statistical controls, so discard all instrumented elapsed and do not infer phase costs, gain, parity or exclusiveGC attribution. Inspect packing,checksums,storage preparation and publication before choosing a redesign.",
+    "totalLocations": 836,
+    "managedMappedLocations": 337,
+    "otherLocations": 499,
+    "interpretation": "836user locations,337mappedmanaged; CRCComputeChunk142/Reduce18,AdlerAppend94,WriteChunk19. Other499locations are not assigned to a codec or silently excluded. Inlining/skid/native-runtime/GC and profile-versus4op batching prevent phase-cost, removable-percentage, CPUgain or exclusiveGC-attribution claims. All instrumented elapsed discarded.",
+    "sourceFindings": [
+      "Current CRC encoder already uses512bitfour-residueGFNI/PCLMUL; the8residue trial remains unretained. Do not replay it unchanged.",
+      "Current Adler already defers scalar reduction to4096byte boundaries, but still consumes32byteAVX2 groups. A64byteAVX512BW group can apply the same exact recurrence with unchanged4096byte bounds.",
+      "Current stored encode owns64KiB history and4KiB encoded buffer; the former direct-stream attempt showed no usefulCPUgain. MemoryStream growth/caller output ownership stays in complete clocks. The fresh-state and natural64 views pass independently; profile counts explain neither their means norGC costs."
+    ],
+    "nextHypothesis": {
+      "repeatedWork": "Adler32byte group overhead and dependencies inside each4096byte block.",
+      "design": "One64byteAVX512BW/F block path; preserve32byteAVX2 tail/fallback and scalar tail. Formula bFinal=bInitial+n*aInitial+sum(localWeighted)+64*sum(prefixByteSums);aFinal=aInitial+sum(byteSums). Keep modulo, state publication, cancellation, ownership and exact packets. No arrays/cache/owner/API.",
+      "bounds": "Maximum signed16pair255*(64+63)=32385<32767. At most64groups per4096block; weighted int lanes<=4080000, SAD lanes<=130560,prefix lanes<=4112640. Overalluintb<=2408052720. Prove bounds and compare independent recurrence before timing.",
+      "scope": "Shared Adler affects applicable PNG encode/decode/coding validation costs. Use storedword short screen, independent confirmation if promising, then small existing byte/live-decode checks before reconciling affected existing controls. No grid, codegen-size CPU claims or broad/package qualification before settled performance."
+    },
+    "preflight": "One metadata-model adaptation failed before profiling: referenceView is an embedded identity record, not a path. Corrected without any measurement restart; log retained.",
+    "qualificationReused": {
+      "provider": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+      "fullChecksEachOs": 6512,
+      "sameActualPackageBothOS": true,
+      "productionInputsUnchanged": true
+    },
+    "raw": {
+      "file": "png-wide-checksum-current-attribution.tar.xz",
+      "sha256": "d01b2763fb5aeea09e3dad51a201d778d3e2eba63defe56dd3c00b6009b92344",
+      "bytes": 104812,
+      "members": 24,
+      "allMembersVerified": true,
+      "mirrored": true,
+      "dependencies": [
+        {
+          "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+          "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+          "bytes": 1422452,
+          "members": 93,
+          "allMembersVerified": true,
+          "mirrored": true,
+          "dependencies": [
+            {
+              "file": "bilinear-operation-metadata-qualified.tar.xz",
+              "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+            },
+            {
+              "file": "resize-current-adjacent-confidence.tar.xz",
+              "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+            },
+            {
+              "file": "column-coefficient-preparation-trial.tar.xz",
+              "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "interruptedController": "Deliberate exit75 after complete DecodePaeth8 capture, output checks/receipt/quiet guards/parser/observation. No timed operation interrupted; no live process remains. Stop hook restored byte-for-byte before baseline measurement.",
+  "preflights": [
+    "Local staging-script quoting failed before builds/timing; exact original source recovered from Git/source pin.",
+    "Generalization helper preparation referenced a VM-only short-selector record; valid byte confirmations were retained. Fixed confirm-only helper before first read measurement. No successful capture repeated."
+  ],
+  "qualification": {
+    "provider": "benchmarks/compact-bicubic-paired-weights-evidence.json",
+    "productionRestoredByteForByte": true,
+    "fullChecksEachOs": 6512,
+    "sameActualPackageBothOs": true,
+    "newBroadOrPackageProofs": 0,
+    "acceptedPackageSha256": "c125aeb3b0bddae06bc8383ef8f6bced2583ed82f494944dd11aab39d7023633"
+  },
+  "next": "Stop this implementation. Preserve currentWCF876B/ABP875 PNG costs and CPW885 qualification. Resolve a consequential current uncertainty or select independent material attribution; do not replay wider checksums unchanged.",
+  "raw": {
+    "file": "png-wide-adler-trial.tar.xz",
+    "sha256": "23cb37fb4d456c58ac38eab764bfaae4ae66b710623051f23951ea824d470178",
+    "bytes": 1763684,
+    "members": 495,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "png-wide-checksum-current-attribution.tar.xz",
+        "sha256": "d01b2763fb5aeea09e3dad51a201d778d3e2eba63defe56dd3c00b6009b92344",
+        "bytes": 104812,
+        "members": 24,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+            "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+            "bytes": 1422452,
+            "members": 93,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "bilinear-operation-metadata-qualified.tar.xz",
+                "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+              },
+              {
+                "file": "resize-current-adjacent-confidence.tar.xz",
+                "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+              },
+              {
+                "file": "column-coefficient-preparation-trial.tar.xz",
+                "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "file": "compact-bicubic-paired-weights-qualified.tar.xz",
+        "sha256": "1007e5e9b0677feb2b81c1bfbda55ae12d206b8bac78f1cfd28b5a5738510cc8",
+        "bytes": 1422452,
+        "members": 93,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "bilinear-operation-metadata-qualified.tar.xz",
+            "sha256": "340452c6a0aad4a80d0462fdfd2cfe0d6f75e3a0c7340edd7085679812c41850"
+          },
+          {
+            "file": "resize-current-adjacent-confidence.tar.xz",
+            "sha256": "549cefa20ea4aefeb3516bd2cc537bd502fad0f25f689e28e0450fd5f07047b6"
+          },
+          {
+            "file": "column-coefficient-preparation-trial.tar.xz",
+            "sha256": "e2d8da36a93ed7be032e4f5494cc17886a5709d026789931d23138ef01f6d827"
+          }
+        ]
+      }
+    ]
+  }
+}
