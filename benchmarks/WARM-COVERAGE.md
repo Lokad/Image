@@ -69,7 +69,11 @@ saving; main generated decoder grows5,723→8,245B, cold fallback924B.
 One immutable core/embedded build perOS, zero new tests/harness/native/fixture
 builds. Full6,449checks perOS,1,026internal/239public normal/scalar/BMI2-off and
 SAMEactualpackage/all3examples pass; unchanged family/ISA evidence reused.
-Attribute the remaining approximately100µs gap before further decoder changes.
+The [current two-second profile](WEBP-INVERSE-COLOR-CURRENT-ATTRIBUTION.md)
+finds repeated tile indexing/coefficient loads and signed products in the scalar
+inverse color transform. Next, test per-tile preparation with exact SIMD batches
+and a portable scalar tail, without new workspace. Profile counts are not phase
+costs or gain predictions; complete measurements must decide retention.
 [Prior baseline](WEBP-LOSSLESS-LIVE-CURRENT-CONFIDENCE.md) and
 [two-second attribution](WEBP-LOSSLESS-LIVE-CURRENT-ATTRIBUTION.md) retain the
 original samples, source/JIT identities and hypothesis; they are historical
