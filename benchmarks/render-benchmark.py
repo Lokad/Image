@@ -178,6 +178,42 @@ def apply_released_image_storage(codecs, editing, read_rows):
     return codecs, editing, read_rows, current
 
 
+def apply_lanczos_output_rows(editing):
+    current = json.loads((ROOT / 'benchmarks/lanczos-paired-output-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 162, 'gap': 13, 'uncertain': 16}
+    assert current['currentEightLanczosStatus'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6551
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    mapping = {
+        'Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129': 'OneShot8',
+        'Lanczos3 prepared RGBA8 / zimg prepared † → 256×129': 'Repeated8',
+    }
+    seen, rows = set(), []
+    for line in editing.splitlines():
+        cells = [c.strip() for c in line.strip('|').split('|')]
+        label = re.sub(r' \((?:gap|uncertain)\)', '', cells[0])
+        if label in mapping:
+            case = mapping[label]; c = current['cases'][case]
+            assert case not in seen; seen.add(case)
+            assert c['actualIterations'] == 12 and c['allActualsRetained']
+            assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
+            assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+            assert c['status'] == 'pass' and c['upper'] <= 1
+            assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+            cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
+                         f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
+            line = '| ' + ' | '.join(cells) + ' |'
+        rows.append(line)
+    assert seen == set(mapping.values())
+    return '\n'.join(rows), current
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -2423,6 +2459,7 @@ def render():
         read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
+    editing, lanczos_current = apply_lanczos_output_rows(editing)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2432,14 +2469,22 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Released-image storage](../benchmarks/RELEASED-IMAGE-STORAGE.md) refreshes 191
-existing affected comparisons: **161 pass, 14 gaps, 16 uncertain**. The complete
+[Paired Lanczos outputs](../benchmarks/LANCZOS-PAIRED-OUTPUT.md) close prepared
+RGBA8 reduction: **462.72 / zimg 489.40 µs, upper 0.950**, with **138 B/op** and
+**139,800 B** retained plan. Independent gain is **7.40% reference-normalized**;
+the **14.68% raw** view includes a **−7.87%** reference clock change. One-shot also
+passes; no further byte-reduction tuning. Exact pixels, admission and owned capacity
+stay unchanged; the second sum borrows 8 KiB from unpublished output.
+
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with those two
+updated costs, has **162 pass, 13 gaps, 16 uncertain** across 191 existing comparisons.
+Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
 capture is hidden. Larger demonstrated remaining gaps include bounded mixed-word
-bicubic and repeated Lanczos reductions; tiny copy/turn gaps remain in the report.
+bicubic and prepared word Lanczos reduction; tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -2454,7 +2499,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,538 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,551 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

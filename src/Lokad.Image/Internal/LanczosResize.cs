@@ -49,6 +49,19 @@ internal static class LanczosResize
             for (var y = 0; y < height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
+                if (typeof(TRows) == typeof(PairedByteRows) && vertical.MaximumCount <= slots
+                    && y + 2 <= height - 8)
+                {
+                    // Eight unpublished byte rows hold one double sum row.
+                    // Publish only preceding rows while that suffix is borrowed;
+                    // the ordinary tail overwrites it after the last pair retires.
+                    var second = MemoryMarshal.Cast<byte, double>(result.Pixels.Slice(
+                        (height - 8) * result.Stride, (int)channels * sizeof(double)));
+                    ExecuteByteOutputPair(source, result, y, horizontal, vertical, workspace,
+                        second, numeratorError, errors.Alpha, context);
+                    y++;
+                    continue;
+                }
                 if (workspace.Fast) workspace.FastSums.AsSpan().Clear();
                 else workspace.ExactSums.AsSpan().Clear();
                 var window = vertical.Windows[y];
@@ -105,6 +118,54 @@ internal static class LanczosResize
             result.Orientation = source.Orientation; return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private static void ExecuteByteOutputPair(ImageBuffer source, ImageBuffer result, int y,
+        LanczosPlan horizontal, LanczosPlan vertical, LanczosWorkspace workspace,
+        Span<double> second, double numeratorError, double alphaError, OperationContext context)
+    {
+        var first = workspace.FastSums.AsSpan(); first.Clear(); second.Clear();
+        var w0 = vertical.Windows[y]; var w1 = vertical.Windows[y + 1];
+        var begin = Math.Min(w0.First, w1.First);
+        var end = Math.Max(w0.First + w0.Count, w1.First + w1.Count);
+        var channels = first.Length; var ids = workspace.RowIds; var slots = ids.Length;
+        for (var sy = begin; sy < end; sy++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var t0 = sy - w0.First; var t1 = sy - w1.First;
+            var weight0 = (uint)t0 < (uint)w0.Count ? vertical.Weights[w0.Offset + t0] : 0;
+            var weight1 = (uint)t1 < (uint)w1.Count ? vertical.Weights[w1.Offset + t1] : 0;
+            if (weight0 == 0 && weight1 == 0) continue;
+            var slot = sy % slots;
+            var row = workspace.FastRows.AsSpan(slot * channels, channels);
+            if (ids[slot] != sy)
+            {
+                var next = sy + 1; var nextSlot = next % slots;
+                var next0 = next - w0.First; var next1 = next - w1.First;
+                var neededNext = (uint)next0 < (uint)w0.Count && vertical.Weights[w0.Offset + next0] != 0
+                    || (uint)next1 < (uint)w1.Count && vertical.Weights[w1.Offset + next1] != 0;
+                if (slots > 1 && neededNext && ids[nextSlot] != next)
+                {
+                    var nextRow = workspace.FastRows.AsSpan(nextSlot * channels, channels);
+                    LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
+                    ids[nextSlot] = next;
+                }
+                else LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context);
+                ids[slot] = sy;
+            }
+            // The ascending union keeps each output's original nonzero-tap
+            // sequence. Consume every current user before any later row can
+            // reuse its ring slot; cached rows may always be reconstructed.
+            if (weight0 == 0) LanczosFmaResize.Accumulate(row, second, weight1, context);
+            else if (weight1 == 0) LanczosFmaResize.Accumulate(row, first, weight0, context);
+            else LanczosFmaResize.AccumulatePair(row, first, second, weight0, weight1, context);
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
+        LanczosFmaResize.WriteRow(source, result, y, horizontal, vertical, first,
+            numeratorError, alphaError, 255, context);
+        context.Cancellation.ThrowIfCancellationRequested();
+        LanczosFmaResize.WriteRow(source, result, y + 1, horizontal, vertical, second,
+            numeratorError, alphaError, 255, context);
     }
 
     private static void WriteExactRow(ImageBuffer result, int y, ReadOnlySpan<Int128> sums,

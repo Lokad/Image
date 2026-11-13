@@ -19,7 +19,8 @@
 - Improve VP8/VP8L encoding/decoding through shared candidate preparation, token/
   histogram workspace reuse, SIMD kernels and bounded entropy processing.
 - Share resizing geometry, row scheduling and exact-result certification across
-  byte/word, scalar/SIMD and bounded-workspace paths.
+  byte/word, scalar/SIMD and bounded-workspace paths, including shared Lanczos
+  output-row execution without additional workspace.
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
 

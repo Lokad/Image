@@ -322,6 +322,27 @@ internal static class LanczosFmaResize
         }
     }
 
+    internal static void AccumulatePair(ReadOnlySpan<double> row, Span<double> first, Span<double> second,
+        int weight0, int weight1, OperationContext context)
+    {
+        var factor0 = Vector512.Create((double)weight0); var factor1 = Vector512.Create((double)weight1);
+        var i = 0;
+        for (; i <= first.Length - 8; i += 8)
+        {
+            if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var value = Vector512.Create(row.Slice(i, 8));
+            Avx512F.FusedMultiplyAdd(value, factor0, Vector512.Create(first.Slice(i, 8))).CopyTo(first.Slice(i, 8));
+            Avx512F.FusedMultiplyAdd(value, factor1, Vector512.Create(second.Slice(i, 8))).CopyTo(second.Slice(i, 8));
+        }
+        if (i < first.Length)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var value = Vector256.Create(row.Slice(i, 4));
+            Fma.MultiplyAdd(value, Vector256.Create((double)weight0), Vector256.Create(first.Slice(i, 4))).CopyTo(first.Slice(i, 4));
+            Fma.MultiplyAdd(value, Vector256.Create((double)weight1), Vector256.Create(second.Slice(i, 4))).CopyTo(second.Slice(i, 4));
+        }
+    }
+
     internal static Vector128<int> ExactPixel(ImageBuffer source, int x, int y, LanczosPlan horizontal,
         LanczosPlan vertical, OperationContext context)
     {

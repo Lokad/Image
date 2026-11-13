@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "LZA914",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "uniformWarmParityComplete": false,
+  "cases": {
+    "Repeated8": {
+      "managedUs": 462.71702380952377,
+      "nativeUs": 489.4006386138614,
+      "ratio": 0.94547695139934,
+      "lower": 0.9322491435567791,
+      "upper": 0.9495358564331008,
+      "allocatedBytes": 138,
+      "retainedBytes": 139800,
+      "status": "pass",
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "managedExact": true,
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "nativeWorkerSha256": "a47088aaca94d1cae1bd275afc2f3e4fb99fd4df00ae79dd8a9f35a67b07295e",
+      "harnessSha256": "d92ea139e0dcffd87f4ed333acf6a6b49b09f4195e6c11b390bfa6bb1bab3187",
+      "nativeScratchBytes": 367168,
+      "receipt": "tmp/lza914-candidate-Repeated8-confirm-receipt.json",
+      "observation": "tmp/lza914-candidate-Repeated8-confirm-observation.json"
+    },
+    "OneShot8": {
+      "managedUs": 591.473215909091,
+      "nativeUs": 1580.93784375,
+      "ratio": 0.3741280647100652,
+      "lower": 0.37232789678997286,
+      "upper": 0.37644312325310136,
+      "allocatedBytes": 138650,
+      "retainedBytes": 0,
+      "status": "pass",
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "managedExact": true,
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "managedBoundary": "Complete public Resize including axes/workspace preparation and independent output/disposal",
+      "nativeBoundary": "Complete zimg graph/input-plane/scratch preparation, packing/filtering/output/normalization/disposal",
+      "nativeWorkerSha256": "a47088aaca94d1cae1bd275afc2f3e4fb99fd4df00ae79dd8a9f35a67b07295e",
+      "harnessSha256": "d92ea139e0dcffd87f4ed333acf6a6b49b09f4195e6c11b390bfa6bb1bab3187",
+      "nativeScratchBytes": 367168,
+      "receipt": "tmp/lza914-candidate-OneShot8-confirm-receipt.json",
+      "observation": "tmp/lza914-candidate-OneShot8-confirm-observation.json"
+    }
+  },
+  "independentComparison": {
+    "project": "Lokad.Image",
+    "stage": "LZA914",
+    "independentConfirmation": true,
+    "raw": {
+      "statistics": {
+        "savedUs": 79.62319255332346,
+        "reductionPercent": 14.681410330826793,
+        "confidenceSeparated": true
+      },
+      "unfilteredActualStatistics": {
+        "savedUs": 79.62332983010914,
+        "reductionPercent": 14.681395037079925,
+        "confidenceSeparated": true
+      }
+    },
+    "referenceNormalizedReductionPercent": 7.398243711727082,
+    "nativeClockChangePercent": -7.8650415618759295,
+    "baselineNormalizedLower": 1.0129930287825637,
+    "candidateNormalizedUpper": 0.9495358564331008,
+    "normalizedConfidenceSeparated": true,
+    "candidateCurrent": {
+      "managedUs": 462.71702380952377,
+      "nativeUs": 489.4006386138614,
+      "ratio": 0.94547695139934,
+      "lower": 0.9322491435567791,
+      "upper": 0.9495358564331008,
+      "allocatedBytes": 138,
+      "retainedBytes": 139800,
+      "status": "pass",
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f"
+    },
+    "oneShotCurrent": {
+      "managedUs": 591.473215909091,
+      "nativeUs": 1580.93784375,
+      "ratio": 0.3741280647100652,
+      "lower": 0.37232789678997286,
+      "upper": 0.37644312325310136,
+      "allocatedBytes": 138650,
+      "retainedBytes": 0,
+      "status": "pass",
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f"
+    },
+    "allAffectedPerformanceReconciled": true,
+    "stopByteReductionTuning": true,
+    "noFourRowProducerNeeded": true,
+    "productionSourceScope": "Only fast byte vertical reduction enters the new constant-typed branch. Original word, byte enlargement, exact/scalar/long-support/tiny-result paths remain and source-valid evidence is reused."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "LZA914",
+    "acceptedBaseCommit": "f716c067ff8c600c121f6665302c4a1749474559",
+    "changedProductionPaths": [
+      "src/Lokad.Image/Internal/LanczosResize.cs",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs"
+    ],
+    "allOtherProductionPathsUnchanged": true,
+    "exactSourceReconstructionAfterRemovingOnlyAddedBranchAndTwoMethods": true,
+    "unchangedWorkspacePlanFactoryOwnershipAdmissionAndNumericCertificates": true,
+    "selectedDomain": "The new value-type constant branch is reachable only for fast byte vertical reduction. SingleRows and PairedWordRows remain on their original body; all original scalar/word/enlargement/long-support/tiny-output numeric kernels are byte-exact.",
+    "numericalProof": "Ascending union preserves original per-output nonzero tap order. Separate sums use the original FMA operands/order and certificate. Scalar FMA bit tests and exact integer complete-frame checks pass.",
+    "borrowedResultRows": 8,
+    "extraOwnedCapacityBytes": 0,
+    "extraRetainedBytes": 0,
+    "newOwners": 0,
+    "newReservations": 0,
+    "frozenBorrowedSumBytes": 8192,
+    "sourcePins": {
+      "src/Lokad.Image/Internal/LanczosResize.cs": "4902984def7ae04f9ae8a3462e3b0fc135de45efe313984d8f871dbd2ba11ddf",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs": "fffad49c42d1893da109c0585027b96f0fc800bd3a596e9387ec5659759f242c"
+    },
+    "guardSha256": "3895a9a2598bbc54e0afda4399fc88d196bc398a6ed1a5d8e56f6c821435cb29",
+    "helperSha256": "c0bcec1b7628eeb4c7a98086a60fedbee92211bbcd60ef76ec0f9f83cf19a78f",
+    "accumulationSha256": "809f4c6c5531c708303a3ee976dd6ecc068b63b08eba26434883c9dabff537e3",
+    "affectedPerformanceCases": [
+      "OneShot8",
+      "Repeated8"
+    ],
+    "unchangedEvidenceCases": [
+      "OneShot16",
+      "Repeated16",
+      "OneShotEnlarge8",
+      "RepeatedEnlarge8",
+      "OneShotEnlarge16",
+      "RepeatedEnlarge16"
+    ],
+    "unchangedOtherCodecResizeDrawingTextEvidenceReused": true
+  },
+  "producers": {
+    "windowsSha256": "be0e2c6f75948ca828b06385537e06b7b3c930a174f221cfe72ec8799cf74885",
+    "linuxSha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+    "timedArtifactSha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+    "actualPackageSha256": "95c9d902537a44bda7e1845837569f9769beba03326b00f04a53a160cedb313a",
+    "packageProducer": "Linux immutable timed DLL"
+  },
+  "qualification": {
+    "fullChecksEachOs": 6551,
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "LZA914",
+      "platform": "windows",
+      "productionSha256": "be0e2c6f75948ca828b06385537e06b7b3c930a174f221cfe72ec8799cf74885",
+      "full": [
+        3214,
+        2389,
+        948
+      ],
+      "total": 6551,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 130,
+        "public-normal": 15,
+        "internal-scalar": 130,
+        "public-scalar": 15
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "4902984def7ae04f9ae8a3462e3b0fc135de45efe313984d8f871dbd2ba11ddf",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "fffad49c42d1893da109c0585027b96f0fc800bd3a596e9387ec5659759f242c",
+        "tests/Lokad.Image.Tests/LanczosPairedOutputTests.cs": "2eca47569ebdd2969a527b1dfd95e88d77ad2260f7f04ebc1fc30d66ecffe23a"
+      },
+      "additionalProductionBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedCodecAndResizeArithmeticQualificationReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "LZA914",
+      "platform": "linux",
+      "productionSha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+      "full": [
+        3214,
+        2389,
+        948
+      ],
+      "total": 6551,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 130,
+        "public-normal": 15,
+        "internal-scalar": 130,
+        "public-scalar": 15,
+        "internal-avx512off": 130,
+        "public-avx512off": 15,
+        "internal-avx2off": 130,
+        "public-avx2off": 15
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/LanczosResize.cs": "4902984def7ae04f9ae8a3462e3b0fc135de45efe313984d8f871dbd2ba11ddf",
+        "src/Lokad.Image/Internal/LanczosFmaResize.cs": "fffad49c42d1893da109c0585027b96f0fc800bd3a596e9387ec5659759f242c",
+        "tests/Lokad.Image.Tests/LanczosPairedOutputTests.cs": "2eca47569ebdd2969a527b1dfd95e88d77ad2260f7f04ebc1fc30d66ecffe23a"
+      },
+      "additionalProductionBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedCodecAndResizeArithmeticQualificationReused": true
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "LZA914",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "95c9d902537a44bda7e1845837569f9769beba03326b00f04a53a160cedb313a",
+      "symbolsSha256": "f7f4c6fed15c22a921443d553fd613eae596a3fa906bd2a79f300a1c9fb6e598",
+      "bytes": 458773,
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionBuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "LZA914",
+      "sameActualPackageSha256": "95c9d902537a44bda7e1845837569f9769beba03326b00f04a53a160cedb313a",
+      "librarySha256": "10d4ccfcebd354594dc1fe45c91f55933d569b1526574c623d8c69610220bd5f",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "performanceFinishedBeforeBroadQualification": true
+  },
+  "memory": {
+    "extraOwnedCapacityBytes": 0,
+    "extraRetainedBytes": 0,
+    "borrowedResultRows": 8,
+    "frozenBorrowedSumBytes": 8192,
+    "preparedBytePlanBytes": 139800,
+    "independentOutputBytes": 132096,
+    "planAndOneOutputOwnedCapacityBytes": 271896,
+    "gcBytesPerRepeatedOperation": 138,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "description": "Borrowed sum storage is within the independently owned result already admitted before allocation. Caller inputs are borrowed; charge retained plans/results through actual disposal. No new pool, owner, reservation or retained buffer."
+  },
+  "currentEightLanczosStatus": {
+    "pass": 6,
+    "gap": 1,
+    "uncertain": 1
+  },
+  "currentImageOwnerViewStatuses": {
+    "pass": 162,
+    "uncertain": 16,
+    "gap": 13
+  },
+  "unchangedEvidence": {
+    "owner": "released-image-storage-evidence.json",
+    "cases": [
+      "OneShot16",
+      "Repeated16",
+      "OneShotEnlarge8",
+      "RepeatedEnlarge8",
+      "OneShotEnlarge16",
+      "RepeatedEnlarge16"
+    ],
+    "reason": "The new value-type branch is false for SingleRows/PairedWordRows. Original word, enlargement, scalar, long-support and tiny-result bodies/certificates remain exact; source-valid costs and broader numerical/ownership evidence are reused.",
+    "unrelatedCodecsResizingDrawingTextUnchanged": true
+  },
+  "raw": {
+    "file": "lanczos-paired-output-qualified.tar.xz",
+    "sha256": "cc4078cf9ba6b61db8dae5af25789da5c9cff1e86967d7d21d6a2c6c09d03c84",
+    "bytes": 2081032,
+    "members": 137,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "released-image-storage-qualified.tar.xz",
+        "sha256": "1ef7261190c65bd9a8d0cffa38b7904c590304e846e91419e3f3f517f5b776d6"
+      }
+    ]
+  },
+  "publicationPostponed": true,
+  "next": "Stop confirmed byte-reduction controls and the unneeded four-row proposal. Continue independent demonstrated gaps using current attribution; preserve word-reduction gap and word-enlargement uncertainty."
+}
