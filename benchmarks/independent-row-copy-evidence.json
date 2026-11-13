@@ -1,0 +1,570 @@
+{
+  "project": "Lokad.Image",
+  "stage": "IRC944B",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "baselineCommit": "8d106c9f32dcd39fe9af5ff99c0b215ccd5e57d8",
+  "sources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "c00121f330a1531d09101b7e674d773242dadb01e0d3fd75b40a4bce59c8ba90",
+    "src/Lokad.Image/ImageDrawing.cs": "ab34641dba1bd29aa5e114b8217350ed931a4a8e4150c9603ae2e227aad51706",
+    "tests/Lokad.Image.PublicApi.Tests/DrawingTests.cs": "17878fc7828c6a34324b4de3350e368581cc4655f79fe98b277639d32c0bfda7",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+    "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+    "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+  },
+  "consumer": {
+    "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+    "sha256": "61708273fae2f61a0743642c4c12e1c62c762299242595877e7726c8944e35e2"
+  },
+  "hypothesis": "PhaseA confirms useful byte/paired gains but regresses the required word rectangle control against a contemporary unchanged baseline. Keep the measured disjoint-row byte specialization; preserve existing BCL word copies. The shared flip primitive and every traversal/checkpoint remain unchanged. This is format-specific dispatch, not a fixture width/shape filter. Check complete affected costs before full/package acceptance.",
+  "intendedEndState": "One unchanged Vector512 four-vector/remaining-vector/byte-tail bounded-row primitive serves VerticalFlip and eligible CopyRegion chunks. Keep all clipping/argument/memory validation and4096pixel/1024pixel cancellation boundaries. No new owned capacity, buffers, caches, public API, metadata/pixel policy or caller lifetime.",
+  "cases": {
+    "DrawingCopy8": {
+      "managedUs": 1.9930026500141835,
+      "allActualManagedUs": 1.9989177636827828,
+      "nativeUs": 1.9059191818237304,
+      "ratio": 1.045691060261603,
+      "lower": 1.0328576798262814,
+      "upper": 1.0650503531849413,
+      "allocatedBytes": 56,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/irc944b-candidate-DrawingCopy8-confirm-receipt.json",
+      "observation": "tmp/irc944b-candidate-DrawingCopy8-confirm-observation.json",
+      "nativeSamplesEachBracket": 12,
+      "status": "gap",
+      "sourceAliasesCanvas": false,
+      "borrowedCanvas": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": false,
+      "untouchedCanvasExact": true,
+      "caseId": "DrawingCopy8",
+      "managedExact": true,
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "retainedOperationScratchBytes": 0
+    },
+    "DrawingCopy16": {
+      "managedUs": 3.8319960473612813,
+      "allActualManagedUs": 3.8331129853219696,
+      "nativeUs": 3.789183090209961,
+      "ratio": 1.0112987301304959,
+      "lower": 0.9869592058218949,
+      "upper": 1.0262588566703306,
+      "allocatedBytes": 56,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/irc944b-candidate-DrawingCopy16-confirm-receipt.json",
+      "observation": "tmp/irc944b-candidate-DrawingCopy16-confirm-observation.json",
+      "nativeSamplesEachBracket": 12,
+      "status": "uncertain",
+      "sourceAliasesCanvas": false,
+      "borrowedCanvas": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": false,
+      "untouchedCanvasExact": true,
+      "caseId": "DrawingCopy16",
+      "managedExact": true,
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA16 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+      "retainedOperationScratchBytes": 0
+    },
+    "DrawingCopyOverlap8": {
+      "managedUs": 3.8465367143615685,
+      "allActualManagedUs": 3.8503549079695674,
+      "nativeUs": 3.80719004313151,
+      "ratio": 1.0103348324576134,
+      "lower": 1.0055763115533394,
+      "upper": 1.0168969894298834,
+      "allocatedBytes": 112,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/irc944b-candidate-DrawingCopyOverlap8-confirm-receipt.json",
+      "observation": "tmp/irc944b-candidate-DrawingCopyOverlap8-confirm-observation.json",
+      "nativeSamplesEachBracket": 12,
+      "status": "gap",
+      "sourceAliasesCanvas": true,
+      "borrowedCanvas": true,
+      "sourceUnchanged": false,
+      "independentOwnedOutput": false,
+      "untouchedCanvasExact": true,
+      "publicMovesPerPair": 2,
+      "nativeCallsPerPair": 6,
+      "restorationTimed": true,
+      "caseId": "DrawingCopyOverlap8",
+      "managedExact": true,
+      "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+      "retainedOperationScratchBytes": 0
+    },
+    "WarmVerticalFlip8": {
+      "ratio": 1.0546598821596975,
+      "lower": 1.010675986134521,
+      "upper": 1.0834885464900896,
+      "status": "gap",
+      "operationsPerSubject": 64,
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.752497395833334,
+      "nativeUs": 8.298881510416667,
+      "allocatedBytes": 112,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/irc944b-candidate-WarmVerticalFlip8-confirm-receipt.json",
+      "observation": "tmp/irc944b-candidate-WarmVerticalFlip8-confirm-observation.json",
+      "rawPairs": "tmp/irc944b-candidate-WarmVerticalFlip8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "retainedOperationScratchBytes": 0
+    },
+    "WarmVerticalFlip16": {
+      "ratio": 0.9770445894758177,
+      "lower": 0.9601665268683618,
+      "upper": 0.9913998509720353,
+      "status": "pass",
+      "operationsPerSubject": 64,
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip16",
+      "managedUs": 17.55091276041667,
+      "nativeUs": 17.963266927083332,
+      "allocatedBytes": 112,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/irc944b-candidate-WarmVerticalFlip16-confirm-receipt.json",
+      "observation": "tmp/irc944b-candidate-WarmVerticalFlip16-confirm-observation.json",
+      "rawPairs": "tmp/irc944b-candidate-WarmVerticalFlip16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeSamplesEachBracket": 12,
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+      "retainedOperationScratchBytes": 0
+    }
+  },
+  "comparison": {
+    "DrawingCopy8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 2.232581178533143,
+          "candidateUs": 1.9930026500141835,
+          "savedUs": 0.2395785285189595,
+          "savedFraction": 0.10731010850694711,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 2.236317299818355,
+          "candidateUs": 1.9989177636827828,
+          "savedUs": 0.23739953613557213,
+          "savedFraction": 0.10615646364442777,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        }
+      },
+      "normalizedGain": 0.1075390955831782,
+      "normalizedGainSeparated": true,
+      "normalizedRegressionSeparated": false,
+      "lower": 1.0328576798262814,
+      "upper": 1.0650503531849413,
+      "nativeClockChange": 0.00025657939199108526
+    },
+    "DrawingCopyOverlap8": {
+      "views": {
+        "statistics": {
+          "baselineUs": 4.188561697860963,
+          "candidateUs": 3.8465367143615685,
+          "savedUs": 0.3420249834993938,
+          "savedFraction": 0.08165690472556753,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 4.195836191649955,
+          "candidateUs": 3.8503549079695674,
+          "savedUs": 0.34548128368038805,
+          "savedFraction": 0.08233907805264729,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        }
+      },
+      "normalizedGain": 0.0914224100889196,
+      "normalizedGainSeparated": true,
+      "normalizedRegressionSeparated": false,
+      "lower": 1.0055763115533394,
+      "upper": 1.0168969894298834,
+      "nativeClockChange": 0.01074812484017773
+    },
+    "DrawingCopy16": {
+      "views": {
+        "statistics": {
+          "baselineUs": 3.9274158263910715,
+          "candidateUs": 3.8319960473612813,
+          "savedUs": 0.09541977902978988,
+          "savedFraction": 0.024295817720292656,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "baselineUs": 3.9329397578722625,
+          "candidateUs": 3.8331129853219696,
+          "savedUs": 0.09982677255029285,
+          "savedFraction": 0.025382227721763906,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        }
+      },
+      "normalizedGain": 0.02616973852453708,
+      "normalizedGainSeparated": true,
+      "normalizedRegressionSeparated": false,
+      "lower": 0.9869592058218949,
+      "upper": 1.0262588566703306,
+      "nativeClockChange": 0.0019242786739912532
+    }
+  },
+  "phaseAWord": {
+    "managedUs": 4.138271460266691,
+    "ratio": 1.08640912146731,
+    "upper": 1.1016652576446122,
+    "baselineUs": 3.9274158263910715,
+    "baselineUpper": 1.0497140355556127,
+    "productionSha256": "7da2c383ad768cbad34409197f86a5bee6f664e3929fac92d2929190220cbcf2",
+    "retained": false,
+    "decision": "Adverse word-copy evidence prompted byte-only drawing dispatch; original all-actual/filtered observations retained. No full/package qualification of A."
+  },
+  "producers": {
+    "windowsSha256": "c81ab4e61eed73b043917de66bb24e05c4f8037ecb39fe460600b18962e2be24",
+    "linuxSha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+    "timedArtifactSha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+    "actualPackageSha256": "03572b9065b73ea03a6800ae891641023c93ec654198b657093033134595bf2c"
+  },
+  "storage": {
+    "gcAllocatedBytesPerOperation": {
+      "separateCopy": 56,
+      "overlapPair": 112,
+      "verticalFlip": 112
+    },
+    "newOwnedOrAdmittedCapacityBytes": 0,
+    "newOperationBuffers": 0,
+    "retainedOperationScratchBytes": 0,
+    "inPlaceTemporaryPixelBytes": 0,
+    "separateBorrowedSourceAndCanvasBytes": {
+      "byte": 1062936,
+      "word": 2125872
+    },
+    "overlapBorrowedCanvasBytes": 531468,
+    "defaultIdleSlots": 2,
+    "defaultIdleCeilingBytes": 4194304,
+    "callerRootBypassesIdleStorage": true,
+    "physicalNativeAndJitStackPeaksMeasured": false
+  },
+  "sourceProof": {
+    "onlyCopyRegionBodyAndVerticalHelperCallChange": true,
+    "fillCompositeClippingAndAdmissionSourceUnchanged": true,
+    "originalVectorHelperBodyShared": true,
+    "original4096PixelDrawingAnd1024PixelFlipCheckpoints": true,
+    "wordDrawingUsesOriginalBclKernel": true,
+    "sameRowSelfCopiesUseOriginalMemmove": true,
+    "noApiCacheBufferOrOwnershipChange": true
+  },
+  "correctness": {
+    "fullChannelBitsHiddenRgbAndWordSamplesExact": true,
+    "overlappingSnapshotSemantics": true,
+    "newPublicCases": 4,
+    "wideHorizontalWordAliasesAndClippedPartialVectorTails": true,
+    "packagedByteWordOverlappingCopiesCancellationFullSharedBudgetAndRecovery": true,
+    "encoderPacketsAndDecoderPixelsUnchanged": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "IRC944B",
+      "platform": "windows",
+      "productionSha256": "c81ab4e61eed73b043917de66bb24e05c4f8037ecb39fe460600b18962e2be24",
+      "embeddedTestsSha256": "fafc51bea347cb866ff36093764c201e1e2c9387e85978ad09810e4ebe9c87c8",
+      "full": [
+        3248,
+        2428,
+        948
+      ],
+      "total": 6624,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 76,
+        "internal-scalar": 25,
+        "public-scalar": 76,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 76,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 76
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "IRC944B",
+        "platform": "windows",
+        "productionSha256": "c81ab4e61eed73b043917de66bb24e05c4f8037ecb39fe460600b18962e2be24",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "c00121f330a1531d09101b7e674d773242dadb01e0d3fd75b40a4bce59c8ba90",
+          "src/Lokad.Image/ImageDrawing.cs": "ab34641dba1bd29aa5e114b8217350ed931a4a8e4150c9603ae2e227aad51706",
+          "tests/Lokad.Image.PublicApi.Tests/DrawingTests.cs": "17878fc7828c6a34324b4de3350e368581cc4655f79fe98b277639d32c0bfda7",
+          "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 76,
+          "internal-scalar": 25,
+          "public-scalar": 76,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 76,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 76
+        },
+        "logs": [
+          "tmp/irc944b-windows-build-core.log",
+          "tmp/irc944b-windows-build-internal.log",
+          "tmp/irc944b-windows-internal-normal.log",
+          "tmp/irc944b-windows-public-normal.log",
+          "tmp/irc944b-windows-internal-scalar.log",
+          "tmp/irc944b-windows-public-scalar.log",
+          "tmp/irc944b-windows-internal-avx512-off.log",
+          "tmp/irc944b-windows-public-avx512-off.log",
+          "tmp/irc944b-windows-internal-avx2-off.log",
+          "tmp/irc944b-windows-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedCodecResizeAndOtherEditEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "IRC944B",
+      "platform": "linux",
+      "productionSha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "embeddedTestsSha256": "fb0338d88dc372aa94e35cacb00447333765d4daeb6266785bfd4412a1aa3ce1",
+      "full": [
+        3248,
+        2428,
+        948
+      ],
+      "total": 6624,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 76,
+        "internal-scalar": 25,
+        "public-scalar": 76,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 76,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 76
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "IRC944B",
+        "platform": "linux",
+        "productionSha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "c00121f330a1531d09101b7e674d773242dadb01e0d3fd75b40a4bce59c8ba90",
+          "src/Lokad.Image/ImageDrawing.cs": "ab34641dba1bd29aa5e114b8217350ed931a4a8e4150c9603ae2e227aad51706",
+          "tests/Lokad.Image.PublicApi.Tests/DrawingTests.cs": "17878fc7828c6a34324b4de3350e368581cc4655f79fe98b277639d32c0bfda7",
+          "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 76,
+          "internal-scalar": 25,
+          "public-scalar": 76,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 76,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 76
+        },
+        "logs": [
+          "tmp/irc944b-linux-build-core.log",
+          "tmp/irc944b-linux-build-internal.log",
+          "tmp/irc944b-linux-internal-normal.log",
+          "tmp/irc944b-linux-public-normal.log",
+          "tmp/irc944b-linux-internal-scalar.log",
+          "tmp/irc944b-linux-public-scalar.log",
+          "tmp/irc944b-linux-internal-avx512-off.log",
+          "tmp/irc944b-linux-public-avx512-off.log",
+          "tmp/irc944b-linux-internal-avx2-off.log",
+          "tmp/irc944b-linux-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedCodecResizeAndOtherEditEvidenceReused": true
+    },
+    "fullChecksEachOs": 6624,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "IRC944B",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "03572b9065b73ea03a6800ae891641023c93ec654198b657093033134595bf2c",
+      "symbolsSha256": "cf7fca4510afe91c3d2dde8d118262ea87df947e484c6f36ff7977de23825c08",
+      "bytes": 460074,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualConsumerPassed": true,
+      "overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed": true,
+      "verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 14,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "IRC944B",
+      "sameActualPackageSha256": "03572b9065b73ea03a6800ae891641023c93ec654198b657093033134595bf2c",
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualConsumerPassed": true,
+      "overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed": true,
+      "verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 14,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "coreAndEmbeddedBuildsEachOs": 2,
+    "publicBuildsEachOs": 1,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "harnessNativeOrFixtureBuilds": 0,
+    "packCalls": 1,
+    "focusedModesEachOs": [
+      "normal",
+      "scalar",
+      "avx512-off",
+      "avx2-off"
+    ],
+    "unchangedCodecResizeTextAndOtherIsaEvidenceReused": true
+  },
+  "currentImageOwnerViewStatuses": {
+    "gap": 1,
+    "uncertain": 17,
+    "pass": 173
+  },
+  "currentTwentyEditStatuses": {
+    "gap": 1,
+    "uncertain": 5,
+    "pass": 14
+  },
+  "sourceInvalidation": "CopyRegion gains current byte/word/overlap observations; shared flip helper placement refreshes both complete flips. Byte vertical changes from uncertainty to a small current gap, with historical confidence overlap rather than a demonstrated regression; no favorable retry. Other18 independent-result edits, fill/composite, codecs, resize and text retain source-valid costs. All289 material paths still required.",
+  "workflow": "Reuse original bounded fixtures, native workers, selectors and harnesses. A short overlapping screen, independent confirmation and companions expose word adversity; B restores word runtime copying and reconciles allfive complete costs before one full/package milestone. Two core/embedded builds and one public build perOS across A/B; no new benchmark build, fixture/settings grid, favorable timing retry or accepted-artifact rebuild.",
+  "raw": {
+    "file": "independent-row-copy-qualified.tar.xz",
+    "sha256": "04a8dc53d05ffbf7280f05e501de5ac75839441e6e25526fa10b0d69e2968ba4",
+    "bytes": 3534964,
+    "members": 282,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vector-row-copy-qualified.tar.xz",
+        "sha256": "8e1ea39a078f534e788daded6450a1bc1da64728bd5a8b355e058f252bacd5bf"
+      },
+      {
+        "file": "rectangle-copy-spans-qualified.tar.xz",
+        "sha256": "6d2df323037db0f6508240e425d94353af3e54b14dddb89530726120b60a91a5"
+      },
+      {
+        "file": "current-overlapping-copy-cost.tar.xz",
+        "sha256": "d9581fe3c7adf21ccb2a620d0aa2402754882e6831736187095a1f7c03777aa5"
+      }
+    ]
+  }
+}

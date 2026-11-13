@@ -992,11 +992,44 @@ internal static class CooperativeMemoryConsumer
             var hash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(canvas)));
             if (hash != expected || root.Bytes != canvas.Stride * (long)height || root.IsDisposed)
                 throw new Exception("Packaged copy changed exact pixels or surviving canvas ownership.");
+            // Occupy the released source's capacity: in-place copies need no
+            // additional storage even when their rectangles overlap vertically.
+            if (!root.TryReserve(input.Length, out var held)) throw new Exception("Cannot hold packaged copy capacity.");
+            using (held)
+            {
+                var copyLimits = limits with { MaxWorkingBytes = input.Length };
+                var pixels = OriginalPixels.Bytes(canvas);
+                using var canceled = new CancellationTokenSource(); canceled.Cancel();
+                try
+                {
+                    ImageDrawing.CopyRegion(canvas, 17, 19, 256, 129, canvas, 127, 65, copyLimits, canceled.Token);
+                    throw new Exception("Packaged overlapping copy ignored cancellation.");
+                }
+                catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { }
+                if (!OriginalPixels.Bytes(canvas).AsSpan().SequenceEqual(pixels))
+                    throw new Exception("Packaged canceled copy mutated its canvas.");
+                for (var repeat = 0; repeat < 2; repeat++)
+                foreach (var move in new[] { (SX: 17, SY: 19, X: 127, Y: 65), (SX: 127, SY: 65, X: 17, Y: 19) })
+                {
+                    var after = pixels.ToArray();
+                    for (var row = 0; row < 129; row++)
+                    for (var col = 0; col < 256; col++)
+                    for (var channelByte = 0; channelByte < 4 * sampleBytes; channelByte++)
+                        after[((move.Y + row) * width + move.X + col) * 4 * sampleBytes + channelByte]
+                            = pixels[((move.SY + row) * width + move.SX + col) * 4 * sampleBytes + channelByte];
+                    ImageDrawing.CopyRegion(canvas, move.SX, move.SY, 256, 129, canvas, move.X, move.Y, copyLimits);
+                    if (!OriginalPixels.Bytes(canvas).AsSpan().SequenceEqual(after)
+                        || root.Bytes != 2L * input.Length || root.Refusals != 0 || root.IsDisposed)
+                        throw new Exception("Packaged overlapping copy lost snapshot pixels or required additional shared capacity.");
+                    pixels = after;
+                }
+            }
             canvas.Dispose();
             if (root.Bytes != 0 || root.IsDisposed)
                 throw new Exception("Packaged copy leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged rectangle copy preserves exact byte/word canvases and shared ownership.");
+        Console.WriteLine("Packaged overlapping byte/word copies preserve snapshot pixels, cancellation and a full shared budget.");
     }
 
     private static async Task VerifyDirectRgbResult()

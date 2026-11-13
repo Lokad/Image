@@ -74,8 +74,12 @@ public static partial class ImageDrawing
         var region = Clip(canvas, sourceX, sourceY, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
-        var backwardsY = ReferenceEquals(source, canvas) && region.DestinationY > region.SourceY;
-        var backwardsX = ReferenceEquals(source, canvas) && region.DestinationX > region.SourceX;
+        var sameBuffer = ReferenceEquals(source, canvas);
+        // The measured byte fast path requires disjoint row slices. Word copies
+        // retain the existing runtime kernel; traversal still handles all aliases.
+        var independentRows = canvas.BitDepth == 8 && (!sameBuffer || region.SourceY != region.DestinationY);
+        var backwardsY = sameBuffer && region.DestinationY > region.SourceY;
+        var backwardsX = sameBuffer && region.DestinationX > region.SourceX;
         // Admission and geometry are already validated. Borrow each packed
         // span once; copying bytes preserves both sample depths exactly.
         var sourcePixels = source.Pixels; var canvasPixels = canvas.Pixels;
@@ -90,8 +94,10 @@ public static partial class ImageDrawing
                 var offsetX = backwardsX ? region.Width - first - count : first;
                 var sx = (region.SourceX + offsetX) * pixelBytes; var dx = (region.DestinationX + offsetX) * pixelBytes;
                 var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
-                sourcePixels.Slice(sy * sourceStride + sx, count * pixelBytes)
-                    .CopyTo(canvasPixels.Slice(dy * canvasStride + dx, count * pixelBytes));
+                var input = sourcePixels.Slice(sy * sourceStride + sx, count * pixelBytes);
+                var output = canvasPixels.Slice(dy * canvasStride + dx, count * pixelBytes);
+                if (independentRows) IndependentRowCopy.Copy(input, output);
+                else input.CopyTo(output);
                 first += count;
             }
         }

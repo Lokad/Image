@@ -1,7 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
-
 namespace Lokad.Image.Internal;
 
 /// <summary>Reverse row placement, preserving each complete channel byte.</summary>
@@ -24,7 +20,7 @@ internal static class VerticalFlip
                 {
                     var count = Math.Min(1024, source.Width - start);
                     context.Cancellation.ThrowIfCancellationRequested();
-                    CopyPixels(input.Slice(start * pixelBytes, count * pixelBytes),
+                    IndependentRowCopy.Copy(input.Slice(start * pixelBytes, count * pixelBytes),
                         output.Slice(start * pixelBytes, count * pixelBytes));
                 }
             }
@@ -32,28 +28,5 @@ internal static class VerticalFlip
             return result;
         }
         catch { result.Dispose(); throw; }
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void CopyPixels(ReadOnlySpan<byte> input, Span<byte> output)
-    {
-        // The independently owned output cannot overlap this borrowed row.
-        if (Vector512.IsHardwareAccelerated && input.Length >= 256)
-        {
-            var source = MemoryMarshal.Cast<byte, Vector512<byte>>(input);
-            var destination = MemoryMarshal.Cast<byte, Vector512<byte>>(output);
-            var i = 0;
-            for (; i <= source.Length - 4; i += 4)
-            {
-                var a = source[i]; var b = source[i + 1];
-                var c = source[i + 2]; var d = source[i + 3];
-                destination[i] = a; destination[i + 1] = b;
-                destination[i + 2] = c; destination[i + 3] = d;
-            }
-            for (; i < source.Length; i++) destination[i] = source[i];
-            var copied = source.Length * Vector512<byte>.Count;
-            input[copied..].CopyTo(output[copied..]);
-        }
-        else input.CopyTo(output);
     }
 }

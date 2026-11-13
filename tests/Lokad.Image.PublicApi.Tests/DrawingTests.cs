@@ -58,6 +58,7 @@ public sealed class DrawingTests
     [Theory]
     [InlineData(8, 1, 0)] [InlineData(8, -1, 0)] [InlineData(8, 0, 1)] [InlineData(8, 0, -1)]
     [InlineData(16, 1, 1)] [InlineData(16, -1, -1)] [InlineData(16, 1, -1)] [InlineData(16, -1, 1)]
+    [InlineData(16, 1, 0)] [InlineData(16, -1, 0)]
     public void OverlappingCopyHasSnapshotSemanticsAcrossChunksAndRows(int depth, int dx, int dy)
     {
         using var canvas = OriginalPixels.Buffer(8203, 4, depth); using var snapshot = canvas.Clone();
@@ -66,6 +67,22 @@ public sealed class DrawingTests
         for (var row = 0; row < 4; row++) for (var col = 0; col < 8203; col++) for (var c = 0; c < 4; c++)
             Assert.Equal(col >= x && col < x + 8202 && row >= y && row < y + 3
                 ? Sample(snapshot, col - dx, row - dy, c) : Sample(snapshot, col, row, c), Sample(canvas, col, row, c));
+    }
+
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void ClippedSelfCopyAcrossDistinctRowsKeepsSnapshotAndPartialVectorTails(int depth)
+    {
+        using var canvas = OriginalPixels.Buffer(97, 7, depth);
+        Set(canvas, 2, 1, 3, 0);
+        using var snapshot = canvas.Clone();
+        var limits = new ImageLimits { MaxWorkingBytes = 97L * 7 * 4 * (depth / 8) };
+        ImageDrawing.CopyRegion(canvas, 1, 1, 95, 5, canvas, -1, 0, limits);
+        for (var y = 0; y < 7; y++)
+        for (var x = 0; x < 97; x++)
+        for (var channel = 0; channel < 4; channel++)
+            Assert.Equal(x < 94 && y < 5 ? Sample(snapshot, x + 2, y + 1, channel)
+                : Sample(snapshot, x, y, channel), Sample(canvas, x, y, channel));
     }
 
     [Theory]

@@ -208,29 +208,30 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
-def apply_current_vector_row_copy(editing):
-    current = json.loads((ROOT / 'benchmarks/vector-row-copy-evidence.json').read_text(encoding='utf-8'))
+def apply_current_independent_row_copy(editing):
+    current = json.loads((ROOT / 'benchmarks/independent-row-copy-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
     assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6620
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6624
     assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed']
-    assert q['samePackageWindows']['verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed']
-    assert current['currentImageOwnerViewStatuses'] == {'pass': 173, 'gap': 0, 'uncertain': 18}
-    assert current['primaryEffect']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in current['primaryEffect']['views'].values())
+    assert q['actualPackage']['overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed']
+    assert q['samePackageWindows']['overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed']
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 173, 'gap': 1, 'uncertain': 17}
+    for name in ('DrawingCopy8', 'DrawingCopyOverlap8'):
+        assert current['comparison'][name]['normalizedGainSeparated']
+        assert all(v['rawGainSeparated'] for v in current['comparison'][name]['views'].values())
     for c in current['cases'].values():
         assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 112
+        assert c['allocatedBytes'] == (56 if c['caseId'] in {'DrawingCopy8', 'DrawingCopy16'} else 112)
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     c = current['cases']['WarmVerticalFlip8']
-    assert c['status'] == 'uncertain'
-    return editing + f'\n| Vertical flip RGBA8 (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+    assert c['status'] == 'gap' and c['sourceUnchanged'] and c['independentOwnedOutput']
+    return editing + f'\n| Vertical flip RGBA8 (gap) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
 
 
 def apply_current_pixel_reversal(editing):
@@ -1634,15 +1635,15 @@ def render():
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
             rows[position] = ('codec', row)
-    rectangle = json.loads((ROOT / 'benchmarks/rectangle-copy-spans-evidence.json').read_text(encoding='utf-8'))
-    assert rectangle['requiredMaterialPaths'] == 282 and rectangle['newRequiredCases'] == 0
-    assert rectangle['qualification']['sameActualPackageBothOS'] and rectangle['raw']['allMembersVerified']
-    for case, label in [('DrawingCopy8', 'Exact rectangle copy into borrowed RGBA8 canvas'),
+    rectangle = json.loads((ROOT / 'benchmarks/independent-row-copy-evidence.json').read_text(encoding='utf-8'))
+    assert rectangle['requiredMaterialPaths'] == 289 and rectangle['newMaterialPaths'] == 0
+    assert rectangle['qualification']['sameActualPackageBothOs'] and rectangle['raw']['allMembersVerified']
+    for case, label in [('DrawingCopy8', 'Exact rectangle copy into borrowed RGBA8 canvas (gap)'),
                         ('DrawingCopy16', 'Exact rectangle copy into borrowed RGBA16 canvas (confidence open)')]:
-        c = rectangle['cases'][case]['cost']
-        assert c['actuals'] == c['nativeSamplesEachBracket'] == 12
-        assert rectangle['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
-        rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
+        c = rectangle['cases'][case]
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        assert c['managedExact'] and c['borrowedCanvas'] and c['sourceUnchanged'] and c['untouchedCanvasExact']
+        rows.append(('editing', f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                      f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
     fill = json.loads((ROOT / 'benchmarks/rectangle-fill-packed-evidence.json').read_text(encoding='utf-8'))
     assert fill['requiredMaterialPaths'] == 282 and fill['newRequiredCases'] == 0
@@ -1654,13 +1655,12 @@ def render():
         assert c['upper'] <= 1 and fill['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
         rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
                      f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
-    overlap = json.loads((ROOT / 'benchmarks/current-overlapping-copy-cost-evidence.json').read_text(encoding='utf-8'))
-    c = overlap['cost']
-    assert not overlap['productionChanged'] and c['actuals'] == c['nativeSamplesEachBracket'] == 12
+    c = rectangle['cases']['DrawingCopyOverlap8']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
     assert c['publicMovesPerPair'] == 2 and c['nativeCallsPerPair'] == 6 and c['lower'] > 1
-    assert overlap['rejectedTrial']['restoration']['productionRestoredByteExactly']
-    rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedMicroseconds"]:,.2f} | '
-                 f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
+    assert c['sourceAliasesCanvas'] and c['restorationTimed'] and c['managedExact']
+    rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedUs"]:,.2f} | '
+                 f'{c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
@@ -2735,7 +2735,7 @@ def render():
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     editing = apply_current_pixel_reversal(editing)
-    editing = apply_current_vector_row_copy(editing)
+    editing = apply_current_independent_row_copy(editing)
     raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
     copy_q = raster_copies['qualification']
     assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
@@ -2761,13 +2761,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Safe vector row copy](../benchmarks/VECTOR-ROW-COPY.md) saves **1.39 µs / 14.12%
-raw**, **7.25% reference-normalized**, on complete RGBA8 vertical flip, with
-**112 B/op** and no additional owned storage. Current **8.48 / FFmpeg 8.39 µs,
-upper 1.045** remains uncertain; the affected word flip passes. Current word-clone
-and normal-orientation confirmations are also uncertain, superseding older gaps
-without a speedup claim. Their complete costs and the inconclusive full-copy
-extension remain in the linked report; the extension is removed.
+[Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
+**10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
+and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpeg
+1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
+**112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
+word rectangle copying is uncertain. The word dispatch is revised after an adverse
+candidate, whose results are retained. Shared-helper byte vertical flip now has
+a small gap (**8.75 / 8.30 µs, upper 1.083**); historical confidence overlaps.
+Word flip passes. Current word clone/normal-orientation evidence stays uncertain.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -2786,7 +2788,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 173 pass, 0 gaps, 18 uncertain**. This does not establish full parity:
+image views: 173 pass, 1 gap, 17 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
@@ -2828,7 +2830,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,620 full/live checks**,
+storage, separately from its **138 B/op**. Each OS passes **6,624 full/live checks**,
 focused normal/scalar/AVX512-off/AVX2-off checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.

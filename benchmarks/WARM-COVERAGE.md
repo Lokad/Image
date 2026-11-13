@@ -17,12 +17,14 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 [shared-reversal costs](SHARED-PIXEL-REVERSAL.md) and 24 refreshed
 [JPEG RGBA/fresh costs](JPEG-HORIZONTAL-PREPARATION.md), with seven refreshed
 [synchronous stream costs](PREPARED-MEMORY-INPUT.md), and four current
-[row/copy views](VECTOR-ROW-COPY.md), owns the current **191
-comparisons: 173 pass, 0 gaps, 18 uncertain**. These are existing views, including
+[row/copy views](VECTOR-ROW-COPY.md), with two refreshed shared-row flip costs in
+[independent row copying](INDEPENDENT-ROW-COPY.md), owns the current **191
+comparisons: 173 pass, 1 gap, 17 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
-inspection and in-place drawing paths retain their identified evidence. Four affected
+inspection paths retain their identified evidence; three in-place copy controls
+refresh separately in the new row-copy report. Four affected
 JPEG caller-buffer costs also refresh; coding-only validation reuses unchanged proof.
-Each OS passes **6,620 full/live checks**, focused normal/scalar/AVX512-off/AVX2-off checks and
+Each OS passes **6,624 full/live checks**, focused normal/scalar/AVX512-off/AVX2-off checks and
 the **same actual Release-package consumer / three examples**. Source-valid ISA
 proof is reused. Current scope and raw evidence are in the linked owner, rather
 than repeated experimental or qualification narratives here.
@@ -41,8 +43,10 @@ restored. Its original adverse/inconclusive samples remain, without a broad reru
 or renderer dependency. The later [safe vector primitive](VECTOR-ROW-COPY.md)
 keeps the original cancellation scheduling and qualifies a useful row-only gain.
 Its full-raster extension stays inconclusive and is removed. Passing controls
-stop; uncertainty is not passing evidence, and drawing/probe gaps remain outside
-these 191 views. No whole-library parity claim follows from the zero-gap count.
+stop; uncertainty is not passing evidence. The later shared-row stage retains
+byte-specific rectangle gains after rejecting the word dispatch. Current byte
+vertical flip is a small gap; historical confidence overlaps. Drawing/probe gaps
+remain outside these 191 views; whole-library parity remains open.
 
 ## Current family status
 
@@ -58,7 +62,7 @@ these 191 views. No whole-library parity claim follows from the zero-gap count.
 | WebP reading | Current12views:eight pass, four uncertainties. [Current adjacency](VP8-DECODE-CURRENT-CONFIDENCE.md) keeps ordinary/simple/live-token opaque controls uncertain. [Prepared input](PREPARED-MEMORY-INPUT.md) refreshes passing VP8L stream and narrowly uncertain VP8 stream (upper1.004). Exact pixels/alpha, source, ownership and reference gates pass; no presumed gap or unchanged favorable repeat. Seven other passing views reuse unchanged [released-storage](RELEASED-IMAGE-STORAGE.md) evidence. |
 | Bicubic/bilinear resizing | Current 73 views: 67 pass, six uncertainties. [Bounded horizontal reuse](BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves 3.29% in paired complete byte-wide resize; standalone360.12/zimg348.02µs, upper1.041 remains uncertain,113B/op. Five unaffected specializations compile identically; reuse their valid costs. [Packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) passes bounded mixed-word and tight vertical; default mixed-word remains uncertain. Earlier adverse captures are retained. All eight equivalent one-shot/prepared controls pass and stop. Native float versus managed exact arithmetic stays explicit. |
 | Lanczos3 | All eight declared one-shot/prepared byte/word comparisons pass and stop. [Current prepared word enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md):4117.26/zimg4212.39µs, upper.990,4264760B/op and333396B retained plan. [Reduction product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) retains its6.18% normalized gain and four passing reduction views. Exact Q30/rational arithmetic, float-native bounds and equivalent prepared/one-shot ownership stay explicit; no gain is inferred from the confidence update. |
-| Copy/turn transforms and drawing | [Vector row copy](VECTOR-ROW-COPY.md) saves1.39µs/14.12%raw/7.25%normalized on byte vertical flip,112B/op; parity remains uncertain. Word flip passes. Current word clone/normal orientation are also uncertain, without a gain claim. Current20independent-result edits:14pass,six uncertainties,no demonstrated gap. The full-raster extension is inconclusive and removed; all raw samples remain. [Shared reversal](SHARED-PIXEL-REVERSAL.md) retains its4.64µs byte-half-turn gain, and all eight [axis swaps](SHARED-AXIS-SWAP.md) pass/stop. [Raster-copy](SHARED-RASTER-COPY.md) byte passes retain valid evidence. Other dispatcher branches compile identically. In-place rectangle-copy/overlap gaps remain separate; use current evidence before further optimization, keep tiny probes visible. |
+| Copy/turn transforms and drawing | [Independent row copying](INDEPENDENT-ROW-COPY.md) saves10.73%raw/10.75%normalized on separate byte rectangles and8.17%/9.14% on the two-move overlapping pair,56/112Bop and zero new owned storage. Both retain small gaps; word rectangle is uncertain after reverting its adverse dispatch. Current byte vertical8.752/FFmpeg8.299µs upper1.083 is a gap, with historical confidence overlap; word flip passes. Current20independent-result edits:14pass,one gap,five uncertainties. Word clone/normal remain uncertain. Other18edit paths reuse valid evidence; all eight [axis swaps](SHARED-AXIS-SWAP.md) pass/stop and [shared reversal](SHARED-PIXEL-REVERSAL.md) retains its4.64µs byte-half-turn gain. Original adverse/inconclusive extensions remain in their reports, without favorable retries or permanent family bans. Tiny probes remain visible. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Prepared input](PREPARED-MEMORY-INPUT.md) resolves complete seekable PNG Identify:15.08/reference adapter15.88µs, upper.953,192B/op,2.75µs/15.40%raw gain. Input acquisition peak393216→262144B; no idle-retention or universal decode-peak claim. [Direct-input](DIRECT-STREAM-INPUT.md) async and named prefix/header adapters retain valid evidence. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
 

@@ -5,13 +5,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Safe vector row copy](../benchmarks/VECTOR-ROW-COPY.md) saves **1.39 µs / 14.12%
-raw**, **7.25% reference-normalized**, on complete RGBA8 vertical flip, with
-**112 B/op** and no additional owned storage. Current **8.48 / FFmpeg 8.39 µs,
-upper 1.045** remains uncertain; the affected word flip passes. Current word-clone
-and normal-orientation confirmations are also uncertain, superseding older gaps
-without a speedup claim. Their complete costs and the inconclusive full-copy
-extension remain in the linked report; the extension is removed.
+[Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
+**10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
+and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpeg
+1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
+**112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
+word rectangle copying is uncertain. The word dispatch is revised after an adverse
+candidate, whose results are retained. Shared-helper byte vertical flip now has
+a small gap (**8.75 / 8.30 µs, upper 1.083**); historical confidence overlaps.
+Word flip passes. Current word clone/normal-orientation evidence stays uncertain.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -30,7 +32,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 173 pass, 0 gaps, 18 uncertain**. This does not establish full parity:
+image views: 173 pass, 1 gap, 17 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
@@ -72,7 +74,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,620 full/live checks**,
+storage, separately from its **138 B/op**. Each OS passes **6,624 full/live checks**,
 focused normal/scalar/AVX512-off/AVX2-off checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
@@ -199,11 +201,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA8 † → 259×513 | 29.27 | 37.36 | 0.783 / 0.797 | 112 |
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 36.97 | 44.33 | 0.834 / 0.910 | 112 |
 | Mirrored transpose RGBA8 † → 259×513 | 32.07 | 39.50 | 0.812 / 0.826 | 112 |
-| Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.99 | 1.91 | 1.046 / 1.065 | 56 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.79 | 1.011 / 1.026 | 56 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 4.18 | 3.78 | 1.106 / 1.152 | 112 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.85 | 3.81 | 1.010 / 1.017 | 112 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 87.12 | 45.40 | 1.919 / 2.945 | 59,304 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 92.57 | 46.48 | 1.992 / 2.975 | 59,304 |
 | Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 53.81 | 37.80 | 1.424 / 1.622 | 56 |
@@ -228,7 +230,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
 | Half turn RGBA8 † | 8.18 | 10.02 | 0.816 / 0.838 | 112 |
-| Vertical flip RGBA8 (confidence open) † | 8.48 | 8.39 | 1.010 / 1.045 | 112 |
+| Vertical flip RGBA8 (gap) † | 8.75 | 8.30 | 1.055 / 1.083 | 112 |
 
 **Inspection and pixel-coding validation**
 
