@@ -182,6 +182,21 @@ internal static partial class WideColumnBicubicResize
                         var count0 = counts[x]; var count1 = counts[x + 1];
                         var weights0 = weights.Slice(x * taps, count0); var weights1 = weights.Slice((x + 1) * taps, count1);
                         var offsets0 = offsets.Slice(x * taps, count0); var offsets1 = offsets.Slice((x + 1) * taps, count1);
+                        if (typeof(TWidth) == typeof(RowLoanColumns) && typeof(TSamples) == typeof(ByteSamples)
+                            && x + 3 < length && count0 == 16 && count1 == 16
+                            && counts[x + 2] == 16 && counts[x + 3] == 16
+                            && offsets[x * taps + 16] != 0
+                            && offsets[(x + 2) * taps + 16] == offsets[x * taps + 16] + 8)
+                        {
+                            // Both prepared pairs prove four contiguous windows;
+                            // their +8 displacement bounds the complete28-pixel union.
+                            var firstPixel = offsets[x * taps + 16] - 1;
+                            BicubicMath.FilterOverlappingHorizontalQuartet(decoded.Slice(firstPixel, 28),
+                                weights0, weights1, weights.Slice((x + 2) * taps, 16), weights.Slice((x + 3) * taps, 16),
+                                cache.Slice(slot * columns + x, 4), context.Cancellation);
+                            x += 2;
+                            continue;
+                        }
                         if (typeof(TWidth) == typeof(RowLoanColumns) && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
                         {
                             var firstPixel = offsets[x * taps + 16] - 1;

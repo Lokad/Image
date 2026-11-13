@@ -245,6 +245,34 @@ def apply_lanczos_product_reuse(editing):
     return '\n'.join(rows), current
 
 
+def apply_bounded_wide_quartet(editing):
+    current = json.loads((ROOT / 'benchmarks/bounded-wide-horizontal-quartet-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6592
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    c = current['cases']['TightWide8']
+    assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+    assert c['actualIterations'] == 12 and c['allActualsRetained']
+    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    label = 'Bicubic RGBA8 reduction, input+output+4 KiB'
+    rows, seen = [], 0
+    for line in editing.splitlines():
+        if line.startswith('| ' + label) and line.split('|')[1].strip().endswith('128×64'):
+            seen += 1
+            qualifier = '' if c['status'] == 'pass' else f" ({c['status']})"
+            line = f"| {label}{qualifier} † → 128×64 | {c['managedUs']:,.2f} | {c['nativeUs']:,.2f} | {c['ratio']:.3f} / {c['upper']:.3f} | {c['allocatedBytes']:,} |"
+        rows.append(line)
+    assert seen == 1
+    return '\n'.join(rows)
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -2491,6 +2519,7 @@ def render():
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_mixed_word_cache(editing)
+    editing = apply_bounded_wide_quartet(editing)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2499,6 +2528,12 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
+
+[Bounded horizontal reuse](../benchmarks/BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves
+**3.29%** in a paired complete byte bicubic resize, with **113 B/op** and no new
+owned or retained capacity. Standalone **360.12 / zimg 348.02 µs, upper 1.041**
+remains uncertain. Independent raw saving is 4.87%, but the native clock moves
+−8.23%; the paired gain establishes no native parity. Exact pixels stay unchanged.
 
 The [shared transpose schedule](../benchmarks/SHARED-TRANSPOSE-TILES.md) closes byte
 counterclockwise rotation: **28.81 / FFmpeg 37.88 µs, upper 0.769**, **112 B/op**.
@@ -2522,15 +2557,15 @@ default workspace remains uncertain. The earlier candidate's vertical regression
 is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these twelve
-updated costs, has **166 pass, 9 gaps, 16 uncertain** across 191 existing comparisons.
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these thirteen
+updated costs, has **166 pass, 8 gaps, 17 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
-128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
-is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. The bounded byte-wide bicubic gap remains; the retained horizontal-CMYK JPEG view
-has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
+128×64 control's earlier **1.59 µs raw adverse effect** remains linked history;
+its current cost is uncertain. No adverse or uncertain capture is hidden.
+The retained horizontal-CMYK JPEG view has an equivalent fresh-context pass.
+Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -2545,7 +2580,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,587 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,592 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

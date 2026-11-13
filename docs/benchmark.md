@@ -5,6 +5,12 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
+[Bounded horizontal reuse](../benchmarks/BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves
+**3.29%** in a paired complete byte bicubic resize, with **113 B/op** and no new
+owned or retained capacity. Standalone **360.12 / zimg 348.02 µs, upper 1.041**
+remains uncertain. Independent raw saving is 4.87%, but the native clock moves
+−8.23%; the paired gain establishes no native parity. Exact pixels stay unchanged.
+
 The [shared transpose schedule](../benchmarks/SHARED-TRANSPOSE-TILES.md) closes byte
 counterclockwise rotation: **28.81 / FFmpeg 37.88 µs, upper 0.769**, **112 B/op**.
 Independent saving is **11.84 µs / 29.12% raw**, **28.85% reference-normalized**;
@@ -27,15 +33,15 @@ default workspace remains uncertain. The earlier candidate's vertical regression
 is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these twelve
-updated costs, has **166 pass, 9 gaps, 16 uncertain** across 191 existing comparisons.
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these thirteen
+updated costs, has **166 pass, 8 gaps, 17 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
-128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
-is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. The bounded byte-wide bicubic gap remains; the retained horizontal-CMYK JPEG view
-has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
+128×64 control's earlier **1.59 µs raw adverse effect** remains linked history;
+its current cost is uncertain. No adverse or uncertain capture is hidden.
+The retained horizontal-CMYK JPEG view has an equivalent fresh-context pass.
+Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -50,7 +56,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,587 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,592 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -167,7 +173,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 820.00 | 846.10 | 0.969 / 0.978 | 113 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 357.38 | 347.95 | 1.027 / 1.031 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB (uncertain) † → 128×64 | 360.12 | 348.02 | 1.035 / 1.041 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 128×64 | 416.84 | 415.03 | 1.004 / 1.020 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |

@@ -131,6 +131,67 @@ internal static class BicubicMath
         return sum;
     }
 
+    // Four sixteen-tap outputs start four pixels apart. Keep two ordered
+    // pair sums while recycling fourteen two-pixel loads across all outputs.
+    // The cache is operation-private. Check cancellation before bounded work;
+    // no caller observes or resumes a failed partial cache.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static void FilterOverlappingHorizontalQuartet(ReadOnlySpan<Vector256<double>> decoded,
+        ReadOnlySpan<double> weights0, ReadOnlySpan<double> weights1,
+        ReadOnlySpan<double> weights2, ReadOnlySpan<double> weights3,
+        Span<Vector256<double>> cached, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        decoded = decoded[..28];
+        weights0 = weights0[..16]; weights1 = weights1[..16];
+        weights2 = weights2[..16]; weights3 = weights3[..16];
+        cached = cached[..4];
+        var p0 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded[..2]));
+        var p1 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(2, 2)));
+        var p2 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(4, 2)));
+        var p3 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(6, 2)));
+        var p4 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(8, 2)));
+        var p5 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(10, 2)));
+        var p6 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(12, 2)));
+        var p7 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(14, 2)));
+        var sum0 = Vector512<double>.Zero; var sum1 = Vector512<double>.Zero;
+        for (var tap = 0; tap < 16; tap += 4)
+        {
+            var a = Avx512F.Shuffle4x128(p0, p2, 0x44);
+            var b = Avx512F.Shuffle4x128(p4, p6, 0x44);
+            var wa = Avx512F.InsertVector256(Vector512.Create(weights0[tap]), Vector256.Create(weights1[tap]), 1);
+            var wb = Avx512F.InsertVector256(Vector512.Create(weights2[tap]), Vector256.Create(weights3[tap]), 1);
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(a, wa));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(b, wb));
+            a = Avx512F.Shuffle4x128(p0, p2, 0xee);
+            b = Avx512F.Shuffle4x128(p4, p6, 0xee);
+            wa = Avx512F.InsertVector256(Vector512.Create(weights0[tap + 1]), Vector256.Create(weights1[tap + 1]), 1);
+            wb = Avx512F.InsertVector256(Vector512.Create(weights2[tap + 1]), Vector256.Create(weights3[tap + 1]), 1);
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(a, wa));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(b, wb));
+            a = Avx512F.Shuffle4x128(p1, p3, 0x44);
+            b = Avx512F.Shuffle4x128(p5, p7, 0x44);
+            wa = Avx512F.InsertVector256(Vector512.Create(weights0[tap + 2]), Vector256.Create(weights1[tap + 2]), 1);
+            wb = Avx512F.InsertVector256(Vector512.Create(weights2[tap + 2]), Vector256.Create(weights3[tap + 2]), 1);
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(a, wa));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(b, wb));
+            a = Avx512F.Shuffle4x128(p1, p3, 0xee);
+            b = Avx512F.Shuffle4x128(p5, p7, 0xee);
+            wa = Avx512F.InsertVector256(Vector512.Create(weights0[tap + 3]), Vector256.Create(weights1[tap + 3]), 1);
+            wb = Avx512F.InsertVector256(Vector512.Create(weights2[tap + 3]), Vector256.Create(weights3[tap + 3]), 1);
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(a, wa));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(b, wb));
+            if (tap + 4 < 16)
+            {
+                p0 = p2; p1 = p3; p2 = p4; p3 = p5; p4 = p6; p5 = p7;
+                p6 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 16, 2)));
+                p7 = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(tap + 18, 2)));
+            }
+        }
+        MemoryMarshal.Write(MemoryMarshal.AsBytes(cached[..2]), in sum0);
+        MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(2, 2)), in sum1);
+    }
+
     // Four taps in a common window or windows shifted by one pixel. Every
     // half keeps its original t0,t1,t2,t3 multiply/add sequence.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
