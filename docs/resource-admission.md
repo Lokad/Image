@@ -87,6 +87,9 @@ use8448-byte workspace without a raster. Identify/Decode stream
 buffers retain actual capacity through parsing, avoiding a final encoded copy.
 Complete-input reads target admitted storage directly; growth charges old and new
 capacity together. An EOF probe on a full buffer avoids allocating only to find EOF.
+Synchronous ordinary `MemoryStream` inputs up to 4 MiB can prepare one bounded
+owned capacity from their remaining length; real reads and EOF checks still apply.
+Derived/custom streams and asynchronous reads retain incremental acquisition.
 Async encoding retains staged chunks/prepared partitions through actual delivery.
 Returned results have independent lifetimes. See [SPEC](spec.md) for codec,
 stream validation and pixel details and [migration](migration.md) for0.2 API removals.

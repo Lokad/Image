@@ -5,6 +5,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
+[Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
+15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
+**15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
+capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
+up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
+no idle-pool or complete-decode peak saving is inferred. Affected PNG16 decode and
+VP8 stream costs are now uncertain; their original samples remain, with no
+demonstrated regression or favorable standalone repeat.
+
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
 Current cost is **8.18 / FFmpeg 10.02 µs, upper .838**, **112 B/op**. Shared exact
@@ -13,7 +22,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 175 pass, 3 gaps, 13 uncertain**. The tables retain source-valid
+image views: 173 pass, 3 gaps, 15 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -33,7 +42,8 @@ pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-All 28 affected RGBA/fresh/caller-buffer read views pass and stop; the current
+The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
+the affected stream view refreshes and passes in the prepared-input round. The
 horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
 confidence is reconciled before acceptance; historical clock shifts are not gains.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
@@ -52,7 +62,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,605 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,614 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -79,7 +89,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 5,815.99 | 6,005.64 | 0.968 / 0.974 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (confidence open) † | 6,147.32 | 6,261.60 | 0.982 / 1.004 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,712.07 | 1,650.90 | 1.037 / 1.057 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -121,7 +131,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG baseline420, resident decode † | 665.65 | 1,009.30 | 0.660 / 0.670 | 258,454 | — |
 | JPEG DC-only, caller CMYK decode † | 322.49 | 331.83 | 0.972 / 0.994 | 1,085,981 | — |
 | VP8L RGBA8, resident decode † | 2,709.07 | 3,019.90 | 0.897 / 0.902 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 2,730.45 | 3,029.07 | 0.901 / 0.905 | 152,824 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 2,805.41 | 3,016.87 | 0.930 / 0.935 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode † | 408.48 | 545.38 | 0.749 / 0.759 | 288,464 | — |
 | JPEG CMYK sparse-2D, resident decode † | 414.93 | 433.23 | 0.958 / 0.970 | 20,944 | — |
 | JPEG YCCK420, resident decode † | 417.49 | 708.60 | 0.589 / 0.593 | 895,563 | — |
@@ -228,7 +238,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
-| Identify PNG8, fresh seekable Stream, adapter reference | 17.492 | 15.921 | 1.099 / 1.103 | 192 | Confirmed gap |
+| Identify PNG8, fresh seekable Stream, adapter reference | 15.083 | 15.882 | 0.950 / 0.953 | 192 | Confirmed pass |
 | Identify PNG8, async nonseekable, adapter reference | 18.367 | 19.282 | 0.953 / 0.956 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
 

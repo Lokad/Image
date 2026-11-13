@@ -24,7 +24,7 @@ internal sealed partial class IdentificationInput : IDisposable
         var length = 0;
         try
         {
-            buffer = Grow(buffer, 0, context);
+            buffer = Prepare(input, context);
             Span<byte> probe = stackalloc byte[1];
             while (true)
             {
@@ -59,6 +59,31 @@ internal sealed partial class IdentificationInput : IDisposable
             Return(buffer, !context.HasMemoryBudget);
             context.Release(buffer.Length);
         }
+    }
+
+    private static byte[] Prepare(Stream input, OperationContext context)
+    {
+        // Only the ordinary in-memory stream has trusted, inexpensive metadata.
+        // Derived/custom streams keep the original metadata-free acquisition.
+        if (input.GetType() == typeof(MemoryStream))
+        {
+            var remaining = input.Length - input.Position;
+            // Reuse the existing storage ceiling to bound eager preparation.
+            // Large inputs retain incremental admission; Length never proves EOF.
+            if (remaining is > 256 and <= MaxPooledLength)
+            {
+                var capacity = (int)Math.Min(Math.Min(context.Limits.MaxInputBytes, Array.MaxLength),
+                    BitOperations.RoundUpToPowerOf2((uint)remaining));
+                context.Reserve(capacity);
+                try
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    return Rent(capacity, !context.HasMemoryBudget);
+                }
+                catch { context.Release(capacity); throw; }
+            }
+        }
+        return Grow([], 0, context);
     }
 
     private static byte[] Grow(byte[] buffer, int length, OperationContext context)

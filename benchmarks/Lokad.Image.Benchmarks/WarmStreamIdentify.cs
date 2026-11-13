@@ -112,11 +112,11 @@ public class WarmStreamIdentify
         var badCrc = encoded.ToArray(); badCrc[41] ^= 1;
         Reject(badCrc); Reject(encoded.AsSpan(0, encoded.Length - 1));
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
-        // Direct acquisition peaks at old131072B plus the input-clamped final
-        // capacity; no scratch or final-input copy is allocated.
+        // This ceiling admits incremental replacement as well as prepared input.
+        // Every delivered input byte must remain admitted, regardless of growth.
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 131072 + encoded.Length};
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact Identify admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = exact.MaxWorkingBytes - 1 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Identify accepted an insufficient limit."); }
             catch (ImageLimitException) { }

@@ -1,0 +1,558 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DIP941",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "productionChanged": true,
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "allAffectedPerformanceReconciled": true,
+  "cases": {
+    "PngSeekable": {
+      "caseId": "PngSeekable",
+      "managedUs": 15.083040958438426,
+      "nativeUs": 15.88168516031901,
+      "ratio": 0.9497128803512598,
+      "lower": 0.9471684891870833,
+      "upper": 0.9527821416552549,
+      "allocatedBytes": 192,
+      "status": "pass",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-PngSeekable-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-PngSeekable-confirm-observation.json",
+      "boundary": "One existing218775-byte original PNG (513x259) through a fresh seekable non-exposed MemoryStream to a fresh independently owned ImageInfo. Stream wrapper/input buffering/copies/EOF and wrapper disposal timed; caller remains open during Identify. Default limits; complete original public ReadInput+PNG structural/metadata/CRC scan, no pixel inflation. FFmpeg fresh custom AVIO context/scratch, length query, exact owned input acquisition/full reads/EOF, original public PNG parser+CRC/full metadata adapter, descriptor materialization/independent ownership and all input/AVIO/descriptor release timed. Original source/parser/codec context reused, input/output owners never cached. Exact nine fields,21 same-packet controls and direct fresh non-exposed Stream/EOF/caller lifetime/owner/changedwidth/invalid Deflate/exact input/working limits/cancellation gates. One CPU, normal SIMD, nonconcurrent workstation GC; startup, IPC, I/O, generation/hashing/preparation/validation excluded. Same one packet as resident C01; no Stream format/depth grid.",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputSha256": "e96cfcba81194472b5f76f6a4b36998ecda4c0348f4c0d0ccd346ccc8a51eb65",
+      "descriptorFields": 9,
+      "typedSourceMetadataExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    },
+    "Png8": {
+      "caseId": "Png8",
+      "managedUs": 1188.3477329545453,
+      "nativeUs": 1394.8362395833333,
+      "ratio": 0.8519621868367355,
+      "lower": 0.8451598315414737,
+      "upper": 0.8581874472222546,
+      "allocatedBytes": 4568,
+      "status": "pass",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-Png8-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-Png8-confirm-observation.json",
+      "boundary": "Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "encodedInputBytes": 218775
+    },
+    "PngCropFit8": {
+      "caseId": "PngCropFit8",
+      "managedUs": 1257.2201552083332,
+      "nativeUs": 1478.1826393229167,
+      "ratio": 0.8505174677089999,
+      "lower": 0.8426801860968491,
+      "upper": 0.8570802540863296,
+      "allocatedBytes": 169574,
+      "status": "pass",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-PngCropFit8-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-PngCropFit8-confirm-observation.json",
+      "boundary": "Composed Decode(Stream), AutoOrient(Normal), CropCentered(256,129), ResizeToFit(128,64,false,Nearest) gives 127x64. All managed intermediate owners are materialized and released. Native equivalent single-thread crop/point graph may retain intermediate views; final output is independently owned. Complete graph and pixel conversions are timed. Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "37e74deb6c0cbf5bb5fee349e1102b0a63371785201cdd22d2309b8f2fbd4dd2",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "encodedInputBytes": 218775
+    },
+    "Png16": {
+      "caseId": "Png16",
+      "managedUs": 3180.0599760416667,
+      "nativeUs": 3084.9671796875,
+      "ratio": 1.0308245731041454,
+      "lower": 0.9410752668434605,
+      "upper": 1.1207726638876305,
+      "allocatedBytes": 8664,
+      "status": "uncertain",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-Png16-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-Png16-confirm-observation.json",
+      "boundary": "Native PNG16 includes fresh owned RGBA64LE acquisition and full BE-to-LE conversion. Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "encodedInputBytes": 960565
+    },
+    "PngCropFit16": {
+      "caseId": "PngCropFit16",
+      "managedUs": 2926.976453409091,
+      "nativeUs": 2945.1129895833333,
+      "ratio": 0.9938418199103429,
+      "lower": 0.9790739857826594,
+      "upper": 1.0018162948711025,
+      "allocatedBytes": 338268,
+      "status": "uncertain",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-PngCropFit16-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-PngCropFit16-confirm-observation.json",
+      "boundary": "Composed Decode(Stream), AutoOrient(Normal), CropCentered(256,129), ResizeToFit(128,64,false,Nearest) gives 127x64. All managed intermediate owners are materialized and released. Native equivalent single-thread crop/point graph may retain intermediate views; final output is independently owned. Complete graph and pixel conversions are timed. Native PNG16 stays RGBA64BE through crop; the complete public graph converts selected full-word planes to LE and packs independently owned RGBA64LE output. No artificial full-frame endian copy is required. Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "encodedInputBytes": 960565
+    },
+    "JpegStream": {
+      "caseId": "JpegStream",
+      "managedUs": 801.4855953776041,
+      "nativeUs": 991.5747096354166,
+      "ratio": 0.8082957215319613,
+      "lower": 0.8035264739699486,
+      "upper": 0.8119199839728622,
+      "allocatedBytes": 262927,
+      "status": "pass",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-JpegStream-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-JpegStream-confirm-observation.json",
+      "boundary": "Fresh non-exposed seekable JPEG Stream with complete input acquisition, all buffering/copies and EOF checks to independent owned RGBA8. Native fresh AVIO and owned packet acquisition/release execute every operation. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha.",
+      "inputSha256": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+      "nativeOutputSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    },
+    "WebpStream": {
+      "caseId": "WebpStream",
+      "managedUs": 2805.4115599999996,
+      "nativeUs": 3016.8719348958334,
+      "ratio": 0.9299074075866812,
+      "lower": 0.9242622565071894,
+      "upper": 0.9351797544481374,
+      "allocatedBytes": 152824,
+      "status": "pass",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-WebpStream-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-WebpStream-confirm-observation.json",
+      "boundary": "Fresh read-only seekable MemoryStream with non-exposed buffer; complete public Decode(Stream) input reads, buffering, copies, stream creation/disposal and output release timed. Native fresh AVIO context/8192-byte scratch, length query, complete acquisition into a fresh padded owned packet, EOF check and input/scratch release timed; no prepared input view. Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. This one frozen exact native encoder input exercises adaptive coding; no profile/strategy sweep.",
+      "inputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    },
+    "Vp8Stream": {
+      "caseId": "Vp8Stream",
+      "managedUs": 6147.315864583333,
+      "nativeUs": 6261.603979166667,
+      "ratio": 0.9817477893901325,
+      "lower": 0.9309601138712728,
+      "upper": 1.0040407759194667,
+      "allocatedBytes": 240496,
+      "status": "uncertain",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/dip941-candidate-Vp8Stream-confirm-receipt.json",
+      "observation": "tmp/dip941-candidate-Vp8Stream-confirm-observation.json",
+      "boundary": "Fresh non-exposed seekable VP8/ALPH Stream to independent owned RGBA8. Complete default managed input buffering/copies and EOF reading, full public Decode/disposal. Native fresh AVIO/owned packet acquisition, complete reading/EOF, software webp state reset/decode, centered chroma expansion, limited BT601 through RGBA16/no-dither reduction, exact alpha merge and all input/scratch/output acquisition/release timed. Decoder/conversion/frame/packet wrappers reused; every call reacquires input and decodes/converts all pixels. No demux, exposed input-buffer shortcut, output cache or redundant packing. One CPU/codec/conversion thread, normal SIMD. Startup/I/O/IPC/generation/hashing/validation excluded. Existing frozen input and exact per-decoder pixel anchors reused; no encoding or quality search.",
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    }
+  },
+  "statusCounts": {
+    "pass": 5,
+    "gap": 0,
+    "uncertain": 3
+  },
+  "primaryEffect": {
+    "views": {
+      "statistics": {
+        "baselineUs": 17.829087247833957,
+        "candidateUs": 15.083040958438426,
+        "savedUs": 2.7460462893955335,
+        "savedFraction": 0.15402057610824404,
+        "rawGainSeparated": true
+      },
+      "unfilteredActualStatistics": {
+        "baselineUs": 17.838353196123755,
+        "candidateUs": 15.091238056644551,
+        "savedUs": 2.747115139479205,
+        "savedFraction": 0.15400049036343488,
+        "rawGainSeparated": true
+      }
+    },
+    "normalizedGain": 0.1501464606623908,
+    "normalizedGainSeparated": true,
+    "nativeClockChange": -0.004558568349168346,
+    "baselineObservation": "tmp/dip941-baseline-PngSeekable-confirm-observation.json"
+  },
+  "companionReconciliation": {
+    "originalPng16": {
+      "managedUs": 3180.0599760416667,
+      "lower": 0.9410752668434605,
+      "upper": 1.1207726638876305,
+      "status": "uncertain"
+    },
+    "contemporaryBaselinePng16": {
+      "managedUs": 2906.533591666667,
+      "lower": 0.829363851570087,
+      "upper": 0.9826412432883088
+    },
+    "controlledPair": {
+      "baselineUs": 2834.264546875,
+      "candidateUs": 2828.932390625,
+      "ratio": 0.9998992489485468,
+      "lower": 0.944390394335066,
+      "upper": 1.0568765565283635,
+      "scopedIncrementOnly": true,
+      "newNativeCostOrParityProof": false,
+      "all12PairsRetained": true
+    },
+    "resolution": "Original Png16 standalone is bimodal and uncertain. One contemporary immutable-baseline capture has overlapping normalized confidence; one alternating controlled pair is also inconclusive. No demonstrated production regression or companion speedup. Preserve adverse original cost and downgrade prior passing Png16 evidence to uncertainty; do not substitute paired costs or repeat candidate standalone for a favorable number. VP8 stream also now uncertain; PNG word composition remains uncertain."
+  },
+  "scope": {
+    "affected": "Synchronous ordinary MemoryStream complete acquisition for Identify, Decode and sync pixel validation. Eight existing complete controls refreshed, no grid expansion.",
+    "unchanged": "All async acquisition, resident codecs, bounded header inspection, packet encoders, editing/resizing, fonts/text and ISA kernels. Grow/Rent/Return/read/EOF loops and async source remain unchanged.",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+      "tests/Lokad.Image.Tests/PreparedMemoryInputTests.cs": "e35333ab312936c8646cea0907ae919aa9728cbf902a0f9e8f7fcbd9a2e32ab3",
+      "tests/Lokad.Image.PublicApi.Tests/PreparedMemoryStreamTests.cs": "4f82abee6c70b424a5649548b295208ee747fbf2dc7bc9c4dd00fab867ffbd96"
+    },
+    "unchangedSources": {
+      "src/Lokad.Image/Internal/IdentificationInput.Async.cs": "2523fea47aa7570dc91d6eb48d25d636b6097effd03605312136d6a0964a22a9",
+      "src/Lokad.Image/ImageCodec.cs": "d3b62537c5234430da06f41f12ad33f26c84d51c1dcf57577339b12fe56b53a8",
+      "src/Lokad.Image/ImageCodec.Async.cs": "af429aacd087ec8c3d0b3f3342d1f0fb6bc115cdef9945708b426d1c4c809953",
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+      "src/Lokad.Image/Internal/PngIdentifier.cs": "144b885365b3b02f81ddea129aad18f74532de1be7f25767924120a2668fda27"
+    },
+    "harnessSources": {
+      "benchmarks/Lokad.Image.Benchmarks/WarmStreamIdentify.cs": "a560040e86b312d3fbccd7dbf68a3f2d07d815aa3334686f9d44c975b314f842"
+    },
+    "benchmarkHarnessChange": "Untimed working-limit refusal gate uses encoded length minus one rather than the superseded growth peak. Timed body and all original metadata/CRC/reference/ownership controls unchanged."
+  },
+  "storage": {
+    "controlInputBytes": 218775,
+    "previousCapacityAcquisitions": 11,
+    "currentCapacityAcquisitions": 1,
+    "previousGrowthCopyBytes": 261888,
+    "currentGrowthCopyBytes": 0,
+    "finalOwnedInputCapacityBytes": 262144,
+    "previousAcquisitionPeakBytes": 393216,
+    "currentAcquisitionPeakBytes": 262144,
+    "allocatedBytesPerIdentify": 192,
+    "defaultPoolLargestBucketBytes": 4194304,
+    "defaultPoolMaximumIdleCapacityBytes": 8388608,
+    "poolConfigurationChanged": false,
+    "sharedRootBypassesPool": true,
+    "actualDefaultIdleRetentionSavingMeasured": false,
+    "physicalNativeJitPeaksMeasured": false,
+    "retainedResults": "Metadata contains scalar facts; pixel results keep independent owned lifetimes. No universal complete-decode peak claim."
+  },
+  "currentImageOwnerViewStatuses": {
+    "gap": 3,
+    "uncertain": 15,
+    "pass": 173
+  },
+  "decision": {
+    "accept": true,
+    "scope": "Retain independently confirmed complete Identify gain and lower logical input acquisition peak. No universal decode saving. Three affected comparisons remain uncertain without demonstrated regression; preserve original native boundaries and all samples. Qualify accepted milestone on both OS and the same actual immutable Release package, without rebuilding production. Other valid path evidence is reused. Publication postponed."
+  },
+  "baselineCommit": "86e1981194bc7f372395e194630ca77c15b83b0a",
+  "sources": {
+    "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+    "tests/Lokad.Image.Tests/PreparedMemoryInputTests.cs": "e35333ab312936c8646cea0907ae919aa9728cbf902a0f9e8f7fcbd9a2e32ab3",
+    "tests/Lokad.Image.PublicApi.Tests/PreparedMemoryStreamTests.cs": "4f82abee6c70b424a5649548b295208ee747fbf2dc7bc9c4dd00fab867ffbd96"
+  },
+  "harnessSources": {
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamIdentify.cs": "a560040e86b312d3fbccd7dbf68a3f2d07d815aa3334686f9d44c975b314f842"
+  },
+  "consumer": {
+    "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+    "sha256": "0d1020d6476fb63eea578648ca68398695526c627d2d0e64cbbd710305367fcc"
+  },
+  "hypothesis": "Ordinary MemoryStream exposes reliable cheap relative length; current synchronous acquisition always takes11capacities and261888growth-copy bytes for the frozen218775byte packet. Prepare one owned final bucket for standard in-memory delivery, retaining real reads/EOF and all input/resource gates. This removes repeated pool/reservation/growth copy work without borrowing caller backing storage or caching content.",
+  "intendedEndState": "One initial preparation helper used only by synchronous Read. Exact MemoryStream type, remaining257bytes..existing4MiBpoolceiling: one bounded power-of-two capacity, clamped by input/array limits, reserved before allocation. Other types, derived streams, small/huge memory inputs use original Grow. Shared Grow, Rent, Return, read/EOF/copy loops and entire async source remain verbatim. Refusal propagates terminally, cancellation after admission releases charge, and actual EOF is always read. No new pool,field,owner,API,budget or quota.",
+  "producers": {
+    "windowsSha256": "d3a2ca523cfff87a57dbc14e9222a49942ce53a4f590d9bd07d56a8e01defade",
+    "linuxSha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+    "timedArtifactSha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+    "actualPackageSha256": "9ac7f2c821be09363ac328d9b22e51860b3395d3c3b45a12f9e6f831f012c301"
+  },
+  "correctness": {
+    "actualEofAndLimitProbeRequired": true,
+    "callerInputAndBudgetBorrowed": true,
+    "ownedCopyIndependentOfCallerBuffer": true,
+    "exactTypeGuardPreservesCustomAndDerivedStreamSemantics": true,
+    "largeInputsRetainIncrementalAdmission": true,
+    "refusalTerminalBeforeReadOrAllocation": true,
+    "cancellationAfterAdmissionCleanup": true,
+    "nextOperationSucceedsAfterRelease": true,
+    "newInternalCases": 5,
+    "newPublicCases": 4,
+    "all21ManagedControlsRecheckedBothSubjects": true,
+    "originalNativeControlsReusedWithExactSourceAndWorkerIdentities": true,
+    "asyncSourceAndGrowRentReturnBodiesUnchanged": true,
+    "encoderPacketsAndDecodedPixelsUnchanged": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "DIP941",
+      "platform": "windows",
+      "productionSha256": "d3a2ca523cfff87a57dbc14e9222a49942ce53a4f590d9bd07d56a8e01defade",
+      "embeddedTestsSha256": "1523809da4929e98667dea0c891e14fa6d3b4e8d310bb4aee8b3de18a685c0f8",
+      "full": [
+        3248,
+        2418,
+        948
+      ],
+      "total": 6614,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 28,
+        "public-normal": 153,
+        "internal-scalar": 28,
+        "public-scalar": 153
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "DIP941",
+        "platform": "windows",
+        "productionSha256": "d3a2ca523cfff87a57dbc14e9222a49942ce53a4f590d9bd07d56a8e01defade",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "tests/Lokad.Image.Tests/PreparedMemoryInputTests.cs": "e35333ab312936c8646cea0907ae919aa9728cbf902a0f9e8f7fcbd9a2e32ab3",
+          "tests/Lokad.Image.PublicApi.Tests/PreparedMemoryStreamTests.cs": "4f82abee6c70b424a5649548b295208ee747fbf2dc7bc9c4dd00fab867ffbd96"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/IdentificationInput.Async.cs": "2523fea47aa7570dc91d6eb48d25d636b6097effd03605312136d6a0964a22a9",
+          "src/Lokad.Image/ImageCodec.cs": "d3b62537c5234430da06f41f12ad33f26c84d51c1dcf57577339b12fe56b53a8",
+          "src/Lokad.Image/ImageCodec.Async.cs": "af429aacd087ec8c3d0b3f3342d1f0fb6bc115cdef9945708b426d1c4c809953",
+          "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+          "src/Lokad.Image/Internal/PngIdentifier.cs": "144b885365b3b02f81ddea129aad18f74532de1be7f25767924120a2668fda27"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 28,
+          "public-normal": 153,
+          "internal-scalar": 28,
+          "public-scalar": 153
+        },
+        "logs": [
+          "tmp/dip941-windows-build-core.log",
+          "tmp/dip941-windows-build-internal.log",
+          "tmp/dip941-windows-build-public.log",
+          "tmp/dip941-windows-internal-normal.log",
+          "tmp/dip941-windows-public-normal.log",
+          "tmp/dip941-windows-internal-scalar.log",
+          "tmp/dip941-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedNonJpegIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "DIP941",
+      "platform": "linux",
+      "productionSha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "embeddedTestsSha256": "41e2c3d98c1255b46fc8e241671d36a55c8723542ac3e140c3b2ac9ce0a6c713",
+      "full": [
+        3248,
+        2418,
+        948
+      ],
+      "total": 6614,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 28,
+        "public-normal": 153,
+        "internal-scalar": 28,
+        "public-scalar": 153
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "DIP941",
+        "platform": "linux",
+        "productionSha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "tests/Lokad.Image.Tests/PreparedMemoryInputTests.cs": "e35333ab312936c8646cea0907ae919aa9728cbf902a0f9e8f7fcbd9a2e32ab3",
+          "tests/Lokad.Image.PublicApi.Tests/PreparedMemoryStreamTests.cs": "4f82abee6c70b424a5649548b295208ee747fbf2dc7bc9c4dd00fab867ffbd96"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/IdentificationInput.Async.cs": "2523fea47aa7570dc91d6eb48d25d636b6097effd03605312136d6a0964a22a9",
+          "src/Lokad.Image/ImageCodec.cs": "d3b62537c5234430da06f41f12ad33f26c84d51c1dcf57577339b12fe56b53a8",
+          "src/Lokad.Image/ImageCodec.Async.cs": "af429aacd087ec8c3d0b3f3342d1f0fb6bc115cdef9945708b426d1c4c809953",
+          "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+          "src/Lokad.Image/Internal/PngIdentifier.cs": "144b885365b3b02f81ddea129aad18f74532de1be7f25767924120a2668fda27"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 28,
+          "public-normal": 153,
+          "internal-scalar": 28,
+          "public-scalar": 153
+        },
+        "logs": [
+          "tmp/dip941-linux-build-core.log",
+          "tmp/dip941-linux-build-internal.log",
+          "tmp/dip941-linux-build-public.log",
+          "tmp/dip941-linux-internal-normal.log",
+          "tmp/dip941-linux-public-normal.log",
+          "tmp/dip941-linux-internal-scalar.log",
+          "tmp/dip941-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedNonJpegIsaEvidenceReused": true
+    },
+    "fullChecksEachOs": 6614,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "DIP941",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "9ac7f2c821be09363ac328d9b22e51860b3395d3c3b45a12f9e6f831f012c301",
+      "symbolsSha256": "3a290609300350aa7333fef5f0c0ae96c671c73ee45058ff91d1128b2a11c7bd",
+      "bytes": 459687,
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualConsumerPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 12,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionBuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "DIP941",
+      "sameActualPackageSha256": "9ac7f2c821be09363ac328d9b22e51860b3395d3c3b45a12f9e6f831f012c301",
+      "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+      "actualConsumerPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 12,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "coreEmbeddedAndPublicBuildsEachOs": 1,
+    "productionBuildsAfterTiming": 0,
+    "changedAdmissionGateHarnessBuilds": 1,
+    "diagnosticPairDriverBuilds": 1,
+    "nativeOrFixtureBuilds": 0,
+    "packCalls": 1,
+    "unchangedKernelIsaAndAsyncEvidenceReused": true
+  },
+  "sourceInvalidation": "Only synchronous complete input acquisition gains the exact ordinary MemoryStream length preparation. Eight existing complete costs refresh; async Identify/Decode/Validate, resident codecs, bounded inspection, encoders, editing/resize/font/text and their valid source/ISA evidence are unchanged. Prior passing PNG16 stream and VP8 stream costs are superseded by current uncertainty; original adverse captures are not replaced by paired timings.",
+  "workflow": "One short screen then one independent primary confirmation per immutable subject; seven affected synchronous companion costs once. Resolve noisy Png16 with one contemporary baseline and one controlled pair, retaining all adversity and no favorable candidate standalone repeat. Full both-OS/package checks follow reconciliation. One harness change corrects an untimed obsolete minimum-growth admission assertion; timed/reference boundaries and21controls frozen. Initial missing-probe preflight fails before measurement and is preserved; recover existing probe without a rebuild. No unrelated audit, image grid or text campaign.",
+  "raw": {
+    "file": "prepared-memory-input-qualified.tar.xz",
+    "sha256": "5dd5497bcac99999a01af73db6e1508f277edcd068d789b34df455fd0a6ceaf4",
+    "bytes": 8844792,
+    "members": 263,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "shared-pixel-reversal-qualified.tar.xz",
+        "sha256": "b6b7db044ea33967352c197e4c957967b361ee852505311fa0ef298e2643ddb6"
+      },
+      {
+        "file": "direct-stream-input-qualified.tar.xz",
+        "sha256": "2ff8118b228d7b78c6a55893b22bfe96a4f9b88ef77194e87aac289810b3bae0"
+      },
+      {
+        "file": "released-image-storage-qualified.tar.xz",
+        "sha256": "1ef7261190c65bd9a8d0cffa38b7904c590304e846e91419e3f3f517f5b776d6"
+      }
+    ]
+  }
+}

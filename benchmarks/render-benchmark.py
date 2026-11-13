@@ -173,6 +173,41 @@ def apply_current_jpeg_preparation(codecs, read_rows):
     return codecs, read_rows
 
 
+def apply_current_prepared_input(codecs, read_rows):
+    """Refresh complete synchronous stream costs; keep async/resident evidence."""
+    current = json.loads((ROOT / 'benchmarks/prepared-memory-input-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6614
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed']
+    assert q['samePackageWindows']['preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed']
+    assert current['statusCounts'] == {'pass': 5, 'gap': 0, 'uncertain': 3}
+    assert current['primaryEffect']['normalizedGainSeparated']
+    for c in current['cases'].values():
+        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    for name, prefix in [('WebpStream', '| VP8L RGBA8, fresh seekable Stream decode'),
+                         ('Vp8Stream', '| WebP VP8 + alpha, fresh seekable Stream')]:
+        c = current['cases'][name]
+        found = [line for line in codecs.splitlines() if line.startswith(prefix)]
+        assert len(found) == 1
+        label = found[0].split('|')[1].strip().replace(' (confidence open)', '')
+        if c['status'] == 'uncertain': label = label.replace(' †', ' (confidence open) †')
+        codecs = codecs.replace(found[0], f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
+    c = current['cases']['PngSeekable']
+    indices = [i for i, line in enumerate(read_rows) if line.startswith('| Identify PNG8, fresh seekable Stream')]
+    assert len(indices) == 1 and c['status'] == 'pass'
+    i = indices[0]; label = read_rows[i].split('|')[1].strip()
+    read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |'
+    return codecs, read_rows
+
+
 def apply_current_pixel_reversal(editing):
     current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2668,6 +2703,7 @@ def render():
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     codecs, read_rows = apply_current_jpeg_preparation(codecs, read_rows)
+    codecs, read_rows = apply_current_prepared_input(codecs, read_rows)
     codecs = apply_current_jpeg_caller_confidence(codecs)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_current_lanczos_enlargement_confidence(editing)
@@ -2699,6 +2735,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
+[Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
+15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
+**15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
+capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
+up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
+no idle-pool or complete-decode peak saving is inferred. Affected PNG16 decode and
+VP8 stream costs are now uncertain; their original samples remain, with no
+demonstrated regression or favorable standalone repeat.
+
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
 Current cost is **8.18 / FFmpeg 10.02 µs, upper .838**, **112 B/op**. Shared exact
@@ -2707,7 +2752,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 175 pass, 3 gaps, 13 uncertain**. The tables retain source-valid
+image views: 173 pass, 3 gaps, 15 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2727,7 +2772,8 @@ pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-All 28 affected RGBA/fresh/caller-buffer read views pass and stop; the current
+The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
+the affected stream view refreshes and passes in the prepared-input round. The
 horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
 confidence is reconciled before acceptance; historical clock shifts are not gains.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
@@ -2746,7 +2792,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,605 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,614 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

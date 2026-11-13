@@ -1789,6 +1789,17 @@ internal static class CooperativeMemoryConsumer
             var minimal = AuthoredPng.Wrap(frame, zlib);
             var packet = AuthoredPng.Wrap(frame, zlib, ("tEXt", new byte[length - minimal.Length - 12]));
             var expected = ImageCodec.Identify(packet);
+            using (var preparedRoot = new TestMemoryBudget(length))
+            {
+                var caller = new byte[37 + length]; packet.CopyTo(caller, 37);
+                var saved = caller.ToArray();
+                using var relative = new MemoryStream(caller, writable: false) { Position = 37 };
+                var preparedLimits = new ImageLimits { MemoryBudget = preparedRoot, MaxWorkingBytes = length, MaxInputBytes = length };
+                if (ImageCodec.Identify(relative, preparedLimits) != expected || relative.Position != relative.Length
+                    || !relative.CanRead || !caller.AsSpan().SequenceEqual(saved) || preparedRoot.Peak != length
+                    || preparedRoot.Bytes != 0 || preparedRoot.IsDisposed)
+                    throw new Exception("Packaged known memory input lost its relative cursor, single owned capacity or borrowed ownership.");
+            }
             var peak = length == 256 ? 256 : length + length / 2;
             using var root = new TestMemoryBudget(peak);
             var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = peak, MaxInputBytes = length };
@@ -1810,7 +1821,33 @@ internal static class CooperativeMemoryConsumer
             if (await ImageCodec.IdentifyAsync(recovered, limits) != expected || root.Bytes != 0)
                 throw new Exception("Packaged direct input did not recover released capacity.");
         }
+        var smallFrame = new AuthoredPng.Frame("packaged-prepared-input", 6, 8, 1, 1, false);
+        var smallZlib = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(smallFrame));
+        var smallMinimal = AuthoredPng.Wrap(smallFrame, smallZlib);
+        var smallPacket = AuthoredPng.Wrap(smallFrame, smallZlib, ("tEXt", new byte[257 - smallMinimal.Length - 12]));
+        using (var preparedRoot = new TestMemoryBudget(512))
+        {
+            var preparedLimits = new ImageLimits { MemoryBudget = preparedRoot, MaxWorkingBytes = 512 };
+            using var held = ImageBuffer.Create(3, 1, 8, preparedLimits);
+            using var input = new MemoryStream(smallPacket, writable: false);
+            var attempts = preparedRoot.Attempts;
+            try { ImageCodec.Identify(input, preparedLimits); throw new Exception("Packaged prepared input ignored aggregate refusal."); }
+            catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+            if (preparedRoot.Attempts != attempts + 1 || preparedRoot.Refusals != 1 || preparedRoot.Bytes != 12
+                || input.Position != 0 || !input.CanRead) throw new Exception("Packaged prepared input retried, read before refusal or leaked.");
+            held.Dispose();
+            using var cancellation = new CancellationTokenSource();
+            preparedRoot.Admitted = _ => cancellation.Cancel();
+            try { ImageCodec.Identify(input, preparedLimits, cancellation.Token); throw new Exception("Packaged prepared input ignored cancellation."); }
+            catch (OperationCanceledException error) when (error.CancellationToken == cancellation.Token) { }
+            if (input.Position != 0 || preparedRoot.Bytes != 0 || preparedRoot.IsDisposed)
+                throw new Exception("Packaged prepared input cancellation read or retained storage.");
+            preparedRoot.Admitted = null;
+            if (ImageCodec.Identify(input, preparedLimits) != ImageCodec.Identify(smallPacket) || preparedRoot.Bytes != 0 || !input.CanRead)
+                throw new Exception("Packaged prepared input did not recover released capacity.");
+        }
         Console.WriteLine("Packaged direct stream input preserves full EOF, exact capacity, replacement peaks and refusal recovery.");
+        Console.WriteLine("Packaged prepared memory input preserves relative cursors, single capacity, terminal refusal, cancellation and recovery.");
     }
 
     private static async Task VerifyStoredPngWorkspace()
