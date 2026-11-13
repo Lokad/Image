@@ -242,18 +242,28 @@ def current_png_stream_word_note():
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
     assert q['fullChecksEachOs'] == 6624 and q['productionAndActualPackageByteIdentical']
     assert q['sameActualPackageBothOsAndThreeExamplesPassed'] and q['broadOrPackageRepeats'] == 0
-    assert current['currentImageOwnerViewStatuses'] == {'passCount': 174, 'gaps': 1, 'uncertain': 16, 'total': 191}
+    assert current['currentImageOwnerViewStatuses'] == {'passCount': 175, 'gaps': 1, 'uncertain': 15, 'total': 191}
     assert c['librarySha256'] == current['producers']['timedArtifactSha256'] == q['actualPackageLibrarySha256']
     assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
     assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
     assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 8664
     assert c['status'] == 'pass' and c['upper'] <= 1
     assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    composition = current['compositionCase']
+    assert composition['status'] == 'pass' and composition['upper'] <= 1
+    assert composition['librarySha256'] == c['librarySha256']
+    assert composition['actualIterations'] == composition['nativeSamplesEachBracket'] == 12
+    assert composition['allActualsRetained'] and composition['allOriginalGatesPassed'] and composition['quietGuardsPassed']
+    assert composition['managedExact'] and composition['sourceUnchanged'] and composition['independentOwnedOutput']
+    assert current['compositionReferenceValidation']['nativeCliNormalScalarPixelsExact']
+    assert math.isclose(composition['ratio'], composition['managedUs'] / composition['nativeUs'], rel_tol=1e-12)
     return (f'[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) '
             f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
             f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
             'uncertainty without a production change or speedup claim. Original adverse data remain; '
-            'no further tuning of this control.')
+            f'The complete decode/orient/crop/fit operation also passes: **{composition["managedUs"]:,.2f} / '
+            f'{composition["nativeUs"]:,.2f} µs, upper {composition["upper"]:.3f}**, '
+            f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
 
 
 def apply_current_pixel_reversal(editing):
@@ -2799,8 +2809,8 @@ Word flip passes. Current word clone/normal-orientation evidence stays uncertain
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
-no idle-pool or complete-decode peak saving is inferred. Word composition and
-VP8 stream costs remain uncertain, with original samples retained.
+no idle-pool or complete-decode peak saving is inferred. VP8 stream remains
+uncertain, with original samples retained.
 
 {png_stream_word_note}
 
@@ -2812,7 +2822,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 174 pass, 1 gap, 16 uncertain**. This does not establish full parity:
+image views: 175 pass, 1 gap, 15 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
@@ -2826,8 +2836,8 @@ uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are 
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
-word copies are now uncertain under the current confirmations; complete word PNG
-composition also stays uncertain. No gain is inferred from those confidence changes.
+word copies are now uncertain under the current confirmations. Complete word PNG
+composition now passes under adjacent reference batches, without a speedup claim.
 [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
 pass and stop. This confidence update does not establish a production speedup.

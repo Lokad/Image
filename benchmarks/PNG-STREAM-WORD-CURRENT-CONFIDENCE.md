@@ -1,16 +1,17 @@
 # Current PNG16 stream confidence
 
-The complete PNG16 stream decode **passes and stops** on the current immutable
-package DLL. This resolves uncertainty without a production change or speedup claim.
+Both complete PNG16 stream operations **pass and stop** on the current immutable
+package DLL. This resolves their uncertainties without a production change or speedup claim.
 
 | Existing 513×259 RGBA16 operation | Lokad / FFmpeg µs | Conservative ratio interval | Managed allocated B/op |
 | --- | ---: | ---: | ---: |
 | Fresh non-exposed seekable stream, complete decode/dispose | 3,106.21 / 3,349.15 | 0.917–0.934 | 8,664 |
+| Decode → normal orientation → centered crop → nearest fit, 127×64 | 2,891.18 / 2,943.12 | 0.971–0.994 | 338,271.1 |
 
 Both sides include fresh input acquisition/copies/EOF, full decode/normalization,
 independent output ownership and disposal. Managed creates a new non-exposed
-MemoryStream; native creates AVIO/scratch/packet payload and converts complete
-RGBA64BE to independently owned RGBA64LE. FFmpeg retains its decoder/frame/packet
+MemoryStream; native creates AVIO/scratch/packet payload. Plain native decoding
+converts complete RGBA64BE to independently owned RGBA64LE. FFmpeg retains its decoder/frame/packet
 wrappers, as before. Source input, reference settings/identities, exact full-word
 pixels, alpha/hidden RGB, stream ownership and independent-survivor checks remain.
 
@@ -22,6 +23,12 @@ and after. Every actual and the same conservative paired/three-bracket confidenc
 rule remain. Native clock movement versus history is not a CPU gain. No unchanged
 favorable repeat follows. Quiet CPU0, Release optimized JIT, nonconcurrent GC and
 both idle-v2 guards pass. All original correctness and ownership gates pass.
+
+The composition includes every managed intermediate owner; FFmpeg times its
+original single-thread graph and complete final packing, retaining intermediate
+views as documented. Its distinct pinned worker, full-word normal/scalar checks
+and 127×64 output remain exact. It reuses the same verified adjacent driver with
+zero builds. The prior upper1.002 remains history, not a causal speedup baseline.
 
 A separate two-second read-only current-package profile finds 1,656/1,996 sampled
 locations in InflateCursor and one in input acquisition. Inlining/skid/unmapped
@@ -40,9 +47,10 @@ One private driver build adds only WarmStreamDecode to the existing harness
 allowlist. Production, embedded tests, original harness, fixtures and reference
 worker are reused. The timed DLL remains in the same qualified actual package;
 reuse 6,624 full/live checks per OS, focused scalar/ISA and SAME-package consumers/
-all three examples. No broad/package repeat. Current image views are **174 pass,
-one gap, 16 uncertain**; synchronous stream views have six passes/two uncertainties.
-Composition and VP8 stream confidence remain open. All 289 material paths remain
+all three examples. No broad/package repeat. Current image views are **175 pass,
+one gap, 15 uncertain**; eight synchronous input views, including Identify, have
+seven passes/one uncertainty.
+VP8 stream confidence remains open. All 289 material paths remain
 required; publication stays postponed.
 
 [Evidence](png-stream-word-current-confidence-evidence.json) preserves identities,
@@ -50,3 +58,5 @@ all actuals, validation and reproduction. Raw `png-stream-word-current-adjacent.
 107,852 B / 36 members, SHA256 `896829bd44cfcf48f707ee1984dadae7aec366bc1179737ccda8e592872379bb`,
 mirrored/member-verified. Dependencies retain original fixtures/workers, all
 adverse/uncertain comparisons, packages and qualification.
+
+The subsequent composition raw archive `png-stream-word-composition-adjacent.tar.xz` (23196 B / 13 members), SHA256 `5b32642000a401306f4cca40f9b54b828bf3cd3207f049a07638be425e1e46ef`, is also mirrored/member-verified. It depends on the plain-decode archive above, retaining all previous raw evidence.

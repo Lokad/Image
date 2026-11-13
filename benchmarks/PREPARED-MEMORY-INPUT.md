@@ -1,9 +1,9 @@
 # Prepared complete stream input
 
 [Current PNG16 stream confidence](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) supersedes
-only the earlier standalone PNG16 decode uncertainty below. The original capture
-and inconclusive two-DLL comparison remain history. The complete operation now
-passes on the current actual-package DLL under alternating managed/native batches;
+the earlier PNG16 decode and composition uncertainties below. Both complete
+operations pass on the current actual-package DLL under alternating managed/native
+batches. Original captures and the inconclusive two-DLL comparison remain history;
 this is a confidence update, not a production speedup. Other costs below retain
 their identified scope.
 

@@ -18,9 +18,9 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 [JPEG RGBA/fresh costs](JPEG-HORIZONTAL-PREPARATION.md), with seven refreshed
 [synchronous stream costs](PREPARED-MEMORY-INPUT.md), and four current
 [row/copy views](VECTOR-ROW-COPY.md), with two refreshed shared-row flip costs in
-[independent row copying](INDEPENDENT-ROW-COPY.md) and one current
+[independent row copying](INDEPENDENT-ROW-COPY.md) and two current
 [PNG16 stream comparison](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md), owns the current **191
-comparisons: 174 pass, 1 gap, 16 uncertain**. These are existing views, including
+comparisons: 175 pass, 1 gap, 15 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 inspection paths retain their identified evidence; three in-place copy controls
 refresh separately in the new row-copy report. Four affected
@@ -32,7 +32,8 @@ than repeated experimental or qualification narratives here.
 
 The released-storage stage's **317.42 µs / 9.74%** word-composition gain and
 **1,063,078 allocated B/op** reduction remain history. Its refreshed complete cost
-is 2,926.98 / FFmpeg 2,945.11 µs, upper 1.002, still uncertain. The byte composition
+is superseded by the passing 2,891.18 / FFmpeg 2,943.12 µs adjacent comparison,
+upper .994. The byte composition
 passes at 1,257.22 / 1,478.18 µs, upper .857. No pipeline gain is inferred from
 historical stage sums. The bounded byte-wide control's earlier adverse captures
 remain history; its current cost is uncertain.
@@ -54,7 +55,7 @@ remain outside these 191 views; whole-library parity remains open.
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
 | PNG decoding | [Current owner](RELEASED-IMAGE-STORAGE.md): all 47 existing decode controls pass. Four coding-only validators and the caller-root retained-output control reuse unchanged paths. Stop passes. |
-| Stream decode/composition | [Current PNG16 adjacency](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) passes/stops:3,106.21/FFmpeg3,349.15µs, upper.934,8,664Bop. Changed adjacency resolves the older within-process timing uncertainty without a production speedup claim; all original samples and the inconclusive two-DLL pair remain. The seven synchronous [prepared-input](PREPARED-MEMORY-INPUT.md) views now have six passes; word composition and VP8 stream remain uncertain. PNG8 decode/composition, JPEG, VP8L and unchanged async PNG8 pass. [Direct acquisition](DIRECT-STREAM-INPUT.md) retains async inspection/validation evidence. |
+| Stream decode/composition | Both [current PNG16 adjacent comparisons](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) pass/stop: plain3,106.21/FFmpeg3,349.15µs upper.934,8,664Bop; complete decode/orient/crop/fit2,891.18/2,943.12µs upper.994,338,271.1Bop. Changed adjacency resolves old uncertainties without a production speedup claim; original samples and the inconclusive two-DLL pair remain. The seven synchronous [prepared-input](PREPARED-MEMORY-INPUT.md) decode/composition views now have six passes; VP8 stream alone remains uncertain. Identify and unchanged async PNG8 also pass. [Direct acquisition](DIRECT-STREAM-INPUT.md) retains async inspection/validation evidence. |
 | JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | [Current caller-RGB420 adjacency](JPEG-CALLER-CURRENT-CONFIDENCE.md) stays uncertain:1712.07/FFmpeg1650.90µs, ratio interval.991–1.057,388220B/op. Exact52091/52093B packets retain the strict2B metadata exception. No presumed gap or unchanged favorable repeat. [Gray preparation](JPEG-GRAY-TILE-PREPARATION.md) and other [Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md) costs reuse unchanged evidence; SIMD libjpeg-turbo grayscale stays explicitly labeled. |
 | PNG encoding | [Current Gray8 adjacency](PNG-GRAY-CURRENT-PATH.md) remains uncertain, ratio .983–1.006, after the heap-entry path change; no favorable retry or presumed optimization gap. [Compressed heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md) retain 16 passing fresh controls, exact packets and scoped 600 B/op reduction. [Stored/fresh/natural64 views](PNG-STORED-WORD-NORMALIZATION.md) keep their distinct lifetimes; retained word is uncertain. |

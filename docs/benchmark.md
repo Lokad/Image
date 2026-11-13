@@ -20,10 +20,10 @@ Word flip passes. Current word clone/normal-orientation evidence stays uncertain
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
-no idle-pool or complete-decode peak saving is inferred. Word composition and
-VP8 stream costs remain uncertain, with original samples retained.
+no idle-pool or complete-decode peak saving is inferred. VP8 stream remains
+uncertain, with original samples retained.
 
-[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain; no further tuning of this control.
+[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain; The complete decode/orient/crop/fit operation also passes: **2,891.18 / 2,943.12 µs, upper 0.994**, **338,271.1 B/op**. Both controls stop.
 
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
@@ -33,7 +33,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 174 pass, 1 gap, 16 uncertain**. This does not establish full parity:
+image views: 175 pass, 1 gap, 15 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
@@ -47,8 +47,8 @@ uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are 
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
-word copies are now uncertain under the current confirmations; complete word PNG
-composition also stays uncertain. No gain is inferred from those confidence changes.
+word copies are now uncertain under the current confirmations. Complete word PNG
+composition now passes under adjacent reference batches, without a speedup claim.
 [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
 pass and stop. This confidence update does not establish a production speedup.
