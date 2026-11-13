@@ -18,6 +18,8 @@ Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.
+[Caller-RGB JPEG encoding](../benchmarks/JPEG-CALLER-CURRENT-CONFIDENCE.md) also
+remains uncertain under the current adjacent comparison, with exact packets.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
@@ -73,7 +75,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream † | 5,815.99 | 6,005.64 | 0.968 / 0.974 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
+| JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,712.07 | 1,650.90 | 1.037 / 1.057 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,160.95 | 1,403.16 | 0.827 / 0.840 | 155,435 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,059.14 | 1,112.88 | 0.952 / 0.969 | 155,438 | 58,910 / 58,910 |
