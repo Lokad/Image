@@ -15,6 +15,8 @@ The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 exi
 image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
+Fresh grayscale PNG remains [uncertain](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
+after current-code adjacent confirmation; no optimization gap is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
@@ -86,7 +88,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 19,824.87 | 20,956.16 | 0.946 / 0.958 | 2,432,924 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,111.01 | 4,361.68 | 0.943 / 0.963 | 816,180 | 236,828 / 236,828 |
 | PNG RGBA16, one-shot stored0 / native0 † | 389.62 | 1,387.71 | 0.281 / 0.288 | 1,143,324 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 1,986.46 | 1,993.40 | 0.997 / 1.038 | 546,628 | 72,586 / 72,586 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 1,981.08 | 1,992.02 | 0.995 / 1.006 | 546,523 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,398.61 | 9,773.57 | 0.962 / 0.978 | 815,148 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,197.60 | 4,477.89 | 0.937 / 0.953 | 547,596 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 16,718.11 | 17,275.89 | 0.968 / 0.979 | 815,716 | 210,973 / 210,973 |

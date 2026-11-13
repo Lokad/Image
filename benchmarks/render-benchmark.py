@@ -2016,7 +2016,15 @@ def render():
     assert not png_current['comparison']['normalizedGainSeparated'] and not png_current['comparison']['normalizedAdverseSeparated']
     assert not png_current['predictableAttribution']['normalizedAdverseSeparated']
     assert not any(v['rawAdverseSeparated'] for v in png_current['predictableAttribution']['views'].values())
-    png_cases = png_current['cases']
+    png_gray_current = json.loads((ROOT / 'benchmarks/png-gray-current-path-evidence.json').read_text(encoding='utf-8'))
+    assert png_gray_current['measurementAccepted'] and not png_gray_current['productionChanged']
+    assert not png_gray_current['productionSpeedupClaim'] and png_gray_current['allBuilds'] == png_gray_current['broadOrPackageRepeats'] == 0
+    assert png_gray_current['raw']['mirrored'] and png_gray_current['raw']['allMembersVerified']
+    assert png_gray_current['qualification']['sameActualPackageBothOS'] and png_gray_current['qualification']['productionInputsUnchanged']
+    assert png_gray_current['qualification']['fullChecksEachOs'] == 6600
+    assert set(png_gray_current['cases']) == {'EncodeGray8'}
+    assert png_gray_current['cases']['EncodeGray8']['operationsPerSubject'] == 64
+    png_cases = {**png_current['cases'], **png_gray_current['cases']}
     assert len(png_cases) == 20
     png_rgb16 = png_cases['EncodeRgb16']; png_gray8 = png_cases['EncodeGray8']
     assert png_rgb16['status'] == 'pass' and png_gray8['status'] == 'uncertain'
@@ -2028,7 +2036,7 @@ def render():
     for case, current in png_cases.items():
         reused = case in reused_stored_cases
         assert current['costReused'] == reused
-        producer = png_stored if reused else png_current
+        producer = png_gray_current if case == 'EncodeGray8' else png_stored if reused else png_current
         assert current['librarySha256'] == producer['qualification']['actualPackage']['librarySha256']
         if reused:
             assert all(current[k] == png_stored['cases'][case][k] for k in ('managedUs', 'nativeUs', 'allocatedBytes', 'receipt', 'packetSha256'))
@@ -2555,6 +2563,8 @@ The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 exi
 image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
+Fresh grayscale PNG remains [uncertain](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
+after current-code adjacent confirmation; no optimization gap is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;

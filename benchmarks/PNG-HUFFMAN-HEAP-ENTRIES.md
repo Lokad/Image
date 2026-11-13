@@ -1,5 +1,9 @@
 # PNG Huffman heap entries
 
+Gray8's [current-code adjacent confirmation](PNG-GRAY-CURRENT-PATH.md) supersedes
+its displayed standalone cost below. This stage's incremental and other valid
+family evidence remains retained.
+
 Compressed PNG tree construction now keeps each exact weight/depth priority beside
 its heap symbol. This removes dependent lookups through separate weight/depth
 arrays. Signed64 priorities preserve signed32 weight ordering, then subtree depth;

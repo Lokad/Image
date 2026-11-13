@@ -1,0 +1,305 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PGC924",
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "measurementAccepted": true,
+  "allBuilds": 0,
+  "broadOrPackageRepeats": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "33d750c0409ac2a417f8c5d498174dd26e4fa047a233ecc161b28f2a7fab4763",
+    "linuxSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+    "timedArtifactSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+    "actualPackageSha256": "0a80ee5983f0bcab80c68c32b359157b2c8e0b4906bbf8babd06fe83cdf86c33"
+  },
+  "cases": {
+    "EncodeGray8": {
+      "managedUs": 1981.08131640625,
+      "nativeUs": 1992.0161328125,
+      "ratio": 0.9945106787911344,
+      "lower": 0.9826803566115786,
+      "upper": 1.0058405356256288,
+      "allocatedBytes": 546523,
+      "status": "uncertain",
+      "librarySha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+      "caseId": "EncodeGray8",
+      "receipt": "tmp/pgc924-gray-adjacent-receipt.json",
+      "observation": "tmp/pgc924-gray-adjacent.json",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "managedActualNanoseconds": [
+        1987592.4375,
+        1981423.421875,
+        1975559.53125,
+        1991851.234375,
+        1973734.578125,
+        1985346.078125,
+        1978395.859375,
+        1980013.453125,
+        1981726.046875,
+        1980252.578125,
+        1973006.28125,
+        1984074.296875
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "retainedOperationScratchBytes": 0,
+      "inputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color0 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native identical single-thread conversion context/graph, options/initialization, working frame and disposal timed; conversion state not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "sourceUnchanged": true,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "tightWorkingBytes": null,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "label": "PNG grayscale8, one-shot Optimal6 / native6",
+      "boundaryKind": "equivalent-one-shot",
+      "codecPreparationTimed": true,
+      "referenceCodecRetained": false,
+      "completePacketExact": true,
+      "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "nativePacketSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "packetBytes": 72586,
+      "nativePacketBytes": 72586,
+      "independentOwnedOutput": true,
+      "costReused": false,
+      "directAllocatedMeanBytes": 546522.7291666666,
+      "allocatedBytesEachPair": [
+        546527.25,
+        546519.5,
+        546519.5,
+        546527.25,
+        546519.5,
+        546519.5,
+        546527.25,
+        546519.5,
+        546527.25,
+        546519.5,
+        546519.5,
+        546527.25
+      ],
+      "operationsPerSubject": 64,
+      "nativeBracketMeansUs": [
+        1996.3332395833334,
+        1992.0161328125,
+        1992.7037903645833
+      ],
+      "sampling": "NaturalGC64adjacent12pairs; old post-GC/global and pre-HKE907 adjacent results remain separate history."
+    }
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/PngCodec.cs": "e4bcddd1a972fbe96f2720fda7cedb93490a013ae0996a3d5a5abd03bfd6380d",
+    "src/Lokad.Image/Internal/PngDeflater.cs": "4ac3d4d6af0f5913cddad6fdf684251357e893be7c2d1ee0552b1e7fb251bedc",
+    "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f",
+    "src/Lokad.Image/Internal/Adler32.cs": "3c76a614c5de3a261442224f8a69218f345b3ab1730038a08eefb4c861a05c54",
+    "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+    "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/Internal/DeflateHuffman.cs": "bd75fca9c4c53c6f84b82d91267e652fb0e0848c3c943dae94d87780a8689a58"
+  },
+  "oneShotStatusCounts": {
+    "pass": 16,
+    "gap": 0,
+    "uncertain": 1
+  },
+  "qualification": {
+    "provider": "benchmarks/shared-axis-swap-evidence.json",
+    "fullChecksEachOs": 6600,
+    "sameActualPackageBothOS": true,
+    "actualPackage": {
+      "sha256": "0a80ee5983f0bcab80c68c32b359157b2c8e0b4906bbf8babd06fe83cdf86c33",
+      "librarySha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+      "bytes": 459577
+    },
+    "productionInputsUnchanged": true,
+    "fullScalarIsaAndActualPackageEvidenceReused": true
+  },
+  "confidence": {
+    "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+    "pairedRatioConfidence": [
+      0.9918580220157002,
+      0.9971684650164236
+    ],
+    "views": [
+      {
+        "view": "allActual",
+        "statistics": {
+          "OriginalValues": [
+            1987592.4375,
+            1981423.421875,
+            1975559.53125,
+            1991851.234375,
+            1973734.578125,
+            1985346.078125,
+            1978395.859375,
+            1980013.453125,
+            1981726.046875,
+            1980252.578125,
+            1973006.28125,
+            1984074.296875
+          ],
+          "N": 12,
+          "Min": 1973006.28125,
+          "LowerFence": 1967628.580078125,
+          "Q1": 1977686.77734375,
+          "Median": 1980838,
+          "Mean": 1981081.31640625,
+          "Q3": 1984392.2421875,
+          "UpperFence": 1994450.439453125,
+          "Max": 1991851.234375,
+          "InterquartileRange": 6705.46484375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 1616.1457028542916,
+          "Variance": 31343123.194252707,
+          "StandardDeviation": 5598.492939555493,
+          "Skewness": 0.24568968496902185,
+          "Kurtosis": 2.0198181500893067,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1981081.31640625,
+            "StandardError": 1616.1457028542916,
+            "Level": 12,
+            "Margin": 7170.805089383141,
+            "Lower": 1973910.5113168668,
+            "Upper": 1988252.1214956332
+          },
+          "Percentiles": {
+            "P0": 1973006.28125,
+            "P25": 1977686.77734375,
+            "P50": 1980838,
+            "P67": 1982594.899375,
+            "P80": 1985091.721875,
+            "P85": 1986132.3039062498,
+            "P90": 1987367.8015625002,
+            "P95": 1989508.89609375,
+            "P100": 1991851.234375
+          }
+        },
+        "nativeConfidenceLower": 1976707.0932958056,
+        "nativeConfidenceUpper": 2008700.487433361,
+        "ratioLower": 0.9826803566115786,
+        "ratioUpper": 1.0058405356256288
+      },
+      {
+        "view": "upperOutlierDiagnostic",
+        "statistics": {
+          "OriginalValues": [
+            1987592.4375,
+            1981423.421875,
+            1975559.53125,
+            1991851.234375,
+            1973734.578125,
+            1985346.078125,
+            1978395.859375,
+            1980013.453125,
+            1981726.046875,
+            1980252.578125,
+            1973006.28125,
+            1984074.296875
+          ],
+          "N": 12,
+          "Min": 1973006.28125,
+          "LowerFence": 1967628.580078125,
+          "Q1": 1977686.77734375,
+          "Median": 1980838,
+          "Mean": 1981081.31640625,
+          "Q3": 1984392.2421875,
+          "UpperFence": 1994450.439453125,
+          "Max": 1991851.234375,
+          "InterquartileRange": 6705.46484375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 1616.1457028542916,
+          "Variance": 31343123.194252707,
+          "StandardDeviation": 5598.492939555493,
+          "Skewness": 0.24568968496902185,
+          "Kurtosis": 2.0198181500893067,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1981081.31640625,
+            "StandardError": 1616.1457028542916,
+            "Level": 12,
+            "Margin": 7170.805089383141,
+            "Lower": 1973910.5113168668,
+            "Upper": 1988252.1214956332
+          },
+          "Percentiles": {
+            "P0": 1973006.28125,
+            "P25": 1977686.77734375,
+            "P50": 1980838,
+            "P67": 1982594.899375,
+            "P80": 1985091.721875,
+            "P85": 1986132.3039062498,
+            "P90": 1987367.8015625002,
+            "P95": 1989508.89609375,
+            "P100": 1991851.234375
+          }
+        },
+        "nativeConfidenceLower": 1976707.0932958056,
+        "nativeConfidenceUpper": 2008700.487433361,
+        "ratioLower": 0.9826803566115786,
+        "ratioUpper": 1.0058405356256288
+      }
+    ]
+  },
+  "scope": "Existing frozen513x259 Gray8 level6/filterNone/color0 complete public EncodePng and MemoryStream creation/growth/disposal; equivalent fresh codec/options/zlib/conversion/working-frame/packet/output preparation and disposal on both sides. NaturalGC64 complete operations per alternating subject. No reference retains codec or conversion working state. Frozen nativeReady and exact boundary override generic driver prose about retained wrappers. No new image/settings/work boundary or threshold.",
+  "invalidatedOlderEvidence": {
+    "provider": "benchmarks/png-current-encode-confidence-evidence.json",
+    "case": "EncodeGray8",
+    "change": "26dfe1e4 Prepare Huffman priorities beside PNG heap symbols",
+    "changedSource": "src/Lokad.Image/Internal/DeflateHuffman.cs",
+    "currentSha256": "bd75fca9c4c53c6f84b82d91267e652fb0e0848c3c943dae94d87780a8689a58",
+    "reason": "Heap representation and compressed caller field offsets change actual measured work; exact packets remain unchanged."
+  },
+  "currentGlobalHistory": {
+    "provider": "benchmarks/png-huffman-heap-entries-evidence.json",
+    "case": "EncodeGray8",
+    "sampling": "Post-GC/global brackets; source-valid but a distinct sampling observation, not an incremental causal comparator."
+  },
+  "unchangedCasesReused": {
+    "provider": "benchmarks/png-huffman-heap-entries-evidence.json",
+    "allOtherCases": true,
+    "reason": "No production changes in this measurement-only round; exact current HKE907 encoder source pins hold. Reuse passing compressed controls and separate stored/fresh/retained scopes."
+  },
+  "storage": {
+    "logicalDeflaterWorkspaceBytes": 393216,
+    "retainedOperationScratchBytes": 0,
+    "newOwnedOrRetainedCapacityBytes": 0,
+    "physicalNativeJitPoolPeaksRemeasured": false,
+    "allocation": "Direct natural-GC64 counter; historical post-GC BDN546628B/op is a different instrumentation boundary, not a saving claim. Owned capacity and output lifetime unchanged."
+  },
+  "next": "CurrentGray8 remains uncertain: no speedup, demonstrated gap or favorable retry. Stop confirmed passing controls; resume justified independent codec/resizing/storage work. Preserve all289required paths and complete-packet correctness.",
+  "raw": {
+    "file": "png-gray-current-path.tar.xz",
+    "sha256": "b05fec235c14e4598fc787eb58887ba56b27da4374d0090eae42386937eba6fa",
+    "bytes": 383824,
+    "members": 18,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "shared-axis-swap-qualified.tar.xz",
+        "sha256": "95f7e1217518a1eef153c90c46254fb9457fbfa26d4b7f0e319709c0452eaefb"
+      },
+      {
+        "file": "png-huffman-heap-entries-qualified.tar.xz",
+        "sha256": "049ade8e4321908a29fd827787aabdc5403f4001861ff5ca5da0179dfb2467d1"
+      },
+      {
+        "file": "png-gray-current-confidence.tar.xz",
+        "sha256": "68fd5d1f0302a11bbb7cb681c32e01869e9aef204931895f59e37b608f0ba0b0"
+      }
+    ]
+  }
+}
