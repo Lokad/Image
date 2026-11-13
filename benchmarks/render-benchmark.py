@@ -207,21 +207,24 @@ def apply_mixed_word_cache(editing):
     return '\n'.join(rows)
 
 
-def apply_lanczos_output_rows(editing):
-    current = json.loads((ROOT / 'benchmarks/lanczos-paired-output-evidence.json').read_text(encoding='utf-8'))
+def apply_lanczos_product_reuse(editing):
+    current = json.loads((ROOT / 'benchmarks/lanczos-word-product-reuse-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
     assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['currentImageOwnerViewStatuses'] == {'pass': 162, 'gap': 13, 'uncertain': 16}
-    assert current['currentEightLanczosStatus'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 164, 'gap': 11, 'uncertain': 16}
+    assert current['currentEightLanczosStatus'] == {'pass': 7, 'gap': 0, 'uncertain': 1}
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6551
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6573
     assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
     assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
     assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
     mapping = {
         'Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129': 'OneShot8',
         'Lanczos3 prepared RGBA8 / zimg prepared † → 256×129': 'Repeated8',
+        'Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129': 'OneShot16',
+        'Lanczos3 prepared RGBA16 / zimg prepared † → 256×129': 'Repeated16',
+        'Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519': 'RepeatedEnlarge16',
     }
     seen, rows = set(), []
     for line in editing.splitlines():
@@ -233,7 +236,8 @@ def apply_lanczos_output_rows(editing):
             assert c['actualIterations'] == 12 and c['allActualsRetained']
             assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
             assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-            assert c['status'] == 'pass' and c['upper'] <= 1
+            assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+            if c['status'] != 'pass': label = label.replace(' †', f" ({c['status']}) †")
             assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
             cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
                          f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
@@ -2488,7 +2492,7 @@ def render():
         read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
-    editing, lanczos_current = apply_lanczos_output_rows(editing)
+    editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_mixed_word_cache(editing)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
@@ -2499,12 +2503,12 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Paired Lanczos outputs](../benchmarks/LANCZOS-PAIRED-OUTPUT.md) close prepared
-RGBA8 reduction: **462.72 / zimg 489.40 µs, upper 0.950**, with **138 B/op** and
-**139,800 B** retained plan. Independent gain is **7.40% reference-normalized**;
-the **14.68% raw** view includes a **−7.87%** reference clock change. One-shot also
-passes; no further byte-reduction tuning. Exact pixels, admission and owned capacity
-stay unchanged; the second sum borrows 8 KiB from unpublished output.
+[Word product reuse](../benchmarks/LANCZOS-WORD-PRODUCT-REUSE.md) closes prepared
+RGBA16 Lanczos reduction: **485.36 / zimg 512.07 µs, upper 0.958**, with **138 B/op**
+and **156,248 B** retained plan. Independent gain is **6.18% reference-normalized**;
+the **13.33% raw** view includes a **−7.62%** reference clock change. All four
+affected one-shot/prepared byte/word controls pass and stop. Exact pixels, admission
+and owned capacity stay unchanged; temporary product/sum views reuse existing owners.
 
 [Packed mixed-word storage](../benchmarks/MIXED-WORD-PACKED-CACHE.md) passes the
 bounded bicubic control: **820.00 / zimg 846.10 µs, upper 0.978**, **113 B/op**.
@@ -2514,15 +2518,15 @@ default workspace remains uncertain. The earlier candidate's vertical regression
 is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these five
-updated costs, has **163 pass, 12 gaps, 16 uncertain** across 191 existing comparisons.
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these eight
+updated costs, has **164 pass, 11 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
 capture is hidden. Larger demonstrated remaining gaps include bounded byte wide
-bicubic and prepared word Lanczos reduction; the retained horizontal-CMYK JPEG view
+bicubic and quarter turns; the retained horizontal-CMYK JPEG view
 has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -2538,7 +2542,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,551 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,573 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

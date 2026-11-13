@@ -49,15 +49,16 @@ internal static class LanczosResize
             for (var y = 0; y < height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                if (typeof(TRows) == typeof(PairedByteRows) && vertical.MaximumCount <= slots
-                    && y + 2 <= height - 8)
+                if ((typeof(TRows) == typeof(PairedByteRows) || typeof(TRows) == typeof(PairedWordRows))
+                    && vertical.MaximumCount <= slots
+                    && y + 2 <= height - (typeof(TRows) == typeof(PairedWordRows) ? 4 : 8))
                 {
-                    // Eight unpublished byte rows hold one double sum row.
+                    // Four unpublished word rows or eight byte rows hold one double sum.
                     // Publish only preceding rows while that suffix is borrowed;
                     // the ordinary tail overwrites it after the last pair retires.
                     var second = MemoryMarshal.Cast<byte, double>(result.Pixels.Slice(
-                        (height - 8) * result.Stride, (int)channels * sizeof(double)));
-                    ExecuteByteOutputPair(source, result, y, horizontal, vertical, workspace,
+                        (height - (typeof(TRows) == typeof(PairedWordRows) ? 4 : 8)) * result.Stride, (int)channels * sizeof(double)));
+                    ExecuteOutputPair<TRows>(source, result, y, horizontal, vertical, workspace,
                         second, numeratorError, errors.Alpha, context);
                     y++;
                     continue;
@@ -120,10 +121,11 @@ internal static class LanczosResize
         catch { result.Dispose(); throw; }
     }
 
-    private static void ExecuteByteOutputPair(ImageBuffer source, ImageBuffer result, int y,
+    private static void ExecuteOutputPair<TRows>(ImageBuffer source, ImageBuffer result, int y,
         LanczosPlan horizontal, LanczosPlan vertical, LanczosWorkspace workspace,
-        Span<double> second, double numeratorError, double alphaError, OperationContext context)
+        Span<double> second, double numeratorError, double alphaError, OperationContext context) where TRows : struct
     {
+        var maximum = typeof(TRows) == typeof(PairedWordRows) ? 65535 : 255;
         var first = workspace.FastSums.AsSpan(); first.Clear(); second.Clear();
         var w0 = vertical.Windows[y]; var w1 = vertical.Windows[y + 1];
         var begin = Math.Min(w0.First, w1.First);
@@ -147,10 +149,19 @@ internal static class LanczosResize
                 if (slots > 1 && neededNext && ids[nextSlot] != next)
                 {
                     var nextRow = workspace.FastRows.AsSpan(nextSlot * channels, channels);
-                    LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
+                    if (typeof(TRows) == typeof(PairedWordRows))
+                    {
+                        if (TryBorrowWordProductRows(source, result, y, workspace, out var firstProducts, out var secondProducts))
+                            LanczosFmaResize.HorizontalExpandedWordPair(source, sy, next, horizontal, row, nextRow,
+                                firstProducts, secondProducts, context);
+                        else LanczosFmaResize.HorizontalWordPair(source, sy, next, horizontal, row, nextRow, workspace.Products, context);
+                    }
+                    else LanczosFmaResize.HorizontalBytePair(source, sy, next, horizontal, row, nextRow, context);
                     ids[nextSlot] = next;
                 }
-                else LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context);
+                else LanczosFmaResize.Horizontal(source, sy, horizontal, row,
+                    typeof(TRows) == typeof(PairedWordRows)
+                        ? workspace.Products.AsSpan(0, source.Width * 4) : workspace.Products, context);
                 ids[slot] = sy;
             }
             // The ascending union keeps each output's original nonzero-tap
@@ -162,10 +173,27 @@ internal static class LanczosResize
         }
         context.Cancellation.ThrowIfCancellationRequested();
         LanczosFmaResize.WriteRow(source, result, y, horizontal, vertical, first,
-            numeratorError, alphaError, 255, context);
+            numeratorError, alphaError, maximum, context);
         context.Cancellation.ThrowIfCancellationRequested();
         LanczosFmaResize.WriteRow(source, result, y + 1, horizontal, vertical, second,
-            numeratorError, alphaError, 255, context);
+            numeratorError, alphaError, maximum, context);
+    }
+
+    private static bool TryBorrowWordProductRows(ImageBuffer source, ImageBuffer result, int y,
+        LanczosWorkspace workspace, out Span<double> first, out Span<double> second)
+    {
+        first = second = default;
+        var bytes = source.Width * 32L;
+        var rows = (bytes + result.Stride - 1) / result.Stride;
+        var startRow = result.Height - 4L - rows;
+        if (bytes > int.MaxValue || startRow < y || workspace.Products.Length < source.Width * 8L) return false;
+        // The two UInt32 rows already owned by the plan hold one exact double
+        // row. The second source row precedes the active final-four-row sum.
+        // Both source views retire before this output pair is published; a
+        // later pair cannot overwrite any completed output row in the loan.
+        first = MemoryMarshal.Cast<uint, double>(workspace.Products.AsSpan()).Slice(0, source.Width * 4);
+        second = MemoryMarshal.Cast<byte, double>(result.Pixels.Slice((int)(startRow * result.Stride), (int)bytes));
+        return true;
     }
 
     private static void WriteExactRow(ImageBuffer result, int y, ReadOnlySpan<Int128> sums,

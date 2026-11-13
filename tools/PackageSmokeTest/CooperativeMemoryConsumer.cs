@@ -728,25 +728,28 @@ internal static class CooperativeMemoryConsumer
         }
         Console.WriteLine("Packaged Lanczos plans preserve exact reuse, retained admission and asynchronous surviving outputs.");
         VerifyLanczosPendingOutput();
-        VerifyLanczosPairedOutputs();
+        VerifyLanczosPairedOutputs(8);
+        VerifyLanczosPairedOutputs(16);
     }
 
-    private static void VerifyLanczosPairedOutputs()
+    private static void VerifyLanczosPairedOutputs(int depth)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = root };
-        using var original = OriginalPixels.Buffer(513, 259, 8);
-        original.GetRow8(0)[3] = original.GetRow8(0)[513 * 4 - 1] = 0;
+        using var original = OriginalPixels.Buffer(513, 259, depth);
+        if (depth == 8) original.GetRow8(0)[3] = original.GetRow8(0)[513 * 4 - 1] = 0;
+        else original.GetRow16(0)[3] = original.GetRow16(0)[513 * 4 - 1] = 0;
         using var source = original.Clone(limits);
-        using var plan = Lanczos3ResizePlan.Create(513, 259, 256, 129, 8, limits);
+        using var plan = Lanczos3ResizePlan.Create(513, 259, 256, 129, depth, limits);
         using var first = plan.Resize(source);
         using var survivor = plan.Resize(source);
-        const string frozen = "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb";
+        var frozen = depth == 8 ? "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb"
+            : "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac";
         static string Hash(ImageBuffer image) => Convert.ToHexStringLower(
             System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(image)));
         var live = root.Bytes;
         if (Hash(first) != frozen || Hash(survivor) != frozen
-            || live != (long)source.Stride * source.Height + plan.StorageBytes + 2L * 256 * 129 * 4)
+            || live != (long)source.Stride * source.Height + plan.StorageBytes + 2L * 256 * 129 * (depth / 2))
             throw new Exception("Packaged paired Lanczos outputs lost frozen pixels or independent admission.");
         root.RefuseAtGrowth = root.GrowthAttempts + 1;
         var refusals = root.Refusals;
@@ -767,7 +770,8 @@ internal static class CooperativeMemoryConsumer
         catch (OperationCanceledException) { }
         using (var recovery = plan.Resize(source))
             if (Hash(recovery) != frozen) throw new Exception("Packaged paired Lanczos plan failed subsequent reuse.");
-        first.GetRow8(0)[0] ^= 255;
+        if (depth == 8) first.GetRow8(0)[0] ^= 255;
+        else first.GetRow16(0)[0] ^= 65535;
         if (Hash(survivor) != frozen) throw new Exception("Packaged paired Lanczos outputs alias.");
         first.Dispose(); source.Dispose(); plan.Dispose();
         if (root.Bytes != (long)survivor.Stride * survivor.Height || Hash(survivor) != frozen)
@@ -775,6 +779,8 @@ internal static class CooperativeMemoryConsumer
         survivor.Dispose();
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged paired Lanczos output leaked or disposed the caller root.");
         Console.WriteLine("Packaged paired Lanczos outputs preserve frozen pixels, shared refusal, cancellation and independent survivors.");
+        if (depth == 16)
+            Console.WriteLine("Packaged paired Lanczos word preparation preserves frozen pixels, terminal refusal, cancellation and independent survivors.");
     }
 
     private static void VerifyLanczosPendingOutput()

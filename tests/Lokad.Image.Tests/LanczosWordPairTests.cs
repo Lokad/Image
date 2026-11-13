@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -11,9 +12,11 @@ public sealed class LanczosWordPairTests
         && Avx2.IsSupported && Fma.IsSupported && Sse41.IsSupported;
 
     [Theory]
-    [InlineData(1, 5)] [InlineData(5, 13)] [InlineData(31, 9)]
-    [InlineData(33, 15)] [InlineData(513, 256)] [InlineData(1031, 2)]
-    public void TwoRowsPreserveScalarFmaBitsEnvelopeGuardsAndBorrowedOwnership(int width, int target)
+    [InlineData(1, 5, false)] [InlineData(5, 13, false)] [InlineData(31, 9, false)]
+    [InlineData(33, 15, false)] [InlineData(513, 256, false)] [InlineData(1031, 2, false)]
+    [InlineData(1, 5, true)] [InlineData(5, 13, true)] [InlineData(31, 9, true)]
+    [InlineData(33, 15, true)] [InlineData(513, 256, true)] [InlineData(1031, 2, true)]
+    public void TwoRowsPreserveScalarFmaBitsEnvelopeGuardsAndBorrowedOwnership(int width, int target, bool expanded)
     {
         if (!Supported) return;
         using var source = ImageBuffer.Create(width, 3, 16);
@@ -31,10 +34,18 @@ public sealed class LanczosWordPairTests
         const uint productGuard = 0xdec0ded;
         const ulong outputGuard = 0xfff8abcd12345678;
         var products = Enumerable.Repeat(productGuard, width * 8 + 8).ToArray();
+        var extraProducts = Enumerable.Repeat(BitConverter.UInt64BitsToDouble(outputGuard), width * 4 + 8).ToArray();
         var first = Enumerable.Repeat(BitConverter.UInt64BitsToDouble(outputGuard), target * 4 + 8).ToArray();
         var second = first.ToArray(); var charge = root.Bytes; var attempts = root.Attempts;
-        void Apply() => LanczosFmaResize.HorizontalWordPair(source, 0, 2, plan,
-            first.AsSpan(4, target * 4), second.AsSpan(4, target * 4), products.AsSpan(4, width * 8), context);
+        void Apply()
+        {
+            if (expanded)
+                LanczosFmaResize.HorizontalExpandedWordPair(source, 0, 2, plan,
+                    first.AsSpan(4, target * 4), second.AsSpan(4, target * 4),
+                    MemoryMarshal.Cast<uint, double>(products.AsSpan(4, width * 8)), extraProducts.AsSpan(4, width * 4), context);
+            else LanczosFmaResize.HorizontalWordPair(source, 0, 2, plan,
+                first.AsSpan(4, target * 4), second.AsSpan(4, target * 4), products.AsSpan(4, width * 8), context);
+        }
         Apply(); var allocated = GC.GetAllocatedBytesForCurrentThread(); Apply();
         Assert.Equal(allocated, GC.GetAllocatedBytesForCurrentThread());
         Assert.Equal(charge, root.Bytes); Assert.Equal(attempts, root.Attempts);
@@ -42,6 +53,8 @@ public sealed class LanczosWordPairTests
         for (var i = 0; i < 4; i++)
         {
             Assert.Equal(productGuard, products[i]); Assert.Equal(productGuard, products[width * 8 + 4 + i]);
+            Assert.Equal(outputGuard, BitConverter.DoubleToUInt64Bits(extraProducts[i]));
+            Assert.Equal(outputGuard, BitConverter.DoubleToUInt64Bits(extraProducts[width * 4 + 4 + i]));
             foreach (var output in new[] { first, second })
             {
                 Assert.Equal(outputGuard, BitConverter.DoubleToUInt64Bits(output[i]));
@@ -79,8 +92,9 @@ public sealed class LanczosWordPairTests
         }
     }
 
-    [Fact]
-    public void ProductPairChecksCancellationBeforeBorrowedMutation()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void ProductPairChecksCancellationBeforeBorrowedMutation(bool expanded)
     {
         if (!Supported) return;
         using var source = ImageBuffer.Create(13, 2, 16);
@@ -88,14 +102,22 @@ public sealed class LanczosWordPairTests
         using var plan = LanczosPlan.Create(13, 5, geometry);
         var output = Enumerable.Repeat(double.NaN, 40).ToArray();
         var products = Enumerable.Repeat(0xdec0dedu, 13 * 8).ToArray();
+        var extraProducts = Enumerable.Repeat(double.NaN, 13 * 4).ToArray();
         using var root = new TestMemoryBudget(0); using var cancellation = new CancellationTokenSource();
         using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
         cancellation.Cancel();
-        var error = Assert.Throws<OperationCanceledException>(() => LanczosFmaResize.HorizontalWordPair(source, 0, 1,
-            plan, output.AsSpan(0, 20), output.AsSpan(20, 20), products, context));
+        var error = Assert.Throws<OperationCanceledException>(() =>
+        {
+            if (expanded)
+                LanczosFmaResize.HorizontalExpandedWordPair(source, 0, 1, plan, output.AsSpan(0, 20), output.AsSpan(20, 20),
+                    MemoryMarshal.Cast<uint, double>(products.AsSpan()), extraProducts, context);
+            else LanczosFmaResize.HorizontalWordPair(source, 0, 1,
+                plan, output.AsSpan(0, 20), output.AsSpan(20, 20), products, context);
+        });
         Assert.Equal(cancellation.Token, error.CancellationToken);
         Assert.All(output, value => Assert.True(double.IsNaN(value)));
         Assert.All(products, value => Assert.Equal(0xdec0dedu, value));
+        Assert.All(extraProducts, value => Assert.True(double.IsNaN(value)));
         Assert.Equal(0, root.Attempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 

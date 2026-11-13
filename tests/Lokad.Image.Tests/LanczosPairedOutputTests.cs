@@ -7,30 +7,47 @@ namespace Lokad.Image.Tests;
 public sealed class LanczosPairedOutputTests
 {
     [Theory]
-    [InlineData(17, 35, 9, 17, false)]
-    [InlineData(17, 69, 9, 33, true)]
-    [InlineData(7, 41, 3, 20, true)]
-    [InlineData(1, 21, 1, 10, false)]
-    [InlineData(8, 73, 5, 11, false)]
-    [InlineData(9, 1031, 5, 11, false)]
-    [InlineData(3, 19, 5, 9, true)]
-    [InlineData(3, 35, 5, 17, true)]
+    [InlineData(17, 35, 9, 17, false, 8)]
+    [InlineData(17, 69, 9, 33, true, 8)]
+    [InlineData(7, 41, 3, 20, true, 8)]
+    [InlineData(1, 21, 1, 10, false, 8)]
+    [InlineData(8, 73, 5, 11, false, 8)]
+    [InlineData(9, 1031, 5, 11, false, 8)]
+    [InlineData(3, 19, 5, 9, true, 8)]
+    [InlineData(3, 35, 5, 17, true, 8)]
+    [InlineData(17, 35, 9, 17, false, 16)]
+    [InlineData(17, 69, 9, 33, true, 16)]
+    [InlineData(7, 41, 3, 20, true, 16)]
+    [InlineData(1, 21, 1, 10, false, 16)]
+    [InlineData(8, 73, 5, 11, false, 16)]
+    [InlineData(9, 1031, 5, 11, false, 16)]
+    [InlineData(3, 19, 5, 9, true, 16)]
+    [InlineData(3, 35, 5, 17, true, 16)]
+    [InlineData(7, 13, 3, 6, true, 16)]
+    [InlineData(7, 11, 3, 5, true, 16)]
+    [InlineData(37, 29, 19, 11, true, 16)]
+    [InlineData(37, 29, 19, 12, true, 16)]
+    [InlineData(37, 29, 19, 13, true, 16)]
+    [InlineData(37, 29, 19, 14, true, 16)]
     public void SharedOutputPrefixesAndOrdinaryTailsMatchExactIntegerExecution(
-        int sourceWidth, int sourceHeight, int width, int height, bool tinyAlpha)
+        int sourceWidth, int sourceHeight, int width, int height, bool tinyAlpha, int depth)
     {
-        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 8);
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, depth);
         if (tinyAlpha)
             for (var y = 0; y < sourceHeight; y++)
             for (var x = 0; x < sourceWidth; x++)
-                source.GetRow8(y)[x * 4 + 3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+                if (depth == 8)
+                    source.GetRow8(y)[x * 4 + 3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+                else
+                    source.GetRow16(y)[x * 4 + 3] = (ushort)((x + y) % 7 == 0 ? 65535 : (x + y) % 3 == 0 ? 1 : 0);
         var input = OriginalPixels.Bytes(source);
         using var exact = new OperationContext(ImageLimits.Default, default);
         using var horizontal = LanczosPlan.Create(sourceWidth, width, exact);
         using var vertical = LanczosPlan.Create(sourceHeight, height, exact);
-        using var rows = new LanczosWorkspace(horizontal, vertical, 8, false, exact);
+        using var rows = new LanczosWorkspace(horizontal, vertical, depth, false, exact);
         using var expected = LanczosResize.Execute(source, width, height, horizontal, vertical, rows, exact);
         using var root = new TestMemoryBudget(1_000_000);
-        using var plan = Lanczos3ResizePlan.Create(sourceWidth, sourceHeight, width, height, 8,
+        using var plan = Lanczos3ResizePlan.Create(sourceWidth, sourceHeight, width, height, depth,
             new() { MemoryBudget = root });
         using var first = plan.Resize(source);
         using var second = plan.Resize(source);
@@ -38,21 +55,24 @@ public sealed class LanczosPairedOutputTests
         Assert.Equal(frozen, OriginalPixels.Bytes(first));
         Assert.Equal(frozen, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Equal(plan.StorageBytes + 2L * width * height * 4, root.Bytes);
-        first.GetRow8(0)[0] ^= 255;
+        var bytesPerPixel = depth / 2;
+        Assert.Equal(plan.StorageBytes + 2L * width * height * bytesPerPixel, root.Bytes);
+        if (depth == 8) first.GetRow8(0)[0] ^= 255;
+        else first.GetRow16(0)[0] ^= 65535;
         Assert.Equal(frozen, OriginalPixels.Bytes(second));
         first.Dispose(); source.Dispose(); plan.Dispose();
-        Assert.Equal((long)width * height * 4, root.Bytes);
+        Assert.Equal((long)width * height * bytesPerPixel, root.Bytes);
         Assert.Equal(frozen, OriginalPixels.Bytes(second));
         second.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void OutputRefusalAndCancellationReleaseOnlyTheFailedResultBeforeReuse()
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void OutputRefusalAndCancellationReleaseOnlyTheFailedResultBeforeReuse(int depth)
     {
-        using var source = OriginalPixels.Buffer(17, 69, 8);
+        using var source = OriginalPixels.Buffer(17, 69, depth);
         using var root = new TestMemoryBudget(1_000_000);
-        using var plan = Lanczos3ResizePlan.Create(17, 69, 9, 33, 8, new() { MemoryBudget = root });
+        using var plan = Lanczos3ResizePlan.Create(17, 69, 9, 33, depth, new() { MemoryBudget = root });
         var retained = plan.StorageBytes;
         using var survivor = plan.Resize(source);
         var live = root.Bytes;

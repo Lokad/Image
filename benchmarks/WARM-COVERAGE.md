@@ -7,13 +7,13 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
 gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
-[Released-image storage](RELEASED-IMAGE-STORAGE.md), with two refreshed
-[paired Lanczos output](LANCZOS-PAIRED-OUTPUT.md) and three
+[Released-image storage](RELEASED-IMAGE-STORAGE.md), with five refreshed
+[Lanczos word-product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) and three
 [packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs, owns the current **191
-comparisons: 163 pass, 12 gaps, 16 uncertain**. These are existing views, including
+comparisons: 164 pass, 11 gaps, 16 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 caller-sample, inspection and in-place drawing paths retain their identified evidence.
-Each OS passes **6,551 full/live checks**, focused normal/scalar ownership checks and
+Each OS passes **6,573 full/live checks**, focused normal/scalar ownership checks and
 the **same actual Release-package consumer / three examples**. Source-valid ISA
 proof is reused. Current scope and raw evidence are in the linked owner, rather
 than repeated experimental or qualification narratives here.
@@ -38,7 +38,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | Lossy WebP encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md) retains six passes / three uncertainties on the existing content/effort scopes. Exact packets and tie order remain. |
 | WebP reading | Current 12 views: nine pass, three opaque VP8 uncertainties. Full output, native bounds, cancellation and ownership gates pass. [Earlier color-tile work](WEBP-INVERSE-COLOR-TILES.md) remains history. |
 | Bicubic/bilinear resizing | Current 73 views: 67 pass, one bounded byte-wide gap, five uncertainties. [Packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) passes bounded mixed-word: 820.00/native846.10 µs, upper0.978, 113 B/op; 3.38% normalized gain is confirmed. Tight vertical also improves; default mixed-word remains uncertain. The earlier vertical regression is retained. All eight equivalent one-shot/prepared controls pass. Stop passes; investigate demonstrated gaps before tuning uncertainties. Native float versus managed exact arithmetic stays explicit. |
-| Lanczos3 | [Paired outputs](LANCZOS-PAIRED-OUTPUT.md) pass and stop prepared byte reduction: 462.72/zimg489.40 µs, upper0.950; 138 B/op, 139,800 B retained plan. Eight views: six pass, one prepared-word gap, one word-enlargement uncertainty. The new sum borrows existing output capacity; exact arithmetic and equivalent one-shot/prepared ownership remain. |
+| Lanczos3 | [Word product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) passes and stops all four affected byte/word reduction views. Prepared word: 485.36/zimg512.07 µs, upper0.958; 6.18% normalized gain, 138 B/op, 156,248 B retained plan. Eight views: seven pass, one word-enlargement uncertainty; its unchanged-path refresh remains open at upper1.035. Product/sum loans reuse admitted storage; exact arithmetic and equivalent one-shot/prepared ownership remain. |
 | Copy/turn transforms and drawing | Current 20 independent-result edits: five pass, nine gaps, six uncertainties. Most gaps are a few microseconds; retain them without displacing larger absolute work. In-place fill/copy/compositing reuse unchanged evidence and approved reference identities. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Direct-input](DIRECT-STREAM-INPUT.md) and named prefix/header adapters remain source-valid. Seekable complete PNG Identify has a small gap; async passes. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
