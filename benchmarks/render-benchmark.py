@@ -74,6 +74,36 @@ def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata)
     return result
 
 
+def apply_current_cmyk_confidence(codecs, read_rows):
+    """Display accepted immutable-build costs, independent of rejected experiments."""
+    current = json.loads((ROOT / 'benchmarks/cmyk-current-owned-confidence-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['measurementAccepted'] and not current['productionChanged']
+    assert not current['productionSpeedupClaim'] and current['requiredMaterialPaths'] == 289
+    assert current['newMaterialPaths'] == current['measurementBuilds'] == current['broadOrPackageRepeatsForRestoration'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6600
+    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused']
+    assert q['actualPackageSha256'] == current['producers']['actualPackageSha256']
+    for c in current['cases'].values():
+        assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['metadata']['sourceUnchanged'] and c['metadata']['independentOwnedOutput']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    c = current['cases']['CmykAdobeAc']
+    prefix = '| JPEG horizontal-only CMYK, resident decode'
+    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
+    assert len(found) == 1 and c['status'] == 'gap'
+    codecs = codecs.replace(found[0], f'| JPEG horizontal-only CMYK, resident decode (gap) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
+    c = current['cases']['CmykAdobeAcFresh']
+    indices = [i for i, line in enumerate(read_rows) if line.startswith('| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts')]
+    assert len(indices) == 1 and c['status'] == 'pass'
+    read_rows[indices[0]] = f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |'
+    return codecs, read_rows
+
+
 def apply_released_image_storage(codecs, editing, read_rows):
     """Refresh affected displayed costs from the qualified current owner."""
     current = json.loads((ROOT / 'benchmarks/released-image-storage-evidence.json').read_text(encoding='utf-8'))
@@ -2542,6 +2572,7 @@ def render():
         read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
+    codecs, read_rows = apply_current_cmyk_confidence(codecs, read_rows)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
@@ -2588,7 +2619,9 @@ pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
 word copies retain small gaps, and complete word PNG composition stays uncertain.
 No pipeline speedup is inferred from historical stage sums.
-Retained-context horizontal-CMYK JPEG has an equivalent fresh-context pass.
+[Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
+remains a retained-context gap and an equivalent fresh-context pass. A word-product
+prototype was rejected after conflicting complete-operation results.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,

@@ -31,13 +31,14 @@ public sealed class JpegCmykFrameTests
             JpegDecoder.RenderCmykInPlace(pixels.AsSpan(3, 65536 * 4), inverted);
             Assert.Equal(expected, pixels);
         }
-        foreach (var count in new[] { 0, 1, 7, 8, 9, 17 })
+        foreach (var inverted in new[] { false, true })
+        foreach (var count in new[] { 0, 1, 7, 8, 9, 15, 16, 17, 31, 32, 33 })
         {
             var pixels = Enumerable.Range(0, count * 4).Select(i => (byte)(i * 59)).ToArray();
             var expected = pixels.ToArray();
             for (var i = 0; i < count; i++)
-                JpegBlackColor.WriteCmyk(pixels[i * 4], pixels[i * 4 + 1], pixels[i * 4 + 2], pixels[i * 4 + 3], false, expected.AsSpan(i * 4, 4), 4);
-            JpegDecoder.RenderCmykInPlace(pixels, false); Assert.Equal(expected, pixels);
+                JpegBlackColor.WriteCmyk(pixels[i * 4], pixels[i * 4 + 1], pixels[i * 4 + 2], pixels[i * 4 + 3], inverted, expected.AsSpan(i * 4, 4), 4);
+            JpegDecoder.RenderCmykInPlace(pixels, inverted); Assert.Equal(expected, pixels);
         }
         var invalid = new byte[31]; var saved = invalid.ToArray();
         Assert.Throws<ArgumentException>(() => JpegDecoder.RenderCmykInPlace(invalid, true)); Assert.Equal(saved, invalid);

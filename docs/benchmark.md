@@ -23,7 +23,9 @@ pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
 word copies retain small gaps, and complete word PNG composition stays uncertain.
 No pipeline speedup is inferred from historical stage sums.
-Retained-context horizontal-CMYK JPEG has an equivalent fresh-context pass.
+[Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
+remains a retained-context gap and an equivalent fresh-context pass. A word-product
+prototype was rejected after conflicting complete-operation results.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -121,7 +123,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,517.84 | 3,856.40 | 0.912 / 0.918 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,611.56 | 2,853.33 | 0.915 / 0.919 | 1,638,214 | — |
 | JPEG dense CMYK, resident decode † | 1,269.91 | 3,112.28 | 0.408 / 0.413 | 20,944 | — |
-| JPEG horizontal-only CMYK, resident decode (gap) † | 400.21 | 386.59 | 1.035 / 1.040 | 20,944 | — |
+| JPEG horizontal-only CMYK, resident decode (gap) † | 434.53 | 392.72 | 1.106 / 1.119 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 429.43 | 605.39 | 0.709 / 0.715 | 762,717 | — |
 | JPEG progressive grayscale, resident decode † | 1,590.44 | 1,713.68 | 0.928 / 0.934 | 151,432 | — |
 | JPEG progressive420, resident decode † | 1,418.37 | 1,954.92 | 0.726 / 0.731 | 243,676 | — |
@@ -217,7 +219,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
 | Identify PNG8, fresh seekable Stream, adapter reference | 17.492 | 15.921 | 1.099 / 1.103 | 192 | Confirmed gap |
 | Identify PNG8, async nonseekable, adapter reference | 18.367 | 19.282 | 0.953 / 0.956 | 216 | Confirmed pass |
-| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 408.406 | 750.674 | 0.544 / 0.547 | 20,944 | Confirmed pass |
+| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 399.321 | 748.794 | 0.533 / 0.562 | 20,944 | Confirmed pass |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
 remaining paths, boundaries, allocations, references and raw evidence. Superseded

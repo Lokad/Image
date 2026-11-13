@@ -12,7 +12,8 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 [packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs, plus eight current
 [shared axis-swapping edits](SHARED-AXIS-SWAP.md) and one
 [bounded horizontal quartet](BOUNDED-WIDE-HORIZONTAL-QUARTET.md), plus six
-[shared-copy/composition costs](SHARED-RASTER-COPY.md), owns the current **191
+[shared-copy/composition costs](SHARED-RASTER-COPY.md) and two refreshed
+[horizontal-CMYK costs](CMYK-CURRENT-OWNED-CONFIDENCE.md), owns the current **191
 comparisons: 172 pass, 5 gaps, 14 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 caller-sample, inspection and in-place drawing paths retain their identified evidence.
@@ -36,7 +37,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | --- | --- |
 | PNG decoding | [Current owner](RELEASED-IMAGE-STORAGE.md): all 47 existing decode controls pass. Four coding-only validators and the caller-root retained-output control reuse unchanged paths. Stop passes. |
 | Stream decode/composition | Five PNG views: four pass, word composition uncertain. JPEG/VP8L/VP8 stream decode passes. [Direct acquisition](DIRECT-STREAM-INPUT.md) remains the source-valid inspection/async-validation owner; its old affected decode/composition costs are historical. |
-| JPEG reading | Current 24 RGBA/fresh-reference comparisons: 23 pass, retained horizontal-CMYK gap. The contemporary old build has the same retained-reference gap; the equivalent fresh view passes. Six caller-sample/validation paths reuse unchanged evidence. [Kernel history](JPEG-SHARED-BLOCK-SUPPORT.md). |
+| JPEG reading | Current 24 RGBA/fresh-reference comparisons: 23 pass, retained horizontal-CMYK gap. [Current accepted costs](CMYK-CURRENT-OWNED-CONFIDENCE.md): 434.53/FFmpeg392.72 µs, upper1.119 with retained contexts; equivalent fresh contexts pass at 399.32/748.79 µs, upper.562. A [word-product prototype](CMYK-WORD-PRODUCT-EXPERIMENT.md) was rejected after conflicting standalone results and an inconclusive controlled pair; production/package restored exactly. Next investigate repeated inverse workspace preparation, not more color variants. Six caller-sample/validation paths reuse unchanged evidence. [Kernel history](JPEG-SHARED-BLOCK-SUPPORT.md). |
 | JPEG encoding | [Gray preparation](JPEG-GRAY-TILE-PREPARATION.md), [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) and identified color/sampling evidence are unchanged. Keep SIMD libjpeg-turbo grayscale explicitly labeled and packets exact. |
 | PNG encoding | [Current Gray8 adjacency](PNG-GRAY-CURRENT-PATH.md) remains uncertain, ratio .983–1.006, after the heap-entry path change; no favorable retry or presumed optimization gap. [Compressed heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md) retain 16 passing fresh controls, exact packets and scoped 600 B/op reduction. [Stored/fresh/natural64 views](PNG-STORED-WORD-NORMALIZATION.md) keep their distinct lifetimes; retained word is uncertain. |
 | Lossless WebP/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md), [photograph confidence](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and [adjacent alpha views](WARM-ADJACENT-CONFIDENCE.md) remain source-valid: six pass, opaque/word-alpha uncertain. Exact packets, selected-candidate ownership and operation-owned workspace reuse remain. |
