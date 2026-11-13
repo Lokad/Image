@@ -13,6 +13,7 @@ public sealed class PngRgba16EncodePackingTests
     [InlineData(4096, CompressionLevel.NoCompression)]
     [InlineData(4097, CompressionLevel.NoCompression)]
     [InlineData(8193, CompressionLevel.NoCompression)]
+    [InlineData(16383, CompressionLevel.NoCompression)]
     [InlineData(4097, CompressionLevel.Fastest)]
     [InlineData(4097, CompressionLevel.Optimal)]
     [InlineData(4097, CompressionLevel.SmallestSize)]

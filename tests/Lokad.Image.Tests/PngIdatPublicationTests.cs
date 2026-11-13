@@ -17,7 +17,7 @@ public sealed class PngIdatPublicationTests
     {
         const int width = 513, height = 259;
         var sourceBytes = width * height * (depth / 2);
-        var working = sourceBytes + width * (depth / 2) + 4096 + PngDeflater.StoredWorkspaceBytes;
+        var working = sourceBytes + 4096 + PngDeflater.StoredWorkspaceBytes;
         using var root = new TestMemoryBudget(working);
         var limits = new ImageLimits { MaxWorkingBytes = working, MemoryBudget = root };
         using var seed = OriginalPixels.Buffer(width, height, depth);

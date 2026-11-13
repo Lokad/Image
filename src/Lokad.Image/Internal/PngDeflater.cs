@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -75,6 +76,105 @@ internal sealed partial class PngDeflater : Stream
         // boundary. Flush stored data only after the entire row, never after
         // its separately written filter byte. Generic writes fill fixed blocks.
         if (level == 0 && storedCount >= Window) StoredBlock(false);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal void WriteStoredRow16(ReadOnlySpan<ushort> row)
+    {
+        if (level != 0) throw new InvalidOperationException("Stored rows require uncompressed PNG output.");
+        WriteByte(0);
+        var length = checked(row.Length * sizeof(ushort)); var at = 0;
+        while (at < length)
+        {
+            var count = Math.Min(length - at, 65531 - storedCount);
+            var destination = history.AsSpan(storedCount, count);
+            if (Avx512BW.IsSupported && Avx512F.IsSupported && count >= 64)
+                PackStoredWordsAndAdler(row, at, destination, ref adlerA, ref adlerB, context.Cancellation);
+            else
+            {
+                // Portable packing keeps the original 4096-pixel checkpoints.
+                for (var offset = 0; offset < count; offset += 32768)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    PackStoredWords(row, at + offset,
+                        destination.Slice(offset, Math.Min(32768, count - offset)));
+                }
+                Adler32.Append(destination, ref adlerA, ref adlerB, context.Cancellation);
+            }
+            storedCount += count; at += count;
+            if (storedCount == 65531) StoredBlock(false);
+        }
+        if (storedCount >= Window) StoredBlock(false);
+    }
+
+    private static void PackStoredWords(ReadOnlySpan<ushort> row, int at, Span<byte> destination)
+    {
+        if ((at & 1) != 0 && !destination.IsEmpty)
+        {
+            destination[0] = (byte)row[at / 2]; destination = destination[1..]; at++;
+        }
+        var words = destination.Length / 2;
+        var source = row.Slice(at / 2, words);
+        var target = MemoryMarshal.Cast<byte, ushort>(destination[..(words * 2)]);
+        if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(source, target);
+        else source.CopyTo(target);
+        if ((destination.Length & 1) != 0) destination[^1] = (byte)(row[at / 2 + words] >> 8);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void PackStoredWordsAndAdler(ReadOnlySpan<ushort> row, int at, Span<byte> bytes,
+        ref uint stateA, ref uint stateB, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        var source = MemoryMarshal.AsBytes(row); var a = stateA; var b = stateB;
+        while (!bytes.IsEmpty)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var block = bytes[..Math.Min(4096, bytes.Length)]; var i = 0;
+            if ((at & 1) != 0)
+            {
+                block[0] = (byte)row[at / 2];
+                Adler32.Append(block[..1], ref a, ref b, cancellation); i = 1;
+            }
+            if (block.Length - i >= 64)
+            {
+                // PNG word k uses byte indices (2*k+1, 2*k) on little-endian
+                // storage. PSHUFB applies each lane's low four index bits.
+                var swap = Vector512.Create((byte)1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12, 15, 14,
+                    17, 16, 19, 18, 21, 20, 23, 22, 25, 24, 27, 26, 29, 28, 31, 30,
+                    33, 32, 35, 34, 37, 36, 39, 38, 41, 40, 43, 42, 45, 44, 47, 46,
+                    49, 48, 51, 50, 53, 52, 55, 54, 57, 56, 59, 58, 61, 60, 63, 62);
+                // RFC1950: reuse the exact stored-Adler coefficients and bounds
+                // over the converted bytes, with at most 64 groups per block.
+                var weights = Vector512.Create((sbyte)64, 63, 62, 61, 60, 59, 58, 57,
+                    56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41,
+                    40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25,
+                    24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9,
+                    8, 7, 6, 5, 4, 3, 2, 1);
+                var sums = Vector512<ulong>.Zero; var prefixes = Vector512<ulong>.Zero;
+                var weightedSums = Vector512<int>.Zero; var first = i;
+                for (; i <= block.Length - 64; i += 64)
+                {
+                    var value = Vector512.Create(source.Slice(at + i, 64));
+                    if (BitConverter.IsLittleEndian) value = Avx512BW.Shuffle(value, swap);
+                    value.CopyTo(block.Slice(i, 64));
+                    var pairs = Avx512BW.MultiplyAddAdjacent(value, weights);
+                    weightedSums = Avx512F.Add(weightedSums,
+                        Avx512BW.MultiplyAddAdjacent(pairs, Vector512.Create((short)1)));
+                    prefixes = Avx512F.Add(prefixes, sums);
+                    sums = Avx512F.Add(sums, Avx512BW.SumAbsoluteDifferences(value, Vector512<byte>.Zero).AsUInt64());
+                }
+                b += (uint)(i - first) * a + (uint)Vector512.Sum(weightedSums) + 64 * (uint)Vector512.Sum(prefixes);
+                a += (uint)Vector512.Sum(sums); a %= 65521; b %= 65521;
+            }
+            if (i < block.Length)
+            {
+                PackStoredWords(row, at + i, block[i..]);
+                Adler32.Append(block[i..], ref a, ref b, cancellation);
+            }
+            at += block.Length; bytes = bytes[block.Length..];
+        }
+        stateA = a; stateB = b;
     }
 
     private void WriteStored(ReadOnlySpan<byte> data)

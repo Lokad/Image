@@ -1729,9 +1729,11 @@ internal static class PngCodec
             CompressionLevel.SmallestSize => 9,
             _ => throw new ArgumentOutOfRangeException(nameof(options))
         };
-        // Admit the packed row, minor codec state and compressor before output.
-        context.Reserve(rowBytes + 4096L);
-        var row = new byte[rowBytes];
+        // Stored RGBA borrows byte rows or serializes words into compressor
+        // history. Other paths own a packed row. Admit all storage before output.
+        var storedRgba = level == 0 && color == 6;
+        context.Reserve((storedRgba ? 0L : rowBytes) + 4096);
+        var row = storedRgba ? Array.Empty<byte>() : new byte[rowBytes];
         var predict = level != 0 && PngRowPrediction.Useful(source, color, context.Cancellation);
         byte[] previous = [], filteredRow = [];
         if (predict)
@@ -1752,54 +1754,71 @@ internal static class PngCodec
             Span<byte> physical = stackalloc byte[9]; physical.Clear(); physical[7] = 1;
             WriteChunk(output, "pHYs"u8, physical);
         }
-        if (level == 0 && color == 6
-            && output is LimitedWriteStream bounded)
-            bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
-        for (var y = 0; y < source.Height; y++)
+        if (storedRgba)
         {
-            context.Cancellation.ThrowIfCancellationRequested();
-            if (color == 6 && source.BitDepth == 8)
+            if (output is LimitedWriteStream bounded)
+                bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
+            WriteStoredRows(source, deflater, context.Cancellation);
+        }
+        else
+        {
+            for (var y = 0; y < source.Height; y++)
             {
-                for (var x = 0; x < source.Width; x += 4096)
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (color == 6 && source.BitDepth == 8)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var bytes = Math.Min(4096, source.Width - x) * 4;
-                    source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
+                    for (var x = 0; x < source.Width; x += 4096)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var bytes = Math.Min(4096, source.Width - x) * 4;
+                        source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
+                    }
                 }
-            }
-            else if (color == 6 && source.BitDepth == 16)
-            {
-                for (var x = 0; x < source.Width; x += 4096)
+                else if (color == 6 && source.BitDepth == 16)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var samples = Math.Min(4096, source.Width - x) * 4;
-                    var input = source.GetRow16(y).Slice(x * 4, samples);
-                    var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
-                    // PNG stores full-word samples most significant byte first.
-                    // The span overload provides portable vectorized conversion.
-                    if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
-                    else input.CopyTo(destination);
+                    for (var x = 0; x < source.Width; x += 4096)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var samples = Math.Min(4096, source.Width - x) * 4;
+                        var input = source.GetRow16(y).Slice(x * 4, samples);
+                        var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
+                        // PNG stores full-word samples most significant byte first.
+                        // The span overload provides portable vectorized conversion.
+                        if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
+                        else input.CopyTo(destination);
+                    }
                 }
+                else if (source.BitDepth == 8 && color is 0 or 2 or 4)
+                {
+                    PackByteRow(source, y, row, color, context.Cancellation);
+                }
+                else
+                {
+                    PackWordRow(source, y, row, color, context.Cancellation);
+                }
+                if (predict)
+                {
+                    var filter = PngRowPrediction.Apply(row, previous, filteredRow, Channels(color) * (source.BitDepth / 8), context.Cancellation);
+                    deflater.WriteRow(filter == 0 ? row : filteredRow, filter);
+                    (row, previous) = (previous, row);
+                }
+                else deflater.WriteRow(row);
             }
-            else if (source.BitDepth == 8 && color is 0 or 2 or 4)
-            {
-                PackByteRow(source, y, row, color, context.Cancellation);
-            }
-            else
-            {
-                PackWordRow(source, y, row, color, context.Cancellation);
-            }
-            if (predict)
-            {
-                var filter = PngRowPrediction.Apply(row, previous, filteredRow, Channels(color) * (source.BitDepth / 8), context.Cancellation);
-                deflater.WriteRow(filter == 0 ? row : filteredRow, filter);
-                (row, previous) = (previous, row);
-            }
-            else deflater.WriteRow(row);
         }
         deflater.Complete();
         context.Cancellation.ThrowIfCancellationRequested();
         WriteChunk(output, "IEND"u8, []);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void WriteStoredRows(ImageBuffer source, PngDeflater deflater, CancellationToken cancellation)
+    {
+        for (var y = 0; y < source.Height; y++)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            if (source.BitDepth == 8) deflater.WriteRow(source.GetRow8(y));
+            else deflater.WriteStoredRow16(source.GetRow16(y));
+        }
     }
 
     private static void PackByteRow(ImageBuffer source, int y, Span<byte> row, int color, CancellationToken cancellation)

@@ -109,7 +109,7 @@ public sealed class PngStoredWorkspaceTests
     {
         const int width = 19, height = 13;
         var sourceBytes = width * height * 4 * (depth / 8);
-        var working = sourceBytes + width * 4 * (depth / 8) + 4096 + PngDeflater.StoredWorkspaceBytes;
+        var working = sourceBytes + 4096 + PngDeflater.StoredWorkspaceBytes;
         using var root = new TestMemoryBudget(working);
         var limits = new ImageLimits { MaxWorkingBytes = working, MemoryBudget = root };
         using var source = ImageBuffer.Create(width, height, depth, limits);

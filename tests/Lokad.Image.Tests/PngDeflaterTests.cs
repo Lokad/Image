@@ -9,6 +9,36 @@ namespace Lokad.Image.Tests;
 public sealed class PngDeflaterTests
 {
     [Theory]
+    [InlineData(32)] [InlineData(2048)] [InlineData(32768)] [InlineData(65532)]
+    public void StoredWordRowsMatchIndependentNetworkOrderAcrossHardSplits(int samples)
+    {
+        var input = new ushort[samples + 2]; input[0] = 0x55aa; input[^1] = 0xaa55;
+        using var root = new TestMemoryBudget(2 * PngDeflater.StoredWorkspaceBytes);
+        using var expectedContext = new OperationContext(new() { MemoryBudget = root }, default);
+        using var actualContext = new OperationContext(new() { MemoryBudget = root }, default);
+        using var expected = new MemoryStream(); using var actual = new MemoryStream();
+        using (var generic = new PngDeflater(expected, expectedContext, 0))
+        using (var typed = new PngDeflater(actual, actualContext, 0))
+        {
+            for (var y = 0; y < 3; y++)
+            {
+                var network = new byte[samples * 2];
+                for (var i = 0; i < samples; i++)
+                {
+                    input[i + 1] = y == 1 ? ushort.MaxValue : (ushort)(i * 71 + y * 123 + (i >> 7) * 2053);
+                    System.Buffers.Binary.BinaryPrimitives.WriteUInt16BigEndian(network.AsSpan(i * 2), input[i + 1]);
+                }
+                var original = input.ToArray();
+                generic.WriteRow(network); typed.WriteStoredRow16(input.AsSpan(1, samples));
+                Assert.Equal(original, input);
+            }
+            generic.Complete(); typed.Complete();
+        }
+        Assert.Equal(expected.ToArray(), actual.ToArray());
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Theory]
     [InlineData(2, false)] [InlineData(9, false)]
     [InlineData(2, true)] [InlineData(9, true)]
     public void StoredChunkFailurePreservesPublishedPrefixPendingBytesAndAdmission(int stopAt, bool cancel)

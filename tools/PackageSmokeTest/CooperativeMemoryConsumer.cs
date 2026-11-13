@@ -1621,7 +1621,7 @@ internal static class CooperativeMemoryConsumer
         {
             const int width = 19, height = 131;
             var sourceBytes = width * height * 4 * (depth / 8);
-            var working = sourceBytes + width * 4 * (depth / 8) + 4096 + 72 * 1024;
+            var working = sourceBytes + 4096 + 72 * 1024;
             using var root = new TestMemoryBudget(2 * 1024 * 1024);
             var limits = new ImageLimits { MaxWorkingBytes = working, MemoryBudget = root };
             using var seed = OriginalPixels.Buffer(width, height, depth);

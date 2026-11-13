@@ -12,7 +12,8 @@ public sealed class PngManagedAdmissionTests
     {
         const int width = 32, height = 24, sourceBytes = width * height * 4;
         var workspace = compression == CompressionLevel.NoCompression ? 72 * 1024 : 384 * 1024;
-        using var root = new TestMemoryBudget(sourceBytes + width * 4 + 4096 + workspace);
+        var rowBytes = compression == CompressionLevel.NoCompression ? 0 : width * 4;
+        using var root = new TestMemoryBudget(sourceBytes + rowBytes + 4096 + workspace);
         var limits = ImageLimits.Default with { MemoryBudget = root };
         using var source = ImageBuffer.Create(width, height, 8, limits);
         var options = new PngEncodeOptions { Limits = limits, Compression = compression };

@@ -21,11 +21,12 @@ public sealed class PngEncoderAdmissionTests
             opaque: color is PngColorType.Grayscale or PngColorType.Rgb);
         var sourcePixels = OriginalPixels.Bytes(source);
         var channels = color switch { PngColorType.Grayscale => 1, PngColorType.Rgb => 3, PngColorType.GrayscaleAlpha => 2, _ => 4 };
-        // Public admission policy: supplied pixels + one packed scanline + 4 KiB
-        // minor codec state + 72 KiB stored or 384 KiB compressed workspace. The inflater
-        // has a separate 256 KiB allowance; this test only constrains encoding.
+        // Stored RGBA uses compressor history directly. Other paths retain a
+        // packed row; all keep 4 KiB minor state and their compressor allowance.
         var workspace = compression == CompressionLevel.NoCompression ? 72 * 1024 : 384 * 1024;
-        var peak = sourcePixels.Length + 9L * channels * (depth / 8) + 4096 + workspace;
+        var packedRow = compression == CompressionLevel.NoCompression && color == PngColorType.Rgba
+            ? 0 : 9L * channels * (depth / 8);
+        var peak = sourcePixels.Length + packedRow + 4096 + workspace;
         var options = new PngEncodeOptions { ColorType = color, Compression = compression, Limits = new ImageLimits { MaxWorkingBytes = peak } };
         using var rejected = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, rejected, options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
