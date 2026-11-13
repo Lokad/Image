@@ -1,7 +1,7 @@
 # VP8 search-local rounded borders
 
-The photograph's [current adjacent confidence](VP8-PHOTOGRAPH-CURRENT-CONFIDENCE.md)
-supersedes its standalone cost below. This stage's incremental and other valid
+The photograph/effort2diagram's [current adjacent confidence](VP8-ENCODE-CURRENT-CONFIDENCE.md)
+supersedes their standalone costs below. This stage's incremental and other valid
 family evidence remains retained.
 
 VPR619 retains exact rounded-border preparation within distortion-only 4×4

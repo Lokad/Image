@@ -1846,21 +1846,22 @@ def render():
         'alpha16': 'VP8 RGBA16 + alpha, including normalization',
     }
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
-    vp8_photo_current = json.loads((ROOT / 'benchmarks/vp8-photograph-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_photo_current['measurementAccepted'] and not vp8_photo_current['productionChanged']
-    assert not vp8_photo_current['productionSpeedupClaim'] and vp8_photo_current['allBuilds'] == vp8_photo_current['broadOrPackageRepeats'] == 0
-    assert vp8_photo_current['raw']['mirrored'] and vp8_photo_current['raw']['allMembersVerified']
-    assert vp8_photo_current['qualification']['sameActualPackageBothOS'] and vp8_photo_current['qualification']['productionInputsUnchanged']
-    assert set(vp8_photo_current['cases']) == {'photograph'}
-    vp8_photo = vp8_photo_current['cases']['photograph']
-    assert vp8_photo['librarySha256'] == vp8_photo_current['qualification']['actualPackage']['librarySha256']
-    assert vp8_photo['actualIterations'] == vp8_photo['nativeSamplesEachBracket'] == len(vp8_photo['managedActualNanoseconds']) == 12
-    assert vp8_photo['allActualsRetained'] and vp8_photo['allOriginalGatesPassed'] and vp8_photo['quietGuardsPassed']
-    assert vp8_photo['operationsPerSubject'] == 8 and vp8_photo['status'] == 'uncertain'
-    assert vp8_photo['completePacketExact'] and vp8_photo['packetSha256'] == vp8_photo['nativePacketSha256']
-    assert vp8_photo['managedPacketBytes'] == vp8_photo['nativePacketBytes'] == 17688
-    assert vp8_photo['sourceUnchanged'] and vp8_photo['independentOwnedOutput']
-    vp8_encode_cases = {**vp8_current['cases'], **vp8_photo_current['cases']}
+    vp8_confidence = json.loads((ROOT / 'benchmarks/vp8-encode-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_confidence['measurementAccepted'] and not vp8_confidence['productionChanged']
+    assert not vp8_confidence['productionSpeedupClaim'] and vp8_confidence['allBuilds'] == vp8_confidence['broadOrPackageRepeats'] == 0
+    assert vp8_confidence['raw']['mirrored'] and vp8_confidence['raw']['allMembersVerified']
+    assert vp8_confidence['qualification']['sameActualPackageBothOS'] and vp8_confidence['qualification']['productionInputsUnchanged']
+    assert set(vp8_confidence['cases']) == {'photograph', 'distortion'}
+    for case, operations, packet in [('photograph', 8, 17688), ('distortion', 32, 7330)]:
+        c = vp8_confidence['cases'][case]
+        assert c['librarySha256'] == vp8_confidence['qualification']['actualPackage']['librarySha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == len(c['managedActualNanoseconds']) == 12
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['operationsPerSubject'] == operations and c['status'] == 'uncertain' and c['lower'] <= 1 < c['upper']
+        assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
+        assert c['managedPacketBytes'] == c['nativePacketBytes'] == packet
+        assert c['sourceUnchanged'] and c['independentOwnedOutput']
+    vp8_encode_cases = {**vp8_current['cases'], **vp8_confidence['cases']}
     vp8_rows = []
     for case, label in vp8_labels.items():
         c = webp_owned['cases'][case] if case in ('alpha', 'alpha16') else vp8_encode_cases[case]
@@ -1873,7 +1874,7 @@ def render():
                                    else vp8_encode_cases[case])['status'] == state
                                   for case in vp8_encode_cases)
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_status_counts == vp8_photo_current['currentLossyStatusCounts'] == {'pass': 6, 'gap': 0, 'uncertain': 3}
+    assert vp8_status_counts == vp8_confidence['currentLossyStatusCounts'] == {'pass': 6, 'gap': 0, 'uncertain': 3}
     selected_cost = vp8_current['cases']['selected']
     distortion_cost = vp8_current['cases']['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
@@ -2580,7 +2581,7 @@ image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-and [VP8 photograph](../benchmarks/VP8-PHOTOGRAPH-CURRENT-CONFIDENCE.md) uncertain;
+and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
