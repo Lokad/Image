@@ -234,6 +234,28 @@ def apply_current_independent_row_copy(editing):
     return editing + f'\n| Vertical flip RGBA8 (gap) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
 
 
+def current_png_stream_word_note():
+    current = json.loads((ROOT / 'benchmarks/png-stream-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    c, q = current['case'], current['qualification']
+    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == 6624 and q['productionAndActualPackageByteIdentical']
+    assert q['sameActualPackageBothOsAndThreeExamplesPassed'] and q['broadOrPackageRepeats'] == 0
+    assert current['currentImageOwnerViewStatuses'] == {'passCount': 174, 'gaps': 1, 'uncertain': 16, 'total': 191}
+    assert c['librarySha256'] == current['producers']['timedArtifactSha256'] == q['actualPackageLibrarySha256']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+    assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 8664
+    assert c['status'] == 'pass' and c['upper'] <= 1
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return (f'[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) '
+            f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
+            f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
+            'uncertainty without a production change or speedup claim. Original adverse data remain; '
+            'no further tuning of this control.')
+
+
 def apply_current_pixel_reversal(editing):
     current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2754,6 +2776,7 @@ def render():
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
+    png_stream_word_note = current_png_stream_word_note()
     return f"""# Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
@@ -2776,9 +2799,10 @@ Word flip passes. Current word clone/normal-orientation evidence stays uncertain
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
-no idle-pool or complete-decode peak saving is inferred. Affected PNG16 decode and
-VP8 stream costs are now uncertain; their original samples remain, with no
-demonstrated regression or favorable standalone repeat.
+no idle-pool or complete-decode peak saving is inferred. Word composition and
+VP8 stream costs remain uncertain, with original samples retained.
+
+{png_stream_word_note}
 
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
@@ -2788,7 +2812,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 173 pass, 1 gap, 17 uncertain**. This does not establish full parity:
+image views: 174 pass, 1 gap, 16 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.

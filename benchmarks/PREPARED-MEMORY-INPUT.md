@@ -1,5 +1,12 @@
 # Prepared complete stream input
 
+[Current PNG16 stream confidence](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) supersedes
+only the earlier standalone PNG16 decode uncertainty below. The original capture
+and inconclusive two-DLL comparison remain history. The complete operation now
+passes on the current actual-package DLL under alternating managed/native batches;
+this is a confidence update, not a production speedup. Other costs below retain
+their identified scope.
+
 Complete PNG `Identify(Stream)` independently saves **2.75 µs / 15.40% raw**,
 **15.01% reference-normalized**, against a contemporary 17.829 µs baseline.
 Filtered and all-actual raw confidence separate, as does normalized confidence;
