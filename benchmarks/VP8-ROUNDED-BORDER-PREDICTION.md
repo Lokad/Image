@@ -1,5 +1,9 @@
 # VP8 search-local rounded borders
 
+The photograph's [current adjacent confidence](VP8-PHOTOGRAPH-CURRENT-CONFIDENCE.md)
+supersedes its standalone cost below. This stage's incremental and other valid
+family evidence remains retained.
+
 VPR619 retains exact rounded-border preparation within distortion-only 4×4
 prediction search. On the frozen complete effort-2 diagram encode, independent
 confirmation saves **112.73µs: 4.27% raw and 4.55% reference-normalized**. Filtered

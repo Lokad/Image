@@ -15,8 +15,9 @@ The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 exi
 image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
-Fresh grayscale PNG remains [uncertain](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-after current-code adjacent confirmation; no optimization gap is inferred.
+Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
+and [VP8 photograph](../benchmarks/VP8-PHOTOGRAPH-CURRENT-CONFIDENCE.md) uncertain;
+no optimization gap is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
@@ -76,7 +77,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
 | VP8 opaque RGBA16, including normalization † | 13,882.59 | 15,579.01 | 0.891 / 0.894 | 1,201,560 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 9,630.85 | 9,657.98 | 0.997 / 1.001 | 809,233 | 17,688 / 17,688 |
+| VP8 opaque photograph † | 9,721.80 | 9,717.17 | 1.000 / 1.007 | 809,080 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,476.34 | 5,803.20 | 0.944 / 0.952 | 741,196 | 7,100 / 7,100 |
 | VP8 diagram, effort2 / distortion-only search † | 2,525.56 | 2,511.68 | 1.006 / 1.013 | 406,705 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
