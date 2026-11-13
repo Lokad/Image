@@ -1,5 +1,8 @@
 # Bounded wide bicubic: current tail attribution
 
+The opening WCA850 checkpoint is historical; the source-current refresh and
+unselected coefficient-pair trial are recorded below.
+
 The first profile after [contiguous source addressing](CONTIGUOUS-WIDE-SOURCE-VIEWS.md)
 uses the [current actual package](WEBP-INVERSE-COLOR-TILES.md), with unchanged
 resizing sources. Complete128×64RGBA8/4KiB Resize retains its source-valid
@@ -33,3 +36,45 @@ retains source/JIT/sample identities and the hypothesis. Raw`wide-bicubic-curren
 (126680B/27members), is mirrored/member-verified; dependencies preserve
 the actual package, original timing/native contexts and frozen fixture. All289
 required paths remain; publication is postponed.
+
+## Source-current refresh and coefficient-pair screen
+
+BWA917 profiles the qualified Lanczos-word-product package with current bicubic
+sources: 1,995 locations, including row-loan1,083/tail748. Generated bodies are
+6,539/6,559B. Scalar coefficient checks survive in the paired tail kernel, while
+the row-loan uses contiguous256-bit streams. These are attribution leads, not
+phase costs or removable shares; instrumented elapsed is discarded.
+
+BWP918 tries paired128-bit coefficient views in the one shared overlapping
+kernel, preserving each lane's multiply/add order and existing source windows.
+It adds no buffer, owner, admission or retained state.
+
+| Original complete513×259→128×64RGBA8 Resize/4KiB | Lokad / zimg µs | Ratio interval | GC B/op |
+| --- | ---: | ---: | ---: |
+| Source-valid current confirmation,12actuals | 357.38 / 347.95 | 1.019–1.031 | 113 |
+| Coefficient-pair short screen,3actuals | 356.64 / 352.04 | .949–1.085 | 113 |
+
+The0.74µs/.206% raw point saving and1.365% normalized point saving are
+inconclusive: both confidence views overlap; the native clock moves+1.175%.
+Row-loan/tail code grows to6,626/6,575B. Do not retain this implementation or
+repeat sampling for a favorable result. Revised preparation remains possible.
+
+Exact managed pixels, scoped native bounds, source/reference identities,
+independent outputs, cancellation and idle-v2 gates pass. Complete managed
+preparation/allocation/disposal stays timed; zimg retains graph/scratch. The
+original4KiB extra admission and zero retained operation scratch are unchanged;
+this is not a physical/native/JIT peak measurement.
+
+One Linux core/embedded build passes317internal/730public checks in each of normal
+and scalar modes, including all three named resize storage suites. No Windows,
+public-tool, native or fixture build; no independent timing/broad/package campaign.
+Qualified source, core, embedded tests and public DLL restore exactly without
+rebuilding. Windows and the actual package never change; their6,573full/live
+checks perOS and package/all3example proof remain valid. Current costs and the
+289-path objective are unchanged; this report supplies no renderer result.
+
+The evidence follow-up retains designs, samples, generated code, receipts,
+restoration and reproduction scripts. Raw`bounded-wide-coefficient-pair-trial.tar.xz`,
+SHA256`f88e86ba050d0e4ca21067b74492b21af8b3800d94a315cf291cdf065d588f0e`
+(1,437,256B/58members), is mirrored/member-verified. Its dependency preserves the
+accepted actual package and original references. Publication remains postponed.
