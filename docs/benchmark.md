@@ -12,7 +12,7 @@ saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost 
 engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 171 pass, 5 gaps, 15 uncertain**. The tables retain source-valid
+image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -24,6 +24,9 @@ The four Lanczos reduction and eight equivalent bicubic one-shot/prepared contro
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
 word copies retain small gaps, and complete word PNG composition stays uncertain.
+[Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
+now passes on the unchanged package DLL; all eight declared Lanczos comparisons
+pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
 [Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
 remains a retained-context gap and an equivalent fresh-context pass. A word-product
@@ -146,7 +149,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,770.44 | 5,255.86 | 0.717 / 0.727 | 319,224 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,554.71 | 4,074.82 | 0.872 / 0.882 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,117.46 | 5,096.28 | 0.808 / 0.821 | 4,592,777 |
-| Lanczos3 prepared RGBA16 / zimg prepared (uncertain) † → 1027×519 | 3,989.78 | 3,911.18 | 1.020 / 1.035 | 4,265,332 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
 | Bicubic resize RGBA8 † → 256×129 | 415.34 | 419.25 | 0.991 / 0.997 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |

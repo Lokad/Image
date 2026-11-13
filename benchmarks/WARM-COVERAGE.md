@@ -9,12 +9,13 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 
 [Released-image storage](RELEASED-IMAGE-STORAGE.md), with five refreshed
 [Lanczos word-product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) and three
-[packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs, plus eight current
+[packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs and one current
+[Lanczos enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md), plus eight current
 [shared axis-swapping edits](SHARED-AXIS-SWAP.md) and one
 [bounded horizontal quartet](BOUNDED-WIDE-HORIZONTAL-QUARTET.md), plus six
 [shared-copy/composition costs](SHARED-RASTER-COPY.md) and two refreshed
 [horizontal-CMYK costs](CMYK-CURRENT-OWNED-CONFIDENCE.md) and its sparse-2D update, owns the current **191
-comparisons: 171 pass, 5 gaps, 15 uncertain**. These are existing views, including
+comparisons: 172 pass, 5 gaps, 14 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 caller-sample, inspection and in-place drawing paths retain their identified evidence.
 Each OS passes **6,600 full/live checks**, focused normal/scalar ownership checks and
@@ -44,7 +45,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | Lossy WebP encoding | [Current opaque adjacency](VP8-ENCODE-CURRENT-CONFIDENCE.md) remains uncertain: photograph .991–1.007, effort2diagram .980–1.001. No presumed gap or favorable retry. [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md) and [alpha scopes](WARM-ADJACENT-CONFIDENCE.md) retain six passes / three uncertainties across nine controls. Exact packets and tie order remain. |
 | WebP reading | Current 12 views: nine pass, three opaque VP8 uncertainties. Full output, native bounds, cancellation and ownership gates pass. [Earlier color-tile work](WEBP-INVERSE-COLOR-TILES.md) remains history. |
 | Bicubic/bilinear resizing | Current 73 views: 67 pass, six uncertainties. [Bounded horizontal reuse](BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves 3.29% in paired complete byte-wide resize; standalone360.12/zimg348.02µs, upper1.041 remains uncertain,113B/op. Five unaffected specializations compile identically; reuse their valid costs. [Packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) passes bounded mixed-word and tight vertical; default mixed-word remains uncertain. Earlier adverse captures are retained. All eight equivalent one-shot/prepared controls pass and stop. Native float versus managed exact arithmetic stays explicit. |
-| Lanczos3 | [Word product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) passes and stops all four affected byte/word reduction views. Prepared word: 485.36/zimg512.07 µs, upper0.958; 6.18% normalized gain, 138 B/op, 156,248 B retained plan. Eight views: seven pass, one word-enlargement uncertainty; its unchanged-path refresh remains open at upper1.035. Product/sum loans reuse admitted storage; exact arithmetic and equivalent one-shot/prepared ownership remain. |
+| Lanczos3 | All eight declared one-shot/prepared byte/word comparisons pass and stop. [Current prepared word enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md):4117.26/zimg4212.39µs, upper.990,4264760B/op and333396B retained plan. [Reduction product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) retains its6.18% normalized gain and four passing reduction views. Exact Q30/rational arithmetic, float-native bounds and equivalent prepared/one-shot ownership stay explicit; no gain is inferred from the confidence update. |
 | Copy/turn transforms and drawing | [Shared axis-swapping tiles](SHARED-AXIS-SWAP.md) pass/stop all eight byte/word transposes and quarter turns. Mirrored byte transpose: 32.07/FFmpeg39.50 µs, upper .826; confirmed 10.00 µs / 23.76% raw / 21.24% normalized gain, unchanged 112 B/op and capacity. Three duplicate classes are removed. Current 20 independent-result edits: 13 pass, four gaps, three uncertainties. [Shared raster copy](SHARED-RASTER-COPY.md) retains its word-clone gain and passing byte copies. Other dispatcher branches compile identically; in-place drawing/reference evidence is reused. Keep small gaps visible without displacing material work. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Direct-input](DIRECT-STREAM-INPUT.md) and named prefix/header adapters remain source-valid. Seekable complete PNG Identify has a small gap; async passes. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |

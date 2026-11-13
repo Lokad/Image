@@ -84,3 +84,8 @@ usage examples**, including frozen word pixels and surviving owners.
 [Evidence](lanczos-word-product-reuse-evidence.json) records source identities and mirrored/member-checked
 raw archive retain reproduction and the earlier stage. Published releases are
 immutable; publication remains postponed.
+
+[Current adjacent enlargement confidence](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
+supersedes only the earlier word-enlargement uncertainty above. It passes on the
+current actual-package DLL; all eight declared Lanczos comparisons now pass and
+stop. The earlier costs remain history, without a causal speedup claim.

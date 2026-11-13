@@ -93,6 +93,31 @@ def apply_current_jpeg_caller_confidence(codecs):
     return codecs.replace(found[0], f'| JPEG 4:2:0 from caller RGB samples (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |')
 
 
+def apply_current_lanczos_enlargement_confidence(editing):
+    current = json.loads((ROOT / 'benchmarks/lanczos-enlargement-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    c, q, m = current['case'], current['qualification'], current['measurement']
+    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6600
+    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
+    assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
+    assert m['pairs'] == m['nativeSamplesEachBracket'] == 12 and m['allActualsRetained'] and m['operationsEachSubject'] == 16
+    assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
+    assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['quality']['matched']
+    assert c['status'] == 'pass' and c['upper'] <= 1 and c['retainedManagedBytes'] == 333396 and c['nativeScratchBytes'] == 274240
+    assert c['quality']['rgbMaximum'] <= 1 and c['quality']['alphaMaximum'] <= 1
+    assert c['quality']['rgbMeanSquared'] <= .25**2 and c['quality']['alphaMeanSquared'] <= .25**2
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    prefix = '| Lanczos3 prepared RGBA16 / zimg prepared'
+    found = [line for line in editing.splitlines() if line.startswith(prefix) and '1027×519' in line]
+    assert len(found) == 1
+    editing = editing.replace(found[0], f'{prefix} † → 1027×519 | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |')
+    lanczos_rows = [line for line in editing.splitlines() if line.startswith('| Lanczos3 ')]
+    assert len(lanczos_rows) == 8 and all(float(line.split('|')[4].split('/')[1]) <= 1 for line in lanczos_rows)
+    return editing
+
+
 def apply_current_cmyk_confidence(codecs, read_rows):
     """Display accepted immutable-build costs, independent of rejected experiments."""
     current = json.loads((ROOT / 'benchmarks/cmyk-current-owned-confidence-evidence.json').read_text(encoding='utf-8'))
@@ -2600,6 +2625,7 @@ def render():
     codecs, read_rows = apply_current_cmyk_confidence(codecs, read_rows)
     codecs = apply_current_jpeg_caller_confidence(codecs)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
+    editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
@@ -2634,7 +2660,7 @@ saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost 
 engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 171 pass, 5 gaps, 15 uncertain**. The tables retain source-valid
+image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2646,6 +2672,9 @@ The four Lanczos reduction and eight equivalent bicubic one-shot/prepared contro
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
 word copies retain small gaps, and complete word PNG composition stays uncertain.
+[Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
+now passes on the unchanged package DLL; all eight declared Lanczos comparisons
+pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
 [Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
 remains a retained-context gap and an equivalent fresh-context pass. A word-product
