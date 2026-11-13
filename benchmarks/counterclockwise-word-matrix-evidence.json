@@ -1,0 +1,455 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CCV919",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "acceptedBaseCommit": "fc4980c038cad4892c4693bd035aee5fd41d5451",
+  "sources": {
+    "src/Lokad.Image/Internal/CounterclockwiseTurn.cs": "e5823dbefa38d8842fa354c960833c0460ea25538c5b6c0f8f18ea065f22dd02",
+    "src/Lokad.Image/Internal/TransposeCopy.cs": "4621ea40f21f5c29f4e34f71768141c3861c61fd197f49ff4202834dec2d3202",
+    "tests/Lokad.Image.PublicApi.Tests/CounterclockwiseTurnReferenceTests.cs": "2483deec9c05feceaa85db73097633bc9a51346587211078ba7101b41dba3d27"
+  },
+  "consumer": {
+    "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+    "sha256": "e47d0b16598b3767f744528a43d41d6c3fd1f6383394d59060fda2b84a01758b"
+  },
+  "hypothesis": "Share the existing exact AVX2 UInt64 4x4 transpose schedule with counterclockwise output using constant generic destination-row order. Remove scalar per-pixel gathering for complete matrices; preserve original scalar tails/fallback and all64pixelbits. No extra image/pass/storage/owner/admission or fixture-specific dispatch.",
+  "endState": "One word SIMD tile/matrix execution schedule with compile-time forward/reverse destination rows; original byte and portable scalar code remains. Qualified word transpose is a strategy lead, not causal evidence for rotation.",
+  "producers": {
+    "windowsSha256": "89fdbada5e495feaeaac73b524e03e86666f02f20b7182765e365fb851d7afb5",
+    "linuxSha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+    "timedArtifactSha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+    "actualPackageSha256": "990a7620dfe368f41ef1b414458a71f4d2c00f5efcdd8405c79ebdd1cda68a79"
+  },
+  "cases": {
+    "WarmCounterclockwise16": {
+      "ratio": 0.824206469261878,
+      "lower": 0.7520954225937091,
+      "upper": 0.8840020707119158,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmCounterclockwise16",
+      "managedUs": 39.785983072916665,
+      "nativeUs": 48.27186458333333,
+      "allocatedBytes": 112,
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/ccv919-candidate-WarmCounterclockwise16-confirm-receipt.json",
+      "observation": "tmp/ccv919-candidate-WarmCounterclockwise16-confirm-observation.json",
+      "rawPairs": "tmp/ccv919-candidate-WarmCounterclockwise16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA16 raster rotated counterclockwise into an independent owned 259x513 raster at the same depth. Complete public Rotate(CounterClockwise90), admission, allocation, materialization and disposal. Native public FFmpeg transpose graph allocates/processes independent pixels and releases output inside every operation. Graph/source/frame wrappers are reused. Native padded rows exposed directly; no redundant packing/materialization copy. Exact counterclockwise placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ca55dc1571e99de838a9d442bd34b70ab674bf1f899900876d37cdbd123df703"
+    },
+    "WarmCounterclockwise8": {
+      "ratio": 1.0953839151521352,
+      "lower": 1.0398251266744836,
+      "upper": 1.1467356875370074,
+      "status": "gap",
+      "project": "Lokad.Image",
+      "caseId": "WarmCounterclockwise8",
+      "managedUs": 44.767225260416666,
+      "nativeUs": 40.86898177083334,
+      "allocatedBytes": 112,
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/ccv919-candidate-WarmCounterclockwise8-confirm-receipt.json",
+      "observation": "tmp/ccv919-candidate-WarmCounterclockwise8-confirm-observation.json",
+      "rawPairs": "tmp/ccv919-candidate-WarmCounterclockwise8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA8 raster rotated counterclockwise into an independent owned 259x513 raster at the same depth. Complete public Rotate(CounterClockwise90), admission, allocation, materialization and disposal. Native public FFmpeg transpose graph allocates/processes independent pixels and releases output inside every operation. Graph/source/frame wrappers are reused. Native padded rows exposed directly; no redundant packing/materialization copy. Exact counterclockwise placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "d2af3d4094baef282082466153da21022070360bcc6a9e0ac9eb83b6b8a71df8"
+    },
+    "WarmTranspose16": {
+      "ratio": 0.8249334877276359,
+      "lower": 0.7127209713646218,
+      "upper": 0.9254362208078072,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmTranspose16",
+      "managedUs": 39.70446875,
+      "nativeUs": 48.13050911458333,
+      "allocatedBytes": 112,
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/ccv919-candidate-WarmTranspose16-confirm-receipt.json",
+      "observation": "tmp/ccv919-candidate-WarmTranspose16-confirm-observation.json",
+      "rawPairs": "tmp/ccv919-candidate-WarmTranspose16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA16 raster transposed into an independent owned 259x513 raster at the same depth. Complete public Transpose(mirrored:false), admission, allocation, materialization and disposal. Native public FFmpeg transpose graph allocates/processes independent pixels and releases output inside every operation. Graph/source/frame wrappers are reused. Native padded rows exposed directly; no redundant packing/materialization copy. Exact transpose placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "5f069f64073d23b8ab966892a31cd37b1432ebc620aa867192ddcb0ecb9f5788"
+    },
+    "WarmTranspose8": {
+      "ratio": 0.7478514284279875,
+      "lower": 0.7218012020645409,
+      "upper": 0.7697979717904269,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmTranspose8",
+      "managedUs": 30.25776692708333,
+      "nativeUs": 40.45959635416666,
+      "allocatedBytes": 112,
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/ccv919-candidate-WarmTranspose8-confirm-receipt.json",
+      "observation": "tmp/ccv919-candidate-WarmTranspose8-confirm-observation.json",
+      "rawPairs": "tmp/ccv919-candidate-WarmTranspose8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA8 raster transposed into an independent owned 259x513 raster at the same depth. Complete public Transpose(mirrored:false), admission, allocation, materialization and disposal. Native public FFmpeg transpose graph allocates/processes independent pixels and releases output inside every operation. Graph/source/frame wrappers are reused. Native padded rows exposed directly; no redundant packing/materialization copy. Exact transpose placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "c14a2161b0570deff5995c6b0f80d29ba7d0555c9aa235d54eb1fabbbb32b122"
+    }
+  },
+  "comparisons": {
+    "WarmCounterclockwise16": {
+      "views": {
+        "allActual": {
+          "baselineUs": 50.6878671875,
+          "candidateUs": 39.785983072916665,
+          "savedUs": 10.901884114583336,
+          "savedFraction": 0.2150787697232568,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 50687.8671875,
+            "StandardError": 333.6546752417536,
+            "Level": 12,
+            "Margin": 1480.4188997900985,
+            "Lower": 49207.4482877099,
+            "Upper": 52168.2860872901
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 39785.983072916664,
+            "StandardError": 528.7571637900248,
+            "Level": 12,
+            "Margin": 2346.0846101047055,
+            "Lower": 37439.89846281196,
+            "Upper": 42132.06768302137
+          }
+        },
+        "upperOutlierDiagnostic": {
+          "baselineUs": 50.44460369318182,
+          "candidateUs": 39.785983072916665,
+          "savedUs": 10.658620620265152,
+          "savedFraction": 0.21129357433540097,
+          "rawGainSeparated": true,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 50444.603693181816,
+            "StandardError": 250.15590652899954,
+            "Level": 12,
+            "Margin": 1147.4385910346684,
+            "Lower": 49297.16510214715,
+            "Upper": 51592.042284216484
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 39785.983072916664,
+            "StandardError": 528.7571637900248,
+            "Level": 12,
+            "Margin": 2346.0846101047055,
+            "Lower": 37439.89846281196,
+            "Upper": 42132.06768302137
+          }
+        }
+      },
+      "normalizedGain": 0.2718117031728803,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.07790970233498884,
+      "contemporaryBaseline": "tmp/ccv919-baseline-WarmCounterclockwise16-confirm-observation.json"
+    },
+    "WarmCounterclockwise8": {
+      "historicalCostOnly": true,
+      "notContemporaryCausalProof": true,
+      "rawPointChange": 0.12219126025080818,
+      "normalizedPointChange": 0.031168368927944945,
+      "nativeClockChange": 0.08827160924020139,
+      "normalizedAdverseSeparated": false,
+      "oldStatus": "gap",
+      "currentStatus": "gap"
+    },
+    "WarmTranspose16": {
+      "views": {
+        "allActual": {
+          "baselineUs": 39.20641666666666,
+          "candidateUs": 39.70446875,
+          "savedUs": -0.4980520833333358,
+          "savedFraction": -0.012703330874835661,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 39206.416666666664,
+            "StandardError": 531.2336968425521,
+            "Level": 12,
+            "Margin": 2357.0729360865303,
+            "Lower": 36849.343730580134,
+            "Upper": 41563.489602753194
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 39704.46875,
+            "StandardError": 807.6013600403488,
+            "Level": 12,
+            "Margin": 3583.31054715071,
+            "Lower": 36121.15820284929,
+            "Upper": 43287.77929715071
+          }
+        },
+        "upperOutlierDiagnostic": {
+          "baselineUs": 39.20641666666666,
+          "candidateUs": 39.70446875,
+          "savedUs": -0.4980520833333358,
+          "savedFraction": -0.012703330874835661,
+          "rawGainSeparated": false,
+          "rawAdverseSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 39206.416666666664,
+            "StandardError": 531.2336968425521,
+            "Level": 12,
+            "Margin": 2357.0729360865303,
+            "Lower": 36849.343730580134,
+            "Upper": 41563.489602753194
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 39704.46875,
+            "StandardError": 807.6013600403488,
+            "Level": 12,
+            "Margin": 3583.31054715071,
+            "Lower": 36121.15820284929,
+            "Upper": 43287.77929715071
+          }
+        }
+      },
+      "normalizedGain": -0.0037508362285028074,
+      "normalizedGainSeparated": false,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": 0.008919040785032584,
+      "contemporaryBaseline": "tmp/ccv919-baseline-WarmTranspose16-confirm-observation.json"
+    },
+    "WarmTranspose8": {
+      "historicalCostOnly": true,
+      "notContemporaryCausalProof": true,
+      "rawPointChange": 0.08705154436819385,
+      "normalizedPointChange": 0.021012390867207076,
+      "nativeClockChange": 0.06468007057671055,
+      "normalizedAdverseSeparated": false,
+      "oldStatus": "pass",
+      "currentStatus": "pass"
+    }
+  },
+  "screen": {
+    "ratio": 0.8349455480433204,
+    "lower": 0.7412711438183675,
+    "upper": 0.9077118936203351,
+    "status": "pass",
+    "project": "Lokad.Image",
+    "caseId": "WarmCounterclockwise16",
+    "managedUs": 38.27724479166666,
+    "nativeUs": 45.844001302083335,
+    "allocatedBytes": 112,
+    "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receipt": "tmp/ccv919-candidate-WarmCounterclockwise16-screen-receipt.json",
+    "observation": "tmp/ccv919-candidate-WarmCounterclockwise16-screen-observation.json",
+    "rawPairs": "tmp/ccv919-candidate-WarmCounterclockwise16-screen.json",
+    "phase": "screen",
+    "screenOnly": true,
+    "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+  },
+  "correctness": {
+    "exactManagedAndNativePixels": true,
+    "all64PixelBitsPreserved": true,
+    "scalarFallbacksAndByteKernelsSourceVerbatim": true,
+    "normalScalarEachOs": true,
+    "additionalPublicChecks": 7,
+    "tileMatrixThinAndExifBoundaries": true,
+    "terminalRefusalCancellationCleanupAndIndependentSurvivors": true,
+    "threeOriginalNativeIdentityFieldsPreserved": true
+  },
+  "storage": {
+    "additionalOwnedOrRetainedCapacityBytes": 0,
+    "additionalScratchBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "primaryAllocatedBytesPerOperation": 112,
+    "primaryBorrowedSourceBytes": 1062936,
+    "primaryOwnedOutputBytes": 1062936,
+    "governedSourceAndTwoResultsTestPeakBytes": 31080,
+    "defaultIdlePolicy": "Unchanged two-array/4MiB idle pool; governed operations bypass idle storage.",
+    "physicalNativeAndJitPeaksMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "CCV919",
+      "platform": "windows",
+      "productionSha256": "89fdbada5e495feaeaac73b524e03e86666f02f20b7182765e365fb851d7afb5",
+      "full": [
+        3236,
+        2396,
+        948
+      ],
+      "total": 6580,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 13,
+        "public-normal": 241,
+        "internal-scalar": 13,
+        "public-scalar": 241
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/CounterclockwiseTurn.cs": "e5823dbefa38d8842fa354c960833c0460ea25538c5b6c0f8f18ea065f22dd02",
+        "src/Lokad.Image/Internal/TransposeCopy.cs": "4621ea40f21f5c29f4e34f71768141c3861c61fd197f49ff4202834dec2d3202",
+        "tests/Lokad.Image.PublicApi.Tests/CounterclockwiseTurnReferenceTests.cs": "2483deec9c05feceaa85db73097633bc9a51346587211078ba7101b41dba3d27"
+      },
+      "additionalProductionBuilds": 0,
+      "normalScalarAffectedWordAndBytePathsPassed": true,
+      "unchangedResizeCodecAndIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "CCV919",
+      "platform": "linux",
+      "productionSha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "full": [
+        3236,
+        2396,
+        948
+      ],
+      "total": 6580,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 13,
+        "public-normal": 241,
+        "internal-scalar": 13,
+        "public-scalar": 241
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/CounterclockwiseTurn.cs": "e5823dbefa38d8842fa354c960833c0460ea25538c5b6c0f8f18ea065f22dd02",
+        "src/Lokad.Image/Internal/TransposeCopy.cs": "4621ea40f21f5c29f4e34f71768141c3861c61fd197f49ff4202834dec2d3202",
+        "tests/Lokad.Image.PublicApi.Tests/CounterclockwiseTurnReferenceTests.cs": "2483deec9c05feceaa85db73097633bc9a51346587211078ba7101b41dba3d27"
+      },
+      "additionalProductionBuilds": 0,
+      "normalScalarAffectedWordAndBytePathsPassed": true,
+      "unchangedResizeCodecAndIsaEvidenceReused": true
+    },
+    "fullChecksEachOs": 6580,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "CCV919",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "990a7620dfe368f41ef1b414458a71f4d2c00f5efcdd8405c79ebdd1cda68a79",
+      "symbolsSha256": "25cd85c2bc9ba0946ea749b97b6e552d7704341151d313261cdfd6f4ce9b0907",
+      "bytes": 459660,
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualConsumerPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionBuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "CCV919",
+      "sameActualPackageSha256": "990a7620dfe368f41ef1b414458a71f4d2c00f5efcdd8405c79ebdd1cda68a79",
+      "librarySha256": "3da8ee86afb293888eed5a8f2b60453d8e1fd5a459a48acac1a899cd85e4a646",
+      "actualConsumerPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "productionBuildsAfterTiming": 0,
+    "packCalls": 1,
+    "unchangedCodecResizeTextAndIsaEvidenceReused": true
+  },
+  "currentImageOwnerViewStatuses": {
+    "gap": 10,
+    "uncertain": 16,
+    "pass": 165
+  },
+  "currentTwentyEditStatuses": {
+    "gap": 8,
+    "uncertain": 6,
+    "pass": 6
+  },
+  "raw": {
+    "file": "counterclockwise-word-matrix-qualified.tar.xz",
+    "sha256": "86bb02c751ffe5a2d66cbe8be7ac2be05a3f6993fd567f208a5776ffc7a8b217",
+    "bytes": 2440216,
+    "members": 132,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "lanczos-word-product-reuse-qualified.tar.xz",
+        "sha256": "17f1d93c965bf02b7032d121e1866ce9cc8f71b35fa59f291460711314f4ad07"
+      }
+    ]
+  },
+  "unchangedEvidence": {
+    "imageOwner": "released-image-storage-evidence.json",
+    "mixedWord": "mixed-word-packed-cache-evidence.json",
+    "lanczos": "lanczos-word-product-reuse-evidence.json"
+  },
+  "scope": "Four original complete513x259RGBA8/16 transpose/counterclockwise operations. Original inputs/settings/native identities, exact managed/normal-scalar native pixels, output ownership/disposal and quietCPU0 idle-v2 gates. Native publicFFmpegtranspose retains graph/source/frame wrappers; independent pixel allocation/processing/release stays timed. No broader shape/ISA/CPU/library parity claim. Byte counterclockwise remains a demonstrated gap. Byte raw historical increases are visible with reference movement and inconclusive normalized intervals; no causal byte gain/regression inferred."
+}

@@ -15,6 +15,12 @@ public sealed class CounterclockwiseTurnReferenceTests
     [InlineData(16, 1, 5)]
     [InlineData(8, 7, 1)]
     [InlineData(16, 7, 1)]
+    [InlineData(16, 3, 7)]
+    [InlineData(16, 4, 4)]
+    [InlineData(16, 5, 7)]
+    [InlineData(16, 31, 33)]
+    [InlineData(16, 32, 32)]
+    [InlineData(16, 33, 35)]
     public void CounterclockwiseMatchesIndependentPlacementAndExactAdmission(int depth, int width, int height)
     {
         using var source = OriginalPixels.Buffer(width, height, depth);
@@ -59,6 +65,51 @@ public sealed class CounterclockwiseTurnReferenceTests
         Assert.Equal(expected, OriginalPixels.Bytes(oriented));
         Assert.Equal(original, OriginalPixels.Bytes(source));
         Assert.Equal(ImageOrientation.Rotate270, source.Orientation);
+    }
+
+    [Fact]
+    public void WordMatricesKeepEveryPixelBitAndReleaseRefusedOrCanceledOwners()
+    {
+        const int width = 35, height = 37, bytes = width * height * 8;
+        using var root = new TestMemoryBudget(3L * bytes);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
+        using var source = ImageBuffer.Create(width, height, 16, limits);
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        {
+            var index = y * width + x;
+            var payload = unchecked((ulong)(index + 1) * 0x9e3779b97f4a7c15UL)
+                ^ System.Numerics.BitOperations.RotateLeft(1UL, index & 63);
+            if (index % 11 == 0) payload &= 0x0000ffffffffffffUL;
+            var row = source.GetRow16(y);
+            for (var c = 0; c < 4; c++) row[x * 4 + c] = (ushort)(payload >> (c * 16));
+        }
+        var original = OriginalPixels.Bytes(source);
+        var expected = CounterclockwiseReference(original, width, height, 16);
+        using (var cancellation = new CancellationTokenSource())
+        {
+            root.Admitted = used => { if (used == 2L * bytes) cancellation.Cancel(); };
+            Assert.Throws<OperationCanceledException>(() => ImageTransforms.Rotate(source,
+                QuarterTurn.CounterClockwise90, limits, cancellation.Token));
+            root.Admitted = null;
+        }
+        Assert.Equal(bytes, root.Bytes);
+        using var first = ImageTransforms.Rotate(source, QuarterTurn.CounterClockwise90, limits);
+        using var second = ImageTransforms.Rotate(source, QuarterTurn.CounterClockwise90, limits);
+        Assert.Equal(3L * bytes, root.Bytes);
+        Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(expected, OriginalPixels.Bytes(second));
+        var attempts = root.Attempts;
+        var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Rotate(source, QuarterTurn.CounterClockwise90, limits));
+        Assert.Equal(ImageLimitScope.SharedBudget, error.Scope); Assert.Equal(attempts + 1, root.Attempts);
+        Assert.Equal(3L * bytes, root.Bytes); Assert.Equal(original, OriginalPixels.Bytes(source));
+        source.Dispose(); first.Dispose();
+        Assert.Equal(bytes, root.Bytes); Assert.Equal(expected, OriginalPixels.Bytes(second));
+        using (var restored = ImageTransforms.Rotate(second, QuarterTurn.Clockwise90, limits))
+        {
+            Assert.Equal(original, OriginalPixels.Bytes(restored)); Assert.Equal(2L * bytes, root.Bytes);
+            second.Dispose(); Assert.Equal(bytes, root.Bytes); Assert.Equal(original, OriginalPixels.Bytes(restored));
+        }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     private static byte[] CounterclockwiseReference(byte[] input, int width, int height, int depth)

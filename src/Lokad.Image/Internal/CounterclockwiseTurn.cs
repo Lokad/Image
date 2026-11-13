@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -15,6 +16,9 @@ internal static class CounterclockwiseTurn
             if (source.BitDepth == 8)
                 Copy(MemoryMarshal.Cast<byte, uint>(source.Pixels), MemoryMarshal.Cast<byte, uint>(result.Pixels),
                     source.Width, source.Height, context);
+            else if (Avx2.IsSupported)
+                TransposeCopy.CopyWords<TransposeCopy.ReverseRows>(MemoryMarshal.Cast<byte, ulong>(source.Pixels),
+                    MemoryMarshal.Cast<byte, ulong>(result.Pixels), source.Width, source.Height, context);
             else
                 Copy(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
                     source.Width, source.Height, context);

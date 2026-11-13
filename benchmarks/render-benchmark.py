@@ -142,8 +142,6 @@ def apply_released_image_storage(codecs, editing, read_rows):
      'PNG RGBA16 decode, tight working limit †': 'png/DecodeTight16',
      'PNG RGBA8 decode, live token †': 'png/DecodeCancelable8',
      'PNG RGBA8 decode, tight working limit †': 'png/DecodeTight8',
-     'Plain transpose RGBA16 † → 259×513': 'transform/WarmTranspose16',
-     'Plain transpose RGBA8 † → 259×513': 'transform/WarmTranspose8',
      'VP8L RGBA8, fresh seekable Stream decode †': 'webp/WebpStream',
      'VP8L RGBA8, resident decode †': 'webp/WebpResident',
      'VP8L palette16 RGBA8, resident decode (confirmed pass) †': 'webp/IndexedNative16Colors8',
@@ -1355,30 +1353,28 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    transpose_cost = json.loads((ROOT / 'benchmarks/word-transpose-matrix-evidence.json').read_text(encoding='utf-8'))
-    assert transpose_cost['productionChanged'] and transpose_cost['decision']['passed']
-    assert transpose_cost['decision']['normalizedSeparated']
-    assert transpose_cost['qualification']['fullChecksEachOs'] == 5352
-    assert transpose_cost['qualification']['package']['sha256'] == transpose_cost['qualification']['linuxPackage']['sameActualPackageSha256']
-    byte_transpose_cost = json.loads((ROOT / 'benchmarks/byte-transpose-matrix-evidence.json').read_text(encoding='utf-8'))
-    assert byte_transpose_cost['accepted'] and byte_transpose_cost['decision']['normalizedSeparated']
-    assert byte_transpose_cost['qualification']['fullChecksEachOs'] == 5376
-    assert byte_transpose_cost['qualification']['package']['sha256'] == byte_transpose_cost['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert byte_transpose_cost['reuse']['wordKernelAndEntryUnchanged']
-    for case, depth in [('Whole16', 16), ('Whole8', 8)]:
-        selected = byte_transpose_cost if depth == 8 else transpose_cost
-        observation = selected['cases'][case][-1]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert receipt['librarySha256'] == selected['producers']['linuxSha256']
-        assert receipt['allRgbaSamplesExact'] and receipt['alphaExact'] and receipt['hiddenRgbExact']
-        assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
-        assert observation['conservativeRatioUpper'] < 1
-        rows.append(('editing', f'| Plain transpose RGBA{depth} † → 259×513 | '
-                     f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
-                     f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    # These three displayed rows use the current qualified shared word-matrix
+    # owner. Superseded transpose experiments remain linked history.
+    turn_current = json.loads((ROOT / 'benchmarks/counterclockwise-word-matrix-evidence.json').read_text(encoding='utf-8'))
+    turn_q = turn_current['qualification']
+    assert turn_current['productionAccepted'] and turn_current['allAffectedPerformanceReconciled']
+    assert turn_current['requiredMaterialPaths'] == 289 and turn_current['newMaterialPaths'] == 0
+    assert turn_current['raw']['mirrored'] and turn_current['raw']['allMembersVerified']
+    assert turn_q['windows']['total'] == turn_q['linux']['total'] == turn_q['fullChecksEachOs'] == 6580
+    assert turn_q['actualPackage']['sha256'] == turn_q['samePackageWindows']['sameActualPackageSha256']
+    assert turn_q['actualPackage']['actualConsumerPassed'] and turn_q['samePackageWindows']['actualConsumerPassed']
+    assert turn_q['actualPackage']['usageExamples'] == turn_q['samePackageWindows']['usageExamples'] == 3
+    for case, label in [('WarmTranspose16', 'Plain transpose RGBA16'),
+                        ('WarmTranspose8', 'Plain transpose RGBA8'),
+                        ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16')]:
+        c = turn_current['cases'][case]
+        assert c['librarySha256'] == turn_q['actualPackage']['librarySha256'] == turn_current['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+        if c['status'] != 'pass': label += f" ({c['status']})"
+        rows.append(('editing', f"| {label} † → 259×513 | {c['managedUs']:,.2f} | {c['nativeUs']:,.2f} | {c['ratio']:.3f} / {c['upper']:.3f} | {c['allocatedBytes']:,} |"))
     # Current JPEG costs have one owner; superseded algorithms/experiments remain
     # linked history rather than prerequisites of every summary rendering.
     jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-shared-block-support-evidence.json').read_text(encoding='utf-8'))
@@ -2503,6 +2499,12 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
+[Shared word matrices](../benchmarks/COUNTERCLOCKWISE-WORD-MATRIX.md) closes the
+RGBA16 counterclockwise turn: **39.79 / FFmpeg 48.27 µs, upper 0.884**, **112 B/op**.
+Independent saving is **10.90 µs / 21.51% raw**, **27.18% reference-normalized**;
+the native clock moves **+7.79%**. Shared word transpose and byte transpose pass;
+the existing byte counterclockwise gap remains. No extra owned/retained capacity.
+
 [Word product reuse](../benchmarks/LANCZOS-WORD-PRODUCT-REUSE.md) closes prepared
 RGBA16 Lanczos reduction: **485.36 / zimg 512.07 µs, upper 0.958**, with **138 B/op**
 and **156,248 B** retained plan. Independent gain is **6.18% reference-normalized**;
@@ -2518,15 +2520,15 @@ default workspace remains uncertain. The earlier candidate's vertical regression
 is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these eight
-updated costs, has **164 pass, 11 gaps, 16 uncertain** across 191 existing comparisons.
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these twelve
+updated costs, has **165 pass, 10 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. Larger demonstrated remaining gaps include bounded byte wide
-bicubic and quarter turns; the retained horizontal-CMYK JPEG view
+capture is hidden. Remaining demonstrated gaps include bounded byte wide
+bicubic and byte quarter turns; the retained horizontal-CMYK JPEG view
 has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -2542,7 +2544,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,573 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,580 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -2586,7 +2588,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 138, 'Expected138comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 139, 'Expected139comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

@@ -1048,12 +1048,15 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine($"Packaged grouped JPEG entropy preserves frozen pixels, sync/async, scan storage and shared admission: live={cancelable}.");
     }
 
-    private static void VerifyTranspose(int depth)
+    private static void VerifyTranspose(int depth, bool counterclockwise = false)
     {
         const int width = 35, height = 37;
         var bytes = width * height * (depth / 8) * 4;
         using var root = new TestMemoryBudget(3L * bytes);
         var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
+        ImageBuffer Place(ImageBuffer input) => counterclockwise
+            ? ImageTransforms.Rotate(input, QuarterTurn.CounterClockwise90, limits)
+            : ImageTransforms.Transpose(input, false, limits);
         using var source = ImageBuffer.Create(width, height, depth, limits);
         var original = new ushort[width * height * 4];
         for (var y = 0; y < height; y++)
@@ -1070,12 +1073,25 @@ internal static class CooperativeMemoryConsumer
             else source.GetRow16(y)[x * 4 + channel] = value;
             original[(y * width + x) * 4 + channel] = value;
         }
-        using var first = ImageTransforms.Transpose(source, false, limits);
-        using var second = ImageTransforms.Transpose(source, false, limits);
+        if (counterclockwise)
+        {
+            using var cancellation = new CancellationTokenSource();
+            root.Admitted = used => { if (used == 2L * bytes) cancellation.Cancel(); };
+            try
+            {
+                using var unexpected = ImageTransforms.Rotate(source, QuarterTurn.CounterClockwise90, limits, cancellation.Token);
+                throw new Exception("Packaged quarter turn ignored cancellation after admission.");
+            }
+            catch (OperationCanceledException) { }
+            finally { root.Admitted = null; }
+            if (root.Bytes != bytes) throw new Exception("Packaged quarter turn leaked a canceled result.");
+        }
+        using var first = Place(source);
+        using var second = Place(source);
         if (root.Bytes != 3L * bytes) throw new Exception("Packaged transpose retained charges differ.");
         try
         {
-            using var unexpected = ImageTransforms.Transpose(source, false, limits);
+            using var unexpected = Place(source);
             throw new Exception("Packaged transpose ignored aggregate refusal.");
         }
         catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
@@ -1084,10 +1100,12 @@ internal static class CooperativeMemoryConsumer
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         for (var channel = 0; channel < 4; channel++)
-            if ((depth == 8 ? second.GetRow8(x)[y * 4 + channel] : second.GetRow16(x)[y * 4 + channel])
+            if ((depth == 8 ? second.GetRow8(counterclockwise ? width - 1 - x : x)[y * 4 + channel]
+                : second.GetRow16(counterclockwise ? width - 1 - x : x)[y * 4 + channel])
                 != original[(y * width + x) * 4 + channel])
                 throw new Exception("Packaged transpose changed complete pixels or scalar tails.");
-        using (var restored = ImageTransforms.Transpose(second, false, limits))
+        using (var restored = counterclockwise ? ImageTransforms.Rotate(second, QuarterTurn.Clockwise90, limits)
+            : ImageTransforms.Transpose(second, false, limits))
         {
             second.Dispose();
             if (root.Bytes != bytes) throw new Exception("Packaged transpose recovery charge differs.");
@@ -1098,7 +1116,7 @@ internal static class CooperativeMemoryConsumer
                     throw new Exception("Packaged transpose recovery pixels differ.");
         }
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged transpose leaked or disposed the borrowed root.");
-        Console.WriteLine($"Packaged RGBA{depth} transpose preserves exact pixels, tails and shared ownership.");
+        Console.WriteLine($"Packaged RGBA{depth} {(counterclockwise ? "counterclockwise turn" : "transpose")} preserves exact pixels, tails and shared ownership.");
     }
 
     private static void VerifyWideBicubicRepair()
@@ -1302,6 +1320,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyWordPngPacking(budget, limits);
         VerifyTranspose(8);
         VerifyTranspose(16);
+        VerifyTranspose(16, counterclockwise: true);
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
         VerifyRectangleFill();

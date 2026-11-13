@@ -7,6 +7,9 @@ namespace Lokad.Image.Internal;
 /// <summary>Transpose complete pixels in bounded cache-local tiles.</summary>
 internal static class TransposeCopy
 {
+    internal readonly struct ForwardRows { }
+    internal readonly struct ReverseRows { }
+
     public static ImageBuffer Apply(ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
         using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
@@ -18,7 +21,7 @@ internal static class TransposeCopy
                 Copy(MemoryMarshal.Cast<byte, uint>(source.Pixels), MemoryMarshal.Cast<byte, uint>(result.Pixels),
                     source.Width, source.Height, context);
             else if (Avx2.IsSupported)
-                CopyWords(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
+                CopyWords<ForwardRows>(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
                     source.Width, source.Height, context);
             else
                 Copy(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
@@ -29,11 +32,14 @@ internal static class TransposeCopy
         catch { result.Dispose(); throw; }
     }
 
-    private static void CopyWords(ReadOnlySpan<ulong> source, Span<ulong> destination, int width, int height,
-        OperationContext context)
+    internal static void CopyWords<TRows>(ReadOnlySpan<ulong> source, Span<ulong> destination, int width, int height,
+        OperationContext context) where TRows : struct
     {
         // Four complete pixels per vector; unpacks and lane selection transpose
         // each 4x4 matrix without interpreting any channel or alpha sample.
+        // Destination rows increase for transpose and decrease for a quarter
+        // turn; the closed row-order type keeps that choice outside pixel loops.
+        var step = typeof(TRows) == typeof(ReverseRows) ? -height : height;
         for (var y = 0; y < height; y += 32)
         for (var x = 0; x < width; x += 32)
         {
@@ -51,17 +57,19 @@ internal static class TransposeCopy
                 var r3 = Vector256.Create(source.Slice(input + 3 * width, 4));
                 var low01 = Avx2.UnpackLow(r0, r1); var high01 = Avx2.UnpackHigh(r0, r1);
                 var low23 = Avx2.UnpackLow(r2, r3); var high23 = Avx2.UnpackHigh(r2, r3);
-                var output = (x + column) * height + y + row;
+                var outputRow = typeof(TRows) == typeof(ReverseRows) ? width - 1 - x - column : x + column;
+                var output = outputRow * height + y + row;
                 Avx2.Permute2x128(low01, low23, 0x20).CopyTo(destination.Slice(output, 4));
-                Avx2.Permute2x128(high01, high23, 0x20).CopyTo(destination.Slice(output + height, 4));
-                Avx2.Permute2x128(low01, low23, 0x31).CopyTo(destination.Slice(output + 2 * height, 4));
-                Avx2.Permute2x128(high01, high23, 0x31).CopyTo(destination.Slice(output + 3 * height, 4));
+                Avx2.Permute2x128(high01, high23, 0x20).CopyTo(destination.Slice(output + step, 4));
+                Avx2.Permute2x128(low01, low23, 0x31).CopyTo(destination.Slice(output + 2 * step, 4));
+                Avx2.Permute2x128(high01, high23, 0x31).CopyTo(destination.Slice(output + 3 * step, 4));
             }
             for (var column = 0; column < columns; column++)
             {
                 var firstRow = column < vectorColumns ? vectorRows : 0;
                 var input = (y + firstRow) * width + x + column;
-                var output = destination.Slice((x + column) * height + y + firstRow, rows - firstRow);
+                var outputRow = typeof(TRows) == typeof(ReverseRows) ? width - 1 - x - column : x + column;
+                var output = destination.Slice(outputRow * height + y + firstRow, rows - firstRow);
                 for (var row = 0; row < output.Length; row++)
                 {
                     output[row] = source[input];

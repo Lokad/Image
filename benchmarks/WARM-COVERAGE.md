@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-13. **289 material required paths** remain
-in scope; the 138 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 139 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
@@ -9,11 +9,12 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 
 [Released-image storage](RELEASED-IMAGE-STORAGE.md), with five refreshed
 [Lanczos word-product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) and three
-[packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs, owns the current **191
-comparisons: 164 pass, 11 gaps, 16 uncertain**. These are existing views, including
+[packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) costs, plus four current
+[shared word-matrix edits](COUNTERCLOCKWISE-WORD-MATRIX.md), owns the current **191
+comparisons: 165 pass, 10 gaps, 16 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 caller-sample, inspection and in-place drawing paths retain their identified evidence.
-Each OS passes **6,573 full/live checks**, focused normal/scalar ownership checks and
+Each OS passes **6,580 full/live checks**, focused normal/scalar ownership checks and
 the **same actual Release-package consumer / three examples**. Source-valid ISA
 proof is reused. Current scope and raw evidence are in the linked owner, rather
 than repeated experimental or qualification narratives here.
@@ -39,7 +40,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | WebP reading | Current 12 views: nine pass, three opaque VP8 uncertainties. Full output, native bounds, cancellation and ownership gates pass. [Earlier color-tile work](WEBP-INVERSE-COLOR-TILES.md) remains history. |
 | Bicubic/bilinear resizing | Current 73 views: 67 pass, one bounded byte-wide gap, five uncertainties. [Packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) passes bounded mixed-word: 820.00/native846.10 µs, upper0.978, 113 B/op; 3.38% normalized gain is confirmed. Tight vertical also improves; default mixed-word remains uncertain. The earlier vertical regression is retained. All eight equivalent one-shot/prepared controls pass. Stop passes; investigate demonstrated gaps before tuning uncertainties. Native float versus managed exact arithmetic stays explicit. |
 | Lanczos3 | [Word product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) passes and stops all four affected byte/word reduction views. Prepared word: 485.36/zimg512.07 µs, upper0.958; 6.18% normalized gain, 138 B/op, 156,248 B retained plan. Eight views: seven pass, one word-enlargement uncertainty; its unchanged-path refresh remains open at upper1.035. Product/sum loans reuse admitted storage; exact arithmetic and equivalent one-shot/prepared ownership remain. |
-| Copy/turn transforms and drawing | Current 20 independent-result edits: five pass, nine gaps, six uncertainties. Most gaps are a few microseconds; retain them without displacing larger absolute work. In-place fill/copy/compositing reuse unchanged evidence and approved reference identities. |
+| Copy/turn transforms and drawing | [Shared word matrices](COUNTERCLOCKWISE-WORD-MATRIX.md) closes RGBA16 counterclockwise:39.79/FFmpeg48.27µs, upper.884,112B/op; confirmed21.51%raw/27.18%normalized saving, no new owned storage. Current20independent-result edits: six pass, eight gaps, six uncertainties. Shared word/byte transpose pass; byte counterclockwise remains a gap. Retain tiny gaps without displacing larger absolute work. In-place fill/copy/compositing reuse unchanged evidence and approved reference identities. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Direct-input](DIRECT-STREAM-INPUT.md) and named prefix/header adapters remain source-valid. Seekable complete PNG Identify has a small gap; async passes. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
 
