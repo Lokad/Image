@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-13. **289 material required paths** remain
-in scope; the 141 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 142 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
@@ -13,13 +13,14 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 [Lanczos enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md), plus eight current
 [shared axis-swapping edits](SHARED-AXIS-SWAP.md) and one
 [bounded horizontal quartet](BOUNDED-WIDE-HORIZONTAL-QUARTET.md), plus six
-[shared-copy/composition costs](SHARED-RASTER-COPY.md) and 24 refreshed
+[shared-copy/composition costs](SHARED-RASTER-COPY.md), four
+[shared-reversal costs](SHARED-PIXEL-REVERSAL.md) and 24 refreshed
 [JPEG RGBA/fresh costs](JPEG-HORIZONTAL-PREPARATION.md), owns the current **191
-comparisons: 174 pass, 4 gaps, 13 uncertain**. These are existing views, including
+comparisons: 175 pass, 3 gaps, 13 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
 inspection and in-place drawing paths retain their identified evidence. Four affected
 JPEG caller-buffer costs also refresh; coding-only validation reuses unchanged proof.
-Each OS passes **6,602 full/live checks**, focused normal/scalar ownership checks and
+Each OS passes **6,605 full/live checks**, focused normal/scalar ownership checks and
 the **same actual Release-package consumer / three examples**. Source-valid ISA
 proof is reused. Current scope and raw evidence are in the linked owner, rather
 than repeated experimental or qualification narratives here.
@@ -47,7 +48,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | WebP reading | Current12views:nine pass, three opaque VP8 uncertainties. [Current adjacency](VP8-DECODE-CURRENT-CONFIDENCE.md) keeps ordinary/simple/live-token controls uncertain, intervals.965–1.006/.983–1.008/.972–1.042. Exact pixels/alpha, source, ownership and reference gates pass; no presumed gap or unchanged favorable repeat. Othernineviews reuse passing [released-storage](RELEASED-IMAGE-STORAGE.md) evidence. |
 | Bicubic/bilinear resizing | Current 73 views: 67 pass, six uncertainties. [Bounded horizontal reuse](BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves 3.29% in paired complete byte-wide resize; standalone360.12/zimg348.02µs, upper1.041 remains uncertain,113B/op. Five unaffected specializations compile identically; reuse their valid costs. [Packed mixed-word cache](MIXED-WORD-PACKED-CACHE.md) passes bounded mixed-word and tight vertical; default mixed-word remains uncertain. Earlier adverse captures are retained. All eight equivalent one-shot/prepared controls pass and stop. Native float versus managed exact arithmetic stays explicit. |
 | Lanczos3 | All eight declared one-shot/prepared byte/word comparisons pass and stop. [Current prepared word enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md):4117.26/zimg4212.39µs, upper.990,4264760B/op and333396B retained plan. [Reduction product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) retains its6.18% normalized gain and four passing reduction views. Exact Q30/rational arithmetic, float-native bounds and equivalent prepared/one-shot ownership stay explicit; no gain is inferred from the confidence update. |
-| Copy/turn transforms and drawing | [Shared axis-swapping tiles](SHARED-AXIS-SWAP.md) pass/stop all eight byte/word transposes and quarter turns. Mirrored byte transpose: 32.07/FFmpeg39.50 µs, upper .826; confirmed 10.00 µs / 23.76% raw / 21.24% normalized gain, unchanged 112 B/op and capacity. Three duplicate classes are removed. Current 20 independent-result edits: 13 pass, four gaps, three uncertainties. [Shared raster copy](SHARED-RASTER-COPY.md) retains its word-clone gain and passing byte copies. Other dispatcher branches compile identically; in-place drawing/reference evidence is reused. Keep small gaps visible without displacing material work. |
+| Copy/turn transforms and drawing | [Shared pixel reversal](SHARED-PIXEL-REVERSAL.md) saves 4.64 µs / 36.18% raw / 27.22% normalized on byte half turn:8.18/FFmpeg10.02µs upper.838,112B/op. Two word controls pass; byte horizontal stays narrowly uncertain without a demonstrated regression. Sharing exact kernels removes37production lines. Current20independent-result edits:14pass,three gaps,three uncertainties. All eight [axis-swapping controls](SHARED-AXIS-SWAP.md) pass/stop; [raster copy](SHARED-RASTER-COPY.md) retains its word-clone gain and passing byte copies. Other dispatcher branches compile identically; in-place drawing evidence is reused. Next demonstrated image gaps are byte vertical reversal and word clone/normal orientation; keep tiny probe gaps visible. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Direct-input](DIRECT-STREAM-INPUT.md) and named prefix/header adapters remain source-valid. Seekable complete PNG Identify has a small gap; async passes. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
 

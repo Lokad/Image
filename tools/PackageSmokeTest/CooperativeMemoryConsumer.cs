@@ -1101,7 +1101,7 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine($"Packaged grouped JPEG entropy preserves frozen pixels, sync/async, scan storage and shared admission: live={cancelable}.");
     }
 
-    private static void VerifyAxisSwap(int depth, ImageOrientation orientation)
+    private static void VerifyPixelPermutation(int depth, ImageOrientation orientation)
     {
         const int width = 35, height = 37;
         var bytes = width * height * (depth / 8) * 4;
@@ -1113,8 +1113,12 @@ internal static class CooperativeMemoryConsumer
             ImageOrientation.Transverse => ImageTransforms.Transpose(input, true, limits, cancellation),
             ImageOrientation.Rotate90 => ImageTransforms.Rotate(input, QuarterTurn.Clockwise90, limits, cancellation),
             ImageOrientation.Rotate270 => ImageTransforms.Rotate(input, QuarterTurn.CounterClockwise90, limits, cancellation),
+            ImageOrientation.Rotate180 => ImageTransforms.Rotate(input, QuarterTurn.Half, limits, cancellation),
+            ImageOrientation.MirrorHorizontal => ImageTransforms.FlipHorizontal(input, limits, cancellation),
             _ => throw new ArgumentOutOfRangeException(nameof(orientation))
         };
+        var swapsAxes = orientation is ImageOrientation.Transpose or ImageOrientation.Transverse
+            or ImageOrientation.Rotate90 or ImageOrientation.Rotate270;
         var reverseRows = orientation is ImageOrientation.Rotate270 or ImageOrientation.Transverse;
         var reverseColumns = orientation is ImageOrientation.Rotate90 or ImageOrientation.Transverse;
         using var source = ImageBuffer.Create(width, height, depth, limits);
@@ -1139,14 +1143,17 @@ internal static class CooperativeMemoryConsumer
             try
             {
                 using var unexpected = Place(source, cancellation.Token);
-                throw new Exception("Packaged quarter turn ignored cancellation after admission.");
+                throw new Exception("Packaged pixel permutation ignored cancellation after admission.");
             }
             catch (OperationCanceledException error) when (error.CancellationToken == cancellation.Token) { }
             finally { root.Admitted = null; }
-            if (root.Bytes != bytes) throw new Exception("Packaged quarter turn leaked a canceled result.");
+            if (root.Bytes != bytes) throw new Exception("Packaged pixel permutation leaked a canceled result.");
         }
         using var first = Place(source);
         using var second = Place(source);
+        if ((first.Width, first.Height, first.BitDepth) != (swapsAxes ? height : width, swapsAxes ? width : height, depth)
+            || (second.Width, second.Height, second.BitDepth) != (first.Width, first.Height, first.BitDepth))
+            throw new Exception("Packaged pixel permutation geometry differs.");
         if (root.Bytes != 3L * bytes) throw new Exception("Packaged transpose retained charges differ.");
         var attempts = root.Attempts;
         try
@@ -1162,15 +1169,21 @@ internal static class CooperativeMemoryConsumer
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         for (var channel = 0; channel < 4; channel++)
-            if ((depth == 8 ? second.GetRow8(reverseRows ? width - 1 - x : x)[(reverseColumns ? height - 1 - y : y) * 4 + channel]
-                : second.GetRow16(reverseRows ? width - 1 - x : x)[(reverseColumns ? height - 1 - y : y) * 4 + channel])
+        {
+            var dx = swapsAxes ? (reverseColumns ? height - 1 - y : y) : width - 1 - x;
+            var dy = swapsAxes ? (reverseRows ? width - 1 - x : x)
+                : orientation == ImageOrientation.Rotate180 ? height - 1 - y : y;
+            if ((depth == 8 ? second.GetRow8(dy)[dx * 4 + channel] : second.GetRow16(dy)[dx * 4 + channel])
                 != original[(y * width + x) * 4 + channel])
                 throw new Exception("Packaged transpose changed complete pixels or scalar tails.");
+        }
         using (var restored = orientation switch
         {
             ImageOrientation.Rotate270 => ImageTransforms.Rotate(second, QuarterTurn.Clockwise90, limits),
             ImageOrientation.Rotate90 => ImageTransforms.Rotate(second, QuarterTurn.CounterClockwise90, limits),
             ImageOrientation.Transverse => ImageTransforms.Transpose(second, true, limits),
+            ImageOrientation.Rotate180 => ImageTransforms.Rotate(second, QuarterTurn.Half, limits),
+            ImageOrientation.MirrorHorizontal => ImageTransforms.FlipHorizontal(second, limits),
             _ => ImageTransforms.Transpose(second, false, limits)
         })
         {
@@ -1188,6 +1201,8 @@ internal static class CooperativeMemoryConsumer
             ImageOrientation.Rotate270 => "counterclockwise turn",
             ImageOrientation.Rotate90 => "clockwise turn",
             ImageOrientation.Transverse => "transverse",
+            ImageOrientation.Rotate180 => "half turn",
+            ImageOrientation.MirrorHorizontal => "horizontal flip",
             _ => "transpose"
         };
         Console.WriteLine($"Packaged RGBA{depth} {label} preserves exact pixels, tails and shared ownership.");
@@ -1395,8 +1410,9 @@ internal static class CooperativeMemoryConsumer
         await VerifyWordPngPacking(budget, limits);
         foreach (var depth in new[] { 8, 16 })
         foreach (var orientation in new[] { ImageOrientation.Transpose, ImageOrientation.Rotate90,
-            ImageOrientation.Rotate270, ImageOrientation.Transverse })
-            VerifyAxisSwap(depth, orientation);
+            ImageOrientation.Rotate270, ImageOrientation.Transverse, ImageOrientation.Rotate180,
+            ImageOrientation.MirrorHorizontal })
+            VerifyPixelPermutation(depth, orientation);
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
         VerifyRectangleFill();

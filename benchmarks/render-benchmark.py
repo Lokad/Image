@@ -173,6 +173,32 @@ def apply_current_jpeg_preparation(codecs, read_rows):
     return codecs, read_rows
 
 
+def apply_current_pixel_reversal(editing):
+    current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6605
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['allFourReversalConsumersPassed'] and q['samePackageWindows']['allFourReversalConsumersPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 175, 'gap': 3, 'uncertain': 13}
+    assert current['productionLineDelta'] == -37
+    for c in current['cases'].values():
+        assert c['actualIterations'] == 12 and c['allActualsRetained']
+        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    p = current['comparisons']['WarmHalfTurn8']
+    assert p['normalizedGainSeparated'] and all(c['rawGainSeparated'] for c in p['views'].values())
+    c = current['cases']['WarmHalfTurn8']
+    assert c['status'] == 'pass' and c['allocatedBytes'] == 112
+    # One displayed representative; the linked family report owns all four costs.
+    return editing + f'\n| Half turn RGBA8 † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+
+
 def apply_released_image_storage(codecs, editing, read_rows):
     """Refresh affected displayed costs from the qualified current owner."""
     current = json.loads((ROOT / 'benchmarks/released-image-storage-evidence.json').read_text(encoding='utf-8'))
@@ -2647,6 +2673,7 @@ def render():
     editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
+    editing = apply_current_pixel_reversal(editing)
     raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
     copy_q = raster_copies['qualification']
     assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
@@ -2672,14 +2699,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Shared axis-swapping tiles](../benchmarks/SHARED-AXIS-SWAP.md) pass all eight original
-byte/word transpose and quarter-turn controls. Mirrored transpose independently
-saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost is
-**32.07 / FFmpeg 39.50 µs, upper .826**, **112 B/op**. One shared ownership/tile
-engine replaces three duplicate classes, with unchanged owned/retained capacity.
+[Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
+36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
+Current cost is **8.18 / FFmpeg 10.02 µs, upper .838**, **112 B/op**. Shared exact
+kernels remove 37 production lines with unchanged owned/retained capacity. Both
+word controls pass; byte horizontal flip is narrowly uncertain, with no demonstrated
+regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 174 pass, 4 gaps, 13 uncertain**. The tables retain source-valid
+image views: 175 pass, 3 gaps, 13 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2718,7 +2746,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,602 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,605 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -2762,7 +2790,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 141, 'Expected141comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 142, 'Expected 142 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

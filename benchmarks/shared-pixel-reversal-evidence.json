@@ -1,0 +1,588 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PXR940",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "baselineCommit": "200c429be142deec9f5f6e6bcbfb07d1497bceb5",
+  "sources": {
+    "src/Lokad.Image/Internal/HorizontalFlip.cs": "522c392f48b898a49288ac7d12fae504fd1a054a6adfb449cc81dda0d28e4bc4",
+    "src/Lokad.Image/Internal/HalfTurn.cs": "cb18999e4a25c00d1051846a160f6050aff06606af7b1fa2f38958cc91833e62",
+    "tests/Lokad.Image.PublicApi.Tests/HalfTurnReferenceTests.cs": "2eb3c05f3b166656428c8afe4261d6a5472e9eb0f6264b74d9f3fef602e46de6",
+    "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "448ba01aabe05f3e12aff5e37c63f10371553fb1f98e99fe0e0e07e04f394164"
+  },
+  "createdPaths": [
+    "src/Lokad.Image/Internal/PixelReversal.cs"
+  ],
+  "consumer": {
+    "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+    "sha256": "6b9b0f875cb9e75dadb98459d8f7d5b8685df499486735fc8512972f101e3236"
+  },
+  "productionLineDelta": -37,
+  "hypothesis": "HorizontalFlip and HalfTurn duplicate complete uint/ulong reversal kernels; only the former has a qualified16laneAVX512F byte path. Share that existing real kernel across row and flat placement, removing duplicate code without another owner,buffer,cache or virtual pixel policy.",
+  "endState": "One actual shared uint/ulong reversal kernel serves horizontal row placement and flat half-turn placement. Reuse both existing horizontal bodies verbatim with visibility/type changes only; remove duplicated half-turn bodies. Preserve real public ownership entries,1024pixel cancellation blocks and all vector/scalar/tail fallbacks. Half-turn8 gains the already qualified16laneAVX512F path. No new storage,owner,pool,API or numerical policy.",
+  "producers": {
+    "windowsSha256": "732052ac657abaa52ecea5869b137e8848e0383b49d959a7a8e0889a80eb4a0e",
+    "linuxSha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+    "timedArtifactSha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+    "actualPackageSha256": "a4957644cbdfcc3d53d521dfad74b518f0ec02a8dc56163def9ce7f763c556ec"
+  },
+  "cases": {
+    "WarmHalfTurn8": {
+      "ratio": 0.8162753248406732,
+      "lower": 0.7859242683422699,
+      "upper": 0.8375779646880384,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmHalfTurn8",
+      "managedUs": 8.181071614583333,
+      "nativeUs": 10.02244140625,
+      "allocatedBytes": 112,
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/pxr940-candidate-WarmHalfTurn8-confirm-receipt.json",
+      "observation": "tmp/pxr940-candidate-WarmHalfTurn8-confirm-observation.json",
+      "rawPairs": "tmp/pxr940-candidate-WarmHalfTurn8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA8 raster rotated by a half turn into an independent owned raster at the same dimensions/depth. Complete public Rotate(Half), admission, allocation, materialization and disposal. Native public FFmpeg hflip allocates/processes owned pixels, then vflip reverses their row stride inside each operation before owned output release. No redundant positive-stride materialization; every output sample and independent owner is verified. Graph/source/frame wrappers are reused. Native padded rows of either stride sign exposed directly. Exact whole-pixel placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "967b3e2b40afe9875f63237c4cadf7165e9b9c0f308aa9ab760166d184077abb"
+    },
+    "WarmHalfTurn16": {
+      "ratio": 0.8704727968438036,
+      "lower": 0.8524909280675007,
+      "upper": 0.8794593514965544,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmHalfTurn16",
+      "managedUs": 19.17083723958333,
+      "nativeUs": 22.0234765625,
+      "allocatedBytes": 112,
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/pxr940-candidate-WarmHalfTurn16-confirm-receipt.json",
+      "observation": "tmp/pxr940-candidate-WarmHalfTurn16-confirm-observation.json",
+      "rawPairs": "tmp/pxr940-candidate-WarmHalfTurn16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "One resident original 513x259 RGBA16 raster rotated by a half turn into an independent owned raster at the same dimensions/depth. Complete public Rotate(Half), admission, allocation, materialization and disposal. Native public FFmpeg hflip allocates/processes owned pixels, then vflip reverses their row stride inside each operation before owned output release. No redundant positive-stride materialization; every output sample and independent owner is verified. Graph/source/frame wrappers are reused. Native padded rows of either stride sign exposed directly. Exact whole-pixel placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "87669b0951b37356289144da0a76a350639513f1043db3e282d3a05479266c93"
+    },
+    "WarmHorizontalFlip8": {
+      "ratio": 0.9807458366832557,
+      "lower": 0.9356979478104729,
+      "upper": 1.0044663878893454,
+      "status": "uncertain",
+      "project": "Lokad.Image",
+      "caseId": "WarmHorizontalFlip8",
+      "managedUs": 9.225201822916667,
+      "nativeUs": 9.4063125,
+      "allocatedBytes": 112,
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/pxr940-candidate-WarmHorizontalFlip8-confirm-receipt.json",
+      "observation": "tmp/pxr940-candidate-WarmHorizontalFlip8-confirm-observation.json",
+      "rawPairs": "tmp/pxr940-candidate-WarmHorizontalFlip8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "Warm memory horizontal flip with output pixel allocation, complete materialization and release. Managed public ImageBuffer call, including admission/metadata; native public FFmpeg hflip graph with reused graph/source/frame wrappers and fresh non-aliasing pixel result. Native row alignment/padding is recorded; both expose packed RGBA rows, with no extra packing copy. Process launch, IPC, file transport and hashing are outside scored intervals. Native samples use worker monotonic elapsed time, not caller protocol duration. No codec or pixel/depth conversion. Native nativeBefore/nativeAfter bracket the managed BenchmarkDotNet iterations. Exact independent placement includes zero-alpha hidden RGB.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "6465b9771a07be47b575203262e1cf196ab6a4a211ea78ed722293048e839440"
+    },
+    "WarmHorizontalFlip16": {
+      "ratio": 0.803923027755988,
+      "lower": 0.7914415953730203,
+      "upper": 0.8115105088564486,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmHorizontalFlip16",
+      "managedUs": 21.676649739583333,
+      "nativeUs": 26.963588541666667,
+      "allocatedBytes": 112,
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/pxr940-candidate-WarmHorizontalFlip16-confirm-receipt.json",
+      "observation": "tmp/pxr940-candidate-WarmHorizontalFlip16-confirm-observation.json",
+      "rawPairs": "tmp/pxr940-candidate-WarmHorizontalFlip16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "retainedOperationScratchBytes": 0,
+      "boundary": "Warm memory horizontal flip with output pixel allocation, complete materialization and release. Managed public ImageBuffer call, including admission/metadata; native public FFmpeg hflip graph with reused graph/source/frame wrappers and fresh non-aliasing pixel result. Native row alignment/padding is recorded; both expose packed RGBA rows, with no extra packing copy. Process launch, IPC, file transport and hashing are outside scored intervals. Native samples use worker monotonic elapsed time, not caller protocol duration. No codec or pixel/depth conversion. Native nativeBefore/nativeAfter bracket the managed BenchmarkDotNet iterations. Exact independent placement includes zero-alpha hidden RGB.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "c3997b90d320f1ad866af83d2c013903ac256485318386e3368dac3fecff929f"
+    }
+  },
+  "comparisons": {
+    "WarmHalfTurn8": {
+      "views": {
+        "allActual": {
+          "baselineUs": 12.819201822916666,
+          "candidateUs": 8.181071614583333,
+          "savedUs": 4.638130208333333,
+          "savedFraction": 0.3618111542671735,
+          "rawGainSeparated": true,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 12819.201822916666,
+            "StandardError": 34.892968886403104,
+            "Level": 12,
+            "Margin": 154.81938196067802,
+            "Lower": 12664.382440955987,
+            "Upper": 12974.021204877345
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 8181.071614583333,
+            "StandardError": 23.71654977311695,
+            "Level": 12,
+            "Margin": 105.22984129173437,
+            "Lower": 8075.841773291599,
+            "Upper": 8286.301455875067
+          }
+        },
+        "upperOutlierDiagnostic": {
+          "baselineUs": 12.7821359375,
+          "candidateUs": 8.181071614583333,
+          "savedUs": 4.601064322916666,
+          "savedFraction": 0.3599605218888454,
+          "rawGainSeparated": true,
+          "baselineCI": {
+            "N": 10,
+            "Mean": 12782.1359375,
+            "StandardError": 29.109304180931623,
+            "Level": 12,
+            "Margin": 139.16903868807123,
+            "Lower": 12642.966898811928,
+            "Upper": 12921.30497618807
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 8181.071614583333,
+            "StandardError": 23.71654977311695,
+            "Level": 12,
+            "Margin": 105.22984129173437,
+            "Lower": 8075.841773291599,
+            "Upper": 8286.301455875067
+          }
+        }
+      },
+      "normalizedGain": 0.27218629095448277,
+      "normalizedGainSeparated": true,
+      "normalizedAdverseSeparated": false,
+      "nativeClockChange": -0.12314258744896167,
+      "contemporaryBaseline": "tmp/pxr940-baseline-WarmHalfTurn8-confirm-observation.json"
+    },
+    "WarmHalfTurn16": {
+      "historicalCostOnly": true,
+      "noCausalCompanionGainOrRegressionClaim": true,
+      "rawPointChange": 0.040685925770422404,
+      "normalizedPointChange": 0.034224442973795455,
+      "nativeClockChange": 0.006247660109490072,
+      "normalizedAdverseSeparated": false,
+      "previousStatus": "pass",
+      "currentStatus": "pass"
+    },
+    "WarmHorizontalFlip8": {
+      "historicalCostOnly": true,
+      "noCausalCompanionGainOrRegressionClaim": true,
+      "rawPointChange": -0.0028171825050377075,
+      "normalizedPointChange": 0.015336006998792007,
+      "nativeClockChange": -0.01787899707948737,
+      "normalizedAdverseSeparated": false,
+      "previousStatus": "pass",
+      "currentStatus": "uncertain"
+    },
+    "WarmHorizontalFlip16": {
+      "historicalCostOnly": true,
+      "noCausalCompanionGainOrRegressionClaim": true,
+      "rawPointChange": -0.021847009299689968,
+      "normalizedPointChange": -0.21276080963126076,
+      "nativeClockChange": 0.2425105389407094,
+      "normalizedAdverseSeparated": false,
+      "previousStatus": "uncertain",
+      "currentStatus": "pass"
+    }
+  },
+  "dispatchProof": {
+    "project": "Lokad.Image",
+    "stage": "PXR940",
+    "allUnchangedDispatchBranchesIdentical": true,
+    "normalization": "Remove encoded bytes and long absolute relocations; preserve every call target, argument move, branch and constant. No intentional target substitution. Preserve all argument moves, stack, branches, other calls and constants.",
+    "comparisons": {
+      "Lokad.Image.ImageTransforms:Orient(Lokad.Image.ImageBuffer,int,Lokad.Image.ImageLimits,System.Threading.CancellationToken):Lokad.Image.ImageBuffer (FullOpts)": {
+        "instructionsAndConstantsIdentical": true,
+        "axisSwapCalls": 0,
+        "baselineBytes": 243,
+        "candidateBytes": 243
+      }
+    },
+    "results": {
+      "baseline": {
+        "librarySha256": "9d36add5ee9b3de433dd021a5d909352af0831ca70893de82844c59c2c00503c",
+        "checks": 10,
+        "log": "tmp/pxr940-baseline-dispatch.log",
+        "jit": "tmp/pxr940-baseline-dispatch-jit.txt",
+        "jitSha256": "9881c276d7a9907eb0006ad35f854d2f3cc4a79eaf6129e48b68624154b5392d",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~NormalOrientationReferenceTests"
+        ]
+      },
+      "candidate": {
+        "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+        "checks": 10,
+        "log": "tmp/pxr940-candidate-dispatch.log",
+        "jit": "tmp/pxr940-candidate-dispatch-jit.txt",
+        "jitSha256": "39323a0ad727bde6cf356214839138522c9e0bd1797543ece2e2dab34c302849",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~NormalOrientationReferenceTests"
+        ]
+      }
+    },
+    "actualFunctionalChecks": 20,
+    "publicBindingRestored": true,
+    "allBuilds": 0,
+    "noTimingClaim": true,
+    "scope": "One shared orientation dispatcher, not a whole-library method audit. Four changed complete horizontal/half-turn controls are measured separately. Other sixteen edit controls, PNG compositions, resizing, codecs and text retain unchanged source paths and valid evidence."
+  },
+  "storage": {
+    "gcAllocatedBytesPerOperation": 112,
+    "newOwnedOrAdmittedCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "sourceAndOutputBytesEach": {
+      "byte": 531468,
+      "word": 1062936
+    },
+    "defaultIdlePoolSlots": 2,
+    "defaultIdlePoolMaximumBytes": 4194304,
+    "callerBudgetBypassesIdlePool": true,
+    "governedSourceAndTwoResultsConsumerPeakBytes": {
+      "byte": 15540,
+      "word": 31080
+    },
+    "physicalNativeAndJitPeakUnmeasured": true
+  },
+  "correctness": {
+    "sharedKernelsCopiedVerbatimFromActualHorizontalImplementation": true,
+    "fullPixelBitsHiddenRgbAlphaAndWordSamplesExact": true,
+    "rowVersusFlatPlacementPreserved": true,
+    "all128256ScalarFallbacksPreserved": true,
+    "avx512GuardIsFOnly": true,
+    "cooperative1024PixelCheckpointsPreserved": true,
+    "refusalBeforeAllocationAndExceptionCleanupPreserved": true,
+    "borrowedSharedRootAndSurvivingOwnershipPreserved": true,
+    "newPublicIndependentPlacementCases": 3,
+    "newPublicFlatPixelCounts": [
+      15,
+      16,
+      17
+    ],
+    "actualPackageNewReversalConsumers": 4,
+    "noNewOwnerBufferPoolFieldReservationOrPublicApi": true,
+    "encoderPacketsAndDecoderPixelsPreserved": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "PXR940",
+      "platform": "windows",
+      "productionSha256": "732052ac657abaa52ecea5869b137e8848e0383b49d959a7a8e0889a80eb4a0e",
+      "embeddedTestsSha256": "afc3a99efe11c7dea4ff97ec5af2161be7fb5d717b92c3c8769ec26e12b9a0a0",
+      "full": [
+        3243,
+        2414,
+        948
+      ],
+      "total": 6605,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 237,
+        "internal-scalar": 25,
+        "public-scalar": 237,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 237,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 237
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "PXR940",
+        "platform": "windows",
+        "productionSha256": "732052ac657abaa52ecea5869b137e8848e0383b49d959a7a8e0889a80eb4a0e",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/HorizontalFlip.cs": "522c392f48b898a49288ac7d12fae504fd1a054a6adfb449cc81dda0d28e4bc4",
+          "src/Lokad.Image/Internal/HalfTurn.cs": "cb18999e4a25c00d1051846a160f6050aff06606af7b1fa2f38958cc91833e62",
+          "tests/Lokad.Image.PublicApi.Tests/HalfTurnReferenceTests.cs": "2eb3c05f3b166656428c8afe4261d6a5472e9eb0f6264b74d9f3fef602e46de6",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "448ba01aabe05f3e12aff5e37c63f10371553fb1f98e99fe0e0e07e04f394164"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 237,
+          "internal-scalar": 25,
+          "public-scalar": 237,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 237,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 237
+        },
+        "logs": [
+          "tmp/pxr940-windows-build-core.log",
+          "tmp/pxr940-windows-build-internal.log",
+          "tmp/pxr940-windows-build-public.log",
+          "tmp/pxr940-windows-internal-normal.log",
+          "tmp/pxr940-windows-public-normal.log",
+          "tmp/pxr940-windows-internal-scalar.log",
+          "tmp/pxr940-windows-public-scalar.log",
+          "tmp/pxr940-windows-internal-avx512-off.log",
+          "tmp/pxr940-windows-public-avx512-off.log",
+          "tmp/pxr940-windows-internal-avx2-off.log",
+          "tmp/pxr940-windows-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedNonJpegIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "PXR940",
+      "platform": "linux",
+      "productionSha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "embeddedTestsSha256": "908b3227fe41992b21e54d3a377332f2bed5b5903d571121ee80ea5418b39064",
+      "full": [
+        3243,
+        2414,
+        948
+      ],
+      "total": 6605,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 237,
+        "internal-scalar": 25,
+        "public-scalar": 237,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 237,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 237
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "PXR940",
+        "platform": "linux",
+        "productionSha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/HorizontalFlip.cs": "522c392f48b898a49288ac7d12fae504fd1a054a6adfb449cc81dda0d28e4bc4",
+          "src/Lokad.Image/Internal/HalfTurn.cs": "cb18999e4a25c00d1051846a160f6050aff06606af7b1fa2f38958cc91833e62",
+          "tests/Lokad.Image.PublicApi.Tests/HalfTurnReferenceTests.cs": "2eb3c05f3b166656428c8afe4261d6a5472e9eb0f6264b74d9f3fef602e46de6",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "448ba01aabe05f3e12aff5e37c63f10371553fb1f98e99fe0e0e07e04f394164"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 237,
+          "internal-scalar": 25,
+          "public-scalar": 237,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 237,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 237
+        },
+        "logs": [
+          "tmp/pxr940-linux-build-core.log",
+          "tmp/pxr940-linux-build-internal.log",
+          "tmp/pxr940-linux-build-public.log",
+          "tmp/pxr940-linux-internal-normal.log",
+          "tmp/pxr940-linux-public-normal.log",
+          "tmp/pxr940-linux-internal-scalar.log",
+          "tmp/pxr940-linux-public-scalar.log",
+          "tmp/pxr940-linux-internal-avx512-off.log",
+          "tmp/pxr940-linux-public-avx512-off.log",
+          "tmp/pxr940-linux-internal-avx2-off.log",
+          "tmp/pxr940-linux-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedNonJpegIsaEvidenceReused": true
+    },
+    "fullChecksEachOs": 6605,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "PXR940",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "a4957644cbdfcc3d53d521dfad74b518f0ec02a8dc56163def9ce7f763c556ec",
+      "symbolsSha256": "9b4c5aca185448a24e53f6d7dd058087e5c88199c055f67b3a0b6197ec8bc004",
+      "bytes": 459506,
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualConsumerPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 12,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionBuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "PXR940",
+      "sameActualPackageSha256": "a4957644cbdfcc3d53d521dfad74b518f0ec02a8dc56163def9ce7f763c556ec",
+      "librarySha256": "b321039ac4ce6eea4a9452e421760d1e05fa2b05046deadd0ca9c85a29e8aee4",
+      "actualConsumerPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 12,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "coreEmbeddedAndPublicBuildsEachOs": 1,
+    "productionBuildsAfterTiming": 0,
+    "packCalls": 1,
+    "harnessNativeAndFixtureBuilds": 0,
+    "unchangedCodecResizeTextAndOtherIsaEvidenceReused": true
+  },
+  "sourceInvalidation": "Only horizontal/half-turn pixel-producing paths change: four byte/word complete costs refresh. The complete243Borientation dispatcher retains identical instructions,arguments,call targets and constants after relocation normalization; other16edit kernels and PNG AutoOrient(Normal) compositions stay unchanged. Codec,resize,font/text sources and timing/ISA proof are reused. No historical stage sums, new image or shape/settings grid.",
+  "currentImageOwnerViewStatuses": {
+    "pass": 175,
+    "gap": 3,
+    "uncertain": 13
+  },
+  "currentTwentyEditStatuses": {
+    "pass": 14,
+    "gap": 3,
+    "uncertain": 3
+  },
+  "decision": {
+    "accept": true,
+    "scope": "Retain shared exact whole-pixel reversal kernels: independent complete byte-half-turn raw/all-actual and normalized gains separate, source duplication removed and no new storage. Word half turn/horizontal pass. Byte horizontal is now narrowly uncertain with overlapping historical intervals and a slightly better raw point; no demonstrated regression or favorable repeat. Other16edit branches/PNG compositions keep identical dispatcher/source paths. Qualify one coherent milestone; reuse unchanged codec/resize/font/text/ISA evidence and preserve all289required paths."
+  },
+  "raw": {
+    "file": "shared-pixel-reversal-qualified.tar.xz",
+    "sha256": "b6b7db044ea33967352c197e4c957967b361ee852505311fa0ef298e2643ddb6",
+    "bytes": 3352192,
+    "members": 164,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-horizontal-preparation-qualified.tar.xz",
+        "sha256": "b5bcafb5913deaa70d29d0ecc7b8b07ec4ace16c357411bc714d752ad078c9ee"
+      },
+      {
+        "file": "shared-axis-swap-qualified.tar.xz",
+        "sha256": "95f7e1217518a1eef153c90c46254fb9457fbfa26d4b7f0e319709c0452eaefb"
+      },
+      {
+        "file": "released-image-storage-qualified.tar.xz",
+        "sha256": "1ef7261190c65bd9a8d0cffa38b7904c590304e846e91419e3f3f517f5b776d6"
+      }
+    ]
+  }
+}

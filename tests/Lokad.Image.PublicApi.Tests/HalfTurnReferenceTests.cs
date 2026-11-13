@@ -12,6 +12,9 @@ public sealed class HalfTurnReferenceTests
     [InlineData(8, 1, 5)]
     [InlineData(16, 1, 5)]
     [InlineData(8, 7, 1)]
+    [InlineData(8, 15, 1)]
+    [InlineData(8, 16, 1)]
+    [InlineData(8, 17, 1)]
     [InlineData(16, 7, 1)]
     public void HalfTurnMatchesIndependentPlacementAndExactAdmission(int depth, int width, int height)
     {

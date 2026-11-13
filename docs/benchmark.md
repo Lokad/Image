@@ -1,18 +1,19 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **141 comparisons** summarize that scope.
+**289 named material paths**; these **142 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Shared axis-swapping tiles](../benchmarks/SHARED-AXIS-SWAP.md) pass all eight original
-byte/word transpose and quarter-turn controls. Mirrored transpose independently
-saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost is
-**32.07 / FFmpeg 39.50 µs, upper .826**, **112 B/op**. One shared ownership/tile
-engine replaces three duplicate classes, with unchanged owned/retained capacity.
+[Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
+36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
+Current cost is **8.18 / FFmpeg 10.02 µs, upper .838**, **112 B/op**. Shared exact
+kernels remove 37 production lines with unchanged owned/retained capacity. Both
+word controls pass; byte horizontal flip is narrowly uncertain, with no demonstrated
+regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 174 pass, 4 gaps, 13 uncertain**. The tables retain source-valid
+image views: 175 pass, 3 gaps, 13 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -51,7 +52,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,602 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,605 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -205,6 +206,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 398.55 | 422.93 | 0.942 / 0.952 | 137 |
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
+| Half turn RGBA8 † | 8.18 | 10.02 | 0.816 / 0.838 | 112 |
 
 **Inspection and pixel-coding validation**
 
