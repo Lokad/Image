@@ -224,7 +224,7 @@ public sealed class PixelValidationTests
     {
         const int capacity = 1024 * 1024;
         var data = OriginalExif.Create(profile, 17, 11).Encoded;
-        using var root = new TestMemoryBudget(capacity); Assert.True(root.TryReserve(capacity - 8192, out var caller));
+        using var root = new TestMemoryBudget(capacity); Assert.True(root.TryReserve(capacity - 256, out var caller));
         var limits = new ImageLimits { MemoryBudget = root };
         var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -242,7 +242,7 @@ public sealed class PixelValidationTests
         }
         finally { release.TrySetResult(); }
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
-        Assert.Equal(capacity - 8192, root.Bytes); caller.Dispose(); Assert.Equal(0, root.Bytes);
+        Assert.Equal(capacity - 256, root.Bytes); caller.Dispose(); Assert.Equal(0, root.Bytes);
         Assert.Equal(ImageCodec.Identify(data), ImageCodec.ValidatePixels(data, limits)); Assert.Equal(0, root.Bytes);
         Assert.False(input.WasDisposed); Assert.False(root.IsDisposed);
     }

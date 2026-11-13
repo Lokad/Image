@@ -124,7 +124,7 @@ public static partial class ImageCodec
 
     private static ImageBuffer DecodeFromStream(Stream input, DecodeOptions options, OperationContext context)
     {
-        using var data = IdentificationInput.ReadForDecode(input, context);
+        using var data = IdentificationInput.Read(input, context);
         try { return DecodeCore(data.Span, options, context); }
         finally { context.Release(data.Capacity); }
     }

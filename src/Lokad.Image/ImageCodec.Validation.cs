@@ -22,7 +22,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(input);
         using var context = ReadContext(limits ?? ImageLimits.Default, cancellationToken, metadataPolicy);
-        using var data = IdentificationInput.ReadForDecode(input, context);
+        using var data = IdentificationInput.Read(input, context);
         try { return ValidatePixelsCore(data.Span, context, metadataPolicy); }
         finally { context.Release(data.Capacity); }
     }

@@ -11,8 +11,8 @@ public sealed class StreamDecodeInputTests
     {
         var frame = new AuthoredPng.Frame("large-stream-input", 6, 8, 1, 1, false);
         var data = AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame)), ("tEXt", new byte[1024 * 1024]));
-        var previousCapacity = 8192L; while (previousCapacity * 2 < data.Length) previousCapacity *= 2;
-        var limits = Limits with { MaxInputBytes = data.Length, MaxWorkingBytes = 8192 + previousCapacity + data.Length};
+        var previousCapacity = 256L; while (previousCapacity * 2 < data.Length) previousCapacity *= 2;
+        var limits = Limits with { MaxInputBytes = data.Length, MaxWorkingBytes = previousCapacity + data.Length};
         using var input = new SyncInput(data, 8192); using var result = ImageCodec.Decode(input, new() { Limits = limits });
         using var expected = ImageCodec.Decode(data); Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
         using var rejected = new SyncInput(data, 8192);

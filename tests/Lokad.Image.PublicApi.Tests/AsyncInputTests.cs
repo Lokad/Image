@@ -48,7 +48,7 @@ public sealed class AsyncInputTests
     public async Task ExactAcquisitionAllowanceNeedsNoFinalFullInputCopy()
     {
         var encoded = OriginalExif.Create(MetadataProfile.Png8, 1, 1).Encoded;
-        var limits = new ImageLimits { MaxInputBytes = encoded.Length, MaxWorkingBytes = 8192L + encoded.Length };
+        var limits = new ImageLimits { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
         using var input = new AsyncOnlyInput(encoded, encoded.Length);
         Assert.Equal(ImageCodec.Identify(encoded), await ImageCodec.IdentifyAsync(input, limits));
         using var rejected = new AsyncOnlyInput(encoded, encoded.Length);
@@ -58,18 +58,18 @@ public sealed class AsyncInputTests
     }
 
     [Fact]
-    public async Task ScratchAndSimultaneousGrowthAreAdmittedBeforeAllocation()
+    public async Task InitialStorageAndSimultaneousGrowthAreAdmittedBeforeAllocation()
     {
         var encoded = OriginalExif.Create(MetadataProfile.Png8, 33, 17).Encoded;
         Assert.True(encoded.Length > 512);
-        using var noScratch = new AsyncOnlyInput(encoded);
-        var scratch = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.IdentifyAsync(noScratch,
-            new() { MaxWorkingBytes = 8191 }).AsTask());
-        Assert.Equal(ImageLimitKind.WorkingBytes, scratch.Limit); Assert.Equal(0, noScratch.ReadCalls);
+        using var noStorage = new AsyncOnlyInput(encoded);
+        var initial = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.IdentifyAsync(noStorage,
+            new() { MaxWorkingBytes = 255 }).AsTask());
+        Assert.Equal(ImageLimitKind.WorkingBytes, initial.Limit); Assert.Equal(0, noStorage.ReadCalls);
         using var growth = new AsyncOnlyInput(encoded, 256);
         var failure = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.DecodeAsync(growth,
-            new() { Limits = new() { MaxWorkingBytes = 8192 + 256 + 512 - 1 } }).AsTask());
-        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(512, growth.Consumed); Assert.False(growth.WasDisposed);
+            new() { Limits = new() { MaxWorkingBytes = 256 + 512 - 1 } }).AsTask());
+        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(257, growth.Consumed); Assert.False(growth.WasDisposed);
     }
 
     [Theory]

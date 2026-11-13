@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Read complete stream inputs directly into admitted storage, removing scratch
+  copies and sharing synchronous acquisition across inspection and decoding.
+
 - Prepare lossless WebP inverse color coefficients per tile and restore pixels
   in SIMD batches, preserving exact samples and the portable scalar path.
 

@@ -7,6 +7,14 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs source-valid passing evidence for every named path, with scope
 stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
 
+[Direct stream input](DIRECT-STREAM-INPUT.md) supersedes eleven affected complete
+stream costs:9pass/2gap/0uncertain, no new paths. Identify independently saves11.6%
+seekable/10.5%async; async216B/op and upper.956 passes/stops. Seekable remains
+upper1.103; the existing PNG16 crop/fit gap remainsupper1.115. All current decode/
+metadata/ownership gates pass. BothOS6,530full/live checks and SAME actual package/
+all3examples pass; unchanged resident, codec, resize and text evidence is reused.
+Historical affected costs remain linked evidence, without current-cost claims.
+
 [Horizontal enlargement confidence](RESIZE-HORIZONTAL-CONFIDENCE.md) passes/stops:
 1431.47/prepared-zimg1514.24µs,range.934955–.953372,112directB/op. One12-pair
 64-operation adjacent capture on the unchanged actual package retains every

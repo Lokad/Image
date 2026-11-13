@@ -1261,6 +1261,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyLanczosPlans();
         await VerifyCompactPngDictionary(budget, limits);
         await VerifyStoredPngWorkspace();
+        await VerifyDirectStreamInput();
         await VerifyDirectRgbResult();
         await VerifyGroupedJpegResult(false);
         await VerifyGroupedJpegResult(true);
@@ -1613,6 +1614,39 @@ internal static class CooperativeMemoryConsumer
         if (budget.Bytes != 0 || budget.IsDisposed)
             throw new Exception("Packaged JPEG444 retained storage leaked.");
         Console.WriteLine("Packaged JPEG444 byte/word normalization, exact packets, async and shared ownership passed.");
+    }
+
+    private static async Task VerifyDirectStreamInput()
+    {
+        foreach (var length in new[] { 256, 8192 })
+        {
+            var frame = new AuthoredPng.Frame("packaged-direct-input", 6, 8, 1, 1, false);
+            var zlib = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
+            var minimal = AuthoredPng.Wrap(frame, zlib);
+            var packet = AuthoredPng.Wrap(frame, zlib, ("tEXt", new byte[length - minimal.Length - 12]));
+            var expected = ImageCodec.Identify(packet);
+            var peak = length == 256 ? 256 : length + length / 2;
+            using var root = new TestMemoryBudget(peak);
+            var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = peak, MaxInputBytes = length };
+            using var synchronous = new MemoryStream(packet, writable: false);
+            using var asynchronous = new MemoryStream(packet, writable: false);
+            if (ImageCodec.Identify(synchronous, limits) != expected || await ImageCodec.IdentifyAsync(asynchronous, limits) != expected
+                || !synchronous.CanRead || !asynchronous.CanRead || synchronous.Position != length || asynchronous.Position != length
+                || root.Peak != peak || root.Bytes != 0 || root.IsDisposed)
+                throw new Exception("Packaged direct input capacity, full EOF or borrowed ownership differs.");
+            using var refused = new MemoryStream(packet, writable: false);
+            try
+            {
+                await ImageCodec.IdentifyAsync(refused, limits with { MaxWorkingBytes = peak - 1 });
+                throw new Exception("Packaged direct input ignored the replacement peak.");
+            }
+            catch (ImageLimitException error) when (error.Limit == ImageLimitKind.WorkingBytes && error.Scope == ImageLimitScope.Operation) { }
+            if (root.Bytes != 0 || !refused.CanRead) throw new Exception("Packaged direct input refusal leaked storage.");
+            using var recovered = new MemoryStream(packet, writable: false);
+            if (await ImageCodec.IdentifyAsync(recovered, limits) != expected || root.Bytes != 0)
+                throw new Exception("Packaged direct input did not recover released capacity.");
+        }
+        Console.WriteLine("Packaged direct stream input preserves full EOF, exact capacity, replacement peaks and refusal recovery.");
     }
 
     private static async Task VerifyStoredPngWorkspace()

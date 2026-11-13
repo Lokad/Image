@@ -2,43 +2,39 @@ namespace Lokad.Image.Internal;
 
 internal sealed partial class IdentificationInput
 {
-    // The asynchronous path admits actual simultaneous capacities. Its retained
-    // capacity stays charged throughout parsing/decoding, without an exact-sized
-    // final encoded-input copy. The original synchronous path is unchanged.
+    // Storage stays charged through actual asynchronous users and subsequent
+    // parsing. Reads target owned tails directly; the optional EOF probe is tiny.
     internal static async ValueTask<IdentificationInput> ReadAsync(Stream input, OperationContext context)
     {
         ArgumentNullException.ThrowIfNull(input);
-        const int scratchBytes = 8192;
-        context.Reserve(scratchBytes);
         byte[] buffer = [];
         var length = 0;
         try
         {
-            var scratch = new byte[scratchBytes];
+            buffer = Grow(buffer, 0, context);
+            byte[]? probe = null;
             while (true)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var read = await input.ReadAsync(scratch.AsMemory(), context.Cancellation).ConfigureAwait(false);
-                if ((uint)read > scratchBytes) throw new ImageDataException("Stream returned an invalid read count.");
-                if (read == 0) break;
-                if (read > context.Limits.MaxInputBytes - length)
-                    throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-                var needed = (long)length + read;
-                if (needed > buffer.Length)
+                if (length == buffer.Length)
                 {
-                    var capacity = Math.Min(context.Limits.MaxInputBytes, Math.Max(needed, Math.Max(256, buffer.Length * 2L)));
-                    if (capacity > Array.MaxLength)
-                        throw new ImageLimitException(ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
-                    context.Reserve(capacity);
-                    byte[] next;
-                    try { next = Rent((int)capacity, !context.HasMemoryBudget); }
-                    catch { context.Release(capacity); throw; }
-                    buffer.AsSpan(0, length).CopyTo(next);
-                    Return(buffer, !context.HasMemoryBudget); context.Release(buffer.Length); buffer = next;
+                    probe ??= new byte[1];
+                    var extra = await input.ReadAsync(probe.AsMemory(), context.Cancellation).ConfigureAwait(false);
+                    if ((uint)extra > 1) throw new ImageDataException("Stream returned an invalid read count.");
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    if (extra == 0) break;
+                    if (length == context.Limits.MaxInputBytes)
+                        throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
+                    buffer = Grow(buffer, length, context);
+                    buffer[length++] = probe[0];
+                    continue;
                 }
-                scratch.AsSpan(0, read).CopyTo(buffer.AsSpan(length));
-                length += read;
+                var requested = Math.Min(8192, buffer.Length - length);
+                var read = await input.ReadAsync(buffer.AsMemory(length, requested), context.Cancellation).ConfigureAwait(false);
+                if ((uint)read > (uint)requested) throw new ImageDataException("Stream returned an invalid read count.");
                 context.Cancellation.ThrowIfCancellationRequested();
+                if (read == 0) break;
+                length += read;
             }
             context.Cancellation.ThrowIfCancellationRequested();
             var result = new IdentificationInput(buffer, length, !context.HasMemoryBudget);
@@ -47,8 +43,8 @@ internal sealed partial class IdentificationInput
         }
         finally
         {
-            context.Release(scratchBytes + (long)buffer.Length);
             Return(buffer, !context.HasMemoryBudget);
+            context.Release(buffer.Length);
         }
     }
 }

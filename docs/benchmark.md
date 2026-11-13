@@ -6,6 +6,13 @@ open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** ma
 development costs. Retained release costs apply only to unchanged production
 paths. Publication is postponed.
 
+[Direct stream input](../benchmarks/DIRECT-STREAM-INPUT.md) refreshes eleven
+affected complete operations on the current immutable package: nine pass and two
+remain gaps. Independent Identify gains are11.6%seekable/10.5%async; async allocation
+falls8400→216B/op. Every packet, metadata/pixel gate and owner contract is preserved.
+Full6530checks per OS and the same actual package/all three examples pass.
+Other source-valid paths retain their separately identified qualification.
+
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
 workstation GC. Times are **µs per complete operation**. Ratios use the faster
@@ -185,14 +192,15 @@ Current scope and remaining work:
   them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
   and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
 
-The current immutable build passes **6,522 full/live checks per OS**
+The current immutable build passes **6,530 full/live checks per OS**
 and the **same actual Release-package consumer/all three usage examples on
 Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass 713 internal / 247 public per
-normal/scalar/disabled-AVX2/AVX512 mode.
+Stream acquisition/admission checks pass157internal/429public per normal/scalar
+mode on each OS. Source-valid PNG kernel/admission evidence reuses713internal/
+247public per normal/scalar/disabled-AVX2/AVX512 mode from the preceding milestone.
 Current resize qualification passes570 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
@@ -232,7 +240,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 6,187.90 | 6,465.82 | 0.957 / 0.964 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,809.55 | 6,000.48 | 0.968 / 0.973 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -274,7 +282,7 @@ settings do not establish matched quality.
 | JPEG baseline420, resident decode (confirmed pass) † | 668.74 | 1,013.98 | 0.660 / 0.670 | 258,454 | — |
 | JPEG DC-only, caller CMYK decode (confirmed pass) † | 318.93 | 330.45 | 0.965 / 0.972 | 1,085,981 | — |
 | VP8L RGBA8, resident decode † | 2,719.46 | 3,020.83 | 0.900 / 0.907 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 2,906.33 | 3,151.62 | 0.922 / 0.983 | 152,824 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 2,725.37 | 3,031.58 | 0.899 / 0.908 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode (confirmed pass) † | 420.09 | 544.27 | 0.772 / 0.778 | 288,465 | — |
 | JPEG CMYK sparse-2D, resident decode (confirmed pass) † | 419.25 | 433.52 | 0.967 / 0.978 | 20,944 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 420.81 | 709.56 | 0.593 / 0.598 | 895,563 | — |
@@ -372,13 +380,13 @@ settings do not establish matched quality.
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,225.118 | 3,204.194 | 0.694 / 0.730 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,350.108 | 5,453.134 | 0.798 / 0.801 | 15,600 | Confirmed pass |
-| Validate PNG16, async nonseekable † | 2,748.498 | 3,615.582 | 0.760 / 0.763 | 8,544 | Confirmed pass |
+| Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
-| Identify PNG8, fresh seekable Stream, adapter reference | 19.537 | 15.929 | 1.226 / 1.232 | 192 | Confirmed gap |
-| Identify PNG8, async nonseekable, adapter reference | 20.312 | 19.321 | 1.051 / 1.060 | 8,400 | Confirmed gap |
+| Identify PNG8, fresh seekable Stream, adapter reference | 17.492 | 15.921 | 1.099 / 1.103 | 192 | Confirmed gap |
+| Identify PNG8, async nonseekable, adapter reference | 18.367 | 19.282 | 0.953 / 0.956 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 398.401 | 745.735 | 0.534 / 0.537 | 20,944 | Confirmed pass |
 
 [Coverage and linked family reports](../benchmarks/WARM-COVERAGE.md) retain producer

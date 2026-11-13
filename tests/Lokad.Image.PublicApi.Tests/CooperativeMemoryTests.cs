@@ -186,12 +186,12 @@ public sealed class CooperativeMemoryTests
     [Fact]
     public async Task InputGrowthChargesOldAndNewCapacityTogetherBeforeReplacing()
     {
-        using var root = new TestMemory(8192 + 256 + 512 - 1);
+        using var root = new TestMemory(256 + 512 - 1);
         var limits = new ImageLimits { MemoryBudget = root };
         using var input = new ChunkInput(new byte[257]);
         var error = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.IdentifyAsync(input, limits).AsTask());
         Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
-        Assert.Equal(8192 + 256, root.Peak);
+        Assert.Equal(256, root.Peak);
         Assert.Equal(1, root.Refusals);
         Assert.Equal(0, root.Bytes);
         Assert.True(input.CanRead);

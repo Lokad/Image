@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Private, fully written input for metadata inspection; never exposed to a caller.</summary>
+/// <summary>Private complete input, charged through its last parser/decoder user.</summary>
 internal sealed partial class IdentificationInput : IDisposable
 {
     // One idle exact power-of-two array per BCL bucket, at most 8 MiB total.
@@ -20,46 +20,66 @@ internal sealed partial class IdentificationInput : IDisposable
     public static IdentificationInput Read(Stream input, OperationContext context)
     {
         ArgumentNullException.ThrowIfNull(input);
-        if (context.HasMemoryBudget) return ReadForDecode(input, context);
-        var limits = context.Limits;
-        context.Reserve(8192);
-        Span<byte> scratch = stackalloc byte[8192];
         byte[] buffer = [];
         var length = 0;
         try
         {
+            buffer = Grow(buffer, 0, context);
+            Span<byte> probe = stackalloc byte[1];
             while (true)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var read = input.Read(scratch);
-                if (read == 0) break;
-                if (read > limits.MaxInputBytes - (long)length) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-                var needed = (long)length + read;
-                var capacity = Math.Max(needed, Math.Max(256, buffer.Length * 2L));
-                if (needed > buffer.Length)
+                if (length == buffer.Length)
                 {
-                    if (capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes || capacity > Array.MaxLength)
-                        throw new ImageLimitException(capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes
-                            ? ImageLimitKind.WorkingBytes : ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
-                    var next = Rent((int)capacity, !context.HasMemoryBudget);
-                    buffer.AsSpan(0, length).CopyTo(next);
-                    Return(buffer, !context.HasMemoryBudget); buffer = next;
+                    // Probe before growing: an exact-capacity input needs no
+                    // replacement allocation just to establish EOF.
+                    var extra = input.Read(probe);
+                    if ((uint)extra > 1) throw new ImageDataException("Stream returned an invalid read count.");
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    if (extra == 0) break;
+                    if (length == context.Limits.MaxInputBytes)
+                        throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
+                    buffer = Grow(buffer, length, context);
+                    buffer[length++] = probe[0];
+                    continue;
                 }
-                scratch[..read].CopyTo(buffer.AsSpan(length));
-                length += read;
+                var requested = Math.Min(8192, buffer.Length - length);
+                var read = input.Read(buffer.AsSpan(length, requested));
+                if ((uint)read > (uint)requested) throw new ImageDataException("Stream returned an invalid read count.");
                 context.Cancellation.ThrowIfCancellationRequested();
+                if (read == 0) break;
+                length += read;
             }
-            // Keep memory admission and format-error ordering. Parsing the
-            // fully acquired private prefix avoids the former exact-sized copy.
-            if ((long)buffer.Length + length + scratch.Length > limits.MaxWorkingBytes)
-                throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");
-            context.Release(scratch.Length);
-            context.Reserve(length);
             var result = new IdentificationInput(buffer, length, !context.HasMemoryBudget);
             buffer = [];
             return result;
         }
-        finally { Return(buffer, !context.HasMemoryBudget); }
+        finally
+        {
+            Return(buffer, !context.HasMemoryBudget);
+            context.Release(buffer.Length);
+        }
+    }
+
+    private static byte[] Grow(byte[] buffer, int length, OperationContext context)
+    {
+        var capacity = Math.Min(Math.Min(context.Limits.MaxInputBytes, Array.MaxLength),
+            Math.Max(256, buffer.Length * 2L));
+        if (capacity <= length)
+            throw new ImageLimitException(ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
+        // Old and new storage coexist through the copy. Refusal is terminal;
+        // never retry with another capacity or return an active IO buffer.
+        context.Reserve(capacity);
+        byte[] next;
+        try
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            next = Rent((int)capacity, !context.HasMemoryBudget);
+        }
+        catch { context.Release(capacity); throw; }
+        buffer.AsSpan(0, length).CopyTo(next);
+        Return(buffer, !context.HasMemoryBudget); context.Release(buffer.Length);
+        return next;
     }
     private static bool Pooled(int length) => length >= 256 && length <= MaxPooledLength && BitOperations.IsPow2(length);
     private static byte[] Rent(int length, bool pooled = true)

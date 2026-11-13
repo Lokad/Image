@@ -112,7 +112,9 @@ public class WarmStreamIdentify
         var badCrc = encoded.ToArray(); badCrc[41] ^= 1;
         Reject(badCrc); Reject(encoded.AsSpan(0, encoded.Length - 1));
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
-        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 262144 + encoded.Length + 8192};
+        // Direct acquisition peaks at old131072B plus the input-clamped final
+        // capacity; no scratch or final-input copy is allocated.
+        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 131072 + encoded.Length};
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact Identify admission differs.");
         foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = exact.MaxWorkingBytes - 1 } })
         {

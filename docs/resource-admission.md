@@ -82,6 +82,8 @@ live result ownership. Other default caches remain bounded independently.
 Dimension-only probes admit512 bytes; other probing and complete header inspection
 use8448-byte workspace without a raster. Identify/Decode stream
 buffers retain actual capacity through parsing, avoiding a final encoded copy.
+Complete-input reads target admitted storage directly; growth charges old and new
+capacity together. An EOF probe on a full buffer avoids allocating only to find EOF.
 Async encoding retains staged chunks/prepared partitions through actual delivery.
 Returned results have independent lifetimes. See [SPEC](spec.md) for codec,
 stream validation and pixel details and [migration](migration.md) for0.2 API removals.

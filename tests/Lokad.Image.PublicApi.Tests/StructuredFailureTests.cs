@@ -35,10 +35,10 @@ public sealed class StructuredFailureTests
         {
             (new ImageLimits { MaxInputBytes = data.Length - 1 }, ImageLimitKind.InputBytes),
             (new ImageLimits { MaxContainerItems = 1 }, ImageLimitKind.ContainerItems),
-            (new ImageLimits { MaxWorkingBytes = 8192 }, ImageLimitKind.WorkingBytes)
+            (new ImageLimits { MaxWorkingBytes = 255 }, ImageLimitKind.WorkingBytes)
         })
         {
-            // The last bound specifically exercises stream-buffer growth.
+            // The last bound refuses the stream reader's initial owned capacity.
             if (!streamed && expected == ImageLimitKind.WorkingBytes) continue;
             using var input = new MemoryStream(data);
             var error = Assert.Throws<ImageLimitException>(() =>

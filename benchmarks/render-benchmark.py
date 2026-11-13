@@ -2284,6 +2284,40 @@ def render():
     assert png_live_qualification['threeNamedStorageSuitesIncluded']
     assert png_live_qualification['pngInternalEachModeEachOs'] == 712 and png_live_qualification['pngPublicEachModeEachOs'] == 246
     assert png_live_qualification['unchangedResizeCodecTextIsaEvidenceReused'] and png_live_qualification['additionalResizeIsaRuns'] == 0
+    direct_inputs = json.loads((ROOT / 'benchmarks/direct-stream-input-evidence.json').read_text(encoding='utf-8'))
+    assert direct_inputs['productionAccepted'] and direct_inputs['allAffectedPerformanceReconciled']
+    assert direct_inputs['requiredMaterialPaths'] == 289 and direct_inputs['statusCounts'] == {'pass': 9, 'gap': 2, 'uncertain': 0}
+    assert len(direct_inputs['cases']) == 11 and direct_inputs['raw']['mirrored'] and direct_inputs['raw']['allMembersVerified']
+    direct_qualification = direct_inputs['qualification']
+    assert direct_qualification['windows']['total'] == direct_qualification['linux']['total'] == 6530
+    assert direct_qualification['actualPackage']['sha256'] == direct_qualification['samePackageLinux']['sameActualPackageSha256']
+    assert direct_qualification['actualPackage']['directStreamInputCapacityAndRefusalRecoveryPassed']
+    assert direct_qualification['samePackageLinux']['directStreamInputCapacityAndRefusalRecoveryPassed']
+    for case in direct_inputs['cases'].values():
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12
+        assert case['librarySha256'] == direct_inputs['producers']['timedWindowsSha256'] == direct_qualification['actualPackage']['librarySha256']
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['sourceUnchanged'] and case['independentOwnedOutput']
+        assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+    # Five displayed costs change; the six other affected complete workloads are
+    # retained in the linked report, without adding rows or a workload grid.
+    for name, prefix in [('WebpStream', '| VP8L RGBA8, fresh seekable Stream decode'),
+                         ('Vp8Stream', '| WebP VP8 + alpha, fresh seekable Stream')]:
+        c = direct_inputs['cases'][name]
+        found = [line for line in codecs.splitlines() if line.startswith(prefix)]
+        assert len(found) == 1
+        label = found[0].split('|')[1].strip()
+        replacement = f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |'
+        codecs = codecs.replace(found[0], replacement)
+    for name, prefix in [('PngSeekable', '| Identify PNG8, fresh seekable Stream'),
+                         ('PngAsync', '| Identify PNG8, async nonseekable'),
+                         ('ValidatePng16Async', '| Validate PNG16, async nonseekable')]:
+        c = direct_inputs['cases'][name]
+        indices = [i for i, line in enumerate(read_rows) if line.startswith(prefix)]
+        assert len(indices) == 1
+        i = indices[0]; label = read_rows[i].split('|')[1].strip()
+        status = 'Confirmed pass' if c['status'] == 'pass' else 'Confirmed gap' if c['status'] == 'gap' else 'Confidence open'
+        read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
+
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     cached_horizontal_qualification = cached_horizontal['qualification']
@@ -2339,12 +2373,13 @@ def render():
     assert word_views_qualification['actualPackage']['actualConsumerPassed'] and word_views_qualification['samePackageLinux']['actualConsumerPassed']
     assert word_views_qualification['affectedDeepWordConsumerPassedBothOS']
     assert word_views_qualification['threeNamedStorageSuitesIncluded'] and word_views_qualification['disabledResizeIsaReused']
-    current_build_qualification = png_current['qualification']
-    assert current_build_qualification['fullChecksEachOs'] == current_build_qualification['windows']['total'] == current_build_qualification['linux']['total'] == 6522
-    assert current_build_qualification['actualPackage']['sha256'] == current_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
-    assert current_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
-    assert current_build_qualification['actualPackage']['actualConsumerPassed'] and current_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert current_build_qualification['allFourPngModesPassed'] and current_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
+    png_build_qualification = png_current['qualification']
+    assert png_build_qualification['fullChecksEachOs'] == png_build_qualification['windows']['total'] == png_build_qualification['linux']['total'] == 6522
+    assert png_build_qualification['actualPackage']['sha256'] == png_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
+    assert png_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
+    assert png_build_qualification['actualPackage']['actualConsumerPassed'] and png_build_qualification['samePackageLinux']['actualConsumerPassed']
+    assert png_build_qualification['allFourPngModesPassed'] and png_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
+    current_build_qualification = direct_qualification
     bilinear_byte = bilinear_metadata['cases']['Down8']
     bilinear_word = bilinear_metadata['cases']['Down16']
     scaler_tight = compact_paired['cases']['TightDown8']
@@ -2360,6 +2395,13 @@ Updated 2026-11-13. These **{displayed_count} tabulated comparisons** combine qu
 open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs. Retained release costs apply only to unchanged production
 paths. Publication is postponed.
+
+[Direct stream input](../benchmarks/DIRECT-STREAM-INPUT.md) refreshes eleven
+affected complete operations on the current immutable package: nine pass and two
+remain gaps. Independent Identify gains are11.6%seekable/10.5%async; async allocation
+falls8400→216B/op. Every packet, metadata/pixel gate and owner contract is preserved.
+Full6530checks per OS and the same actual package/all three examples pass.
+Other source-valid paths retain their separately identified qualification.
 
 All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
 warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
@@ -2546,8 +2588,9 @@ Windows/Linux**. Current WebP checks pass1,033internal/239public per
 normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
 evidence is reused. Current text/canvas/ownership
 checks pass183internal/162public per normal/scalar mode on each OS.
-Current PNG/admission checks pass {current_build_qualification['windows']['pngInternalEachMode']} internal / {current_build_qualification['windows']['pngPublicEachMode']} public per
-normal/scalar/disabled-AVX2/AVX512 mode.
+Stream acquisition/admission checks pass157internal/429public per normal/scalar
+mode on each OS. Source-valid PNG kernel/admission evidence reuses713internal/
+247public per normal/scalar/disabled-AVX2/AVX512 mode from the preceding milestone.
 Current resize qualification passes570 internal/791 public per normal/scalar mode;
 unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
 Unchanged JPEG checks pass
