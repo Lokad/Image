@@ -118,39 +118,58 @@ def apply_current_lanczos_enlargement_confidence(editing):
     return editing
 
 
-def apply_current_cmyk_confidence(codecs, read_rows):
-    """Display accepted immutable-build costs, independent of rejected experiments."""
-    current = json.loads((ROOT / 'benchmarks/cmyk-current-owned-confidence-evidence.json').read_text(encoding='utf-8'))
+def apply_current_jpeg_preparation(codecs, read_rows):
+    """Replace affected JPEG costs from their qualified current owner."""
+    current = json.loads((ROOT / 'benchmarks/jpeg-horizontal-preparation-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
-    assert current['measurementAccepted'] and not current['productionChanged']
-    assert not current['productionSpeedupClaim'] and current['requiredMaterialPaths'] == 289
-    assert current['newMaterialPaths'] == current['measurementBuilds'] == current['broadOrPackageRepeatsForRestoration'] == 0
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert len(current['cases']) == 28
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6600
-    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused']
-    assert q['actualPackageSha256'] == current['producers']['actualPackageSha256']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6602
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == current['producers']['actualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    assert current['companionReconciliation']['controlledPair']['upper'] < 1
+    assert current['companionReconciliation']['normalizedLower'] <= 1 <= current['companionReconciliation']['normalizedUpper']
     for c in current['cases'].values():
-        assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['metadata']['sourceUnchanged'] and c['metadata']['independentOwnedOutput']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert c['status'] == 'pass' and c['upper'] <= 1
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    c = current['cases']['CmykAdobeAc']
-    prefix = '| JPEG horizontal-only CMYK, resident decode'
-    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
-    assert len(found) == 1 and c['status'] == 'gap'
-    codecs = codecs.replace(found[0], f'| JPEG horizontal-only CMYK, resident decode (gap) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
-    c = current['cases']['CmykAdobeAcFresh']
+    mapping = {
+        'JPEG baseline420, resident decode': 'NativeDecode420',
+        'JPEG DC-only, caller CMYK decode': 'CmykCaller',
+        'JPEG CMYK sparse-2D, resident decode': 'CmykAdobeSparse2D',
+        'JPEG YCCK420, resident decode': 'Ycck420',
+        'JPEG 4:1:1, resident decode': 'Decode411',
+        'JPEG 4:1:0, resident decode': 'Decode410',
+        'JPEG dense CMYK, resident decode': 'CmykAdobeGeneral',
+        'JPEG horizontal-only CMYK, resident decode': 'CmykAdobeAc',
+        'JPEG YCCK420, caller RGB24 decode': 'Ycck420CallerRgb',
+        'JPEG progressive grayscale, resident decode': 'ProgressiveGray',
+        'JPEG progressive420, resident decode': 'Progressive420',
+        'JPEG progressive422, resident decode': 'Progressive422',
+        'JPEG ordinary progressive444, resident decode': 'Progressive444',
+        'JPEG progressive444, live-token resident decode': 'ProgressiveCancelable444',
+    }
+    lines, seen = [], set()
+    for line in codecs.splitlines():
+        label = line.split(' | ')[0].removeprefix('| ').removesuffix(' †')
+        label = re.sub(r' \((?:confirmed pass|confirmed gap|confidence open|gap|uncertain|pass)\)', '', label)
+        if label in mapping:
+            assert label not in seen; seen.add(label)
+            c = current['cases'][mapping[label]]
+            line = f'| {label} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |'
+        lines.append(line)
+    assert seen == set(mapping)
+    codecs = '\n'.join(lines)
     indices = [i for i, line in enumerate(read_rows) if line.startswith('| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts')]
-    assert len(indices) == 1 and c['status'] == 'pass'
+    assert len(indices) == 1
+    c = current['cases']['CmykAdobeAcFresh']
     read_rows[indices[0]] = f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |'
-    c = current['cases']['CmykAdobeSparse2D']
-    assert c['raw']['mirrored'] and c['raw']['allMembersVerified'] and c['status'] == 'uncertain'
-    prefix = '| JPEG CMYK sparse-2D, resident decode'
-    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
-    assert len(found) == 1
-    codecs = codecs.replace(found[0], f'| JPEG CMYK sparse-2D, resident decode (uncertain) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
     return codecs, read_rows
 
 
@@ -2622,7 +2641,7 @@ def render():
         read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
-    codecs, read_rows = apply_current_cmyk_confidence(codecs, read_rows)
+    codecs, read_rows = apply_current_jpeg_preparation(codecs, read_rows)
     codecs = apply_current_jpeg_caller_confidence(codecs)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_current_lanczos_enlargement_confidence(editing)
@@ -2660,7 +2679,7 @@ saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost 
 engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
+image views: 174 pass, 4 gaps, 13 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2678,11 +2697,11 @@ word copies retain small gaps, and complete word PNG composition stays uncertain
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
 pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
-[Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
-remains a retained-context gap and an equivalent fresh-context pass. A word-product
-prototype was rejected after conflicting complete-operation results.
-The unchanged sparse-2D build is now uncertain; compact-output candidates were
-rejected for demonstrated companion regressions. Their costs are not displayed.
+[Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
+**4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
+All 28 affected RGBA/fresh/caller-buffer read views pass and stop; the current
+horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
+confidence is reconciled before acceptance; historical clock shifts are not gains.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -2699,7 +2718,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,600 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,602 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

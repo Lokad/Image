@@ -1,5 +1,8 @@
 # Current owned CMYK JPEG confidence
 
+Historical checkpoint. [Horizontal inverse preparation](JPEG-HORIZONTAL-PREPARATION.md)
+supersedes these costs on the accepted current package. Raw evidence below is retained.
+
 The accepted immutable build retains a demonstrated horizontal-AC gap against
 FFmpeg's reused contexts. The separately timed equivalent fresh-context operation
 passes. These boundaries describe different complete workloads; their costs are

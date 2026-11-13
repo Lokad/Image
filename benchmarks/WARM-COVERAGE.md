@@ -13,12 +13,13 @@ gaps and uncertainty stay open. No image, shape, depth, filter or quality grid i
 [Lanczos enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md), plus eight current
 [shared axis-swapping edits](SHARED-AXIS-SWAP.md) and one
 [bounded horizontal quartet](BOUNDED-WIDE-HORIZONTAL-QUARTET.md), plus six
-[shared-copy/composition costs](SHARED-RASTER-COPY.md) and two refreshed
-[horizontal-CMYK costs](CMYK-CURRENT-OWNED-CONFIDENCE.md) and its sparse-2D update, owns the current **191
-comparisons: 172 pass, 5 gaps, 14 uncertain**. These are existing views, including
+[shared-copy/composition costs](SHARED-RASTER-COPY.md) and 24 refreshed
+[JPEG RGBA/fresh costs](JPEG-HORIZONTAL-PREPARATION.md), owns the current **191
+comparisons: 174 pass, 4 gaps, 13 uncertain**. These are existing views, including
 approved alternative boundaries, not 191 new material paths. The unchanged encoder,
-caller-sample, inspection and in-place drawing paths retain their identified evidence.
-Each OS passes **6,600 full/live checks**, focused normal/scalar ownership checks and
+inspection and in-place drawing paths retain their identified evidence. Four affected
+JPEG caller-buffer costs also refresh; coding-only validation reuses unchanged proof.
+Each OS passes **6,602 full/live checks**, focused normal/scalar ownership checks and
 the **same actual Release-package consumer / three examples**. Source-valid ISA
 proof is reused. Current scope and raw evidence are in the linked owner, rather
 than repeated experimental or qualification narratives here.
@@ -38,7 +39,7 @@ logical admitted capacity and unmeasured physical peaks remain distinct.
 | --- | --- |
 | PNG decoding | [Current owner](RELEASED-IMAGE-STORAGE.md): all 47 existing decode controls pass. Four coding-only validators and the caller-root retained-output control reuse unchanged paths. Stop passes. |
 | Stream decode/composition | Five PNG views: four pass, word composition uncertain. JPEG/VP8L/VP8 stream decode passes. [Direct acquisition](DIRECT-STREAM-INPUT.md) remains the source-valid inspection/async-validation owner; its old affected decode/composition costs are historical. |
-| JPEG reading | 24 RGBA/fresh views: 22 pass, a retained horizontal-CMYK gap and sparse-2D uncertainty. [Current costs](CMYK-CURRENT-OWNED-CONFIDENCE.md): horizontal434.53/FFmpeg392.72µs upper1.119; equivalent fresh399.32/748.79µs upper.562 passes; sparse-2D upper1.001 is uncertain. [Compact output](JPEG-COMPACT-OUTPUT-STUDY.md) retains rejected companion regressions; the [row-product study](JPEG-ROW-PRODUCT-STUDY.md) is inconclusive and retains independent matrix coverage. Production/package are restored. Next: actual repeated raw-row normalization, with dense/sparse safeguards. Six caller/validation paths reuse unchanged evidence. |
+| JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | [Current caller-RGB420 adjacency](JPEG-CALLER-CURRENT-CONFIDENCE.md) stays uncertain:1712.07/FFmpeg1650.90µs, ratio interval.991–1.057,388220B/op. Exact52091/52093B packets retain the strict2B metadata exception. No presumed gap or unchanged favorable repeat. [Gray preparation](JPEG-GRAY-TILE-PREPARATION.md) and other [Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md) costs reuse unchanged evidence; SIMD libjpeg-turbo grayscale stays explicitly labeled. |
 | PNG encoding | [Current Gray8 adjacency](PNG-GRAY-CURRENT-PATH.md) remains uncertain, ratio .983–1.006, after the heap-entry path change; no favorable retry or presumed optimization gap. [Compressed heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md) retain 16 passing fresh controls, exact packets and scoped 600 B/op reduction. [Stored/fresh/natural64 views](PNG-STORED-WORD-NORMALIZATION.md) keep their distinct lifetimes; retained word is uncertain. |
 | Lossless WebP/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md), [photograph confidence](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and [adjacent alpha views](WARM-ADJACENT-CONFIDENCE.md) remain source-valid: six pass, opaque/word-alpha uncertain. Exact packets, selected-candidate ownership and operation-owned workspace reuse remain. |

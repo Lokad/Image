@@ -195,7 +195,10 @@ internal static class JpegInverseTransform
     private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels, ulong support)
     {
         var twoLowRows = (support >> 16) == 0;
-        var rowCount = twoLowRows ? 2 : 8;
+        var horizontal = (support >> 8) == 0;
+        // With only horizontal support, every later row transforms to zero.
+        // Do not materialize/read an all-zero second row just to rediscover it.
+        var rowCount = horizontal ? 1 : twoLowRows ? 2 : 8;
         for (var y = 0; y < rowCount; y++)
         {
             var row = input.Slice(y * 8, 8);
@@ -220,7 +223,8 @@ internal static class JpegInverseTransform
         {
             // Every omitted row transforms to zero. Keep all sixteen lower
             // frequencies, the original word bias and the same column sums.
-            var second = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(8, 8)));
+            var second = horizontal ? Vector128<short>.Zero
+                : MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(8, 8)));
             if (Vector128.EqualsAll(second, Vector128<short>.Zero))
             {
                 // Every odd term is exactly zero. Preserve the existing word
@@ -230,8 +234,7 @@ internal static class JpegInverseTransform
                 var even = Avx2.MultiplyLow(constant, Vector256.Create(Kernel[0]));
                 StoreRow(even, pixels[..8]);
                 var packed = BinaryPrimitives.ReadUInt64LittleEndian(pixels[..8]);
-                for (var y = 1; y < 8; y++)
-                    BinaryPrimitives.WriteUInt64LittleEndian(pixels.Slice(y * 8, 8), packed);
+                Vector512.Create(packed).AsByte().CopyTo(pixels);
                 return;
             }
             if (Avx512BW.IsSupported)
