@@ -101,6 +101,12 @@ def apply_current_cmyk_confidence(codecs, read_rows):
     indices = [i for i, line in enumerate(read_rows) if line.startswith('| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts')]
     assert len(indices) == 1 and c['status'] == 'pass'
     read_rows[indices[0]] = f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |'
+    c = current['cases']['CmykAdobeSparse2D']
+    assert c['raw']['mirrored'] and c['raw']['allMembersVerified'] and c['status'] == 'uncertain'
+    prefix = '| JPEG CMYK sparse-2D, resident decode'
+    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
+    assert len(found) == 1
+    codecs = codecs.replace(found[0], f'| JPEG CMYK sparse-2D, resident decode (uncertain) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
     return codecs, read_rows
 
 
@@ -2608,7 +2614,7 @@ saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost 
 engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
+image views: 171 pass, 5 gaps, 15 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2622,6 +2628,8 @@ No pipeline speedup is inferred from historical stage sums.
 [Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
 remains a retained-context gap and an equivalent fresh-context pass. A word-product
 prototype was rejected after conflicting complete-operation results.
+The unchanged sparse-2D build is now uncertain; compact-output candidates were
+rejected for demonstrated companion regressions. Their costs are not displayed.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,

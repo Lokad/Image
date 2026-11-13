@@ -12,7 +12,7 @@ saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost 
 engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
+image views: 171 pass, 5 gaps, 15 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -26,6 +26,8 @@ No pipeline speedup is inferred from historical stage sums.
 [Current horizontal-CMYK JPEG](../benchmarks/CMYK-CURRENT-OWNED-CONFIDENCE.md)
 remains a retained-context gap and an equivalent fresh-context pass. A word-product
 prototype was rejected after conflicting complete-operation results.
+The unchanged sparse-2D build is now uncertain; compact-output candidates were
+rejected for demonstrated companion regressions. Their costs are not displayed.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -113,7 +115,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L RGBA8, resident decode † | 2,709.07 | 3,019.90 | 0.897 / 0.902 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 2,730.45 | 3,029.07 | 0.901 / 0.905 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode † | 408.48 | 545.38 | 0.749 / 0.759 | 288,464 | — |
-| JPEG CMYK sparse-2D, resident decode † | 417.17 | 434.69 | 0.960 / 0.979 | 20,944 | — |
+| JPEG CMYK sparse-2D, resident decode (uncertain) † | 449.95 | 461.96 | 0.974 / 1.001 | 20,944 | — |
 | JPEG YCCK420, resident decode † | 419.05 | 709.44 | 0.591 / 0.592 | 895,563 | — |
 | JPEG 4:1:1, resident decode † | 384.80 | 447.28 | 0.860 / 0.865 | 219,551 | — |
 | JPEG 4:1:0, resident decode † | 335.71 | 508.89 | 0.660 / 0.670 | 189,091 | — |

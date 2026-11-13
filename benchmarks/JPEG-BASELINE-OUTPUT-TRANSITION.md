@@ -52,3 +52,7 @@ SHA256 `89741e51508d5d53a9f79993996d813debfb55e5d10d8ec475d5464302629667` (2,699
 and member-verified. Dependencies preserve original tools, frozen inputs and the
 qualified package. [Current accepted costs](CMYK-CURRENT-OWNED-CONFIDENCE.md)
 remain authoritative; this transition supplies no displayed production result.
+
+The [subsequent compact-state study](JPEG-COMPACT-OUTPUT-STUDY.md) preserves the
+fast coefficient path and controlled horizontal gains, but rejects both revised
+implementations after a material sparse-2D regression. Production remains restored.
