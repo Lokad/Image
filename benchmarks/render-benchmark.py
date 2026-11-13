@@ -74,6 +74,110 @@ def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata)
     return result
 
 
+def apply_released_image_storage(codecs, editing, read_rows):
+    """Refresh affected displayed costs from the qualified current owner."""
+    current = json.loads((ROOT / 'benchmarks/released-image-storage-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and len(current['cases']) == 191
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6538
+    assert q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
+    assert q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageLinux']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageLinux']['usageExamples'] == 3
+    mapping = {'Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9': 'bicubic/Tight2x9_16',
+     'Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64': 'bicubic/TightWide16',
+     'Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129': 'bicubic/TightDown16',
+     'Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16': 'bicubic/Tight32x16_16',
+     'Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32': 'bicubic/Tight64x32_16',
+     'Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519': 'bicubic/TightCross16',
+     'Bicubic RGBA16, width down / height up, default workspace † → 256×519': 'bicubic/Cross16',
+     'Bicubic RGBA16, width up / height down, input+output+4 KiB (uncertain) † → 1027×129': 'bicubic/TightMixed16',
+     'Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519': 'bicubic/TightUp8',
+     'Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9': 'bicubic/Tight2x9_8',
+     'Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519': 'bicubic/TightVerticalUp8',
+     'Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64': 'bicubic/TightWide8',
+     'Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129': 'bicubic/TightDown8',
+     'Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259': 'bicubic/TightHorizontalUp8',
+     'Bicubic RGBA8, fresh managed / prepared zimg (uncertain) † → 128×64': 'bicubic/Wide8',
+     'Bicubic RGBA8, width down / height up, default workspace † → 256×519': 'bicubic/Cross8',
+     'Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519': 'bicubic/TightCross8',
+     'Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259': 'bicubic/TightHorizontal8',
+     'Bicubic RGBA8, width up / height down, input+output+4 KiB (uncertain) † → 1027×129': 'bicubic/TightMixed8',
+     'Bicubic one-shot RGBA16 / zimg one-shot † → 128×64': 'preparedWide/OneShot16',
+     'Bicubic one-shot RGBA8 / zimg one-shot † → 128×64': 'preparedWide/OneShot8',
+     'Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129': 'preparedNarrow/OneShot16',
+     'Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129': 'preparedNarrow/OneShot8',
+     'Bicubic prepared RGBA16 / zimg prepared † → 128×64': 'preparedWide/Repeated16',
+     'Bicubic prepared RGBA8 / zimg prepared † → 128×64': 'preparedWide/Repeated8',
+     'Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129': 'preparedNarrow/Repeated16',
+     'Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129': 'preparedNarrow/Repeated8',
+     'Bicubic resize RGBA8 (uncertain) † → 256×129': 'bicubic/Down8',
+     'Bicubic upscale RGBA16 † → 1027×519': 'bicubic/Up16',
+     'Bilinear resize RGBA16 † → 256×129': 'bilinear/Down16',
+     'Bilinear resize RGBA8 † → 256×129': 'bilinear/Down8',
+     'Bilinear upscale RGBA8 † → 1027×519': 'bilinear/Up8',
+     'JPEG 4:1:0, resident decode (confirmed pass) †': 'jpeg/Decode410',
+     'JPEG 4:1:1, resident decode (confirmed pass) †': 'jpeg/Decode411',
+     'JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts †': 'jpeg/CmykAdobeAcFresh',
+     'JPEG CMYK sparse-2D, resident decode (confirmed pass) †': 'jpeg/CmykAdobeSparse2D',
+     'JPEG YCCK420, resident decode (confirmed pass) †': 'jpeg/Ycck420',
+     'JPEG baseline420, resident decode (confirmed pass) †': 'jpeg/NativeDecode420',
+     'JPEG dense CMYK, resident decode (confirmed pass) †': 'jpeg/CmykAdobeGeneral',
+     'JPEG horizontal-only CMYK, resident decode (confidence open) †': 'jpeg/CmykAdobeAc',
+     'JPEG ordinary progressive444, resident decode (confirmed pass) †': 'jpeg/Progressive444',
+     'JPEG progressive grayscale, resident decode (confirmed pass) †': 'jpeg/ProgressiveGray',
+     'JPEG progressive420, resident decode (confirmed pass) †': 'jpeg/Progressive420',
+     'JPEG progressive422, resident decode (confirmed pass) †': 'jpeg/Progressive422',
+     'JPEG progressive444, live-token resident decode (confirmed pass) †': 'jpeg/ProgressiveCancelable444',
+     'Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519': 'lanczos/OneShotEnlarge16',
+     'Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129': 'lanczos/OneShot16',
+     'Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519': 'lanczos/OneShotEnlarge8',
+     'Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129': 'lanczos/OneShot8',
+     'Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519': 'lanczos/RepeatedEnlarge16',
+     'Lanczos3 prepared RGBA16 / zimg prepared † → 256×129': 'lanczos/Repeated16',
+     'Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519': 'lanczos/RepeatedEnlarge8',
+     'Lanczos3 prepared RGBA8 / zimg prepared † → 256×129': 'lanczos/Repeated8',
+     'PNG RGBA16 decode, tight working limit †': 'png/DecodeTight16',
+     'PNG RGBA8 decode, live token †': 'png/DecodeCancelable8',
+     'PNG RGBA8 decode, tight working limit †': 'png/DecodeTight8',
+     'Plain transpose RGBA16 † → 259×513': 'transform/WarmTranspose16',
+     'Plain transpose RGBA8 † → 259×513': 'transform/WarmTranspose8',
+     'VP8L RGBA8, fresh seekable Stream decode †': 'webp/WebpStream',
+     'VP8L RGBA8, resident decode †': 'webp/WebpResident',
+     'VP8L palette16 RGBA8, resident decode (confirmed pass) †': 'webp/IndexedNative16Colors8',
+     'Validate VP8+alpha, span †': 'webp/ValidateVp8Alpha',
+     'Validate VP8L+alpha, span †': 'webp/ValidateVp8lAlpha',
+     'WebP VP8 + alpha, fresh seekable Stream (parity confirmed) †': 'webp/Vp8Stream'}
+    seen = set()
+    def update(lines, read=False):
+        result = []
+        for line in lines:
+            cells = [c.strip() for c in line.split('|')[1:-1]]
+            if not cells or cells[0] not in mapping:
+                result.append(line); continue
+            label = cells[0]; key = mapping[label]; c = current['cases'][key]
+            assert label not in seen; seen.add(label)
+            assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
+            assert c['actualIterations'] == 12 and c['librarySha256'] == current['producers']['timedArtifactSha256']
+            assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+            label = re.sub(r' \((?:uncertain|confidence open|parity confirmed|confirmed pass|confirmed gap|gap|pass)\)', '', label)
+            if not read and c['status'] != 'pass':
+                label = label.replace(' †', f" ({c['status']}) †") if ' †' in label else label + f" ({c['status']})"
+            digits = 3 if read else 2
+            cells[:5] = [label, f"{c['managedUs']:,.{digits}f}", f"{c['nativeUs']:,.{digits}f}",
+                         f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
+            if read: cells[-1] = {'pass': 'Confirmed pass', 'gap': 'Confirmed gap', 'uncertain': 'Confidence open'}[c['status']]
+            result.append('| ' + ' | '.join(cells) + ' |')
+        return result
+    codecs = '\n'.join(update(codecs.splitlines()))
+    editing = '\n'.join(update(editing.splitlines()))
+    read_rows = update(read_rows, read=True)
+    assert seen == set(mapping), sorted(set(mapping) - seen)
+    return codecs, editing, read_rows, current
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -2318,313 +2422,60 @@ def render():
         status = 'Confirmed pass' if c['status'] == 'pass' else 'Confirmed gap' if c['status'] == 'gap' else 'Confidence open'
         read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |'
 
+    codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
-    cached_horizontal_qualification = cached_horizontal['qualification']
-    assert cached_horizontal_qualification['fullChecksEachOs'] == cached_horizontal_qualification['windows']['total'] == cached_horizontal_qualification['linux']['total'] == 6401
-    assert cached_horizontal_qualification['actualPackage']['sha256'] == cached_horizontal_qualification['samePackageLinux']['sameActualPackageSha256'] == cached_horizontal['producers']['actualPackageSha256']
-    assert cached_horizontal_qualification['actualPackage']['librarySha256'] == cached_horizontal['producers']['timedArtifactSha256']
-    assert cached_horizontal_qualification['actualPackage']['actualConsumerPassed'] and cached_horizontal_qualification['samePackageLinux']['actualConsumerPassed']
-    assert cached_horizontal_qualification['threeNamedStorageSuitesIncluded']
-    deep_current_qualification = deep_current['qualification']
-    assert deep_current_qualification['windows']['total'] == deep_current_qualification['linux']['total'] == 6435
-    assert deep_current_qualification['actualPackage']['sha256'] == deep_current_qualification['samePackageLinux']['sameActualPackageSha256'] == deep_current['producers']['actualPackageSha256']
-    assert wide_quartet_qualification['windows']['total'] == wide_quartet_qualification['linux']['total'] == 6439
-    assert wide_quartet_qualification['actualPackage']['sha256'] == wide_quartet_qualification['samePackageLinux']['sameActualPackageSha256'] == wide_quartet['producers']['actualPackageSha256']
-    huffman_front_qualification = huffman_front['qualification']
-    assert huffman_front_qualification['fullChecksEachOs'] == huffman_front_qualification['windows']['total'] == huffman_front_qualification['linux']['total'] == 6449
-    assert huffman_front_qualification['actualPackage']['sha256'] == huffman_front_qualification['samePackageLinux']['sameActualPackageSha256'] == huffman_front['producers']['actualPackageSha256']
-    assert huffman_front_qualification['actualPackage']['librarySha256'] == huffman_front['producers']['windowsSha256']
-    assert huffman_front_qualification['actualPackage']['actualConsumerPassed'] and huffman_front_qualification['samePackageLinux']['actualConsumerPassed']
-    assert huffman_front_qualification['actualPackage']['losslessHuffmanPaletteOwnersPassed'] and huffman_front_qualification['samePackageLinux']['losslessHuffmanPaletteOwnersPassed']
-    assert huffman_front_qualification['huffmanInternalEachModeEachOs'] == 1026 and huffman_front_qualification['huffmanPublicEachModeEachOs'] == 239
-    color_tiles_qualification = color_tiles['qualification']
-    assert color_tiles_qualification['fullChecksEachOs'] == color_tiles_qualification['windows']['total'] == color_tiles_qualification['linux']['total'] == 6456
-    assert color_tiles_qualification['actualPackage']['sha256'] == color_tiles_qualification['samePackageLinux']['sameActualPackageSha256'] == color_tiles['producers']['actualPackageSha256']
-    assert color_tiles_qualification['actualPackage']['librarySha256'] == color_tiles['producers']['windowsSha256']
-    assert color_tiles_qualification['actualPackage']['actualConsumerPassed'] and color_tiles_qualification['samePackageLinux']['actualConsumerPassed']
-    assert color_tiles_qualification['webpInternalEachModeEachOs'] == 1033 and color_tiles_qualification['webpPublicEachModeEachOs'] == 239
-    cross_prefix_qualification = cross_prefix['qualification']
-    assert cross_prefix_qualification['fullChecksEachOs'] == cross_prefix_qualification['windows']['total'] == cross_prefix_qualification['linux']['total'] == 6497
-    assert cross_prefix_qualification['actualPackage']['sha256'] == cross_prefix_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert cross_prefix_qualification['actualPackage']['actualConsumerPassed'] and cross_prefix_qualification['samePackageLinux']['actualConsumerPassed']
-    streaming_weights_qualification = streaming_weights['qualification']
-    assert streaming_weights_qualification['fullChecksEachOs'] == streaming_weights_qualification['windows']['total'] == streaming_weights_qualification['linux']['total'] == 6497
-    assert streaming_weights_qualification['actualPackage']['sha256'] == streaming_weights_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert all(q['actualConsumerPassed'] and q['streamingByteFrozenControls'] == 3
-               for q in (streaming_weights_qualification['actualPackage'], streaming_weights_qualification['samePackageLinux']))
-    bilinear_metadata_qualification = bilinear_metadata['qualification']
-    assert bilinear_metadata_qualification['fullChecksEachOs'] == bilinear_metadata_qualification['windows']['total'] == bilinear_metadata_qualification['linux']['total'] == 6511
-    assert bilinear_metadata_qualification['actualPackage']['sha256'] == bilinear_metadata_qualification['samePackageLinux']['sameActualPackageSha256'] == bilinear_metadata['producers']['actualPackageSha256']
-    assert bilinear_metadata_qualification['actualPackage']['librarySha256'] == bilinear_metadata['producers']['windowsSha256']
-    assert bilinear_metadata_qualification['actualPackage']['actualConsumerPassed'] and bilinear_metadata_qualification['samePackageLinux']['actualConsumerPassed']
-    assert bilinear_metadata_qualification['threeNamedStorageSuitesIncluded'] and bilinear_metadata_qualification['disabledResizeIsaReused']
-    compact_paired_qualification = compact_paired['qualification']
-    assert compact_paired_qualification['fullChecksEachOs'] == compact_paired_qualification['windows']['total'] == compact_paired_qualification['linux']['total'] == 6512
-    assert compact_paired_qualification['actualPackage']['sha256'] == compact_paired_qualification['samePackageLinux']['sameActualPackageSha256'] == compact_paired['producers']['actualPackageSha256']
-    assert compact_paired_qualification['actualPackage']['librarySha256'] == compact_paired['producers']['windowsSha256']
-    assert compact_paired_qualification['actualPackage']['actualConsumerPassed'] and compact_paired_qualification['samePackageLinux']['actualConsumerPassed']
-    assert compact_paired_qualification['threeNamedStorageSuitesIncluded'] and compact_paired_qualification['disabledResizeIsaReused']
-    assert compact_paired_qualification['affectedNarrowByteConsumerPassedBothOS']
-    word_views_qualification = word_views['qualification']
-    assert word_views_qualification['fullChecksEachOs'] == word_views_qualification['windows']['total'] == word_views_qualification['linux']['total'] == 6512
-    assert word_views_qualification['actualPackage']['sha256'] == word_views_qualification['samePackageLinux']['sameActualPackageSha256'] == word_views['producers']['actualPackageSha256']
-    assert word_views_qualification['actualPackage']['librarySha256'] == word_views['producers']['windowsSha256']
-    assert word_views_qualification['actualPackage']['actualConsumerPassed'] and word_views_qualification['samePackageLinux']['actualConsumerPassed']
-    assert word_views_qualification['affectedDeepWordConsumerPassedBothOS']
-    assert word_views_qualification['threeNamedStorageSuitesIncluded'] and word_views_qualification['disabledResizeIsaReused']
-    png_build_qualification = png_current['qualification']
-    assert png_build_qualification['fullChecksEachOs'] == png_build_qualification['windows']['total'] == png_build_qualification['linux']['total'] == 6522
-    assert png_build_qualification['actualPackage']['sha256'] == png_build_qualification['samePackageLinux']['sameActualPackageSha256'] == png_current['producers']['actualPackageSha256']
-    assert png_build_qualification['actualPackage']['librarySha256'] == png_current['producers']['windowsSha256']
-    assert png_build_qualification['actualPackage']['actualConsumerPassed'] and png_build_qualification['samePackageLinux']['actualConsumerPassed']
-    assert png_build_qualification['allFourPngModesPassed'] and png_build_qualification['unchangedResizeIsaAndStorageSuitesReused']
-    current_build_qualification = direct_qualification
-    bilinear_byte = bilinear_metadata['cases']['Down8']
-    bilinear_word = bilinear_metadata['cases']['Down16']
-    scaler_tight = compact_paired['cases']['TightDown8']
-    scaler_wide = scaler_confidence['cases']['Wide8']
-    stored_byte = png_current['cases']['EncodeNoCompression8']
-    stored_word = png_current['cases']['EncodeNoCompression16']
-    retained_word = png_current['cases']['EncodeNoCompression16Retained']
-    natural_word = png_current['naturalWord']
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-13. These **{displayed_count} tabulated comparisons** combine qualified
-**0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
-development costs. Retained release costs apply only to unchanged production
-paths. Publication is postponed.
+Current development version **0.2.1**. Warm single-CPU parity remains open across
+**289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
+This is an incremental update: affected costs use the qualified immutable package
+DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Direct stream input](../benchmarks/DIRECT-STREAM-INPUT.md) refreshes eleven
-affected complete operations on the current immutable package: nine pass and two
-remain gaps. Independent Identify gains are11.6%seekable/10.5%async; async allocation
-falls8400→216B/op. Every packet, metadata/pixel gate and owner contract is preserved.
-Full6530checks per OS and the same actual package/all three examples pass.
-Other source-valid paths retain their separately identified qualification.
+[Released-image storage](../benchmarks/RELEASED-IMAGE-STORAGE.md) refreshes 191
+existing affected comparisons: **161 pass, 14 gaps, 16 uncertain**. The complete
+RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
+and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
+128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
+is inconclusive and both contemporary builds miss parity. No adverse or uncertain
+capture is hidden. Larger demonstrated remaining gaps include bounded mixed-word
+bicubic and repeated Lanczos reductions; tiny copy/turn gaps remain in the report.
 
-All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
-warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
-workstation GC. Times are **µs per complete operation**. Ratios use the faster
-reference bracket; **upper** includes conservative all-actual and relevant filtered/paired confidence.
-Short screens do not establish independent parity. **B/op** is total managed
-allocation, separate from peak live capacity and retained storage. Native
-allocations are unmeasured. Normalization, output ownership and disposal stay
-timed; setup, delivery and retained state follow the stated case boundaries.
+Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
+with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
+fixture preparation and validation are outside the clocks. Timed calls retain
+their declared normalization, input delivery, output ownership and disposal.
+Ratios are Lokad/reference; **upper** is the conservative confidence bound, with
+all actuals retained. Upper ≤1 passes, lower >1 is a gap; otherwise uncertainty stays open.
+**GC B/op** reports managed allocation, including result ownership where applicable,
+not peak live capacity or native allocation.
 
-Current scope and remaining work:
+The default store still has **two slots / 4 MiB**. Source-derived word-composition
+idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
+remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
+capacity, allocation and retained storage are separate; physical/native/JIT peaks
+are unmeasured. Each OS passes **6,538 full/live checks**, focused normal/scalar
+ownership checks and the **same actual Release-package consumer / three examples**.
+Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-- **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has {lossless_status_counts['pass']} passes / {lossless_status_counts['uncertain']} uncertain encode controls;
-  [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and
-  [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
-  package DLL. Alpha costs {alpha_current['managedUs']/1000:.2f}/FFmpeg {alpha_current['nativeUs']/1000:.2f} ms,
-  upper {alpha_current['upper']:.3f}, exact {alpha_current['managedPacketBytes']:,} B and {alpha_current['allocatedBytes']:,} B/op; this resolves uncertainty, with no production speedup claim.
-  [Opaque lossless](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain:
-  {opaque['managedUs']/1000:.2f}/libwebp{opaque['nativeUs']/1000:.2f}ms, range{opaque['lower']:.3f}–{opaque['upper']:.3f},
-  {opaque['allocatedBytes']:,}B/op and exact121,896B packet. All adjacent pairs/brackets remain;
-  no codec change, presumed gap or favorable repeat follows the first adjacent capture.
-  [Per-tile inverse color](../benchmarks/WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/
-  6.14%raw/7.18%normalized on live-token VP8L decoding. Current2.933/FFmpeg3.059ms,
-  range0.907–0.989 passes/stops; allocation stays152,728B/op.
-  All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
-  conversion contexts and has no equivalent cancellation token. Across six lossless
-  reads/validators:{lossless_read_counts['pass']}pass/{lossless_read_counts['gap']}gap/{lossless_read_counts['uncertain']}uncertain.
-  All six pass/stop. Two validators bypass inverse arithmetic and reuse source-valid evidence.
-  The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
-  {vp8_status_counts['pass']} passes / {vp8_status_counts['uncertain']} uncertain. The current word-alpha view is
-  {alpha16_current['managedUs']/1000:.2f}/FFmpeg {alpha16_current['nativeUs']/1000:.2f} ms, upper {alpha16_current['upper']:.3f}: uncertain,
-  exact normalized alpha/packet and {alpha16_current['allocatedBytes']:,} B/op. Resolve uncertainty before tuning. Complete packets remain
-  exact. The same [color-tile round](../benchmarks/WEBP-INVERSE-COLOR-TILES.md)
-  refreshes six affected companion decodes without a uniform causal gain claim.
-  VP8/ALPH plus unchanged opaque [position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
-  {vp8_decode_counts['pass']} passes / {vp8_decode_counts['gap']} gaps / {vp8_decode_counts['uncertain']} uncertain.
-  Ordinary opaque decoding improves 2.02% after reference normalization, with separated
-  raw/all-actual/normalized intervals. Live {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
-  upper{live['upper']:.3f}, remains uncertain. Resident and stream ALPH now pass.
-  All six allocation totals include the earlier increase of
-  1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
-  Selected codes/results retain independent ownership.
-- **PNG:** [Huffman heap entries](../benchmarks/PNG-HUFFMAN-HEAP-ENTRIES.md)
-  prepare exact weight/depth priorities beside heap symbols, removing dependent
-  metadata lookups while preserving structural ties, every complete packet and
-  independent tree results. Gray8 independently improves2048.63→1986.46µs:
-  **62.18µs/3.035% filtered raw** has separated confidence. All-actual62.39µs/3.026%
-  and normalized3.041% points overlap; native moves+.006%. No general gain is claimed.
-  Gray8 remains uncertain: {png_gray8['managedUs']:.2f}/{png_gray8['nativeUs']:.2f}µs,
-  range{png_gray8['lower']:.3f}–{png_gray8['upper']:.3f}, {png_gray8['allocatedBytes']:,}B/op.
-  All16affected compressed controls are current on the qualified module and
-  allocate600B/op less;572B less element capacity, no extra owner or retention.
-  The17fresh-state controls have {png_oneshot_status['pass']} passes /
-  {png_oneshot_status['gap']} gaps / {png_oneshot_status['uncertain']} uncertain; Fastest8 now passes.
-  RGB16 passes at{png_rgb16['managedUs']:.2f}/{png_rgb16['nativeUs']:.2f}µs,
-  upper{png_rgb16['upper']:.3f}, exact739,472B. Predictable16 is
-  {predictable['managedUs']/1000:.2f}/{predictable['nativeUs']/1000:.2f}ms, upper{predictable['upper']:.3f},
-  exact573,041B. Contemporary qualifiedbaseline259.32ms resolves the historical
-  difference; raw/all-actual/normalized intervals overlap, with no regression claim.
-  Compressed admission remains384KiB; operation scratch retention0, physical peaks unmeasured.
-  [Stored costs](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md) reuse their unchanged
-  paths and original producer: fresh RGBA8 {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f}µs,
-  upper{stored_byte['upper']:.3f}; RGBA16 {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f}µs,
-  upper{stored_word['upper']:.3f}, {stored_byte['allocatedBytes']:,}/{stored_word['allocatedBytes']:,}B/op.
-  Both pass. Retained-native post-GC4 word stays uncertain at
-  {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f}µs, upper{retained_word['upper']:.3f}.
-  Natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f}µs,
-  upper{natural_word['upper']:.3f}, {natural_word['allocatedBytes']:,.3f}directB/op.
-  The582B constructor matches and stored execution never constructs tree workspace.
-  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) also reuse51source-valid controls
-  (49pass/two uncertain). Initial indexed-key screen, profiles and earlier encode
-  studies retain raw evidence separately; no unchanged favorable repeats or new grid.
-- **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
-  forms exact support alongside dequantization and reuses inverse decisions.
-  Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
-  with separated filtered/all-actual raw and normalized intervals. All 27 pixel
-  decode costs refresh; two unchanged coding-only validations are reused.
-  Across 29 reads: **{jpeg_counts['confirmed-pass-stop']} pass / {jpeg_counts['confirmed-gap']} gaps /
-  {jpeg_counts['confirmed-confidence-open']} uncertain**. Sparse and caller CMYK pass/stop;
-  retained-context horizontal CMYK stays uncertain and its equivalent fresh view passes.
-  No added owned capacity or retention; sparse CMYK/RGB allocations remain 20,944/42,936 B/op.
-  [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
-  gains and 15 unchanged color costs. Content and sampling scopes remain explicit
-  in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73named warm controls, **{resize_status_counts['pass']}pass /
-  {resize_status_counts['gap']} gaps / {resize_status_counts['uncertain']}uncertain**.
-  [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
-  two gaps: {cross_prefix['cases']['TightCross8']['managedUs']:.2f}/zimg{cross_prefix['cases']['TightCross8']['nativeUs']:.2f}µs,
-  upper{cross_prefix['cases']['TightCross8']['upper']:.3f}, and same-height
-  {cross_prefix['cases']['TightHorizontal8']['managedUs']:.2f}/{cross_prefix['cases']['TightHorizontal8']['nativeUs']:.2f}µs,
-  upper{cross_prefix['cases']['TightHorizontal8']['upper']:.3f};113B/op each.
-  Independent savings178.42/141.71µs,18.36%/22.20%raw and17.02%/16.65%normalized
-  retain separate native clocks/all actuals. The shared prefix borrows91168B from
-  already admitted output, then unwinds before the strip tail. Same4KiB charge,
-  no new heap/retention; physical/JIT/native peaks unmeasured.
-  All14affectedcosts reconcile. Enlargement has11passes/1uncertain:
-  HorizontalUp8's first source-affected1486.10/zimg1518.51µs upper1.025 is uncertain,
-  not a presumed gap. Four passing raw captures are slower; two scoped paired
-  checks and all clock shifts remain in the report, with no uniform gain claim.
-  Unchanged59resize costs reuse source-valid proof, including five passing
-  [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
-  [Word tap/sample views](../benchmarks/DEEP-WORD-HORIZONTAL-VIEWS.md) confirm
-  {deep_cost['managedUs']:.2f}/prepared-zimg{deep_cost['nativeUs']:.2f}µs,
-  upper{deep_cost['upper']:.3f},113B/op: pass/stop. Independent37.68µs/8.53%raw/
-  8.45%normalized gains have separated confidence. Same4KiB admission/ordered pixels;
-  its6512checks/SAMEpackage and new word consumer pass bothOSes;
-  latest PNG milestone6522checks/SAMEpackage requalifies unchanged resize paths.
-  Superseded DeepWord costs/attribution stay linked history.
-  [Horizontal enlargement confidence](../benchmarks/RESIZE-HORIZONTAL-CONFIDENCE.md)
-  passes/stops at{horizontal_cost['managedUs']:.2f}/prepared-zimg{horizontal_cost['nativeUs']:.2f}µs,
-  upper{horizontal_cost['upper']:.3f},112directB/op. Twelve alternating64-operation
-  pairs retain every actual/native bracket and exact pixels/owners. Original
-  standalone uncertainty remains separately visible; no production gain or
-  broader conditioning claim. Zero builds/broad/package repeats.
-  All eight equivalent prepared/one-shot controls pass; plans
-  retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
-  upper.998 passes while its standalone view stays uncertain. The existing
-  [bounded mixed-word adjacent case](../benchmarks/RESIZE-MIXED-WORD-CONFIDENCE.md)
-  stays uncertain at{mixed_word_adjacent['managedUs']:.2f}/{mixed_word_adjacent['nativeUs']:.2f}µs,
-  range{mixed_word_adjacent['lower']:.6f}–{mixed_word_adjacent['upper']:.6f},112directB/op.
-  No presumed gap, saving, new build or favorable repeat follows. Bilinear word
-  enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
-  stay separate. No historical stage sums or favorable repeats.
-  [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the
-  16×8 and 8×17 gaps: {sw_primary['managedUs']:.2f}/prepared-zimg{sw_primary['nativeUs']:.2f}µs,
-  upper{sw_primary['upper']:.3f}, and {sw_seventeen['managedUs']:.2f}/{sw_seventeen['nativeUs']:.2f}µs,
-  upper{sw_seventeen['upper']:.3f};113B/op each. Raw47.05/88.49µs savings and
-  15.24%/17.96%normalized gains retain separate native shifts/all actuals.
-  Affected8×4 also passes,upper{sw_four['upper']:.3f}. Exact pixels/4KiB/owners
-  stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
-  [Bilinear metadata preparation](../benchmarks/BILINEAR-OPERATION-METADATA.md)
-  reuses immutable strides/private destination views once per operation. Word saves
-  **50.44 µs / 11.55% raw / 12.31% normalized**, with separated filtered/all-actual
-  and normalized intervals; native time moves +0.87%. Current word
-  {bilinear_word['managedUs']:.2f}/FFmpeg {bilinear_word['nativeUs']:.2f} µs,
-  upper {bilinear_word['upper']:.3f}, passes. Byte costs 4.55 µs/1.16% more raw;
-  normalized intervals overlap, and current {bilinear_byte['managedUs']:.2f}/{bilinear_byte['nativeUs']:.2f} µs,
-  upper {bilinear_byte['upper']:.3f}, also passes. Its baseline already passed on the
-  contemporary reference clock, so no causal byte-gap closure claim follows.
-  Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
-  scratch. Arithmetic/repair and ownership stay exact.
-  [Compact paired weights](../benchmarks/COMPACT-BICUBIC-PAIRED-WEIGHTS.md)
-  independently confirms TightDown8
-  {scaler_tight['managedUs']:.2f}/prepared-zimg {scaler_tight['nativeUs']:.2f} µs,
-  upper {scaler_tight['upper']:.3f}, pass. Raw5.77µs/1.38% gain and all-actual
-  6.24µs/1.48% gain have separated intervals; normalized confidence overlaps,
-  native clock−0.36%. Its contemporary baseline was uncertain, so historical
-  gap closure is not attributed solely to this code. No new preparation state,
-  loan/tail work or owned/retained capacity;113B/op, same4KiB admission.
-  The other72resize costs reuse source/shared-caller proof. Unchanged Wide8
-  {scaler_wide['managedUs']:.2f}/{scaler_wide['nativeUs']:.2f} µs,
-  range {scaler_wide['lower']:.3f}–{scaler_wide['upper']:.3f} remains uncertain.
-  Its [adjacent capture](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
-  retains every actual/native bracket, with direct198350B/op, separate from
-  unchanged retained capacity. Stop confirmed passes; uncertainty is not a gap.
-  [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
-  without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
-  [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
-  passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
-- **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
-  pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
-  {tp_one['managedUs']:,.2f}/ImageSharp {tp_one['referenceUs']:,.2f} µs, upper {tp_one['upper']:.3f};
-  preparation plus eight fresh-canvas draws/disposal {tp_batch['managedUs']:,.2f}/{tp_batch['referenceUs']:,.2f} µs,
-  upper {tp_batch['upper']:.3f}, measured amortization {tp_batch['amortizedManagedUs']:,.2f}/{tp_batch['amortizedReferenceUs']:,.2f} µs/draw.
-  GC totals are {math.ceil(tp_one['managedAllocatedBytes']):,}/{math.ceil(tp_one['referenceAllocatedBytes']):,} B one-shot and
-  {math.ceil(tp_batch['managedAllocatedBytes']):,}/{math.ceil(tp_batch['referenceAllocatedBytes']):,} B per eight-draw batch.
-  The eight-draw batch saves665.54 µs/24.46% raw/29.86% normalized with separated
-  confidence; reference time moves+7.69%. Managed active preparation owns39,904 B;
-  approximate live-heap deltas{text_pipeline['footprint']['managedApproximateLiveHeapDelta']:,}/{text_pipeline['footprint']['referenceApproximateLiveHeapDelta']:,} B are separate from allocations.
-  Default disposed font/canvas storage may retain1,248,596 B in this sequence,
-  within the existing two-array/4MiB ceiling; governed calls still bypass it.
-  Steady fresh-canvas drawing is uncertain ({tp_draw['managedUs']:,.2f}/{tp_draw['referenceUs']:,.2f} µs, upper {tp_draw['upper']:.3f});
-  no general-font or arbitrary-repeat-count claim. Parser validation, retained paths/workspace,
-  all fitting/layout calls and full16-bit visual gates remain explicit. Earlier
-  [font-load](../benchmarks/FONT-OWNED-STORAGE.md) and [drawing](../benchmarks/TEXT-RENDER-PREPARATION.md)
-  stage costs below are scoped diagnostics, not proof of overall text slowdown; never add
-  them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
+† Reference boundaries require care. Codec contexts or filter graphs may remain
+prepared; packed conversion, independent payload acquisition and release are timed
+as declared. **zimg** is FFmpeg's labeled scaler backend, using float intermediates;
+managed Q30/rational pixel guarantees remain exact. One-shot and prepared results
+are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP uses
+**libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
-The current immutable build passes **{current_build_qualification['fullChecksEachOs']:,} full/live checks per OS**
-and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Current WebP checks pass1,033internal/239public per
-normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
-evidence is reused. Current text/canvas/ownership
-checks pass183internal/162public per normal/scalar mode on each OS.
-Stream acquisition/admission checks pass157internal/429public per normal/scalar
-mode on each OS. Source-valid PNG kernel/admission evidence reuses713internal/
-247public per normal/scalar/disabled-AVX2/AVX512 mode from the preceding milestone.
-Current resize qualification passes570 internal/791 public per normal/scalar mode;
-unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
-Unchanged JPEG checks pass
-{wide_quartet_qualification['jpegInternalEachModeEachOs']} internal/{wide_quartet_qualification['jpegPublicEachModeEachOs']} public per normal/scalar mode; Linux also disables
-AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
-The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
-Exact packets/pixels, shared admission,
-refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
-paths and family-specific ISA evidence are reused; this is not a whole-release
-performance refresh. Total GC, admitted capacity and retained state are separate;
-physical/native/JIT-stack peaks are unmeasured unless a linked report says otherwise.
-Historical/adverse experiments remain in the linked family reports and raw archives.
-
-**References and boundaries.** FFmpeg is the reference except for explicitly
-labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
-**libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The seventeen current one-shot PNG rows time fresh codec/zlib/packet state and independent
-output on both sides, including native word-frame endian conversion/allocation/
-disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
-also times decoder/frame/packing-context setup and disposal; its original
-retained-context comparison remains separate. Other native codec workers retain
-their documented wrappers/contexts.
-Stream rows include declared acquisition, copies, EOF and release.
-
-Text compares the complete **ImageSharp.Drawing 2.1.7/Fonts 2.1.3 public integration**,
-including multiple layout calls and the full fitting search, not bare shaping.
-Font load compares **FreeType 2.13.2 copy/open/retain/dispose**, with eager/lazy
-validation differences; it does not establish general parser equivalence.
-RGBA16 SrcOver compares **ImageSharp 3.1.12 Rgba64**, not FFmpeg performance.
-[Scoped native/visual tolerances](../benchmarks/TEXT-DRAWING-CURRENT.md) retain
-exact managed contracts and full 16-bit samples; visual gates are not sample
-exactness. Complete packet claims, metadata exceptions and codec pixel contracts
-retain their declared [case scope](codec-parity.md). Equal numerical quality
-settings do not establish matched quality.
+Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
+The complete one-shot and preparation-plus-eight-draw public integrations pass,
+including every layout/fitting call and fresh canvas ownership. Preparation is
+reported separately and the complete repeated batch amortized across eight draws.
+Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
+and retained raster state differ; historical stage times are never added to infer
+overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
+RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
+[visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
+managed pixels. Complete encoder packets and narrow metadata exceptions retain
+their [declared scope](codec-parity.md); equal quality numbers are not quality matching.
 
 **Codecs**
 
@@ -2638,10 +2489,10 @@ settings do not establish matched quality.
 
 {read_table}
 
-[Coverage and linked family reports](../benchmarks/WARM-COVERAGE.md) retain producer
-identities, confidence decisions, ownership/correctness gates and reproducible raw
-evidence. Historical experiment reports remain separate. Update with
-`python benchmarks/render-benchmark.py`; verify with `--check`.
+[Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
+remaining paths, boundaries, allocations, references and raw evidence. Superseded
+experiments remain linked separately. Update with `python benchmarks/render-benchmark.py`;
+verify with `--check`.
 """
 
 if __name__ == '__main__':

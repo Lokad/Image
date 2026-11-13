@@ -41,7 +41,7 @@ public sealed class ImageBuffer : IDisposable
         byte[]? data = null;
         try
         {
-            data = PixelStoragePool.Shared.RentCleared(length, context.Cancellation);
+            data = PixelStoragePool.Shared.RentImage(length, context.Cancellation, clear: true);
             return new ImageBuffer(width, height, bitDepth, data, reusableStorage: true);
         }
         catch
@@ -72,7 +72,7 @@ public sealed class ImageBuffer : IDisposable
             // Governed calls never populate an unowned process-wide pool. This
             // policy is selected before admission, not as recovery from refusal.
             var reusable = !context.HasMemoryBudget;
-            var data = reusable ? PixelStoragePool.Shared.Rent(length) : GC.AllocateUninitializedArray<byte>(length);
+            var data = reusable ? PixelStoragePool.Shared.RentImage(length, context.Cancellation, clear: false) : GC.AllocateUninitializedArray<byte>(length);
             return new ImageBuffer(width, height, bitDepth, data, reusable, owner);
         }
         catch { owner?.Dispose(); throw; }
@@ -135,7 +135,7 @@ public sealed class ImageBuffer : IDisposable
     public void Dispose()
     {
         var data = Interlocked.Exchange(ref pixels, null);
-        if (reusableStorage && data is not null) PixelStoragePool.Shared.Return(data);
+        if (reusableStorage && data is not null) PixelStoragePool.Shared.ReturnLargest(data);
         Interlocked.Exchange(ref memoryOwner, null)?.Dispose();
     }
 }

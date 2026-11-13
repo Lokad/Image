@@ -51,7 +51,7 @@ public class WarmHorizontalFlip
             source = JpegBenchmarkCase.Buffer(input, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth);
             File.WriteAllBytes(state.Input, input);
             ValidateManaged();
-            native = new NativeWarmReference(state, Depth, cpu);
+            native = new NativeWarmReference(state, Depth, cpu, "hflip");
             RequireNativeOutput();
             before = native.Measure(smoke, sampleCount: sampleCount);
             ready = true;

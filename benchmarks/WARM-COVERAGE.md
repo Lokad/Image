@@ -4,253 +4,50 @@ Current architectural phase, 2026-11-13. **289 material required paths** remain
 in scope; the 138 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
-Completion needs source-valid passing evidence for every named path, with scope
-stated. Missing/uncertain evidence remains open; all formerly marked display costs are refreshed.
+Completion requires valid passing evidence for every named path. Missing evidence,
+gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
-[Direct stream input](DIRECT-STREAM-INPUT.md) supersedes eleven affected complete
-stream costs:9pass/2gap/0uncertain, no new paths. Identify independently saves11.6%
-seekable/10.5%async; async216B/op and upper.956 passes/stops. Seekable remains
-upper1.103; the existing PNG16 crop/fit gap remainsupper1.115. All current decode/
-metadata/ownership gates pass. BothOS6,530full/live checks and SAME actual package/
-all3examples pass; unchanged resident, codec, resize and text evidence is reused.
-Historical affected costs remain linked evidence, without current-cost claims.
+[Released-image storage](RELEASED-IMAGE-STORAGE.md) owns the current **191 affected
+comparisons: 161 pass, 14 gaps, 16 uncertain**. These are existing views, including
+approved alternative boundaries, not 191 new material paths. The unchanged encoder,
+caller-sample, inspection and in-place drawing paths retain their identified evidence.
+Each OS passes **6,538 full/live checks**, focused normal/scalar ownership checks and
+the **same actual Release-package consumer / three examples**. Source-valid ISA
+proof is reused. Current scope and raw evidence are in the linked owner, rather
+than repeated experimental or qualification narratives here.
 
-[Horizontal enlargement confidence](RESIZE-HORIZONTAL-CONFIDENCE.md) passes/stops:
-1431.47/prepared-zimg1514.24µs,range.934955–.953372,112directB/op. One12-pair
-64-operation adjacent capture on the unchanged actual package retains every
-actual/native bracket and exact pixels/approved bounds/owners. Prior standalone
-uncertainty stays separate; no codegain, arbitrary conditioning claim or favorable
-repeat. Current73named warm controls:66pass/zero gaps/seven uncertain. Existing
-6517qualification/SAMEpackage/ISA/storage proof reused,zero builds/broad repeats.
-
-[Huffman heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md) are the current compressed
-PNG stage: priorities retain signed weight/depth ordering beside symbols, with
-exact zero-weight flags and structural right-child ties. One short profile points
-to comparison work; sample counts are not phase times. The indexed-key screen is
-inconclusive and is not shipped. Direct entries independently improve Gray8
-2048.63->1986.46us:62.18us/3.035%filteredraw separates; allactual62.39us/3.026% and
-normalized3.041%points overlap. CurrentGray8upper1.038 remains uncertain. All16
-compressed packets stay exact and save600allocatedB/op;572B less element capacity,
-no new owner/retention, same384KiBadmission. Predictable16's historical difference
-reconciles against a contemporary259.32ms baseline:current259.80ms, no separated
-raw/allactual/normalized adversity. Seventeenfresh controls:16pass/zero gaps/one
-Gray8uncertainty; stop passing Fastest8 and other unchanged passes. BothOS6522full/
-live,713internal/247public four-mode checks and SAME actualpackage/all3examples.
-Two core/embedded builds perOS, zero public/harness/native/fixture builds, one final
-full/package milestone; no repeated successful capture. Publication stays postponed.
-
-[Stored row normalization](PNG-STORED-WORD-NORMALIZATION.md) keeps its source-valid
-four stored scopes/natural64. The582B constructor matches, and stored execution
-never constructs changed tree workspace. Retained-native post-GC4word remains
-387.85/native406.15us,upper1.044 uncertain; fresh storedbyte/word and natural64 pass.
-These lifetime/conditioning views remain separate, with their original measured
-producer. Reuse51unchanged PNGreads/sharedroot and unrelated families. Earlier
-[forwarding](PNG-STORED-FORWARDING.md), [checksum](PNG-STORED-CHECKSUM.md) and
-[CRC](PNG-WIDE-CHUNK-CRC.md) retain their original milestones/raw evidence as history.
-
-[Word tap/sample views](DEEP-WORD-HORIZONTAL-VIEWS.md) are accepted: the bounded
-RGBA16 32×16 reduction independently confirms403.94/prepared-zimg412.77µs,
-upper.985,113B/op. Raw37.68µs/8.53% and normalized8.45% gains have separated
-confidence; native moves−.09%. Exact ordered pixels,4032B arrays/4KiB admission,
-cleanup and owners stay unchanged. Shared9388Bcaller/488Bpublisher exact;
-other72resize costs reuse scoped proof. At that checkpoint73controls:65pass/zero gaps/
-eight uncertain. BothOS6512full/live,570/791normal/scalar,three storage suites
-and SAME measured package/new word consumer/all3examples pass. One core/embedded
-build perOS,zero public/harness/native/fixture builds,onepack. A scalar consumer
-refusal assumption is corrected with caller reservation; same package reused.
-Stop this control. [Former gap](DEEP-WORD-CURRENT-CONFIDENCE.md) and
-[attribution](DEEP-WORD-PAIRED-LOOP-ATTRIBUTION.md) remain linked history, outside
-current renderer dependencies. Publication stays postponed.
-
-[Bounded mixed-word confidence](RESIZE-MIXED-WORD-CONFIDENCE.md) remains uncertain:
-862.61/prepared-zimg840.93µs,range.999440–1.041560,112directB/op. One existing
-12-pair64-operation adjacent capture retains all actuals/native brackets and
-exact managed pixels/approved native bounds/owners. Prior standalone uncertainty
-is preserved; no new case, assumed gap or favorable repeat. Current immutable
-package/6513qualification is reused with zero builds/broad/package repeats.
-Its73-control checkpoint was65pass/zero gaps/eight uncertain; the horizontal
-confidence above supersedes one uncertainty. Publication stays postponed.
-
-[Compact paired weights](COMPACT-BICUBIC-PAIRED-WEIGHTS.md) is accepted: the bounded
-byte reduction independently confirms414.18/prepared-zimg418.13µs, upper.998,
-113B/op and exact managed pixels. Raw5.77µs/1.38% and all-actual6.24µs/1.48% gains
-have separated intervals; normalized confidence overlaps, native moves−0.36%.
-Contemporary baseline was uncertain; no causal historical-gap closure claim.
-No new storage/preparation/loan/tail/ownership state. Source/actual9388Bcaller
-proof reuses72other resize costs and unrelated families. At that milestone73controls:
-64pass/0gaps/9uncertain. Windows/Linux6512full/live,570/791focused normal/scalar,
-three storage suites and SAME actual measured package/all3examples pass. Disabled
-ISA paths reuse unchanged guards/fallback evidence. One core/embedded build perOS,
-no public/harness/native/fixture builds, onepack. Stop this passing control;
-publication remains postponed.
-
-Other current resize owners and their measured tradeoffs are summarized in the
-family table below, including [bilinear metadata](BILINEAR-OPERATION-METADATA.md).
-[Adjacent confidence](RESIZE-CURRENT-ADJACENT-CONFIDENCE.md) still owns unchanged
-Wide8:371.91/377.37µs,range.953–1.012,uncertain. Its former TightDown8 cost is
-superseded above. The [stride](RASTER-STRIDE-PREPARATION-TRIAL.md) and
-[expanded-coefficient](COLUMN-COEFFICIENT-PREPARATION-TRIAL.md) trials retain
-their adverse/inconclusive results and raw evidence as separate history; neither
-is a renderer dependency or a permanent design-family ban.
-
-[Prior current-encode confidence](PNG-CURRENT-ENCODE-CONFIDENCE.md) retains the
-original natural-GC Gray8/RGB16 adjacent captures and source pins. Their CPU costs,
-along with the former CRC/forwarding encoder providers, are superseded by the
-current compressed module's16captures and four source-valid stored captures. Original conditions,
-uncertainties and passing scopes remain history; no causal cross-boundary gain
-or hidden allocation-saving claim follows from replacing the displayed owner.
-
-[Adler evidence](PNG-BLOCK-ADLER.md) still owns 51 unchanged read/validation controls:
-49 pass/two uncertain (live8/tight cancelable16), plus shared-root passing evidence.
-Encode-only CRC changes preserve standalone scan/identify Compute/Reduce generated
-bodies and all shared fields/initialization/read/fold/reduce source. Other codec,
-resize and text costs remain source-valid. Prior [IDAT](PNG-IDAT-FORWARDING.md) and
-[stored workspace](PNG-STORED-WORKSPACE.md) ownership qualification remains valid;
-superseded encoder timings and original raw evidence are retained as history.
-
-[Wider Adler trial](PNG-WIDE-ADLER-TRIAL.md) is not retained. The scoped stored-word
-39.20µs/8.26% raw gain has overlapping normalized confidence; SmallestSize16's
-contemporary1,570.62µs/7.75% raw adverse and2.51% normalized adverse separate.
-The batch stops after20exact encoder/11read-validation views, without measuring
-remaining controls or broad/package qualification. Source/core/embedded modules
-are restored byte-for-byte on both OSes; current costs/6512qualification and SAME
-actual package remain valid. All adverse results/raw evidence are retained outside
-renderer dependencies. The earlier [eight-residue CRC trial](PNG-INTERLEAVED-CRC-TRIAL.md)
-also remains unretained history. Neither establishes a permanent SIMD-family ban.
-
-[Output-backed Cross rows](CROSS-BICUBIC-OUTPUT-PREFIX.md) close both byte
-Cross gaps:793.42/zimg875.67µs upper.913 and same-height496.61/573.93µs
-upper.872,113B/op each. Independent178.42/141.71µs,18.36%/22.20%raw and
-17.02%/16.65%normalized savings retain all actuals/native shifts. Shared prefix
-preparation borrows91168B of already charged output, unwinds, then uses the
-original strip tail. One4KiB reservation,80Bprefix/3440Btail explicit arrays,
-no new heap/retention; physical/JIT/native peaks unmeasured. Exact qualified
-managed pixels/native bounds/owners/cancellation stay intact. Ten new boundary/
-alignment/poison/alpha/refusal/cancel/recovery tests pass. BothOSes6497full/live,
-569internal/791public normal/scalar,3storage suites and SAMEactualpackage with
-two explicit frozen Cross consumers/all3examples pass. One core/embedded eachOS,
-no public/frozen-harness/native/fixture build,one diagnostic bridge/onepack.
-
-All14affectedcosts reconcile:2Crosspasses,11enlargement passes/1uncertain.
-HorizontalUp8firstsource-affected1486.10/zimg1518.51µs upper1.025 is uncertain,
-not a presumed gap. Four passing raw captures are slower; two scoped paired
-checks/clock shifts remain distinct from standalone costs, no universal gain.
-At the Cross milestone73standalonecontrols60pass/5gaps/8uncertain. Its unchanged59costs reuse53
-[base](SHARED-RESIZE-FILTER-WEIGHTS.md),five[generated passes](GENERATED-BICUBIC-SHARED-EXECUTION.md)
-and one[DeepWord](DEEP-WORD-VECTOR-WEIGHTS.md) uncertainty. Root IL/actual timed
-JIT match; disabled-ISA/other-family proof reused. All8equivalent prepared/
-one-shot boundaries pass, plans retain198432Bwide/199840Bnarrow. Scoped adjacent
-views stay separate. Stop confirmed passes and do not repeat for favorable bounds.
-
-The [stored-PNG streaming trial](PNG-STORED-DIRECT-STREAM.md) is not retained:
-65,536B/op saved, no demonstrated CPU gain, additional format state and two
-adverse historical compressed comparisons. Exact qualified sources/modules/package
-are restored; no broad/package repeat. The post-GC word gap and distinct passing
-natural-GC64op scope remain open/unchanged.
-
-[Streaming byte weights](STREAMING-BYTE-VECTOR-WEIGHTS.md) now close both resize
-gaps:16×8 costs463.98/zimg483.72µs upper.970;8×17 costs457.40/516.75µs upper.890.
-The affected8×4 control also passes,380.48/663.44µs upper.577. All113B/op, exact
-pixels, original4KiB/4048B explicit arrays and zero added capacity/retention.
-Raw47.05/88.49/121.42µs gains and normalized15.24%/17.96%/23.47% retain every
-actual and separate native clocks. Same lane bits/products/add order/repair.
-Actual shared2579Bcaller/root9388B instructions and block offsets match after
-addresses/method-number/proven GS-cookie normalization, so70other costs remain
-valid. At that stage73standalonecontrols62pass/3gaps/8uncertain; current bilinear metadata preparation above supersedes two costs. BothOSes6497full/live,
-569internal/791public normal/scalar/3storage suites and SAMEactualpackage/all3
-examples pass; existing package consumer explicitly covers all3frozen controls.
-One core/embedded build eachOS, zero public/harness/native/fixture builds,onepack.
-That milestone's TightDown8/Wide8 gaps are superseded by current confidence and
-accepted weights above; current resize status follows horizontal confidence.
-Choose the next justified material preparation/reuse improvement; uncertainties
-are not presumed gaps, and passing controls stop unless actually affected.
-All289paths remain required; publication postponed. Historical
-[Cross overlap](BYTE-CROSS-HORIZONTAL-OVERLAP.md),[quartets](BYTE-CROSS-SHARED-QUARTETS.md)
-and[geometry](BYTE-CROSS-SHARED-GEOMETRY.md) retain original raw evidence;
-their superseded Cross costs do not own the current summary. Prior adverse/
-inconclusive publication/cache-view trials are linked from the current owner.
-
-[Per-tile inverse color](WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/6.14%raw/
-7.18%normalized on complete live-token VP8L decode, with separated confidence
-and native+1.127%. Current2,933.10/FFmpeg3,059.18µs,range0.907–0.989 passes/stops;
-allocation stays152,728B/op. Seven actual decode costs refresh before qualification;
-two validators bypass inverse transforms and reuse source-valid HFR847 evidence.
-All six lossless reads/validators now pass; VP8/ALPH plus unchanged opaque controls
-have5passes/1uncertain (live opaque). All frozen pixels/alpha/hiddenRGB/owners/
-cancellation/idle-v2 gates pass. Native retains contexts and has no equivalent
-cancellation token. Coefficients prepare once per tile; AVX2 batches and scalar
-tails/fallback preserve exact signed/modulo arithmetic. No new owned/retained
-capacity or allocation saving. One immutable core/embedded build perOS;
-seven new oracle/boundary/cancellation tests. Full6,456checks perOS,1,033internal/
-239public normal/scalar/AVX512-off/AVX2-off and SAMEactualpackage/all3examples
-pass. Unchanged Huffman BMI2 and other family/ISA evidence reused.
-Stop all six confirmed lossless controls; continue independent demonstrated
-resizing work without assuming gaps in uncertain controls. The
-[Huffman predecessor](WEBP-HUFFMAN-READ-FRONTEND.md) and
-[current-build attribution](WEBP-INVERSE-COLOR-CURRENT-ATTRIBUTION.md) retain
-their original sources/samples/JIT and hypothesis. No historical-stage sum or
-uniform causal companion gain is claimed; profile counts are not phase times.
-
-[Current opaque lossless confidence](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains
-uncertain after its first adjacent capture:73.41/libwebp73.50ms, range.915–1.070.
-Complete121,896B packets and all pixels/owners/settings/quiet guards pass. Native
-bracket variation remains visible; no presumed gap, speedup or favorable repeat.
-Direct allocation4,822,760B/op, zero retained operation scratch; peaks unremeasured.
-One allowlist-only driver build, unchanged production/frozen harnesses/current
-package and6,439-check qualification reused. No new workload or broad campaign.
-
-Unchanged [live PNG run preparation](PNG-LIVE-RUN-PREPARATION.md)
-passes6,351full/live checks per OS,712internal/246public PNG/admission checks in
-normal/scalar modes, and SAME actual Release-package/all three examples on
-Windows/Linux. Word decoding saves93.08µs/2.89%raw/1.86%normalized against a
-contemporary predecessor, with separated filtered/all-actual/normalized confidence;
-native time moves−1.05%. Current3126.33/native3153.78µs upper1.001253 remains
-uncertain. Byte1529.69/1535.97µs upper1.012 also stays uncertain; raw+9.90%
-tracks native+10.19% with normalized overlap, not a byte speedup or uniform gain.
-GC4,472/8,568B/op and4KiB framing admission are unchanged. Both cancellation
-polls remain per symbol; no new storage/owner/pool. The51read/validation controls
-now have49pass/0gap/2uncertain; stop unchanged passing paths. Resize/codec/text
-ISA evidence is reused.
-
-[Matched one-shot stored PNG](PNG-STORED-ONE-SHOT-BOUNDARIES.md) retains the
-reference-boundary qualification and historical captures. [Current wide-CRC
-costs](PNG-STORED-WORD-NORMALIZATION.md) supersede its encoder costs; fresh/prepared lifetimes
-remain separate and historical subtraction measures no preparation time.
+The complete word composition independently saves **317.42 µs / 9.74%** and
+**1,063,078 allocated B/op**; parity remains uncertain. The bounded byte wide
+control records **1.59 µs / 0.446% raw adversity**, with inconclusive normalization;
+both contemporary builds miss parity. Preserve that tradeoff and all raw captures.
+The default store remains two arrays / 4 MiB; larger idle retention, allocation,
+logical admitted capacity and unmeasured physical peaks remain distinct.
 
 ## Current family status
 
-| Required family/boundary | Current owner and remaining work |
+| Required family/boundary | Current evidence and next action |
 | --- | --- |
-| JPEG decoding and coding validation | [Shared product/support preparation](JPEG-SHARED-BLOCK-SUPPORT.md): 29 reads, 28 pass / 0 gaps / 1 uncertain. All 27 pixel-decode costs refresh on the actual package; two unchanged coding-only validations reuse evidence. Sparse CMYK saves 16.85 µs/3.86% raw and dense RGB444 45.35 µs/3.87%; both confidence views separate. Sparse/caller CMYK pass and stop. Retained-context horizontal CMYK remains uncertain; equivalent fresh-context 398.40/745.74 µs upper .537 passes. No new owned capacity/retention; primary allocations 20,944/42,936 B/op. |
-| JPEG encoding | [Gray tile preparation](JPEG-GRAY-TILE-PREPARATION.md) and [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) retain current grayscale/caller and unchanged color evidence. Current default/sampling scopes, exact packets and explicitly labeled SIMD libjpeg-turbo grayscale boundaries remain distinct. |
-| PNG reading | [Current block Adler costs](PNG-CURRENT-FRAMING-COSTS.md):51controls,49pass/0gap/2uncertain. Live16passes, upper.988; live8/tight cancelable16 remain uncertain. Complete full-depth pixels/metadata/owners/limits remain exact, allocation/admission unchanged. Three historical adverse comparisons reconcile against current baselines; no uniform gain or favorable repeat. Two-retained-image shared-root also passes. Historical stream/composition costs remain H. |
-| PNG encoding | [Heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md):16compressed controls refreshed,600allocatedB/op less, exact packets. Gray8 independently2048.63->1986.46us;3.035%filteredraw separates, allactual/normalized overlap, parityupper1.038 remains uncertain.17fresh controls16pass/zero gaps/one uncertainty; stop passing Fastest8. ContemporaryPredictable259.32/259.80ms has no demonstrated adversity. [Stored scopes](PNG-STORED-WORD-NORMALIZATION.md) retain original producer/costs through exact582Bconstructor and callgraph proof; retainedwordupper1.044 stays uncertain, freshstored/natural64 pass. Source-valid51reads reused;6522Windows/Linux/SAME-package checks qualify final code once. |
-| WebP lossless/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md): 8 controls, 6 pass / 2 uncertain. [Current photograph](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md)81.00/libwebp83.39ms upper.981 passes/stops on the actual package DLL; no production speedup claim. Photograph allocation5,358,368B/op uses direct batches; supersedes20–30MB, not a new allocation saving. [Current transparent RGBA8](WARM-ADJACENT-CONFIDENCE.md) 52.99/53.66 ms upper .998 passes/stops with exact 98,590 B, 6,241,792 B/op, unchanged 3,656,309 B admitted peak. This resolves uncertainty, not a production speedup. Selected candidates remain independently owned; [current opaque lossless](WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain; [current word alpha](WARM-ADJACENT-CONFIDENCE.md)53.40/53.30 ms upper1.008 remains uncertain with full16-bit normalization timed, exact98,590B and6,241,792B/op. |
-| WebP lossy encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md), unchanged [histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) and alpha storage: 6 pass / 3 uncertain after the [current byte-alpha confirmation](WARM-ADJACENT-CONFIDENCE.md). Exact packets, ordered ties and current effort/content boundaries remain; uncertainty alone is not a tuning need. |
-| WebP reading | [Inverse color tiles](WEBP-INVERSE-COLOR-TILES.md): live-token VP8L2.933/FFmpeg3.059ms,range0.907–0.989 passes after a verified191.79µs/7.18%normalized gain;152,728B/op unchanged. Seven actual decodes refresh, two validators reuse source-valid evidence. All six lossless reads/validators pass/stop; VP8/ALPH plus unchanged opaque controls5pass/1uncertain(live opaque). No new owned/retained capacity; exact samples, cancellation and owners retained. Do not presume a gap for the unchanged uncertainty. |
-| Bicubic/bilinear resizing | [Horizontal confidence](RESIZE-HORIZONTAL-CONFIDENCE.md) passes1431.47/prepared-zimg1514.24µs,upper.953,112directB/op; original standalone uncertainty stays separate, no codegain. Across73named warm controls66pass/zero gaps/seven uncertain. [Compact paired weights](COMPACT-BICUBIC-PAIRED-WEIGHTS.md) and [word views](DEEP-WORD-HORIZONTAL-VIEWS.md) stop passing reductions; [bilinear metadata](BILINEAR-OPERATION-METADATA.md) retains exact byte/word passes. Wide8 stays371.91/377.37µs,range.953–1.012 uncertain; mixed-word adjacency is also uncertain. Eight equivalent prepared/one-shot controls pass. No new capacity/retention; current6522W/Lfull/live/SAME-package qualification and source-valid ISA/storage evidence reused. |
-| Lanczos3 | [Current byte confidence](LANCZOS-BYTE-PRODUCT-PREPARATION.md): unchanged actual package 489.94/zimg 491.00 µs upper1.015 is uncertain, superseding the former byte gap. Eight controls now6pass/0gap/2uncertain; six passes stop. GC138B/op and plan139800B unchanged. Product-row A confirms4.15%raw/4.21%normalized adverse with separated intervals; B adverse screen, both restored. Two useful ownership tests pass454resize checks per normal/scalar/AVX2off/AVX512off perOS; full/package proof reused. Other seven costs remain [source-valid](LANCZOS-PAIRED-WORD-ROWS.md), including word uncertainty upper1.012 and156248B retained plan. Exact Q30 and explicit complete boundaries unchanged. |
-| Text, drawing and composition | [Cleared canvas storage/public pipelines](CLEARED-CANVAS-STORAGE.md): one-shot1313.88/ImageSharp6739.69µs upper.218 and preparation+8fresh-canvas draws2055.00/7634.49µs upper.302 pass/stop; measured amortization256.87/954.31µs/draw. Complete public integration includes all fitting/layout calls and canvas/output ownership/disposal. GC283275/9256953B one-shot and284623/9494633B per batch. Active prepared capacity39904B, governed peak807708B; default idle font/canvas sequence can retain1248596B within unchanged two-array/4MiB ceiling. Steady fresh-canvas105.65/81.93µs range.850–2.006 is uncertain; existing-canvas103.39/78.81µs upper1.609 remains a gap. Earlier [loading](FONT-OWNED-STORAGE.md)/[drawing](TEXT-RENDER-PREPARATION.md) stages retain eager/lazy validation and preparation differences; never sum them or infer overall slowdown. Original exact full-word/layout/fitting/visual/owner gates pass; current W/L/scalar/SAME-package proof follows affected reconciliation. No arbitrary repeat-count/general-font claim. Independent codec/resizing work continues. |
-| Inspection and other public boundaries | Use the named inventory below and [current summary](../docs/benchmark.md). Native adapters, acquisition/copy/output ownership and source metadata stay explicit. Sub-microsecond gaps remain required but do not displace material codec/resize work. |
+| PNG decoding | [Current owner](RELEASED-IMAGE-STORAGE.md): all 47 existing decode controls pass. Four coding-only validators and the caller-root retained-output control reuse unchanged paths. Stop passes. |
+| Stream decode/composition | Five PNG views: four pass, word composition uncertain. JPEG/VP8L/VP8 stream decode passes. [Direct acquisition](DIRECT-STREAM-INPUT.md) remains the source-valid inspection/async-validation owner; its old affected decode/composition costs are historical. |
+| JPEG reading | Current 24 RGBA/fresh-reference comparisons: 23 pass, retained horizontal-CMYK gap. The contemporary old build has the same retained-reference gap; the equivalent fresh view passes. Six caller-sample/validation paths reuse unchanged evidence. [Kernel history](JPEG-SHARED-BLOCK-SUPPORT.md). |
+| JPEG encoding | [Gray preparation](JPEG-GRAY-TILE-PREPARATION.md), [prepared replay](JPEG-PREPARED-HUFFMAN-BANK.md) and identified color/sampling evidence are unchanged. Keep SIMD libjpeg-turbo grayscale explicitly labeled and packets exact. |
+| PNG encoding | [Compressed heap entries](PNG-HUFFMAN-HEAP-ENTRIES.md) retain 16 passing fresh controls and one Gray8 uncertainty; exact packets and 600 B/op reduction remain scoped. [Stored/fresh/natural64 views](PNG-STORED-WORD-NORMALIZATION.md) keep their distinct lifetimes; retained word is uncertain. No speed tuning based on uncertainty alone. |
+| Lossless WebP/alpha encoding | [Huffman workspace](WEBP-HUFFMAN-WORKSPACE.md), [photograph confidence](WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and [adjacent alpha views](WARM-ADJACENT-CONFIDENCE.md) remain source-valid: six pass, opaque/word-alpha uncertain. Exact packets, selected-candidate ownership and operation-owned workspace reuse remain. |
+| Lossy WebP encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md) retains six passes / three uncertainties on the existing content/effort scopes. Exact packets and tie order remain. |
+| WebP reading | Current 12 views: nine pass, three opaque VP8 uncertainties. Full output, native bounds, cancellation and ownership gates pass. [Earlier color-tile work](WEBP-INVERSE-COLOR-TILES.md) remains history. |
+| Bicubic/bilinear resizing | Current 73 views: 66 pass, two bounded bicubic gaps, five uncertainties. All eight equivalent one-shot/prepared bicubic controls pass. Prioritize the bounded mixed-word gap, then bounded byte wide; stop passes. Native float versus managed exact arithmetic stays explicit. |
+| Lanczos3 | Current eight views: five pass, two repeated-reduction gaps, one word-enlargement uncertainty. Byte reduction costs about 17 µs more than prepared zimg. One-shot preparation and complete outputs remain equivalent; retained geometry is reported separately. [Row/ownership history](LANCZOS-PAIRED-WORD-ROWS.md). |
+| Copy/turn transforms and drawing | Current 20 independent-result edits: five pass, nine gaps, six uncertainties. Most gaps are a few microseconds; retain them without displacing larger absolute work. In-place fill/copy/compositing reuse unchanged evidence and approved reference identities. |
+| Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
+| Inspection | [Direct-input](DIRECT-STREAM-INPUT.md) and named prefix/header adapters remain source-valid. Seekable complete PNG Identify has a small gap; async passes. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
 
-[Canvas/text attribution](TEXT-CANVAS-ATTRIBUTION.md) retains the original lead.
-Its accepted [cleared-rental stage](CLEARED-CANVAS-STORAGE.md) reduces fresh canvas
-ownership/clear/disposal80.66→7.18µs,491657→113B, with separate live/idle ownership.
-The two complete public comparisons precede further text tuning and pass/stop;
-diagnostics remain scoped, never additive phases or an overall slowdown claim.
-
-[Preparation/storage attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md) explains
-complete one-shot versus retained native state. Current owners link their earlier
-milestones and raw evidence. The [exact coefficient trial](CACHED-CUBIC-WEIGHT-PREPARATION-EXPERIMENT.md)
-adds no production gain or current cost; accepted builds are restored. The
-[current bounded narrow attribution](NARROW-BICUBIC-QUARTET-ATTRIBUTION.md) refreshes
-the actual package after accepted vertical quartets. One2s capture identifies
-source-pair split stores/indexing as a bounded lead for a single64B write, already
-used by the wide executor. No new statistical timing/build/fixture/qualification;
-instrumented elapsed is discarded. Earlier pre-quartet attribution remains history.
-Neither diagnostic becomes a renderer dependency. The [previous coverage narrative](https://github.com/lokad/image/blob/54112a2147d325eb69faac255e9e71ad5c808fe6/benchmarks/WARM-COVERAGE.md)
-retains superseded costs, qualification and experiment links in Git history;
-those do not govern current status or permanently close algorithm families.
+Preparation/reuse boundaries are described in
+[architectural attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md).
+[Prior coverage](https://github.com/lokad/image/blob/31988ad292e291faa62f156498b0e8c58be9a698/benchmarks/WARM-COVERAGE.md)
+retains superseded costs, experiments and qualification links. Those are history,
+not current timing proof or permanent algorithm-family restrictions. The required
+inventory below is retained unchanged; current family costs above supersede its
+older illustrative timings.
 
 ## Finite required inventory
 
@@ -369,122 +166,27 @@ approved scopes and current evidence above.
 
 ## Evidence and execution rules
 
-The [current generated-byte profile](GENERATED-BYTE-CURRENT-ATTRIBUTION.md)
-confirms2×9 executes `GeneratedBicubicResize`:1,241instruction locations in row
-filtering,731in coefficient generation and20in its scheduler, not phase costs.
-Proposed next step: prepare one coefficient/index block for a bounded group of
-source rows, preserving per-row tap order, vertical/clamped order, certificates,
-exact repair and4KiB. Check nested storage and affected existing2×2/1×1 controls;
-no full table, pool/session or new grid. Actual current package/harness/fixtures
-and qualification are reused, zero builds or timing/qualification repeats.
-Rawe16ae8b6/99868B/23members is mirrored/memberverified; instrumented elapsed is
-discarded. This supplies no displayed result and is not a renderer dependency.
+Use original frozen controls, reference settings, exact encoder packets and managed
+pixels, approved native/visual bounds, complete ownership boundaries and the
+dedicated quiet VM. Run sequentially on one CPU with the versioned idle/process
+guard; historical own load is not a reason to wait. Preserve every actual sample
+and adverse result. Do not retime solely for favorable numbers or infer overall
+cost by adding historical stages.
 
-- Resolve missing or uncertain measurements before assuming optimization is
-  needed. Stop cases with applicable confirmed passing evidence; changes to their
-  actual production paths can invalidate that evidence.
-- Preserve complete encoder packets and declared metadata exceptions, exact
-  lossless/managed pixels, lossy reconstruction/alpha gates, ownership, cancellation,
-  shared admission and meaningful local bounds. Equal numeric quality is no match.
-- Compare equivalent one-shot or repeated prepared-state operations. Include
-  necessary setup, workspace, normalization, independent output ownership and
-  disposal; disclose retained native graphs/codec contexts. Do not remove managed
-  work merely to improve the ratio.
-- Use the dedicated quiet VM sequentially, one CPU per operation, Release,
-  versioned idle/process guards, pinned sources/producers/settings and output
-  checks. Keep all actuals/brackets and adverse results. Profiling/counts are
-  attribution, not component timings or savings.
-- Prioritize useful absolute time savings in codecs/resizing. Sub-microsecond
-  probe/copy gaps remain in scope without displacing millisecond work. No fixed
-  continuation percentage, one-primitive mandate or permanent closed-family list.
-- Text is the approved Drawing2.1.7/Fonts2.1.3 complete public-API integration,
-  including multiple layout calls and the full fitting search, not bare shaping.
-  FreeType2.13.2 font loading discloses eager/lazy validation differences. RGBA16
-  compositing is ImageSharp3.1.12 Rgba64 SrcOver, not FFmpeg. Existing scoped visual
-  and native bounds remain distinct from exact managed contracts.
-- Reuse immutable builds and qualification for unchanged inputs/paths. Focused
-  representative checks precede broad Windows/Linux/scalar/differential and actual
-  same-package qualification at coherent accepted production milestones. A release
-  refresh measures every displayed row on the actual immutable package DLL.
+Resolve uncertain measurements before assuming an optimization is needed. Stop
+confirmed passes unless their production paths change. Architectural transitions
+may span coherent stages; judge completed stages by absolute time, allocation,
+retention and simplification without fixed percentage thresholds. A pending family
+does not block independent codec, resizing or ownership work.
 
-Current invalidation and next execution:
+Reuse verified immutable builds and unchanged evidence. Use focused checks during
+development; finish affected performance reconciliation before one coherent full
+Windows/Linux, scalar/affected-ISA and actual Release-package milestone. Preserve
+the three named resize-storage suites. Report allocation, admitted peak and retained
+capacity separately. Publication is separate and postponed.
 
-- CBG854 changes only byte cross vertical-geometry routing. Two complete bounded
-  byte reverse-mixed/identity costs supersede CMP853; original helper, decoding,
-  numerical loops, repair, word paths, cached/prepared and other filters/codecs/text
-  remain unchanged. Seven focused cases and actual package6463eachOS pass. New
-  code follows the unchanged ISA guard; disabled fallback proof is reused.
-  Inspect current byte2×9 before the next redesign; no new workload matrix.
-- CMP853 extracts only the unchanged filter polynomial and three fixed bicubic
-  preparation calls. Its thin dispatcher changes caller inlining, so all61existing
-  bicubic, eight prepared and four bilinear controls are reconciled, not silently
-  reused. Earlier CPU providers for these paths are superseded; their arithmetic,
-  ownership designs, qualification and raw evidence remain history. Two adjacent
-  scopes retain original uncertain standalone results; a contemporary previous-DLL
-  byte-bilinear comparison is inconclusive. Historical raw time alone is not a
-  gain claim. Codec/text/orientation/Lanczos paths retain relevant source validity.
-  CBG854 now owns the two updated byte cross costs; the other71paths retain
-  applicable source validity. No new matrix or global blocker; all289paths remain required.
-- CIT849 replaces only inverse-color traversal with per-tile preparation and
-  exact SIMD batches/scalar tails. Seven decode costs supersede affected HFR847
-  observations; two validators bypass inverse transforms and retain HFR847 proof.
-  Reader/prefix/cache/other-transform/encoder bodies reconstruct verbatim, and
-  generated ReadImageCore remains8,245B. Other codecs/editing/text and Huffman
-  BMI2 evidence remain valid. All six lossless reads pass/stop; continue an
-  independent demonstrated resizing path rather than retuning this family.
-- HFR847 changes only the common VP8L Huffman call boundary. Nine complete
-  VP8L/ALPH/validation costs originally superseded WLR845 and affected WPP695/
-  VPP788 observations; CIT849 now owns seven current costs and reuses two
-  validators. The primary matched HFR baseline remains the valid incremental
-  comparator. Three opaque VP8 controls do not use this reader and retain their
-  prior evidence; unrelated codecs/editing/text remain source-valid.
-- HKE907 replaces only private compressed Huffman weight/depth/index metadata
-  with direct heap entries and exact zero-weight flags. Sixteen compressed costs
-  supersede their SRD904CPU observations; complete packets, signed ordering,
-  overflow/removal rules, cancellation and independent results remain exact.
-  Constructor582B matches; storedmode0neverconstructsWorkspace. Reusefourstored/
-  natural64 and51reads/sharedroot plus unrelated families. Different workspace
-  field offsets mean compressed callers are measured, not asserted byte-identical.
-- SRD904 changes only stored-row allocation/admission and execution routing, plus
-  guarded fused word normalization/checksum into existing history. Every20encoder
-  view and natural64refresh after the final execution boundary; original packets
-  are exact. Earlier SRO901/SRA902/SFA903 costs are diagnostics and retained raw,
-  not proof of the selected module. C's material Predictable16 adversity is resolved
-  before acceptance. Source/fields/initialization/read paths remain unchanged:
-  reuse51PNGreads/shared-root and unrelated codec/editing/text/resize evidence.
-- WCF876B changes only encoder chunk CRC, preserving exact polynomial state,
-  complete packets and all ownership/cancellation/admission boundaries. Its 20
-  complete encode views and natural64 replace the affected ABP875 costs. Standalone
-  scan/identify Compute/Reduce generated bodies and shared source/initialization
-  remain identical; ABP875's 51 reads/shared root and all other families are reused.
-  Both correct prototypes retain their evidence; only final B is measured.
-  Primary gain is scoped, retained-native word remains a gap, and uncertainty is
-  resolved before any further tuning. No broad timing campaign or new grid.
-- ABP875 changes only shared PNG Adler SIMD accumulation. All51read/validation,
-  17fresh encodes, retained-native stored2/predictable/natural64word and shared-root
-  costs supersede affected earlier CPU providers. Full packets/managed pixels,
-  original settings/boundaries, scalar path, modulo, cancellation and ownership
-  remain. Three contemporary baseline checks resolve historical read adversities;
-  current uncertainty is not presumed to need optimization. PNG identify/inspection/
-  CRC, other codecs, resizing and font/text/drawing sources remain unchanged.
-- VPP788 replaces repeated coefficient-position/band addressing with one frame
-  model preparation shared by ordinary/live/window/scalar/validation decoding.
-  Six named VP8 cost paths refresh; exact probability syntax, numerical operations,
-  polling and ownership remain. Encoder/VP8L and other codec/editing/text evidence
-  is unaffected. No profile or fixture is repeated.
-- JPEG's current shared-support owner refreshes all 27 pixel-decode paths,
-  including DC-only and caller samples, plus the existing fresh-context view.
-  Two coding-only validation paths retain unchanged source-valid evidence.
-  Encoder Ac and scalar arithmetic/query bodies remain verbatim; older JPEG
-  pixel CPU costs are superseded on these affected paths.
-- Reuse passing evidence only where the relevant actual production paths and
-  complete boundaries are unchanged. Current uncertainties are not demonstrated
-  optimization needs; resolve them before tuning. Every named H/missing case
-  remains outstanding until applicable current passing evidence exists.
-- Select useful absolute savings from current attribution. The [cached-wide
-  attribution](CACHED-WIDE-CURRENT-PREPARATION-ATTRIBUTION.md) and [scheduling study](CACHED-WIDE-WINDOW-SCHEDULING-EXPERIMENT.md)
-  retain safe-window leads and adverse/inconclusive implementations; inspect
-  current sources before proposing a materially revised design. Passing quartet
-  cases stop. Text/drawing never globally blocks independent codec/resizing work.
-- All cited raw archives, released packages and reproducibility remain retained.
-  Publication and the all289-path completion audit are separate; PLAN.md is ignored.
+Keep the current summary at three tables or fewer and verify it with
+`python benchmarks/render-benchmark.py --check`. Current owners retain reproduction,
+source/reference identities and mirrored member-verified raw evidence. Historical
+reports and published release artifacts remain preserved, without an arbitrary
+checkout-size cap.

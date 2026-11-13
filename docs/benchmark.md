@@ -1,246 +1,60 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-13. These **138 tabulated comparisons** combine qualified
-**0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [289 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
-development costs. Retained release costs apply only to unchanged production
-paths. Publication is postponed.
+Current development version **0.2.1**. Warm single-CPU parity remains open across
+**289 named material paths**; these **138 comparisons** summarize that scope.
+This is an incremental update: affected costs use the qualified immutable package
+DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Direct stream input](../benchmarks/DIRECT-STREAM-INPUT.md) refreshes eleven
-affected complete operations on the current immutable package: nine pass and two
-remain gaps. Independent Identify gains are11.6%seekable/10.5%async; async allocation
-falls8400→216B/op. Every packet, metadata/pixel gate and owner contract is preserved.
-Full6530checks per OS and the same actual package/all three examples pass.
-Other source-valid paths retain their separately identified qualification.
+[Released-image storage](../benchmarks/RELEASED-IMAGE-STORAGE.md) refreshes 191
+existing affected comparisons: **161 pass, 14 gaps, 16 uncertain**. The complete
+RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
+and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
+128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
+is inconclusive and both contemporary builds miss parity. No adverse or uncertain
+capture is hidden. Larger demonstrated remaining gaps include bounded mixed-word
+bicubic and repeated Lanczos reductions; tiny copy/turn gaps remain in the report.
 
-All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
-warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
-workstation GC. Times are **µs per complete operation**. Ratios use the faster
-reference bracket; **upper** includes conservative all-actual and relevant filtered/paired confidence.
-Short screens do not establish independent parity. **B/op** is total managed
-allocation, separate from peak live capacity and retained storage. Native
-allocations are unmeasured. Normalization, output ownership and disposal stay
-timed; setup, delivery and retained state follow the stated case boundaries.
+Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
+with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
+fixture preparation and validation are outside the clocks. Timed calls retain
+their declared normalization, input delivery, output ownership and disposal.
+Ratios are Lokad/reference; **upper** is the conservative confidence bound, with
+all actuals retained. Upper ≤1 passes, lower >1 is a gap; otherwise uncertainty stays open.
+**GC B/op** reports managed allocation, including result ownership where applicable,
+not peak live capacity or native allocation.
 
-Current scope and remaining work:
+The default store still has **two slots / 4 MiB**. Source-derived word-composition
+idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
+remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
+capacity, allocation and retained storage are separate; physical/native/JIT peaks
+are unmeasured. Each OS passes **6,538 full/live checks**, focused normal/scalar
+ownership checks and the **same actual Release-package consumer / three examples**.
+Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-- **WebP:** [current lossless/alpha storage](../benchmarks/WEBP-HUFFMAN-WORKSPACE.md)
-  has 6 passes / 2 uncertain encode controls;
-  [current photograph](../benchmarks/WEBP-LOSSLESS-PHOTOGRAPH-CONFIDENCE.md) and
-  [transparent RGBA8](../benchmarks/WARM-ADJACENT-CONFIDENCE.md) pass on the actual
-  package DLL. Alpha costs 52.99/FFmpeg 53.66 ms,
-  upper 0.998, exact 98,590 B and 6,241,792 B/op; this resolves uncertainty, with no production speedup claim.
-  [Opaque lossless](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) remains uncertain:
-  73.41/libwebp73.50ms, range0.915–1.070,
-  4,822,760B/op and exact121,896B packet. All adjacent pairs/brackets remain;
-  no codec change, presumed gap or favorable repeat follows the first adjacent capture.
-  [Per-tile inverse color](../benchmarks/WEBP-INVERSE-COLOR-TILES.md) saves191.79µs/
-  6.14%raw/7.18%normalized on live-token VP8L decoding. Current2.933/FFmpeg3.059ms,
-  range0.907–0.989 passes/stops; allocation stays152,728B/op.
-  All exact pixels/owners and12adjacent pairs/brackets pass; native retains codec/
-  conversion contexts and has no equivalent cancellation token. Across six lossless
-  reads/validators:6pass/0gap/0uncertain.
-  All six pass/stop. Two validators bypass inverse arithmetic and reuse source-valid evidence.
-  The [lossy scope](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md) now has
-  6 passes / 3 uncertain. The current word-alpha view is
-  53.40/FFmpeg 53.30 ms, upper 1.008: uncertain,
-  exact normalized alpha/packet and 6,241,792 B/op. Resolve uncertainty before tuning. Complete packets remain
-  exact. The same [color-tile round](../benchmarks/WEBP-INVERSE-COLOR-TILES.md)
-  refreshes six affected companion decodes without a uniform causal gain claim.
-  VP8/ALPH plus unchanged opaque [position preparation](../benchmarks/VP8-POSITION-MODEL-PREPARATION.md) has
-  5 passes / 0 gaps / 1 uncertain.
-  Ordinary opaque decoding improves 2.02% after reference normalization, with separated
-  raw/all-actual/normalized intervals. Live 4,803.55/native4,786.85µs,
-  upper1.009, remains uncertain. Resident and stream ALPH now pass.
-  All six allocation totals include the earlier increase of
-  1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
-  Selected codes/results retain independent ownership.
-- **PNG:** [Huffman heap entries](../benchmarks/PNG-HUFFMAN-HEAP-ENTRIES.md)
-  prepare exact weight/depth priorities beside heap symbols, removing dependent
-  metadata lookups while preserving structural ties, every complete packet and
-  independent tree results. Gray8 independently improves2048.63→1986.46µs:
-  **62.18µs/3.035% filtered raw** has separated confidence. All-actual62.39µs/3.026%
-  and normalized3.041% points overlap; native moves+.006%. No general gain is claimed.
-  Gray8 remains uncertain: 1986.46/1993.40µs,
-  range0.968–1.038, 546,628B/op.
-  All16affected compressed controls are current on the qualified module and
-  allocate600B/op less;572B less element capacity, no extra owner or retention.
-  The17fresh-state controls have 16 passes /
-  0 gaps / 1 uncertain; Fastest8 now passes.
-  RGB16 passes at15326.44/16232.30µs,
-  upper0.955, exact739,472B. Predictable16 is
-  259.80/388.01ms, upper0.685,
-  exact573,041B. Contemporary qualifiedbaseline259.32ms resolves the historical
-  difference; raw/all-actual/normalized intervals overlap, with no regression claim.
-  Compressed admission remains384KiB; operation scratch retention0, physical peaks unmeasured.
-  [Stored costs](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md) reuse their unchanged
-  paths and original producer: fresh RGBA8 53.27/541.40µs,
-  upper0.114; RGBA16 389.62/1387.71µs,
-  upper0.288, 607,628/1,143,324B/op.
-  Both pass. Retained-native post-GC4 word stays uncertain at
-  387.85/406.15µs, upper1.044.
-  Natural-GC64 passes only its scope: 235.78/404.41µs,
-  upper0.615, 1,143,265.875directB/op.
-  The582B constructor matches and stored execution never constructs tree workspace.
-  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) also reuse51source-valid controls
-  (49pass/two uncertain). Initial indexed-key screen, profiles and earlier encode
-  studies retain raw evidence separately; no unchanged favorable repeats or new grid.
-- **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
-  forms exact support alongside dequantization and reuses inverse decisions.
-  Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
-  with separated filtered/all-actual raw and normalized intervals. All 27 pixel
-  decode costs refresh; two unchanged coding-only validations are reused.
-  Across 29 reads: **28 pass / 0 gaps /
-  1 uncertain**. Sparse and caller CMYK pass/stop;
-  retained-context horizontal CMYK stays uncertain and its equivalent fresh view passes.
-  No added owned capacity or retention; sparse CMYK/RGB allocations remain 20,944/42,936 B/op.
-  [Encoding](../benchmarks/JPEG-GRAY-TILE-PREPARATION.md) retains scoped grayscale
-  gains and 15 unchanged color costs. Content and sampling scopes remain explicit
-  in the packet table. Frozen packets/metadata gates apply.
-- **Resizing:** across73named warm controls, **66pass /
-  0 gaps / 7uncertain**.
-  [Output-backed Cross rows](../benchmarks/CROSS-BICUBIC-OUTPUT-PREFIX.md) close
-  two gaps: 793.42/zimg875.67µs,
-  upper0.913, and same-height
-  496.61/573.93µs,
-  upper0.872;113B/op each.
-  Independent savings178.42/141.71µs,18.36%/22.20%raw and17.02%/16.65%normalized
-  retain separate native clocks/all actuals. The shared prefix borrows91168B from
-  already admitted output, then unwinds before the strip tail. Same4KiB charge,
-  no new heap/retention; physical/JIT/native peaks unmeasured.
-  All14affectedcosts reconcile. Enlargement has11passes/1uncertain:
-  HorizontalUp8's first source-affected1486.10/zimg1518.51µs upper1.025 is uncertain,
-  not a presumed gap. Four passing raw captures are slower; two scoped paired
-  checks and all clock shifts remain in the report, with no uniform gain claim.
-  Unchanged59resize costs reuse source-valid proof, including five passing
-  [generated controls](../benchmarks/GENERATED-BICUBIC-SHARED-EXECUTION.md).
-  [Word tap/sample views](../benchmarks/DEEP-WORD-HORIZONTAL-VIEWS.md) confirm
-  403.94/prepared-zimg412.77µs,
-  upper0.985,113B/op: pass/stop. Independent37.68µs/8.53%raw/
-  8.45%normalized gains have separated confidence. Same4KiB admission/ordered pixels;
-  its6512checks/SAMEpackage and new word consumer pass bothOSes;
-  latest PNG milestone6522checks/SAMEpackage requalifies unchanged resize paths.
-  Superseded DeepWord costs/attribution stay linked history.
-  [Horizontal enlargement confidence](../benchmarks/RESIZE-HORIZONTAL-CONFIDENCE.md)
-  passes/stops at1431.47/prepared-zimg1514.24µs,
-  upper0.953,112directB/op. Twelve alternating64-operation
-  pairs retain every actual/native bracket and exact pixels/owners. Original
-  standalone uncertainty remains separately visible; no production gain or
-  broader conditioning claim. Zero builds/broad/package repeats.
-  All eight equivalent prepared/one-shot controls pass; plans
-  retain198432B wide/199840B narrow. Mixed byte's scoped64-operation adjacent
-  upper.998 passes while its standalone view stays uncertain. The existing
-  [bounded mixed-word adjacent case](../benchmarks/RESIZE-MIXED-WORD-CONFIDENCE.md)
-  stays uncertain at862.61/840.93µs,
-  range0.999440–1.041560,112directB/op.
-  No presumed gap, saving, new build or favorable repeat follows. Bilinear word
-  enlargement's adjacent upper1.001 remains uncertain,4498558B/op; boundaries
-  stay separate. No historical stage sums or favorable repeats.
-  [Streaming byte weights](../benchmarks/STREAMING-BYTE-VECTOR-WEIGHTS.md) close the
-  16×8 and 8×17 gaps: 463.98/prepared-zimg483.72µs,
-  upper0.970, and 457.40/516.75µs,
-  upper0.890;113B/op each. Raw47.05/88.49µs savings and
-  15.24%/17.96%normalized gains retain separate native shifts/all actuals.
-  Affected8×4 also passes,upper0.577. Exact pixels/4KiB/owners
-  stay unchanged;70other costs reuse valid evidence. No new capacity/retention.
-  [Bilinear metadata preparation](../benchmarks/BILINEAR-OPERATION-METADATA.md)
-  reuses immutable strides/private destination views once per operation. Word saves
-  **50.44 µs / 11.55% raw / 12.31% normalized**, with separated filtered/all-actual
-  and normalized intervals; native time moves +0.87%. Current word
-  386.50/FFmpeg 425.37 µs,
-  upper 0.949, passes. Byte costs 4.55 µs/1.16% more raw;
-  normalized intervals overlap, and current 398.01/414.98 µs,
-  upper 0.966, also passes. Its baseline already passed on the
-  contemporary reference clock, so no causal byte-gap closure claim follows.
-  Both remain 8,473 B/op, 12,608 B scratch admission and zero retained operation
-  scratch. Arithmetic/repair and ownership stay exact.
-  [Compact paired weights](../benchmarks/COMPACT-BICUBIC-PAIRED-WEIGHTS.md)
-  independently confirms TightDown8
-  414.18/prepared-zimg 418.13 µs,
-  upper 0.998, pass. Raw5.77µs/1.38% gain and all-actual
-  6.24µs/1.48% gain have separated intervals; normalized confidence overlaps,
-  native clock−0.36%. Its contemporary baseline was uncertain, so historical
-  gap closure is not attributed solely to this code. No new preparation state,
-  loan/tail work or owned/retained capacity;113B/op, same4KiB admission.
-  The other72resize costs reuse source/shared-caller proof. Unchanged Wide8
-  371.91/377.37 µs,
-  range 0.953–1.012 remains uncertain.
-  Its [adjacent capture](../benchmarks/RESIZE-CURRENT-ADJACENT-CONFIDENCE.md)
-  retains every actual/native bracket, with direct198350B/op, separate from
-  unchanged retained capacity. Stop confirmed passes; uncertainty is not a gap.
-  [Discarded PNG streaming](../benchmarks/PNG-STORED-DIRECT-STREAM.md) saved64KiB
-  without a demonstrated CPU gain; its original post-GC/natural-GC scopes remain.
-  [Lanczos3](../benchmarks/LANCZOS-BYTE-PRODUCT-PREPARATION.md) retains six
-  passes/two uncertainties, exact Q30 and separate complete preparation boundaries.
-- **Text/drawing:** [Cleared canvas storage and complete public pipelines](../benchmarks/CLEARED-CANVAS-STORAGE.md)
-  pass on the existing constrained-fit RGBA16 control: one-shot font→fit→layout→draw→dispose
-  1,313.88/ImageSharp 6,739.69 µs, upper 0.218;
-  preparation plus eight fresh-canvas draws/disposal 2,055.00/7,634.49 µs,
-  upper 0.302, measured amortization 256.87/954.31 µs/draw.
-  GC totals are 283,275/9,256,953 B one-shot and
-  284,623/9,494,633 B per eight-draw batch.
-  The eight-draw batch saves665.54 µs/24.46% raw/29.86% normalized with separated
-  confidence; reference time moves+7.69%. Managed active preparation owns39,904 B;
-  approximate live-heap deltas34,256/22,504 B are separate from allocations.
-  Default disposed font/canvas storage may retain1,248,596 B in this sequence,
-  within the existing two-array/4MiB ceiling; governed calls still bypass it.
-  Steady fresh-canvas drawing is uncertain (105.65/81.93 µs, upper 2.006);
-  no general-font or arbitrary-repeat-count claim. Parser validation, retained paths/workspace,
-  all fitting/layout calls and full16-bit visual gates remain explicit. Earlier
-  [font-load](../benchmarks/FONT-OWNED-STORAGE.md) and [drawing](../benchmarks/TEXT-RENDER-PREPARATION.md)
-  stage costs below are scoped diagnostics, not proof of overall text slowdown; never add
-  them into an end-to-end estimate. Separate [RGBA16](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  and [RGBA8 composition](../benchmarks/BYTE-COMPOSITE-EXACT-VECTOR.md) pass/stop. Independent codec/resizing work continues.
+† Reference boundaries require care. Codec contexts or filter graphs may remain
+prepared; packed conversion, independent payload acquisition and release are timed
+as declared. **zimg** is FFmpeg's labeled scaler backend, using float intermediates;
+managed Q30/rational pixel guarantees remain exact. One-shot and prepared results
+are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP uses
+**libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
-The current immutable build passes **6,530 full/live checks per OS**
-and the **same actual Release-package consumer/all three usage examples on
-Windows/Linux**. Current WebP checks pass1,033internal/239public per
-normal/scalar/AVX512-off/AVX2-off mode; unchanged Huffman BMI2, broader shared-memory and numerical ISA
-evidence is reused. Current text/canvas/ownership
-checks pass183internal/162public per normal/scalar mode on each OS.
-Stream acquisition/admission checks pass157internal/429public per normal/scalar
-mode on each OS. Source-valid PNG kernel/admission evidence reuses713internal/
-247public per normal/scalar/disabled-AVX2/AVX512 mode from the preceding milestone.
-Current resize qualification passes570 internal/791 public per normal/scalar mode;
-unchanged disabled-AVX2/AVX512 evidence (528internal/791public) is reused.
-Unchanged JPEG checks pass
-464 internal/341 public per normal/scalar mode; Linux also disables
-AVX512 and AVX512+BMI2, with 464 Windows internal checks for the latter.
-The exact JPEG filter is `Jpeg`; older wider counts included ownership tests.
-Exact packets/pixels, shared admission,
-refusal/cancellation cleanup and surviving owners remain qualified. Unchanged
-paths and family-specific ISA evidence are reused; this is not a whole-release
-performance refresh. Total GC, admitted capacity and retained state are separate;
-physical/native/JIT-stack peaks are unmeasured unless a linked report says otherwise.
-Historical/adverse experiments remain in the linked family reports and raw archives.
-
-**References and boundaries.** FFmpeg is the reference except for explicitly
-labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
-**libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The seventeen current one-shot PNG rows time fresh codec/zlib/packet state and independent
-output on both sides, including native word-frame endian conversion/allocation/
-disposal. The [Adobe CMYK fresh-context row](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
-also times decoder/frame/packing-context setup and disposal; its original
-retained-context comparison remains separate. Other native codec workers retain
-their documented wrappers/contexts.
-Stream rows include declared acquisition, copies, EOF and release.
-
-Text compares the complete **ImageSharp.Drawing 2.1.7/Fonts 2.1.3 public integration**,
-including multiple layout calls and the full fitting search, not bare shaping.
-Font load compares **FreeType 2.13.2 copy/open/retain/dispose**, with eager/lazy
-validation differences; it does not establish general parser equivalence.
-RGBA16 SrcOver compares **ImageSharp 3.1.12 Rgba64**, not FFmpeg performance.
-[Scoped native/visual tolerances](../benchmarks/TEXT-DRAWING-CURRENT.md) retain
-exact managed contracts and full 16-bit samples; visual gates are not sample
-exactness. Complete packet claims, metadata exceptions and codec pixel contracts
-retain their declared [case scope](codec-parity.md). Equal numerical quality
-settings do not establish matched quality.
+Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
+The complete one-shot and preparation-plus-eight-draw public integrations pass,
+including every layout/fitting call and fresh canvas ownership. Preparation is
+reported separately and the complete repeated batch amortized across eight draws.
+Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
+and retained raster state differ; historical stage times are never added to infer
+overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
+RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
+[visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
+managed pixels. Complete encoder packets and narrow metadata exceptions retain
+their [declared scope](codec-parity.md); equal quality numbers are not quality matching.
 
 **Codecs**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,809.55 | 6,000.48 | 0.968 / 0.973 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 5,815.99 | 6,005.64 | 0.968 / 0.974 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
@@ -271,71 +85,71 @@ settings do not establish matched quality.
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,602.49 | 5,408.55 | 0.851 / 0.867 | 818,004 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,892.73 | 10,500.84 | 0.942 / 0.952 | 1,356,164 | 506,887 / 506,887 |
 | PNG RGBA8, one-shot stored0 / native0 † | 53.27 | 541.40 | 0.098 / 0.114 | 607,628 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † | 1,499.29 | 1,505.44 | 0.996 / 1.010 | 4,472 | — |
-| PNG RGBA8 decode, tight working limit † | 1,283.58 | 1,506.58 | 0.852 / 0.861 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit † | 3,052.97 | 3,142.15 | 0.972 / 0.989 | 70,272 | — |
+| PNG RGBA8 decode, live token † | 1,358.23 | 1,393.80 | 0.974 / 0.980 | 4,472 | — |
+| PNG RGBA8 decode, tight working limit † | 1,178.41 | 1,396.38 | 0.844 / 0.853 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit † | 2,821.89 | 2,902.08 | 0.972 / 0.978 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 259,795.57 | 388,008.23 | 0.670 / 0.685 | 2,491,252 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 17,196.47 | 18,607.32 | 0.924 / 0.929 | 2,432,956 | 968,216 / 968,216 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,720.65 | 17,676.67 | 0.946 / 0.961 | 877,476 | 210,973 / 210,973 |
-| JPEG baseline420, resident decode (confirmed pass) † | 668.74 | 1,013.98 | 0.660 / 0.670 | 258,454 | — |
+| JPEG baseline420, resident decode † | 677.27 | 1,007.87 | 0.672 / 0.678 | 258,456 | — |
 | JPEG DC-only, caller CMYK decode (confirmed pass) † | 318.93 | 330.45 | 0.965 / 0.972 | 1,085,981 | — |
-| VP8L RGBA8, resident decode † | 2,719.46 | 3,020.83 | 0.900 / 0.907 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 2,725.37 | 3,031.58 | 0.899 / 0.908 | 152,824 | — |
-| VP8L palette16 RGBA8, resident decode (confirmed pass) † | 420.09 | 544.27 | 0.772 / 0.778 | 288,465 | — |
-| JPEG CMYK sparse-2D, resident decode (confirmed pass) † | 419.25 | 433.52 | 0.967 / 0.978 | 20,944 | — |
-| JPEG YCCK420, resident decode (confirmed pass) † | 420.81 | 709.56 | 0.593 / 0.598 | 895,563 | — |
-| JPEG 4:1:1, resident decode (confirmed pass) † | 382.03 | 448.23 | 0.852 / 0.863 | 219,551 | — |
-| JPEG 4:1:0, resident decode (confirmed pass) † | 337.85 | 507.32 | 0.666 / 0.671 | 189,090 | — |
+| VP8L RGBA8, resident decode † | 2,709.07 | 3,019.90 | 0.897 / 0.902 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 2,730.45 | 3,029.07 | 0.901 / 0.905 | 152,824 | — |
+| VP8L palette16 RGBA8, resident decode † | 408.48 | 545.38 | 0.749 / 0.759 | 288,464 | — |
+| JPEG CMYK sparse-2D, resident decode † | 417.17 | 434.69 | 0.960 / 0.979 | 20,944 | — |
+| JPEG YCCK420, resident decode † | 419.05 | 709.44 | 0.591 / 0.592 | 895,563 | — |
+| JPEG 4:1:1, resident decode † | 384.80 | 447.28 | 0.860 / 0.865 | 219,551 | — |
+| JPEG 4:1:0, resident decode † | 335.71 | 508.89 | 0.660 / 0.670 | 189,091 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 114,600.56 | 131,281.45 | 0.873 / 0.887 | 5,948,664 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,581.70 | 1,629.27 | 0.971 / 0.979 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,517.84 | 3,856.40 | 0.912 / 0.918 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,611.56 | 2,853.33 | 0.915 / 0.919 | 1,638,214 | — |
-| JPEG dense CMYK, resident decode (confirmed pass) † | 1,274.91 | 3,112.44 | 0.410 / 0.413 | 20,944 | — |
-| JPEG horizontal-only CMYK, resident decode (confidence open) † | 397.12 | 402.99 | 0.985 / 1.008 | 20,944 | — |
+| JPEG dense CMYK, resident decode † | 1,269.91 | 3,112.28 | 0.408 / 0.413 | 20,944 | — |
+| JPEG horizontal-only CMYK, resident decode (gap) † | 400.21 | 386.59 | 1.035 / 1.040 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 429.43 | 605.39 | 0.709 / 0.715 | 762,717 | — |
-| JPEG progressive grayscale, resident decode (confirmed pass) † | 1,587.42 | 1,712.14 | 0.927 / 0.937 | 151,432 | — |
-| JPEG progressive420, resident decode (confirmed pass) † | 1,443.79 | 1,950.04 | 0.740 / 0.745 | 243,676 | — |
-| JPEG progressive422, resident decode (confirmed pass) † | 1,788.29 | 2,241.06 | 0.798 / 0.804 | 315,496 | — |
-| JPEG ordinary progressive444, resident decode (confirmed pass) † | 2,852.57 | 3,359.77 | 0.849 / 0.852 | 169,664 | — |
-| JPEG progressive444, live-token resident decode (confirmed pass) † | 3,036.83 | 3,360.43 | 0.904 / 0.907 | 169,664 | — |
+| JPEG progressive grayscale, resident decode † | 1,590.44 | 1,713.68 | 0.928 / 0.934 | 151,432 | — |
+| JPEG progressive420, resident decode † | 1,418.37 | 1,954.92 | 0.726 / 0.731 | 243,676 | — |
+| JPEG progressive422, resident decode † | 1,784.86 | 2,245.97 | 0.795 / 0.800 | 315,496 | — |
+| JPEG ordinary progressive444, resident decode † | 2,849.49 | 3,361.93 | 0.848 / 0.854 | 169,664 | — |
+| JPEG progressive444, live-token resident decode † | 3,035.18 | 3,362.21 | 0.903 / 0.907 | 169,664 | — |
 
 **Editing**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 667.33 | 1,629.83 | 0.409 / 0.436 | 138,647 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 489.94 | 491.00 | 0.998 / 1.015 | 138 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 698.00 | 1,963.30 | 0.356 / 0.360 | 155,077 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 550.80 | 552.29 | 0.997 / 1.012 | 139 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,769.63 | 5,231.96 | 0.720 / 0.726 | 319,224 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,496.35 | 4,060.63 | 0.861 / 0.865 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,084.94 | 5,070.48 | 0.806 / 0.811 | 4,592,818 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,797.13 | 3,893.13 | 0.975 / 0.979 | 4,265,332 |
-| Bicubic resize RGBA8 (uncertain) † → 256×129 | 416.53 | 418.55 | 0.995 / 1.004 | 199,985 |
-| Bicubic upscale RGBA16 † → 1027×519 | 2,608.17 | 2,873.02 | 0.908 / 0.912 | 4,264,573 |
-| Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 793.42 | 875.67 | 0.906 / 0.913 | 113 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 811.25 | 819.63 | 0.990 / 0.993 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 403.94 | 412.77 | 0.979 / 0.985 | 113 |
-| Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 437.49 | 1,049.53 | 0.417 / 0.419 | 113 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,824.41 | 3,041.97 | 0.928 / 0.937 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,450.22 | 1,518.97 | 0.955 / 0.989 | 114 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,451.78 | 1,745.61 | 0.832 / 0.867 | 114 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 414.18 | 418.13 | 0.991 / 0.998 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 488.42 | 571.80 | 0.854 / 0.859 | 113 |
-| Bicubic RGBA8, fresh managed / prepared zimg (uncertain) † → 128×64 | 371.91 | 377.37 | 0.986 / 1.012 | 198,350 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB (uncertain) † → 1027×129 | 900.25 | 870.63 | 1.034 / 1.091 | 114 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB (uncertain) † → 1027×129 | 857.10 | 848.80 | 1.010 / 1.023 | 114 |
-| Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 462.67 | 1,269.67 | 0.364 / 0.380 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 364.87 | 387.63 | 0.941 / 0.945 | 113 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 343.67 | 346.22 | 0.993 / 0.995 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.22 | 413.66 | 0.980 / 0.990 | 113 |
-| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 783.44 | 838.43 | 0.934 / 0.981 | 199,947 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 749.70 | 815.22 | 0.920 / 0.926 | 199,898 |
-| Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
-| Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 619.06 | 1,573.38 | 0.393 / 0.395 | 138,647 |
+| Lanczos3 prepared RGBA8 / zimg prepared (gap) † → 256×129 | 508.63 | 491.31 | 1.035 / 1.044 | 138 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 645.74 | 1,822.54 | 0.354 / 0.360 | 155,078 |
+| Lanczos3 prepared RGBA16 / zimg prepared (gap) † → 256×129 | 517.75 | 510.64 | 1.014 / 1.021 | 138 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,770.44 | 5,255.86 | 0.717 / 0.727 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,554.71 | 4,074.82 | 0.872 / 0.882 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,117.46 | 5,096.28 | 0.808 / 0.821 | 4,592,777 |
+| Lanczos3 prepared RGBA16 / zimg prepared (uncertain) † → 1027×519 | 3,913.25 | 3,928.97 | 0.996 / 1.031 | 4,265,332 |
+| Bicubic resize RGBA8 † → 256×129 | 415.34 | 419.25 | 0.991 / 0.997 | 199,985 |
+| Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
+| Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 804.84 | 818.22 | 0.984 / 0.990 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 403.27 | 413.28 | 0.976 / 0.982 | 113 |
+| Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 451.05 | 1,046.58 | 0.431 / 0.433 | 113 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 2,816.92 | 3,042.03 | 0.926 / 0.931 | 116 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,418.23 | 1,515.14 | 0.936 / 0.943 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,397.56 | 1,747.50 | 0.800 / 0.805 | 114 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 409.71 | 418.67 | 0.979 / 0.993 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 503.81 | 576.25 | 0.874 / 0.886 | 113 |
+| Bicubic RGBA8, fresh managed / prepared zimg (uncertain) † → 128×64 | 342.20 | 350.44 | 0.976 / 1.004 | 198,350 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 830.84 | 864.78 | 0.961 / 0.967 | 113 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB (gap) † → 1027×129 | 866.89 | 843.63 | 1.028 / 1.032 | 114 |
+| Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 357.38 | 347.95 | 1.027 / 1.031 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 128×64 | 416.84 | 415.03 | 1.004 / 1.020 | 113 |
+| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
+| Plain transpose RGBA16 † → 259×513 | 35.36 | 44.50 | 0.795 / 0.863 | 112 |
+| Plain transpose RGBA8 † → 259×513 | 27.83 | 38.00 | 0.732 / 0.771 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
@@ -352,18 +166,18 @@ settings do not establish matched quality.
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
-| Bilinear upscale RGBA8 † → 1027×519 | 1,959.44 | 1,981.62 | 0.989 / 0.993 | 102,891 |
-| Bilinear resize RGBA8 † → 256×129 | 398.01 | 414.98 | 0.959 / 0.966 | 8,473 |
-| Bilinear resize RGBA16 † → 256×129 | 386.50 | 425.37 | 0.909 / 0.949 | 8,473 |
-| Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 496.61 | 573.93 | 0.865 / 0.872 | 113 |
-| Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 348.81 | 988.82 | 0.353 / 0.355 | 198,455 |
-| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.80 | 347.32 | 0.748 / 0.750 | 137 |
-| Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 396.85 | 594.42 | 0.668 / 0.674 | 198,453 |
-| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 328.08 | 412.01 | 0.796 / 0.805 | 137 |
-| Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 448.47 | 1,034.17 | 0.434 / 0.436 | 199,991 |
-| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 390.39 | 416.20 | 0.938 / 0.942 | 137 |
-| Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.69 | 717.02 | 0.623 / 0.626 | 199,983 |
-| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 372.59 | 569.92 | 0.654 / 0.658 | 137 |
+| Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
+| Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
+| Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
+| Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 500.42 | 574.64 | 0.871 / 0.875 | 113 |
+| Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 350.31 | 990.90 | 0.354 / 0.357 | 198,455 |
+| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.35 | 348.80 | 0.744 / 0.747 | 137 |
+| Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 395.89 | 599.92 | 0.660 / 0.677 | 198,453 |
+| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 328.80 | 404.94 | 0.812 / 0.822 | 137 |
+| Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 447.86 | 1,038.21 | 0.431 / 0.437 | 199,991 |
+| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 398.55 | 422.93 | 0.942 / 0.952 | 137 |
+| Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
+| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
 
 **Inspection and pixel-coding validation**
 
@@ -378,8 +192,8 @@ settings do not establish matched quality.
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
-| Validate VP8L+alpha, span † | 2,225.118 | 3,204.194 | 0.694 / 0.730 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,350.108 | 5,453.134 | 0.798 / 0.801 | 15,600 | Confirmed pass |
+| Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,344.720 | 5,438.871 | 0.799 / 0.801 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
@@ -387,9 +201,9 @@ settings do not establish matched quality.
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
 | Identify PNG8, fresh seekable Stream, adapter reference | 17.492 | 15.921 | 1.099 / 1.103 | 192 | Confirmed gap |
 | Identify PNG8, async nonseekable, adapter reference | 18.367 | 19.282 | 0.953 / 0.956 | 216 | Confirmed pass |
-| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 398.401 | 745.735 | 0.534 / 0.537 | 20,944 | Confirmed pass |
+| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 408.406 | 750.674 | 0.544 / 0.547 | 20,944 | Confirmed pass |
 
-[Coverage and linked family reports](../benchmarks/WARM-COVERAGE.md) retain producer
-identities, confidence decisions, ownership/correctness gates and reproducible raw
-evidence. Historical experiment reports remain separate. Update with
-`python benchmarks/render-benchmark.py`; verify with `--check`.
+[Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
+remaining paths, boundaries, allocations, references and raw evidence. Superseded
+experiments remain linked separately. Update with `python benchmarks/render-benchmark.py`;
+verify with `--check`.

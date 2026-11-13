@@ -51,6 +51,30 @@ internal sealed class PixelStoragePool
         }
     }
 
+    // Image pipelines can keep several differently sized owners alive at once.
+    // Retain the larger released images when they fit in the same two slots;
+    // a later size miss still leaves room for that request's ordinary return.
+    public void ReturnLargest(byte[] buffer)
+    {
+        if (buffer.Length <= maxRetainedBytes)
+        {
+            lock (gate)
+            {
+                if (ReferenceEquals(first, buffer) || ReferenceEquals(second, buffer)) return;
+                if (first is null) first = buffer;
+                else if (second is null)
+                {
+                    if (first.Length <= maxRetainedBytes - buffer.Length) second = buffer;
+                }
+                else if (first.Length <= second.Length)
+                {
+                    if (buffer.Length > first.Length && second.Length <= maxRetainedBytes - buffer.Length) first = buffer;
+                }
+                else if (buffer.Length > second.Length && first.Length <= maxRetainedBytes - buffer.Length) second = buffer;
+            }
+        }
+    }
+
     // Font loads may interleave with differently sized images. A miss must not
     // discard those idle image arrays, and a newly released font must be eligible
     // for reuse even when both slots previously held other sizes.
@@ -86,10 +110,10 @@ internal sealed class PixelStoragePool
         }
     }
 
-    // Public zeroed canvases share the bounded storage, not parsed or rendered
-    // state. On a miss, keep one recent size when it fits alongside the new
-    // canvas, leaving space for the existing return policy without growing it.
-    public byte[] RentCleared(int length, CancellationToken cancellation)
+    // Cleared canvases and private full-overwrite images share storage, not
+    // parsed/rendered state. On a miss keep one size only when it leaves both
+    // capacity and a free slot for the requested image's return.
+    public byte[] RentImage(int length, CancellationToken cancellation, bool clear)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(length);
         cancellation.ThrowIfCancellationRequested();
@@ -113,9 +137,10 @@ internal sealed class PixelStoragePool
                 }
             }
         }
-        // Keep CLR zero-initialization on cold misses, including large buffers.
-        // Do not touch every page merely to repeat a guaranteed initialization.
-        if (buffer is null) return new byte[length];
+        // Cleared cold misses keep CLR initialization, including large buffers;
+        // complete-overwrite owners can skip it without publishing stale samples.
+        if (buffer is null) return clear ? new byte[length] : GC.AllocateUninitializedArray<byte>(length);
+        if (!clear) return buffer;
         try
         {
             if (!cancellation.CanBeCanceled) buffer.AsSpan().Clear();
