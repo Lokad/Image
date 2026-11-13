@@ -20,6 +20,8 @@ and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) un
 no optimization gap is inferred.
 [Caller-RGB JPEG encoding](../benchmarks/JPEG-CALLER-CURRENT-CONFIDENCE.md) also
 remains uncertain under the current adjacent comparison, with exact packets.
+[Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
+uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
