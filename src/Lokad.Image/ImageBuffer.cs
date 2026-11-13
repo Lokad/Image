@@ -107,14 +107,18 @@ public sealed class ImageBuffer : IDisposable
         var result = AllocateForOverwrite(Width, Height, BitDepth, context);
         try
         {
-            for (var y = 0; y < Height; y++)
+            ReadOnlySpan<byte> input = Pixels;
+            var destination = result.Pixels;
+            // A raster is tightly packed. Batch across row boundaries while
+            // retaining bounded checkpoints whenever cancellation is possible.
+            if (!context.Cancellation.CanBeCanceled) input.CopyTo(destination);
+            else
             {
-                var row = Row(y); var destination = result.Row(y);
-                for (var offset = 0; offset < row.Length;)
+                for (var offset = 0; offset < input.Length;)
                 {
-                    var count = Math.Min(16384, row.Length - offset);
+                    var count = Math.Min(16384, input.Length - offset);
                     context.Cancellation.ThrowIfCancellationRequested();
-                    row.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
+                    input.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
                 }
             }
             result.Orientation = Orientation;

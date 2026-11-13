@@ -2,6 +2,59 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyRasterCopies()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        foreach (var orient in new[] { false, true })
+        {
+            const int width = 513, height = 9;
+            var bytes = width * height * 4 * (depth / 8);
+            using var root = new TestMemoryBudget(3L * bytes);
+            var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
+            using var source = ImageBuffer.Create(width, height, depth, limits);
+            using (var seed = OriginalPixels.Buffer(width, height, depth))
+                for (var y = 0; y < height; y++)
+                    if (depth == 8) seed.GetRow8(y).CopyTo(source.GetRow8(y));
+                    else seed.GetRow16(y).CopyTo(source.GetRow16(y));
+            if (depth == 8) source.GetRow8(0)[3] = 0;
+            else source.GetRow16(0)[3] = 0;
+            var expected = OriginalPixels.Bytes(source);
+
+            ImageBuffer Copy(CancellationToken cancellation = default) => orient
+                ? ImageTransforms.AutoOrient(source, limits, cancellation)
+                : source.Clone(limits, cancellation);
+            using (var cancellation = new CancellationTokenSource())
+            {
+                root.Admitted = used => { if (used == 2L * bytes) cancellation.Cancel(); };
+                try { using var unexpected = Copy(cancellation.Token); throw new Exception("Packaged raster copy ignored cancellation."); }
+                catch (OperationCanceledException error) when (error.CancellationToken == cancellation.Token) { }
+                root.Admitted = null;
+            }
+            if (root.Bytes != bytes) throw new Exception("Packaged canceled raster copy retained storage.");
+            using var first = Copy(); using var second = Copy();
+            if (root.Bytes != 3L * bytes || root.Peak != 3L * bytes
+                || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first))
+                || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
+                || (first.Width, first.Height, first.BitDepth, first.Orientation) != (width, height, depth, ImageOrientation.Normal))
+                throw new Exception("Packaged raster copy changed full samples, geometry or admission.");
+            var attempts = root.Attempts;
+            try { using var unexpected = Copy(); throw new Exception("Packaged raster copy ignored aggregate admission."); }
+            catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+            if (root.Attempts != attempts + 1 || root.Bytes != 3L * bytes)
+                throw new Exception("Packaged raster copy retried refusal or lost an owner.");
+            if (depth == 8) first.GetRow8(0)[0] ^= 255;
+            else first.GetRow16(0)[0] ^= 65535;
+            if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
+                throw new Exception("Packaged raster copy aliases its input.");
+            source.Dispose(); first.Dispose();
+            if (root.Bytes != bytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second)))
+                throw new Exception("Packaged raster copy lost its surviving result.");
+            second.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged raster copy leaked or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged clone/normal copies preserve exact byte/word frames, cancellation, terminal refusal and independent survivors.");
+    }
+
     private static void VerifyClearedCanvases()
     {
         foreach (var depth in new[] { 8, 16 })
@@ -1261,6 +1314,7 @@ internal static class CooperativeMemoryConsumer
     internal static async Task Verify()
     {
         VerifyClearedCanvases();
+        VerifyRasterCopies();
         VerifyBicubicPlans();
         VerifyBicubicSchedule(4096);
         VerifyBicubicSchedule(8192);

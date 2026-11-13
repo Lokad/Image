@@ -2520,6 +2520,22 @@ def render():
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
+    raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
+    copy_q = raster_copies['qualification']
+    assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
+    assert raster_copies['requiredMaterialPaths'] == 289 and raster_copies['newMaterialPaths'] == 0
+    assert raster_copies['raw']['mirrored'] and raster_copies['raw']['allMembersVerified']
+    assert copy_q['fullChecksEachOs'] == copy_q['windows']['total'] == copy_q['linux']['total'] == 6592
+    assert copy_q['actualPackage']['sha256'] == copy_q['samePackageWindows']['sameActualPackageSha256']
+    assert copy_q['actualPackage']['actualConsumerPassed'] and copy_q['samePackageWindows']['actualConsumerPassed']
+    assert copy_q['actualPackage']['usageExamples'] == copy_q['samePackageWindows']['usageExamples'] == 3
+    assert raster_copies['currentImageOwnerViewStatuses'] == {'pass': 168, 'gap': 6, 'uncertain': 17}
+    for c in raster_copies['cases'].values():
+        assert c['librarySha256'] == copy_q['actualPackage']['librarySha256'] == raster_copies['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2529,43 +2545,21 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Bounded horizontal reuse](../benchmarks/BOUNDED-WIDE-HORIZONTAL-QUARTET.md) saves
-**3.29%** in a paired complete byte bicubic resize, with **113 B/op** and no new
-owned or retained capacity. Standalone **360.12 / zimg 348.02 µs, upper 1.041**
-remains uncertain. Independent raw saving is 4.87%, but the native clock moves
-−8.23%; the paired gain establishes no native parity. Exact pixels stay unchanged.
+[Shared raster copying](../benchmarks/SHARED-RASTER-COPY.md) removes duplicate
+normal-orientation code. Word clone independently saves **1.46 µs / 7.66% raw**,
+**7.41% reference-normalized**, with **112 B/op** and unchanged owned/retained capacity.
+Byte clone and normal-orientation copy pass; word copies retain small gaps.
+The two affected complete PNG composition controls are refreshed: byte passes,
+word remains uncertain. No pipeline speedup is inferred from historical stage times.
 
-The [shared transpose schedule](../benchmarks/SHARED-TRANSPOSE-TILES.md) closes byte
-counterclockwise rotation: **28.81 / FFmpeg 37.88 µs, upper 0.769**, **112 B/op**.
-Independent saving is **11.84 µs / 29.12% raw**, **28.85% reference-normalized**;
-the native clock moves **−0.39%**. All four byte/word rotation and transpose controls
-pass and stop. The duplicate scalar rotation loop is removed; no extra owned or
-retained capacity is introduced. The earlier word stage remains linked history.
-
-[Word product reuse](../benchmarks/LANCZOS-WORD-PRODUCT-REUSE.md) closes prepared
-RGBA16 Lanczos reduction: **485.36 / zimg 512.07 µs, upper 0.958**, with **138 B/op**
-and **156,248 B** retained plan. Independent gain is **6.18% reference-normalized**;
-the **13.33% raw** view includes a **−7.62%** reference clock change. All four
-affected one-shot/prepared byte/word controls pass and stop. Exact pixels, admission
-and owned capacity stay unchanged; temporary product/sum views reuse existing owners.
-
-[Packed mixed-word storage](../benchmarks/MIXED-WORD-PACKED-CACHE.md) passes the
-bounded bicubic control: **820.00 / zimg 846.10 µs, upper 0.978**, **113 B/op**.
-Independent saving is **35.58 µs / 4.16% raw**, **3.38% reference-normalized**;
-both are confirmed. Tight vertical independently saves **23.04 µs / 4.79% raw**;
-default workspace remains uncertain. The earlier candidate's vertical regression
-is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
-capacity reduction. Stop passes.
-
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these thirteen
-updated costs, has **166 pass, 8 gaps, 17 uncertain** across 191 existing comparisons.
-Unchanged paths reuse their identified source-valid evidence. The complete
-RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
-and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
-128×64 control's earlier **1.59 µs raw adverse effect** remains linked history;
-its current cost is uncertain. No adverse or uncertain capture is hidden.
-The retained horizontal-CMYK JPEG view has an equivalent fresh-context pass.
-Tiny copy/turn gaps remain in the report.
+The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
+image views: 168 pass, 6 gaps, 17 uncertain**. The tables retain source-valid
+unchanged costs; current copy/composition costs are in their linked family report.
+Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
+All four byte/word transpose/counterclockwise controls pass, as do the four Lanczos
+reduction and eight equivalent bicubic one-shot/prepared controls. Stop passes.
+Retained-context horizontal-CMYK JPEG has an equivalent fresh-context pass.
+Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -2577,10 +2571,11 @@ all actuals retained. Upper ≤1 passes, lower >1 is a gap; otherwise uncertaint
 not peak live capacity or native allocation.
 
 The default store still has **two slots / 4 MiB**. Source-derived word-composition
-idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
-remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
+idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,088 B**.
+Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,592 full/live checks**, focused normal/scalar
+are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
+storage, separately from its **138 B/op**. Each OS passes **6,592 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 

@@ -73,7 +73,7 @@ public static class ImageTransforms
         ArgumentNullException.ThrowIfNull(source);
         return orientation switch
         {
-            ImageOrientation.Normal => NormalOrientation.Apply(source, limits, cancellationToken),
+            ImageOrientation.Normal => source.Clone(limits, cancellationToken),
             ImageOrientation.MirrorHorizontal => HorizontalFlip.Apply(source, limits, cancellationToken),
             ImageOrientation.MirrorVertical => VerticalFlip.Apply(source, limits, cancellationToken),
             ImageOrientation.Rotate180 => HalfTurn.Apply(source, limits, cancellationToken),
