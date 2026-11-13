@@ -36,6 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Provision pinned Linux tools and live oracle
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           # Route each suite directly; runner mirror lists can send security
           # indexes to an archive mirror whose package pool has not caught up.

@@ -37,7 +37,14 @@ download() {
     algorithm=sha256
     [[ $name != dotnet ]] || algorithm=sha512
     digest=$(value "linuxBootstrap.$name.$algorithm")
-    [[ $name != powershell ]] || headers=(--header 'Accept: application/octet-stream')
+    if [[ $name == powershell ]]; then
+        headers=(--header 'Accept: application/octet-stream')
+        # CI can authenticate this API request instead of sharing the runner IP's
+        # anonymous allowance. Curl drops Authorization on cross-host redirects.
+        if [[ $url == https://api.github.com/* && -n ${GITHUB_TOKEN:-} ]]; then
+            headers+=(--header "Authorization: Bearer $GITHUB_TOKEN")
+        fi
+    fi
     if [[ ! -f $path ]]; then
         curl --fail --location --retry 3 --output "$path.part" "${headers[@]}" "$url" || return 1
         mv -- "$path.part" "$path" || return 1
