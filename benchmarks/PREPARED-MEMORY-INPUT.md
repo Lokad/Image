@@ -7,6 +7,10 @@ batches. Original captures and the inconclusive two-DLL comparison remain histor
 this is a confidence update, not a production speedup. Other costs below retain
 their identified scope.
 
+[Current VP8/alpha stream confidence](VP8-STREAM-CURRENT-CONFIDENCE.md) also
+supersedes the earlier VP8 stream uncertainty below: the same complete boundary
+passes with adjacent reference batches, without builds or a production speedup.
+
 Complete PNG `Identify(Stream)` independently saves **2.75 µs / 15.40% raw**,
 **15.01% reference-normalized**, against a contemporary 17.829 µs baseline.
 Filtered and all-actual raw confidence separate, as does normalized confidence;

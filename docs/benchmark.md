@@ -20,10 +20,14 @@ Word flip passes. Current word clone/normal-orientation evidence stays uncertain
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
-no idle-pool or complete-decode peak saving is inferred. VP8 stream remains
-uncertain, with original samples retained.
+no idle-pool or complete-decode peak saving is inferred. The original uncertain
+stream captures remain linked beside their current confirmations.
 
 [Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain; The complete decode/orient/crop/fit operation also passes: **2,891.18 / 2,943.12 µs, upper 0.994**, **338,271.1 B/op**. Both controls stop.
+
+[VP8/alpha stream confidence](../benchmarks/VP8-STREAM-CURRENT-CONFIDENCE.md)
+also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
+**240,496 B/op**. No builds or production change; this control stops.
 
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
@@ -33,7 +37,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 175 pass, 1 gap, 15 uncertain**. This does not establish full parity:
+image views: 176 pass, 1 gap, 14 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
@@ -103,7 +107,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (confidence open) † | 6,147.32 | 6,261.60 | 0.982 / 1.004 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,841.97 | 5,986.04 | 0.976 / 0.988 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,712.07 | 1,650.90 | 1.037 / 1.057 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |

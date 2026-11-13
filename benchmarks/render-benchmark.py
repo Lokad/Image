@@ -266,6 +266,31 @@ def current_png_stream_word_note():
             f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
 
 
+def apply_current_vp8_stream_confidence(codecs):
+    current = json.loads((ROOT / 'benchmarks/vp8-stream-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    c, q = current['case'], current['qualification']
+    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == 6624 and q['productionAndActualPackageByteIdentical']
+    assert q['sameActualPackageBothOsAndThreeExamplesPassed'] and q['broadOrPackageRepeats'] == 0
+    assert current['measurement']['allBuilds'] == 0
+    assert current['currentImageOwnerViewStatuses'] == {'passCount': 176, 'gaps': 1, 'uncertain': 14, 'total': 191}
+    assert c['librarySha256'] == current['producers']['timedArtifactSha256'] == q['actualPackageLibrarySha256']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+    assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 240496
+    assert c['status'] == 'pass' and c['upper'] <= 1
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    v = current['referenceValidation']
+    assert v['managedOutputSha256'] == v['nativeOutputSha256'] == c['outputSha256']
+    assert v['decoderMaximum'] == v['decoderRmse'] == 0 and v['alphaExact'] and v['scalarCliPixelsExact']
+    prefix = '| WebP VP8 + alpha, fresh seekable Stream'
+    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
+    assert len(found) == 1
+    return codecs.replace(found[0], f'{prefix} (parity confirmed) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
+
+
 def apply_current_pixel_reversal(editing):
     current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2787,6 +2812,7 @@ def render():
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     png_stream_word_note = current_png_stream_word_note()
+    codecs = apply_current_vp8_stream_confidence(codecs)
     return f"""# Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
@@ -2809,10 +2835,14 @@ Word flip passes. Current word clone/normal-orientation evidence stays uncertain
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
-no idle-pool or complete-decode peak saving is inferred. VP8 stream remains
-uncertain, with original samples retained.
+no idle-pool or complete-decode peak saving is inferred. The original uncertain
+stream captures remain linked beside their current confirmations.
 
 {png_stream_word_note}
+
+[VP8/alpha stream confidence](../benchmarks/VP8-STREAM-CURRENT-CONFIDENCE.md)
+also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
+**240,496 B/op**. No builds or production change; this control stops.
 
 [Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
 36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
@@ -2822,7 +2852,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 175 pass, 1 gap, 15 uncertain**. This does not establish full parity:
+image views: 176 pass, 1 gap, 14 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
