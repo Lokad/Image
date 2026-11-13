@@ -1,23 +1,25 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **140 comparisons** summarize that scope.
+**289 named material paths**; these **141 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Shared raster copying](../benchmarks/SHARED-RASTER-COPY.md) removes duplicate
-normal-orientation code. Word clone independently saves **1.46 µs / 7.66% raw**,
-**7.41% reference-normalized**, with **112 B/op** and unchanged owned/retained capacity.
-Byte clone and normal-orientation copy pass; word copies retain small gaps.
-The two affected complete PNG composition controls are refreshed: byte passes,
-word remains uncertain. No pipeline speedup is inferred from historical stage times.
+[Shared axis-swapping tiles](../benchmarks/SHARED-AXIS-SWAP.md) pass all eight original
+byte/word transpose and quarter-turn controls. Mirrored transpose independently
+saves **10.00 µs / 23.76% raw**, **21.24% reference-normalized**; current cost is
+**32.07 / FFmpeg 39.50 µs, upper .826**, **112 B/op**. One shared ownership/tile
+engine replaces three duplicate classes, with unchanged owned/retained capacity.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 168 pass, 6 gaps, 17 uncertain**. The tables retain source-valid
+image views: 172 pass, 5 gaps, 14 uncertain**. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
-All four byte/word transpose/counterclockwise controls pass, as do the four Lanczos
-reduction and eight equivalent bicubic one-shot/prepared controls. Stop passes.
+The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
+pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
+retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
+word copies retain small gaps, and complete word PNG composition stays uncertain.
+No pipeline speedup is inferred from historical stage sums.
 Retained-context horizontal-CMYK JPEG has an equivalent fresh-context pass.
 Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
 
@@ -35,7 +37,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,592 full/live checks**, focused normal/scalar
+storage, separately from its **138 B/op**. Each OS passes **6,600 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -156,10 +158,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 128×64 | 416.84 | 415.03 | 1.004 / 1.020 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Plain transpose RGBA16 † → 259×513 | 34.98 | 44.11 | 0.793 / 0.855 | 112 |
-| Plain transpose RGBA8 † → 259×513 | 27.70 | 38.27 | 0.724 / 0.758 | 112 |
-| Counterclockwise quarter turn RGBA8 † → 259×513 | 28.81 | 37.88 | 0.761 / 0.769 | 112 |
-| Counterclockwise quarter turn RGBA16 † → 259×513 | 35.65 | 44.07 | 0.809 / 0.880 | 112 |
+| Plain transpose RGBA16 † → 259×513 | 34.25 | 43.85 | 0.781 / 0.859 | 112 |
+| Plain transpose RGBA8 † → 259×513 | 27.65 | 37.89 | 0.730 / 0.740 | 112 |
+| Counterclockwise quarter turn RGBA8 † → 259×513 | 29.27 | 37.36 | 0.783 / 0.797 | 112 |
+| Counterclockwise quarter turn RGBA16 † → 259×513 | 36.97 | 44.33 | 0.834 / 0.910 | 112 |
+| Mirrored transpose RGBA8 † → 259×513 | 32.07 | 39.50 | 0.812 / 0.826 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |

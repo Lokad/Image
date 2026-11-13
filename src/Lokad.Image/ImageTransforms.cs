@@ -77,10 +77,10 @@ public static class ImageTransforms
             ImageOrientation.MirrorHorizontal => HorizontalFlip.Apply(source, limits, cancellationToken),
             ImageOrientation.MirrorVertical => VerticalFlip.Apply(source, limits, cancellationToken),
             ImageOrientation.Rotate180 => HalfTurn.Apply(source, limits, cancellationToken),
-            ImageOrientation.Rotate90 => ClockwiseTurn.Apply(source, limits, cancellationToken),
-            ImageOrientation.Rotate270 => CounterclockwiseTurn.Apply(source, limits, cancellationToken),
-            ImageOrientation.Transpose => TransposeCopy.Apply(source, limits, cancellationToken),
-            ImageOrientation.Transverse => TransverseCopy.Apply(source, limits, cancellationToken),
+            ImageOrientation.Rotate90 => TransposeCopy.Apply<TransposeCopy.ForwardRows, TransposeCopy.ReverseColumns>(source, limits, cancellationToken),
+            ImageOrientation.Rotate270 => TransposeCopy.Apply<TransposeCopy.ReverseRows, TransposeCopy.ForwardColumns>(source, limits, cancellationToken),
+            ImageOrientation.Transpose => TransposeCopy.Apply<TransposeCopy.ForwardRows, TransposeCopy.ForwardColumns>(source, limits, cancellationToken),
+            ImageOrientation.Transverse => TransposeCopy.Apply<TransposeCopy.ReverseRows, TransposeCopy.ReverseColumns>(source, limits, cancellationToken),
             _ => throw new ArgumentOutOfRangeException(nameof(orientation))
         };
     }

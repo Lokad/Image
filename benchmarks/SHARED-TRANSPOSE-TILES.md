@@ -1,5 +1,9 @@
 # Shared transpose and counterclockwise tiles
 
+Historical accepted tile stage. [Current shared axis-swapping costs](SHARED-AXIS-SWAP.md)
+cover all eight byte/word controls and supersede the four costs below. This stage's
+incremental gain, source scope and raw evidence remain retained.
+
 All four original byte/word transpose and counterclockwise controls pass warm
 single-CPU parity. The byte turn independently saves **11.84 µs / 29.12% raw**,
 **28.85% reference-normalized**, against a contemporary **40.65 / FFmpeg 38.02 µs**
