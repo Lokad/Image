@@ -5,13 +5,19 @@ namespace Lokad.Image.Internal;
 internal static class DeflateHuffman
 {
     internal readonly record struct Run(int Symbol, int Extra, int Bits);
+    // Signed frequency in the high word, subtree depth in the low word.
+    internal readonly record struct Node(long Priority, int Symbol);
 
     // Operation-owned preparation storage. All three RFC1951 alphabets fit the
     // literal/length capacity; returned trees have separate ownership.
     internal sealed class Workspace
     {
-        internal readonly int[] Weights = new int[572], Depth = new int[572], Parent = new int[572];
-        internal readonly int[] Heap = new int[286], Removal = new int[572], Bits = new int[572];
+        // Keep comparison data beside its symbol to avoid a second indexed
+        // lookup while sifting. Only zero-weight state survives tree building.
+        internal readonly Node[] Heap = new Node[286];
+        internal readonly bool[] NonZero = new bool[572];
+        internal readonly int[] Parent = new int[572];
+        internal readonly int[] Removal = new int[572], Bits = new int[572];
         internal readonly int[] BitCounts = new int[16];
         // Frequencies for the286/30/19alphabets coexist through block pricing.
         // Header codes finish before literal/distance codes use the same prefix.
@@ -22,10 +28,10 @@ internal static class DeflateHuffman
         {
             if ((uint)symbols > 286 || maximumBits is < 1 or > 15)
                 throw new ArgumentException("Tree exceeds the Deflate workspace.");
-            // Counts replace every leaf weight. Heap/removal prefixes, active
-            // parents and internal weights/depths are assigned before use.
+            // Counts replace every leaf key. Heap/removal prefixes, active
+            // parents and internal keys are assigned before use.
             // Inactive leaves still need zero lengths; the root is reset below.
-            Array.Clear(Depth, 0, symbols); Array.Clear(Bits, 0, symbols);
+            Array.Clear(Bits, 0, symbols);
             Array.Clear(BitCounts, 0, maximumBits + 1);
         }
     }
@@ -34,27 +40,28 @@ internal static class DeflateHuffman
     {
         context.Cancellation.ThrowIfCancellationRequested();
         workspace.Reset(counts.Length, maximumBits);
-        var weights = workspace.Weights; var depth = workspace.Depth; var parent = workspace.Parent;
+        var nonZero = workspace.NonZero; var parent = workspace.Parent;
         var heap = workspace.Heap; var removal = workspace.Removal;
-        counts.CopyTo(weights);
         var size = 0; var largest = -1; var removed = 0;
         for (var symbol = 0; symbol < counts.Length; symbol++)
-            if (counts[symbol] != 0) heap[size++] = largest = symbol;
+        {
+            var count = counts[symbol]; nonZero[symbol] = count != 0;
+            if (count != 0) { heap[size++] = new((long)count << 32, symbol); largest = symbol; }
+        }
         while (size < 2)
         {
             var dummy = largest < 2 ? ++largest : 0;
-            heap[size++] = dummy; weights[dummy] = 1;
+            heap[size++] = new(1L << 32, dummy); nonZero[dummy] = true;
         }
         // A structural right-child tie and subtree depth make heap removal
         // deterministic, including when several symbols have equal weights.
-        bool Before(int a, int b) => weights[a] < weights[b] || weights[a] == weights[b] && depth[a] <= depth[b];
         void Sink(int index)
         {
             var value = heap[index];
             for (var child = index * 2 + 1; child < size; child = index * 2 + 1)
             {
-                if (child + 1 < size && Before(heap[child + 1], heap[child])) child++;
-                if (Before(value, heap[child])) break;
+                if (child + 1 < size && heap[child + 1].Priority <= heap[child].Priority) child++;
+                if (value.Priority <= heap[child].Priority) break;
                 heap[index] = heap[child]; index = child;
             }
             heap[index] = value;
@@ -64,16 +71,19 @@ internal static class DeflateHuffman
         while (size > 1)
         {
             var a = heap[0]; heap[0] = heap[--size]; Sink(0);
-            var b = heap[0]; removal[removed++] = a; removal[removed++] = b;
-            parent[a] = parent[b] = next;
-            weights[next] = weights[a] + weights[b]; depth[next] = Math.Max(depth[a], depth[b]) + 1;
-            heap[0] = next++; Sink(0);
+            var b = heap[0]; removal[removed++] = a.Symbol; removal[removed++] = b.Symbol;
+            parent[a.Symbol] = parent[b.Symbol] = next;
+            var first = a.Priority; var second = b.Priority;
+            var weight = (int)(first >> 32) + (int)(second >> 32);
+            var depth = Math.Max((uint)(first & uint.MaxValue), (uint)(second & uint.MaxValue)) + 1;
+            nonZero[next] = weight != 0;
+            heap[0] = new(((long)weight << 32) | depth, next++); Sink(0);
         }
         var bits = workspace.Bits; var bitCounts = workspace.BitCounts; var overflow = 0;
         bits[next - 1] = 0;
         for (var node = next - 2; node >= 0; node--)
         {
-            if (weights[node] == 0) continue;
+            if (!nonZero[node]) continue;
             var length = bits[parent[node]] + 1;
             if (length > maximumBits) { length = maximumBits; overflow++; }
             bits[node] = length;

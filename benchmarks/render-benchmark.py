@@ -1794,19 +1794,25 @@ def render():
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
     # One current owner for all affected complete PNG encodes. Superseded cost
     # providers and adjacent sampling studies remain linked from its report.
-    png_current = json.loads((ROOT / 'benchmarks/png-stored-word-normalization-evidence.json').read_text(encoding='utf-8'))
+    png_current = json.loads((ROOT / 'benchmarks/png-huffman-heap-entries-evidence.json').read_text(encoding='utf-8'))
     assert png_current['productionAccepted'] and png_current['allAffectedPerformanceReconciled']
     assert png_current['requiredMaterialPaths'] == 289 and png_current['cpuGainClaimed'] and not png_current['generalCpuGainClaimed']
     assert png_current['raw']['mirrored'] and png_current['raw']['allMembersVerified']
     assert not png_current['compressionChanged'] and not png_current['managedPacketsChanged']
     assert png_current['storage']['newOwnedCapacityBytes'] == png_current['storage']['newRetainedCapacityBytes'] == 0
-    assert png_current['storage']['workspaceAdmissionChanged'] and png_current['storage']['logicalWorkspaceAdmissionBytes'] == 73728
-    assert png_current['storage']['packedRowArraySavedBytes'] == {'rgba8': 2080, 'rgba16': 4128}
+    assert not png_current['storage']['workspaceAdmissionChanged']
+    assert png_current['storage']['logicalCompressedWorkspaceAdmissionBytes'] == 393216
+    assert png_current['storage']['elementCapacitySavedBytes'] == 572
+    assert png_current['storage']['measuredObjectAllocationSavedBytes'] == 600
     assert png_current['reusedPerformance']['pngReadCases'] == 51 and not png_current['issues']
-    assert png_current['sourceProof']['wholeOriginalCodecAndDeflaterReconstructedOutsideTypedStoredRowAndDispatch']
-    assert png_current['sourceProof']['originalPackedCompressedLoopRestoredExactlyOutsideIndentation']
-    assert all(v['exact'] for v in png_current['sourceProof']['actualCommonBodies'].values())
-    assert all(v['exact'] for v in png_current['sourceProof']['fusedWordBodiesUnchangedFromC'].values())
+    assert png_current['sourceProof']['storedCostsReusable'] and png_current['sourceProof']['originalCodesAndRunsSourceExact']
+    assert png_current['sourceProof']['actualCommonBodies']['Lokad.Image.Internal.PngDeflater:.ctor'] == {'exact': True, 'codeBytes': 582}
+    png_stored = json.loads((ROOT / png_current['reusedPerformance']['storedEvidence']).read_text(encoding='utf-8'))
+    assert png_stored['productionAccepted'] and png_stored['raw']['mirrored'] and png_stored['raw']['allMembersVerified']
+    assert png_stored['producers']['windowsSha256'] == png_current['reusedPerformance']['storedWindowsSha256']
+    assert png_stored['producers']['actualPackageSha256'] == png_current['reusedPerformance']['storedActualPackageSha256']
+    reused_stored_cases = set(png_current['reusedPerformance']['storedCases'])
+    assert reused_stored_cases == {'EncodeNoCompression8', 'EncodeNoCompression16', 'EncodeNoCompression8Retained', 'EncodeNoCompression16Retained'}
     assert png_current['comparison']['views']['statistics']['rawGainSeparated']
     assert not png_current['comparison']['views']['unfilteredActualStatistics']['rawGainSeparated']
     assert not png_current['comparison']['normalizedGainSeparated'] and not png_current['comparison']['normalizedAdverseSeparated']
@@ -1815,14 +1821,19 @@ def render():
     png_cases = png_current['cases']
     assert len(png_cases) == 20
     png_rgb16 = png_cases['EncodeRgb16']; png_gray8 = png_cases['EncodeGray8']
-    assert png_rgb16['status'] == 'pass' and png_gray8['status'] == 'gap'
+    assert png_rgb16['status'] == 'pass' and png_gray8['status'] == 'uncertain'
     png_oneshot_status = {status: sum(c['status'] == status and c['boundaryKind'] == 'equivalent-one-shot' for c in png_cases.values()) for status in ('pass', 'gap', 'uncertain')}
-    assert png_oneshot_status == png_current['oneShotStatusCounts'] == {'pass': 15, 'gap': 1, 'uncertain': 1}
+    assert png_oneshot_status == png_current['oneShotStatusCounts'] == {'pass': 16, 'gap': 0, 'uncertain': 1}
     def png_label(label):
         return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
                 .replace(', red-plane reference', '').replace('NoCompression0', 'stored0'))
     for case, current in png_cases.items():
-        assert current['librarySha256'] == png_current['qualification']['actualPackage']['librarySha256']
+        reused = case in reused_stored_cases
+        assert current['costReused'] == reused
+        producer = png_stored if reused else png_current
+        assert current['librarySha256'] == producer['qualification']['actualPackage']['librarySha256']
+        if reused:
+            assert all(current[k] == png_stored['cases'][case][k] for k in ('managedUs', 'nativeUs', 'allocatedBytes', 'receipt', 'packetSha256'))
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == len(current['managedActualNanoseconds']) == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['completePacketExact']
         assert current['packetBytes'] == current['nativePacketBytes'] and current['packetSha256'] == current['nativePacketSha256']
@@ -2392,36 +2403,36 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [stored-row normalization](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md)
-  borrows RGBA8 rows and fuses RGBA16 endian conversion/history writes/Adler,
-  removing the packed-row array. Independent **33.25µs/7.90% filtered raw** gain
-  separates; all-actual27.06µs/6.39% and normalized7.93% points overlap.
-  Native clock moves+.03%; no all-actual, normalized or general gain is claimed.
-  All20encoder views were measured on this immutable module with unchanged exact
-  complete packets. The17fresh-state controls have {png_oneshot_status['pass']} passes /
-  {png_oneshot_status['gap']} gap / {png_oneshot_status['uncertain']} uncertain.
-  Gray8 is {png_gray8['managedUs']:.2f}/{png_gray8['nativeUs']:.2f}µs,
-  range{png_gray8['lower']:.3f}–{png_gray8['upper']:.3f}; Fastest8 remains uncertain.
-  RGB16 passes at {png_rgb16['managedUs']:.2f}/{png_rgb16['nativeUs']:.2f}µs,
-  upper{png_rgb16['upper']:.3f}, exact739,472B. Earlier adjacent sampling remains history.
-  Fresh stored RGBA8 is {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f}µs,
-  upper{stored_byte['upper']:.3f}, {stored_byte['allocatedBytes']:,}B/op; RGBA16 is
-  {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f}µs, upper{stored_word['upper']:.3f},
-  {stored_word['allocatedBytes']:,}B/op. Both pass with codec/conversion/output preparation timed.
-  Retained-native post-GC4 word remains uncertain:
+- **PNG:** [Huffman heap entries](../benchmarks/PNG-HUFFMAN-HEAP-ENTRIES.md)
+  prepare exact weight/depth priorities beside heap symbols, removing dependent
+  metadata lookups while preserving structural ties, every complete packet and
+  independent tree results. Gray8 independently improves2048.63→1986.46µs:
+  **62.18µs/3.035% filtered raw** has separated confidence. All-actual62.39µs/3.026%
+  and normalized3.041% points overlap; native moves+.006%. No general gain is claimed.
+  Gray8 remains uncertain: {png_gray8['managedUs']:.2f}/{png_gray8['nativeUs']:.2f}µs,
+  range{png_gray8['lower']:.3f}–{png_gray8['upper']:.3f}, {png_gray8['allocatedBytes']:,}B/op.
+  All16affected compressed controls are current on the qualified module and
+  allocate600B/op less;572B less element capacity, no extra owner or retention.
+  The17fresh-state controls have {png_oneshot_status['pass']} passes /
+  {png_oneshot_status['gap']} gaps / {png_oneshot_status['uncertain']} uncertain; Fastest8 now passes.
+  RGB16 passes at{png_rgb16['managedUs']:.2f}/{png_rgb16['nativeUs']:.2f}µs,
+  upper{png_rgb16['upper']:.3f}, exact739,472B. Predictable16 is
+  {predictable['managedUs']/1000:.2f}/{predictable['nativeUs']/1000:.2f}ms, upper{predictable['upper']:.3f},
+  exact573,041B. Contemporary qualifiedbaseline259.32ms resolves the historical
+  difference; raw/all-actual/normalized intervals overlap, with no regression claim.
+  Compressed admission remains384KiB; operation scratch retention0, physical peaks unmeasured.
+  [Stored costs](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md) reuse their unchanged
+  paths and original producer: fresh RGBA8 {stored_byte['managedUs']:.2f}/{stored_byte['nativeUs']:.2f}µs,
+  upper{stored_byte['upper']:.3f}; RGBA16 {stored_word['managedUs']:.2f}/{stored_word['nativeUs']:.2f}µs,
+  upper{stored_word['upper']:.3f}, {stored_byte['allocatedBytes']:,}/{stored_word['allocatedBytes']:,}B/op.
+  Both pass. Retained-native post-GC4 word stays uncertain at
   {retained_word['managedUs']:.2f}/{retained_word['nativeUs']:.2f}µs, upper{retained_word['upper']:.3f}.
   Natural-GC64 passes only its scope: {natural_word['managedUs']:.2f}/{natural_word['nativeUs']:.2f}µs,
   upper{natural_word['upper']:.3f}, {natural_word['allocatedBytes']:,.3f}directB/op.
-  Allocations fall2,080/4,128B for storedbyte/word; local admission falls2,052/4,104B.
-  Deflater admission stays72KiB and operation scratch retention0; physical/native/JIT peaks are unmeasured.
-  The intermediate design regressed Predictable16. Isolated row execution resolves
-  that demonstrated regression: current{predictable['managedUs']/1000:.2f}/native{predictable['nativeUs']/1000:.2f}ms,
-  upper{predictable['upper']:.3f}, exact573,041B; contemporary qualifiedbaseline254.85ms.
-  Raw/all-actual/normalized intervals overlap, so no Predictable16 gain is claimed.
-  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) reuse51source-valid controls
-  (49pass/two uncertain), including hiddenRGB, full-depth pixels, metadata and shared-root owners.
-  [Prior forwarding](../benchmarks/PNG-STORED-FORWARDING.md), checksum and CRC experiments
-  retain raw evidence separately; no unchanged favorable repeat or new workload grid follows.
+  The582B constructor matches and stored execution never constructs tree workspace.
+  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) also reuse51source-valid controls
+  (49pass/two uncertain). Initial indexed-key screen, profiles and earlier encode
+  studies retain raw evidence separately; no unchanged favorable repeats or new grid.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,

@@ -50,8 +50,10 @@ public sealed class PngDeflateTreeWorkspaceTests
         {
             // Poison all preparation slots, including the root, unused symbols
             // and the suffixes left behind when alphabet sizes shrink.
-            foreach (var array in new[] { workspace.Weights, workspace.Depth, workspace.Parent,
-                workspace.Heap, workspace.Removal, workspace.Bits, workspace.BitCounts,
+            Array.Fill(workspace.Heap, new DeflateHuffman.Node(long.MaxValue, int.MaxValue));
+            Array.Fill(workspace.NonZero, true);
+            foreach (var array in new[] { workspace.Parent,
+                workspace.Removal, workspace.Bits, workspace.BitCounts,
                 workspace.BlockFrequencies, workspace.BlockCodes }) Array.Fill(array, 12345);
             var original = counts.ToArray();
             var result = DeflateHuffman.Lengths(counts, maximumBits, context, workspace);

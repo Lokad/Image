@@ -48,36 +48,36 @@ Current scope and remaining work:
   All six allocation totals include the earlier increase of
   1,536 B/op for frame preparation, within the unchanged 8 KiB admission; scratch0.
   Selected codes/results retain independent ownership.
-- **PNG:** [stored-row normalization](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md)
-  borrows RGBA8 rows and fuses RGBA16 endian conversion/history writes/Adler,
-  removing the packed-row array. Independent **33.25µs/7.90% filtered raw** gain
-  separates; all-actual27.06µs/6.39% and normalized7.93% points overlap.
-  Native clock moves+.03%; no all-actual, normalized or general gain is claimed.
-  All20encoder views were measured on this immutable module with unchanged exact
-  complete packets. The17fresh-state controls have 15 passes /
-  1 gap / 1 uncertain.
-  Gray8 is 2030.26/1976.23µs,
-  range1.003–1.062; Fastest8 remains uncertain.
-  RGB16 passes at 15692.93/16082.49µs,
-  upper0.983, exact739,472B. Earlier adjacent sampling remains history.
-  Fresh stored RGBA8 is 53.27/541.40µs,
-  upper0.114, 607,628B/op; RGBA16 is
-  389.62/1387.71µs, upper0.288,
-  1,143,324B/op. Both pass with codec/conversion/output preparation timed.
-  Retained-native post-GC4 word remains uncertain:
+- **PNG:** [Huffman heap entries](../benchmarks/PNG-HUFFMAN-HEAP-ENTRIES.md)
+  prepare exact weight/depth priorities beside heap symbols, removing dependent
+  metadata lookups while preserving structural ties, every complete packet and
+  independent tree results. Gray8 independently improves2048.63→1986.46µs:
+  **62.18µs/3.035% filtered raw** has separated confidence. All-actual62.39µs/3.026%
+  and normalized3.041% points overlap; native moves+.006%. No general gain is claimed.
+  Gray8 remains uncertain: 1986.46/1993.40µs,
+  range0.968–1.038, 546,628B/op.
+  All16affected compressed controls are current on the qualified module and
+  allocate600B/op less;572B less element capacity, no extra owner or retention.
+  The17fresh-state controls have 16 passes /
+  0 gaps / 1 uncertain; Fastest8 now passes.
+  RGB16 passes at15326.44/16232.30µs,
+  upper0.955, exact739,472B. Predictable16 is
+  259.80/388.01ms, upper0.685,
+  exact573,041B. Contemporary qualifiedbaseline259.32ms resolves the historical
+  difference; raw/all-actual/normalized intervals overlap, with no regression claim.
+  Compressed admission remains384KiB; operation scratch retention0, physical peaks unmeasured.
+  [Stored costs](../benchmarks/PNG-STORED-WORD-NORMALIZATION.md) reuse their unchanged
+  paths and original producer: fresh RGBA8 53.27/541.40µs,
+  upper0.114; RGBA16 389.62/1387.71µs,
+  upper0.288, 607,628/1,143,324B/op.
+  Both pass. Retained-native post-GC4 word stays uncertain at
   387.85/406.15µs, upper1.044.
   Natural-GC64 passes only its scope: 235.78/404.41µs,
   upper0.615, 1,143,265.875directB/op.
-  Allocations fall2,080/4,128B for storedbyte/word; local admission falls2,052/4,104B.
-  Deflater admission stays72KiB and operation scratch retention0; physical/native/JIT peaks are unmeasured.
-  The intermediate design regressed Predictable16. Isolated row execution resolves
-  that demonstrated regression: current254.31/native385.75ms,
-  upper0.679, exact573,041B; contemporary qualifiedbaseline254.85ms.
-  Raw/all-actual/normalized intervals overlap, so no Predictable16 gain is claimed.
-  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) reuse51source-valid controls
-  (49pass/two uncertain), including hiddenRGB, full-depth pixels, metadata and shared-root owners.
-  [Prior forwarding](../benchmarks/PNG-STORED-FORWARDING.md), checksum and CRC experiments
-  retain raw evidence separately; no unchanged favorable repeat or new workload grid follows.
+  The582B constructor matches and stored execution never constructs tree workspace.
+  [Read/validation costs](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) also reuse51source-valid controls
+  (49pass/two uncertain). Initial indexed-key screen, profiles and earlier encode
+  studies retain raw evidence separately; no unchanged favorable repeats or new grid.
 - **JPEG:** [shared block support](../benchmarks/JPEG-SHARED-BLOCK-SUPPORT.md)
   forms exact support alongside dequantization and reuses inverse decisions.
   Sparse CMYK saves **16.85 µs/3.86% raw**, dense RGB444 **45.35 µs/3.87%**,
@@ -250,27 +250,27 @@ settings do not establish matched quality.
 | VP8 RGBA16 + alpha, including normalization † | 53,395.51 | 53,304.90 | 1.002 / 1.008 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 73,406.90 | 73,496.23 | 0.999 / 1.070 | 4,822,760 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,916.31 | 17,247.39 | 0.981 / 0.992 | 816,316 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,269.60 | 20,880.53 | 0.971 / 0.981 | 2,433,524 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 4,260.69 | 4,347.06 | 0.980 / 1.022 | 816,780 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,887.12 | 17,258.24 | 0.978 / 0.992 | 815,716 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 19,824.87 | 20,956.16 | 0.946 / 0.958 | 2,432,924 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 4,111.01 | 4,361.68 | 0.943 / 0.963 | 816,180 | 236,828 / 236,828 |
 | PNG RGBA16, one-shot stored0 / native0 † | 389.62 | 1,387.71 | 0.281 / 0.288 | 1,143,324 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 2,030.26 | 1,976.23 | 1.027 / 1.062 | 547,228 | 72,586 / 72,586 |
-| PNG RGB8, one-shot Optimal6 / native6 † | 9,467.42 | 9,855.15 | 0.961 / 0.992 | 815,748 | 168,729 / 168,729 |
-| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,258.06 | 4,476.90 | 0.951 / 0.970 | 548,196 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 16,988.90 | 17,258.01 | 0.984 / 0.990 | 816,316 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 20,468.26 | 20,777.99 | 0.985 / 0.991 | 2,433,524 | 963,202 / 963,202 |
-| PNG RGB16, one-shot Optimal6 / native6 † | 15,692.93 | 16,082.49 | 0.976 / 0.983 | 2,427,356 | 739,472 / 739,472 |
-| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,839.91 | 5,406.38 | 0.895 / 0.921 | 818,604 | 265,433 / 265,433 |
-| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,113.98 | 10,538.98 | 0.960 / 0.976 | 1,356,764 | 506,887 / 506,887 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 1,986.46 | 1,993.40 | 0.997 / 1.038 | 546,628 | 72,586 / 72,586 |
+| PNG RGB8, one-shot Optimal6 / native6 † | 9,398.61 | 9,773.57 | 0.962 / 0.978 | 815,148 | 168,729 / 168,729 |
+| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,197.60 | 4,477.89 | 0.937 / 0.953 | 547,596 | 120,366 / 120,366 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 16,718.11 | 17,275.89 | 0.968 / 0.979 | 815,716 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 19,971.87 | 20,773.12 | 0.961 / 0.968 | 2,432,924 | 963,202 / 963,202 |
+| PNG RGB16, one-shot Optimal6 / native6 † | 15,326.44 | 16,232.30 | 0.944 / 0.955 | 2,426,756 | 739,472 / 739,472 |
+| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,602.49 | 5,408.55 | 0.851 / 0.867 | 818,004 | 265,433 / 265,433 |
+| PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,892.73 | 10,500.84 | 0.942 / 0.952 | 1,356,164 | 506,887 / 506,887 |
 | PNG RGBA8, one-shot stored0 / native0 † | 53.27 | 541.40 | 0.098 / 0.114 | 607,628 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,499.29 | 1,505.44 | 0.996 / 1.010 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,283.58 | 1,506.58 | 0.852 / 0.861 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 3,052.97 | 3,142.15 | 0.972 / 0.989 | 70,272 | — |
-| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 254,307.51 | 385,749.35 | 0.659 / 0.679 | 2,491,852 | 573,041 / 573,041 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 17,758.53 | 18,615.23 | 0.954 / 0.962 | 2,433,524 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,128.66 | 18,597.93 | 0.975 / 0.983 | 2,433,524 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, forward-only output † | 17,744.16 | 18,587.00 | 0.955 / 0.970 | 2,433,556 | 968,216 / 968,216 |
-| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,794.78 | 17,540.73 | 0.957 / 0.968 | 878,076 | 210,973 / 210,973 |
+| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 259,795.57 | 388,008.23 | 0.670 / 0.685 | 2,491,252 | 573,041 / 573,041 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, forward-only output † | 17,196.47 | 18,607.32 | 0.924 / 0.929 | 2,432,956 | 968,216 / 968,216 |
+| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,720.65 | 17,676.67 | 0.946 / 0.961 | 877,476 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode (confirmed pass) † | 668.74 | 1,013.98 | 0.660 / 0.670 | 258,454 | — |
 | JPEG DC-only, caller CMYK decode (confirmed pass) † | 318.93 | 330.45 | 0.965 / 0.972 | 1,085,981 | — |
 | VP8L RGBA8, resident decode † | 2,719.46 | 3,020.83 | 0.900 / 0.907 | 152,728 | — |
