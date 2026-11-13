@@ -1,0 +1,126 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VCP942",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "hypothesis": "Complete byte vertical flip is a demonstrated9.37/8.55us gap. Current row copy always prepares1024pixel chunk slicing/cancellation even for an un-cancelable token, and obtains source/result spans per row. Borrow already-owned raster spans once and copy one whole row when cancellation cannot occur. No arithmetic or new kernel. Resolve current complete operation before claiming a gain.",
+  "intendedEndState": "One per-operation cancellation capability branch. Ordinary noncancelable execution hoists owned span validation and performs one BCL complete row copy; live tokens retain verbatim1024pixel loop/checkpoints. Preserve admission, exception cleanup, metadata, independently owned output and all byte/word bits. No cache/owner/storage/public API.",
+  "baselineCommit": "f983e6b92523af01ab7200bf4e6b31b4c5496f5a",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "b8a1cc064eb0a8e294afdc771b19b79030f62211fdefc484701729178bfd7a74"
+  },
+  "restoredSources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "fcb68ff6fcf998940136efb2268d05ebafd0b255f2bb38e4d0888c18fd16f1b7"
+  },
+  "baseline": {
+    "ratio": 1.0932034337094623,
+    "lower": 1.0503222258912608,
+    "upper": 1.1197898144263736,
+    "status": "gap",
+    "project": "Lokad.Image",
+    "caseId": "WarmVerticalFlip8",
+    "managedUs": 9.100850260416665,
+    "nativeUs": 8.3249375,
+    "allocatedBytes": 112,
+    "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receipt": "tmp/vcp942-baseline-WarmVerticalFlip8-screen-receipt.json",
+    "observation": "tmp/vcp942-baseline-WarmVerticalFlip8-screen-observation.json",
+    "rawPairs": "tmp/vcp942-baseline-WarmVerticalFlip8-screen.json",
+    "phase": "screen",
+    "screenOnly": true,
+    "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+  },
+  "candidate": {
+    "ratio": 1.1082009666275832,
+    "lower": 1.0422328323904169,
+    "upper": 1.1545627289937002,
+    "status": "gap",
+    "project": "Lokad.Image",
+    "caseId": "WarmVerticalFlip8",
+    "managedUs": 9.708794270833334,
+    "nativeUs": 8.760860677083334,
+    "allocatedBytes": 112,
+    "librarySha256": "b417f1cb027582794afa5b837e8a15145c401db78e200144c27a6f4eaaaf4654",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receipt": "tmp/vcp942-candidate-WarmVerticalFlip8-screen-receipt.json",
+    "observation": "tmp/vcp942-candidate-WarmVerticalFlip8-screen-observation.json",
+    "rawPairs": "tmp/vcp942-candidate-WarmVerticalFlip8-screen.json",
+    "phase": "screen",
+    "screenOnly": true,
+    "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+  },
+  "rawPointChange": 0.06680079256559868,
+  "referenceClockChange": 0.05236353751404543,
+  "normalizedPointChange": 0.013718885667264313,
+  "normalizedIntervalsOverlap": true,
+  "decision": "Not retained: first bounded complete-operation screen supplies no useful elapsed-time or normalized gain and adds a separate row path. Raw point is adverse; normalized confidence overlaps. This implementation is unpromising, not proof that the algorithmic family cannot help. No independent confirmation, word companion capture, Windows build, full suite or package repeat. Restore exact qualified source/core/embedded/public modules without rebuilding; retain all samples and source/ownership/reference checks.",
+  "linuxFocused": {
+    "project": "Lokad.Image",
+    "stage": "VCP942",
+    "platform": "linux",
+    "productionSha256": "b417f1cb027582794afa5b837e8a15145c401db78e200144c27a6f4eaaaf4654",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/VerticalFlip.cs": "b8a1cc064eb0a8e294afdc771b19b79030f62211fdefc484701729178bfd7a74"
+    },
+    "unchangedSources": {
+      "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+      "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+      "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+      "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+    },
+    "focusedPassed": true,
+    "counts": {
+      "internal-normal": 25,
+      "public-normal": 194,
+      "internal-scalar": 25,
+      "public-scalar": 194
+    },
+    "logs": [
+      "tmp/vcp942-linux-build-core.log",
+      "tmp/vcp942-linux-build-internal.log",
+      "tmp/vcp942-linux-internal-normal.log",
+      "tmp/vcp942-linux-public-normal.log",
+      "tmp/vcp942-linux-internal-scalar.log",
+      "tmp/vcp942-linux-public-scalar.log"
+    ],
+    "coreBuilds": 1,
+    "embeddedBuilds": 1,
+    "publicBuilds": 0,
+    "harnessNativeFixtureBuilds": 0
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stage": "VCP942",
+    "sourceAndQualifiedCoreAndEmbeddedRestored": true,
+    "productionSha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+    "embeddedSha256": "41e2c3d98c1255b46fc8e241671d36a55c8723542ac3e140c3b2ac9ce0a6c713",
+    "productionOrEmbeddedRebuildsForRestoration": 0,
+    "unchangedWindowsBuildAndActualPackageQualificationReused": true
+  },
+  "qualificationReused": "DIP941 full6614eachOS, same actual immutable package/all3examples and unchanged kernel ISA; no new qualification of rejected code claimed.",
+  "newBenchmarkHarnessNativeFixtureBuilds": 0,
+  "raw": {
+    "file": "vertical-copy-preparation-screen.tar.xz",
+    "sha256": "db8e50bb0ea7bae4915738a09b20b48675912ebd9e9ac9c1beeafff8f2134cf2",
+    "bytes": 1706672,
+    "members": 54,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "prepared-memory-input-qualified.tar.xz",
+        "sha256": "5dd5497bcac99999a01af73db6e1508f277edcd068d789b34df455fd0a6ceaf4"
+      }
+    ]
+  }
+}

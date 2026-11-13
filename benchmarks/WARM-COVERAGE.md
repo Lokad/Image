@@ -34,6 +34,10 @@ historical stage sums. The bounded byte-wide control's earlier adverse captures
 remain history; its current cost is uncertain.
 The default store remains two arrays / 4 MiB; larger idle retention, allocation,
 logical admitted capacity and unmeasured physical peaks remain distinct.
+The bounded [vertical-copy preparation screen](VERTICAL-COPY-PREPARATION-SCREEN.md)
+supplies no useful gain; its separate row path is removed and qualified modules
+restored. Original adverse/inconclusive samples remain, without a broad rerun or
+new renderer dependency. Current costs and statuses above are unchanged.
 
 ## Current family status
 
