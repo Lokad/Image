@@ -1,15 +1,16 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **139 comparisons** summarize that scope.
+**289 named material paths**; these **140 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Shared word matrices](../benchmarks/COUNTERCLOCKWISE-WORD-MATRIX.md) closes the
-RGBA16 counterclockwise turn: **39.79 / FFmpeg 48.27 µs, upper 0.884**, **112 B/op**.
-Independent saving is **10.90 µs / 21.51% raw**, **27.18% reference-normalized**;
-the native clock moves **+7.79%**. Shared word transpose and byte transpose pass;
-the existing byte counterclockwise gap remains. No extra owned/retained capacity.
+The [shared transpose schedule](../benchmarks/SHARED-TRANSPOSE-TILES.md) closes byte
+counterclockwise rotation: **28.81 / FFmpeg 37.88 µs, upper 0.769**, **112 B/op**.
+Independent saving is **11.84 µs / 29.12% raw**, **28.85% reference-normalized**;
+the native clock moves **−0.39%**. All four byte/word rotation and transpose controls
+pass and stop. The duplicate scalar rotation loop is removed; no extra owned or
+retained capacity is introduced. The earlier word stage remains linked history.
 
 [Word product reuse](../benchmarks/LANCZOS-WORD-PRODUCT-REUSE.md) closes prepared
 RGBA16 Lanczos reduction: **485.36 / zimg 512.07 µs, upper 0.958**, with **138 B/op**
@@ -27,14 +28,13 @@ is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
 The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these twelve
-updated costs, has **165 pass, 10 gaps, 16 uncertain** across 191 existing comparisons.
+updated costs, has **166 pass, 9 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. Remaining demonstrated gaps include bounded byte wide
-bicubic and byte quarter turns; the retained horizontal-CMYK JPEG view
+capture is hidden. The bounded byte-wide bicubic gap remains; the retained horizontal-CMYK JPEG view
 has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -50,7 +50,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,580 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,587 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -171,9 +171,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 128×64 | 416.84 | 415.03 | 1.004 / 1.020 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Plain transpose RGBA16 † → 259×513 | 39.70 | 48.13 | 0.825 / 0.925 | 112 |
-| Plain transpose RGBA8 † → 259×513 | 30.26 | 40.46 | 0.748 / 0.770 | 112 |
-| Counterclockwise quarter turn RGBA16 † → 259×513 | 39.79 | 48.27 | 0.824 / 0.884 | 112 |
+| Plain transpose RGBA16 † → 259×513 | 34.98 | 44.11 | 0.793 / 0.855 | 112 |
+| Plain transpose RGBA8 † → 259×513 | 27.70 | 38.27 | 0.724 / 0.758 | 112 |
+| Counterclockwise quarter turn RGBA8 † → 259×513 | 28.81 | 37.88 | 0.761 / 0.769 | 112 |
+| Counterclockwise quarter turn RGBA16 † → 259×513 | 35.65 | 44.07 | 0.809 / 0.880 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |

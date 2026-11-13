@@ -1,5 +1,8 @@
 # Shared word matrices for counterclockwise rotation
 
+Historical accepted word stage. [Current shared tile costs](SHARED-TRANSPOSE-TILES.md)
+replace its four displayed costs and retain this evidence unchanged.
+
 The existing RGBA16 counterclockwise operation passes warm parity: **39.79 /
 FFmpeg48.27µs, upper0.884**, **112B/op**. An independent contemporary baseline
 is50.69/native44.78µs. All-actual saving is**10.90µs/21.51% raw**, **27.18%

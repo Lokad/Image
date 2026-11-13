@@ -15,6 +15,12 @@ public sealed class CounterclockwiseTurnReferenceTests
     [InlineData(16, 1, 5)]
     [InlineData(8, 7, 1)]
     [InlineData(16, 7, 1)]
+    [InlineData(8, 3, 7)]
+    [InlineData(8, 4, 4)]
+    [InlineData(8, 5, 7)]
+    [InlineData(8, 31, 33)]
+    [InlineData(8, 32, 32)]
+    [InlineData(8, 33, 35)]
     [InlineData(16, 3, 7)]
     [InlineData(16, 4, 4)]
     [InlineData(16, 5, 7)]
@@ -67,25 +73,37 @@ public sealed class CounterclockwiseTurnReferenceTests
         Assert.Equal(ImageOrientation.Rotate270, source.Orientation);
     }
 
-    [Fact]
-    public void WordMatricesKeepEveryPixelBitAndReleaseRefusedOrCanceledOwners()
+    [Theory]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void MatricesKeepEveryPixelBitAndReleaseRefusedOrCanceledOwners(int depth)
     {
-        const int width = 35, height = 37, bytes = width * height * 8;
+        const int width = 35, height = 37;
+        var bytes = width * height * (depth / 8) * 4;
         using var root = new TestMemoryBudget(3L * bytes);
         var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
-        using var source = ImageBuffer.Create(width, height, 16, limits);
+        using var source = ImageBuffer.Create(width, height, depth, limits);
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         {
             var index = y * width + x;
             var payload = unchecked((ulong)(index + 1) * 0x9e3779b97f4a7c15UL)
                 ^ System.Numerics.BitOperations.RotateLeft(1UL, index & 63);
-            if (index % 11 == 0) payload &= 0x0000ffffffffffffUL;
-            var row = source.GetRow16(y);
-            for (var c = 0; c < 4; c++) row[x * 4 + c] = (ushort)(payload >> (c * 16));
+            if (depth == 8)
+            {
+                if (index % 11 == 0) payload &= 0x00ffffffUL;
+                var row = source.GetRow8(y);
+                for (var c = 0; c < 4; c++) row[x * 4 + c] = (byte)(payload >> (c * 8));
+            }
+            else
+            {
+                if (index % 11 == 0) payload &= 0x0000ffffffffffffUL;
+                var row = source.GetRow16(y);
+                for (var c = 0; c < 4; c++) row[x * 4 + c] = (ushort)(payload >> (c * 16));
+            }
         }
         var original = OriginalPixels.Bytes(source);
-        var expected = CounterclockwiseReference(original, width, height, 16);
+        var expected = CounterclockwiseReference(original, width, height, depth);
         using (var cancellation = new CancellationTokenSource())
         {
             root.Admitted = used => { if (used == 2L * bytes) cancellation.Cancel(); };

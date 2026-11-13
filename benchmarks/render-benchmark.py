@@ -1353,19 +1353,20 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    # These three displayed rows use the current qualified shared word-matrix
+    # These four displayed rows use the current qualified shared transpose-tile
     # owner. Superseded transpose experiments remain linked history.
-    turn_current = json.loads((ROOT / 'benchmarks/counterclockwise-word-matrix-evidence.json').read_text(encoding='utf-8'))
+    turn_current = json.loads((ROOT / 'benchmarks/shared-transpose-tiles-evidence.json').read_text(encoding='utf-8'))
     turn_q = turn_current['qualification']
     assert turn_current['productionAccepted'] and turn_current['allAffectedPerformanceReconciled']
     assert turn_current['requiredMaterialPaths'] == 289 and turn_current['newMaterialPaths'] == 0
     assert turn_current['raw']['mirrored'] and turn_current['raw']['allMembersVerified']
-    assert turn_q['windows']['total'] == turn_q['linux']['total'] == turn_q['fullChecksEachOs'] == 6580
+    assert turn_q['windows']['total'] == turn_q['linux']['total'] == turn_q['fullChecksEachOs'] == 6587
     assert turn_q['actualPackage']['sha256'] == turn_q['samePackageWindows']['sameActualPackageSha256']
     assert turn_q['actualPackage']['actualConsumerPassed'] and turn_q['samePackageWindows']['actualConsumerPassed']
     assert turn_q['actualPackage']['usageExamples'] == turn_q['samePackageWindows']['usageExamples'] == 3
     for case, label in [('WarmTranspose16', 'Plain transpose RGBA16'),
                         ('WarmTranspose8', 'Plain transpose RGBA8'),
+                        ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8'),
                         ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16')]:
         c = turn_current['cases'][case]
         assert c['librarySha256'] == turn_q['actualPackage']['librarySha256'] == turn_current['producers']['timedArtifactSha256']
@@ -2499,11 +2500,12 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Shared word matrices](../benchmarks/COUNTERCLOCKWISE-WORD-MATRIX.md) closes the
-RGBA16 counterclockwise turn: **39.79 / FFmpeg 48.27 µs, upper 0.884**, **112 B/op**.
-Independent saving is **10.90 µs / 21.51% raw**, **27.18% reference-normalized**;
-the native clock moves **+7.79%**. Shared word transpose and byte transpose pass;
-the existing byte counterclockwise gap remains. No extra owned/retained capacity.
+The [shared transpose schedule](../benchmarks/SHARED-TRANSPOSE-TILES.md) closes byte
+counterclockwise rotation: **28.81 / FFmpeg 37.88 µs, upper 0.769**, **112 B/op**.
+Independent saving is **11.84 µs / 29.12% raw**, **28.85% reference-normalized**;
+the native clock moves **−0.39%**. All four byte/word rotation and transpose controls
+pass and stop. The duplicate scalar rotation loop is removed; no extra owned or
+retained capacity is introduced. The earlier word stage remains linked history.
 
 [Word product reuse](../benchmarks/LANCZOS-WORD-PRODUCT-REUSE.md) closes prepared
 RGBA16 Lanczos reduction: **485.36 / zimg 512.07 µs, upper 0.958**, with **138 B/op**
@@ -2521,14 +2523,13 @@ is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
 capacity reduction. Stop passes.
 
 The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these twelve
-updated costs, has **165 pass, 10 gaps, 16 uncertain** across 191 existing comparisons.
+updated costs, has **166 pass, 9 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. Remaining demonstrated gaps include bounded byte wide
-bicubic and byte quarter turns; the retained horizontal-CMYK JPEG view
+capture is hidden. The bounded byte-wide bicubic gap remains; the retained horizontal-CMYK JPEG view
 has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
@@ -2544,7 +2545,7 @@ The default store still has **two slots / 4 MiB**. Source-derived word-compositi
 idle payload rises **1,327,128 → 2,125,872 B**; four simultaneous image payloads
 remain **2,455,088 B**. Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
-are unmeasured. Each OS passes **6,580 full/live checks**, focused normal/scalar
+are unmeasured. Each OS passes **6,587 full/live checks**, focused normal/scalar
 ownership checks and the **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -2588,7 +2589,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 139, 'Expected139comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 140, 'Expected140comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

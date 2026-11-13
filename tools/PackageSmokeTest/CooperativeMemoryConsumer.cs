@@ -1320,6 +1320,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyWordPngPacking(budget, limits);
         VerifyTranspose(8);
         VerifyTranspose(16);
+        VerifyTranspose(8, counterclockwise: true);
         VerifyTranspose(16, counterclockwise: true);
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();

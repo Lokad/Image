@@ -18,13 +18,13 @@ internal static class TransposeCopy
         try
         {
             if (source.BitDepth == 8)
-                Copy(MemoryMarshal.Cast<byte, uint>(source.Pixels), MemoryMarshal.Cast<byte, uint>(result.Pixels),
+                Copy<uint, ForwardRows>(MemoryMarshal.Cast<byte, uint>(source.Pixels), MemoryMarshal.Cast<byte, uint>(result.Pixels),
                     source.Width, source.Height, context);
             else if (Avx2.IsSupported)
                 CopyWords<ForwardRows>(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
                     source.Width, source.Height, context);
             else
-                Copy(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
+                Copy<ulong, ForwardRows>(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
                     source.Width, source.Height, context);
             result.Orientation = source.Orientation;
             return result;
@@ -79,11 +79,12 @@ internal static class TransposeCopy
         }
     }
 
-    private static void Copy<T>(ReadOnlySpan<T> source, Span<T> destination, int width, int height,
-        OperationContext context) where T : unmanaged
+    internal static void Copy<T, TRows>(ReadOnlySpan<T> source, Span<T> destination, int width, int height,
+        OperationContext context) where T : unmanaged where TRows : struct
     {
         // Reified generic types keep the UInt64 portable fallback scalar.
         var vectorized = typeof(T) == typeof(uint) && Sse2.IsSupported;
+        var step = typeof(TRows) == typeof(ReverseRows) ? -height : height;
         for (var y = 0; y < height; y += 32)
         for (var x = 0; x < width; x += 32)
         {
@@ -108,18 +109,20 @@ internal static class TransposeCopy
                     var high01 = Sse2.UnpackHigh(r0, r1).AsUInt64();
                     var low23 = Sse2.UnpackLow(r2, r3).AsUInt64();
                     var high23 = Sse2.UnpackHigh(r2, r3).AsUInt64();
-                    var output = (x + column) * height + y + row;
+                    var outputRow = typeof(TRows) == typeof(ReverseRows) ? width - 1 - x - column : x + column;
+                    var output = outputRow * height + y + row;
                     Sse2.UnpackLow(low01, low23).AsUInt32().CopyTo(outputPixels.Slice(output, 4));
-                    Sse2.UnpackHigh(low01, low23).AsUInt32().CopyTo(outputPixels.Slice(output + height, 4));
-                    Sse2.UnpackLow(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 2 * height, 4));
-                    Sse2.UnpackHigh(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 3 * height, 4));
+                    Sse2.UnpackHigh(low01, low23).AsUInt32().CopyTo(outputPixels.Slice(output + step, 4));
+                    Sse2.UnpackLow(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 2 * step, 4));
+                    Sse2.UnpackHigh(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 3 * step, 4));
                 }
             }
             for (var column = 0; column < columns; column++)
             {
                 var firstRow = column < vectorColumns ? vectorRows : 0;
                 var input = (y + firstRow) * width + x + column;
-                var output = destination.Slice((x + column) * height + y + firstRow, rows - firstRow);
+                var outputRow = typeof(TRows) == typeof(ReverseRows) ? width - 1 - x - column : x + column;
+                var output = destination.Slice(outputRow * height + y + firstRow, rows - firstRow);
                 for (var row = 0; row < output.Length; row++)
                 {
                     output[row] = source[input];
