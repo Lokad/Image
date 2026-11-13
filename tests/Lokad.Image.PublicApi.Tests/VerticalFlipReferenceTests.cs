@@ -13,6 +13,12 @@ public sealed class VerticalFlipReferenceTests
     [InlineData(16, 1, 5)]
     [InlineData(8, 7, 1)]
     [InlineData(16, 7, 1)]
+    [InlineData(8, 63, 3)]
+    [InlineData(8, 64, 3)]
+    [InlineData(8, 65, 3)]
+    [InlineData(16, 31, 3)]
+    [InlineData(16, 32, 3)]
+    [InlineData(16, 33, 3)]
     public void ReversedRowsMatchIndependentPlacementAndExactAdmission(int depth, int width, int height)
     {
         using var source = OriginalPixels.Buffer(width, height, depth);
@@ -29,6 +35,9 @@ public sealed class VerticalFlipReferenceTests
             (first.Width, first.Height, first.BitDepth, first.Orientation));
         Assert.Equal(expected, OriginalPixels.Bytes(first));
         Assert.Equal(expected, OriginalPixels.Bytes(second));
+        using var cancellation = new CancellationTokenSource();
+        using var live = ImageTransforms.FlipVertical(source, limits, cancellation.Token);
+        Assert.Equal(expected, OriginalPixels.Bytes(live));
         if (depth == 8) first.GetRow8(0)[0] ^= 255;
         else first.GetRow16(0)[0] ^= 65535;
         Assert.Equal(expected, OriginalPixels.Bytes(second));

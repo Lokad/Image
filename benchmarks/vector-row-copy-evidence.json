@@ -1,0 +1,687 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VRC943",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "cases": {
+    "WarmVerticalFlip8": {
+      "ratio": 1.0104899511135252,
+      "lower": 0.9470700079164468,
+      "upper": 1.0454150326281684,
+      "status": "uncertain",
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.477984375,
+      "nativeUs": 8.389973958333334,
+      "allocatedBytes": 112,
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vrc943-candidate-WarmVerticalFlip8-confirm-receipt.json",
+      "observation": "tmp/vrc943-candidate-WarmVerticalFlip8-confirm-observation.json",
+      "rawPairs": "tmp/vrc943-candidate-WarmVerticalFlip8-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 64,
+      "nativeSamplesEachBracket": 12,
+      "retainedOperationScratchBytes": 0
+    },
+    "WarmVerticalFlip16": {
+      "ratio": 0.9815905180171164,
+      "lower": 0.96084565588665,
+      "upper": 0.9960305123842857,
+      "status": "pass",
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip16",
+      "managedUs": 17.71891666666667,
+      "nativeUs": 18.05123046875,
+      "allocatedBytes": 112,
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vrc943-candidate-WarmVerticalFlip16-confirm-receipt.json",
+      "observation": "tmp/vrc943-candidate-WarmVerticalFlip16-confirm-observation.json",
+      "rawPairs": "tmp/vrc943-candidate-WarmVerticalFlip16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 64,
+      "nativeSamplesEachBracket": 12,
+      "retainedOperationScratchBytes": 0
+    },
+    "WarmNormalOrientation16": {
+      "ratio": 1.0393284456449514,
+      "lower": 0.9935292172615299,
+      "upper": 1.0660951692471057,
+      "status": "uncertain",
+      "operationsPerSubject": 256,
+      "project": "Lokad.Image",
+      "caseId": "WarmNormalOrientation16",
+      "managedUs": 17.29641569010417,
+      "nativeUs": 16.6419150390625,
+      "allocatedBytes": 112,
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vrc943-candidate-WarmNormalOrientation16-confirm-receipt.json",
+      "observation": "tmp/vrc943-candidate-WarmNormalOrientation16-confirm-observation.json",
+      "rawPairs": "tmp/vrc943-candidate-WarmNormalOrientation16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public AutoOrient, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeSamplesEachBracket": 12,
+      "retainedOperationScratchBytes": 0
+    },
+    "WarmClone16": {
+      "ratio": 1.0486574179418733,
+      "lower": 0.973720013600774,
+      "upper": 1.1231877387560751,
+      "status": "uncertain",
+      "project": "Lokad.Image",
+      "caseId": "WarmClone16",
+      "managedUs": 17.630227864583333,
+      "nativeUs": 16.812190104166667,
+      "allocatedBytes": 112,
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vrc943b-baseline-WarmClone16-confirm-receipt.json",
+      "observation": "tmp/vrc943b-baseline-WarmClone16-confirm-observation.json",
+      "rawPairs": "tmp/vrc943b-baseline-WarmClone16-confirm.json",
+      "phase": "confirm",
+      "screenOnly": false,
+      "measurement": "Existing complete public edit,12alternating64operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference.",
+      "managedExact": true,
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public Clone, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 64,
+      "nativeSamplesEachBracket": 12,
+      "retainedOperationScratchBytes": 0
+    }
+  },
+  "primaryEffect": {
+    "currentUs": 8.477984375,
+    "nativeUs": 8.389973958333334,
+    "lower": 0.9470700079164468,
+    "upper": 1.0454150326281684,
+    "status": "uncertain",
+    "previousUs": 9.367279947916666,
+    "previousNativeUs": 8.547575520833334,
+    "previousLower": 1.057149719415935,
+    "previousUpper": 1.1232521546145842,
+    "historicalNormalizedAdverseSeparated": false,
+    "historicalComparisonNotCausal": true,
+    "views": {
+      "allActual": {
+        "savedUs": 1.393669270833334,
+        "savedFraction": 0.14117890688168333,
+        "rawGainSeparated": true,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 9871.653645833334,
+          "StandardError": 28.036419510275618,
+          "Level": 12,
+          "Margin": 124.39701405467332,
+          "Lower": 9747.25663177866,
+          "Upper": 9996.050659888007
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 8477.984375,
+          "StandardError": 34.9072667907238,
+          "Level": 12,
+          "Margin": 154.88282146671347,
+          "Lower": 8323.101553533286,
+          "Upper": 8632.867196466714
+        }
+      },
+      "upperOutlierDiagnostic": {
+        "savedUs": 1.393669270833334,
+        "savedFraction": 0.14117890688168333,
+        "rawGainSeparated": true,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 9871.653645833334,
+          "StandardError": 28.036419510275618,
+          "Level": 12,
+          "Margin": 124.39701405467332,
+          "Lower": 9747.25663177866,
+          "Upper": 9996.050659888007
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 8477.984375,
+          "StandardError": 34.9072667907238,
+          "Level": 12,
+          "Margin": 154.88282146671347,
+          "Lower": 8323.101553533286,
+          "Upper": 8632.867196466714
+        }
+      }
+    },
+    "normalizedGain": 0.0725429274219287,
+    "normalizedGainSeparated": true,
+    "nativeClockChange": -0.07400448116586755
+  },
+  "wordCompanion": {
+    "currentUs": 17.71891666666667,
+    "nativeUs": 18.05123046875,
+    "lower": 0.96084565588665,
+    "upper": 0.9960305123842857,
+    "status": "pass",
+    "previousUs": 16.91536588541667,
+    "previousNativeUs": 17.681723958333333,
+    "previousLower": 0.9236014639914663,
+    "previousUpper": 0.9807330881346665,
+    "historicalNormalizedAdverseSeparated": false,
+    "historicalComparisonNotCausal": true
+  },
+  "dispatchProof": {
+    "project": "Lokad.Image",
+    "stage": "VRC943",
+    "allUnchangedDispatchBranchesIdentical": true,
+    "normalization": "Remove encoded bytes and long absolute relocations; preserve every call target, argument move, branch and constant. No intentional target substitution. Preserve all argument moves, stack, branches, other calls and constants.",
+    "comparisons": {
+      "Lokad.Image.ImageTransforms:Orient(Lokad.Image.ImageBuffer,int,Lokad.Image.ImageLimits,System.Threading.CancellationToken):Lokad.Image.ImageBuffer (FullOpts)": {
+        "instructionsAndConstantsIdentical": true,
+        "axisSwapCalls": 0,
+        "baselineBytes": 243,
+        "candidateBytes": 243
+      }
+    },
+    "results": {
+      "baseline": {
+        "librarySha256": "ff80e2cf0481f4aa6feee67713e41b8039d169e64baa8bb045170b704a003b80",
+        "checks": 10,
+        "log": "tmp/vrc943-baseline-dispatch.log",
+        "jit": "tmp/vrc943-baseline-dispatch-jit.txt",
+        "jitSha256": "f4c09fb04876aa17040795afc8815a3dd5e4ab400592d4af323a697a43ba7f82",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~NormalOrientationReferenceTests"
+        ]
+      },
+      "candidate": {
+        "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+        "checks": 10,
+        "log": "tmp/vrc943-candidate-dispatch.log",
+        "jit": "tmp/vrc943-candidate-dispatch-jit.txt",
+        "jitSha256": "d3673538f0ddbaacea3fc1db167381ad3f568a51e0eb75921fb5d7f52d941245",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~NormalOrientationReferenceTests"
+        ]
+      }
+    },
+    "actualFunctionalChecks": 20,
+    "publicBindingRestored": true,
+    "allBuilds": 0,
+    "noTimingClaim": true,
+    "scope": "One shared orientation dispatcher, not a whole-library method audit. Two changed complete vertical-flip controls are measured separately. Other eighteen edit controls, PNG compositions, resizing, codecs and text retain unchanged source paths and valid evidence."
+  },
+  "deferredExtension": {
+    "stage": "VRC943B",
+    "hypothesis": "Generalize the independently useful safe non-overlap row-copy primitive to the two remaining demonstrated word full-frame copy gaps. Clone currently dispatches one1MiB BCL memmove; copied source/result storage cannot overlap. Shared explicit vectors may remove native generic overlap dispatch. Complete Clone16 is the bounded decision screen; allocation savings are not assumed. If unpromising restore exactA without a broad/package campaign.",
+    "candidateProductionSha256": "671cc5f32b5856e04a83f1ee62d4acda751f284407fb338d3846425b933fa7b5",
+    "assessment": {
+      "currentUs": 17.0161484375,
+      "nativeUs": 16.51476432291667,
+      "lower": 0.9719182724986334,
+      "upper": 1.044332161404836,
+      "status": "uncertain",
+      "previousUs": 19.59119921875,
+      "previousNativeUs": 17.15274088541667,
+      "previousLower": 1.1124904778395412,
+      "previousUpper": 1.1590600802564548,
+      "historicalNormalizedAdverseSeparated": false,
+      "historicalComparisonNotCausal": true,
+      "views": {
+        "allActual": {
+          "savedUs": 0.6140794270833321,
+          "savedFraction": 0.03483105447076673,
+          "rawGainSeparated": false,
+          "baselineCI": {
+            "N": 12,
+            "Mean": 17630.227864583332,
+            "StandardError": 242.18964528511563,
+            "Level": 12,
+            "Margin": 1074.5904518009797,
+            "Lower": 16555.63741278235,
+            "Upper": 18704.818316384313
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 17016.1484375,
+            "StandardError": 27.849578640722573,
+            "Level": 12,
+            "Margin": 123.56800497713192,
+            "Lower": 16892.580432522867,
+            "Upper": 17139.716442477133
+          }
+        },
+        "upperOutlierDiagnostic": {
+          "savedUs": 0.37235866477272794,
+          "savedFraction": 0.021414067497724343,
+          "rawGainSeparated": true,
+          "baselineCI": {
+            "N": 11,
+            "Mean": 17388.507102272728,
+            "StandardError": 16.500812754877842,
+            "Level": 12,
+            "Margin": 75.68747666643249,
+            "Lower": 17312.819625606295,
+            "Upper": 17464.19457893916
+          },
+          "candidateCI": {
+            "N": 12,
+            "Mean": 17016.1484375,
+            "StandardError": 27.849578640722573,
+            "Level": 12,
+            "Margin": 123.56800497713192,
+            "Lower": 16892.580432522867,
+            "Upper": 17139.716442477133
+          }
+        }
+      },
+      "normalizedGain": 0.017448661234677698,
+      "normalizedGainSeparated": false,
+      "nativeClockChange": -0.01769107887831256
+    },
+    "restoration": {
+      "project": "Lokad.Image",
+      "stage": "VRC943B",
+      "sourceAndCoreAndEmbeddedRestoredToA": true,
+      "productionSha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "embeddedSha256": "60f48025a251cbd023539a1ff1298540f3f34ee6cd3f7d4bde9ae69f8ec6f971",
+      "productionOrEmbeddedBuildsForRestoration": 0,
+      "windowsBPublicFullPackageRuns": 0,
+      "decision": "Broader full-raster primitive not retained: confirmation all-actual and normalized effects are inconclusive; retain filtered gain and upper outlier without favorable resampling. Original row-onlyA gain remains useful. No permanent family restriction."
+    },
+    "decision": "Not retained: full-raster extension has an all-actual and native-normalized inconclusive confirmation. Keep its filtered2.14%gain and upper outlier; no favorable replay or global family prohibition. Restore exact verifiedA, remove temporary shared helper and ImageBuffer changes, without another build/full/package campaign."
+  },
+  "measurementReconciliation": "CurrentA word clone is the broader-copy trial baseline, reused on the exact final immutable DLL; its conservative interval now includes1, superseding the old gap without claiming a production speedup. Current normal word orientation uses one existing256operation-per-subject confirmation (previous64), unchanged original boundary/worker/settings and no build. It is also uncertain; no further favorable repeat. Main row confirmation retains native clock movement and all actuals.",
+  "currentImageOwnerViewStatuses": {
+    "pass": 173,
+    "gap": 0,
+    "uncertain": 18
+  },
+  "currentTwentyEditStatuses": {
+    "pass": 14,
+    "gap": 0,
+    "uncertain": 6
+  },
+  "decision": {
+    "accept": true,
+    "scope": "Keep only the independently useful safe row-copy primitive:1.39us/14.12%raw/7.25%normalized complete byte flip gain, zero new owned capacity or retained state. Word flip passes; byte flip and both current word-copy boundaries are uncertain. No complete-copy speedup or whole-library parity claim. Qualification follows reconciliation and reuses valid other18edit, codec/resize/text/ISA paths. Full289required paths remain; publication postponed."
+  },
+  "baselineCommit": "8b3b211af2ed08878bdbd857a01b18a1d7b01d2b",
+  "sources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "f711d21d38a9172d17bebd42d407a1644036019b5469a17bd71c33e9c59c2638",
+    "tests/Lokad.Image.PublicApi.Tests/VerticalFlipReferenceTests.cs": "fade100fd65f2ad862cadd3be4974ceb5548ecd3aafa78706744856aa5224e02"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+    "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+    "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+  },
+  "consumer": {
+    "path": "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs",
+    "sha256": "86f52b60d0ede0e2084500c36cef946d33dbdd7e29815dca5d7d11a657ef6b25"
+  },
+  "hypothesis": "Remaining byte vertical flip gap is about0.8us. Each at-most1024pixel chunk enters general overlapping Span.CopyTo. Independent result ownership proves no alias; a safe Vector512 copy can remove per-row native overlap/copy dispatch while retaining exact bytes and existing checkpoints. VCP942 only removed setup/chunks and was inconclusive/adverse; this materially different primitive keeps scheduling unchanged. FFmpeg insight only: av_frame_copy reaches a per-row memcpy, no upstream implementation or tables copied.",
+  "intendedEndState": "Keep original row/chunk scheduling and cancellation. Private safe span Vector512 helper copies four vectors per iteration plus vector/byte tails for at least256B, otherwise the actual BCL fallback. Guard hardware; no unsafe pointers, native dependencies, allocation, new owner/cache/API or numerical change. Reuse storage/ownership unchanged.",
+  "producers": {
+    "windowsSha256": "312dd8e5ae9b3122461aaaa6273d0fd68c901e4bb453adbd93b816641ac83780",
+    "linuxSha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+    "timedArtifactSha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+    "actualPackageSha256": "2d0e9c847f97deb3164a5f3f9b369090c7b30601c928964cbbfb728490288b3e"
+  },
+  "storage": {
+    "gcAllocatedBytesPerOperation": 112,
+    "newOwnedOrAdmittedCapacityBytes": 0,
+    "newOperationBuffers": 0,
+    "retainedOperationScratchBytes": 0,
+    "sourceAndResultBytesEach": {
+      "byte": 531468,
+      "word": 1062936
+    },
+    "defaultIdleSlots": 2,
+    "defaultIdleCeilingBytes": 4194304,
+    "callerRootBypassesIdleStorage": true,
+    "newConsumerSourceAndTwoOutputsPeakBytes": {
+      "byte": 42180,
+      "word": 84360
+    },
+    "physicalNativeAndJitStackPeaksMeasured": false
+  },
+  "correctness": {
+    "privateHelperRequiresIndependentNonOverlappingOwners": true,
+    "safeSpanVector512FourVectorLoopAndVectorByteTails": true,
+    "hardwareGuardAndBclFallbackPreserved": true,
+    "original1024PixelCancellationBoundariesPreserved": true,
+    "fullChannelBitsHiddenRgbAndWordSamplesExact": true,
+    "admissionAndExceptionCleanupUnchanged": true,
+    "newPublicCases": 6,
+    "liveTokenAndNoTokenOracleResultsAgree": true,
+    "packagedVerticalConsumers": 2,
+    "packagedFrame": [
+      95,
+      37
+    ],
+    "packagedRemainingVectorCounts": {
+      "byte": 1,
+      "word": 3
+    },
+    "packagedCancellationRefusalRecoveryAndIndependentSurvivors": true,
+    "encoderPacketsAndDecoderPixelsUnchanged": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "VRC943",
+      "platform": "windows",
+      "productionSha256": "312dd8e5ae9b3122461aaaa6273d0fd68c901e4bb453adbd93b816641ac83780",
+      "embeddedTestsSha256": "5e9cac679c078bb3d490409e77900d2cb1719f6b148e17c81fde7a678730c7cb",
+      "full": [
+        3248,
+        2424,
+        948
+      ],
+      "total": 6620,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 200,
+        "internal-scalar": 25,
+        "public-scalar": 200,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 200,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 200
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "VRC943",
+        "platform": "windows",
+        "productionSha256": "312dd8e5ae9b3122461aaaa6273d0fd68c901e4bb453adbd93b816641ac83780",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "f711d21d38a9172d17bebd42d407a1644036019b5469a17bd71c33e9c59c2638",
+          "tests/Lokad.Image.PublicApi.Tests/VerticalFlipReferenceTests.cs": "fade100fd65f2ad862cadd3be4974ceb5548ecd3aafa78706744856aa5224e02"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 200,
+          "internal-scalar": 25,
+          "public-scalar": 200,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 200,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 200
+        },
+        "logs": [
+          "tmp/vrc943-windows-build-core.log",
+          "tmp/vrc943-windows-build-internal.log",
+          "tmp/vrc943-windows-build-public.log",
+          "tmp/vrc943-windows-internal-normal.log",
+          "tmp/vrc943-windows-public-normal.log",
+          "tmp/vrc943-windows-internal-scalar.log",
+          "tmp/vrc943-windows-public-scalar.log",
+          "tmp/vrc943-windows-internal-avx512-off.log",
+          "tmp/vrc943-windows-public-avx512-off.log",
+          "tmp/vrc943-windows-internal-avx2-off.log",
+          "tmp/vrc943-windows-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedOtherKernelIsaEvidenceReused": true,
+      "newRowKernelIsaModesVerified": [
+        "normal",
+        "scalar",
+        "avx512-off",
+        "avx2-off"
+      ]
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "VRC943",
+      "platform": "linux",
+      "productionSha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "embeddedTestsSha256": "60f48025a251cbd023539a1ff1298540f3f34ee6cd3f7d4bde9ae69f8ec6f971",
+      "full": [
+        3248,
+        2424,
+        948
+      ],
+      "total": 6620,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 200,
+        "internal-scalar": 25,
+        "public-scalar": 200,
+        "internal-avx512-off": 25,
+        "public-avx512-off": 200,
+        "internal-avx2-off": 25,
+        "public-avx2-off": 200
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "VRC943",
+        "platform": "linux",
+        "productionSha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "f711d21d38a9172d17bebd42d407a1644036019b5469a17bd71c33e9c59c2638",
+          "tests/Lokad.Image.PublicApi.Tests/VerticalFlipReferenceTests.cs": "fade100fd65f2ad862cadd3be4974ceb5548ecd3aafa78706744856aa5224e02"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+          "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+          "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+          "src/Lokad.Image/Internal/IdentificationInput.cs": "dd55e0fcf5263f306a9c866f0e7bc04acc0f70c59501bd5d54b4f2d012b20fc8",
+          "src/Lokad.Image/Internal/PixelReversal.cs": "1140f07dbb0c6968784227fc8f8549177a8f2505991989b0a23a8ca9013861ad"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 200,
+          "internal-scalar": 25,
+          "public-scalar": 200,
+          "internal-avx512-off": 25,
+          "public-avx512-off": 200,
+          "internal-avx2-off": 25,
+          "public-avx2-off": 200
+        },
+        "logs": [
+          "tmp/vrc943-linux-build-core.log",
+          "tmp/vrc943-linux-build-internal.log",
+          "tmp/vrc943-linux-build-public.log",
+          "tmp/vrc943-linux-internal-normal.log",
+          "tmp/vrc943-linux-public-normal.log",
+          "tmp/vrc943-linux-internal-scalar.log",
+          "tmp/vrc943-linux-public-scalar.log",
+          "tmp/vrc943-linux-internal-avx512-off.log",
+          "tmp/vrc943-linux-public-avx512-off.log",
+          "tmp/vrc943-linux-internal-avx2-off.log",
+          "tmp/vrc943-linux-public-avx2-off.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "threeNamedResizeStorageSuitesIncluded": true,
+      "unchangedOtherKernelIsaEvidenceReused": true,
+      "newRowKernelIsaModesVerified": [
+        "normal",
+        "scalar",
+        "avx512-off",
+        "avx2-off"
+      ]
+    },
+    "fullChecksEachOs": 6620,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "VRC943",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "2d0e9c847f97deb3164a5f3f9b369090c7b30601c928964cbbfb728490288b3e",
+      "symbolsSha256": "de31f3619423548741b695ca67805aba6276cfb94b8cb72a3e2bacbf13ca4106",
+      "bytes": 459948,
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualConsumerPassed": true,
+      "verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 14,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Linux immutable timed DLL",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "VRC943",
+      "sameActualPackageSha256": "2d0e9c847f97deb3164a5f3f9b369090c7b30601c928964cbbfb728490288b3e",
+      "librarySha256": "cb0c9b63e0d8ffe8951f91b4dbbba08c2ad8a435ecd221e5aaa4b736b34daebb",
+      "actualConsumerPassed": true,
+      "verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed": true,
+      "preparedMemoryInputSingleCapacityRefusalCancellationRecoveryPassed": true,
+      "allFourReversalConsumersPassed": true,
+      "pixelPermutationConsumers": 14,
+      "allEightAxisSwapConsumersPassed": true,
+      "cloneNormalExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseByteExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "counterclockwiseExactPixelsCancellationRefusalAndSurvivorsPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "mixedWordFrozenPixelsAdmissionCancellationAndSurvivorsPassed": true,
+      "pairedLanczosFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "pairedWordPreparationFrozenPixelsRefusalCancellationAndSurvivorsPassed": true,
+      "usageExamples": 3,
+      "productionOrEmbeddedBuilds": 0,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "acceptedCoreEmbeddedAndPublicBuildsEachOs": 1,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "prototypeExtraLinuxCoreAndEmbeddedBuildsEach": 1,
+    "prototypePublicBuilds": 0,
+    "prototypeWindowsFullOrPackageQualification": 0,
+    "harnessNativeOrFixtureBuilds": 0,
+    "packCalls": 1,
+    "unchangedCodecResizeTextAndOtherIsaEvidenceReused": true
+  },
+  "sourceInvalidation": "Only vertical row copying changes. Two complete byte/word costs refresh; the actual shared243Borientation dispatcher has identical instructions/call targets/arguments/constants after relocation normalization. Other18edit kernels and PNG compositions keep their source paths. Clone/ImageBuffer sources are restored verbatim afterB; reuse the finalA word-clone observation and one longer matched-batch normal-orientation confirmation as current confidence, without a gain claim. Existing byte-copy passes, codecs/resize/text and their valid source evidence remain.",
+  "workflow": "One acceptedA core/embedded/public build perOS, one short row screen then one independent primary confirmation and one affected word cost. B generalizes the same helper to whole copies: one additional Linux core/embedded build, public reused, screen and independent confirmation remain all-actual/native-normalized inconclusive. Restore immutableA without rebuilding; no Windows/full/package B campaign. One existing normal16 control uses supported256matched operations rather than64 to reduce short-block uncertainty, no new driver/worker/fixture. All performance reconciliation precedes one full eachOS and one actual same-package/all3examples milestone. Published releases unchanged; no favorable retries.",
+  "raw": {
+    "file": "vector-row-copy-qualified.tar.xz",
+    "sha256": "8e1ea39a078f534e788daded6450a1bc1da64728bd5a8b355e058f252bacd5bf",
+    "bytes": 3529060,
+    "members": 231,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "prepared-memory-input-qualified.tar.xz",
+        "sha256": "5dd5497bcac99999a01af73db6e1508f277edcd068d789b34df455fd0a6ceaf4"
+      },
+      {
+        "file": "shared-raster-copy-qualified.tar.xz",
+        "sha256": "3e1b130aa06d03373804c547a140f7afa5b701ad3745794962c207bf529207af"
+      },
+      {
+        "file": "released-image-storage-qualified.tar.xz",
+        "sha256": "1ef7261190c65bd9a8d0cffa38b7904c590304e846e91419e3f3f517f5b776d6"
+      }
+    ]
+  }
+}

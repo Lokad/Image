@@ -208,6 +208,31 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
+def apply_current_vector_row_copy(editing):
+    current = json.loads((ROOT / 'benchmarks/vector-row-copy-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6620
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed']
+    assert q['samePackageWindows']['verticalByteWordExactPixelsRefusalCancellationSurvivorsAndVectorRemaindersPassed']
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 173, 'gap': 0, 'uncertain': 18}
+    assert current['primaryEffect']['normalizedGainSeparated']
+    assert all(v['rawGainSeparated'] for v in current['primaryEffect']['views'].values())
+    for c in current['cases'].values():
+        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 112
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    c = current['cases']['WarmVerticalFlip8']
+    assert c['status'] == 'uncertain'
+    return editing + f'\n| Vertical flip RGBA8 (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+
+
 def apply_current_pixel_reversal(editing):
     current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2710,6 +2735,7 @@ def render():
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     editing = apply_current_pixel_reversal(editing)
+    editing = apply_current_vector_row_copy(editing)
     raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
     copy_q = raster_copies['qualification']
     assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
@@ -2735,6 +2761,14 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
+[Safe vector row copy](../benchmarks/VECTOR-ROW-COPY.md) saves **1.39 µs / 14.12%
+raw**, **7.25% reference-normalized**, on complete RGBA8 vertical flip, with
+**112 B/op** and no additional owned storage. Current **8.48 / FFmpeg 8.39 µs,
+upper 1.045** remains uncertain; the affected word flip passes. Current word-clone
+and normal-orientation confirmations are also uncertain, superseding older gaps
+without a speedup claim. Their complete costs and the inconclusive full-copy
+extension remain in the linked report; the extension is removed.
+
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
 **15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
@@ -2752,7 +2786,8 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 173 pass, 3 gaps, 15 uncertain**. The tables retain source-valid
+image views: 173 pass, 0 gaps, 18 uncertain**. This does not establish full parity:
+uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
@@ -2765,7 +2800,8 @@ uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are 
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
 retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
-word copies retain small gaps, and complete word PNG composition stays uncertain.
+word copies are now uncertain under the current confirmations; complete word PNG
+composition also stays uncertain. No gain is inferred from those confidence changes.
 [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
 pass and stop. This confidence update does not establish a production speedup.
@@ -2776,7 +2812,7 @@ The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
 the affected stream view refreshes and passes in the prepared-input round. The
 horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
 confidence is reconciled before acceptance; historical clock shifts are not gains.
-Adverse and uncertain captures stay linked; small copy/turn gaps remain open.
+Adverse and uncertain captures stay linked; copy/turn confidence remains open.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -2792,8 +2828,9 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,614 full/live checks**, focused normal/scalar
-ownership checks and the **same actual Release-package consumer / three examples**.
+storage, separately from its **138 B/op**. Each OS passes **6,620 full/live checks**,
+focused normal/scalar/AVX512-off/AVX2-off checks and the **same actual
+Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
@@ -2836,7 +2873,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 142, 'Expected 142 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 143, 'Expected 143 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

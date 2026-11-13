@@ -1103,7 +1103,8 @@ internal static class CooperativeMemoryConsumer
 
     private static void VerifyPixelPermutation(int depth, ImageOrientation orientation)
     {
-        const int width = 35, height = 37;
+        const int height = 37;
+        var width = orientation == ImageOrientation.MirrorVertical ? 95 : 35;
         var bytes = width * height * (depth / 8) * 4;
         using var root = new TestMemoryBudget(3L * bytes);
         var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
@@ -1115,6 +1116,7 @@ internal static class CooperativeMemoryConsumer
             ImageOrientation.Rotate270 => ImageTransforms.Rotate(input, QuarterTurn.CounterClockwise90, limits, cancellation),
             ImageOrientation.Rotate180 => ImageTransforms.Rotate(input, QuarterTurn.Half, limits, cancellation),
             ImageOrientation.MirrorHorizontal => ImageTransforms.FlipHorizontal(input, limits, cancellation),
+            ImageOrientation.MirrorVertical => ImageTransforms.FlipVertical(input, limits, cancellation),
             _ => throw new ArgumentOutOfRangeException(nameof(orientation))
         };
         var swapsAxes = orientation is ImageOrientation.Transpose or ImageOrientation.Transverse
@@ -1170,9 +1172,10 @@ internal static class CooperativeMemoryConsumer
         for (var x = 0; x < width; x++)
         for (var channel = 0; channel < 4; channel++)
         {
-            var dx = swapsAxes ? (reverseColumns ? height - 1 - y : y) : width - 1 - x;
+            var dx = swapsAxes ? (reverseColumns ? height - 1 - y : y)
+                : orientation == ImageOrientation.MirrorVertical ? x : width - 1 - x;
             var dy = swapsAxes ? (reverseRows ? width - 1 - x : x)
-                : orientation == ImageOrientation.Rotate180 ? height - 1 - y : y;
+                : orientation is ImageOrientation.Rotate180 or ImageOrientation.MirrorVertical ? height - 1 - y : y;
             if ((depth == 8 ? second.GetRow8(dy)[dx * 4 + channel] : second.GetRow16(dy)[dx * 4 + channel])
                 != original[(y * width + x) * 4 + channel])
                 throw new Exception("Packaged transpose changed complete pixels or scalar tails.");
@@ -1184,6 +1187,7 @@ internal static class CooperativeMemoryConsumer
             ImageOrientation.Transverse => ImageTransforms.Transpose(second, true, limits),
             ImageOrientation.Rotate180 => ImageTransforms.Rotate(second, QuarterTurn.Half, limits),
             ImageOrientation.MirrorHorizontal => ImageTransforms.FlipHorizontal(second, limits),
+            ImageOrientation.MirrorVertical => ImageTransforms.FlipVertical(second, limits),
             _ => ImageTransforms.Transpose(second, false, limits)
         })
         {
@@ -1203,6 +1207,7 @@ internal static class CooperativeMemoryConsumer
             ImageOrientation.Transverse => "transverse",
             ImageOrientation.Rotate180 => "half turn",
             ImageOrientation.MirrorHorizontal => "horizontal flip",
+            ImageOrientation.MirrorVertical => "vertical flip",
             _ => "transpose"
         };
         Console.WriteLine($"Packaged RGBA{depth} {label} preserves exact pixels, tails and shared ownership.");
@@ -1411,7 +1416,7 @@ internal static class CooperativeMemoryConsumer
         foreach (var depth in new[] { 8, 16 })
         foreach (var orientation in new[] { ImageOrientation.Transpose, ImageOrientation.Rotate90,
             ImageOrientation.Rotate270, ImageOrientation.Transverse, ImageOrientation.Rotate180,
-            ImageOrientation.MirrorHorizontal })
+            ImageOrientation.MirrorHorizontal, ImageOrientation.MirrorVertical })
             VerifyPixelPermutation(depth, orientation);
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
