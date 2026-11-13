@@ -64,6 +64,46 @@ public sealed class JpegLowFrequencyRowsTests
         Assert.Equal(0, root.Attempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void MixedRowSpectraKeepIndependentFullWidthMatrixPixels(bool scanOrder)
+    {
+        int[] values = [-32768, -32767, -4096, -1025, -33, -1, 0, 1, 31, 1023, 4095, 32767, 65536, int.MinValue, int.MaxValue];
+        ushort[] scales = [0, 1, 255, 32767, 32768, 65534, 65535];
+        var coefficients = new int[66]; var quantizers = new ushort[66]; var scan = new int[64];
+        coefficients[0] = 739519; coefficients[^1] = -739519;
+        quantizers[0] = quantizers[^1] = 7351;
+        var output = new byte[80]; var expected = new byte[64]; var kernel = BuildKernel();
+        using var root = new TestMemoryBudget(0);
+        using var context = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 1 }, default);
+        for (var frequencyRow = 0; frequencyRow < 8; frequencyRow++)
+        for (var sample = 0; sample < 256; sample++)
+        {
+            Array.Clear(coefficients, 1, 64);
+            for (var k = 0; k < 64; k++) quantizers[1 + k] = scales[(sample + k) % scales.Length];
+            // Mix sparse and ordinary spectra across vertical frequencies, not
+            // only the top-left corner. Include actual products that wrap to0.
+            for (var row = 0; row < 8; row++)
+            {
+                coefficients[1 + row * 8] = values[(sample + row) % values.Length];
+                coefficients[2 + row * 8] = sample < 128 ? sample % 15 - 7 : values[(sample + row * 3) % values.Length];
+                coefficients[3 + row * 8] = 65536;
+            }
+            if (sample % 3 != 0)
+                coefficients[1 + frequencyRow * 8 + 2 + sample % 6] = values[(sample + 5) % values.Length];
+            var original = coefficients.ToArray(); var originalQuantizers = quantizers.ToArray();
+            for (var k = 0; k < 64; k++) scan[k] = coefficients[1 + JpegTransform.Zigzag[k]];
+            var originalScan = scan.ToArray();
+            Reference(coefficients.AsSpan(1, 64), quantizers.AsSpan(1, 64), expected, kernel);
+            Array.Fill(output, (byte)0xa5);
+            JpegInverseTransform.Inverse(scanOrder ? scan : coefficients.AsSpan(1, 64),
+                quantizers.AsSpan(1, 64), output.AsSpan(8, 64), context, scanOrder);
+            Assert.Equal(expected, output.AsSpan(8, 64).ToArray());
+            Assert.All(output.Take(8).Concat(output.Skip(72)), value => Assert.Equal(0xa5, value));
+            Assert.Equal(original, coefficients); Assert.Equal(originalQuantizers, quantizers); Assert.Equal(originalScan, scan);
+        }
+        Assert.Equal(0, root.Attempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     private static int[] BuildKernel()
     {
         var weights = new int[64];
