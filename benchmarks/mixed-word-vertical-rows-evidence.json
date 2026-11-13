@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "MVR913",
+  "productionAccepted": false,
+  "shortScreensOnly": true,
+  "independentlyConfirmed": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "cases": {
+    "accepted": {
+      "librarySha256": "5c89fc2b589f637a9db713ac1594c04cf160cfec92cee8667d69de625e5dbbba",
+      "allActualUs": [
+        851.367425,
+        851.3315791666668,
+        851.2069749999999
+      ],
+      "allActualMeanUs": 851.3019930555556,
+      "nativeBeforeUs": 850.2909739583333,
+      "nativeAfterUs": 845.5628072916667,
+      "gcBytesPerOperation": 113.03333333333333,
+      "reportedGcBytesPerOperation": 114,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "rawReceipt": "tmp/mvr913-baseline-TightMixed16-short-receipt.json",
+      "rawPointChangePercent": 0.0
+    },
+    "interleaved": {
+      "librarySha256": "b2c23c1b44cc4aeac256f1da57bd321a7dd4515429e4b2aa3ea352c617df4fcb",
+      "allActualUs": [
+        871.4435916666666,
+        871.6093833333333,
+        872.3063541666667
+      ],
+      "allActualMeanUs": 871.7864430555555,
+      "nativeBeforeUs": 857.2810625,
+      "nativeAfterUs": 853.7559322916667,
+      "gcBytesPerOperation": 113.03333333333333,
+      "reportedGcBytesPerOperation": 114,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "rawReceipt": "tmp/mvr913-candidate-TightMixed16-short-receipt.json",
+      "rawPointChangePercent": 2.4062495057101563
+    },
+    "equalTapCounts": {
+      "librarySha256": "53ba795afb7c7b5c1905bee666c4b214011488321626da6bf5dc3b1c0cae6876",
+      "allActualUs": [
+        878.7868166666666,
+        871.2110916666667,
+        870.6067583333333
+      ],
+      "allActualMeanUs": 873.5348888888889,
+      "nativeBeforeUs": 855.8388125,
+      "nativeAfterUs": 850.2831614583333,
+      "gcBytesPerOperation": 113.03333333333333,
+      "reportedGcBytesPerOperation": 114,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "rawReceipt": "tmp/mvr913b-candidate-TightMixed16-short-receipt.json",
+      "rawPointChangePercent": 2.6116344158356064
+    }
+  },
+  "focused": {
+    "mvr913/windows": {
+      "productionSha256": "993835897240d8933350099ee679f44a7aa45c342e134b24f20f8dc9d41efccb",
+      "counts": {
+        "internal-normal": 48,
+        "internal-scalar": 48,
+        "public-normal": 21,
+        "public-scalar": 21
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "c78c6789e00172e7021b8d61404b50a035dca4d2f19a29f6ab420c2bb6a2f651"
+      }
+    },
+    "mvr913/linux": {
+      "productionSha256": "b2c23c1b44cc4aeac256f1da57bd321a7dd4515429e4b2aa3ea352c617df4fcb",
+      "counts": {
+        "internal-normal": 48,
+        "internal-scalar": 48,
+        "public-normal": 21,
+        "public-scalar": 21
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "c78c6789e00172e7021b8d61404b50a035dca4d2f19a29f6ab420c2bb6a2f651"
+      }
+    },
+    "mvr913b/linux": {
+      "productionSha256": "53ba795afb7c7b5c1905bee666c4b214011488321626da6bf5dc3b1c0cae6876",
+      "counts": {
+        "internal-normal": 48,
+        "internal-scalar": 48,
+        "public-normal": 21,
+        "public-scalar": 21
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "1109325dbfce61194e14b051266f9134efcdf1e2032485782b98038413967349"
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "MVR913",
+      "platform": "windows",
+      "acceptedProductionRestored": true,
+      "productionSha256": "66c014e792521ad0304e529602beed1550e31fac228faca86857fae818657e61",
+      "sourceSha256": "62f522b6ab04cad2c327f4c07b39bf1af92e28fb556124c411db75b487fbce0a",
+      "embeddedTestsMatchQualifiedArchive": true,
+      "productionRebuildsForRestoration": 0,
+      "broadTestsOrPackageChecksRepeated": false,
+      "actualPackageUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "MVR913",
+      "platform": "linux",
+      "acceptedProductionRestored": true,
+      "productionSha256": "5c89fc2b589f637a9db713ac1594c04cf160cfec92cee8667d69de625e5dbbba",
+      "sourceSha256": "62f522b6ab04cad2c327f4c07b39bf1af92e28fb556124c411db75b487fbce0a",
+      "embeddedTestsMatchQualifiedArchive": true,
+      "productionRebuildsForRestoration": 0,
+      "broadTestsOrPackageChecksRepeated": false,
+      "actualPackageUnchanged": true
+    }
+  },
+  "sourceHashes": {
+    "accepted": "62f522b6ab04cad2c327f4c07b39bf1af92e28fb556124c411db75b487fbce0a",
+    "interleaved": {
+      "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "c78c6789e00172e7021b8d61404b50a035dca4d2f19a29f6ab420c2bb6a2f651"
+    },
+    "equalTapCounts": {
+      "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "1109325dbfce61194e14b051266f9134efcdf1e2032485782b98038413967349"
+    }
+  },
+  "reference": "FFmpeg zscale zimg backend, existing retained graph/input/scratch boundary; complete packed conversion/filter/quantization/independent output/release timed.",
+  "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2126896 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+  "currentProductionEvidence": "released-image-storage-evidence.json",
+  "currentPerformanceUnchanged": true,
+  "fullOrPackageQualificationRepeated": false,
+  "publicationPostponed": true,
+  "scope": "Existing 513x259 to1027x129 RGBA16 bounded bicubic control. Raw all-actual means are diagnostics from three-actual screens, not independent regression or parity proofs. Exact managed pixels and approved native bounds unchanged.",
+  "decision": "Reject both implementations; no useful elapsed or allocation evidence supports continuation. Original source and qualified binaries restored exactly. This is not a ban on materially revised scheduling.",
+  "next": "Inspect the current demonstrated prepared Lanczos gap using existing attribution before another production hypothesis.",
+  "raw": {
+    "file": "mixed-word-vertical-rows.tar.xz",
+    "sha256": "419605a63b57876b5d07c28ec2ea456bdef39c970a6b1d1a6a9e02b8120747d8",
+    "bytes": 542472,
+    "members": 77,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "released-image-storage-qualified.tar.xz",
+        "sha256": "1ef7261190c65bd9a8d0cffa38b7904c590304e846e91419e3f3f517f5b776d6"
+      },
+      {
+        "file": "current-mixed-word-profile.tar.xz",
+        "sha256": "80c29ca252d6e6903a52d1d4ec450621b4e47846565ee0d429e09edf5ecaa288"
+      }
+    ]
+  }
+}
