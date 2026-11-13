@@ -12,15 +12,24 @@ the **14.68% raw** view includes a **−7.87%** reference clock change. One-shot
 passes; no further byte-reduction tuning. Exact pixels, admission and owned capacity
 stay unchanged; the second sum borrows 8 KiB from unpublished output.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with those two
-updated costs, has **162 pass, 13 gaps, 16 uncertain** across 191 existing comparisons.
+[Packed mixed-word storage](../benchmarks/MIXED-WORD-PACKED-CACHE.md) passes the
+bounded bicubic control: **820.00 / zimg 846.10 µs, upper 0.978**, **113 B/op**.
+Independent saving is **35.58 µs / 4.16% raw**, **3.38% reference-normalized**;
+both are confirmed. Tight vertical independently saves **23.04 µs / 4.79% raw**;
+default workspace remains uncertain. The earlier candidate's vertical regression
+is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
+capacity reduction. Stop passes.
+
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these five
+updated costs, has **163 pass, 12 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. Larger demonstrated remaining gaps include bounded mixed-word
-bicubic and prepared word Lanczos reduction; tiny copy/turn gaps remain in the report.
+capture is hidden. Larger demonstrated remaining gaps include bounded byte wide
+bicubic and prepared word Lanczos reduction; the retained horizontal-CMYK JPEG view
+has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -149,7 +158,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 503.81 | 576.25 | 0.874 / 0.886 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg (uncertain) † → 128×64 | 342.20 | 350.44 | 0.976 / 1.004 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 830.84 | 864.78 | 0.961 / 0.967 | 113 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB (gap) † → 1027×129 | 866.89 | 843.63 | 1.028 / 1.032 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 820.00 | 846.10 | 0.969 / 0.978 | 113 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (gap) † → 128×64 | 357.38 | 347.95 | 1.027 / 1.031 | 113 |

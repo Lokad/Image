@@ -77,7 +77,7 @@ internal static class MixedWordColumnBicubicResize
         finally { context.Release(workspaceBytes); }
     }
 
-    internal const int ResultWorkspaceBytes = 28136;
+    internal const int ResultWorkspaceBytes = 27112;
 
     internal static bool TryLocateResultWorkspace(ImageBuffer result, out int start, out int safeRows)
     {
@@ -109,8 +109,11 @@ internal static class MixedWordColumnBicubicResize
         var identity = typeof(TBand) == typeof(VerticalEightRowBand) || typeof(TBand) == typeof(VerticalSixteenRowBand);
         var rowCapacity = typeof(TBand) == typeof(SixtyFourRowBand) ? 64
         : typeof(TBand) == typeof(SixteenRowBand) || typeof(TBand) == typeof(VerticalSixteenRowBand) ? 16 : 8;
-        var sourceCapacity = rowCapacity == 64 ? 144 : rowCapacity == 16 ? 42 : 24;
-        var decoded = Take<Vector512<double>>(ref workspace, sourceCapacity);
+        var sourceCapacity = rowCapacity == 64 ? 256 : rowCapacity == 16 ? 42 : 24;
+        // The large bank stores 256 exact UInt32 product vectors in the space
+        // of 128 double vectors. Small banks retain their original typed view;
+        // create the product view only inside the large-bank branches.
+        var decoded = Take<Vector512<double>>(ref workspace, rowCapacity == 64 ? 128 : sourceCapacity);
         var cache = Take<Vector256<double>>(ref workspace, 6 * rowCapacity);
         var columnIds = Take<int>(ref workspace, 6);
         var vertical = Take<double>(ref workspace, rowCapacity * 10);
@@ -199,7 +202,10 @@ internal static class MixedWordColumnBicubicResize
                         : Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(offset, 8))).AsUInt16();
                         var samples = Avx2.ConvertToVector256Int32(packed);
                         var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-                        decoded[sy] = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+                        var values = Avx2.MultiplyLow(samples, factors).AsUInt32();
+                        if (typeof(TBand) == typeof(SixtyFourRowBand))
+                            MemoryMarshal.Cast<Vector512<double>, Vector256<uint>>(decoded)[sy] = values;
+                        else decoded[sy] = Avx512F.ConvertToVector512Double(values);
                     }
                     for (var y = 0; y < length; y++)
                     {
@@ -209,7 +215,14 @@ internal static class MixedWordColumnBicubicResize
                         var offsets = rowOffsets.Slice(y * 10, counts[y]);
                         var sum = Vector512<double>.Zero;
                         for (var ty = 0; ty < weights.Length; ty++)
-                            sum = Avx512F.Add(sum, Avx512F.Multiply(decoded[offsets[ty]], Vector512.Create(weights[ty])));
+                        {
+                            // Every UInt32 converts exactly to binary64. Keep
+                            // the original multiply/add sequence after expansion.
+                            var values = typeof(TBand) == typeof(SixtyFourRowBand)
+                                ? Avx512F.ConvertToVector512Double(MemoryMarshal.Cast<Vector512<double>, Vector256<uint>>(decoded)[offsets[ty]])
+                                : decoded[offsets[ty]];
+                            sum = Avx512F.Add(sum, Avx512F.Multiply(values, Vector512.Create(weights[ty])));
+                        }
                         cache[slot * rowCapacity + y] = sum.GetLower();
                         if (paired) cache[nextSlot * rowCapacity + y] = sum.GetUpper();
                     }

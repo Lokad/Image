@@ -178,6 +178,35 @@ def apply_released_image_storage(codecs, editing, read_rows):
     return codecs, editing, read_rows, current
 
 
+def apply_mixed_word_cache(editing):
+    current = json.loads((ROOT / 'benchmarks/mixed-word-packed-cache-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['currentImageOwnerViewStatuses'] == {'pass': 163, 'gap': 12, 'uncertain': 16}
+    assert current['currentSeventyThreeResizeStatuses'] == {'pass': 67, 'gap': 1, 'uncertain': 5}
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6551
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    c = current['cases']['TightMixed16']
+    assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert c['status'] == 'pass' and c['upper'] <= 1
+    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+    assert c['actualIterations'] == 12 and c['allActualsRetained']
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    label = 'Bicubic RGBA16, width up / height down, input+output+4 KiB'
+    rows, seen = [], 0
+    for line in editing.splitlines():
+        if line.startswith('| ' + label):
+            seen += 1
+            line = f"| {label} † → 1027×129 | {c['managedUs']:,.2f} | {c['nativeUs']:,.2f} | {c['ratio']:.3f} / {c['upper']:.3f} | {c['allocatedBytes']:,} |"
+        rows.append(line)
+    assert seen == 1
+    return '\n'.join(rows)
+
+
 def apply_lanczos_output_rows(editing):
     current = json.loads((ROOT / 'benchmarks/lanczos-paired-output-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2460,6 +2489,7 @@ def render():
 
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     editing, lanczos_current = apply_lanczos_output_rows(editing)
+    editing = apply_mixed_word_cache(editing)
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -2476,15 +2506,24 @@ the **14.68% raw** view includes a **−7.87%** reference clock change. One-shot
 passes; no further byte-reduction tuning. Exact pixels, admission and owned capacity
 stay unchanged; the second sum borrows 8 KiB from unpublished output.
 
-The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with those two
-updated costs, has **162 pass, 13 gaps, 16 uncertain** across 191 existing comparisons.
+[Packed mixed-word storage](../benchmarks/MIXED-WORD-PACKED-CACHE.md) passes the
+bounded bicubic control: **820.00 / zimg 846.10 µs, upper 0.978**, **113 B/op**.
+Independent saving is **35.58 µs / 4.16% raw**, **3.38% reference-normalized**;
+both are confirmed. Tight vertical independently saves **23.04 µs / 4.79% raw**;
+default workspace remains uncertain. The earlier candidate's vertical regression
+is retained. The borrowed view is 1 KiB smaller, with no owned/admitted/retained
+capacity reduction. Stop passes.
+
+The [released-storage view](../benchmarks/RELEASED-IMAGE-STORAGE.md), with these five
+updated costs, has **163 pass, 12 gaps, 16 uncertain** across 191 existing comparisons.
 Unchanged paths reuse their identified source-valid evidence. The complete
 RGBA16 PNG decode/orient/crop/fit operation independently saves **317.42 µs / 9.74%**
 and **1,063,078 allocated B/op**. Its parity remains uncertain. The bounded byte
 128×64 control has a recorded **1.59 µs raw adverse effect**; its normalized effect
 is inconclusive and both contemporary builds miss parity. No adverse or uncertain
-capture is hidden. Larger demonstrated remaining gaps include bounded mixed-word
-bicubic and prepared word Lanczos reduction; tiny copy/turn gaps remain in the report.
+capture is hidden. Larger demonstrated remaining gaps include bounded byte wide
+bicubic and prepared word Lanczos reduction; the retained horizontal-CMYK JPEG view
+has an equivalent fresh-context pass. Tiny copy/turn gaps remain in the report.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
