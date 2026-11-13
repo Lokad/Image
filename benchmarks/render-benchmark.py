@@ -291,6 +291,46 @@ def apply_current_vp8_stream_confidence(codecs):
     return codecs.replace(found[0], f'{prefix} (parity confirmed) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
 
 
+def apply_current_bicubic_adjacent_confidence(editing):
+    current = json.loads((ROOT / 'benchmarks/bicubic-current-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6624
+    assert q['sameActualPackageBothOsAndThreeExamplesPassed'] and q['broadOrPackageRepeats'] == 0
+    assert current['measurement']['allBuilds'] == 0 and current['measurement']['operationsEachSubject'] == 64
+    assert current['currentImageOwnerViewStatuses'] == {'passCount': 179, 'gaps': 1, 'uncertain': 11, 'total': 191}
+    for c in current['cases'].values():
+        assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 112
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert c['nativeRgbMaximum'] <= 1 and c['nativeAlphaMaximum'] <= 1
+        assert c['nativeRgbRmse'] <= .25 and c['nativeAlphaRmse'] <= .25
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    for name, depth in [('TightWide8', 8), ('TightWide16', 16)]:
+        c = current['cases'][name]
+        assert c['status'] == 'pass'
+        prefix = f'| Bicubic RGBA{depth} reduction, input+output+4 KiB'
+        found = [line for line in editing.splitlines() if line.startswith(prefix) and '128×64' in line]
+        assert len(found) == 1
+        editing = editing.replace(found[0], f'{prefix} † → 128×64 | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |')
+    c = current['cases']['TightWide8']
+    word = current['cases']['TightWide16']
+    mixed = current['cases']['Mixed16']
+    note = (f'[Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) '
+            f'resolves default mixed-word resize (**{mixed["managedUs"]:,.2f} / zimg {mixed["nativeUs"]:,.2f} µs, '
+            f'upper {mixed["upper"]:.3f}**) and bounded byte-wide resize (**{c["managedUs"]:,.2f} / '
+            f'{c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**). Bounded word-wide also passes '
+            f'(**{word["managedUs"]:,.2f} / {word["nativeUs"]:,.2f} µs, upper {word["upper"]:.3f}**). '
+            'All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; '
+            'current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries '
+            'remain explicit; no production speedup is claimed.')
+    return editing, note
+
+
 def apply_current_pixel_reversal(editing):
     current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
@@ -2813,6 +2853,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     png_stream_word_note = current_png_stream_word_note()
     codecs = apply_current_vp8_stream_confidence(codecs)
+    editing, bicubic_adjacent_note = apply_current_bicubic_adjacent_confidence(editing)
     return f"""# Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
@@ -2852,10 +2893,10 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 176 pass, 1 gap, 14 uncertain**. This does not establish full parity:
+image views: 179 pass, 1 gap, 11 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
-Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
+{bicubic_adjacent_note}
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.

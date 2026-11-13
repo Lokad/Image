@@ -37,10 +37,10 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 176 pass, 1 gap, 14 uncertain**. This does not establish full parity:
+image views: 179 pass, 1 gap, 11 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
-Bounded byte-wide bicubic remains uncertain after its scoped paired gain.
+[Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.
@@ -197,8 +197,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 820.00 | 846.10 | 0.969 / 0.978 | 113 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (uncertain) † → 128×64 | 360.12 | 348.02 | 1.035 / 1.041 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB (uncertain) † → 128×64 | 416.84 | 415.03 | 1.004 / 1.020 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 340.70 | 347.49 | 0.980 / 0.984 | 112 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Plain transpose RGBA16 † → 259×513 | 34.25 | 43.85 | 0.781 / 0.859 | 112 |

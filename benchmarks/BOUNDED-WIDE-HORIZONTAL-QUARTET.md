@@ -1,5 +1,10 @@
 # Bounded wide horizontal reuse
 
+[Current adjacent confidence](BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) supersedes
+the standalone parity uncertainty below: the same bounded byte-wide operation
+passes on the current immutable package DLL. The earlier scoped DLL gain and
+all adverse/uncertain data remain distinct; this is not a new production gain.
+
 The existing complete 513×259 RGBA8 → 128×64 bicubic control saves **3.29%**
 in one counterbalanced immutable-DLL comparison: **385.00 → 372.34 µs**, ratio
 confidence **.9615–.9728**. All twelve alternating pairs of sixteen complete

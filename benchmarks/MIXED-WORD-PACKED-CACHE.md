@@ -1,5 +1,10 @@
 # Mixed-word bicubic packed cache
 
+[Current adjacent confidence](BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) supersedes
+only the default mixed-word uncertainty below. That complete operation passes
+on the current immutable package DLL; original captures remain history, without
+a production speedup claim. Bounded and tight-vertical passes remain stopped.
+
 Accepted revision MWB915B, 2026-11-13. The large mixed-word column bank retains exact
 UInt32 alpha products and expands them at each weighted read. Its 256-entry
 domain removes the hot byte-index bounds check and uses 8,192 B instead of
