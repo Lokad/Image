@@ -48,6 +48,12 @@ historical gain and superseded-case audits stay in their reports. Rendered resul
 are byte-identical. Require concrete attribution or a materially revised design
 before another production copy candidate; no permanent family ban.
 
+The later [block-value trial](VECTOR-BLOCK-VALUE-COPY-SCREEN.md) confirms tiny
+word/byte copy gains but a larger adverse complete PNG16 pipeline effect. All11
+affected references and one matched pipeline comparison are retained; qualified
+source/modules are restored, current results unchanged. The contradiction is
+resolved by rejecting the stage before Windows/full/package qualification.
+
 [Compact VP8L pair-reuse trials](WEBP-COMPACT-PAIR-REUSE-TRIALS.md) remain
 unaccepted: scoped opaque gains did not justify photograph costs and added storage.
 Qualified source/modules are restored exactly; the current costs above are unchanged.
