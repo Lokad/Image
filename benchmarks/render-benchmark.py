@@ -342,15 +342,45 @@ def apply_current_bicubic_adjacent_confidence(editing):
     c = current['cases']['TightWide8']
     word = current['cases']['TightWide16']
     mixed = current['cases']['Mixed16']
+    wide_current = json.loads((ROOT / 'benchmarks/bicubic-wide-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    bounded_current = json.loads((ROOT / 'benchmarks/bicubic-bounded-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    for scoped in (wide_current, bounded_current):
+        c, sq = scoped['case'], scoped['qualification']
+        assert scoped['measurementAccepted'] and not scoped['productionChanged'] and not scoped['productionSpeedupClaim']
+        assert scoped['measurement']['allBuilds'] == scoped['measurement']['broadOrPackageRepeats'] == 0
+        assert scoped['measurement']['previousOperationsPerSubject'] == 64 and c['operationsPerSubject'] == 256
+        assert scoped['raw']['mirrored'] and scoped['raw']['allMembersVerified']
+        assert c['librarySha256'] == scoped['producers']['timedArtifactSha256'] == sq['actualPackageLibrarySha256']
+        assert scoped['producers']['packageSha256'] == sq['actualPackageSha256'] and sq['fullChecksEachOs'] == 6690
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['metadata']['nativeRgbMaximum'] <= 1 and c['metadata']['nativeAlphaMaximum'] <= 1
+        assert c['metadata']['nativeRgbRmse'] <= .25 and c['metadata']['nativeAlphaRmse'] <= .25
+    wide, bounded = wide_current['case'], bounded_current['case']
+    assert wide['status'] == 'pass' and wide['allocatedBytes'] == 198350
+    assert bounded['status'] == 'uncertain' and bounded['allocatedBytes'] == 112
+    prefix = '| Bicubic RGBA8, fresh managed / prepared zimg'
+    found = [line for line in editing.splitlines() if line.startswith(prefix) and '128×64' in line]
+    assert len(found) == 1
+    editing = editing.replace(found[0], f'{prefix} † → 128×64 | {wide["managedUs"]:,.2f} | {wide["nativeUs"]:,.2f} | {wide["ratio"]:.3f} / {wide["upper"]:.3f} | {wide["allocatedBytes"]:,} |')
+    c = current['cases']['TightWide8']
     note = (f'[Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) '
             f'resolves default mixed-word resize (**{mixed["managedUs"]:,.2f} / zimg {mixed["nativeUs"]:,.2f} µs, '
             f'upper {mixed["upper"]:.3f}**) and bounded byte-wide resize (**{c["managedUs"]:,.2f} / '
             f'{c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**). Bounded word-wide also passes '
             f'(**{word["managedUs"]:,.2f} / {word["nativeUs"]:,.2f} µs, upper {word["upper"]:.3f}**). '
-            'All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; '
-            'current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries '
-            'remain explicit; no production speedup is claimed.')
-    return editing, note
+            'All three stop, **112 B/op**, zero builds. '
+            f'[Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) '
+            f'also passes/stops: **{wide["managedUs"]:,.2f} / zimg {wide["nativeUs"]:,.2f}µs, upper {wide["upper"]:.6f}**, '
+            '**198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; '
+            'zero builds/qualification repeats, no production speedup. '
+            f'The [bounded 16×8 word view](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) '
+            f'remains uncertain after its 64→256 integration: **{bounded["managedUs"]:,.2f} / '
+            f'{bounded["nativeUs"]:,.2f}µs, upper {bounded["upper"]:.6f}**, **112 B/op**. '
+            'Fresh managed/prepared native boundaries remain explicit.')
+    return editing, note, wide_current
 
 
 def apply_released_image_storage(codecs, editing, read_rows):
@@ -2841,9 +2871,9 @@ remains linked history; no historical phase sum is used."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
     codecs, read_table, mode_current = apply_current_vp8_mode_window(codecs, read_table)
-    editing, bicubic_adjacent_note = apply_current_bicubic_adjacent_confidence(editing)
+    editing, bicubic_adjacent_note, wide_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = mode_current['cases']['OpaqueCancelable8']
-    image_view_counts = mode_current['currentImageOwnerViewStatuses']
+    image_view_counts = wide_current['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']

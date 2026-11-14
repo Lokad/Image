@@ -1,0 +1,224 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TWL1006",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "a6f3449f25f8323c7e3996301aee50bd20ec8f9519b08bca5c1308ce258a0745",
+    "linuxSha256": "b1e968e88ec951e2aef5efe16345bffba2518db4bc8c3e8468284c96ce13e982",
+    "timedArtifactSha256": "b1e968e88ec951e2aef5efe16345bffba2518db4bc8c3e8468284c96ce13e982",
+    "packageSha256": "03f0db386422afb7850f3b9192641bf2b36d78fcdd277aaee3fe99fe3292fda6"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "f175cc867e3dfcab25958169693eca6f3539268632cfefdea26a602829f42dfe",
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/ImageBuffer.cs": "820f0e9c2bca4ffab866351b3d6201e754fb785aa7aee5d03509a76da8505fa0",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "6b08a12de87f1f3317ffc34369223f7436573e56107544282ca455d241521c05",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "8cc2388b31327744260d4ad061b9883767e7e4e0e1e5a8f074c1135fce7cb8fb",
+    "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "260731fb21b5e055c894be0cb4667c8a0e6071e2e97f01cdd6796141477a2d49"
+  },
+  "case": {
+    "caseId": "Tight16x8_16",
+    "managedUs": 494.73003352864583,
+    "nativeUs": 494.7755354817708,
+    "ratio": 0.9999080351596594,
+    "lower": 0.9932665448025649,
+    "upper": 1.0030687371087634,
+    "status": "uncertain",
+    "allocatedBytes": 112,
+    "librarySha256": "b1e968e88ec951e2aef5efe16345bffba2518db4bc8c3e8468284c96ce13e982",
+    "operationsPerSubject": 256,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "pairedRatioConfidence": [
+      0.9940354707201273,
+      1.0015462015724557
+    ],
+    "nativeBracketMeansUs": [
+      495.9059072265625,
+      495.8302174479167,
+      494.7755354817708
+    ],
+    "metadata": {
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8",
+      "nativeOutputSha256": "0b94e3613c10f789ca0070a06f0f96eb496d9dd661a5159ec43882b8f2a015e5",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.07216878364870322,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "managedMaxWorkingBytes": 1068056
+    },
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1068056 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg scaler backend worker",
+      "sourceSha256": "c372f31d68131d5596b743f73eb951bbbbb509c74024beadd0d0990509c097c4",
+      "buildScriptSha256": "0105eea2be13476b75aa0a1ad05930e4c70d929f3258d235b357a660a0ab88fc",
+      "workerSha256": "37ab9de81f51f37bbb703482f9972593ea7b417ad135a51fbf87da34fe06efae",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DLOKAD_IMAGE_WIDE_DOWNSAMPLE=4",
+        "-DLOKAD_IMAGE_SAMPLE_DEPTH=16"
+      ],
+      "staticArchives": {
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "zimgVersion": "3.0.6",
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lzimg -lstdc++"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "bicubic-resize",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "affinityCount": 1,
+      "filterThreads": 1,
+      "threadType": 0,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "independentLiveOutputs": true,
+      "initialCompletedOperations": 3,
+      "inputStride": 4104,
+      "backend": "zimg (FFmpeg zscale backend)",
+      "scalar": false,
+      "haloPixels": 64,
+      "haloPixelsX": 64,
+      "haloPixelsY": 64,
+      "haloAndPackingTimed": true,
+      "outputAllocationAndRepackingTimed": true,
+      "alphaTolerance1": true,
+      "premultipliedFloatOutput": true,
+      "unpremultiplicationAndQuantizationTimed": true,
+      "lowAlphaRgbAllowance": false,
+      "lowAlphaRgbReferenceMaximum": 0,
+      "lowAlphaRgbErrorMaximum": 1,
+      "scratchBytes": 4167808,
+      "nativeOutputPixelAllocationBytes": 3072
+    },
+    "sourceEvidence": {
+      "observation": "tmp/twl1006-Tight16x8_16-counterbalanced.json",
+      "receipt": "tmp/twl1006-Tight16x8_16-counterbalanced-receipt.json"
+    }
+  },
+  "measurement": {
+    "allBuilds": 0,
+    "driverBuilds": 0,
+    "broadOrPackageRepeats": 0,
+    "pairs": 12,
+    "operationsPerSubject": 256,
+    "previousOperationsPerSubject": 64,
+    "allActualsRetained": true,
+    "confidence": "Unchanged worse-of paired log-ratio and all-actual/diagnostic mean confidence against native before/paired/after brackets.",
+    "reason": "One prespecified longer-integration resolution of existing bounded bicubic Tight16x8_16 uncertainty:64 complete operations (~32ms) ->256 (~128ms), retaining12alternating pairs/all12native brackets and unchanged conservative confidence. Original496.74/495.21us interval.984873..1.011176 is not a demonstrated gap. Preserve naturalGC, frozen source/settings/reference identities, exact rational/full-word managed samples, native<=1/RMSE<=.25, zero-alpha RGB and independent ownership. Complete managed preparation/admission/filtering/output/disposal stays timed. Native retains graph/input/scratch; explicitly asymmetric diagnostic, distinct from passing equivalent one-shot/prepared controls. No new image/shape/depth/filter/settings control or builds/broad/package repeats. Current verified actual package; stop pass, attribute separated gap, preserve uncertainty without an identical favorable repeat."
+  },
+  "storage": {
+    "borrowedSourceBytes": 1062936,
+    "independentResultBytes": 1024,
+    "additionalWorkspaceCeilingBytes": 4096,
+    "localWorkingLimitBytes": 1068056,
+    "retainedOperationScratchBytes": 0,
+    "defaultIdlePolicyUnchanged": true,
+    "callerRootBypassesIdleStorage": true,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "note": "Allowed workspace is a ceiling, not measured actual/physical peak. GC allocation, admitted capacity and retained storage remain distinct; no capacity or allocation-saving claim."
+  },
+  "qualification": {
+    "provider": "benchmarks/vp8-mode-window-evidence.json",
+    "fullChecksEachOs": 6690,
+    "actualPackageSha256": "03f0db386422afb7850f3b9192641bf2b36d78fcdd277aaee3fe99fe3292fda6",
+    "actualPackageLibrarySha256": "b1e968e88ec951e2aef5efe16345bffba2518db4bc8c3e8468284c96ce13e982",
+    "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
+    "resizeScalarStorageEvidenceReused": "benchmarks/bicubic-current-adjacent-confidence-evidence.json",
+    "broadOrPackageRepeats": 0
+  },
+  "history": {
+    "case": {
+      "caseId": "Tight16x8_16",
+      "managedUs": 496.74470833333334,
+      "nativeUs": 495.2090130208333,
+      "ratio": 1.0031011053355674,
+      "lower": 0.9848734177817433,
+      "upper": 1.0111760558757503,
+      "status": "uncertain",
+      "allocatedBytes": 112,
+      "librarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 16x8 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1068056 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, sixty-four-pixel clamped halo (86.703% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8",
+      "nativeOutputSha256": "0b94e3613c10f789ca0070a06f0f96eb496d9dd661a5159ec43882b8f2a015e5",
+      "depth": 16,
+      "width": 513,
+      "height": 259,
+      "outputWidth": 16,
+      "outputHeight": 8,
+      "managedMaxWorkingBytes": 1068056,
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.07216878364870322,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "nativeReference": {
+        "sourceSha256": "c372f31d68131d5596b743f73eb951bbbbb509c74024beadd0d0990509c097c4",
+        "buildScriptSha256": "0105eea2be13476b75aa0a1ad05930e4c70d929f3258d235b357a660a0ab88fc",
+        "workerSha256": "37ab9de81f51f37bbb703482f9972593ea7b417ad135a51fbf87da34fe06efae"
+      },
+      "nativeVersions": {},
+      "observation": "tmp/bca951-Tight16x8_16-adjacent.json",
+      "receipt": "tmp/bca951-Tight16x8_16-adjacent-receipt.json"
+    },
+    "allRawRetained": true,
+    "reason": "Prespecified longer integration on current verified package, not a production change or historical-clock gain."
+  },
+  "raw": {
+    "file": "bicubic-bounded-word-long-integration.tar.xz",
+    "sha256": "a1db6c3f2d8136e083ae9773b878a20ff18e5999aa7574f687bf7baff3fdd5c9",
+    "bytes": 24532,
+    "members": 19,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-mode-window-qualified.tar.xz",
+        "sha256": "e1ba2ec841b31acfcdbabfee9968a5028f33e3f0c5571ecbd49656347beea199"
+      },
+      {
+        "file": "bicubic-word-current-adjacent.tar.xz",
+        "sha256": "d0f793e48d419c61de2a1c58d7f574e640bdbe029280e31777291c69a31a5a5e"
+      }
+    ]
+  },
+  "decision": "Uncertain, not a pass or a demonstrated optimization gap. Keep this conservative result without another identical favorable capture; no production change. All289material paths remain required."
+}
