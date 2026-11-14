@@ -1,42 +1,46 @@
 # Current opaque VP8 encode confidence
 
-Both frozen513×259 controls remain **uncertain**, with exact complete packets
-and reconstructed samples. Neither establishes a production speedup or optimization
-gap. Preserve these captures; do not repeat unchanged timing for favorable bounds.
+Two prespecified longer complete batches resolve the existing uncertain controls.
+**Photograph has a small demonstrated gap; effort-2 diagram passes/stops.**
+These are current measurements, not production speedup claims.
 
-| Complete original operation | Lokad / FFmpeg-libwebp µs | Conservative ratio interval | Managed B/op | Exact packet B |
+| Frozen513×259 complete control | Lokad / FFmpeg-libwebp µs | Conservative interval / status | Managed B/op | Exact packet B |
 | --- | ---: | ---: | ---: | ---: |
-| Photograph,method4,RDO | 9,721.80 / 9,717.17 | 0.991–1.007 | 809,080 | 17,688 |
-| Diagram,method2,distortion-only | 2,492.72 / 2,512.68 | 0.980–1.001 | 406,664 | 7,330 |
+| Photograph,method4,RDO | 9,798.43 / 9,702.89 | 1.00432–1.01401 / gap | 809,080 | 17,688 |
+| Diagram,method2,distortion-only | 2,492.83 / 2,513.35 | 0.98485–0.99709 / pass | 406,664 | 7,330 |
 
-Each first adjacent capture retains12 alternating pairs and12native batches
-before/after:8complete operations per photograph subject,32per diagram subject.
-Photograph evidence is reused unchanged. Original inputs/Q75/methods4and2,
-source preservation, normal/scalar CLI, alpha and independent-output checks pass.
-Exact packets establish this scope; equal quality numbers do not establish matching.
-All actuals and conservative confidence views remain retained.
+The previous roughly80ms blocks produced .991–1.007/.980–1.001 uncertainty.
+One frozen batch change,8→32photograph and32→128diagram, integrates about310ms.
+Keep all12alternating pairs,12native batches before/after, the same four untimed
+warmup cycles, natural GC and the worse paired/all-actual/diagnostic confidence.
+No setting, quality gate, sample exclusion or acceptance threshold changes.
+No scheduling/GC/thermal cause is asserted; no unchanged timing retry follows.
+Prior adversity and uncertainties remain in the evidence/raw.
 
-CPU0/one thread, optimized JIT, natural nonconcurrent workstation GC and idle-v2
-pass. Both sides include normalization/repacking, full encoding, independent output
-growth/acquisition and release. Native wrappers/private scratch remain retained as
-declared; these are not fresh-context comparisons. Startup, IPC, I/O, fixture
-preparation and validation remain excluded. Historical global/post-GC observations
-stay separate; no incremental gain is inferred from different clocks.
+Both sides include source processing/normalization, complete encode, fresh
+independent output growth/acquisition and disposal. Native wrappers/input/private
+scratch remain retained as declared; these are not fresh-context comparisons.
+Startup,JIT,IPC,I/O,fixtures and checks stay outside clocks. CPU0,one thread,
+Release,optimized JIT,nonconcurrent workstation GC and idle-v2 guards pass.
+Frozen source/settings, exact complete packets/reconstructed samples/alpha,
+syntax, normal/scalar CLI, borrowed source and surviving owners pass.
+Numerical quality equality does not establish equivalence.
 
-Total allocation, admission and retention stay separate. Source analysis and
-decisions keep1KiB/16KiB coarse allowances; no new owned capacity or retained
-operation scratch. Direct counters differ from historical BDN; no saving is inferred.
-Physical/native/JIT/pool peaks remain unmeasured.
+Allocation remains809080/406664B/op. Retained operation scratch is zero;
+no production/capacity/retention changes occur. Governed/physical/native/JIT
+peaks are not remeasured. Current actualee4bc932private0.2.1package/b26c35e1DLL
+reuses6,683full/live checks perOS, scalar/affectedISA and SAMEpackage/all3examples.
+**Zero builds or broad/package repeats.** Published releases remain immutable.
 
-No build or broad/package rerun. Reuse the same actual package's
-[6,600full/live checks perOS, scalar/affectedISA, consumers/all3examples](SHARED-AXIS-SWAP.md).
-Other costs reuse [rounded borders](VP8-ROUNDED-BORDER-PREDICTION.md) and
-[alpha scopes](WARM-ADJACENT-CONFIDENCE.md): seven passes/two uncertainties across
-nine lossy controls. Stop passes and continue demonstrated independent gaps.
-All289paths remain required; publication is postponed.
+The nine lossy controls now have **eight passes/one photograph gap**.
+All eight lossless/alpha controls pass/stop. Prioritize the photograph's roughly
+95.5µs current gap using
+[current attribution](CURRENT-VP8-PHOTO-ATTRIBUTION.md), preserving exact packets.
+All289required paths remain; publication is postponed.
 
-[Evidence](vp8-encode-current-confidence-evidence.json) pins modules, references,
-boundaries and samples/confidence. New diagram raw`vp8-encode-current-confidence.tar.xz`,
-SHA256`59d371609310eefbd56ed7c6330a7574f31ec86e517802c54c6a806e91efe710` (385,084B/19members), is mirrored/member-verified.
-Dependencies retain the unchanged photograph capture, original workers/driver and
-qualified actual package. The prior photograph report remains in linked Git history.
+[Evidence](vp8-encode-current-confidence-evidence.json) pins both current captures,
+prior points and the unchanged qualification. Mirrored/member-verified raw:
+vp8-opaque-long-batch-attribution.tar.xz, **176772B/53members**,
+SHA256 a2d294d298ed51742daaf5d0e15e5cdb9ebdc0aa9515bcfd5ccfd80b0aba1265.
+Dependencies retain original workers/harness/fixtures, prior measurements,
+actual package and superseded attribution.

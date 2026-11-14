@@ -1,564 +1,1787 @@
 {
-  "schemaVersion": 2,
   "project": "Lokad.Image",
+  "stage": "VPA984",
   "productionChanged": false,
   "diagnosticOnly": true,
   "noTimingClaim": true,
+  "profiledElapsedDiscarded": true,
   "case": "PhotographLossy8",
-  "scope": "One two-second capture of the existing complete opaque PhotographLossy8 encode on immutable qualified RSP186. CPU0; sampler CPU1. Original frozen settings/inputs, complete packet validated by original receipt, normalization/output ownership unchanged. Profiled elapsed discarded; samples and skid are not component times or predicted savings.",
-  "productionSha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
-  "sourceSha256": "56f1b320cb425fce33547daa080ced45c8817c269de581a8f514af15f203401a",
-  "samples": 1961,
+  "productionSha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+  "packageSha256": "ee4bc932422375b8d7865fcc35af44e03de6e0d66cf3bc5cf03f942d7670c968",
+  "samples": 1968,
+  "managedSamples": 1928,
   "seconds": 2,
   "methods": [
-    {
-      "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
-      "samples": 357
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
-      "samples": 165
-    },
-    {
-      "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
-      "samples": 154
-    },
-    {
-      "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyVectors(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
-      "samples": 125
-    },
-    {
-      "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::QuantizedLevels(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32)[Optimized]",
-      "samples": 117
-    },
-    {
-      "method": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,bool,int32&,uint32&,int32&)[Optimized]",
-      "samples": 108
-    },
-    {
-      "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
-      "samples": 85
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
-      "samples": 77
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
-      "samples": 75
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
-      "samples": 62
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallBlock(valuetype Lokad.Image.Internal.Vp8SmallIntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
-      "samples": 56
-    },
-    {
-      "method": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Chroma(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,bool)[Optimized]",
-      "samples": 52
-    },
-    {
-      "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Energy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
-      "samples": 50
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::WalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
-      "samples": 35
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
-      "samples": 30
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourPredictions(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
-      "samples": 29
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::SmallMode(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,int32,int32,int32)[Optimized]",
-      "samples": 25
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
-      "samples": 24
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Check(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32)[Optimized]",
-      "samples": 24
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
-      "samples": 20
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourBlocks(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
-      "samples": 18
-    },
-    {
-      "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::VariableCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
-      "samples": 15
-    },
-    {
-      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32)[Optimized]",
-      "samples": 15
-    },
-    {
-      "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Band(int32)[Optimized]",
-      "samples": 14
-    },
-    {
-      "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Band(int32)[Optimized]",
-      "samples": 14
-    },
-    {
-      "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareChroma8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
-      "samples": 14
-    },
-    {
-      "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::Add(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,bool)[Optimized]",
-      "samples": 14
-    },
-    {
-      "method": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Values()[Optimized]",
-      "samples": 13
-    },
-    {
-      "method": "valuetype Lokad.Image.Internal.Vp8SourceHistogram/Shape [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::Describe(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
-      "samples": 12
-    },
-    {
-      "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Prepare(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,bool,int32)[Optimized]",
-      "samples": 12
-    }
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+      518
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      161
+    ],
+    [
+      "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,int32&)[Optimized]",
+      108
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallCandidates(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      77
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+      77
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+      73
+    ],
+    [
+      "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Chroma(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,bool)[Optimized]",
+      68
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+      67
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyBlocks(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32)[Optimized]",
+      60
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare4(int32,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8>)[Optimized]",
+      55
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Energy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+      46
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+      43
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddFourBlocks(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+      42
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      40
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::WalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+      38
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourPredictions(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+      37
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      36
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::VariableCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+      33
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+      29
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32)[Optimized]",
+      26
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Diffuse(int16&,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+      25
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourBlocks(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+      21
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Encode(class Lokad.Image.Internal.Vp8FramePlan,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&)[Optimized]",
+      19
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::SmallMode(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,int32,int32,int32)[Optimized]",
+      19
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,bool,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint32>,bool,class Lokad.Image.Internal.Vp8CoefficientProgram)[Optimized]",
+      19
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Prepare(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,bool,int32)[Optimized]",
+      18
+    ],
+    [
+      "valuetype Lokad.Image.Internal.Vp8SourceHistogram/Shape [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::Describe(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
+      17
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareOpaqueTiles(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      15
+    ],
+    [
+      "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Values()[Optimized]",
+      14
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::CorrectDc(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,valuetype [System.Runtime]System.Span`1<int8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+      13
+    ]
   ],
-  "targetCode": [
+  "currentCodecCode": [
     {
-      "address": "0x7dda558c6460",
-      "size": 6685,
-      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]"
+      "address": "0x7ddffc0a7780",
+      "size": 83,
+      "name": "instance class [System.Runtime]System.Collections.Generic.IEnumerator`1<object[]> [Lokad.Image.Benchmarks] Lokad.Image.Tooling.OriginalVp8Controls+<Cases>d__0::System.Collections.Generic.IEnumerable<System.Object[]>.GetEnumerator()[Optimized]"
     },
     {
-      "address": "0x7dda558cf960",
-      "size": 3931,
+      "address": "0x7ddffc0a77f0",
+      "size": 4472,
+      "name": "instance bool [Lokad.Image.Benchmarks] Lokad.Image.Tooling.OriginalVp8Controls+<Cases>d__0::MoveNext()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0a89e0",
+      "size": 5,
+      "name": "instance object[] [Lokad.Image.Benchmarks] Lokad.Image.Tooling.OriginalVp8Controls+<Cases>d__0::System.Collections.Generic.IEnumerator<System.Object[]>.get_Current()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0a8bd0",
+      "size": 8,
+      "name": "instance void [Lokad.Image.Benchmarks] Lokad.Image.Tooling.OriginalVp8Controls+<Cases>d__0::System.IDisposable.Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ca200",
+      "size": 1117,
+      "name": "class Lokad.Image.Internal.Vp8Encoder/Prepared [Lokad.Image] Lokad.Image.Internal.Vp8Encoder::Prepare(class Lokad.Image.ImageBuffer,class Lokad.Image.WebpEncodeOptions,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ca6e0",
+      "size": 6496,
+      "name": "class Lokad.Image.Internal.Vp8PreparedInput [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Create(class Lokad.Image.ImageBuffer,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cc0e0",
+      "size": 143,
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::HasAlpha8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cc1a0",
+      "size": 4074,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareOpaqueTiles(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd220",
+      "size": 715,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput+Chroma8Tables::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd5c0",
+      "size": 206,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput+InputTiles::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd6b0",
+      "size": 80,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput+AlphaWeights::.ctor(uint8,uint8,uint8,uint8)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd720",
+      "size": 65,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Compress(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd780",
+      "size": 325,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Pad()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cd900",
+      "size": 343,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PadPlane(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cda80",
+      "size": 1258,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::CleanupTransparentArea()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cdfa0",
+      "size": 3046,
+      "name": "class Lokad.Image.Internal.Vp8SourceAnalysis [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::Create(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.OperationContext,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cebd0",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::get_Storage()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cec40",
+      "size": 1700,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cf320",
+      "size": 1231,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cf810",
+      "size": 676,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourBlocks(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cfae0",
+      "size": 718,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cfec0",
+      "size": 26,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0cff00",
+      "size": 695,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddFourBlocks(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d0200",
+      "size": 134,
+      "name": "valuetype Lokad.Image.Internal.Vp8SourceHistogram/Shape [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::Describe(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d02a0",
+      "size": 840,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d0620",
+      "size": 473,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d0840",
+      "size": 2080,
+      "name": "class Lokad.Image.Internal.Vp8SourceSegments [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::Create(class Lokad.Image.Internal.Vp8SourceAnalysis,int32,bool,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d10f0",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::get_Histogram()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d1160",
+      "size": 1715,
+      "name": "valuetype Lokad.Image.Internal.Vp8SourceSegments/Clustering [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::Cluster(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.Vp8SourceSegments/Segment>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d1840",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::get_Records()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d18c0",
+      "size": 1691,
+      "name": "class Lokad.Image.Internal.Vp8QuantizationPlan [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::Create(class Lokad.Image.Internal.Vp8SourceSegments,int32,class Lokad.Image.Internal.OperationContext,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d1f90",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8SourceSegments/Segment> [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::get_Parameters()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d2000",
+      "size": 683,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::FillMatrix(valuetype [System.Runtime]System.Span`1<int32>,int32,int32,valuetype Lokad.Image.Internal.Vp8CoefficientPlane)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d22d0",
+      "size": 518,
+      "name": "class Lokad.Image.Internal.Vp8FramePlan [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Create(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,class Lokad.Image.Internal.OperationContext,int32,bool,int32,class Lokad.Image.Internal.Vp8AlphaEncoding)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d2510",
+      "size": 140,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::.ctor(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,int32,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d25c0",
+      "size": 748,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Initialize(class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8AlphaEncoding,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d28e0",
+      "size": 5222,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Prepare(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,bool,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d3da0",
+      "size": 444,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::TextureWeights(valuetype [System.Runtime]System.Span`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d3fa0",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::get_Map()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4010",
+      "size": 49,
+      "name": "uint8 [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Probability(int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4060",
+      "size": 1682,
+      "name": "class Lokad.Image.Internal.Vp8RatePlan [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Create(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4740",
+      "size": 199,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::EntropyCost(int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d48e0",
+      "size": 298,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::FixedCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4a30",
+      "size": 135,
+      "name": "valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Category(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4ae0",
+      "size": 61,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Geometry(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4b40",
+      "size": 697,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::SmallMode(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d4e20",
+      "size": 529,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::FillCoefficientCosts(valuetype [System.Runtime]System.Span`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d5060",
+      "size": 757,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::VariableCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d5370",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Values()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d53e0",
+      "size": 395,
+      "name": "instance int64 [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::SegmentHeaderCost(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d5590",
+      "size": 205,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8QuantizationMatrix [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::Matrix(int32,valuetype Lokad.Image.Internal.Vp8CoefficientPlane)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d5680",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::get_Storage()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d56f0",
+      "size": 133,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8QuantizationCosts [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::Costs(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d57a0",
+      "size": 4627,
+      "name": "valuetype Lokad.Image.Internal.Vp8MacroblockScore [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,bool,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d69e0",
+      "size": 654,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d6c90",
+      "size": 146,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Check(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d6d40",
+      "size": 180,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::CheckWeights(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d6e10",
+      "size": 284,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Energy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d6f40",
+      "size": 5500,
+      "name": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,int32&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8600",
+      "size": 859,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::WalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8980",
+      "size": 11,
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::Apply(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d89a0",
+      "size": 426,
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyFullBlock(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8b70",
+      "size": 132,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8c20",
+      "size": 196,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ZigzagMask(bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8d20",
+      "size": 106,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ScanRank(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8da0",
+      "size": 133,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::FullBlockOrder()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d8e60",
+      "size": 378,
+      "name": "uint32 [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyBlocks(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d90a0",
+      "size": 236,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::WriteWalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d91c0",
+      "size": 631,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Transforms::InverseWalsh(valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9460",
+      "size": 168,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::Add(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9520",
+      "size": 646,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9800",
+      "size": 331,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9970",
+      "size": 41,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d99c0",
+      "size": 130,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::CreateResidualBandOffsets()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9a60",
+      "size": 38,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Modes()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9aa0",
+      "size": 51,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision+Metric::Price(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0d9b00",
+      "size": 6630,
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0db6a0",
+      "size": 3133,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallCandidates(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dc300",
+      "size": 1270,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourPredictions(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dc820",
+      "size": 219,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare4(int32,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dc910",
+      "size": 20,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision+Metric::.ctor(int64,int64,int64,int64,int64)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dc940",
+      "size": 67,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision+Metric::Add(valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dc9a0",
+      "size": 4190,
+      "name": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Chroma(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ddb00",
+      "size": 795,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::CorrectDc(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,valuetype [System.Runtime]System.Span`1<int8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dde40",
+      "size": 148,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Diffuse(int16&,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ddf00",
+      "size": 1270,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,bool,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint32>,bool,class Lokad.Image.Internal.Vp8CoefficientProgram)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0de420",
+      "size": 1498,
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dea40",
+      "size": 376,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallBlock(valuetype Lokad.Image.Internal.Vp8SmallIntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0debe0",
+      "size": 310,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::PrepareSmallBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ded30",
+      "size": 2897,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0df8e0",
+      "size": 918,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Update(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,bool&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dfca0",
+      "size": 232,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Refresh(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dfda0",
+      "size": 39,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0dfde0",
+      "size": 1030,
+      "name": "class Lokad.Image.Internal.Vp8FrameEncoding [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Create(class Lokad.Image.Internal.Vp8FramePlan,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e0220",
+      "size": 103,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::.ctor(class Lokad.Image.Internal.OperationContext,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e02a0",
+      "size": 281,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Encode(class Lokad.Image.Internal.Vp8FramePlan)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e03e0",
+      "size": 200,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Borrow()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e04c0",
+      "size": 10409,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Encode(class Lokad.Image.Internal.Vp8FramePlan,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e2d90",
+      "size": 133,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Ensure(int64)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e2e30",
+      "size": 374,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Grow()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e2fd0",
+      "size": 62,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_UpdateMap()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3030",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_Parameters()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e30a0",
+      "size": 147,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter+Cursor::PublishWord()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3160",
+      "size": 242,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Carry(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,uint64&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3280",
+      "size": 370,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter+Cursor::Literal(int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3410",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_Probabilities()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3480",
+      "size": 199,
+      "name": "instance valuetype Lokad.Image.Internal.Vp8FrameBlock [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Block(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3560",
+      "size": 82,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_BlockData()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e35d0",
+      "size": 131,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::SmallModes(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3670",
+      "size": 2222,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::SmallMode(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3f40",
+      "size": 61,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Geometry(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e3fa0",
+      "size": 135,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int16> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Levels(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e4040",
+      "size": 121,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int16> [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_Coefficients()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e40e0",
+      "size": 3967,
       "name": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5090",
+      "size": 135,
+      "name": "valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Category(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5140",
+      "size": 441,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Finish()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5320",
+      "size": 127,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlyMemory`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::get_Memory()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e53c0",
+      "size": 109,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5450",
+      "size": 39,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5490",
+      "size": 48,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e54d0",
+      "size": 48,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5510",
+      "size": 39,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5550",
+      "size": 440,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::WriteOpaqueWebp(class [System.Runtime]System.IO.Stream)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e57d0",
+      "size": 655,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::WriteFrame(class [System.Runtime]System.IO.Stream)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5a80",
+      "size": 368,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::FrameHeader(valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5c70",
+      "size": 92,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0e5cf0",
+      "size": 43,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Dispose()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ec440",
+      "size": 1285,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ec970",
+      "size": 42,
+      "name": "void [System.Private.CoreLib] System.Array+EmptyArray`1[Lokad.Image.Internal.Vp8BooleanReader]::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ec9c0",
+      "size": 10862,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ef460",
+      "size": 494,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ef670",
+      "size": 137,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ef720",
+      "size": 289,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ExpandCoefficientModel(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.Vp8BooleanReader/CoefficientModelRow>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0ef880",
+      "size": 10587,
+      "name": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f2220",
+      "size": 4082,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f3230",
+      "size": 416,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::PrepareQuantizers(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f33f0",
+      "size": 79,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCoefficientWindow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f3460",
+      "size": 1356,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype Lokad.Image.Internal.Vp8BooleanReader/BlockReader&,bool,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f39e0",
+      "size": 2040,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::ReadCoefficients(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8BooleanReader/CoefficientModelRow>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f4220",
+      "size": 76,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Publish(valuetype Lokad.Image.Internal.Vp8BooleanReader&)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f4280",
+      "size": 885,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::Large(uint8[],int32,int32,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f4640",
+      "size": 503,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::PrepareSmall(uint8[],int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f4860",
+      "size": 67,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCancellableCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f48c0",
+      "size": 4328,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f59c0",
+      "size": 618,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f5c80",
+      "size": 625,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Macroblock(uint8[],int32,int32,int32,int32,int32,int32,bool,bool,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f5f20",
+      "size": 816,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Line(uint8[],int32,int32,int32,int32,int32,int32,int32,bool,bool,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f6270",
+      "size": 1572,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Vertical8(uint8[],int32,int32,int32,int32,int32,bool,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f6950",
+      "size": 1319,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Horizontal8(uint8[],int32,int32,int32,int32,int32,bool,bool)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f6f40",
+      "size": 861,
+      "name": "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.Vp8Color::Render(class Lokad.Image.Internal.Vp8Planes,uint8[],class Lokad.Image.ImageBuffer,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f72e0",
+      "size": 1563,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Color::WriteVectorRow(class Lokad.Image.Internal.Vp8Planes,uint8[],bool,int32,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7930",
+      "size": 247,
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Color::Chroma(uint8[],int32,int32,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7a40",
+      "size": 496,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Color::WritePixel(uint8,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7c50",
+      "size": 136,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Color::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7cf0",
+      "size": 39,
+      "name": "uint8 [Lokad.Image] Lokad.Image.Internal.Vp8Color::Sample(int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7d30",
+      "size": 259,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8Color::Chroma8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f7e60",
+      "size": 601,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8Color::WritePixels8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x7ddffc0f8130",
+      "size": 33,
+      "name": "instance int64 [Lokad.Image] Lokad.Image.Internal.Vp8Planes::get_MemoryBytes()[Optimized]"
     }
   ],
-  "instructionGroups": {
-    "Luma4": {
-      "samples": 357,
-      "groups": [
-        [
-          "G_M000_IG95",
-          59
+  "instructionAnalysis": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1968,
+    "analyses": {
+      "Luma4": {
+        "samples": 518,
+        "groups": [
+          [
+            "G_M000_IG71",
+            84
+          ],
+          [
+            "G_M000_IG107",
+            62
+          ],
+          [
+            "G_M000_IG76",
+            56
+          ],
+          [
+            "G_M000_IG102",
+            34
+          ],
+          [
+            "G_M000_IG72",
+            26
+          ],
+          [
+            "G_M000_IG105",
+            23
+          ],
+          [
+            "G_M000_IG57",
+            20
+          ],
+          [
+            "G_M000_IG103",
+            17
+          ],
+          [
+            "G_M000_IG97",
+            17
+          ],
+          [
+            "G_M000_IG100",
+            16
+          ],
+          [
+            "G_M000_IG115",
+            12
+          ],
+          [
+            "G_M000_IG119",
+            11
+          ],
+          [
+            "G_M000_IG75",
+            10
+          ],
+          [
+            "G_M000_IG98",
+            10
+          ],
+          [
+            "G_M000_IG92",
+            9
+          ],
+          [
+            "G_M000_IG55",
+            8
+          ],
+          [
+            "G_M000_IG77",
+            8
+          ],
+          [
+            "G_M000_IG118",
+            8
+          ],
+          [
+            "G_M000_IG111",
+            7
+          ],
+          [
+            "G_M000_IG96",
+            6
+          ],
+          [
+            "G_M000_IG60",
+            5
+          ],
+          [
+            "G_M000_IG27",
+            5
+          ],
+          [
+            "G_M000_IG110",
+            4
+          ],
+          [
+            "G_M000_IG64",
+            4
+          ],
+          [
+            "G_M000_IG112",
+            4
+          ],
+          [
+            "G_M000_IG23",
+            4
+          ],
+          [
+            "G_M000_IG108",
+            3
+          ],
+          [
+            "G_M000_IG21",
+            3
+          ],
+          [
+            "G_M000_IG32",
+            3
+          ],
+          [
+            "G_M000_IG93",
+            3
+          ],
+          [
+            "G_M000_IG81",
+            3
+          ],
+          [
+            "G_M000_IG20",
+            3
+          ],
+          [
+            "G_M000_IG128",
+            2
+          ],
+          [
+            "G_M000_IG120",
+            2
+          ],
+          [
+            "G_M000_IG19",
+            2
+          ],
+          [
+            "G_M000_IG113",
+            2
+          ],
+          [
+            "G_M000_IG91",
+            2
+          ],
+          [
+            "G_M000_IG127",
+            2
+          ],
+          [
+            "G_M000_IG51",
+            2
+          ],
+          [
+            "G_M000_IG46",
+            2
+          ],
+          [
+            "G_M000_IG29",
+            2
+          ],
+          [
+            "G_M000_IG48",
+            2
+          ],
+          [
+            "G_M000_IG01",
+            1
+          ],
+          [
+            "G_M000_IG66",
+            1
+          ],
+          [
+            "G_M000_IG95",
+            1
+          ],
+          [
+            "G_M000_IG61",
+            1
+          ],
+          [
+            "G_M000_IG15",
+            1
+          ],
+          [
+            "G_M000_IG99",
+            1
+          ],
+          [
+            "G_M000_IG17",
+            1
+          ],
+          [
+            "G_M000_IG16",
+            1
+          ],
+          [
+            "G_M000_IG90",
+            1
+          ],
+          [
+            "G_M000_IG44",
+            1
+          ]
         ],
-        [
-          "G_M000_IG91",
-          52
+        "hotInstructions": [
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xf06",
+            "samples": 29,
+            "instruction": {
+              "group": "G_M000_IG76",
+              "assembly": "add      r8d, edx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xb33",
+            "samples": 17,
+            "instruction": {
+              "group": "G_M000_IG57",
+              "assembly": "mov      rdi, bword ptr [rbp-0x868]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x13fd",
+            "samples": 13,
+            "instruction": {
+              "group": "G_M000_IG105",
+              "assembly": "vmovups  ymm1, ymmword ptr [rbp-0x570]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x1485",
+            "samples": 11,
+            "instruction": {
+              "group": "G_M000_IG107",
+              "assembly": "test     r13d, r13d"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x1455",
+            "samples": 10,
+            "instruction": {
+              "group": "G_M000_IG107",
+              "assembly": "vmovaps  ymm9, ymm8"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x162c",
+            "samples": 10,
+            "instruction": {
+              "group": "G_M000_IG115",
+              "assembly": "vmovdqu  ymmword ptr [rbp-0x2A8], ymm0"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xda1",
+            "samples": 10,
+            "instruction": {
+              "group": "G_M000_IG71",
+              "assembly": "movzx    rcx, cx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xef4",
+            "samples": 9,
+            "instruction": {
+              "group": "G_M000_IG76",
+              "assembly": "and      edx, 0x7FF"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xedc",
+            "samples": 8,
+            "instruction": {
+              "group": "G_M000_IG75",
+              "assembly": "jg       G_M000_IG84"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x144b",
+            "samples": 7,
+            "instruction": {
+              "group": "G_M000_IG107",
+              "assembly": "vpsubw   ymm8, ymm8, ymm9"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x11f8",
+            "samples": 7,
+            "instruction": {
+              "group": "G_M000_IG100",
+              "assembly": "cmp      dword ptr [rbp-0x2B8], 0"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xe89",
+            "samples": 7,
+            "instruction": {
+              "group": "G_M000_IG72",
+              "assembly": "vmovups  ymmword ptr [rbp-0x530], ymm8"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x13ab",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG103",
+              "assembly": "vmovups  ymmword ptr [rbp-0x570], ymm6"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xf09",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG76",
+              "assembly": "add      r11, 2"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x11e5",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG98",
+              "assembly": "mov      rsi, qword ptr [rbp-0x740]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xa5b",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG55",
+              "assembly": "vmovdqu  ymmword ptr [rdi], ymm0"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xcf9",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG71",
+              "assembly": "vpmovsxwd zmm0, ymmword ptr [rcx]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x146b",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG107",
+              "assembly": "vpaddd   xmm8, xmm9, xmm8"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0x13ea",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG105",
+              "assembly": "vxorps   xmm1, xmm1, xmm1"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+            "offset": "0xcff",
+            "samples": 5,
+            "instruction": {
+              "group": "G_M000_IG71",
+              "assembly": "vpabsd   zmm1, zmm0"
+            }
+          }
         ],
-        [
-          "G_M000_IG70",
-          22
+        "unmapped": []
+      },
+      "Coefficients": {
+        "samples": 161,
+        "groups": [
+          [
+            "G_M000_IG19",
+            16
+          ],
+          [
+            "G_M000_IG26",
+            16
+          ],
+          [
+            "G_M000_IG31",
+            10
+          ],
+          [
+            "G_M000_IG02",
+            10
+          ],
+          [
+            "G_M000_IG150",
+            9
+          ],
+          [
+            "G_M000_IG36",
+            8
+          ],
+          [
+            "G_M000_IG135",
+            7
+          ],
+          [
+            "G_M000_IG22",
+            6
+          ],
+          [
+            "G_M000_IG24",
+            6
+          ],
+          [
+            "G_M000_IG34",
+            5
+          ],
+          [
+            "G_M000_IG160",
+            5
+          ],
+          [
+            "G_M000_IG11",
+            5
+          ],
+          [
+            "G_M000_IG16",
+            4
+          ],
+          [
+            "G_M000_IG32",
+            4
+          ],
+          [
+            "G_M000_IG148",
+            3
+          ],
+          [
+            "G_M000_IG25",
+            3
+          ],
+          [
+            "G_M000_IG35",
+            3
+          ],
+          [
+            "G_M000_IG149",
+            3
+          ],
+          [
+            "G_M000_IG01",
+            3
+          ],
+          [
+            "G_M000_IG10",
+            2
+          ],
+          [
+            "G_M000_IG41",
+            2
+          ],
+          [
+            "G_M000_IG07",
+            2
+          ],
+          [
+            "G_M000_IG40",
+            2
+          ],
+          [
+            "G_M000_IG09",
+            2
+          ],
+          [
+            "G_M000_IG157",
+            2
+          ],
+          [
+            "G_M000_IG147",
+            2
+          ],
+          [
+            "G_M000_IG20",
+            2
+          ],
+          [
+            "G_M000_IG18",
+            2
+          ],
+          [
+            "G_M000_IG145",
+            2
+          ],
+          [
+            "G_M000_IG111",
+            2
+          ],
+          [
+            "G_M000_IG88",
+            1
+          ],
+          [
+            "G_M000_IG47",
+            1
+          ],
+          [
+            "G_M000_IG30",
+            1
+          ],
+          [
+            "G_M000_IG143",
+            1
+          ],
+          [
+            "G_M000_IG129",
+            1
+          ],
+          [
+            "G_M000_IG118",
+            1
+          ],
+          [
+            "G_M000_IG05",
+            1
+          ],
+          [
+            "G_M000_IG162",
+            1
+          ],
+          [
+            "G_M000_IG164",
+            1
+          ],
+          [
+            "G_M000_IG113",
+            1
+          ],
+          [
+            "G_M000_IG116",
+            1
+          ],
+          [
+            "G_M000_IG159",
+            1
+          ],
+          [
+            "G_M000_IG127",
+            1
+          ]
         ],
-        [
-          "G_M000_IG88",
-          17
+        "hotInstructions": [
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x29d",
+            "samples": 10,
+            "instruction": {
+              "group": "G_M000_IG31",
+              "assembly": "test     r9d, r9d"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x1a1",
+            "samples": 7,
+            "instruction": {
+              "group": "G_M000_IG19",
+              "assembly": "mov      edx, dword ptr [rbp-0x30]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x231",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG26",
+              "assembly": "sar      esi, 3"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x1e5",
+            "samples": 6,
+            "instruction": {
+              "group": "G_M000_IG22",
+              "assembly": "jns      SHORT G_M000_IG19"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x200",
+            "samples": 5,
+            "instruction": {
+              "group": "G_M000_IG24",
+              "assembly": "sub      dword ptr [rbx+0x18], ecx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x3d",
+            "samples": 4,
+            "instruction": {
+              "group": "G_M000_IG02",
+              "assembly": "movzx    rcx, cx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x172",
+            "samples": 4,
+            "instruction": {
+              "group": "G_M000_IG16",
+              "assembly": "test     eax, eax"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x22e",
+            "samples": 4,
+            "instruction": {
+              "group": "G_M000_IG26",
+              "assembly": "add      esi, 7"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x1be",
+            "samples": 4,
+            "instruction": {
+              "group": "G_M000_IG19",
+              "assembly": "mov      r8, bword ptr [rbp-0x60]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x37",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG02",
+              "assembly": "kmovw    ecx, k1"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0xd80",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG148",
+              "assembly": "cmp      ecx, 128"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0xc75",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG135",
+              "assembly": "sar      esi, 3"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x20a",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG25",
+              "assembly": "jge      G_M000_IG31"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x2fb",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG35",
+              "assembly": "sub      dword ptr [rbx+0x18], ecx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x2e8",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG34",
+              "assembly": "inc      ecx"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x321",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG36",
+              "assembly": "add      dword ptr [rbx+0x14], edi"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0xd8b",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG149",
+              "assembly": "jmp      G_M000_IG160"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0x217",
+            "samples": 3,
+            "instruction": {
+              "group": "G_M000_IG26",
+              "assembly": "add      edi, -24"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0xe52",
+            "samples": 2,
+            "instruction": {
+              "group": "G_M000_IG160",
+              "assembly": "mov      eax, dword ptr [rbp-0x2C]"
+            }
+          },
+          {
+            "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+            "offset": "0xd92",
+            "samples": 2,
+            "instruction": {
+              "group": "G_M000_IG150",
+              "assembly": "lzcnt    edi, ecx"
+            }
+          }
         ],
-        [
-          "G_M000_IG96",
-          15
-        ],
-        [
-          "G_M000_IG125",
-          13
-        ],
-        [
-          "G_M000_IG122",
-          12
-        ],
-        [
-          "G_M000_IG127",
-          10
-        ],
-        [
-          "G_M000_IG86",
-          9
-        ],
-        [
-          "G_M000_IG57",
-          9
-        ],
-        [
-          "G_M000_IG115",
-          9
-        ],
-        [
-          "G_M000_IG108",
-          9
-        ],
-        [
-          "G_M000_IG92",
-          8
-        ],
-        [
-          "G_M000_IG114",
-          8
-        ],
-        [
-          "G_M000_IG63",
-          7
-        ],
-        [
-          "G_M000_IG107",
-          6
-        ],
-        [
-          "G_M000_IG116",
-          5
-        ],
-        [
-          "G_M000_IG71",
-          5
-        ],
-        [
-          "G_M000_IG112",
-          4
-        ],
-        [
-          "G_M000_IG141",
-          4
-        ],
-        [
-          "G_M000_IG118",
-          4
-        ],
-        [
-          "G_M000_IG76",
-          4
-        ],
-        [
-          "G_M000_IG89",
-          3
-        ],
-        [
-          "G_M000_IG62",
-          3
-        ],
-        [
-          "G_M000_IG87",
-          3
-        ],
-        [
-          "G_M000_IG123",
-          3
-        ],
-        [
-          "G_M000_IG23",
-          3
-        ],
-        [
-          "G_M000_IG21",
-          3
-        ],
-        [
-          "G_M000_IG132",
-          3
-        ],
-        [
-          "G_M000_IG117",
-          3
-        ],
-        [
-          "G_M000_IG73",
-          3
-        ],
-        [
-          "G_M000_IG25",
-          3
-        ],
-        [
-          "G_M000_IG28",
-          3
-        ],
-        [
-          "G_M000_IG83",
-          2
-        ],
-        [
-          "G_M000_IG94",
-          2
-        ],
-        [
-          "G_M000_IG64",
-          2
-        ],
-        [
-          "G_M000_IG126",
-          2
-        ],
-        [
-          "G_M000_IG33",
-          2
-        ],
-        [
-          "G_M000_IG111",
-          2
-        ],
-        [
-          "G_M000_IG20",
-          2
-        ],
-        [
-          "G_M000_IG22",
-          2
-        ],
-        [
-          "G_M000_IG72",
-          2
-        ],
-        [
-          "G_M000_IG80",
-          1
-        ],
-        [
-          "G_M000_IG31",
-          1
-        ],
-        [
-          "G_M000_IG134",
-          1
-        ],
-        [
-          "G_M000_IG144",
-          1
-        ],
-        [
-          "G_M000_IG45",
-          1
-        ],
-        [
-          "G_M000_IG84",
-          1
-        ],
-        [
-          "G_M000_IG51",
-          1
-        ],
-        [
-          "G_M000_IG124",
-          1
-        ],
-        [
-          "G_M000_IG58",
-          1
-        ],
-        [
-          "G_M000_IG09",
-          1
-        ],
-        [
-          "G_M000_IG140",
-          1
-        ],
-        [
-          "G_M000_IG97",
-          1
-        ],
-        [
-          "G_M000_IG109",
-          1
-        ],
-        [
-          "G_M000_IG46",
-          1
-        ],
-        [
-          "G_M000_IG27",
-          1
-        ]
-      ],
-      "unmapped": []
+        "unmapped": []
+      }
     },
-    "Coefficients": {
-      "samples": 154,
-      "groups": [
-        [
-          "G_M000_IG07",
-          16
-        ],
-        [
-          "G_M000_IG05",
-          13
-        ],
-        [
-          "G_M000_IG27",
-          11
-        ],
-        [
-          "G_M000_IG34",
-          9
-        ],
-        [
-          "G_M000_IG156",
-          8
-        ],
-        [
-          "G_M000_IG121",
-          6
-        ],
-        [
-          "G_M000_IG143",
-          6
-        ],
-        [
-          "G_M000_IG09",
-          6
-        ],
-        [
-          "G_M000_IG148",
-          6
-        ],
-        [
-          "G_M000_IG29",
-          5
-        ],
-        [
-          "G_M000_IG32",
-          5
-        ],
-        [
-          "G_M000_IG119",
-          5
-        ],
-        [
-          "G_M000_IG151",
-          5
-        ],
-        [
-          "G_M000_IG26",
-          5
-        ],
-        [
-          "G_M000_IG28",
-          5
-        ],
-        [
-          "G_M000_IG10",
-          4
-        ],
-        [
-          "G_M000_IG149",
-          4
-        ],
-        [
-          "G_M000_IG44",
-          4
-        ],
-        [
-          "G_M000_IG40",
-          4
-        ],
-        [
-          "G_M000_IG19",
-          3
-        ],
-        [
-          "G_M000_IG30",
-          2
-        ],
-        [
-          "G_M000_IG24",
-          2
-        ],
-        [
-          "G_M000_IG39",
-          2
-        ],
-        [
-          "G_M000_IG42",
-          2
-        ],
-        [
-          "G_M000_IG154",
-          2
-        ],
-        [
-          "G_M000_IG142",
-          2
-        ],
-        [
-          "G_M000_IG164",
-          2
-        ],
-        [
-          "G_M000_IG01",
-          2
-        ],
-        [
-          "G_M000_IG124",
-          1
-        ],
-        [
-          "G_M000_IG33",
-          1
-        ],
-        [
-          "G_M000_IG43",
-          1
-        ],
-        [
-          "G_M000_IG02",
-          1
-        ],
-        [
-          "G_M000_IG17",
-          1
-        ],
-        [
-          "G_M000_IG18",
-          1
-        ],
-        [
-          "G_M000_IG126",
-          1
-        ],
-        [
-          "G_M000_IG108",
-          1
-        ]
-      ],
-      "unmapped": []
-    }
+    "note": "Instruction attribution and sample skid, not component timings or predicted savings. Same capture; no rerun."
+  },
+  "sourceFiles": {
+    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "1eab8bf37fed5a3de7d7207c09e91b982b67a4df2b343002e10c1b96fc247bf2",
+    "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "27bc79856e5eea4e67369e92b2428993132cb0e1b6082c53dce6521ea6223309",
+    "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
+    "src/Lokad.Image/Internal/Vp8RatePlan.cs": "ebfba1f6e8b7841214498a5c737cc908f0b13a16590f46e937d2c73f09a59260",
+    "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "5ebed1323c1e0cce75b85ffbb7c3e180501e77237e33e4a6f19915fc94d34531",
+    "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+    "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "3d8cc552e81d82a6d3e8e30e9c4cefc524bcea5e2f325c2e1e3d43b631df1a16",
+    "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9"
+  },
+  "priorAttributionSourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "PEC983attributionReuseAudit",
+    "productionChanged": false,
+    "performanceMeasured": false,
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": {
+        "profileSha256": "b1f2aedd70e68471e49d7b21c4cffbad1ec11619ec68db3effb1cafd49c67d22",
+        "currentSha256": "1eab8bf37fed5a3de7d7207c09e91b982b67a4df2b343002e10c1b96fc247bf2",
+        "unchanged": false
+      },
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": {
+        "profileSha256": "575e0e727a74616ae9a86ecd88ef9e94fef49f3eec5fdb4b332112b20e010055",
+        "currentSha256": "27bc79856e5eea4e67369e92b2428993132cb0e1b6082c53dce6521ea6223309",
+        "unchanged": false
+      },
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": {
+        "profileSha256": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
+        "currentSha256": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
+        "unchanged": true
+      },
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": {
+        "profileSha256": "670cb229dcd07edbf1a3c984116fda46be6a2e9392ad1f6b10462721d0ec4737",
+        "currentSha256": "ebfba1f6e8b7841214498a5c737cc908f0b13a16590f46e937d2c73f09a59260",
+        "unchanged": false
+      },
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": {
+        "profileSha256": "c5926b2bf03043fb3a0314de4302517a89c9ddc8d3ac01713deaa6c0b87ec83f",
+        "currentSha256": "5ebed1323c1e0cce75b85ffbb7c3e180501e77237e33e4a6f19915fc94d34531",
+        "unchanged": false
+      },
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": {
+        "profileSha256": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+        "currentSha256": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+        "unchanged": true
+      }
+    },
+    "archive": "tmp/vp8-current-decision-pipeline-attribution.tar.xz",
+    "scripts": [
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs",
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs",
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs",
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs",
+      "tmp/vpc191-analyze.py",
+      "tmp/vpc191-profile-vm.py",
+      "tmp/vpc191-profile.py",
+      "tmp/vpc191-retain-vm.py",
+      "tmp/vpc191-retain.py",
+      "tools/WarmReference/capture-vm-environment.py"
+    ],
+    "decision": "The old six-file hot-path attribution can only be reused where bodies remain unchanged. Changed producers need a bounded current actual-module trace before interpreting old hotspot counts.",
+    "noWholeLibraryAudit": true
   },
   "packetBytes": 17688,
   "exactPacketsReconstructionSourceOwnersPassed": true,
   "quietGuardsPassed": true,
   "allBuilds": 0,
   "repeatedSuitesOrPackageProofs": 0,
-  "sourceFiles": {
-    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "b1f2aedd70e68471e49d7b21c4cffbad1ec11619ec68db3effb1cafd49c67d22",
-    "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "575e0e727a74616ae9a86ecd88ef9e94fef49f3eec5fdb4b332112b20e010055",
-    "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
-    "src/Lokad.Image/Internal/Vp8RatePlan.cs": "670cb229dcd07edbf1a3c984116fda46be6a2e9392ad1f6b10462721d0ec4737",
-    "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "c5926b2bf03043fb3a0314de4302517a89c9ddc8d3ac01713deaa6c0b87ec83f",
-    "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913"
-  },
   "raw": {
-    "project": "Lokad.Image",
-    "file": "vp8-current-decision-pipeline-attribution.tar.xz",
-    "bytes": 1081224,
-    "members": 35,
-    "sha256": "a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca",
-    "vmMembersVerified": true,
-    "productionChanged": false,
-    "baselineDependency": "lanczos-word-source-row-preparation.tar.xz",
-    "baselineDependencySha256": "c4834c33d827b7c5f1313c45225d5b7862a6f2bb7aa6b8149277b7ff4d1c02d2",
-    "localMembersVerified": true
+    "file": "vp8-opaque-long-batch-attribution.tar.xz",
+    "sha256": "a2d294d298ed51742daaf5d0e15e5cdb9ebdc0aa9515bcfd5ccfd80b0aba1265",
+    "bytes": 176772,
+    "members": 53,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-encode-current-confidence.tar.xz",
+        "sha256": "59d371609310eefbd56ed7c6330a7574f31ec86e517802c54c6a806e91efe710"
+      },
+      {
+        "file": "word-clone-copy-qualified.tar.xz",
+        "sha256": "9596f8228d0e67e0e9973d78f2e4fe571a86a8ea59be76204bd19640b81e03f9"
+      },
+      {
+        "file": "vp8-current-decision-pipeline-attribution.tar.xz",
+        "sha256": "a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca"
+      }
+    ]
   },
-  "previous": {
-    "report": "https://github.com/lokad/image/blob/66340be3e4d3e14163ce9efeb58b8574207331b9/benchmarks/CURRENT-VP8-PHOTO-ATTRIBUTION.md",
-    "raw": "current-vp8-photo-attribution.tar.xz",
-    "sha256": "d04385dc49b612e4a1b03fd830b7a89fbc7fc96f993faaff0bb0f49558a41121"
-  },
-  "next": "Investigate quantization-to-score handoff for exact magnitudes/nonzero information. Do not replay unchanged paired/packed quantization or summary/emission variants; preserve all adverse results. Samples and skid are not component times or predicted gains."
+  "scope": "One2second actual current package trace, CPU0 executes/CPU1collects. Frozen complete photograph/settings/packet, admission/preparation/independent outputs/disposal remain. No component time or predicted saving from samples/skid.",
+  "next": "Investigate a bounded fused uncancelable luma4 candidate-preparation phase after the existing ten-independent-prediction transforms. Reuse quantizer/rate math to price all ten before ordered reconstruction/winner selection, with explicit extra stack capacity within16KiB and unchanged scalar/live/trellis/uniform paths. Current6630Bloop spills five matrix vectors and reloads price pointers inside coefficient summation. Preserve validation, exact costs, candidate order/ties and packets. This is a hypothesis, not adoption or measured gain."
 }

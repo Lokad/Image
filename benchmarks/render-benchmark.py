@@ -2133,12 +2133,12 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert vp8_confidence['raw']['mirrored'] and vp8_confidence['raw']['allMembersVerified']
     assert vp8_confidence['qualification']['sameActualPackageBothOS'] and vp8_confidence['qualification']['productionInputsUnchanged']
     assert set(vp8_confidence['cases']) == {'photograph', 'distortion'}
-    for case, operations, packet in [('photograph', 8, 17688), ('distortion', 32, 7330)]:
+    for case, operations, packet in [('photograph', 32, 17688), ('distortion', 128, 7330)]:
         c = vp8_confidence['cases'][case]
         assert c['librarySha256'] == vp8_confidence['qualification']['actualPackage']['librarySha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == len(c['managedActualNanoseconds']) == 12
         assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['operationsPerSubject'] == operations and c['status'] == 'uncertain' and c['lower'] <= 1 < c['upper']
+        assert c['operationsPerSubject'] == operations and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
         assert c['managedPacketBytes'] == c['nativePacketBytes'] == packet
         assert c['sourceUnchanged'] and c['independentOwnedOutput']
@@ -2155,7 +2155,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                                    else vp8_encode_cases[case])['status'] == state
                                   for case in vp8_encode_cases)
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_status_counts == {'pass': 7, 'gap': 0, 'uncertain': 2}
+    assert vp8_status_counts == {'pass': 8, 'gap': 1, 'uncertain': 0}
     selected_cost = vp8_current['cases']['selected']
     distortion_cost = vp8_current['cases']['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
@@ -2915,8 +2915,13 @@ uncertainties, in-place drawing and inspection gaps remain. The tables retain so
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
-no optimization gap is inferred.
+uncertain; no optimization gap is inferred for that control.
+[Opaque VP8](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) now resolves the photograph
+as a small gap: **9,798.43 / FFmpeg 9,702.89 µs, upper 1.014**,
+**809,080 B/op**, exact **17,688 B**. Effort-2 diagram passes/stops at upper 0.997,
+**406,664 B/op**, exact **7,330 B**. One prespecified longer batch each changes
+measurement confidence, with zero builds or qualification repeats; no speedup is claimed.
+The nine lossy controls now have eight passes and one photograph gap.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls

@@ -69,8 +69,13 @@ uncertainties, in-place drawing and inspection gaps remain. The tables retain so
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
-no optimization gap is inferred.
+uncertain; no optimization gap is inferred for that control.
+[Opaque VP8](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) now resolves the photograph
+as a small gap: **9,798.43 / FFmpeg 9,702.89 µs, upper 1.014**,
+**809,080 B/op**, exact **17,688 B**. Effort-2 diagram passes/stops at upper 0.997,
+**406,664 B/op**, exact **7,330 B**. One prespecified longer batch each changes
+measurement confidence, with zero builds or qualification repeats; no speedup is claimed.
+The nine lossy controls now have eight passes and one photograph gap.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
@@ -148,9 +153,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
 | VP8 opaque RGBA16, including normalization † | 13,882.59 | 15,579.01 | 0.891 / 0.894 | 1,201,560 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 9,721.80 | 9,717.17 | 1.000 / 1.007 | 809,080 | 17,688 / 17,688 |
+| VP8 opaque photograph † | 9,798.43 | 9,702.89 | 1.010 / 1.014 | 809,080 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,476.34 | 5,803.20 | 0.944 / 0.952 | 741,196 | 7,100 / 7,100 |
-| VP8 diagram, effort2 / distortion-only search † | 2,492.72 | 2,512.68 | 0.992 / 1.001 | 406,664 | 7,330 / 7,330 |
+| VP8 diagram, effort2 / distortion-only search † | 2,492.83 | 2,513.35 | 0.992 / 0.997 | 406,664 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 52,408.00 | 54,009.89 | 0.970 / 0.979 | 6,241,792 | 98,590 / 98,590 |

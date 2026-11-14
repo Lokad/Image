@@ -1,48 +1,48 @@
 # Current VP8 photograph attribution
 
-One two-second capture on the qualified RSP186 DLL uses the existing complete
-513×259 opaque photograph/Q75/effort4 control. The 17,688-byte packet, frozen
-quality, normalization, source/output ownership and quiet guards pass. No builds
-or repeated suite/package qualification. CPU0 executes; CPU1 collects. Profiled
-elapsed is discarded: samples and instruction skid are not component timings.
+The longer-batch complete comparison now demonstrates a small photograph gap.
+One **two-second trace of the actual immutable package DLL** supplies current
+attribution. CPU0 executes; CPU1 collects. Complete frozen513×259/Q75/method4
+encoding, exact17,688Bpacket, source/settings/ownership and idle-v2 guards pass.
+**Profiled elapsed is discarded; locations/skid are not component times or gains.**
 
-| Current sampled location | Samples, out of 1,961 |
+| Current sampled location | Samples / 1968 total |
 | --- | ---: |
-| Luma4 decisions, including inlined scoring | 357 |
-| Quantization helpers | 242 |
-| Reconstruction AddVector | 165 |
-| Coefficient emission | 154 |
-| Luma16 decisions | 108 |
-| Token statistics | 85 |
+| Luma4, including inlined quantization/rates/reconstruction | 518 |
+| Coefficient emission | 161 |
+| Luma16 | 108 |
+| Small candidate prediction | 77 |
+| Forward transform | 77 |
+| Token statistics | 73 |
 
-Luma4's 6,685-byte body has 111 samples in IG91/95, covering residual-magnitude
-preparation/validation and scalar table summation. The existing quantizer already
-forms zigzag levels before writing them; scoring reloads them for flatness,
-magnitudes, nonzero/last position and rates. These are concrete repeated-work
-leads, not a claimed saving. Coefficient emission spans a 3,931-byte body; its
-costs are distributed, with no isolated gain established.
+Actual Luma4 is6,630B; coefficient emission3,967B. Luma4's IG71quantizer/validation
+has84samples, IG72index preparation26, IG76price summation56, IG107reconstruction62.
+The quantizer reloads five fixed matrix vectors from the parent frame per mode;
+the scalar sum reloads its price pointer inside the coefficient loop.
+These are concrete repeated loads/register-pressure leads, not removable percentages.
+Emission samples are distributed; no isolated emitter gain is established.
 
-Current code already shares source texture, batches forward predictions, reuses
-uniform predictions and applies rate/SSD bounds. [Paired quantization](VP8-QUANTIZATION-PAIR-CONFIRMATION.md)
-has no useful independent gain. [Packed quantization](VP8-PACKED-QUANTIZATION-REJECTED.md),
-the earlier [residual-summary screen](VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
-[combined prices](WARM-VP8-COMBINED-PRICES-SCREEN.md) retain their specific adverse
-or inconclusive evidence. Their old thresholds and family-closure wording do not
-ban a materially different architectural design; they do not justify replaying
-unchanged candidates.
+The old attribution predates four changed files: macroblock decisions, block
+quantization and both rate-plan files. A bounded six-file comparison identifies
+those invalidations; quantization-plan and reconstruction files remain unchanged.
+Do not reuse the old hotspot ranking. Old quantizer/scoring and pair/packed
+quantization outcomes remain leads/adverse history, not bans or replay approval.
 
-The next bounded hypothesis shares quantization byproducts with candidate scoring,
-preserving level caps, exact costs, ordered decisions/ties, trellis and portable
-execution. Use existing complete photograph/alpha controls; verify gains before
-acceptance. Existing costs remain unchanged. [Earlier attribution](https://github.com/lokad/image/blob/66340be3e4d3e14163ce9efeb58b8574207331b9/benchmarks/CURRENT-VP8-PHOTO-ATTRIBUTION.md)
-and its raw archive remain history.
+**Next hypothesis:** separate nonuniform, fused, uncancelable luma4 candidate
+preparation from ordered winner scoring after the existing batched transforms.
+Prepare exact quantized values/rates for the same ten visited candidates in a
+small loop with fewer live reconstruction variables; preserve all validation,
+mode order, strict ties, candidate independence and selected levels/pixels.
+Keep scalar, live-token, trellis and uniform behavior. Account for extra bounded
+stack storage inside the existing16KiB allowance; add no heap/pool/session.
+Inspect codegen and complete paired photograph/alpha costs before acceptance.
+This proposed phase split is distinct from replaying the former single-mode
+byproduct handoff. Additional stores/calls may outweigh reduced spills.
 
-[Evidence](current-vp8-photo-attribution-evidence.json) pins current sources,
-instructions, actual producers and quality/source gates. Raw
-`vp8-current-decision-pipeline-attribution.tar.xz`: 1,081,224 B / 35 members,
-SHA256 `a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca`,
-mirrored/member-verified, with the pinned qualified-baseline dependency.
-
-The resulting [quantizer/scoring handoff trial](VP8-QUANTIZED-SCORING-INCONCLUSIVE.md)
-preserves packets but establishes no normalized lead in either coherent stage.
-Production is restored; this attribution remains diagnostic, not a speed claim.
+[Evidence](current-vp8-photo-attribution-evidence.json) records actual code,
+mapped instructions, source audit, producer identities and both opaque captures.
+Raw vp8-opaque-long-batch-attribution.tar.xz is mirrored/member-verified:
+**176772B/53members**, SHA256
+a2d294d298ed51742daaf5d0e15e5cdb9ebdc0aa9515bcfd5ccfd80b0aba1265.
+No builds or broad/package checks repeat. Full289-path parity remains open;
+publication is postponed.
