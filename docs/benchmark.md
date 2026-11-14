@@ -49,21 +49,23 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
-[Word clone copying](../benchmarks/WORD-CLONE-COPY.md) reuses the existing safe
-vector copier with one checked equal-length destination view. Independent complete
-pairs confirm **1.71% / 0.297 µs** for word clone and **4.45% / 0.249 µs** for its
-byte guard. These are scoped increments against the preceding immutable DLL,
-not FFmpeg parity or additive gains from earlier stages.
-Six affected complete reference costs refresh on the new actual package DLL;
-14 unchanged owned-edit paths reuse their qualified producers. Together these
-20 views have **16 passes, two gaps and two uncertainties**. Word normal-copy and
-vertical flip retain upper **1.037 / 1.047**; word clone and byte flip remain
-uncertain at **1.009 / 1.012**. Stop the passing controls.
-All 18 owned edits still allocate **56 B/op**, after
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removed an unused
-execution object. Pixel capacity, retained storage, cancellation, terminal
-admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
-remains linked history; no historical phase sum is used.
+[Current owned-edit confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md)
+extends only the four open controls to 4096 complete calls per batch on the unchanged
+actual package. Twelve alternating pairs/all native brackets remain. Normal RGBA16
+copy and RGBA8 vertical flip show gaps: **17.201 / 16.561 µs**, upper **1.043**, and
+**8.614 / 8.507 µs**, upper **1.023**. Word clone and word vertical flip remain
+uncertain, upper **1.027 / 1.005**. The normal/clone native setup and owned-copy
+boundary are identical; their different costs have no established cause.
+Together the 20 owned-edit/composition views retain **16 passes, two gaps and two
+uncertainties**. Stop confirmed passes; no historical-clock speedup or identical
+favorable retries. All 18 basic owned edits still allocate **56 B/op**; active
+result payload is 531,468/1,062,936 B at 8/16 bits. Borrowed input and unchanged
+default idle pixel storage are separate. No physical/native/JIT peak is claimed.
+Exact pixels, cancellation, terminal admission and independent ownership remain.
+Reuse 6,692 full/live checks per OS and the SAME actual package/all three examples;
+one argument-guard-only helper build, no production or broad/package repeats.
+[Word-copy increments](../benchmarks/WORD-CLONE-COPY.md) and
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) remain history.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
 image views: 185 pass, 2 gaps, 4 uncertain**. This does not establish full parity:
@@ -300,7 +302,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
-| Vertical flip RGBA8 (confidence open) † | 8.44 | 8.40 | 1.005 / 1.012 | 56 |
+| Vertical flip RGBA8 (gap) † | 8.61 | 8.51 | 1.013 / 1.023 | 56 |
 
 **Inspection and pixel-coding validation**
 

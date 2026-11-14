@@ -1,0 +1,595 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OCL1008",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "ab84ec8d34d462f555320d9a0a51e340a24c08f5dcd46d2adb7a6b0041a7eed2",
+    "linuxSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "timedArtifactSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "packageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33"
+  },
+  "sources": {
+    "src/Lokad.Image/ImageBuffer.cs": "820f0e9c2bca4ffab866351b3d6201e754fb785aa7aee5d03509a76da8505fa0",
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4"
+  },
+  "cases": {
+    "WarmNormalOrientation16": {
+      "caseId": "WarmNormalOrientation16",
+      "managedUs": 17.201326599121092,
+      "nativeUs": 16.560690002441405,
+      "ratio": 1.0386841729774088,
+      "lower": 1.0330506204426049,
+      "upper": 1.0428138389158972,
+      "status": "gap",
+      "allocatedBytes": 56,
+      "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+      "operationsPerSubject": 4096,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeBracketMeansUs": [
+        16.595804850260418,
+        16.56235595703125,
+        16.560690002441405
+      ],
+      "pairedRatioConfidence": [
+        1.0365430372085804,
+        1.0406214557099034
+      ],
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public AutoOrient, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "normal-orient",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "sharedNullView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ocl1008-WarmNormalOrientation16-counterbalanced.json",
+        "receipt": "tmp/ocl1008-WarmNormalOrientation16-counterbalanced-receipt.json"
+      }
+    },
+    "WarmVerticalFlip16": {
+      "caseId": "WarmVerticalFlip16",
+      "managedUs": 17.416791931152343,
+      "nativeUs": 17.42428582763672,
+      "ratio": 0.9995699165774422,
+      "lower": 0.9912110777050311,
+      "upper": 1.0054511108937234,
+      "status": "uncertain",
+      "allocatedBytes": 56,
+      "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+      "operationsPerSubject": 4096,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeBracketMeansUs": [
+        17.444595682779948,
+        17.42428582763672,
+        17.43631935628255
+      ],
+      "pairedRatioConfidence": [
+        0.9972494696546782,
+        1.0018952758104074
+      ],
+      "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741"
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "bace5a3f15856499a4f80ac4deebfe36c93f330b5771900a6c2a66d74a16d7a0",
+        "buildScriptSha256": "dd124c8312734634377b3972e790f3a3f6171a121084f2667a6aff198a002b18",
+        "workerSha256": "aa16c6f9305ed6fd9721ed4b29d13a6ee66c5390917ec28afd5e6a6653c0308e",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "vflip",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "negativeStrideView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ocl1008-WarmVerticalFlip16-counterbalanced.json",
+        "receipt": "tmp/ocl1008-WarmVerticalFlip16-counterbalanced-receipt.json"
+      }
+    },
+    "WarmClone16": {
+      "caseId": "WarmClone16",
+      "managedUs": 17.22398352050781,
+      "nativeUs": 17.081079264322916,
+      "ratio": 1.0083662310778791,
+      "lower": 0.9888143538177206,
+      "upper": 1.0267941278337833,
+      "status": "uncertain",
+      "allocatedBytes": 56,
+      "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+      "operationsPerSubject": 4096,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeBracketMeansUs": [
+        17.165864990234375,
+        17.081079264322916,
+        17.215293355305988
+      ],
+      "pairedRatioConfidence": [
+        0.9961836908259017,
+        1.0208084726645485
+      ],
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public Clone, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "normal-orient",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "sharedNullView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ocl1008-WarmClone16-counterbalanced.json",
+        "receipt": "tmp/ocl1008-WarmClone16-counterbalanced-receipt.json"
+      }
+    },
+    "WarmVerticalFlip8": {
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.613951965332031,
+      "nativeUs": 8.506733317057291,
+      "ratio": 1.0126039743199367,
+      "lower": 1.0006145967429683,
+      "upper": 1.0225658478823316,
+      "status": "gap",
+      "allocatedBytes": 56,
+      "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+      "operationsPerSubject": 4096,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeBracketMeansUs": [
+        8.506733317057291,
+        8.530046813964844,
+        8.507499959309897
+      ],
+      "pairedRatioConfidence": [
+        1.0049417372834053,
+        1.014762712289419
+      ],
+      "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524"
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "bace5a3f15856499a4f80ac4deebfe36c93f330b5771900a6c2a66d74a16d7a0",
+        "buildScriptSha256": "dd124c8312734634377b3972e790f3a3f6171a121084f2667a6aff198a002b18",
+        "workerSha256": "aa16c6f9305ed6fd9721ed4b29d13a6ee66c5390917ec28afd5e6a6653c0308e",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "vflip",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "negativeStrideView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 2080,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ocl1008-WarmVerticalFlip8-counterbalanced.json",
+        "receipt": "tmp/ocl1008-WarmVerticalFlip8-counterbalanced-receipt.json"
+      }
+    }
+  },
+  "measurement": {
+    "productionBuilds": 0,
+    "embeddedBuilds": 0,
+    "harnessNativeFixtureBuilds": 0,
+    "helperBuilds": 1,
+    "broadOrPackageRepeats": 0,
+    "previousOperationsPerSubject": 256,
+    "operationsPerSubject": 4096,
+    "pairs": 12,
+    "allActualsRetained": true,
+    "helper": {
+      "source": "tmp/wir911-edits-driver/Program.cs",
+      "sourceSha256": "0f8bd13d03a38c86d67e53320c69700c8c83f9727e66486406a35d5186e4db6f",
+      "originalPdb": {
+        "driver": "tmp/wcc980-candidate-WarmClone16-runtime/AdjacentManagedNative.dll",
+        "driverSha256": "db5803e0f65f98c1d8a40c584958c010091844e4a005ccb51fca46b7eed7e064",
+        "pdb": "tmp/wcc980-candidate-WarmClone16-runtime/AdjacentManagedNative.pdb",
+        "pdbSha256": "22984bd182e5fc76a8f2079d2762c9a235d6282621c0693798f2916c33b27aec"
+      },
+      "pdbSourceChecksumExact": true,
+      "changedSource": "tmp/ocl1008-driver/Program.cs",
+      "changedSourceSha256": "c6f801907f4e9ac053658ac8e29ff2cf6c3b2d61940e01778258b98beb4b7a8f",
+      "originalReconstructedByteExact": true,
+      "onlyChanges": "Argument upper guard and matching error text256->4096; every timed loop, validation call, warmup, alternating order and conservative confidence expression is byte-exact.",
+      "projectSha256": "55661eaba6a12688e77934a2c7d87243db2b1d22254b2a2cf119ba4c246d129e",
+      "artifacts": {
+        "tmp/ocl1008-driver/bin/Release/net10.0/AdjacentManagedNative.dll": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+        "tmp/ocl1008-driver/bin/Release/net10.0/AdjacentManagedNative.pdb": "25b198f221f8a5a184cddcec7146491bea5f0679639c07623ce0b85e45cf0b9b",
+        "tmp/ocl1008-driver/bin/Release/net10.0/AdjacentManagedNative.deps.json": "cd4d48ee4bdee06ebd834ca68f3a047106682571444606ddc8a7e221c2ca5d37",
+        "tmp/ocl1008-driver/bin/Release/net10.0/AdjacentManagedNative.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+      },
+      "driverSha256": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+      "buildCommand": [
+        "dotnet",
+        "build",
+        "tmp\\ocl1008-driver\\AdjacentManagedNative.csproj",
+        "-c",
+        "Release",
+        "--tl:off",
+        "--nologo",
+        "-v",
+        "minimal",
+        "-m:1",
+        "-nr:false",
+        "-p:UseSharedCompilation=false",
+        "-p:BenchmarkRuntime=D:\\code\\image\\benchmarks\\Lokad.Image.Benchmarks\\bin\\Release\\net10.0",
+        "-p:RestoreSources="
+      ],
+      "builds": 1
+    },
+    "confidence": "Unchanged worse-of paired log-ratio and all-actual/diagnostic mean confidence against native before/paired/after brackets; natural GC, all12pairs/native samples retained.",
+    "reason": "Prespecified longer integration of only the four already-open owned edits; no production change, new control or favorable repeat."
+  },
+  "storage": {
+    "allocatedBytesPerEdit": 56,
+    "independentResultPayloadBytes": {
+      "RGBA8": 531468,
+      "RGBA16": 1062936
+    },
+    "borrowedInputNotChargedAsLibraryOwned": true,
+    "scratchCapacityAddedBytes": 0,
+    "retainedPolicyUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false,
+    "note": "GC allocations, active independent result payload and unchanged default idle pixel capacity are distinct. No allocation/capacity/retention saving is claimed."
+  },
+  "qualification": {
+    "provider": "benchmarks/vp8-fixed-code-evidence.json",
+    "fullChecksEachOs": 6692,
+    "actualPackageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33",
+    "actualPackageLibrarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
+    "productionAndActualPackageByteIdentical": true,
+    "broadOrPackageRepeats": 0
+  },
+  "history": {
+    "cases": {
+      "WarmNormalOrientation16": {
+        "managedUs": 17.06611783854167,
+        "nativeUs": 16.64233821614583,
+        "ratio": 1.0254639472465894,
+        "lower": 1.0078545419804859,
+        "upper": 1.0365066083345404,
+        "status": "gap",
+        "allocatedBytes": 56,
+        "caseId": "WarmNormalOrientation16",
+        "operationsEachSubject": 256,
+        "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public AutoOrient, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+        "receipt": "tmp/wcc980-candidate-WarmNormalOrientation16-confirm-receipt.json",
+        "raw": "tmp/wcc980-candidate-WarmNormalOrientation16-confirm.json"
+      },
+      "WarmVerticalFlip16": {
+        "managedUs": 18.4505322265625,
+        "nativeUs": 17.94451822916667,
+        "ratio": 1.0281988065064553,
+        "lower": 1.004429103271158,
+        "upper": 1.0473734244239428,
+        "status": "gap",
+        "allocatedBytes": 56,
+        "caseId": "WarmVerticalFlip16",
+        "operationsEachSubject": 256,
+        "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+        "receipt": "tmp/orp978-candidate-WarmVerticalFlip16-confirm-receipt.json",
+        "raw": "tmp/orp978-candidate-WarmVerticalFlip16-confirm.json"
+      },
+      "WarmClone16": {
+        "managedUs": 17.3369443359375,
+        "nativeUs": 17.32476171875,
+        "ratio": 1.0007031910386575,
+        "lower": 0.9918200615989249,
+        "upper": 1.0090693763865888,
+        "status": "uncertain",
+        "allocatedBytes": 56,
+        "caseId": "WarmClone16",
+        "operationsEachSubject": 256,
+        "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public Clone, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+        "receipt": "tmp/wcc980-candidate-WarmClone16-confirm-receipt.json",
+        "raw": "tmp/wcc980-candidate-WarmClone16-confirm.json"
+      },
+      "WarmVerticalFlip8": {
+        "managedUs": 8.439322265625,
+        "nativeUs": 8.400898763020834,
+        "ratio": 1.004573737130758,
+        "lower": 0.9923609893862537,
+        "upper": 1.0120293466541035,
+        "status": "uncertain",
+        "allocatedBytes": 56,
+        "caseId": "WarmVerticalFlip8",
+        "operationsEachSubject": 256,
+        "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+        "receipt": "tmp/orp978-candidate-WarmVerticalFlip8-confirm-receipt.json",
+        "raw": "tmp/orp978-candidate-WarmVerticalFlip8-confirm.json"
+      }
+    },
+    "allRawRetained": true
+  },
+  "referenceBoundaryAudit": {
+    "sameNativeBuildReadySourceGeometryAndPixels": true,
+    "nativeWorkerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa",
+    "normalNativeUs": 16.560690002441405,
+    "cloneNativeUs": 17.081079264322916,
+    "finding": "Both harnesses use the same normal-orient worker, original RGBA16 bytes, null graph, independent av_frame_get_buffer/av_frame_copy output and disposal. Native source uses identical setup/timed path. Managed AutoOrient routes Normal to Clone. No boundary discrepancy identified; alignment, allocator and clock causes are not established. Separate observations are retained without a causal speedup/regression claim.",
+    "sources": {
+      "benchmarks/Lokad.Image.Benchmarks/WarmClone.cs": "4cf91a079e0030d9a8c1bdd7f4c0992e5ce295e0d8bb28b79b476714409baad4",
+      "benchmarks/Lokad.Image.Benchmarks/WarmNormalOrientation.cs": "6ee4b220181a2de30ed7a69a189e0f2781bb1fefc61a387370dbd51c3dd80c4a",
+      "tools/WarmReference/ffmpeg-normal-orient-warm.c": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611"
+    }
+  },
+  "combinedOwnedEditStatusCounts": {
+    "pass": 16,
+    "gap": 2,
+    "uncertain": 2
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 185,
+    "gaps": 2,
+    "uncertain": 4,
+    "total": 191
+  },
+  "raw": {
+    "file": "owned-edit-long-integration.tar.xz",
+    "sha256": "ed303cbd46ea756b5a43a9e2935146736bd080b25aed38322f205c00b74215e4",
+    "bytes": 77832,
+    "members": 60,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-fixed-code-qualified.tar.xz",
+        "sha256": "b8c44a7151a5855abec730b73e3d9cc4a3c1a93b8cdda670e538ea150f791092"
+      },
+      {
+        "file": "word-clone-copy-qualified.tar.xz",
+        "sha256": "9596f8228d0e67e0e9973d78f2e4fe571a86a8ea59be76204bd19640b81e03f9"
+      },
+      {
+        "file": "copy-result-admission-qualified.tar.xz",
+        "sha256": "46d4eed930e9dba98874ffb08bede13a2389da0327e080417f26fda8885b9024"
+      }
+    ]
+  },
+  "decision": "Normal RGBA16 copy and RGBA8 vertical flip are demonstrated gaps. RGBA16 clone and vertical flip remain uncertain. Stop the other16owned-edit passes. Preserve all observations without historical-clock production gain/regression claims or identical favorable retries.",
+  "next": "Bounded vertical-flip row-view preparation experiment on confirmed byte gap, with word guard, exact ownership/cancellation/admission and independent complete-operation confirmation if useful. The identical normal/clone native boundary gives no demonstrated cause; do not invent one. No broader text campaign or change outside the authorized PLAN font/text section."
+}

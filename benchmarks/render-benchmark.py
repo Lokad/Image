@@ -242,6 +242,24 @@ def apply_word_clone_copy(current):
         assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
     current['cases'].update(stage['cases'])
     assert stage['combinedOwnedEditStatusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
+    measured = json.loads((ROOT / 'benchmarks/owned-edit-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    q = measured['qualification']
+    assert measured['measurementAccepted'] and not measured['productionChanged'] and not measured['productionSpeedupClaim']
+    assert measured['raw']['mirrored'] and measured['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == 6692 and q['productionAndActualPackageByteIdentical']
+    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
+    assert measured['measurement']['productionBuilds'] == measured['measurement']['harnessNativeFixtureBuilds'] == 0
+    assert measured['measurement']['helperBuilds'] == 1
+    assert set(measured['cases']) == {'WarmNormalOrientation16', 'WarmVerticalFlip16', 'WarmClone16', 'WarmVerticalFlip8'}
+    for c in measured['cases'].values():
+        assert c['librarySha256'] == q['actualPackageLibrarySha256'] == measured['producers']['timedArtifactSha256']
+        assert c['operationsPerSubject'] == 4096 and c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 56
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
+    current['cases'].update(measured['cases'])
+    assert measured['combinedOwnedEditStatusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
     return current
 
 
@@ -2843,24 +2861,26 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                         ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16 † → 259×513'),
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
-                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (confidence open) †')]:
+                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (gap) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    owned_copy_note = """[Word clone copying](../benchmarks/WORD-CLONE-COPY.md) reuses the existing safe
-vector copier with one checked equal-length destination view. Independent complete
-pairs confirm **1.71% / 0.297 µs** for word clone and **4.45% / 0.249 µs** for its
-byte guard. These are scoped increments against the preceding immutable DLL,
-not FFmpeg parity or additive gains from earlier stages.
-Six affected complete reference costs refresh on the new actual package DLL;
-14 unchanged owned-edit paths reuse their qualified producers. Together these
-20 views have **16 passes, two gaps and two uncertainties**. Word normal-copy and
-vertical flip retain upper **1.037 / 1.047**; word clone and byte flip remain
-uncertain at **1.009 / 1.012**. Stop the passing controls.
-All 18 owned edits still allocate **56 B/op**, after
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removed an unused
-execution object. Pixel capacity, retained storage, cancellation, terminal
-admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
-remains linked history; no historical phase sum is used."""
+    owned_copy_note = """[Current owned-edit confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md)
+extends only the four open controls to 4096 complete calls per batch on the unchanged
+actual package. Twelve alternating pairs/all native brackets remain. Normal RGBA16
+copy and RGBA8 vertical flip show gaps: **17.201 / 16.561 µs**, upper **1.043**, and
+**8.614 / 8.507 µs**, upper **1.023**. Word clone and word vertical flip remain
+uncertain, upper **1.027 / 1.005**. The normal/clone native setup and owned-copy
+boundary are identical; their different costs have no established cause.
+Together the 20 owned-edit/composition views retain **16 passes, two gaps and two
+uncertainties**. Stop confirmed passes; no historical-clock speedup or identical
+favorable retries. All 18 basic owned edits still allocate **56 B/op**; active
+result payload is 531,468/1,062,936 B at 8/16 bits. Borrowed input and unchanged
+default idle pixel storage are separate. No physical/native/JIT peak is claimed.
+Exact pixels, cancellation, terminal admission and independent ownership remain.
+Reuse 6,692 full/live checks per OS and the SAME actual package/all three examples;
+one argument-guard-only helper build, no production or broad/package repeats.
+[Word-copy increments](../benchmarks/WORD-CLONE-COPY.md) and
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) remain history."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)

@@ -1,5 +1,10 @@
 # Word clone copying
 
+[Current longer integration](OWNED-EDIT-CURRENT-CONFIDENCE.md) supersedes the
+normal-word/clone-word confidence rows below. Their original measurements and
+scoped incremental gains remain history; no production path changed.
+
+
 Uncancelable RGBA16 clones now reuse the existing safe disjoint vector copier.
 One checked destination slice establishes its known-equal extent before the
 loop. This removes repeated destination checks in the four-vector loop without
