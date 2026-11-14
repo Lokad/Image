@@ -67,8 +67,10 @@ public sealed class JpegEntropyWriterTests
     }
 
     [Fact]
-    public void PairedGroupsMatchIndependentBitsAcrossWidthsTailsFlushesAndRestarts()
+    public void ReplayMatchesIndependentBitsAcrossWidthsTailsFlushesAndRestarts()
     {
+        Span<uint> bank = stackalloc uint[1024]; bank.Clear();
+        Span<int> records = stackalloc int[8];
         for (var tail = 0; tail < 8; tail++)
         {
             using var output = new MemoryStream(); using var context = Context();
@@ -86,7 +88,7 @@ public sealed class JpegEntropyWriterTests
             }
             void Pad() { if (available != 0) Bits((1 << (8 - available)) - 1, 8 - available); }
             var ordinal = 0;
-            for (var firstCount = 0; firstCount <= 16; firstCount++)
+            for (var firstCount = 1; firstCount <= 16; firstCount++)
             for (var secondCount = 0; secondCount <= 16; secondCount++)
             for (var pattern = 0; pattern < 4; pattern++)
             {
@@ -96,11 +98,11 @@ public sealed class JpegEntropyWriterTests
                 var prefix = (1 << tail) - 1; writer.Write(prefix, tail); Bits(prefix, tail);
                 var first = (pattern switch { 0 => 0, 1 => 65535, 2 => 0xaaaa, _ => ordinal * 271 + 13 }) & ((1 << firstCount) - 1);
                 var second = (pattern switch { 0 => 0, 1 => 65535, 2 => 0x5555, _ => ordinal * 419 + 31 }) & ((1 << secondCount) - 1);
-                writer.WritePair(first, firstCount, second, secondCount); Bits(first, firstCount); Bits(second, secondCount);
-                for (var repeat = 0; repeat < 7; repeat++)
-                {
-                    writer.WritePair(first, firstCount, second, secondCount); Bits(first, firstCount); Bits(second, secondCount);
-                }
+                bank[0] = (uint)first | (uint)firstCount << 16;
+                records.Fill(unchecked((int)((uint)second | (uint)secondCount << 27)));
+                records[^1] |= (int)JpegEntropyRecords.EndMcuBit;
+                writer.Replay(records, bank);
+                for (var repeat = 0; repeat < 8; repeat++) { Bits(first, firstCount); Bits(second, secondCount); }
                 if (++ordinal % 23 == 0)
                 {
                     Pad(); expected.Add(255); expected.Add((byte)(0xd0 + (ordinal & 7))); writer.Restart(ordinal);
@@ -110,45 +112,12 @@ public sealed class JpegEntropyWriterTests
             // including stuffed 0xff bytes on either side of a chunk boundary.
             for (var i = 0; i < 1024; i++)
             {
-                writer.WritePair(65535, 16, i, 16); Bits(65535, 16); Bits(i, 16);
+                bank[0] = 65535 | 16U << 16; records[0] = unchecked((int)((uint)i | 16U << 27 | JpegEntropyRecords.EndMcuBit));
+                writer.Replay(records[..1], bank); Bits(65535, 16); Bits(i, 16);
             }
             Pad(); writer.Align();
             Assert.Equal(expected, output.ToArray()); Assert.True(output.CanWrite);
         }
-    }
-
-    [Fact]
-    public void InvalidPairsLeavePendingBitsAndAdmissionUntouched()
-    {
-        using var root = new Lokad.Image.Tooling.TestMemoryBudget(JpegEntropyWriter.StorageBytes);
-        using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
-        writer.Write(5, 3);
-        foreach (var count in new[] { int.MinValue, -1, 17, 32, int.MaxValue })
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => writer.WritePair(0, count, 0, 0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => writer.WritePair(0, 0, 0, count));
-        }
-        for (var count = 0; count <= 16; count++)
-        foreach (var value in new[] { -1, 1 << count, int.MaxValue })
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => writer.WritePair(value, count, 0, 0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => writer.WritePair(0, 0, value, count));
-        }
-        Assert.Equal(0, root.Attempts); Assert.Equal(0, output.Length);
-        writer.WritePair(1, 1, 0, 4); writer.Align(); Assert.Equal(new byte[] { 0xb0 }, output.ToArray());
-    }
-
-    [Fact]
-    public void EvenZeroWidthPairsObserveCancellationAndDisposalWithoutAdmission()
-    {
-        using var root = new Lokad.Image.Tooling.TestMemoryBudget(0); using var cancellation = new CancellationTokenSource();
-        using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
-        using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
-        writer.WritePair(0, 0, 0, 0); cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => writer.WritePair(0, 0, 0, 0));
-        writer.Dispose(); Assert.Throws<ObjectDisposedException>(() => writer.WritePair(0, 0, 0, 0));
-        Assert.Equal(0, root.Attempts); Assert.Equal(0, output.Length); Assert.True(output.CanWrite);
     }
 
     private static OperationContext Context() => new(ImageLimits.Default, default);

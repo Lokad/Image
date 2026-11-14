@@ -47,19 +47,11 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
         ObjectDisposedException.ThrowIf(disposed, this);
         if (count is < 0 or > 16 || value < 0 || value >= 1 << count) throw new ArgumentOutOfRangeException(nameof(value));
         context.Cancellation.ThrowIfCancellationRequested();
-        Append((uint)value, count);
+        Append((uint)value, count, ref bits, ref available);
     }
 
-    internal void WritePair(int first, int firstCount, int second, int secondCount)
-    {
-        ObjectDisposedException.ThrowIf(disposed, this);
-        if (firstCount is < 0 or > 16 || first < 0 || first >= 1 << firstCount) throw new ArgumentOutOfRangeException(nameof(first));
-        if (secondCount is < 0 or > 16 || second < 0 || second >= 1 << secondCount) throw new ArgumentOutOfRangeException(nameof(second));
-        context.Cancellation.ThrowIfCancellationRequested();
-        Append((ulong)(uint)first << secondCount | (uint)second, firstCount + secondCount);
-    }
-
-    private void Append(ulong value, int count)
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private void Append(ulong value, int count, ref ulong bits, ref int available)
     {
         bits = bits << count | value; available += count;
         while (available >= 8)
@@ -69,6 +61,33 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
             Emit(next);
             if (next == 255) Emit(0);
         }
+    }
+
+    internal void Replay(ReadOnlySpan<int> records, ReadOnlySpan<uint> bank)
+    {
+        ObjectDisposedException.ThrowIf(disposed, this);
+        // Production owns this writer privately, replays once and abandons it
+        // on failure. Publish the reservoir only after successful replay;
+        // buffered output and its admission still use their actual lifetimes.
+        var pending = bits; var pendingCount = available; var offset = 0;
+        while (offset < records.Length)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); uint record;
+            do
+            {
+                record = (uint)records[offset++]; var packed = bank[(int)(record >> 16 & 1023)];
+                var length = (int)(packed >> 16); var code = (int)(packed & 65535);
+                if (length == 0) throw new ImageDataException("JPEG source changed between encoding passes.");
+                var amplitudeCount = (int)(record >> 27);
+                var amplitude = amplitudeCount == 31 ? 0 : (int)(record & 65535);
+                if (amplitudeCount == 31) amplitudeCount = 0;
+                if (length > 16 || code >= 1 << length) throw new ArgumentOutOfRangeException(nameof(bank));
+                if (amplitudeCount > 16 || amplitude >= 1 << amplitudeCount) throw new ArgumentOutOfRangeException(nameof(records));
+                context.Cancellation.ThrowIfCancellationRequested();
+                Append((ulong)(uint)code << amplitudeCount | (uint)amplitude, length + amplitudeCount, ref pending, ref pendingCount);
+            } while ((record & JpegEntropyRecords.EndMcuBit) == 0);
+        }
+        bits = pending; available = pendingCount;
     }
 
     public void Signed(int value, int count)

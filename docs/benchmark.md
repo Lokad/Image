@@ -1,9 +1,18 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **143 comparisons** summarize that scope.
+**289 named material paths**; these **144 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
+
+[Local JPEG entropy replay](../benchmarks/JPEG-LOCAL-ENTROPY-REPLAY.md) saves
+**10.49% / 167.72 µs** on complete caller-RGB420 encoding and **16.68% / 196.77 µs**
+on RGBA8→gray in independent paired confirmations. All 17 replay controls now pass;
+caller RGB420 is **1,431.80 / FFmpeg 1,578.72 µs, upper .912**, **388,222 B/op**.
+Exact packets and storage ownership remain; no heap capacity or retention is added.
+The existing row-restart control remains a **1.31× gap**, **151,179 B/op**; the
+unchanged contemporary original also has this gap. Its direct entropy path is
+the next attribution target. Previous caller uncertainty and stage costs remain history.
 
 [Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
 **10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
@@ -45,8 +54,6 @@ unchanged costs; current copy/composition costs are in their linked family repor
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.
-[Caller-RGB JPEG encoding](../benchmarks/JPEG-CALLER-CURRENT-CONFIDENCE.md) also
-remains uncertain under the current adjacent comparison, with exact packets.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
@@ -80,8 +87,8 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,642 full/live checks**,
-focused normal/scalar header checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,640 full/live checks**,
+focused normal/scalar JPEG checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -119,11 +126,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,841.97 | 5,986.04 | 0.976 / 0.988 | 240,496 | — |
-| JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,712.07 | 1,650.90 | 1.037 / 1.057 | 388,220 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
-| JPEG grayscale, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,160.95 | 1,403.16 | 0.827 / 0.840 | 155,435 | 58,910 / 58,910 |
-| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,059.14 | 1,112.88 | 0.952 / 0.969 | 155,438 | 58,910 / 58,910 |
+| JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,083.86 | 3,772.61 | 0.817 / 0.825 | 820,120 | 133,039 / 133,041 |
+| JPEG 4:2:0 from caller RGB samples (parity confirmed) † | 1,431.80 | 1,578.72 | 0.907 / 0.912 | 388,222 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,525.81 | 1,841.57 | 0.829 / 0.832 | 819,475 | 52,115 / 52,117 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo (parity confirmed) † | 962.45 | 1,408.06 | 0.684 / 0.688 | 155,435 | 58,910 / 58,910 |
+| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 889.23 | 1,077.61 | 0.825 / 0.834 | 155,439 | 58,910 / 58,910 |
 | VP8L photograph / libwebp exact=1 † | 81,000.31 | 83,387.76 | 0.971 / 0.981 | 5,358,368 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
@@ -168,9 +175,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG 4:1:0, resident decode † | 339.24 | 507.96 | 0.668 / 0.680 | 189,090 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 114,600.56 | 131,281.45 | 0.873 / 0.887 | 5,948,664 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
-| JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,581.70 | 1,629.27 | 0.971 / 0.979 | 309,524 | 52,091 / 52,093 |
-| JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,517.84 | 3,856.40 | 0.912 / 0.918 | 820,531 | 133,039 / 133,041 |
+| JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,422.33 | 1,626.70 | 0.874 / 0.878 | 309,523 | 52,091 / 52,093 |
+| JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,106.93 | 3,858.03 | 0.805 / 0.810 | 820,502 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,611.56 | 2,853.33 | 0.915 / 0.919 | 1,638,214 | — |
+| JPEG RGBA8 4:2:0, row restart33 (confirmed gap) † | 2,112.08 | 1,610.79 | 1.311 / 1.317 | 151,179 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 410.41 | 418.11 | 0.982 / 0.988 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode † | 438.99 | 604.73 | 0.726 / 0.742 | 762,720 | — |

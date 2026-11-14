@@ -174,19 +174,6 @@ internal sealed partial class JpegEntropyRecords : IDisposable
             for (var symbol = 0; symbol < 256; symbol++)
                 target[symbol] = table.Codes[symbol] | (uint)table.Lengths[symbol] << 16;
         }
-        var offset = 0;
-        while (offset < records.Length)
-        {
-            context.Cancellation.ThrowIfCancellationRequested(); uint record;
-            do
-            {
-                record = (uint)records[offset++]; var packed = bank[(int)(record >> 16 & 1023)];
-                var length = (int)(packed >> 16); var code = (int)(packed & 65535);
-                if (length == 0) throw new ImageDataException("JPEG source changed between encoding passes.");
-                var bits = (int)(record >> 27);
-                if (bits == 31) writer.Write(code, length);
-                else writer.WritePair(code, length, (int)(record & 65535), bits);
-            } while ((record & EndMcuBit) == 0);
-        }
+        writer.Replay(records, bank);
     }
 }

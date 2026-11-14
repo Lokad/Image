@@ -53,14 +53,14 @@ public sealed class JpegEntropyBufferTests
     [InlineData(true, false)]
     [InlineData(false, true)]
     [InlineData(true, true)]
-    public void RefusalOrCancellationAfterAdmissionCleansUpWithoutRetryAndAllowsRecovery(bool cancel, bool pair)
+    public void RefusalOrCancellationAfterAdmissionCleansUpWithoutRetryAndAllowsRecovery(bool cancel, bool replay)
     {
         using var root = new TestMemoryBudget(JpegEntropyWriter.StorageBytes);
         using var cancellation = new CancellationTokenSource();
         if (cancel) root.Admitted = _ => cancellation.Cancel(); else root.RefuseAtGrowth = 1;
         using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
         using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
-        void Write() { if (pair) writer.WritePair(255, 8, 65535, 16); else writer.Write(255, 8); }
+        void Write() { if (replay) Replay(writer, 255, 8, 65535, 16); else writer.Write(255, 8); }
         if (cancel) Assert.Throws<OperationCanceledException>(Write);
         else
         {
@@ -91,7 +91,7 @@ Assert.Equal(1, root.GrowthAttempts);
     [InlineData(true, false)]
     [InlineData(false, true)]
     [InlineData(true, true)]
-    public void OutputUserKeepsItsChargeAndFailureDisposalDoesNotPublishPendingBytes(bool cancel, bool pair)
+    public void OutputUserKeepsItsChargeAndFailureDisposalDoesNotPublishPendingBytes(bool cancel, bool replay)
     {
         using var root = new TestMemoryBudget(JpegEntropyWriter.StorageBytes);
         using var cancellation = new CancellationTokenSource();
@@ -102,11 +102,18 @@ Assert.Equal(1, root.GrowthAttempts);
             if (cancel) cancellation.Cancel(); else throw new IOException("Authored output failure");
         });
         using var writer = new JpegEntropyWriter(output, context);
-        void Encode() { for (var i = 0; i < 1024; i++) { if (pair) writer.WritePair(91, 8, 91, 8); else writer.Write(91, 8); } }
+        void Encode() { for (var i = 0; i < 1024; i++) { if (replay) Replay(writer, 91, 8, 91, 8); else writer.Write(91, 8); } }
         if (cancel) Assert.Throws<OperationCanceledException>(Encode); else Assert.Throws<IOException>(Encode);
         var writes = output.Writes; var length = output.Length;
         writer.Dispose(); writer.Dispose(); Assert.Equal(0, root.Bytes);
         Assert.Equal(writes, output.Writes); Assert.Equal(length, output.Length);
         Assert.True(output.CanWrite); Assert.False(root.IsDisposed); Assert.Equal(0, root.Refusals);
+    }
+    private static void Replay(JpegEntropyWriter writer, int code, int length, int amplitude, int amplitudeCount)
+    {
+        Span<uint> bank = stackalloc uint[1024]; bank.Clear(); bank[0] = (uint)code | (uint)length << 16;
+        Span<int> records = stackalloc int[1];
+        records[0] = unchecked((int)((uint)amplitude | (uint)amplitudeCount << 27 | JpegEntropyRecords.EndMcuBit));
+        writer.Replay(records, bank);
     }
 }

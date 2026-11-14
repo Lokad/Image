@@ -1,0 +1,1749 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "JER967",
+  "productionChanged": true,
+  "productionAccepted": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "allAffectedPerformanceReconciled": true,
+  "producers": {
+    "windowsSha256": "3d2a450675a81c0c6b325a27253fd228113556136b74e0d399f3b7e5a5a8eeb2",
+    "linuxSha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+    "actualPackageSha256": "efb0b5d56929948fbbd0a66b34928d92a6fc817b7dffec4287581aef96acaf36"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "6e74e43162d6a2aec94971d505cd6a4fcba6b7081d4e3cd4ea6f71c61896727c",
+    "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9e1bdbda315bab8e404ffc54b454f09ef5a6adf65f5ffb9d7548dac58d9906a2",
+    "tests/Lokad.Image.Tests/JpegEntropyRecordsTests.cs": "1237050fe476d9f46a6425784c4ce57189e428c0402b0fa507e47f2ae1d3e091",
+    "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "99d8a069b2d4913e1bb3601adf59fa775fd9943d6d6fd19b982b07a63aea136f",
+    "tests/Lokad.Image.Tests/JpegEntropyBufferTests.cs": "7234f04ad8c53679e091767272723422ccc32f6ff44cac17da18baa0bed903c7"
+  },
+  "originalSources": {
+    "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "b9987bf08e2b3675387d06415da0e48f9d3a36f847547ce5a83d8192e7a9e587",
+    "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9f00a3788174f6c224dffb415ee321d62ba170ca4516ef1a5f9fa61c8983fa15",
+    "tests/Lokad.Image.Tests/JpegEntropyRecordsTests.cs": "1237050fe476d9f46a6425784c4ce57189e428c0402b0fa507e47f2ae1d3e091",
+    "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "0a52f47f43c3de2fc1eaa2e81f0eacc93eabe75490838b02c25fe1e9718567ff",
+    "tests/Lokad.Image.Tests/JpegEntropyBufferTests.cs": "23b7f178d32a77394531f2caadfa448f47edd418113a5b43e014e8de879ff039"
+  },
+  "cases": {
+    "Encode422_8": {
+      "managedUs": 1802.7129139610388,
+      "nativeUs": 2347.6328958333334,
+      "ratio": 0.7678853525866676,
+      "lower": 0.7647653463591879,
+      "upper": 0.7710913688389864,
+      "status": "pass",
+      "allocatedBytes": 529871,
+      "managedPacketBytes": 71166,
+      "nativePacketBytes": 71168,
+      "packetSha256": "a1d3d66671a19606075b7604173922d7677236928381a14355bc6fb640ebd3a4",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:2 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode420Stream8": {
+      "managedUs": 1405.3216174242425,
+      "nativeUs": 1761.8824869791667,
+      "ratio": 0.7976250560465782,
+      "lower": 0.7899420065926963,
+      "upper": 0.8031091239354008,
+      "status": "pass",
+      "allocatedBytes": 388247,
+      "managedPacketBytes": 52091,
+      "nativePacketBytes": 52093,
+      "packetSha256": "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included, plus fresh forward-only Stream wrapper creation/disposal; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode422_16": {
+      "managedUs": 1823.2374322240262,
+      "nativeUs": 2418.0129869791667,
+      "ratio": 0.7540230106463589,
+      "lower": 0.7513864935621752,
+      "upper": 0.757554765767285,
+      "status": "pass",
+      "allocatedBytes": 529871,
+      "managedPacketBytes": 71208,
+      "nativePacketBytes": 71210,
+      "packetSha256": "afe4c4f147555ca198d3c82858c481eb0901dab08cd3ccf7c287915fba00d030",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:2 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode420Stream16": {
+      "managedUs": 1491.9475268308083,
+      "nativeUs": 1838.0896510416667,
+      "ratio": 0.8116837641653138,
+      "lower": 0.8060986746798604,
+      "upper": 0.8159885038991963,
+      "status": "pass",
+      "allocatedBytes": 388247,
+      "managedPacketBytes": 52115,
+      "nativePacketBytes": 52117,
+      "packetSha256": "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included, plus fresh forward-only Stream wrapper creation/disposal; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode420Cancelable16": {
+      "managedUs": 1533.1453203125,
+      "nativeUs": 1836.7248229166667,
+      "ratio": 0.8347169380974059,
+      "lower": 0.8299381632127191,
+      "upper": 0.8404026138513917,
+      "status": "pass",
+      "allocatedBytes": 388214,
+      "managedPacketBytes": 52115,
+      "nativePacketBytes": 52117,
+      "packetSha256": "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode420_8": {
+      "managedUs": 1409.869975378788,
+      "nativeUs": 1767.0263515625,
+      "ratio": 0.7978771647248526,
+      "lower": 0.7935570877494127,
+      "upper": 0.8021413546575467,
+      "status": "pass",
+      "allocatedBytes": 388215,
+      "managedPacketBytes": 52091,
+      "nativePacketBytes": 52093,
+      "packetSha256": "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode420_16": {
+      "managedUs": 1478.8166332070707,
+      "nativeUs": 1835.6089713541667,
+      "ratio": 0.8056272639134668,
+      "lower": 0.8028638272647783,
+      "upper": 0.8094019151585564,
+      "status": "pass",
+      "allocatedBytes": 388215,
+      "managedPacketBytes": 52115,
+      "nativePacketBytes": 52117,
+      "packetSha256": "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "GovernedRGBA16": {
+      "managedUs": 1525.8071441761365,
+      "nativeUs": 1841.57,
+      "ratio": 0.8285360557438145,
+      "lower": 0.8234460447247248,
+      "upper": 0.8324796820548788,
+      "status": "pass",
+      "allocatedBytes": 819475,
+      "managedPacketBytes": 52115,
+      "nativePacketBytes": 52117,
+      "packetSha256": "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Borrowed caller IMemoryBudget through ImageLimits.MemoryBudget; private coefficient storage, admission and refunds timed. One finite root and resident-source reservation prepared outside timing. Source/root borrowing, terminal refusal/recovery, cancellation, independent surviving packets and full temporary return checked. Native has no shared admission API; managed accounting is included additional work. Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "JpegRgb420AsyncSamples": {
+      "managedUs": 1422.3343246527782,
+      "nativeUs": 1626.698203125,
+      "ratio": 0.8743689037833664,
+      "lower": 0.8693843082766752,
+      "upper": 0.8776359446616101,
+      "status": "pass",
+      "allocatedBytes": 309523,
+      "managedPacketBytes": 52091,
+      "nativePacketBytes": 52093,
+      "packetSha256": "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Same borrowed resident packed RGB24 through complete public EncodeJpegAsync(ReadOnlyMemory), explicit stride1539, to fresh independently owned nonseekable caller output. Sample validation/borrow, admitted coefficient/entropy workspace and segmented async staging, RGB-to-YCbCr420/transform/reference-compatible Huffman/entropy, tail clearing, actual WriteAsync copies and all staging/output release are timed. Native borrows the same RGB24, recomputes full-range BT601 RGB-to-YCbCr420 conversion/sampling and optimal Huffman JPEG encode, then fresh AVIO/output growth/callback copies/internal flush/staging and caller-output release. No RGBA intermediary or alpha flattening on either side; input projection excluded for both. Both callbacks complete immediately, caller output survives staging/input release and is disposed inside each operation; no final snapshot copy, forced scheduling, real I/O, seek/length/output view, cached encoded content or caller FlushAsync requirement. Prepared source/context/wrappers and released private storage may be reused. Managed quality85/nativeqscale5; complete packet equality apart from approved attribution; minimal source-quality sanity check. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, IPC, preparation/hashing and quality checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "88f8aca4e7f425f362daa4c5c6472067fa09f36e5f5458eea60c006257d9d236",
+        "buildScriptSha256": "e0ed0da673fa2bf3e92ae34136d14d178c2b54d66399610f249d29b03709fee7",
+        "workerSha256": "43d733a9cbd167baae5db1c9a251481a01de9b7023ca5b3ceb7ff61343c1b520"
+      }
+    },
+    "CallerRGB420": {
+      "managedUs": 1431.8019122474745,
+      "nativeUs": 1578.7211822916668,
+      "ratio": 0.9069377976984355,
+      "lower": 0.9026684087493347,
+      "upper": 0.9120638123090903,
+      "status": "pass",
+      "allocatedBytes": 388222,
+      "managedPacketBytes": 52091,
+      "nativePacketBytes": 52093,
+      "packetSha256": "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Identical resident packed 8-bit caller gray/RGB samples to complete fresh independent JPEG bytes. Public EncodeJpeg admission, bounded block/row normalization, color conversion when RGB, transform, quantization, adaptive Huffman/entropy coding, MemoryStream creation/growth and owned output release are timed. Native borrows resident packed samples, reuses codec and private conversion scratch only; every operation processes/encodes all samples and acquires/releases a fresh owned packet. No RGBA staging or alpha flattening in either operation. Input projection, startup, disk I/O, IPC, hashing and quality checks excluded. One CPU; frozen matched-quality packets exact, no quality-number equivalence assumption.",
+      "referenceLabel": "FFmpeg n8.1 MJPEG",
+      "nativeIdentity": {
+        "sourceSha256": "89656f6181868ffacf99eb45e3e27c767999e085974c8cb3eee04f646e2f7654",
+        "buildScriptSha256": "e2e739c66599f9819d554ac77df46d7267dd7ad024f9f3c81972155a8cf86e8e",
+        "workerSha256": "258303ad4ca873f5ca447ef65078f3404248fcfc2934e1b3504334eac0c55916",
+        "simdEnabled": true,
+        "reference": "FFmpeg n8.1 MJPEG"
+      }
+    },
+    "Encode8": {
+      "managedUs": 3057.7488444602272,
+      "nativeUs": 3776.8989479166667,
+      "ratio": 0.8095924425372508,
+      "lower": 0.7952481210295161,
+      "upper": 0.8211256549272107,
+      "status": "pass",
+      "allocatedBytes": 820088,
+      "managedPacketBytes": 133039,
+      "nativePacketBytes": 133041,
+      "packetSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:4:4 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode16": {
+      "managedUs": 3157.2799140625,
+      "nativeUs": 3847.2327604166667,
+      "ratio": 0.8206625672735635,
+      "lower": 0.8028506611411149,
+      "upper": 0.8270738124169515,
+      "status": "pass",
+      "allocatedBytes": 820088,
+      "managedPacketBytes": 133041,
+      "nativePacketBytes": 133043,
+      "packetSha256": "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA16 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:4:4 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Encode444Cancelable8": {
+      "managedUs": 3105.100718039773,
+      "nativeUs": 3777.72496875,
+      "ratio": 0.8219499152865039,
+      "lower": 0.8139184958501158,
+      "upper": 0.829419900839161,
+      "status": "pass",
+      "allocatedBytes": 820088,
+      "managedPacketBytes": 133039,
+      "nativePacketBytes": 133041,
+      "packetSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:4:4 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "Jpeg8AsyncNonSeekable": {
+      "managedUs": 3106.933895596591,
+      "nativeUs": 3858.0293177083336,
+      "ratio": 0.8053163000435951,
+      "lower": 0.8012973026460801,
+      "upper": 0.8100705405305323,
+      "status": "pass",
+      "allocatedBytes": 820502,
+      "managedPacketBytes": 133039,
+      "nativePacketBytes": 133041,
+      "packetSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Same borrowed resident RGBA8 through complete public EncodeJpegAsync with admitted coefficient/entropy workspace and segmented async staging and full alpha flattening onto0x204060/color conversion/444 encoding; native recomputes equivalent normalization/encoding and AVIO output. Both callbacks complete immediately, caller output survives staging/input release and is disposed inside each operation; no final snapshot copy, forced scheduling, real I/O, seek/length/output view, cached encoded content or caller FlushAsync requirement. Prepared source/context/wrappers and released private storage may be reused. Managed quality85/nativeqscale5; complete packet equality apart from approved attribution; minimal source-quality sanity check. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, IPC, preparation/hashing and quality checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "21d0540a0cccf895bef3b247ce32eac963adc0fbcf397db5b0a693b7188136dc",
+        "buildScriptSha256": "dacc492607dabbb2e47d9eaa410c6d7128c6d227c525b4494622884637f8cdb5",
+        "workerSha256": "da7a9e6e35204d7269db6388c9615527634e70987215293c33aea2b516e2f12c"
+      }
+    },
+    "CallerGray": {
+      "managedUs": 889.2320138392859,
+      "nativeUs": 1077.6143619791667,
+      "ratio": 0.825185748458387,
+      "lower": 0.8192753239505707,
+      "upper": 0.8339250934900307,
+      "status": "pass",
+      "allocatedBytes": 155439,
+      "managedPacketBytes": 58910,
+      "nativePacketBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "metadataExceptionBytes": 0,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "inputSha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Identical resident packed 8-bit caller gray/RGB samples to complete fresh independent JPEG bytes. Public EncodeJpeg admission, bounded block/row normalization, color conversion when RGB, transform, quantization, adaptive Huffman/entropy coding, MemoryStream creation/growth and owned output release are timed. Native borrows resident packed samples, reuses codec and private conversion scratch only; every operation processes/encodes all samples and acquires/releases a fresh owned packet. No RGBA staging or alpha flattening in either operation. Input projection, startup, disk I/O, IPC, hashing and quality checks excluded. One CPU; frozen matched-quality packets exact, no quality-number equivalence assumption.",
+      "referenceLabel": "SIMD-enabled libjpeg-turbo 3.1.4.1; single-component grayscale benchmark exception",
+      "nativeIdentity": {
+        "sourceSha256": "89656f6181868ffacf99eb45e3e27c767999e085974c8cb3eee04f646e2f7654",
+        "buildScriptSha256": "e2e739c66599f9819d554ac77df46d7267dd7ad024f9f3c81972155a8cf86e8e",
+        "workerSha256": "f1886cd9f9391270994b45e142dd4d63d0d3932e9d238e38517dd1f17fb8520c",
+        "simdEnabled": true,
+        "reference": "SIMD-enabled libjpeg-turbo 3.1.4.1"
+      }
+    },
+    "Encode444Stream8": {
+      "managedUs": 3083.863534090909,
+      "nativeUs": 3772.6139010416664,
+      "ratio": 0.8174341756094933,
+      "lower": 0.8122464060690633,
+      "upper": 0.8245153586918098,
+      "status": "pass",
+      "allocatedBytes": 820120,
+      "managedPacketBytes": 133039,
+      "nativePacketBytes": 133041,
+      "packetSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:4:4 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included, plus fresh forward-only Stream wrapper creation/disposal; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+        "buildScriptSha256": "faa16500aba5a15d3ca091888d8fa8f24b6687e1b604dfdb76a3ce1fbe3101e8",
+        "workerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708"
+      }
+    },
+    "RgbaGray": {
+      "managedUs": 962.451128277972,
+      "nativeUs": 1408.0551263020832,
+      "ratio": 0.6835322781755125,
+      "lower": 0.6790795646535698,
+      "upper": 0.6876731941476777,
+      "status": "pass",
+      "allocatedBytes": 155435,
+      "managedPacketBytes": 58910,
+      "nativePacketBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "metadataExceptionBytes": 0,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Complete public original RGBA8 to one-component grayscale JPEG: single-round alpha flattening on0x204060, full-range BT.601 grayscale normalization, transform/quantization, adaptive histogram/Huffman/entropy coding and fresh owned output acquisition/release. Fresh managed MemoryStream creation/growth/disposal included. Standalone SIMD libjpeg-turbo reuses only codec/gray scratch; every source sample is normalized and encoded again, each packet newly acquired and freed. Startup/I/O/IPC/fixture creation/quality checks excluded; no output cache. Same owned mathematical quantizers, one frozen setting per encoder, existing0.25dB source-quality gate and max4/RMSE1.5 decoder agreement, exact alpha. One CPU, no concurrent codec/filter work. Production uses no native binding or dependency.",
+      "referenceLabel": "SIMD-enabled libjpeg-turbo 3.1.4.1, standalone single-component grayscale reference",
+      "nativeIdentity": {
+        "simdEnabled": true,
+        "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+        "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+        "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012"
+      }
+    },
+    "Encode420Restart8": {
+      "managedUs": 2112.083107007576,
+      "nativeUs": 1610.791171875,
+      "ratio": 1.311208519071445,
+      "lower": 1.3061406408505283,
+      "upper": 1.317467061580237,
+      "status": "gap",
+      "allocatedBytes": 151179,
+      "managedPacketBytes": 58010,
+      "nativePacketBytes": 58012,
+      "packetSha256": "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "referenceLabel": "FFmpeg n8.1",
+      "nativeIdentity": {
+        "sourceSha256": "171c08214e2d15cf503fca1c447fd62dd42e93a439ad5f8ec0369a4c6722004a",
+        "buildScriptSha256": "6ba50147e7ffe22f85a397493d12f185a601621bcaa1125d2dd2dc86f8195c87",
+        "workerSha256": "5bfc5d08ba779337b22d691755cac0f9d1862087ea4c4c520c400bc4bdf09f4c"
+      }
+    }
+  },
+  "statusCounts": {
+    "pass": 17,
+    "gap": 1,
+    "uncertain": 0
+  },
+  "comparison": {
+    "CallerRGB420": {
+      "originalUs": 1598.4214869791667,
+      "candidateUs": 1430.70113671875,
+      "savedUs": 167.7203502604168,
+      "rawReduction": 0.10492873852527407,
+      "lower": 0.8818456014303337,
+      "upper": 0.9086292235368675,
+      "allActualsRetained": true,
+      "pairs": 12,
+      "operationsEachSubject": 64,
+      "independentConfirmationAfterShort": true,
+      "outputExact": true
+    },
+    "RgbaGray": {
+      "originalUs": 1179.6082447916667,
+      "candidateUs": 982.8379049479166,
+      "savedUs": 196.7703398437501,
+      "rawReduction": 0.1668099055025698,
+      "lower": 0.8293621917934975,
+      "upper": 0.8370203924124007,
+      "allActualsRetained": true,
+      "pairs": 12,
+      "operationsEachSubject": 64,
+      "independentConfirmationAfterShort": true,
+      "outputExact": true
+    }
+  },
+  "restartReconciliation": {
+    "original": {
+      "managedUs": 2188.6576202651518,
+      "nativeUs": 1642.5035520833333,
+      "ratio": 1.3325131732525526,
+      "lower": 1.3263582736904338,
+      "upper": 1.3373803373407156,
+      "allocatedBytes": 151179,
+      "status": "gap",
+      "librarySha256": "de0fe408ea8e3b1768b7f8e424d500010a9866abaf4c53104cd7389122b9de60"
+    },
+    "candidate": {
+      "managedUs": 2112.083107007576,
+      "nativeUs": 1610.791171875,
+      "ratio": 1.311208519071445,
+      "lower": 1.3061406408505283,
+      "upper": 1.317467061580237,
+      "allocatedBytes": 151179,
+      "status": "gap"
+    },
+    "originalCapture": "tmp/jer967-baseline-Encode420Restart8-confirm-receipt.json",
+    "candidateCapture": "tmp/jer967-candidate-Encode420Restart8-confirm-receipt.json",
+    "independentNativeNormalizedIntervalsSeparated": true,
+    "productionRegressionDemonstrated": false,
+    "scope": "The required restart control already has a material gap on the unchanged contemporary original. Its separate native capture resolves the suspected new regression; it is not a paired causal speedup claim or a reason to rerun the favorable candidate. Keep current1.31ratio gap open and prioritize actual fixed-table/direct entropy attribution."
+  },
+  "diagnostics": {
+    "Encode422_8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1802712.9139610387,
+        "StandardError": 333.18296266748354,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1802712.9139610387,
+          "StandardError": 333.18296266748354,
+          "Level": 12,
+          "Margin": 1528.274884829132,
+          "Lower": 1801184.6390762096,
+          "Upper": 1804241.1888458678
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1803775.0535714284,
+        "StandardError": 1102.7702340334765,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1803775.0535714284,
+          "StandardError": 1102.7702340334765,
+          "Level": 12,
+          "Margin": 4892.968742027116,
+          "Lower": 1798882.0848294012,
+          "Upper": 1808668.0223134556
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2349993.0598958335,
+          "standardError": 497.7026190795298,
+          "confidenceLower": 2347710.1508095968,
+          "confidenceUpper": 2352275.96898207
+        },
+        {
+          "mean": 2347632.8958333335,
+          "standardError": 459.3088302737409,
+          "confidenceLower": 2345526.0949811297,
+          "confidenceUpper": 2349739.696685537
+        }
+      ],
+      "rawGc": "// GC:  2 0 0 59345512 112",
+      "rawReceipt": "tmp/jer967-candidate-Encode422_8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode422_8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420Stream8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1405321.6174242424,
+        "StandardError": 675.3066279803612,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1405321.6174242424,
+          "StandardError": 675.3066279803612,
+          "Level": 12,
+          "Margin": 3097.5598237027075,
+          "Lower": 1402224.0576005396,
+          "Upper": 1408419.1772479452
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1406659.329861111,
+        "StandardError": 1470.8436926864226,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1406659.329861111,
+          "StandardError": 1470.8436926864226,
+          "Level": 12,
+          "Margin": 6526.103072622408,
+          "Lower": 1400133.2267884887,
+          "Upper": 1413185.4329337333
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1769112.4036458333,
+          "standardError": 752.3702132120382,
+          "confidenceLower": 1765661.361336407,
+          "confidenceUpper": 1772563.4459552595
+        },
+        {
+          "mean": 1761882.4869791667,
+          "standardError": 504.70855583449276,
+          "confidenceLower": 1759567.4424046637,
+          "confidenceUpper": 1764197.5315536698
+        }
+      ],
+      "rawGc": "// GC:  3 0 0 55907552 144",
+      "rawReceipt": "tmp/jer967-candidate-Encode420Stream8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420Stream8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode422_16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1823237.4322240262,
+        "StandardError": 923.881528773231,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1823237.4322240262,
+          "StandardError": 923.881528773231,
+          "Level": 12,
+          "Margin": 4237.746509237906,
+          "Lower": 1818999.6857147883,
+          "Upper": 1827475.178733264
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1824314.0736607146,
+        "StandardError": 1366.0962446038864,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1824314.0736607146,
+          "StandardError": 1366.0962446038864,
+          "Level": 12,
+          "Margin": 6061.340809861334,
+          "Lower": 1818252.7328508531,
+          "Upper": 1830375.414470576
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2418021.3333333335,
+          "standardError": 414.43916285841004,
+          "confidenceLower": 2416120.344882978,
+          "confidenceUpper": 2419922.321783689
+        },
+        {
+          "mean": 2418012.9869791665,
+          "standardError": 417.0607610492682,
+          "confidenceLower": 2416099.973536173,
+          "confidenceUpper": 2419926.00042216
+        }
+      ],
+      "rawGc": "// GC:  2 0 0 59345512 112",
+      "rawReceipt": "tmp/jer967-candidate-Encode422_16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode422_16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420Stream16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1491947.5268308083,
+        "StandardError": 637.3672333520725,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1491947.5268308083,
+          "StandardError": 637.3672333520725,
+          "Level": 12,
+          "Margin": 2923.5358475310904,
+          "Lower": 1489023.990983277,
+          "Upper": 1494871.0626783394
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1493095.3136574074,
+        "StandardError": 1285.0363781507788,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1493095.3136574074,
+          "StandardError": 1285.0363781507788,
+          "Level": 12,
+          "Margin": 5701.679857337013,
+          "Lower": 1487393.6338000705,
+          "Upper": 1498796.9935147443
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1843724.8255208333,
+          "standardError": 326.9813118022322,
+          "confidenceLower": 1842224.9969502634,
+          "confidenceUpper": 1845224.6540914031
+        },
+        {
+          "mean": 1838089.6510416667,
+          "standardError": 293.6124253930514,
+          "confidenceLower": 1836742.8820111933,
+          "confidenceUpper": 1839436.4200721402
+        }
+      ],
+      "rawGc": "// GC:  3 0 0 55907552 144",
+      "rawReceipt": "tmp/jer967-candidate-Encode420Stream16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420Stream16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420Cancelable16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1533145.3203125,
+        "StandardError": 692.650735133767,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1533145.3203125,
+          "StandardError": 692.650735133767,
+          "Level": 12,
+          "Margin": 3177.1154022656747,
+          "Lower": 1529968.2049102343,
+          "Upper": 1536322.4357147657
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1534688.1875,
+        "StandardError": 1665.5629577891843,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1534688.1875,
+          "StandardError": 1665.5629577891843,
+          "Level": 12,
+          "Margin": 7390.068428427779,
+          "Lower": 1527298.1190715723,
+          "Upper": 1542078.2559284277
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1836724.8229166667,
+          "standardError": 370.9788625654671,
+          "confidenceLower": 1835023.182250763,
+          "confidenceUpper": 1838426.4635825704
+        },
+        {
+          "mean": 1837591.640625,
+          "standardError": 600.3359279909296,
+          "confidenceLower": 1834837.9634445591,
+          "confidenceUpper": 1840345.3178054409
+        }
+      ],
+      "rawGc": "// GC:  2 0 0 49691368 128",
+      "rawReceipt": "tmp/jer967-candidate-Encode420Cancelable16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420Cancelable16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420_8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1409869.975378788,
+        "StandardError": 522.3113105436814,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1409869.975378788,
+          "StandardError": 522.3113105436814,
+          "Level": 12,
+          "Margin": 2395.786541950935,
+          "Lower": 1407474.1888368372,
+          "Upper": 1412265.761920739
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1410790.490740741,
+        "StandardError": 1034.8228409389903,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1410790.490740741,
+          "StandardError": 1034.8228409389903,
+          "Level": 12,
+          "Margin": 4591.487562853887,
+          "Lower": 1406199.003177887,
+          "Upper": 1415381.9783035947
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1767026.3515625,
+          "standardError": 535.4582620231015,
+          "confidenceLower": 1764570.2613495653,
+          "confidenceUpper": 1769482.4417754347
+        },
+        {
+          "mean": 1768262.2005208333,
+          "standardError": 846.9196259894806,
+          "confidenceLower": 1764377.4700907231,
+          "confidenceUpper": 1772146.9309509434
+        }
+      ],
+      "rawGc": "// GC:  3 0 0 55902944 144",
+      "rawReceipt": "tmp/jer967-candidate-Encode420_8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420_8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420_16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1478816.6332070706,
+        "StandardError": 513.6756332882217,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1478816.6332070706,
+          "StandardError": 513.6756332882217,
+          "Level": 12,
+          "Margin": 2356.1756069939133,
+          "Lower": 1476460.4576000767,
+          "Upper": 1481172.8088140646
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1479738.9803240744,
+        "StandardError": 1032.8460574531005,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1479738.9803240744,
+          "StandardError": 1032.8460574531005,
+          "Level": 12,
+          "Margin": 4582.71661537298,
+          "Lower": 1475156.2637087014,
+          "Upper": 1484321.6969394474
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1835612.9296875,
+          "standardError": 316.15996047462795,
+          "confidenceLower": 1834162.7375068627,
+          "confidenceUpper": 1837063.1218681373
+        },
+        {
+          "mean": 1835608.9713541667,
+          "standardError": 396.4358661540132,
+          "confidenceLower": 1833790.5621148765,
+          "confidenceUpper": 1837427.380593457
+        }
+      ],
+      "rawGc": "// GC:  3 0 0 55902944 144",
+      "rawReceipt": "tmp/jer967-candidate-Encode420_16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420_16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "GovernedRGBA16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1525807.1441761365,
+        "StandardError": 726.0465158621301,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1525807.1441761365,
+          "StandardError": 726.0465158621301,
+          "Level": 12,
+          "Margin": 3330.2983037496083,
+          "Lower": 1522476.8458723868,
+          "Upper": 1529137.442479886
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1526661.98828125,
+        "StandardError": 1080.0506596289488,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1526661.98828125,
+          "StandardError": 1080.0506596289488,
+          "Level": 12,
+          "Margin": 4792.1624598454555,
+          "Lower": 1521869.8258214046,
+          "Upper": 1531454.1507410954
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1844167.890625,
+          "standardError": 902.4136931234121,
+          "confidenceLower": 1840028.6147992346,
+          "confidenceUpper": 1848307.1664507654
+        },
+        {
+          "mean": 1841570.0,
+          "standardError": 437.35535176427885,
+          "confidenceLower": 1839563.8974235186,
+          "confidenceUpper": 1843576.1025764814
+        }
+      ],
+      "rawGc": "// GC:  8 7 7 104892760 128",
+      "rawReceipt": "tmp/jer967-candidate-GovernedRGBA16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-GovernedRGBA16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "JpegRgb420AsyncSamples": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 1422334.3246527782,
+        "StandardError": 985.3580089757313,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1422334.3246527782,
+          "StandardError": 985.3580089757313,
+          "Level": 12,
+          "Margin": 4372.0131255174665,
+          "Lower": 1417962.3115272608,
+          "Upper": 1426706.3377782956
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1422336.2378472222,
+        "StandardError": 985.3580089757149,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1422336.2378472222,
+          "StandardError": 985.3580089757149,
+          "Level": 12,
+          "Margin": 4372.013125517394,
+          "Lower": 1417964.2247217048,
+          "Upper": 1426708.2509727397
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1628949.53125,
+          "standardError": 461.2255760681674,
+          "confidenceLower": 1626903.082899222,
+          "confidenceUpper": 1630995.979600778
+        },
+        {
+          "mean": 1626698.203125,
+          "standardError": 241.53839570814944,
+          "confidenceLower": 1625626.5022541154,
+          "confidenceUpper": 1627769.9039958846
+        }
+      ],
+      "rawGc": "// GC:  2 0 0 44571216 144",
+      "rawReceipt": "tmp/jer967-candidate-JpegRgb420AsyncSamples-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-JpegRgb420AsyncSamples-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "CallerRGB420": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1431801.9122474745,
+        "StandardError": 463.26248755168064,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1431801.9122474745,
+          "StandardError": 463.26248755168064,
+          "Level": 12,
+          "Margin": 2124.9358584858915,
+          "Lower": 1429676.9763889886,
+          "Upper": 1433926.8481059605
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1432457.586226852,
+        "StandardError": 778.53385124917,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1432457.586226852,
+          "StandardError": 778.53385124917,
+          "Level": 12,
+          "Margin": 3454.3386112619155,
+          "Lower": 1429003.24761559,
+          "Upper": 1435911.9248381138
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1578731.140625,
+          "standardError": 363.50693465310576,
+          "confidenceLower": 1577063.77289934,
+          "confidenceUpper": 1580398.50835066
+        },
+        {
+          "mean": 1578721.1822916667,
+          "standardError": 984.1175986503779,
+          "confidenceLower": 1574207.139323519,
+          "confidenceUpper": 1583235.2252598144
+        }
+      ],
+      "rawGc": "// GC:  3 0 0 55903936 144",
+      "rawReceipt": "tmp/jer967-candidate-CallerRGB420-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-CallerRGB420-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 3057748.844460227,
+        "StandardError": 1019.6394113502274,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 3057748.844460227,
+          "StandardError": 1019.6394113502274,
+          "Level": 12,
+          "Margin": 4676.977752622018,
+          "Lower": 3053071.866707605,
+          "Upper": 3062425.8222128493
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 3061429.3606770835,
+        "StandardError": 3793.051218123843,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3061429.3606770835,
+          "StandardError": 3793.051218123843,
+          "Level": 12,
+          "Margin": 16829.689879555124,
+          "Lower": 3044599.6707975282,
+          "Upper": 3078259.0505566387
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3776898.9479166665,
+          "standardError": 915.6825041680512,
+          "confidenceLower": 3772698.8094630265,
+          "confidenceUpper": 3781099.0863703066
+        },
+        {
+          "mean": 3788659.2447916665,
+          "standardError": 8977.052519689067,
+          "confidenceLower": 3747482.4577321047,
+          "confidenceUpper": 3829836.0318512283
+        }
+      ],
+      "rawGc": "// GC:  1 0 0 52485616 64",
+      "rawReceipt": "tmp/jer967-candidate-Encode8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode16": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 3157279.9140625,
+        "StandardError": 958.381745928787,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 3157279.9140625,
+          "StandardError": 958.381745928787,
+          "Level": 12,
+          "Margin": 4395.995343385551,
+          "Lower": 3152883.9187191143,
+          "Upper": 3161675.9094058857
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 3160807.5442708335,
+        "StandardError": 3632.2172989157866,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3160807.5442708335,
+          "StandardError": 3632.2172989157866,
+          "Level": 12,
+          "Margin": 16116.073103316638,
+          "Lower": 3144691.471167517,
+          "Upper": 3176923.61737415
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3913513.0572916665,
+          "standardError": 764.9490246194426,
+          "confidenceLower": 3910004.317309463,
+          "confidenceUpper": 3917021.79727387
+        },
+        {
+          "mean": 3847232.7604166665,
+          "standardError": 1368.4595889729692,
+          "confidenceLower": 3840955.781533991,
+          "confidenceUpper": 3853509.739299342
+        }
+      ],
+      "rawGc": "// GC:  1 0 0 52485616 64",
+      "rawReceipt": "tmp/jer967-candidate-Encode16-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode16-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode444Cancelable8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 3105100.718039773,
+        "StandardError": 928.2647877383079,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 3105100.718039773,
+          "StandardError": 928.2647877383079,
+          "Level": 12,
+          "Margin": 4257.852052859938,
+          "Lower": 3100842.865986913,
+          "Upper": 3109358.570092633
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 3108834.1953125,
+        "StandardError": 3825.075339708481,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3108834.1953125,
+          "StandardError": 3825.075339708481,
+          "Level": 12,
+          "Margin": 16971.780245316444,
+          "Lower": 3091862.415067184,
+          "Upper": 3125805.975557816
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3783701.203125,
+          "standardError": 3388.7766326157594,
+          "confidenceLower": 3768157.2444049646,
+          "confidenceUpper": 3799245.1618450354
+        },
+        {
+          "mean": 3777724.96875,
+          "standardError": 1149.0315498603918,
+          "confidenceLower": 3772454.4829920577,
+          "confidenceUpper": 3782995.4545079423
+        }
+      ],
+      "rawGc": "// GC:  1 0 0 52485616 64",
+      "rawReceipt": "tmp/jer967-candidate-Encode444Cancelable8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode444Cancelable8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Jpeg8AsyncNonSeekable": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 3106933.895596591,
+        "StandardError": 1005.2813382718656,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 3106933.895596591,
+          "StandardError": 1005.2813382718656,
+          "Level": 12,
+          "Margin": 4611.11879541567,
+          "Lower": 3102322.776801175,
+          "Upper": 3111545.0143920067
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 3109302.94921875,
+        "StandardError": 2537.8828116077043,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3109302.94921875,
+          "StandardError": 2537.8828116077043,
+          "Level": 12,
+          "Margin": 11260.5335952035,
+          "Lower": 3098042.4156235466,
+          "Upper": 3120563.4828139534
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3859335.578125,
+          "standardError": 1565.8776746584222,
+          "confidenceLower": 3852153.063437767,
+          "confidenceUpper": 3866518.092812233
+        },
+        {
+          "mean": 3858029.3177083335,
+          "standardError": 1311.091509907656,
+          "confidenceLower": 3852015.48011513,
+          "confidenceUpper": 3864043.155301537
+        }
+      ],
+      "rawGc": "// GC:  2 1 1 52512072 64",
+      "rawReceipt": "tmp/jer967-candidate-Jpeg8AsyncNonSeekable-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Jpeg8AsyncNonSeekable-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "CallerGray": {
+      "managedStatistics": {
+        "N": 10,
+        "Mean": 889232.0138392858,
+        "StandardError": 268.9433579527583,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 889232.0138392858,
+          "StandardError": 268.9433579527583,
+          "Level": 12,
+          "Margin": 1285.7946845855981,
+          "Lower": 887946.2191547002,
+          "Upper": 890517.8085238715
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 891028.5747767858,
+        "StandardError": 1541.6085188874586,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 891028.5747767858,
+          "StandardError": 1541.6085188874586,
+          "Level": 12,
+          "Margin": 6840.085144273191,
+          "Lower": 884188.4896325126,
+          "Upper": 897868.659921059
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1078006.2317708333,
+          "standardError": 276.3562912332471,
+          "confidenceLower": 1076684.996500238,
+          "confidenceUpper": 1079327.4670414284
+        },
+        {
+          "mean": 1077614.3619791667,
+          "standardError": 211.07425847688074,
+          "confidenceLower": 1076605.234400526,
+          "confidenceUpper": 1078623.4895578076
+        }
+      ],
+      "rawGc": "// GC:  2 0 0 34818256 224",
+      "rawReceipt": "tmp/jer967-candidate-CallerGray-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-CallerGray-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode444Stream8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 3083863.534090909,
+        "StandardError": 931.2841459377719,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 3083863.534090909,
+          "StandardError": 931.2841459377719,
+          "Level": 12,
+          "Margin": 4271.701528438163,
+          "Lower": 3079591.832562471,
+          "Upper": 3088135.2356193475
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 3087908.6184895835,
+        "StandardError": 4130.16742607251,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3087908.6184895835,
+          "StandardError": 4130.16742607251,
+          "Level": 12,
+          "Margin": 18325.46752844066,
+          "Lower": 3069583.150961143,
+          "Upper": 3106234.086018024
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3775272.6666666665,
+          "standardError": 868.9135935847244,
+          "confidenceLower": 3771287.052241695,
+          "confidenceUpper": 3779258.281091638
+        },
+        {
+          "mean": 3772613.9010416665,
+          "standardError": 1187.4229554716421,
+          "confidenceLower": 3767167.3179811514,
+          "confidenceUpper": 3778060.4841021816
+        }
+      ],
+      "rawGc": "// GC:  1 0 0 52487664 64",
+      "rawReceipt": "tmp/jer967-candidate-Encode444Stream8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode444Stream8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "RgbaGray": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 962451.128277972,
+        "StandardError": 252.61118859901782,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 962451.128277972,
+          "StandardError": 252.61118859901782,
+          "Level": 12,
+          "Margin": 1158.7007092796673,
+          "Lower": 961292.4275686924,
+          "Upper": 963609.8289872516
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 963356.7355769231,
+        "StandardError": 932.8731742387306,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 963356.7355769231,
+          "StandardError": 932.8731742387306,
+          "Level": 12,
+          "Margin": 4139.138998275827,
+          "Lower": 959217.5965786473,
+          "Upper": 967495.874575199
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1411014.8567708333,
+          "standardError": 340.5976790828607,
+          "confidenceLower": 1409452.5713688245,
+          "confidenceUpper": 1412577.142172842
+        },
+        {
+          "mean": 1408055.1263020833,
+          "standardError": 257.56875625949306,
+          "confidenceLower": 1406873.6857561544,
+          "confidenceUpper": 1409236.5668480122
+        }
+      ],
+      "rawGc": "// GC:  1 0 0 32330352 208",
+      "rawReceipt": "tmp/jer967-candidate-RgbaGray-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-RgbaGray-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    },
+    "Encode420Restart8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 2112083.107007576,
+        "StandardError": 428.10981047504646,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 2112083.107007576,
+          "StandardError": 428.10981047504646,
+          "Level": 12,
+          "Margin": 1963.6942599340946,
+          "Lower": 2110119.412747642,
+          "Upper": 2114046.8012675103
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 2113022.128472222,
+        "StandardError": 1015.2733341605193,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2113022.128472222,
+          "StandardError": 1015.2733341605193,
+          "Level": 12,
+          "Margin": 4504.7468052263985,
+          "Lower": 2108517.3816669956,
+          "Upper": 2117526.8752774484
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1610791.171875,
+          "standardError": 793.3244278965772,
+          "confidenceLower": 1607152.276929805,
+          "confidenceUpper": 1614430.066820195
+        },
+        {
+          "mean": 1611151.6536458333,
+          "standardError": 442.0513610910869,
+          "confidenceLower": 1609124.0109730167,
+          "confidenceUpper": 1613179.2963186498
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 14513144 96",
+      "rawReceipt": "tmp/jer967-candidate-Encode420Restart8-confirm-receipt.json",
+      "rawObservation": "tmp/jer967-candidate-Encode420Restart8-confirm-observation.json",
+      "details": "Every actual, native sample, full statistics, original receipt, guards and source/output checks remain in the mirrored member-verified raw archive."
+    }
+  },
+  "sourceProof": {
+    "recordGenerationAndOwnedCapacityUnchanged": true,
+    "huffmanBankPreparationUnchanged": true,
+    "emitFlushSignedAlignRestartAndDisposalSourceUnchanged": true,
+    "oneSharedBitPackingKernel": true,
+    "privateFailedReservoirNotResumed": true,
+    "privateProductionWriterSites": [
+      "JpegEncoder.EncodeReference",
+      "JpegEncoder.EncodeReferenceGray"
+    ],
+    "unusedWritePairRemoved": true,
+    "callersSourcePins": {
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "730045d9a3c297a63b16c6e00791afaa634f372d38292ff51aebed1bfce5407e",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "0cf2b7670f3d980df0d0561d0a88527098f3b83e440405db409ec84cb51589f4"
+    }
+  },
+  "memory": {
+    "newHeapCapacityBytes": 0,
+    "newRetainedBytes": 0,
+    "writerAdmittedBytes": 640,
+    "writerBufferCapacityBytes": 512,
+    "writerRetainedAfterDisposalBytes": 0,
+    "huffmanBankStackBytes": 4096,
+    "tableOwnerBytes": 16384,
+    "governedRgba16PeakBytes": 1704856,
+    "coefficientPoolCeilingBytes": 4194304,
+    "callerRootBypassesIdleCoefficientPool": true,
+    "allocationIsNotCapacityOrRetention": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualification": {
+    "fullChecksEachOs": 6640,
+    "internalChecks": 3246,
+    "publicChecks": 2446,
+    "liveChecks": 948,
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JER967",
+      "platform": "windows",
+      "productionSha256": "3d2a450675a81c0c6b325a27253fd228113556136b74e0d399f3b7e5a5a8eeb2",
+      "embeddedTestsSha256": "6d1babdd896712d83fb2353436130956d0c4af841703dcaecdb5721ce6ce2d03",
+      "full": [
+        3246,
+        2446,
+        948
+      ],
+      "total": 6640,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 464,
+        "public-normal": 379,
+        "internal-scalar": 464,
+        "public-scalar": 379
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JER967",
+        "platform": "windows",
+        "productionSha256": "3d2a450675a81c0c6b325a27253fd228113556136b74e0d399f3b7e5a5a8eeb2",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "6e74e43162d6a2aec94971d505cd6a4fcba6b7081d4e3cd4ea6f71c61896727c",
+          "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9e1bdbda315bab8e404ffc54b454f09ef5a6adf65f5ffb9d7548dac58d9906a2",
+          "tests/Lokad.Image.Tests/JpegEntropyRecordsTests.cs": "1237050fe476d9f46a6425784c4ce57189e428c0402b0fa507e47f2ae1d3e091",
+          "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "99d8a069b2d4913e1bb3601adf59fa775fd9943d6d6fd19b982b07a63aea136f",
+          "tests/Lokad.Image.Tests/JpegEntropyBufferTests.cs": "7234f04ad8c53679e091767272723422ccc32f6ff44cac17da18baa0bed903c7"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 464,
+          "public-normal": 379,
+          "internal-scalar": 464,
+          "public-scalar": 379
+        },
+        "logs": [
+          "tmp/jer967-windows-build-core.log",
+          "tmp/jer967-windows-build-internal.log",
+          "tmp/jer967-windows-internal-normal.log",
+          "tmp/jer967-windows-public-normal.log",
+          "tmp/jer967-windows-internal-scalar.log",
+          "tmp/jer967-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedDecoderPngWebpResizeDrawingTextEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JER967",
+      "platform": "linux",
+      "productionSha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "embeddedTestsSha256": "dba2abedee69b07dac3d46f44103ea014c5c8d765ccc5120515248f887bf1918",
+      "full": [
+        3246,
+        2446,
+        948
+      ],
+      "total": 6640,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 464,
+        "public-normal": 379,
+        "internal-scalar": 464,
+        "public-scalar": 379
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JER967",
+        "platform": "linux",
+        "productionSha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "6e74e43162d6a2aec94971d505cd6a4fcba6b7081d4e3cd4ea6f71c61896727c",
+          "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9e1bdbda315bab8e404ffc54b454f09ef5a6adf65f5ffb9d7548dac58d9906a2",
+          "tests/Lokad.Image.Tests/JpegEntropyRecordsTests.cs": "1237050fe476d9f46a6425784c4ce57189e428c0402b0fa507e47f2ae1d3e091",
+          "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "99d8a069b2d4913e1bb3601adf59fa775fd9943d6d6fd19b982b07a63aea136f",
+          "tests/Lokad.Image.Tests/JpegEntropyBufferTests.cs": "7234f04ad8c53679e091767272723422ccc32f6ff44cac17da18baa0bed903c7"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 464,
+          "public-normal": 379,
+          "internal-scalar": 464,
+          "public-scalar": 379
+        },
+        "logs": [
+          "tmp/jer967-linux-build-core.log",
+          "tmp/jer967-linux-build-internal.log",
+          "tmp/jer967-linux-internal-normal.log",
+          "tmp/jer967-linux-public-normal.log",
+          "tmp/jer967-linux-internal-scalar.log",
+          "tmp/jer967-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedDecoderPngWebpResizeDrawingTextEvidenceReused": true
+    },
+    "focusedInternalEachMode": 464,
+    "focusedPublicEachMode": 379,
+    "focusedModes": [
+      "normal",
+      "scalar"
+    ],
+    "unchangedIsaQualificationReused": true,
+    "sameActualPackageBothOs": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "JER967",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "efb0b5d56929948fbbd0a66b34928d92a6fc817b7dffec4287581aef96acaf36",
+      "symbolsSha256": "6cfd45e7ac72f59e639bf3abf5bcd9b1601d2f3619f56a9175e8360a46bd19e1",
+      "bytes": 460327,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for both paired screens/confirmations and all18affected original complete-operation reference controls; no post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "JER967",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "efb0b5d56929948fbbd0a66b34928d92a6fc817b7dffec4287581aef96acaf36",
+      "symbolsSha256": "6cfd45e7ac72f59e639bf3abf5bcd9b1601d2f3619f56a9175e8360a46bd19e1",
+      "bytes": 460327,
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for both paired screens/confirmations and all18affected original complete-operation reference controls; no post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "efb0b5d56929948fbbd0a66b34928d92a6fc817b7dffec4287581aef96acaf36"
+    },
+    "usageExamplesEachOs": 3,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "removedTests": 2,
+    "removedTestsScope": "Sole purpose was preserving the unpublished WritePair API. Exhaustive packing coverage now targets actual Replay, including pending tails, stuffing, flushes, restarts and cleanup."
+  },
+  "workflow": "One production/internal build per OS. Existing public/differential modules, prepared native workers/harnesses and frozen fixtures reused. Short paired screens precede independent12pair confirmations on callerRGB420 and RGBA-to-gray.18existing complete reference controls captured once, plus unchanged-original restart comparison to resolve a material suspected regression before broad qualification. One failed helper fixture guard produced no timing pairs; helper repaired without rebuilding production. Missing VM parser dependency and missing archive import were post-capture tooling failures; completed logs recovered without retiming. One failed pre-run idle guard retained; workload had not started. No historical-stage sums or repeated favorable sampling.",
+  "evidenceReuse": "All191image-owner views and unrelated decoder/PNG/WebP/resize/drawing/text/inspection paths reuse source-valid evidence.18JPEG encode costs refresh, including restart because the shared packing kernel changed. Old caller-RGB uncertainty and Huffman/tile timings become history; preserved raw/reference artifacts remain dependencies.17replay cases pass and stop. The confirmed restart gap remains required, not a global blocker.",
+  "raw": {
+    "file": "jpeg-local-entropy-replay-qualified.tar.xz",
+    "sha256": "027a47771b282a9fadcad54cfdb989b9cd58a723974d90dd23477a84d2f554b0",
+    "bytes": 45981144,
+    "members": 989,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "direct-probe-fields-qualified.tar.xz",
+        "sha256": "d40dd6307535a6548963ee135a4ff6689906fbf7cba182d76d979c72b008541a"
+      },
+      {
+        "file": "jpeg-prepared-huffman-bank-qualified.tar.xz",
+        "sha256": "14f0e8ed1f88d9714ef10b919fceff40e64c41395834bae39f3fda144f836776"
+      },
+      {
+        "file": "jpeg-caller-current-entropy-attribution.tar.xz",
+        "sha256": "bad8dafd90214884aa4ac954ec9b7eeb5112302eb6e048671532eddb5ea6b44e"
+      }
+    ]
+  },
+  "history": [
+    "JPEG-PREPARED-HUFFMAN-BANK.md",
+    "JPEG-GRAY-TILE-PREPARATION.md",
+    "JPEG-CALLER-CURRENT-CONFIDENCE.md"
+  ],
+  "next": "Stop confirmed replay cases. Profile the current exact fixed-table row-restart path; keep its1.31native gap explicit, preserve complete-operation boundaries and do not speculate from old stage clocks. Continue independent roadmap work; publication remains postponed."
+}

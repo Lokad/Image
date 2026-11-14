@@ -74,25 +74,6 @@ def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata)
     return result
 
 
-def apply_current_jpeg_caller_confidence(codecs):
-    current = json.loads((ROOT / 'benchmarks/jpeg-caller-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    c, q, m = current['case'], current['qualification'], current['measurement']
-    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6600
-    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
-    assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
-    assert m['pairs'] == m['nativeSamplesEachBracket'] == 12 and m['allActualsRetained'] and m['operationsEachSubject'] == 64
-    assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['sourceUnchanged'] and c['independentOwnedOutput']
-    assert c['completePacketExact'] and c['metadataExceptionBytes'] == 2 and c['status'] == 'uncertain' and c['lower'] <= 1 < c['upper']
-    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    prefix = '| JPEG 4:2:0 from caller RGB samples'
-    found = [line for line in codecs.splitlines() if line.startswith(prefix)]
-    assert len(found) == 1
-    return codecs.replace(found[0], f'| JPEG 4:2:0 from caller RGB samples (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |')
-
-
 def apply_current_lanczos_enlargement_confidence(editing):
     current = json.loads((ROOT / 'benchmarks/lanczos-enlargement-current-confidence-evidence.json').read_text(encoding='utf-8'))
     c, q, m = current['case'], current['qualification'], current['measurement']
@@ -1612,38 +1593,38 @@ def render():
         rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 128×64 | '
                      f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
-    jpeg_bank = json.loads((ROOT / 'benchmarks/jpeg-prepared-huffman-bank-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_bank['productionAccepted'] and jpeg_bank['requiredMaterialPaths'] == 283
-    assert jpeg_bank['raw']['mirrored'] and jpeg_bank['raw']['allMembersVerified']
-    assert len(jpeg_bank['cases']) == 17
-    assert jpeg_bank['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_bank['cases'].values())
-                                        for state in ('pass', 'gap', 'uncertain')}
-    jpeg_tiles = json.loads((ROOT / 'benchmarks/jpeg-gray-tile-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_tiles['productionAccepted'] and jpeg_tiles['requiredMaterialPaths'] == 283
-    assert jpeg_tiles['raw']['mirrored'] and jpeg_tiles['raw']['allMembersVerified']
-    assert set(jpeg_tiles['cases']) == {'RgbaGray', 'CallerGray'}
-    assert jpeg_tiles['sourceProof']['onlyImageGrayPreparationScheduleChanged']
-    assert jpeg_tiles['sourceProof']['normalizationTransformQuantizationEntropyReplayHeaderAndOwnershipSourceUnchanged']
-    assert jpeg_tiles['qualification']['fullChecksEachOs'] == 6073
-    assert jpeg_tiles['qualification']['actualPackage']['sha256'] == jpeg_tiles['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert jpeg_tiles['timedArtifactSha256'] == jpeg_tiles['qualification']['actualPackage']['librarySha256']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in jpeg_tiles['comparison']['views'].values())
-    jpeg_encoding_cases = {**jpeg_bank['cases'], **jpeg_tiles['cases']}
-    assert jpeg_tiles['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_encoding_cases.values())
-                                         for state in ('pass', 'gap', 'uncertain')}
+    jpeg_replay = json.loads((ROOT / 'benchmarks/jpeg-local-entropy-replay-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_replay['productionAccepted'] and jpeg_replay['allAffectedPerformanceReconciled']
+    assert jpeg_replay['requiredMaterialPaths'] == 289 and jpeg_replay['newMaterialPaths'] == 0
+    assert jpeg_replay['raw']['mirrored'] and jpeg_replay['raw']['allMembersVerified']
+    jpeg_q = jpeg_replay['qualification']
+    assert jpeg_q['fullChecksEachOs'] == jpeg_q['windows']['total'] == jpeg_q['linux']['total'] == 6640
+    assert jpeg_q['actualPackage']['sha256'] == jpeg_q['samePackageWindows']['sameActualPackageSha256']
+    assert jpeg_q['actualPackage']['actualConsumerPassed'] and jpeg_q['samePackageWindows']['actualConsumerPassed']
+    assert jpeg_q['actualPackage']['usageExamples'] == jpeg_q['samePackageWindows']['usageExamples'] == 3
+    assert jpeg_q['actualPackage']['librarySha256'] == jpeg_replay['producers']['linuxSha256']
+    assert jpeg_q['acceptedArtifactRebuildsAfterTiming'] == 0 and jpeg_q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert jpeg_replay['statusCounts'] == {'pass': 17, 'gap': 1, 'uncertain': 0}
+    jpeg_encoding_cases = jpeg_replay['cases']; assert len(jpeg_encoding_cases) == 18
+    assert jpeg_replay['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_encoding_cases.values())
+                                          for state in ('pass', 'gap', 'uncertain')}
     for name, c in jpeg_encoding_cases.items():
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['librarySha256'] == (jpeg_tiles['timedArtifactSha256'] if name in jpeg_tiles['cases']
-                                      else jpeg_bank['producers']['linuxSha256'])
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['independentOwnedOutput']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['librarySha256'] == jpeg_replay['producers']['linuxSha256']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['independentOwnedOutput'] and c['sourceUnchanged']
         assert c['completePacketExact'] and c['metadataExceptionBytes'] == (0 if name in ('RgbaGray', 'CallerGray') else 2)
         assert c['nativePacketBytes'] - c['managedPacketBytes'] == c['metadataExceptionBytes']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert jpeg_bank['sourceProof']['recordGenerationOwnershipGrowCommitDisposeExact']
-    assert jpeg_bank['sourceProof']['writerValidationPollAppendStuffingFlushDisposeByteExact']
+    for c in jpeg_replay['comparison'].values():
+        assert c['upper'] < 1 and c['pairs'] == 12 and c['operationsEachSubject'] == 64
+        assert c['allActualsRetained'] and c['outputExact'] and c['independentConfirmationAfterShort']
+    assert jpeg_replay['restartReconciliation']['independentNativeNormalizedIntervalsSeparated']
+    assert not jpeg_replay['restartReconciliation']['productionRegressionDemonstrated']
+    assert jpeg_replay['memory']['newHeapCapacityBytes'] == jpeg_replay['memory']['newRetainedBytes'] == 0
     jpeg_labels = {
         'Encode444Stream8': 'JPEG 4:4:4, forward-only / exact reference',
+        'Encode420Restart8': 'JPEG RGBA8 4:2:0, row restart33',
         'CallerRGB420': 'JPEG 4:2:0 from caller RGB samples',
         'GovernedRGBA16': 'JPEG RGBA16 4:2:0 / caller IMemoryBudget',
         'RgbaGray': 'JPEG grayscale, standalone SIMD libjpeg-turbo',
@@ -1654,6 +1635,9 @@ def render():
     for name, label in jpeg_labels.items():
         c = jpeg_encoding_cases[name]
         positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| ' + label)]
+        if name == 'Encode420Restart8':
+            assert not positions
+            positions = [len(rows)]; rows.append(('codec', ''))
         assert len(positions) == 1, label
         qualifier = {'pass': 'parity confirmed', 'gap': 'confirmed gap', 'uncertain': 'confidence open'}[c['status']]
         rows[positions[0]] = ('codec', f'| {label} ({qualifier}) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
@@ -2851,7 +2835,6 @@ def render():
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     codecs, read_rows = apply_current_jpeg_preparation(codecs, read_rows)
     codecs, read_rows = apply_current_prepared_input(codecs, read_rows)
-    codecs = apply_current_jpeg_caller_confidence(codecs)
     editing, lanczos_current = apply_lanczos_product_reuse(editing)
     editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
@@ -2885,6 +2868,15 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
+
+[Local JPEG entropy replay](../benchmarks/JPEG-LOCAL-ENTROPY-REPLAY.md) saves
+**10.49% / 167.72 µs** on complete caller-RGB420 encoding and **16.68% / 196.77 µs**
+on RGBA8→gray in independent paired confirmations. All 17 replay controls now pass;
+caller RGB420 is **1,431.80 / FFmpeg 1,578.72 µs, upper .912**, **388,222 B/op**.
+Exact packets and storage ownership remain; no heap capacity or retention is added.
+The existing row-restart control remains a **1.31× gap**, **151,179 B/op**; the
+unchanged contemporary original also has this gap. Its direct entropy path is
+the next attribution target. Previous caller uncertainty and stage costs remain history.
 
 [Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
 **10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
@@ -2926,8 +2918,6 @@ unchanged costs; current copy/composition costs are in their linked family repor
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 and [two opaque VP8 controls](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) uncertain;
 no optimization gap is inferred.
-[Caller-RGB JPEG encoding](../benchmarks/JPEG-CALLER-CURRENT-CONFIDENCE.md) also
-remains uncertain under the current adjacent comparison, with exact packets.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
@@ -2961,8 +2951,8 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,642 full/live checks**,
-focused normal/scalar header checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,640 full/live checks**,
+focused normal/scalar JPEG checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -3016,7 +3006,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 143, 'Expected 143 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 144, 'Expected 144 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
