@@ -1,6 +1,6 @@
 # Vector normalization and certified bilinear publication
 
-[Subsequent same-package adjacent measurement](WARM-ADJACENT-CONFIDENCE.md)
+[Current actual-package enlargement measurement](BILINEAR-WORD-CURRENT-CONFIDENCE.md)
 owns the current Up16 cost. This stage retains its independently confirmed gain.
 
 BVC804 keeps RGBA16 enlargement's alpha normalization and certification in vector

@@ -2823,7 +2823,6 @@ execution object. Pixel capacity, retained storage, cancellation, terminal
 admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
 remains linked history; no historical phase sum is used."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
-    displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     png_stream_word_note = current_png_stream_word_note()
     codecs = apply_current_vp8_stream_confidence(codecs)
     editing, bicubic_adjacent_note = apply_current_bicubic_adjacent_confidence(editing)
@@ -2841,6 +2840,23 @@ remains linked history; no historical phase sum is used."""
     opaque_live = opaque_decode['cases']['OpaqueCancelable8']
     image_view_counts = opaque_decode['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
+    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    bilinear_word_case = bilinear_word_current['case']
+    assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
+    assert bilinear_word_current['measurement']['allBuilds'] == bilinear_word_current['measurement']['broadOrPackageRepeats'] == 0
+    assert bilinear_word_current['raw']['mirrored'] and bilinear_word_current['raw']['allMembersVerified']
+    assert bilinear_word_case['librarySha256'] == policy_q['actualPackage']['librarySha256']
+    assert bilinear_word_case['allActualsRetained'] and bilinear_word_case['allOriginalGatesPassed'] and bilinear_word_case['quietGuardsPassed']
+    assert bilinear_word_case['managedRationalReferenceExact'] and bilinear_word_case['sourceUnchanged'] and bilinear_word_case['independentOwnedOutput']
+    assert bilinear_word_case['lower'] <= 1 < bilinear_word_case['upper'] and bilinear_word_case['status'] == 'uncertain'
+    assert bilinear_word_case['metadata']['nativeRgbMaximum'] <= 1 and bilinear_word_case['metadata']['nativeAlphaMaximum'] <= 1
+    assert bilinear_word_case['metadata']['nativeRgbRmse'] <= .25 and bilinear_word_case['metadata']['nativeAlphaRmse'] <= .25
+    anchor = next(line for line in editing.splitlines() if line.startswith('| Bilinear upscale RGBA8'))
+    bilinear_word_row = (f'| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (uncertain) † → 1027×519 | '
+                         f'{bilinear_word_case["managedUs"]:,.2f} | {bilinear_word_case["nativeUs"]:,.2f} | '
+                         f'{bilinear_word_case["ratio"]:.3f} / {bilinear_word_case["upper"]:.6f} | {bilinear_word_case["allocatedBytes"]:,} |')
+    editing = editing.replace(anchor, anchor + '\n' + bilinear_word_row)
+    displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
@@ -2881,6 +2897,11 @@ image views: {image_view_counts['passCount']} pass, {image_view_counts['gaps']} 
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CURRENT-CONFIDENCE.md)
+remains uncertain: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
+upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**. The longer
+integration retains every native fluctuation; this is not a pass or a production
+speedup. Necessary managed preparation and the native prepared-graph boundary stay explicit.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **{png_gray8['managedUs']:,.2f} / FFmpeg {png_gray8['nativeUs']:,.2f}µs,
 upper {png_gray8['upper']:.6f}**, **{png_gray8['allocatedBytes']:,} B/op**. All 17
@@ -2988,7 +3009,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 144, 'Expected 144 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 145, 'Expected 145 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

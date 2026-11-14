@@ -1,5 +1,10 @@
 # Current adjacent-operation confidence
 
+Current [RGBA16 bilinear confidence](BILINEAR-WORD-CURRENT-CONFIDENCE.md) supersedes
+the enlargement cost below. All nine lossy encodes now pass on
+[variable-price preparation](VP8-VARIABLE-PRICE-PREPARATION.md). This report keeps
+its earlier captures and qualification as scoped history.
+
 The word-alpha longer-batch comparison now passes/stops on the actual current
 package DLL. Transparent byte alpha remains passing; bilinear enlargement
 remains uncertain on its source-valid unchanged path. These are measurements,

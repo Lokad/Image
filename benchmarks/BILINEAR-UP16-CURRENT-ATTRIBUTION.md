@@ -1,7 +1,8 @@
 # RGBA16 bilinear enlargement attribution
 
 This profile/trial precedes [accepted vector certification](BILINEAR-VECTOR-CERTIFICATION.md),
-which owns the current Up16 cost. Retain these original observations as history.
+whose confirmed gain remains. [Current enlargement confidence](BILINEAR-WORD-CURRENT-CONFIDENCE.md)
+owns the current Up16 cost; retain these original observations as history.
 
 BUA802 inspects the actual qualified package on the existing 513×259→1027×519
 control. Its complete current cost remains **2,724.96/FFmpeg 2,146.42 µs**,

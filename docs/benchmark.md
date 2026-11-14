@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **144 comparisons** summarize that scope.
+**289 named material paths**; these **145 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -68,6 +68,11 @@ image views: 183 pass, 3 gaps, 5 uncertain**. This does not establish full parit
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CURRENT-CONFIDENCE.md)
+remains uncertain: **1,805.35 / FFmpeg 1,924.57µs,
+upper 1.000415**, **4,498,558 B/op**. The longer
+integration retains every native fluctuation; this is not a pass or a production
+speedup. Necessary managed preparation and the native prepared-graph boundary stay explicit.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **1,964.07 / FFmpeg 1,978.51µs,
 upper 0.999681**, **546,523 B/op**. All 17
@@ -270,6 +275,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
+| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (uncertain) † → 1027×519 | 1,805.35 | 1,924.57 | 0.938 / 1.000415 | 4,498,558 |
 | Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 500.42 | 574.64 | 0.871 / 0.875 | 113 |
