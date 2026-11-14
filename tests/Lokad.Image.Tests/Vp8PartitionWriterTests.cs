@@ -7,8 +7,10 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8PartitionWriterTests
 {
-    [Fact]
-    public void AllProbabilitiesAndOriginalSeededSymbolsRetainCompleteBytesAndOwnership()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AllProbabilitiesAndOriginalSeededSymbolsRetainCompleteBytesAndOwnership(bool checkCancellation)
     {
         using var root = new TestMemoryBudget(1_000_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
@@ -23,7 +25,8 @@ public sealed class Vp8PartitionWriterTests
                 state ^= state << 13; state ^= state >> 17; state ^= state << 5;
                 var bit = (int)(state >> 31); var probability = (int)(state & 255);
                 if (sequence < 512) { bit = sequence & 1; probability = sequence >> 1; }
-                cursor.Write(bit != 0, (byte)probability);
+                if (checkCancellation) cursor.Write<Vp8PartitionWriter.Cancellable>(bit != 0, (byte)probability);
+                else cursor.Write<Vp8PartitionWriter.Uncancelable>(bit != 0, (byte)probability);
             }
             } finally { cursor.Commit(); }
             writer.Finish(); BinaryPrimitives.WriteInt32LittleEndian(length, writer.Bytes.Length);
@@ -140,6 +143,18 @@ public sealed class Vp8PartitionWriterTests
         writer.Dispose(); Assert.Equal(0, root.Bytes); root.Admitted = null;
         using var later = new OperationContext(new() { MemoryBudget = root }, default); using var next = new Vp8PartitionWriter(later, 731);
         Feed(next, "mixed", 4096); next.Finish(); next.Dispose(); Assert.Equal(0, root.Bytes);
+    }
+
+    [Fact]
+    public void LiveBitCancellationPrecedesMutationWithoutNeedingBufferGrowth()
+    {
+        using var root = new TestMemoryBudget(1_000_000); using var cancel = new CancellationTokenSource();
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
+        using var writer = new Vp8PartitionWriter(context, 731);
+        Feed(writer, "mixed", 1); var capacity = writer.CapacityBytes; cancel.Cancel();
+        Assert.Throws<OperationCanceledException>(() => Feed(writer, "mixed", 1));
+        Assert.Equal(capacity, writer.CapacityBytes); Assert.Equal(capacity, root.Bytes);
+        writer.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Fact]

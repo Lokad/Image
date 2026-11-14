@@ -70,12 +70,16 @@ unchanged costs; current copy/composition costs are in their linked family repor
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 uncertain; no optimization gap is inferred for that control.
-[Opaque VP8](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) now resolves the photograph
-as a small gap: **9,798.43 / FFmpeg 9,702.89 µs, upper 1.014**,
-**809,080 B/op**, exact **17,688 B**. Effort-2 diagram passes/stops at upper 0.997,
-**406,664 B/op**, exact **7,330 B**. One prespecified longer batch each changes
-measurement confidence, with zero builds or qualification repeats; no speedup is claimed.
-The nine lossy controls now have eight passes and one photograph gap.
+[VP8 writer policy](../benchmarks/VP8-WRITER-POLICY.md) retains small controlled
+managed-DLL gains: **40.57µs/0.427%** photograph and **108.80µs/0.205%** RGBA16alpha.
+All nine complete standalone controls refresh on the actual upcoming package:
+eight pass; photograph remains a gap at **9,811.17 /
+FFmpeg 9,704.83µs, upper 1.015**,
+**809,080 B/op**, exact **17,688 B**. Effort2diagram passes, upper
+0.993, **406,664 B/op**, exact **7,330 B**.
+Allocations/retention and packets remain unchanged. Both OSes pass **6,685 full/live**
+checks and the **same actual package/all three examples**. No historical-clock
+subtraction, transferred ALC gain or overall parity claim; publication is postponed.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
@@ -151,14 +155,14 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 889.23 | 1,077.61 | 0.825 / 0.834 | 155,439 | 58,910 / 58,910 |
 | VP8L photograph / libwebp exact=1 † | 81,000.31 | 83,387.76 | 0.971 / 0.981 | 5,358,368 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,441.59 | 9,575.22 | 0.777 / 0.791 | 3,721,041 | 7,234 / 7,234 |
-| VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
-| VP8 opaque RGBA16, including normalization † | 13,882.59 | 15,579.01 | 0.891 / 0.894 | 1,201,560 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 9,798.43 | 9,702.89 | 1.010 / 1.014 | 809,080 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 5,476.34 | 5,803.20 | 0.944 / 0.952 | 741,196 | 7,100 / 7,100 |
-| VP8 diagram, effort2 / distortion-only search † | 2,492.83 | 2,513.35 | 0.992 / 0.997 | 406,664 | 7,330 / 7,330 |
-| VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
-| VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
-| VP8 RGBA16 + alpha, including normalization † | 52,408.00 | 54,009.89 | 0.970 / 0.979 | 6,241,792 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 14,004.61 | 15,407.17 | 0.909 / 0.915 | 1,201,560 | 72,380 / 72,380 |
+| VP8 opaque RGBA16, including normalization † | 13,904.12 | 15,515.42 | 0.896 / 0.902 | 1,201,560 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 9,811.17 | 9,704.83 | 1.011 / 1.015 | 809,080 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 5,380.37 | 5,815.07 | 0.925 / 0.930 | 740,992 | 7,100 / 7,100 |
+| VP8 diagram, effort2 / distortion-only search † | 2,472.14 | 2,506.89 | 0.986 / 0.993 | 406,664 | 7,330 / 7,330 |
+| VP8 diagram, effort6 / trellis † | 9,263.47 | 9,821.67 | 0.943 / 0.948 | 754,352 | 6,818 / 6,818 |
+| VP8 RGBA8 + lossless alpha † | 52,933.07 | 53,515.45 | 0.989 / 0.994 | 6,241,792 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 52,480.30 | 53,260.80 | 0.985 / 0.996 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 67,959.20 | 69,456.89 | 0.978 / 0.985 | 4,822,760 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,887.12 | 17,258.24 | 0.978 / 0.992 | 815,716 | 210,973 / 210,973 |

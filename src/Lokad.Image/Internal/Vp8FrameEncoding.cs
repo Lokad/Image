@@ -40,6 +40,9 @@ internal sealed class Vp8FrameEncoding : IDisposable
     }
 
     private static void Bit(ref Vp8PartitionWriter.Cursor writer, bool value, byte probability = 128) => writer.Write(value, probability);
+    private static void Bit<TCancellation>(ref Vp8PartitionWriter.Cursor writer, bool value, byte probability = 128)
+        where TCancellation : struct => writer.Write<TCancellation>(value, probability);
+
     private static void Signed(ref Vp8PartitionWriter.Cursor writer, int value, int width)
     {
         Bit(ref writer, value != 0); if (value != 0) writer.Literal((Math.Abs(value) << 1) | (value < 0 ? 1 : 0), width + 1);
@@ -63,33 +66,37 @@ internal sealed class Vp8FrameEncoding : IDisposable
         4 => [180, 157, 141, 134, 130], _ => [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]
     };
 
+    // The residual program uses the checked entry, including dense literals.
     internal static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
+        => WriteCoefficients<Vp8PartitionWriter.Cancellable>(ref writer, levels, type, first, initialContext, probabilities);
+
+    private static bool WriteCoefficients<TCancellation>(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities) where TCancellation : struct
     {
         var last = Vp8ResidualSummary.Last(levels, first, validate: false);
         var at = ((type * 8 + Vp8Tables.CoefficientBand(first)) * 3 + initialContext) * 11;
-        Bit(ref writer, last >= 0, probabilities[at]); if (last < 0) return false;
+        Bit<TCancellation>(ref writer, last >= 0, probabilities[at]); if (last < 0) return false;
         for (var n = first; n <= last; n++)
         {
-            var level = Math.Abs((int)levels[n]); Bit(ref writer, level != 0, probabilities[at + 1]);
+            var level = Math.Abs((int)levels[n]); Bit<TCancellation>(ref writer, level != 0, probabilities[at + 1]);
             if (level == 0) { at = ((type * 8 + Vp8Tables.CoefficientBand(n + 1)) * 3) * 11; continue; }
-            Bit(ref writer, level > 1, probabilities[at + 2]);
+            Bit<TCancellation>(ref writer, level > 1, probabilities[at + 2]);
             if (level > 1)
             {
-                Bit(ref writer, level > 4, probabilities[at + 3]);
-                if (level <= 4) { Bit(ref writer, level != 2, probabilities[at + 4]); if (level != 2) Bit(ref writer, level == 4, probabilities[at + 5]); }
+                Bit<TCancellation>(ref writer, level > 4, probabilities[at + 3]);
+                if (level <= 4) { Bit<TCancellation>(ref writer, level != 2, probabilities[at + 4]); if (level != 2) Bit<TCancellation>(ref writer, level == 4, probabilities[at + 5]); }
                 else
                 {
-                    Bit(ref writer, level > 10, probabilities[at + 6]);
-                    if (level <= 10) Bit(ref writer, level > 6, probabilities[at + 7]);
-                    else { Bit(ref writer, level >= 35, probabilities[at + 8]); Bit(ref writer, level >= (level < 35 ? 19 : 67), probabilities[at + (level < 35 ? 9 : 10)]); }
+                    Bit<TCancellation>(ref writer, level > 10, probabilities[at + 6]);
+                    if (level <= 10) Bit<TCancellation>(ref writer, level > 6, probabilities[at + 7]);
+                    else { Bit<TCancellation>(ref writer, level >= 35, probabilities[at + 8]); Bit<TCancellation>(ref writer, level >= (level < 35 ? 19 : 67), probabilities[at + (level < 35 ? 9 : 10)]); }
                     var category = 0; var start = 5; var bits = 1;
                     while (category < 5 && level >= start + (1 << bits)) { start += 1 << bits; bits++; category++; }
                     var p = Category(category); var remainder = level - start;
-                    for (var b = 0; b < p.Length; b++) Bit(ref writer, (remainder & (1 << (p.Length - 1 - b))) != 0, p[b]);
+                    for (var b = 0; b < p.Length; b++) Bit<TCancellation>(ref writer, (remainder & (1 << (p.Length - 1 - b))) != 0, p[b]);
                 }
             }
-            Bit(ref writer, levels[n] < 0);
-            if (n < 15) { at = ((type * 8 + Vp8Tables.CoefficientBand(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit(ref writer, n < last, probabilities[at]); }
+            Bit<TCancellation>(ref writer, levels[n] < 0);
+            if (n < 15) { at = ((type * 8 + Vp8Tables.CoefficientBand(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit<TCancellation>(ref writer, n < last, probabilities[at]); }
         }
         return true;
     }
@@ -97,11 +104,15 @@ internal sealed class Vp8FrameEncoding : IDisposable
     private void Encode(Vp8FramePlan frame)
     {
         var h = header!.Borrow(); var t = tokens!.Borrow();
-        try { Encode(frame, ref h, ref t); }
+        try
+        {
+            if (context.Cancellation.CanBeCanceled) Encode<Vp8PartitionWriter.Cancellable>(frame, ref h, ref t);
+            else Encode<Vp8PartitionWriter.Uncancelable>(frame, ref h, ref t);
+        }
         finally { h.Commit(); t.Commit(); }
     }
 
-    private void Encode(Vp8FramePlan frame, ref Vp8PartitionWriter.Cursor h, ref Vp8PartitionWriter.Cursor t)
+    private void Encode<TCancellation>(Vp8FramePlan frame, ref Vp8PartitionWriter.Cursor h, ref Vp8PartitionWriter.Cursor t) where TCancellation : struct
     {
         var p = frame.SegmentProbabilities;
         h.Write(false); h.Write(false); Bit(ref h, frame.SegmentCount > 1);
@@ -160,13 +171,13 @@ internal sealed class Vp8FrameEncoding : IDisposable
             {
                 ResetAfterSkip(contexts, block.Intra16); top.CopyTo(coefficientTop.AsSpan(x * 9, 9)); continue;
             }
-            if (block.Intra16) top[8] = left[8] = Coefficients(ref t, levels[..16], 1, 0, top[8] + left[8], probabilities) ? (byte)1 : (byte)0;
+            if (block.Intra16) top[8] = left[8] = WriteCoefficients<TCancellation>(ref t, levels[..16], 1, 0, top[8] + left[8], probabilities) ? (byte)1 : (byte)0;
             for (var by = 0; by < 4; by++) for (var bx = 0; bx < 4; bx++)
-                top[bx] = left[by] = Coefficients(ref t, levels.Slice(16 + (by * 4 + bx) * 16, 16), block.Intra16 ? 0 : 3, block.Intra16 ? 1 : 0, top[bx] + left[by], probabilities) ? (byte)1 : (byte)0;
+                top[bx] = left[by] = WriteCoefficients<TCancellation>(ref t, levels.Slice(16 + (by * 4 + bx) * 16, 16), block.Intra16 ? 0 : 3, block.Intra16 ? 1 : 0, top[bx] + left[by], probabilities) ? (byte)1 : (byte)0;
             for (var channel = 0; channel < 2; channel++) for (var by = 0; by < 2; by++) for (var bx = 0; bx < 2; bx++)
             {
                 var a = 4 + channel * 2 + bx; var b = 4 + channel * 2 + by;
-                top[a] = left[b] = Coefficients(ref t, levels.Slice(272 + (channel * 4 + by * 2 + bx) * 16, 16), 2, 0, top[a] + left[b], probabilities) ? (byte)1 : (byte)0;
+                top[a] = left[b] = WriteCoefficients<TCancellation>(ref t, levels.Slice(272 + (channel * 4 + by * 2 + bx) * 16, 16), 2, 0, top[a] + left[b], probabilities) ? (byte)1 : (byte)0;
             }
             top.CopyTo(coefficientTop.AsSpan(x * 9, 9));
         }

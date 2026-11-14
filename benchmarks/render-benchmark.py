@@ -544,30 +544,6 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    vp8_current = json.loads((ROOT / 'benchmarks/vp8-rounded-border-prediction-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
-    assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
-    assert vp8_current['statusCounts'] == {state: sum(c['status'] == state for c in vp8_current['cases'].values())
-                                         for state in ('pass', 'gap', 'uncertain')}
-    assert set(vp8_current['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'selected', 'trellis', 'distortion', 'alpha', 'alpha16'}
-    for name, c in vp8_current['cases'].items():
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['librarySha256'] == (vp8_current['producers']['linuxSha256'] if name == 'distortion'
-                                      else vp8_current['reuse']['originalLinuxSha256'])
-        assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
-        assert c['managedPacketBytes'] == c['nativePacketBytes']
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['sourceUnchanged'] and c['independentOwnedOutput']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    proof = vp8_current['sourceProof']
-    assert proof['sharedPredictionAndEncoderFrameAnalysisHistogramSourcesByteExact']
-    assert proof['selectReconstructionAndUvBodiesExact'] and proof['originalPortablePredictionBodyPreserved']
-    assert proof['perModeCancellationOrderAndStrictHeaderPrunePreserved']
-    assert proof['actualCSharpPredictedSamples'] == 696320
-    assert vp8_current['reuse']['unchangedCases'] == sorted(set(vp8_current['cases']) - {'distortion'})
-    assert vp8_current['qualification']['fullChecksEachOs'] == 5939
-    assert vp8_current['qualification']['sameActualPackageBothOs']
-    assert vp8_current['qualification']['actualPackage']['sha256'] == vp8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     prepared_model = json.loads((ROOT / 'benchmarks/vp8-position-model-preparation-evidence.json').read_text(encoding='utf-8'))
     assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 289
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
@@ -597,9 +573,6 @@ def render():
     assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6247
     assert q['sameActualPackageBothOS'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
     live = vp8_costs['OpaqueCancelable8']
-    assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
-    assert all(v['normalizedGainSeparated'] for v in vp8_current['comparison']['views'].values())
-    assert vp8_current['storage']['newOwnedHeapCapacityBytes'] == vp8_current['storage']['newRetainedStateBytes'] == 0
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
     assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
@@ -2026,34 +1999,30 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         assert current['packetSha256'] == current['nativePacketSha256']
         assert current['managedPacketBytes'] == current['nativePacketBytes']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    adjacent_confidence = json.loads((ROOT / 'benchmarks/warm-adjacent-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not adjacent_confidence['productionChanged'] and not adjacent_confidence['productionSpeedupClaim']
-    assert adjacent_confidence['raw']['mirrored'] and adjacent_confidence['raw']['allMembersVerified']
-    assert set(adjacent_confidence['cases']) == {'alpha', 'alpha16', 'Up16'}
-    for name, case in adjacent_confidence['cases'].items():
-        assert case['actualPairs'] == case['nativeBatchesEachBracket'] == 12 and case['allActualsRetained']
-        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['independentOwnedOutputs']
-        assert case['librarySha256'] == adjacent_confidence.get('caseProducers', {}).get(name, adjacent_confidence['producers']['windowsSha256'])
-        assert case['retainedOperationScratchBytes'] == 0
-    alpha_current = adjacent_confidence['cases']['alpha']
-    assert alpha_current['upper'] <= 1 and alpha_current['status'] == 'pass'
-    assert alpha_current['completePacketExact'] and alpha_current['alphaExact']
-    assert alpha_current['operationsPerSubject'] == 4
-    assert alpha_current['managedPacketBytes'] == alpha_current['nativePacketBytes'] == 98590
-    assert alpha_current['packetSha256'] == alpha_current['nativeOutputSha256']
-    webp_owned['cases']['alpha'] = alpha_current
-    alpha16_current = adjacent_confidence['cases']['alpha16']
-    assert alpha16_current['upper'] <= 1 and alpha16_current['status'] == 'pass'
-    assert alpha16_current['operationsPerSubject'] == 16 and alpha16_current['fullSourceNormalizationTimed']
-    assert alpha16_current['completePacketExact'] and alpha16_current['alphaExact']
-    assert alpha16_current['managedPacketBytes'] == alpha16_current['nativePacketBytes'] == 98590
-    assert alpha16_current['packetSha256'] == alpha16_current['nativeOutputSha256']
-    assert alpha16_current['raw']['mirrored'] and alpha16_current['raw']['allMembersVerified']
-    alpha16_q = adjacent_confidence['caseQualificationReused']['alpha16']
-    assert alpha16_current['librarySha256'] == alpha16_q['sourceLibrarySha256']
-    assert alpha16_q['fullChecksEachOs'] == 6683 and alpha16_q['sameActualPackageConsumerBothOsPassed']
-    assert alpha16_q['usageExamplesEachOs'] == 3 and alpha16_q['broadOrPackageRepeats'] == 0
-    webp_owned['cases']['alpha16'] = alpha16_current
+    writer_policy = json.loads((ROOT / 'benchmarks/vp8-writer-policy-evidence.json').read_text(encoding='utf-8'))
+    assert writer_policy['productionAccepted'] and writer_policy['allAffectedPerformanceReconciled']
+    assert writer_policy['requiredMaterialPaths'] == 289 and not writer_policy['materialPassToGapContradictions']
+    assert writer_policy['raw']['mirrored'] and writer_policy['raw']['allMembersVerified']
+    policy_q = writer_policy['qualification']
+    assert policy_q['fullChecksEachOs'] == policy_q['windows']['total'] == policy_q['linux']['total'] == 6685
+    assert policy_q['windows']['fullLivePassed'] and policy_q['linux']['fullLivePassed']
+    assert policy_q['sameActualPackageBothOS'] and policy_q['allThreeExamplesBothOS']
+    assert policy_q['actualPackage']['sha256'] == policy_q['samePackageWindows']['sameActualPackageSha256']
+    assert writer_policy['workflow']['postTimingProductionRebuilds'] == writer_policy['workflow']['measurementBuilds'] == 0
+    assert writer_policy['storage']['newOwnedHeapCapacityBytes'] == writer_policy['storage']['newRetainedStateBytes'] == 0
+    vp8_encode_cases = writer_policy['cases']
+    assert set(vp8_encode_cases) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'selected', 'trellis', 'distortion', 'alpha', 'alpha16'}
+    for c in vp8_encode_cases.values():
+        assert c['librarySha256'] == writer_policy['producers']['linuxSha256'] == policy_q['actualPackage']['librarySha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == len(c['managedActualNanoseconds']) == 12
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
+        assert c['managedPacketBytes'] == c['nativePacketBytes'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    assert all(c['gainSeparated'] and c['pairs'] == 12 and c['operations'] == 32 for c in writer_policy['paired'].values())
+    for name in ['alpha', 'alpha16']:
+        webp_owned['cases'][name] = vp8_encode_cases[name]
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
     streaming_qualification = streaming['qualification']
@@ -2127,37 +2096,19 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         'alpha16': 'VP8 RGBA16 + alpha, including normalization',
     }
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
-    vp8_confidence = json.loads((ROOT / 'benchmarks/vp8-encode-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_confidence['measurementAccepted'] and not vp8_confidence['productionChanged']
-    assert not vp8_confidence['productionSpeedupClaim'] and vp8_confidence['allBuilds'] == vp8_confidence['broadOrPackageRepeats'] == 0
-    assert vp8_confidence['raw']['mirrored'] and vp8_confidence['raw']['allMembersVerified']
-    assert vp8_confidence['qualification']['sameActualPackageBothOS'] and vp8_confidence['qualification']['productionInputsUnchanged']
-    assert set(vp8_confidence['cases']) == {'photograph', 'distortion'}
-    for case, operations, packet in [('photograph', 32, 17688), ('distortion', 128, 7330)]:
-        c = vp8_confidence['cases'][case]
-        assert c['librarySha256'] == vp8_confidence['qualification']['actualPackage']['librarySha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == len(c['managedActualNanoseconds']) == 12
-        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['operationsPerSubject'] == operations and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
-        assert c['managedPacketBytes'] == c['nativePacketBytes'] == packet
-        assert c['sourceUnchanged'] and c['independentOwnedOutput']
-    vp8_encode_cases = {**vp8_current['cases'], **vp8_confidence['cases']}
     vp8_rows = []
     for case, label in vp8_labels.items():
-        c = webp_owned['cases'][case] if case in ('alpha', 'alpha16') else vp8_encode_cases[case]
+        c = vp8_encode_cases[case]
         assert not any(row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label for _, row in rows)
         vp8_rows.append(('codec', f'| {label} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
             f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | '
             f'{c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |'))
     rows[position:position] = vp8_rows
-    vp8_status_counts = {state: sum((webp_owned['cases'][case] if case in ('alpha', 'alpha16')
-                                   else vp8_encode_cases[case])['status'] == state
-                                  for case in vp8_encode_cases)
+    vp8_status_counts = {state: sum(c['status'] == state for c in vp8_encode_cases.values())
                          for state in ('pass', 'gap', 'uncertain')}
     assert vp8_status_counts == {'pass': 8, 'gap': 1, 'uncertain': 0}
-    selected_cost = vp8_current['cases']['selected']
-    distortion_cost = vp8_current['cases']['distortion']
+    selected_cost = vp8_encode_cases['selected']
+    distortion_cost = vp8_encode_cases['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
     stream = lpf['Vp8Stream']
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | {stream["managedUs"]:,.2f} | '
@@ -2916,12 +2867,16 @@ unchanged costs; current copy/composition costs are in their linked family repor
 {bicubic_adjacent_note}
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 uncertain; no optimization gap is inferred for that control.
-[Opaque VP8](../benchmarks/VP8-ENCODE-CURRENT-CONFIDENCE.md) now resolves the photograph
-as a small gap: **9,798.43 / FFmpeg 9,702.89 µs, upper 1.014**,
-**809,080 B/op**, exact **17,688 B**. Effort-2 diagram passes/stops at upper 0.997,
-**406,664 B/op**, exact **7,330 B**. One prespecified longer batch each changes
-measurement confidence, with zero builds or qualification repeats; no speedup is claimed.
-The nine lossy controls now have eight passes and one photograph gap.
+[VP8 writer policy](../benchmarks/VP8-WRITER-POLICY.md) retains small controlled
+managed-DLL gains: **40.57µs/0.427%** photograph and **108.80µs/0.205%** RGBA16alpha.
+All nine complete standalone controls refresh on the actual upcoming package:
+eight pass; photograph remains a gap at **{vp8_encode_cases['photograph']['managedUs']:,.2f} /
+FFmpeg {vp8_encode_cases['photograph']['nativeUs']:,.2f}µs, upper {vp8_encode_cases['photograph']['upper']:.3f}**,
+**809,080 B/op**, exact **17,688 B**. Effort2diagram passes, upper
+{vp8_encode_cases['distortion']['upper']:.3f}, **406,664 B/op**, exact **7,330 B**.
+Allocations/retention and packets remain unchanged. Both OSes pass **6,685 full/live**
+checks and the **same actual package/all three examples**. No historical-clock
+subtraction, transferred ALC gain or overall parity claim; publication is postponed.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls

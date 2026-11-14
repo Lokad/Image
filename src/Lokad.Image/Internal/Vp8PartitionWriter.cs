@@ -35,6 +35,9 @@ internal sealed class Vp8PartitionWriter : IDisposable
         return new Cursor(this);
     }
 
+    internal readonly struct Cancellable { }
+    internal readonly struct Uncancelable { }
+
     internal ref struct Cursor
     {
         private readonly Vp8PartitionWriter owner;
@@ -52,8 +55,14 @@ internal sealed class Vp8PartitionWriter : IDisposable
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void Write(bool bit, byte probability = 128)
+            => Write<Cancellable>(bit, probability);
+
+        // Only a frame whose immutable token cannot be cancelled selects this
+        // policy. Ordinary callers and live tokens retain each bit checkpoint.
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void Write<TCancellation>(bool bit, byte probability = 128) where TCancellation : struct
         {
-            cancellation.ThrowIfCancellationRequested();
+            if (typeof(TCancellation) != typeof(Uncancelable)) cancellation.ThrowIfCancellationRequested();
             var boundary = 1 + ((range - 1) * probability >> 8);
             if (!bit) range = boundary;
             else { value += (uint)boundary; range -= boundary; }
