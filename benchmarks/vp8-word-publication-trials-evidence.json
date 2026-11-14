@@ -1,0 +1,226 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    {
+      "stage": "WPC991",
+      "name": "Inline publication / value carry",
+      "originalUs": 9514.389002604166,
+      "candidateUs": 9526.817729166665,
+      "ratio": 1.0013064776569427,
+      "lower": 0.9997185833545947,
+      "upper": 1.0028968940773721,
+      "classification": "inconclusive",
+      "allocatedBytes": 809080,
+      "productionSha256": "efebf604b43f1bf1ea7cc000154cb5c239bcdf7e6234ed74b7be2c88511bad48",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "e84cd3ed954720c2b7947e819ef9400e9c49ba96b2be334a8a99a1c1153493a7"
+      },
+      "baselineSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+      "codegen": {
+        "project": "Lokad.Image",
+        "stage": "WPC991",
+        "productionSha256": "efebf604b43f1bf1ea7cc000154cb5c239bcdf7e6234ed74b7be2c88511bad48",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "e84cd3ed954720c2b7947e819ef9400e9c49ba96b2be334a8a99a1c1153493a7"
+        },
+        "publicActualVp8Checks": 166,
+        "publicAndHarnessBuilds": 0,
+        "coreBuilds": 1,
+        "embeddedBuilds": 0,
+        "embeddedModuleStillBaselineAndNotRun": true,
+        "instrumentedElapsedDiscarded": true,
+        "performanceMeasured": false,
+        "codeBytes": 4965,
+        "previousCodeBytes": 3515,
+        "publishCallSites": 0,
+        "previousPublishCallSites": 12,
+        "carryCallSites": 13,
+        "note": "Source/codegen diagnostic only; call sites are not dynamic counts or elapsed gains. Full focused normal/scalar must follow an embedded rebuild before complete timing."
+      },
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      },
+      "allPacketInputAndOwnerGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "pairs": 12,
+      "operationsPerSubject": 32,
+      "independentConfirmation": false
+    },
+    {
+      "stage": "WPC992",
+      "name": "Inline no-carry predicate",
+      "originalUs": 9557.887901041666,
+      "candidateUs": 9642.2148515625,
+      "ratio": 1.0088271497092476,
+      "lower": 1.0044994419704114,
+      "upper": 1.0131735026095348,
+      "classification": "demonstrated-adverse",
+      "allocatedBytes": 809080,
+      "productionSha256": "015272d710ecc8d2066b811f5bfcb59d2a88bffa453360df6d61c13914de66e9",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "d3f67782347d78bb773eaff56737eee5c978703322dd59ce67bb69b4e37a5b3a"
+      },
+      "baselineSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+      "codegen": {
+        "project": "Lokad.Image",
+        "stage": "WPC992",
+        "productionSha256": "015272d710ecc8d2066b811f5bfcb59d2a88bffa453360df6d61c13914de66e9",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "d3f67782347d78bb773eaff56737eee5c978703322dd59ce67bb69b4e37a5b3a"
+        },
+        "publicActualVp8Checks": 166,
+        "publicAndHarnessBuilds": 0,
+        "coreBuilds": 1,
+        "embeddedBuilds": 0,
+        "embeddedModuleStillBaselineAndNotRun": true,
+        "instrumentedElapsedDiscarded": true,
+        "performanceMeasured": false,
+        "codeBytes": 5220,
+        "previousCodeBytes": 4965,
+        "acceptedBaselineCodeBytes": 3515,
+        "publishCallSites": 0,
+        "previousPublishCallSites": 12,
+        "carryCallSites": 0,
+        "propagateCallSites": 13,
+        "note": "Source/codegen diagnostic only; call sites are not dynamic counts or elapsed gains. Full focused normal/scalar must follow an embedded rebuild before complete timing."
+      },
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      },
+      "allPacketInputAndOwnerGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "pairs": 12,
+      "operationsPerSubject": 32,
+      "independentConfirmation": false
+    },
+    {
+      "stage": "WPC993",
+      "name": "Shared word publisher",
+      "originalUs": 9877.376401041665,
+      "candidateUs": 9863.305380208334,
+      "ratio": 0.9985758059685587,
+      "lower": 0.9958486565126122,
+      "upper": 1.0013104237723371,
+      "classification": "inconclusive",
+      "allocatedBytes": 809080,
+      "productionSha256": "fbf0891054129fb230c6640954ad8eb6d8def40749288a66233cecaabfe91518",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "2c4343cce742521d24f8dcf33da9919c55043936f914fff6f9653f15f1ce4c70"
+      },
+      "baselineSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+      "codegen": {
+        "project": "Lokad.Image",
+        "stage": "WPC993",
+        "productionSha256": "fbf0891054129fb230c6640954ad8eb6d8def40749288a66233cecaabfe91518",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "2c4343cce742521d24f8dcf33da9919c55043936f914fff6f9653f15f1ce4c70"
+        },
+        "publicActualVp8Checks": 166,
+        "publicAndHarnessBuilds": 0,
+        "coreBuilds": 1,
+        "embeddedBuilds": 0,
+        "embeddedModuleStillBaselineAndNotRun": true,
+        "instrumentedElapsedDiscarded": true,
+        "performanceMeasured": false,
+        "codeBytes": 3515,
+        "previousCodeBytes": 5220,
+        "acceptedBaselineCodeBytes": 3515,
+        "publishCallSites": 12,
+        "previousPublishCallSites": 12,
+        "carryCallSites": 0,
+        "publisherCodeBytes": 171,
+        "publisherCarryCalls": 0,
+        "publisherPropagateCalls": 1,
+        "propagateCallSites": 0,
+        "note": "Source/codegen diagnostic only; call sites are not dynamic counts or elapsed gains. Full focused normal/scalar must follow an embedded rebuild before complete timing."
+      },
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      },
+      "allPacketInputAndOwnerGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "pairs": 12,
+      "operationsPerSubject": 32,
+      "independentConfirmation": false
+    }
+  ],
+  "date": "2026-11-14",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "decision": "Discard all three implementations and restore exact accepted source/main/embedded/bindings/manifest. A/Cremain inconclusive without a demonstrated useful gain; Bhas an adverse paired effect. No equivalence, accepted CPU gain, full parity or permanent family ban. Do not favorably resample unchanged candidates.",
+  "scope": "Existing513x259opaquephotograph,Q75/effort4,full public EncodeWebp/source processing,fresh MemoryStream growth/owned output/disposal. IndependentALCs,current baseline145cca00,candidate pinned,CPU0,optimizedJIT,naturalGC,idle-v2,all12alternating32operation pairs. Same exact17688Bpacket/input/source/owners, no fixture/settings changes. No native performance measured; current nine standalone costs remain unchanged.",
+  "baseline": {
+    "windowsSha256": "f85e0b7b794a39b0bbf00110747987c2a2b9e3c7597522d9696f7d5118b100ba",
+    "linuxSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+    "timedArtifactSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+    "packageSha256": "c39ddab12f2b3b559a4e07b255a1616dd1483c596b527d2a8f48fdc7aeb32d76"
+  },
+  "storage": "All809080B/op. No new array,admitted payload,owner,cache,session or retained operation state. JIT/native/physical peaks unmeasured; code size is not a CPU or physical-peak claim.",
+  "qualification": {
+    "linuxCoreBuilds": 3,
+    "linuxEmbeddedBuilds": 3,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureHelperBuilds": 0,
+    "focusedEachNormalScalarEachStage": [
+      1035,
+      402
+    ],
+    "additionalActualPublicCodegenEachStage": 166,
+    "fullOrPackageRepeats": 0,
+    "qualified6685EachOsAndSameActualPackageAll3ExamplesReused": true
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stages": [
+      "WPC991",
+      "WPC992",
+      "WPC993"
+    ],
+    "productionChanged": false,
+    "productionAccepted": false,
+    "sourceSha256": "b37e5622f3285a93b3f80ad8b94c7eb8bdf48d80df3c606eb0ee7a8e2956b9ce",
+    "coreSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+    "embeddedTestsSha256": "86ea684844f3d46c55386bb4c5a72638377257f34d530e938f51f89016f558a7",
+    "actualPackageSha256": "c39ddab12f2b3b559a4e07b255a1616dd1483c596b527d2a8f48fdc7aeb32d76",
+    "sourceMainEmbeddedAndBindingsRestoredExactly": true,
+    "sourceManifestByteExact": true,
+    "allManifestFilesExact": true,
+    "restoreBuilds": 0,
+    "fullOrPackageRepeats": 0,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureHelperBuilds": 0,
+    "prior6685FullLiveEachOsAndSamePackageAll3ExamplesReused": true,
+    "reason": "A/Cscreens are inconclusive with no demonstrated useful lead; Bhas a demonstrated adverse paired effect. Discard all three implementations, preserving exact packets and all outcomes. Not evidence of equivalence, a permanent family ban or an accepted gain."
+  },
+  "raw": {
+    "file": "vp8-word-publication-trials.tar.xz",
+    "sha256": "367911705ea973fda383e21f3584c6fb6885ac57fe3b2326956aaa1f773e0cba",
+    "bytes": 2360468,
+    "members": 116,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-writer-policy-qualified.tar.xz",
+        "sha256": "085ed7b6afea863e9d9daf88cbe9715e4ea30d5d037a3541c0ea6f327443cc56"
+      }
+    ]
+  },
+  "next": "Stream one prepared Luma4 block through the full ordered mode-selection loop in a small private kernel, rather than staging ten quantized candidates. Inspect actual matrix/rate-vector retention before timing. Guard nonuniform plain/uncancelable SIMD input; keep portable/live/trellis/uniform fallbacks and exact publication/ties/prunes. This targets the larger current518sample location and avoids the earlier candidate-array handoff.",
+  "planScope": "PLAN remains ignored. Only authorized font/text section differs from original checkpoint. Complete text one-shot/eight-draw controls pass/stop with eager/lazy/prepared-state caveats; every other PLAN byte remains unchanged."
+}

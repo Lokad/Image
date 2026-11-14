@@ -33,11 +33,15 @@ VPA984trace remains source-specific history in
 Three [candidate-preparation revisions](VP8-CANDIDATE-PREPARATION-TRIALS.md) are
 fully restored and remain unaccepted.
 
-**Next:** audit the older local-copy coefficient trial against this current bit core,
-including its actual inconclusive/failure reason and cursor growth/failure publication.
-Require a materially justified design before another candidate. No staged-symbol
-buffer, new heap storage, lost live-token checkpoints or assumed speedup. Passing
-companions stop; independent codec/resize work remains available.
+The subsequent [word-publication trials](VP8-WORD-PUBLICATION-TRIALS.md) preserve
+exact packets but establish no accepted gain; all three private layouts are removed.
+The source/core/embedded baseline restores exactly, so this trace remains current.
+
+**Next:** stream a prepared block through the complete ordered Luma4 mode search,
+retaining quantizer/rate vectors without materializing ten candidate snapshots.
+Check actual register retention and call/storage overhead before complete timing.
+Preserve all strict prunes,ties,winner publication and portable/live/trellis/uniform
+paths. The larger518sample location supplies a lead, not projected savings.
 
 The [current evidence](vp8-writer-policy-evidence.json#currentAttribution) and its raw
 archive retain perf data/maps, all instruction offsets,JITbytes,source/module pins,
