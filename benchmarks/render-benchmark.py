@@ -216,6 +216,32 @@ def copy_result_admission():
     assert gain['exactSourceOutputAndIndependentOwnersPassed'] and gain['notNativeParity']
     assert current['sourceProof']['copyKernelsExactAfterTokenParameterSubstitution']
     assert current['sourceProof']['originalImageCreateAndCodecResizeAllocationBodiesVerbatim']
+    return apply_word_clone_copy(current)
+
+
+def apply_word_clone_copy(current):
+    stage = json.loads((ROOT / 'benchmarks/word-clone-copy-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == 6683
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert stage['sourceProof']['allOtherImageBufferBytesExact'] and stage['sourceProof']['copyPrimitiveBodyUnchanged']
+    assert len(stage['cases']) == 6 and len(stage['unchangedOwnedEditCases']) == 14
+    for name, c in stage['cases'].items():
+        assert c['librarySha256'] == stage['producers']['linuxSha256'] == q['actualPackage']['librarySha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
+        assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
+    current['cases'].update(stage['cases'])
+    assert stage['combinedOwnedEditStatusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
     return current
 
 
@@ -240,7 +266,7 @@ def current_png_stream_word_note():
             f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
             f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
             'uncertainty without a production change or speedup claim. Original adverse data remain. '
-            f'The [copy-result round](../benchmarks/COPY-RESULT-ADMISSION.md) refreshes the complete '
+            f'The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete '
             f'decode/orient/crop/fit comparison: **{composition["managedUs"]:,.2f} / '
             f'{composition["nativeUs"]:,.2f} µs, upper {composition["upper"]:.3f}**, '
             f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
@@ -2824,19 +2850,21 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (confidence open) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    owned_copy_note = """[Copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removes an unused
-temporary execution object: all 18 owned clone/flip/turn controls allocate
-**56 B/op**, down from 112 B/op. Returned pixels remain independently owned and
-charged until disposal; pixel capacity and retained storage are unchanged.
-A complete word-clone comparison confirms **1.68% / 0.29 µs** incremental savings.
-Flip timing remains inconclusive; historical clocks are not causal gain evidence.
-All 20 affected complete reference comparisons refresh on the actual package DLL:
-**16 pass, three word gaps, one byte-flip uncertainty**. Word clone, normal copy
-and vertical flip retain ratio uppers **1.054 / 1.038 / 1.047**. Exact managed
-pixels, cancellation and terminal admission remain. All eight axis swaps,
-reversal controls and both PNG compositions pass and stop. Earlier
-[copy](../benchmarks/SHARED-RASTER-COPY.md), [reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md)
-and [tile](../benchmarks/SHARED-AXIS-SWAP.md) gains remain linked history."""
+    owned_copy_note = """[Word clone copying](../benchmarks/WORD-CLONE-COPY.md) reuses the existing safe
+vector copier with one checked equal-length destination view. Independent complete
+pairs confirm **1.71% / 0.297 µs** for word clone and **4.45% / 0.249 µs** for its
+byte guard. These are scoped increments against the preceding immutable DLL,
+not FFmpeg parity or additive gains from earlier stages.
+Six affected complete reference costs refresh on the new actual package DLL;
+14 unchanged owned-edit paths reuse their qualified producers. Together these
+20 views have **16 passes, two gaps and two uncertainties**. Word normal-copy and
+vertical flip retain upper **1.037 / 1.047**; word clone and byte flip remain
+uncertain at **1.009 / 1.012**. Stop the passing controls.
+All 18 owned edits still allocate **56 B/op**, after
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removed an unused
+execution object. Pixel capacity, retained storage, cancellation, terminal
+admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
+remains linked history; no historical phase sum is used."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     png_stream_word_note = current_png_stream_word_note()
@@ -2870,7 +2898,7 @@ also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988
 {owned_copy_note}
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 181 pass, three gaps, seven uncertain**. This does not establish full parity:
+image views: 181 pass, two gaps, eight uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}

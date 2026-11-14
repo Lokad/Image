@@ -33,28 +33,30 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [copy-result round](../benchmarks/COPY-RESULT-ADMISSION.md) refreshes the complete decode/orient/crop/fit comparison: **2,888.51 / 2,938.65 µs, upper 0.990**, **338,159.1 B/op**. Both controls stop.
+[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete decode/orient/crop/fit comparison: **2,874.75 / 2,937.59 µs, upper 0.984**, **338,159.1 B/op**. Both controls stop.
 
 [VP8/alpha stream confidence](../benchmarks/VP8-STREAM-CURRENT-CONFIDENCE.md)
 also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
 **240,496 B/op**. No builds or production change; this control stops.
 
-[Copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removes an unused
-temporary execution object: all 18 owned clone/flip/turn controls allocate
-**56 B/op**, down from 112 B/op. Returned pixels remain independently owned and
-charged until disposal; pixel capacity and retained storage are unchanged.
-A complete word-clone comparison confirms **1.68% / 0.29 µs** incremental savings.
-Flip timing remains inconclusive; historical clocks are not causal gain evidence.
-All 20 affected complete reference comparisons refresh on the actual package DLL:
-**16 pass, three word gaps, one byte-flip uncertainty**. Word clone, normal copy
-and vertical flip retain ratio uppers **1.054 / 1.038 / 1.047**. Exact managed
-pixels, cancellation and terminal admission remain. All eight axis swaps,
-reversal controls and both PNG compositions pass and stop. Earlier
-[copy](../benchmarks/SHARED-RASTER-COPY.md), [reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md)
-and [tile](../benchmarks/SHARED-AXIS-SWAP.md) gains remain linked history.
+[Word clone copying](../benchmarks/WORD-CLONE-COPY.md) reuses the existing safe
+vector copier with one checked equal-length destination view. Independent complete
+pairs confirm **1.71% / 0.297 µs** for word clone and **4.45% / 0.249 µs** for its
+byte guard. These are scoped increments against the preceding immutable DLL,
+not FFmpeg parity or additive gains from earlier stages.
+Six affected complete reference costs refresh on the new actual package DLL;
+14 unchanged owned-edit paths reuse their qualified producers. Together these
+20 views have **16 passes, two gaps and two uncertainties**. Word normal-copy and
+vertical flip retain upper **1.037 / 1.047**; word clone and byte flip remain
+uncertain at **1.009 / 1.012**. Stop the passing controls.
+All 18 owned edits still allocate **56 B/op**, after
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removed an unused
+execution object. Pixel capacity, retained storage, cancellation, terminal
+admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
+remains linked history; no historical phase sum is used.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 181 pass, three gaps, seven uncertain**. This does not establish full parity:
+image views: 181 pass, two gaps, eight uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
