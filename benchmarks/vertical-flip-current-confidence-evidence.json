@@ -1,0 +1,122 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VFC957",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "case": {
+    "caseId": "WarmVerticalFlip8",
+    "managedUs": 9.232338216145834,
+    "nativeUs": 9.216613932291667,
+    "ratio": 1.0017060803424862,
+    "lower": 0.9830676601775016,
+    "upper": 1.0161626765319207,
+    "status": "uncertain",
+    "allocatedBytes": 112,
+    "librarySha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "operationsPerSubject": 256,
+    "managedExact": true,
+    "nativeSamplesEachBracket": 12,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured."
+  },
+  "originalScreen": {
+    "ratio": 0.9836455638975039,
+    "lower": 0.9618978323460601,
+    "upper": 0.9983506749960624,
+    "status": "pass",
+    "operationsPerSubject": 256,
+    "project": "Lokad.Image",
+    "caseId": "WarmVerticalFlip8",
+    "managedUs": 8.538642903645833,
+    "nativeUs": 8.680609375,
+    "allocatedBytes": 112,
+    "librarySha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+    "actualIterations": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "receipt": "tmp/vbc956-baseline-WarmVerticalFlip8-screen-receipt.json",
+    "observation": "tmp/vbc956-baseline-WarmVerticalFlip8-screen-observation.json",
+    "rawPairs": "tmp/vbc956-baseline-WarmVerticalFlip8-screen.json",
+    "phase": "screen",
+    "screenOnly": true,
+    "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+  },
+  "measurement": {
+    "pairs": 12,
+    "operationsEachSubject": 256,
+    "allActualsRetained": true,
+    "nativeSamplesEachBracket": 12,
+    "reason": "Increase the existing supported equal batch parameter from64to256 before observing either experiment. At~9us per operation,64gives only~0.6ms per block. Keep same frozen original raster, public operation, output ownership, reference identity, single CPU and conservative paired/native confidence; no new matrix. Initial screen passes but independent confirmation stays uncertain. No further same-method retry."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6640,
+    "productionAndActualPackageByteIdentical": true,
+    "actualPackageSha256": "7ab97921d8af6a8ff243bed371a8df2268ba869360af7b65758e96abcd3c73b3",
+    "actualPackageLibrarySha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+    "sameActualPackageBothOsAndThreeExamplesPassed": true,
+    "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
+    "broadOrPackageRepeats": 0
+  },
+  "producers": {
+    "windowsSha256": "827bb6e50a2963c25c443e157bce7583b44dbf307d5d87a5b24a457ab758055a",
+    "linuxSha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+    "actualPackageSha256": "7ab97921d8af6a8ff243bed371a8df2268ba869360af7b65758e96abcd3c73b3",
+    "timedArtifactSha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f"
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 179,
+    "gaps": 0,
+    "uncertain": 12,
+    "total": 191
+  },
+  "currentIndependentEditStatuses": {
+    "pass": 14,
+    "gap": 0,
+    "uncertain": 6,
+    "total": 20
+  },
+  "memory": {
+    "allocatedBytesPerOperation": 112,
+    "newOwnedCapacityBytes": 0,
+    "operationScratchRetainedBytes": 0,
+    "sourceBytes": 531468,
+    "resultBytes": 531468,
+    "defaultIdleSlots": 2,
+    "defaultIdleCeilingBytes": 4194304,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "scope": "One current complete owned RGBA8 vertical flip of original513x259raster; FFmpeg vflip graph/source/frame wrappers reused, independent output allocation/copy/release timed, native padded rows exposed directly. Caller-root mode is correctness-covered, not this default timing control.",
+  "prior": "independent-row-copy-evidence.json retains the old64operation gap and original raw. Current256operation confirmation supersedes its standalone byte vertical cost, without a production speedup claim; native-clock shifts and the failed refactors are separate evidence.",
+  "next": "Byte vertical confidence is open. Stop tuning it on an assumed current gap; no unchanged favorable retry. Other independent-result views reuse valid evidence. Continue the demonstrated dimension-probe/in-place drawing gaps while preserving encoder exactness and required material scope.",
+  "raw": {
+    "file": "vector-copy-bound-screen.tar.xz",
+    "sha256": "f4ecb3ab25e7139725e6a3d0e4954686ed676129cf1191d2f2993bcab0bae84c",
+    "bytes": 18755908,
+    "members": 493,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "seekable-header-storage-qualified.tar.xz",
+        "sha256": "968d075110b264209814a057d027d0c27be4ab95363113923271ea18442ce337"
+      },
+      {
+        "file": "independent-row-copy-qualified.tar.xz",
+        "sha256": "04a8dc53d05ffbf7280f05e501de5ac75839441e6e25526fa10b0d69e2968ba4"
+      }
+    ]
+  },
+  "historicalExperiments": "VECTOR-COPY-BOUND-SCREEN.md"
+}

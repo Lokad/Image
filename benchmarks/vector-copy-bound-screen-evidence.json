@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "VBC956A/B",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "decision": "Discard both implementations; exact accepted source/core/embedded/public modules restored. A is neutral on the complete byte operation despite smaller JIT. B is measurably adverse. Do not infer CPU gains from generated size or blindly repeat either trial.",
+  "hypotheses": {
+    "A": "Expose equal source/destination vector bounds once.",
+    "B": "Use four-vector group spans and constant displacement addressing."
+  },
+  "jit": {
+    "originalMethodBytes": 1110,
+    "aMethodBytes": 952,
+    "bMethodBytes": 948,
+    "aRemovesDestinationGuards": true,
+    "bRemovesRepeatedShiftsButAddsGroupGuard": true,
+    "notCpuEvidence": true
+  },
+  "interleaved": {
+    "A": {
+      "project": "Lokad.Image",
+      "stage": "VBC956",
+      "managedOnly": true,
+      "baselineUs": 8.480922200520833,
+      "candidateUs": 8.479805989583333,
+      "savedUs": 0.0011162109375,
+      "ratio": 0.9998736739309114,
+      "lower": 0.9952605338557984,
+      "upper": 1.00450819640855,
+      "gainSeparated": false,
+      "baselineAllocatedBytes": 112.0,
+      "candidateAllocatedBytes": 112.0,
+      "all12PairsRetained": true,
+      "quietGuardsPassed": true,
+      "exactOutputsSourceAndIndependentOwnersPassed": true,
+      "baselineSha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+      "candidateSha256": "e07d6aa7875393da8a340a677dea7f4ef6a7507dc56a4f23b1bbc5127bc0a9c6",
+      "raw": "tmp/vbc956-interleaved-confirm.log",
+      "sameWholeOperationAsStandalone": true,
+      "absoluteNativeParityNotEstablished": true
+    },
+    "B": {
+      "project": "Lokad.Image",
+      "stage": "VBC956B",
+      "managedOnly": true,
+      "baselineUs": 9.101738932291665,
+      "candidateUs": 9.495799153645834,
+      "savedUs": -0.3940602213541679,
+      "ratio": 1.0433227767242967,
+      "lower": 1.029983705991914,
+      "upper": 1.0568345985467873,
+      "gainSeparated": false,
+      "baselineAllocatedBytes": 112.0,
+      "candidateAllocatedBytes": 112.0,
+      "all12PairsRetained": true,
+      "quietGuardsPassed": true,
+      "exactOutputsSourceAndIndependentOwnersPassed": true,
+      "baselineSha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+      "candidateSha256": "d97507f7f951cbbbd5dc626d0122f5368c6b58bf633fbeb4b13aeb13afc81067",
+      "raw": "tmp/vbc956b-interleaved-confirm.log",
+      "sameWholeOperationAsStandalone": true,
+      "absoluteNativeParityNotEstablished": true
+    }
+  },
+  "originalStandaloneScreens": {
+    "project": "Lokad.Image",
+    "stage": "VBC956",
+    "phase": "screen",
+    "baseline": {
+      "ratio": 0.9836455638975039,
+      "lower": 0.9618978323460601,
+      "upper": 0.9983506749960624,
+      "status": "pass",
+      "operationsPerSubject": 256,
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.538642903645833,
+      "nativeUs": 8.680609375,
+      "allocatedBytes": 112,
+      "librarySha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vbc956-baseline-WarmVerticalFlip8-screen-receipt.json",
+      "observation": "tmp/vbc956-baseline-WarmVerticalFlip8-screen-observation.json",
+      "rawPairs": "tmp/vbc956-baseline-WarmVerticalFlip8-screen.json",
+      "phase": "screen",
+      "screenOnly": true,
+      "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+    },
+    "candidate": {
+      "ratio": 1.0122988017779961,
+      "lower": 1.0000809355675677,
+      "upper": 1.0232275098908414,
+      "status": "gap",
+      "operationsPerSubject": 256,
+      "project": "Lokad.Image",
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.388471028645833,
+      "nativeUs": 8.286556315104166,
+      "allocatedBytes": 112,
+      "librarySha256": "e07d6aa7875393da8a340a677dea7f4ef6a7507dc56a4f23b1bbc5127bc0a9c6",
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/vbc956-candidate-WarmVerticalFlip8-screen-receipt.json",
+      "observation": "tmp/vbc956-candidate-WarmVerticalFlip8-screen-observation.json",
+      "rawPairs": "tmp/vbc956-candidate-WarmVerticalFlip8-screen.json",
+      "phase": "screen",
+      "screenOnly": true,
+      "measurement": "Existing complete public edit,12alternating fixed-operation pairs/native3brackets. All actuals. Screen is cheap, then independent primary when promising. Native graph/source wrappers retained as documented; no historical stage sums or BDN speedup inference."
+    },
+    "views": {
+      "allActual": {
+        "savedUs": 0.150171875,
+        "savedFraction": 0.017587323500304675,
+        "rawGainSeparated": true,
+        "baselineCI": {
+          "N": 12,
+          "Mean": 8538.642903645834,
+          "StandardError": 15.30705710081131,
+          "Level": 12,
+          "Margin": 67.91709606882654,
+          "Lower": 8470.725807577008,
+          "Upper": 8606.55999971466
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 8388.471028645834,
+          "StandardError": 7.496780482198321,
+          "Level": 12,
+          "Margin": 33.26306009463964,
+          "Lower": 8355.207968551194,
+          "Upper": 8421.734088740473
+        }
+      },
+      "upperOutlierDiagnostic": {
+        "savedUs": 0.138866329308712,
+        "savedFraction": 0.016284840563880576,
+        "rawGainSeparated": true,
+        "baselineCI": {
+          "N": 11,
+          "Mean": 8527.337357954546,
+          "StandardError": 11.304369086846021,
+          "Level": 12,
+          "Margin": 51.851941125534765,
+          "Lower": 8475.485416829011,
+          "Upper": 8579.18929908008
+        },
+        "candidateCI": {
+          "N": 12,
+          "Mean": 8388.471028645834,
+          "StandardError": 7.496780482198321,
+          "Level": 12,
+          "Margin": 33.26306009463964,
+          "Lower": 8355.207968551194,
+          "Upper": 8421.734088740473
+        }
+      }
+    },
+    "normalizedGain": -0.029129636661969327,
+    "normalizedGainSeparated": false,
+    "nativeClockChange": -0.04539463105328756,
+    "noNewOwnedCapacity": true,
+    "allocatedBytes": 112,
+    "baselineCurrentPass": true,
+    "baselinePassingEvidenceScope": "Current256operation screen/confirmation, not old64operation comparison; preserve both. Candidate can still be useful as a verified simplification, without claiming its change caused the native-clock-driven parity classification.",
+    "decisionPending": true
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stage": "VBC956A/B",
+    "productionAccepted": false,
+    "sourceAndProductionEmbeddedPublicModulesRestoredExactly": true,
+    "productionSha256": "af427b0f983c2b87b5b3a0c0791af71e7a777a4ee716f98384051ccdfab7df6f",
+    "embeddedTestsSha256": "19225abd9ec4ced55011cc56cf5da2d0acb3092744ac8d477e2ba7a1ef06eb7d",
+    "publicTestsSha256": "6da72b554744bc99a6e5586ad2ac75cb71f62805acde8f8cd6b01a36209e97c1",
+    "packageSha256": "7ab97921d8af6a8ff243bed371a8df2268ba869360af7b65758e96abcd3c73b3",
+    "restored": [
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.dll",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.pdb",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb",
+      "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll",
+      "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb"
+    ],
+    "restorationBuilds": 0,
+    "fullOrPackageRepeats": 0,
+    "qualifiedEvidenceReused": "HSB953B Windows/Linux6640and SAMEactualpackage/all3examples remain valid after exact immutable restoration.",
+    "reason": "A interleaved byte vertical neutral0.999874 with CI0.995261\u20131.004508; B adverse1.043323 with CI1.029984\u20131.056835. Smaller code alone is not an elapsed gain. Shared drawing/word costs not qualified for discarded code; no broad campaign."
+  },
+  "scope": "Only the existing complete513x259RGBA8vertical flip is measured. Exact original samples/alpha/hiddenRGB, source, independent owners and oneCPU are preserved.12interleaved original/candidate pairs of256operations per subject with all pairs retained. Isolated default two-slot/4MiBstores; this controlled managed comparison is not a native parity claim.",
+  "qualification": {
+    "linuxFocusedInternalPerMode": 25,
+    "linuxFocusedPublicPerMode": 76,
+    "modes": [
+      "normal",
+      "scalar",
+      "avx512-off",
+      "avx2-off"
+    ],
+    "jitPublicVerticalPerVersion": 16,
+    "linuxCoreEmbeddedBuilds": 2,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "privatePairedHelperBuilds": 1,
+    "windowsCandidateBuilds": 0,
+    "broadOrPackageRepeats": 0,
+    "unchangedQualified6640PerOsAndSamePackageReused": true
+  },
+  "recovery": "One preparation newline-normalization assertion failed before build; one ValueTuple allocation-field reader failed after successful capture, then recovered Item2 from the same completed log without timing/build replay. The first post-restoration confidence preflight correctly rejected candidate-source pins; a separate restored-source read-only driver is used afterward.",
+  "next": "No permanent family ban: A is not proven useful for other callers, which were not measured; revisit only with concrete relevant attribution. No compiler-size-only merge. Current byte vertical confidence is separately owned by vertical-flip-current-confidence-evidence.json; no rejected-implementation dependency is added to the renderer.",
+  "raw": {
+    "file": "vector-copy-bound-screen.tar.xz",
+    "sha256": "f4ecb3ab25e7139725e6a3d0e4954686ed676129cf1191d2f2993bcab0bae84c",
+    "bytes": 18755908,
+    "members": 493,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "seekable-header-storage-qualified.tar.xz",
+        "sha256": "968d075110b264209814a057d027d0c27be4ab95363113923271ea18442ce337"
+      },
+      {
+        "file": "independent-row-copy-qualified.tar.xz",
+        "sha256": "04a8dc53d05ffbf7280f05e501de5ac75839441e6e25526fa10b0d69e2968ba4"
+      }
+    ]
+  }
+}

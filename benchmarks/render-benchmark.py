@@ -231,7 +231,17 @@ def apply_current_independent_row_copy(editing):
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     c = current['cases']['WarmVerticalFlip8']
     assert c['status'] == 'gap' and c['sourceUnchanged'] and c['independentOwnedOutput']
-    return editing + f'\n| Vertical flip RGBA8 (gap) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+    confidence = json.loads((ROOT / 'benchmarks/vertical-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    c, q = confidence['case'], confidence['qualification']
+    assert confidence['measurementAccepted'] and not confidence['productionChanged'] and not confidence['productionSpeedupClaim']
+    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6640 and q['broadOrPackageRepeats'] == 0
+    assert c['librarySha256'] == q['actualPackageLibrarySha256']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 256
+    assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
+    assert c['status'] == 'uncertain' and c['lower'] <= 1 < c['upper']
+    assert confidence['currentImageOwnerViewStatuses'] == {'passCount': 179, 'gaps': 0, 'uncertain': 12, 'total': 191}
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return editing + f'\n| Vertical flip RGBA8 (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
 
 
 def current_png_stream_word_note():
@@ -2881,9 +2891,10 @@ and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpe
 1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
 **112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
 word rectangle copying is uncertain. The word dispatch is revised after an adverse
-candidate, whose results are retained. Shared-helper byte vertical flip now has
-a small gap (**8.75 / 8.30 µs, upper 1.083**); historical confidence overlaps.
-Word flip passes. Current word clone/normal-orientation evidence stays uncertain.
+candidate, whose results are retained. [Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
+is now open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**, on the unchanged
+actual package. Longer matched blocks supersede the older small-gap observation;
+this is not a production gain. Word flip passes; word clone/normal stay uncertain.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -2907,7 +2918,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 179 pass, 1 gap, 11 uncertain**. This does not establish full parity:
+image views: 179 pass, zero gaps, 12 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}

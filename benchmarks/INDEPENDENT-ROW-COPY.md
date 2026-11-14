@@ -1,5 +1,8 @@
 # Shared independent row copying
 
+The later [byte vertical confidence](VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
+supersedes this report's standalone byte-flip cost; its drawing gains remain valid.
+
 Complete RGBA8 rectangle copying saves **0.240 µs / 10.73% raw**, **10.75%
 reference-normalized**. The overlapping forward/reverse pair saves **0.342 µs /
 8.17% raw**, **9.14% normalized**. Both managed confidence views and normalized

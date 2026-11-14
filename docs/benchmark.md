@@ -11,9 +11,10 @@ and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpe
 1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
 **112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
 word rectangle copying is uncertain. The word dispatch is revised after an adverse
-candidate, whose results are retained. Shared-helper byte vertical flip now has
-a small gap (**8.75 / 8.30 µs, upper 1.083**); historical confidence overlaps.
-Word flip passes. Current word clone/normal-orientation evidence stays uncertain.
+candidate, whose results are retained. [Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
+is now open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**, on the unchanged
+actual package. Longer matched blocks supersede the older small-gap observation;
+this is not a production gain. Word flip passes; word clone/normal stay uncertain.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -37,7 +38,7 @@ word controls pass; byte horizontal flip is narrowly uncertain, with no demonstr
 regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 179 pass, 1 gap, 11 uncertain**. This does not establish full parity:
+image views: 179 pass, zero gaps, 12 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
@@ -246,7 +247,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
 | Half turn RGBA8 † | 8.18 | 10.02 | 0.816 / 0.838 | 112 |
-| Vertical flip RGBA8 (gap) † | 8.75 | 8.30 | 1.055 / 1.083 | 112 |
+| Vertical flip RGBA8 (confidence open) † | 9.23 | 9.22 | 1.002 / 1.016 | 112 |
 
 **Inspection and pixel-coding validation**
 
