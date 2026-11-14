@@ -5,14 +5,14 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Local JPEG entropy replay](../benchmarks/JPEG-LOCAL-ENTROPY-REPLAY.md) saves
-**10.49% / 167.72 µs** on complete caller-RGB420 encoding and **16.68% / 196.77 µs**
-on RGBA8→gray in independent paired confirmations. All 17 replay controls now pass;
-caller RGB420 is **1,431.80 / FFmpeg 1,578.72 µs, upper .912**, **388,222 B/op**.
-Exact packets and storage ownership remain; no heap capacity or retention is added.
-The existing row-restart control remains a **1.31× gap**, **151,179 B/op**; the
-unchanged contemporary original also has this gap. Its direct entropy path is
-the next attribution target. Previous caller uncertainty and stage costs remain history.
+[Direct JPEG block emission](../benchmarks/JPEG-DIRECT-BLOCK-EMISSION.md) closes
+the restart gap: **1,339.28 / FFmpeg 1,609.15 µs, upper 0.841**,
+**151,180 B/op**, exact **58,010 / 58,012 B** packets with the strict metadata exception.
+All 18 declared JPEG encoding comparisons pass and stop; 17 adaptive controls
+reuse their unchanged paths and original artifact identities. Separate complete
+paired confirmations measure **19.21%** for block emission and **17.00%** for bounded
+sign arithmetic. These successive effects are not added into a cumulative claim.
+No heap capacity or retention is added; validation and independent owners remain.
 
 [Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
 **10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
@@ -87,7 +87,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,640 full/live checks**,
+storage, separately from its **138 B/op**. Each OS passes **6,648 full/live checks**,
 focused normal/scalar JPEG checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
@@ -178,7 +178,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,422.33 | 1,626.70 | 0.874 / 0.878 | 309,523 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,106.93 | 3,858.03 | 0.805 / 0.810 | 820,502 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,611.56 | 2,853.33 | 0.915 / 0.919 | 1,638,214 | — |
-| JPEG RGBA8 4:2:0, row restart33 (confirmed gap) † | 2,112.08 | 1,610.79 | 1.311 / 1.317 | 151,179 | 58,010 / 58,012 |
+| JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 410.41 | 418.11 | 0.982 / 0.988 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode † | 438.99 | 604.73 | 0.726 / 0.742 | 762,720 | — |

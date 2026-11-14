@@ -173,9 +173,11 @@ internal static partial class JpegEncoder
     private static void ReferenceBlock(ReadOnlySpan<short> coefficients, int component, Span<int> previous,
         int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer)
     {
+        if (writer is not null) { writer.WriteBlock(coefficients, component, previous, tables!); return; }
         var family = component == 0 ? 0 : 1;
         var difference = coefficients[0] - previous[component]; previous[component] = coefficients[0];
-        ReferenceCoefficient(writer, tables, histograms, family, 0, difference);
+        CountCoefficient(histograms[family], 0, difference);
+        var ac = histograms[family + 2];
         if (System.Runtime.Intrinsics.X86.Avx512BW.IsSupported)
         {
             var mask = JpegNonzeroMask.Ac(coefficients); var position = 0;
@@ -183,11 +185,11 @@ internal static partial class JpegEncoder
             {
                 var next = System.Numerics.BitOperations.TrailingZeroCount(mask); mask &= mask - 1;
                 var zeros = next - position - 1;
-                while (zeros >= 16) { ReferenceSymbol(writer, tables, histograms, family + 2, 240); zeros -= 16; }
-                ReferenceCoefficient(writer, tables, histograms, family + 2, zeros, coefficients[JpegTransform.Zigzag[next]]);
+                while (zeros >= 16) { ac[240]++; zeros -= 16; }
+                CountCoefficient(ac, zeros, coefficients[JpegTransform.Zigzag[next]]);
                 position = next;
             }
-            if (position != 63) ReferenceSymbol(writer, tables, histograms, family + 2, 0);
+            if (position != 63) ac[0]++;
             return;
         }
         var run = 0;
@@ -195,27 +197,16 @@ internal static partial class JpegEncoder
         {
             var value = coefficients[JpegTransform.Zigzag[k]];
             if (value == 0) { run++; continue; }
-            while (run >= 16) { ReferenceSymbol(writer, tables, histograms, family + 2, 240); run -= 16; }
-            ReferenceCoefficient(writer, tables, histograms, family + 2, run, value); run = 0;
+            while (run >= 16) { ac[240]++; run -= 16; }
+            CountCoefficient(ac, run, value); run = 0;
         }
-        if (run != 0) ReferenceSymbol(writer, tables, histograms, family + 2, 0);
+        if (run != 0) ac[0]++;
     }
 
-    private static void ReferenceCoefficient(JpegEntropyWriter? writer, JpegEncodingTable[]? tables,
-        int[][] histograms, int table, int run, int value)
+    private static void CountCoefficient(int[] histogram, int run, int value)
     {
         var bits = value == 0 ? 0 : System.Numerics.BitOperations.Log2((uint)Math.Abs(value)) + 1;
-        ReferenceSymbol(writer, tables, histograms, table, run * 16 + bits);
-        if (writer is not null) writer.Signed(value, bits);
-    }
-
-    private static void ReferenceSymbol(JpegEntropyWriter? writer, JpegEncodingTable[]? tables,
-        int[][] histograms, int table, int symbol)
-    {
-        if (writer is null) { histograms[table][symbol]++; return; }
-        var coding = tables![table]; var length = coding.Lengths[symbol];
-        if (length == 0) throw new ImageDataException("JPEG source changed between encoding passes.");
-        writer.Write(coding.Codes[symbol], length);
+        histogram[run * 16 + bits]++;
     }
 
     private static void WriteReferenceHeader(Stream output, int width, int height, JpegSampling sampling, ushort[] quantization,

@@ -5,7 +5,7 @@ namespace Lokad.Image.Tests;
 public sealed class JpegEntropyWriterTests
 {
     [Fact]
-    public void EverySignedAmplitudeKeepsCanonicalBytesStuffingPaddingRestart()
+    public void EveryAmplitudePayloadKeepsCanonicalBytesStuffingPaddingRestart()
     {
         var expected = new byte[6];
         for (var width = 1; width <= 16; width++)
@@ -28,7 +28,7 @@ public sealed class JpegEntropyWriterTests
                 using var output = new MemoryStream();
                 using var context = Context();
                 using var writer = new JpegEntropyWriter(output, context);
-                writer.Signed(sign * magnitude, width); writer.Restart(0);
+                writer.Write(code, width); writer.Restart(0);
                 Assert.True(expected.AsSpan(0, length).SequenceEqual(output.GetBuffer().AsSpan(0, (int)output.Length)));
                 Assert.True(output.CanWrite);
             }
@@ -39,11 +39,11 @@ public sealed class JpegEntropyWriterTests
     public void ZeroWidthStillAdmitsAndObservesCancellation()
     {
         using var output = new MemoryStream(); using var context = Context();
-        using var writer = new JpegEntropyWriter(output, context); writer.Signed(0, 0);
+        using var writer = new JpegEntropyWriter(output, context); writer.Write(0, 0);
         Assert.Equal(0, output.Length);         using var cancellation = new CancellationTokenSource();
         using var canceled = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
         using var stopped = new JpegEntropyWriter(output, canceled);
-        Assert.Throws<OperationCanceledException>(() => stopped.Signed(0, 0));
+        Assert.Throws<OperationCanceledException>(() => stopped.Write(0, 0));
         Assert.Equal(0, output.Length);
     }
 
@@ -61,7 +61,7 @@ public sealed class JpegEntropyWriterTests
         {
             using var output = new MemoryStream(); using var context = Context();
             using var writer = new JpegEntropyWriter(output, context);
-            var error = Assert.Throws<ArgumentOutOfRangeException>(() => writer.Signed(value, width));
+            var error = Assert.Throws<ArgumentOutOfRangeException>(() => writer.Write(value, width));
             Assert.Equal("value", error.ParamName); Assert.Equal(0, output.Length);
         }
     }

@@ -1604,10 +1604,10 @@ def render():
     assert jpeg_q['actualPackage']['usageExamples'] == jpeg_q['samePackageWindows']['usageExamples'] == 3
     assert jpeg_q['actualPackage']['librarySha256'] == jpeg_replay['producers']['linuxSha256']
     assert jpeg_q['acceptedArtifactRebuildsAfterTiming'] == 0 and jpeg_q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert jpeg_replay['statusCounts'] == {'pass': 17, 'gap': 1, 'uncertain': 0}
-    jpeg_encoding_cases = jpeg_replay['cases']; assert len(jpeg_encoding_cases) == 18
-    assert jpeg_replay['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_encoding_cases.values())
-                                          for state in ('pass', 'gap', 'uncertain')}
+    # Only the17still-displayed/current adaptive cases retain this owner;
+    # its superseded restart measurements remain in the linked history.
+    jpeg_encoding_cases = {name: c for name, c in jpeg_replay['cases'].items() if name != 'Encode420Restart8'}
+    assert len(jpeg_encoding_cases) == 17 and all(c['status'] == 'pass' for c in jpeg_encoding_cases.values())
     for name, c in jpeg_encoding_cases.items():
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['librarySha256'] == jpeg_replay['producers']['linuxSha256']
@@ -1619,9 +1619,43 @@ def render():
     for c in jpeg_replay['comparison'].values():
         assert c['upper'] < 1 and c['pairs'] == 12 and c['operationsEachSubject'] == 64
         assert c['allActualsRetained'] and c['outputExact'] and c['independentConfirmationAfterShort']
-    assert jpeg_replay['restartReconciliation']['independentNativeNormalizedIntervalsSeparated']
-    assert not jpeg_replay['restartReconciliation']['productionRegressionDemonstrated']
     assert jpeg_replay['memory']['newHeapCapacityBytes'] == jpeg_replay['memory']['newRetainedBytes'] == 0
+    jpeg_direct = json.loads((ROOT / 'benchmarks/jpeg-direct-block-emission-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_direct['productionAccepted'] and jpeg_direct['allAffectedPerformanceReconciled']
+    assert jpeg_direct['requiredMaterialPaths'] == 289 and jpeg_direct['newMaterialPaths'] == 0
+    assert jpeg_direct['raw']['mirrored'] and jpeg_direct['raw']['allMembersVerified']
+    direct_q = jpeg_direct['qualification']
+    assert direct_q['fullChecksEachOs'] == direct_q['windows']['total'] == direct_q['linux']['total'] == 6648
+    assert direct_q['actualPackage']['sha256'] == direct_q['samePackageWindows']['sameActualPackageSha256']
+    assert direct_q['actualPackage']['actualConsumerPassed'] and direct_q['samePackageWindows']['actualConsumerPassed']
+    assert direct_q['actualPackage']['usageExamples'] == direct_q['samePackageWindows']['usageExamples'] == 3
+    assert direct_q['acceptedArtifactRebuildsAfterTiming'] == 0 and direct_q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert jpeg_direct['sourceProof']['allConfirmed'] and jpeg_direct['sourceProof']['privateCodeValidationAndBlockScheduleUnchangedFromA']
+    assert jpeg_direct['sourceProof']['generalInt32CategoryUnchanged'] and jpeg_direct['sourceProof']['completeDcDifferenceDomainChecked'] == 131071
+    assert set(jpeg_direct['reusedPassingAdaptiveCases']) == set(jpeg_encoding_cases)
+    for name, prior in jpeg_direct['reusedPassingAdaptiveCases'].items():
+        assert prior['librarySha256'] == jpeg_encoding_cases[name]['librarySha256'] and prior['status'] == 'pass'
+    direct_c = jpeg_direct['cases']['Encode420Restart8']
+    assert direct_c['librarySha256'] == jpeg_direct['producers']['linuxSha256'] == direct_q['actualPackage']['librarySha256']
+    assert direct_c['actualIterations'] == direct_c['nativeSamplesEachBracket'] == 12 and direct_c['allActualsRetained']
+    assert direct_c['allOriginalGatesPassed'] and direct_c['quietGuardsPassed'] and direct_c['sourceUnchanged'] and direct_c['independentOwnedOutput']
+    assert direct_c['completePacketExact'] and direct_c['metadataExceptionBytes'] == 2
+    assert (direct_c['managedPacketBytes'], direct_c['nativePacketBytes']) == (58010, 58012)
+    assert direct_c['status'] == 'pass' and direct_c['upper'] <= 1 and math.isclose(direct_c['ratio'], direct_c['managedUs']/direct_c['nativeUs'], rel_tol=1e-12)
+    comparison = jpeg_direct['comparison']
+    assert comparison['ratioUpper'] < 1 and comparison['pairs'] == 12 and comparison['operationsEachSubject'] == 64
+    assert comparison['allActualsRetained'] and comparison['independentConfirmationAfterShort'] and comparison['outputExact']
+    assert jpeg_direct['memory']['newHeapCapacityBytes'] == jpeg_direct['memory']['newRetainedBytes'] == 0
+    jpeg_encoding_cases['Encode420Restart8'] = direct_c
+    assert len(jpeg_encoding_cases) == 18 and all(c['status'] == 'pass' for c in jpeg_encoding_cases.values())
+    jpeg_direct_note = f"""[Direct JPEG block emission](../benchmarks/JPEG-DIRECT-BLOCK-EMISSION.md) closes
+the restart gap: **{direct_c['managedUs']:,.2f} / FFmpeg {direct_c['nativeUs']:,.2f} µs, upper {direct_c['upper']:.3f}**,
+**{direct_c['allocatedBytes']:,} B/op**, exact **58,010 / 58,012 B** packets with the strict metadata exception.
+All 18 declared JPEG encoding comparisons pass and stop; 17 adaptive controls
+reuse their unchanged paths and original artifact identities. Separate complete
+paired confirmations measure **19.21%** for block emission and **{100*comparison['rawReduction']:.2f}%** for bounded
+sign arithmetic. These successive effects are not added into a cumulative claim.
+No heap capacity or retention is added; validation and independent owners remain."""
     jpeg_labels = {
         'Encode444Stream8': 'JPEG 4:4:4, forward-only / exact reference',
         'Encode420Restart8': 'JPEG RGBA8 4:2:0, row restart33',
@@ -2869,14 +2903,7 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
-[Local JPEG entropy replay](../benchmarks/JPEG-LOCAL-ENTROPY-REPLAY.md) saves
-**10.49% / 167.72 µs** on complete caller-RGB420 encoding and **16.68% / 196.77 µs**
-on RGBA8→gray in independent paired confirmations. All 17 replay controls now pass;
-caller RGB420 is **1,431.80 / FFmpeg 1,578.72 µs, upper .912**, **388,222 B/op**.
-Exact packets and storage ownership remain; no heap capacity or retention is added.
-The existing row-restart control remains a **1.31× gap**, **151,179 B/op**; the
-unchanged contemporary original also has this gap. Its direct entropy path is
-the next attribution target. Previous caller uncertainty and stage costs remain history.
+{jpeg_direct_note}
 
 [Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
 **10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
@@ -2951,7 +2978,7 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,640 full/live checks**,
+storage, separately from its **138 B/op**. Each OS passes **6,648 full/live checks**,
 focused normal/scalar JPEG checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.

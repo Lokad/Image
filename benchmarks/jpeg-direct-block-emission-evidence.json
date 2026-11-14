@@ -1,0 +1,505 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "JBW969B",
+  "productionChanged": true,
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "30c1d83344f42cfcda9b5dc4ceda5e914563b722ac48857d13b1598805cbb52c",
+    "linuxSha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+    "actualPackageSha256": "cfe22bc6ddfc63f253a4a898f603d4361b6a87e5d95bd10577b6c4e7ea70077d"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "a167371596cb8b90a3d22b291f1a976996e37c95f101080a6c3857610b198b7f",
+    "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3ff301a6decc2f52f7cc5e33126ffbbf3546f745ffc095fe07bb04b8bb2e7372",
+    "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "8c07b185618e82f645840400dff10eea4d29e144940b5dc5cd5d022b91e7a06d",
+    "tests/Lokad.Image.Tests/JpegDirectBlockTests.cs": "8e6f338daed85c04cb79180517675692b54bbcca28f6a226590c126911cc52ed"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/Internal/JpegEncoder.ReferenceSubsampled.cs": "2c5e968b7e3c2a2d5d1c32643171f6d88142da8b1e9d485b653f3675d976fae5",
+    "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "0cf2b7670f3d980df0d0561d0a88527098f3b83e440405db409ec84cb51589f4",
+    "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9e1bdbda315bab8e404ffc54b454f09ef5a6adf65f5ffb9d7548dac58d9906a2",
+    "src/Lokad.Image/Internal/JpegFixedReferenceTables.cs": "f4b26cbb839f9f5fea5d280031da5eeebd6214938fd9384f126a309cc21a8394",
+    "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3ff301a6decc2f52f7cc5e33126ffbbf3546f745ffc095fe07bb04b8bb2e7372",
+    "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "8c07b185618e82f645840400dff10eea4d29e144940b5dc5cd5d022b91e7a06d"
+  },
+  "cases": {
+    "Encode420Restart8": {
+      "managedUs": 1339.2835514204544,
+      "nativeUs": 1609.1491380208333,
+      "ratio": 0.8322929924740854,
+      "lower": 0.8247227513994924,
+      "upper": 0.8408340934570477,
+      "status": "pass",
+      "allocatedBytes": 151180,
+      "managedPacketBytes": 58010,
+      "nativePacketBytes": 58012,
+      "packetSha256": "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4",
+      "metadataExceptionBytes": 2,
+      "completePacketExact": true,
+      "librarySha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "referenceLabel": "FFmpeg n8.1",
+      "boundary": "Resident original RGBA8 to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, 4:2:0 encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "boundaryClarification": "Original worker requests optimal Huffman, but its two serial slice contexts force the specification example tables in pinned FFmpeg n8.1. Native table expansion, codec/conversion/frame/scratch setup precede timing and remain retained. Managed fixed-table creation stays inside each complete public encode. Both sides flatten/convert and encode every source, acquire independent complete output and release it inside timing. No settings, output, workload or timing-boundary change.",
+      "nativeIdentity": {
+        "sourceSha256": "171c08214e2d15cf503fca1c447fd62dd42e93a439ad5f8ec0369a4c6722004a",
+        "buildScriptSha256": "6ba50147e7ffe22f85a397493d12f185a601621bcaa1125d2dd2dc86f8195c87",
+        "workerSha256": "5bfc5d08ba779337b22d691755cac0f9d1862087ea4c4c520c400bc4bdf09f4c"
+      }
+    }
+  },
+  "comparison": {
+    "originalUs": 1648.4785221354168,
+    "candidateUs": 1368.30726171875,
+    "savedUs": 280.1712604166669,
+    "rawReduction": 0.1699574830090821,
+    "ratioLower": 0.8235665639970343,
+    "ratioUpper": 0.8366229116570613,
+    "pairs": 12,
+    "operationsEachSubject": 64,
+    "allActualsRetained": true,
+    "independentConfirmationAfterShort": true,
+    "managedOnlyIncrementalComparison": true,
+    "outputExact": true,
+    "independentOwners": true
+  },
+  "diagnostics": {
+    "managedStatistics": {
+      "N": 11,
+      "Mean": 1339283.5514204544,
+      "StandardError": 331.82237824139065,
+      "ConfidenceInterval": {
+        "N": 11,
+        "Mean": 1339283.5514204544,
+        "StandardError": 331.82237824139065,
+        "Level": 12,
+        "Margin": 1522.0340284826968,
+        "Lower": 1337761.5173919718,
+        "Upper": 1340805.585448937
+      }
+    },
+    "unfilteredActualStatistics": {
+      "N": 12,
+      "Mean": 1341493.8260416666,
+      "StandardError": 2229.1667149854197,
+      "ConfidenceInterval": {
+        "N": 12,
+        "Mean": 1341493.8260416666,
+        "StandardError": 2229.1667149854197,
+        "Level": 12,
+        "Margin": 9890.766653445797,
+        "Lower": 1331603.0593882208,
+        "Upper": 1351384.5926951123
+      }
+    },
+    "nativeBrackets": [
+      {
+        "mean": 1612163.5729166667,
+        "standardError": 550.6774649871568,
+        "confidenceLower": 1609637.6738351427,
+        "confidenceUpper": 1614689.4719981907
+      },
+      {
+        "mean": 1609149.1380208333,
+        "standardError": 440.3559781864411,
+        "confidenceLower": 1607129.271889448,
+        "confidenceUpper": 1611169.0041522186
+      }
+    ],
+    "rawGc": "// GC:  1 0 0 24188656 160",
+    "rawReceipt": "tmp/jbw969b-candidate-Encode420Restart8-confirm-receipt.json",
+    "rawObservation": "tmp/jbw969b-candidate-Encode420Restart8-confirm-observation.json",
+    "details": "All actuals, native samples, complete receipts/guards and source/output checks remain in member-verified raw."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "JBW969B",
+    "allConfirmed": true,
+    "criticalWriterMethodsUnchanged": {
+      "private void Emit(": "70b4c76b92d7758f3b979f9ad38b01ae2ebdb7a0e7ebd62b2fe19033a73ea3d1",
+      "private void Flush(": "61d0d750c60ed73b5a07e5a70b8b11e8f3e22ebe6c806cd679bbfd9b17433272",
+      "public void Write(": "7f5650d3d30998b715e5c625faa5f9910a4d4df847d0bd830fd5b8fe050e0fb8",
+      "private void Append(": "17d26e73829b7a592509eb5967f6f07971799d3b322e5ede44e9914e44627bb2",
+      "internal void Replay(": "e699393244f32cbdf272a8d2ac481a90fa6739742cabb7f566dccc56ec504fdf",
+      "public void Align(": "10e548845519c0e6e0216a958841f192a00c87cdb99357c43659b0c977fe9e8e",
+      "public void Restart(": "33b799976cf2fefe17712ec508130417598e7c46bbe6f79feed16e542a283a28",
+      "public void Dispose(": "f413d7133b95239d5f6e0fbadb7049320336fd027b3164c8a39cfa40b70bba6c"
+    },
+    "referenceEntryPassRestartAndHeaderUnchanged": true,
+    "recordGenerationReplayAndPreparedBankSourcesUnchanged": true,
+    "unchangedSources": {
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceSubsampled.cs": "2c5e968b7e3c2a2d5d1c32643171f6d88142da8b1e9d485b653f3675d976fae5",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "0cf2b7670f3d980df0d0561d0a88527098f3b83e440405db409ec84cb51589f4",
+      "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "9e1bdbda315bab8e404ffc54b454f09ef5a6adf65f5ffb9d7548dac58d9906a2",
+      "src/Lokad.Image/Internal/JpegFixedReferenceTables.cs": "f4b26cbb839f9f5fea5d280031da5eeebd6214938fd9384f126a309cc21a8394",
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3ff301a6decc2f52f7cc5e33126ffbbf3546f745ffc095fe07bb04b8bb2e7372",
+      "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "8c07b185618e82f645840400dff10eea4d29e144940b5dc5cd5d022b91e7a06d"
+    },
+    "noNewHeapOrRetainedCapacity": true,
+    "privateFailedWriterNotResumed": true,
+    "sourceScope": "Targeted affected methods and their actual three callers only; not a whole-library method audit.17existing513x259default adaptive controls select records and bypass ReferenceBlock. ReferencePass/Subsampled/Gray, generated tables/RecordBlock, replay, packing, output storage and disposal remain source-identical on those paths. Existing direct/recompute correctness is affected and requalified; current restart cost must refresh.",
+    "reuse": "Retain17valid JER967adaptive comparisons and their original artifact identities. No full-release timing refresh or universal pixel/content claim. Source-identical arithmetic/ISA paths retain qualification; normal/scalar direct tests cover the new body.",
+    "privateCodeValidationAndBlockScheduleUnchangedFromA": true,
+    "boundedIntegerProof": "AC values are Int16. Each private previousDC slot starts at0, is cleared at restart and is assigned an Int16 coefficient on block entry. DC differences therefore lie in[-65535,65535], excluding int.MinValue. sign=value>>31; magnitude=(value^sign)-sign fits[0,65535]; count=32-LeadingZeroCount((uint)magnitude) lies[0,16]; amplitude=value+(sign&((1<<count)-1)) equals the T.81 signed complement, in[0,2^count). No input or table validation is removed.",
+    "generalInt32CategoryUnchanged": true,
+    "completeDcDifferenceDomainChecked": 131071
+  },
+  "firstStage": {
+    "raw": {
+      "file": "jpeg-direct-block-emission-qualified.tar.xz",
+      "sha256": "f252d3e2f4080d9521fce162cf63d5016ef6b7dbc10c1fe8e8c88fc251bf4b62",
+      "bytes": 13700808,
+      "members": 311,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "jpeg-local-entropy-replay-qualified.tar.xz",
+          "sha256": "027a47771b282a9fadcad54cfdb989b9cd58a723974d90dd23477a84d2f554b0"
+        },
+        {
+          "file": "jpeg-restart-current-entropy-attribution.tar.xz",
+          "sha256": "96ee0fcba0150a66ff4bf179bc55d8b9d6ea8f371337bd3b2333af25a2d07fd9"
+        }
+      ]
+    },
+    "comparison": {
+      "originalUs": 2059.7561067708334,
+      "candidateUs": 1664.0036575520833,
+      "savedUs": 395.75244921875014,
+      "rawReduction": 0.19213558727551872,
+      "ratioLower": 0.8047130186766958,
+      "ratioUpper": 0.8110540136839903,
+      "pairs": 12,
+      "operationsEachSubject": 64,
+      "allActualsRetained": true,
+      "independentConfirmationAfterShort": true,
+      "managedOnlyIncrementalComparison": true,
+      "outputExact": true,
+      "independentOwners": true
+    },
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "JBW969",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "a135f624785d6959f80a62836dbac6b77ebc6a3d7f7381aac7e76d56113f4521",
+      "symbolsSha256": "5726f9046d655c4577bcf88e1d009e2fedd16d7ebf12376ce205e09a88f89f5f",
+      "bytes": 460627,
+      "librarySha256": "49030408a8cd29282175c3d650a433dbb6b7ef83e5743eadd1d78670204c9e10",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for the complete restart paired screen/confirmation and standalone native confirmation;17unchanged adaptive costs retain their original artifact identities. No post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "qualificationEachOs": 6647
+  },
+  "reusedPassingAdaptiveCases": {
+    "Encode422_8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode420Stream8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode422_16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode420Stream16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode420Cancelable16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode420_8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode420_16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "GovernedRGBA16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "JpegRgb420AsyncSamples": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "CallerRGB420": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode16": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode444Cancelable8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Jpeg8AsyncNonSeekable": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "CallerGray": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "Encode444Stream8": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    },
+    "RgbaGray": {
+      "librarySha256": "1afc91badd4eff3faa1ac2166b6ea24fc06f22c2e0306021b168eac1141c24d4",
+      "status": "pass"
+    }
+  },
+  "reusedEvidence": "jpeg-local-entropy-replay-evidence.json",
+  "memory": {
+    "newHeapCapacityBytes": 0,
+    "newRetainedBytes": 0,
+    "writerAdmittedBytes": 640,
+    "writerBufferCapacityBytes": 512,
+    "writerRetainedAfterDisposalBytes": 0,
+    "tableOwnerBytes": 16384,
+    "coefficientPoolCeilingBytes": 4194304,
+    "physicalNativeJitPeaksMeasured": false,
+    "allocationIsNotCapacityOrRetention": true,
+    "storagePolicy": "Direct block locals and borrowed private code/length array references only. Buffer/context/output lifetimes and admission unchanged; no frame records, new cache or session. Adaptive4KiB stack bank and its16KiB owner unchanged. Existing coefficient pool and caller-root bypass unchanged."
+  },
+  "qualification": {
+    "fullChecksEachOs": 6648,
+    "internalChecks": 3254,
+    "publicChecks": 2446,
+    "liveChecks": 948,
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JBW969B",
+      "platform": "windows",
+      "productionSha256": "30c1d83344f42cfcda9b5dc4ceda5e914563b722ac48857d13b1598805cbb52c",
+      "embeddedTestsSha256": "8135478b90a9d049a993b656e75b5829d4e5dbb51ab41ce47ed831c2cc0ca973",
+      "full": [
+        3254,
+        2446,
+        948
+      ],
+      "total": 6648,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 472,
+        "public-normal": 379,
+        "internal-scalar": 472,
+        "public-scalar": 379
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JBW969B",
+        "platform": "windows",
+        "productionSha256": "30c1d83344f42cfcda9b5dc4ceda5e914563b722ac48857d13b1598805cbb52c",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "a167371596cb8b90a3d22b291f1a976996e37c95f101080a6c3857610b198b7f",
+          "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3ff301a6decc2f52f7cc5e33126ffbbf3546f745ffc095fe07bb04b8bb2e7372",
+          "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "8c07b185618e82f645840400dff10eea4d29e144940b5dc5cd5d022b91e7a06d",
+          "tests/Lokad.Image.Tests/JpegDirectBlockTests.cs": "8e6f338daed85c04cb79180517675692b54bbcca28f6a226590c126911cc52ed"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 472,
+          "public-normal": 379,
+          "internal-scalar": 472,
+          "public-scalar": 379
+        },
+        "logs": [
+          "tmp/jbw969b-windows-build-core.log",
+          "tmp/jbw969b-windows-build-internal.log",
+          "tmp/jbw969b-windows-internal-normal.log",
+          "tmp/jbw969b-windows-public-normal.log",
+          "tmp/jbw969b-windows-internal-scalar.log",
+          "tmp/jbw969b-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedDecoderPngWebpResizeDrawingTextEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JBW969B",
+      "platform": "linux",
+      "productionSha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+      "embeddedTestsSha256": "7bb5097be5501613ed014160e427590012d9e3f7eefb1820ad4d12527ab6379b",
+      "full": [
+        3254,
+        2446,
+        948
+      ],
+      "total": 6648,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 472,
+        "public-normal": 379,
+        "internal-scalar": 472,
+        "public-scalar": 379
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JBW969B",
+        "platform": "linux",
+        "productionSha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "a167371596cb8b90a3d22b291f1a976996e37c95f101080a6c3857610b198b7f",
+          "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3ff301a6decc2f52f7cc5e33126ffbbf3546f745ffc095fe07bb04b8bb2e7372",
+          "tests/Lokad.Image.Tests/JpegEntropyWriterTests.cs": "8c07b185618e82f645840400dff10eea4d29e144940b5dc5cd5d022b91e7a06d",
+          "tests/Lokad.Image.Tests/JpegDirectBlockTests.cs": "8e6f338daed85c04cb79180517675692b54bbcca28f6a226590c126911cc52ed"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 472,
+          "public-normal": 379,
+          "internal-scalar": 472,
+          "public-scalar": 379
+        },
+        "logs": [
+          "tmp/jbw969b-linux-build-core.log",
+          "tmp/jbw969b-linux-build-internal.log",
+          "tmp/jbw969b-linux-internal-normal.log",
+          "tmp/jbw969b-linux-public-normal.log",
+          "tmp/jbw969b-linux-internal-scalar.log",
+          "tmp/jbw969b-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedDecoderPngWebpResizeDrawingTextEvidenceReused": true
+    },
+    "focusedInternalEachMode": 472,
+    "focusedPublicEachMode": 379,
+    "focusedModes": [
+      "normal",
+      "scalar"
+    ],
+    "newInternalCases": 8,
+    "unchangedArithmeticIsaQualificationReused": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "JBW969B",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "cfe22bc6ddfc63f253a4a898f603d4361b6a87e5d95bd10577b6c4e7ea70077d",
+      "symbolsSha256": "6ccf7ee9c4d5b1f7e412b86fffa82c9a6067555d47bbcfc011741a35f2657efc",
+      "bytes": 460646,
+      "librarySha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for the complete restart paired screen/confirmation and standalone native confirmation;17unchanged adaptive costs retain their original artifact identities. No post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "JBW969B",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "cfe22bc6ddfc63f253a4a898f603d4361b6a87e5d95bd10577b6c4e7ea70077d",
+      "symbolsSha256": "6ccf7ee9c4d5b1f7e412b86fffa82c9a6067555d47bbcfc011741a35f2657efc",
+      "bytes": 460646,
+      "librarySha256": "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for the complete restart paired screen/confirmation and standalone native confirmation;17unchanged adaptive costs retain their original artifact identities. No post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "cfe22bc6ddfc63f253a4a898f603d4361b6a87e5d95bd10577b6c4e7ea70077d"
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "existingPackageRestartAndTightRecomputePacketsAndAdmissionPassed": true
+  },
+  "nativePreparationAudit": {
+    "ffmpegTag": "n8.1",
+    "ffmpegCommit": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "sourceIdentities": {
+      "libavcodec/mjpegenc.c": "b3ef1046caed56c3ef856e065b4f1f568893fac25fc959c413696467364e8b65",
+      "libavcodec/mjpegenc_common.c": "f9aa38fc4686138c8e3e027f8d863fdff61c5e60a361bb063f9a63b6e75196a2",
+      "libavcodec/mpegvideo.c": "a7ce93cd207d924914ce9544b72d311a30e0427db0361908a168d3d3de59ee92"
+    },
+    "workerSourceSha256": "171c08214e2d15cf503fca1c447fd62dd42e93a439ad5f8ec0369a4c6722004a",
+    "sourceInsightOnly": true,
+    "upstreamSourcesNeverBuildInputs": true,
+    "requestedHuffman": "optimal",
+    "effectiveHuffman": "T.81 example fixed tables: two serial slice contexts force HUFFMAN_TABLE_DEFAULT during encoder initialization",
+    "nativeSetupExcluded": "Native codec/conversion contexts, frame/scratch wrappers and table expansion are prepared before clocked samples.",
+    "managedSetupIncluded": "All fixed-table creation and quantization preparation remain inside every public EncodeJpeg call.",
+    "status": "Current comparison retained and labeled accurately. Source inspection is not attributable elapsed time, a new one-shot comparison, a session justification or a phase-sum speed claim."
+  },
+  "boundedIntegerProof": "AC values are Int16. Each private previousDC slot starts at0, is cleared at restart and is assigned an Int16 coefficient on block entry. DC differences therefore lie in[-65535,65535], excluding int.MinValue. sign=value>>31; magnitude=(value^sign)-sign fits[0,65535]; count=32-LeadingZeroCount((uint)magnitude) lies[0,16]; amplitude=value+(sign&((1<<count)-1)) equals the T.81 signed complement, in[0,2^count). No input or table validation is removed.",
+  "implementation": "One writer-owned direct coefficient-block emitter holds reservoir and component code/length arrays locally, combines code/amplitude appends using the unchanged packing kernel and publishes on block success. Failed private state is abandoned at the established encoder boundary. A single bounded sign mask computes magnitude and negative amplitude; all Code validation remains. Separate histogram-only helpers lose unused writer/table dispatch. Unused internal Signed wrapper is removed; meaningful payload and actual block-sign coverage remain. No production dependency, unsafe/native code, full-frame cache, extra histogram pass, emitter framework or owned capacity.",
+  "workflow": "Two immutable core/internal builds per OS cover A+B; final B has no post-timing rebuild. One paired helper build in A is reused by B; all prepared harness/native/fixture inputs reused. One short3pair screen and independent12pair confirmation,64complete operations per subject, all pairs retained. One standalone12actual/12native-per-bracket capture per changed candidate; final B confirms restart parity before broad/package qualification. The Aqualification/archive remain as retained transition evidence.17unchanged adaptive costs are reused, not retimed. No failed implementation or timing retries in this round. Actual package/no-rebuild proof and all3examples on bothOS. Old paired and standalone clocks are not combined into a pipeline claim.",
+  "raw": {
+    "file": "jpeg-bounded-block-emission-qualified.tar.xz",
+    "sha256": "1f818a00b99bcabf97b14fe440165b18c1f485fa9c9d396f8a8ce29b617b3573",
+    "bytes": 8569520,
+    "members": 256,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-direct-block-emission-qualified.tar.xz",
+        "sha256": "f252d3e2f4080d9521fce162cf63d5016ef6b7dbc10c1fe8e8c88fc251bf4b62"
+      },
+      {
+        "file": "jpeg-direct-preparation-attribution.tar.xz",
+        "sha256": "4c8967511287fe3826a0a7d22e739678e61a7023fa967129b08cb00d66df7506"
+      }
+    ]
+  },
+  "previousEvidence": "jpeg-local-entropy-replay-evidence.json",
+  "next": "Keep all17adaptive passes stopped. All18declaredJPEGencode controls now pass/stop, with exact packets. Continue with a bounded audit of the existing VP8L opaque-RGBA8 confidence evidence before any revised measurement or optimization; its material uncertainty is not a demonstrated gap. Keep native preparation boundaries explicit and all289paths required; no session or new workload grid."
+}
