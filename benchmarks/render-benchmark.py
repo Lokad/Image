@@ -2030,10 +2030,10 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert not adjacent_confidence['productionChanged'] and not adjacent_confidence['productionSpeedupClaim']
     assert adjacent_confidence['raw']['mirrored'] and adjacent_confidence['raw']['allMembersVerified']
     assert set(adjacent_confidence['cases']) == {'alpha', 'alpha16', 'Up16'}
-    for case in adjacent_confidence['cases'].values():
+    for name, case in adjacent_confidence['cases'].items():
         assert case['actualPairs'] == case['nativeBatchesEachBracket'] == 12 and case['allActualsRetained']
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['independentOwnedOutputs']
-        assert case['librarySha256'] == adjacent_confidence['producers']['windowsSha256']
+        assert case['librarySha256'] == adjacent_confidence.get('caseProducers', {}).get(name, adjacent_confidence['producers']['windowsSha256'])
         assert case['retainedOperationScratchBytes'] == 0
     alpha_current = adjacent_confidence['cases']['alpha']
     assert alpha_current['upper'] <= 1 and alpha_current['status'] == 'pass'
@@ -2043,12 +2043,16 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert alpha_current['packetSha256'] == alpha_current['nativeOutputSha256']
     webp_owned['cases']['alpha'] = alpha_current
     alpha16_current = adjacent_confidence['cases']['alpha16']
-    assert alpha16_current['lower'] <= 1 < alpha16_current['upper'] and alpha16_current['status'] == 'uncertain'
-    assert alpha16_current['operationsPerSubject'] == 4 and alpha16_current['fullSourceNormalizationTimed']
+    assert alpha16_current['upper'] <= 1 and alpha16_current['status'] == 'pass'
+    assert alpha16_current['operationsPerSubject'] == 16 and alpha16_current['fullSourceNormalizationTimed']
     assert alpha16_current['completePacketExact'] and alpha16_current['alphaExact']
     assert alpha16_current['managedPacketBytes'] == alpha16_current['nativePacketBytes'] == 98590
     assert alpha16_current['packetSha256'] == alpha16_current['nativeOutputSha256']
     assert alpha16_current['raw']['mirrored'] and alpha16_current['raw']['allMembersVerified']
+    alpha16_q = adjacent_confidence['caseQualificationReused']['alpha16']
+    assert alpha16_current['librarySha256'] == alpha16_q['sourceLibrarySha256']
+    assert alpha16_q['fullChecksEachOs'] == 6683 and alpha16_q['sameActualPackageConsumerBothOsPassed']
+    assert alpha16_q['usageExamplesEachOs'] == 3 and alpha16_q['broadOrPackageRepeats'] == 0
     webp_owned['cases']['alpha16'] = alpha16_current
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['requiredMaterialPaths'] == 283
@@ -2088,16 +2092,16 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     opaque_evidence = json.loads((ROOT / 'benchmarks/webp-opaque-current-confidence-evidence.json').read_text(encoding='utf-8'))
     opaque = opaque_evidence['current']
     assert not opaque_evidence['productionChanged'] and not opaque_evidence['productionSpeedupClaim']
-    assert opaque_evidence['requiredMaterialPaths'] == 289 and opaque_evidence['workflow']['driverBuilds'] == 1
-    assert opaque_evidence['workflow']['onlyDriverAllowlistExtended'] and opaque_evidence['workflow']['productionEmbeddedPublicHarnessNativeFixtureOrPackageBuilds'] == 0
+    assert opaque_evidence['requiredMaterialPaths'] == 289 and opaque_evidence['workflow']['driverBuilds'] == 0
+    assert opaque_evidence['workflow']['longerFixedBatchOnly'] and opaque_evidence['workflow']['productionEmbeddedPublicHarnessNativeFixtureOrPackageBuilds'] == 0
     assert opaque_evidence['raw']['mirrored'] and opaque_evidence['raw']['allMembersVerified']
-    assert opaque['status'] == 'uncertain' and opaque['lower'] <= 1 < opaque['upper']
-    assert opaque['actualIterations'] == opaque['nativeSamplesEachBracket'] == 12 and opaque['pairedOperationsPerSubject'] == 4
+    assert opaque['status'] == 'pass' and opaque['upper'] <= 1
+    assert opaque['actualIterations'] == opaque['nativeSamplesEachBracket'] == 12 and opaque['pairedOperationsPerSubject'] == 16
     assert opaque['allActualsRetained'] and opaque['allOriginalGatesPassed'] and opaque['quietGuardsPassed']
     assert opaque['managedExact'] and opaque['completePacketExact'] and opaque['independentOwnedOutput']
     assert opaque['managedPacketBytes'] == opaque['nativePacketBytes'] == 121896
     assert opaque['packetSha256'] == opaque['nativePacketSha256']
-    assert opaque['librarySha256'] == opaque_evidence['producers']['windows'] == opaque_evidence['qualificationReused']['actualPackage']['librarySha256']
+    assert opaque['librarySha256'] == opaque_evidence['producers']['linux'] == opaque_evidence['qualificationReused']['actualPackage']['librarySha256']
     assert opaque['retainedOperationScratchBytes'] == 0
     webp_owned['cases']['opaque'] = opaque
     for case, label in current_labels.items():
@@ -2111,7 +2115,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     lossless_status_counts = {state: sum((photo if name == 'photograph' else case)['status'] == state
                                          for name, case in webp_owned['cases'].items())
                               for state in ('pass', 'gap', 'uncertain')}
-    assert lossless_status_counts == {'pass': 6, 'gap': 0, 'uncertain': 2}
+    assert lossless_status_counts == {'pass': 8, 'gap': 0, 'uncertain': 0}
     vp8_labels = {
         'opaque8': 'VP8 opaque RGBA8',
         'opaque16': 'VP8 opaque RGBA16, including normalization',
@@ -2151,7 +2155,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                                    else vp8_encode_cases[case])['status'] == state
                                   for case in vp8_encode_cases)
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_status_counts == vp8_confidence['currentLossyStatusCounts'] == {'pass': 6, 'gap': 0, 'uncertain': 3}
+    assert vp8_status_counts == {'pass': 7, 'gap': 0, 'uncertain': 2}
     selected_cost = vp8_current['cases']['selected']
     distortion_cost = vp8_current['cases']['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
@@ -2894,6 +2898,14 @@ stream captures remain linked beside their current confirmations.
 [VP8/alpha stream confidence](../benchmarks/VP8-STREAM-CURRENT-CONFIDENCE.md)
 also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
 **240,496 B/op**. No builds or production change; this control stops.
+
+[Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
+**67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
+One prespecified longer batch resolves uncertainty on the actual package DLL,
+with zero builds or qualification repeats; no production speedup is claimed.
+All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM-ADJACENT-CONFIDENCE.md)
+now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
+**98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
 {owned_copy_note}
 

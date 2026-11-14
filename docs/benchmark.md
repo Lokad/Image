@@ -39,6 +39,14 @@ stream captures remain linked beside their current confirmations.
 also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
 **240,496 B/op**. No builds or production change; this control stops.
 
+[Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
+**67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
+One prespecified longer batch resolves uncertainty on the actual package DLL,
+with zero builds or qualification repeats; no production speedup is claimed.
+All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM-ADJACENT-CONFIDENCE.md)
+now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
+**98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
+
 [Word clone copying](../benchmarks/WORD-CLONE-COPY.md) reuses the existing safe
 vector copier with one checked equal-length destination view. Independent complete
 pairs confirm **1.71% / 0.297 µs** for word clone and **4.45% / 0.249 µs** for its
@@ -145,9 +153,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8 diagram, effort2 / distortion-only search † | 2,492.72 | 2,512.68 | 0.992 / 1.001 | 406,664 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 52,994.15 | 53,664.11 | 0.988 / 0.998 | 6,241,792 | 98,590 / 98,590 |
-| VP8 RGBA16 + alpha, including normalization † | 53,395.51 | 53,304.90 | 1.002 / 1.008 | 6,241,792 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 52,408.00 | 54,009.89 | 0.970 / 0.979 | 6,241,792 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 107,509.18 | 126,289.11 | 0.851 / 0.910 | 5,948,664 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 73,406.90 | 73,496.23 | 0.999 / 1.070 | 4,822,760 | 121,896 / 121,896 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 67,959.20 | 69,456.89 | 0.978 / 0.985 | 4,822,760 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,887.12 | 17,258.24 | 0.978 / 0.992 | 815,716 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 19,824.87 | 20,956.16 | 0.946 / 0.958 | 2,432,924 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,111.01 | 4,361.68 | 0.943 / 0.963 | 816,180 | 236,828 / 236,828 |

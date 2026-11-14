@@ -224,6 +224,195 @@
       "caseId": "alpha16",
       "harness": "WarmWebp",
       "harnessCase": "Encode16",
+      "managedUs": 52407.9996875,
+      "nativeUs": 54009.885557291665,
+      "ratio": 0.970340876429141,
+      "lower": 0.9604176207502516,
+      "upper": 0.978941407992686,
+      "status": "pass",
+      "allocatedBytes": 6241792,
+      "actualPairs": 12,
+      "operationsPerSubject": 16,
+      "nativeBatchesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "independentOwnedOutputs": true,
+      "librarySha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "driverSha256": "bc427928f73013c023d5f6c361f4df04eca59de19e2a06aa54fee7b07bc0049a",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "nativeOutputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativeBracketMeansUs": [
+        54096.81864583334,
+        54081.029359375,
+        54009.885557291665
+      ],
+      "pairedRatioConfidence": [
+        0.9613688573487352,
+        0.9767923436335336
+      ],
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "webp-encode",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "threadType": 0,
+        "activeThreadType": 0,
+        "conversionThreads": 1,
+        "quality": 75,
+        "effort": 4,
+        "lossless": false,
+        "inputFormat": "BGRA",
+        "repackingTimed": true,
+        "fullSourceNormalizationTimed": true,
+        "normalizedReferenceExact": true,
+        "outputBytes": 98590,
+        "initialCompletedOperations": 3,
+        "independentLiveOutputs": true,
+        "bitstreamDeterministic": true,
+        "ffmpegVersion": "n8.1",
+        "avcodecVersion": 4070500
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm WebP FFmpeg worker",
+        "sourceSha256": "3445143526f882258ad469cd78045228e9aea251e03adc8d0659fd2b6d52844c",
+        "buildScriptSha256": "f930165b1f364f20234e387785aef20cdb300d4fdd023a05d3976cbac3aca5c1",
+        "workerSha256": "c98be0777528a2c5948227d4f125b30253f3882e9785406e1e5432b3de3c909f",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavutil -lm -lz -latomic -pthread"
+      },
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "receiptFile": "wac982-alpha16-long-batch-receipt.json",
+      "rawStatisticsFile": "wac982-alpha16-long-batch.json",
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "completePacketExact": true,
+      "alphaExact": true,
+      "fullSourceNormalizationTimed": true,
+      "retainedOperationScratchBytes": 0,
+      "newCapacityOrRetentionAddedBytes": 0,
+      "governedPeakNotRemeasuredForThisDepth": true,
+      "raw": {
+        "file": "webp-alpha16-long-batch-confidence.tar.xz",
+        "sha256": "016bf4c64d1a72eabe61508f567f4f56572fe6f4ba61532b2c25dcc16b37178d",
+        "bytes": 28924,
+        "members": 14,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "webp-alpha16-current-confidence.tar.xz",
+            "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b"
+          },
+          {
+            "file": "word-clone-copy-qualified.tar.xz",
+            "sha256": "9596f8228d0e67e0e9973d78f2e4fe571a86a8ea59be76204bd19640b81e03f9"
+          }
+        ]
+      }
+    }
+  },
+  "method": "Twelve alternating adjacent managed/native pairs, all actuals retained, fixed batches4alpha/alpha16 and64Up16. Twelve native batches before/after. Worse of paired log confidence and all-actual/diagnostic managed confidence against faster before/paired/after native bracket; unchanged confidence thresholds. Complete original public benchmark methods,16bit normalization and independent output/disposal stay timed; declared native wrappers/contexts/scratch retained. WAC982 supersedes only alpha16 with a prespecified16operation batch/current actual package; unchanged alpha/Up16 producers and costs remain.",
+  "qualificationReused": {
+    "evidence": "bilinear-vector-certification-evidence.json",
+    "fullChecksEachOs": 6253,
+    "sameActualPackageBothOsAndAllThreeExamples": true,
+    "currentImmutablePackageSha256": "f22ab4015ca38494228059978b8fa7e0899f7786ae5fec485cb7c52c9976f98f",
+    "productionEmbeddedNativeAndFixtureBuilds": 0
+  },
+  "allocation": "Direct per-thread counters bracket complete method batches. Counter differences versus earlier BDN observations are reported, not savings or new capacity. Peak and retained state remain separate; physical/native/JIT peaks are not remeasured.",
+  "workflow": {
+    "driverBuilds": 1,
+    "driverReusedForBothRequiredControls": true,
+    "newTimedCasesOrImages": 0,
+    "successfulTimingsRepeated": 0,
+    "qualificationAndPackageRepeats": 0,
+    "alphaCompletedCaptureRecoveredAfterReceiptPrefixFixWithoutRemeasurement": true,
+    "wordAlphaReusesExistingDriverWithoutAnyBuild": true,
+    "wordAlphaCaseSpecificHarnessPreflightResolvedBeforeTiming": true
+  },
+  "raw": {
+    "file": "warm-adjacent-current-confidence.tar.xz",
+    "sha256": "580bfd3573ace40973bed1ae61c7f4365e47b4af085ea83702f5ca695b4a42fa",
+    "bytes": 1093116,
+    "members": 57,
+    "dependencies": [
+      {
+        "file": "bilinear-vector-certification.tar.xz",
+        "sha256": "8cddc33d352357b64ee0c493182746fc78cd6e276aa951387a6dff8d5681b6a5",
+        "scope": "Actual immutable6ef/29ca/packagef22 and6253W/L/SAMEpackage qualification plus frozen Up16 inputs/reference dependencies."
+      },
+      {
+        "file": "webp-huffman-workspace-qualified.tar.xz",
+        "sha256": "83757ae5ab3160e288d61f6fc70168a643ec8f7541152275526f3edc10fc0fc1",
+        "scope": "Unchanged alpha producer, exact98590B control, native settings/worker/fixture and3,656,309B admitted peak. New alpha current cost supersedes its global-bracket uncertainty."
+      },
+      {
+        "file": "webp-lossless-photograph-current-confidence.tar.xz",
+        "sha256": "175e9e30b3a8e4d790080584a3867cf057dbf96711a1b3dc3e96b6da7efe2876",
+        "scope": "Original authored Wpc299 adjacent methodology and prior driver identity. Photograph stays passed/stopped; no remeasurement."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Byte alpha passes/stops. Word alpha (.991\u20131.008) and Up16 (.884\u20131.013) remain uncertain after their first adjacent captures; no unchanged repeat or presumed gap/tuning. Continue demonstrated default bicubic execution/preparation work; all289paths remain.",
+  "supplementalRaw": {
+    "file": "webp-alpha16-current-confidence.tar.xz",
+    "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b",
+    "bytes": 442280,
+    "members": 24,
+    "dependencies": [
+      {
+        "file": "bilinear-vector-certification.tar.xz",
+        "sha256": "8cddc33d352357b64ee0c493182746fc78cd6e276aa951387a6dff8d5681b6a5",
+        "scope": "Actual immutable6ef/29ca/packagef22 and6253W/L/SAMEpackage proof; current production source/module qualification."
+      },
+      {
+        "file": "warm-adjacent-current-confidence.tar.xz",
+        "sha256": "580bfd3573ace40973bed1ae61c7f4365e47b4af085ea83702f5ca695b4a42fa",
+        "scope": "Same parameterized driver source/project/binary and statistical dependencies, transitive frozen VP8 normalization/alpha/settings/packet/refworker. No driver build."
+      }
+    ],
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "previousMeasurements": {
+    "alpha16": {
+      "caseId": "alpha16",
+      "harness": "WarmWebp",
+      "harnessCase": "Encode16",
       "managedUs": 53395.5109375,
       "nativeUs": 53304.90075,
       "ratio": 1.0016998472227716,
@@ -345,69 +534,89 @@
       }
     }
   },
-  "method": "Twelve alternating adjacent managed/native pairs, all actuals retained, fixed batches4alpha/alpha16 and64Up16. Twelve native batches before/after. Worse of paired log confidence and all-actual/diagnostic managed confidence against faster before/paired/after native bracket; unchanged confidence thresholds. Complete original public benchmark methods,16bit normalization and independent output/disposal stay timed; declared native wrappers/contexts/scratch retained.",
-  "qualificationReused": {
-    "evidence": "bilinear-vector-certification-evidence.json",
-    "fullChecksEachOs": 6253,
-    "sameActualPackageBothOsAndAllThreeExamples": true,
-    "currentImmutablePackageSha256": "f22ab4015ca38494228059978b8fa7e0899f7786ae5fec485cb7c52c9976f98f",
-    "productionEmbeddedNativeAndFixtureBuilds": 0
+  "caseProducers": {
+    "alpha16": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6"
   },
-  "allocation": "Direct per-thread counters bracket complete method batches. Counter differences versus earlier BDN observations are reported, not savings or new capacity. Peak and retained state remain separate; physical/native/JIT peaks are not remeasured.",
-  "workflow": {
-    "driverBuilds": 1,
-    "driverReusedForBothRequiredControls": true,
-    "newTimedCasesOrImages": 0,
-    "successfulTimingsRepeated": 0,
-    "qualificationAndPackageRepeats": 0,
-    "alphaCompletedCaptureRecoveredAfterReceiptPrefixFixWithoutRemeasurement": true,
-    "wordAlphaReusesExistingDriverWithoutAnyBuild": true,
-    "wordAlphaCaseSpecificHarnessPreflightResolvedBeforeTiming": true
+  "caseQualificationReused": {
+    "alpha16": {
+      "evidence": "word-clone-copy-evidence.json",
+      "sourceLibrarySha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+      "actualPackageSha256": "ee4bc932422375b8d7865fcc35af44e03de6e0d66cf3bc5cf03f942d7670c968",
+      "fullChecksEachOs": 6683,
+      "windowsFullLivePassed": true,
+      "linuxFullLivePassed": true,
+      "sameActualPackageConsumerBothOsPassed": true,
+      "usageExamplesEachOs": 3,
+      "broadOrPackageRepeats": 0
+    }
   },
-  "raw": {
-    "file": "warm-adjacent-current-confidence.tar.xz",
-    "sha256": "580bfd3573ace40973bed1ae61c7f4365e47b4af085ea83702f5ca695b4a42fa",
-    "bytes": 1093116,
-    "members": 57,
-    "dependencies": [
-      {
-        "file": "bilinear-vector-certification.tar.xz",
-        "sha256": "8cddc33d352357b64ee0c493182746fc78cd6e276aa951387a6dff8d5681b6a5",
-        "scope": "Actual immutable6ef/29ca/packagef22 and6253W/L/SAMEpackage qualification plus frozen Up16 inputs/reference dependencies."
-      },
-      {
-        "file": "webp-huffman-workspace-qualified.tar.xz",
-        "sha256": "83757ae5ab3160e288d61f6fc70168a643ec8f7541152275526f3edc10fc0fc1",
-        "scope": "Unchanged alpha producer, exact98590B control, native settings/worker/fixture and3,656,309B admitted peak. New alpha current cost supersedes its global-bracket uncertainty."
-      },
-      {
-        "file": "webp-lossless-photograph-current-confidence.tar.xz",
-        "sha256": "175e9e30b3a8e4d790080584a3867cf057dbf96711a1b3dc3e96b6da7efe2876",
-        "scope": "Original authored Wpc299 adjacent methodology and prior driver identity. Photograph stays passed/stopped; no remeasurement."
-      }
-    ],
-    "mirrored": true,
-    "allMembersVerified": true
-  },
-  "next": "Byte alpha passes/stops. Word alpha (.991\u20131.008) and Up16 (.884\u20131.013) remain uncertain after their first adjacent captures; no unchanged repeat or presumed gap/tuning. Continue demonstrated default bicubic execution/preparation work; all289paths remain.",
-  "supplementalRaw": {
-    "file": "webp-alpha16-current-confidence.tar.xz",
-    "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b",
-    "bytes": 442280,
-    "members": 24,
-    "dependencies": [
-      {
-        "file": "bilinear-vector-certification.tar.xz",
-        "sha256": "8cddc33d352357b64ee0c493182746fc78cd6e276aa951387a6dff8d5681b6a5",
-        "scope": "Actual immutable6ef/29ca/packagef22 and6253W/L/SAMEpackage proof; current production source/module qualification."
-      },
-      {
-        "file": "warm-adjacent-current-confidence.tar.xz",
-        "sha256": "580bfd3573ace40973bed1ae61c7f4365e47b4af085ea83702f5ca695b4a42fa",
-        "scope": "Same parameterized driver source/project/binary and statistical dependencies, transitive frozen VP8 normalization/alpha/settings/packet/refworker. No driver build."
-      }
-    ],
-    "mirrored": true,
-    "allMembersVerified": true
+  "latestWordAlpha": {
+    "stage": "WAC982",
+    "productionChanged": false,
+    "productionSpeedupClaim": false,
+    "design": {
+      "project": "Lokad.Image",
+      "stage": "WAC982",
+      "productionChanged": false,
+      "productionSpeedupClaim": false,
+      "requiredMaterialPaths": 289,
+      "newMaterialPaths": 0,
+      "reason": "One prespecified longer16operation batch for the existing uncertain53msRGBA16 VP8/lossless-alpha control. Its four-operation213ms blocks and native bracket means53.417/53.475/53.305ms yield conservative confidence .991..1.008, leaving the expensive path unresolved. Preserve timed full16bit normalization and exact98590Bpacket. Longer complete batches change integration duration and warmup work coherently, not inputs/settings/statistics. Amortize block scheduling/collection cadence without excluding natural GC; no claim that these cause the old variation. Not an unchanged favorable retry.",
+      "previousManagedBlockUs": [
+        53563.7825,
+        53274.36675,
+        53246.8675,
+        53456.633,
+        53283.83875,
+        53531.987,
+        53187.78825,
+        53379.55625,
+        53257.38125,
+        53552.58325,
+        53476.44025,
+        53534.9065
+      ],
+      "previousNativeBracketUs": [
+        53417.121375,
+        53475.01089583334,
+        53304.90075
+      ],
+      "sourceLibrarySha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+      "packageSha256": "ee4bc932422375b8d7865fcc35af44e03de6e0d66cf3bc5cf03f942d7670c968",
+      "harnessSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "driverSha256": "bc427928f73013c023d5f6c361f4df04eca59de19e2a06aa54fee7b07bc0049a",
+      "operationsPerSubject": 16,
+      "actualPairs": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "unchangedConfidenceAndCompleteBoundaries": true,
+      "allExistingCorrectnessAndReferenceGates": true,
+      "builds": 0,
+      "broadOrPackageQualificationRepeats": 0,
+      "qualificationReuse": "Same actual current package/bothOS all3examples6683full-live, focused normal/scalar; no production change. Existing fixture/reference/harness identities retained.",
+      "continuation": "Accept whatever this one capture establishes. If still uncertain, retain it without tuning a presumed gap or resampling unchanged. Stop if passing; otherwise select a justified independent task.",
+      "planScope": "PLAN remains ignored. Only authorized font/text section differs from original checkpoint. Complete text one-shot/eight-draw controls pass/stop with eager/lazy/prepared-state caveats; every other PLAN byte remains unchanged."
+    },
+    "raw": {
+      "file": "webp-alpha16-long-batch-confidence.tar.xz",
+      "sha256": "016bf4c64d1a72eabe61508f567f4f56572fe6f4ba61532b2c25dcc16b37178d",
+      "bytes": 28924,
+      "members": 14,
+      "allMembersVerified": true,
+      "mirrored": true,
+      "dependencies": [
+        {
+          "file": "webp-alpha16-current-confidence.tar.xz",
+          "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b"
+        },
+        {
+          "file": "word-clone-copy-qualified.tar.xz",
+          "sha256": "9596f8228d0e67e0e9973d78f2e4fe571a86a8ea59be76204bd19640b81e03f9"
+        }
+      ]
+    },
+    "noBuildsOrQualificationRepeats": true,
+    "decision": "Wordalpha passes/stops on one prespecified longer-batch actual-package comparison. All8lossless/alphapaths pass with source-valid unchanged controls. Lossy9scope now7pass/2uncertain. No speedup or measured drift cause follows; no unchanged repeat or tuning follows.",
+    "recordingCorrection": "A generic packet-field name failed before archival or tracked edits. Use the actual case-specific managedEncodedSha256/managedOutputBytes receipt fields and verify both native identities. Saved successful capture reused; no timing repeated."
   }
 }

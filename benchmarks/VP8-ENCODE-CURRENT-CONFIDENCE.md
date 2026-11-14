@@ -31,7 +31,7 @@ Physical/native/JIT/pool peaks remain unmeasured.
 No build or broad/package rerun. Reuse the same actual package's
 [6,600full/live checks perOS, scalar/affectedISA, consumers/all3examples](SHARED-AXIS-SWAP.md).
 Other costs reuse [rounded borders](VP8-ROUNDED-BORDER-PREDICTION.md) and
-[alpha scopes](WARM-ADJACENT-CONFIDENCE.md): six passes/three uncertainties across
+[alpha scopes](WARM-ADJACENT-CONFIDENCE.md): seven passes/two uncertainties across
 nine lossy controls. Stop passes and continue demonstrated independent gaps.
 All289paths remain required; publication is postponed.
 
