@@ -2270,15 +2270,17 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert not png_gray_current['productionSpeedupClaim'] and png_gray_current['allBuilds'] == png_gray_current['broadOrPackageRepeats'] == 0
     assert png_gray_current['raw']['mirrored'] and png_gray_current['raw']['allMembersVerified']
     assert png_gray_current['qualification']['sameActualPackageBothOS'] and png_gray_current['qualification']['productionInputsUnchanged']
-    assert png_gray_current['qualification']['fullChecksEachOs'] == 6600
+    assert png_gray_current['qualification']['actualPackage'] == {
+        k: policy_q['actualPackage'][k] for k in ('sha256', 'librarySha256', 'bytes')}
+    assert png_gray_current['qualification']['fullChecksEachOs'] == policy_q['fullChecksEachOs']
     assert set(png_gray_current['cases']) == {'EncodeGray8'}
-    assert png_gray_current['cases']['EncodeGray8']['operationsPerSubject'] == 64
+    assert png_gray_current['cases']['EncodeGray8']['operationsPerSubject'] == png_gray_current['integration']['operationsPerSubject']
     png_cases = {**png_current['cases'], **png_gray_current['cases']}
     assert len(png_cases) == 20
     png_rgb16 = png_cases['EncodeRgb16']; png_gray8 = png_cases['EncodeGray8']
-    assert png_rgb16['status'] == 'pass' and png_gray8['status'] == 'uncertain'
+    assert png_rgb16['status'] == 'pass' and png_gray8['status'] == 'pass'
     png_oneshot_status = {status: sum(c['status'] == status and c['boundaryKind'] == 'equivalent-one-shot' for c in png_cases.values()) for status in ('pass', 'gap', 'uncertain')}
-    assert png_oneshot_status == png_current['oneShotStatusCounts'] == {'pass': 16, 'gap': 0, 'uncertain': 1}
+    assert png_oneshot_status == png_gray_current['oneShotStatusCounts'] == {'pass': 17, 'gap': 0, 'uncertain': 0}
     def png_label(label):
         return (label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ')
                 .replace(', red-plane reference', '').replace('NoCompression0', 'stored0'))
@@ -2865,8 +2867,12 @@ image views: 181 pass, two gaps, eight uncertain**. This does not establish full
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}
-Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-uncertain; no optimization gap is inferred for that control.
+Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
+uncertainty at **{png_gray8['managedUs']:,.2f} / FFmpeg {png_gray8['nativeUs']:,.2f}µs,
+upper {png_gray8['upper']:.6f}**, **{png_gray8['allocatedBytes']:,} B/op**. All 17
+equivalent fresh-state PNG encodes pass/stop. Original uncertain samples remain;
+this measurement-only update is not a production speedup. Stored RGBA16's
+post-GC diagnostic stays separate from its passing natural-GC workload.
 [Variable-price preparation](../benchmarks/VP8-VARIABLE-PRICE-PREPARATION.md) closes
 the photograph gap: **{vp8_encode_cases['photograph']['managedUs']:,.2f} / FFmpeg
 {vp8_encode_cases['photograph']['nativeUs']:,.2f}µs, upper {vp8_encode_cases['photograph']['upper']:.3f}**,

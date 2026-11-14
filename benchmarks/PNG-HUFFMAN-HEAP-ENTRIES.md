@@ -1,8 +1,9 @@
 # PNG Huffman heap entries
 
-Gray8's [current-code adjacent confirmation](PNG-GRAY-CURRENT-PATH.md) supersedes
-its displayed standalone cost below. This stage's incremental and other valid
-family evidence remains retained.
+Gray8's [longer-integration current-code confirmation](PNG-GRAY-CURRENT-PATH.md)
+passes/stops and supersedes its displayed standalone cost below. All17equivalent
+fresh-state controls now pass. This stage's incremental and other valid family
+evidence remains retained.
 
 Compressed PNG tree construction now keeps each exact weight/depth priority beside
 its heap symbol. This removes dependent lookups through separate weight/depth

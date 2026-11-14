@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "stage": "PGC924",
+  "stage": "PGL998B",
   "productionChanged": false,
   "productionSpeedupClaim": false,
   "measurementAccepted": true,
@@ -10,40 +10,40 @@
   "newMaterialPaths": 0,
   "publicationPostponed": true,
   "producers": {
-    "windowsSha256": "33d750c0409ac2a417f8c5d498174dd26e4fa047a233ecc161b28f2a7fab4763",
-    "linuxSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
-    "timedArtifactSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
-    "actualPackageSha256": "0a80ee5983f0bcab80c68c32b359157b2c8e0b4906bbf8babd06fe83cdf86c33"
+    "windowsSha256": "686e47a6c12e6d90cbccd753bd1739e8483ba39711efbd5586edaa89f44b6586",
+    "linuxSha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+    "timedArtifactSha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+    "packageSha256": "89186b3b58da96d2868c935a149cc00a36e60f7cfac0263c0ca07f9adb9c2478"
   },
   "cases": {
     "EncodeGray8": {
-      "managedUs": 1981.08131640625,
-      "nativeUs": 1992.0161328125,
-      "ratio": 0.9945106787911344,
-      "lower": 0.9826803566115786,
-      "upper": 1.0058405356256288,
+      "managedUs": 1964.0692008463543,
+      "nativeUs": 1978.5086526692708,
+      "ratio": 0.9927018505562583,
+      "lower": 0.9833508226138107,
+      "upper": 0.9996806875810479,
       "allocatedBytes": 546523,
-      "status": "uncertain",
-      "librarySha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+      "status": "pass",
+      "librarySha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
       "caseId": "EncodeGray8",
-      "receipt": "tmp/pgc924-gray-adjacent-receipt.json",
-      "observation": "tmp/pgc924-gray-adjacent.json",
+      "receipt": "tmp/pgl998b-gray-adjacent-receipt.json",
+      "observation": "tmp/pgl998b-gray-adjacent.json",
       "actualIterations": 12,
       "nativeSamplesEachBracket": 12,
       "allActualsRetained": true,
       "managedActualNanoseconds": [
-        1987592.4375,
-        1981423.421875,
-        1975559.53125,
-        1991851.234375,
-        1973734.578125,
-        1985346.078125,
-        1978395.859375,
-        1980013.453125,
-        1981726.046875,
-        1980252.578125,
-        1973006.28125,
-        1984074.296875
+        1965696.23046875,
+        1964981.359375,
+        1958897.53515625,
+        1963738.50390625,
+        1967243.265625,
+        1971862.05859375,
+        1956998.41796875,
+        1964517.33984375,
+        1960227.60546875,
+        1966994.4921875,
+        1958901.73046875,
+        1968771.87109375
       ],
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
@@ -71,28 +71,28 @@
       "nativePacketBytes": 72586,
       "independentOwnedOutput": true,
       "costReused": false,
-      "directAllocatedMeanBytes": 546522.7291666666,
+      "directAllocatedMeanBytes": 546522.2447916666,
       "allocatedBytesEachPair": [
-        546527.25,
-        546519.5,
-        546519.5,
-        546527.25,
-        546519.5,
-        546519.5,
-        546527.25,
-        546519.5,
-        546527.25,
-        546519.5,
-        546519.5,
-        546527.25
+        546521.4375,
+        546523.375,
+        546521.4375,
+        546523.375,
+        546521.4375,
+        546523.375,
+        546521.4375,
+        546521.4375,
+        546523.375,
+        546523.375,
+        546521.4375,
+        546521.4375
       ],
-      "operationsPerSubject": 64,
+      "operationsPerSubject": 256,
       "nativeBracketMeansUs": [
-        1996.3332395833334,
-        1992.0161328125,
-        1992.7037903645833
+        1981.8216083984375,
+        1978.5086526692708,
+        1988.607134765625
       ],
-      "sampling": "NaturalGC64adjacent12pairs; old post-GC/global and pre-HKE907 adjacent results remain separate history."
+      "sampling": "NaturalGC256adjacent12pairs; longer integration, all actuals and unchanged conservative confidence. Earlier64-operation uncertainty remains history; no production speedup or historical subtraction."
     }
   },
   "sourcePins": {
@@ -106,18 +106,18 @@
     "src/Lokad.Image/Internal/DeflateHuffman.cs": "bd75fca9c4c53c6f84b82d91267e652fb0e0848c3c943dae94d87780a8689a58"
   },
   "oneShotStatusCounts": {
-    "pass": 16,
+    "pass": 17,
     "gap": 0,
-    "uncertain": 1
+    "uncertain": 0
   },
   "qualification": {
-    "provider": "benchmarks/shared-axis-swap-evidence.json",
-    "fullChecksEachOs": 6600,
+    "provider": "benchmarks/vp8-variable-price-preparation-evidence.json",
+    "fullChecksEachOs": 6686,
     "sameActualPackageBothOS": true,
     "actualPackage": {
-      "sha256": "0a80ee5983f0bcab80c68c32b359157b2c8e0b4906bbf8babd06fe83cdf86c33",
-      "librarySha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
-      "bytes": 459577
+      "sha256": "89186b3b58da96d2868c935a149cc00a36e60f7cfac0263c0ca07f9adb9c2478",
+      "librarySha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+      "bytes": 461088
     },
     "productionInputsUnchanged": true,
     "fullScalarIsaAndActualPackageEvidenceReused": true
@@ -125,135 +125,135 @@
   "confidence": {
     "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
     "pairedRatioConfidence": [
-      0.9918580220157002,
-      0.9971684650164236
+      0.9886987349357043,
+      0.9967255466001967
     ],
     "views": [
       {
         "view": "allActual",
         "statistics": {
           "OriginalValues": [
-            1987592.4375,
-            1981423.421875,
-            1975559.53125,
-            1991851.234375,
-            1973734.578125,
-            1985346.078125,
-            1978395.859375,
-            1980013.453125,
-            1981726.046875,
-            1980252.578125,
-            1973006.28125,
-            1984074.296875
+            1965696.23046875,
+            1964981.359375,
+            1958897.53515625,
+            1963738.50390625,
+            1967243.265625,
+            1971862.05859375,
+            1956998.41796875,
+            1964517.33984375,
+            1960227.60546875,
+            1966994.4921875,
+            1958901.73046875,
+            1968771.87109375
           ],
           "N": 12,
-          "Min": 1973006.28125,
-          "LowerFence": 1967628.580078125,
-          "Q1": 1977686.77734375,
-          "Median": 1980838,
-          "Mean": 1981081.31640625,
-          "Q3": 1984392.2421875,
-          "UpperFence": 1994450.439453125,
-          "Max": 1991851.234375,
-          "InterquartileRange": 6705.46484375,
+          "Min": 1956998.41796875,
+          "LowerFence": 1949155.3134765625,
+          "Q1": 1959896.13671875,
+          "Median": 1964749.349609375,
+          "Mean": 1964069.2008463542,
+          "Q3": 1967056.685546875,
+          "UpperFence": 1977797.5087890625,
+          "Max": 1971862.05859375,
+          "InterquartileRange": 7160.548828125,
           "LowerOutliers": [],
           "UpperOutliers": [],
           "AllOutliers": [],
-          "StandardError": 1616.1457028542916,
-          "Variance": 31343123.194252707,
-          "StandardDeviation": 5598.492939555493,
-          "Skewness": 0.24568968496902185,
-          "Kurtosis": 2.0198181500893067,
+          "StandardError": 1301.12976910364,
+          "Variance": 20315264.112572297,
+          "StandardDeviation": 4507.245734655733,
+          "Skewness": -0.042894539819683025,
+          "Kurtosis": 1.7173698781096598,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 1981081.31640625,
-            "StandardError": 1616.1457028542916,
+            "Mean": 1964069.2008463542,
+            "StandardError": 1301.12976910364,
             "Level": 12,
-            "Margin": 7170.805089383141,
-            "Lower": 1973910.5113168668,
-            "Upper": 1988252.1214956332
+            "Margin": 5773.085900459484,
+            "Lower": 1958296.1149458948,
+            "Upper": 1969842.2867468137
           },
           "Percentiles": {
-            "P0": 1973006.28125,
-            "P25": 1977686.77734375,
-            "P50": 1980838,
-            "P67": 1982594.899375,
-            "P80": 1985091.721875,
-            "P85": 1986132.3039062498,
-            "P90": 1987367.8015625002,
-            "P95": 1989508.89609375,
-            "P100": 1991851.234375
+            "P0": 1956998.41796875,
+            "P25": 1959896.13671875,
+            "P50": 1964749.349609375,
+            "P67": 1966176.5873046874,
+            "P80": 1967193.5109375,
+            "P85": 1967778.2775390623,
+            "P90": 1968619.0105468752,
+            "P95": 1970162.45546875,
+            "P100": 1971862.05859375
           }
         },
-        "nativeConfidenceLower": 1976707.0932958056,
-        "nativeConfidenceUpper": 2008700.487433361,
-        "ratioLower": 0.9826803566115786,
-        "ratioUpper": 1.0058405356256288
+        "nativeConfidenceLower": 1970471.4827624508,
+        "nativeConfidenceUpper": 1991452.15513281,
+        "ratioLower": 0.9833508226138107,
+        "ratioUpper": 0.9996806875810479
       },
       {
         "view": "upperOutlierDiagnostic",
         "statistics": {
           "OriginalValues": [
-            1987592.4375,
-            1981423.421875,
-            1975559.53125,
-            1991851.234375,
-            1973734.578125,
-            1985346.078125,
-            1978395.859375,
-            1980013.453125,
-            1981726.046875,
-            1980252.578125,
-            1973006.28125,
-            1984074.296875
+            1965696.23046875,
+            1964981.359375,
+            1958897.53515625,
+            1963738.50390625,
+            1967243.265625,
+            1971862.05859375,
+            1956998.41796875,
+            1964517.33984375,
+            1960227.60546875,
+            1966994.4921875,
+            1958901.73046875,
+            1968771.87109375
           ],
           "N": 12,
-          "Min": 1973006.28125,
-          "LowerFence": 1967628.580078125,
-          "Q1": 1977686.77734375,
-          "Median": 1980838,
-          "Mean": 1981081.31640625,
-          "Q3": 1984392.2421875,
-          "UpperFence": 1994450.439453125,
-          "Max": 1991851.234375,
-          "InterquartileRange": 6705.46484375,
+          "Min": 1956998.41796875,
+          "LowerFence": 1949155.3134765625,
+          "Q1": 1959896.13671875,
+          "Median": 1964749.349609375,
+          "Mean": 1964069.2008463542,
+          "Q3": 1967056.685546875,
+          "UpperFence": 1977797.5087890625,
+          "Max": 1971862.05859375,
+          "InterquartileRange": 7160.548828125,
           "LowerOutliers": [],
           "UpperOutliers": [],
           "AllOutliers": [],
-          "StandardError": 1616.1457028542916,
-          "Variance": 31343123.194252707,
-          "StandardDeviation": 5598.492939555493,
-          "Skewness": 0.24568968496902185,
-          "Kurtosis": 2.0198181500893067,
+          "StandardError": 1301.12976910364,
+          "Variance": 20315264.112572297,
+          "StandardDeviation": 4507.245734655733,
+          "Skewness": -0.042894539819683025,
+          "Kurtosis": 1.7173698781096598,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 1981081.31640625,
-            "StandardError": 1616.1457028542916,
+            "Mean": 1964069.2008463542,
+            "StandardError": 1301.12976910364,
             "Level": 12,
-            "Margin": 7170.805089383141,
-            "Lower": 1973910.5113168668,
-            "Upper": 1988252.1214956332
+            "Margin": 5773.085900459484,
+            "Lower": 1958296.1149458948,
+            "Upper": 1969842.2867468137
           },
           "Percentiles": {
-            "P0": 1973006.28125,
-            "P25": 1977686.77734375,
-            "P50": 1980838,
-            "P67": 1982594.899375,
-            "P80": 1985091.721875,
-            "P85": 1986132.3039062498,
-            "P90": 1987367.8015625002,
-            "P95": 1989508.89609375,
-            "P100": 1991851.234375
+            "P0": 1956998.41796875,
+            "P25": 1959896.13671875,
+            "P50": 1964749.349609375,
+            "P67": 1966176.5873046874,
+            "P80": 1967193.5109375,
+            "P85": 1967778.2775390623,
+            "P90": 1968619.0105468752,
+            "P95": 1970162.45546875,
+            "P100": 1971862.05859375
           }
         },
-        "nativeConfidenceLower": 1976707.0932958056,
-        "nativeConfidenceUpper": 2008700.487433361,
-        "ratioLower": 0.9826803566115786,
-        "ratioUpper": 1.0058405356256288
+        "nativeConfidenceLower": 1970471.4827624508,
+        "nativeConfidenceUpper": 1991452.15513281,
+        "ratioLower": 0.9833508226138107,
+        "ratioUpper": 0.9996806875810479
       }
     ]
   },
-  "scope": "Existing frozen513x259 Gray8 level6/filterNone/color0 complete public EncodePng and MemoryStream creation/growth/disposal; equivalent fresh codec/options/zlib/conversion/working-frame/packet/output preparation and disposal on both sides. NaturalGC64 complete operations per alternating subject. No reference retains codec or conversion working state. Frozen nativeReady and exact boundary override generic driver prose about retained wrappers. No new image/settings/work boundary or threshold.",
+  "scope": "Existing frozen513x259 Gray8 level6/filterNone/color0 complete public EncodePng and MemoryStream creation/growth/disposal; equivalent fresh codec/options/zlib/conversion/working-frame/packet/output preparation and disposal on both sides. NaturalGC256 complete operations per alternating subject. No reference retains codec or conversion working state. Frozen nativeReady and exact boundary override generic driver prose about retained wrappers. No new image/settings/work boundary or threshold.",
   "invalidatedOlderEvidence": {
     "provider": "benchmarks/png-current-encode-confidence-evidence.json",
     "case": "EncodeGray8",
@@ -277,29 +277,88 @@
     "retainedOperationScratchBytes": 0,
     "newOwnedOrRetainedCapacityBytes": 0,
     "physicalNativeJitPoolPeaksRemeasured": false,
-    "allocation": "Direct natural-GC64 counter; historical post-GC BDN546628B/op is a different instrumentation boundary, not a saving claim. Owned capacity and output lifetime unchanged."
+    "allocation": "Direct natural-GC256 counter. Earlier64-operation and post-GC BDN counters retain their original instrumentation boundaries; no allocation-saving claim. Owned capacity and output lifetime unchanged."
   },
-  "next": "CurrentGray8 remains uncertain: no speedup, demonstrated gap or favorable retry. Stop confirmed passing controls; resume justified independent codec/resizing/storage work. Preserve all289required paths and complete-packet correctness.",
+  "next": "Stop the passing fresh-state Gray8 control; all17fresh-state PNG encodes pass. Preserve separate retained/postGC uncertainty and naturalGC stored-word pass. Resume justified independent work; all289required paths remain, publication postponed.",
   "raw": {
-    "file": "png-gray-current-path.tar.xz",
-    "sha256": "b05fec235c14e4598fc787eb58887ba56b27da4374d0090eae42386937eba6fa",
-    "bytes": 383824,
-    "members": 18,
-    "allMembersVerified": true,
+    "file": "png-gray-long-integration.tar.xz",
+    "sha256": "8391a77128a8d2d83959a3d980edd2e74298c762b5f85582ff86afe2e2a8170b",
+    "bytes": 28688,
+    "members": 21,
     "mirrored": true,
+    "allMembersVerified": true,
     "dependencies": [
       {
-        "file": "shared-axis-swap-qualified.tar.xz",
-        "sha256": "95f7e1217518a1eef153c90c46254fb9457fbfa26d4b7f0e319709c0452eaefb"
+        "file": "png-gray-current-path.tar.xz",
+        "sha256": "b05fec235c14e4598fc787eb58887ba56b27da4374d0090eae42386937eba6fa"
       },
       {
-        "file": "png-huffman-heap-entries-qualified.tar.xz",
-        "sha256": "049ade8e4321908a29fd827787aabdc5403f4001861ff5ca5da0179dfb2467d1"
-      },
-      {
-        "file": "png-gray-current-confidence.tar.xz",
-        "sha256": "68fd5d1f0302a11bbb7cb681c32e01869e9aef204931895f59e37b608f0ba0b0"
+        "file": "vp8-variable-price-preparation-qualified.tar.xz",
+        "sha256": "fa4315e5cb56702c93a1662f8e7dd19b7dce645420ec2b98b464815d0fa5e3a2"
       }
     ]
+  },
+  "integration": {
+    "operationsPerSubject": 256,
+    "previousOperationsPerSubject": 64,
+    "purpose": "One prespecified longer-integration resolution of existing Gray8 uncertainty:64 operations (~0.127s) to256 (~0.5s) per timed subject, twelve alternating pairs and all twelve native samples per before/after bracket. The prior paired interval .991858..997168 passes but conservative all-actual/three-bracket interval .982680..1.005841 crosses parity. Longer integration reduces timer/scheduling sensitivity per subject; no event cause is asserted. Exact inputs, level6/filterNone/color0, packet72586B, input delivery, fresh complete codec/zlib/conversion/output ownership, confidence method and sample count unchanged. Use already-qualified current actual package DLL, original harness/worker/driver; no builds or broad qualification. Preserve every original sample and all new samples. This is not a production gain, historical subtraction or a favorable identical retry. Pass stops; a separated gap permits attribution; uncertainty remains without another capture. No new material control. Stored RGBA16 already passes naturalGC64; its postGC4 uncertainty remains a distinct diagnostic.",
+    "previousStatus": "uncertain",
+    "previousInterval": [
+      0.9826803566115786,
+      1.0058405356256288
+    ],
+    "rejectedUnsupportedRequest": {
+      "stage": "PGL998",
+      "operations": 512,
+      "reason": "Original unchanged driver accepts1..256; argument validation rejected512 before harness creation or measurements. No timing data exist; retain invocation/log/guards. Do not rebuild tooling to extend the range."
+    }
+  },
+  "history": {
+    "previousMeasurement": {
+      "stage": "PGC924",
+      "producers": {
+        "windowsSha256": "33d750c0409ac2a417f8c5d498174dd26e4fa047a233ecc161b28f2a7fab4763",
+        "linuxSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+        "timedArtifactSha256": "fee919cf3cbb4989e6d85342bfdc973727df29048b8121328a6acf78c86790a8",
+        "actualPackageSha256": "0a80ee5983f0bcab80c68c32b359157b2c8e0b4906bbf8babd06fe83cdf86c33"
+      },
+      "case": {
+        "caseId": "EncodeGray8",
+        "managedUs": 1981.08131640625,
+        "nativeUs": 1992.0161328125,
+        "ratio": 0.9945106787911344,
+        "lower": 0.9826803566115786,
+        "upper": 1.0058405356256288,
+        "allocatedBytes": 546523,
+        "status": "uncertain",
+        "operationsPerSubject": 64,
+        "receipt": "tmp/pgc924-gray-adjacent-receipt.json",
+        "observation": "tmp/pgc924-gray-adjacent.json"
+      },
+      "raw": {
+        "file": "png-gray-current-path.tar.xz",
+        "sha256": "b05fec235c14e4598fc787eb58887ba56b27da4374d0090eae42386937eba6fa",
+        "bytes": 383824,
+        "members": 18,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "shared-axis-swap-qualified.tar.xz",
+            "sha256": "95f7e1217518a1eef153c90c46254fb9457fbfa26d4b7f0e319709c0452eaefb"
+          },
+          {
+            "file": "png-huffman-heap-entries-qualified.tar.xz",
+            "sha256": "049ade8e4321908a29fd827787aabdc5403f4001861ff5ca5da0179dfb2467d1"
+          },
+          {
+            "file": "png-gray-current-confidence.tar.xz",
+            "sha256": "68fd5d1f0302a11bbb7cb681c32e01869e9aef204931895f59e37b608f0ba0b0"
+          }
+        ]
+      },
+      "allOriginalEvidenceRetainedInRaw": true
+    },
+    "reason": "Current complete-package longer integration supersedes the standalone cost, without a production change or speedup claim. Original complete evidence/raw archive remain retained."
   }
 }

@@ -68,8 +68,12 @@ image views: 181 pass, two gaps, eight uncertain**. This does not establish full
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
-Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
-uncertain; no optimization gap is inferred for that control.
+Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
+uncertainty at **1,964.07 / FFmpeg 1,978.51µs,
+upper 0.999681**, **546,523 B/op**. All 17
+equivalent fresh-state PNG encodes pass/stop. Original uncertain samples remain;
+this measurement-only update is not a production speedup. Stored RGBA16's
+post-GC diagnostic stays separate from its passing natural-GC workload.
 [Variable-price preparation](../benchmarks/VP8-VARIABLE-PRICE-PREPARATION.md) closes
 the photograph gap: **9,385.67 / FFmpeg
 9,729.91µs, upper 0.971**,
@@ -168,7 +172,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 19,824.87 | 20,956.16 | 0.946 / 0.958 | 2,432,924 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 4,111.01 | 4,361.68 | 0.943 / 0.963 | 816,180 | 236,828 / 236,828 |
 | PNG RGBA16, one-shot stored0 / native0 † | 389.62 | 1,387.71 | 0.281 / 0.288 | 1,143,324 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 1,981.08 | 1,992.02 | 0.995 / 1.006 | 546,523 | 72,586 / 72,586 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 1,964.07 | 1,978.51 | 0.993 / 1.000 | 546,523 | 72,586 / 72,586 |
 | PNG RGB8, one-shot Optimal6 / native6 † | 9,398.61 | 9,773.57 | 0.962 / 0.978 | 815,148 | 168,729 / 168,729 |
 | PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,197.60 | 4,477.89 | 0.937 / 0.953 | 547,596 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 16,718.11 | 17,275.89 | 0.968 / 0.979 | 815,716 | 210,973 / 210,973 |
