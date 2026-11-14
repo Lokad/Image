@@ -28,16 +28,20 @@ those invalidations; quantization-plan and reconstruction files remain unchanged
 Do not reuse the old hotspot ranking. Old quantizer/scoring and pair/packed
 quantization outcomes remain leads/adverse history, not bans or replay approval.
 
-**Next hypothesis:** separate nonuniform, fused, uncancelable luma4 candidate
-preparation from ordered winner scoring after the existing batched transforms.
-Prepare exact quantized values/rates for the same ten visited candidates in a
-small loop with fewer live reconstruction variables; preserve all validation,
-mode order, strict ties, candidate independence and selected levels/pixels.
-Keep scalar, live-token, trellis and uniform behavior. Account for extra bounded
-stack storage inside the existing16KiB allowance; add no heap/pool/session.
-Inspect codegen and complete paired photograph/alpha costs before acceptance.
-This proposed phase split is distinct from replaying the former single-mode
-byproduct handoff. Additional stores/calls may outweigh reduced spills.
+The subsequent [candidate-preparation round](VP8-CANDIDATE-PREPARATION-TRIALS.md)
+tests three coherent revisions without a useful complete-operation lead.
+All private helper/type/storage changes are removed and the exact source/core/
+embedded baseline restored. The trace above therefore remains current.
+Keep all adverse screens; do not replay another phase variant without new evidence.
+
+The cursor audit confirms that arithmetic state is already borrowed locally and
+committed before growth and frame cleanup. An
+[earlier cancellation-policy screen](VP8-WRITER-POLICY-SCREEN.md) removes redundant
+immutable-none bit checks but has very wide3×8paired uncertainty, not a confirmed
+failure. **Next:** one targeted current comparison with its existing paired
+helper and12×32complete-operation integration. Preserve the residual program's
+checked entry and every live/header/growth/carry/finish/output checkpoint.
+No state/symbol staging replay; exact packets and cleanup remain required.
 
 [Evidence](current-vp8-photo-attribution-evidence.json) records actual code,
 mapped instructions, source audit, producer identities and both opaque captures.

@@ -1,0 +1,196 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    {
+      "stage": "LCP985",
+      "name": "Quantization/rate preparation",
+      "productionSha256": "7a94bea04df8a4c3087475370dc6ed0aee84682562a8ec645cb44d3d9d6dbc12",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "446ab28de87e6afee24991eaee8daf54f81d5f381f514ccb53f0d54a666a503b"
+      },
+      "managedUs": 9932.1455625,
+      "nativeUs": 9710.784979166667,
+      "ratio": 1.0227953336221776,
+      "lower": 1.017311442155891,
+      "upper": 1.026823426499168,
+      "status": "gap",
+      "allocatedBytes": 809080,
+      "actualPairs": 12,
+      "operationsPerSubject": 8,
+      "allActualsRetained": true,
+      "allExistingGatesPassed": true,
+      "focused": {
+        "internal-normal": 1033,
+        "public-normal": 239,
+        "internal-scalar": 1033,
+        "public-scalar": 239
+      },
+      "coreBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicHarnessNativeFixtureBuilds": 0,
+      "independentConfirmation": false,
+      "sourceAndRunnableModulesPreserved": true
+    },
+    {
+      "stage": "LCP986",
+      "name": "Deferred vector handoff",
+      "productionSha256": "573267b14adb7b40250cd9035e09046dd2b8a4a03eaec22c7dfe0a39c9861589",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "e4ffab59d19ba3cbebff75611bccecbc3e770afc71b679ecbd895e5bf6d3ac10"
+      },
+      "managedUs": 9766.003020833334,
+      "nativeUs": 9658.059625,
+      "ratio": 1.0111765095707135,
+      "lower": 1.0032428402452336,
+      "upper": 1.018066072121047,
+      "status": "gap",
+      "allocatedBytes": 809080,
+      "actualPairs": 12,
+      "operationsPerSubject": 8,
+      "allActualsRetained": true,
+      "allExistingGatesPassed": true,
+      "focused": {
+        "internal-normal": 1033,
+        "public-normal": 402,
+        "internal-scalar": 1033,
+        "public-scalar": 402
+      },
+      "coreBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicHarnessNativeFixtureBuilds": 0,
+      "independentConfirmation": false,
+      "sourceAndRunnableModulesPreserved": true
+    },
+    {
+      "stage": "LCP987",
+      "name": "Compact pixel/SSD candidates",
+      "productionSha256": "eeec2333dcd7f892027c554a6d7ff3d45f93a896e6af17dc9ac8ec3f950a94a1",
+      "sourceSha256": {
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "f136cf831d727d102c2e96ce93dd0b214372a9f3a8eb1121b0324f0e09577b4e"
+      },
+      "managedUs": 9895.163697916667,
+      "nativeUs": 9705.973947916666,
+      "ratio": 1.0194920933247105,
+      "lower": 1.0130545335033592,
+      "upper": 1.0242994047162437,
+      "status": "gap",
+      "allocatedBytes": 809080,
+      "actualPairs": 12,
+      "operationsPerSubject": 8,
+      "allActualsRetained": true,
+      "allExistingGatesPassed": true,
+      "focused": {
+        "internal-normal": 1033,
+        "public-normal": 402,
+        "internal-scalar": 1033,
+        "public-scalar": 402
+      },
+      "coreBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicHarnessNativeFixtureBuilds": 0,
+      "independentConfirmation": false,
+      "sourceAndRunnableModulesPreserved": true
+    }
+  ],
+  "date": "2026-11-14",
+  "productionChanged": false,
+  "privateProductionCandidatesTested": true,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "decision": "Discard all three implementations and restore exact accepted source/core/embedded/public bindings/manifest. A removes intended matrix/price-pointer reloads but has an adverse screen point. Bdeferred vectors has no useful lead; Ccompact pixel candidates is adverse. No standalone paired causal regression or gain proof, no favorable repeat, no confirmation or broad/package qualification.",
+  "baseline": {
+    "evidence": "vp8-encode-current-confidence-evidence.json",
+    "productionSha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+    "packageSha256": "ee4bc932422375b8d7865fcc35af44e03de6e0d66cf3bc5cf03f942d7670c968",
+    "managedUs": 9798.425182291667,
+    "nativeUs": 9702.8940234375,
+    "lower": 1.004323098481593,
+    "upper": 1.0140144509083084,
+    "actualPairs": 12,
+    "operationsPerSubject": 32,
+    "status": "gap"
+  },
+  "scope": "Existing513x259opaquephotograph,Q75,method4,RDO. Exact17688Bpacket/input/reconstruction/alpha/source/independent ownership,complete admission/preparation/MemoryStream growth/disposal. Same prepared worker,CPU0,naturalGC,idle-v2,all12pairs/nativebrackets. Generic capture flag is measurement metadata; explicit candidate producer pins identify the privately changed libraries. Screen8operations differs from accepted32operation integration; no historical-clock causal claim.",
+  "codegen": {
+    "lcp985": {
+      "project": "Lokad.Image",
+      "stage": "LCP985focusedSupplement",
+      "productionSha256": "7a94bea04df8a4c3087475370dc6ed0aee84682562a8ec645cb44d3d9d6dbc12",
+      "allBuilds": 0,
+      "publicBindingsReused": true,
+      "counts": {
+        "normal": 166,
+        "scalar": 166
+      },
+      "normalInstrumentedElapsedDiscarded": true,
+      "performanceClaim": false,
+      "jitSha256": "da8acb07efce46f27d4902c81c9698b5843ff450f22c976303bcc97e56200285",
+      "scope": "Existing public Vp8 API packet/ownership/root/refusal/async lifetime/cancellation controls, missed by the broad Webp name. Scalar reuses portable paths. Actual production helper codegen, not a timing campaign."
+    },
+    "plainParentBytes": 6960,
+    "originalParentBytes": 6630,
+    "helperBytes": 1304,
+    "matrixVectorsHeldInRegisters": true,
+    "pricePointerHeldInRegisterInHelperLoop": true,
+    "firstParentEagerlyLoadsBothVectors": true,
+    "codeSizeOrSamplesNotElapsedProof": true,
+    "laterVariantsCodegenNotMeasured": true
+  },
+  "memory": "A/Badd1000Bofstack candidates/rates to existing16384Bcoarse admission; Cintendscompact pixel/SSDvalues,emittedstride/physical/admitted peaks unmeasured. No new heap/owner/cache/pool. All809080B/op. All extra candidate state removed on restoration.",
+  "qualification": {
+    "linuxFocusedStages": 3,
+    "additionalPublicVp8NormalAndScalar": {
+      "normal": 166,
+      "scalar": 166
+    },
+    "linuxCoreBuilds": 3,
+    "linuxEmbeddedBuilds": 3,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "fullOrPackageRepeats": 0,
+    "qualifiedChecksEachOsReused": 6683,
+    "sameActualPackageBothOsAll3ExamplesReused": true
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stages": [
+      "LCP985",
+      "LCP986",
+      "LCP987"
+    ],
+    "productionChanged": false,
+    "productionAccepted": false,
+    "restoredSourceSha256": "1eab8bf37fed5a3de7d7207c09e91b982b67a4df2b343002e10c1b96fc247bf2",
+    "restoredProductionSha256": "b26c35e18feab238225e0c28c48c0e89f8fabde1a7f27814734d0fa6ba1e75e6",
+    "restoredEmbeddedTestsSha256": "155fd6b9d82045f7dbd607fdc14134edcc6365617ecd4f599dbb668ce3904033",
+    "sourceManifestByteExact": true,
+    "allManifestFilesExact": true,
+    "actualPackageSha256": "ee4bc932422375b8d7865fcc35af44e03de6e0d66cf3bc5cf03f942d7670c968",
+    "actualPackageUnchanged": true,
+    "restoreBuilds": 0,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "candidateCPreserved": true,
+    "fullOrPackageQualificationRepeated": false,
+    "prior6683FullLiveEachOsAndActualPackageEvidenceReused": true,
+    "reason": "All three complete source-exact packet screens lack a useful parity/incremental lead. Restore the exact accepted source, production core, embedded tests and external public/live bindings, not only a library DLL."
+  },
+  "raw": {
+    "file": "vp8-candidate-preparation-trials.tar.xz",
+    "sha256": "60b0e8d4c12b24ec59bef6fbf4a0cd61e720315d55a4140f12811d8b83ae7c91",
+    "bytes": 2532884,
+    "members": 106,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-opaque-long-batch-attribution.tar.xz",
+        "sha256": "a2d294d298ed51742daaf5d0e15e5cdb9ebdc0aa9515bcfd5ccfd80b0aba1265"
+      }
+    ]
+  },
+  "next": "Bounded audit of current coefficient emission/cursor storage, the distinct161sample location in current attribution. Verify actual call/failure/ownership boundaries before proposing a state-local emitter change. Do not replay another candidate-preparation variant without materially new evidence.",
+  "planScope": "PLAN remains ignored. Only authorized font/text section differs from original checkpoint. Complete text one-shot/eight-draw controls pass/stop with eager/lazy/prepared-state caveats; every other PLAN byte remains unchanged."
+}
