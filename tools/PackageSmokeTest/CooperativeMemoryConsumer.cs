@@ -631,6 +631,7 @@ internal static class CooperativeMemoryConsumer
         foreach (var (depth, width, height, expectedHash) in new[]
         {
             (8, 16, 8, "eec2e89602720fa8ca330733763524017f49de642fb341ba839aeca0aca887fd"),
+            (16, 16, 8, "67fc5ce26cfe8812561835d03f375e5d036e2d56bf513638d5c21fb4a5dac1a8"),
             (8, 8, 4, "5ebc1d60ad1c4bcaeeb105d2f5f83285b0dbac88ebbc83cb2f04732ee134b4bc"),
             (8, 8, 17, "481df76194da6537d6ecfbc24f37c842ae750b7752791f35d40d43454532eee1"),
             (16, 8, 17, "9f1aaa6ef72a650982022d0a36563789f9ae50d79a094f97141af8ed50051b6c"),
@@ -687,6 +688,7 @@ internal static class CooperativeMemoryConsumer
             if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged streaming bicubic disposed or leaked the caller root.");
         }
         Console.WriteLine("Packaged streaming bicubic preserves exact blocks, shared admission and independent survivors.");
+        Console.WriteLine("Packaged adjacent word columns preserve frozen pixels, terminal refusal and independent survivors.");
         Console.WriteLine("Packaged word column bicubic preserves frozen pixels, 4KiB admission and independent survivors.");
         Console.WriteLine("Packaged wide column bicubic preserves frozen byte/word pixels, 4KiB admission and independent survivors.");
     }

@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -33,16 +34,18 @@ internal static class StreamingWordBicubicResize
 
     internal static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
         ReadOnlySpan<double> weights, ReadOnlySpan<ushort> offsets)
+        => AccumulateRow(row, weights, offsets, Vector256<double>.Zero);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<double> AccumulateRow(ReadOnlySpan<byte> row,
+        ReadOnlySpan<double> weights, ReadOnlySpan<ushort> offsets, Vector256<double> sum)
     {
-        var sum = Vector256<double>.Zero;
         var t = 0;
         for (; t + 1 < weights.Length; t += 2)
         {
             var p0 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[t] * 8, 8));
             var p1 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[t + 1] * 8, 8));
-            var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
-            var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-            var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+            var values = PreparePair(p0, p1);
             var w0 = weights[t]; var w1 = weights[t + 1];
             var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
             sum = Avx.Add(sum, products.GetLower());
@@ -51,13 +54,72 @@ internal static class StreamingWordBicubicResize
         if (t < weights.Length)
         {
             var packed = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets[t] * 8, 8));
-            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsUInt16());
-            var alpha = (int)(packed >> 48);
-            var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1)).AsUInt32();
-            var values = Avx512F.ConvertToVector512Double(Vector256.Create(products, Vector128<uint>.Zero)).GetLower();
+            var values = PreparePixel(packed);
             sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(weights[t])));
         }
         return sum;
+    }
+
+    // Both offset tables describe the same unclamped coordinates in their
+    // overlapping interval. Decode those pixels once without regrouping either sum.
+    internal static void FilterColumnPair(ReadOnlySpan<byte> row,
+        ReadOnlySpan<double> weights0, ReadOnlySpan<ushort> offsets0, int delta,
+        ReadOnlySpan<double> weights1, ReadOnlySpan<ushort> offsets1,
+        out Vector256<double> sum0, out Vector256<double> sum1)
+    {
+        var prefix = Math.Min(delta, weights0.Length);
+        // Keep independent sums in registers; out references can alias and would
+        // otherwise require publishing every intermediate add to memory.
+        var left = FilterRow(row, weights0[..prefix], offsets0[..prefix]);
+        var right = Vector256<double>.Zero;
+        var overlap = Math.Min(weights0.Length - prefix, weights1.Length);
+        var t = 0;
+        for (; t + 1 < overlap; t += 2)
+        {
+            var at = prefix + t;
+            var p0 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets0[at] * 8, 8));
+            var p1 = BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets0[at + 1] * 8, 8));
+            var values = PreparePair(p0, p1);
+            var product0 = Avx512F.Multiply(values, Avx512F.InsertVector256(
+                Vector512.Create(weights0[at]), Vector256.Create(weights0[at + 1]), 1));
+            var product1 = Avx512F.Multiply(values, Avx512F.InsertVector256(
+                Vector512.Create(weights1[t]), Vector256.Create(weights1[t + 1]), 1));
+            left = Avx.Add(left, product0.GetLower());
+            left = Avx.Add(left, product0.GetUpper());
+            right = Avx.Add(right, product1.GetLower());
+            right = Avx.Add(right, product1.GetUpper());
+        }
+        if (t < overlap)
+        {
+            var at = prefix + t;
+            var values = PreparePixel(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(offsets0[at] * 8, 8)));
+            left = Avx.Add(left, Avx.Multiply(values, Vector256.Create(weights0[at])));
+            right = Avx.Add(right, Avx.Multiply(values, Vector256.Create(weights1[t])));
+        }
+        var suffix0 = prefix + overlap;
+        if (suffix0 < weights0.Length)
+            left = AccumulateRow(row, weights0[suffix0..], offsets0[suffix0..], left);
+        if (overlap < weights1.Length)
+            right = AccumulateRow(row, weights1[overlap..], offsets1[overlap..], right);
+        sum0 = left;
+        sum1 = right;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> PreparePair(ulong first, ulong second)
+    {
+        var samples = Avx2.ConvertToVector256Int32(Vector128.Create(first, second).AsUInt16());
+        var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
+        return Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<double> PreparePixel(ulong packed)
+    {
+        var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsUInt16());
+        var alpha = (int)(packed >> 48);
+        var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1)).AsUInt32();
+        return Avx512F.ConvertToVector512Double(Vector256.Create(products, Vector128<uint>.Zero)).GetLower();
     }
 
     private static bool TryWrite(Vector256<double> sum, double normalizer, Span<byte> output)

@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -11,6 +12,10 @@ internal static class StreamingBicubicResize
     private const int Capacity = BicubicMath.StreamingTapCapacity;
     private const int OutputRowsPerBlock = BicubicMath.StreamingRows;
     private const int WorkspaceBytes = BicubicMath.StreamingWorkspaceBytes;
+    private const int PairedRows = (WorkspaceBytes - Capacity * (sizeof(double) + sizeof(ushort)))
+        / (8 * sizeof(double) + 2 * sizeof(double) + 2 * sizeof(int));
+    private readonly struct SingleColumn { }
+    private readonly struct AdjacentColumns { }
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
@@ -23,80 +28,120 @@ internal static class StreamingBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 4,048 bytes. Only the last horizontal result
-            // is retained, including repeated clamped edge rows.
-            Span<double> weights = stackalloc double[Capacity];
-            Span<ushort> offsets = stackalloc ushort[Capacity];
-            Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
-            Span<double> centers = stackalloc double[OutputRowsPerBlock];
-            Span<int> first = stackalloc int[OutputRowsPerBlock];
-            Span<int> last = stackalloc int[OutputRowsPerBlock];
-            Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
-            var word = source.BitDepth == 16;
-            var pixelBytes = word ? 8 : 4;
-            var input = source.Pixels;
-            var stride = source.Stride;
-            for (var x = 0; x < result.Width; x++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var centerX = (x + .5) * source.Width / result.Width - .5;
-                var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
-                var countX = (int)Math.Floor(centerX + 2 * scaleX) - firstX + 1;
-                var sourceFirst = Math.Clamp(firstX, 0, source.Width - 1);
-                double normalizerX = 0;
-                for (var t = 0; t < countX; t++)
-                {
-                    var w = ImageTransforms.Kernel((firstX + t - centerX) / scaleX, ResizeFilter.Bicubic);
-                    weights[t] = w; normalizerX += w;
-                    var relative = Math.Clamp(firstX + t, 0, source.Width - 1) - sourceFirst;
-                    if ((uint)relative >= Capacity) return false;
-                    offsets[t] = (ushort)relative;
-                }
-                var sourceCount = offsets[countX - 1] + 1;
-                // Reuse the same bounded arrays across output-row blocks.
-                // Each output keeps original global coordinates and full tap order.
-                for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
-                {
-                    var height = BicubicMath.PrepareStreamingRows(source.Height, result.Height,
-                        blockStart, scaleY, centers, first, last);
-                    totals[..height].Clear(); normalizers[..height].Clear();
-                    var previousRow = -1;
-                    var horizontal = Vector256<double>.Zero;
-                    // Unclamped coordinates are visited in increasing order. Each
-                    // output receives exactly its original vertical taps, including
-                    // separate contributions from duplicated clamped edge samples.
-                    for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
-                    {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        var sy = Math.Clamp(coordinate, 0, source.Height - 1);
-                        if (sy != previousRow)
-                        {
-                            previousRow = sy;
-                            var row = input.Slice(sy * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
-                            horizontal = word ? StreamingWordBicubicResize.FilterRow(row, weights[..countX], offsets[..countX])
-                                : FilterRow(row, weights[..countX], offsets[..countX]);
-                        }
-                        for (var y = 0; y < height; y++)
-                        {
-                            if (coordinate < first[y] || coordinate > last[y]) continue;
-                            var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
-                            normalizers[y] += w;
-                            totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
-                        }
-                    }
-                    if (word)
-                    {
-                        if (!StreamingWordBicubicResize.WriteBlock(source, result, x, blockStart, weights[..countX], offsets[..countX], sourceFirst,
-                            normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
-                    }
-                    else if (!WriteBlock(source, result, x, blockStart, weights[..countX], offsets[..countX], sourceFirst,
-                            normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
-                }
-            }
-            context.Cancellation.ThrowIfCancellationRequested();
-            return true;
+            return source.BitDepth == 16 && result.Width >= 2 && result.Height <= PairedRows
+                && tapsX > 72 && tapsX <= Capacity / 2
+                ? Apply<AdjacentColumns>(source, result, scaleX, scaleY, context)
+                : Apply<SingleColumn>(source, result, scaleX, scaleY, context);
         }
         finally { context.Release(WorkspaceBytes); }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool Apply<TColumns>(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, OperationContext context) where TColumns : struct
+    {
+        var columns = typeof(TColumns) == typeof(AdjacentColumns) ? 2 : 1;
+        var capacity = Capacity / columns;
+        var rowCount = typeof(TColumns) == typeof(AdjacentColumns) ? PairedRows : OutputRowsPerBlock;
+        // Single/pair frames use 4,048/4,096 B of explicit arrays. Only the
+        // current row values survive each step, including clamped duplicates.
+        Span<double> weights = stackalloc double[Capacity];
+        Span<ushort> offsets = stackalloc ushort[Capacity];
+        Span<Vector256<double>> totals = stackalloc Vector256<double>[rowCount * columns];
+        Span<double> centers = stackalloc double[rowCount];
+        Span<int> first = stackalloc int[rowCount];
+        Span<int> last = stackalloc int[rowCount];
+        Span<double> normalizers = stackalloc double[rowCount];
+        var word = source.BitDepth == 16;
+        var pixelBytes = word ? 8 : 4;
+        var input = source.Pixels;
+        var stride = source.Stride;
+        for (var x = 0; x < result.Width; x += columns)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var centerX = (x + .5) * source.Width / result.Width - .5;
+            var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
+            var countX = (int)Math.Floor(centerX + 2 * scaleX) - firstX + 1;
+            var sourceFirst = Math.Clamp(firstX, 0, source.Width - 1);
+            var weights0 = weights[..countX]; var offsets0 = offsets[..countX];
+            if (!PrepareHorizontal(source.Width, sourceFirst, centerX, firstX, countX, scaleX,
+                weights0, offsets0, out var normalizerX)) return false;
+            var pair = columns == 2 && x + 1 < result.Width;
+            var firstX1 = firstX; var countX1 = 0; double normalizerX1 = 0;
+            if (pair)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var centerX1 = (x + 1 + .5) * source.Width / result.Width - .5;
+                firstX1 = (int)Math.Ceiling(centerX1 - 2 * scaleX);
+                countX1 = (int)Math.Floor(centerX1 + 2 * scaleX) - firstX1 + 1;
+                if (!PrepareHorizontal(source.Width, sourceFirst, centerX1, firstX1, countX1, scaleX,
+                    weights.Slice(capacity, countX1), offsets.Slice(capacity, countX1), out normalizerX1)) return false;
+            }
+            var weights1 = weights.Slice(capacity, countX1);
+            var offsets1 = offsets.Slice(capacity, countX1);
+            var sourceCount = offsets0[countX - 1] + 1;
+            if (pair) sourceCount = Math.Max(sourceCount, offsets1[countX1 - 1] + 1);
+            // Each output keeps its global coordinates and original tap order.
+            for (var blockStart = 0; blockStart < result.Height; blockStart += rowCount)
+            {
+                var height = BicubicMath.PrepareStreamingRows(source.Height, result.Height,
+                    blockStart, scaleY, centers, first, last);
+                totals[..height].Clear(); normalizers[..height].Clear();
+                if (pair) totals.Slice(rowCount, height).Clear();
+                var previousRow = -1;
+                var horizontal = Vector256<double>.Zero;
+                var horizontal1 = Vector256<double>.Zero;
+                for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var sy = Math.Clamp(coordinate, 0, source.Height - 1);
+                    if (sy != previousRow)
+                    {
+                        previousRow = sy;
+                        var row = input.Slice(sy * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
+                        if (pair)
+                            StreamingWordBicubicResize.FilterColumnPair(row, weights0, offsets0, firstX1 - firstX,
+                                weights1, offsets1, out horizontal, out horizontal1);
+                        else horizontal = word ? StreamingWordBicubicResize.FilterRow(row, weights0, offsets0)
+                            : FilterRow(row, weights0, offsets0);
+                    }
+                    for (var y = 0; y < height; y++)
+                    {
+                        if (coordinate < first[y] || coordinate > last[y]) continue;
+                        var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                        normalizers[y] += w;
+                        totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
+                        if (pair) totals[rowCount + y] = Avx.Add(totals[rowCount + y], Avx.Multiply(horizontal1, Vector256.Create(w)));
+                    }
+                }
+                if (word)
+                {
+                    if (!StreamingWordBicubicResize.WriteBlock(source, result, x, blockStart, weights0, offsets0, sourceFirst,
+                        normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
+                    if (pair && !StreamingWordBicubicResize.WriteBlock(source, result, x + 1, blockStart, weights1, offsets1, sourceFirst,
+                        normalizerX1, totals.Slice(rowCount, height), normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
+                }
+                else if (!WriteBlock(source, result, x, blockStart, weights0, offsets0, sourceFirst,
+                    normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
+            }
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
+        return true;
+    }
+
+    private static bool PrepareHorizontal(int sourceWidth, int sourceFirst, double center,
+        int first, int count, double scale, Span<double> weights, Span<ushort> offsets, out double normalizer)
+    {
+        normalizer = 0;
+        for (var t = 0; t < count; t++)
+        {
+            var w = ImageTransforms.Kernel((first + t - center) / scale, ResizeFilter.Bicubic);
+            weights[t] = w; normalizer += w;
+            var relative = Math.Clamp(first + t, 0, sourceWidth - 1) - sourceFirst;
+            if ((uint)relative >= Capacity) return false;
+            offsets[t] = (ushort)relative;
+        }
+        return true;
     }
 
     private static bool WriteBlock(ImageBuffer source, ImageBuffer result, int x, int blockStart,

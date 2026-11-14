@@ -333,8 +333,8 @@ def apply_current_bicubic_adjacent_confidence(editing):
     word = current['cases']['TightWide16']
     mixed = current['cases']['Mixed16']
     wide_current = json.loads((ROOT / 'benchmarks/bicubic-wide-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    bounded_current = json.loads((ROOT / 'benchmarks/bicubic-bounded-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    for scoped in (wide_current, bounded_current):
+    streaming = json.loads((ROOT / 'benchmarks/streaming-column-reuse-evidence.json').read_text(encoding='utf-8'))
+    for scoped in (wide_current,):
         c, sq = scoped['case'], scoped['qualification']
         assert scoped['measurementAccepted'] and not scoped['productionChanged'] and not scoped['productionSpeedupClaim']
         assert scoped['measurement']['allBuilds'] == scoped['measurement']['broadOrPackageRepeats'] == 0
@@ -348,9 +348,26 @@ def apply_current_bicubic_adjacent_confidence(editing):
         assert c['sourceUnchanged'] and c['independentOwnedOutput']
         assert c['metadata']['nativeRgbMaximum'] <= 1 and c['metadata']['nativeAlphaMaximum'] <= 1
         assert c['metadata']['nativeRgbRmse'] <= .25 and c['metadata']['nativeAlphaRmse'] <= .25
-    wide, bounded = wide_current['case'], bounded_current['case']
+    sq = streaming['qualification']
+    assert streaming['productionAccepted'] and streaming['allAffectedPerformanceReconciled']
+    assert streaming['raw']['mirrored'] and streaming['raw']['allMembersVerified']
+    assert sq['fullChecksEachOs'] == sq['windows']['total'] == sq['linux']['total'] == 6702
+    assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
+    assert sq['package']['librarySha256'] == streaming['producers']['linuxSha256']
+    assert sq['actualPackageNewPairedPathPassedBothOs'] and sq['acceptedArtifactRebuildsAfterTiming'] == 0
+    assert set(streaming['cases']) == {'Tight16x8_16', 'Tight16x8_8', 'Tight8x4_16', 'Tight8x4_8', 'Tight8x17_16', 'Tight8x17_8'}
+    for c in streaming['cases'].values():
+        assert c['status'] == 'pass' and c['upper'] <= 1 and c['allocatedBytes'] == 112
+        assert c['librarySha256'] == streaming['producers']['linuxSha256']
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 256
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    assert streaming['memory']['workspaceAdmissionBytes'] == 4096
+    assert streaming['currentResizeStatusCounts'] == {'passCount': 72, 'gaps': 0, 'uncertain': 1, 'total': 73}
+    wide, bounded = wide_current['case'], streaming['cases']['Tight16x8_16']
     assert wide['status'] == 'pass' and wide['allocatedBytes'] == 198350
-    assert bounded['status'] == 'uncertain' and bounded['allocatedBytes'] == 112
+    assert bounded['status'] == 'pass' and bounded['allocatedBytes'] == 112
     prefix = '| Bicubic RGBA8, fresh managed / prepared zimg'
     found = [line for line in editing.splitlines() if line.startswith(prefix) and '128×64' in line]
     assert len(found) == 1
@@ -366,11 +383,16 @@ def apply_current_bicubic_adjacent_confidence(editing):
             f'also passes/stops: **{wide["managedUs"]:,.2f} / zimg {wide["nativeUs"]:,.2f}µs, upper {wide["upper"]:.6f}**, '
             '**198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; '
             'zero builds/qualification repeats, no production speedup. '
-            f'The [bounded 16×8 word view](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) '
-            f'remains uncertain after its 64→256 integration: **{bounded["managedUs"]:,.2f} / '
+            f'[Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the '
+            f'bounded 16×8 word uncertainty: **{bounded["managedUs"]:,.2f} / zimg '
             f'{bounded["nativeUs"]:,.2f}µs, upper {bounded["upper"]:.6f}**, **112 B/op**. '
-            'Fresh managed/prepared native boundaries remain explicit.')
-    return editing, note, wide_current
+            'Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. '
+            'All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, '
+            'with no retained operation workspace. Both OSes pass **6,702 full/live** checks, '
+            'focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. '
+            'The adverse first implementation and earlier uncertainty remain history. '
+            'Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.')
+    return editing, note, streaming
 
 
 def apply_released_image_storage(codecs, editing, read_rows):
@@ -2895,9 +2917,9 @@ One core/embedded build per OS, no other builds, one pack and no post-timing reb
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
-    editing, bicubic_adjacent_note, wide_current = apply_current_bicubic_adjacent_confidence(editing)
+    editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = reader_current['cases']['OpaqueCancelable8']
-    image_view_counts = owned_copy['currentImageOwnerViewStatuses']
+    image_view_counts = streaming_current['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
