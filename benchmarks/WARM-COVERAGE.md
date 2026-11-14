@@ -71,6 +71,10 @@ remain outside these 191 views; whole-library parity remains open.
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [Direct field assembly](DIRECT-PROBE-FIELDS.md) removes a separate array/copies: dimension probes744→688B/op, unchanged512Badmission, zero retained scratch. PNG/WebP normalized intervals separate; JPEG CPU effects are inconclusive. All four retain small absolute gaps. Complete PNG headers pass/stop at0.311/FFmpeg AVIO/header adapter0.579µs, upper.550,592B/op. All five confirmations use the same actual package DLL, original controls and ownership boundaries. [Earlier seekable storage](SEEKABLE-HEADER-STORAGE.md) retains bulk tradeoffs as history. [Prepared input](PREPARED-MEMORY-INPUT.md) keeps complete seekable PNG Identify15.08/adapter15.88µs, upper.953,192B/op and input peak393216→262144B. [Direct-input](DIRECT-STREAM-INPUT.md) retains other valid views. Metadata acquisition, container validation, coding validation and pixel decoding remain distinct. |
 
+[Compact VP8L pair-reuse trials](WEBP-COMPACT-PAIR-REUSE-TRIALS.md) remain
+unaccepted: scoped opaque gains did not justify photograph costs and added storage.
+Qualified source/modules are restored exactly; the current costs above are unchanged.
+
 Preparation/reuse boundaries are described in
 [architectural attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md).
 [Prior coverage](https://github.com/lokad/image/blob/31988ad292e291faa62f156498b0e8c58be9a698/benchmarks/WARM-COVERAGE.md)
