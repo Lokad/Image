@@ -1,5 +1,10 @@
 # Live-token VP8 decode attribution
 
+**Source-specific history.** [Header-mode decoding](VP8-MODE-WINDOW.md) changes
+ReadSmallMode/ReadPlanes; their old locations/code sizes are not a current profile.
+The unchanged coefficient body remains a lead, not a predicted saving.
+
+
 [The two resulting window trials](VP8-LIVE-WINDOW-TRIALS.md) are not accepted.
 Their scoped gains did not establish a standalone win. The profiled qualified
 source and current costs below are restored exactly; this remains attribution.

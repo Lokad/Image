@@ -594,27 +594,43 @@ foreach (var (name, width, height, expectedHash) in new[]
     }
     if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged VP8 retained admission was not released.");
 }
-using (var packageVp8Source = Lokad.Image.Tooling.OriginalPixels.Buffer(64, 64, 8, opaque: true))
+using (var packageVp8Source = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, 8, opaque: true))
 using (var packageVp8Encoded = new MemoryStream())
 using (var packageVp8Root = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024))
 using (var packageVp8Cancellation = new CancellationTokenSource())
 {
     ImageCodec.EncodeWebp(packageVp8Source, packageVp8Encoded, new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4 });
     var packageVp8Packet = packageVp8Encoded.ToArray();
-    if (packageVp8Packet.Length <= 1024) throw new Exception("Package VP8 block fixture is too short.");
+    if (packageVp8Packet.Length != 72380
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packageVp8Packet)) != "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f")
+        throw new Exception("Package VP8 mode/block fixture differs.");
     var packageVp8Options = new DecodeOptions { Limits = new ImageLimits { MemoryBudget = packageVp8Root } };
     using var packageVp8Fast = ImageCodec.Decode(packageVp8Packet, packageVp8Options);
     using var packageVp8Original = ImageCodec.Decode(packageVp8Packet, packageVp8Options, packageVp8Cancellation.Token);
     if (!Lokad.Image.Tooling.OriginalPixels.Bytes(packageVp8Fast).AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(packageVp8Original))
-        || packageVp8Root.Bytes != 2 * 64 * 64 * 4)
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(packageVp8Original))) != "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac"
+        || packageVp8Root.Bytes != 2 * 513 * 259 * 4)
         throw new Exception("Package VP8 block pixels or retained charges differ.");
     var packageVp8Pixel = packageVp8Original.GetRow8(0)[0];
     packageVp8Fast.GetRow8(0)[0] ^= 255; packageVp8Fast.Dispose();
-    if (packageVp8Original.GetRow8(0)[0] != packageVp8Pixel || packageVp8Root.Bytes != 64 * 64 * 4)
+    Array.Clear(packageVp8Packet);
+    if (packageVp8Original.GetRow8(0)[0] != packageVp8Pixel || packageVp8Root.Bytes != 513 * 259 * 4)
         throw new Exception("Package VP8 block survivors alias or lose their charge.");
     packageVp8Original.Dispose();
     if (packageVp8Root.Bytes != 0 || packageVp8Root.IsDisposed)
         throw new Exception("Package VP8 block cleanup or borrowed root differs.");
+    packageVp8Cancellation.Cancel();
+    try
+    {
+        using var unexpected = ImageCodec.Decode(packageVp8Encoded.ToArray(), packageVp8Options, packageVp8Cancellation.Token);
+        throw new Exception("Package VP8 canceled mode decode succeeded.");
+    }
+    catch (OperationCanceledException error) when (error.CancellationToken == packageVp8Cancellation.Token) { }
+    using (var following = ImageCodec.Decode(packageVp8Encoded.ToArray(), packageVp8Options))
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(following))) != "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac")
+            throw new Exception("Package VP8 subsequent mode decode differs.");
+    if (packageVp8Root.Bytes != 0 || packageVp8Root.IsDisposed)
+        throw new Exception("Package VP8 cancellation/subsequent cleanup differs.");
 }
 using (var packagePngSource = Lokad.Image.Tooling.OriginalPixels.Buffer(64, 64, 8))
 using (var packagePngEncoded = new MemoryStream())

@@ -21,8 +21,8 @@ public sealed partial class Vp8CoefficientBlockTests
             var range = 128 + trial % 128;
             var actual = Reader(data, trial % 12, trial % 8, range, random.Next(range)); var expected = actual;
             Assert.True(actual.CanReadCoefficientWindow(data, context, blocks));
-            var window = actual.BeginCoefficientWindow(data);
-            var validation = actual; var validationWindow = validation.BeginCoefficientWindow(data);
+            var window = actual.BeginWindow(data);
+            var validation = actual; var validationWindow = validation.BeginWindow(data);
             var values = new short[18]; var original = new short[18];
             for (var block = 0; block < blocks; block++)
             {

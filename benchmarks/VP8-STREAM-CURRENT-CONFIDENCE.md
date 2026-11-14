@@ -1,5 +1,10 @@
 # Current VP8 stream confidence
 
+**Historical after header-mode decoding.** [Current six affected costs](VP8-MODE-WINDOW.md)
+supersede these decoder timings. Retain the original confidence/boundaries and raw
+evidence; do not present the earlier producer as current proof.
+
+
 The existing transparent VP8/ALPH stream decode **passes and stops** on the current
 immutable package DLL. This resolves uncertainty without a production speedup claim.
 

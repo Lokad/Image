@@ -47,7 +47,14 @@ internal partial struct Vp8BooleanReader
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
         && end <= data.Length && end - position >= 272 * blocks;
 
-    internal readonly BlockReader BeginCoefficientWindow(ReadOnlySpan<byte> data)
+    // One mode macroblock uses at most121 decisions, fewer than the304
+    // covered by the existing272B coefficient lookahead proof. The declared
+    // first-partition end still bounds every buffered input read.
+    internal bool CanReadModeWindow(ReadOnlySpan<byte> data)
+        => range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
+        && end <= data.Length && end - position >= 272;
+
+    internal readonly BlockReader BeginWindow(ReadOnlySpan<byte> data)
         => new(data, position, shift, range, value);
 
     // The decoder supplies its complete private model,16sample block and valid
@@ -57,7 +64,7 @@ internal partial struct Vp8BooleanReader
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
         where TMode : struct
     {
-        var reader = BeginCoefficientWindow(data);
+        var reader = BeginWindow(data);
         var result = reader.ReadCoefficients<TMode>(model, values, plane, initialContext, dc, ac, out nonzero);
         reader.Publish(ref this);
         return result;

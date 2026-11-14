@@ -35,9 +35,11 @@ stream captures remain linked beside their current confirmations.
 
 [Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete decode/orient/crop/fit comparison: **2,874.75 / 2,937.59 µs, upper 0.984**, **338,159.1 B/op**. Both controls stop.
 
-[VP8/alpha stream confidence](../benchmarks/VP8-STREAM-CURRENT-CONFIDENCE.md)
-also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
-**240,496 B/op**. No builds or production change; this control stops.
+[Current VP8 header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) retains the
+stream pass: **5,664.40 / FFmpeg
+5,985.36µs, upper
+0.949**, **240,496 B/op**. This complete
+operation includes fresh stream acquisition, decoding, owned output and disposal.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
 **67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
@@ -85,19 +87,24 @@ the photograph gap: **9,385.67 / FFmpeg
 **809,080 B/op**, exact **17,688 B**. All nine lossy and all eight lossless/alpha
 controls pass/stop. Independent controlled gains are **154.41µs/1.623%** photograph
 and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
-The longer trellis integration retains its original uncertain capture. Both OSes
-pass **6,686 full/live** checks and the **same actual package/all three examples**.
+The longer trellis integration retains its original uncertain capture. Unchanged
+encoder paths reuse this source-valid evidence on the current qualified package.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Longer opaque VP8 integration](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md)
-resolves ordinary/simple-filter passes. Live-token decoding has a separated gap:
-**4,841.21 / FFmpeg 4,779.99µs**, ratio
-**1.0128**, upper **1.015392**,
+[Wide header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) reuses the exact
+buffered arithmetic reader, with every decision's cancellation check retained.
+Contemporary ordinary-decode captures save **73.60µs/1.55% raw**, with a separated
+reference-normalized gain (conservative effect upper .990). A paired live-token
+confirmation saves **88.65µs/1.83%** only in its ALC context; standalone live
+intervals overlap, so no standalone live gain is claimed. The live gap remains:
+**4,818.81 / FFmpeg 4,788.03µs**, ratio
+**1.0064**, upper **1.009319**,
 **230,880 B/op**. All pixels remain exact; original
-uncertainties remain in history. Eleven of twelve WebP reads pass/stop; attribute
-the remaining live-token gap before changing production. No speedup is inferred.
-[Two arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md) showed scoped
-paired gains without an established standalone win. Neither is accepted; qualified
-production and current costs are restored exactly. Their evidence stays separate.
+uncertainties remain in history. All six affected costs refresh on the timed,
+immutable actual package; eleven of twelve WebP reads pass/stop. Allocations,
+capacity and retention are unchanged. Both OSes pass **6,690 full/live** checks,
+focused normal/scalar checks and the **same actual package/all three examples**.
+[Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
+remain separate history; none of their coefficient state-bridge changes survives.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
@@ -163,7 +170,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,841.97 | 5,986.04 | 0.976 / 0.988 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,664.40 | 5,985.36 | 0.946 / 0.949 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,083.86 | 3,772.61 | 0.817 / 0.825 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (parity confirmed) † | 1,431.80 | 1,578.72 | 0.907 / 0.912 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,525.81 | 1,841.57 | 0.829 / 0.832 | 819,475 | 52,115 / 52,117 |
@@ -309,7 +316,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,344.720 | 5,438.871 | 0.799 / 0.801 | 15,600 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,236.130 | 5,452.224 | 0.777 / 0.779 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.311 | 0.579 | 0.537 / 0.550 | 592 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

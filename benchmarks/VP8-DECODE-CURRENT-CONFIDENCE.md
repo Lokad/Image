@@ -1,5 +1,10 @@
 # Current opaque VP8 decode confidence
 
+**Historical after header-mode decoding.** [Current six affected costs](VP8-MODE-WINDOW.md)
+supersede these decoder timings. Retain the original confidence/boundaries and raw
+evidence; do not present the earlier producer as current proof.
+
+
 The three existing controls now have **2 passing, 1 gap,
 0 uncertain** comparisons on the current immutable actual package.
 This is an uncertainty resolution, not a production speedup or historical-clock gain.

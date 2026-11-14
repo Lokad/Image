@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -22,6 +23,8 @@ internal ref struct Vp8Decoder
     private int filterLevel, sharpness, quantizer, skipProbability;
 
     private struct Macroblock { public byte Mode, Chroma, Segment, Flags; }
+    private readonly struct ScalarModeBits { }
+    private readonly struct WideModeBits { }
 
     public Vp8Decoder(ReadOnlySpan<byte> data, OperationContext context)
     {
@@ -124,28 +127,12 @@ internal ref struct Vp8Decoder
             {
                 var index = my * columns + mx;
                 ref var block = ref blocks[index];
-                if (segmentMap)
-                {
-                    var half = Bit(segmentProbabilities[0]);
-                    block.Segment = (byte)(half * 2 + Bit(segmentProbabilities[half + 1]));
-                }
-                if (skipEnabled && Bit(skipProbability) != 0) block.Flags |= 1;
-                block.Mode = (byte)(Bit(145) == 0 ? 4 : Bit(156) == 0 ? Bit(163) : 2 + Bit(128));
-                if (block.Mode == 4)
-                    for (var by = 0; by < 4; by++)
-                        for (var bx = 0; bx < 4; bx++)
-                        {
-                            var contextIndex = (aboveModes[mx * 4 + bx] * 10 + leftModes[by]) * 9;
-                            var mode = ReadSmallMode(Vp8Tables.BlockModeProbabilities.Slice(contextIndex, 9));
-                            aboveModes[mx * 4 + bx] = leftModes[by] = (byte)mode;
-                            if (reconstruct) modes[index * 16 + by * 4 + bx] = (byte)mode;
-                        }
+                var above = aboveModes.AsSpan(mx * 4, 4);
+                var destination = reconstruct ? modes.AsSpan(index * 16, 16) : default;
+                if (header.CanReadModeWindow(data))
+                    ReadModes<WideModeBits>(ref block, above, leftModes, destination, reconstruct);
                 else
-                {
-                    var mode = block.Mode switch { 0 => 0, 1 => 2, 2 => 3, _ => 1 };
-                    aboveModes.AsSpan(mx * 4, 4).Fill((byte)mode); leftModes.Fill((byte)mode);
-                }
-                block.Chroma = (byte)(Bit(142) == 0 ? 0 : Bit(114) == 0 ? 1 : 2 + Bit(183));
+                    ReadModes<ScalarModeBits>(ref block, above, leftModes, destination, reconstruct);
             }
         }
         var stride = columns * 16; var planeHeight = rows * 16;
@@ -187,7 +174,7 @@ internal ref struct Vp8Decoder
                     var lumaDc = reconstruct ? prepared[2] : 0; var lumaAc = reconstruct ? prepared[3] : 0;
                     var chromaDc = reconstruct ? prepared[4] : 0; var chromaAc = reconstruct ? prepared[5] : 0;
                     var reuseWindow = tokens.CanReadCoefficientWindow(data, context, hasY2 ? 25 : 24);
-                    var window = reuseWindow ? tokens.BeginCoefficientWindow(data) : default;
+                    var window = reuseWindow ? tokens.BeginWindow(data) : default;
                     if (hasY2)
                     {
                         any |= Coefficients(reconstruct, ref tokens, ref window, reuseWindow, reconstruct ? coefficients[..16] : default,
@@ -262,15 +249,67 @@ internal ref struct Vp8Decoder
         context.Release(metadataBytes + 8192); return result;
     }
 
-    private int ReadSmallMode(ReadOnlySpan<byte> p)
+    private void ReadModes<TBits>(ref Macroblock block, scoped Span<byte> above, scoped Span<byte> left,
+        scoped Span<byte> modes, bool reconstruct) where TBits : struct
     {
-        if (Bit(p[0]) == 0) return 0;
-        if (Bit(p[1]) == 0) return 1;
-        if (Bit(p[2]) == 0) return 2;
-        if (Bit(p[3]) == 0) return Bit(p[4]) == 0 ? 3 : Bit(p[5]) == 0 ? 5 : 6;
-        if (Bit(p[6]) == 0) return 4;
-        if (Bit(p[7]) == 0) return 7;
-        return Bit(p[8]) == 0 ? 8 : 9;
+        if (typeof(TBits) == typeof(WideModeBits)) context.Cancellation.ThrowIfCancellationRequested();
+        var reader = typeof(TBits) == typeof(WideModeBits) ? header.BeginWindow(data) : default;
+        var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
+        if (segmentMap)
+        {
+            var half = ModeBit<TBits>(segmentProbabilities[0], ref position, ref bits, ref range, ref value);
+            block.Segment = (byte)(half * 2 + ModeBit<TBits>(segmentProbabilities[half + 1], ref position, ref bits, ref range, ref value));
+        }
+        if (skipEnabled && ModeBit<TBits>(skipProbability, ref position, ref bits, ref range, ref value) != 0) block.Flags |= 1;
+        block.Mode = (byte)(ModeBit<TBits>(145, ref position, ref bits, ref range, ref value) == 0 ? 4
+            : ModeBit<TBits>(156, ref position, ref bits, ref range, ref value) == 0
+                ? ModeBit<TBits>(163, ref position, ref bits, ref range, ref value)
+                : 2 + ModeBit<TBits>(128, ref position, ref bits, ref range, ref value));
+        if (block.Mode == 4)
+            for (var by = 0; by < 4; by++)
+                for (var bx = 0; bx < 4; bx++)
+                {
+                    var contextIndex = (above[bx] * 10 + left[by]) * 9;
+                    var mode = ReadSmallMode<TBits>(Vp8Tables.BlockModeProbabilities.Slice(contextIndex, 9),
+                        ref position, ref bits, ref range, ref value);
+                    above[bx] = left[by] = (byte)mode;
+                    if (reconstruct) modes[by * 4 + bx] = (byte)mode;
+                }
+        else
+        {
+            var mode = block.Mode switch { 0 => 0, 1 => 2, 2 => 3, _ => 1 };
+            above.Fill((byte)mode); left.Fill((byte)mode);
+        }
+        block.Chroma = (byte)(ModeBit<TBits>(142, ref position, ref bits, ref range, ref value) == 0 ? 0
+            : ModeBit<TBits>(114, ref position, ref bits, ref range, ref value) == 0 ? 1
+                : 2 + ModeBit<TBits>(183, ref position, ref bits, ref range, ref value));
+        if (typeof(TBits) == typeof(WideModeBits))
+        {
+            reader.Position = position; reader.Bits = bits; reader.Range = range; reader.Value = value;
+            reader.Publish(ref header);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int ModeBit<TBits>(int probability, scoped ref int position, scoped ref int bits,
+        scoped ref int range, scoped ref ulong value) where TBits : struct
+        => typeof(TBits) == typeof(WideModeBits)
+            ? Vp8BooleanReader.CancellableBlockReader.Read(in data, probability, context.Cancellation,
+                ref position, ref bits, ref range, ref value)
+            : header.Read(data, probability, context);
+
+    private int ReadSmallMode<TBits>(ReadOnlySpan<byte> p, scoped ref int position, scoped ref int bits,
+        scoped ref int range, scoped ref ulong value) where TBits : struct
+    {
+        if (ModeBit<TBits>(p[0], ref position, ref bits, ref range, ref value) == 0) return 0;
+        if (ModeBit<TBits>(p[1], ref position, ref bits, ref range, ref value) == 0) return 1;
+        if (ModeBit<TBits>(p[2], ref position, ref bits, ref range, ref value) == 0) return 2;
+        if (ModeBit<TBits>(p[3], ref position, ref bits, ref range, ref value) == 0)
+            return ModeBit<TBits>(p[4], ref position, ref bits, ref range, ref value) == 0 ? 3
+                : ModeBit<TBits>(p[5], ref position, ref bits, ref range, ref value) == 0 ? 5 : 6;
+        if (ModeBit<TBits>(p[6], ref position, ref bits, ref range, ref value) == 0) return 4;
+        if (ModeBit<TBits>(p[7], ref position, ref bits, ref range, ref value) == 0) return 7;
+        return ModeBit<TBits>(p[8], ref position, ref bits, ref range, ref value) == 0 ? 8 : 9;
     }
 
     // Geometry and ownership are shared. Only token materialization specializes;

@@ -28,7 +28,7 @@ internal partial struct Vp8BooleanReader
         nonzero = 0;
         context.Cancellation.ThrowIfCancellationRequested();
         var cancellation = context.Cancellation;
-        var reader = BeginCoefficientWindow(data);
+        var reader = BeginWindow(data);
         var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
