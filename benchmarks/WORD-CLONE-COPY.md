@@ -1,8 +1,8 @@
 # Word clone copying
 
-[Current longer integration](OWNED-EDIT-CURRENT-CONFIDENCE.md) supersedes the
-normal-word/clone-word confidence rows below. Their original measurements and
-scoped incremental gains remain history; no production path changed.
+[Raster copy scheduling](RASTER-COPY-SCHEDULING.md) now owns the clone implementation
+and six affected current costs. The earlier [longer integration](OWNED-EDIT-CURRENT-CONFIDENCE.md)
+and this vector-dispatch stage retain their measurements and qualification as history.
 
 
 Uncancelable RGBA16 clones now reuse the existing safe disjoint vector copier.

@@ -145,10 +145,9 @@ public sealed class ImageBuffer : IDisposable
             var destination = result.Pixels;
             // A raster is tightly packed. Batch across row boundaries while
             // retaining bounded checkpoints whenever cancellation is possible.
-            if (!cancellationToken.CanBeCanceled)
+            if (!cancellationToken.CanBeCanceled && BitDepth != 16)
             {
-                if (BitDepth == 16) IndependentRowCopy.Copy(input, destination[..input.Length]);
-                else input.CopyTo(destination);
+                input.CopyTo(destination);
             }
             else
             {

@@ -193,14 +193,14 @@ def owned_edit_costs():
     # Only the selected current case needs validation. Superseded increments and
     # experiment-specific source/build proofs stay in their original reports.
     providers = [json.loads((ROOT / ('benchmarks/' + name)).read_text(encoding='utf-8')) for name in (
-        'copy-result-admission-evidence.json', 'word-clone-copy-evidence.json',
-        'owned-edit-current-confidence-evidence.json')]
+        'copy-result-admission-evidence.json', 'owned-edit-current-confidence-evidence.json',
+        'raster-copy-scheduling-evidence.json')]
     selected = {}
     for index, stage in enumerate(providers):
         q = stage['qualification']
         assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
         assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-        if index == 2:
+        if index == 1:
             assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
             assert q['fullChecksEachOs'] == 6692 and q['productionAndActualPackageByteIdentical']
             assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
@@ -209,14 +209,14 @@ def owned_edit_costs():
             library = q['actualPackageLibrarySha256']
         else:
             assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
-            assert q['windows']['total'] == q['linux']['total'] == 6683
+            assert q['windows']['total'] == q['linux']['total'] == (6683 if index == 0 else 6696)
             assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
             assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
             assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
             assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
             library = q['actualPackage']['librarySha256']
         assert library == stage['producers']['linuxSha256']
-        selected.update((name, (case, library, index == 2)) for name, case in stage['cases'].items())
+        selected.update((name, (case, library, index == 1)) for name, case in stage['cases'].items())
     assert len(selected) == 20
     for name, (c, library, latest) in selected.items():
         assert c['librarySha256'] == library
@@ -230,7 +230,7 @@ def owned_edit_costs():
     cases = {name: c for name, (c, _, _) in selected.items()}
     assert providers[-1]['combinedOwnedEditStatusCounts'] == {
         state: sum(c['status'] == state for c in cases.values()) for state in ('pass', 'gap', 'uncertain')}
-    return {'cases': cases}
+    return {'cases': cases, 'currentImageOwnerViewStatuses': providers[-1]['currentImageOwnerViewStatuses']}
 
 
 def current_png_stream_word_note():
@@ -254,7 +254,7 @@ def current_png_stream_word_note():
             f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
             f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
             'uncertainty without a production change or speedup claim. Original adverse data remain. '
-            f'The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete '
+            f'The [raster-copy round](../benchmarks/RASTER-COPY-SCHEDULING.md) refreshes the complete '
             f'decode/orient/crop/fit comparison: **{composition["managedUs"]:,.2f} / '
             f'{composition["nativeUs"]:,.2f} µs, upper {composition["upper"]:.3f}**, '
             f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
@@ -2843,29 +2843,32 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (gap) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    owned_copy_note = """[Current owned-edit confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md)
-extends only the four open controls to 4096 complete calls per batch on the unchanged
-actual package. Twelve alternating pairs/all native brackets remain. Normal RGBA16
-copy and RGBA8 vertical flip show gaps: **17.201 / 16.561 µs**, upper **1.043**, and
-**8.614 / 8.507 µs**, upper **1.023**. Word clone and word vertical flip remain
-uncertain, upper **1.027 / 1.005**. The normal/clone native setup and owned-copy
-boundary are identical; their different costs have no established cause.
-Together the 20 owned-edit/composition views retain **16 passes, two gaps and two
-uncertainties**. Stop confirmed passes; no historical-clock speedup or identical
-favorable retries. All 18 basic owned edits still allocate **56 B/op**; active
-result payload is 531,468/1,062,936 B at 8/16 bits. Borrowed input and unchanged
-default idle pixel storage are separate. No physical/native/JIT peak is claimed.
-Exact pixels, cancellation, terminal admission and independent ownership remain.
-Reuse 6,692 full/live checks per OS and the SAME actual package/all three examples;
-one argument-guard-only helper build, no production or broad/package repeats.
-[Word-copy increments](../benchmarks/WORD-CLONE-COPY.md) and
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) remain history."""
+    owned_copy_note = """[Raster copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md)
+joins word clones to the existing 16 KiB BCL strip body. Complete normal-word
+pairs improve about **9–12%** in both producer assignments, with unchanged allocation.
+Current normal/clone RGBA16 comparisons pass at **15.481 / 16.648 µs**, upper **.936**,
+and **15.455 / 16.740 µs**, upper **.926**. All six affected references pass;
+the prescribed longer PNG16 integration retains its original uncertainty and
+adverse/AA/reversed controls. Pipeline attribution changes sign with assignment;
+no fixed slot correction or causal pipeline/byte gain is claimed.
+The 20 owned-edit/composition views now retain **18 passes, one gap and one
+uncertainty**. Byte vertical flip remains **8.614 / 8.507 µs**, upper **1.023**;
+word vertical flip remains uncertain, upper **1.005**. Stop confirmed passes.
+All 18 basic owned edits still allocate **56 B/op**; active byte/word result payload
+is 531,468/1,062,936 B, separately from borrowed input and unchanged idle storage.
+No physical/native/JIT peak is claimed. Exact pixels, cancellation, terminal
+admission and independent ownership remain. Each OS passes **6,696 full/live checks**,
+focused normal/scalar checks and the SAME actual package/all three examples.
+One core/embedded build per OS, no other builds, one pack and no post-timing rebuild.
+[Prior copy confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md),
+[word increments](../benchmarks/WORD-CLONE-COPY.md) and
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) retain history."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, wide_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = reader_current['cases']['OpaqueCancelable8']
-    image_view_counts = reader_current['currentImageOwnerViewStatuses']
+    image_view_counts = owned_copy['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']

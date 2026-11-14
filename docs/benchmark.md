@@ -33,7 +33,7 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete decode/orient/crop/fit comparison: **2,874.75 / 2,937.59 µs, upper 0.984**, **338,159.1 B/op**. Both controls stop.
+[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [raster-copy round](../benchmarks/RASTER-COPY-SCHEDULING.md) refreshes the complete decode/orient/crop/fit comparison: **2,867.64 / 2,934.06 µs, upper 0.982**, **338,159.2 B/op**. Both controls stop.
 
 [Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
 stream pass: **5,701.59 / FFmpeg
@@ -49,26 +49,29 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
-[Current owned-edit confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md)
-extends only the four open controls to 4096 complete calls per batch on the unchanged
-actual package. Twelve alternating pairs/all native brackets remain. Normal RGBA16
-copy and RGBA8 vertical flip show gaps: **17.201 / 16.561 µs**, upper **1.043**, and
-**8.614 / 8.507 µs**, upper **1.023**. Word clone and word vertical flip remain
-uncertain, upper **1.027 / 1.005**. The normal/clone native setup and owned-copy
-boundary are identical; their different costs have no established cause.
-Together the 20 owned-edit/composition views retain **16 passes, two gaps and two
-uncertainties**. Stop confirmed passes; no historical-clock speedup or identical
-favorable retries. All 18 basic owned edits still allocate **56 B/op**; active
-result payload is 531,468/1,062,936 B at 8/16 bits. Borrowed input and unchanged
-default idle pixel storage are separate. No physical/native/JIT peak is claimed.
-Exact pixels, cancellation, terminal admission and independent ownership remain.
-Reuse 6,692 full/live checks per OS and the SAME actual package/all three examples;
-one argument-guard-only helper build, no production or broad/package repeats.
-[Word-copy increments](../benchmarks/WORD-CLONE-COPY.md) and
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) remain history.
+[Raster copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md)
+joins word clones to the existing 16 KiB BCL strip body. Complete normal-word
+pairs improve about **9–12%** in both producer assignments, with unchanged allocation.
+Current normal/clone RGBA16 comparisons pass at **15.481 / 16.648 µs**, upper **.936**,
+and **15.455 / 16.740 µs**, upper **.926**. All six affected references pass;
+the prescribed longer PNG16 integration retains its original uncertainty and
+adverse/AA/reversed controls. Pipeline attribution changes sign with assignment;
+no fixed slot correction or causal pipeline/byte gain is claimed.
+The 20 owned-edit/composition views now retain **18 passes, one gap and one
+uncertainty**. Byte vertical flip remains **8.614 / 8.507 µs**, upper **1.023**;
+word vertical flip remains uncertain, upper **1.005**. Stop confirmed passes.
+All 18 basic owned edits still allocate **56 B/op**; active byte/word result payload
+is 531,468/1,062,936 B, separately from borrowed input and unchanged idle storage.
+No physical/native/JIT peak is claimed. Exact pixels, cancellation, terminal
+admission and independent ownership remain. Each OS passes **6,696 full/live checks**,
+focused normal/scalar checks and the SAME actual package/all three examples.
+One core/embedded build per OS, no other builds, one pack and no post-timing rebuild.
+[Prior copy confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md),
+[word increments](../benchmarks/WORD-CLONE-COPY.md) and
+[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) retain history.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 185 pass, 2 gaps, 4 uncertain**. This does not establish full parity:
+image views: 187 pass, 1 gaps, 3 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. The [bounded 16×8 word view](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) remains uncertain after its 64→256 integration: **494.73 / 494.78µs, upper 1.003069**, **112 B/op**. Fresh managed/prepared native boundaries remain explicit.

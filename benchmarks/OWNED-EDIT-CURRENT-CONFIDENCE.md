@@ -1,5 +1,9 @@
 # Current owned-edit confidence
 
+[Raster copy scheduling](RASTER-COPY-SCHEDULING.md) supersedes the normal-word and
+word-clone costs below. The byte/word vertical-flip observations remain current;
+this report retains its longer-integration method, raw evidence and prior actions.
+
 Only the four open 513×259 owned-edit controls receive a longer integration.
 No production change or historical-clock speedup is claimed.
 

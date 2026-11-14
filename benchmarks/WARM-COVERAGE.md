@@ -8,10 +8,11 @@ Completion requires valid passing evidence for every named path. Missing evidenc
 gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
 Current costs use the identified immutable producers in the family reports below.
-[Word clone copying](WORD-CLONE-COPY.md) refreshes six affected copy/composition
-views; fourteen unchanged owned edits reuse [copy-result](COPY-RESULT-ADMISSION.md)
-evidence. [Fixed-position VP8 arithmetic](VP8-FIXED-CODE.md) refreshes
-six affected decode/validation views and closes the live-token gap. Across the **191 existing image views: 185 pass, two gaps, four uncertain**.
+[Raster copy scheduling](RASTER-COPY-SCHEDULING.md) refreshes six affected
+copy/composition views and closes the normal-word gap and word-clone uncertainty.
+Fourteen unchanged edits reuse current [flip confidence](OWNED-EDIT-CURRENT-CONFIDENCE.md)
+and [copy-result](COPY-RESULT-ADMISSION.md) evidence. [Fixed-position VP8 arithmetic](VP8-FIXED-CODE.md)
+retains six passing decode/validation views. Across the **191 existing image views: 187 pass, one gap, three uncertain**.
 These include approved alternative boundaries, not 191 new material paths.
 In-place drawing and inspection retain separate gaps; whole-library parity is open.
 
@@ -26,7 +27,7 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
 | PNG decoding | [Current owner](RELEASED-IMAGE-STORAGE.md): all 47 existing decode controls pass. Four coding-only validators and the caller-root retained-output control reuse unchanged paths. Stop passes. |
-| Stream decode/composition | [Current PNG16 stream](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) passes/stops:3,106.21/FFmpeg3,349.15µs,upper.934,8,664B/op. [Current complete decode/orient/crop/fit](WORD-CLONE-COPY.md) passes/stops:byte1,236.40/1,477.26µs,upper.846,169,454.8B/op; word2,874.75/2,937.59µs,upper.984,338,159.1B/op. [VP8/alpha stream](VP8-FIXED-CODE.md) also passes/stops:5,701.59/5,982.33µs,upper.956,240,496B/op. All seven synchronous decode/composition views,Identify and unchanged async PNG8 pass. [Direct acquisition](DIRECT-STREAM-INPUT.md) retains async inspection/validation evidence. No gain follows from historical phase sums; retain adverse samples. |
+| Stream decode/composition | [Current PNG16 stream](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) passes/stops:3,106.21/FFmpeg3,349.15µs,upper.934,8,664B/op. [Current complete decode/orient/crop/fit](RASTER-COPY-SCHEDULING.md) passes/stops:byte1,236.76/1,478.65µs,upper.845,169,454.8B/op; word2,867.64/2,934.06µs,upper.982,338,159.2B/op. Original uncertain/adverse and producer-position controls remain; no causal pipeline gain is claimed. [VP8/alpha stream](VP8-FIXED-CODE.md) retains its pass:5,701.59/5,982.33µs,upper.956,240,496B/op. All seven synchronous decode/composition views,Identify and unchanged async PNG8 pass. Reuse unchanged async inspection/validation evidence. No phase sums. |
 | JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | All 18 declared comparisons pass/stop. [Direct block emission](JPEG-DIRECT-BLOCK-EMISSION.md) closes restart33: 1,339.28 / FFmpeg 1,609.15 µs, upper .841, 151,180 B/op, exact 58,010 / 58,012 B packets with the strict 2 B attribution exception. Separate complete paired steps save 19.21% and 17.00%; no summed gain. The 17 [adaptive replay controls](JPEG-LOCAL-ENTROPY-REPLAY.md) reuse unchanged paths/artifact identities. SIMD libjpeg-turbo grayscale stays explicitly labeled. Native contexts/table preparation remain retained; managed preparation stays timed. No added storage or broader content/settings claim. |
 | PNG encoding | All 17 equivalent fresh-state controls pass/stop. [Longer Gray8 integration](PNG-GRAY-CURRENT-PATH.md) resolves uncertainty:1,964.07/FFmpeg1,978.51µs,upper.999681,546523B/op,exact72586B. No production speedup; original samples retained. Sixteen passing controls reuse unchanged [compressed heap](PNG-HUFFMAN-HEAP-ENTRIES.md) and [stored](PNG-STORED-WORD-NORMALIZATION.md) evidence. Stored-word naturalGC64 passes/stops; postGC4 retained-word uncertainty remains a distinct diagnostic. |
@@ -35,28 +36,18 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 | WebP reading | All twelve declared comparisons pass/stop. [Fixed-position arithmetic](VP8-FIXED-CODE.md) closes the live-token gap:4,767.34/FFmpeg4,784.37µs,interval.991113–.999450,230880B/op. Independent paired live gain41.53µs/.86% is scoped; all six affected actual-reference costs refresh before qualification. Five other standalone points are higher than the preceding round but retain passes; no uniform speedup/historical-clock gain or causal regression claim. Six lossless reads reuse unchanged proof. Exact pixels/cursors,all decision polls,input-read addresses,admission and output ownership remain. Stop this family; earlier mode/window profiles and rejected bridges stay history. |
 | Bicubic/bilinear resizing | Current73views:71pass,two uncertainties. [Default Wide8 longer integration](BICUBIC-WIDE-CURRENT-CONFIDENCE.md) passes/stops:337.24/zimg349.38µs,upper.970941,198350B/op; zero builds/qualification repeats,no production speedup. [Current adjacency](BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) stops default mixed-word and bounded byte/word-wide passes,112B/op. Bounded16×8word494.73/494.78µs upper1.003069 remains uncertain after one64→256integration;112B/op,no builds/qualification repeats or presumed gap. [Bilinear Up16](BILINEAR-WORD-CURRENT-CONFIDENCE.md) remains1,805.35/FFmpeg1,924.57µs,interval.879672–1.000415,4,498,558B/op uncertain after its longer integration. Preserve all samples; no identical favorable repeats or numerical-policy change. Asymmetric preparation remains explicit; all eight equivalent one-shot/prepared controls pass/stop. |
 | Lanczos3 | All eight declared one-shot/prepared byte/word comparisons pass and stop. [Current prepared word enlargement](LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md):4117.26/zimg4212.39µs, upper.990,4264760B/op and333396B retained plan. [Reduction product reuse](LANCZOS-WORD-PRODUCT-REUSE.md) retains its6.18% normalized gain and four passing reduction views. Exact Q30/rational arithmetic, float-native bounds and equivalent prepared/one-shot ownership stay explicit; no gain is inferred from the confidence update. |
-| Copy/turn transforms and drawing | [Current longer integration](OWNED-EDIT-CURRENT-CONFIDENCE.md), unchanged actual package:20views/16pass,two gaps(normal RGBA16 copy17.201/FFmpeg16.561µs,upper1.042814;RGBA8 vertical flip8.614/8.507µs,upper1.022566),two uncertainties(word clone upper1.026794;word vertical flip1.005451). All56B/op. Same normal/clone native boundary audited; no cause inferred from different clocks. Stop the16passes; no identical favorable retries. [Word-copy increments](WORD-CLONE-COPY.md) and [copy-result](COPY-RESULT-ADMISSION.md) remain history. Exact pixels,cancellation,caller root,independent output and capacity unchanged;6692full/live perOS and actual package reused. [Borrowed drawing](BORROWED-DRAWING-VALIDATION.md) retains0B/op:four pass,two tiny copy gaps,overlap uncertain;word compositing uses labeled ImageSharp3.1.12. |
+| Copy/turn transforms and drawing | [Raster copy scheduling](RASTER-COPY-SCHEDULING.md):20views/18pass,one gap,one uncertainty. Normal/clone RGBA16 now15.481/FFmpeg16.648µs,upper.936 and15.455/16.740µs,upper.926 pass/stop; scoped normal-word gains about9–12% across producer assignments. Reusing the16KiBBCL loop adds no kernel/storage; all18basic edits retain56B/op. [Current flip confidence](OWNED-EDIT-CURRENT-CONFIDENCE.md) retains byte vertical gap8.614/8.507µs,upper1.022566 and word-flip uncertainty upper1.005451. Exact pixels,cancellation,caller root,independent output/capacity remain;6696full/live perOS and SAMEactualpackage/all3examples pass. [Borrowed drawing](BORROWED-DRAWING-VALIDATION.md) retains0B/op:four pass,two tiny copy gaps,overlap uncertain;word compositing uses labeled ImageSharp3.1.12. |
 | Font/text public integration | Both complete one-shot and preparation-plus-eight-draw comparisons pass and stop. Report preparation separately and amortize the measured complete batch. Stage loading/drawing costs remain diagnostics with validation/retained-state differences, not evidence of overall slowdown. Preserve exact layout/fitting/full-word and visual gates; no face/script grid expansion. |
 | Inspection | [JPEG marker preparation](JPEG-MARKER-PREPARATION.md) confirms scoped complete sync/async probe gains of about14%/10% and a7%full-header gain, unchanged632/8800B/op. Current JPEG/async .260/.330µs,upper1.387/1.650 remain gaps to the labeled FFmpeg AVIO/header adapter. [Probe preparation](PROBE-PREPARATION.md) retains unchanged PNG/WebP .132/.133µs,upper1.116/1.105 and passing PNG headers .304/.569µs,upper.546,592B/op. Four small probe gaps remain; fixed512Badmission/256Bscratch and zero retained scratch. Original source/descriptor/ownership gates, independent confirmations and actual package qualify the scoped change;6696full/live perOS include held JPEG prefix/code cancellation/failure/recovery. Reuse unchanged paths; no whole-release timing refresh. Earlier field/storage reports retain history. |
 
-[Copy preparation trials](VERTICAL-COPY-PREPARATION-SCREEN.md) retain the
-inconclusive span-only screen and the unaccepted advancing-view/isolation stages.
-Qualified source/modules are restored exactly; current costs above are unchanged.
-No third cursor variant or favorable retry follows. Current copy-cost rendering
-selects the20live records once, preserving producer/quality/owner/confidence gates;
-historical gain and superseded-case audits stay in their reports. Rendered results
-are byte-identical. Require concrete attribution or a materially revised design
-before another production copy candidate; no permanent family ban.
-
-The later [block-value trial](VECTOR-BLOCK-VALUE-COPY-SCREEN.md) confirms tiny
-word/byte copy gains but a larger adverse complete PNG16 pipeline effect. All11
-affected references and one matched pipeline comparison are retained; qualified
-source/modules are restored, current results unchanged. The contradiction is
-resolved by rejecting the stage before Windows/full/package qualification.
-
-[Compact VP8L pair-reuse trials](WEBP-COMPACT-PAIR-REUSE-TRIALS.md) remain
-unaccepted: scoped opaque gains did not justify photograph costs and added storage.
-Qualified source/modules are restored exactly; the current costs above are unchanged.
+Earlier [copy preparation](VERTICAL-COPY-PREPARATION-SCREEN.md),
+[block-value copying](VECTOR-BLOCK-VALUE-COPY-SCREEN.md) and
+[compact VP8L reuse](WEBP-COMPACT-PAIR-REUSE-TRIALS.md) remain unaccepted historical
+studies with raw evidence retained. Current producer-position controls do not
+retroactively qualify an older candidate. Require concrete attribution or a
+materially revised design before another trial; there is no permanent family ban.
+Copy-cost rendering selects the 20 current records once; superseded gain and
+rejection checks remain in their reports, outside renderer dependencies.
 
 Preparation/reuse boundaries are described in
 [architectural attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md).

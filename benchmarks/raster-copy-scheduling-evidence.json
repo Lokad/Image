@@ -1,0 +1,527 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RCS1020",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "9f08b7a5487aff97a18707ac18bac4e6e401b78299dc7d7f3dee1e987f5124fa",
+    "linuxSha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+    "packageSha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de"
+  },
+  "sources": {
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4"
+  },
+  "sourceProof": {
+    "singleDispatchChange": true,
+    "existingStripBodyExact": true,
+    "byteCopyOperationExact": true,
+    "admissionAllocationCleanupExact": true,
+    "sharedRowKernelExact": true,
+    "noCapacityAllocationRetentionOrPublicApiChange": true
+  },
+  "cases": {
+    "WarmNormalOrientation16": {
+      "managedUs": 15.48090126546224,
+      "nativeUs": 16.648492411295575,
+      "ratio": 0.9298680554978568,
+      "lower": 0.8901178398792543,
+      "upper": 0.9362259521332161,
+      "status": "pass",
+      "allocatedBytes": 56.0,
+      "caseId": "WarmNormalOrientation16",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 4096,
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public AutoOrient, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "nativeIdentity": {
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 513,
+        "outputHeight": 259
+      },
+      "receipt": "tmp/rcs1020-WarmNormalOrientation16-reference-confirm-receipt.json",
+      "raw": "tmp/rcs1020-WarmNormalOrientation16-reference-confirm.json"
+    },
+    "WarmClone16": {
+      "managedUs": 15.454920084635416,
+      "nativeUs": 16.7403198038737,
+      "ratio": 0.9232153426996752,
+      "lower": 0.9191140706054466,
+      "upper": 0.9263632217907286,
+      "status": "pass",
+      "allocatedBytes": 56.0,
+      "caseId": "WarmClone16",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 4096,
+      "boundary": "One resident original 513x259 RGBA16 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public Clone, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "nativeIdentity": {
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 513,
+        "outputHeight": 259
+      },
+      "receipt": "tmp/rcs1020-WarmClone16-reference-confirm-receipt.json",
+      "raw": "tmp/rcs1020-WarmClone16-reference-confirm.json"
+    },
+    "WarmClone8": {
+      "managedUs": 5.674374348958333,
+      "nativeUs": 7.732201497395833,
+      "ratio": 0.7338627104931803,
+      "lower": 0.7025229002307984,
+      "upper": 0.7502568767139944,
+      "status": "pass",
+      "allocatedBytes": 56.0,
+      "caseId": "WarmClone8",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 256,
+      "boundary": "One resident original 513x259 RGBA8 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public Clone, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "nativeIdentity": {
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "outputWidth": 513,
+        "outputHeight": 259
+      },
+      "receipt": "tmp/rcs1020-WarmClone8-reference-confirm-receipt.json",
+      "raw": "tmp/rcs1020-WarmClone8-reference-confirm.json"
+    },
+    "WarmNormalOrientation8": {
+      "managedUs": 5.558603841145833,
+      "nativeUs": 7.660187174479167,
+      "ratio": 0.7256485663516146,
+      "lower": 0.7042791970238872,
+      "upper": 0.7391325726039674,
+      "status": "pass",
+      "allocatedBytes": 56.0,
+      "caseId": "WarmNormalOrientation8",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 256,
+      "boundary": "One resident original 513x259 RGBA8 raster with Normal orientation copied into an independent owned 513x259 raster at the same depth. Complete public AutoOrient, admission, allocation, full materialization and disposal. Native public FFmpeg null graph emits a shared view; av_frame_get_buffer plus av_frame_copy allocates and materializes an independent raster inside every operation before release. Graph/source/frame wrappers are reused. Native padded rows exposed directly; one necessary owned copy, no redundant packing copy. Exact complete channel bytes, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original raster is measured.",
+      "nativeIdentity": {
+        "sourceSha256": "348ad0cf3d3d69e154c0d03d9cd6b483f09c92d8d5ee685265db8eec78dcb611",
+        "buildScriptSha256": "a36e408a677c8646e33dd0a358f28d14b94cbd3cd92292fd6ed61c15139adc00",
+        "workerSha256": "0aef1c8e0f899edb651ca27f10809e34e9349bf9d1aa4654d46098e0a28c38aa"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "outputWidth": 513,
+        "outputHeight": 259
+      },
+      "receipt": "tmp/rcs1020-WarmNormalOrientation8-reference-confirm-receipt.json",
+      "raw": "tmp/rcs1020-WarmNormalOrientation8-reference-confirm.json"
+    },
+    "PngCropFit8": {
+      "managedUs": 1236.7563645833332,
+      "nativeUs": 1478.6514453125,
+      "ratio": 0.836408315498556,
+      "lower": 0.8187272306431803,
+      "upper": 0.8449705592205661,
+      "status": "pass",
+      "allocatedBytes": 169454.78125,
+      "caseId": "PngCropFit8",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputSha256": "37e74deb6c0cbf5bb5fee349e1102b0a63371785201cdd22d2309b8f2fbd4dd2",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 64,
+      "boundary": "Composed Decode(Stream), AutoOrient(Normal), CropCentered(256,129), ResizeToFit(128,64,false,Nearest) gives 127x64. All managed intermediate owners are materialized and released. Native equivalent single-thread crop/point graph may retain intermediate views; final output is independently owned. Complete graph and pixel conversions are timed. Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "nativeIdentity": {
+        "sourceSha256": "a4a395cf1838bc72be2776656de4b02363b249af44fef20803b39e975c351027",
+        "buildScriptSha256": "cf9e6d6cd18ac31165d4093eafd7d933c64bff63e330e7487b8d51a7c822c1ac",
+        "workerSha256": "b6c71b44c0b0512794bb7ab4e2221d6892d36d66e842050280655245a7364c3a"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "outputWidth": 127,
+        "outputHeight": 64
+      },
+      "receipt": "tmp/rcs1020-PngCropFit8-reference-confirm-receipt.json",
+      "raw": "tmp/rcs1020-PngCropFit8-reference-confirm.json"
+    },
+    "PngCropFit16": {
+      "managedUs": 2867.637862955729,
+      "nativeUs": 2934.0621041666664,
+      "ratio": 0.9773609968525859,
+      "lower": 0.9711484590280446,
+      "upper": 0.9823195644379765,
+      "status": "pass",
+      "allocatedBytes": 338159.1848958333,
+      "caseId": "PngCropFit16",
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "operationsPerSubject": 256,
+      "boundary": "Composed Decode(Stream), AutoOrient(Normal), CropCentered(256,129), ResizeToFit(128,64,false,Nearest) gives 127x64. All managed intermediate owners are materialized and released. Native equivalent single-thread crop/point graph may retain intermediate views; final output is independently owned. Complete graph and pixel conversions are timed. Native PNG16 stays RGBA64BE through crop; the complete public graph converts selected full-word planes to LE and packs independently owned RGBA64LE output. No artificial full-frame endian copy is required. Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing.",
+      "nativeIdentity": {
+        "sourceSha256": "36c8ec66db3533cafbf751f65de8c16e9bb360ad5d6a5ac7f9a64fe2b60fe298",
+        "buildScriptSha256": "f02d7b55088447248469ec3f69ca76057e699e3edc595f9fd9850ed96b99163f",
+        "workerSha256": "78ba7dbbb443f478fb36c0cbc59cf042a2ccc4e778c6bda8bce7559c68ee45de"
+      },
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 127,
+        "outputHeight": 64
+      },
+      "receipt": "tmp/rcs1020-PngCropFit16-reference-long-confirm-receipt.json",
+      "raw": "tmp/rcs1020-PngCropFit16-reference-long-confirm.json"
+    }
+  },
+  "combinedOwnedEditStatusCounts": {
+    "pass": 18,
+    "gap": 1,
+    "uncertain": 1
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 187,
+    "gaps": 1,
+    "uncertain": 3,
+    "total": 191
+  },
+  "pairedPrimary": {
+    "forward": {
+      "project": "Lokad.Image",
+      "stage": "RCS1020",
+      "caseId": "WarmNormalOrientation16",
+      "baselineUs": 17.047637573242188,
+      "candidateUs": 15.441088602701821,
+      "ratio": 0.9057606538787951,
+      "lower": 0.9000715525361825,
+      "upper": 0.9114857144448665,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 12,
+      "phase": "confirm",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/rcs1020-baseline-linux/Lokad.Image.dll",
+        "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+        "tmp/rcs1020-candidate-linux/Lokad.Image.dll",
+        "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "WarmNormalOrientation16",
+        "confirm"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/rcs1020-WarmNormalOrientation16-paired-confirm.log"
+    },
+    "reverse": {
+      "project": "Lokad.Image",
+      "stage": "RCS1020",
+      "caseId": "WarmNormalOrientation16",
+      "baselineUs": 15.40463144938151,
+      "candidateUs": 17.407725443522136,
+      "ratio": 1.1300052877361932,
+      "lower": 1.12157847579596,
+      "upper": 1.138495413266165,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 12,
+      "phase": "confirm",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/rcs1020-candidate-linux/Lokad.Image.dll",
+        "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+        "tmp/rcs1020-baseline-linux/Lokad.Image.dll",
+        "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "WarmNormalOrientation16",
+        "confirm"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/rcs1020-WarmNormalOrientation16-paired-reverse-confirm.log"
+    },
+    "reverseMapped": {
+      "ratio": 0.8849516111587048,
+      "lower": 0.8783522430987724,
+      "upper": 0.8916005625824102
+    },
+    "allAssignmentUpperBoundsBelowOne": true,
+    "claim": "Scoped complete word-copy improvement in both producer assignments; do not merge their ranges into an unsupported universal percentage."
+  },
+  "pipelineReconciliation": {
+    "forward": {
+      "baselineUs": 2921.1239817708333,
+      "candidateUs": 2947.2820377604166,
+      "ratio": 1.0089572138680167,
+      "lower": 1.001686418968738,
+      "upper": 1.0162807842242312
+    },
+    "reverseRaw": {
+      "baselineUs": 2920.1272799479166,
+      "candidateUs": 2940.1816966145834,
+      "ratio": 1.0068724946456333,
+      "lower": 0.999325474469391,
+      "upper": 1.0144765107806457
+    },
+    "reverseMapped": {
+      "ratio": 0.9931744141565292,
+      "lower": 0.9857300680431664,
+      "upper": 1.0006749808224065
+    },
+    "sameDllControl": {
+      "baselineUs": 2924.57212109375,
+      "candidateUs": 2903.8467239583333,
+      "ratio": 0.9929167471104646,
+      "lower": 0.9841279365522568,
+      "upper": 1.0017840466416597
+    },
+    "conclusion": "The sign changes when producer positions reverse; same-DLL control is inconclusive at this scale. The original adverse paired result is retained but is not robust producer attribution. No fixed slot bias, AA subtraction, or pipeline CPU gain/regression is claimed. All views remain."
+  },
+  "memory": {
+    "allocatedBytesPerBasicOwnedEdit": 56,
+    "allocationChangeBytes": 0,
+    "newOwnedCapacityBytes": 0,
+    "retainedOperationWorkspaceBytes": 0,
+    "byteSourceAndResultEach": 531468,
+    "wordSourceAndResultEach": 1062936,
+    "defaultIdleSlots": 2,
+    "defaultIdleCeilingBytes": 4194304,
+    "callerGovernedResultsBypassIdleStorage": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "decision": {
+    "accept": true,
+    "reason": "Normal-word copying improves in both assignments; all six affected current standalone FFmpeg controls pass on the same immutable DLL. The previously uncertain PNG16 control passes one prespecified64to256integration; original captures and position controls remain. Strip/body/source/output/lifetime contracts unchanged, no new kernel or ownership machinery."
+  },
+  "qualification": {
+    "windows": {
+      "productionSha256": "9f08b7a5487aff97a18707ac18bac4e6e401b78299dc7d7f3dee1e987f5124fa",
+      "embeddedTestsSha256": "ea65797348ca566bd9c62f7525922f13acfecc8d7c7f6e053f4ec1b32012f321",
+      "full": [
+        3263,
+        2485,
+        948
+      ],
+      "total": 6696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 118,
+        "internal-scalar": 25,
+        "public-scalar": 118
+      }
+    },
+    "linux": {
+      "productionSha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "embeddedTestsSha256": "83a24dfd9e854f1e113bf2a555bcd9aa3d4804c987b458ecc9d2c1d7e8882d1c",
+      "full": [
+        3263,
+        2485,
+        948
+      ],
+      "total": 6696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 118,
+        "internal-scalar": 25,
+        "public-scalar": 118
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "RCS1020",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de",
+      "symbolsSha256": "22bb6c8b5a8d54604b4e251dfee1c08003e3effe2a11c782070962e2503ba373",
+      "bytes": 461903,
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for complete word-copy screens/confirmations in both producer assignments and six affected standalone FFmpeg references. Both word-copy controls now pass; PNG16 composition passes its prespecified longer integration, while all adverse/AA/reversed controls remain. No causal pipeline or byte gain is claimed.56Bop and owned capacity/retention unchanged. No post-timing rebuild; unchanged codec/resize/text/inspection evidence reused.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "RCS1020",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de",
+      "symbolsSha256": "22bb6c8b5a8d54604b4e251dfee1c08003e3effe2a11c782070962e2503ba373",
+      "bytes": 461903,
+      "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for complete word-copy screens/confirmations in both producer assignments and six affected standalone FFmpeg references. Both word-copy controls now pass; PNG16 composition passes its prespecified longer integration, while all adverse/AA/reversed controls remain. No causal pipeline or byte gain is claimed.56Bop and owned capacity/retention unchanged. No post-timing rebuild; unchanged codec/resize/text/inspection evidence reused.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de"
+    },
+    "fullChecksEachOs": 6696,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "acceptedCoreAndEmbeddedBuildsEachOs": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "helperBuilds": 0,
+    "packCalls": 1,
+    "focusedEachMode": {
+      "internal": 25,
+      "public": 118
+    },
+    "unchangedScalarAndIsaProofReused": true
+  },
+  "history": {
+    "allRawRetained": true,
+    "previousProvider": "benchmarks/owned-edit-current-confidence-evidence.json",
+    "initialPng64": {
+      "caseId": "PngCropFit16",
+      "managedUs": 2914.3074856770836,
+      "nativeUs": 2944.5210026041664,
+      "ratio": 0.9897390723651277,
+      "lower": 0.9477027837280216,
+      "upper": 1.031281433317638,
+      "status": "uncertain",
+      "allocatedBytes": 338159.1041666667
+    },
+    "boundedMeasurementChange": "Prespecified PNG16 integration64to256after initial uncertainty and producer-position controls. Twelve pairs/native brackets and all observations remain; no identical favorable retry.",
+    "noPipelineOrByteCausalSpeedupClaim": true,
+    "primaryGainRequiresBothAssignments": true,
+    "toolingCorrections": "A record-script keyword syntax error preceded qualification. The reverse adapter stopped at an existing local log before SSH; its generated original recipe was reconstructed from the unchanged generator, and unique reverse names used. No successful build or timing repeated.",
+    "fixedHelperStageLabel": "The reused pipeline helper retains its historical stage label; current run IDs, immutable module hashes and explicit source-to-slot mapping identify this round."
+  },
+  "raw": {
+    "file": "raster-copy-scheduling-qualified.tar.xz",
+    "sha256": "254540f22edaae5451829452f7b349c3029fed4ef8fa49a38206a4cab9f9372f",
+    "bytes": 5468044,
+    "members": 296,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "normal-word-copy-attribution.tar.xz",
+        "sha256": "fe5d419989d40d02c6177bc0e053167724a203bd2f43e1421e6240ba89418952",
+        "bytes": 51568,
+        "members": 28,
+        "mirrored": true,
+        "allMembersVerified": true
+      },
+      {
+        "file": "jpeg-marker-preparation-qualified.tar.xz",
+        "sha256": "f89171c3959b9c0f08ac37561691586a49f7589f61bbf2356cc9f98d76e9cae0"
+      }
+    ]
+  },
+  "next": "Stop the newly passing normal-word/word-clone controls. The only owned-edit gap is byte vertical flip; word vertical flip stays uncertain. Two resize uncertainties, borrowed drawing and four small inspection gaps remain separately visible. Use attribution or a materially revised design before further tuning; preserve all289paths."
+}
