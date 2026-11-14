@@ -1,5 +1,10 @@
 # Live-token VP8 decode attribution
 
+**Not a current profile.** [Fixed-position arithmetic](VP8-FIXED-CODE.md) changes
+the coefficient reader as well. Its old locations/code sizes are source-specific
+history; all twelve current WebP reads pass/stop.
+
+
 **Source-specific history.** [Header-mode decoding](VP8-MODE-WINDOW.md) changes
 ReadSmallMode/ReadPlanes; their old locations/code sizes are not a current profile.
 The unchanged coefficient body remains a lead, not a predicted saving.

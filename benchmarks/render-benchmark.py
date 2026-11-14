@@ -272,18 +272,19 @@ def current_png_stream_word_note():
             f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
 
 
-def apply_current_vp8_mode_window(codecs, reads):
-    current = json.loads((ROOT / 'benchmarks/vp8-mode-window-evidence.json').read_text(encoding='utf-8'))
+def apply_current_vp8_fixed_code(codecs, reads, current):
     q = current['qualification']
     assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6690
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6692
     assert q['sameActualPackageBothOS'] and q['allThreeExamplesBothOS']
     assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
     assert q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-    assert current['comparison']['ordinary']['separated'] and current['comparison']['ordinary']['conservativeUpper'] < 1
-    assert not current['comparison']['live']['standaloneGainClaim'] and not current['comparison']['live']['parityClosed']
+    assert current['comparison']['pairedLive']['scopedManagedDllEffectOnly'] and current['comparison']['pairedLive']['upper'] < 1
+    assert current['comparison']['standalone']['allSixPass'] and current['comparison']['standalone']['liveGapClosed']
+    assert not current['comparison']['standalone']['historicalClockSpeedupClaim']
+    assert current['implementation']['sourceProof']['entireOriginalBlockSourceReconstructsByteExact']
     assert current['storage']['newOwnedHeapCapacityBytes'] == current['storage']['newRetainedStateBytes'] == 0
     assert set(current['cases']) == {'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8', 'Native8', 'StreamNative8', 'ValidateVp8Alpha'}
     for name, c in current['cases'].items():
@@ -291,6 +292,7 @@ def apply_current_vp8_mode_window(codecs, reads):
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert c['status'] == 'pass'
         v = c['metadata']
         assert v['sourceUnchanged'] and v['independentOwnedOutput']
         if name == 'ValidateVp8Alpha':
@@ -310,7 +312,7 @@ def apply_current_vp8_mode_window(codecs, reads):
     found = [line for line in reads.splitlines() if line.startswith(prefix)]
     assert len(found) == 1
     reads = reads.replace(found[0], f'{prefix} † | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |')
-    return codecs, reads, current
+    return codecs, reads
 
 
 def apply_current_bicubic_adjacent_confidence(editing):
@@ -590,15 +592,16 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    prepared_model = json.loads((ROOT / 'benchmarks/vp8-position-model-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 289
-    assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
-    assert prepared_model['allAffectedPerformanceReconciled'] and not prepared_model['materialPassToGapContradictions']
-    assert set(prepared_model['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
-    vp8_costs = {('Vp8Stream' if name == 'StreamNative8' else name): cost for name, cost in prepared_model['cases'].items()}
+    reader_current = json.loads((ROOT / 'benchmarks/vp8-fixed-code-evidence.json').read_text(encoding='utf-8'))
+    assert reader_current['productionAccepted'] and reader_current['requiredMaterialPaths'] == 289
+    assert reader_current['raw']['mirrored'] and reader_current['raw']['allMembersVerified']
+    assert reader_current['allAffectedPerformanceReconciled'] and not reader_current['materialPassToGapContradictions']
+    assert set(reader_current['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
+    vp8_costs = {('Vp8Stream' if name == 'StreamNative8' else name): {**cost['metadata'], **cost}
+                 for name, cost in reader_current['cases'].items()}
     for cost in vp8_costs.values():
         assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
-        assert cost['librarySha256'] == prepared_model['producers']['timedArtifactSha256']
+        assert cost['librarySha256'] == reader_current['producers']['timedArtifactSha256']
         assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
         assert cost['sourceUnchanged'] and cost['independentOwnedOutput']
         if cost['caseId'] == 'ValidateVp8Alpha':
@@ -608,17 +611,6 @@ def render():
             assert cost['decoderMaximum'] == 0 and cost['managedOutputBytes'] == 531468
         assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
-    assert all(prepared_model['sourceProof']['originalProductionSourcesReconstructedExactlyAfterRevertingOnlyModelPreparationAndAddressing'].values())
-    assert prepared_model['storage']['modelPayloadBytes'] == 3072
-    assert prepared_model['storage']['additionalModelArrayBytes'] == 1536
-    assert prepared_model['storage']['conservativelySummedFixedBoundBytes'] <= prepared_model['storage']['coarseHeaderWorkspaceBytes'] == 8192
-    assert prepared_model['storage']['newRetainedStateBytes'] == 0
-    assert prepared_model['comparison']['Opaque8']['normalizedGainSeparated']
-    assert all(v['rawGainSeparated'] for v in prepared_model['comparison']['Opaque8']['views'].values())
-    q = prepared_model['qualification']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6247
-    assert q['sameActualPackageBothOS'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
-    live = vp8_costs['OpaqueCancelable8']
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
     assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
@@ -1074,11 +1066,12 @@ def render():
     assert color_tiles['comparison']['normalizedGainSeparated']
     assert all(view['rawGainSeparated'] for view in color_tiles['comparison']['views'].values())
     lpf.update(color_tiles['costs'])
+    lpf.update(vp8_costs)
     lossless_read_counts = {state: sum(lpf[name]['status'] == state for name in ('WebpResident', 'Lossless8', 'IndexedNative16Colors8', 'NativeLosslessCancelable8', 'WebpStream', 'ValidateVp8lAlpha')) for state in ('pass', 'gap', 'uncertain')}
     assert lossless_read_counts == {'pass': 6, 'gap': 0, 'uncertain': 0}
     vp8_decode_counts = {state: sum(lpf[name]['status'] == state for name in vp8_costs)
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_decode_counts == {'pass': 5, 'gap': 0, 'uncertain': 1}
+    assert vp8_decode_counts == {'pass': 6, 'gap': 0, 'uncertain': 0}
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -2870,10 +2863,10 @@ admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
 remains linked history; no historical phase sum is used."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
-    codecs, read_table, mode_current = apply_current_vp8_mode_window(codecs, read_table)
+    codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, wide_current = apply_current_bicubic_adjacent_confidence(editing)
-    opaque_live = mode_current['cases']['OpaqueCancelable8']
-    image_view_counts = wide_current['currentImageOwnerViewStatuses']
+    opaque_live = reader_current['cases']['OpaqueCancelable8']
+    image_view_counts = reader_current['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
@@ -2913,10 +2906,10 @@ stream captures remain linked beside their current confirmations.
 
 {png_stream_word_note}
 
-[Current VP8 header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) retains the
-stream pass: **{mode_current['cases']['StreamNative8']['managedUs']:,.2f} / FFmpeg
-{mode_current['cases']['StreamNative8']['nativeUs']:,.2f}µs, upper
-{mode_current['cases']['StreamNative8']['upper']:.3f}**, **240,496 B/op**. This complete
+[Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
+stream pass: **{reader_current['cases']['StreamNative8']['managedUs']:,.2f} / FFmpeg
+{reader_current['cases']['StreamNative8']['nativeUs']:,.2f}µs, upper
+{reader_current['cases']['StreamNative8']['upper']:.3f}**, **240,496 B/op**. This complete
 operation includes fresh stream acquisition, decoding, owned output and disposal.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
@@ -2954,18 +2947,18 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Unchanged
 encoder paths reuse this source-valid evidence on the current qualified package.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Wide header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) reuses the exact
-buffered arithmetic reader, with every decision's cancellation check retained.
-Contemporary ordinary-decode captures save **73.60µs/1.55% raw**, with a separated
-reference-normalized gain (conservative effect upper .990). A paired live-token
-confirmation saves **88.65µs/1.83%** only in its ALC context; standalone live
-intervals overlap, so no standalone live gain is claimed. The live gap remains:
+[Fixed-position VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) keeps the code
+byte at a fixed UInt64 position, preserving scalar cursors, every cancellation
+check and input-refill addresses. Independent live-token pairs save **41.53µs/.86%**
+in their scoped ALC comparison. The actual standalone live comparison now passes:
 **{opaque_live['managedUs']:,.2f} / FFmpeg {opaque_live['nativeUs']:,.2f}µs**, ratio
 **{opaque_live['ratio']:.4f}**, upper **{opaque_live['upper']:.6f}**,
 **{opaque_live['allocatedBytes']:,} B/op**. All pixels remain exact; original
 uncertainties remain in history. All six affected costs refresh on the timed,
-immutable actual package; eleven of twelve WebP reads pass/stop. Allocations,
-capacity and retention are unchanged. Both OSes pass **6,690 full/live** checks,
+immutable actual package; **all twelve WebP reads pass/stop**. Separate ordinary,
+stream and coding-validation points are higher than the preceding round; current
+costs stay visible and no uniform speedup or historical-clock gain is claimed.
+Allocations, capacity and retention are unchanged. Both OSes pass **6,692 full/live** checks,
 focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.

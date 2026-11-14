@@ -79,7 +79,9 @@ internal partial struct Vp8BooleanReader
         internal BlockReader(ReadOnlySpan<byte> data, int position, int shift, int range, int value)
         {
             this.data = data; Position = position + 1; Bits = shift + 1; Range = range;
-            Value = ((ulong)value << Bits) | ((uint)data[position] & ((1u << Bits) - 1));
+            // Keep the code byte at a fixed position; future input follows it.
+            Value = ((ulong)value << 56)
+                | ((ulong)((uint)data[position] & ((1u << Bits) - 1)) << (56 - Bits));
             Fill(in data, ref Position, ref Bits, ref Value);
         }
 
@@ -145,8 +147,8 @@ internal partial struct Vp8BooleanReader
         {
             Normalize(in data, ref position, ref bits, ref range, ref value);
             var boundary = 1 + ((range - 1) * probability >> 8);
-            var bit = value >= ((ulong)boundary << bits) ? 1 : 0; var mask = -bit;
-            value -= (ulong)(boundary & mask) << bits;
+            var bit = value >= ((ulong)boundary << 56) ? 1 : 0; var mask = -bit;
+            value -= (ulong)(boundary & mask) << 56;
             range = boundary + ((range - 2 * boundary) & mask);
             return bit;
         }
@@ -157,7 +159,7 @@ internal partial struct Vp8BooleanReader
         {
             Normalize(in data, ref position, ref bits, ref range, ref value);
             var boundary = 1 + ((range - 1) * probability >> 8);
-            var split = (ulong)boundary << bits;
+            var split = (ulong)boundary << 56;
             if (value < split) { range = boundary; return 0; }
             range -= boundary; value -= split; return 1;
         }
@@ -167,7 +169,7 @@ internal partial struct Vp8BooleanReader
             ref int position, ref int bits, ref int range, ref ulong value)
         {
             var count = BitOperations.LeadingZeroCount((uint)range) - 24;
-            range <<= count; bits -= count;
+            range <<= count; bits -= count; value <<= count;
             Fill(in data, ref position, ref bits, ref value);
         }
 
@@ -178,17 +180,17 @@ internal partial struct Vp8BooleanReader
             var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
             var bits = Bits - count;
             target.position = Position - (bits + 7) / 8; target.shift = (bits - 1) & 7;
-            target.range = Range << count; target.value = (int)((Value >> bits) & 255);
+            target.range = Range << count; target.value = (int)((Value >> (56 - count)) & 255);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Fill(in ReadOnlySpan<byte> data, ref int position, ref int bits, ref ulong value)
         {
-            // With bits<8, the code contains at most15bits. Appending32
-            // fits UInt64 and leaves32..39future bits before a decision.
-            // The original272B/block admission covers all lookahead.
+            // With1..7 future bits, insert32 below the code and known input.
+            // The low insertion space is zero;33..39 future bits then remain.
+            // Refill positions and the original272B lookahead stay unchanged.
             if (bits >= 8) return;
-            value = value << 32 | BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
+            value |= (ulong)BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4)) << (24 - bits);
             position += 4; bits += 32;
         }
 

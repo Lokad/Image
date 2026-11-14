@@ -35,10 +35,10 @@ stream captures remain linked beside their current confirmations.
 
 [Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [word-clone round](../benchmarks/WORD-CLONE-COPY.md) refreshes the complete decode/orient/crop/fit comparison: **2,874.75 / 2,937.59 µs, upper 0.984**, **338,159.1 B/op**. Both controls stop.
 
-[Current VP8 header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) retains the
-stream pass: **5,664.40 / FFmpeg
-5,985.36µs, upper
-0.949**, **240,496 B/op**. This complete
+[Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
+stream pass: **5,701.59 / FFmpeg
+5,982.33µs, upper
+0.956**, **240,496 B/op**. This complete
 operation includes fresh stream acquisition, decoding, owned output and disposal.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
@@ -66,7 +66,7 @@ admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
 remains linked history; no historical phase sum is used.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 184 pass, 3 gaps, 4 uncertain**. This does not establish full parity:
+image views: 185 pass, 2 gaps, 4 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. The [bounded 16×8 word view](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) remains uncertain after its 64→256 integration: **494.73 / 494.78µs, upper 1.003069**, **112 B/op**. Fresh managed/prepared native boundaries remain explicit.
@@ -90,18 +90,18 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Unchanged
 encoder paths reuse this source-valid evidence on the current qualified package.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Wide header-mode decoding](../benchmarks/VP8-MODE-WINDOW.md) reuses the exact
-buffered arithmetic reader, with every decision's cancellation check retained.
-Contemporary ordinary-decode captures save **73.60µs/1.55% raw**, with a separated
-reference-normalized gain (conservative effect upper .990). A paired live-token
-confirmation saves **88.65µs/1.83%** only in its ALC context; standalone live
-intervals overlap, so no standalone live gain is claimed. The live gap remains:
-**4,818.81 / FFmpeg 4,788.03µs**, ratio
-**1.0064**, upper **1.009319**,
+[Fixed-position VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) keeps the code
+byte at a fixed UInt64 position, preserving scalar cursors, every cancellation
+check and input-refill addresses. Independent live-token pairs save **41.53µs/.86%**
+in their scoped ALC comparison. The actual standalone live comparison now passes:
+**4,767.34 / FFmpeg 4,784.37µs**, ratio
+**0.9964**, upper **0.999450**,
 **230,880 B/op**. All pixels remain exact; original
 uncertainties remain in history. All six affected costs refresh on the timed,
-immutable actual package; eleven of twelve WebP reads pass/stop. Allocations,
-capacity and retention are unchanged. Both OSes pass **6,690 full/live** checks,
+immutable actual package; **all twelve WebP reads pass/stop**. Separate ordinary,
+stream and coding-validation points are higher than the preceding round; current
+costs stay visible and no uniform speedup or historical-clock gain is claimed.
+Allocations, capacity and retention are unchanged. Both OSes pass **6,692 full/live** checks,
 focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.
@@ -170,7 +170,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,664.40 | 5,985.36 | 0.946 / 0.949 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,701.59 | 5,982.33 | 0.953 / 0.956 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,083.86 | 3,772.61 | 0.817 / 0.825 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (parity confirmed) † | 1,431.80 | 1,578.72 | 0.907 / 0.912 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,525.81 | 1,841.57 | 0.829 / 0.832 | 819,475 | 52,115 / 52,117 |
@@ -316,7 +316,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,236.130 | 5,452.224 | 0.777 / 0.779 | 15,600 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.311 | 0.579 | 0.537 / 0.550 | 592 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

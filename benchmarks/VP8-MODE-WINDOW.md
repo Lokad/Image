@@ -1,5 +1,10 @@
 # VP8 header-mode arithmetic window
 
+**Historical after fixed-position arithmetic.** [Current six affected costs](VP8-FIXED-CODE.md)
+supersede the timings below and close the live-token gap. Retain this stage's
+source, scoped gains, adverse points and raw evidence as history.
+
+
 Accepted: reuse the existing exact wide buffered arithmetic reader for macroblock
 header modes. The mode tree has one source and selects the wide or scalar path
 once per macroblock. Short declared partitions keep the scalar fallback. Every
