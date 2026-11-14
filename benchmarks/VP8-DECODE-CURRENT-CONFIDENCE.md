@@ -56,3 +56,7 @@ case, source, owner and qualification boundary. Full observations/validations ar
 in raw `vp8-decode-long-integration.tar.xz`, SHA256
 `e7f276497356eaa6ffec978bb83fc51a918dd1107d5ad6f305c65ba824684234` (33,008B/28members),
 mirrored/member-verified. Dependencies retain original captures/tools and package.
+
+[Current live-token attribution](VP8-LIVE-DECODE-ATTRIBUTION.md) identifies the
+block-by-block arithmetic-state bridge as the next bounded reuse trial. Its
+sample locations do not establish preparation costs or a predicted speedup.

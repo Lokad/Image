@@ -1,0 +1,509 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VDA1000",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "allBuilds": 0,
+  "qualificationRepeats": 0,
+  "profiledElapsedDiscarded": true,
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "686e47a6c12e6d90cbccd753bd1739e8483ba39711efbd5586edaa89f44b6586",
+    "linuxSha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+    "timedArtifactSha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+    "packageSha256": "89186b3b58da96d2868c935a149cc00a36e60f7cfac0263c0ca07f9adb9c2478"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "59717460867c7fc551f0d4bc6eaa25a2d59742daca036021f0e4cd6c3e17e2d7",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "e27aeca0bcf7e02465c2dab47a57218ba5d35955ed9bad63d869360aa3704aa5",
+    "src/Lokad.Image/Internal/Vp8Decoder.cs": "3a83590d365bb767da0d353968d22a55336d45a446c88e39598bf3385f59b85e"
+  },
+  "completeCostProvider": "benchmarks/vp8-decode-current-confidence-evidence.json",
+  "caseId": "OpaqueCancelable8",
+  "currentCost": {
+    "managedUs": 4841.206332682292,
+    "nativeUs": 4779.985217447917,
+    "ratio": 1.012807804302596,
+    "lower": 1.0082573992183759,
+    "upper": 1.015391812193571,
+    "status": "gap",
+    "allocatedBytes": 230880,
+    "librarySha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "caseId": "OpaqueCancelable8",
+    "allActualsRetained": true,
+    "metadata": {
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "inputBytes": 72380,
+      "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "decoderMaximum": 0,
+      "decoderRmse": 0,
+      "alphaExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    },
+    "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality.",
+    "operationsPerSubject": 128,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "sourceEvidence": {
+      "receipt": "tmp/vdl999-OpaqueCancelable8-adjacent-receipt.json",
+      "observation": "tmp/vdl999-OpaqueCancelable8-adjacent.json"
+    },
+    "pairedRatioConfidence": [
+      1.0090871995140456,
+      1.0140040010658085
+    ],
+    "nativeBracketMeansUs": [
+      4779.985217447917,
+      4785.960359375,
+      4784.899743489583
+    ]
+  },
+  "profile": {
+    "event": "cpu-clock:u",
+    "frequencyHz": 999,
+    "seconds": 2,
+    "targetCpu": 0,
+    "collectorCpu": 1,
+    "totalSamples": 1997,
+    "managedSamples": 1988,
+    "methods": [
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCancellableCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8BooleanReader/CoefficientModelRow>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        1448
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        92
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Color::WritePixels8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        74
+      ],
+      [
+        "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        67
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        61
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Vertical8(uint8[],int32,int32,int32,int32,int32,bool,bool)[Optimized]",
+        39
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::PrepareSmall(uint8[],int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        35
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::Large(uint8[],int32,int32,int32,int32,int32)[Optimized]",
+        32
+      ],
+      [
+        "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8Color::Chroma8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]",
+        30
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        17
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Horizontal8(uint8[],int32,int32,int32,int32,int32,bool,bool)[Optimized]",
+        17
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Publish(valuetype Lokad.Image.Internal.Vp8BooleanReader&)[Optimized]",
+        16
+      ]
+    ],
+    "methodsAnalyzed": {
+      "ReadCancellableCoefficientBlock": {
+        "codeBytes": 3059,
+        "samples": 1448,
+        "groups": [
+          [
+            "G_M000_IG72",
+            151
+          ],
+          [
+            "G_M000_IG17",
+            137
+          ],
+          [
+            "G_M000_IG12",
+            126
+          ],
+          [
+            "G_M000_IG71",
+            101
+          ],
+          [
+            "G_M000_IG09",
+            83
+          ],
+          [
+            "G_M000_IG11",
+            77
+          ],
+          [
+            "G_M000_IG68",
+            73
+          ],
+          [
+            "G_M000_IG79",
+            56
+          ],
+          [
+            "G_M000_IG18",
+            56
+          ],
+          [
+            "G_M000_IG62",
+            54
+          ],
+          [
+            "G_M000_IG16",
+            43
+          ],
+          [
+            "G_M000_IG25",
+            43
+          ],
+          [
+            "G_M000_IG21",
+            42
+          ],
+          [
+            "G_M000_IG14",
+            37
+          ],
+          [
+            "G_M000_IG70",
+            37
+          ],
+          [
+            "G_M000_IG76",
+            34
+          ],
+          [
+            "G_M000_IG80",
+            32
+          ],
+          [
+            "G_M000_IG75",
+            31
+          ],
+          [
+            "G_M000_IG77",
+            30
+          ],
+          [
+            "G_M000_IG24",
+            27
+          ],
+          [
+            "G_M000_IG08",
+            22
+          ],
+          [
+            "G_M000_IG82",
+            19
+          ],
+          [
+            "G_M000_IG22",
+            14
+          ],
+          [
+            "G_M000_IG26",
+            11
+          ],
+          [
+            "G_M000_IG65",
+            9
+          ],
+          [
+            "G_M000_IG64",
+            9
+          ],
+          [
+            "G_M000_IG05",
+            8
+          ],
+          [
+            "G_M000_IG19",
+            7
+          ],
+          [
+            "G_M000_IG15",
+            7
+          ],
+          [
+            "G_M000_IG59",
+            7
+          ],
+          [
+            "G_M000_IG66",
+            6
+          ],
+          [
+            "G_M000_IG74",
+            6
+          ],
+          [
+            "G_M000_IG20",
+            6
+          ],
+          [
+            "G_M000_IG78",
+            5
+          ],
+          [
+            "G_M000_IG13",
+            5
+          ],
+          [
+            "G_M000_IG01",
+            5
+          ],
+          [
+            "G_M000_IG69",
+            4
+          ],
+          [
+            "G_M000_IG03",
+            4
+          ],
+          [
+            "G_M000_IG57",
+            4
+          ],
+          [
+            "G_M000_IG48",
+            3
+          ],
+          [
+            "G_M000_IG56",
+            3
+          ],
+          [
+            "G_M000_IG45",
+            2
+          ],
+          [
+            "G_M000_IG33",
+            2
+          ],
+          [
+            "G_M000_IG28",
+            2
+          ],
+          [
+            "G_M000_IG83",
+            2
+          ],
+          [
+            "G_M000_IG10",
+            2
+          ],
+          [
+            "G_M000_IG55",
+            1
+          ],
+          [
+            "G_M000_IG47",
+            1
+          ],
+          [
+            "G_M000_IG06",
+            1
+          ],
+          [
+            "G_M000_IG30",
+            1
+          ]
+        ]
+      },
+      "ReadPlanes": {
+        "codeBytes": 10587,
+        "samples": 67,
+        "groups": [
+          [
+            "G_M000_IG173",
+            16
+          ],
+          [
+            "G_M000_IG182",
+            8
+          ],
+          [
+            "G_M000_IG58",
+            7
+          ],
+          [
+            "G_M000_IG59",
+            4
+          ],
+          [
+            "G_M000_IG180",
+            4
+          ],
+          [
+            "G_M000_IG178",
+            4
+          ],
+          [
+            "G_M000_IG36",
+            3
+          ],
+          [
+            "G_M000_IG211",
+            3
+          ],
+          [
+            "G_M000_IG170",
+            2
+          ],
+          [
+            "G_M000_IG191",
+            2
+          ],
+          [
+            "G_M000_IG209",
+            2
+          ],
+          [
+            "G_M000_IG214",
+            1
+          ],
+          [
+            "G_M000_IG183",
+            1
+          ],
+          [
+            "G_M000_IG192",
+            1
+          ],
+          [
+            "G_M000_IG22",
+            1
+          ],
+          [
+            "G_M000_IG169",
+            1
+          ],
+          [
+            "G_M000_IG13",
+            1
+          ],
+          [
+            "G_M000_IG17",
+            1
+          ],
+          [
+            "G_M000_IG205",
+            1
+          ],
+          [
+            "G_M000_IG212",
+            1
+          ],
+          [
+            "G_M000_IG199",
+            1
+          ],
+          [
+            "G_M000_IG194",
+            1
+          ],
+          [
+            "G_M000_IG64",
+            1
+          ]
+        ]
+      },
+      "Coefficients": {
+        "codeBytes": 1356,
+        "samples": 11,
+        "groups": [
+          [
+            "G_M000_IG01",
+            3
+          ],
+          [
+            "G_M000_IG26",
+            3
+          ],
+          [
+            "G_M000_IG03",
+            3
+          ],
+          [
+            "G_M000_IG27",
+            2
+          ]
+        ]
+      },
+      "Publish": {
+        "codeBytes": 76,
+        "samples": 16,
+        "groups": [
+          [
+            "G_M000_IG02",
+            15
+          ],
+          [
+            "G_M000_IG03",
+            1
+          ]
+        ]
+      }
+    },
+    "everySelectedInstructionOffsetMapped": true,
+    "note": "One2-second cpu-clock:u capture; locations include inlining/skid. They are not phase timings, exhaustive counts or predicted savings. Profile elapsed discarded. No favorable rerun."
+  },
+  "hypothesis": {
+    "repeatedWork": "Per-coefficient-block eligibility, native-word refill setup and cursor publication; ordinary decoding can retain arithmetic state across24/25blocks but live cancellation takes the separate single-block path.",
+    "intendedEndState": "An operation-private live-token arithmetic window spanning eligible macroblocks, retaining every existing per-decision and block-entry cancellation checkpoint, exact decisions, coefficient stores and all short-partition fallbacks. Reuse the existing stack/coarse allowance and borrowed context; no cache, pool, owner or new allocation.",
+    "failureBoundary": "The decoder is operation-private and abandoned on failure; no caller observes/resumes its failed cursor. Publish completed output exactly on success. Existing low-level cancellation ordinals/cursor-oracle tests remain useful; do not relax public failure, token identity or cleanup.",
+    "relevantCompleteWorkloads": [
+      "OpaqueCancelable8 first screen",
+      "Opaque8 ordinary-routing guard",
+      "Existing transparent VP8/alpha control if the design survives; no new fixture grid",
+      "All actually affected VP8 decode/validation boundaries before accepted production qualification"
+    ],
+    "correctness": "Exact pixels/alpha and coding decisions, 272-byte-per-block partition/lookahead proof, coefficient/cursor oracles, malformed/short fallbacks, every cancellation ordinal and aggregate-root refusal/cancellation cleanup. No poll suppression.",
+    "temporaryRisks": "Shared dispatch/struct layout may regress ordinary decoding or code generation. Retain specialized polling/portable paths during the transition; remove superseded state bridges only after coherent complete-operation evidence.",
+    "decision": "One focused implementation screen, then independent confirmation if supported. Judge complete elapsed time, allocations/retention and simplification together. Sample locations do not price setup or predict savings. Revise or abandon on evidence; preserve adversity, no favorable resampling."
+  },
+  "raw": {
+    "file": "vp8-live-decode-attribution.tar.xz",
+    "sha256": "8091b859cc06632f033ee449a2fcbc7d5af61c430c082f02add38a1fb891e740",
+    "bytes": 108752,
+    "members": 17,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-decode-long-integration.tar.xz",
+        "sha256": "e7f276497356eaa6ffec978bb83fc51a918dd1107d5ad6f305c65ba824684234"
+      },
+      {
+        "file": "vp8-variable-price-preparation-qualified.tar.xz",
+        "sha256": "fa4315e5cb56702c93a1662f8e7dd19b7dce645420ec2b98b464815d0fa5e3a2"
+      }
+    ]
+  }
+}
