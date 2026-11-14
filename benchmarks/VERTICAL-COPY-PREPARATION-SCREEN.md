@@ -61,3 +61,48 @@ builds, restoration and boundaries. Raw `vertical-row-span-screen.tar.xz`, 4,953
 No renderer dependency is added for a rejected implementation. A materially revised
 shared design remains eligible when concrete attribution supports it; these results
 neither demonstrate a regression nor justify blind replay.
+
+## Advancing vector views
+
+**A/B not retained.** A advances safe source/destination vector views by four
+vectors, keeping fixed0..3 loads-before-stores, remaining vectors and byte tails.
+It differs from the earlier indexed group-span trial: no Slice(i,4) group creation.
+Source/owner/cancellation paths and the portable fallback remain unchanged.
+
+| Complete original 513×259 managed screen, A | Preceding / candidate µs | Ratio interval | GC B/op |
+| --- | ---: | ---: | ---: |
+| VerticalFlip8 | 8.484 / 9.181 | 0.992864–1.179300 | 56 / 56 |
+| Clone16 | 17.299 / 17.525 | 0.850343–1.206778 | 56 / 56 |
+
+Three alternating4096-call pairs per control, natural GC, all observations retained.
+Both exact source/pixel/independent-owner and idle-v2 gates pass. Byte point is
+adverse; both intervals include1. No useful gain or causal regression is established.
+These are scoped DLL screens, not new FFmpeg costs. No favorable replay follows.
+
+Actual caller code grows: byte flip894→1093B, word clone640→963B. The fixed-offset
+addressing works, but mutable span pointers/lengths spill and new range checks
+remain. B isolates the same body behind a shared noninlined call to address that
+specific issue. Its caller shrinks to392B, but the705B standalone kernel retains
+the spills/checks. The intended simplification fails; **no uninstrumented B screen**
+is run. All code-generation timings are discarded; size is not CPU evidence.
+
+A partial software profile of the original kernel has778samples:629 in flip and41
+in pixel accessors, including startup/JIT and105native/unresolved samples. Initial
+profiler launch failed before workload; corrected capture returned nonzero after
+collecting data, with exact exit statuses unrecorded. Existing complete application
+checks and samples were postprocessed without replay. This is attribution only,
+not quantitative CPU savings or a successful timing qualification.
+
+Each stage passes Linux **25 internal /190 public** focused normal/scalar checks.
+Two core/embedded builds total; existing helper reused, zero helper/public/harness/
+native/fixture/Windows builds or broad/package repeats. Exact qualified source,
+core/embedded/public bindings and source manifest are restored without rebuilding.
+Reuse [6,692 full/live checks per OS and SAME actual package](VP8-FIXED-CODE.md).
+No capacity or retention changes; physical peaks remain unmeasured. Current
+[owned-edit costs](OWNED-EDIT-CURRENT-CONFIDENCE.md) remain authoritative.
+
+[Evidence](vector-span-cursor-screen-evidence.json) retains both designs, every
+screen, generated code, partial profile and restoration. Raw `vector-span-cursor-screen.tar.xz`,
+546,584 B/95 members, SHA256 `caf3479bb0beaa8ed1eb8304b69e51e38e215bcb90426ea1e3da173205d393ae`, mirrored and
+member-verified. Keep the measured indexed copier; no third variant in this round,
+no permanent family ban and no rejected-trial renderer dependency.

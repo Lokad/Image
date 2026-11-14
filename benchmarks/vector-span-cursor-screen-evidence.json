@@ -1,0 +1,218 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VSC1011A/B",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "decision": "Restore both implementations. A has no demonstrated useful complete-operation gain; B does not remove the observed spilled span state and is stopped before an uninstrumented screen. No family ban or source-count CPU claim.",
+  "baselineProducers": {
+    "windowsSha256": "ab84ec8d34d462f555320d9a0a51e340a24c08f5dcd46d2adb7a6b0041a7eed2",
+    "linuxSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "timedArtifactSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "packageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33"
+  },
+  "candidateLinuxSha256": {
+    "A": "900192b82352078d56c9c3e5bc8ce0f9837b2ccb0e5ffd741986158ed5de3ad4",
+    "B": "e5ac78e14efe92633d44315192cede192a3a6f21560f3a017665f582280b623a"
+  },
+  "candidateSources": {
+    "A": {
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "2f3b79c8c41c00d7916cb9c28979236263e5d1032ecced21800bc81c6451ecc3"
+    },
+    "B": {
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "5f85b7ddd1948ce62c817a6adea1a4e30c4aa5adcd47649b153639829af62572"
+    }
+  },
+  "hypotheses": {
+    "A": "Advance existing safe vector-span views by four vectors rather than keep a growing vector index and compute four index-to-byte addresses per group. Keep fixed0/1/2/3 loads-before-stores, remaining-vector and byte tails. No gain follows from source/code size or partial software samples; memory traffic or new span guards can offset the change.",
+    "B": "Keep the advancing-vector kernel behind one noninlined shared call so its span state is not merged into large caller EH loops. Current A generated fixed offsets but spilled mutable span fields each group: flip894->1093B,Clone640->963B; screens inconclusive/adverse. This is a changed architecture/producer, not a favorable A timing retry."
+  },
+  "endState": {
+    "A": "One shared disjoint-copy primitive with advancing local views; all existing callers, portable/small fallback, output allocation, admission, ownership and cooperative checkpoints unchanged. No new kernel family, cache, buffer, session, owner, unchecked API or fixture dispatch.",
+    "B": "One shared safe independent-copy implementation and unchanged small/portable path; fewer duplicated inlined bodies. No owner/cache/buffer/session/API, fixture-specific dispatch or unchecked memory access. Per-call overhead may outweigh any simplification, especially per-row flips; no benefit assumed."
+  },
+  "distinctionFromEarlierGroups": "VBC956A equal bounds alone was neutral; VBC956B constructed source.Slice(i,4)/destination.Slice(i,4) each indexed iteration and was adverse. This candidate advances the existing span bases/lengths once per group, replacing indexed addressing and avoiding new group spans. Common destination bounds are enabling preparation, not a claimed independent gain. Do not replay A/B merely for a favorable result.",
+  "sourceProof": {
+    "A": {
+      "originalReconstructsByteExact": true,
+      "allCallerSourcesByteExact": true,
+      "sourceVectorAddressesAndFourLoadsBeforeStoresUnchanged": true,
+      "remainingVectorAndByteCoverageExact": true,
+      "portableAndSmallFallbackVerbatim": true,
+      "liveCancellationCheckpointsVerbatim": true,
+      "newOwnedCapacityBytes": 0,
+      "newRetainedStateBytes": 0
+    },
+    "B": {
+      "aBodyAndEveryCallerVerbatim": true,
+      "onlyNoInliningAttributeChanged": true,
+      "outputAddressesAndFourLoadsBeforeStoresUnchanged": true,
+      "newOwnedCapacityBytes": 0,
+      "newRetainedStateBytes": 0
+    }
+  },
+  "cases": {
+    "WarmVerticalFlip8": {
+      "project": "Lokad.Image",
+      "stage": "VSC1011",
+      "caseId": "WarmVerticalFlip8",
+      "baselineUs": 8.48446248372396,
+      "candidateUs": 9.180749755859376,
+      "ratio": 1.0820741378733356,
+      "lower": 0.9928639311170996,
+      "upper": 1.1793000059302454,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 3,
+      "phase": "screen",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/vsc1011-baseline-linux/Lokad.Image.dll",
+        "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+        "tmp/vsc1011-candidate-linux/Lokad.Image.dll",
+        "900192b82352078d56c9c3e5bc8ce0f9837b2ccb0e5ffd741986158ed5de3ad4",
+        "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+        "WarmVerticalFlip8",
+        "screen"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/vsc1011-WarmVerticalFlip8-paired-screen.log"
+    },
+    "WarmClone16": {
+      "project": "Lokad.Image",
+      "stage": "VSC1011",
+      "caseId": "WarmClone16",
+      "baselineUs": 17.299303466796875,
+      "candidateUs": 17.52454850260417,
+      "ratio": 1.0130029920478962,
+      "lower": 0.8503430958715151,
+      "upper": 1.2067776723068058,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 3,
+      "phase": "screen",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/vsc1011-baseline-linux/Lokad.Image.dll",
+        "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+        "tmp/vsc1011-candidate-linux/Lokad.Image.dll",
+        "900192b82352078d56c9c3e5bc8ce0f9837b2ccb0e5ffd741986158ed5de3ad4",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "WarmClone16",
+        "screen"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/vsc1011-WarmClone16-paired-screen.log"
+    }
+  },
+  "codegen": {
+    "timingDiscarded": true,
+    "byteFlipBaselineBytes": 894,
+    "byteFlipABytes": 1093,
+    "wordCloneBaselineBytes": 640,
+    "wordCloneABytes": 963,
+    "bByteFlipCallerBytes": 392,
+    "bSharedCopyBytes": 705,
+    "bStillSpillsSpanPointersAndLengths": true,
+    "bStillChecksRangesPerGroup": true,
+    "notes": "Actual indexed baseline identified by loop structure. A adds fixed offsets but spills state; isolating B keeps the spills and extra checks. B receipt carries original tooling stage labelVSC1011; filename, command, module/source hashes unambiguously identify B. Neither size nor sample counts prove CPU effects."
+  },
+  "partialProfile": {
+    "file": "tmp/vca1010-byte-flip-recovered-summary.json",
+    "samples": 778,
+    "verticalFlipSamples": 629,
+    "pixelsGetterSamples": 41,
+    "nativeOrUnresolvedSamples": 105,
+    "allBuilds": 0,
+    "timingsDiscarded": true,
+    "limitation": "Initial privileged launch failed before workload because SDK PATH reset. Corrected user target completed all12pairs and exact-owner checks, but collector returned nonzero; its precise status and target exit were not captured. Postprocess the existing778samples only, without target replay. Root-owned raw perf file ownership corrected for hashing/copy. Treat as partial attribution with startup/JIT/native unresolved samples, not quantitative CPU savings. JIT body hash equals original code-generation-only capture. All files retained locally/onVM."
+  },
+  "focusedLinuxNormalScalarEachStage": {
+    "internal": 25,
+    "public": 190
+  },
+  "builds": {
+    "linuxCore": 2,
+    "linuxEmbedded": 2,
+    "helper": 0,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0
+  },
+  "independentTimingConfirmations": 0,
+  "bStandaloneScreens": 0,
+  "broadOrPackageRepeats": 0,
+  "allocationBytesPerOperationBothSubjects": 56,
+  "newOwnedCapacityBytes": 0,
+  "newRetainedStateBytes": 0,
+  "physicalNativeJitPeaksMeasured": false,
+  "restoration": {
+    "project": "Lokad.Image",
+    "stage": "VSC1011A/B",
+    "qualifiedSourceCoreEmbeddedAndPublicBindingsRestored": true,
+    "productionRebuilds": 0,
+    "packageUnchanged": true,
+    "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "embeddedSha256": "bd69e2a843ecaf6bc9b5af43550546907866d7b04e80601f4d2a7f961d003b20",
+    "decision": "A: no useful complete byte-flip/word-clone screen gain. B: separate kernel still spills span state/repeats guards; design goal not reached, no uninstrumented B screen. Stop both implementations without independent/Windows/broad/package qualification or identical favorable retries."
+  },
+  "existingQualificationReused": {
+    "provider": "benchmarks/vp8-fixed-code-evidence.json",
+    "fullChecksEachOs": 6692,
+    "actualPackageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33",
+    "actualPackageLibrarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
+    "productionAndActualPackageByteIdentical": true,
+    "broadOrPackageRepeats": 0
+  },
+  "raw": {
+    "file": "vector-span-cursor-screen.tar.xz",
+    "sha256": "caf3479bb0beaa8ed1eb8304b69e51e38e215bcb90426ea1e3da173205d393ae",
+    "bytes": 546584,
+    "members": 95,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "owned-edit-long-integration.tar.xz",
+        "sha256": "ed303cbd46ea756b5a43a9e2935146736bd080b25aed38322f205c00b74215e4"
+      },
+      {
+        "file": "vp8-fixed-code-qualified.tar.xz",
+        "sha256": "b8c44a7151a5855abec730b73e3d9cc4a3c1a93b8cdda670e538ea150f791092"
+      },
+      {
+        "file": "vertical-row-span-screen.tar.xz",
+        "sha256": "85bee9a081c773bbaf44fc20a0d6df89df785b0397b958a56ecdd1f57985528f"
+      },
+      {
+        "file": "vector-copy-bound-screen.tar.xz",
+        "sha256": "f4ecb3ab25e7139725e6a3d0e4954686ed676129cf1191d2f2993bcab0bae84c"
+      }
+    ]
+  },
+  "publicationPostponed": true,
+  "next": "Retain measured indexed copier and portable fallback. No third copy variant in this bounded round. Simplify current copy-cost renderer dependencies while retaining all raw history; then select independent work from concrete remaining gaps/attribution. All289paths remain required, current costs/status unchanged, font/text complete cases remain stopped and PLAN outside authorized section remains byte-exact."
+}

@@ -189,78 +189,48 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
-def copy_result_admission():
-    current = json.loads((ROOT / 'benchmarks/copy-result-admission-evidence.json').read_text(encoding='utf-8'))
-    q = current['qualification']
-    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6683
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
-    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
-    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert len(current['cases']) == 20
-    assert current['statusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
-    for name, c in current['cases'].items():
-        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['linuxSha256']
+def owned_edit_costs():
+    # Only the selected current case needs validation. Superseded increments and
+    # experiment-specific source/build proofs stay in their original reports.
+    providers = [json.loads((ROOT / ('benchmarks/' + name)).read_text(encoding='utf-8')) for name in (
+        'copy-result-admission-evidence.json', 'word-clone-copy-evidence.json',
+        'owned-edit-current-confidence-evidence.json')]
+    selected = {}
+    for index, stage in enumerate(providers):
+        q = stage['qualification']
+        assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+        assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+        if index == 2:
+            assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+            assert q['fullChecksEachOs'] == 6692 and q['productionAndActualPackageByteIdentical']
+            assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
+            assert q['actualPackageSha256'] == stage['producers']['packageSha256']
+            assert set(stage['cases']) == {'WarmNormalOrientation16', 'WarmVerticalFlip16', 'WarmClone16', 'WarmVerticalFlip8'}
+            library = q['actualPackageLibrarySha256']
+        else:
+            assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+            assert q['windows']['total'] == q['linux']['total'] == 6683
+            assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+            assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+            assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+            assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+            library = q['actualPackage']['librarySha256']
+        assert library == stage['producers']['linuxSha256']
+        selected.update((name, (case, library, index == 2)) for name, case in stage['cases'].items())
+    assert len(selected) == 20
+    for name, (c, library, latest) in selected.items():
+        assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
         assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
-    gain = current['paired']['WarmClone16']
-    assert gain['upper'] < 1 and gain['all12PairsRetained'] and gain['quietGuardsPassed']
-    assert gain['baselineAllocatedBytes'] == 112 and gain['candidateAllocatedBytes'] == 56
-    assert gain['exactSourceOutputAndIndependentOwnersPassed'] and gain['notNativeParity']
-    assert current['sourceProof']['copyKernelsExactAfterTokenParameterSubstitution']
-    assert current['sourceProof']['originalImageCreateAndCodecResizeAllocationBodiesVerbatim']
-    return apply_word_clone_copy(current)
-
-
-def apply_word_clone_copy(current):
-    stage = json.loads((ROOT / 'benchmarks/word-clone-copy-evidence.json').read_text(encoding='utf-8'))
-    q = stage['qualification']
-    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == 6683
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
-    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
-    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert stage['sourceProof']['allOtherImageBufferBytesExact'] and stage['sourceProof']['copyPrimitiveBodyUnchanged']
-    assert len(stage['cases']) == 6 and len(stage['unchangedOwnedEditCases']) == 14
-    for name, c in stage['cases'].items():
-        assert c['librarySha256'] == stage['producers']['linuxSha256'] == q['actualPackage']['librarySha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
-        assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
-    current['cases'].update(stage['cases'])
-    assert stage['combinedOwnedEditStatusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
-    measured = json.loads((ROOT / 'benchmarks/owned-edit-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    q = measured['qualification']
-    assert measured['measurementAccepted'] and not measured['productionChanged'] and not measured['productionSpeedupClaim']
-    assert measured['raw']['mirrored'] and measured['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == 6692 and q['productionAndActualPackageByteIdentical']
-    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
-    assert measured['measurement']['productionBuilds'] == measured['measurement']['harnessNativeFixtureBuilds'] == 0
-    assert measured['measurement']['helperBuilds'] == 1
-    assert set(measured['cases']) == {'WarmNormalOrientation16', 'WarmVerticalFlip16', 'WarmClone16', 'WarmVerticalFlip8'}
-    for c in measured['cases'].values():
-        assert c['librarySha256'] == q['actualPackageLibrarySha256'] == measured['producers']['timedArtifactSha256']
-        assert c['operationsPerSubject'] == 4096 and c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 56
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
-    current['cases'].update(measured['cases'])
-    assert measured['combinedOwnedEditStatusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
-    return current
+        assert not latest or c['operationsPerSubject'] == 4096
+    cases = {name: c for name, (c, _, _) in selected.items()}
+    assert providers[-1]['combinedOwnedEditStatusCounts'] == {
+        state: sum(c['status'] == state for c in cases.values()) for state in ('pass', 'gap', 'uncertain')}
+    return {'cases': cases}
 
 
 def current_png_stream_word_note():
@@ -278,7 +248,7 @@ def current_png_stream_word_note():
     assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 8664
     assert c['status'] == 'pass' and c['upper'] <= 1
     assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    composition = copy_result_admission()['cases']['PngCropFit16']
+    composition = owned_edit_costs()['cases']['PngCropFit16']
     assert composition['status'] == 'pass'
     return (f'[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) '
             f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
@@ -2854,7 +2824,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
-    owned_copy = copy_result_admission()
+    owned_copy = owned_edit_costs()
     for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
                         ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
                         ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
