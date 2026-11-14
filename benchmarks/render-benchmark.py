@@ -1737,14 +1737,23 @@ No heap capacity or retention is added; validation and independent owners remain
     assert bq['actualPackage']['usageExamples'] == bq['samePackageWindows']['usageExamples'] == 3
     assert bq['acceptedArtifactRebuildsAfterTiming'] == 0 and bq['allAffectedPerformanceReconciledBeforeBroadQualification']
     assert borrowed_drawing['sourceProof']['allConfirmed'] and borrowed_drawing['sourceProof']['sharedOperationContextAndMemoryBudgetUnchanged']
-    drawing_cases = borrowed_drawing['cases']
+    drawing_cases = dict(borrowed_drawing['cases'])
     assert len(drawing_cases) == 7
     assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
-    for comparison in borrowed_drawing['comparison'].values():
-        assert comparison['ratioUpper'] < 1 and comparison['pairs'] == 12 and comparison['operationsEachSubject'] == 8192
-        assert comparison['candidateAllocatedBytes'] == 0 and comparison['allActualsRetained'] and comparison['outputExact']
-        assert comparison['borrowedCanvas'] and comparison['independentSubjects'] and comparison['notNativeParity']
+    overlap_current = json.loads((ROOT / 'benchmarks/borrowed-overlap-current-evidence.json').read_text(encoding='utf-8'))
+    oq = overlap_current['qualification']
+    assert overlap_current['measurementAccepted'] and not overlap_current['productionChanged']
+    assert not overlap_current['productionSpeedupClaim']
+    assert overlap_current['requiredMaterialPaths'] == 289 and overlap_current['newMaterialPaths'] == 0
+    assert overlap_current['raw']['mirrored'] and overlap_current['raw']['allMembersVerified']
+    assert oq['fullChecksEachOs'] == 6696 and oq['productionAndActualPackageByteIdentical']
+    assert oq['fullScalarIsaActualConsumerAndThreeExamplesReused'] and oq['broadOrPackageRepeats'] == oq['allBuilds'] == 0
+    assert oq['sameActualPackageBothOsAndThreeExamplesPassed']
+    assert oq['actualPackageSha256'] == overlap_current['producers']['packageSha256']
+    assert oq['actualPackageLibrarySha256'] == overlap_current['producers']['linuxSha256']
+    assert overlap_current['memory']['newOwnedHeapCapacityBytes'] == overlap_current['memory']['newAdmittedBytes'] == overlap_current['memory']['retainedOperationBytes'] == 0
+    drawing_cases['DrawingCopyOverlap8'] = overlap_current['case']
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1756,7 +1765,8 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        assert c['librarySha256'] == borrowed_drawing['producers']['linuxSha256'] == bq['actualPackage']['librarySha256']
+        library = oq['actualPackageLibrarySha256'] if name == 'DrawingCopyOverlap8' else bq['actualPackage']['librarySha256']
+        assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
@@ -1771,11 +1781,13 @@ No heap capacity or retention is added; validation and independent owners remain
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
     borrowed_drawing_note = f"""[Borrowed drawing validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
 removes the operation owner: all seven fill/copy/composite controls allocate **0 B/op**,
-with unchanged borrowed capacity and zero retained workspace. Complete copy/pair
-confirmations gain **2.74% / 3.16%**, separately from native parity. Current byte
+with unchanged borrowed capacity and zero retained workspace. Earlier copy/pair
+confirmations remain in its report. Current byte
 copy remains a small gap: **{b8['managedUs']:.2f} / FFmpeg {b8['nativeUs']:.2f} µs, upper {b8['upper']:.3f}**;
 word copy is **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**, also a tiny gap.
-The two-move overlapping pair remains uncertain: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
+The [current actual-package overlap control](../benchmarks/VECTOR-EXTENT-COPY-SCREEN.md)
+resolves the two-move pair as a small gap: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
+No production change or speedup is claimed; the adverse shared-copy trial is restored.
 Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
 ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
 """
