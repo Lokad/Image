@@ -60,3 +60,7 @@ mirrored/member-verified. Dependencies retain original captures/tools and packag
 [Current live-token attribution](VP8-LIVE-DECODE-ATTRIBUTION.md) identifies the
 block-by-block arithmetic-state bridge as the next bounded reuse trial. Its
 sample locations do not establish preparation costs or a predicted speedup.
+
+[Arithmetic-window trials](VP8-LIVE-WINDOW-TRIALS.md) retain two unaccepted
+implementations. Scoped paired gains did not establish a standalone win; qualified
+production is restored exactly and current costs remain unchanged.

@@ -2903,6 +2903,9 @@ resolves ordinary/simple-filter passes. Live-token decoding has a separated gap:
 **{opaque_live['allocatedBytes']:,} B/op**. All pixels remain exact; original
 uncertainties remain in history. Eleven of twelve WebP reads pass/stop; attribute
 the remaining live-token gap before changing production. No speedup is inferred.
+[Two arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md) showed scoped
+paired gains without an established standalone win. Neither is accepted; qualified
+production and current costs are restored exactly. Their evidence stays separate.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons

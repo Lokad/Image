@@ -1,5 +1,9 @@
 # Live-token VP8 decode attribution
 
+[The two resulting window trials](VP8-LIVE-WINDOW-TRIALS.md) are not accepted.
+Their scoped gains did not establish a standalone win. The profiled qualified
+source and current costs below are restored exactly; this remains attribution.
+
 The [current complete workload](VP8-DECODE-CURRENT-CONFIDENCE.md) has a separated
 **1.008257–1.015392** gap: **4,841.21/FFmpeg4,779.99µs**, **230,880 B/op**.
 Ordinary and simple-filter controls pass/stop. This report supplies one bounded
@@ -50,3 +54,7 @@ commands, bounded hypothesis and acceptance. Raw `vp8-live-decode-attribution.ta
 is mirrored/member-verified and retains trace, map, instructions, raw offsets,
 guards and output proof. Dependencies preserve complete timing and actual package.
 Unchanged qualification and costs are reused. Publication remains postponed.
+
+[Arithmetic-window trials](VP8-LIVE-WINDOW-TRIALS.md) retain two unaccepted
+implementations. Scoped paired gains did not establish a standalone win; qualified
+production is restored exactly and current costs remain unchanged.
