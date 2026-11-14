@@ -78,6 +78,42 @@ public sealed class ImageBuffer : IDisposable
         catch { owner?.Dispose(); throw; }
     }
 
+    // Copy-only operations borrow a valid raster and own only their returned
+    // pixels. Admit that escaping owner directly; no temporary storage scope is
+    // needed. Keep policy, cancellation, source and result checks in that order.
+    internal static ImageBuffer AllocateCopyResult(ImageBuffer source, int width, int height,
+        ImageLimits? limits, CancellationToken cancellationToken)
+    {
+        limits ??= ImageLimits.Default; limits.Validate(); cancellationToken.ThrowIfCancellationRequested();
+        var sourceLength = source.ByteLength;
+        if (sourceLength > limits.MaxWorkingBytes)
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
+        if (width < 1 || height < 1)
+            throw new ArgumentOutOfRangeException(nameof(width), "Dimensions must be positive.");
+        // The borrowed ImageBuffer establishes valid 8/16-bit samples. These
+        // operations copy a subset or permutation of them, without changing depth.
+        var pixelBytes = source.BitDepth / 8 * 4;
+        var pixels = (long)width * height;
+        if (width > limits.MaxDimension || height > limits.MaxDimension || pixels > limits.MaxPixels
+            || pixels > Array.MaxLength / pixelBytes)
+            throw new ImageLimitException(width > limits.MaxDimension || height > limits.MaxDimension
+                ? ImageLimitKind.Dimension : pixels > limits.MaxPixels
+                ? ImageLimitKind.PixelCount : ImageLimitKind.BufferLength,
+                "Image dimensions or pixel count exceed the configured limits.");
+        var length = (int)(pixels * pixelBytes);
+        if (length > limits.MaxWorkingBytes - sourceLength)
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
+        var owner = MemoryAdmission.Own(limits.MemoryBudget, length);
+        try
+        {
+            var reusable = limits.MemoryBudget is null;
+            var data = reusable ? PixelStoragePool.Shared.RentImage(length, cancellationToken, clear: false)
+                : GC.AllocateUninitializedArray<byte>(length);
+            return new ImageBuffer(width, height, source.BitDepth, data, reusable, owner);
+        }
+        catch { owner?.Dispose(); throw; }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<byte> GetRow8(int y)
     {
@@ -102,22 +138,20 @@ public sealed class ImageBuffer : IDisposable
 
     public ImageBuffer Clone(ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(ByteLength);
-        var result = AllocateForOverwrite(Width, Height, BitDepth, context);
+        var result = AllocateCopyResult(this, Width, Height, limits, cancellationToken);
         try
         {
             ReadOnlySpan<byte> input = Pixels;
             var destination = result.Pixels;
             // A raster is tightly packed. Batch across row boundaries while
             // retaining bounded checkpoints whenever cancellation is possible.
-            if (!context.Cancellation.CanBeCanceled) input.CopyTo(destination);
+            if (!cancellationToken.CanBeCanceled) input.CopyTo(destination);
             else
             {
                 for (var offset = 0; offset < input.Length;)
                 {
                     var count = Math.Min(16384, input.Length - offset);
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
                     input.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
                 }
             }

@@ -6,12 +6,12 @@ namespace Lokad.Image.Internal;
 // Reverse complete pixels; callers own placement, admission and result lifetime.
 internal static class PixelReversal
 {
-    internal static void Reverse(ReadOnlySpan<uint> source, Span<uint> destination, OperationContext context)
+    internal static void Reverse(ReadOnlySpan<uint> source, Span<uint> destination, CancellationToken cancellationToken)
     {
         for (var start = 0; start < destination.Length; start += 1024)
         {
             var count = Math.Min(1024, destination.Length - start);
-            context.Cancellation.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             var input = source.Slice(source.Length - start - count, count);
             var output = destination.Slice(start, count);
             var x = 0;
@@ -31,12 +31,12 @@ internal static class PixelReversal
         }
     }
 
-    internal static void Reverse(ReadOnlySpan<ulong> source, Span<ulong> destination, OperationContext context)
+    internal static void Reverse(ReadOnlySpan<ulong> source, Span<ulong> destination, CancellationToken cancellationToken)
     {
         for (var start = 0; start < destination.Length; start += 1024)
         {
             var count = Math.Min(1024, destination.Length - start);
-            context.Cancellation.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             var input = source.Slice(source.Length - start - count, count);
             var output = destination.Slice(start, count);
             var x = 0;

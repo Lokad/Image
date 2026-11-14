@@ -5,9 +5,7 @@ internal static class VerticalFlip
 {
     public static ImageBuffer Apply(ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(source.ByteLength);
-        var result = ImageBuffer.AllocateForOverwrite(source.Width, source.Height, source.BitDepth, context);
+        var result = ImageBuffer.AllocateCopyResult(source, source.Width, source.Height, limits, cancellationToken);
         try
         {
             var stride = source.Stride;
@@ -19,7 +17,7 @@ internal static class VerticalFlip
                 for (var start = 0; start < source.Width; start += 1024)
                 {
                     var count = Math.Min(1024, source.Width - start);
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
                     IndependentRowCopy.Copy(input.Slice(start * pixelBytes, count * pixelBytes),
                         output.Slice(start * pixelBytes, count * pixelBytes));
                 }

@@ -15,20 +15,18 @@ internal static class TransposeCopy
     public static ImageBuffer Apply<TRows, TColumns>(ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
         where TRows : struct where TColumns : struct
     {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(source.ByteLength);
-        var result = ImageBuffer.AllocateForOverwrite(source.Height, source.Width, source.BitDepth, context);
+        var result = ImageBuffer.AllocateCopyResult(source, source.Height, source.Width, limits, cancellationToken);
         try
         {
             if (source.BitDepth == 8)
                 Copy<uint, TRows, TColumns>(MemoryMarshal.Cast<byte, uint>(source.Pixels), MemoryMarshal.Cast<byte, uint>(result.Pixels),
-                    source.Width, source.Height, context);
+                    source.Width, source.Height, cancellationToken);
             else if (Avx2.IsSupported)
                 CopyWords<TRows, TColumns>(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
-                    source.Width, source.Height, context);
+                    source.Width, source.Height, cancellationToken);
             else
                 Copy<ulong, TRows, TColumns>(MemoryMarshal.Cast<byte, ulong>(source.Pixels), MemoryMarshal.Cast<byte, ulong>(result.Pixels),
-                    source.Width, source.Height, context);
+                    source.Width, source.Height, cancellationToken);
             result.Orientation = source.Orientation;
             return result;
         }
@@ -36,7 +34,7 @@ internal static class TransposeCopy
     }
 
     private static void CopyWords<TRows, TColumns>(ReadOnlySpan<ulong> source, Span<ulong> destination, int width, int height,
-        OperationContext context) where TRows : struct where TColumns : struct
+        CancellationToken cancellationToken) where TRows : struct where TColumns : struct
     {
         // Four complete pixels per vector; unpacks and lane selection transpose
         // each 4x4 matrix without interpreting any channel or alpha sample.
@@ -48,7 +46,7 @@ internal static class TransposeCopy
         {
             var rows = Math.Min(32, height - y);
             var columns = Math.Min(32, width - x);
-            context.Cancellation.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             var vectorRows = rows & ~3; var vectorColumns = columns & ~3;
             for (var row = 0; row < vectorRows; row += 4)
             for (var column = 0; column < vectorColumns; column += 4)
@@ -106,7 +104,7 @@ internal static class TransposeCopy
     }
 
     private static void Copy<T, TRows, TColumns>(ReadOnlySpan<T> source, Span<T> destination, int width, int height,
-        OperationContext context) where T : unmanaged where TRows : struct where TColumns : struct
+        CancellationToken cancellationToken) where T : unmanaged where TRows : struct where TColumns : struct
     {
         // Reified generic types keep the UInt64 portable fallback scalar.
         var vectorized = typeof(T) == typeof(uint) && Sse2.IsSupported;
@@ -116,7 +114,7 @@ internal static class TransposeCopy
         {
             var rows = Math.Min(32, height - y);
             var columns = Math.Min(32, width - x);
-            context.Cancellation.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             var vectorRows = vectorized ? rows & ~3 : 0;
             var vectorColumns = vectorized ? columns & ~3 : 0;
             if (vectorized)

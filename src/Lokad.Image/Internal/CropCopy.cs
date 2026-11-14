@@ -6,9 +6,7 @@ internal static class CropCopy
     public static ImageBuffer Apply(ImageBuffer source, int x, int y, int width, int height,
         ImageLimits? limits, CancellationToken cancellationToken)
     {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(source.ByteLength);
-        var result = ImageBuffer.AllocateForOverwrite(width, height, source.BitDepth, context);
+        var result = ImageBuffer.AllocateCopyResult(source, width, height, limits, cancellationToken);
         try
         {
             var pixelBytes = source.BitDepth / 8 * 4;
@@ -21,7 +19,7 @@ internal static class CropCopy
                 for (var start = 0; start < width; start += 1024)
                 {
                     var count = Math.Min(1024, width - start);
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
                     input.Slice(start * pixelBytes, count * pixelBytes)
                         .CopyTo(output.Slice(start * pixelBytes, count * pixelBytes));
                 }

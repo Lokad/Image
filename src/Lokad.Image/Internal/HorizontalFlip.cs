@@ -7,9 +7,7 @@ internal static class HorizontalFlip
 {
     public static ImageBuffer Apply(ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(source.ByteLength);
-        var result = ImageBuffer.AllocateForOverwrite(source.Width, source.Height, source.BitDepth, context);
+        var result = ImageBuffer.AllocateCopyResult(source, source.Width, source.Height, limits, cancellationToken);
         try
         {
             var stride = source.Stride;
@@ -18,9 +16,9 @@ internal static class HorizontalFlip
                 var input = source.Pixels.Slice(y * stride, stride);
                 var output = result.Pixels.Slice(y * stride, stride);
                 if (source.BitDepth == 8)
-                    PixelReversal.Reverse(MemoryMarshal.Cast<byte, uint>(input), MemoryMarshal.Cast<byte, uint>(output), context);
+                    PixelReversal.Reverse(MemoryMarshal.Cast<byte, uint>(input), MemoryMarshal.Cast<byte, uint>(output), cancellationToken);
                 else
-                    PixelReversal.Reverse(MemoryMarshal.Cast<byte, ulong>(input), MemoryMarshal.Cast<byte, ulong>(output), context);
+                    PixelReversal.Reverse(MemoryMarshal.Cast<byte, ulong>(input), MemoryMarshal.Cast<byte, ulong>(output), cancellationToken);
             }
             result.Orientation = source.Orientation;
             return result;

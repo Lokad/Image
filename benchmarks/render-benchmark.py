@@ -189,18 +189,34 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
-def apply_current_vertical_flip_confidence(editing):
-    confidence = json.loads((ROOT / 'benchmarks/vertical-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    c, q = confidence['case'], confidence['qualification']
-    assert confidence['measurementAccepted'] and not confidence['productionChanged'] and not confidence['productionSpeedupClaim']
-    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6640 and q['broadOrPackageRepeats'] == 0
-    assert c['librarySha256'] == q['actualPackageLibrarySha256']
-    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 256
-    assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
-    assert c['status'] == 'uncertain' and c['lower'] <= 1 < c['upper']
-    assert confidence['currentImageOwnerViewStatuses'] == {'passCount': 179, 'gaps': 0, 'uncertain': 12, 'total': 191}
-    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    return editing + f'\n| Vertical flip RGBA8 (confidence open) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+def copy_result_admission():
+    current = json.loads((ROOT / 'benchmarks/copy-result-admission-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
+    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6683
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert len(current['cases']) == 20
+    assert current['statusCounts'] == {state: sum(c['status'] == state for c in current['cases'].values()) for state in ('pass', 'gap', 'uncertain')}
+    for name, c in current['cases'].items():
+        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['linuxSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
+        assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
+    gain = current['paired']['WarmClone16']
+    assert gain['upper'] < 1 and gain['all12PairsRetained'] and gain['quietGuardsPassed']
+    assert gain['baselineAllocatedBytes'] == 112 and gain['candidateAllocatedBytes'] == 56
+    assert gain['exactSourceOutputAndIndependentOwnersPassed'] and gain['notNativeParity']
+    assert current['sourceProof']['copyKernelsExactAfterTokenParameterSubstitution']
+    assert current['sourceProof']['originalImageCreateAndCodecResizeAllocationBodiesVerbatim']
+    return current
 
 
 def current_png_stream_word_note():
@@ -218,19 +234,14 @@ def current_png_stream_word_note():
     assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 8664
     assert c['status'] == 'pass' and c['upper'] <= 1
     assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    composition = current['compositionCase']
-    assert composition['status'] == 'pass' and composition['upper'] <= 1
-    assert composition['librarySha256'] == c['librarySha256']
-    assert composition['actualIterations'] == composition['nativeSamplesEachBracket'] == 12
-    assert composition['allActualsRetained'] and composition['allOriginalGatesPassed'] and composition['quietGuardsPassed']
-    assert composition['managedExact'] and composition['sourceUnchanged'] and composition['independentOwnedOutput']
-    assert current['compositionReferenceValidation']['nativeCliNormalScalarPixelsExact']
-    assert math.isclose(composition['ratio'], composition['managedUs'] / composition['nativeUs'], rel_tol=1e-12)
+    composition = copy_result_admission()['cases']['PngCropFit16']
+    assert composition['status'] == 'pass'
     return (f'[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) '
             f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
             f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
-            'uncertainty without a production change or speedup claim. Original adverse data remain; '
-            f'The complete decode/orient/crop/fit operation also passes: **{composition["managedUs"]:,.2f} / '
+            'uncertainty without a production change or speedup claim. Original adverse data remain. '
+            f'The [copy-result round](../benchmarks/COPY-RESULT-ADMISSION.md) refreshes the complete '
+            f'decode/orient/crop/fit comparison: **{composition["managedUs"]:,.2f} / '
             f'{composition["nativeUs"]:,.2f} µs, upper {composition["upper"]:.3f}**, '
             f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
 
@@ -298,32 +309,6 @@ def apply_current_bicubic_adjacent_confidence(editing):
             'current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries '
             'remain explicit; no production speedup is claimed.')
     return editing, note
-
-
-def apply_current_pixel_reversal(editing):
-    current = json.loads((ROOT / 'benchmarks/shared-pixel-reversal-evidence.json').read_text(encoding='utf-8'))
-    q = current['qualification']
-    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6605
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['allFourReversalConsumersPassed'] and q['samePackageWindows']['allFourReversalConsumersPassed']
-    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
-    assert current['currentImageOwnerViewStatuses'] == {'pass': 175, 'gap': 3, 'uncertain': 13}
-    assert current['productionLineDelta'] == -37
-    for c in current['cases'].values():
-        assert c['actualIterations'] == 12 and c['allActualsRetained']
-        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    p = current['comparisons']['WarmHalfTurn8']
-    assert p['normalizedGainSeparated'] and all(c['rawGainSeparated'] for c in p['views'].values())
-    c = current['cases']['WarmHalfTurn8']
-    assert c['status'] == 'pass' and c['allocatedBytes'] == 112
-    # One displayed representative; the linked family report owns all four costs.
-    return editing + f'\n| Half turn RGBA8 † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
 
 
 def apply_released_image_storage(codecs, editing, read_rows):
@@ -1670,29 +1655,6 @@ No heap capacity or retention is added; validation and independent owners remain
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    # Current axis-swapping costs have one owner; superseded tile stages remain history.
-    turn_current = json.loads((ROOT / 'benchmarks/shared-axis-swap-evidence.json').read_text(encoding='utf-8'))
-    turn_q = turn_current['qualification']
-    assert turn_current['productionAccepted'] and turn_current['allAffectedPerformanceReconciled']
-    assert turn_current['requiredMaterialPaths'] == 289 and turn_current['newMaterialPaths'] == 0
-    assert turn_current['raw']['mirrored'] and turn_current['raw']['allMembersVerified']
-    assert turn_q['windows']['total'] == turn_q['linux']['total'] == turn_q['fullChecksEachOs'] == 6600
-    assert turn_q['actualPackage']['sha256'] == turn_q['samePackageWindows']['sameActualPackageSha256']
-    assert turn_q['actualPackage']['actualConsumerPassed'] and turn_q['samePackageWindows']['actualConsumerPassed']
-    assert turn_q['actualPackage']['usageExamples'] == turn_q['samePackageWindows']['usageExamples'] == 3
-    for case, label in [('WarmTranspose16', 'Plain transpose RGBA16'),
-                        ('WarmTranspose8', 'Plain transpose RGBA8'),
-                        ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8'),
-                        ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16'),
-                        ('WarmTransverse8', 'Mirrored transpose RGBA8')]:
-        c = turn_current['cases'][case]
-        assert c['librarySha256'] == turn_q['actualPackage']['librarySha256'] == turn_current['producers']['timedArtifactSha256']
-        assert c['actualIterations'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-        if c['status'] != 'pass': label += f" ({c['status']})"
-        rows.append(('editing', f"| {label} † → 259×513 | {c['managedUs']:,.2f} | {c['nativeUs']:,.2f} | {c['ratio']:.3f} / {c['upper']:.3f} | {c['allocatedBytes']:,} |"))
     # Current JPEG costs have one owner; superseded algorithms/experiments remain
     # linked history rather than prerequisites of every summary rendering.
     jpeg_read = json.loads((ROOT / 'benchmarks/jpeg-shared-block-support-evidence.json').read_text(encoding='utf-8'))
@@ -1790,8 +1752,7 @@ word copy is **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['uppe
 The two-move overlapping pair remains uncertain: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
 Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
 ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
-[Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
-is still open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**. No new flip timing."""
+"""
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
@@ -2853,24 +2814,29 @@ is still open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**. No new flip timin
     editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
-    editing = apply_current_pixel_reversal(editing)
-    editing = apply_current_vertical_flip_confidence(editing)
-    raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
-    copy_q = raster_copies['qualification']
-    assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
-    assert raster_copies['requiredMaterialPaths'] == 289 and raster_copies['newMaterialPaths'] == 0
-    assert raster_copies['raw']['mirrored'] and raster_copies['raw']['allMembersVerified']
-    assert copy_q['fullChecksEachOs'] == copy_q['windows']['total'] == copy_q['linux']['total'] == 6592
-    assert copy_q['actualPackage']['sha256'] == copy_q['samePackageWindows']['sameActualPackageSha256']
-    assert copy_q['actualPackage']['actualConsumerPassed'] and copy_q['samePackageWindows']['actualConsumerPassed']
-    assert copy_q['actualPackage']['usageExamples'] == copy_q['samePackageWindows']['usageExamples'] == 3
-    assert raster_copies['currentImageOwnerViewStatuses'] == {'pass': 168, 'gap': 6, 'uncertain': 17}
-    for c in raster_copies['cases'].values():
-        assert c['librarySha256'] == copy_q['actualPackage']['librarySha256'] == raster_copies['producers']['timedArtifactSha256']
-        assert c['actualIterations'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    owned_copy = copy_result_admission()
+    for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
+                        ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
+                        ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
+                        ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16 † → 259×513'),
+                        ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
+                        ('WarmHalfTurn8', 'Half turn RGBA8 †'),
+                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (confidence open) †')]:
+        c = owned_copy['cases'][name]
+        editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
+    owned_copy_note = """[Copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) removes an unused
+temporary execution object: all 18 owned clone/flip/turn controls allocate
+**56 B/op**, down from 112 B/op. Returned pixels remain independently owned and
+charged until disposal; pixel capacity and retained storage are unchanged.
+A complete word-clone comparison confirms **1.68% / 0.29 µs** incremental savings.
+Flip timing remains inconclusive; historical clocks are not causal gain evidence.
+All 20 affected complete reference comparisons refresh on the actual package DLL:
+**16 pass, three word gaps, one byte-flip uncertainty**. Word clone, normal copy
+and vertical flip retain ratio uppers **1.054 / 1.038 / 1.047**. Exact managed
+pixels, cancellation and terminal admission remain. All eight axis swaps,
+reversal controls and both PNG compositions pass and stop. Earlier
+[copy](../benchmarks/SHARED-RASTER-COPY.md), [reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md)
+and [tile](../benchmarks/SHARED-AXIS-SWAP.md) gains remain linked history."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     png_stream_word_note = current_png_stream_word_note()
@@ -2901,15 +2867,10 @@ stream captures remain linked beside their current confirmations.
 also passes under adjacent batches: **5,841.97 / FFmpeg 5,986.04 µs, upper .988**,
 **240,496 B/op**. No builds or production change; this control stops.
 
-[Shared pixel reversal](../benchmarks/SHARED-PIXEL-REVERSAL.md) saves **4.64 µs /
-36.18% raw**, **27.22% reference-normalized**, on the original byte half turn.
-Current cost is **8.18 / FFmpeg 10.02 µs, upper .838**, **112 B/op**. Shared exact
-kernels remove 37 production lines with unchanged owned/retained capacity. Both
-word controls pass; byte horizontal flip is narrowly uncertain, with no demonstrated
-regression. All eight [axis-swapping controls](../benchmarks/SHARED-AXIS-SWAP.md) pass and stop.
+{owned_copy_note}
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 179 pass, zero gaps, 12 uncertain**. This does not establish full parity:
+image views: 181 pass, three gaps, seven uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}
@@ -2919,11 +2880,7 @@ no optimization gap is inferred.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
-pass and stop. [Shared full-raster copying](../benchmarks/SHARED-RASTER-COPY.md)
-retains its 7.41% normalized word-clone gain and two passing byte-copy controls;
-word copies are now uncertain under the current confirmations. Complete word PNG
-composition now passes under adjacent reference batches, without a speedup claim.
-[Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
+pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
 pass and stop. This confidence update does not establish a production speedup.
 No pipeline speedup is inferred from historical stage sums.
@@ -2949,8 +2906,8 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,659 full/live checks**,
-focused normal/scalar drawing checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,683 full/live checks**,
+focused normal/scalar copy-ownership checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
