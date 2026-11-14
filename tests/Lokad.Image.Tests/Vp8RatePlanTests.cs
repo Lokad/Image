@@ -7,6 +7,63 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8RatePlanTests
 {
+    private static int ReferenceBit(ReadOnlySpan<ushort> entropy, bool bit, int probability)
+        => entropy[bit ? 255 - probability : probability];
+
+    private static int ReferenceVariableCost(int level, ReadOnlySpan<byte> p, ReadOnlySpan<ushort> entropy)
+    {
+        var cost = ReferenceBit(entropy, level != 0, p[1]); if (level == 0) return cost;
+        cost += ReferenceBit(entropy, level > 1, p[2]); if (level == 1) return cost;
+        cost += ReferenceBit(entropy, level > 4, p[3]);
+        if (level <= 4)
+        {
+            cost += ReferenceBit(entropy, level != 2, p[4]);
+            if (level != 2) cost += ReferenceBit(entropy, level == 4, p[5]);
+        }
+        else
+        {
+            cost += ReferenceBit(entropy, level > 10, p[6]);
+            if (level <= 10) cost += ReferenceBit(entropy, level > 6, p[7]);
+            else
+            {
+                cost += ReferenceBit(entropy, level >= 35, p[8]);
+                cost += level >= 35 ? ReferenceBit(entropy, level >= 67, p[10]) : ReferenceBit(entropy, level >= 19, p[9]);
+            }
+        }
+        return cost;
+    }
+
+    [Fact]
+    public void EveryVariablePriceBandMatchesUnfactoredTreeAcrossAllNodeProbabilities()
+    {
+        // Each leaf cost is additive in independent node prices. Exhaust every
+        // probability at each node and row, retaining the unfactored tree oracle.
+        var probabilities = Enumerable.Repeat((byte)128, 1056).ToArray();
+        using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var plan = Vp8RatePlan.Create(probabilities, context);
+        var entropy = plan.Entropy; var fixedLevels = plan.FixedLevels; var attempts = root.Attempts;
+        for (var node = 0; node < 11; node++)
+        {
+            probabilities.AsSpan().Fill(128);
+            for (var sample = 0; sample < 256; sample++)
+            {
+                for (var index = 0; index < 96; index++) probabilities[index * 11 + node] = (byte)((sample + index * 17) & 255);
+                plan.Refresh(probabilities); var combined = plan.CombinedLevels;
+                for (var index = 0; index < 96; index++)
+                {
+                    var p = probabilities.AsSpan(index * 11, 11); var extra = index % 3 == 0 ? 0 : ReferenceBit(entropy, true, p[0]);
+                    for (var level = 0; level < 68; level++)
+                    {
+                        var expected = fixedLevels[level] + extra + ReferenceVariableCost(level, p, entropy);
+                        if (combined[index * 68 + level] != expected) Assert.Equal(expected, (int)combined[index * 68 + level]);
+                    }
+                }
+            }
+        }
+        Assert.Equal(attempts, root.Attempts); Assert.Equal(plan.CapacityBytes, root.Bytes);
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(1)]

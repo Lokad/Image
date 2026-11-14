@@ -1999,28 +1999,28 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         assert current['packetSha256'] == current['nativePacketSha256']
         assert current['managedPacketBytes'] == current['nativePacketBytes']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    writer_policy = json.loads((ROOT / 'benchmarks/vp8-writer-policy-evidence.json').read_text(encoding='utf-8'))
-    assert writer_policy['productionAccepted'] and writer_policy['allAffectedPerformanceReconciled']
-    assert writer_policy['requiredMaterialPaths'] == 289 and not writer_policy['materialPassToGapContradictions']
-    assert writer_policy['raw']['mirrored'] and writer_policy['raw']['allMembersVerified']
-    policy_q = writer_policy['qualification']
-    assert policy_q['fullChecksEachOs'] == policy_q['windows']['total'] == policy_q['linux']['total'] == 6685
+    variable_prices = json.loads((ROOT / 'benchmarks/vp8-variable-price-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert variable_prices['productionAccepted'] and variable_prices['allAffectedPerformanceReconciled']
+    assert variable_prices['requiredMaterialPaths'] == 289 and not variable_prices['materialPassToGapContradictions']
+    assert variable_prices['raw']['mirrored'] and variable_prices['raw']['allMembersVerified']
+    policy_q = variable_prices['qualification']
+    assert policy_q['fullChecksEachOs'] == policy_q['windows']['total'] == policy_q['linux']['total'] == 6686
     assert policy_q['windows']['fullLivePassed'] and policy_q['linux']['fullLivePassed']
     assert policy_q['sameActualPackageBothOS'] and policy_q['allThreeExamplesBothOS']
     assert policy_q['actualPackage']['sha256'] == policy_q['samePackageWindows']['sameActualPackageSha256']
-    assert writer_policy['workflow']['postTimingProductionRebuilds'] == writer_policy['workflow']['measurementBuilds'] == 0
-    assert writer_policy['storage']['newOwnedHeapCapacityBytes'] == writer_policy['storage']['newRetainedStateBytes'] == 0
-    vp8_encode_cases = writer_policy['cases']
+    assert variable_prices['workflow']['postTimingProductionRebuilds'] == variable_prices['workflow']['measurementBuilds'] == 0
+    assert variable_prices['storage']['newOwnedHeapCapacityBytes'] == variable_prices['storage']['newRetainedStateBytes'] == 0
+    vp8_encode_cases = variable_prices['cases']
     assert set(vp8_encode_cases) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'selected', 'trellis', 'distortion', 'alpha', 'alpha16'}
     for c in vp8_encode_cases.values():
-        assert c['librarySha256'] == writer_policy['producers']['linuxSha256'] == policy_q['actualPackage']['librarySha256']
+        assert c['librarySha256'] == variable_prices['producers']['linuxSha256'] == policy_q['actualPackage']['librarySha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == len(c['managedActualNanoseconds']) == 12
         assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
         assert c['managedPacketBytes'] == c['nativePacketBytes'] and c['sourceUnchanged'] and c['independentOwnedOutput']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert all(c['gainSeparated'] and c['pairs'] == 12 and c['operations'] == 32 for c in writer_policy['paired'].values())
+    assert all(c['gainSeparated'] and c['pairs'] == 12 and c['operations'] == 32 for c in variable_prices['paired'].values())
     for name in ['alpha', 'alpha16']:
         webp_owned['cases'][name] = vp8_encode_cases[name]
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
@@ -2106,7 +2106,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     rows[position:position] = vp8_rows
     vp8_status_counts = {state: sum(c['status'] == state for c in vp8_encode_cases.values())
                          for state in ('pass', 'gap', 'uncertain')}
-    assert vp8_status_counts == {'pass': 8, 'gap': 1, 'uncertain': 0}
+    assert vp8_status_counts == {'pass': 9, 'gap': 0, 'uncertain': 0}
     selected_cost = vp8_encode_cases['selected']
     distortion_cost = vp8_encode_cases['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
@@ -2867,16 +2867,15 @@ unchanged costs; current copy/composition costs are in their linked family repor
 {bicubic_adjacent_note}
 Current-code adjacency leaves [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md)
 uncertain; no optimization gap is inferred for that control.
-[VP8 writer policy](../benchmarks/VP8-WRITER-POLICY.md) retains small controlled
-managed-DLL gains: **40.57µs/0.427%** photograph and **108.80µs/0.205%** RGBA16alpha.
-All nine complete standalone controls refresh on the actual upcoming package:
-eight pass; photograph remains a gap at **{vp8_encode_cases['photograph']['managedUs']:,.2f} /
-FFmpeg {vp8_encode_cases['photograph']['nativeUs']:,.2f}µs, upper {vp8_encode_cases['photograph']['upper']:.3f}**,
-**809,080 B/op**, exact **17,688 B**. Effort2diagram passes, upper
-{vp8_encode_cases['distortion']['upper']:.3f}, **406,664 B/op**, exact **7,330 B**.
-Allocations/retention and packets remain unchanged. Both OSes pass **6,685 full/live**
-checks and the **same actual package/all three examples**. No historical-clock
-subtraction, transferred ALC gain or overall parity claim; publication is postponed.
+[Variable-price preparation](../benchmarks/VP8-VARIABLE-PRICE-PREPARATION.md) closes
+the photograph gap: **{vp8_encode_cases['photograph']['managedUs']:,.2f} / FFmpeg
+{vp8_encode_cases['photograph']['nativeUs']:,.2f}µs, upper {vp8_encode_cases['photograph']['upper']:.3f}**,
+**809,080 B/op**, exact **17,688 B**. All nine lossy and all eight lossless/alpha
+controls pass/stop. Independent controlled gains are **154.41µs/1.623%** photograph
+and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
+The longer trellis integration retains its original uncertain capture. Both OSes
+pass **6,686 full/live** checks and the **same actual package/all three examples**.
+This scoped refresh does not establish whole-library parity; publication is postponed.
 [Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
 uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls

@@ -96,27 +96,10 @@ internal sealed partial class Vp8RatePlan : IDisposable
         return cost;
     }
 
-    private static int VariableCost(int level, ReadOnlySpan<byte> p, ReadOnlySpan<ushort> entropy)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void FillVariableBand(Span<ushort> row, ReadOnlySpan<ushort> fixedLevels, int first, int end, int cost)
     {
-        var cost = Bit(entropy, level != 0, p[1]); if (level == 0) return cost;
-        cost += Bit(entropy, level > 1, p[2]); if (level == 1) return cost;
-        cost += Bit(entropy, level > 4, p[3]);
-        if (level <= 4)
-        {
-            cost += Bit(entropy, level != 2, p[4]);
-            if (level != 2) cost += Bit(entropy, level == 4, p[5]);
-        }
-        else
-        {
-            cost += Bit(entropy, level > 10, p[6]);
-            if (level <= 10) cost += Bit(entropy, level > 6, p[7]);
-            else
-            {
-                cost += Bit(entropy, level >= 35, p[8]);
-                cost += level >= 35 ? Bit(entropy, level >= 67, p[10]) : Bit(entropy, level >= 19, p[9]);
-            }
-        }
-        return cost;
+        for (var level = first; level < end; level++) row[level] = (ushort)(fixedLevels[level] + cost);
     }
 
     internal static Vp8RatePlan Create(ReadOnlySpan<byte> probabilities, OperationContext context)
@@ -184,8 +167,30 @@ internal sealed partial class Vp8RatePlan : IDisposable
             // Include the invariant sign/category price in the existing words.
             // Variable tree: at most7binary costs; fixed: sign256+11costs.
             // Even a conservative2048per bit gives37120, within UInt16.
-            for (var level = 0; level < 68; level++)
-                values[LevelsAt + index * 68 + level] = (ushort)(values[FixedAt + level] + extra + VariableCost(level, p, entropy));
+            // Eleven leaves cover all68levels. The row's probabilities stay
+            // fixed, so reuse each tree path before adding invariant prices.
+            var row = values.Slice(LevelsAt + index * 68, 68);
+            ReadOnlySpan<ushort> fixedLevels = values.Slice(FixedAt, 68);
+            row[0] = (ushort)(fixedLevels[0] + extra + Bit(entropy, false, p[1]));
+            var nonzero = extra + Bit(entropy, true, p[1]);
+            row[1] = (ushort)(fixedLevels[1] + nonzero + Bit(entropy, false, p[2]));
+            var multiple = nonzero + Bit(entropy, true, p[2]);
+            var small = multiple + Bit(entropy, false, p[3]);
+            row[2] = (ushort)(fixedLevels[2] + small + Bit(entropy, false, p[4]));
+            var threeOrFour = small + Bit(entropy, true, p[4]);
+            row[3] = (ushort)(fixedLevels[3] + threeOrFour + Bit(entropy, false, p[5]));
+            row[4] = (ushort)(fixedLevels[4] + threeOrFour + Bit(entropy, true, p[5]));
+            var large = multiple + Bit(entropy, true, p[3]);
+            var medium = large + Bit(entropy, false, p[6]);
+            FillVariableBand(row, fixedLevels, 5, 7, medium + Bit(entropy, false, p[7]));
+            FillVariableBand(row, fixedLevels, 7, 11, medium + Bit(entropy, true, p[7]));
+            var category = large + Bit(entropy, true, p[6]);
+            var lowerCategory = category + Bit(entropy, false, p[8]);
+            FillVariableBand(row, fixedLevels, 11, 19, lowerCategory + Bit(entropy, false, p[9]));
+            FillVariableBand(row, fixedLevels, 19, 35, lowerCategory + Bit(entropy, true, p[9]));
+            var upperCategory = category + Bit(entropy, true, p[8]);
+            FillVariableBand(row, fixedLevels, 35, 67, upperCategory + Bit(entropy, false, p[10]));
+            row[67] = (ushort)(fixedLevels[67] + upperCategory + Bit(entropy, true, p[10]));
         }
     }
 

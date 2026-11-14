@@ -1,5 +1,8 @@
 # VP8 immutable cancellation policy
 
+Current costs are in [variable-price preparation](VP8-VARIABLE-PRICE-PREPARATION.md):
+all nine lossy controls pass. This report retains the earlier source-specific round.
+
 **Retained as a small incremental improvement.** Select the immutable cancellation
 policy once at frame entry. Direct coefficients with a token that cannot be cancelled
 omit redundant per-bit checks. Live tokens, headers/literals, residual-program writes,
