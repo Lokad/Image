@@ -32,7 +32,7 @@ public static partial class ImageCodec
     {
         using var context = ReadContext(limits ?? ImageLimits.Default, cancellationToken, metadataPolicy);
         ArgumentNullException.ThrowIfNull(input);
-        using var reader = new InspectionReader(input, context, asynchronous);
+        using var reader = new InspectionReader(input, context, asynchronous, adaptiveHeaders: true);
         return await StreamInspection.InspectAsync(reader, metadataPolicy: metadataPolicy).ConfigureAwait(false);
     }
 }

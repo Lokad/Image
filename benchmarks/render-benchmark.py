@@ -2658,7 +2658,20 @@ def render():
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
+    header_storage = json.loads((ROOT / 'benchmarks/seekable-header-storage-evidence.json').read_text(encoding='utf-8'))
+    assert header_storage['productionAccepted'] and header_storage['reuse']['sourceValid']
+    assert header_storage['qualification']['fullChecksEachOs'] == 6640
+    assert header_storage['qualification']['sameActualPackageBothOs']
+    assert header_storage['qualification']['package']['sha256'] == header_storage['qualification']['windowsPackage']['sameActualPackageSha256']
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
+        if case in header_storage['currentProbeCases']:
+            current = header_storage['currentProbeCases'][case]
+            assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
+            assert current['librarySha256'] == header_storage['producers']['linuxSha256']
+            status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
+            read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
+            continue
         if case in png_adler['readCases']:
             current = png_adler['readCases'][case]
             assert current['descriptorExact'] and current['prefixAndCodingScopesVerified'] and current['outputBytes'] == 36
@@ -2702,15 +2715,16 @@ def render():
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    headers = header_skips['cases']['PngHeaders'][-1]
+    headers = header_storage['observations'][-1]
     assert headers['receipt']['descriptorExact'] and headers['receipt']['typedSourceMetadataExact']
-    assert headers['receipt']['librarySha256'] == header_skips['producers']['linuxSha256']
+    assert headers['receipt']['librarySha256'] == header_storage['reuse']['timedSha256']
+    assert header_storage['reuse']['currentSha256'] == header_storage['qualification']['package']['librarySha256']
     assert len(headers['managed']['actual']) == 12 and all(q['passed'] for q in headers['quietness'].values())
     read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
                      f'{headers["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
                      f'{min(b["mean"] for b in headers["nativeBrackets"]) / 1000:,.3f} | '
                      f'{headers["worstBracketRatio"]:.3f} / {headers["conservativeRatioUpper"]:.3f} | '
-                     f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed gap |')
+                     f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed pass; source-valid |')
     identified = png_gfni['cases']['PngResident'][-1]
     assert identified['receipt']['descriptorExact'] and identified['receipt']['typedSourceMetadataExact']
     assert identified['receipt']['descriptorFields'] == 9 and identified['receipt']['nativeReady']['outputBytes'] == 36
@@ -2935,10 +2949,21 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,624 full/live checks**,
-focused normal/scalar/AVX512-off/AVX2-off checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,640 full/live checks**,
+focused normal/scalar header checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
+
+Complete [seekable PNG headers](../benchmarks/SEEKABLE-HEADER-STORAGE.md) pass at
+**0.306 / FFmpeg AVIO/header adapter 0.572 µs, upper .548**, **592 B/op**.
+Admitted small-buffer peak falls **8,448 → 512 B**, with zero retained scratch.
+JPEG bulk keeps its 8,448 B peak and adds 280 B/op; its elapsed effect is inconclusive.
+PNG timing reuses unchanged executed paths across a JPEG-only EOI refinement;
+the final DLL passes original controls, paired companions and actual-package checks.
+This source-valid reuse is distinct from a fresh whole-release timing refresh.
+The four shared dimension probes refresh on that final DLL and remain small
+absolute gaps: PNG/WebP/JPEG/async JPEG **0.160/0.156/0.324/0.401 µs**, **744 B/op**.
+No probe speedup is inferred from historical clocks.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed

@@ -63,6 +63,7 @@ try {
     $fontFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredTrueType.cs'))
     $memoryFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/TestMemoryBudget.cs'))
     $memoryConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/CooperativeMemoryConsumer.cs'))
+    $headerStorageConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/HeaderStorageConsumer.cs'))
     $streamingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/GovernedStreamingConsumer.cs'))
     $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
@@ -90,6 +91,7 @@ try {
     <Compile Include="$fontFixturePath" Link="AuthoredTrueType.cs" />
     <Compile Include="$memoryFixturePath" Link="TestMemoryBudget.cs" />
     <Compile Include="$memoryConsumerPath" Link="CooperativeMemoryConsumer.cs" />
+    <Compile Include="$headerStorageConsumerPath" Link="HeaderStorageConsumer.cs" />
     <Compile Include="$streamingConsumerPath" Link="GovernedStreamingConsumer.cs" />
     <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
@@ -283,6 +285,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     }
 }
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
+await Lokad.Image.Tooling.HeaderStorageConsumer.Verify();
 Lokad.Image.Tooling.TextShapingConsumer.Verify();
 Lokad.Image.Tooling.PngCompressionConsumer.Verify();
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(

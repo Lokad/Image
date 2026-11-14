@@ -72,9 +72,9 @@ internal sealed class WarmPngHeaders
         if (first != Expected || second != Expected || ReferenceEquals(first, second)) throw new InvalidOperationException("Header descriptors differ or alias.");
         var copy = encoded.ToArray(); var survivor = Inspect(copy); Array.Clear(copy);
         if (survivor != Expected || first != Expected || second != Expected) throw new InvalidOperationException("Surviving metadata aliases source.");
-        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 8448};
+        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 512 };
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact header admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = 8447 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = 511 } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Header inspector accepted insufficient admission."); }
             catch (ImageLimitException) { }
@@ -123,12 +123,12 @@ internal sealed class WarmPngHeaders
                 schemaVersion = 1, name = "WarmStreamIdentify", caseId = "Png8HeadersSeekable", publicBoundary = "InspectHeaders/PngRgba8FreshSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = encoded.Length, inputSha256 = InputHash,
                 descriptor = Expected, managedOutputBytes = 36, nativeOutputBytes = 36, descriptorExact = true, typedSourceMetadataExact = true, headerStructure = true, fullCrc = false, pixelDecode = false,
-                freshSeekableStream = true, opaquePayloadsSkipped = true, inputView = false, fixedWorkspace = 8448, eofChecked = true, callerSourceLeftOpen = true,
+                freshSeekableStream = true, opaquePayloadsSkipped = true, inputView = false, fixedWorkspace = 8448, initialWorkspace = 512, eofChecked = true, callerSourceLeftOpen = true,
                 fixedInputWorkspaceAcquisitionAndReleaseTimed = true, wholeInputCopy = false, streamAcquisitionAndReleaseTimed = true, residentCallbacksCompleteImmediately = true,
                 sourceUnchanged = true, independentOwnedOutput = true, resourceAndCancellationGates = true, preparedEquivalentBoundaryControls = 21, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPngHeaders).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same original resident PNG through fresh read-only seekable source exposing no input view, to fresh independent nine-field typed source descriptor. Complete public InspectHeaders, fixed8448B local admission/scratch/header storage, actual bounded reads and opaque IDAT seek skipping through EOF, structural/header/EXIF scan, descriptor ownership, source/workspace release are timed. Native fresh FFmpeg AVIO with8192B scratch and original bounded header/EXIF adapter plus fresh owned AVCodecParameters; reads/seek skipping/EOF and all source/workspace/descriptor acquisition/release timed. Public PNG packet parser, CRC and compressed pixels excluded on both sides; parser streaming would buffer the whole input. Resident callbacks immediate. Same caller input left open and unchanged; descriptors survive source/workspace/peer release. No whole-input copy, metadata-block/raster allocation, source view, real I/O or cached descriptor. Startup/IPC/preparation and control hashing excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC."
+                boundary = "Same original resident PNG through fresh read-only seekable source exposing no input view, to fresh independent nine-field typed source descriptor. Complete public InspectHeaders, acquired512B initial local admission/scratch/header storage (8448B maximum for bulk scans), actual bounded reads and opaque IDAT seek skipping through EOF, structural/header/EXIF scan, descriptor ownership, source/workspace release are timed. Native fresh FFmpeg AVIO with8192B scratch and original bounded header/EXIF adapter plus fresh owned AVCodecParameters; reads/seek skipping/EOF and all source/workspace/descriptor acquisition/release timed. Public PNG packet parser, CRC and compressed pixels excluded on both sides; parser streaming would buffer the whole input. Resident callbacks immediate. Same caller input left open and unchanged; descriptors survive source/workspace/peer release. No whole-input copy, metadata-block/raster allocation, source view, real I/O or cached descriptor. Startup/IPC/preparation and control hashing excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }

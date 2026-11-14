@@ -6,7 +6,9 @@ internal sealed class InspectionReader : IDisposable
     internal const int WorkingBytes = 8192 + 256;
     private readonly Stream input;
     private readonly bool asynchronous;
-    private readonly byte[] buffer;
+    private byte[] buffer;
+    private readonly bool adaptiveHeaders;
+    private bool bulk;
     internal readonly byte[] Header;
     internal readonly OperationContext Context;
     private int first, last;
@@ -18,12 +20,13 @@ internal sealed class InspectionReader : IDisposable
     internal long BytesTraversed => acquired;
 
     internal InspectionReader(Stream input, OperationContext context, bool asynchronous, long? maxAcquiredBytes = null,
-        bool dimensionsOnly = false)
+        bool dimensionsOnly = false, bool adaptiveHeaders = false)
     {
         this.input = input; Context = context; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
-        // Dimension probes stop before scans and need only small header reads.
-        // Keep the larger scratch for complete inspection and late-metadata scans.
-        var capacity = dimensionsOnly ? 256 : 8192;
+        this.adaptiveHeaders = adaptiveHeaders && input.CanSeek && !dimensionsOnly;
+        // Seekable container inspection skips opaque payloads. Acquire bulk scratch
+        // only if a later scan actually needs it; probes retain their small buffer.
+        var capacity = dimensionsOnly || this.adaptiveHeaders ? 256 : 8192;
         context.Reserve(capacity + 256);
         try { buffer = new byte[capacity]; Header = new byte[32]; }
         catch { context.Release(capacity + 256); throw; }
@@ -32,6 +35,7 @@ internal sealed class InspectionReader : IDisposable
     private ValueTask<bool> FillAsync(int needed)
     {
         Context.Cancellation.ThrowIfCancellationRequested();
+        if (adaptiveHeaders && bulk && buffer.Length == 256) PrepareBulkStorage();
         var requested = (int)Math.Min(buffer.Length, Context.Limits.MaxInputBytes - acquired + 1);
         if (maxAcquiredBytes is { } maximum)
         {
@@ -41,6 +45,21 @@ internal sealed class InspectionReader : IDisposable
         if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(0, requested)), requested));
         var pending = input.ReadAsync(buffer.AsMemory(0, requested), Context.Cancellation);
         return pending.IsCompletedSuccessfully ? ValueTask.FromResult(CompleteFill(pending.Result, requested)) : AwaitFillAsync(pending, requested);
+    }
+
+    private void PrepareBulkStorage()
+    {
+        // Fill is called only after the previous buffer and any asynchronous read
+        // have finished. No unread bytes or live users survive this replacement.
+        buffer = [];
+        Context.Release(256);
+        Context.Reserve(8192);
+        try
+        {
+            Context.Cancellation.ThrowIfCancellationRequested();
+            buffer = new byte[8192];
+        }
+        catch { Context.Release(8192); throw; }
     }
 
     private async ValueTask<bool> AwaitFillAsync(ValueTask<int> pending, int requested)
@@ -122,6 +141,7 @@ internal sealed class InspectionReader : IDisposable
 
     private async ValueTask SkipForwardAsync(long count)
     {
+        bulk = true;
         while (count != 0)
         {
             if (!await FillAsync((int)Math.Min(count, buffer.Length)).ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
@@ -133,6 +153,7 @@ internal sealed class InspectionReader : IDisposable
     {
         if (entropy)
         {
+            bulk = true;
             while (true)
             {
                 if (first == last && !await FillAsync(buffer.Length).ConfigureAwait(false)) throw new ImageDataException("JPEG is missing EOI.");
@@ -152,6 +173,9 @@ internal sealed class InspectionReader : IDisposable
         int marker;
         do { marker = await ByteAsync().ConfigureAwait(false); } while (marker == 255);
         if (marker < 0) throw new ImageDataException("Truncated JPEG marker.");
+        // A small complete JPEG may fit the initial read. Its final EOF probe
+        // needs no entropy-scan scratch when that buffer has just been drained.
+        if (marker == 217) bulk = false;
         return marker;
     }
 

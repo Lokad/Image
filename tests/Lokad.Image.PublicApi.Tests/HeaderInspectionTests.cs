@@ -191,10 +191,10 @@ ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
     {
         var data = OriginalExif.Attach(OriginalExif.Create(profile, 17, 11), ImageOrientation.Rotate90, false);
         using var input = SparseInput.Bytes([1, 2, 3, .. data], true, seekable: true);
-        input.Position = 3;
+        input.Position = 3; input.BytesSkipped = 0;
         Assert.Equal(ImageCodec.Identify(data), await ImageCodec.InspectHeadersAsync(input,
             new() { MaxWorkingBytes = Workspace, MaxInputBytes = data.Length }));
-        Assert.Equal(input.Length, input.Position); Assert.Equal(data.Length, input.BytesRead);
+        Assert.Equal(input.Length, input.Position); Assert.Equal(data.Length, input.BytesRead + input.BytesSkipped);
     }
 
     private static byte[] ChunkHeader(string type, int size)
@@ -239,7 +239,7 @@ ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
     private sealed class SparseInput(long length, bool seekable, bool asynchronous, (long Offset, byte[] Bytes)[] pieces, int chunk = int.MaxValue) : Stream
     {
         private long position;
-        public long BytesRead;
+        public long BytesRead, BytesSkipped;
         public int ReadCalls, SeekCalls, LargestRequest;
         public bool WasDisposed, FalseSeek;
         public long FailAfter = long.MaxValue;
@@ -273,7 +273,7 @@ ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
         {
             if (!seekable) throw new NotSupportedException(); SeekCalls++;
             var target = origin switch { SeekOrigin.Current => position + offset, SeekOrigin.Begin => offset, _ => length + offset };
-            if (target < 0) throw new IOException(); position = target; return FalseSeek ? target + 1 : target;
+            if (target < 0) throw new IOException(); BytesSkipped += target - position; position = target; return FalseSeek ? target + 1 : target;
         }
         protected override void Dispose(bool disposing) { WasDisposed = true; base.Dispose(disposing); }
         public override bool CanRead => !WasDisposed;
