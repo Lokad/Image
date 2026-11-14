@@ -1,0 +1,329 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAP975/WPN976",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "c100ad8f0c9e0b0818acbb4191329ff680615e2445f3280d8bd97d39e1b21e5b"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "71e625b0b6135ead4be54eea1ff332b136a365a8eed8eff7384ce8fad725bdb7",
+    "src/Lokad.Image/Internal/Vp8Encoder.cs": "6d5b8a910d9e6f5e0a4abe51c5f0d6bcfbf89d1eefba4bf97141715a4f720e17",
+    "tests/Lokad.Image.Tests/Vp8lMatchLengthTests.cs": "ba1424ca652c1c3192326fd3d3b7272d4f065784f474d32b4b1c11647ce400c0",
+    "tests/Lokad.Image.Tests/Vp8lReferenceMatcherTests.cs": "39277095cd05f8f9ed4ec4b2de95fd5236cfa1db49736ddc41e34db7d4653e62"
+  },
+  "producers": {
+    "baselineLinux": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+    "baselineWindows": "620dbb17e12fc8eb0e7bf010a38526037e2d61e24a80191708409a56493c7289",
+    "candidateLinux": "366c5a7701eb22668a6205ae26df4e8c3c97f0833866ca9d762b51505d832b3d",
+    "package": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618"
+  },
+  "hypothesis": "For already==0 and positive limit, reuse the first sample equality established by the unchanged pruning check. Keep its cancellation checkpoint, start the same scalar prefix loop at1, and retain all other paths verbatim. Remove provably duplicated reads/comparison in current inlined code without windows, packed/vector preparation, a new prefix worker or search re-layout.",
+  "proof": "If pruning fails the result remains0. If already!=0 or limit<=0 the exact old loop starts at0. Otherwise the immutable first pair is equal and limit>0, so the old first iteration checks cancellation and advances to1; the revised path performs that checkpoint and advances without repeating reads. Subsequent samples, bounds, overlaps, tails, first mismatch, search order/budget/ties, indices and complete packets are identical. No owned storage/admission/retention change.",
+  "priorEvidence": [
+    "benchmarks/WEBP-SCALAR-WINDOW-PREPARATION.md",
+    "benchmarks/WEBP-PAIRED-MATCH-ENTRY-INCONCLUSIVE.md",
+    "benchmarks/WEBP-MATCHER-PHASE-STUDY.md"
+  ],
+  "distinction": "Earlier experiments combined windows, paired/vector loads or split query/prefix ownership and had adverse/inconclusive complete costs. This minimal source change isolates the duplicate scalar iteration verified in the current actual-library JIT. It is not a replay or automatic acceptance from333sample locations.",
+  "attribution": {
+    "totalSamples": 1952,
+    "mappedSamples": 1916,
+    "matchingSamples": 333,
+    "coefficientEmissionSamples": 123,
+    "luma4DecisionSamples": 98,
+    "preparedPopulationSamples": 75,
+    "inputPreparationSamples": 3,
+    "profilingOnly": true,
+    "profiledElapsedDiscarded": true,
+    "allBuilds": 0,
+    "allOriginalPacketOwnershipQualityAndQuietGatesPassed": true,
+    "interpretation": "Sample locations, inlining/skid and unclassified locations are not phase timings or projected gains. No material alpha-detection lead is established.",
+    "jitSourceSha256": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+    "jitSha256": "a112649178b21c0f90218fd406693369f069d767945b6a03ce945bb659193aae",
+    "currentFullOptsBytes": 2363,
+    "exactInstructionOffsetMappingAvailable": false,
+    "duplicateZeroOffsetCheckConfirmed": true,
+    "raw": {
+      "file": "webp-word-alpha-preparation-attribution.tar.xz",
+      "sha256": "be05940acb36f9c197e3167aafc109188b712b2810f8e9023661fe35ecf9cba9",
+      "bytes": 126780,
+      "members": 32,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "borrowed-drawing-validation-qualified.tar.xz",
+          "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+        },
+        {
+          "file": "webp-alpha16-current-confidence.tar.xz",
+          "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b"
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "alpha16": {
+      "caseId": "Encode16",
+      "depth": 16,
+      "quality": 75,
+      "effort": 4,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "packetBytes": 98590,
+      "identities": [
+        "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+        "366c5a7701eb22668a6205ae26df4e8c3c97f0833866ca9d762b51505d832b3d"
+      ],
+      "baselineUs": 53059.087,
+      "candidateUs": 55107.42154166666,
+      "ratio": 1.038604797716735,
+      "ratioConfidence": [
+        1.0260527682325336,
+        1.0513100688708097
+      ],
+      "allocationValues": [
+        6241792
+      ],
+      "pairs": [
+        {
+          "index": 0,
+          "first": "original",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 53065652,
+            "Item2": 6241792
+          },
+          "candidate": {
+            "Item1": 55123189.625,
+            "Item2": 6241792
+          },
+          "ratio": 1.0387734353099063
+        },
+        {
+          "index": 1,
+          "first": "candidate",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 53058759,
+            "Item2": 6241792
+          },
+          "candidate": {
+            "Item1": 55066711.5,
+            "Item2": 6241792
+          },
+          "ratio": 1.0378439401494484
+        },
+        {
+          "index": 2,
+          "first": "original",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 53052850,
+            "Item2": 6241792
+          },
+          "candidate": {
+            "Item1": 55132363.5,
+            "Item2": 6241792
+          },
+          "ratio": 1.0391970176908498
+        }
+      ],
+      "boundary": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+      "exactPackets": true,
+      "independentOwners": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "nativePerformanceMeasured": false,
+      "receipt": "tmp/wpn976-alpha16-short-receipt.json"
+    },
+    "photograph": {
+      "caseId": "PhotographLossless8",
+      "depth": 8,
+      "quality": 85,
+      "effort": 4,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "outputSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "packetBytes": 160032,
+      "identities": [
+        "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+        "366c5a7701eb22668a6205ae26df4e8c3c97f0833866ca9d762b51505d832b3d"
+      ],
+      "baselineUs": 80760.16625,
+      "candidateUs": 83034.99883333333,
+      "ratio": 1.028173606964055,
+      "ratioConfidence": [
+        0.9455223234696005,
+        1.1180339805986133
+      ],
+      "allocationValues": [
+        5358368
+      ],
+      "pairs": [
+        {
+          "index": 0,
+          "first": "original",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 81059694.375,
+            "Item2": 5358368
+          },
+          "candidate": {
+            "Item1": 83057336.25,
+            "Item2": 5358368
+          },
+          "ratio": 1.0246440834794968
+        },
+        {
+          "index": 1,
+          "first": "candidate",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 80633690,
+            "Item2": 5358368
+          },
+          "candidate": {
+            "Item1": 83338563.375,
+            "Item2": 5358368
+          },
+          "ratio": 1.0335452014536355
+        },
+        {
+          "index": 2,
+          "first": "original",
+          "operationsPerSubject": 8,
+          "baseline": {
+            "Item1": 80587114.375,
+            "Item2": 5358368
+          },
+          "candidate": {
+            "Item1": 82709096.875,
+            "Item2": 5358368
+          },
+          "ratio": 1.0263315359590328
+        }
+      ],
+      "boundary": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+      "exactPackets": true,
+      "independentOwners": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "nativePerformanceMeasured": false,
+      "receipt": "tmp/wpn976-photograph-short-receipt.json"
+    }
+  },
+  "decision": "Restore: alpha short is3.86%slower with conservative interval above1; photograph has2.82%slower point but wide interval. Neither supplies a useful complete-operation lead. No causal regression claim from code size/sample counts. No independent confirmation or unchanged favorable repeat; no permanent family ban.",
+  "focused": {
+    "platform": "linux",
+    "counts": {
+      "internal-normal": 68,
+      "public-normal": 112,
+      "internal-scalar": 68,
+      "public-scalar": 112
+    },
+    "privatePrefixAndFrozenIndices": true,
+    "exactPacketsAndSharedAdmissionAndAsyncOwnership": true,
+    "coreBuilds": 1,
+    "embeddedBuilds": 1,
+    "publicBuilds": 0,
+    "harnessNativeFixtureBuilds": 0,
+    "windowsCandidateBuilds": 0
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stage": "WPN976",
+    "productionAccepted": false,
+    "sourceAndRunnableModulesRestoredExactly": true,
+    "sourcePins": {
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3"
+    },
+    "productionSha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+    "embeddedTestsSha256": "f2c83798e7aefd2471d735cedc4968717758a8e7ee6d01e00b06bf038b883738",
+    "publicTestsSha256": "1d3e0ed26f7af2701e9187a3010733b3e72f6296f209891af13fa91eaec4e765",
+    "packageSha256": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618",
+    "restored": [
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.dll",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.pdb",
+      "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb",
+      "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb",
+      "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb",
+      "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml",
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb",
+      "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll",
+      "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb"
+    ],
+    "restorationBuilds": 0,
+    "fullOrPackageRepeats": 0,
+    "reason": "Word-alpha short3.86%slower with interval above1; photograph short2.82%slower point with wide interval. Neither gives a useful complete-operation lead. No confirmation or unchanged favorable repeat.",
+    "evidenceReused": "BDO9736659full/live eachOS,normal/scalar affected checks and SAMEactualpackage/all3examples; exact source/module restoration preserves this qualification."
+  },
+  "qualificationReuse": {
+    "owner": "benchmarks/borrowed-drawing-validation-evidence.json",
+    "eachOsFullLive": 6659,
+    "sameActualPackageAndAllThreeExamplesEachOs": true,
+    "repeatedBroadChecks": 0,
+    "repeatedPackCalls": 0
+  },
+  "memory": {
+    "totalAllocationsMeasured": true,
+    "allocationChanges": false,
+    "ownedCapacityChanges": false,
+    "retainedStorageChanges": false,
+    "physicalPeakMeasured": false,
+    "nativeAllocationsMeasured": false,
+    "noPeakOrCpuGainClaim": true
+  },
+  "raw": {
+    "file": "webp-first-match-reuse-rejected.tar.xz",
+    "sha256": "efa8514f1d7c844f712ce358c2cdf8bdeaab19045964e431444b6cc25dff2997",
+    "bytes": 1851636,
+    "members": 39,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-word-alpha-preparation-attribution.tar.xz",
+        "sha256": "be05940acb36f9c197e3167aafc109188b712b2810f8e9023661fe35ecf9cba9",
+        "bytes": 126780,
+        "members": 32,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "borrowed-drawing-validation-qualified.tar.xz",
+            "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+          },
+          {
+            "file": "webp-alpha16-current-confidence.tar.xz",
+            "sha256": "a4385a311d63db65fa7e1ea67c946587f2d40a16d9b967c7b070a4408709003b"
+          }
+        ]
+      },
+      {
+        "file": "borrowed-drawing-validation-qualified.tar.xz",
+        "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+      }
+    ]
+  },
+  "currentCostsAndRendererUnchanged": true,
+  "planScope": "PLAN remains ignored. Only the previously authorized font/text section differs from its original checkpoint. Complete text one-shot/eight-draw controls pass/stop; no other PLAN byte changed."
+}
