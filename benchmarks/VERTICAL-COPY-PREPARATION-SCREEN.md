@@ -106,3 +106,26 @@ screen, generated code, partial profile and restoration. Raw `vector-span-cursor
 546,584 B/95 members, SHA256 `caf3479bb0beaa8ed1eb8304b69e51e38e215bcb90426ea1e3da173205d393ae`, mirrored and
 member-verified. Keep the measured indexed copier; no third variant in this round,
 no permanent family ban and no rejected-trial renderer dependency.
+
+
+## Flat row placement
+
+**Not retained; inconclusive.** Whole-raster views and integer row/chunk offsets
+remove the intermediate row spans and second slices. The shared copier, every
+1,024-pixel cancellation checkpoint, owned capacity and source/result lifetimes stay.
+This differs from getter hoisting alone and the advancing-vector designs above.
+
+One three-pair screen per original 513×259 depth, 4096 complete operations per
+subject, natural GC and all observations retained: byte **8.389 → 8.416 µs**,
+ratio interval **0.969866–1.037867**; word **18.014 → 17.718 µs**,
+**0.936857–1.032544**. Both retain **56 B/op** and exact pixels/source/
+independent owners. No useful target gain or causal regression is demonstrated.
+These scoped DLL screens are not new FFmpeg costs. No favorable retry follows.
+
+Linux **25 internal/134 public** checks pass normal/scalar. One core/embedded
+build, zero other builds or broad/package repeats. Qualified source, modules,
+bindings and manifest are restored byte-exactly without rebuilding; current
+[raster-copy qualification](RASTER-COPY-SCHEDULING.md) and package remain valid.
+Raw flat-row-flip-screen.tar.xz, 501,420 B/37 members,
+SHA256 29d98cf8ae6915c292895ee6dd4fc09abe052dd63345a388f0b28d15d3fb36e9, is mirrored/member-verified and retains code, screens,
+checks and restoration. No rejected-trial renderer dependency is added.
