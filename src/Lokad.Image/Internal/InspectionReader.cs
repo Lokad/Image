@@ -1,7 +1,7 @@
 namespace Lokad.Image.Internal;
 
 /// <summary>Fixed-space container acquisition; byte admission includes read-ahead and skipped payloads.</summary>
-internal sealed class InspectionReader : IDisposable
+internal class InspectionReader : IDisposable
 {
     internal const int WorkingBytes = 8192 + 256;
     private const int HeaderBytes = 32;

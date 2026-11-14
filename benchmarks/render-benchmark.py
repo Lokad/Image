@@ -2637,9 +2637,9 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
-    header_storage = json.loads((ROOT / 'benchmarks/direct-probe-fields-evidence.json').read_text(encoding='utf-8'))
+    header_storage = json.loads((ROOT / 'benchmarks/probe-preparation-evidence.json').read_text(encoding='utf-8'))
     assert header_storage['productionAccepted'] and header_storage['qualification']['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert header_storage['qualification']['fullChecksEachOs'] == 6642
+    assert header_storage['qualification']['fullChecksEachOs'] == 6692
     assert header_storage['qualification']['sameActualPackageBothOs']
     assert header_storage['qualification']['package']['sha256'] == header_storage['qualification']['windowsPackage']['sameActualPackageSha256']
     assert header_storage['raw']['mirrored'] and header_storage['raw']['allMembersVerified']
@@ -2984,15 +2984,17 @@ focused normal/scalar copy-ownership checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Direct dimension-field assembly](../benchmarks/DIRECT-PROBE-FIELDS.md) removes a
-separate array and field copies: **744 → 688 B/op**, with unchanged **512 B**
-admission and zero retained scratch. PNG/WebP conservative native-normalized
-intervals separate; JPEG CPU effects remain inconclusive. Four probes remain
-small absolute gaps: PNG/WebP/JPEG/async JPEG **0.144/0.143/0.323/0.385 µs**.
-Complete PNG headers still pass at **0.311 / FFmpeg AVIO/header adapter 0.579 µs,
-upper .550**, **592 B/op**. All five confirmations use the same actual package
-DLL, original inputs/controls and ownership boundaries. Other source-valid costs
-are reused; this is not a fresh whole-release timing refresh.
+[Probe preparation](../benchmarks/PROBE-PREPARATION.md) combines facts with their
+reader and avoids allocating default options: **688 → 632 B/op**, with unchanged
+**512 B** admission and zero retained scratch or new cache. This establishes an
+allocation reduction; historical clocks do not establish a causal CPU gain.
+Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
+**0.132/0.133/0.301/0.377 µs**, with upper **1.116/1.105/1.555/1.925**.
+Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
+upper .546**, **592 B/op**. All five confirmations use the same actual package
+DLL, original inputs/controls and ownership boundaries. Windows/Linux each pass
+**6,692 full/live checks**, the same actual package and all three examples.
+Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed

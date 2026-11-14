@@ -1,0 +1,341 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "PPC1015",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "materialRequiredPaths": 289,
+  "newMaterialPaths": 0,
+  "producers": {
+    "windowsSha256": "ce5a395bf7c1c4cdd443af9e5adb24c0bb8cde8627ea9c2377d54bd06619ddc3",
+    "linuxSha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+    "packageSha256": "fd090f96b98dd4ded3fef95870b5ce38796eb6b4d103a72133029694b0ad9304"
+  },
+  "sources": {
+    "src/Lokad.Image/ImageCodec.Probe.cs": "6bebc2674c674849112167c10285c152b8f442e6abdcf633e2a6b251a8295a70",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/Internal/InspectionReader.cs": "c61db05493e0321b057f459f21a445d9ee34e596cd44f81bcb6b425844695160",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "042b2c8bda607b43a064f7194ca3622ea559ad78e970517c2b712c12c09f1309",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "ba0aafe503f109b96b8c564484156820d85306713621ef4d7a19c15ba13eaca9"
+  },
+  "deletedSources": [
+    "src/Lokad.Image/Internal/ProbeState.cs"
+  ],
+  "unchangedSources": {
+    "src/Lokad.Image/ImageCodec.cs": "d3b62537c5234430da06f41f12ad33f26c84d51c1dcf57577339b12fe56b53a8",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "67204a10807e754e9ef10715e9411836d5dec54e9ec8ad5cc767e4096fce4eb5"
+  },
+  "sourceProof": {
+    "acquisitionAndDisposalBodyExact": true,
+    "grammarExactAfterPrivateTypeRename": true,
+    "publicResultClassAndPublicApiBindingsUnchanged": true,
+    "noStaticDefaultCacheOrNewOwnedCapacity": true,
+    "defaultMaximumSingleSource": true,
+    "explicitNullLimitsPreserved": true,
+    "awaitedUserLifetimeUnchanged": true,
+    "existingLogicalWorkspaceBytes": 512,
+    "existingDimensionScratchBytes": 256,
+    "publicMetadataAndFailureContractsUnchanged": true
+  },
+  "cases": {
+    "ProbeDimensionsPng": {
+      "managedUs": 0.13202459017492305,
+      "nativeUs": 0.12263096205393474,
+      "ratio": 1.0766007863239047,
+      "lower": 1.0566833158772697,
+      "upper": 1.1155078022039815,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "f222f46cd50138623a14862e7a54c795d35ff6acef5daea1b5cef9331e99bd7e",
+      "inputBytes": 210972,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ppc1015-ProbeDimensionsPng-confirm-observation.json",
+        "receipt": "tmp/ppc1015-ProbeDimensionsPng-confirm-receipt.json"
+      }
+    },
+    "ProbeDimensionsWebp": {
+      "managedUs": 0.13256475078593646,
+      "nativeUs": 0.12353373877207438,
+      "ratio": 1.0731056317377776,
+      "lower": 1.0620772332339579,
+      "upper": 1.1050481383268205,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "db796bb9ad5d480eb273db8ae966d4fa1a8f5995bceaa724475c09d6201dbfb7",
+      "inputBytes": 183310,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ppc1015-ProbeDimensionsWebp-confirm-observation.json",
+        "receipt": "tmp/ppc1015-ProbeDimensionsWebp-confirm-receipt.json"
+      }
+    },
+    "ProbeDimensionsJpeg": {
+      "managedUs": 0.3009139260822825,
+      "nativeUs": 0.19816852633158366,
+      "ratio": 1.5184748640598007,
+      "lower": 1.5033924178037128,
+      "upper": 1.5545233983086348,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ppc1015-ProbeDimensionsJpeg-confirm-observation.json",
+        "receipt": "tmp/ppc1015-ProbeDimensionsJpeg-confirm-receipt.json"
+      }
+    },
+    "ProbeDimensionsJpegAsync": {
+      "managedUs": 0.3768160578658445,
+      "nativeUs": 0.2004604107538859,
+      "ratio": 1.8797529968572109,
+      "lower": 1.8375192344779097,
+      "upper": 1.9246542753502298,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ppc1015-ProbeDimensionsJpegAsync-confirm-observation.json",
+        "receipt": "tmp/ppc1015-ProbeDimensionsJpegAsync-confirm-receipt.json"
+      }
+    },
+    "PngHeaders": {
+      "managedUs": 0.30407130495732426,
+      "nativeUs": 0.5692839527130127,
+      "ratio": 0.5341294155723596,
+      "lower": 0.5292698369236601,
+      "upper": 0.5459749642566024,
+      "status": "pass",
+      "allocatedBytes": 592,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "benchmarkAssemblySha256": "10884ddaddbb9de3897298953da3544ce0c973b8c39a16f0ffdaac34eeacc022",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "inputBytes": 218775,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Same original resident PNG through fresh read-only seekable source exposing no input view, to fresh independent nine-field typed source descriptor. Complete public InspectHeaders, acquired512B initial local admission/scratch/header storage (8448B maximum for bulk scans), actual bounded reads and opaque IDAT seek skipping through EOF, structural/header/EXIF scan, descriptor ownership, source/workspace release are timed. Native fresh FFmpeg AVIO with8192B scratch and original bounded header/EXIF adapter plus fresh owned AVCodecParameters; reads/seek skipping/EOF and all source/workspace/descriptor acquisition/release timed. Public PNG packet parser, CRC and compressed pixels excluded on both sides; parser streaming would buffer the whole input. Resident callbacks immediate. Same caller input left open and unchanged; descriptors survive source/workspace/peer release. No whole-input copy, metadata-block/raster allocation, source view, real I/O or cached descriptor. Startup/IPC/preparation and control hashing excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC.",
+      "nativeIdentity": {
+        "sourceSha256": "634ec07a7c15f28d0f899ad02e561721518a5fa91fc641a468a8bfc92a766e1a",
+        "buildScriptSha256": "08e3efcf31ec7589e796ff02891dfad75334af2635c43114cf65aa16d44102dc",
+        "workerSha256": "72673d85c1c8b16b27b23cf20448cac9989df53d473a8f3b30034162dbe71dea"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/ppc1015-candidate-PngHeaders-confirm-observation.json",
+        "receipt": "tmp/ppc1015-candidate-PngHeaders-confirm-receipt.json"
+      }
+    }
+  },
+  "memory": {
+    "priorAllocatedBytes": 688,
+    "currentAllocatedBytes": 632,
+    "savedAllocatedBytes": 56,
+    "admittedCapacityBytes": 512,
+    "scratchBytes": 256,
+    "retainedAfterOperationBytes": 0,
+    "newStaticCacheBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "implementation": "Normalize immutable option/default values into locals without constructing or caching options. ProbeReader holds facts in the acquisition owner instead of allocating ProbeState beside InspectionReader. Ordinary headers retain the same base storage; no virtual methods, second disposal path or extra fields. Grammar/callback bounds are unchanged after private-type substitution; public result/ABI and explicit-null validation remain.",
+  "cpuClaim": "Five current complete-operation costs are independently confirmed. No causal CPU reduction from historical clocks or native parity is claimed; four dimension probes remain gaps. The accepted improvement is56B/op fewer allocations and simpler preparation without retained cache/storage.",
+  "qualification": {
+    "fullChecksEachOs": 6692,
+    "windows": {
+      "productionSha256": "ce5a395bf7c1c4cdd443af9e5adb24c0bb8cde8627ea9c2377d54bd06619ddc3",
+      "embeddedTestsSha256": "e0c950e5c1a79957eaeee23b2d18ba8aed417f9741d3e962a5758d2ed4315e86",
+      "full": [
+        3263,
+        2481,
+        948
+      ],
+      "total": 6692,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 139,
+        "internal-scalar": 2,
+        "public-scalar": 139
+      },
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "linux": {
+      "productionSha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "embeddedTestsSha256": "2cda09fe63021c216264d8304a89efe2c012702ec9c694518895211421ac79c8",
+      "full": [
+        3263,
+        2481,
+        948
+      ],
+      "total": 6692,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 139,
+        "internal-scalar": 2,
+        "public-scalar": 139
+      },
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "sameActualPackageBothOs": true,
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "PPC1015",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "fd090f96b98dd4ded3fef95870b5ce38796eb6b4d103a72133029694b0ad9304",
+      "symbolsSha256": "a6251aacfc5275fd8cc1bb73742a18d8c2ac6f61cb024512e85dbd5d87e26807",
+      "bytes": 461574,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for4probe screens/independent confirmations and the passing completePNGheader guard. Probes allocate632rather than688B/op; no historical-clock causal CPU gain or native parity claimed. Fixed admission/actual async users and public outputs remain; existing unrelated codec/edit/text/resize proof reused. Scratch capacity and retained operation state are unchanged; allocation falls by56B/op on probes. No production rebuild after timing. Other codec/edit/resize/text evidence reused unchanged.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "PPC1015",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "fd090f96b98dd4ded3fef95870b5ce38796eb6b4d103a72133029694b0ad9304",
+      "symbolsSha256": "a6251aacfc5275fd8cc1bb73742a18d8c2ac6f61cb024512e85dbd5d87e26807",
+      "bytes": 461574,
+      "librarySha256": "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for4probe screens/independent confirmations and the passing completePNGheader guard. Probes allocate632rather than688B/op; no historical-clock causal CPU gain or native parity claimed. Fixed admission/actual async users and public outputs remain; existing unrelated codec/edit/text/resize proof reused. Scratch capacity and retained operation state are unchanged; allocation falls by56B/op on probes. No production rebuild after timing. Other codec/edit/resize/text evidence reused unchanged.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "fd090f96b98dd4ded3fef95870b5ce38796eb6b4d103a72133029694b0ad9304"
+    },
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "focusedEachMode": {
+      "internal": 2,
+      "public": 139
+    },
+    "focusedModes": [
+      "normal",
+      "scalar"
+    ],
+    "producerBuildsEachOs": 1,
+    "embeddedBuildsEachOs": 1,
+    "publicHarnessNativeFixtureBuilds": 0,
+    "helperBuilds": 0,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "frozenReadControls": 12,
+    "frozenHeaderControls": 21,
+    "usageExamplesEachOs": 3,
+    "unaffectedArithmeticIsaEvidenceReused": true
+  },
+  "history": {
+    "provider": "benchmarks/direct-probe-fields-evidence.json",
+    "allRawRetained": true,
+    "shortActuals": 3,
+    "confirmationActuals": 12,
+    "shortConsoleLabel": "The reused short-screen console said12actuals; its actual log/receipt/assertions have3. Corrected future label without repeating a measurement.",
+    "qualificationAdapter": "Initial record-generation syntax error preceded full checks; corrected without rebuilding or repeating measurements."
+  },
+  "raw": {
+    "file": "probe-preparation-qualified.tar.xz",
+    "sha256": "9f8e74a1f287ab06a7e8462d1d688981a4543ec87b490edbfb5452296fc6714e",
+    "bytes": 3078112,
+    "members": 142,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "direct-probe-fields-qualified.tar.xz",
+        "sha256": "d40dd6307535a6548963ee135a4ff6689906fbf7cba182d76d979c72b008541a"
+      },
+      {
+        "file": "vp8-fixed-code-qualified.tar.xz",
+        "sha256": "b8c44a7151a5855abec730b73e3d9cc4a3c1a93b8cdda670e538ea150f791092"
+      }
+    ]
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 185,
+    "gaps": 2,
+    "uncertain": 4,
+    "total": 191,
+    "unchanged": true
+  },
+  "next": "Stop confirmed completePNGheader control. Four dimension-probe gaps remain visible: sync/async parser preparation and awaits are potential attribution leads, not assumed causes or permission for a duplicate grammar. Preserve larger confirmed codec/resize/text passes, known copy gaps and uncertainties; no blind replay of rejected copy candidates. All289material paths and exact encoder/pixel/safety/ownership contracts remain required; publication postponed."
+}

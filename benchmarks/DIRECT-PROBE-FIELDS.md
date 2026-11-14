@@ -1,5 +1,10 @@
 # Direct dimension-field assembly
 
+[Probe preparation](PROBE-PREPARATION.md) now owns the five current costs and
+632B/op dimension-probe allocations. This report retains its field-assembly
+implementation, observations and qualification as history.
+
+
 Dimension-only probes reuse their existing 256-byte scratch for partial fields,
 removing a separate 32-byte array and each buffer-to-header copy. Complete calls
 allocate **688 rather than 744 B/op**, with the same **512 B admitted capacity**

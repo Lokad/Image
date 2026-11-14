@@ -17,11 +17,13 @@ public enum ImageProbeFacts
 /// <summary>Bounded prefix acquisition. Complete container validation is a separate operation.</summary>
 public sealed record ImageProbeOptions
 {
+    internal const long DefaultMaxAcquiredBytes = 1024 * 1024;
+
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
     public ImageProbeFacts Facts { get; init; } = ImageProbeFacts.Dimensions;
     public ImageMetadataPolicy MetadataPolicy { get; init; }
     /// <summary>Maximum bytes actually read, excluding seeks; refusal does not read past this bound.</summary>
-    public long MaxAcquiredBytes { get; init; } = 1024 * 1024;
+    public long MaxAcquiredBytes { get; init; } = DefaultMaxAcquiredBytes;
 }
 
 /// <summary>Established header facts. Null fields are unexamined, not evidence of absence.</summary>

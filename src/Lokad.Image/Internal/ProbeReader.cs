@@ -1,6 +1,10 @@
 namespace Lokad.Image.Internal;
 
-internal sealed class ProbeState(ImageProbeFacts requested)
+// Facts share the acquisition owner, including while a stream read is pending.
+internal sealed class ProbeReader(Stream input, OperationContext context, bool asynchronous,
+    long maxAcquiredBytes, ImageProbeFacts requested)
+    : InspectionReader(input, context, asynchronous, maxAcquiredBytes,
+        dimensionsOnly: requested == ImageProbeFacts.Dimensions)
 {
     private ImageProbeFacts established;
     private bool animated;
@@ -15,7 +19,7 @@ internal sealed class ProbeState(ImageProbeFacts requested)
         return (established & requested) == requested;
     }
 
-    internal ImageProbeResult Result(ImageInfo info, InspectionReader reader)
+    internal ImageProbeResult Result(ImageInfo info)
     {
         var dimensions = (established & ImageProbeFacts.Dimensions) != 0;
         var source = (established & ImageProbeFacts.SourceRepresentation) != 0;
@@ -29,7 +33,7 @@ internal sealed class ProbeState(ImageProbeFacts requested)
             SourceAlpha = alpha ? info.SourceAlpha : null, HasAlpha = alpha ? info.HasAlpha : null,
             Orientation = (established & ImageProbeFacts.Orientation) != 0 ? info.Orientation : null,
             IsAnimated = (established & ImageProbeFacts.Animation) != 0 ? animated : null,
-            BytesRead = reader.BytesRead, BytesTraversed = reader.BytesTraversed
+            BytesRead = BytesRead, BytesTraversed = BytesTraversed
         };
     }
 }

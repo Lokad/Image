@@ -26,14 +26,14 @@ public static partial class ImageCodec
         CancellationToken cancellationToken, bool asynchronous)
     {
         ArgumentNullException.ThrowIfNull(input);
-        options ??= new();
-        if (options.Facts == 0 || (options.Facts & ~ImageProbeFacts.All) != 0 || options.MaxAcquiredBytes < 1)
+        var facts = options?.Facts ?? ImageProbeFacts.Dimensions;
+        var maximum = options?.MaxAcquiredBytes ?? ImageProbeOptions.DefaultMaxAcquiredBytes;
+        var metadataPolicy = options?.MetadataPolicy ?? ImageMetadataPolicy.Strict;
+        if (facts == 0 || (facts & ~ImageProbeFacts.All) != 0 || maximum < 1)
             throw new ArgumentOutOfRangeException(nameof(options));
-        using var context = ReadContext(options.Limits, cancellationToken, options.MetadataPolicy);
-        using var reader = new InspectionReader(input, context, asynchronous, options.MaxAcquiredBytes,
-            dimensionsOnly: options.Facts == ImageProbeFacts.Dimensions);
-        var state = new ProbeState(options.Facts);
-        var info = await StreamInspection.InspectAsync(reader, state, options.MetadataPolicy).ConfigureAwait(false);
-        return state.Result(info, reader);
+        using var context = ReadContext(options is null ? ImageLimits.Default : options.Limits, cancellationToken, metadataPolicy);
+        using var reader = new ProbeReader(input, context, asynchronous, maximum, facts);
+        var info = await StreamInspection.InspectAsync(reader, reader, metadataPolicy).ConfigureAwait(false);
+        return reader.Result(info);
     }
 }

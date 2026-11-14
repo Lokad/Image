@@ -139,15 +139,17 @@ focused normal/scalar copy-ownership checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Direct dimension-field assembly](../benchmarks/DIRECT-PROBE-FIELDS.md) removes a
-separate array and field copies: **744 → 688 B/op**, with unchanged **512 B**
-admission and zero retained scratch. PNG/WebP conservative native-normalized
-intervals separate; JPEG CPU effects remain inconclusive. Four probes remain
-small absolute gaps: PNG/WebP/JPEG/async JPEG **0.144/0.143/0.323/0.385 µs**.
-Complete PNG headers still pass at **0.311 / FFmpeg AVIO/header adapter 0.579 µs,
-upper .550**, **592 B/op**. All five confirmations use the same actual package
-DLL, original inputs/controls and ownership boundaries. Other source-valid costs
-are reused; this is not a fresh whole-release timing refresh.
+[Probe preparation](../benchmarks/PROBE-PREPARATION.md) combines facts with their
+reader and avoids allocating default options: **688 → 632 B/op**, with unchanged
+**512 B** admission and zero retained scratch or new cache. This establishes an
+allocation reduction; historical clocks do not establish a causal CPU gain.
+Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
+**0.132/0.133/0.301/0.377 µs**, with upper **1.116/1.105/1.555/1.925**.
+Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
+upper .546**, **592 B/op**. All five confirmations use the same actual package
+DLL, original inputs/controls and ownership boundaries. Windows/Linux each pass
+**6,692 full/live checks**, the same actual package and all three examples.
+Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed
@@ -308,10 +310,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.144 | 0.122 | 1.176 / 1.204 | 688 | Confirmed gap |
-| Probe JPEG dimensions, seekable | 0.323 | 0.192 | 1.685 / 1.805 | 688 | Confirmed gap |
-| Probe WebP dimensions, seekable | 0.143 | 0.121 | 1.177 / 1.205 | 688 | Confirmed gap |
-| Probe JPEG dimensions, async nonseekable | 0.385 | 0.202 | 1.905 / 1.991 | 688 | Confirmed gap |
+| Probe PNG dimensions, seekable | 0.132 | 0.123 | 1.077 / 1.116 | 632 | Confirmed gap |
+| Probe JPEG dimensions, seekable | 0.301 | 0.198 | 1.518 / 1.555 | 632 | Confirmed gap |
+| Probe WebP dimensions, seekable | 0.133 | 0.124 | 1.073 / 1.105 | 632 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.377 | 0.200 | 1.880 / 1.925 | 632 | Confirmed gap |
 | Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |
@@ -320,7 +322,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
-| Inspect PNG8 complete headers, seekable, adapter reference | 0.311 | 0.579 | 0.537 / 0.550 | 592 | Confirmed pass |
+| Inspect PNG8 complete headers, seekable, adapter reference | 0.304 | 0.569 | 0.534 / 0.546 | 592 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |

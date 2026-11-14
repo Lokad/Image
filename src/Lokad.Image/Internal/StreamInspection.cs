@@ -6,7 +6,7 @@ namespace Lokad.Image.Internal;
 // RFC9649 RIFF/VP8 headers and CIPA Exif IFD0. Pixel syntax and PNG CRCs are opaque.
 internal static class StreamInspection
 {
-    internal static async ValueTask<ImageInfo> InspectAsync(InspectionReader r, ProbeState? probe = null,
+    internal static async ValueTask<ImageInfo> InspectAsync(InspectionReader r, ProbeReader? probe = null,
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         await r.ReadAsync(2).ConfigureAwait(false);
@@ -54,7 +54,7 @@ internal static class StreamInspection
         foreach (var b in type) if (b is not (>= 65 and <= 90) and not (>= 97 and <= 122)) throw new ImageDataException("Invalid PNG chunk name.");
     }
 
-    private static async ValueTask<ImageInfo> PngAsync(InspectionReader r, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<ImageInfo> PngAsync(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
     {
         int items = 0, width = 0, height = 0, depth = 0, color = 0, palette = 0;
         long metadata = 0, compressed = 0;
@@ -152,7 +152,7 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> JpegAsync(InspectionReader r, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<ImageInfo> JpegAsync(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
     {
         int items = 0, width = 0, height = 0; long metadata = 0;
         bool frame = false, scan = false, scanSeen = false, exif = false;
@@ -227,7 +227,7 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> WebpAsync(InspectionReader r, long end, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<ImageInfo> WebpAsync(InspectionReader r, long end, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
     {
         if (end < 12) throw new ImageDataException("Invalid WebP RIFF length."); r.DeclaredEnd(end);
         int items = 0, width = 0, height = 0, canvasW = 0, canvasH = 0; long metadata = 0;
