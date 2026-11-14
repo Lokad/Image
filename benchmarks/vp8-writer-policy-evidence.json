@@ -1493,7 +1493,8 @@
     "previousAttribution": "current-vp8-photo-attribution-evidence.json",
     "previousStandalone": "vp8-encode-current-confidence-evidence.json",
     "wordPublicationTrials": "vp8-word-publication-trials-evidence.json",
-    "lumaExecutionTrials": "vp8-luma-execution-trials-evidence.json"
+    "lumaExecutionTrials": "vp8-luma-execution-trials-evidence.json",
+    "twoCandidateTail": "vp8-two-candidate-dct-tail-evidence.json"
   },
   "raw": {
     "file": "vp8-writer-policy-qualified.tar.xz",
@@ -1522,6 +1523,6 @@
     ],
     "dependencyScope": "Accepted baseline package/modules and independent unaffected evidence; unchanged paired/current-native harnesses, fixtures/reference sources and original inconclusive policy screen. No helper/native/fixture rebuild."
   },
-  "next": "Audit the plain batched forward-DCT tail: the existing loop transforms12predictions although only10plain modes are consumed. Keep four-lane trellis padding unchanged. A two-candidate tail could remove two unused transforms without changing scoring, candidate order, setup lifetime or exact coefficients. Use existing scalar coefficient oracles and complete controls; no projected elapsed gain from the16.7percent transform-count reduction.",
+  "next": "Factor rate-table variable tree paths once per probability row. Existing VariableCost recomputes the same path for each of68levels; only11leaf bands exist. Reuse each band base while preserving fixed/EOB additions, exact words, row cancellation and ownership. Current source-specific trace has29VariableCost samples; samples are not phase times or projected savings.",
   "planScope": "PLAN remains ignored. Only authorized font/text section differs from original checkpoint. Complete text one-shot/eight-draw controls pass/stop with eager/lazy/prepared-state caveats; every other PLAN byte remains unchanged."
 }

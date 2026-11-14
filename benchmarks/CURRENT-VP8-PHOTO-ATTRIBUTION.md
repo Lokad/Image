@@ -41,10 +41,14 @@ The [luma execution trials](VP8-LUMA-EXECUTION-TRIALS.md) do not establish a
 reproducible gain either; all source/modules restore exactly. The trace remains
 current, and contradictory captures are retained rather than selecting a result.
 
-**Next:** inspect the plain batched DCT tail:12predictions are transformed while
-only10plain modes are consumed. Evaluate a two-candidate tail against the existing
-scalar coefficient oracle and complete encoder controls, retaining four-lane
-trellis padding. Fewer transforms are not yet a measured elapsed gain.
+The [two-candidate DCT tail](VP8-TWO-CANDIDATE-DCT-TAIL.md) also supplies no
+useful elapsed lead despite exact coefficients and fewer logical transforms;
+the original source/modules restore exactly.
+
+**Next:** factor variable-price tree preparation:68levels share11leaf bands per
+probability row. The accepted trace has29samples in VariableCost and8in table
+filling, not phase times. Reuse each band's base cost while preserving fixed/EOB
+prices,row cancellation and exact table/packet oracles. No new owner,cache or grid.
 
 The [current evidence](vp8-writer-policy-evidence.json#currentAttribution) and its raw
 archive retain perf data/maps, all instruction offsets,JITbytes,source/module pins,
