@@ -64,7 +64,7 @@ admission and exact pixels remain unchanged. Earlier copy/reversal/tile evidence
 remains linked history; no historical phase sum is used.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 181 pass, two gaps, eight uncertain**. This does not establish full parity:
+image views: 183 pass, 3 gaps, 5 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. The 16×8 word view remains uncertain; current byte-wide adjacency is reused without resampling. Fresh managed/prepared native boundaries remain explicit; no production speedup is claimed.
@@ -83,8 +83,13 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Both OSes
 pass **6,686 full/live** checks and the **same actual package/all three examples**.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
-uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
+[Longer opaque VP8 integration](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md)
+resolves ordinary/simple-filter passes. Live-token decoding has a separated gap:
+**4,841.21 / FFmpeg 4,779.99µs**, ratio
+**1.0128**, upper **1.015392**,
+**230,880 B/op**. All pixels remain exact; original
+uncertainties remain in history. Eleven of twelve WebP reads pass/stop; attribute
+the remaining live-token gap before changing production. No speedup is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons

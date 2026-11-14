@@ -2827,6 +2827,20 @@ remains linked history; no historical phase sum is used."""
     png_stream_word_note = current_png_stream_word_note()
     codecs = apply_current_vp8_stream_confidence(codecs)
     editing, bicubic_adjacent_note = apply_current_bicubic_adjacent_confidence(editing)
+    opaque_decode = json.loads((ROOT / 'benchmarks/vp8-decode-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert opaque_decode['measurementAccepted'] and not opaque_decode['productionChanged'] and not opaque_decode['productionSpeedupClaim']
+    assert opaque_decode['measurement']['allBuilds'] == opaque_decode['qualification']['broadOrPackageRepeats'] == 0
+    assert opaque_decode['raw']['mirrored'] and opaque_decode['raw']['allMembersVerified']
+    assert opaque_decode['qualification']['actualPackageSha256'] == policy_q['actualPackage']['sha256']
+    assert opaque_decode['qualification']['fullChecksEachOs'] == policy_q['fullChecksEachOs']
+    for c in opaque_decode['cases'].values():
+        assert c['librarySha256'] == policy_q['actualPackage']['librarySha256']
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['metadata']['decoderMaximum'] == c['metadata']['decoderRmse'] == 0 and c['metadata']['alphaExact']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    opaque_live = opaque_decode['cases']['OpaqueCancelable8']
+    image_view_counts = opaque_decode['currentImageOwnerViewStatuses']
+    assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
     return f"""# Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
@@ -2863,7 +2877,7 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 {owned_copy_note}
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 181 pass, two gaps, eight uncertain**. This does not establish full parity:
+image views: {image_view_counts['passCount']} pass, {image_view_counts['gaps']} gaps, {image_view_counts['uncertain']} uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 {bicubic_adjacent_note}
@@ -2882,8 +2896,13 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Both OSes
 pass **6,686 full/live** checks and the **same actual package/all three examples**.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Opaque VP8 decoding](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md) retains three
-uncertainties under adjacent ordinary/simple/live-token comparisons; pixels are exact.
+[Longer opaque VP8 integration](../benchmarks/VP8-DECODE-CURRENT-CONFIDENCE.md)
+resolves ordinary/simple-filter passes. Live-token decoding has a separated gap:
+**{opaque_live['managedUs']:,.2f} / FFmpeg {opaque_live['nativeUs']:,.2f}µs**, ratio
+**{opaque_live['ratio']:.4f}**, upper **{opaque_live['upper']:.6f}**,
+**{opaque_live['allocatedBytes']:,} B/op**. All pixels remain exact; original
+uncertainties remain in history. Eleven of twelve WebP reads pass/stop; attribute
+the remaining live-token gap before changing production. No speedup is inferred.
 The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
 pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
 now passes on the unchanged package DLL; all eight declared Lanczos comparisons
