@@ -385,6 +385,23 @@ public sealed class ImageProbeTests
         MetadataProfile profile, int? holdAt)
     {
         var data = OriginalExif.Create(profile, 17, 11).Encoded;
+        await AssertPendingProbeOwnership(data, fail, afterFragment, holdAt);
+    }
+
+    [Theory]
+    [InlineData(false, 6)] [InlineData(true, 6)]
+    [InlineData(false, 11)] [InlineData(true, 11)]
+    public async Task PendingPayloadSkipKeepsAdmissionThroughActualReadCompletion(bool fail, int holdAt)
+    {
+        var original = OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11).Encoded;
+        // An original opaque APP2 segment forces a nonseekable payload drain.
+        // Suspend either its first read or the read after five successful bytes.
+        byte[] data = [.. original.AsSpan(0, 2), 255, 226, 0, 19, .. new byte[17], .. original.AsSpan(2)];
+        await AssertPendingProbeOwnership(data, fail, false, holdAt);
+    }
+
+    private static async Task AssertPendingProbeOwnership(byte[] data, bool fail, bool afterFragment, int? holdAt)
+    {
         using var root = new TestMemoryBudget(Workspace);
         using var cancellation = new CancellationTokenSource();
         using var input = new GatedProbeInput(data, fail, afterFragment, holdAt);

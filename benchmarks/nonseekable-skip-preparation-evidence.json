@@ -1,0 +1,286 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JSA1025",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "66c20a7f91db8bed78b9a92c64b1e486e31e0c5d090cdc3d5100bf7b983d379b",
+    "linuxSha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+    "packageSha256": "bc2da6874fec465157d65b73eeeb99d7e740008ea35b23cb783ae16e43c70229"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "259e4e149bb3bb448785eb169e741a333d08e455a94f822e02597bf7286d44b7"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageCodec.Probe.cs": "6bebc2674c674849112167c10285c152b8f442e6abdcf633e2a6b251a8295a70",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "ba0aafe503f109b96b8c564484156820d85306713621ef4d7a19c15ba13eaca9",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "0f39edec6b3468b6ce16b16b2dd4eea05b34f4aeab4d304f850d78fb1e54f91c",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "67204a10807e754e9ef10715e9411836d5dec54e9ec8ad5cc767e4096fce4eb5",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "testSources": {
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2"
+  },
+  "qualificationToolingSources": {
+    "tools/PackageSmokeTest/verify-package.ps1": "75efe236adf89a1417e4d749663e5eee9442d6e787ea4956f608748881edc8ab",
+    "tools/PackageSmokeTest/HeaderStorageConsumer.cs": "a8254e561584311ad63e814392f79f6cc2e851727d01548e44b4fc2f7dd45a5e"
+  },
+  "sourceProof": {
+    "acquisitionReserveAndDisposalExact": true,
+    "allGrammarAndMarkerCodeExact": true,
+    "seekableSkipExact": true,
+    "everyPollAndCountPreserved": true,
+    "noNewOwnedCapacityOrRetention": true,
+    "publicApiBindingsUnchanged": true
+  },
+  "cases": {
+    "ProbeDimensionsJpegAsync": {
+      "managedUs": 0.2989267793155522,
+      "nativeUs": 0.20555074532826742,
+      "ratio": 1.4542724174420383,
+      "lower": 1.39111760516115,
+      "upper": 1.5086133321977622,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/jsa1025-ProbeDimensionsJpegAsync-confirm-observation.json",
+        "receipt": "tmp/jsa1025-ProbeDimensionsJpegAsync-confirm-receipt.json"
+      }
+    }
+  },
+  "paired": {
+    "ProbeDimensionsJpegAsync": {
+      "project": "Lokad.Image",
+      "stage": "JSA1025",
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "confirm",
+      "baselineUs": 0.33408669153849285,
+      "candidateUs": 0.29792038599650067,
+      "ratio": 0.8923800613135918,
+      "lower": 0.8570881681623066,
+      "upper": 0.9291251511936014,
+      "allocatedBaseline": 632,
+      "allocatedCandidate": 632,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorsOwnershipPassed": true,
+      "librarySha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "helperSha256": "2c9bfa8c0ad7a7154e870b891b321ce56fcfd487eb2bbcfa4fbb3f18e9f70542",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/jmb1018-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/jsa1025-baseline-linux/Lokad.Image.dll",
+        "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+        "tmp/jsa1025-candidate-linux/Lokad.Image.dll",
+        "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "confirm"
+      ],
+      "raw": "tmp/jsa1025-ProbeDimensionsJpegAsync-paired-header-checked-confirm.json"
+    }
+  },
+  "headerGuard": {
+    "project": "Lokad.Image",
+    "stage": "JSA1025",
+    "caseId": "InspectHeadersJpeg",
+    "phase": "confirm",
+    "baselineUs": 6.013917017618815,
+    "candidateUs": 6.048736750284831,
+    "ratio": 1.005786178282527,
+    "lower": 0.9990879537494469,
+    "upper": 1.0125293099849182,
+    "allocatedBaseline": 8800,
+    "allocatedCandidate": 8800,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorsOwnershipPassed": true,
+    "librarySha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+    "helperSha256": "2c9bfa8c0ad7a7154e870b891b321ce56fcfd487eb2bbcfa4fbb3f18e9f70542",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/jmb1018-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/jsa1025-baseline-linux/Lokad.Image.dll",
+      "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+      "tmp/jsa1025-candidate-linux/Lokad.Image.dll",
+      "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "InspectHeadersJpeg",
+      "confirm"
+    ],
+    "raw": "tmp/jsa1025-InspectHeadersJpeg-paired-header-checked-confirm.json"
+  },
+  "memory": {
+    "probeAllocatedBytes": 632,
+    "headerGuardAllocatedBytes": 8800,
+    "admittedDimensionCapacityBytes": 512,
+    "dimensionScratchBytes": 256,
+    "fullHeaderMaximumAdmittedBytes": 8448,
+    "retainedAfterOperationBytes": 0,
+    "newStaticCacheBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "decision": {
+    "accept": true,
+    "reason": "Complete immediate-async JPEG probe confirms10.76%scoped gain; SAMEimmutable DLL standalone original-reference cost is0.299us, still a gap.632Bop/capacity/retention unchanged. Original source proves every seekable branch and parser/acquisition/ownership body unchanged. Complete seekable-header guard is inconclusive at1.0058(.9991-1.0125), not a gain or universal non-regression claim; no material contradiction or favorable repeat. Four suspended APP2 skip cases pass normal/scalar."
+  },
+  "attribution": {
+    "stage": "PCA1024",
+    "profilingOnly": true,
+    "allBuilds": 0,
+    "instrumentedTimingsDiscarded": true,
+    "samples": 1187,
+    "collectorExitCode": 0,
+    "applicationExitCode": 0,
+    "perfScriptExitCode": 0,
+    "finding": "Current complete immediate-async probe samples and generated code locate nonseekable skip wrapper/state setup among remaining acquisition costs. Inlining/skid/startup preclude phase percentages or direct CPU predictions. No fresh reference evidence from this profile."
+  },
+  "qualification": {
+    "windows": {
+      "productionSha256": "66c20a7f91db8bed78b9a92c64b1e486e31e0c5d090cdc3d5100bf7b983d379b",
+      "embeddedTestsSha256": "ed2d2b667a6e62086846d9fc0a55d0c100dc27c2fa9fa54670680f89ec633e20",
+      "full": [
+        3263,
+        2489,
+        948
+      ],
+      "total": 6700,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 147,
+        "internal-scalar": 2,
+        "public-scalar": 147
+      }
+    },
+    "linux": {
+      "productionSha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "embeddedTestsSha256": "513ba2995be0f68bd7cfc941ba66dbd5a81fe0c352762132d2bddb6ad05c8a81",
+      "full": [
+        3263,
+        2489,
+        948
+      ],
+      "total": 6700,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 147,
+        "internal-scalar": 2,
+        "public-scalar": 147
+      }
+    },
+    "fullChecksEachOs": 6700,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "JSA1025",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "bc2da6874fec465157d65b73eeeb99d7e740008ea35b23cb783ae16e43c70229",
+      "symbolsSha256": "b87c0f8803dc4e8de5e1f4b35b9c30c2a345e01c12b64234251471f01b6f4932",
+      "bytes": 462028,
+      "librarySha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for complete immediate-async JPEG probe screen/independent confirmation and original standalone native comparison. Scoped gain10.76%,632Bop and retained capacity unchanged; native gap remains. Four new suspended-payload tests and actual-package pending-skip cancellation/readfailure/recovery checks. Seekable header guard is inconclusive, no header gain/non-regression claim. Source-identical codec/edit/resize/text paths reuse evidence; no post-timing producer rebuild.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "JSA1025",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "bc2da6874fec465157d65b73eeeb99d7e740008ea35b23cb783ae16e43c70229",
+      "symbolsSha256": "b87c0f8803dc4e8de5e1f4b35b9c30c2a345e01c12b64234251471f01b6f4932",
+      "bytes": 462028,
+      "librarySha256": "6f8a065c3c906438eec71df50fdfd2f2f314fc6fdd66c13ca35182a8548c14cf",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for complete immediate-async JPEG probe screen/independent confirmation and original standalone native comparison. Scoped gain10.76%,632Bop and retained capacity unchanged; native gap remains. Four new suspended-payload tests and actual-package pending-skip cancellation/readfailure/recovery checks. Seekable header guard is inconclusive, no header gain/non-regression claim. Source-identical codec/edit/resize/text paths reuse evidence; no post-timing producer rebuild.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "bc2da6874fec465157d65b73eeeb99d7e740008ea35b23cb783ae16e43c70229"
+    },
+    "focusedEachMode": {
+      "internal": 2,
+      "public": 147
+    },
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "coreAndEmbeddedAndPublicBuildsEachOs": 1,
+    "harnessNativeFixtureHelperBuilds": 0,
+    "packCalls": 1,
+    "unchangedScalarAndIsaProofReused": true,
+    "newPublicSuspendedPayloadCases": 4,
+    "actualPackageSuspendedPayloadCases": 4
+  },
+  "reuse": "Only existing immediate-async nonseekable JPEG dimension control executes the changed skip among displayed comparisons. Other three probes, seekable headers, full codec-validation/read/edit/resize/text paths retain exact relevant code and original source-valid evidence. Existing complete header guard retained separately. No full-release refresh or new workload/settings matrix.",
+  "raw": {
+    "file": "nonseekable-skip-preparation-qualified.tar.xz",
+    "sha256": "571d81060acec9a6a38de9930fbb17a18bbe2a2d2831ceb9ce6f88d5c140d1ba",
+    "bytes": 4876204,
+    "members": 178,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "raster-copy-scheduling-qualified.tar.xz",
+        "sha256": "254540f22edaae5451829452f7b349c3029fed4ef8fa49a38206a4cab9f9372f"
+      }
+    ]
+  },
+  "next": "Keep the improved immediate-async probe as a remaining native gap. Other three probes reuse source-valid costs. No header gain/non-regression claim or unchanged passing-case retune. Codecs/Lanczos/complete text passes stop; image-owner/resize uncertainties and the full289path objective remain. Publication postponed."
+}

@@ -149,14 +149,16 @@ reader and avoids allocating default options: **688 → 632 B/op**, with unchang
 **512 B** admission and zero retained scratch or new cache. This establishes an
 allocation reduction; historical clocks do not establish a causal CPU gain.
 Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
-**0.132/0.133/0.260/0.330 µs**, with upper **1.116/1.105/1.387/1.650**.
+**0.132/0.133/0.260/0.299 µs**, with upper **1.116/1.105/1.387/1.509**.
 Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
 upper .546**, **592 B/op**. [JPEG marker preparation](../benchmarks/JPEG-MARKER-PREPARATION.md)
-refreshes the two JPEG costs on its actual package DLL; the other three retain
-source-valid confirmations. Controlled complete JPEG pairs show about **14%/10%**
-sync/async probe gains and **7%** full-header gain, with unchanged allocations.
+retains the source-valid sync JPEG cost. [Nonseekable skip preparation](../benchmarks/NONSEEKABLE-SKIP-PREPARATION.md)
+refreshes the async cost on its actual package DLL and confirms **10.76%** scoped
+complete-operation gain, with unchanged allocations. The seekable-header guard
+is inconclusive; no header gain or universal non-regression claim.
 The reference is **FFmpeg AVIO + bounded header adapter**, not its public codec parser.
-Windows/Linux each pass **6,696 full/live checks**, the same actual package and all three examples.
+Windows/Linux each pass **6,700 full/live checks**, the same actual package and all three examples,
+including suspended-payload cancellation/failure cleanup and subsequent recovery.
 Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
@@ -321,7 +323,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Probe PNG dimensions, seekable | 0.132 | 0.123 | 1.077 / 1.116 | 632 | Confirmed gap |
 | Probe JPEG dimensions, seekable | 0.260 | 0.194 | 1.339 / 1.387 | 632 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.133 | 0.124 | 1.073 / 1.105 | 632 | Confirmed gap |
-| Probe JPEG dimensions, async nonseekable | 0.330 | 0.205 | 1.609 / 1.650 | 632 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.299 | 0.206 | 1.454 / 1.509 | 632 | Confirmed gap |
 | Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |

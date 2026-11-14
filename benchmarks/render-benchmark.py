@@ -2663,10 +2663,27 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert jpeg_markers['qualification']['package']['sha256'] == jpeg_markers['qualification']['windowsPackage']['sameActualPackageSha256']
     assert jpeg_markers['raw']['mirrored'] and jpeg_markers['raw']['allMembersVerified']
     assert set(jpeg_markers['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'}
-    active_reads = {**header_storage['cases'], **jpeg_markers['cases']}
+    skip_preparation = json.loads((ROOT / 'benchmarks/nonseekable-skip-preparation-evidence.json').read_text(encoding='utf-8'))
+    sq = skip_preparation['qualification']
+    assert skip_preparation['productionAccepted'] and skip_preparation['allAffectedPerformanceReconciled']
+    assert skip_preparation['requiredMaterialPaths'] == 289 and skip_preparation['newMaterialPaths'] == 0
+    assert skip_preparation['raw']['mirrored'] and skip_preparation['raw']['allMembersVerified']
+    assert sq['fullChecksEachOs'] == sq['windows']['total'] == sq['linux']['total'] == 6700
+    assert sq['sameActualPackageBothOs'] and sq['allThreeUsageExamplesBothOs']
+    assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
+    assert sq['package']['librarySha256'] == skip_preparation['producers']['linuxSha256']
+    assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert sq['newPublicSuspendedPayloadCases'] == sq['actualPackageSuspendedPayloadCases'] == 4
+    assert set(skip_preparation['cases']) == {'ProbeDimensionsJpegAsync'}
+    skip_probe = skip_preparation['cases']['ProbeDimensionsJpegAsync']
+    assert skip_preparation['paired']['ProbeDimensionsJpegAsync']['upper'] < 1
+    assert skip_preparation['memory']['probeAllocatedBytes'] == 632
+    assert skip_preparation['memory']['admittedDimensionCapacityBytes'] == 512
+    assert skip_preparation['memory']['retainedAfterOperationBytes'] == 0
+    active_reads = {**header_storage['cases'], **jpeg_markers['cases'], **skip_preparation['cases']}
     assert all(c['managedActuals'] == c['nativeSamplesEachBracket'] == 12 for c in active_reads.values())
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        provider = jpeg_markers if case in jpeg_markers['cases'] else header_storage
+        provider = skip_preparation if case in skip_preparation['cases'] else jpeg_markers if case in jpeg_markers['cases'] else header_storage
         if case in provider['cases']:
             current = provider['cases'][case]
             assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
@@ -3013,14 +3030,16 @@ reader and avoids allocating default options: **688 → 632 B/op**, with unchang
 **512 B** admission and zero retained scratch or new cache. This establishes an
 allocation reduction; historical clocks do not establish a causal CPU gain.
 Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
-**0.132/0.133/0.260/0.330 µs**, with upper **1.116/1.105/1.387/1.650**.
+**0.132/0.133/0.260/{skip_probe['managedUs']:.3f} µs**, with upper **1.116/1.105/1.387/{skip_probe['upper']:.3f}**.
 Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
 upper .546**, **592 B/op**. [JPEG marker preparation](../benchmarks/JPEG-MARKER-PREPARATION.md)
-refreshes the two JPEG costs on its actual package DLL; the other three retain
-source-valid confirmations. Controlled complete JPEG pairs show about **14%/10%**
-sync/async probe gains and **7%** full-header gain, with unchanged allocations.
+retains the source-valid sync JPEG cost. [Nonseekable skip preparation](../benchmarks/NONSEEKABLE-SKIP-PREPARATION.md)
+refreshes the async cost on its actual package DLL and confirms **10.76%** scoped
+complete-operation gain, with unchanged allocations. The seekable-header guard
+is inconclusive; no header gain or universal non-regression claim.
 The reference is **FFmpeg AVIO + bounded header adapter**, not its public codec parser.
-Windows/Linux each pass **6,696 full/live checks**, the same actual package and all three examples.
+Windows/Linux each pass **6,700 full/live checks**, the same actual package and all three examples,
+including suspended-payload cancellation/failure cleanup and subsequent recovery.
 Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain

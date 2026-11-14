@@ -67,8 +67,33 @@ internal static class HeaderStorageConsumer
             if (!input.SawLiveCharge || root.Bytes != 0 || root.IsDisposed || !input.CanRead)
                 throw new Exception("Packaged async header ownership or cancellation cleanup differs.");
         }
+        byte[] skipped = [.. prefix.AsSpan(0, 2), 255, 226, 0, 19, .. new byte[17], .. tiny.AsSpan(2)];
+        foreach (var holdAt in new[] { 6, 11 })
+        foreach (var fail in new[] { false, true })
+        {
+            using var cancellation = new CancellationTokenSource();
+            using var input = new HeldInput(skipped, small, false, false, holdAt, fail);
+            var pending = ImageCodec.ProbeAsync(input, new() { Limits = smallLimits }, cancellation.Token).AsTask();
+            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            try
+            {
+                cancellation.Cancel();
+                if (pending.IsCompleted || small.Bytes != 512 || input.Position != holdAt)
+                    throw new Exception("Packaged pending payload skip released storage before its actual user finished.");
+            }
+            finally { input.Resume.TrySetResult(); }
+            try { await pending; throw new Exception("Packaged payload cancellation or read failure ignored."); }
+            catch (IOException e) when (fail && e.GetType() == typeof(IOException)) { }
+            catch (OperationCanceledException e) when (!fail && e.CancellationToken == cancellation.Token) { }
+            if (!input.SawLiveCharge || small.Bytes != 0 || small.IsDisposed || !input.CanRead)
+                throw new Exception("Packaged payload skip leaked or disposed borrowed ownership.");
+            using var next = new MemoryStream(skipped, writable: false);
+            if ((await ImageCodec.ProbeAsync(next, new() { Limits = smallLimits })).Width != 17 || small.Bytes != 0)
+                throw new Exception("Packaged payload skip did not release capacity for a subsequent operation.");
+        }
         Console.WriteLine("Packaged dimension probes preserve partial fields and pending user ownership.");
         Console.WriteLine("Packaged seekable headers preserve small storage, bounded bulk replacement, terminal refusal, cancellation and actual async lifetimes.");
+        Console.WriteLine("Packaged nonseekable payload skips preserve actual read charges, failure cleanup and recovery.");
     }
 
     private sealed class FragmentedInput(byte[] data) : MemoryStream(data, writable: false)
@@ -78,20 +103,27 @@ internal static class HeaderStorageConsumer
             => ValueTask.FromResult(Read(buffer.Span));
     }
 
-    private sealed class HeldInput(byte[] data, TestMemoryBudget root, bool bulk, bool afterFragment) : MemoryStream(data, writable: false)
+    private sealed class HeldInput(byte[] data, TestMemoryBudget root, bool bulk, bool afterFragment,
+        int? payloadHoldAt = null, bool fail = false) : MemoryStream(data, writable: false)
     {
         internal TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal bool SawLiveCharge;
         private bool held;
+        public override bool CanSeek => payloadHoldAt is null && base.CanSeek;
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             if (afterFragment && Position == 0) return Read(buffer.Span[..1]);
-            if (!held && (bulk ? buffer.Length > 256 : Position == (afterFragment ? 1 : 0)))
+            var shouldHold = payloadHoldAt is { } boundary ? Position == boundary
+                : bulk ? buffer.Length > 256 : Position == (afterFragment ? 1 : 0);
+            if (!held && shouldHold)
             {
                 held = true; Entered.SetResult(); await Resume.Task.ConfigureAwait(false);
                 SawLiveCharge = root.Bytes >= buffer.Length;
+                if (fail) throw new IOException("Authored pending payload failure.");
             }
+            if (payloadHoldAt is { } next && Position < next)
+                buffer = buffer[..Math.Min(buffer.Length, (int)(next - Position))];
             return Read(buffer.Span);
         }
     }

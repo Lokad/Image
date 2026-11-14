@@ -18,6 +18,8 @@ parsing, independent descriptor and source/workspace disposal. Full headers incl
 framing, entropy and EOF, with permitted seek skips. Source bytes and complete
 descriptors/lifetimes match. These paired effects are not FFmpeg costs.
 
+The later [nonseekable skip stage](NONSEEKABLE-SKIP-PREPARATION.md) supersedes only
+the async probe cost below. The sync cost and this stage's scoped gains remain.
 Independent original-reference confirmations give JPEG probe **0.260 / 0.194 µs,
 upper 1.387**, and immediate-async **0.330 / 0.205 µs, upper 1.650**. Both remain
 gaps to the explicitly labeled **FFmpeg AVIO + bounded header adapter**, not its

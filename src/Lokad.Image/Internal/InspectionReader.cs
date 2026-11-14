@@ -146,13 +146,27 @@ internal class InspectionReader : IDisposable
         return SkipForwardAsync(count);
     }
 
-    private async ValueTask SkipForwardAsync(long count)
+    private ValueTask SkipForwardAsync(long count)
     {
         bulk = true;
         while (count != 0)
         {
-            if (!await FillAsync((int)Math.Min(count, buffer.Length)).ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
+            var pending = FillAsync((int)Math.Min(count, buffer.Length));
+            if (!pending.IsCompletedSuccessfully) return AwaitSkipForwardAsync(count, pending);
+            if (!pending.Result) throw new ImageDataException("Truncated image payload.");
             var n = (int)Math.Min(count, last); first = n; count -= n;
+        }
+        return ValueTask.CompletedTask;
+    }
+
+    private async ValueTask AwaitSkipForwardAsync(long count, ValueTask<bool> pending)
+    {
+        while (true)
+        {
+            if (!await pending.ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
+            var n = (int)Math.Min(count, last); first = n; count -= n;
+            if (count == 0) return;
+            pending = FillAsync((int)Math.Min(count, buffer.Length));
         }
     }
 
