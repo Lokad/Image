@@ -178,6 +178,53 @@ public sealed class DrawingTests
         Apply(operation, source, source, limits);
     }
 
+    [Theory]
+    [InlineData("fill", 8)] [InlineData("copy", 8)] [InlineData("composite", 8)]
+    [InlineData("fill", 16)] [InlineData("copy", 16)] [InlineData("composite", 16)]
+    public void BorrowedDrawingNeedsNoAdditionalSharedAdmission(string operation, int depth)
+    {
+        using var root = new TestMemoryBudget(0);
+        using var canvas = OriginalPixels.Buffer(9, 7, depth); using var source = canvas.Clone();
+        var saved = OriginalPixels.Bytes(source);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = saved.Length * 2L };
+        Apply(operation, canvas, source, limits);
+        Apply(operation, canvas, canvas, limits with { MaxWorkingBytes = saved.Length });
+        Assert.Equal(0, root.Attempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(saved, OriginalPixels.Bytes(source));
+        Assert.True(root.TryReserve(0, out var owner)); owner!.Dispose();
+    }
+
+    [Theory]
+    [InlineData("fill")] [InlineData("copy")] [InlineData("composite")]
+    public void ValidationCancellationAndDisposedInputsKeepFailureOrder(string operation)
+    {
+        using var canvas = OriginalPixels.Buffer(9, 7, 8); using var source = canvas.Clone();
+        var saved = OriginalPixels.Bytes(canvas); source.Dispose();
+        using var canceled = new CancellationTokenSource(); canceled.Cancel();
+        Assert.Throws<ArgumentOutOfRangeException>(() => Apply(operation, canvas, source,
+            new ImageLimits { MaxWorkingBytes = 0 }, canceled.Token));
+        Assert.ThrowsAny<OperationCanceledException>(() => Apply(operation, canvas, source, ImageLimits.Default, canceled.Token));
+        var error = Assert.Throws<ImageLimitException>(() => Apply(operation, canvas, source,
+            new ImageLimits { MaxWorkingBytes = saved.Length - 1 }));
+        Assert.Equal(ImageLimitKind.WorkingBytes, error.Limit); Assert.Equal(ImageLimitScope.Operation, error.Scope);
+        if (operation != "fill") Assert.Throws<ObjectDisposedException>(() => Apply(operation, canvas, source,
+            new ImageLimits { MaxWorkingBytes = saved.Length }));
+        Assert.Equal(saved, OriginalPixels.Bytes(canvas));
+    }
+
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void EmptyClippedCopyStillChecksBorrowedCapacity(int depth)
+    {
+        using var source = OriginalPixels.Buffer(9, 7, depth); using var canvas = source.Clone();
+        var saved = OriginalPixels.Bytes(canvas); var bytes = saved.Length * 2L;
+        var limits = new ImageLimits { MaxWorkingBytes = bytes, MaxDimension = 1, MaxPixels = 1 };
+        ImageDrawing.CopyRegion(source, 0, 0, 9, 7, canvas, int.MaxValue, int.MinValue, limits);
+        var error = Assert.Throws<ImageLimitException>(() => ImageDrawing.CopyRegion(source, 0, 0, 9, 7,
+            canvas, int.MaxValue, int.MinValue, limits with { MaxWorkingBytes = bytes - 1 }));
+        Assert.Equal(ImageLimitKind.WorkingBytes, error.Limit); Assert.Equal(saved, OriginalPixels.Bytes(canvas));
+    }
+
     [Fact]
     public void InvalidRectanglesDepthsAndDisposedOwnersDoNotMutateCanvas()
     {

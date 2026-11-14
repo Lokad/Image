@@ -14,16 +14,17 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
-**10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
-and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpeg
-1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
-**112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
-word rectangle copying is uncertain. The word dispatch is revised after an adverse
-candidate, whose results are retained. [Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
-is now open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**, on the unchanged
-actual package. Longer matched blocks supersede the older small-gap observation;
-this is not a production gain. Word flip passes; word clone/normal stay uncertain.
+[Borrowed drawing validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+removes the operation owner: all seven fill/copy/composite controls allocate **0 B/op**,
+with unchanged borrowed capacity and zero retained workspace. Complete copy/pair
+confirmations gain **2.74% / 3.16%**, separately from native parity. Current byte
+copy remains a small gap: **1.98 / FFmpeg 1.93 µs, upper 1.029**;
+word copy is **3.792 / 3.784 µs, upper 1.004**, also a tiny gap.
+The two-move overlapping pair remains uncertain: **3.81 / 3.79 µs, upper 1.014**.
+Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
+ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
+[Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
+is still open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**. No new flip timing.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -87,8 +88,8 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,648 full/live checks**,
-focused normal/scalar JPEG checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,659 full/live checks**,
+focused normal/scalar drawing checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
@@ -225,11 +226,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA8 † → 259×513 | 29.27 | 37.36 | 0.783 / 0.797 | 112 |
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 36.97 | 44.33 | 0.834 / 0.910 | 112 |
 | Mirrored transpose RGBA8 † → 259×513 | 32.07 | 39.50 | 0.812 / 0.826 | 112 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.99 | 1.91 | 1.046 / 1.065 | 56 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.79 | 1.011 / 1.026 | 56 |
-| Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
-| Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.85 | 3.81 | 1.010 / 1.017 | 112 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.98 | 1.93 | 1.026 / 1.029 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (gap) | 3.79 | 3.78 | 1.002 / 1.004 | 0 |
+| Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
+| Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (confidence open) | 3.81 | 3.79 | 1.006 / 1.014 | 0 |
+| RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
+| RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 87.12 | 45.40 | 1.919 / 2.945 | 59,304 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 92.57 | 46.48 | 1.992 / 2.975 | 59,304 |
 | Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 53.81 | 37.80 | 1.424 / 1.622 | 56 |
@@ -239,8 +242,6 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Composite RGBA8 / FFmpeg (pass) † | 65.63 | 451.36 | 0.145 / 0.157 | 56 |
-| Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
 | Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |

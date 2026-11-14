@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "BDO973",
+  "recordedOn": "2026-11-14",
+  "productionChanged": true,
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "620dbb17e12fc8eb0e7bf010a38526037e2d61e24a80191708409a56493c7289",
+    "linuxSha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+    "actualPackageSha256": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618"
+  },
+  "sources": {
+    "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944",
+    "src/Lokad.Image/ImageDrawing.Composite8.cs": "6c4b62ebf1ca49fe91c0958f08b80252887dc69292196c38e8de1017560ca7bd",
+    "tests/Lokad.Image.PublicApi.Tests/DrawingTests.cs": "d524fff51c04c06b1a3ebc2b499115ccbdcb9302ebdeaffc46c27e8278cd0e74"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+    "src/Lokad.Image/ImageBuffer.cs": "4e76de77d2d82925e2c83e357762545605105021ca8ef2d0d19db4b36b9553ff",
+    "src/Lokad.Image/ImageDrawing.Text.cs": "715a41b2706ef753263c12ca19e1f642cd844c1f657fa427e72bd4a68a434188",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "32a541112ccd0731b5d756c7f56ecf6e691045db98d6522cf799b1bb5f6de7c4",
+    "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "a167371596cb8b90a3d22b291f1a976996e37c95f101080a6c3857610b198b7f"
+  },
+  "cases": {
+    "DrawingCopy8": {
+      "caseId": "DrawingCopy8",
+      "managedUs": 1.975649340381983,
+      "nativeUs": 1.9264923324584962,
+      "ratio": 1.025516326795215,
+      "lower": 1.020607141094942,
+      "upper": 1.0289378808687133,
+      "status": "gap",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "FFmpeg public av_image_copy_plane",
+      "referenceIdentity": {
+        "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+        "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+        "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2"
+      },
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "receipt": "tmp/bdo973-candidate-DrawingCopy8-confirm-receipt.json",
+      "observation": "tmp/bdo973-candidate-DrawingCopy8-confirm-observation.json"
+    },
+    "DrawingCopyOverlap8": {
+      "caseId": "DrawingCopyOverlap8",
+      "managedUs": 3.81240637815158,
+      "nativeUs": 3.7897822570800783,
+      "ratio": 1.0059697680596913,
+      "lower": 0.9983714366449166,
+      "upper": 1.0137662590114878,
+      "status": "uncertain",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "8ab31255f3286061563d5685b4a427aad74c95b1a349c80b9394c57727a45d27",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": true,
+      "sourceUnchanged": false,
+      "referenceLabel": "FFmpeg public av_image_copy_plane",
+      "referenceIdentity": {
+        "sourceSha256": "45ee17ea9fc81739aaf557dbd5b94361b94d50d31da696ad627cd908b3d3eee9",
+        "buildScriptSha256": "01d17922416b1622bd205ad24a654274f490118e52da920c7c7cc4efee5a15b0",
+        "workerSha256": "e18570ca7b6129cf5cdfa4a5454dd9d5854aabc09d8927ee9648407112e0439c"
+      },
+      "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
+      "receipt": "tmp/bdo973-candidate-DrawingCopyOverlap8-confirm-receipt.json",
+      "observation": "tmp/bdo973-candidate-DrawingCopyOverlap8-confirm-observation.json",
+      "publicMovesPerPair": 2,
+      "nativeCallsPerPair": 6,
+      "restorationTimed": true,
+      "forwardSha256": "6bc212d5d8b90d7e981a4ce3db6cff91cfdc5e484b0bac4774c5bb747cc4ffa3"
+    },
+    "DrawingCopy16": {
+      "caseId": "DrawingCopy16",
+      "managedUs": 3.7916017822809147,
+      "nativeUs": 3.784066864013672,
+      "ratio": 1.0019912222849177,
+      "lower": 1.0000330173853882,
+      "upper": 1.0042757490513523,
+      "status": "gap",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "FFmpeg public av_image_copy_plane",
+      "referenceIdentity": {
+        "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+        "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+        "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2"
+      },
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA16 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "receipt": "tmp/bdo973-candidate-DrawingCopy16-confirm-receipt.json",
+      "observation": "tmp/bdo973-candidate-DrawingCopy16-confirm-observation.json"
+    },
+    "DrawingFill8": {
+      "caseId": "DrawingFill8",
+      "managedUs": 1.2359291974036979,
+      "nativeUs": 1.5666882756551106,
+      "ratio": 0.7888800960656287,
+      "lower": 0.7856041674369278,
+      "upper": 0.7928715579183219,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "55e6ee71b5fbd02e148701d3769700f3feccddf939756217885ac7650382fd1f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "b2cae827d4f9e5e328882d4a7aa2080829418d365f6ed7d882977304d510b478",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "FFmpeg public av_image_fill_color",
+      "referenceIdentity": {
+        "sourceSha256": "620f4f36832500d4b69c59ba0f49cf9fa3e38c6dd3cb58b03ba08f72108c021a",
+        "buildScriptSha256": "8ea6032d15f8edbb3508962a4ad4daea692197a7097efaf7d432438fb02be99c",
+        "workerSha256": "9b4feafd22526b16c3a32c4c532eb8bf3056db2534abf18fbb07af4cdd779f49"
+      },
+      "boundary": "One complete public FillRectangle into the resident original 513x259 RGBA8 canvas: requested x=-17,y=19,w=273,h=129, clipped to x=0,y=19,w=256,h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Canvas preparation/reset, startup, IPC, I/O and verification excluded equally; overwrites are idempotent, no reset/output allocation/full-frame copy. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD; only this rectangle/color per depth is measured.",
+      "receipt": "tmp/bdo973-candidate-DrawingFill8-confirm-receipt.json",
+      "observation": "tmp/bdo973-candidate-DrawingFill8-confirm-observation.json"
+    },
+    "DrawingFill16": {
+      "caseId": "DrawingFill16",
+      "managedUs": 2.092684071773925,
+      "nativeUs": 4.097567306518554,
+      "ratio": 0.5107137760604468,
+      "lower": 0.5084655155517278,
+      "upper": 0.5125096700349834,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "55e6ee71b5fbd02e148701d3769700f3feccddf939756217885ac7650382fd1f",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "e112187d480232292794a75fcde041e5ba3a156d1b81a0f10989153a9203849a",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "FFmpeg public av_image_fill_color",
+      "referenceIdentity": {
+        "sourceSha256": "620f4f36832500d4b69c59ba0f49cf9fa3e38c6dd3cb58b03ba08f72108c021a",
+        "buildScriptSha256": "8ea6032d15f8edbb3508962a4ad4daea692197a7097efaf7d432438fb02be99c",
+        "workerSha256": "9b4feafd22526b16c3a32c4c532eb8bf3056db2534abf18fbb07af4cdd779f49"
+      },
+      "boundary": "One complete public FillRectangle into the resident original 513x259 RGBA16 canvas: requested x=-17,y=19,w=273,h=129, clipped to x=0,y=19,w=256,h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Canvas preparation/reset, startup, IPC, I/O and verification excluded equally; overwrites are idempotent, no reset/output allocation/full-frame copy. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD; only this rectangle/color per depth is measured.",
+      "receipt": "tmp/bdo973-candidate-DrawingFill16-confirm-receipt.json",
+      "observation": "tmp/bdo973-candidate-DrawingFill16-confirm-observation.json"
+    },
+    "DrawingComposite8": {
+      "caseId": "DrawingComposite8",
+      "managedUs": 65.01154545454546,
+      "nativeUs": 451.06158085808585,
+      "ratio": 0.14413008824841492,
+      "lower": 0.13919485035650214,
+      "upper": 0.15042807920522067,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "a5fb9b7d77f950db2ec8dc381b23353abebfd8494e8f1847d207ee51ed487ff0",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "8aafe9cc6bdbd7b747c23772b398796fc7b681b3705d42714f5afbd1eac366cd",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "FFmpeg RGBA8 overlay",
+      "referenceIdentity": {
+        "state": "ready",
+        "caseId": "DrawingComposite8",
+        "graphThreads": 1,
+        "threadType": 0,
+        "cpu": 0,
+        "canvasStride": 2080,
+        "sourceStride": 2080,
+        "ffmpegVersion": "n8.1",
+        "performanceBaselineApproved": false
+      },
+      "boundary": "Complete Composite into borrowed canvas at17,19 with separate immutable source, default local limits/admission/cancellation/context cleanup. Original513x259 pixels; reset excluded before EVERY operation BOTH subjects. Native uses per-operation clock reads; managed invocation/unroll1 with iteration reset. Source/canvas setup and validation excluded. Scoped native bounds/reference approvals required before scoring.",
+      "receipt": "tmp/bdo973-DrawingComposite8-confirm-receipt.json",
+      "observation": "tmp/bdo973-DrawingComposite8-confirm-observation.json"
+    },
+    "DrawingComposite16": {
+      "caseId": "DrawingComposite16",
+      "managedUs": 563.6258333333334,
+      "nativeUs": 629.5135614035088,
+      "ratio": 0.8953354905916914,
+      "lower": 0.8707391235434943,
+      "upper": 0.9127303962047572,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "harnessSha256": "a5fb9b7d77f950db2ec8dc381b23353abebfd8494e8f1847d207ee51ed487ff0",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "sourceUnchanged": true,
+      "referenceLabel": "ImageSharp3.1.12 Rgba64 SrcOver",
+      "referenceIdentity": {
+        "state": "ready",
+        "caseId": "DrawingComposite16",
+        "reference": "ImageSharp3.1.12 Rgba64 DrawImage normal SrcOver opacity1",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "referenceSha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "maximumDegreeOfParallelism": 1,
+        "performanceBaselineApproved": false
+      },
+      "boundary": "Complete Composite into borrowed canvas at17,19 with separate immutable source, default local limits/admission/cancellation/context cleanup. Original513x259 pixels; reset excluded before EVERY operation BOTH subjects. Native uses per-operation clock reads; managed invocation/unroll1 with iteration reset. Source/canvas setup and validation excluded. Scoped native bounds/reference approvals required before scoring.",
+      "receipt": "tmp/bdo973-DrawingComposite16-confirm-receipt.json",
+      "observation": "tmp/bdo973-DrawingComposite16-confirm-observation.json"
+    }
+  },
+  "statusCounts": {
+    "pass": 4,
+    "gap": 2,
+    "uncertain": 1
+  },
+  "comparison": {
+    "DrawingCopy8": {
+      "project": "Lokad.Image",
+      "stage": "BDO973",
+      "caseId": "DrawingCopy8",
+      "baselineUs": 2.095089375813802,
+      "candidateUs": 2.03772216796875,
+      "savedUs": 0.057367207845052004,
+      "rawReduction": 0.02738174729312859,
+      "ratioLower": 0.9669712704137068,
+      "ratioUpper": 0.9783160469055541,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 0.0,
+      "pairs": 12,
+      "operationsEachSubject": 8192,
+      "allActualsRetained": true,
+      "outputExact": true,
+      "borrowedCanvas": true,
+      "independentSubjects": true,
+      "quietGuardsPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "productionSha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+        "tmp/bdo973-baseline-linux/Lokad.Image.dll",
+        "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+        "tmp/bdo973-candidate-linux/Lokad.Image.dll",
+        "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+        "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+        "confirm",
+        "DrawingCopy8"
+      ],
+      "raw": "tmp/bdo973-DrawingCopy8-paired-confirm.log"
+    },
+    "DrawingCopyOverlap8": {
+      "project": "Lokad.Image",
+      "stage": "BDO973",
+      "caseId": "DrawingCopyOverlap8",
+      "baselineUs": 3.944855275472005,
+      "candidateUs": 3.8201529947916666,
+      "savedUs": 0.12470228068033862,
+      "rawReduction": 0.03161137024612848,
+      "ratioLower": 0.9634060068878345,
+      "ratioUpper": 0.9734047222517632,
+      "baselineAllocatedBytes": 112.0,
+      "candidateAllocatedBytes": 0.0,
+      "pairs": 12,
+      "operationsEachSubject": 8192,
+      "allActualsRetained": true,
+      "outputExact": true,
+      "borrowedCanvas": true,
+      "independentSubjects": true,
+      "quietGuardsPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "productionSha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+        "tmp/bdo973-baseline-linux/Lokad.Image.dll",
+        "fa7307fef0a8425a452d20da654cdf6e5dc0ec3750c13fc1728b625e836a6679",
+        "tmp/bdo973-candidate-linux/Lokad.Image.dll",
+        "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+        "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+        "confirm",
+        "DrawingCopyOverlap8"
+      ],
+      "raw": "tmp/bdo973-DrawingCopyOverlap8-paired-confirm.log"
+    }
+  },
+  "diagnostics": {
+    "DrawingCopy8": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 1975.649340381983,
+        "StandardError": 0.4664232717930559,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1975.649340381983,
+          "StandardError": 0.4664232717930559,
+          "Level": 12,
+          "Margin": 2.0695104193102116,
+          "Lower": 1973.5798299626726,
+          "Upper": 1977.7188508012932
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 1976.7525330055812,
+        "StandardError": 0.466423271793054,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1976.7525330055812,
+          "StandardError": 0.466423271793054,
+          "Level": 12,
+          "Margin": 2.069510419310203,
+          "Lower": 1974.683022586271,
+          "Upper": 1978.8220434248915
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1926.492332458496,
+          "standardError": 0.7488746945361978
+        },
+        {
+          "mean": 1928.6331075032551,
+          "standardError": 1.1489915179282406
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 0 101296"
+    },
+    "DrawingCopyOverlap8": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 3812.40637815158,
+        "StandardError": 3.761960560236611,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3812.40637815158,
+          "StandardError": 3.761960560236611,
+          "Level": 12,
+          "Margin": 16.69174127293118,
+          "Lower": 3795.714636878649,
+          "Upper": 3829.0981194245114
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 3813.522891669198,
+        "StandardError": 3.7619605602366364,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3813.522891669198,
+          "StandardError": 3.7619605602366364,
+          "Level": 12,
+          "Margin": 16.69174127293129,
+          "Lower": 3796.831150396267,
+          "Upper": 3830.2146329421294
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3792.0941619873047,
+          "standardError": 2.2114414777038327
+        },
+        {
+          "mean": 3789.782257080078,
+          "standardError": 2.6097358488726092
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 0 52672"
+    },
+    "DrawingCopy16": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 3791.601782280915,
+        "StandardError": 0.45733686873729423,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3791.601782280915,
+          "StandardError": 0.45733686873729423,
+          "Level": 12,
+          "Margin": 2.0291942367028093,
+          "Lower": 3789.572588044212,
+          "Upper": 3793.630976517618
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 3792.8137775753894,
+        "StandardError": 0.45733686873730883,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 3792.8137775753894,
+          "StandardError": 0.45733686873730883,
+          "Level": 12,
+          "Margin": 2.029194236702874,
+          "Lower": 3790.7845833386864,
+          "Upper": 3794.8429718120924
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3784.066864013672,
+          "standardError": 1.2126733018463887
+        },
+        {
+          "mean": 3784.115666707357,
+          "standardError": 0.4248952791897359
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 0 52704"
+    },
+    "DrawingFill8": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 1235.9291974036978,
+        "StandardError": 0.7333565072397713,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1235.9291974036978,
+          "StandardError": 0.7333565072397713,
+          "Level": 12,
+          "Margin": 3.253887669385039,
+          "Lower": 1232.6753097343128,
+          "Upper": 1239.1830850730828
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 1237.032837737261,
+        "StandardError": 0.7333565072397822,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1237.032837737261,
+          "StandardError": 0.7333565072397822,
+          "Level": 12,
+          "Margin": 3.2538876693850876,
+          "Lower": 1233.778950067876,
+          "Upper": 1240.286725406646
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1566.6882756551106,
+          "standardError": 0.5389064486489623
+        },
+        {
+          "mean": 1567.3081970214844,
+          "standardError": 0.28092024354860223
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 0 162128"
+    },
+    "DrawingFill16": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 2092.6840717739246,
+        "StandardError": 0.9405918572629123,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2092.6840717739246,
+          "StandardError": 0.9405918572629123,
+          "Level": 12,
+          "Margin": 4.173386635364108,
+          "Lower": 2088.5106851385603,
+          "Upper": 2096.857458409289
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 2093.7996728076023,
+        "StandardError": 0.9405918572629242,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2093.7996728076023,
+          "StandardError": 0.9405918572629242,
+          "Level": 12,
+          "Margin": 4.17338663536416,
+          "Lower": 2089.626286172238,
+          "Upper": 2097.9730594429666
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4097.567306518555,
+          "standardError": 0.9102082170108559
+        },
+        {
+          "mean": 4103.318506876628,
+          "standardError": 0.9373569478562521
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 0 95968"
+    },
+    "DrawingComposite8": {
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 65011.545454545456,
+        "StandardError": 266.330565741024,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 65011.545454545456,
+          "StandardError": 266.330565741024,
+          "Level": 12,
+          "Margin": 1221.6300360188377,
+          "Lower": 63789.915418526616,
+          "Upper": 66233.17549056429
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 65433.166666666664,
+        "StandardError": 456.7120940687764,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 65433.166666666664,
+          "StandardError": 456.7120940687764,
+          "Level": 12,
+          "Margin": 2026.422124408223,
+          "Lower": 63406.74454225844,
+          "Upper": 67459.58879107489
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 451061.5808580858,
+          "standardError": 265.6723893278209
+        },
+        {
+          "mean": 451987.92491749173,
+          "standardError": 797.1976095010137
+        }
+      ],
+      "rawGc": null
+    },
+    "DrawingComposite16": {
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 563625.8333333334,
+        "StandardError": 1517.313244627896,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 563625.8333333334,
+          "StandardError": 1517.313244627896,
+          "Level": 12,
+          "Margin": 6732.287514393197,
+          "Lower": 556893.5458189402,
+          "Upper": 570358.1208477266
+        }
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 563685.8333333334,
+        "StandardError": 1517.313244627896,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 563685.8333333334,
+          "StandardError": 1517.313244627896,
+          "Level": 12,
+          "Margin": 6732.287514393197,
+          "Lower": 556953.5458189402,
+          "Upper": 570418.1208477266
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 632261.0625,
+          "standardError": 1645.9640837514353
+        },
+        {
+          "mean": 629513.5614035088,
+          "standardError": 239.653969466697
+        }
+      ],
+      "rawGc": null
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "BDO973",
+    "allConfirmed": true,
+    "unchangedKernelsAfterTokenSubstitution": {
+      "FillRectangleKernelSha256": "a081b60848337e752b5a27ae66e70a81a8d019fe8bc64fccad9bf74e8215de0f",
+      "CopyRegionKernelSha256": "e005dc9f1ac4349ca0c66c34638f0944a446acd509591367c562f10195a23a2a",
+      "CompositeKernelSha256": "e27a50401c8cf707169581ba2f851ce84cd6f91f934b2fd29719c9729dc4807d",
+      "private static void CompositeRows<": "ec645723c4c99b7c3643aba4e81569494d6f06db107953a018bc90a68161ff9b",
+      "private static void Extent(": "b8e0c7e33c7aff0687ecd36caf357c7a8f05482921a5350b786dbc005cfa8c74",
+      "private static Region Clip(": "326415f2b6858b8bd100f584d7d64389d748a9fa59ee5288180c7749fa9d621c",
+      "private static void CompositeRows8(": "7d4dce6280db3a2bf30c5c2a8c227f4c1361ee5370637a7c33ec2962673e399f",
+      "internal static Vector128<byte> CompositeFour8(": "006c7bee21c2b34d05f9bdd6816ce07202c894e10ed5a6b0f940c01adacc782c",
+      "internal static Vector512<int> DivideByteColor(": "88b543724367c93891392377dfc010aea56fc8cf00fd7149497ed046387b9ff9"
+    },
+    "noOwnedStorage": true,
+    "noNewBudgetAbstraction": true,
+    "sharedOperationContextAndMemoryBudgetUnchanged": true,
+    "regionProof": "ImageBuffer construction establishes positive dimensions,8/16bit depth and array-sized packed capacity. Nonempty clipped drawing regions fit that buffer, so those intrinsic conditions cannot fail. Preserve caller MaxDimension/MaxPixels and canvas-first borrowed MaxWorkingBytes checks. Preserve input argument/depth-before-policy, malformed-policy-before-precancel and precancel-before-disposed/working validation. Aliases count once; distinct inputs short-circuit canvas-first. No budget API, owner disposal or asynchronous user exists in these synchronous borrowed-only calls.",
+    "reuse": "No other production caller uses these private drawing validators. Text drawing owns separate layout/raster execution, with no calls to these fill/copy/composite entry points. Codec/resize/inspection and independent-result edit paths stay source-identical. Refresh only seven in-place drawing controls; reuse previous broad arithmetic/ISA and unaffected timing evidence.",
+    "failureCoverage": "Eleven added public cases plus existing meaningful geometry/memory/precancel/depth/clip/overlap/hidden-RGB/source lifetime coverage;91public/25internal per normal/scalar on both OSes."
+  },
+  "memory": {
+    "removedPerCallOwnerAllocatedBytes": 56,
+    "removedTwoMovePairAllocatedBytes": 112,
+    "currentAllocatedBytesEachControl": 0,
+    "newOwnedHeapCapacityBytes": 0,
+    "newAdmittedBytes": 0,
+    "retainedOperationBytes": 0,
+    "borrowedCapacityUnchanged": true,
+    "aliasesCountOnce": true,
+    "callerBudgetNeverOwnedOrDisposed": true,
+    "defaultPixelPoolCeilingBytes": 4194304,
+    "physicalNativeJitPeaksMeasured": false,
+    "allocationNotCapacityOrRetention": true
+  },
+  "qualification": {
+    "fullChecksEachOs": 6659,
+    "internalChecks": 3254,
+    "publicChecks": 2457,
+    "liveChecks": 948,
+    "windows": {
+      "productionSha256": "620dbb17e12fc8eb0e7bf010a38526037e2d61e24a80191708409a56493c7289",
+      "embeddedTestsSha256": "63da1bc440ef300d717eaddeca61e152f0c7d42fd55636832013ac72600ea0ec",
+      "full": [
+        3254,
+        2457,
+        948
+      ],
+      "total": 6659,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 91,
+        "internal-scalar": 25,
+        "public-scalar": 91
+      },
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "linux": {
+      "productionSha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "embeddedTestsSha256": "f2c83798e7aefd2471d735cedc4968717758a8e7ee6d01e00b06bf038b883738",
+      "full": [
+        3254,
+        2457,
+        948
+      ],
+      "total": 6659,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 91,
+        "internal-scalar": 25,
+        "public-scalar": 91
+      },
+      "additionalProductionOrEmbeddedBuilds": 0
+    },
+    "focusedInternalEachMode": 25,
+    "focusedPublicEachMode": 91,
+    "focusedModes": [
+      "normal",
+      "scalar"
+    ],
+    "newPublicCases": 11,
+    "unchangedArithmeticIsaQualificationReused": true,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "BDO973",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618",
+      "symbolsSha256": "a0d6735f5a749443abcfc814762fd04781e26d4f007a0d2a826f4cabd3e030c0",
+      "bytes": 460732,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable Linux DLL used for two complete copy paired confirmations, all seven affected current reference confirmations and allocation diagnostic. Unchanged codec/resize/text costs retain original artifact identities. No post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "samePackageWindows": {
+      "project": "Lokad.Image",
+      "stage": "BDO973",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618",
+      "symbolsSha256": "a0d6735f5a749443abcfc814762fd04781e26d4f007a0d2a826f4cabd3e030c0",
+      "bytes": 460732,
+      "librarySha256": "4226749fcf92adb27d8d6aa0d5942f85eedc9df10a17031489d9784ce963f633",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "newSeekableHeaderStorageConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable Linux DLL used for two complete copy paired confirmations, all seven affected current reference confirmations and allocation diagnostic. Unchanged codec/resize/text costs retain original artifact identities. No post-timing production change or rebuild.",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "144dc0ccaa0d1e49195a3a589cd2d54edb1e4a0dea0c34952ac5b2d9a3f74618"
+    },
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true
+  },
+  "implementation": "Borrowed-only fill/copy/composite validate policies, canvas-first local borrowed capacity and nonempty clipped-region limits directly. Pass the same CancellationToken through unchanged kernels/checkpoints. No OperationContext allocation/disposal, budget calls, temporary pixel storage, new owner/quota/session abstraction or common codec-context change. Intrinsic positive dimensions,8/16bit depth and array-sized capacity follow from the existing ImageBuffer and clipped-region invariants.",
+  "boundaries": "Complete original public in-place operations on borrowed canvases, with all actual validation, clipping/normalization, alias handling, cooperative cancellation and cleanup included. Source/canvas preparation remains outside both clocks. Copy/fill repeated overwrites are idempotent; overlap is two public moves with reverse restoration against six native directional bands. Compositing retains original per-operation resets outside clocks, invocation/unroll1 and approved native bounds. Current wrapper/input/graph retention remains as originally documented. No encoder, resize or font/text pipeline timing changes.",
+  "references": {
+    "copyFill": "FFmpeg n8.1 public plane-copy/color-fill APIs",
+    "composite8": "FFmpeg n8.1 RGBA8 overlay; native-onlyRGB<=1/RMSE<=.5, exactalpha/untouched/zero-source-alpha; exactmanaged rational pixels",
+    "composite16": "ImageSharp3.1.12 Rgba64 SrcOver, explicitly not FFmpeg; nativeRGB/alpha<=1 andRMSE<=.25each; exactmanaged rational pixels",
+    "fillCommentIdentityClarification": "Retain original byte-identical native worker. Reconcile the previously recorded comment-only wrapper-source identity refresh and its explicit annotation, without rebuilding or changing code/settings/boundaries."
+  },
+  "workflow": "One immutable core/embedded/public build per OS, zero harness/native/fixture builds. One adapted paired helper build, reused for two independent12pair8192operation confirmations after the short complete byte screen. All seven affected existing controls receive one12actual/12native-per-bracket current confirmation. The fixed allocation diagnostic supplies two composites with no CPU claim. No completed timing restarts, filtered favorable selections, added settings/image grid, post-timing artifact rebuild or unrelated qualification campaign. Full/package checks follow performance reconciliation.",
+  "currentImageOwnerViewStatuses": {
+    "total": 191,
+    "passing": 179,
+    "gaps": 0,
+    "uncertain": 12,
+    "unchanged": true,
+    "inPlaceControlsExcluded": true
+  },
+  "historicalCostCaveat": {
+    "priorByteFillUs": 1.1878394977977034,
+    "currentByteFillUs": 1.2359291974036979,
+    "scope": "The older byte-fill point is lower than the current cost; it remains retained and is not a causal unchanged-baseline comparison. Fill/composite costs are current qualifications, not claimed speedups. Stage acceptance rests on the two controlled copy gains, zero allocation, simpler borrowed ownership and passing affected fill/composite reference controls. No universal CPU non-regression claim."
+  },
+  "raw": {
+    "file": "borrowed-drawing-validation-qualified.tar.xz",
+    "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f",
+    "bytes": 41259724,
+    "members": 514,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "independent-row-copy-qualified.tar.xz",
+        "sha256": "04a8dc53d05ffbf7280f05e501de5ac75839441e6e25526fa10b0d69e2968ba4"
+      },
+      {
+        "file": "rectangle-fill-packed-qualified.tar.xz",
+        "sha256": "93a1e91bdf349d7af12cde4a8300873dfeabfe5cb6d2a327e24b3262e2351e27"
+      },
+      {
+        "file": "byte-composite-exact-vector-qualified.tar.xz",
+        "sha256": "789bd43e763effe85a5c35bf4342aac5d996192288605c7ddcb384d83eba11ae"
+      },
+      {
+        "file": "compositing-shared-rows.tar.xz",
+        "sha256": "32819eb8a3892d233c7bc134ae10b28cf0aa1d81a1c3f0878c8cff2f1b5c35a2"
+      },
+      {
+        "file": "jpeg-bounded-block-emission-qualified.tar.xz",
+        "sha256": "1f818a00b99bcabf97b14fe440165b18c1f485fa9c9d396f8a8ce29b617b3573"
+      }
+    ]
+  },
+  "next": "Stop four passing fill/composite controls. Keep the two tiny copy gaps and overlap uncertainty visible, without repeating unchanged measurements. Reassess the existing high-cost uncertain WebP word-alpha evidence/boundaries before another optimization; no presumed gap or broad matrix. Complete font/text integration passes stay stopped, and all289material paths remain required."
+}

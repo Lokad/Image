@@ -24,11 +24,10 @@ public static partial class ImageDrawing
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(canvas); Extent(width, height);
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(canvas.ByteLength);
+        limits = ValidateInputs(canvas, canvas, limits, cancellationToken);
         var region = Clip(canvas, 0, 0, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
-        context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
+        ValidateRegion(region, limits);
         var r = canvas.BitDepth == 8 ? (color.R + 128) / 257 : color.R;
         var g = canvas.BitDepth == 8 ? (color.G + 128) / 257 : color.G;
         var b = canvas.BitDepth == 8 ? (color.B + 128) / 257 : color.B;
@@ -46,7 +45,7 @@ public static partial class ImageDrawing
         for (var row = 0; row < region.Height; row++)
         for (var first = 0; first < region.Width;)
         {
-            var count = Math.Min(4096, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
+            var count = Math.Min(4096, region.Width - first); cancellationToken.ThrowIfCancellationRequested();
             var yRow = region.DestinationY + row;
             if (canvas.BitDepth == 8)
             {
@@ -70,10 +69,10 @@ public static partial class ImageDrawing
         if (sourceX < 0 || sourceY < 0 || (long)sourceX + width > source.Width || (long)sourceY + height > source.Height)
             throw new ArgumentOutOfRangeException(nameof(sourceX), "Source rectangle must fit the source.");
         if (source.BitDepth != canvas.BitDepth) throw new ArgumentException("Exact copies require matching pixel depths.", nameof(canvas));
-        using var context = Admit(canvas, source, limits, cancellationToken);
+        limits = ValidateInputs(canvas, source, limits, cancellationToken);
         var region = Clip(canvas, sourceX, sourceY, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
-        context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
+        ValidateRegion(region, limits);
         var sameBuffer = ReferenceEquals(source, canvas);
         // The measured byte fast path requires disjoint row slices. Word copies
         // retain the existing runtime kernel; traversal still handles all aliases.
@@ -90,7 +89,7 @@ public static partial class ImageDrawing
             var offsetY = backwardsY ? region.Height - row - 1 : row;
             for (var first = 0; first < region.Width;)
             {
-                var count = Math.Min(4096, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
+                var count = Math.Min(4096, region.Width - first); cancellationToken.ThrowIfCancellationRequested();
                 var offsetX = backwardsX ? region.Width - first - count : first;
                 var sx = (region.SourceX + offsetX) * pixelBytes; var dx = (region.DestinationX + offsetX) * pixelBytes;
                 var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
@@ -110,27 +109,27 @@ public static partial class ImageDrawing
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(source); ArgumentNullException.ThrowIfNull(canvas);
-        using var context = Admit(canvas, source, limits, cancellationToken);
+        limits = ValidateInputs(canvas, source, limits, cancellationToken);
         var region = Clip(canvas, 0, 0, x, y, source.Width, source.Height);
         if (region.Width == 0 || region.Height == 0) return;
-        context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
+        ValidateRegion(region, limits);
         var backwardsY = ReferenceEquals(source, canvas) && region.DestinationY > region.SourceY;
         var backwardsX = ReferenceEquals(source, canvas) && region.DestinationX > region.SourceX;
         if (source.BitDepth == 8)
         {
             if (canvas.BitDepth == 8)
             {
-                if (Avx512F.IsSupported) CompositeRows8(canvas, source, region, backwardsX, backwardsY, context);
-                else CompositeRows<byte, byte>(canvas, source, region, backwardsX, backwardsY, context);
+                if (Avx512F.IsSupported) CompositeRows8(canvas, source, region, backwardsX, backwardsY, cancellationToken);
+                else CompositeRows<byte, byte>(canvas, source, region, backwardsX, backwardsY, cancellationToken);
             }
-            else CompositeRows<byte, ushort>(canvas, source, region, backwardsX, backwardsY, context);
+            else CompositeRows<byte, ushort>(canvas, source, region, backwardsX, backwardsY, cancellationToken);
         }
-        else if (canvas.BitDepth == 8) CompositeRows<ushort, byte>(canvas, source, region, backwardsX, backwardsY, context);
-        else CompositeRows<ushort, ushort>(canvas, source, region, backwardsX, backwardsY, context);
+        else if (canvas.BitDepth == 8) CompositeRows<ushort, byte>(canvas, source, region, backwardsX, backwardsY, cancellationToken);
+        else CompositeRows<ushort, ushort>(canvas, source, region, backwardsX, backwardsY, cancellationToken);
     }
 
     private static void CompositeRows<TSource, TCanvas>(ImageBuffer canvas, ImageBuffer source, Region region,
-        bool backwardsX, bool backwardsY, OperationContext context)
+        bool backwardsX, bool backwardsY, CancellationToken cancellationToken)
         where TSource : unmanaged, IBinaryInteger<TSource>, IMinMaxValue<TSource>
         where TCanvas : unmanaged, IBinaryInteger<TCanvas>, IMinMaxValue<TCanvas>
     {
@@ -145,7 +144,7 @@ public static partial class ImageDrawing
             var canvasRow = canvasPixels.Slice((region.DestinationY + offsetY) * canvasStride + region.DestinationX * 4, region.Width * 4);
             for (var first = 0; first < region.Width;)
             {
-                var count = Math.Min(256, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
+                var count = Math.Min(256, region.Width - first); cancellationToken.ThrowIfCancellationRequested();
                 for (var i = first; i < first + count; i++)
                 {
                     var at = (backwardsX ? region.Width - i - 1 : i) * 4;
@@ -175,12 +174,30 @@ public static partial class ImageDrawing
         }
     }
 
-    private static OperationContext Admit(ImageBuffer canvas, ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
+    private static ImageLimits ValidateInputs(ImageBuffer canvas, ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(canvas.ByteLength);
-        if (!ReferenceEquals(canvas, source)) context.ReserveBorrowed(source.ByteLength);
-        return context;
+        limits ??= ImageLimits.Default;
+        limits.Validate();
+        cancellationToken.ThrowIfCancellationRequested();
+        // These operations borrow all pixel storage and allocate no owned
+        // workspace. Count borrowed capacity locally, without creating an owner
+        // or charging storage that already belongs to the caller.
+        var canvasBytes = canvas.ByteLength;
+        if (canvasBytes > limits.MaxWorkingBytes
+            || !ReferenceEquals(canvas, source) && source.ByteLength > limits.MaxWorkingBytes - canvasBytes)
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
+        return limits;
+    }
+
+    private static void ValidateRegion(Region region, ImageLimits limits)
+    {
+        // A nonempty clipped region fits an existing valid ImageBuffer, so its
+        // depth, positive dimensions and array-sized capacity are established.
+        // Only the caller's stricter region dimension/pixel limits remain.
+        var dimensionsExceeded = region.Width > limits.MaxDimension || region.Height > limits.MaxDimension;
+        if (dimensionsExceeded || (long)region.Width * region.Height > limits.MaxPixels)
+            throw new ImageLimitException(dimensionsExceeded ? ImageLimitKind.Dimension : ImageLimitKind.PixelCount,
+                "Image dimensions or pixel count exceed the configured limits.");
     }
 
     private static void Extent(int width, int height)

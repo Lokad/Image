@@ -2,14 +2,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using Lokad.Image.Internal;
 
 namespace Lokad.Image;
 
 public static partial class ImageDrawing
 {
     private static void CompositeRows8(ImageBuffer canvas, ImageBuffer source, Region region,
-        bool backwardsX, bool backwardsY, OperationContext context)
+        bool backwardsX, bool backwardsY, CancellationToken cancellationToken)
     {
         var sourcePixels = source.Pixels; var canvasPixels = canvas.Pixels;
         for (var row = 0; row < region.Height; row++)
@@ -20,7 +19,7 @@ public static partial class ImageDrawing
             for (var first = 0; first < region.Width;)
             {
                 var end = first + Math.Min(256, region.Width - first);
-                context.Cancellation.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
                 var i = first;
                 for (; i <= end - 4; i += 4)
                 {

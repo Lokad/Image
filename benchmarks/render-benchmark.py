@@ -189,29 +189,7 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
-def apply_current_independent_row_copy(editing):
-    current = json.loads((ROOT / 'benchmarks/independent-row-copy-evidence.json').read_text(encoding='utf-8'))
-    q = current['qualification']
-    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6624
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed']
-    assert q['samePackageWindows']['overlappingByteWordSnapshotCancellationAndFullSharedBudgetPassed']
-    assert current['currentImageOwnerViewStatuses'] == {'pass': 173, 'gap': 1, 'uncertain': 17}
-    for name in ('DrawingCopy8', 'DrawingCopyOverlap8'):
-        assert current['comparison'][name]['normalizedGainSeparated']
-        assert all(v['rawGainSeparated'] for v in current['comparison'][name]['views'].values())
-    for c in current['cases'].values():
-        assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['allocatedBytes'] == (56 if c['caseId'] in {'DrawingCopy8', 'DrawingCopy16'} else 112)
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    c = current['cases']['WarmVerticalFlip8']
-    assert c['status'] == 'gap' and c['sourceUnchanged'] and c['independentOwnedOutput']
+def apply_current_vertical_flip_confidence(editing):
     confidence = json.loads((ROOT / 'benchmarks/vertical-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
     c, q = confidence['case'], confidence['qualification']
     assert confidence['measurementAccepted'] and not confidence['productionChanged'] and not confidence['productionSpeedupClaim']
@@ -1760,32 +1738,60 @@ No heap capacity or retention is added; validation and independent owners remain
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
             rows[position] = ('codec', row)
-    rectangle = json.loads((ROOT / 'benchmarks/independent-row-copy-evidence.json').read_text(encoding='utf-8'))
-    assert rectangle['requiredMaterialPaths'] == 289 and rectangle['newMaterialPaths'] == 0
-    assert rectangle['qualification']['sameActualPackageBothOs'] and rectangle['raw']['allMembersVerified']
-    for case, label in [('DrawingCopy8', 'Exact rectangle copy into borrowed RGBA8 canvas (gap)'),
-                        ('DrawingCopy16', 'Exact rectangle copy into borrowed RGBA16 canvas (confidence open)')]:
-        c = rectangle['cases'][case]
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['managedExact'] and c['borrowedCanvas'] and c['sourceUnchanged'] and c['untouchedCanvasExact']
-        rows.append(('editing', f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
-                     f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
-    fill = json.loads((ROOT / 'benchmarks/rectangle-fill-packed-evidence.json').read_text(encoding='utf-8'))
-    assert fill['requiredMaterialPaths'] == 282 and fill['newRequiredCases'] == 0
-    assert fill['qualification']['sameActualPackageBothOS'] and fill['raw']['allMembersVerified']
-    for case, label in [('DrawingFill8', 'Exact clipped fill into borrowed RGBA8 canvas (parity confirmed)'),
-                        ('DrawingFill16', 'Exact clipped fill into borrowed RGBA16 canvas (parity confirmed)')]:
-        c = fill['cases'][case]['cost']
-        assert c['actuals'] == c['nativeSamplesEachBracket'] == 12 and c['status'] == 'confirmed-pass-stop'
-        assert c['upper'] <= 1 and fill['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
-        rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
-                     f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
-    c = rectangle['cases']['DrawingCopyOverlap8']
-    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-    assert c['publicMovesPerPair'] == 2 and c['nativeCallsPerPair'] == 6 and c['lower'] > 1
-    assert c['sourceAliasesCanvas'] and c['restorationTimed'] and c['managedExact']
-    rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedUs"]:,.2f} | '
-                 f'{c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
+    borrowed_drawing = json.loads((ROOT / 'benchmarks/borrowed-drawing-validation-evidence.json').read_text(encoding='utf-8'))
+    bq = borrowed_drawing['qualification']
+    assert borrowed_drawing['productionAccepted'] and borrowed_drawing['allAffectedPerformanceReconciled']
+    assert borrowed_drawing['requiredMaterialPaths'] == 289 and borrowed_drawing['newMaterialPaths'] == 0
+    assert borrowed_drawing['raw']['mirrored'] and borrowed_drawing['raw']['allMembersVerified']
+    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 6659
+    assert bq['actualPackage']['sha256'] == bq['samePackageWindows']['sameActualPackageSha256']
+    assert bq['actualPackage']['actualConsumerPassed'] and bq['samePackageWindows']['actualConsumerPassed']
+    assert bq['actualPackage']['usageExamples'] == bq['samePackageWindows']['usageExamples'] == 3
+    assert bq['acceptedArtifactRebuildsAfterTiming'] == 0 and bq['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert borrowed_drawing['sourceProof']['allConfirmed'] and borrowed_drawing['sourceProof']['sharedOperationContextAndMemoryBudgetUnchanged']
+    drawing_cases = borrowed_drawing['cases']
+    assert len(drawing_cases) == 7
+    assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
+    assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
+    for comparison in borrowed_drawing['comparison'].values():
+        assert comparison['ratioUpper'] < 1 and comparison['pairs'] == 12 and comparison['operationsEachSubject'] == 8192
+        assert comparison['candidateAllocatedBytes'] == 0 and comparison['allActualsRetained'] and comparison['outputExact']
+        assert comparison['borrowedCanvas'] and comparison['independentSubjects'] and comparison['notNativeParity']
+    drawing_labels = {
+        'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
+        'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
+        'DrawingFill8': 'Exact clipped fill into borrowed RGBA8 canvas',
+        'DrawingFill16': 'Exact clipped fill into borrowed RGBA16 canvas',
+        'DrawingCopyOverlap8': 'Overlapping RGBA8 copy + reverse restoration, per pair',
+        'DrawingComposite8': 'RGBA8 source-over / FFmpeg overlay',
+        'DrawingComposite16': 'RGBA16 source-over / ImageSharp 3.1.12',
+    }
+    for name, label in drawing_labels.items():
+        c = drawing_cases[name]
+        assert c['librarySha256'] == borrowed_drawing['producers']['linuxSha256'] == bq['actualPackage']['librarySha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
+        if name == 'DrawingCopyOverlap8':
+            assert c['sourceAliasesCanvas'] and c['publicMovesPerPair'] == 2 and c['nativeCallsPerPair'] == 6 and c['restorationTimed']
+        else:
+            assert c['sourceUnchanged']
+        status = 'parity confirmed' if c['status'] == 'pass' else 'gap' if c['status'] == 'gap' else 'confidence open'
+        mark = ' †' if name.startswith('DrawingComposite') else ''
+        rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
+    b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
+    borrowed_drawing_note = f"""[Borrowed drawing validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+removes the operation owner: all seven fill/copy/composite controls allocate **0 B/op**,
+with unchanged borrowed capacity and zero retained workspace. Complete copy/pair
+confirmations gain **2.74% / 3.16%**, separately from native parity. Current byte
+copy remains a small gap: **{b8['managedUs']:.2f} / FFmpeg {b8['nativeUs']:.2f} µs, upper {b8['upper']:.3f}**;
+word copy is **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**, also a tiny gap.
+The two-move overlapping pair remains uncertain: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
+Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
+ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
+[Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
+is still open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**. No new flip timing."""
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
@@ -1801,22 +1807,6 @@ No heap capacity or retention is added; validation and independent owners remain
     assert font_load['storage']['globalPoolCeilingBytes'] == 4194304
     assert font_load['storage']['globalPoolIdleSlots'] == 2
     assert font_load['current']['managedMemory']['BytesAllocatedPerOperation'] == 176
-    composites = json.loads((ROOT / 'benchmarks/compositing-shared-rows-evidence.json').read_text(encoding='utf-8'))
-    assert composites['productionAccepted'] and composites['independentQuietConfirmation']
-    assert composites['qualification']['fullChecksEachOs'] == 5423
-    assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
-    assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
-    composite8_current = json.loads((ROOT / 'benchmarks/byte-composite-exact-vector-evidence.json').read_text(encoding='utf-8'))
-    assert composite8_current['productionAccepted']
-    assert composite8_current['current']['allOriginalGatesPassed'] and composite8_current['current']['quietGuardsPassed']
-    assert composite8_current['current']['actualIterations'] == 12
-    assert composite8_current['current']['librarySha256'] == composite8_current['actualPackage']['librarySha256']
-    assert composite8_current['allocation']['refreshedOnActualTimedDll']
-    assert composite8_current['current']['upper'] < 1
-    assert composite8_current['qualification']['fullChecksEachOs'] == 5975
-    assert composite8_current['actualPackage']['sha256'] == composite8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert composite8_current['raw']['mirrored'] and composite8_current['raw']['allMembersVerified']
     raster = json.loads((ROOT / 'benchmarks/text-render-preparation-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
     assert raster['qualification']['fullChecksEachOs'] == 6244
@@ -1840,19 +1830,9 @@ No heap capacity or retention is added; validation and independent owners remain
         rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["nativeUs"]:,.2f} | '
                      f'{case["ratio"]:.3f} / {case["upper"]:.3f} | {case["allocatedBytes"]:,} |'))
     for case_id, previous in text_current['observations'].items():
-        if case_id in ('DrawText8', 'DrawText16'):
-            continue  # Current ordinary and explicitly prepared boundaries above.
-        if case_id == 'DrawingComposite8':
-            current = composite8_current['current']
-            rows.append(('editing', f'| {composites["cases"][case_id]["label"]} (pass) † | {current["managedUs"]:,.2f} | '
-                         f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
-                         f'{current["allocatedBytes"]:,} |'))
-            continue
-        case = (font_load['current'] if case_id == 'FontLoadRegular'
-                else composites['cases'].get(case_id, previous))
-        if case_id in composites['cases']:
-            assert case['librarySha256'] == composites['producers']['linuxSha256']
-            assert case['validation']['exactManagedPixels'] and case['managedMemory']['BytesAllocatedPerOperation'] == 56
+        if case_id in ('DrawText8', 'DrawText16', 'DrawingComposite8', 'DrawingComposite16'):
+            continue  # Current ordinary/prepared text and borrowed composites above.
+        case = font_load['current'] if case_id == 'FontLoadRegular' else previous
         assert len(case['managed']['actual']) == 12 and case['quietGuardsPassed']
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
@@ -2874,7 +2854,7 @@ No heap capacity or retention is added; validation and independent owners remain
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     editing = apply_current_pixel_reversal(editing)
-    editing = apply_current_independent_row_copy(editing)
+    editing = apply_current_vertical_flip_confidence(editing)
     raster_copies = json.loads((ROOT / 'benchmarks/shared-raster-copy-evidence.json').read_text(encoding='utf-8'))
     copy_q = raster_copies['qualification']
     assert raster_copies['productionAccepted'] and raster_copies['allAffectedPerformanceReconciled']
@@ -2905,16 +2885,7 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 
 {jpeg_direct_note}
 
-[Shared independent row copying](../benchmarks/INDEPENDENT-ROW-COPY.md) saves
-**10.73% raw / 10.75% reference-normalized** on the complete RGBA8 rectangle copy
-and **8.17% / 9.14%** on the two-move overlapping pair. Costs are **1.99 / FFmpeg
-1.91 µs, upper 1.065**, **56 B/op**, and **3.85 / 3.81 µs, upper 1.017**,
-**112 B/pair**, respectively. No new owned storage. Both remain small parity gaps;
-word rectangle copying is uncertain. The word dispatch is revised after an adverse
-candidate, whose results are retained. [Byte vertical confidence](../benchmarks/VERTICAL-FLIP-CURRENT-CONFIDENCE.md)
-is now open: **9.23 / 9.22 µs, upper 1.016**, **112 B/op**, on the unchanged
-actual package. Longer matched blocks supersede the older small-gap observation;
-this is not a production gain. Word flip passes; word clone/normal stay uncertain.
+{borrowed_drawing_note}
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -2978,8 +2949,8 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,648 full/live checks**,
-focused normal/scalar JPEG checks and the **same actual
+storage, separately from its **138 B/op**. Each OS passes **6,659 full/live checks**,
+focused normal/scalar drawing checks and the **same actual
 Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
