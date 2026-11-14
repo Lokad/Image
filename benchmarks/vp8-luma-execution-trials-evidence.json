@@ -1,0 +1,442 @@
+{
+  "project": "Lokad.Image",
+  "date": "2026-11-14",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "captures": [
+    {
+      "stage": "LMS994",
+      "mode": "screen",
+      "label": "Streaming per-block selector",
+      "originalUs": 9693.4944921875,
+      "candidateUs": 10148.253856770834,
+      "ratio": 1.0469144411354945,
+      "lower": 1.0449194661327874,
+      "upper": 1.0489132249726527,
+      "allocatedBytes": 809080,
+      "identities": [
+        "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+        "977a6e0ab3489491bf6fab6a4e9be9c203a356b47553e494a1ab9d776bbd4d52"
+      ],
+      "exactPackets": true,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      }
+    },
+    {
+      "stage": "LMS995",
+      "mode": "screen",
+      "label": "Whole-search mode screen",
+      "originalUs": 9587.529515625,
+      "candidateUs": 9498.534677083335,
+      "ratio": 0.9907181178894366,
+      "lower": 0.9880436973749598,
+      "upper": 0.9933997774816054,
+      "allocatedBytes": 809080,
+      "identities": [
+        "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+        "811fdafe363935ac22cc2ce7a5bf2b68178ca0d0a5801ace033a33c6a924c3dd"
+      ],
+      "exactPackets": true,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      }
+    },
+    {
+      "stage": "LMS995",
+      "mode": "confirm",
+      "label": "Whole-search independent confirmation",
+      "originalUs": 9581.31959375,
+      "candidateUs": 9712.520020833334,
+      "ratio": 1.0136931766929953,
+      "lower": 1.0123623938032213,
+      "upper": 1.0150257089396308,
+      "allocatedBytes": 809080,
+      "identities": [
+        "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+        "811fdafe363935ac22cc2ce7a5bf2b68178ca0d0a5801ace033a33c6a924c3dd"
+      ],
+      "exactPackets": true,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true,
+      "focusedCounts": {
+        "internal-normal": 1035,
+        "public-normal": 402,
+        "internal-scalar": 1035,
+        "public-scalar": 402
+      }
+    }
+  ],
+  "decision": "Discard both implementations and restore exact accepted production. Per-block streaming has an adverse complete effect. Whole-search mode directions contradict across independent captures; no reproducible gain, selected favorable result, equivalence or proven cause. No further unchanged sampling.",
+  "sourceProof": {
+    "lms994": true,
+    "lms995": true
+  },
+  "codegen": {
+    "lms994": {
+      "project": "Lokad.Image",
+      "stage": "LMS994",
+      "productionSha256": "977a6e0ab3489491bf6fab6a4e9be9c203a356b47553e494a1ab9d776bbd4d52",
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "da5b5f73a2d59cbfc541e4a4e86ebf1be2c98bca621ea7c216edd65239842e1c"
+      },
+      "publicActualVp8Checks": 166,
+      "publicAndHarnessBuilds": 0,
+      "coreBuilds": 1,
+      "embeddedBuilds": 0,
+      "embeddedModuleStillBaselineAndNotRun": true,
+      "instrumentedElapsedDiscarded": true,
+      "performanceMeasured": false,
+      "helperCodeBytes": 3031,
+      "parentCodeBytes": 7185,
+      "previousParentCodeBytes": 6630,
+      "helperCalls": [
+        "FF15CA40F9FC         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+        "FF151A4D0C00         call     [Lokad.Image.Internal.Vp8BlockReconstruction:InverseWideValues(System.Runtime.Intrinsics.Vector256`1[short]):System.Runtime.Intrinsics.Vector256`1[short]]",
+        "E8A6163F7B           call     CORINFO_HELP_NEWSFAST",
+        "FF15DEE6E1FC         call     [CORINFO_HELP_STRCNS]",
+        "FF153AB53EFD         call     [System.ArgumentException:.ctor(System.String):this]",
+        "E81A432A7B           call     CORINFO_HELP_THROW",
+        "E86A163F7B           call     CORINFO_HELP_NEWSFAST",
+        "FF15A2E6E1FC         call     [CORINFO_HELP_STRCNS]",
+        "FF15FEB43EFD         call     [System.ArgumentException:.ctor(System.String):this]",
+        "E8DE422A7B           call     CORINFO_HELP_THROW",
+        "FF158FC30B00         call     [System.Math:ThrowNegateTwosCompOverflow()]",
+        "FF15902FBDFF         call     [System.ThrowHelper:ThrowArgumentException_DestinationTooShort()]",
+        "E85A84E1FC           call     CORINFO_HELP_RNGCHKFAIL"
+      ],
+      "note": "Codegen/source diagnostic only, not elapsed or phase-time gain. Inspect actual matrix/rate live ranges; fallback source exact, all complete public packets pass."
+    },
+    "lms995": {
+      "project": "Lokad.Image",
+      "stage": "LMS995",
+      "productionSha256": "811fdafe363935ac22cc2ce7a5bf2b68178ca0d0a5801ace033a33c6a924c3dd",
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "61c2fba3679d788ed8d890eae6a1ef4c85ccd409b8351cbb3e8b5142e251a657"
+      },
+      "publicActualVp8Checks": 166,
+      "publicAndHarnessBuilds": 0,
+      "coreBuilds": 1,
+      "embeddedBuilds": 0,
+      "embeddedModuleStillBaselineAndNotRun": true,
+      "instrumentedElapsedDiscarded": true,
+      "performanceMeasured": false,
+      "preparedCodeBytes": 6406,
+      "previousPlainCodeBytes": 6630,
+      "calls": [
+        "FF15217A0C00         call     [Lokad.Image.Internal.Vp8RatePlan:get_Values():System.ReadOnlySpan`1[ushort]:this]",
+        "FF1594810C00         call     [Lokad.Image.Internal.Vp8MacroblockDecision+Metric:Price(int):Lokad.Image.Internal.Vp8MacroblockDecision+Metric:this]",
+        "FF15E0780C00         call     [Lokad.Image.Internal.Vp8RatePlan:get_Values():System.ReadOnlySpan`1[ushort]:this]",
+        "E897AFF7FB           call     CORINFO_HELP_BULK_WRITEBARRIER",
+        "FF15A5760C00         call     [Lokad.Image.Internal.Vp8RatePlan:get_Values():System.ReadOnlySpan`1[ushort]:this]",
+        "FF154E7E0C00         call     [System.SpanHelpers:NonPackedIndexOfValueType[byte,System.SpanHelpers+Negate`1[byte]](byref,byte,int):int]",
+        "FF152E7E0C00         call     [System.SpanHelpers:NonPackedIndexOfValueType[byte,System.SpanHelpers+Negate`1[byte]](byref,byte,int):int]",
+        "FF15D07D0C00         call     [Lokad.Image.Internal.Vp8Prediction:SmallCandidates(System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],byte,System.Span`1[byte])]",
+        "FF159F7C0C00         call     [Lokad.Image.Internal.Vp8ForwardTransform:DctFourPredictions(System.ReadOnlySpan`1[byte],int,System.ReadOnlySpan`1[byte],System.Span`1[short])]",
+        "FF15057C0C00         call     [Lokad.Image.Internal.Vp8Prediction:SmallBlock(byte,System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],byte,System.Span`1[byte])]",
+        "FF152B650C00         call     [Lokad.Image.Internal.Vp8ForwardTransform:Dct(System.ReadOnlySpan`1[short],System.Span`1[short])]",
+        "FF1588720C00         call     [Lokad.Image.Internal.Vp8BlockReconstruction:InverseWideValues(System.Runtime.Intrinsics.Vector256`1[short]):System.Runtime.Intrinsics.Vector256`1[short]]",
+        "FF1562730C00         call     [Lokad.Image.Internal.Vp8Distortion+Texture:Compare4(int,System.Runtime.Intrinsics.Vector128`1[byte]):int:this]",
+        "FF15F3720C00         call     [Lokad.Image.Internal.Vp8MacroblockDecision+Metric:.ctor(long,long,long,long,long):this]",
+        "FF15C16C0C00         call     [Lokad.Image.Internal.Vp8MacroblockDecision+Metric:Price(int):Lokad.Image.Internal.Vp8MacroblockDecision+Metric:this]",
+        "FF15D6670C00         call     [Lokad.Image.Internal.Vp8MacroblockDecision+Metric:Add(Lokad.Image.Internal.Vp8MacroblockDecision+Metric):Lokad.Image.Internal.Vp8MacroblockDecision+Metric:this]",
+        "FF150855BDFF         call     [System.ThrowHelper:ThrowArgumentException_DestinationTooShort()]",
+        "FF159161F9FC         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+        "E8F56C287B           call     CORINFO_HELP_FAIL_FAST",
+        "E8323B3D7B           call     CORINFO_HELP_NEWSFAST",
+        "FF156A0BE2FC         call     [CORINFO_HELP_STRCNS]",
+        "FF15C6D93EFD         call     [System.ArgumentException:.ctor(System.String):this]",
+        "E8A667287B           call     CORINFO_HELP_THROW",
+        "E8F63A3D7B           call     CORINFO_HELP_NEWSFAST",
+        "FF152E0BE2FC         call     [CORINFO_HELP_STRCNS]",
+        "FF158AD93EFD         call     [System.ArgumentException:.ctor(System.String):this]",
+        "E86A67287B           call     CORINFO_HELP_THROW",
+        "E8A36B287B           call     CORINFO_HELP_FAIL_FAST",
+        "E8CBA8E1FC           call     CORINFO_HELP_RNGCHKFAIL"
+      ],
+      "sharedScoringSource": true,
+      "extraPerBlockCalls": 0,
+      "note": "Codegen/source diagnostic only, not elapsed or phase-time gain. Inspect actual matrix/rate live ranges; fallback source exact, all complete public packets pass."
+    },
+    "lms994Vectors": {
+      "project": "Lokad.Image",
+      "stage": "LMS994",
+      "codegenOnly": true,
+      "performanceMeasured": false,
+      "vectorInstructions": [
+        {
+          "line": 45,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C481002         vmovups  zmm0, zmmword ptr [rdx]",
+          "stackOperand": false
+        },
+        {
+          "line": 46,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48118590FEFFFF vmovups  zmmword ptr [rbp-0x170], zmm0",
+          "stackOperand": true
+        },
+        {
+          "line": 50,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48100A         vmovups  zmm1, zmmword ptr [rdx]",
+          "stackOperand": false
+        },
+        {
+          "line": 51,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48118D50FEFFFF vmovups  zmmword ptr [rbp-0x1B0], zmm1",
+          "stackOperand": true
+        },
+        {
+          "line": 55,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C481012         vmovups  zmm2, zmmword ptr [rdx]",
+          "stackOperand": false
+        },
+        {
+          "line": 56,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48119510FEFFFF vmovups  zmmword ptr [rbp-0x1F0], zmm2",
+          "stackOperand": true
+        },
+        {
+          "line": 60,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48101A         vmovups  zmm3, zmmword ptr [rdx]",
+          "stackOperand": false
+        },
+        {
+          "line": 61,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C48119DD0FDFFFF vmovups  zmmword ptr [rbp-0x230], zmm3",
+          "stackOperand": true
+        },
+        {
+          "line": 64,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C481027         vmovups  zmm4, zmmword ptr [rdi]",
+          "stackOperand": false
+        },
+        {
+          "line": 65,
+          "group": "G_M000_IG02",
+          "assembly": "62F17C4811A590FDFFFF vmovups  zmmword ptr [rbp-0x270], zmm4",
+          "stackOperand": true
+        },
+        {
+          "line": 97,
+          "group": "G_M000_IG04",
+          "assembly": "62F27D482329         vpmovsxwd zmm5, ymmword ptr [rcx]",
+          "stackOperand": false
+        },
+        {
+          "line": 98,
+          "group": "G_M000_IG04",
+          "assembly": "62F27D481EF5         vpabsd   zmm6, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 99,
+          "group": "G_M000_IG04",
+          "assembly": "62F14D48FEF0         vpaddd   zmm6, zmm6, zmm0",
+          "stackOperand": false
+        },
+        {
+          "line": 100,
+          "group": "G_M000_IG04",
+          "assembly": "62F24D4840F9         vpmulld  zmm7, zmm6, zmm1",
+          "stackOperand": false
+        },
+        {
+          "line": 101,
+          "group": "G_M000_IG04",
+          "assembly": "62F14548FEFA         vpaddd   zmm7, zmm7, zmm2",
+          "stackOperand": false
+        },
+        {
+          "line": 103,
+          "group": "G_M000_IG04",
+          "assembly": "62D355481FC801       vpcmpltd k1, zmm5, zmm8",
+          "stackOperand": false
+        },
+        {
+          "line": 104,
+          "group": "G_M000_IG04",
+          "assembly": "62F27E4838E9         vpmovm2d zmm5, k1",
+          "stackOperand": false
+        },
+        {
+          "line": 105,
+          "group": "G_M000_IG04",
+          "assembly": "62F1454872E711       vpsrad   zmm7, zmm7, 17",
+          "stackOperand": false
+        },
+        {
+          "line": 106,
+          "group": "G_M000_IG04",
+          "assembly": "62F24558393D2F0A0000 vpminsd  zmm7, zmm7, dword ptr [reloc @RWD00] {1to16}",
+          "stackOperand": false
+        },
+        {
+          "line": 107,
+          "group": "G_M000_IG04",
+          "assembly": "62F14548EFFD         vpxord   zmm7, zmm7, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 108,
+          "group": "G_M000_IG04",
+          "assembly": "62F14548FAED         vpsubd   zmm5, zmm7, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 109,
+          "group": "G_M000_IG04",
+          "assembly": "62F14D4866CB         vpcmpgtd k1, zmm6, zmm3",
+          "stackOperand": false
+        },
+        {
+          "line": 110,
+          "group": "G_M000_IG04",
+          "assembly": "62F27E4838F1         vpmovm2d zmm6, k1",
+          "stackOperand": false
+        },
+        {
+          "line": 111,
+          "group": "G_M000_IG04",
+          "assembly": "62F14D48DBED         vpandd   zmm5, zmm6, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 112,
+          "group": "G_M000_IG04",
+          "assembly": "62F2554840F4         vpmulld  zmm6, zmm5, zmm4",
+          "stackOperand": false
+        },
+        {
+          "line": 113,
+          "group": "G_M000_IG04",
+          "assembly": "62F17C48103D410A0000 vmovups  zmm7, zmmword ptr [reloc @RWD64]",
+          "stackOperand": false
+        },
+        {
+          "line": 114,
+          "group": "G_M000_IG04",
+          "assembly": "62F2454836ED         vpermd   zmm5, zmm7, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 115,
+          "group": "G_M000_IG04",
+          "assembly": "62F27E4823F6         vpmovsdw zmm6, zmm6",
+          "stackOperand": false
+        },
+        {
+          "line": 116,
+          "group": "G_M000_IG04",
+          "assembly": "62F27E4823ED         vpmovsdw zmm5, zmm5",
+          "stackOperand": false
+        },
+        {
+          "line": 395,
+          "group": "G_M000_IG32",
+          "assembly": "62F17C48108590FEFFFF vmovups  zmm0, zmmword ptr [rbp-0x170]",
+          "stackOperand": true
+        },
+        {
+          "line": 396,
+          "group": "G_M000_IG32",
+          "assembly": "62F17C48108D50FEFFFF vmovups  zmm1, zmmword ptr [rbp-0x1B0]",
+          "stackOperand": true
+        },
+        {
+          "line": 397,
+          "group": "G_M000_IG32",
+          "assembly": "62F17C48109510FEFFFF vmovups  zmm2, zmmword ptr [rbp-0x1F0]",
+          "stackOperand": true
+        },
+        {
+          "line": 398,
+          "group": "G_M000_IG32",
+          "assembly": "62F17C48109DD0FDFFFF vmovups  zmm3, zmmword ptr [rbp-0x230]",
+          "stackOperand": true
+        },
+        {
+          "line": 399,
+          "group": "G_M000_IG32",
+          "assembly": "62F17C4810A590FDFFFF vmovups  zmm4, zmmword ptr [rbp-0x270]",
+          "stackOperand": true
+        }
+      ],
+      "stackVectorInstructions": 10,
+      "note": "Static instructions/live ranges only; not dynamic loads, phase times or elapsed savings."
+    }
+  },
+  "storage": "All809080B/op, no new heap/admitted/retained storage. Aadds712Bhelperframe plus calls/arguments and spills, within existing16384Bscratch; vector retention occurs until reconstruction calls. Bhas no per-block helper and one quantizer per original search. Physical/native/JIT peaks unmeasured.",
+  "scope": "One frozen513x259opaquephotograph,Q75/effort4,complete public EncodeWebp,source processing,fresh MemoryStream growth/output ownership/disposal. Pinned immutableALCs,CPU0,naturalGC,idle-v2,all12alternating32operation pairs. Exact17688Bpacket/source/independent owners. No native performance measured; current standalone costs remain unchanged.",
+  "qualification": {
+    "linuxCoreBuilds": 2,
+    "linuxEmbeddedBuilds": 2,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureHelperBuilds": 0,
+    "focusedEachNormalScalarEachStage": [
+      1035,
+      402
+    ],
+    "additionalActualPublicCodegenEachStage": 166,
+    "fullOrPackageRepeats": 0,
+    "qualified6685EachOsAndSameActualPackageAll3ExamplesReused": true
+  },
+  "restoration": {
+    "project": "Lokad.Image",
+    "stages": [
+      "LMS994",
+      "LMS995"
+    ],
+    "productionChanged": false,
+    "productionAccepted": false,
+    "sourceSha256": "1eab8bf37fed5a3de7d7207c09e91b982b67a4df2b343002e10c1b96fc247bf2",
+    "coreSha256": "145cca0016f0fd967baaf06d1d2a45a3f1f5f13db56a8f70e26bf9d0f5df8aa3",
+    "embeddedTestsSha256": "86ea684844f3d46c55386bb4c5a72638377257f34d530e938f51f89016f558a7",
+    "actualPackageSha256": "c39ddab12f2b3b559a4e07b255a1616dd1483c596b527d2a8f48fdc7aeb32d76",
+    "sourceMainEmbeddedAndBindingsRestoredExactly": true,
+    "sourceManifestByteExact": true,
+    "allManifestFilesExact": true,
+    "restoreBuilds": 0,
+    "fullOrPackageRepeats": 0,
+    "windowsBuilds": 0,
+    "publicHarnessNativeFixtureHelperBuilds": 0,
+    "prior6685FullLiveEachOsAndSamePackageAll3ExamplesReused": true,
+    "reason": "Per-block streaming has a demonstrated adverse effect. Whole-search specialization has contradictory independent paired results and no reproducible gain. Discard both implementations, preserving exact packets and every capture. No equivalence, accepted gain, full parity or permanent family ban."
+  },
+  "raw": {
+    "file": "vp8-luma-execution-trials.tar.xz",
+    "sha256": "46a362063fc8857ada94ae9f68886b80fddba38fffcb356d0fbb90b976c50c92",
+    "bytes": 2484396,
+    "members": 89,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-writer-policy-qualified.tar.xz",
+        "sha256": "085ed7b6afea863e9d9daf88cbe9715e4ea30d5d037a3541c0ea6f327443cc56"
+      }
+    ]
+  },
+  "next": "Audit the plain batched forward-DCT tail: the existing loop transforms12predictions although only10plain modes are consumed. Keep four-lane trellis padding unchanged. A two-candidate tail could remove two unused transforms without changing scoring, candidate order, setup lifetime or exact coefficients. Use existing scalar coefficient oracles and complete controls; no projected elapsed gain from the16.7percent transform-count reduction.",
+  "planScope": "PLAN remains ignored. Only authorized font/text section differs from original checkpoint. Complete text one-shot/eight-draw controls pass/stop with eager/lazy/prepared-state caveats; every other PLAN byte remains unchanged."
+}

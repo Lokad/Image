@@ -37,11 +37,14 @@ The subsequent [word-publication trials](VP8-WORD-PUBLICATION-TRIALS.md) preserv
 exact packets but establish no accepted gain; all three private layouts are removed.
 The source/core/embedded baseline restores exactly, so this trace remains current.
 
-**Next:** stream a prepared block through the complete ordered Luma4 mode search,
-retaining quantizer/rate vectors without materializing ten candidate snapshots.
-Check actual register retention and call/storage overhead before complete timing.
-Preserve all strict prunes,ties,winner publication and portable/live/trellis/uniform
-paths. The larger518sample location supplies a lead, not projected savings.
+The [luma execution trials](VP8-LUMA-EXECUTION-TRIALS.md) do not establish a
+reproducible gain either; all source/modules restore exactly. The trace remains
+current, and contradictory captures are retained rather than selecting a result.
+
+**Next:** inspect the plain batched DCT tail:12predictions are transformed while
+only10plain modes are consumed. Evaluate a two-candidate tail against the existing
+scalar coefficient oracle and complete encoder controls, retaining four-lane
+trellis padding. Fewer transforms are not yet a measured elapsed gain.
 
 The [current evidence](vp8-writer-policy-evidence.json#currentAttribution) and its raw
 archive retain perf data/maps, all instruction offsets,JITbytes,source/module pins,
