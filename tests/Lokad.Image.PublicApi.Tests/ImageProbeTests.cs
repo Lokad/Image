@@ -53,14 +53,23 @@ public sealed class ImageProbeTests
         var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 8448 };
         foreach (var seekable in new[] { false, true })
         {
-            using var input = new ObservedInput(data, true, seekable, chunk: 1, mixed: true);
-            var result = await ImageCodec.ProbeAsync(input, new() { Facts = ImageProbeFacts.All, Limits = limits });
-            Assert.Equal(expected, new ImageInfo(result.Format, result.Width!.Value, result.Height!.Value,
-                result.BitDepth!.Value, result.HasAlpha!.Value, result.Orientation!.Value)
-                { SourceColor = result.SourceColor!.Value, SourceAlpha = result.SourceAlpha!.Value,
-                    SourceComponentCount = result.SourceComponentCount!.Value });
-            Assert.True(input.ImmediateReads > 0); Assert.True(input.PendingReads > 0);
-            Assert.Equal(input.BytesRead, result.BytesRead); Assert.False(input.WasDisposed); Assert.Equal(0, root.Bytes);
+            foreach (var facts in new[] { ImageProbeFacts.Dimensions, ImageProbeFacts.All })
+            {
+                using var input = new ObservedInput(data, true, seekable, chunk: 1, mixed: true);
+                var result = await ImageCodec.ProbeAsync(input, new() { Facts = facts, Limits = limits });
+                Assert.Equal((expected.Format, expected.Width, expected.Height), (result.Format, result.Width, result.Height));
+                if (facts == ImageProbeFacts.All)
+                    Assert.Equal(expected, new ImageInfo(result.Format, result.Width!.Value, result.Height!.Value,
+                        result.BitDepth!.Value, result.HasAlpha!.Value, result.Orientation!.Value)
+                        { SourceColor = result.SourceColor!.Value, SourceAlpha = result.SourceAlpha!.Value,
+                            SourceComponentCount = result.SourceComponentCount!.Value });
+                else
+                {
+                    Assert.Null(result.Orientation); Assert.True(result.BytesRead < data.Length);
+                }
+                Assert.True(input.ImmediateReads > 0); Assert.True(input.PendingReads > 0);
+                Assert.Equal(input.BytesRead, result.BytesRead); Assert.False(input.WasDisposed); Assert.Equal(0, root.Bytes);
+            }
             using var complete = new ObservedInput(data, true, seekable, chunk: 1, mixed: true);
             Assert.Equal(expected, await ImageCodec.InspectHeadersAsync(complete, limits));
             Assert.True(complete.ImmediateReads > 0); Assert.True(complete.PendingReads > 0);
@@ -368,18 +377,20 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public async Task PendingProbeKeepsAdmissionUntilAnUncooperativeReadActuallyFinishes(bool fail)
+    [InlineData(false, false)] [InlineData(true, false)]
+    [InlineData(false, true)] [InlineData(true, true)]
+    public async Task PendingProbeKeepsAdmissionUntilAnUncooperativeReadActuallyFinishes(bool fail, bool afterFragment)
     {
         var data = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
         using var root = new TestMemoryBudget(Workspace);
         using var cancellation = new CancellationTokenSource();
-        using var input = new GatedProbeInput(data, fail);
+        using var input = new GatedProbeInput(data, fail, afterFragment);
         var pending = ImageCodec.ProbeAsync(input, new() { Limits = new() { MemoryBudget = root } }, cancellation.Token).AsTask();
         await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
         try
         {
             Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
+            Assert.Equal(afterFragment ? 1 : 0, input.BytesRead);
             cancellation.Cancel();
             Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
         }
@@ -396,20 +407,22 @@ public sealed class ImageProbeTests
         Assert.Equal(0, root.Bytes); Assert.True(next.CanRead);
     }
 
-    private sealed class GatedProbeInput(byte[] data, bool fail) : Stream
+    private sealed class GatedProbeInput(byte[] data, bool fail, bool afterFragment) : Stream
     {
         private int position;
         private bool disposed;
+        internal int BytesRead => position;
         internal readonly TaskCompletionSource Entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal readonly TaskCompletionSource Release = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            if (position == 0)
+            if (position == (afterFragment ? 1 : 0))
             {
                 Entered.TrySetResult(); await Release.Task.ConfigureAwait(false);
                 if (fail) throw new IOException("Authored pending probe failure.");
             }
             var count = Math.Min(buffer.Length, data.Length - position);
+            if (afterFragment && position == 0) count = Math.Min(count, 1);
             data.AsMemory(position, count).CopyTo(buffer); position += count; return count;
         }
         public override bool CanRead => !disposed;

@@ -4,10 +4,12 @@ namespace Lokad.Image.Internal;
 internal sealed class InspectionReader : IDisposable
 {
     internal const int WorkingBytes = 8192 + 256;
+    private const int HeaderBytes = 32;
     private readonly Stream input;
     private readonly bool asynchronous;
     private byte[] buffer;
     private readonly bool adaptiveHeaders;
+    private readonly bool directFields;
     private bool bulk;
     internal readonly byte[] Header;
     internal readonly OperationContext Context;
@@ -24,26 +26,28 @@ internal sealed class InspectionReader : IDisposable
     {
         this.input = input; Context = context; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
         this.adaptiveHeaders = adaptiveHeaders && input.CanSeek && !dimensionsOnly;
+        directFields = dimensionsOnly && maxAcquiredBytes.HasValue;
         // Seekable container inspection skips opaque payloads. Acquire bulk scratch
         // only if a later scan actually needs it; probes retain their small buffer.
         var capacity = dimensionsOnly || this.adaptiveHeaders ? 256 : 8192;
         context.Reserve(capacity + 256);
-        try { buffer = new byte[capacity]; Header = new byte[32]; }
+        try { buffer = new byte[capacity]; Header = directFields ? buffer : new byte[HeaderBytes]; }
         catch { context.Release(capacity + 256); throw; }
     }
 
-    private ValueTask<bool> FillAsync(int needed)
+    private ValueTask<bool> FillAsync(int needed, int offset = 0)
     {
         Context.Cancellation.ThrowIfCancellationRequested();
         if (adaptiveHeaders && bulk && buffer.Length == 256) PrepareBulkStorage();
-        var requested = (int)Math.Min(buffer.Length, Context.Limits.MaxInputBytes - acquired + 1);
+        var requested = (int)Math.Min(buffer.Length - offset, Context.Limits.MaxInputBytes - acquired + 1);
         if (maxAcquiredBytes is { } maximum)
         {
             if (BytesRead == maximum) throw new ImageLimitException(ImageLimitKind.AcquiredBytes, "Probe acquisition limit exceeded.");
             requested = (int)Math.Min(Math.Min(requested, needed), maximum - BytesRead);
         }
-        if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(0, requested)), requested));
-        var pending = input.ReadAsync(buffer.AsMemory(0, requested), Context.Cancellation);
+        first = last = offset;
+        if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(offset, requested)), requested));
+        var pending = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);
         return pending.IsCompletedSuccessfully ? ValueTask.FromResult(CompleteFill(pending.Result, requested)) : AwaitFillAsync(pending, requested);
     }
 
@@ -71,7 +75,7 @@ internal sealed class InspectionReader : IDisposable
         BytesRead += read;
         if (read > Context.Limits.MaxInputBytes - acquired)
             throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-        Context.Cancellation.ThrowIfCancellationRequested(); acquired += read; first = 0; last = read;
+        Context.Cancellation.ThrowIfCancellationRequested(); acquired += read; last = first + read;
         return read != 0;
     }
 
@@ -87,13 +91,13 @@ internal sealed class InspectionReader : IDisposable
 
     internal ValueTask ReadAsync(int count)
     {
-        if ((uint)count > Header.Length) throw new ArgumentOutOfRangeException(nameof(count));
+        if ((uint)count > HeaderBytes) throw new ArgumentOutOfRangeException(nameof(count));
         var copied = 0;
         while (copied < count)
         {
             if (first == last)
             {
-                var pending = FillAsync(count - copied);
+                var pending = FillAsync(count - copied, directFields ? copied : 0);
                 if (!pending.IsCompletedSuccessfully) return AwaitReadAsync(count, copied, pending);
                 if (!pending.Result) throw new ImageDataException("Truncated image header.");
             }
@@ -109,14 +113,17 @@ internal sealed class InspectionReader : IDisposable
             if (!await pending.ConfigureAwait(false)) throw new ImageDataException("Truncated image header.");
             copied += CopyHeader(count - copied, copied);
             if (copied == count) return;
-            pending = FillAsync(count - copied);
+            pending = FillAsync(count - copied, directFields ? copied : 0);
         }
     }
 
     private int CopyHeader(int remaining, int offset)
     {
         var n = Math.Min(remaining, last - first);
-        buffer.AsSpan(first, n).CopyTo(Header.AsSpan(offset)); first += n; return n;
+        // Dimension reads acquire exactly the needed field bytes, with no unread
+        // prefetch between fields. Assemble partial reads in the same workspace.
+        if (!directFields) buffer.AsSpan(first, n).CopyTo(Header.AsSpan(offset));
+        first += n; return n;
     }
 
     internal ValueTask SkipAsync(long count)

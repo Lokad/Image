@@ -14,6 +14,14 @@ internal static class HeaderStorageConsumer
             if (info != expected || input.Position != input.Length || !input.CanRead || small.Bytes != 0 || small.Peak != 512)
                 throw new Exception("Packaged small header storage or independent metadata differs.");
         }
+        using (var input = new FragmentedInput(png))
+        {
+            var info = await ImageCodec.ProbeAsync(input, new() { Limits = smallLimits });
+            if (info.Format != expected.Format || info.Width != expected.Width || info.Height != expected.Height
+                || info.BytesRead != input.Position || input.Position >= input.Length || info.Orientation != null
+                || !input.CanRead || small.Bytes != 0 || small.Peak != 512)
+                throw new Exception("Packaged dimension probe changed partial fields, prefix scope or ownership.");
+        }
         byte[] prefix = [255,216,255,192,0,11,8,0,11,0,17,1,1,0x11,0,255,218,0,8,1,1,0,0,63,0];
         var tiny = new byte[prefix.Length + 2]; prefix.CopyTo(tiny, 0); tiny[^2] = 255; tiny[^1] = 217;
         using (var input = new MemoryStream(tiny, writable: false))
@@ -39,11 +47,13 @@ internal static class HeaderStorageConsumer
                 || root.Bytes != 0 || root.Peak != 8448 || !input.CanRead)
                 throw new Exception("Packaged bulk replacement exceeds its original ceiling or changes metadata.");
         }
-        foreach (var bulk in new[] { false, true })
+        foreach (var (bulk, dimensions) in new[] { (false, false), (true, false), (false, true) })
         {
             using var cancellation = new CancellationTokenSource();
-            using var input = new HeldInput(bulk ? jpeg : png, root, bulk);
-            var pending = ImageCodec.InspectHeadersAsync(input, new() { MemoryBudget = root }, cancellation.Token).AsTask();
+            using var input = new HeldInput(bulk ? jpeg : png, root, bulk, dimensions);
+            Task pending = dimensions
+                ? ImageCodec.ProbeAsync(input, new() { Limits = new() { MemoryBudget = root } }, cancellation.Token).AsTask()
+                : ImageCodec.InspectHeadersAsync(input, new() { MemoryBudget = root }, cancellation.Token).AsTask();
             await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
             try
             {
@@ -57,10 +67,18 @@ internal static class HeaderStorageConsumer
             if (!input.SawLiveCharge || root.Bytes != 0 || root.IsDisposed || !input.CanRead)
                 throw new Exception("Packaged async header ownership or cancellation cleanup differs.");
         }
+        Console.WriteLine("Packaged dimension probes preserve partial fields and pending user ownership.");
         Console.WriteLine("Packaged seekable headers preserve small storage, bounded bulk replacement, terminal refusal, cancellation and actual async lifetimes.");
     }
 
-    private sealed class HeldInput(byte[] data, TestMemoryBudget root, bool bulk) : MemoryStream(data, writable: false)
+    private sealed class FragmentedInput(byte[] data) : MemoryStream(data, writable: false)
+    {
+        public override int Read(Span<byte> buffer) => base.Read(buffer[..Math.Min(1, buffer.Length)]);
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(Read(buffer.Span));
+    }
+
+    private sealed class HeldInput(byte[] data, TestMemoryBudget root, bool bulk, bool afterFragment) : MemoryStream(data, writable: false)
     {
         internal TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -68,7 +86,8 @@ internal static class HeaderStorageConsumer
         private bool held;
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            if (!held && (bulk ? buffer.Length > 256 : Position == 0))
+            if (afterFragment && Position == 0) return Read(buffer.Span[..1]);
+            if (!held && (bulk ? buffer.Length > 256 : Position == (afterFragment ? 1 : 0)))
             {
                 held = true; Entered.SetResult(); await Resume.Task.ConfigureAwait(false);
                 SawLiveCharge = root.Bytes >= buffer.Length;
