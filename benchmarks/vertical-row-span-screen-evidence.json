@@ -1,0 +1,166 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VSP1009",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "decision": "Restore inconclusive implementation; no demonstrated useful gain.",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineProducers": {
+    "windowsSha256": "ab84ec8d34d462f555320d9a0a51e340a24c08f5dcd46d2adb7a6b0041a7eed2",
+    "linuxSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "timedArtifactSha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "packageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33"
+  },
+  "candidateLinuxSha256": "9de8c3231e7d5566a5f76e6c68bc12b34cc40acccda10b3b9218ab2d171f1416",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4466a70cfd65e51b528bbaaab7f6a051303f4b06fe5d5856a92e10c8d79bcd09"
+  },
+  "sourceProof": {
+    "originalReconstructsByteExact": true,
+    "allocationAndOwnerBodyUnchanged": true,
+    "liveCancellationCheckpointsUnchanged": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "outputAndSourcePixelArithmeticUnchanged": true
+  },
+  "hypothesis": "Prepare checked source/result pixel spans once after result admission instead of reacquiring and checking disposed state twice for every row. Keep all row/chunk traversal, copier arithmetic and every1024pixel cooperative checkpoint unchanged. No gain is assumed from source counts.",
+  "endState": "A single row traversal and existing safe specialized copier, with operation-local borrowed views. No buffers, pool/session/cache/API or new admission abstraction.",
+  "ownership": "Source/result views are acquired only after AllocateCopyResult, inside its cleanup try. Caller admission callbacks may cancel or dispose source; retain refusal/failure order and dispose the newly owned result on failure. Concurrency/disposal contracts unchanged.",
+  "cases": {
+    "WarmVerticalFlip8": {
+      "project": "Lokad.Image",
+      "stage": "VSP1009",
+      "caseId": "WarmVerticalFlip8",
+      "baselineUs": 8.58744327799479,
+      "candidateUs": 8.651539306640625,
+      "ratio": 1.0074636466241222,
+      "lower": 0.9554429079302051,
+      "upper": 1.0623167442500066,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 3,
+      "phase": "screen",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/vsp1009-baseline-linux/Lokad.Image.dll",
+        "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+        "tmp/vsp1009-candidate-linux/Lokad.Image.dll",
+        "9de8c3231e7d5566a5f76e6c68bc12b34cc40acccda10b3b9218ab2d171f1416",
+        "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+        "WarmVerticalFlip8",
+        "screen"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/vsp1009-WarmVerticalFlip8-paired-screen.log"
+    },
+    "WarmVerticalFlip16": {
+      "project": "Lokad.Image",
+      "stage": "VSP1009",
+      "caseId": "WarmVerticalFlip16",
+      "baselineUs": 18.024452392578127,
+      "candidateUs": 17.985281005859374,
+      "ratio": 0.9975780452068668,
+      "lower": 0.629978702449451,
+      "upper": 1.5796755547598924,
+      "baselineAllocatedBytes": 56.0,
+      "candidateAllocatedBytes": 56.0,
+      "allPairsRetained": true,
+      "pairs": 3,
+      "phase": "screen",
+      "operationsEachSubject": 4096,
+      "quietGuardsPassed": true,
+      "exactSourceOutputAndIndependentOwnersPassed": true,
+      "managedOnlyIncrementalComparison": true,
+      "notNativeParity": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+        "tmp/vsp1009-baseline-linux/Lokad.Image.dll",
+        "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+        "tmp/vsp1009-candidate-linux/Lokad.Image.dll",
+        "9de8c3231e7d5566a5f76e6c68bc12b34cc40acccda10b3b9218ab2d171f1416",
+        "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+        "WarmVerticalFlip16",
+        "screen"
+      ],
+      "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+      "raw": "tmp/vsp1009-WarmVerticalFlip16-paired-screen.log"
+    }
+  },
+  "focusedLinuxNormalScalar": {
+    "internal": 11,
+    "public": 134
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "helper": 1,
+    "windowsCore": 0,
+    "publicHarnessNativeFixture": 0
+  },
+  "productionAndActualPackageRestored": true,
+  "restoration": {
+    "project": "Lokad.Image",
+    "stage": "VSP1009",
+    "qualifiedSourcesCoreEmbeddedAndPublicBindingsRestored": true,
+    "productionRebuilds": 0,
+    "librarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "embeddedSha256": "bd69e2a843ecaf6bc9b5af43550546907866d7b04e80601f4d2a7f961d003b20",
+    "packageUnchanged": true,
+    "decision": "Two inconclusive screens: no demonstrated useful gain; restore. No independent confirmation, Windows/broad/package campaign or favorable retry. Earlier separate whole-row path stays rejected. Neither outcome bans a materially revised coherent design."
+  },
+  "broadOrPackageRepeats": 0,
+  "allocationBytesPerOpBothSubjects": 56,
+  "newOwnedCapacityBytes": 0,
+  "newRetainedStateBytes": 0,
+  "physicalNativeJitPeaksMeasured": false,
+  "existingQualificationReused": {
+    "provider": "benchmarks/vp8-fixed-code-evidence.json",
+    "fullChecksEachOs": 6692,
+    "actualPackageSha256": "b4853b840376c5291973dc23f1b885d3b4e702c9020f4ca8265e0709d1637d33",
+    "actualPackageLibrarySha256": "6d2c0833c8a9a022832925e5fa793af60f2c0ba7843e02cdffb9bdaa35e0a01b",
+    "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
+    "productionAndActualPackageByteIdentical": true,
+    "broadOrPackageRepeats": 0
+  },
+  "raw": {
+    "file": "vertical-row-span-screen.tar.xz",
+    "sha256": "85bee9a081c773bbaf44fc20a0d6df89df785b0397b958a56ecdd1f57985528f",
+    "bytes": 4953592,
+    "members": 67,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "owned-edit-long-integration.tar.xz",
+        "sha256": "ed303cbd46ea756b5a43a9e2935146736bd080b25aed38322f205c00b74215e4"
+      },
+      {
+        "file": "vp8-fixed-code-qualified.tar.xz",
+        "sha256": "b8c44a7151a5855abec730b73e3d9cc4a3c1a93b8cdda670e538ea150f791092"
+      },
+      {
+        "file": "vertical-copy-preparation-screen.tar.xz",
+        "sha256": "db8e50bb0ea7bae4915738a09b20b48675912ebd9e9ac9c1beeafff8f2134cf2"
+      }
+    ]
+  },
+  "publicationPostponed": true,
+  "next": "No replay of the older separate noncancelable whole-row path: its broader preparation screen was already unpromising. Keep byte/word source-span result as inconclusive, not a family ban. Inspect concrete code generation or an evidenced different shared ownership/copy design before another tuning candidate. Current reference costs/status unchanged."
+}
