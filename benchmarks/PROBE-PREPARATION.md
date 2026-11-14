@@ -1,5 +1,8 @@
 # Probe preparation
 
+[JPEG marker preparation](JPEG-MARKER-PREPARATION.md) supersedes the two JPEG
+timings below. The PNG/WebP probes, PNG headers and allocation proof remain current.
+
 Four dimension probes now allocate **632 rather than 688 B/op**, saving 56 B per
 complete operation. Default values are normalized without an options allocation
 or cache; probe facts share their reader owner. Fixed 512 B admission/256 B scratch,

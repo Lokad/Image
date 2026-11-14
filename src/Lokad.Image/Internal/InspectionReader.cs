@@ -156,6 +156,29 @@ internal class InspectionReader : IDisposable
         }
     }
 
+    // Only complete ordinary prefix/code pairs bypass async setup. Filler,
+    // fragmented reads and every error still use the shared marker parser.
+    internal ValueTask<int> JpegHeaderMarkerAsync()
+    {
+        if (first == last)
+        {
+            var pending = FillAsync(Context.Limits.MaxInputBytes - acquired >= 2 ? 2 : 1);
+            if (!pending.IsCompletedSuccessfully) return AwaitJpegHeaderMarkerAsync(pending);
+            if (!pending.Result) throw new ImageDataException("Invalid JPEG marker.");
+        }
+        if (last - first < 2 || buffer[first] != 255 || buffer[first + 1] == 255)
+            return JpegMarkerAsync(false);
+        var marker = buffer[first + 1]; first += 2;
+        if (marker == 217) bulk = false;
+        return ValueTask.FromResult((int)marker);
+    }
+
+    private async ValueTask<int> AwaitJpegHeaderMarkerAsync(ValueTask<bool> pending)
+    {
+        if (!await pending.ConfigureAwait(false)) throw new ImageDataException("Invalid JPEG marker.");
+        return await JpegHeaderMarkerAsync().ConfigureAwait(false);
+    }
+
     internal async ValueTask<int> JpegMarkerAsync(bool entropy)
     {
         if (entropy)

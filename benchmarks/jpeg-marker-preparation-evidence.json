@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "stage": "JMB1018",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "publicationPostponed": true,
+  "warmParityComplete": false,
+  "materialRequiredPaths": 289,
+  "newMaterialPaths": 0,
+  "producers": {
+    "windowsSha256": "1078d7308de593d4c8f677047c30dd72a68c28cf6792c0465d297e0eb1adb29a",
+    "linuxSha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+    "packageSha256": "c5036f1c5a298d744bb933841c520d01ce37272e5c3eec77c7a9836cc665de27"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "90a891764c1a7e55bb7ad60ed6fe358a853c3e0b782fd2674e0680da1a43be3e",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "0f39edec6b3468b6ce16b16b2dd4eea05b34f4aeab4d304f850d78fb1e54f91c"
+  },
+  "testSources": {
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "de70b422b8ae89cf6487316a811a34d165158012d24457aed0f880ae6f204e85"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/ImageCodec.Probe.cs": "6bebc2674c674849112167c10285c152b8f442e6abdcf633e2a6b251a8295a70",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "67204a10807e754e9ef10715e9411836d5dec54e9ec8ad5cc767e4096fce4eb5",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "ba0aafe503f109b96b8c564484156820d85306713621ef4d7a19c15ba13eaca9",
+    "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "sourceProof": {
+    "originalEntropyAndMarkerGrammarExact": true,
+    "onlyHeaderDispatchAndCertifiedPairAdded": true,
+    "fieldsConstructorAcquisitionDisposalExact": true,
+    "allNonJpegGrammarExact": true,
+    "noNewOwnedStorageOrCache": true,
+    "publicApiBindingsUnchanged": true
+  },
+  "cases": {
+    "ProbeDimensionsJpeg": {
+      "managedUs": 0.26013427274489415,
+      "nativeUs": 0.19431503105163575,
+      "ratio": 1.3387243968572256,
+      "lower": 1.2676476851581147,
+      "upper": 1.3873382981198492,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/jmb1018-ProbeDimensionsJpeg-confirm-observation.json",
+        "receipt": "tmp/jmb1018-ProbeDimensionsJpeg-confirm-receipt.json"
+      }
+    },
+    "ProbeDimensionsJpegAsync": {
+      "managedUs": 0.32998925947190955,
+      "nativeUs": 0.20502688280741374,
+      "ratio": 1.609492642883693,
+      "lower": 1.5518449475297584,
+      "upper": 1.6501726646770138,
+      "status": "gap",
+      "allocatedBytes": 632,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "Fresh read-only source to independently owned requested dimensions; bounded prefix/header acquisition, source/scratch/descriptor lifetime included. FFmpeg AVIO and owned descriptor APIs with original labeled header adapter; no full-container, CRC or pixel validation. No whole-input buffering, cached result, IPC or real I/O. Async uses immediate resident callbacks. One CPU.",
+      "nativeIdentity": {
+        "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+        "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+        "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/jmb1018-ProbeDimensionsJpegAsync-confirm-observation.json",
+        "receipt": "tmp/jmb1018-ProbeDimensionsJpegAsync-confirm-receipt.json"
+      }
+    }
+  },
+  "paired": {
+    "ProbeDimensionsJpeg": {
+      "project": "Lokad.Image",
+      "stage": "JMB1018",
+      "caseId": "ProbeDimensionsJpeg",
+      "phase": "confirm",
+      "baselineUs": 0.3024014803568522,
+      "candidateUs": 0.25948330211639403,
+      "ratio": 0.8586766586116903,
+      "lower": 0.802682052202155,
+      "upper": 0.9185774143344647,
+      "allocatedBaseline": 632,
+      "allocatedCandidate": 632,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorsOwnershipPassed": true,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "helperSha256": "2c9bfa8c0ad7a7154e870b891b321ce56fcfd487eb2bbcfa4fbb3f18e9f70542",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/jmb1018-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/jma1017-baseline-linux/Lokad.Image.dll",
+        "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+        "tmp/jmb1018-candidate-linux/Lokad.Image.dll",
+        "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpeg",
+        "confirm"
+      ],
+      "raw": "tmp/jmb1018-ProbeDimensionsJpeg-paired-header-checked-confirm.json"
+    },
+    "ProbeDimensionsJpegAsync": {
+      "project": "Lokad.Image",
+      "stage": "JMB1018",
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "confirm",
+      "baselineUs": 0.38364333089192704,
+      "candidateUs": 0.34323075739542647,
+      "ratio": 0.8951071677598701,
+      "lower": 0.8576163573418141,
+      "upper": 0.9342368938233311,
+      "allocatedBaseline": 632,
+      "allocatedCandidate": 632,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorsOwnershipPassed": true,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "helperSha256": "2c9bfa8c0ad7a7154e870b891b321ce56fcfd487eb2bbcfa4fbb3f18e9f70542",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/jmb1018-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/jma1017-baseline-linux/Lokad.Image.dll",
+        "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+        "tmp/jmb1018-candidate-linux/Lokad.Image.dll",
+        "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "confirm"
+      ],
+      "raw": "tmp/jmb1018-ProbeDimensionsJpegAsync-paired-header-checked-confirm.json"
+    },
+    "InspectHeadersJpeg": {
+      "project": "Lokad.Image",
+      "stage": "JMB1018",
+      "caseId": "InspectHeadersJpeg",
+      "phase": "confirm",
+      "baselineUs": 6.463020843505859,
+      "candidateUs": 6.012308202107747,
+      "ratio": 0.9302590167434053,
+      "lower": 0.9223382462945742,
+      "upper": 0.9382478084466462,
+      "allocatedBaseline": 8800,
+      "allocatedCandidate": 8800,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorsOwnershipPassed": true,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "helperSha256": "2c9bfa8c0ad7a7154e870b891b321ce56fcfd487eb2bbcfa4fbb3f18e9f70542",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/jmb1018-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/jma1017-baseline-linux/Lokad.Image.dll",
+        "4451852468da3823d6187dba4f7495e61a69926cc5895be60f9b30925c7ff16d",
+        "tmp/jmb1018-candidate-linux/Lokad.Image.dll",
+        "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "InspectHeadersJpeg",
+        "confirm"
+      ],
+      "raw": "tmp/jmb1018-InspectHeadersJpeg-paired-header-checked-confirm.json"
+    }
+  },
+  "memory": {
+    "probeAllocatedBytes": 632,
+    "headerGuardAllocatedBytes": 8800,
+    "admittedDimensionCapacityBytes": 512,
+    "dimensionScratchBytes": 256,
+    "fullHeaderMaximumAdmittedBytes": 8448,
+    "retainedAfterOperationBytes": 0,
+    "newStaticCacheBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "implementation": "One guarded two-byte header entry and one pending-prefix continuation, dispatched by the existing scan flag. Ordinary certified pairs advance the same two bytes and preserve the EOI bulk reset; filler/truncation/invalid prefix fall back to the original shared grammar. The original entropy parser body stays byte-exact. No field, owner, buffer, cache or public API change.",
+  "scope": "Two original complete JPEG dimension probes plus a complete JPEG header paired regression guard on the same513x259baseline420input. No new image/settings, cached output, numerical policy or broad JPEG performance claim.",
+  "qualification": {
+    "fullChecksEachOs": 6696,
+    "windows": {
+      "productionSha256": "1078d7308de593d4c8f677047c30dd72a68c28cf6792c0465d297e0eb1adb29a",
+      "embeddedTestsSha256": "1ea6b974a24843bca50756fe3a309e40b7f111d402d38b5b9a1ca0d8366f9d58",
+      "full": [
+        3263,
+        2485,
+        948
+      ],
+      "total": 6696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 143,
+        "internal-scalar": 2,
+        "public-scalar": 143
+      }
+    },
+    "linux": {
+      "productionSha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "embeddedTestsSha256": "fa5692d384d80f3b9b82e02c45537dc84307ffd00f0675f568ed43cd84f0f6f4",
+      "full": [
+        3263,
+        2485,
+        948
+      ],
+      "total": 6696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 2,
+        "public-normal": 143,
+        "internal-scalar": 2,
+        "public-scalar": 143
+      }
+    },
+    "sameActualPackageBothOs": true,
+    "package": {
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "c5036f1c5a298d744bb933841c520d01ce37272e5c3eec77c7a9836cc665de27",
+      "symbolsSha256": "a3fed5f3d6354c03e6f4987d26aad3d1dffd62e51a58403a72b6c26d26cc0f30",
+      "bytes": 461881,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "actualConsumerPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0
+    },
+    "windowsPackage": {
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "c5036f1c5a298d744bb933841c520d01ce37272e5c3eec77c7a9836cc665de27",
+      "symbolsSha256": "a3fed5f3d6354c03e6f4987d26aad3d1dffd62e51a58403a72b6c26d26cc0f30",
+      "bytes": 461881,
+      "librarySha256": "ab6c6f8309f5693ce5bfc346c2bc379a96127038758068607e104b3201850423",
+      "actualConsumerPassed": true,
+      "retainedOwnershipConsumersPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "sameActualPackageSha256": "c5036f1c5a298d744bb933841c520d01ce37272e5c3eec77c7a9836cc665de27"
+    },
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "focusedEachMode": {
+      "internal": 2,
+      "public": 143
+    },
+    "focusedModes": [
+      "normal",
+      "scalar"
+    ],
+    "producerBuildsEachOs": 2,
+    "embeddedBuildsEachOs": 2,
+    "acceptedProducerBuildsEachOs": 1,
+    "publicBuildsEachOs": 1,
+    "helperBuilds": 4,
+    "harnessNativeFixtureBuilds": 0,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "packCalls": 1,
+    "frozenReadControlsEachStage": 12,
+    "usageExamplesEachOs": 3,
+    "unaffectedArithmeticIsaEvidenceReused": true
+  },
+  "attribution": {
+    "productionChanged": false,
+    "allBuilds": 0,
+    "samples": 1059,
+    "includesStartupJit": true,
+    "countsNotPhaseCosts": true,
+    "raw": {
+      "file": "jpeg-probe-preparation-attribution.tar.xz",
+      "bytes": 225392,
+      "sha256": "b3a059638bc5a07c484409a72cd55efcbc7e5b4e233476dd179b54e58e0820a3",
+      "members": 25,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  },
+  "history": {
+    "provider": "benchmarks/probe-preparation-evidence.json",
+    "allRawRetained": true,
+    "firstStage": {
+      "stage": "JMA1017",
+      "accepted": false,
+      "fullOrPackageQualification": false,
+      "paired": {
+        "syncPair": {
+          "baselineUs": 0.3065804201761882,
+          "candidateUs": 0.2720402619043986,
+          "lower": 0.8394068246470797,
+          "upper": 0.9395538047408758
+        },
+        "asyncPair": {
+          "baselineUs": 0.3743256743748983,
+          "candidateUs": 0.3424635512034099,
+          "lower": 0.8724228041518707,
+          "upper": 0.9603789650619464
+        },
+        "headerPair": {
+          "baselineUs": 7.240598388671875,
+          "candidateUs": 7.537712972005208,
+          "lower": 0.9268665321710549,
+          "upper": 1.1805122357785978
+        }
+      },
+      "decision": "A confirms sync/async scoped gains but complete-header point is adverse with an inconclusive CI. Revise the architecture before acceptance, not a favorable repeat of the same measurement. Preserve all evidence and failed tool-only validation guards."
+    },
+    "boundedMeasurementChange": "Header guard4096to16384calls and4096warmup calls prescribed before B because A was allocation/GC-sensitive. All12pairs retained; probes stay262144calls. Scoped paired costs remain distinct from standalone native confirmations.",
+    "toolingCorrections": "Two strict initial tool guards rejected valid extra established facts and seek-skipped bytes before timing. Corrected against public contracts; prior helpers/logs retained. One local regex postprocessor corrected after a passing test run, reusing that run. No successful producer build or timing was repeated for these corrections."
+  },
+  "raw": {
+    "file": "jpeg-marker-preparation-qualified.tar.xz",
+    "sha256": "f89171c3959b9c0f08ac37561691586a49f7589f61bbf2356cc9f98d76e9cae0",
+    "bytes": 6687680,
+    "members": 391,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "probe-preparation-qualified.tar.xz",
+        "sha256": "9f8e74a1f287ab06a7e8462d1d688981a4543ec87b490edbfb5452296fc6714e"
+      },
+      {
+        "file": "jpeg-probe-preparation-attribution.tar.xz",
+        "bytes": 225392,
+        "sha256": "b3a059638bc5a07c484409a72cd55efcbc7e5b4e233476dd179b54e58e0820a3",
+        "members": 25,
+        "mirrored": true,
+        "allMembersVerified": true
+      }
+    ]
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 185,
+    "gaps": 2,
+    "uncertain": 4,
+    "total": 191,
+    "unchanged": true
+  },
+  "next": "Four dimension probes remain small absolute gaps; stop the passing complete PNG header and codec/resize/text controls. Use current attribution before another preparation change; preserve independent complete boundaries and no blind copy replay. All289material paths remain required; publication postponed."
+}

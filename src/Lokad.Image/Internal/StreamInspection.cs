@@ -160,7 +160,7 @@ internal static class StreamInspection
         var source = new JpegSourceMetadata();
         while (true)
         {
-            var marker = await r.JpegMarkerAsync(scan).ConfigureAwait(false);
+            var marker = await (scan ? r.JpegMarkerAsync(true) : r.JpegHeaderMarkerAsync()).ConfigureAwait(false);
             if (scan && marker == 0) continue;
             Item(r, ref items);
             if (marker is >= 0xD0 and <= 0xD7) { if (!scan) throw new ImageDataException("JPEG restart marker outside a scan."); continue; }

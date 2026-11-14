@@ -134,9 +134,9 @@ idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
-storage, separately from its **138 B/op**. Each OS passes **6,683 full/live checks**,
-focused normal/scalar copy-ownership checks and the **same actual
-Release-package consumer / three examples**.
+storage, separately from its **138 B/op**. That storage stage passed **6,683
+full/live checks** per OS, focused normal/scalar copy-ownership checks and the
+**same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
 [Probe preparation](../benchmarks/PROBE-PREPARATION.md) combines facts with their
@@ -144,11 +144,14 @@ reader and avoids allocating default options: **688 → 632 B/op**, with unchang
 **512 B** admission and zero retained scratch or new cache. This establishes an
 allocation reduction; historical clocks do not establish a causal CPU gain.
 Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
-**0.132/0.133/0.301/0.377 µs**, with upper **1.116/1.105/1.555/1.925**.
+**0.132/0.133/0.260/0.330 µs**, with upper **1.116/1.105/1.387/1.650**.
 Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
-upper .546**, **592 B/op**. All five confirmations use the same actual package
-DLL, original inputs/controls and ownership boundaries. Windows/Linux each pass
-**6,692 full/live checks**, the same actual package and all three examples.
+upper .546**, **592 B/op**. [JPEG marker preparation](../benchmarks/JPEG-MARKER-PREPARATION.md)
+refreshes the two JPEG costs on its actual package DLL; the other three retain
+source-valid confirmations. Controlled complete JPEG pairs show about **14%/10%**
+sync/async probe gains and **7%** full-header gain, with unchanged allocations.
+The reference is **FFmpeg AVIO + bounded header adapter**, not its public codec parser.
+Windows/Linux each pass **6,696 full/live checks**, the same actual package and all three examples.
 Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
@@ -311,9 +314,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Probe PNG dimensions, seekable | 0.132 | 0.123 | 1.077 / 1.116 | 632 | Confirmed gap |
-| Probe JPEG dimensions, seekable | 0.301 | 0.198 | 1.518 / 1.555 | 632 | Confirmed gap |
+| Probe JPEG dimensions, seekable | 0.260 | 0.194 | 1.339 / 1.387 | 632 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.133 | 0.124 | 1.073 / 1.105 | 632 | Confirmed gap |
-| Probe JPEG dimensions, async nonseekable | 0.377 | 0.200 | 1.880 / 1.925 | 632 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.330 | 0.205 | 1.609 / 1.650 | 632 | Confirmed gap |
 | Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |

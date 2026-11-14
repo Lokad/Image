@@ -377,20 +377,23 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
-    [InlineData(false, false)] [InlineData(true, false)]
-    [InlineData(false, true)] [InlineData(true, true)]
-    public async Task PendingProbeKeepsAdmissionUntilAnUncooperativeReadActuallyFinishes(bool fail, bool afterFragment)
+    [InlineData(false, false, MetadataProfile.Png8, null)] [InlineData(true, false, MetadataProfile.Png8, null)]
+    [InlineData(false, true, MetadataProfile.Png8, null)] [InlineData(true, true, MetadataProfile.Png8, null)]
+    [InlineData(false, false, MetadataProfile.JpegBaseline420, 2)] [InlineData(true, false, MetadataProfile.JpegBaseline420, 2)]
+    [InlineData(false, false, MetadataProfile.JpegBaseline420, 3)] [InlineData(true, false, MetadataProfile.JpegBaseline420, 3)]
+    public async Task PendingProbeKeepsAdmissionUntilAnUncooperativeReadActuallyFinishes(bool fail, bool afterFragment,
+        MetadataProfile profile, int? holdAt)
     {
-        var data = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
+        var data = OriginalExif.Create(profile, 17, 11).Encoded;
         using var root = new TestMemoryBudget(Workspace);
         using var cancellation = new CancellationTokenSource();
-        using var input = new GatedProbeInput(data, fail, afterFragment);
+        using var input = new GatedProbeInput(data, fail, afterFragment, holdAt);
         var pending = ImageCodec.ProbeAsync(input, new() { Limits = new() { MemoryBudget = root } }, cancellation.Token).AsTask();
         await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
         try
         {
             Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
-            Assert.Equal(afterFragment ? 1 : 0, input.BytesRead);
+            Assert.Equal(holdAt ?? (afterFragment ? 1 : 0), input.BytesRead);
             cancellation.Cancel();
             Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
         }
@@ -407,7 +410,7 @@ public sealed class ImageProbeTests
         Assert.Equal(0, root.Bytes); Assert.True(next.CanRead);
     }
 
-    private sealed class GatedProbeInput(byte[] data, bool fail, bool afterFragment) : Stream
+    private sealed class GatedProbeInput(byte[] data, bool fail, bool afterFragment, int? holdAt) : Stream
     {
         private int position;
         private bool disposed;
@@ -416,12 +419,13 @@ public sealed class ImageProbeTests
         internal readonly TaskCompletionSource Release = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            if (position == (afterFragment ? 1 : 0))
+            if (position == (holdAt ?? (afterFragment ? 1 : 0)))
             {
                 Entered.TrySetResult(); await Release.Task.ConfigureAwait(false);
                 if (fail) throw new IOException("Authored pending probe failure.");
             }
             var count = Math.Min(buffer.Length, data.Length - position);
+            if (holdAt is { } boundary && position < boundary) count = Math.Min(count, boundary - position);
             if (afterFragment && position == 0) count = Math.Min(count, 1);
             data.AsMemory(position, count).CopyTo(buffer); position += count; return count;
         }
