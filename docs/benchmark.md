@@ -171,26 +171,30 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/FONT-HEADER-VALIDATION.md) pass,
+[Current complete text integrations](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
-Preparation alone is 1,091.01 / 6,006.52 µs; the directly measured eight-draw batch
-amortizes to 234.29 / 853.23 µs per draw, including preparation. Allocations are
+Creation-only preparation is 1,070.51 / 6,107.35 µs; the directly measured eight-draw batch
+amortizes to 231.33 / 853.44 µs per draw, including preparation. Allocations are
 per complete row operation; the repeated row reports the whole batch. Active managed
 prepared capacity is 39,904 B; no font/layout survives preparation. Heap deltas are
 approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
-6,714 full/live checks, focused normal/scalar and SAME actual package/three examples
+6,715 full/live checks, focused normal/scalar and SAME actual package/three examples
 pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
 comparison, not a release-wide refresh. Font loading saves 2.19 µs / 8.98% against a
 contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
-[Prepared RGBA16 draw aggregation](../benchmarks/TEXT-PREPARED-DRAW-AGGREGATION.md)
-refreshes that diagnostic with individually reset draws: 52.00 / 37.64 µs,
-upper 1.613, retaining every actual. Its **80 B/draw includes adapter
-dispatch**; older rows use public-call-only counters. Active Latin raster capacity
-is **40,408 B**, excluding the borrowed canvas and font; reference allocations and
-physical peaks remain unmeasured. This is a measurement change, not a production gain.
+[Paired endpoint evaluation](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) saves
+1.62 µs / 3.11% in contemporary prepared-word pairs;
+paired-normalized gain is 3.41%. Both intervals separate,
+while wider bracket-normalized gain remains inconclusive. Four individually reset
+drawing diagnostics remain scoped gaps. Their GC columns use current public-only
+counters (**59,304 B ordinary / 56 B prepared**); timed adapters add **24 B/draw**.
+Active Latin raster capacity is **40,408 B**, excluding the borrowed canvas and font;
+reference drawing allocations and physical peaks remain unmeasured. No overall
+pipeline gain is claimed. Earlier one-invocation/aggregation evidence stays linked
+as history, outside current-cost renderer dependencies.
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
 managed pixels. Complete encoder packets and narrow metadata exceptions retain
@@ -302,12 +306,12 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.85 | 3.78 | 1.020 / 1.024 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
-| Complete text one-shot / ImageSharp public integration (pass) † | 1,199.51 | 6,180.56 | 0.194 / 0.221 | 283,276 |
-| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,874.29 | 6,825.84 | 0.275 / 0.298 | 284,626 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 87.12 | 45.40 | 1.919 / 2.945 | 59,304 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 92.57 | 46.48 | 1.992 / 2.975 | 59,304 |
-| Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 53.81 | 37.80 | 1.424 / 1.622 | 56 |
-| Text prepared raster RGBA16 / ImageSharp.Drawing (gap) † | 52.00 | 37.64 | 1.382 / 1.613 | 80 |
+| Complete text one-shot / ImageSharp public integration (pass) † | 1,175.03 | 6,218.26 | 0.189 / 0.216 | 283,274 |
+| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,850.66 | 6,827.53 | 0.271 / 0.304 | 284,624 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 76.34 | 45.10 | 1.692 / 2.056 | 59,304 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 79.56 | 46.13 | 1.725 / 2.046 | 59,304 |
+| Text prepared raster RGBA8 / ImageSharp.Drawing (gap) † | 47.26 | 37.02 | 1.276 / 1.426 | 56 |
+| Text prepared raster RGBA16 / ImageSharp.Drawing (gap) † | 50.37 | 37.87 | 1.330 / 1.561 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 22.16 | 13.22 | 1.677 / 1.695 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |

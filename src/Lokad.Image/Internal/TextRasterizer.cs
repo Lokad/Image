@@ -27,6 +27,20 @@ internal sealed partial class TextRasterizer : IDisposable
         internal double MinY => Math.Min(A.Y, B.Y);
         internal double MaxY => Math.Max(A.Y, B.Y);
         internal double X(double y) => A.X + (B.X - A.X) * ((y - A.Y) / (B.Y - A.Y));
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        internal (double Top, double Bottom) Endpoints(double top, double bottom)
+        {
+            if (!System.Runtime.Intrinsics.X86.Sse2.IsSupported) return (X(top), X(bottom));
+            var y = System.Runtime.Intrinsics.Vector128.Create(top, bottom);
+            var originY = System.Runtime.Intrinsics.Vector128.Create(A.Y);
+            var deltaY = System.Runtime.Intrinsics.Vector128.Create(B.Y - A.Y);
+            var fraction = System.Runtime.Intrinsics.X86.Sse2.Divide(System.Runtime.Intrinsics.X86.Sse2.Subtract(y, originY), deltaY);
+            var deltaX = System.Runtime.Intrinsics.Vector128.Create(B.X - A.X);
+            var product = System.Runtime.Intrinsics.X86.Sse2.Multiply(deltaX, fraction);
+            var result = System.Runtime.Intrinsics.X86.Sse2.Add(System.Runtime.Intrinsics.Vector128.Create(A.X), product);
+            return (System.Runtime.Intrinsics.Vector128.GetElement(result, 0), System.Runtime.Intrinsics.Vector128.GetElement(result, 1));
+        }
         internal int Winding => B.Y > A.Y ? 1 : -1;
     }
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
@@ -156,8 +170,8 @@ internal sealed partial class TextRasterizer : IDisposable
             if (previous == 0 && winding != 0) start = edge;
             else if (previous != 0 && winding == 0)
             {
-                var a = start.X(top) + dx; var b = edge.X(top) + dx;
-                var c = edge.X(bottom) + dx; var d = start.X(bottom) + dx;
+                var (a, d) = start.Endpoints(top, bottom); var (b, c) = edge.Endpoints(top, bottom);
+                a += dx; b += dx; c += dx; d += dx;
                 var first = Math.Max(left, Math.Floor(Math.Min(a, d))); var last = Math.Min(right, Math.Ceiling(Math.Max(b, c)));
                 if (first >= last) continue;
                 var y0 = top + dy; var y1 = bottom + dy;

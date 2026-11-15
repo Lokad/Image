@@ -1821,58 +1821,51 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert font_cost['allocatedBytes'] == 176
     assert font_cost['status'] == ('pass' if font_cost['upper'] <= 1 else 'gap' if font_cost['lower'] > 1 else 'uncertain')
     assert math.isclose(font_cost['ratio'], font_cost['managedUs'] / font_cost['nativeUs'], rel_tol=1e-12)
+    text_draw = json.loads((ROOT / 'benchmarks/text-paired-endpoints-evidence.json').read_text(encoding='utf-8'))
+    assert text_draw['productionAccepted'] and text_draw['allAffectedPerformanceReconciled']
+    assert text_draw['requiredMaterialPaths'] == 289 and text_draw['newMaterialPaths'] == 0
+    assert text_draw['raw']['mirrored'] and text_draw['raw']['allMembersVerified']
+    tq = text_draw['qualification']
+    assert tq['windows']['total'] == tq['linux']['total'] == tq['fullChecksEachOs'] == 6715
+    assert tq['actualPackage']['sha256'] == tq['samePackageWindows']['sha256']
+    assert tq['actualPackage']['librarySha256'] == text_draw['producers']['timedArtifactSha256']
+    assert all(tq[k]['actualConsumerPassed'] and tq[k]['usageExamples'] == 3
+               for k in ('actualPackage', 'samePackageWindows'))
+    assert tq['normalAndScalarSse2FallbackPassed']
+    assert text_draw['memory']['addedOwnedCapacityBytes'] == text_draw['memory']['addedRetainedCapacityBytes'] == 0
+    assert all(text_draw['frozenResourceChecks'][mode]['allEightFrozenFramesExact'] for mode in ('normal', 'scalar'))
+    assert font_load['sources']['src/Lokad.Image/TrueTypeFont.cs'] == text_draw['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    text_gain = text_draw['comparison']
+    assert text_gain['rawGainSeparated'] and text_gain['pairedNormalizedGainSeparated']
+    assert not text_gain['worstBracketNormalizedLossSeparated']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = font_load['pipelineCases'][case]
+        cost = text_draw['pipelineCases'][case]
         assert cost['completeWorkload'] and cost['status'] == 'pass'
         assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    assert math.isclose(font_load['pipelineCases']['PrepareDraw8']['amortizedManagedUs'],
-                        font_load['pipelineCases']['PrepareDraw8']['managedUs'] / 8, rel_tol=1e-12)
-    font_preparation = font_load['pipelineCases']['Preparation']
-    font_batch = font_load['pipelineCases']['PrepareDraw8']
+    font_preparation = text_draw['pipelineCases']['Preparation']
+    font_batch = text_draw['pipelineCases']['PrepareDraw8']
+    assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['statistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert font_load['fontComparison']['normalizedGainSeparated']
-    raster = json.loads((ROOT / 'benchmarks/text-render-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 6244
-    assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert raster['storage']['allEightFrozenFramesExact']
-    assert raster['equivalentPreparedReference']['allEightReferenceFramesExact']
-    assert raster['sourceProof']['drawAndBandExactAfterOnlyCopiedGlyphStorageAndExplicitExecutionTokenSubstitution']
-    assert raster['raw']['mirrored'] and raster['raw']['allMembersVerified']
-    draw_aggregate = json.loads((ROOT / 'benchmarks/text-prepared-draw-aggregation-evidence.json').read_text(encoding='utf-8'))
-    assert draw_aggregate['measurementAccepted'] and not draw_aggregate['productionChanged']
-    assert draw_aggregate['actuals'] == 12 and draw_aggregate['operationsPerActual'] == 1024
-    assert draw_aggregate['allActualsRetained'] and draw_aggregate['allOriginalGatesPassed'] and draw_aggregate['quietGuardsPassed']
-    assert draw_aggregate['librarySha256'] == font_load['producers']['linuxSha256']
-    assert draw_aggregate['raw']['mirrored'] and draw_aggregate['raw']['allMembersVerified']
-    assert draw_aggregate['activeRasterCapacityBytes'] == 40408
-    assert draw_aggregate['adapterAllocatedBytesPerDraw'] == [80]
-    assert draw_aggregate['status'] == ('pass' if draw_aggregate['upper'] <= 1 else 'gap' if draw_aggregate['lower'] > 1 else 'uncertain')
-    assert math.isclose(draw_aggregate['ratio'], draw_aggregate['managedUs'] / draw_aggregate['referenceUs'], rel_tol=1e-12)
-    for case in raster['cases'].values():
-        assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
-        assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
-        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12
+    for case in text_draw['cases'].values():
+        assert case['librarySha256'] == text_draw['producers']['timedArtifactSha256']
+        assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
+        assert case['actuals'] == 12 and case['operationsPerActual'] == 1024
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
-        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
-        prepared = case['caseId'].startswith('Prepared')
+        assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
+        prepared = case['boundary'] == 'prepared'
         assert case['allocatedBytes'] == (56 if prepared else 59304)
+        assert case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
         assert case['retainedBytes'] == (40408 if prepared else 0)
-        if case['caseId'] == 'Prepared16':
-            # Current repeated individually reset operations supersede only this
-            # scoped diagnostic. Adapter GC is included and disclosed below;
-            # owning integrations, preparation and other draws stay separate.
-            case = {**case, **{k: draw_aggregate[k] for k in ('managedUs', 'ratio', 'lower', 'upper', 'status')},
-                    'nativeUs': draw_aggregate['referenceUs'], 'allocatedBytes': 80}
         depth = case['depth']
         status = 'confidence open' if case['status'] == 'uncertain' else case['status']
         label = f'Text {"prepared raster" if prepared else "ordinary draw"} RGBA{depth} / ImageSharp.Drawing ({status})'
-        rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["nativeUs"]:,.2f} | '
+        rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["referenceUs"]:,.2f} | '
                      f'{case["ratio"]:.3f} / {case["upper"]:.3f} | {case["allocatedBytes"]:,} |'))
     rows.append(('editing', f'| Font loading / FreeType 2.13.2 (scoped {font_cost["status"]}) † | {font_cost["managedUs"]:,.2f} | '
                  f'{font_cost["nativeUs"]:,.2f} | {font_cost["ratio"]:.3f} / {font_cost["upper"]:.3f} | {font_cost["allocatedBytes"]:,} |'))
@@ -3049,26 +3042,30 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/FONT-HEADER-VALIDATION.md) pass,
+[Current complete text integrations](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
-Preparation alone is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
+Creation-only preparation is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
 amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation. Allocations are
 per complete row operation; the repeated row reports the whole batch. Active managed
 prepared capacity is 39,904 B; no font/layout survives preparation. Heap deltas are
 approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
-{fq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
+{tq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
 pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
 comparison, not a release-wide refresh. Font loading saves {font_gain['savedUs']:.2f} µs / {font_gain['rawSavedFraction']:.2%} against a
 contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
-[Prepared RGBA16 draw aggregation](../benchmarks/TEXT-PREPARED-DRAW-AGGREGATION.md)
-refreshes that diagnostic with individually reset draws: {draw_aggregate['managedUs']:.2f} / {draw_aggregate['referenceUs']:.2f} µs,
-upper {draw_aggregate['upper']:.3f}, retaining every actual. Its **80 B/draw includes adapter
-dispatch**; older rows use public-call-only counters. Active Latin raster capacity
-is **40,408 B**, excluding the borrowed canvas and font; reference allocations and
-physical peaks remain unmeasured. This is a measurement change, not a production gain.
+[Paired endpoint evaluation](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) saves
+{text_gain['savedUs']:.2f} µs / {text_gain['rawSavedFraction']:.2%} in contemporary prepared-word pairs;
+paired-normalized gain is {text_gain['pairedNormalizedSavedFraction']:.2%}. Both intervals separate,
+while wider bracket-normalized gain remains inconclusive. Four individually reset
+drawing diagnostics remain scoped gaps. Their GC columns use current public-only
+counters (**59,304 B ordinary / 56 B prepared**); timed adapters add **24 B/draw**.
+Active Latin raster capacity is **40,408 B**, excluding the borrowed canvas and font;
+reference drawing allocations and physical peaks remain unmeasured. No overall
+pipeline gain is claimed. Earlier one-invocation/aggregation evidence stays linked
+as history, outside current-cost renderer dependencies.
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
 managed pixels. Complete encoder packets and narrow metadata exceptions retain
