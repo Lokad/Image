@@ -690,7 +690,7 @@ def apply_bounded_wide_quartet(editing):
 
 
 def stream_reader_stage():
-    owner = json.loads((ROOT / 'benchmarks/refill-completion-inlining-evidence.json').read_text(encoding='utf-8'))
+    owner = json.loads((ROOT / 'benchmarks/refill-call-inlining-evidence.json').read_text(encoding='utf-8'))
     assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
     assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
     assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
@@ -703,6 +703,7 @@ def stream_reader_stage():
     assert q['focusedEachMode'] == {'internal': 10, 'public': 148}
     assert owner['primaryPair']['upper'] < 1
     assert owner['primaryPair']['allocatedBaseline'] == owner['primaryPair']['allocatedCandidate'] == 568
+    assert owner['primaryAllActualStatistics']['candidate']['ConfidenceInterval']['Upper'] < owner['primaryAllActualStatistics']['baseline']['ConfidenceInterval']['Lower']
     assert owner['headerGuard']['lower'] <= 1 <= owner['headerGuard']['upper']
     assert all(owner['sourceProof'].values())
     assert set(owner['cases']) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
@@ -3186,20 +3187,25 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Small refill completion](../benchmarks/REFILL-COMPLETION-INLINING.md) requests
-inlining of the loop-free completion leaf, preserving the entire reader body.
-Independent complete async JPEG pairs save **3.89% / 10.22 ns**, still **568 B/op**.
+[Refill-call inlining](../benchmarks/REFILL-CALL-INLINING.md) removes repeated
+refill call setup while preserving every method body. Independent complete async
+JPEG pairs save **6.32% / 15.99 ns**, still **568 B/op**; all-actual intervals separate.
 All four original probes and complete PNG headers refresh on the SAME actual
 timed/package DLL, with twelve actuals, both original FFmpeg AVIO/header adapter
-brackets and exact acquisition/descriptor/ownership gates. WebP dimensions now
-passes (**upper 0.993**); PNG dimensions and complete headers pass. Both JPEG
-probes remain gaps. Sync/JPEG-header paired guards are inconclusive, with no gain
-claims for those paths. Actual generated code verifies the hint; its observations
-are not CPU-phase attribution. Windows/Linux each pass **6,721 full/live checks**,
+brackets and exact acquisition/descriptor/ownership gates. PNG/WebP dimensions and
+complete PNG headers pass. JPEG sync/async remain gaps at **0.212/0.240 µs**,
+upper **1.127/1.201**. The targeted complete-JPEG-header confirmation spans parity
+**0.998398–1.008379**; no regression or speedup established. Every original/adverse
+sample remains; no identical favorable replay. Actual callers inline refill;
+the JPEG parser stays **7,451 B**, while selected combined native code grows
+**{probe_owner['jit']['selectedCodeGrowthBytes']:,} B**. These are code sizes, not CPU-phase costs or memory peaks.
+Windows/Linux each pass **6,721 full/live checks**,
 focused **10 internal /148 public** normal/scalar, the SAME actual package and
-all three examples. One core/embedded build per OS, one pack and no accepted-module
-rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
-retains the prior architecture/profile; stage percentages are not added.
+all three examples. One accepted core/embedded build per OS, one pack and no
+accepted-module rebuild after timing. The preceding unretained Boolean-completion
+trial gets no broad/package campaign; its evidence remains. Earlier
+[completion-leaf inlining](../benchmarks/REFILL-COMPLETION-INLINING.md) retains history;
+stage gains are not added. Shared admission and retained capacity are unchanged.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **{resident_png['cases']['identify/Png8']['managedUs']:.3f} / FFmpeg adapter
 {resident_png['cases']['identify/Png8']['nativeUs']:.3f} µs**, conservative upper

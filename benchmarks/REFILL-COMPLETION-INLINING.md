@@ -1,5 +1,8 @@
 # Refill completion inlining
 
+[Refill-call inlining](REFILL-CALL-INLINING.md) now owns the five current costs.
+This report retains its completion-leaf implementation and qualification history.
+
 The small,loop-free CompleteFill routine now requests JIT inlining. Removing the
 namespace import and attribute reconstructs the entire original reader body:
 every read,check,counter update,poll,pending helper and ownership boundary is

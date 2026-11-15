@@ -42,6 +42,7 @@ internal class InspectionReader : OperationContext, IDisposable
         catch { base.Dispose(); throw; }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private ValueTask<bool> FillAsync(int needed, int offset = 0)
     {
         Context.Cancellation.ThrowIfCancellationRequested();
