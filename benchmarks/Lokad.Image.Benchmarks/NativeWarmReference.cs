@@ -102,7 +102,7 @@ internal sealed partial class NativeWarmReference : IDisposable
         catch { Dispose(); throw; }
     }
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null, bool bicubicScalar = false, int vp8Effort = 4, bool pngOneShot = false)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null, bool bicubicScalar = false, int vp8Effort = 4, bool pngOneShot = false, bool bilinearOneShot = false)
     {
         if (resizeWidth.HasValue != resizeHeight.HasValue || resizeWidth.HasValue &&
             (operation is not ("bilinear-resize" or "nearest-resize" or "bicubic-resize")
@@ -138,6 +138,8 @@ internal sealed partial class NativeWarmReference : IDisposable
         var crop = operation == "crop";
         var nearest = operation == "nearest-resize";
         var bilinear = operation == "bilinear-resize";
+        if (bilinearOneShot && (!bilinear || depth != 16 || resizeWidth != 1027 || resizeHeight != 519))
+            throw new ArgumentException("One-shot bilinear is the frozen RGBA16 enlargement control.", nameof(bilinearOneShot));
         var bicubic = operation == "bicubic-resize";
         var bicubicOnePixel = bicubic && depth == 8 && resizeWidth == 1 && resizeHeight == 1;
         var bicubicUpsample = bicubic && depth is (8 or 16) && resizeWidth == 1027 && resizeHeight == 519;
@@ -175,6 +177,7 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (pngOneShotColor) { stem = "ffmpeg-png-one-shot-color-warm"; buildScript = "build-png-one-shot-color-linux.sh"; }
         if (pngOneShot9) { stem = $"ffmpeg-png-one-shot9-{depth}-warm"; buildScript = "build-png-one-shot9-linux.sh"; }
         if (pngOneShotStored) { stem = $"ffmpeg-png-one-shot-store{depth}-warm"; buildScript = "build-png-one-shot-stored-linux.sh"; }
+        if (bilinearOneShot) stem = "ffmpeg-bilinear-one-shot-warm";
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
         var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, operation == "png-store16-encode" ? "png-store16-identity.json" : operation == "png-fast16-encode" ? "png-fast16-identity.json" : operation == "vp8-stream-decode" ? "vp8-stream-identity.json" : operation == "jpeg420-stream-decode" ? "jpeg-stream-identity.json" : operation == "webp-opaque-encode" ? depth == 16 ? "webp-opaque16-identity.json" : "webp-opaque-identity.json" : jpegRestart ? "jpeg-restart-identity.json" : pngStream16 ? "png-stream16-identity.json" : pngComposition16 ? "png-composition16-identity.json" : pngComposition ? "png-composition-identity.json" : pngStream ? "png-stream-identity.json" : retainedFlip ? "hflip-retained2-identity.json" : bicubicOnePixel ? "bicubic-down1x1-8-identity.json" : bicubicNineRows ? depth == 16 ? "bicubic-down2x9-16-identity.json" : "bicubic-down2x9-8-identity.json" : bicubicBeyond1024 ? depth == 16 ? "bicubic-down2x2-16-identity.json" : "bicubic-down2x2-8-identity.json" : bicubicPackedNineRows ? depth == 16 ? "bicubic-down4x9-16-identity.json" : "bicubic-down4x9-8-identity.json" : bicubicBeyond512 ? depth == 16 ? "bicubic-down4x2-16-identity.json" : "bicubic-down4x2-8-identity.json" : bicubicSeventeenRows ? depth == 16 ? "bicubic-down8x17-16-identity.json" : "bicubic-down8x17-8-identity.json" : bicubicBeyond256 ? depth == 16 ? "bicubic-down8x4-16-identity.json" : "bicubic-down8x4-8-identity.json" : bicubicBeyond128 ? depth == 16 ? "bicubic-down16x8-16-identity.json" : "bicubic-down16x8-8-identity.json" : bicubicBeyond64 ? depth == 16 ? "bicubic-down32x16-16-identity.json" : "bicubic-down32x16-8-identity.json" : bicubicVerticalUp ? depth == 16 ? "bicubic-vertical-up16-identity.json" : "bicubic-vertical-up8-identity.json" : bicubicHorizontalUp ? depth == 16 ? "bicubic-horizontal-up16-identity.json" : "bicubic-horizontal-up8-identity.json" : bicubicVertical ? depth == 16 ? "bicubic-vertical16-identity.json" : "bicubic-vertical8-identity.json" : bicubicBeyond32 ? depth == 16 ? "bicubic-down64x32-16-identity.json" : "bicubic-down64x32-8-identity.json" : bicubicHorizontal ? depth == 16 ? "bicubic-horizontal16-identity.json" : "bicubic-horizontal8-identity.json" : bicubicWide ? depth == 16 ? "bicubic-wide16-identity.json" : "bicubic-wide8-identity.json" : bicubicCross ? depth == 16 ? "bicubic-cross16-identity.json" : "bicubic-cross8-identity.json" : bicubicMixed ? depth == 16 ? "bicubic-mixed16-identity.json" : "bicubic-mixed8-identity.json" : bicubicUpsample ? depth == 16 ? "bicubic-up16-identity.json" : "bicubic-up8-identity.json" : bicubic ? depth == 16 ? "bicubic16-identity.json" : "bicubic-identity.json" : transverse ? "transverse-identity.json" : transpose ? "transpose-identity.json" : counterclockwise ? "counterclockwise-identity.json" : normal ? "normal-orient-identity.json" : clockwise ? "clockwise-identity.json" : halfTurn ? "halfturn-identity.json" : vertical ? "vflip-identity.json" : crop ? "crop-identity.json" : bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webpLossless ? "libwebp-lossless-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
         if (derivedVp8) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "webp-" + vp8Variant + "-identity.json");
@@ -184,6 +187,7 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (pngOneShotColor) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "png-one-shot-color-identity.json");
         if (pngOneShot9) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, $"png-one-shot9-{depth}-identity.json");
         if (pngOneShotStored) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, $"png-one-shot-store{depth}-identity.json");
+        if (bilinearOneShot) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "bilinear-one-shot-identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
@@ -213,9 +217,11 @@ internal sealed partial class NativeWarmReference : IDisposable
             || BuildIdentity.GetProperty("encoderLevel").GetInt32() != 6))
             throw new InvalidOperationException("PNG color preparation build boundary differs.");
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
-            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", (pngOneShot ? "ffmpeg-png-warm" : derivedVp8 ? "ffmpeg-webp-opaque-warm" : bicubicOnePixel || bicubicMixed || bicubicCross || bicubicWide || bicubicHorizontal || bicubicBeyond32 || bicubicVertical || bicubicHorizontalUp || bicubicVerticalUp || bicubicBeyond64 || bicubicBeyond128 || bicubicBeyond256 || bicubicBeyond512 || bicubicBeyond1024 ? "zimg-bicubic-mixed8-warm" : stem) + ".c"))
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", (bilinearOneShot ? "ffmpeg-bilinear-warm" : pngOneShot ? "ffmpeg-png-warm" : derivedVp8 ? "ffmpeg-webp-opaque-warm" : bicubicOnePixel || bicubicMixed || bicubicCross || bicubicWide || bicubicHorizontal || bicubicBeyond32 || bicubicVertical || bicubicHorizontalUp || bicubicVerticalUp || bicubicBeyond64 || bicubicBeyond128 || bicubicBeyond256 || bicubicBeyond512 || bicubicBeyond1024 ? "zimg-bicubic-mixed8-warm" : stem) + ".c"))
             || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", buildScript)))
             throw new InvalidOperationException("Native reference build identity differs from the current source/binary.");
+        if (bilinearOneShot && !BuildIdentity.GetProperty("oneShotGraph").GetBoolean())
+            throw new InvalidOperationException("Bilinear worker must include fresh graph preparation.");
         if (pngOneShot && !BuildIdentity.GetProperty("oneShotCodec").GetBoolean())
             throw new InvalidOperationException("PNG worker must include fresh codec/zlib preparation.");
         if (derivedVp8 && (BuildIdentity.GetProperty("effort").GetInt32() != vp8Effort
@@ -251,6 +257,12 @@ internal sealed partial class NativeWarmReference : IDisposable
             Ready = Read();
             if (operation is ("jpeg-rgb-decode" or "jpeg-rgb422-decode" or "jpeg-rgb420-decode") && (!Ready.GetProperty("directRgb").GetBoolean() || Ready.GetProperty("decodedPixelFormat").GetString() != (operation == "jpeg-rgb420-decode" ? "yuvj420p" : "gbrp")))
                 throw new InvalidOperationException("Native direct-RGB JPEG format differs.");
+            if (bilinearOneShot && (!Ready.GetProperty("graphPreparationTimed").GetBoolean()
+                || !Ready.GetProperty("resultWrapperPreparationTimed").GetBoolean()
+                || Ready.GetProperty("graphRetainedBetweenOperations").GetBoolean()
+                || !Ready.GetProperty("borrowedResidentSource").GetBoolean()
+                || Ready.GetProperty("preparationCount").GetUInt64() != Ready.GetProperty("initialCompletedOperations").GetUInt64()))
+                throw new InvalidOperationException("Bilinear one-shot preparation/ownership boundary differs.");
             if (pngOneShot && (!Ready.GetProperty("codecPreparationTimed").GetBoolean()
                 || !Ready.GetProperty("packetWrapperPreparationTimed").GetBoolean()
                 || Ready.GetProperty("codecRetainedBetweenOperations").GetBoolean()

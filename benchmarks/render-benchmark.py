@@ -2914,6 +2914,26 @@ One core/embedded build per OS, no other builds, one pack and no post-timing reb
                          f'{bilinear_word_case["managedUs"]:,.2f} | {bilinear_word_case["nativeUs"]:,.2f} | '
                          f'{bilinear_word_case["ratio"]:.3f} / {bilinear_word_case["upper"]:.6f} | {bilinear_word_case["allocatedBytes"]:,} |')
     editing = editing.replace(anchor, anchor + '\n' + bilinear_word_row)
+    bilinear_one_shot = json.loads((ROOT / 'benchmarks/bilinear-equivalent-one-shot-evidence.json').read_text(encoding='utf-8'))
+    bilinear_fresh_case = bilinear_one_shot['case']
+    fresh_q = json.loads((ROOT / bilinear_one_shot['qualification']['provider']).read_text(encoding='utf-8'))
+    assert bilinear_one_shot['measurementAccepted'] and not bilinear_one_shot['productionChanged'] and not bilinear_one_shot['productionSpeedupClaim']
+    assert bilinear_one_shot['requiredMaterialPaths'] == 289 and bilinear_one_shot['newMaterialPaths'] == 0
+    assert bilinear_one_shot['raw']['mirrored'] and bilinear_one_shot['raw']['allMembersVerified']
+    assert bilinear_one_shot['producers'] == fresh_q['producers']
+    assert bilinear_fresh_case['librarySha256'] == fresh_q['qualification']['actualPackage']['librarySha256']
+    assert bilinear_fresh_case['actualIterations'] == bilinear_fresh_case['nativeSamplesEachBracket'] == 12
+    assert all(bilinear_fresh_case[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedRationalReferenceExact', 'sourceUnchanged', 'independentOwnedOutput'))
+    assert bilinear_fresh_case['status'] == 'pass' and bilinear_fresh_case['upper'] <= 1
+    assert math.isclose(bilinear_fresh_case['ratio'], bilinear_fresh_case['managedUs'] / bilinear_fresh_case['nativeUs'], rel_tol=1e-12)
+    assert bilinear_fresh_case['nativeReady']['graphPreparationTimed'] and not bilinear_fresh_case['nativeReady']['graphRetainedBetweenOperations']
+    assert bilinear_fresh_case['metadata'] == bilinear_word_case['metadata']
+    fresh_row = (f'| Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | '
+                 f'{bilinear_fresh_case["managedUs"]:,.2f} | {bilinear_fresh_case["nativeUs"]:,.2f} | '
+                 f'{bilinear_fresh_case["ratio"]:.3f} / {bilinear_fresh_case["upper"]:.3f} | {bilinear_fresh_case["allocatedBytes"]:,} |')
+    editing = editing.replace(bilinear_word_row, bilinear_word_row + '\n' + fresh_row)
+    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'total': image_view_counts['total'] + 1}
+    assert image_view_counts == bilinear_one_shot['currentImageOwnerViewStatuses']
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -2953,7 +2973,7 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 
 {owned_copy_note}
 
-The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
+The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **{image_view_counts['total']} existing
 image views: {image_view_counts['passCount']} pass, {image_view_counts['gaps']} gaps, {image_view_counts['uncertain']} uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
@@ -2963,6 +2983,15 @@ remains uncertain: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_w
 upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**. The longer
 integration retains every native fluctuation; this is not a pass or a production
 speedup. Necessary managed preparation and the native prepared-graph boundary stay explicit.
+[Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
+**{bilinear_fresh_case['managedUs']:,.2f} / FFmpeg {bilinear_fresh_case['nativeUs']:,.2f} µs, upper {bilinear_fresh_case['upper']:.3f}**,
+**{bilinear_fresh_case['allocatedBytes']:,} B/op**. Fresh graph/context/geometry, lazy first use,
+result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
+source rasters. Exact managed/full-word/native/ownership gates remain; the existing
+qualified package is reused with no production rebuild. This qualifies the complete
+bilinear boundary; the eight earlier equivalent views cover bicubic. No production
+speedup or historical phase-cost subtraction is claimed; the asymmetric view above
+stays uncertain. No material path or settings grid is added.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **{png_gray8['managedUs']:,.2f} / FFmpeg {png_gray8['nativeUs']:,.2f}µs,
 upper {png_gray8['upper']:.6f}**, **{png_gray8['allocatedBytes']:,} B/op**. All 17
@@ -3109,7 +3138,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 147, 'Expected 147 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 148, 'Expected 148 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

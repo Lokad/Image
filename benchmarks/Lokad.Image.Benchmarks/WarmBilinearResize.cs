@@ -21,7 +21,7 @@ public class WarmBilinearResize
     private byte[] input = [], expected = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
-    private bool smoke, ready;
+    private bool smoke, ready, oneShot;
     private int cpu, sampleCount;
     private byte[] nativePixels = [];
     private int nativeRgbMaximum, nativeAlphaMaximum;
@@ -53,6 +53,8 @@ public class WarmBilinearResize
             || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("Bilinear requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_BILINEAR_ONESHOT") == "1";
+        if (oneShot && Case != WarmBilinearCase.Up16) throw new InvalidOperationException("One-shot comparison is limited to Up16.");
         state = new JpegBenchmarkCase();
         try
         {
@@ -63,7 +65,7 @@ public class WarmBilinearResize
             source = JpegBenchmarkCase.Buffer(input, 513, 259, Depth);
             File.WriteAllBytes(state.Input, input);
             ValidateManaged();
-            native = new NativeWarmReference(state, Depth, cpu, "bilinear-resize", resizeWidth: Width, resizeHeight: Height);
+            native = new NativeWarmReference(state, Depth, cpu, "bilinear-resize", resizeWidth: Width, resizeHeight: Height, bilinearOneShot: oneShot);
             RequireNativeOutput();
             var scalarArguments = ResizeOracle.PremultipliedBilinearArguments(513, 259, Width, Height, Depth);
             if (!MatchesNativeCli(OracleProcess.Run(state.Ffmpeg, scalarArguments, input)))
@@ -148,7 +150,7 @@ public class WarmBilinearResize
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
-                schemaVersion = 1, name = nameof(WarmBilinearResize), caseId = Case.ToString(), smoke,
+                schemaVersion = 1, name = nameof(WarmBilinearResize), caseId = Case.ToString(), smoke, oneShot,
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = Depth,
                 outputWidth = Width, outputHeight = Height, cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount,
                 serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription,
@@ -163,7 +165,9 @@ public class WarmBilinearResize
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmBilinearResize).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "One resident original 513x259 RGBA" + Depth + " raster to independently owned " + Width + "x" + Height + " bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured."
+                boundary = "One resident original 513x259 RGBA" + Depth + " raster to independently owned " + Width + "x" + Height + " bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. " + (oneShot
+                    ? "Graph/context/geometry preparation, lazy first-use storage, result wrapper and disposal are timed per operation. Caller-owned source/frame is borrowed; graph is disposed before independent output publication. "
+                    : "Graph/source/frame wrappers and geometry contexts are reused; ") + "each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }

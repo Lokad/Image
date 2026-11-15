@@ -1,6 +1,9 @@
 /* Original development-only adapter around public FFmpeg APIs. No codec source
  * or implementation tables are copied. Build outputs belong in external/. */
 #define _GNU_SOURCE
+#ifndef LOKAD_IMAGE_BILINEAR_ONE_SHOT
+#define LOKAD_IMAGE_BILINEAR_ONE_SHOT 0
+#endif
 #include <errno.h>
 #include <inttypes.h>
 #include <sched.h>
@@ -52,11 +55,52 @@ typedef struct {
     int allow_alpha_rounding1, normalize_zero_alpha, alpha_maximum;
     uint64_t alpha_squared;
     int width, height, depth, row_bytes, output_width, output_height, output_row_bytes, cpu;
-    uint64_t completed, observed;
+    uint64_t completed, observed, preparations;
 } Work;
+
+static void prepare_graph(Work *work)
+{
+    work->graph = avfilter_graph_alloc(); if (!work->graph) fail("Allocate graph failed.");
+    work->graph->nb_threads = 1; work->graph->thread_type = 0;
+    char arguments[256];
+    snprintf(arguments, sizeof(arguments), "video_size=%dx%d:pix_fmt=%d:time_base=1/1:pixel_aspect=1/1:alpha_mode=straight",
+             work->width, work->height, work->source->format);
+    require(avfilter_graph_create_filter(&work->input, avfilter_get_by_name("buffer"), "input", arguments, NULL, work->graph), "Create input");
+    require(avfilter_graph_create_filter(&work->output,avfilter_get_by_name("buffersink"),"output",NULL,NULL,work->graph),"Create output");
+    AVFilterInOut *outputs=avfilter_inout_alloc(),*inputs=avfilter_inout_alloc();
+    if(!outputs||!inputs)fail("Allocate graph endpoints failed.");
+    outputs->name=av_strdup("in");outputs->filter_ctx=work->input;outputs->pad_idx=0;
+    inputs->name=av_strdup("out");inputs->filter_ctx=work->output;inputs->pad_idx=0;
+    char graph[2048];
+    const char *planar=work->depth==16?"gbrap16le":"gbrap",*packed=work->depth==16?"rgba64le":"rgba";
+    snprintf(graph,sizeof(graph),"[in]format=%s,"
+        "zscale=w=%d:h=%d:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,"
+        "format=%s,format=%s[out]",planar,work->output_width,work->output_height,planar,packed);
+    require(avfilter_graph_parse_ptr(work->graph,graph,&inputs,&outputs,NULL),"Parse bilinear graph");
+    if(inputs||outputs)fail("Unconnected graph endpoint.");
+    avfilter_inout_free(&inputs);avfilter_inout_free(&outputs);
+    require(avfilter_graph_config(work->graph, NULL), "Configure graph");
+    if (work->graph->nb_threads != 1 || work->graph->thread_type != 0) fail("Graph threading differs.");
+    work->preparations++;
+}
+
+static void release_result(Work *work)
+{
+#if LOKAD_IMAGE_BILINEAR_ONE_SHOT
+    av_frame_free(&work->result);
+#else
+    av_frame_unref(work->result);
+#endif
+}
 
 static void apply(Work *work)
 {
+#if LOKAD_IMAGE_BILINEAR_ONE_SHOT
+    if (work->graph || work->result) fail("Previous one-shot state is still owned.");
+    work->result = av_frame_alloc();
+    if (!work->result) fail("Allocate result wrapper failed.");
+    prepare_graph(work);
+#endif
     work->source->pts = (int64_t)work->completed;
     require(av_buffersrc_add_frame_flags(work->input, work->source, AV_BUFFERSRC_FLAG_KEEP_REF), "Submit source");
     require(av_buffersink_get_frame(work->output, work->result), "Receive bilinear resize");
@@ -75,6 +119,10 @@ static void apply(Work *work)
                 if (!row[3]) row[0]=row[1]=row[2]=0;
         }
     }
+#if LOKAD_IMAGE_BILINEAR_ONE_SHOT
+    avfilter_graph_free(&work->graph);
+    work->input = work->output = NULL;
+#endif
     work->observed += work->result->data[0][0];
     work->completed++;
 }
@@ -159,11 +207,15 @@ static void check_frame(Work *work, AVFrame *frame)
 static void check_ownership(Work *work)
 {
     AVFrame *first=av_frame_alloc(); if(!first) fail("Allocate ownership frame failed.");
-    apply(work);av_frame_move_ref(first,work->result);apply(work);
+    apply(work);av_frame_move_ref(first,work->result);
+#if LOKAD_IMAGE_BILINEAR_ONE_SHOT
+    release_result(work);
+#endif
+    apply(work);
     if(first->buf[0]->buffer==work->result->buf[0]->buffer)fail("Two live outputs alias.");
     check_frame(work,first);check_frame(work,work->result);
     first->data[0][0]^=255;check_frame(work,work->result);check_source(work);
-    av_frame_free(&first);av_frame_unref(work->result);
+    av_frame_free(&first);release_result(work);
 }
 static void check_and_write(Work *work,const char *path)
 {
@@ -172,7 +224,7 @@ static void check_and_write(Work *work,const char *path)
     for(int y=0;y<work->output_height;y++)
         if(fwrite(work->result->data[0]+(size_t)y*work->result->linesize[0],1,(size_t)work->output_row_bytes,output)!=(size_t)work->output_row_bytes)fail("Write result failed.");
     if(fclose(output))fail("Close result failed.");
-    av_frame_unref(work->result);
+    release_result(work);
 }
 
 int main(int argc, char **argv)
@@ -208,8 +260,8 @@ int main(int argc, char **argv)
     if (fread(work.original, 1, bytes, input) != bytes || fgetc(input) != EOF || ferror(input))
         fail("Input geometry/precision differs.");
     fclose(input);
-    work.source = av_frame_alloc(); work.result = av_frame_alloc();
-    if (!work.source || !work.result) fail("Allocate frame wrappers failed.");
+    work.source = av_frame_alloc(); work.result = LOKAD_IMAGE_BILINEAR_ONE_SHOT ? NULL : av_frame_alloc();
+    if (!work.source || (!LOKAD_IMAGE_BILINEAR_ONE_SHOT && !work.result)) fail("Allocate frame wrappers failed.");
     work.source->format = work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
     work.source->width = work.width; work.source->height = work.height;
     work.source->alpha_mode=AVALPHA_MODE_STRAIGHT;
@@ -217,31 +269,14 @@ int main(int argc, char **argv)
     for (int y = 0; y < work.height; y++)
         memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
                work.original + (size_t)y * work.row_bytes, (size_t)work.row_bytes);
-    work.graph = avfilter_graph_alloc(); if (!work.graph) fail("Allocate graph failed.");
-    work.graph->nb_threads = 1; work.graph->thread_type = 0;
-    char arguments[256];
-    snprintf(arguments, sizeof(arguments), "video_size=%dx%d:pix_fmt=%d:time_base=1/1:pixel_aspect=1/1:alpha_mode=straight",
-             work.width, work.height, work.source->format);
-    require(avfilter_graph_create_filter(&work.input, avfilter_get_by_name("buffer"), "input", arguments, NULL, work.graph), "Create input");
-    require(avfilter_graph_create_filter(&work.output,avfilter_get_by_name("buffersink"),"output",NULL,NULL,work.graph),"Create output");
-    AVFilterInOut *outputs=avfilter_inout_alloc(),*inputs=avfilter_inout_alloc();
-    if(!outputs||!inputs)fail("Allocate graph endpoints failed.");
-    outputs->name=av_strdup("in");outputs->filter_ctx=work.input;outputs->pad_idx=0;
-    inputs->name=av_strdup("out");inputs->filter_ctx=work.output;inputs->pad_idx=0;
-    char graph[2048];
-    const char *planar=work.depth==16?"gbrap16le":"gbrap",*packed=work.depth==16?"rgba64le":"rgba";
-    snprintf(graph,sizeof(graph),"[in]format=%s,"
-        "zscale=w=%d:h=%d:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,"
-        "format=%s,format=%s[out]",planar,work.output_width,work.output_height,planar,packed);
-    require(avfilter_graph_parse_ptr(work.graph,graph,&inputs,&outputs,NULL),"Parse bilinear graph");
-    if(inputs||outputs)fail("Unconnected graph endpoint.");
-    avfilter_inout_free(&inputs);avfilter_inout_free(&outputs);
-    require(avfilter_graph_config(work.graph, NULL), "Configure graph");
-    if (work.graph->nb_threads != 1 || work.graph->thread_type != 0) fail("Graph threading differs.");
+#if !LOKAD_IMAGE_BILINEAR_ONE_SHOT
+    prepare_graph(&work);
+#endif
     make_reference(&work);
     check_ownership(&work);check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"alphaTolerance1\":%s,\"zeroAlphaNormalizationTimed\":%s,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"alphaTolerance1\":%s,\"zeroAlphaNormalizationTimed\":%s,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"graphPreparationTimed\":%s,\"resultWrapperPreparationTimed\":%s,\"graphRetainedBetweenOperations\":%s,\"borrowedResidentSource\":true,\"preparationCount\":%" PRIu64 ",\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
            work.width, work.height, work.depth, work.cpu, work.output_width,work.output_height,work.allow_alpha_rounding1?"true":"false",work.normalize_zero_alpha?"true":"false",work.completed,work.source->linesize[0],
+           LOKAD_IMAGE_BILINEAR_ONE_SHOT?"true":"false",LOKAD_IMAGE_BILINEAR_ONE_SHOT?"true":"false",LOKAD_IMAGE_BILINEAR_ONE_SHOT?"false":"true",work.preparations,
            av_version_info(), avfilter_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
@@ -258,9 +293,13 @@ int main(int argc, char **argv)
         int stride = 0;
         uint64_t start = now_ns();
         for (uint64_t i = 0; i < count; i++) {
-            apply(&work); stride = work.result->linesize[0]; av_frame_unref(work.result);
+            apply(&work); stride = work.result->linesize[0]; release_result(&work);
         }
         uint64_t elapsed = now_ns() - start;
+#if LOKAD_IMAGE_BILINEAR_ONE_SHOT
+        if (work.graph || work.result || work.preparations != work.completed)
+            fail("One-shot graph/wrapper lifetime differs.");
+#endif
         if (sched_getcpu() != work.cpu || affinity_cpu() != work.cpu || work.completed - before_completed != count)
             fail("Sample CPU/workload count differs.");
         printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"cpu\":%d}\n",

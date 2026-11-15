@@ -1,0 +1,447 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BFB1055",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "newEquivalentViews": 1,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "timedArtifactSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
+  },
+  "case": {
+    "caseId": "Up16OneShot",
+    "managedUs": 1973.0513310546876,
+    "nativeUs": 5139.82692578125,
+    "ratio": 0.3838750525154668,
+    "lower": 0.34050831554034033,
+    "upper": 0.43445072278438984,
+    "status": "pass",
+    "allocatedBytes": 4498574,
+    "directAllocatedMeanBytes": 4498573.419270833,
+    "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerSubject": 256,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedRationalReferenceExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "metadata": {
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+      "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.04627403278265037,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04239492329328568
+    },
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x519 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/context/geometry preparation, lazy first-use storage, result wrapper and disposal are timed per operation. Caller-owned source/frame is borrowed; graph is disposed before independent output publication. each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured.",
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "bilinear-resize",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "affinityCount": 1,
+      "filterThreads": 1,
+      "threadType": 0,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "kernel": "triangle",
+      "alphaMode": "straight",
+      "premultipliedAlphaTimed": true,
+      "encodedSampleSpace": true,
+      "independentLiveOutputs": true,
+      "alphaTolerance1": true,
+      "zeroAlphaNormalizationTimed": false,
+      "initialCompletedOperations": 3,
+      "inputStride": 4128,
+      "graphPreparationTimed": true,
+      "resultWrapperPreparationTimed": true,
+      "graphRetainedBetweenOperations": false,
+      "borrowedResidentSource": true,
+      "preparationCount": 3,
+      "ffmpegVersion": "n8.1",
+      "avfilterVersion": 724580,
+      "avutilVersion": 3938916
+    },
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "9354b2e0610e971c73cec3619ec4de1ce4b19658fc023422776485c3d61992e4",
+      "buildScriptSha256": "9f5b6e731c4432016620e180ec9a45f2ad7f6b97ed5c8a8813ac480e5e36f300",
+      "workerSha256": "de85c748ce26dc6b6fc180b8cc8190ac5b885831bc63394fe7d0c26e4fb0af18",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DLOKAD_IMAGE_BILINEAR_ONE_SHOT=1"
+      ],
+      "oneShotGraph": true,
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "pairedRatioConfidence": [
+      0.36407193610800476,
+      0.3811920054614066
+    ],
+    "nativeBracketMeansUs": [
+      5139.82692578125,
+      5296.080016927083,
+      5342.878888346355
+    ]
+  },
+  "toolSources": {
+    "tools/WarmReference/ffmpeg-bilinear-warm.c": "9354b2e0610e971c73cec3619ec4de1ce4b19658fc023422776485c3d61992e4",
+    "tools/WarmReference/build-bilinear-linux.sh": "9f5b6e731c4432016620e180ec9a45f2ad7f6b97ed5c8a8813ac480e5e36f300",
+    "benchmarks/Lokad.Image.Benchmarks/NativeWarmReference.cs": "ff0aeea372b5376a9343995f85a420b08b985e4f78a7860684393f662d4a0b45",
+    "benchmarks/Lokad.Image.Benchmarks/WarmBilinearResize.cs": "c5ef713e88a5cbac363a5227efc992075734ad0e9237f95eebd2cd7628d75e6e"
+  },
+  "sourceProof": {
+    "graphPreparationMovedVerbatim": true,
+    "filterApplyVerbatimApartFromExplicitFreshLifetimes": true,
+    "independentRationalOracleAndNativePixelChecksVerbatim": true,
+    "managedCompleteTimedMethodVerbatim": true,
+    "allProductionSourcesUnchanged": true,
+    "noFirstUseOrNormalizationExcluded": true,
+    "sourceFrameBorrowedOnBothSides": true,
+    "graphDisposedBeforeOutputPublication": true,
+    "resultWrapperAcquisitionAndDisposalTimed": true
+  },
+  "qualification": {
+    "provider": "benchmarks/font-fixed-header-views-evidence.json",
+    "fullChecksEachOs": 6721,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "stage": "HHV1052",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+      "symbolsSha256": "4ce3923491c36a1d7bb02b79d79daaacd96dfe503fdec2bca9afaa52f4d11af1",
+      "bytes": 465559,
+      "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable timed Linux module: direct fixed font-header views remove intermediate span setup,with minimum10B guard,exact original2/8B read addresses,signed comparisons,per-glyph cancellation,owned copy and admission unchanged. Font-load confirmation and both owning complete integrations reconciled before qualification. Other drawing/layout/codec/resize paths reuse unchanged source-valid evidence. No overall text speedup or parser-equivalence claim. No Linux production rebuild after timing; same actual package consumed on both OSes,published artifacts immutable,publication postponed",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "sameActualPackageBothOS": true,
+    "normalScalarIsaAndThreeExamplesReused": true,
+    "broadOrPackageRepeats": 0,
+    "productionSourcesUnchanged": true
+  },
+  "measurement": {
+    "harnessBuilds": 1,
+    "nativeBuilds": 1,
+    "driverBuilds": 0,
+    "productionBuilds": 0,
+    "embeddedBuilds": 0,
+    "publicTestBuilds": 0,
+    "shortOperations": 8,
+    "confirmationOperations": 256,
+    "pairs": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "confidence": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+    "confidenceViews": [
+      {
+        "view": "allActual",
+        "statistics": {
+          "OriginalValues": [
+            2023832.6796875,
+            2010034.0859375,
+            2000605.86328125,
+            1967687.69140625,
+            1953456.76171875,
+            1964525.1640625,
+            1955693.94140625,
+            1962786.59765625,
+            1957936.046875,
+            1964307.9375,
+            1953548.83203125,
+            1962200.37109375
+          ],
+          "N": 12,
+          "Min": 1953456.76171875,
+          "LowerFence": 1929562.9497070312,
+          "Q1": 1957375.5205078125,
+          "Median": 1963547.267578125,
+          "Mean": 1973051.3310546875,
+          "Q3": 1975917.234375,
+          "UpperFence": 2003729.8051757812,
+          "Max": 2023832.6796875,
+          "InterquartileRange": 18541.7138671875,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            2010034.0859375,
+            2023832.6796875
+          ],
+          "AllOutliers": [
+            2010034.0859375,
+            2023832.6796875
+          ],
+          "StandardError": 6963.533993347342,
+          "Variance": 581889668.1180478,
+          "StandardDeviation": 24122.389353421186,
+          "Skewness": 1.0391290658774954,
+          "Kurtosis": 2.355078608798436,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1973051.3310546875,
+            "StandardError": 6963.533993347342,
+            "Level": 12,
+            "Margin": 30897.05644200175,
+            "Lower": 1942154.2746126857,
+            "Upper": 2003948.3874966893
+          },
+          "Percentiles": {
+            "P0": 1953456.76171875,
+            "P25": 1957375.5205078125,
+            "P50": 1963547.267578125,
+            "P67": 1965695.2991796876,
+            "P80": 1994022.22890625,
+            "P85": 2003905.7412109375,
+            "P90": 2009091.263671875,
+            "P95": 2016243.453125,
+            "P100": 2023832.6796875
+          }
+        },
+        "nativeConfidenceLower": 4612602.2639654195,
+        "nativeConfidenceUpper": 5667051.5875970805,
+        "ratioLower": 0.34270982795767874,
+        "ratioUpper": 0.43445072278438984
+      },
+      {
+        "view": "upperOutlierDiagnostic",
+        "statistics": {
+          "OriginalValues": [
+            2000605.86328125,
+            1967687.69140625,
+            1953456.76171875,
+            1964525.1640625,
+            1955693.94140625,
+            1962786.59765625,
+            1957936.046875,
+            1964307.9375,
+            1953548.83203125,
+            1962200.37109375
+          ],
+          "N": 10,
+          "Min": 1953456.76171875,
+          "LowerFence": 1943929.8833007812,
+          "Q1": 1956254.4677734375,
+          "Median": 1962493.484375,
+          "Mean": 1964274.920703125,
+          "Q3": 1964470.857421875,
+          "UpperFence": 1976795.4418945312,
+          "Max": 2000605.86328125,
+          "InterquartileRange": 8216.3896484375,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            2000605.86328125
+          ],
+          "AllOutliers": [
+            2000605.86328125
+          ],
+          "StandardError": 4325.71514321165,
+          "Variance": 187118115.0021059,
+          "StandardDeviation": 13679.112361630263,
+          "Skewness": 1.7422756474310293,
+          "Kurtosis": 5.073411260461196,
+          "ConfidenceInterval": {
+            "N": 10,
+            "Mean": 1964274.920703125,
+            "StandardError": 4325.71514321165,
+            "Level": 12,
+            "Margin": 20680.865965650537,
+            "Lower": 1943594.0547374743,
+            "Upper": 1984955.7866687756
+          },
+          "Percentiles": {
+            "P0": 1953456.76171875,
+            "P25": 1956254.4677734375,
+            "P50": 1962493.484375,
+            "P67": 1964314.454296875,
+            "P80": 1965157.6695312501,
+            "P85": 1966580.8068359375,
+            "P90": 1970979.5085937502,
+            "P95": 1985792.6859375,
+            "P100": 2000605.86328125
+          }
+        },
+        "nativeConfidenceLower": 4571734.349939595,
+        "nativeConfidenceUpper": 5707919.501622905,
+        "ratioLower": 0.34050831554034033,
+        "ratioUpper": 0.43418003644393777
+      }
+    ],
+    "driverRetainedStateWordingSupersededByFreshReadyAndBoundary": true,
+    "independentConfirmation": true,
+    "preflightSyntaxFailureBeforeExecutionRetained": true
+  },
+  "storage": {
+    "borrowedSourceBytes": 1062936,
+    "independentOutputBytes": 4264104,
+    "geometryCapacityBytes": 102892,
+    "rowCacheBytes": 131520,
+    "retainedOperationScratchBytes": 0,
+    "defaultIdleCeilingBytes": 4194304,
+    "resultExceedsIdleCeiling": true,
+    "poolPolicyUnchanged": true,
+    "callerRootBypassesIdleStorage": true,
+    "physicalNativeJitPeaksUnmeasured": true,
+    "nativeOperationContextRetainedBytes": 0,
+    "nativeBorrowedInputFrameBytes": 1069152,
+    "nativeAllocationAndPhysicalPeaksUnmeasured": true,
+    "capacityEvidence": "Reuse unchanged managed source formulas/ownership qualification;not newly measured physical peaks. Source frame native row padding4128*259 is retained caller input,not operation scratch."
+  },
+  "priorAsymmetric": {
+    "provider": "benchmarks/bilinear-word-current-confidence-evidence.json",
+    "case": {
+      "caseId": "Up16",
+      "managedUs": 1805.3473401692709,
+      "nativeUs": 1924.5683287760417,
+      "ratio": 0.9380531276420873,
+      "lower": 0.8796716032802716,
+      "upper": 1.0004152312390044,
+      "status": "uncertain",
+      "allocatedBytes": 4498558,
+      "directAllocatedMeanBytes": 4498558,
+      "librarySha256": "03c21e15bca16636533b45c081abadb9a99c97367f2236ddcef49ae6a8e5b0b5",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerSubject": 256,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedRationalReferenceExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "metadata": {
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "outputWidth": 1027,
+        "outputHeight": 519,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+        "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+        "nativeRgbMaximum": 1,
+        "nativeRgbRmse": 0.04627403278265037,
+        "nativeAlphaMaximum": 1,
+        "nativeAlphaRmse": 0.04239492329328568
+      },
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x519 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured.",
+      "sourceEvidence": {
+        "receipt": "tmp/bul1003-up16-counterbalanced-receipt.json",
+        "observation": "tmp/bul1003-up16-counterbalanced.json"
+      },
+      "pairedRatioConfidence": [
+        0.8870856318702185,
+        0.9937081722794234
+      ],
+      "nativeBracketMeansUs": [
+        2030.3363818359376,
+        1924.5683287760417,
+        1972.7205797526042
+      ]
+    },
+    "unchangedAndStillUncertain": true,
+    "noHistoricalClockSubtraction": true
+  },
+  "currentResizeViews": {
+    "passCount": 73,
+    "gaps": 0,
+    "uncertain": 1,
+    "total": 74
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 189,
+    "gaps": 1,
+    "uncertain": 2,
+    "total": 192
+  },
+  "decision": "Equivalent complete one-shot bilinear Up16 passes/stops on the existing actual package. Preserve the original asymmetric diagnostic and its uncertainty. Previously passing equivalent8views are bicubic,not prior bilinear qualification. No production speedup or standalone phase-cost claim;no historical-clock subtraction. No new shape/depth/filter/quality matrix or material path.",
+  "raw": {
+    "file": "bilinear-equivalent-one-shot.tar.xz",
+    "sha256": "9f382146d3cc106f3f2fa5644cfe3f1717397c2e7949daf4c3d996e3c34e7572",
+    "bytes": 2161056,
+    "members": 61,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867",
+        "bytes": 5199384
+      },
+      {
+        "file": "bilinear-word-long-integration.tar.xz",
+        "sha256": "2c2da9683de79805dde58b09d935205b21dc48b9f1f8fc81c871ee964e4ec932",
+        "bytes": 677924
+      }
+    ]
+  },
+  "retainedModeSyntaxCheck": {
+    "passed": true,
+    "sourceSha256": "9354b2e0610e971c73cec3619ec4de1ce4b19658fc023422776485c3d61992e4",
+    "command": [
+      "gcc",
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DLOKAD_IMAGE_BILINEAR_ONE_SHOT=0",
+      "-fsyntax-only",
+      "-I/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/include",
+      "tools/WarmReference/ffmpeg-bilinear-warm.c"
+    ],
+    "newWorkerBinaryBuilds": 0,
+    "existingRetainedWorkerUnchanged": true,
+    "rawLog": {
+      "file": "tmp/bfb1055-retained-syntax-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mirrored": true
+    }
+  }
+}

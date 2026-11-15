@@ -19,9 +19,11 @@ Managed timing includes complete public Resize, geometry/work preparation,
 admission, exact filtering/repair, independent output and disposal. The existing
 FFmpeg/zimg reference retains graph/input/geometry preparation; conversion,
 triangle filtering, unpremultiplication, quantization and independent output
-acquisition/release remain timed. This is an **asymmetric diagnostic**, separate
-from already-passing equivalent one-shot/prepared operations. No necessary managed
-work is removed. Frozen input/settings, exact rational/full-word managed pixels,
+acquisition/release remain timed. This is an **asymmetric diagnostic**. The eight
+previously passing equivalent one-shot/prepared views cover bicubic, not this
+bilinear path. The later [equivalent bilinear one-shot](BILINEAR-EQUIVALENT-ONE-SHOT.md)
+passes on its declared complete boundary; this diagnostic remains unchanged.
+No necessary managed work is removed. Frozen input/settings, exact rational/full-word managed pixels,
 native-only RGB/alpha maximum1/RMSE≤.25, zero-alpha behavior, normal/scalar native
 CLI, source immutability and surviving owners pass unchanged.
 
@@ -41,5 +43,6 @@ Published releases stay immutable; this is not a release-wide refresh.
 operation boundaries and all observations. Raw `bilinear-word-long-integration.tar.xz`, SHA256
 `2c2da9683de79805dde58b09d935205b21dc48b9f1f8fc81c871ee964e4ec932` (677,924B/21members), is mirrored and
 member-verified; dependencies preserve prior inputs, references and actual package.
-Keep70passing/three uncertain resize views and all289required material paths.
+Current family counts are maintained in [coverage](WARM-COVERAGE.md); all289
+required material paths remain in scope.
 Continue independent work; publication remains postponed.

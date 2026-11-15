@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **147 comparisons** summarize that scope.
+**289 named material paths**; these **148 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -73,8 +73,8 @@ One core/embedded build per OS, no other builds, one pack and no post-timing reb
 [word increments](../benchmarks/WORD-CLONE-COPY.md) and
 [copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) retain history.
 
-The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **191 existing
-image views: 188 pass, 1 gaps, 2 uncertain**. This does not establish full parity:
+The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **192 existing
+image views: 189 pass, 1 gaps, 2 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
@@ -83,6 +83,15 @@ remains uncertain: **1,805.35 / FFmpeg 1,924.57µs,
 upper 1.000415**, **4,498,558 B/op**. The longer
 integration retains every native fluctuation; this is not a pass or a production
 speedup. Necessary managed preparation and the native prepared-graph boundary stay explicit.
+[Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
+**1,973.05 / FFmpeg 5,139.83 µs, upper 0.434**,
+**4,498,574 B/op**. Fresh graph/context/geometry, lazy first use,
+result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
+source rasters. Exact managed/full-word/native/ownership gates remain; the existing
+qualified package is reused with no production rebuild. This qualifies the complete
+bilinear boundary; the eight earlier equivalent views cover bicubic. No production
+speedup or historical phase-cost subtraction is claimed; the asymmetric view above
+stays uncertain. No material path or settings grid is added.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **1,964.07 / FFmpeg 1,978.51µs,
 upper 0.999681**, **546,523 B/op**. All 17
@@ -327,6 +336,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
 | Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (uncertain) † → 1027×519 | 1,805.35 | 1,924.57 | 0.938 / 1.000415 | 4,498,558 |
+| Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
 | Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 500.42 | 574.64 | 0.871 / 0.875 | 113 |
