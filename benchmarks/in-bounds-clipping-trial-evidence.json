@@ -1,0 +1,129 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ICP1076",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "56196eda3ce12d7b394660b3983aaf4005fa57cf6318397dce658e29b7e6f573",
+    "linuxSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "timedArtifactSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "packageSha256": "b75a6d6b9627373c3331432ef325283e9f49b4e614f47c1a1c56963cc5ddb9c4"
+  },
+  "candidateLinuxSha256": "ddae771dfde69a2ee1aae4863b6f93b284ec7d887aecb299d0320b10a3618801",
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "145647ef88558263688284057c215325a2169410e1be2786cb2cf536056aec50"
+  },
+  "hypothesis": "The shared Clip helper always evaluates signed64-bit min/max clipping,even for nonnegative rectangles wholly inside an existing canvas. A guarded return preserves supplied coordinates/extents in that domain and leaves the complete existing clipping fallback verbatim. This removes unnecessary geometry preparation,not validation or pixel work. No timing gain follows from source/instruction counts.",
+  "intendedEndState": "One common clipping function used by public fill/copy/compositing,with one proven in-bounds branch and existing general fallback. Preserve public error/admission/validation order,exact pixels/aliases,all chunk polls and borrowed ownership. No pixel-loop abstraction,new owner/storage/cache,API or fixture dispatch.",
+  "boundaries": "All callers establish nonnegative extents before Clip. For dx/dy>=0,canvas positive dimensions minus either destination fit signedint;the remaining extent comparisons exactly characterize wholly contained rectangles. Nonempty output equals original min/max result;empty extents still return at the same public empty-region check. All negative/partly outside/extreme paths retain the old64-bit fallback. Source fitting and policy/cancellation checks remain before Clip. Only Clip body changes.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyClipBodyChanged": true,
+    "allPublicDrawingBodiesVerbatim": true,
+    "fallbackVerbatim": true,
+    "allPublicValidationAndOwnershipVerbatim": true,
+    "allPixelKernelsAndCancellationVerbatim": true,
+    "noNewOwnedCapacity": true,
+    "noNewRetainedStorage": true
+  },
+  "screen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9683375040690105,
+    "candidateUs": 1.963434600830078,
+    "savedUs": 0.004902903238932499,
+    "rawReduction": 0.002490885444593194,
+    "ratioLower": 0.9941057551983556,
+    "ratioUpper": 1.0009277499233886,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "ddae771dfde69a2ee1aae4863b6f93b284ec7d887aecb299d0320b10a3618801",
+    "raw": "tmp/icp1076-DrawingCopy8-paired-screen.log"
+  },
+  "interpretation": "Inconclusive around a0.249%favorable point. No useful complete-operation gain,regression or FFmpeg parity is established. Close this bounded candidate without an independent confirmation,neighboring variants or actual-reference/broad/package campaign. Not a permanent clipping-family ban.",
+  "qualification": {
+    "provider": "benchmarks/wide-png-scan-crc-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 25,
+      "public-normal": 190,
+      "internal-scalar": 25,
+      "public-scalar": 190
+    },
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "linuxCoreSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "windowsCoreSha256": "56196eda3ce12d7b394660b3983aaf4005fa57cf6318397dce658e29b7e6f573",
+    "linuxEmbeddedTestsSha256": "33cf7699be3cc6a9359074e4a14a4f9025f1bbbca8a939842ec483967b9f5ee8",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "allocatedBytesPerOperation": 0,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Retain the qualified implementation and current reference costs. Word copy remains uncertain under its matched current capture;byte copying remains a demonstrated small gap. Further experiments require revised design or concrete attribution,no unchanged favorable replay.",
+  "raw": {
+    "file": "in-bounds-clipping-trial.tar.xz",
+    "sha256": "00c63036d09a61ffea73b07da42746c3cd7654de31524bdaf2cfae0d92150a67",
+    "bytes": 1751440,
+    "members": 54,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      },
+      {
+        "file": "wide-png-scan-crc-qualified.tar.xz",
+        "sha256": "a63897c47f90bc95a56bc7678307537b5aadc385a4cc1809c7f79a2989f1f82b"
+      },
+      {
+        "file": "borrowed-drawing-validation-qualified.tar.xz",
+        "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+      }
+    ]
+  }
+}
