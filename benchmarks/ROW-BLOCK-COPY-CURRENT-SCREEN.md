@@ -41,3 +41,34 @@ verified baseline result to the renderer. Raw `tmp/row-block-copy-current-screen
 The [earlier block trial](VECTOR-BLOCK-VALUE-COPY-SCREEN.md) keeps its PNG adversity.
 No permanent block-representation ban; further work needs a concrete revised
 design/attribution. All289material paths remain required;publication postponed.
+
+
+## Compiler-context audit
+
+CGA1059 reuses the exact retained baseline/candidate DLLs and original complete
+standalone/isolated harnesses, with zero builds. Each producer's normalized
+`CopyRegion` instruction text is identical across those contexts: baseline
+**1,655 B / 410 instructions**, candidate **1,420 B / 350 instructions**, FullOpts
+without PGO. Normalization removes encoded relocation bytes and process-specific
+absolute handles. The complete source/canvas/native/borrowed-owner checks pass.
+All instrumented elapsed values are discarded; this supplies no refreshed timing.
+
+The rejected block assignment emits four interleaved load/store pairs using one
+vector register and fixed offsets. The current kernel loads four vectors before
+storing them. This identifies a concrete revised design: checked block refs with
+four explicit vector locals, retaining the current group load/store order while
+simplifying index arithmetic. Generated code and complete workloads must establish
+whether it helps. No CPU gain, alignment/aliasing cause or automatic adoption follows.
+The different timing contexts do **not** contain different generated method bodies;
+the earlier contradiction otherwise remains unresolved and the candidate rejected.
+
+Completed standalone captures are reused after a UUID-filename postprocessor fix.
+An unsupported isolated-helper screen argument fails before operations; its existing
+confirm entry is then used once for code capture. No completed workload is repeated.
+Both idle-v2 guards pass. Production, package, allocation and retention are unchanged;
+reuse current qualification without broad/package checks. No renderer dependency.
+
+[Evidence](copy-context-codegen-audit-evidence.json) retains disassembly hashes,
+instruction comparisons, commands, exact output gates and the failed preflight.
+Raw `copy-context-codegen-audit.tar.xz`: 28,404 B/32 members, SHA256
+`da07bf9bc59795a22f4fbf5010eaafd2d44678ca279974e96a8b798c8235d91f`, mirrored/member-verified; the dependency retains both immutable subjects.

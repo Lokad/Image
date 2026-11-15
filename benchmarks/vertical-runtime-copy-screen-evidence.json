@@ -1,0 +1,148 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VRP1058",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "baseline": {
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
+  },
+  "candidateLinuxSha256": "6b8d3dad609502d080073e6c1bb024a16d40a7ba9fbacac01d5a8e89d3bea0ad",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "f49a9665117f8fbb303625b1c04e6cef17f78bf4e1cd0865f26a80a08d1956da"
+  },
+  "restoredSources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944"
+  },
+  "hypothesis": "Use the existing runtime CopyTo directly inside the unchanged owned vertical-flip1024pixel chunks. Remove inlined private vector machinery from this caller,aligning it with the accepted BCL owned-copy end state. No CPU benefit is presumed;one bounded comparison decides whether simplification helps the remaining gap.",
+  "history": "Original manual vector stage saved14.12% against an older112B/operation BCL caller. That evidence is retained and argues against assuming a gain. Current56B direct escaping-owner admission and accepted raster-copy scheduling are materially changed caller context. Do not replay span/getter/flat-row/noncancelable split trials;do not change the shared drawing copier.",
+  "intendedEndState": "One existing runtime safe copy implementation per vertical chunk;no added dispatch,helper,specialization,cache,workspace or pixel policy. Keep shared measured drawing copier unchanged. Accept only a demonstrated useful complete effect after actual-reference reconciliation;otherwise restore.",
+  "correctness": "Exact full channel bytes and hidden RGB at both depths,same row reversal,1024pixel token checkpoints,local/shared preallocation admission,private result cleanup and independent surviving outputs. No changed error order,owner capacity,retained storage,encoder/decoder or resizing arithmetic.",
+  "observation": {
+    "project": "Lokad.Image",
+    "stage": "VRP1058",
+    "caseId": "WarmVerticalFlip8",
+    "baselineUs": 8.381053955078125,
+    "candidateUs": 9.02213972981771,
+    "ratio": 1.07649329059952,
+    "lower": 1.0529572616971818,
+    "upper": 1.100555404155663,
+    "baselineAllocatedBytes": 56.0,
+    "candidateAllocatedBytes": 56.0,
+    "allPairsRetained": true,
+    "pairs": 3,
+    "phase": "screen",
+    "operationsEachSubject": 4096,
+    "quietGuardsPassed": true,
+    "exactSourceOutputAndIndependentOwnersPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+      "tmp/vrp1058-baseline-linux/Lokad.Image.dll",
+      "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "tmp/vrp1058-candidate-linux/Lokad.Image.dll",
+      "6b8d3dad609502d080073e6c1bb024a16d40a7ba9fbacac01d5a8e89d3bea0ad",
+      "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "WarmVerticalFlip8",
+      "screen"
+    ],
+    "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+    "raw": "tmp/vrp1058-WarmVerticalFlip8-paired-screen.log"
+  },
+  "decision": "Do not retain. One complete byte-flip3pair screen is adverse7.65%,interval1.05296\u20131.10056. No independent confirmation/general regression claim. Existing private vector copier remains useful on this caller. No word/native-reference/Windows/broad/package campaign follows the target-screen failure.",
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "VRP1058",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+      "sources": {
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944"
+      },
+      "embeddedTestsSha256": "ba8e7e0e96237011d58b9b8f6850c4d08547a6b6032cb3857c2de00947fca8b9",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newTests": 0,
+      "newBroadOrPackageChecks": 0,
+      "scope": "Exact qualified source/core/embedded-test snapshots restored in bin+obj on Linux. Windows production/embedded modules were never rebuilt and remain verified qualified hashes. All tests unchanged;reuse same immutable package and source-valid qualification."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "VRP1058",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "sources": {
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944"
+      },
+      "embeddedTestsSha256": "56f3d5e83d42fd3ccf74c3e4013cf29e9bbb9ba7b0afb40f64b14746a37ed598",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newTests": 0,
+      "newBroadOrPackageChecks": 0,
+      "scope": "Exact qualified source/core/embedded-test snapshots restored in bin+obj on Linux. Windows production/embedded modules were never rebuilt and remain verified qualified hashes. All tests unchanged;reuse same immutable package and source-valid qualification."
+    }
+  },
+  "focused": {
+    "internal-normal": 25,
+    "public-normal": 190,
+    "internal-scalar": 25,
+    "public-scalar": 190
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsCoreEmbedded": 0,
+    "publicHelperHarnessNativeFixture": 0,
+    "restoration": 0,
+    "broadPackage": 0
+  },
+  "memory": "Both immutable modules allocate56B per complete flip. Same531468B source/result payload,no new admitted workspace or retained operation storage. Default two-slot4MiB idle pool and governed bypass unchanged. Physical/native/JIT peaks unmeasured.",
+  "qualificationReuse": {
+    "provider": "benchmarks/font-fixed-header-views-evidence.json",
+    "fullChecksEachOs": 6721,
+    "actualPackageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+    "sameActualPackageBothOsAndThreeExamplesPassed": true
+  },
+  "baselineCi": {
+    "commit": "794ddaf1c81e5e6888b0985e96a9916a1d2597c1",
+    "run": 43703562705,
+    "conclusion": "success",
+    "allThreeJobsPassed": true
+  },
+  "raw": {
+    "file": "vertical-runtime-copy-screen.tar.xz",
+    "sha256": "bcd99df61fc7818e9166deeb38a5d2178644634df65e787ae88d0f02bcb40797",
+    "bytes": 765700,
+    "members": 41,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867"
+      }
+    ]
+  },
+  "rendererDependency": false,
+  "publicationPostponed": true
+}

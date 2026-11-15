@@ -1,0 +1,128 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CGA1059",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "allInstrumentedTimingsDiscarded": true,
+  "purpose": "Actual CopyRegion code generation in retained standalone versus isolated-pair contexts;diagnostics only. All instrumented timings discarded.",
+  "results": {
+    "baselineStandalone": {
+      "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/rbc1056-baseline-overlap-runtime/Obc59Confirm.deps.json",
+        "--runtimeconfig",
+        "tmp/rbc1056-baseline-overlap-runtime/Obc59Confirm.runtimeconfig.json",
+        "tmp/rbc1056-baseline-overlap-runtime/Obc59Confirm.dll",
+        "--benchmarkName",
+        "WarmCopyOverlap.Managed(Case: DrawingCopyOverlap8)",
+        "--job",
+        "WarmConfirm",
+        "--benchmarkId",
+        "0"
+      ],
+      "disassembly": "tmp/cga1059-baseline-standalone.txt",
+      "disassemblySha256": "1da9ed0e8c660d3a9326125f50536575d75291be5591726032f3db13f498a1a0",
+      "codeBytes": 1655,
+      "validation": "artifacts/benchmark-validation/WarmCopyOverlap-2cae556e01134f3193ee0a6bcfa7464e.json",
+      "allOriginalGatesPassed": true
+    },
+    "candidateStandalone": {
+      "librarySha256": "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/rbc1056-DrawingCopyOverlap8-reference-runtime/Obc59Confirm.deps.json",
+        "--runtimeconfig",
+        "tmp/rbc1056-DrawingCopyOverlap8-reference-runtime/Obc59Confirm.runtimeconfig.json",
+        "tmp/rbc1056-DrawingCopyOverlap8-reference-runtime/Obc59Confirm.dll",
+        "--benchmarkName",
+        "WarmCopyOverlap.Managed(Case: DrawingCopyOverlap8)",
+        "--job",
+        "WarmConfirm",
+        "--benchmarkId",
+        "0"
+      ],
+      "disassembly": "tmp/cga1059-candidate-standalone.txt",
+      "disassemblySha256": "47b138c76aee79e9db862b681a3351a49a14b977972bf2da6d5880436e459f59",
+      "codeBytes": 1420,
+      "validation": "artifacts/benchmark-validation/WarmCopyOverlap-c734ffcfbb354586bfce620e1b8b3920.json",
+      "allOriginalGatesPassed": true
+    },
+    "paired": {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+        "tmp/rbc1056-baseline-linux/Lokad.Image.dll",
+        "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+        "tmp/rbc1056-candidate-linux/Lokad.Image.dll",
+        "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+        "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+        "confirm",
+        "DrawingCopyOverlap8"
+      ],
+      "disassembly": "tmp/cga1059-paired-confirm.txt",
+      "disassemblySha256": "981d696d0ce2ac72973048c047a8cba1b2c665fea59a295304f99e681a6aed3f",
+      "codeBytes": [
+        1655,
+        1420
+      ],
+      "allOriginalGatesPassed": true
+    }
+  },
+  "analysis": {
+    "baseline": {
+      "instructions": 410,
+      "normalizedInstructionsEqual": true,
+      "normalizedSha256": "fe1320e4b417368d0b45446b7f7b1255b1b756e204ca112bbd12f1a9bff360c1",
+      "differenceLines": 0
+    },
+    "candidate": {
+      "instructions": 350,
+      "normalizedInstructionsEqual": true,
+      "normalizedSha256": "8551f499a2b13ac10a8b0ba0487545d03b492512e8871fd139e46cf9029b9f36",
+      "differenceLines": 0
+    }
+  },
+  "quietGuardsPassed": true,
+  "originalOutputSourceNativeAndBorrowedOwnershipGatesPassed": true,
+  "observation": "After removing only process-specific absolute handles and encoded relocation bytes,each producer has identical instruction text in standalone and isolated-pair contexts. Baseline1655B/410instructions,candidate1420B/350instructions. Both FullOpts,noPGO. Candidate bulk copy uses one zmm register and interleaves four load/store pairs at fixed0/64/128/192offsets;baseline gathers four zmm registers before four stores.",
+  "interpretation": "Different generated CopyRegion bodies do not explain the earlier timing contradiction. No cause from alignment,hardware aliasing,clocks or register count is established. Smaller code is not a CPU gain. Prior adverse standalone and favorable isolated measurements remain authoritative;candidate stays rejected.",
+  "nextHypothesis": "Use checked256B inline-array block refs and explicit four vector locals before stores. Preserve current group snapshot/order while reducing per-vector index arithmetic. Keep portable fallback,remaining byte handling,all cancellation/admission/ownership. Generated code must prove intended schedule;then complete original byte-flip/borrowed-copy screen and actual-reference reconciliation before any acceptance. No fixed-fixture layout branch or automatic merge.",
+  "recovery": "Completed baseline captured once;postprocessor initially assumed runId-based filenames but validations use UUID names. Recovered by JSONrunId without recapture. Candidate captured once. Paired helper rejected unsupported screen argument before loading subjects/operations;use its existing confirm entry once,all elapsed discarded. Every failed log/script retained.",
+  "memory": "Production storage unchanged;no allocation/retention/physical-peak result is inferred from instrumented diagnostics.",
+  "qualificationReuse": {
+    "provider": "benchmarks/font-fixed-header-views-evidence.json",
+    "fullChecksEachOs": 6721,
+    "actualPackageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+    "sameActualPackageBothOsAndThreeExamplesPassed": true
+  },
+  "rendererDependency": false,
+  "raw": {
+    "file": "copy-context-codegen-audit.tar.xz",
+    "sha256": "da07bf9bc59795a22f4fbf5010eaafd2d44678ca279974e96a8b798c8235d91f",
+    "bytes": 28404,
+    "members": 32,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "row-block-copy-current-screen.tar.xz",
+        "sha256": "65cee3e691a234f4180ef26ba531a67df3ef9c16c38e75c9866ab0fabdaa2f45"
+      }
+    ]
+  },
+  "publicationPostponed": true
+}

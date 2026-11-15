@@ -129,3 +129,33 @@ bindings and manifest are restored byte-exactly without rebuilding; current
 Raw flat-row-flip-screen.tar.xz, 501,420 B/37 members,
 SHA256 29d98cf8ae6915c292895ee6dd4fc09abe052dd63345a388f0b28d15d3fb36e9, is mirrored/member-verified and retains code, screens,
 checks and restoration. No rejected-trial renderer dependency is added.
+
+
+## Runtime copy on the current owner
+
+**VRP1058 is not retained.** Replacing only the private copier call with the
+existing runtime `CopyTo` keeps the single 1,024-pixel chunk traversal. This removes
+the inlined vector body from vertical flips without changing the drawing copier,
+spans, admission, checkpoints or output ownership. Recent BCL word-copy scheduling
+and direct result admission justify a bounded current comparison, not an assumed
+reversal of the earlier vector gain. The older 112 B/op result remains evidence.
+
+One original 513×259 byte-flip screen gives **8.381 → 9.022 µs**,
+paired ratio **1.076493 (1.052957–1.100555)**, unchanged **56 B/op**.
+All three alternating 4,096-call pairs, full channel/source/independent-owner checks
+and both idle-v2 guards remain. The adverse screen closes this candidate; it is not
+an independently confirmed general regression or a new FFmpeg cost. No word,
+standalone-reference, Windows, broad or package campaign follows.
+
+Linux passes 25 internal/190 public focused checks normally and with intrinsics
+disabled. Exact qualified sources/core/embedded modules and public bindings are
+restored without rebuilding. Windows never changed. Reuse 6,721 full/live checks
+per OS and the same actual package/all three examples. One Linux core/embedded
+build; no other build. Same source/result payload and zero new workspace/retention;
+physical/native/JIT peaks remain unmeasured. Current benchmark rows stay unchanged.
+
+[Evidence](vertical-runtime-copy-screen-evidence.json) retains source identities,
+commands, every pair, restoration and qualification reuse. Raw `vertical-runtime-copy-screen.tar.xz`:
+765,700 B/41 members, SHA256 `bcd99df61fc7818e9166deeb38a5d2178644634df65e787ae88d0f02bcb40797`, mirrored/member-verified.
+No renderer dependency or permanent family ban is added. The demonstrated byte gap
+and uncertain word cost remain in the current owned-edit summary.
