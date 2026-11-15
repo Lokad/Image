@@ -1,0 +1,219 @@
+{
+  "project": "Lokad.Image",
+  "stage": "IWP1057",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "hypothesis": "Use32B initial storage only for direct dimension probes,and promote to the existing256B capacity before entering bulk acquisition. This should remove224B of per-operation array allocation on the four existing prefix controls;CPU effect and actual GC remain unmeasured.",
+  "intendedEndState": "The same reader,async grammar,result factory and sole OperationContext/IMemoryBudget owner. No duplicated synchronous parser,ref-struct async workaround,cache,pool or new admission abstraction. A small bulk-entry helper and one replacement routine own capacity transitions.",
+  "baseline": {
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "timedArtifactSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "c9c6f9d5796c56a3accd3ed9577377d5603b0263fd6a057bf30b735482dc4c69"
+  },
+  "candidateTestSources": {
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "6e20bfa05a22ac2e5eefcb547b4d06cdf024895bc980519dcb0e16598f83fdb9",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "00af9f5f2758e9856f42fb124831b55787aa57fff22652f175ee00f6475cc66a"
+  },
+  "candidateProducers": {
+    "windows": "a8982567c1260a296101c60d288b528a314c6c68eeacf174b40150ee307ad042",
+    "linux": "8b9b2b01400eb43c6497ff8b1f4e82ee2663c76496bdf3f13cf0cb2103db63b8"
+  },
+  "measurements": {
+    "seekable": {
+      "project": "Lokad.Image",
+      "stage": "IWP1057",
+      "caseId": "ProbeDimensionsJpeg",
+      "phase": "screen",
+      "baselineUs": 0.23581936899820963,
+      "candidateUs": 0.2290770543416341,
+      "ratio": 0.9714203693023957,
+      "lower": 0.8563880875038786,
+      "upper": 1.1019040872533492,
+      "allocatedBaseline": 568,
+      "allocatedCandidate": 344,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorOwnershipPassed": true,
+      "librarySha256": "8b9b2b01400eb43c6497ff8b1f4e82ee2663c76496bdf3f13cf0cb2103db63b8",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/iwp1057-baseline-linux/Lokad.Image.dll",
+        "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+        "tmp/iwp1057-candidate-linux/Lokad.Image.dll",
+        "8b9b2b01400eb43c6497ff8b1f4e82ee2663c76496bdf3f13cf0cb2103db63b8",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpeg",
+        "screen"
+      ],
+      "raw": "tmp/iwp1057-ProbeDimensionsJpeg-paired-screen-idle-ready.json"
+    },
+    "nonseekableAsync": {
+      "project": "Lokad.Image",
+      "stage": "IWP1057",
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "screen",
+      "baselineUs": 0.310052682240804,
+      "candidateUs": 0.3226659189860026,
+      "ratio": 1.0406804435430699,
+      "lower": 0.9985114461473298,
+      "upper": 1.0846303162089161,
+      "allocatedBaseline": 568,
+      "allocatedCandidate": 624,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorOwnershipPassed": true,
+      "librarySha256": "8b9b2b01400eb43c6497ff8b1f4e82ee2663c76496bdf3f13cf0cb2103db63b8",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/iwp1057-baseline-linux/Lokad.Image.dll",
+        "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+        "tmp/iwp1057-candidate-linux/Lokad.Image.dll",
+        "8b9b2b01400eb43c6497ff8b1f4e82ee2663c76496bdf3f13cf0cb2103db63b8",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "screen"
+      ],
+      "raw": "tmp/iwp1057-ProbeDimensionsJpegAsync-paired-screen.json"
+    }
+  },
+  "decision": "Not retained: three-pair CPU screens are inconclusive; save224B for early seekable prefixes but add56B and a replacement to the existing nonseekable JPEG boundary. Extra growth/admission machinery is not justified here. This is a bounded implementation decision,not a general ban on smaller buffers or proof of CPU regression.",
+  "memory": "Measured GC:568->344B/op seekableJPEG;568->624B/op nonseekableAsyncJPEG. Candidate initial admitted288B,promoted512B;focused ownership tests establish logical charges and cleanup,not physical peak. No retained operation workspace. Physical/native/JIT peaks unmeasured. General late/header maximum8448B unchanged.",
+  "scope": "Three alternating complete-operation pairs on the same original65163B JPEG,full-batch warmup,naturalGC,oneCPU. Same acquired/traversed prefix,independent output and source lifetime. These are scoped immutable-DLL effects,not standalone FFmpeg measurements or current production costs. PNG/WebP and full headers were not timed after deciding not to adopt.",
+  "idlePreflight": "First pre-measurement guard rejected CPU0 I/O wait0.028>0.01 after build. No overlapping job or actual sample. Failed guard retained;one retry uses distinct idle-ready prefix with both guards passing. No successful timing repeated.",
+  "focused": {
+    "windows": {
+      "internal-normal": 10,
+      "public-normal": 153,
+      "internal-scalar": 10,
+      "public-scalar": 153
+    },
+    "linux": {
+      "internal-normal": 10,
+      "public-normal": 153,
+      "internal-scalar": 10,
+      "public-scalar": 153
+    }
+  },
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "IWP1057",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "d7a6c1026cc767b1ad5b33c93fceb5cf805af95d79f9ce44550d8bafc338f85e",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2"
+      },
+      "embeddedTestsSha256": "ba8e7e0e96237011d58b9b8f6850c4d08547a6b6032cb3857c2de00947fca8b9",
+      "publicTestsSha256": "bd561cfbab1f6182425b5c9e0b80f13c94c88c9ffe59a110626fa62d77d0f4a0",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "IWP1057",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "d7a6c1026cc767b1ad5b33c93fceb5cf805af95d79f9ce44550d8bafc338f85e",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2"
+      },
+      "embeddedTestsSha256": "56f3d5e83d42fd3ccf74c3e4013cf29e9bbb9ba7b0afb40f64b14746a37ed598",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "corePerOs": 1,
+    "embeddedPerOs": 1,
+    "publicPerOs": 1,
+    "helperHarnessNativeFixture": 0,
+    "restoration": 0,
+    "broadPackage": 0
+  },
+  "qualificationReuse": {
+    "provider": "benchmarks/font-fixed-header-views-evidence.json",
+    "fullChecksEachOs": 6721,
+    "actualPackageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+    "sameActualPackageBothOsAndThreeExamplesPassed": true
+  },
+  "rendererDependency": false,
+  "raw": {
+    "file": "probe-initial-workspace-trial.tar.xz",
+    "sha256": "4bdbee58d1db7bca3f7222fb948827347468de34c1830d453c71a0cfd1613d18",
+    "bytes": 793780,
+    "members": 71,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867",
+        "bytes": 5199384,
+        "members": 186,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "font-location-preparation-qualified.tar.xz",
+            "sha256": "2d429199f877b26b63b7192e6d54b91265d4689f46c65d784279a08d7eb4b722",
+            "bytes": 3490576
+          },
+          {
+            "file": "text-prepared-edge-invariants-qualified.tar.xz",
+            "sha256": "b2a8c7de8cb85937784220b88231e7311ae7fa4f4ac65f0b7d93d70b71b8d058",
+            "bytes": 5773048
+          }
+        ]
+      }
+    ]
+  },
+  "publicationPostponed": true
+}
