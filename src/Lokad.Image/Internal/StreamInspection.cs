@@ -154,80 +154,190 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<TResult> JpegAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+    private static ValueTask<TResult> JpegAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
         where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
-        int items = 0, width = 0, height = 0; long metadata = 0;
-        bool frame = false, scan = false, scanSeen = false, exif = false;
-        var orientation = ImageOrientation.Normal;
-        var source = new JpegSourceMetadata();
-        while (true)
+        var state = new JpegInspectionState { Orientation = ImageOrientation.Normal, Source = new JpegSourceMetadata() };
+        return AdvanceJpeg(r, probe, metadataPolicy, ref state, out var pending)
+            ? ValueTask.FromResult(state.Source.Info<TResult, TFactory>(probe, state.Width, state.Height, state.Orientation))
+            : AwaitJpegAsync<TResult, TFactory>(r, probe, metadataPolicy, state, pending);
+    }
+
+    // The grammar advances synchronously until an actual incomplete operation.
+    // Public Probe/InspectHeaders wrappers own the reader through every suspension.
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static async ValueTask<TResult> AwaitJpegAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe,
+        ImageMetadataPolicy metadataPolicy, JpegInspectionState state, JpegPending pending)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+    {
+        do
         {
-            var marker = await (scan ? r.JpegMarkerAsync(true) : r.JpegHeaderMarkerAsync()).ConfigureAwait(false);
-            if (scan && marker == 0) continue;
-            Item(r, ref items);
-            if (marker is >= 0xD0 and <= 0xD7) { if (!scan) throw new ImageDataException("JPEG restart marker outside a scan."); continue; }
-            scan = false;
-            if (marker == 0xD9)
+            switch (pending.Kind)
             {
-                if (!frame || !scanSeen) throw new ImageDataException("Invalid JPEG end.");
-                await r.EndAsync().ConfigureAwait(false);
-                probe?.Animation(false);
-                if (probe?.WantsOrientation == true) probe.Orientation();
-                probe?.Reached(ImageProbeFacts.All);
-                return source.Info<TResult, TFactory>(probe, width, height, orientation);
+                case JpegPendingKind.Marker: state.Marker = await pending.Marker.ConfigureAwait(false); break;
+                case JpegPendingKind.Exif: state.Orientation = (await pending.Exif.ConfigureAwait(false)) ?? state.Orientation; break;
+                default: await pending.Operation.ConfigureAwait(false); break;
             }
-            if (marker is 0 or 0xD8 or 1) throw new ImageDataException("Invalid JPEG marker sequence.");
-            await r.ReadAsync(2).ConfigureAwait(false); var length = BinaryPrimitives.ReadUInt16BigEndian(r.Header);
-            if (length < 2) throw new ImageDataException("Invalid JPEG segment length.");
-            var size = length - 2; var end = r.Position + size; r.DeclaredEnd(end);
-            if (marker is >= 0xC0 and <= 0xCF && marker is not (0xC4 or 0xC8 or 0xCC))
-            {
-                if (marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException(UnsupportedImageFeature.CodingProfile, "This JPEG coding profile is not supported.", ImageFormat.Jpeg);
-                if (frame || size < 6) throw new ImageDataException("Invalid JPEG frame header.");
-                await r.ReadAsync(6).ConfigureAwait(false);
-                if (r.Header[0] != 8) throw new UnsupportedImageException(UnsupportedImageFeature.BitDepth, "Only 8-bit JPEG is supported.", ImageFormat.Jpeg);
-                height = BinaryPrimitives.ReadUInt16BigEndian(r.Header.AsSpan(1)); width = BinaryPrimitives.ReadUInt16BigEndian(r.Header.AsSpan(3)); var count = r.Header[5];
-                if (count is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
-                if (size != 6 + count * 3) throw new ImageDataException("Invalid JPEG frame component count.");
-                Dimensions(r, width, height); frame = true;
-                await r.ReadAsync(count * 3).ConfigureAwait(false);
-                source.Frame(count, r.Header);
-                probe?.Animation(false);
-                if (probe?.Reached(ImageProbeFacts.Dimensions | ImageProbeFacts.Transparency
-                    | (count == 1 ? ImageProbeFacts.SourceRepresentation : 0)) == true)
-                    return source.Info<TResult, TFactory>(probe, width, height, orientation);
-            }
-            else if (marker == 0xDA)
-            {
-                if (!frame || size < 4) throw new ImageDataException("Invalid JPEG scan header.");
-                await r.ReadAsync(1).ConfigureAwait(false);
-                if (r.Header[0] is 0 or > 4 || size != 4 + 2 * r.Header[0]) throw new ImageDataException("Invalid JPEG scan component count.");
-                scan = scanSeen = true;
-            }
-            else if (marker is >= 0xE0 and <= 0xEF || marker == 0xFE)
-            {
-                Metadata(r, size, ref metadata);
-                if (marker == 0xE0 && size >= 5 || marker == 0xEE && size >= 12)
-                {
-                    var prefixLength = marker == 0xE0 ? 5 : 12;
-                    await r.ReadAsync(prefixLength).ConfigureAwait(false);
-                    source.Application(marker, r.Header.AsSpan(0, prefixLength));
-                }
-                if (marker == 0xE1 && size >= 6 && (probe is null || probe.WantsOrientation))
-                {
-                    await r.ReadAsync(6).ConfigureAwait(false);
-                    if (r.Header.AsSpan(0, 6).SequenceEqual("Exif\0\0"u8))
-                    {
-                        if (exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
-                        orientation = (await ExifAsync(r, size - 6, false, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
-                        if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
-                        if (frame && probe?.Reached(0) == true) return source.Info<TResult, TFactory>(probe, width, height, orientation);
-                    }
-                }
-            }
-            await r.SkipAsync(end - r.Position).ConfigureAwait(false);
+            pending = default;
+        } while (!AdvanceJpeg(r, probe, metadataPolicy, ref state, out pending));
+        return state.Source.Info<TResult, TFactory>(probe, state.Width, state.Height, state.Orientation);
+    }
+
+    private enum JpegResume { Start, Marker, Length, Frame, Components, Scan, Application, ExifPrefix, Exif, End }
+    private enum JpegPendingKind { Operation, Marker, Exif }
+
+    private struct JpegInspectionState
+    {
+        internal int Items, Width, Height, Marker, Size, Count;
+        internal long Metadata, End;
+        internal bool Frame, Scan, ScanSeen, Exif;
+        internal ImageOrientation Orientation;
+        internal JpegSourceMetadata Source;
+        internal JpegResume Resume;
+    }
+
+    private readonly struct JpegPending
+    {
+        internal readonly JpegPendingKind Kind;
+        internal readonly ValueTask Operation;
+        internal readonly ValueTask<int> Marker;
+        internal readonly ValueTask<ImageOrientation?> Exif;
+
+        internal JpegPending(ValueTask operation) { Kind = JpegPendingKind.Operation; Operation = operation; }
+        internal JpegPending(ValueTask<int> marker) { Kind = JpegPendingKind.Marker; Marker = marker; }
+        internal JpegPending(ValueTask<ImageOrientation?> exif) { Kind = JpegPendingKind.Exif; Exif = exif; }
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private static bool CompleteJpegOperation(ValueTask operation, JpegResume resume,
+        ref JpegInspectionState state, ref JpegPending pending)
+    {
+        if (operation.IsCompletedSuccessfully) { operation.GetAwaiter().GetResult(); return true; }
+        state.Resume = resume; pending = new JpegPending(operation); return false;
+    }
+
+    private static bool AdvanceJpeg(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy,
+        ref JpegInspectionState state, out JpegPending pending)
+    {
+        pending = default;
+        switch (state.Resume)
+        {
+            case JpegResume.Marker: goto Marker;
+            case JpegResume.Length: goto Length;
+            case JpegResume.Frame: goto Frame;
+            case JpegResume.Components: goto Components;
+            case JpegResume.Scan: goto Scan;
+            case JpegResume.Application: goto Application;
+            case JpegResume.ExifPrefix: goto ExifPrefix;
+            case JpegResume.Exif: goto Exif;
+            case JpegResume.End: goto End;
         }
+
+    NextMarker:
+        var marker = state.Scan ? r.JpegMarkerAsync(true) : r.JpegHeaderMarkerAsync();
+        if (!marker.IsCompletedSuccessfully)
+        {
+            state.Resume = JpegResume.Marker; pending = new JpegPending(marker); return false;
+        }
+        state.Marker = marker.Result;
+    Marker:
+        if (state.Scan && state.Marker == 0) goto NextMarker;
+        Item(r, ref state.Items);
+        if (state.Marker is >= 0xD0 and <= 0xD7)
+        {
+            if (!state.Scan) throw new ImageDataException("JPEG restart marker outside a scan.");
+            goto NextMarker;
+        }
+        state.Scan = false;
+        if (state.Marker == 0xD9)
+        {
+            if (!state.Frame || !state.ScanSeen) throw new ImageDataException("Invalid JPEG end.");
+            if (!CompleteJpegOperation(r.EndAsync(), JpegResume.End, ref state, ref pending)) return false;
+            goto End;
+        }
+        if (state.Marker is 0 or 0xD8 or 1) throw new ImageDataException("Invalid JPEG marker sequence.");
+        if (!CompleteJpegOperation(r.ReadAsync(2), JpegResume.Length, ref state, ref pending)) return false;
+    Length:
+        var length = BinaryPrimitives.ReadUInt16BigEndian(r.Header);
+        if (length < 2) throw new ImageDataException("Invalid JPEG segment length.");
+        state.Size = length - 2; state.End = r.Position + state.Size; r.DeclaredEnd(state.End);
+        if (state.Marker is >= 0xC0 and <= 0xCF && state.Marker is not (0xC4 or 0xC8 or 0xCC))
+        {
+            if (state.Marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException(UnsupportedImageFeature.CodingProfile, "This JPEG coding profile is not supported.", ImageFormat.Jpeg);
+            if (state.Frame || state.Size < 6) throw new ImageDataException("Invalid JPEG frame header.");
+            if (!CompleteJpegOperation(r.ReadAsync(6), JpegResume.Frame, ref state, ref pending)) return false;
+            goto Frame;
+        }
+        if (state.Marker == 0xDA)
+        {
+            if (!state.Frame || state.Size < 4) throw new ImageDataException("Invalid JPEG scan header.");
+            if (!CompleteJpegOperation(r.ReadAsync(1), JpegResume.Scan, ref state, ref pending)) return false;
+            goto Scan;
+        }
+        if (state.Marker is >= 0xE0 and <= 0xEF || state.Marker == 0xFE)
+        {
+            Metadata(r, state.Size, ref state.Metadata);
+            if (state.Marker == 0xE0 && state.Size >= 5 || state.Marker == 0xEE && state.Size >= 12)
+            {
+                state.Count = state.Marker == 0xE0 ? 5 : 12;
+                if (!CompleteJpegOperation(r.ReadAsync(state.Count), JpegResume.Application, ref state, ref pending)) return false;
+                goto Application;
+            }
+            if (state.Marker == 0xE1 && state.Size >= 6 && (probe is null || probe.WantsOrientation))
+            {
+                if (!CompleteJpegOperation(r.ReadAsync(6), JpegResume.ExifPrefix, ref state, ref pending)) return false;
+                goto ExifPrefix;
+            }
+        }
+        goto Skip;
+
+    Frame:
+        if (r.Header[0] != 8) throw new UnsupportedImageException(UnsupportedImageFeature.BitDepth, "Only 8-bit JPEG is supported.", ImageFormat.Jpeg);
+        state.Height = BinaryPrimitives.ReadUInt16BigEndian(r.Header.AsSpan(1)); state.Width = BinaryPrimitives.ReadUInt16BigEndian(r.Header.AsSpan(3)); state.Count = r.Header[5];
+        if (state.Count is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
+        if (state.Size != 6 + state.Count * 3) throw new ImageDataException("Invalid JPEG frame component count.");
+        Dimensions(r, state.Width, state.Height); state.Frame = true;
+        if (!CompleteJpegOperation(r.ReadAsync(state.Count * 3), JpegResume.Components, ref state, ref pending)) return false;
+    Components:
+        state.Source.Frame(state.Count, r.Header);
+        probe?.Animation(false);
+        if (probe?.Reached(ImageProbeFacts.Dimensions | ImageProbeFacts.Transparency
+            | (state.Count == 1 ? ImageProbeFacts.SourceRepresentation : 0)) == true) return true;
+        goto Skip;
+
+    Scan:
+        if (r.Header[0] is 0 or > 4 || state.Size != 4 + 2 * r.Header[0]) throw new ImageDataException("Invalid JPEG scan component count.");
+        state.Scan = state.ScanSeen = true;
+        goto Skip;
+
+    Application:
+        state.Source.Application(state.Marker, r.Header.AsSpan(0, state.Count));
+        goto Skip;
+
+    ExifPrefix:
+        if (!r.Header.AsSpan(0, 6).SequenceEqual("Exif\0\0"u8)) goto Skip;
+        if (state.Exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
+        var exif = ExifAsync(r, state.Size - 6, false, metadataPolicy);
+        if (!exif.IsCompletedSuccessfully)
+        {
+            state.Resume = JpegResume.Exif; pending = new JpegPending(exif); return false;
+        }
+        state.Orientation = exif.Result ?? state.Orientation;
+    Exif:
+        state.Exif = true;
+        if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
+        if (state.Frame && probe?.Reached(0) == true) return true;
+        goto Skip;
+
+    Skip:
+        if (!CompleteJpegOperation(r.SkipAsync(state.End - r.Position), JpegResume.Start, ref state, ref pending)) return false;
+        goto NextMarker;
+
+    End:
+        probe?.Animation(false);
+        if (probe?.WantsOrientation == true) probe.Orientation();
+        probe?.Reached(ImageProbeFacts.All);
+        return true;
     }
 
     private static async ValueTask<TResult> WebpAsync<TResult, TFactory>(InspectionReader r, long end, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)

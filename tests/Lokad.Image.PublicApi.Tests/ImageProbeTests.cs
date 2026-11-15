@@ -427,6 +427,42 @@ public sealed class ImageProbeTests
         Assert.Equal(0, root.Bytes); Assert.True(next.CanRead);
     }
 
+    [Theory]
+    [InlineData(false, false)] [InlineData(false, true)]
+    [InlineData(true, false)] [InlineData(true, true)]
+    public async Task PendingJpegEofKeepsAdmissionUntilTheActualReadFinishes(bool headers, bool fail)
+    {
+        var data = OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11).Encoded;
+        var expected = ImageCodec.Identify(data);
+        const int workspace = 8192 + 256;
+        using var root = new TestMemoryBudget(workspace);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = workspace };
+        using var cancellation = new CancellationTokenSource();
+        using var input = new GatedProbeInput(data, fail, false, data.Length);
+        Task pending = headers
+            ? ImageCodec.InspectHeadersAsync(input, limits, cancellation.Token).AsTask()
+            : ImageCodec.ProbeAsync(input, new() { Facts = ImageProbeFacts.All, Limits = limits }, cancellation.Token).AsTask();
+        await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        try
+        {
+            Assert.Equal(data.Length, input.BytesRead); Assert.False(pending.IsCompleted);
+            Assert.Equal(workspace, root.Bytes);
+            cancellation.Cancel();
+            Assert.False(pending.IsCompleted); Assert.Equal(workspace, root.Bytes);
+        }
+        finally { input.Release.TrySetResult(); }
+        if (fail) await Assert.ThrowsAsync<IOException>(() => pending);
+        else
+        {
+            var error = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
+            Assert.True(pending.IsCanceled); Assert.Equal(cancellation.Token, error.CancellationToken);
+        }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(input.CanRead);
+        using var next = new MemoryStream(data);
+        Assert.Equal(expected, await ImageCodec.InspectHeadersAsync(next, limits));
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(next.CanRead);
+    }
+
     private sealed class GatedProbeInput(byte[] data, bool fail, bool afterFragment, int? holdAt) : Stream
     {
         private int position;

@@ -690,29 +690,44 @@ def apply_bounded_wide_quartet(editing):
 
 
 def stream_reader_stage():
-    owner = json.loads((ROOT / 'benchmarks/refill-call-inlining-evidence.json').read_text(encoding='utf-8'))
+    owner = json.loads((ROOT / 'benchmarks/jpeg-inspection-driver-evidence.json').read_text(encoding='utf-8'))
     assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
     assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
     assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
     q = owner['qualification']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6725
     assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
     assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256']
     assert q['package']['librarySha256'] == owner['producers']['linuxSha256']
     assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert q['focusedEachMode'] == {'internal': 10, 'public': 148}
+    assert q['focusedEachMode'] == {'internal': 10, 'public': 152}
     assert owner['primaryPair']['upper'] < 1
     assert owner['primaryPair']['allocatedBaseline'] == owner['primaryPair']['allocatedCandidate'] == 568
     assert owner['primaryAllActualStatistics']['candidate']['ConfidenceInterval']['Upper'] < owner['primaryAllActualStatistics']['baseline']['ConfidenceInterval']['Lower']
-    assert owner['headerGuard']['lower'] <= 1 <= owner['headerGuard']['upper']
+    assert owner['headerGuard']['upper'] < 1
+    assert owner['headerGuard']['allocatedBaseline'] == owner['headerGuard']['allocatedCandidate'] == 8776
+    assert owner['headerAllActualStatistics']['candidate']['ConfidenceInterval']['Upper'] < owner['headerAllActualStatistics']['baseline']['ConfidenceInterval']['Lower']
+    assert all(v['baselineAndCandidatePassed'] for v in q['newEofCasesBothImplementationsBothOs'].values())
+    assert all(v['addedBytes'] == 64 for v in owner['pendingAllocationDiagnostic']['costs'].values())
     assert all(owner['sourceProof'].values())
-    assert set(owner['cases']) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
+    assert set(owner['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'}
+    assert owner['sourceProof']['outsideJpegRangeReconstructed'] and owner['sourceProof']['unchangedPngWebpExifAcquisitionAndFactories']
     for case in owner['cases'].values():
         assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
         assert case['allocatedBytes'] == 568 and case['allActualsRetained']
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed']
         assert case['librarySha256'] == owner['producers']['linuxSha256']
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+    previous = json.loads((ROOT / owner['reusedCaseProvider']).read_text(encoding='utf-8'))
+    assert set(owner['reusedCases']) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'PngHeaders'}
+    assert previous['productionAccepted'] and previous['qualification']['sameActualPackageBothOs']
+    for name, case in owner['reusedCases'].items():
+        assert case == previous['cases'][name] and case['status'] == 'pass'
+        assert case['librarySha256'] == previous['producers']['linuxSha256']
+        assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
+        assert case['allocatedBytes'] == 568
+    owner['cases'] = {**owner['reusedCases'], **owner['cases']}
     return owner
 
 
@@ -2846,7 +2861,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
         if case in provider['cases']:
             current = provider['cases'][case]
             assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
-            assert current['librarySha256'] == provider['producers']['linuxSha256']
+            # stream_reader_stage validates each current or source-valid reused producer.
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
             read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
@@ -2896,7 +2911,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     headers = probe_owner['cases']['PngHeaders']
     assert headers['descriptorExact'] and headers['allOriginalGatesPassed'] and headers['quietGuardsPassed']
-    assert headers['librarySha256'] == probe_owner['qualification']['package']['librarySha256']
+    # The unchanged PNG-header path retains its separately pinned prior producer.
     assert headers['managedActuals'] == headers['nativeSamplesEachBracket'] == 12 and headers['upper'] <= 1
     read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
                      f'{headers["managedUs"]:,.3f} | {headers["nativeUs"]:,.3f} | '
@@ -3187,25 +3202,29 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Refill-call inlining](../benchmarks/REFILL-CALL-INLINING.md) removes repeated
-refill call setup while preserving every method body. Independent complete async
-JPEG pairs save **6.32% / 15.99 ns**, still **568 B/op**; all-actual intervals separate.
-All four original probes and complete PNG headers refresh on the SAME actual
-timed/package DLL, with twelve actuals, both original FFmpeg AVIO/header adapter
-brackets and exact acquisition/descriptor/ownership gates. PNG/WebP dimensions and
-complete PNG headers pass. JPEG sync/async remain gaps at **0.212/0.240 µs**,
-upper **1.127/1.201**. The targeted complete-JPEG-header confirmation spans parity
-**0.998398–1.008379**; no regression or speedup established. Every original/adverse
-sample remains; no identical favorable replay. Actual callers inline refill;
-the JPEG parser stays **7,451 B**, while selected combined native code grows
-**{probe_owner['jit']['selectedCodeGrowthBytes']:,} B**. These are code sizes, not CPU-phase costs or memory peaks.
-Windows/Linux each pass **6,721 full/live checks**,
-focused **10 internal /148 public** normal/scalar, the SAME actual package and
-all three examples. One accepted core/embedded build per OS, one pack and no
-accepted-module rebuild after timing. The preceding unretained Boolean-completion
-trial gets no broad/package campaign; its evidence remains. Earlier
-[completion-leaf inlining](../benchmarks/REFILL-COMPLETION-INLINING.md) retains history;
-stage gains are not added. Shared admission and retained capacity are unchanged.
+[JPEG inspection advancement](../benchmarks/JPEG-INSPECTION-DRIVER.md) separates
+one grammar from genuine I/O suspension. Independent complete async-probe pairs
+save **{1-probe_owner['primaryPair']['candidateUs']/probe_owner['primaryPair']['baselineUs']:.2%} /
+{(probe_owner['primaryPair']['baselineUs']-probe_owner['primaryPair']['candidateUs'])*1000:.2f} ns**;
+complete-header pairs save **{1-probe_owner['headerGuard']['candidateUs']/probe_owner['headerGuard']['baselineUs']:.2%} /
+{probe_owner['headerGuard']['baselineUs']-probe_owner['headerGuard']['candidateUs']:.3f} µs**.
+Both paired and all-actual intervals separate; these scoped effects are not added
+to earlier gains or described as FFmpeg parity. Current JPEG sync is uncertain at
+**{probe_owner['cases']['ProbeDimensionsJpeg']['managedUs']:.3f} µs, upper {probe_owner['cases']['ProbeDimensionsJpeg']['upper']:.3f}**;
+async remains a gap at **{probe_owner['cases']['ProbeDimensionsJpegAsync']['managedUs']:.3f} µs, upper {probe_owner['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**.
+Both refresh on the SAME actual timed/package DLL. Unchanged PNG/WebP dimensions
+and PNG headers retain their [identified source-valid producer](../benchmarks/REFILL-CALL-INLINING.md).
+Original inputs, callbacks, native brackets and exact descriptor/owner gates stay fixed.
+Immediate GC remains **568 B/probe /8,776 B/complete JPEG header**. A diagnostic
+forcing one pending marker or EOF read adds **64 B/operation**, including unchanged
+gated-input/bridge overhead; its absolute totals are not production GC costs.
+Admission remains **512 B dimensions /8,448 B bulk**, with zero added arrays,
+cache or retained workspace. Source grows by 110 lines and selected native code grows;
+physical/native/JIT peaks are unmeasured. Windows/Linux each pass **6,725 full/live
+checks**, **10 internal/152 public** normal/scalar, the SAME actual package and
+all three examples. Four new EOF cancel/failure/ownership cases also pass the
+baseline. One coherent qualification/pack milestone follows reconciliation;
+the accepted timed Linux DLL is never rebuilt. All earlier and adverse evidence remains.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **{resident_png['cases']['identify/Png8']['managedUs']:.3f} / FFmpeg adapter
 {resident_png['cases']['identify/Png8']['nativeUs']:.3f} µs**, conservative upper
