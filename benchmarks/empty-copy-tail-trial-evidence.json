@@ -1,0 +1,286 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ECT1077",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "56196eda3ce12d7b394660b3983aaf4005fa57cf6318397dce658e29b7e6f573",
+    "linuxSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "timedArtifactSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "packageSha256": "b75a6d6b9627373c3331432ef325283e9f49b4e614f47c1a1c56963cc5ddb9c4"
+  },
+  "candidateLinuxSha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "fb6c2ec54fcb8f06758a152bae17db8ca15035ebce4eae40c1292751d8460cb0"
+  },
+  "hypothesis": "Skip only the empty tail after guarded512-bit whole-block copying. Avoid tail span construction/checks and the zero-byte Memmove call for every exactly covered chunk. Preserve the original grouped vector loads-before-stores,nonempty tail and small/scalar fallback. Benefit and nonempty-tail branch cost require complete measurements.",
+  "intendedEndState": "One shared checked disjoint-row copier with an explicit empty-tail guard. No new kernel,type,array,workspace,pool,cache,owner,API or fixture-dependent dispatch. Keep public validation,chunk traversal,all cancellation checkpoints and output ownership verbatim.",
+  "boundaries": "source.Length=floor(input.Length/256),so copied<=input.Length. If equal,the checked destination block extent already proves output.Length>=input.Length;the omitted zero-length CopyTo cannot copy bytes or throw. Otherwise execute the identical tail expression. The outer guarded/vector/portable branches and every other production statement remain byte-identical.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyEmptyTailGuardAdded": true,
+    "groupedVectorInstructionScheduleIdentical": true,
+    "actualEmptyTailJumpPresent": true,
+    "copyRegionCodeBytes": [
+      1357,
+      1363
+    ],
+    "allInstrumentedTimingsDiscarded": true,
+    "disassemblySha256": "f716b18d25a57077d12773b24aa8b17550a9351cd51cffed979cc626f58bb41a",
+    "noNewStorage": true
+  },
+  "byteScreen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.957666280110677,
+    "candidateUs": 1.9525730997721356,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "raw": "tmp/ect1077-DrawingCopy8-paired-screen.log",
+    "lower": 0.9955292859674375,
+    "upper": 0.9992702826037123
+  },
+  "byteConfirmation": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.986021219889323,
+    "candidateUs": 1.970827168782552,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "raw": "tmp/ect1077-DrawingCopy8-paired-confirm.log",
+    "lower": 0.9913592199960155,
+    "upper": 0.9933411429179018,
+    "savedUs": 0.015194051106770967,
+    "rawReduction": 0.007650497867096151
+  },
+  "wordFlipControl": {
+    "caseId": "WarmVerticalFlip16",
+    "baselineUs": 17.44733066813151,
+    "candidateUs": 17.528317810058592,
+    "baselineAllocatedBytes": 56.0,
+    "candidateAllocatedBytes": 56.0,
+    "pairs": 12,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "raw": "tmp/ect1077-WarmVerticalFlip16-paired-confirm.log",
+    "lower": 1.0008838097282167,
+    "upper": 1.0084090092582665,
+    "ratio": 1.0046393636278992
+  },
+  "rejectedReferenceCases": {
+    "WarmVerticalFlip8": {
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.281514851888021,
+      "nativeUs": 8.376768208821614,
+      "ratio": 0.9886288656246591,
+      "lower": 0.9790162168785222,
+      "upper": 0.993394671185822,
+      "status": "pass",
+      "allocatedBytes": 56.0,
+      "librarySha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": {
+        "receipt": "tmp/ect1077-WarmVerticalFlip8-reference-confirm-receipt.json",
+        "observation": "tmp/ect1077-WarmVerticalFlip8-reference-confirm-observation.json"
+      },
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "boundary": "One resident original 513x259 RGBA8 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "notCurrentProductionCost": true
+    },
+    "WarmVerticalFlip16": {
+      "caseId": "WarmVerticalFlip16",
+      "managedUs": 17.546341125488283,
+      "nativeUs": 17.17539636230469,
+      "ratio": 1.0215974499428564,
+      "lower": 1.0158647173952733,
+      "upper": 1.0250821327420228,
+      "status": "gap",
+      "allocatedBytes": 56.0,
+      "librarySha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": {
+        "receipt": "tmp/ect1077-WarmVerticalFlip16-reference-confirm-receipt.json",
+        "observation": "tmp/ect1077-WarmVerticalFlip16-reference-confirm-observation.json"
+      },
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+      "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+      "notCurrentProductionCost": true
+    },
+    "DrawingCopy8": {
+      "caseId": "DrawingCopy8",
+      "managedUs": 1.987585016734617,
+      "nativeUs": 1.8830391235351562,
+      "ratio": 1.0555197668985177,
+      "upper": 1.0632741211926982,
+      "status": "gap",
+      "allocatedBytes": 0,
+      "librarySha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": {
+        "receipt": "tmp/ect1077-DrawingCopy8-reference-confirm-receipt.json",
+        "observation": "tmp/ect1077-DrawingCopy8-reference-confirm-observation.json"
+      },
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "notCurrentProductionCost": true
+    },
+    "DrawingCopyOverlap8": {
+      "caseId": "DrawingCopyOverlap8",
+      "managedUs": 3.634555557208208,
+      "nativeUs": 3.7908391876220704,
+      "ratio": 0.9587733420810456,
+      "upper": 0.9621649375033032,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": {
+        "receipt": "tmp/ect1077-DrawingCopyOverlap8-reference-confirm-receipt.json",
+        "observation": "tmp/ect1077-DrawingCopyOverlap8-reference-confirm-observation.json"
+      },
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+      "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
+      "notCurrentProductionCost": true
+    },
+    "DrawingCopy16": {
+      "caseId": "DrawingCopy16",
+      "managedUs": 3.7775882962544762,
+      "nativeUs": 3.7892441190083823,
+      "ratio": 0.9969239715394856,
+      "lower": 0.9916326736076979,
+      "upper": 1.0002340838458272,
+      "status": "uncertain",
+      "allocatedBytes": 0.0,
+      "librarySha256": "24757ad487417453dc4a2a5ea6afff34743292c1489766e5b1300a028d64531b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": {
+        "receipt": "tmp/ect1077-DrawingCopy16-reference-confirm-receipt.json",
+        "observation": "tmp/ect1077-DrawingCopy16-reference-confirm-observation.json"
+      },
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA16 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "notCurrentProductionCost": true
+    }
+  },
+  "rejectedReferenceStatusCounts": {
+    "pass": 2,
+    "gap": 2,
+    "uncertain": 1
+  },
+  "interpretation": "Shared candidate rejected. Independent complete byte-copy comparison saves15.194ns/.765%,while one complete word-flip controlled comparison is adverse by80.987ns/.464%,with intervals separated. These scoped distinct workload effects do not imply a universal percentage or summed pipeline gain. The source-only no-op removal is insufficient across current callers.",
+  "remainingContradiction": "Standalone candidate byte point1.987585us is higher than historical1.969386us despite the favorable isolated DLL pairs. No cause is established. A planned current-baseline standalone control was not executed after the word comparison independently rejected the candidate. No acceptance,causal layout/alignment claim or favorable replay follows.",
+  "qualification": {
+    "provider": "benchmarks/wide-png-scan-crc-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 25,
+      "public-normal": 190,
+      "internal-scalar": 25,
+      "public-scalar": 190
+    },
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "linuxCoreSha256": "9a61baa466572626ef0cbfd4bfca6f0fa74c1ffcf25c9a356eff0205ffb4876f",
+    "windowsCoreSha256": "56196eda3ce12d7b394660b3983aaf4005fa57cf6318397dce658e29b7e6f573",
+    "linuxEmbeddedTestsSha256": "33cf7699be3cc6a9359074e4a14a4f9025f1bbbca8a939842ec483967b9f5ee8",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "borrowedCopyAllocatedBytes": 0,
+    "ownedFlipAllocatedBytes": 56,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep the qualified implementation and current case costs. No rejected-result renderer dependency or permanent family ban. A materially revised preparation/execution design may revisit no-op removal,but do not blindly replay the shared per-chunk guard.",
+  "raw": {
+    "file": "empty-copy-tail-trial.tar.xz",
+    "sha256": "76135cd402e1f45312d3e337b6879f134358cc8eb7f2f5c418f610a0307d42e1",
+    "bytes": 1847176,
+    "members": 138,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "wide-png-scan-crc-qualified.tar.xz",
+        "sha256": "a63897c47f90bc95a56bc7678307537b5aadc385a4cc1809c7f79a2989f1f82b"
+      },
+      {
+        "file": "snapshot-block-copy-qualified.tar.xz",
+        "sha256": "ebebf3684cd540a9b9a3bb492f06d4d9a3e5d93f08a75a1382be447024f93adc"
+      },
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      },
+      {
+        "file": "rectangle-copy-adjacent.tar.xz",
+        "sha256": "df5c5abb3b57248b7c74cd5779f188be099e8562abc5f67ac279c619239576e4"
+      }
+    ]
+  }
+}
