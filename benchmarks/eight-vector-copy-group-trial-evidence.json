@@ -1,0 +1,199 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ECG1088",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+    "linuxSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "timedArtifactSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "packageSha256": "fac9093764c7a6ebc1003c574bfe06a79a9b993a072d03de4d0e0bb4be1f150d"
+  },
+  "candidateLinuxSha256": "efae7f231f37a519eae8b133b2ff564e84d23efd7c70172c851b7632038993b9",
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "96ae660041127a8609c4612a973bf443a4aef0a1a8874a20e57eb6c0073d11ef"
+  },
+  "hypothesis": "The existing checked fixed-offset disjoint copy executes four256B groups per1024B row. Eight explicit512-bit vector loads before eight stores copy512B per group,halving loop/index/update/branch repetitions without changing total transferred bytes. More live vectors/code may cause spills or regress short rows;complete workloads must decide,not source counts.",
+  "intendedEndState": "One shared checked grouped loop with eight explicit locals and the existing BCL remainder. No additional vector kernel,type,cache,pool,owner,workspace,API or fixture branch. Vector512 guard retained;the BCL small fallback extends from<256 to<512B. Callers retain geometry,traversal and exact original cancellation chunks.",
+  "boundaries": "CopyBlock eight64B vectors has512B capacity;the source cast covers floor(input.Length/512) complete groups. Every index0..7 stays within each checked block and the destination extent proves capacity. All eight source vectors are loaded before any group store. Callers already prove chunks disjoint,so broader snapshots preserve every byte. copied=groups*512<=input.Length;identical CopyTo copies the tail. Smaller/non-Vector512 inputs use existing CopyTo. No cursor,poll,admission,ownership or caller change.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyGroupedKernelWidthAndLoadsChanged": true,
+    "allGroupLoadsBeforeStores": true,
+    "bclTailAndFallbackOperationVerbatim": true,
+    "allCallersCancellationAdmissionAndOwnershipVerbatim": true,
+    "noNewOwnedCapacity": true,
+    "noNewRetainedState": true
+  },
+  "byteScreen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9820337219238282,
+    "candidateUs": 1.9618275451660157,
+    "savedUs": 0.020206176757812555,
+    "rawReduction": 0.010194668503520576,
+    "ratioLower": 0.9880630527612789,
+    "ratioUpper": 0.9915508301167852,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "efae7f231f37a519eae8b133b2ff564e84d23efd7c70172c851b7632038993b9",
+    "raw": "tmp/ecg1088-DrawingCopy8-paired-screen.log"
+  },
+  "byteConfirmation": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9953360188802083,
+    "candidateUs": 1.971179677327474,
+    "savedUs": 0.024156341552734384,
+    "rawReduction": 0.012106402793395699,
+    "ratioLower": 0.9784862409764579,
+    "ratioUpper": 0.9972899377172734,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "efae7f231f37a519eae8b133b2ff564e84d23efd7c70172c851b7632038993b9",
+    "raw": "tmp/ecg1088-DrawingCopy8-paired-confirm.log"
+  },
+  "wordGuard": {
+    "caseId": "WarmVerticalFlip16",
+    "baselineUs": 17.59493680826823,
+    "candidateUs": 17.655468770345053,
+    "ratio": 1.0034482894711336,
+    "lower": 0.9980902885258579,
+    "upper": 1.0088350535197674,
+    "baselineAllocatedBytes": 56.0,
+    "candidateAllocatedBytes": 56.0,
+    "allPairsRetained": true,
+    "pairs": 12,
+    "phase": "confirm",
+    "operationsEachSubject": 4096,
+    "quietGuardsPassed": true,
+    "exactSourceOutputAndIndependentOwnersPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "raw": "tmp/ecg1088-WarmVerticalFlip16-paired-confirm.log"
+  },
+  "candidateWordReference": {
+    "caseId": "WarmVerticalFlip16",
+    "managedUs": 17.89288397216797,
+    "nativeUs": 17.30276193745931,
+    "ratio": 1.034105655319171,
+    "lower": 1.0262959031410344,
+    "upper": 1.0390723163789304,
+    "status": "gap",
+    "allocatedBytes": 56.0,
+    "librarySha256": "efae7f231f37a519eae8b133b2ff564e84d23efd7c70172c851b7632038993b9",
+    "harnessSha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+    "boundary": "One resident original 513x259 RGBA16 raster vertically flipped into an independent owned raster at the same dimensions/depth. Complete public FlipVertical, admission, allocation, materialization and disposal. Native public FFmpeg vflip graph produces a negative-stride view, then public frame allocation/copy materializes every output row inside each operation before releasing view/output. Graph/source/frame wrappers are reused. Native padded rows exposed directly. Exact row placement, alpha and hidden RGB; no output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this original whole raster is measured.",
+    "referenceLabel": "FFmpeg public vflip negative-stride view plus independent owned materialization",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerSubject": 16384,
+    "sourceEvidence": {
+      "receipt": "tmp/ecg1088-WarmVerticalFlip16-reference-confirm-receipt.json",
+      "observation": "tmp/ecg1088-WarmVerticalFlip16-reference-confirm-observation.json"
+    }
+  },
+  "interpretation": "Unretained shared change:the independent byte-only DLL comparison gains1.21percent/24.16ns,but the candidate complete word-flip reference fails the required parity gate. Its same-context managed pair is uncertain(.998090\u20131.008835),so a causal word regression is not established from these different contexts or historical clocks. Combined evidence is insufficient to adopt the shared kernel. No blanket alignment/register-pressure cause or workload-frequency assumption.",
+  "stoppedWork": "Other four reference configurations were prepared but not timed after the word result made this version unpromising. No baseline-reference control,generated-code capture,Windows candidate,broad correctness or package campaign;no favorable native replay or adjacent unroll variants.",
+  "qualification": {
+    "provider": "benchmarks/refill-call-inlining-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 25,
+      "public-normal": 190,
+      "internal-scalar": 25,
+      "public-scalar": 190
+    },
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "linuxCoreSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "windowsCoreSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+    "linuxEmbeddedTestsSha256": "6b7dfe0a0d085e69046d8de3f4fa4301b89d162835763f52053ecf66537857fe",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "borrowedCopyAllocatedBytes": 0,
+    "ownedFlipAllocatedBytes": 56,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep qualified four-vector grouping and current copy/flip costs. Require materially revised design or attribution before more unroll trials;no permanent family ban. Prioritize remaining demonstrated gaps without retuning confirmed passes or replaying uncertainty for a favorable bound.",
+  "raw": {
+    "file": "eight-vector-copy-group-trial.tar.xz",
+    "sha256": "12cf243d8672565f4ed79cf4fd63b08e39cdf8071ec23a56bdbb3fc6b576e3e8",
+    "bytes": 1809288,
+    "members": 91,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "refill-call-inlining-qualified.tar.xz",
+        "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
+      },
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      },
+      {
+        "file": "owned-flip-current-confidence.tar.xz",
+        "sha256": "fc255ec6be1a7f54e340dd8438c61199a7df0d9884f9e79ec681c9d77c68e900"
+      }
+    ]
+  }
+}
