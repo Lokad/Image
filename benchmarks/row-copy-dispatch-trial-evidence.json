@@ -1,0 +1,162 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RCD1090",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+    "linuxSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "timedArtifactSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "packageSha256": "fac9093764c7a6ebc1003c574bfe06a79a9b993a072d03de4d0e0bb4be1f150d"
+  },
+  "candidateLinuxSha256": "197f0478a7d99908803f186078878d6c630790206523b94b3eddcb4500319004",
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "f3206a77e3624593ea81baaf4640367dc689e4048871089b8bbe7dcb36912913"
+  },
+  "hypothesis": "Source-valid accepted-path generated code retains a stack-loaded independentRows condition selecting grouped/BCL copying in every chunk. Hoist that invariant dispatch before traversal. Expose true/false constants to one force-inlined shared source loop so the JIT can fold the repeated kernel selection. This may grow native code or complicate register allocation and may produce no elapsed gain.",
+  "intendedEndState": "One source traversal with existing prepared row geometry/chunking and unchanged grouped/BCL kernels. Only two call sites with literal strategy values; no interface, delegate, generic pixel abstraction, duplicate maintained loop, cache, workspace, owner or fixture branch. If forced inlining grows code without a useful complete gain,restore rather than sweep variants.",
+  "boundaries": "Moving the exact loop body to CopyRows, replacing region.Width with its identical width argument and selecting literal independentRows once reconstructs the original complete file. All public validation/geometry/admission and inter-row arithmetic remain. Loop receives identical span/cursor/stride/width/height/depth/direction/token values; 4096pixel chunk order, exceptions, alias snapshots and every poll stay identical. No ownership/storage change.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "oneSharedSourceTraversal": true,
+    "allKernelBodiesVerbatim": true,
+    "allValidationAndPreparationVerbatim": true,
+    "allChunkAndPollBoundariesIdentical": true
+  },
+  "attribution": {
+    "provider": "benchmarks/drawing-row-preparation-evidence.json",
+    "generatedCode": "tmp/rcp1061-DrawingCopy8-paired-codegen.txt",
+    "acceptedCallerBytes": 1357,
+    "inLoopKernelSelectionObserved": true,
+    "sourceValidNotNewTimingProof": true,
+    "instrumentedTimingsDiscarded": true
+  },
+  "screen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9838787841796874,
+    "candidateUs": 1.9838868001302083,
+    "savedUs": -8.015950520912085e-06,
+    "rawReduction": -4.040544505423682e-06,
+    "ratioLower": 0.9979819085143925,
+    "ratioUpper": 1.0020311249106246,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "197f0478a7d99908803f186078878d6c630790206523b94b3eddcb4500319004",
+    "raw": "tmp/rcd1090-DrawingCopy8-paired-screen.log"
+  },
+  "interpretation": "Inconclusive screen with effectively identical point time and allocations;not retained. Source-level invariant dispatch through a force-inlined shared traversal does not establish elapsed gains or that the JIT removed the branch. No new codegen capture or causal register/code-size explanation. No confirmation,other-case/native capture,neighboring scheduling variant or broad/package campaign.",
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 25,
+      "public-normal": 190,
+      "internal-scalar": 25,
+      "public-scalar": 190
+    },
+    "existingByteWordExactSamplesAndHiddenRgb": true,
+    "clippedOverlappingWideMultiChunkAliases": true,
+    "cancellationRefusalCleanupAndRecovery": true
+  },
+  "memory": {
+    "borrowedCopyAllocatedBytes": 0,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualification": {
+    "provider": "benchmarks/refill-call-inlining-evidence.json",
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RCD1090",
+      "sourceRestored": true,
+      "productionSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RCD1090",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+      "sourcePins": {
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+        "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+      },
+      "embeddedTestsSha256": "6b7dfe0a0d085e69046d8de3f4fa4301b89d162835763f52053ecf66537857fe",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "raw": {
+    "file": "row-copy-dispatch-trial.tar.xz",
+    "sha256": "677183f06b9d067eb56f825b4fe1769feb24a5ae902c6fe7575f0bc36844af45",
+    "bytes": 1753468,
+    "members": 58,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "refill-call-inlining-qualified.tar.xz",
+        "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
+      },
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      }
+    ]
+  }
+}
