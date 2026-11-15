@@ -1804,19 +1804,36 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
-    assert font_load['productionAccepted'] and font_load['requiredMaterialPaths'] == 283
-    assert font_load['sourceProof']['parserAndLookupAndAdmissionSourceUnchanged']
-    assert font_load['sourceProof']['poolOriginalFieldsRentReturnSourceUnchanged']
+    font_load = json.loads((ROOT / 'benchmarks/font-header-validation-evidence.json').read_text(encoding='utf-8'))
+    assert font_load['productionAccepted'] and font_load['allAffectedPerformanceReconciled']
     assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in font_load['comparison']['views'].values())
-    assert font_load['current']['librarySha256'] == font_load['producers']['linuxSha256']
-    assert font_load['current']['allOriginalGatesPassed'] and font_load['current']['conservativeRatioLower'] > 1
-    assert font_load['storage']['addedOwnedPayloadBytes'] == 0
-    assert font_load['storage']['globalPoolCeilingBytes'] == 4194304
-    assert font_load['storage']['globalPoolIdleSlots'] == 2
-    assert font_load['current']['managedMemory']['BytesAllocatedPerOperation'] == 176
+    fq = font_load['qualification']
+    assert fq['windows']['total'] == fq['linux']['total'] == fq['fullChecksEachOs'] > 0
+    assert all(sum(fq[platform]['full']) == fq['fullChecksEachOs'] for platform in ('windows', 'linux'))
+    assert fq['actualPackage']['sha256'] == fq['samePackageWindows']['sha256']
+    assert fq['actualPackage']['actualConsumerPassed'] and fq['samePackageWindows']['actualConsumerPassed']
+    assert fq['actualPackage']['librarySha256'] == font_load['producers']['timedArtifactSha256']
+    assert font_load['sourceProof']['originalSourceReconstructed']
+    assert font_load['memory']['addedOwnedCapacityBytes'] == font_load['memory']['addedRetainedCapacityBytes'] == 0
+    font_cost = font_load['font']
+    assert font_cost['actualIterations'] == font_cost['nativeSamplesEachBracket'] == 12
+    assert font_cost['allOriginalGatesPassed'] and font_cost['quietGuardsPassed'] and font_cost['allActualsRetained']
+    assert font_cost['allocatedBytes'] == 176
+    assert font_cost['status'] == ('pass' if font_cost['upper'] <= 1 else 'gap' if font_cost['lower'] > 1 else 'uncertain')
+    assert math.isclose(font_cost['ratio'], font_cost['managedUs'] / font_cost['nativeUs'], rel_tol=1e-12)
+    for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
+                        ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
+        cost = font_load['pipelineCases'][case]
+        assert cost['completeWorkload'] and cost['status'] == 'pass'
+        assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
+        rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
+                     f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
+    assert math.isclose(font_load['pipelineCases']['PrepareDraw8']['amortizedManagedUs'],
+                        font_load['pipelineCases']['PrepareDraw8']['managedUs'] / 8, rel_tol=1e-12)
+    font_preparation = font_load['pipelineCases']['Preparation']
+    font_batch = font_load['pipelineCases']['PrepareDraw8']
+    font_gain = font_load['fontComparison']['views']['statistics']
     raster = json.loads((ROOT / 'benchmarks/text-render-preparation-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
     assert raster['qualification']['fullChecksEachOs'] == 6244
@@ -1839,10 +1856,12 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         label = f'Text {"prepared raster" if prepared else "ordinary draw"} RGBA{depth} / ImageSharp.Drawing ({status})'
         rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["nativeUs"]:,.2f} | '
                      f'{case["ratio"]:.3f} / {case["upper"]:.3f} | {case["allocatedBytes"]:,} |'))
+    rows.append(('editing', f'| Font loading / FreeType 2.13.2 (scoped {font_cost["status"]}) † | {font_cost["managedUs"]:,.2f} | '
+                 f'{font_cost["nativeUs"]:,.2f} | {font_cost["ratio"]:.3f} / {font_cost["upper"]:.3f} | {font_cost["allocatedBytes"]:,} |'))
     for case_id, previous in text_current['observations'].items():
-        if case_id in ('DrawText8', 'DrawText16', 'DrawingComposite8', 'DrawingComposite16'):
+        if case_id in ('DrawText8', 'DrawText16', 'DrawingComposite8', 'DrawingComposite16', 'FontLoadRegular'):
             continue  # Current ordinary/prepared text and borrowed composites above.
-        case = font_load['current'] if case_id == 'FontLoadRegular' else previous
+        case = previous
         assert len(case['managed']['actual']) == 12 and case['quietGuardsPassed']
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
@@ -2774,28 +2793,6 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     read_rows.append(f'| JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | {current["managedUs"]:,.3f} | '
                      f'{current["nativeUs"]:,.3f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | Confirmed pass |')
-    text_pipeline = json.loads((ROOT / 'benchmarks/cleared-canvas-storage-evidence.json').read_text(encoding='utf-8'))
-    text_pipeline_qualification = text_pipeline['qualification']
-    assert text_pipeline['productionChanged'] and text_pipeline['requiredMaterialPaths'] == 289
-    assert text_pipeline['raw']['mirrored'] and text_pipeline['raw']['allMembersVerified']
-    assert text_pipeline_qualification['fullChecksEachOs'] == 6275
-    assert text_pipeline_qualification['actualPackage']['sha256'] == text_pipeline_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert text_pipeline_qualification['actualPackage']['librarySha256'] == text_pipeline['producers']['librarySha256']
-    assert text_pipeline['sourceProof']['originalFieldsConstructorDisposeInternalAllocateOverwriteCloneRowsSamplesVerbatim']
-    assert text_pipeline['sourceProof']['oldPoolRentReturnFontPreservationAndLatestReturnVerbatim']
-    assert set(text_pipeline['cases']) == {'OneShot', 'PrepareDraw8', 'Preparation', 'PreparedDraw'}
-    for case, cost in text_pipeline['cases'].items():
-        assert cost['pairs'] == cost['referenceBracketSamples'] == 12 and cost['operationsPerSample'] == 32
-        assert cost['quietGuardsPassed'] and cost['allFrozenChecksPassed'] and cost['allActualsRetained']
-        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
-        assert cost['status'] == ('uncertain' if cost['upper'] is None else 'pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-        assert cost['completeWorkload'] == (case in {'OneShot', 'PrepareDraw8'})
-    tp_one = text_pipeline['cases']['OneShot']
-    tp_batch = text_pipeline['cases']['PrepareDraw8']
-    tp_draw = text_pipeline['cases']['PreparedDraw']
-    assert tp_one['status'] == tp_batch['status'] == 'pass' and tp_draw['status'] == 'uncertain'
-    assert text_pipeline['effects']['PrepareDraw8']['rawGainSeparated'] and text_pipeline['effects']['PrepareDraw8']['normalizedGainSeparated']
-    assert math.isclose(tp_batch['amortizedManagedUs'], tp_batch['managedUs'] / 8, rel_tol=1e-12)
     png_live_qualification = png_live['qualification']
     assert png_live_qualification['fullChecksEachOs'] == png_live_qualification['windows']['total'] == png_live_qualification['linux']['total'] == 6351
     assert png_live_qualification['actualPackage']['sha256'] == png_live_qualification['samePackageLinux']['sameActualPackageSha256'] == png_live['producers']['actualPackageSha256']
@@ -3034,9 +3031,17 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-The complete one-shot and preparation-plus-eight-draw public integrations pass,
-including every layout/fitting call and fresh canvas ownership. Preparation is
-reported separately and the complete repeated batch amortized across eight draws.
+[Current complete text integrations](../benchmarks/FONT-HEADER-VALIDATION.md) pass,
+including every layout/fitting call and fresh canvas/clear/ownership/disposal.
+Preparation alone is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
+amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation. Allocations are
+per complete row operation; the repeated row reports the whole batch. Active managed
+prepared capacity is 39,904 B; no font/layout survives preparation. Heap deltas are
+approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
+{fq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
+pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
+comparison, not a release-wide refresh. Font loading saves {font_gain['savedUs']:.2f} µs / {font_gain['rawSavedFraction']:.2%} against a
+contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
@@ -3066,7 +3071,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 145, 'Expected 145 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 147, 'Expected 147 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
+using System.Runtime.CompilerServices;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image;
@@ -189,11 +190,12 @@ public sealed partial class TrueTypeFont : IDisposable
         return data.AsSpan(glyf.Offset + (int)first, (int)(last - first));
     }
     private uint Location(int index) => locationWidth == 2 ? (uint)U16(Span(loca)[(index * 2)..]) * 2 : U32(Span(loca)[(index * 4)..]);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void Header(ReadOnlySpan<byte> glyph)
     {
         if (glyph.Length < 10) throw new ImageDataException("Invalid glyph header.");
-        glyph = glyph[..10];
-        if (I16(glyph) != 0 && (I16(glyph[2..]) > I16(glyph[6..]) || I16(glyph[4..]) > I16(glyph[8..])))
+        var header = glyph[..10];
+        if (I16(header) != 0 && (I16(header[2..]) > I16(header[6..]) || I16(header[4..]) > I16(header[8..])))
             throw new ImageDataException("Invalid glyph bounds.");
     }
 

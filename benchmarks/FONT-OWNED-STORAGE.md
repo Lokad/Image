@@ -1,5 +1,8 @@
 # Owned font storage
 
+[Header validation](FONT-HEADER-VALIDATION.md) owns the current loading cost and
+complete public-text comparisons. This report retains its storage design and evidence.
+
 [Complete public text pipelines](TEXT-COMPLETE-PUBLIC-PIPELINES.md) measure
 font→fit→layout→draw and repeated use directly. This loading-only comparison has
 different validation policies; its stage gap does not prove an overall slowdown.
