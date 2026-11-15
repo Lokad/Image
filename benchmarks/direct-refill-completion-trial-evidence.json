@@ -1,0 +1,219 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RDI1096",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "1d8000f282710fa62fbcc18f7f00368579bd4b550c70752d1bfb4dc7b61006c7",
+    "linuxSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+    "timedArtifactSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+    "packageSha256": "e9f499d029c63253e24b7a9b60b2b076fb4ba64377d7ee0b5f76845ececf7626"
+  },
+  "candidateLinuxSha256": "bdbf76dec5aff7201a8426715a29c7969b58a4d0c2349ff06da4e3c23315fabd",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b0c0487921b098e0ea649ca4d32e205670efd0b0282b94dfef622e3f98186f15",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "034456850bc58782bd0046f281d318f869e2155932f874fd4ee3efac6fb6fea1"
+  },
+  "hypothesis": "Current immediate consumers still join and inspect an intermediate ValueTask<bool> after the inlined refill. Return a direct completed flag from the single acquisition body,exposing existing first/last EOF only after validated completion. Typed pending tasks remain solely for unfinished/faulted I/O. This removes completed-task packaging/status/result transport;extra output storage or lost code optimizations may offset all savings. ValueTask was already a struct,no heap saving is assumed.",
+  "intendedEndState": "One TryFill acquisition implementation plus a small ValueTask adapter used by existing await loops. Four immediate consumers branch directly on completion;all genuine-await helpers and CompleteFill stay verbatim. No duplicated acquisition,unused compatibility API,new field,buffer,owner,pool,cache or reference change.",
+  "boundaries": "Reversing seven recorded source substitutions reconstructs the complete original file. CompleteFill validates nonnegative bounded read,then identical counters,limit checks,cancellation and last=first+read. Therefore on successful completion read!=0 iff first!=last. Only then do immediate consumers inspect the cursor. Unfinished/faulted reads enter the same AwaitFillAsync and original consuming helpers,exactly once,with identical buffer/offset/request/token. Existing await loops use a functional adapter to the same body;no parser/checkpoint/read-order/ownership change.",
+  "sourceProof": {
+    "completeOriginalReconstructed": true,
+    "completeFillAndAllAwaitHelpersVerbatim": true,
+    "sameRequestsOffsetsCallbacksAndPollOrder": true,
+    "eofCursorEquivalenceAfterValidatedRead": true,
+    "oneAcquisitionImplementation": true,
+    "noNewOwnedCapacityCacheStateOrApi": true
+  },
+  "sourceTransforms": [
+    [
+      "    private ValueTask<bool> FillAsync(int needed, int offset = 0)\n    {\n        Context.Cancellation.ThrowIfCancellationRequested();",
+      "    private ValueTask<bool> FillAsync(int needed, int offset = 0)\n        => TryFill(needed, offset, out var pending) ? ValueTask.FromResult(first != last) : pending;\n\n    // True means the validated read is complete; only suspension transports a task.\n    [MethodImpl(MethodImplOptions.AggressiveInlining)]\n    private bool TryFill(int needed, int offset, out ValueTask<bool> pending)\n    {\n        pending = default;\n        Context.Cancellation.ThrowIfCancellationRequested();"
+    ],
+    [
+      "            var pending = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);\n            if (!pending.IsCompletedSuccessfully) return AwaitFillAsync(pending, requested);\n            read = pending.Result;",
+      "            var inputRead = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);\n            if (!inputRead.IsCompletedSuccessfully)\n            {\n                pending = AwaitFillAsync(inputRead, requested); return false;\n            }\n            read = inputRead.Result;"
+    ],
+    [
+      "        return ValueTask.FromResult(CompleteFill(read, requested));",
+      "        CompleteFill(read, requested);\n        return true;"
+    ],
+    [
+      "        var pending = FillAsync(1);\n        return pending.IsCompletedSuccessfully ? ValueTask.FromResult(pending.Result ? buffer[first++] : -1) : AwaitByteAsync(pending);",
+      "        if (!TryFill(1, 0, out var pending)) return AwaitByteAsync(pending);\n        return ValueTask.FromResult(first != last ? buffer[first++] : -1);"
+    ],
+    [
+      "                var pending = FillAsync(count - copied, directFields ? copied : 0);\n                if (!pending.IsCompletedSuccessfully) return AwaitReadAsync(count, copied, pending);\n                if (!pending.Result) throw new ImageDataException(\"Truncated image header.\");",
+      "                if (!TryFill(count - copied, directFields ? copied : 0, out var pending)) return AwaitReadAsync(count, copied, pending);\n                if (first == last) throw new ImageDataException(\"Truncated image header.\");"
+    ],
+    [
+      "            var pending = FillAsync((int)Math.Min(count, buffer.Length));\n            if (!pending.IsCompletedSuccessfully) return AwaitSkipForwardAsync(count, pending);\n            if (!pending.Result) throw new ImageDataException(\"Truncated image payload.\");",
+      "            if (!TryFill((int)Math.Min(count, buffer.Length), 0, out var pending)) return AwaitSkipForwardAsync(count, pending);\n            if (first == last) throw new ImageDataException(\"Truncated image payload.\");"
+    ],
+    [
+      "            var pending = FillAsync(Context.Limits.MaxInputBytes - acquired >= 2 ? 2 : 1);\n            if (!pending.IsCompletedSuccessfully) return AwaitJpegHeaderMarkerAsync(pending);\n            if (!pending.Result) throw new ImageDataException(\"Invalid JPEG marker.\");",
+      "            if (!TryFill(Context.Limits.MaxInputBytes - acquired >= 2 ? 2 : 1, 0, out var pending)) return AwaitJpegHeaderMarkerAsync(pending);\n            if (first == last) throw new ImageDataException(\"Invalid JPEG marker.\");"
+    ]
+  ],
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.2320985247294108,
+    "candidateUs": 0.22410462188720703,
+    "ratio": 0.9658298006215315,
+    "lower": 0.5868515926449026,
+    "upper": 1.58954532195173,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "bdbf76dec5aff7201a8426715a29c7969b58a4d0c2349ff06da4e3c23315fabd",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/rdi1096-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "confirmation": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "confirm",
+    "baselineUs": 0.22420458285013833,
+    "candidateUs": 0.23320503234863282,
+    "ratio": 1.0399260480336843,
+    "lower": 1.0086437457962714,
+    "upper": 1.0721785465741538,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "bdbf76dec5aff7201a8426715a29c7969b58a4d0c2349ff06da4e3c23315fabd",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/rdi1096-ProbeDimensionsJpegAsync-paired-confirm.json"
+  },
+  "interpretation": "Original favorable3.44percent/7.99ns short point is highly uncertain. The independent12pair comparison is adverse4.014percent/9.00ns,interval1.008644\u20131.072179. No gain is retained. This is scoped managed-DLL evidence,not native performance or a causal JIT/register explanation. Preserve both observations;no confirmation replay,other cases,native/codegen capture,neighboring completion variant or broad/package campaign.",
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 152,
+      "internal-scalar": 10,
+      "public-scalar": 152
+    },
+    "allActualPendingEofFailureCancellationRefusalAndRecoveryPassed": true
+  },
+  "qualification": {
+    "provider": "benchmarks/jpeg-inspection-driver-evidence.json",
+    "fullChecksEachOsReused": 6725,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RDI1096",
+      "sourceRestored": true,
+      "productionSha256": "1d8000f282710fa62fbcc18f7f00368579bd4b550c70752d1bfb4dc7b61006c7",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RDI1096",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b0c0487921b098e0ea649ca4d32e205670efd0b0282b94dfef622e3f98186f15",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+        "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+      },
+      "embeddedTestsSha256": "71cb01d77c6aeff13e918384246b9a3c4baec1412b88c47eae83e87181260406",
+      "publicTestsSha256": "29f00f26cdad140018a09db6e58d9e892e26d16932961c2f69005669a1035b8b",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "immediateAllocatedBytes": 568,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "pendingHelpersAndStateTypesVerbatim": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep the qualified ValueTask<bool> producer and source-valid costs. Stop unchanged direct-completion/marker-hint retries. A new experiment needs materially revised design or attribution,not assumptions from method-entry locations or unconfirmed small points. Other independent required work remains available;no permanent family ban.",
+  "raw": {
+    "file": "direct-refill-completion-trial.tar.xz",
+    "sha256": "18c644be7a6eb53989093dcd6e6c3b4c390baa210a3d828ae2e56e09b0ea6368",
+    "bytes": 1790496,
+    "members": 80,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-inspection-driver-qualified.tar.xz",
+        "sha256": "344d8ed3399c39cdc9fd87197698415ff048f974570b06bb6ed994698005a7de"
+      },
+      {
+        "file": "jpeg-marker-setup-trial.tar.xz",
+        "sha256": "8c36a4f73b44bd38db727c2f92ebfc022bb451e6f438131372342c13cced3f2f"
+      }
+    ]
+  }
+}
