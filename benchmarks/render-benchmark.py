@@ -226,30 +226,6 @@ def adjacent_word_copy():
     return c
 
 
-def snapshot_copy_stage():
-    stage = json.loads((ROOT / 'benchmarks/snapshot-block-copy-evidence.json').read_text(encoding='utf-8'))
-    q = stage['qualification']
-    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == stage['producers']['packageSha256']
-    assert q['actualPackage']['librarySha256'] == stage['producers']['timedArtifactSha256'] == stage['producers']['linuxSha256']
-    assert all(q[name]['actualConsumerPassed'] and q[name]['usageExamples'] == 3 for name in ('actualPackage', 'samePackageWindows'))
-    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert stage['jit']['fixedGroupOffsets'] and stage['jit']['fourSourceLoadsBeforeAnyGroupStore']
-    assert stage['pairedByteFlip']['upper'] < 1
-    assert stage['memory']['newOwnedHeapCapacityBytes'] == stage['memory']['newAdmittedBytes'] == stage['memory']['retainedOperationBytes'] == 0
-    for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'):
-        c = stage['cases'][name]
-        assert c['librarySha256'] == stage['producers']['linuxSha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    return stage
-
-
 def owned_flip_confidence():
     stage = json.loads((ROOT / 'benchmarks/owned-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
@@ -270,55 +246,49 @@ def owned_flip_confidence():
     return stage
 
 
-def owned_edit_costs():
-    # Only the selected current case needs validation. Superseded increments and
-    # experiment-specific source/build proofs stay in their original reports.
-    providers = [json.loads((ROOT / ('benchmarks/' + name)).read_text(encoding='utf-8')) for name in (
-        'copy-result-admission-evidence.json', 'owned-edit-current-confidence-evidence.json',
-        'raster-copy-scheduling-evidence.json')]
+def owned_edit_costs(png):
+    # Select current records first. Fully superseded flip/experiment providers
+    # stay in their reports, without becoming renderer dependencies.
     selected = {}
-    for index, stage in enumerate(providers):
-        q = stage['qualification']
-        assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
-        assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-        if index == 1:
-            assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
-            assert q['fullChecksEachOs'] == 6692 and q['productionAndActualPackageByteIdentical']
-            assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
-            assert q['actualPackageSha256'] == stage['producers']['packageSha256']
-            assert set(stage['cases']) == {'WarmNormalOrientation16', 'WarmVerticalFlip16', 'WarmClone16', 'WarmVerticalFlip8'}
-            library = q['actualPackageLibrarySha256']
-        else:
-            assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
-            assert q['windows']['total'] == q['linux']['total'] == (6683 if index == 0 else 6696)
-            assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-            assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
-            assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
-            assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-            library = q['actualPackage']['librarySha256']
-        assert library == stage['producers']['linuxSha256']
-        selected.update((name, (case, library, index == 1)) for name, case in stage['cases'].items())
+    for name in ('copy-result-admission-evidence.json', 'raster-copy-scheduling-evidence.json'):
+        stage = json.loads((ROOT / ('benchmarks/' + name)).read_text(encoding='utf-8'))
+        selected.update((key, (case, stage)) for key, case in stage['cases'].items())
+    prior_counts = {**stage['combinedOwnedEditStatusCounts']}
+    flips = owned_flip_confidence()
+    selected.update((key, (case, flips)) for key, case in flips['cases'].items())
+    for name in ('PngCropFit8', 'PngCropFit16'):
+        selected[name] = (png['cases']['pngStream/' + name], png)
     assert len(selected) == 20
-    for name, (c, library, latest) in selected.items():
-        assert c['librarySha256'] == library
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-        assert c['managedExact'] and c['sourceUnchanged'] and c['independentOwnedOutput']
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
-        assert name.startswith('PngCropFit') or c['allocatedBytes'] == 56
-        assert not latest or c['operationsPerSubject'] == 4096
-    cases = {name: c for name, (c, _, _) in selected.items()}
-    assert providers[-1]['combinedOwnedEditStatusCounts'] == {
-        state: sum(c['status'] == state for c in cases.values()) for state in ('pass', 'gap', 'uncertain')}
-    current = snapshot_copy_stage()
-    cases.update((name, c) for name, c in current['cases'].items() if name.startswith('WarmVerticalFlip'))
-    assert current['combinedOwnedEditStatusCounts'] == {
-        'passCount': sum(c['status'] == 'pass' for c in cases.values()),
-        'gaps': sum(c['status'] == 'gap' for c in cases.values()),
-        'uncertain': sum(c['status'] == 'uncertain' for c in cases.values()), 'total': len(cases)}
-    cases.update(owned_flip_confidence()['cases'])
-    return {'cases': cases, 'currentImageOwnerViewStatuses': current['currentImageOwnerViewStatuses']}
+    for name, (case, owner) in selected.items():
+        q = owner['qualification']
+        assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
+        assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
+        assert case['librarySha256'] == owner['producers']['linuxSha256']
+        if owner is not flips:  # Flip qualification is checked by its current owner above.
+            assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
+            package = q.get('actualPackage', q.get('package'))
+            windows = q.get('samePackageWindows', q.get('windowsPackage'))
+            assert package['sha256'] == windows['sameActualPackageSha256']
+            assert package['sha256'] == owner['producers']['packageSha256']
+            assert package['librarySha256'] == case['librarySha256']
+            assert all(platform['actualConsumerPassed'] and platform['usageExamples'] == 3 for platform in (package, windows))
+            assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total']
+            assert q['acceptedArtifactRebuildsAfterTiming'] == 0
+            assert q['allAffectedPerformanceReconciledBeforeBroadQualification']
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12 and case['allActualsRetained']
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed']
+        if name.startswith('PngCropFit'):
+            assert all(case['metadata'][key] for key in ('allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput'))
+        else:
+            assert all(case[key] for key in ('managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
+            assert case['allocatedBytes'] == 56
+        assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+    cases = {name: case for name, (case, _) in selected.items()}
+    counts = {state: sum(case['status'] == state for case in cases.values()) for state in ('pass', 'gap', 'uncertain')}
+    assert flips['combinedOwnedEditStatusCounts'] == {'passCount': counts['pass'], 'gaps': counts['gap'], 'uncertain': counts['uncertain'], 'total': len(cases)}
+    return {'cases': cases, 'statusCounts': counts, 'priorStatusCounts': prior_counts,
+            'currentImageOwnerViewStatuses': flips['currentImageOwnerViewStatuses']}
 
 
 def png_scan_stage():
@@ -3018,7 +2988,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     editing = apply_current_lanczos_enlargement_confidence(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
-    owned_copy = owned_edit_costs()
+    owned_copy = owned_edit_costs(resident_png)
     for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
                         ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
                         ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
@@ -3090,15 +3060,11 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     editing = editing.replace(bilinear_word_row, bilinear_word_row + '\n' + fresh_row)
     image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'total': image_view_counts['total'] + 1}
     assert image_view_counts == bilinear_one_shot['currentImageOwnerViewStatuses']
-    copy_views = snapshot_copy_stage()['currentImageOwnerViewStatuses']
-    assert copy_views == {**image_view_counts, 'gaps': image_view_counts['gaps'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
-    image_view_counts = copy_views
-    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
-    assert image_view_counts == resident_png['currentImageOwnerViewStatuses']
-    flips = owned_flip_confidence()
-    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'uncertain': image_view_counts['uncertain'] - 1}
-    assert flips['cases']['WarmVerticalFlip16']['status'] == 'pass' and flips['cases']['WarmVerticalFlip8']['status'] == 'uncertain'
-    assert image_view_counts == flips['currentImageOwnerViewStatuses']
+    # Replace the owned-edit family as a whole instead of replaying old flip,
+    # composition and confidence-round status transitions.
+    for label, field in (('pass', 'passCount'), ('gap', 'gaps'), ('uncertain', 'uncertain')):
+        image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
+    assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
