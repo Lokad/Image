@@ -1,0 +1,266 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JEO1065",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baseline": {
+    "baselineCommit": "ab276fa13dd11f246e856b206a8e94da35b9017f",
+    "windowsSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+    "linuxSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+    "packageSha256": "8a5d74768e26bd62af7b6c490e4d6b614956093df17440cf8f7ac983394438f7"
+  },
+  "hypothesis": "Outline JPEG EXIF prefix/duplicate validation and nested TIFF parsing into one nongeneric async helper. Remove one resume state and cold branch machinery from the large generic JPEG parser;dimensions-only requests do not call the helper.",
+  "intendedEndState": "One shared JPEG grammar and one EXIF helper used by both result specializations. No duplicate synchronous parser or new storage/API/cache/admission owner. Preserve every prefix read and skip. The helper returns recognition plus optional orientation;the outer parser retains seen-state,policy/fact publication and early return.",
+  "privateStateBoundary": "Exif seen/orientation are operation-private and only updated after the same successful reads/parse;failed private operations are abandoned. Read6,signature check,strict duplicate check,ExifAsync(size-6,false,policy),orientation fallback,seen flag,strict fact publication,Reached and finalSkip retain original order. A pending helper and all underlying reads finish before reader disposal;the same borrowed context/root is forwarded.",
+  "currentGeneratedCode": {
+    "librarySha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+    "jpegMoveNextBytes": 7451,
+    "resumeStates": 10,
+    "prologueStackSubtractBytes": 296,
+    "notTotalStackFootprint": true,
+    "allBuilds": 0,
+    "allInstrumentedTimingsDiscarded": true,
+    "notCpuPhaseAttribution": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "sourcePins": {
+      "src/Lokad.Image/Internal/InspectionReader.cs": "d876be66af6c7a7e52cfa296d0537c74a604e2209a5cd9200233a055caec923b",
+      "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+      "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+      "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7"
+    },
+    "receipt": "tmp/jha1064-current-jpeg-probe-codegen-receipt.json",
+    "disassemblySha256": "0835cd8642d390a370a612f62af0e149047070453e9215c88abc5a0989970863",
+    "receiptRecovery": "Initial post-capture verifier required an optional descriptor field absent from both original and new receipts. Original presence-aware field checks applied;existing completed capture and passing guards reused,no recapture or timing repeat."
+  },
+  "variants": {
+    "JEO1065": {
+      "sources": {
+        "src/Lokad.Image/Internal/StreamInspection.cs": "f5d9ca7bb7231fd3717c5b0469f46031215d9e4a964cab2740221f676721dc01"
+      },
+      "linuxSha256": "606019b938bc7f73cbad18db4920e64cb5e5ab59f2ad95639754425e4620ff45",
+      "focused": {
+        "internal-normal": 10,
+        "public-normal": 339,
+        "internal-scalar": 10,
+        "public-scalar": 339
+      },
+      "additionalPolicyFocused": {
+        "internal-normal": 2,
+        "public-normal": 14,
+        "internal-scalar": 2,
+        "public-scalar": 14
+      },
+      "allFocusedNormalScalarPassed": true,
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "JEO1065",
+        "caseId": "ProbeDimensionsJpegAsync",
+        "phase": "screen",
+        "baselineUs": 0.27486374537150066,
+        "candidateUs": 0.3100013020833333,
+        "ratio": 1.127773474525668,
+        "lower": 0.9279404153966619,
+        "upper": 1.3706408178158904,
+        "allocatedBaseline": 568,
+        "allocatedCandidate": 568,
+        "scopedManagedDllEffectOnly": true,
+        "notStandaloneFfmpegPerformance": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "originalInputAndDescriptorOwnershipPassed": true,
+        "librarySha256": "606019b938bc7f73cbad18db4920e64cb5e5ab59f2ad95639754425e4620ff45",
+        "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+        "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+          "tmp/jeo1065-baseline-linux/Lokad.Image.dll",
+          "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+          "tmp/jeo1065-candidate-linux/Lokad.Image.dll",
+          "606019b938bc7f73cbad18db4920e64cb5e5ab59f2ad95639754425e4620ff45",
+          "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+          "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+          "ProbeDimensionsJpegAsync",
+          "screen"
+        ],
+        "raw": "tmp/jeo1065-ProbeDimensionsJpegAsync-paired-screen.json"
+      },
+      "confirmation": null
+    },
+    "JEO1065B": {
+      "sources": {
+        "src/Lokad.Image/Internal/StreamInspection.cs": "27a222446b62ca01b130b45b4bdc1218fa277e96fe005a5e1eac6d3b3e5576e2"
+      },
+      "linuxSha256": "3666889c65a6d1b66401c6cf45ca71ae52d112261a50dc4f39d6cd7369e3f6d9",
+      "focused": {
+        "internal-normal": 10,
+        "public-normal": 339,
+        "internal-scalar": 10,
+        "public-scalar": 339
+      },
+      "additionalPolicyFocused": {
+        "internal-normal": 2,
+        "public-normal": 14,
+        "internal-scalar": 2,
+        "public-scalar": 14
+      },
+      "allFocusedNormalScalarPassed": true,
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "JEO1065B",
+        "caseId": "ProbeDimensionsJpegAsync",
+        "phase": "screen",
+        "baselineUs": 0.27893392690022784,
+        "candidateUs": 0.27166407140096027,
+        "ratio": 0.973938367708506,
+        "lower": 0.9372212164984688,
+        "upper": 1.0120939724759834,
+        "allocatedBaseline": 568,
+        "allocatedCandidate": 568,
+        "scopedManagedDllEffectOnly": true,
+        "notStandaloneFfmpegPerformance": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "originalInputAndDescriptorOwnershipPassed": true,
+        "librarySha256": "3666889c65a6d1b66401c6cf45ca71ae52d112261a50dc4f39d6cd7369e3f6d9",
+        "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+        "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+          "tmp/jeo1065b-baseline-linux/Lokad.Image.dll",
+          "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+          "tmp/jeo1065b-candidate-linux/Lokad.Image.dll",
+          "3666889c65a6d1b66401c6cf45ca71ae52d112261a50dc4f39d6cd7369e3f6d9",
+          "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+          "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+          "ProbeDimensionsJpegAsync",
+          "screen"
+        ],
+        "raw": "tmp/jeo1065b-ProbeDimensionsJpegAsync-paired-screen.json"
+      },
+      "confirmation": {
+        "project": "Lokad.Image",
+        "stage": "JEO1065B",
+        "caseId": "ProbeDimensionsJpegAsync",
+        "phase": "confirm",
+        "baselineUs": 0.27073987674713135,
+        "candidateUs": 0.2724587306976318,
+        "ratio": 1.0063431137576422,
+        "lower": 0.982518688562494,
+        "upper": 1.0307452411812432,
+        "allocatedBaseline": 568,
+        "allocatedCandidate": 568,
+        "scopedManagedDllEffectOnly": true,
+        "notStandaloneFfmpegPerformance": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "originalInputAndDescriptorOwnershipPassed": true,
+        "librarySha256": "3666889c65a6d1b66401c6cf45ca71ae52d112261a50dc4f39d6cd7369e3f6d9",
+        "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+        "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+          "tmp/jeo1065b-baseline-linux/Lokad.Image.dll",
+          "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+          "tmp/jeo1065b-candidate-linux/Lokad.Image.dll",
+          "3666889c65a6d1b66401c6cf45ca71ae52d112261a50dc4f39d6cd7369e3f6d9",
+          "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+          "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+          "ProbeDimensionsJpegAsync",
+          "confirm"
+        ],
+        "raw": "tmp/jeo1065b-ProbeDimensionsJpegAsync-paired-confirm.json"
+      }
+    }
+  },
+  "revision": "Retain the EXIF outline but use a private scalar result:-1=notEXIF,0=recognized without usable orientation,1..8=validated TIFF orientation. Its ValueTask<int> can share the existing marker awaiter type,avoiding a compound result/extra typed awaiter field in the generic outer state machine. Verify generated shape and complete operations;do not infer a gain from representation.",
+  "decision": "Neither variant retained. A three-pair screen has an adverse12.8percentpoint with wide CI;no causal regression or gain established. B compact scalar result is a material representation revision,but its independent12pairs are inconclusive around.634percentadversepoint. No useful confirmed CPU gain. No favorable repeats,standalone candidate/native runs,Windows candidate builds,broad/package campaign or permanent family ban.",
+  "memory": "All measured complete operations568B/op;no new owned workspace or retained state. Existing512B dimension/8448B bulk admission model unchanged. Physical/native/JIT peaks unmeasured. Pending helper/runtime boxes were not used for a general allocation claim;all candidate production is reverted.",
+  "qualificationReused": "Exact original sources and Linux core/embedded/public modules restored byte-for-byte without rebuilding;Windows source restored and modules never rebuilt. BOUNDED-PROBE-REQUESTS.md owns unchanged current costs,6721full/live checks perOS,focused normal/scalar and SAME actual timed/package consumer/all3examples. No retained test or API changes.",
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JEO1065B",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+      "sourceRestoredByteExactly": true,
+      "coreAndEmbeddedNeverRebuilt": true,
+      "newBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JEO1065B",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "d876be66af6c7a7e52cfa296d0537c74a604e2209a5cd9200233a055caec923b",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+      },
+      "embeddedTestsSha256": "6341e75dd6ef2c9497b21cdf9ecda533fe735584dfd55951c43cca6bc9b86f17",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "baselineCi": {
+    "conclusion": "success",
+    "headSha": "ab276fa13dd11f246e856b206a8e94da35b9017f",
+    "status": "completed",
+    "url": "https://github.com/Lokad/Image/actions/runs/43713998069"
+  },
+  "builds": {
+    "linuxCore": 2,
+    "linuxEmbedded": 2,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0,
+    "restoration": 0,
+    "packs": 0
+  },
+  "raw": {
+    "file": "jpeg-exif-outline-trial.tar.xz",
+    "sha256": "cd7881e46e113dbc8251dd25851c39025fafe13607a860973e2fd0749f271097",
+    "bytes": 4281020,
+    "members": 143,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bounded-probe-requests-qualified.tar.xz",
+        "sha256": "c67739464f88e8e929351c2f00b4323edd5429607a8cb5320ae92fdefd4e5fe4"
+      }
+    ]
+  },
+  "next": "Keep the current JPEG probe gaps open. Generated body size identifies a hypothesis,not dominant elapsed work;do not repeat cold EXIF outlining without materially different current attribution/design. Preserve the frozen JFIF/Adobe/SOF acquisition boundary. Independent work continues;full289objective and publication postponement remain."
+}
