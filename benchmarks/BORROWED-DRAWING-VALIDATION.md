@@ -1,5 +1,7 @@
 # Borrowed drawing validation
 
+Current vertical-flip and borrowed-copy costs are in [grouped block copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
+
 Fill, copy and compositing now validate borrowed storage directly, removing a
 56 B operation owner that never held workspace or a shared-budget scope. The
 two-move copy pair removes 112 B. All seven frozen controls allocate **zero B/op**;

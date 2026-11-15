@@ -184,6 +184,30 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
+def snapshot_copy_stage():
+    stage = json.loads((ROOT / 'benchmarks/snapshot-block-copy-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['actualPackage']['librarySha256'] == stage['producers']['timedArtifactSha256'] == stage['producers']['linuxSha256']
+    assert all(q[name]['actualConsumerPassed'] and q[name]['usageExamples'] == 3 for name in ('actualPackage', 'samePackageWindows'))
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert stage['jit']['fixedGroupOffsets'] and stage['jit']['fourSourceLoadsBeforeAnyGroupStore']
+    assert stage['pairedByteFlip']['upper'] < 1 and stage['pairedByteCopy']['ratioUpper'] < 1
+    assert stage['memory']['newOwnedHeapCapacityBytes'] == stage['memory']['newAdmittedBytes'] == stage['memory']['retainedOperationBytes'] == 0
+    assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16', 'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'}
+    for c in stage['cases'].values():
+        assert c['librarySha256'] == stage['producers']['linuxSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def owned_edit_costs():
     # Only the selected current case needs validation. Superseded increments and
     # experiment-specific source/build proofs stay in their original reports.
@@ -225,7 +249,13 @@ def owned_edit_costs():
     cases = {name: c for name, (c, _, _) in selected.items()}
     assert providers[-1]['combinedOwnedEditStatusCounts'] == {
         state: sum(c['status'] == state for c in cases.values()) for state in ('pass', 'gap', 'uncertain')}
-    return {'cases': cases, 'currentImageOwnerViewStatuses': providers[-1]['currentImageOwnerViewStatuses']}
+    current = snapshot_copy_stage()
+    cases.update((name, c) for name, c in current['cases'].items() if name.startswith('WarmVerticalFlip'))
+    assert current['combinedOwnedEditStatusCounts'] == {
+        'passCount': sum(c['status'] == 'pass' for c in cases.values()),
+        'gaps': sum(c['status'] == 'gap' for c in cases.values()),
+        'uncertain': sum(c['status'] == 'uncertain' for c in cases.values()), 'total': len(cases)}
+    return {'cases': cases, 'currentImageOwnerViewStatuses': current['currentImageOwnerViewStatuses']}
 
 
 def current_png_stream_word_note():
@@ -1752,22 +1782,8 @@ No heap capacity or retention is added; validation and independent owners remain
     assert len(drawing_cases) == 7
     assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
-    overlap_current = json.loads((ROOT / 'benchmarks/borrowed-overlap-current-evidence.json').read_text(encoding='utf-8'))
-    oq = overlap_current['qualification']
-    overlap_qualification = json.loads((ROOT / oq['sourceQualification']).read_text(encoding='utf-8'))
-    assert overlap_current['measurementAccepted'] and not overlap_current['productionChanged']
-    assert not overlap_current['productionSpeedupClaim']
-    assert overlap_current['requiredMaterialPaths'] == 289 and overlap_current['newMaterialPaths'] == 0
-    assert overlap_current['raw']['mirrored'] and overlap_current['raw']['allMembersVerified']
-    assert oq['fullChecksEachOs'] == overlap_qualification['qualification']['fullChecksEachOs'] and oq['productionAndActualPackageByteIdentical']
-    assert oq['actualPackageSha256'] == overlap_qualification['producers']['packageSha256']
-    assert oq['actualPackageLibrarySha256'] == overlap_qualification['producers']['linuxSha256']
-    assert oq['fullScalarIsaActualConsumerAndThreeExamplesReused'] and oq['broadOrPackageRepeats'] == oq['allBuilds'] == 0
-    assert oq['sameActualPackageBothOsAndThreeExamplesPassed']
-    assert oq['actualPackageSha256'] == overlap_current['producers']['packageSha256']
-    assert oq['actualPackageLibrarySha256'] == overlap_current['producers']['linuxSha256']
-    assert overlap_current['memory']['newOwnedHeapCapacityBytes'] == overlap_current['memory']['newAdmittedBytes'] == overlap_current['memory']['retainedOperationBytes'] == 0
-    drawing_cases['DrawingCopyOverlap8'] = overlap_current['case']
+    copy_current = snapshot_copy_stage()
+    drawing_cases.update((name, c) for name, c in copy_current['cases'].items() if name.startswith('DrawingCopy'))
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1779,7 +1795,7 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = oq['actualPackageLibrarySha256'] if name == 'DrawingCopyOverlap8' else bq['actualPackage']['librarySha256']
+        library = copy_current['producers']['linuxSha256'] if name.startswith('DrawingCopy') else bq['actualPackage']['librarySha256']
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -1793,17 +1809,18 @@ No heap capacity or retention is added; validation and independent owners remain
         mark = ' †' if name.startswith('DrawingComposite') else ''
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
-    borrowed_drawing_note = f"""[Borrowed drawing validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-removes the operation owner: all seven fill/copy/composite controls allocate **0 B/op**,
-with unchanged borrowed capacity and zero retained workspace. Earlier copy/pair
-confirmations remain in its report. Current byte
-copy remains a small gap: **{b8['managedUs']:.2f} / FFmpeg {b8['nativeUs']:.2f} µs, upper {b8['upper']:.3f}**;
-word copy is **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**, also a tiny gap.
-The [current actual-package overlap control](../benchmarks/ROW-BLOCK-COPY-CURRENT-SCREEN.md)
-resolves the two-move pair as a small gap: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
-No production change or speedup is claimed; the adverse shared-copy trial is restored.
-Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
-ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
+    borrowed_drawing_note = f"""[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retains **0 B/op**
+for all seven borrowed drawing controls. Current overlapping copy passes at
+**{bo['managedUs']:.3f} / FFmpeg {bo['nativeUs']:.3f} µs, upper {bo['upper']:.3f}**;
+word copy passes at **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
+The word path retains BCL copying; no causal word speedup is claimed. Separate
+byte copy remains a gap: **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs, upper {b8['upper']:.3f}**.
+Its independent DLL pair saves **1.44% / 0.029 µs**. A targeted unchanged-DLL
+standalone control resolves the apparent adverse historical direction; the two
+contexts have different effect magnitudes, not one universal gain. Every earlier
+capture remains. Both fills/composites pass/stop; exact rational pixels and the
+explicit FFmpeg/ImageSharp references remain. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+retains ownership/history. Six of these seven controls pass; separate byte copy remains open.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
@@ -2871,29 +2888,23 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                         ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16 † → 259×513'),
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
-                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (gap) †')]:
+                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    owned_copy_note = """[Raster copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md)
-joins word clones to the existing 16 KiB BCL strip body. Complete normal-word
-pairs improve about **9–12%** in both producer assignments, with unchanged allocation.
-Current normal/clone RGBA16 comparisons pass at **15.481 / 16.648 µs**, upper **.936**,
-and **15.455 / 16.740 µs**, upper **.926**. All six affected references pass;
-the prescribed longer PNG16 integration retains its original uncertainty and
-adverse/AA/reversed controls. Pipeline attribution changes sign with assignment;
-no fixed slot correction or causal pipeline/byte gain is claimed.
-The 20 owned-edit/composition views now retain **18 passes, one gap and one
-uncertainty**. Byte vertical flip remains **8.614 / 8.507 µs**, upper **1.023**;
-word vertical flip remains uncertain, upper **1.005**. Stop confirmed passes.
-All 18 basic owned edits still allocate **56 B/op**; active byte/word result payload
-is 531,468/1,062,936 B, separately from borrowed input and unchanged idle storage.
-No physical/native/JIT peak is claimed. Exact pixels, cancellation, terminal
-admission and independent ownership remain. Each OS passes **6,696 full/live checks**,
-focused normal/scalar checks and the SAME actual package/all three examples.
-One core/embedded build per OS, no other builds, one pack and no post-timing rebuild.
-[Prior copy confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md),
-[word increments](../benchmarks/WORD-CLONE-COPY.md) and
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) retain history."""
+    owned_copy_note = """[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
+loads before group stores while using checked fixed offsets. Independent byte-flip
+pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
+flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
+**17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
+**18 passes, zero gaps and two uncertainties**. Neither flip is a passing control.
+Exact samples, tails, cancellation, admission and independent ownership remain.
+Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
+Release-package consumer/all three examples. One core/embedded build per OS, no
+public/harness/native/helper/fixture build, one pack and no Linux rebuild after timing.
+Source/result payload and zero retained workspace stay separate from allocation;
+physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
+retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
+Earlier copy trials remain linked history, outside current-result dependencies."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note()
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
@@ -2937,6 +2948,9 @@ One core/embedded build per OS, no other builds, one pack and no post-timing reb
     editing = editing.replace(bilinear_word_row, bilinear_word_row + '\n' + fresh_row)
     image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'total': image_view_counts['total'] + 1}
     assert image_view_counts == bilinear_one_shot['currentImageOwnerViewStatuses']
+    copy_views = snapshot_copy_stage()['currentImageOwnerViewStatuses']
+    assert copy_views == {**image_view_counts, 'gaps': image_view_counts['gaps'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
+    image_view_counts = copy_views
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 

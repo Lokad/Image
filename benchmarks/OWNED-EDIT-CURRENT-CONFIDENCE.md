@@ -1,5 +1,7 @@
 # Current owned-edit confidence
 
+Current vertical-flip and borrowed-copy costs are in [grouped block copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
+
 [Raster copy scheduling](RASTER-COPY-SCHEDULING.md) supersedes the normal-word and
 word-clone costs below. The byte/word vertical-flip observations remain current;
 this report retains its longer-integration method, raw evidence and prior actions.

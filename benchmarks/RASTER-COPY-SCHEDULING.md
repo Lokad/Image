@@ -1,5 +1,7 @@
 # Raster copy scheduling
 
+Current vertical-flip and borrowed-copy costs are in [grouped block copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
+
 Normal RGBA16 copying and cloning now pass the original FFmpeg comparisons.
 Uncancelable word clones reuse the existing 16 KiB BCL strip loop; byte bulk
 copying, live-token checkpoints, admission and cleanup remain. The shared row

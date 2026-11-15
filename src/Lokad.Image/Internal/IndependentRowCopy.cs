@@ -13,20 +13,26 @@ internal static class IndependentRowCopy
         // Callers prove these bounded row chunks are disjoint.
         if (Vector512.IsHardwareAccelerated && input.Length >= 256)
         {
-            var source = MemoryMarshal.Cast<byte, Vector512<byte>>(input);
-            var destination = MemoryMarshal.Cast<byte, Vector512<byte>>(output);
-            var i = 0;
-            for (; i <= source.Length - 4; i += 4)
+            var source = MemoryMarshal.Cast<byte, CopyBlock>(input);
+            var destination = MemoryMarshal.Cast<byte, CopyBlock>(output)[..source.Length];
+            for (var i = 0; i < source.Length; i++)
             {
-                var a = source[i]; var b = source[i + 1];
-                var c = source[i + 2]; var d = source[i + 3];
-                destination[i] = a; destination[i + 1] = b;
-                destination[i + 2] = c; destination[i + 3] = d;
+                ref readonly var from = ref source[i];
+                ref var to = ref destination[i];
+                var a = from[0]; var b = from[1];
+                var c = from[2]; var d = from[3];
+                to[0] = a; to[1] = b; to[2] = c; to[3] = d;
             }
-            for (; i < source.Length; i++) destination[i] = source[i];
-            var copied = source.Length * Vector512<byte>.Count;
+            var copied = source.Length * (4 * Vector512<byte>.Count);
             input[copied..].CopyTo(output[copied..]);
         }
         else input.CopyTo(output);
+    }
+
+    // Fixed offsets retain the four-load snapshot before any group store.
+    [InlineArray(4)]
+    private struct CopyBlock
+    {
+        private Vector512<byte> value;
     }
 }

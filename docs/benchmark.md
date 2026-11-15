@@ -14,17 +14,18 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Borrowed drawing validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-removes the operation owner: all seven fill/copy/composite controls allocate **0 B/op**,
-with unchanged borrowed capacity and zero retained workspace. Earlier copy/pair
-confirmations remain in its report. Current byte
-copy remains a small gap: **1.98 / FFmpeg 1.93 µs, upper 1.029**;
-word copy is **3.792 / 3.784 µs, upper 1.004**, also a tiny gap.
-The [current actual-package overlap control](../benchmarks/ROW-BLOCK-COPY-CURRENT-SCREEN.md)
-resolves the two-move pair as a small gap: **3.89 / 3.77 µs, upper 1.038**.
-No production change or speedup is claimed; the adverse shared-copy trial is restored.
-Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
-ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
+[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retains **0 B/op**
+for all seven borrowed drawing controls. Current overlapping copy passes at
+**3.720 / FFmpeg 3.804 µs, upper 0.984**;
+word copy passes at **3.797 / 3.818 µs, upper 0.997**.
+The word path retains BCL copying; no causal word speedup is claimed. Separate
+byte copy remains a gap: **2.028 / 1.915 µs, upper 1.063**.
+Its independent DLL pair saves **1.44% / 0.029 µs**. A targeted unchanged-DLL
+standalone control resolves the apparent adverse historical direction; the two
+contexts have different effect magnitudes, not one universal gain. Every earlier
+capture remains. Both fills/composites pass/stop; exact rational pixels and the
+explicit FFmpeg/ImageSharp references remain. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+retains ownership/history. Six of these seven controls pass; separate byte copy remains open.
 
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
@@ -52,29 +53,23 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
-[Raster copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md)
-joins word clones to the existing 16 KiB BCL strip body. Complete normal-word
-pairs improve about **9–12%** in both producer assignments, with unchanged allocation.
-Current normal/clone RGBA16 comparisons pass at **15.481 / 16.648 µs**, upper **.936**,
-and **15.455 / 16.740 µs**, upper **.926**. All six affected references pass;
-the prescribed longer PNG16 integration retains its original uncertainty and
-adverse/AA/reversed controls. Pipeline attribution changes sign with assignment;
-no fixed slot correction or causal pipeline/byte gain is claimed.
-The 20 owned-edit/composition views now retain **18 passes, one gap and one
-uncertainty**. Byte vertical flip remains **8.614 / 8.507 µs**, upper **1.023**;
-word vertical flip remains uncertain, upper **1.005**. Stop confirmed passes.
-All 18 basic owned edits still allocate **56 B/op**; active byte/word result payload
-is 531,468/1,062,936 B, separately from borrowed input and unchanged idle storage.
-No physical/native/JIT peak is claimed. Exact pixels, cancellation, terminal
-admission and independent ownership remain. Each OS passes **6,696 full/live checks**,
-focused normal/scalar checks and the SAME actual package/all three examples.
-One core/embedded build per OS, no other builds, one pack and no post-timing rebuild.
-[Prior copy confidence](../benchmarks/OWNED-EDIT-CURRENT-CONFIDENCE.md),
-[word increments](../benchmarks/WORD-CLONE-COPY.md) and
-[copy-result admission](../benchmarks/COPY-RESULT-ADMISSION.md) retain history.
+[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
+loads before group stores while using checked fixed offsets. Independent byte-flip
+pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
+flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
+**17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
+**18 passes, zero gaps and two uncertainties**. Neither flip is a passing control.
+Exact samples, tails, cancellation, admission and independent ownership remain.
+Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
+Release-package consumer/all three examples. One core/embedded build per OS, no
+public/harness/native/helper/fixture build, one pack and no Linux rebuild after timing.
+Source/result payload and zero retained workspace stay separate from allocation;
+physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
+retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
+Earlier copy trials remain linked history, outside current-result dependencies.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **192 existing
-image views: 189 pass, 1 gaps, 2 uncertain**. This does not establish full parity:
+image views: 189 pass, 0 gaps, 3 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
@@ -316,11 +311,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.98 | 1.93 | 1.026 / 1.029 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (gap) | 3.79 | 3.78 | 1.002 / 1.004 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.03 | 1.91 | 1.059 / 1.063 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (parity confirmed) | 3.80 | 3.82 | 0.994 / 0.997 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.89 | 3.77 | 1.032 / 1.038 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.72 | 3.80 | 0.978 / 0.984 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,147.32 | 6,145.06 | 0.187 / 0.207 | 299,914 |
@@ -354,7 +349,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
-| Vertical flip RGBA8 (gap) † | 8.61 | 8.51 | 1.013 / 1.023 | 56 |
+| Vertical flip RGBA8 (uncertain) † | 8.48 | 8.32 | 1.020 / 1.024 | 56.0 |
 
 **Inspection and pixel-coding validation**
 

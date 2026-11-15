@@ -1,5 +1,7 @@
 # Current row-block copy screen
 
+Current vertical-flip and borrowed-copy costs are in [grouped block copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
+
 RBC1056 is **not retained**. It re-evaluated the checked 256-byte value-copy loop
 after accepted BCL cloning removed the old PNG pipeline's helper call. Current
 callers are vertical flips and disjoint byte drawing rows; no new path/cache/owner.
