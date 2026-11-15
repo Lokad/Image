@@ -23,7 +23,7 @@ namespace Lokad.Image.Internal
         {
             using var font = TrueTypeFont.Load(AuthoredTrueType.Build());
             using var layout = TextLayout.Create(font, "AVg", new() { FontSize = 18 });
-            for (var kind = 0; kind < 5; kind++)
+            for (var kind = 0; kind < 6; kind++)
             {
                 using var root = new TestMemoryBudget(16 * 1024 * 1024);
                 using var cancellation = new CancellationTokenSource();
@@ -36,8 +36,8 @@ namespace Lokad.Image.Internal
                     var edges = new Edge[count];
                     for (var i = 0; i < count; i++)
                     {
-                        var a = kind switch { 0 => i + 1d, 1 => -i - 1d, 2 => i % 2 == 0 ? -0d : 1d, 3 => -1d, _ => i % 3 == 0 ? 0d : -0d };
-                        var b = kind switch { 0 => i + 2d, 1 => -i - 2d, 2 => i % 2 == 0 ? 1d : 0d, 3 => 1d, _ => i % 2 == 0 ? -1d : 1d };
+                        var a = kind switch { 0 => i + 1d, 1 => -i - 1d, 2 => i % 2 == 0 ? -0d : 1d, 3 => -1d, 4 => i % 3 == 0 ? 0d : -0d, _ => i % 3 == 0 ? double.NaN : double.NegativeInfinity };
+                        var b = kind switch { 0 => i + 2d, 1 => -i - 2d, 2 => i % 2 == 0 ? 1d : 0d, 3 => 1d, 4 => i % 2 == 0 ? -1d : 1d, _ => i % 2 == 0 ? double.PositiveInfinity : -0d };
                         edges[i] = new(new(i * .5, a), new(kind == 3 ? -i * .5 : i * .5 + .25, b), i);
                     }
                     var unchanged = edges.ToArray();

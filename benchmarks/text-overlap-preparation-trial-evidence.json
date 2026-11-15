@@ -1,0 +1,169 @@
+{
+  "project": "Lokad.Image",
+  "stage": "EOC1050",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "retainedTestOnly": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baseline": {
+    "windowsSha256": "dd1ff3702beda3d4aa4823154b609a63626563d2cd3e4de75a09f0484baf0c62",
+    "linuxSha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+    "timedArtifactSha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+    "packageSha256": "d05ba728d23304db2c9cf2c617a217d20145c80921652d6d589c10f3a58ea53a"
+  },
+  "candidateLinuxSha256": "677631b112e6286a526965b5fd4a1c8b5619316817fbc20489dfca973788d905",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "09834d39869b9252c6042142404e0b6d521dacb18d311bb33bf913f3c7d4de64"
+  },
+  "retainedTestSources": {
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "3e9aa5305e49ea9ed15587609a293c4a847ecf5bf17727cb2dd148f0ac2a88c5"
+  },
+  "restoredSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd"
+  },
+  "hypothesis": "Reuse current edge address and ordered lower interval bound across overlap pairs,avoiding repeated full56B value loads and range selection.",
+  "design": "One event-overlap sweep with readonly references and strict-dominance low bound; original Math.Max fallback for ties/NaNs/signedzero and original edge-index a/b subtraction order. All endpoint and intersection arithmetic,visit/cancellation/limit order and ownership unchanged. No new storage/cache/API/ISA/numerical policy.",
+  "decision": "Short ordinary16 screen is not promising; stop without independent confirmation. Restore qualified production and retain meaningful NaN/infinity event oracle extension. No measured regression,CPU gain,parity or permanent family-ban claim.",
+  "screen": {
+    "managedUs": 58.46512532552084,
+    "pairedReferenceUs": 46.888633138020836,
+    "pairedRatio": 1.246893360133224,
+    "actuals": 3,
+    "operationsPerActual": 1024,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "independentBaselineMeasured": false,
+    "referenceScope": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12,existing200ms native integration,ordinaryRGBA16 publicdrawing/reset/clock/owner boundary unchanged",
+    "earlierCurrentManagedUs": 58.12184895833334,
+    "earlierCurrentComparison": "Context only,not contemporary gain/regression evidence."
+  },
+  "jit": {
+    "project": "Lokad.Image",
+    "stage": "EOC1050",
+    "readOnlyDiagnosis": true,
+    "newTimings": 0,
+    "newBuilds": 0,
+    "baseline": {
+      "codeBytes": 1895,
+      "stackAdjustments": [
+        "104"
+      ]
+    },
+    "candidate": {
+      "codeBytes": 1884,
+      "stackAdjustments": [
+        "120"
+      ]
+    },
+    "librarySha256": "677631b112e6286a526965b5fd4a1c8b5619316817fbc20489dfca973788d905",
+    "scope": "Only changed event preparation body. Actual generated code size/frame diagnosis is not phase timing or CPU effect. Short3actual screen is not promising; no independent gain or causal-regression claim. All8frozenframes/resources exact."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "EOC1050",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "dd1ff3702beda3d4aa4823154b609a63626563d2cd3e4de75a09f0484baf0c62",
+      "sources": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd"
+      },
+      "retainedTestSources": {
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "3e9aa5305e49ea9ed15587609a293c4a847ecf5bf17727cb2dd148f0ac2a88c5"
+      },
+      "focusedPassed": true,
+      "counts": {
+        "internal-normal": 265,
+        "public-normal": 161,
+        "internal-scalar": 265,
+        "public-scalar": 161
+      },
+      "embeddedTestsSha256": "a56bc87033d3c2b7ea2673d6e285c720d6abc6ce7626c3419724e72a6df4cd11",
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 1,
+      "publicBuilds": 0,
+      "newPackageOrBroadQualification": 0,
+      "scope": "Qualified EIP1047 production source/module restored; retain independent event-oracle NaN/infinity extension. Rebuilt embedded tests only. Same immutable actual package and unchanged production qualification reused."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "EOC1050",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+      "sources": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd"
+      },
+      "retainedTestSources": {
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "3e9aa5305e49ea9ed15587609a293c4a847ecf5bf17727cb2dd148f0ac2a88c5"
+      },
+      "focusedPassed": true,
+      "counts": {
+        "internal-normal": 265,
+        "public-normal": 161,
+        "internal-scalar": 265,
+        "public-scalar": 161
+      },
+      "embeddedTestsSha256": "c744813e74bf7f5b28f432fb233f4541870d998fcec1fd66e1ba1d1cb25851fd",
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 1,
+      "publicBuilds": 0,
+      "newPackageOrBroadQualification": 0,
+      "scope": "Qualified EIP1047 production source/module restored; retain independent event-oracle NaN/infinity extension. Rebuilt embedded tests only. Same immutable actual package and unchanged production qualification reused."
+    }
+  },
+  "builds": {
+    "candidateProductionLinux": 1,
+    "candidateEmbeddedLinux": 1,
+    "restorationEmbeddedLinux": 1,
+    "restorationEmbeddedWindows": 1,
+    "productionWindows": 0,
+    "harnessNativeFixtures": 0,
+    "broadQualification": 0,
+    "package": 0
+  },
+  "sourceScope": "Only event overlap preparation trial was changed; Edge/Band/Area/ownership unchanged. Original source/module/package restored exactly; new test passes both candidate and restored implementations normal/scalar. All8frozenframes/resources pass on candidate; qualified original evidence reused.",
+  "attribution": {
+    "stage": "NTA1049",
+    "librarySha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+    "samples": 1991,
+    "checkedDraws": 28637,
+    "locations": {
+      "Band": 371,
+      "Area": 262,
+      "BuildEvents": 139,
+      "BuildEdges": 99,
+      "MergeBuffered": 76,
+      "Partition": 68
+    },
+    "interpretation": "Same-capture pair bound/edge loads are leads,not phase costs or gain forecasts. Full profile/JIT/guards retained in raw."
+  },
+  "raw": {
+    "file": "text-overlap-preparation-trial.tar.xz",
+    "sha256": "0309e6570459a745078b8510aaa618ce7f80aa3841205009f731918a472cdb90",
+    "bytes": 1447472,
+    "members": 103,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "text-prepared-edge-invariants-qualified.tar.xz",
+        "sha256": "b2a8c7de8cb85937784220b88231e7311ae7fa4f4ac65f0b7d93d70b71b8d058",
+        "bytes": 5773048
+      },
+      {
+        "file": "text-draw-current-confidence.tar.xz",
+        "sha256": "6e9ea11b82a9f96165e6f1d2895b461d3483e71b7c5fee4cef1754d2f400268a",
+        "bytes": 27756
+      }
+    ]
+  },
+  "currentCostOwners": [
+    "TEXT-PREPARED-EDGE-INVARIANTS.md",
+    "TEXT-DRAW-CURRENT-CONFIDENCE.md"
+  ],
+  "rendererDependency": false,
+  "publicationPostponed": true
+}
