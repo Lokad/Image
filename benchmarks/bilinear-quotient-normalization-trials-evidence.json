@@ -1,0 +1,166 @@
+{
+  "project": "Lokad.Image",
+  "stage": "QNR1032/QNR1032I",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "currentCostsUnchanged": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "scope": "Existing 513x259 to1027x519 RGBA16 public bilinear enlargement, AVX512F/DQ. Other three named bilinear controls, codecs, text and portable dispatch are source-identical. Early review all-four-affected wording is corrected by actual dispatcher inspection.",
+  "hypothesis": "Share repeated full-precision alpha divisions; multiply RGB/alpha by prepared reciprocals with expanded certified margins. No approximate reciprocal, numerical-policy relaxation, new pool, workspace or admission path.",
+  "numericalModel": {
+    "project": "Lokad.Image",
+    "stage": "QNR1032-certificate-model",
+    "productionChanged": false,
+    "performanceMeasurements": 0,
+    "analyticQuotientDifferenceUpper": 4.3655079551285793e-11,
+    "normalizationMargin": 2.3283064365386963e-10,
+    "lowerAlphaMonotonicSlackIncludingSubtractionRounding": 1.6007195569384315e-10,
+    "alphaCertificateSlack": 1.8917489797215715e-10,
+    "rgbCertificateSlack": 1.8917489797215715e-10,
+    "controls": 10240,
+    "oldRepairBitsDropped": 0,
+    "extraRepairs": 0,
+    "maximumNearestObservedDifference": 7.275957614183426e-12,
+    "condition": "Existing nonnegative Int64 bilinear sums/interpolation certificate valid. Finite nonzero reciprocal/product normal; correctly rounded operations relative error<=2^-52 under any IEEE mode. Scalar model runs nearest only. Zero-alpha takes original tiny repair. New safeAlpha<=old safeAlpha; reciprocal power bound cannot decrease; margin increments exceed quotient/distance error. Accepted nearest rounding is unchanged. New repairs of formerly accepted pixels have original alpha>1 and cannot newly enter ResizeAlpha.Round scratch.",
+    "remaining": "Actual SIMD/helper,complete-frame,admission/cancellation,ISA and performance qualification required; this model is not merge authority or a speed claim."
+  },
+  "variants": {
+    "fourAlpha": {
+      "linuxSha256": "a3fa28877e06eaf00ee21ad9d239127aba730098defeadd9f3dced50d4f5a567",
+      "short": {
+        "baselineUs": 2280.651125,
+        "candidateUs": 2214.8990625,
+        "ratio": 0.9712003561080419,
+        "lower": 0.7389899888911947,
+        "upper": 1.2763774149628757,
+        "allocatedBaselineBytes": 4498599.333333333,
+        "allocatedCandidateBytes": 4498604.5,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "confirmation": {
+        "baselineUs": 2039.2011692708334,
+        "candidateUs": 2220.2156158854164,
+        "ratio": 1.0887738093991537,
+        "lower": 1.0836649402121818,
+        "upper": 1.0939067640237927,
+        "allocatedBaselineBytes": 4498596.427083333,
+        "allocatedCandidateBytes": 4498596.427083333,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "decision": "Confirmed8.877% adverse; reject. Three-pair point gain was not proof.",
+      "jit": "One256-bitdivide/4pixels, cross-pair gather dependency;2495bytes. Generated code is a lead, not causal timing proof."
+    },
+    "independentPairs": {
+      "linuxSha256": "08cfe7f05d72b2fd71fa92d1e5480a1aa84b857137e2b4473944202587acd015",
+      "short": {
+        "baselineUs": 2055.589145833333,
+        "candidateUs": 2228.63075,
+        "ratio": 1.0842153130557024,
+        "lower": 0.8417372541762406,
+        "upper": 1.3965436829986702,
+        "allocatedBaselineBytes": 4498599.333333333,
+        "allocatedCandidateBytes": 4498604.5,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "decision": "Inconclusive8.422% adverse point; no allocation/storage/simplicity gain and no promising screen. Stop without identical confirmation.",
+      "jit": "Two128-bitdivides/4pixels preserve pair independence;2498bytes. Actual module one-owner Fact passes."
+    }
+  },
+  "boundary": "Isolated producer contexts, complete public Resize including geometry/admission/filter/certificate/independent output/disposal. Fixed alternating pairs,32warmcalls/subject,naturalGC,no cached pixels or forcedGC. Short3x16,independent confirmation12x64. All samples and quiet guards retained. Scoped incremental evidence, no standalone native parity claim.",
+  "memory": {
+    "rowCapacityBytes": 131520,
+    "geometryCapacityBytes": 102892,
+    "borrowedSourceBytes": 1062936,
+    "resultCapacityBytes": 4264104,
+    "retainedScratchBytes": 0,
+    "capacityUnchanged": true,
+    "physicalPeakMeasured": false
+  },
+  "focusedQualification": {
+    "fourAlpha": {
+      "internal-normal": 388,
+      "public-normal": 847,
+      "internal-scalar": 388,
+      "public-scalar": 847
+    },
+    "independentPairs": {
+      "internal-normal": 388,
+      "public-normal": 847,
+      "internal-scalar": 388,
+      "public-scalar": 847
+    }
+  },
+  "qualification": {
+    "resizeStorageSuitesExplicit": true,
+    "scalarInvocations": true,
+    "linuxCoreBuilds": 2,
+    "linuxEmbeddedBuilds": 2,
+    "publicHarnessNativeHelperFixtureBuilds": 0,
+    "windowsBuilds": 0,
+    "newProductionOrTestsRetained": false,
+    "rebuildsAfterRestoration": 0,
+    "broadOrPackageReruns": 0,
+    "qualifiedSourceIdentical6712FullLiveEachOsAndSameActualPackageAllThreeExamplesReused": true
+  },
+  "restoredProducers": {
+    "windowsSha256": "0a3459667f5b2aa792d1ca062aa49e4238344216203961839e83d89b4390ea34",
+    "linuxSha256": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "packageSha256": "682f1236f08130fbd82f007003cff8f36509d856e8955175f150401785f47b4d"
+  },
+  "restoredSourcePins": {
+    "src/Lokad.Image/Internal/BilinearUpsample16.cs": "7063edb8f03f9adba30bb4889d90c0e54cb5f79f3ce225c7632e1b1f5a33584b",
+    "tests/Lokad.Image.Tests/BilinearVectorPublicationTests.cs": "f5911c84768ac5f18a48bf0f580ada04167af0129e3561264b8d4192438fc7ad",
+    "src/Lokad.Image/Lokad.Image.csproj": "14844d60901327cf7c8258d9907cb91c43b1805f8c47ef014e31ee178fc28cef"
+  },
+  "restoredLinuxBindings": {
+    "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "1ee7e322aa9403f85414946f267bd179be6f4573e3ecd5aa2364b32a7b52cb1f",
+    "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "98d06100e64615fcfd642d5f6429f2639177dbb835847c18f176ad7db13aa2c0",
+    "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.dll": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.pdb": "1ee7e322aa9403f85414946f267bd179be6f4573e3ecd5aa2364b32a7b52cb1f",
+    "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.xml": "98d06100e64615fcfd642d5f6429f2639177dbb835847c18f176ad7db13aa2c0",
+    "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "1ee7e322aa9403f85414946f267bd179be6f4573e3ecd5aa2364b32a7b52cb1f",
+    "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "98d06100e64615fcfd642d5f6429f2639177dbb835847c18f176ad7db13aa2c0",
+    "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "1ee7e322aa9403f85414946f267bd179be6f4573e3ecd5aa2364b32a7b52cb1f",
+    "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "98d06100e64615fcfd642d5f6429f2639177dbb835847c18f176ad7db13aa2c0",
+    "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+    "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "1ee7e322aa9403f85414946f267bd179be6f4573e3ecd5aa2364b32a7b52cb1f",
+    "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "98d06100e64615fcfd642d5f6429f2639177dbb835847c18f176ad7db13aa2c0",
+    "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "28c123960806b2a1439f5a49898deb398da078c55bd1b985b4360d19f2c45e6f",
+    "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "c32ca2e366794d62807dc089859de961a7c40d2c25c0ff1b70fe3c01589800a6",
+    "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll": "28c123960806b2a1439f5a49898deb398da078c55bd1b985b4360d19f2c45e6f",
+    "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb": "c32ca2e366794d62807dc089859de961a7c40d2c25c0ff1b70fe3c01589800a6",
+    "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "b5cefea2abb795c1722ec5d35a9b51fc8d83fa55c986067ececbd665144c5652",
+    "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.pdb": "4f5794505db97493de4bc5889805ba9b1fbcfaa891a4cabd17a576a226cd329d",
+    "tests/Lokad.Image.PublicApi.Tests/obj/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "b5cefea2abb795c1722ec5d35a9b51fc8d83fa55c986067ececbd665144c5652",
+    "tests/Lokad.Image.PublicApi.Tests/obj/Release/net10.0/Lokad.Image.PublicApi.Tests.pdb": "4f5794505db97493de4bc5889805ba9b1fbcfaa891a4cabd17a576a226cd329d"
+  },
+  "currentUp16Evidence": "benchmarks/bilinear-word-current-confidence-evidence.json",
+  "currentUp16Status": "uncertain",
+  "raw": {
+    "file": "bilinear-quotient-normalization-trials.tar.xz",
+    "sha256": "0509ff6bf018d5ebf14165ad1c0e6a55abd4210b2fea0fba9304ae352e3b9dc0",
+    "bytes": 2024448,
+    "members": 121,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bilinear-word-row-storage-trials.tar.xz",
+        "sha256": "112e39fba47c7bffece26b3a0277524416a8b5d22807e6e558ccceebaf808435"
+      },
+      {
+        "file": "probe-result-publication-qualified.tar.xz",
+        "sha256": "1fed7a9df4e5647b3885edc4e208a684b69a33b5b43612e65735c9adbfcaf98b"
+      }
+    ]
+  },
+  "next": "Stop both implementations. Preserve original exact pixels/certification and current source-valid evidence. No favorable identical retry or permanent family ban; next work requires materially different attribution/design. Font/text public comparisons already pass/stop; stage diagnostics do not establish overall slowdown."
+}

@@ -52,6 +52,10 @@ without a retained production change: reduced capacity did not establish useful
 elapsed gains. Qualified sources, producer bindings and package are restored;
 one public-operation ownership/refusal/cancellation test is retained. All adverse
 and inconclusive observations remain, outside current-cost renderer dependencies.
+[Bilinear reciprocal sharing](BILINEAR-QUOTIENT-NORMALIZATION-TRIALS.md) likewise
+retains no production change: the first confirmation is adverse and the independent-
+pair revision has no promising screen. Qualified sources, builds and package are
+restored; current Up16 remains uncertain, without another favorable timing retry.
 Copy-cost rendering selects the 20 current records once; superseded gain and
 rejection checks remain in their reports, outside renderer dependencies.
 
