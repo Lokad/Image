@@ -1,5 +1,9 @@
 # Current PNG16 stream confidence
 
+[Wide scan CRC](WIDE-PNG-SCAN-CRC.md) now owns these stream/composition costs.
+Stream decode passes; current word composition is uncertain. Earlier captures
+and the measurement-method change below remain history.
+
 Both complete PNG16 stream operations **pass and stop** on the current immutable
 package DLL. This resolves their uncertainties without a production change or speedup claim.
 

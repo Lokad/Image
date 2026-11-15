@@ -1,5 +1,8 @@
 # Current PNG decode and coding-validation costs
 
+[Wide scan CRC](WIDE-PNG-SCAN-CRC.md) now owns all 51 existing decode/validation
+costs; all pass. The comparisons below retain their earlier checkpoint.
+
 [Block Adler sums](PNG-BLOCK-ADLER.md) now owns all **51 existing controls**:
 **49 pass and two uncertain**. Live byte and tight-memory cancelable word remain
 uncertain; live word now passes. Original inputs, full-depth pixels, metadata,

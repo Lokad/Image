@@ -1,5 +1,8 @@
 # Reusing released image storage
 
+PNG decode and composition costs are now in [wide scan CRC](WIDE-PNG-SCAN-CRC.md).
+This report retains the storage change, its checkpoint and raw evidence.
+
 Default cleared canvases and complete-overwrite images share the existing two-slot
 store. A size miss preserves one array only when it leaves capacity and a slot for
 the request; image disposal prefers a larger fitting released pair. Scratch/font

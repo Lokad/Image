@@ -40,7 +40,7 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) now passes: **3,106.21 / FFmpeg 3,349.15 µs, upper 0.934**, **8,664 B/op**. Alternating complete managed/native batches resolve the older uncertainty without a production change or speedup claim. Original adverse data remain. The [raster-copy round](../benchmarks/RASTER-COPY-SCHEDULING.md) refreshes the complete decode/orient/crop/fit comparison: **2,867.64 / 2,934.06 µs, upper 0.982**, **338,159.2 B/op**. Both controls stop.
+[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) qualifies all 60 affected existing boundaries: **59 pass, one remains uncertain**. All 47 decode controls and four coding validators pass. Word stream decode is **2,823.39 / FFmpeg 3,083.60 µs, upper 0.921**, **8,664 B/op**. Complete word decode/orient/crop/fit is **2,871.46 / 2,943.04 µs**, interval **0.928688–1.021958**, **338,160 B/op**: uncertain. One controlled DLL comparison spans parity around a 0.575% favorable point with identical allocations; no separate pipeline gain or regression is established. Original evidence stays linked; no favorable native replay.
 
 [Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
 stream pass: **5,701.59 / FFmpeg
@@ -61,7 +61,8 @@ loads before group stores while using checked fixed offsets. Independent byte-fl
 pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
 flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
 **17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
-**18 passes, zero gaps and two uncertainties**. Neither flip is a passing control.
+**17 passes, zero gaps and three uncertainties**, including the current word
+composition control. Neither flip is a passing control.
 Exact samples, tails, cancellation, admission and independent ownership remain.
 Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
 Release-package consumer/all three examples. One core/embedded build per OS, no
@@ -72,7 +73,7 @@ retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) p
 Earlier copy trials remain linked history, outside current-result dependencies.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **192 existing
-image views: 189 pass, 0 gaps, 3 uncertain**. This does not establish full parity:
+image views: 188 pass, 0 gaps, 4 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
@@ -166,18 +167,23 @@ focused **10 internal /148 public** normal/scalar, the SAME actual package and
 all three examples. One core/embedded build per OS, one pack and no accepted-module
 rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
 retains the prior architecture/profile; stage percentages are not added.
-[Matched resident PNG batches](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md)
-resolve uncertainty as a small gap: **13.099 /
-FFmpeg adapter 13.047 µs**, conservative interval
-**1.000464–1.007077**, **96 B/op**.
-One longer comparison uses 32,768 complete calls per subject, twelve alternating
-pairs and twelve native samples before/after. The actual qualified package DLL,
-original input/worker and 21 normal/scalar controls are reused; no production gain
-or broad qualification repeat. Earlier samples stay in history.
+[Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
+**6.733 / FFmpeg adapter
+13.068 µs**, conservative upper
+**0.520**, **96 B/op**. Seekable/async Identify
+also pass on the same timed/package DLL. Four existing 128-bit residues advance
+together under 512-bit hardware guards; the seed, polynomial, joins, tails,
+cancellation positions, portable fallbacks and ownership stay exact. Encoder CRC
+and shared fields/helpers are unchanged. Earlier matched-batch diagnostics remain
+[history](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md).
 [Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its allocation
-reduction and four other source-valid Identify costs: JPEG/WebP resident and both
-PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
-evidence. This is not a whole-release timing refresh. Probe/header admission stays
+reduction and two source-valid JPEG/WebP resident Identify passes. All 60 affected
+PNG costs reconcile before one Windows/Linux qualification milestone: **6,721
+full/live checks per OS**, **84 internal /247 public** normal/AVX512-off/scalar,
+the SAME actual package and all three examples. One core/embedded build per OS,
+one pack and no accepted-module rebuild after timing. No new heap array, static
+field, pool or retained operation storage. Other codec/edit/resize/font/text paths
+reuse unchanged evidence. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
@@ -261,9 +267,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,602.49 | 5,408.55 | 0.851 / 0.867 | 818,004 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,892.73 | 10,500.84 | 0.942 / 0.952 | 1,356,164 | 506,887 / 506,887 |
 | PNG RGBA8, one-shot stored0 / native0 † | 53.27 | 541.40 | 0.098 / 0.114 | 607,628 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † | 1,358.23 | 1,393.80 | 0.974 / 0.980 | 4,472 | — |
-| PNG RGBA8 decode, tight working limit † | 1,178.41 | 1,396.38 | 0.844 / 0.853 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit † | 2,821.89 | 2,902.08 | 0.972 / 0.978 | 70,272 | — |
+| PNG RGBA8 decode, live token † | 1,378.18 | 1,395.98 | 0.987 / 0.996 | 4,472 | — |
+| PNG RGBA8 decode, tight working limit † | 1,161.50 | 1,394.24 | 0.833 / 0.840 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit † | 2,797.18 | 2,898.56 | 0.965 / 0.975 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 259,795.57 | 388,008.23 | 0.670 / 0.685 | 2,491,252 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |
@@ -282,7 +288,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,422.33 | 1,626.70 | 0.874 / 0.878 | 309,523 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,106.93 | 3,858.03 | 0.805 / 0.810 | 820,502 | 133,039 / 133,041 |
-| PNG8 decode, two retained images / shared caller root † | 2,611.56 | 2,853.33 | 0.915 / 0.919 | 1,638,214 | — |
+| PNG8 decode, two retained images / shared caller root † | 2,575.83 | 2,846.82 | 0.905 / 0.909 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 410.41 | 418.11 | 0.982 / 0.988 | 20,944 | — |
@@ -373,20 +379,20 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Probe JPEG dimensions, seekable | 0.226 | 0.192 | 1.175 / 1.227 | 568 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.118 | 0.122 | 0.969 / 0.993 | 568 | Confirmed pass |
 | Probe JPEG dimensions, async nonseekable | 0.252 | 0.201 | 1.253 / 1.278 | 568 | Confirmed gap |
-| Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
-| Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
-| Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |
+| Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
+| Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
+| Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
-| Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
+| Validate PNG16, async nonseekable † | 2,753.691 | 3,613.167 | 0.762 / 0.766 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.294 | 0.573 | 0.512 / 0.525 | 568 | Confirmed pass |
-| Identify PNG8 complete container, resident, adapter reference | 13.099 | 13.047 | 1.004 / 1.007 | 96 | Confirmed gap |
+| Identify PNG8 complete container, resident, adapter reference | 6.733 | 13.068 | 0.515 / 0.520 | 96 | Confirmed pass |
 | Identify JPEG420, resident, canonical adapter | 0.497 | 1.181 | 0.421 / 0.431 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 5.039 | 0.004 / 0.005 | 96 | Confirmed pass |
-| Identify PNG8, fresh seekable Stream, adapter reference | 15.046 | 15.883 | 0.947 / 0.950 | 192 | Confirmed pass |
-| Identify PNG8, async nonseekable, adapter reference | 17.871 | 18.771 | 0.952 / 0.957 | 216 | Confirmed pass |
+| Identify PNG8, fresh seekable Stream, adapter reference | 8.802 | 15.951 | 0.552 / 0.555 | 192 | Confirmed pass |
+| Identify PNG8, async nonseekable, adapter reference | 11.801 | 19.297 | 0.612 / 0.621 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify

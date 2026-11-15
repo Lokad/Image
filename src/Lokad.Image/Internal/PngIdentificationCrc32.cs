@@ -161,25 +161,51 @@ internal static class PngIdentificationCrc32
         // Represent the data polynomial before appending the CRC's 32 zero
         // bits. Four residues advance independently by x^512, hiding the
         // carryless-multiply latency; combine once, then append x^32 once.
-        var first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)uint.MaxValue << 32));
+        Vector128<ulong> first;
         var i = 16;
         if (bytes.Length >= 64)
         {
-            var second = Read(bytes.Slice(16, 16));
-            var third = Read(bytes.Slice(32, 16));
-            var fourth = Read(bytes.Slice(48, 16));
-            for (i = 64; i <= bytes.Length - 64; i += 64)
+            Vector128<ulong> second, third, fourth;
+            if (Pclmulqdq.V512.IsSupported && Gfni.V512.IsSupported && Avx512BW.IsSupported && Avx512F.IsSupported)
             {
-                if ((i & 4095) == 0) cancellation.ThrowIfCancellationRequested();
-                first = Sse2.Xor(Fold(first, Fold512), Read(bytes.Slice(i, 16)));
-                second = Sse2.Xor(Fold(second, Fold512), Read(bytes.Slice(i + 16, 16)));
-                third = Sse2.Xor(Fold(third, Fold512), Read(bytes.Slice(i + 32, 16)));
-                fourth = Sse2.Xor(Fold(fourth, Fold512), Read(bytes.Slice(i + 48, 16)));
+                // Pack the same four independent residues, with unchanged
+                // polynomial order and cancellation positions.
+                var orderPair = Vector256.Create(ByteOrder, ByteOrder);
+                var order = Vector512.Create(orderPair, orderPair);
+                var value = Avx512F.Xor(ReadFour(bytes, order),
+                    Vector512.Create(0UL, (ulong)uint.MaxValue << 32, 0, 0, 0, 0, 0, 0));
+                var pair = Vector256.Create(Fold512, Fold512);
+                var factors = Vector512.Create(pair, pair);
+                for (i = 64; i <= bytes.Length - 64; i += 64)
+                {
+                    if ((i & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                    value = Avx512F.Xor(Avx512F.Xor(
+                        Pclmulqdq.V512.CarrylessMultiply(value, factors, 0),
+                        Pclmulqdq.V512.CarrylessMultiply(value, factors, 0x11)), ReadFour(bytes.Slice(i, 64), order));
+                }
+                var lower = value.GetLower(); var upper = value.GetUpper();
+                first = lower.GetLower(); second = lower.GetUpper(); third = upper.GetLower(); fourth = upper.GetUpper();
+            }
+            else
+            {
+                first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)uint.MaxValue << 32));
+                second = Read(bytes.Slice(16, 16));
+                third = Read(bytes.Slice(32, 16));
+                fourth = Read(bytes.Slice(48, 16));
+                for (i = 64; i <= bytes.Length - 64; i += 64)
+                {
+                    if ((i & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                    first = Sse2.Xor(Fold(first, Fold512), Read(bytes.Slice(i, 16)));
+                    second = Sse2.Xor(Fold(second, Fold512), Read(bytes.Slice(i + 16, 16)));
+                    third = Sse2.Xor(Fold(third, Fold512), Read(bytes.Slice(i + 32, 16)));
+                    fourth = Sse2.Xor(Fold(fourth, Fold512), Read(bytes.Slice(i + 48, 16)));
+                }
             }
             first = Sse2.Xor(Fold(first, Fold128), second);
             first = Sse2.Xor(Fold(first, Fold128), third);
             first = Sse2.Xor(Fold(first, Fold128), fourth);
         }
+        else first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)uint.MaxValue << 32));
         for (; i <= bytes.Length - 16; i += 16)
         {
             if ((i & 4095) == 0) cancellation.ThrowIfCancellationRequested();

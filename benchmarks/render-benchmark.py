@@ -282,31 +282,68 @@ def owned_edit_costs():
     return {'cases': cases, 'currentImageOwnerViewStatuses': current['currentImageOwnerViewStatuses']}
 
 
-def current_png_stream_word_note():
-    current = json.loads((ROOT / 'benchmarks/png-stream-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    c, q = current['case'], current['qualification']
-    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+def png_scan_stage():
+    current = json.loads((ROOT / 'benchmarks/wide-png-scan-crc-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert len(current['cases']) == 60 and current['statusCounts'] == {'pass': 59, 'gap': 0, 'uncertain': 1}
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == 6624 and q['productionAndActualPackageByteIdentical']
-    assert q['sameActualPackageBothOsAndThreeExamplesPassed'] and q['broadOrPackageRepeats'] == 0
-    assert current['currentImageOwnerViewStatuses'] == {'passCount': 175, 'gaps': 1, 'uncertain': 15, 'total': 191}
-    assert c['librarySha256'] == current['producers']['timedArtifactSha256'] == q['actualPackageLibrarySha256']
-    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-    assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['allocatedBytes'] == 8664
-    assert c['status'] == 'pass' and c['upper'] <= 1
-    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    composition = owned_edit_costs()['cases']['PngCropFit16']
-    assert composition['status'] == 'pass'
-    return (f'[Current PNG16 stream confidence](../benchmarks/PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) '
-            f'now passes: **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
-            f'**{c["allocatedBytes"]:,} B/op**. Alternating complete managed/native batches resolve the older '
-            'uncertainty without a production change or speedup claim. Original adverse data remain. '
-            f'The [raster-copy round](../benchmarks/RASTER-COPY-SCHEDULING.md) refreshes the complete '
-            f'decode/orient/crop/fit comparison: **{composition["managedUs"]:,.2f} / '
-            f'{composition["nativeUs"]:,.2f} µs, upper {composition["upper"]:.3f}**, '
-            f'**{composition["allocatedBytes"]:,.1f} B/op**. Both controls stop.')
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6721
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == current['producers']['packageSha256']
+    assert q['package']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    for c in current['cases'].values():
+        assert c['librarySha256'] == q['package']['librarySha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return current
+
+
+def current_png_stream_word_note(current):
+    c = current['cases']['pngStream/Png16']
+    composition = current['cases']['pngStream/PngCropFit16']
+    return (f'[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) qualifies all 60 affected existing boundaries: '
+            '**59 pass, one remains uncertain**. All 47 decode controls and four coding validators pass. '
+            f'Word stream decode is **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
+            f'**{c["allocatedBytes"]:,} B/op**. Complete word decode/orient/crop/fit is '
+            f'**{composition["managedUs"]:,.2f} / {composition["nativeUs"]:,.2f} µs**, interval '
+            f'**{composition["lower"]:.6f}–{composition["upper"]:.6f}**, **{composition["allocatedBytes"]:,} B/op**: uncertain. '
+            'One controlled DLL comparison spans parity around a 0.575% favorable point with identical allocations; '
+            'no separate pipeline gain or regression is established. Original evidence stays linked; no favorable native replay.')
+
+
+def apply_current_png_scan(codecs, reads, current):
+    mapping = {
+        'PNG RGBA8 decode, live token †': 'png/DecodeCancelable8',
+        'PNG RGBA8 decode, tight working limit †': 'png/DecodeTight8',
+        'PNG RGBA16 decode, tight working limit †': 'png/DecodeTight16',
+        'PNG8 decode, two retained images / shared caller root †': 'root/Png8Retained2',
+        'Validate PNG8, span †': 'validator/ValidatePng8',
+        'Validate PNG16, span †': 'validator/ValidatePng16',
+        'Validate indexed Adam7 19×17, span †': 'validator/ValidateIndexedAdam7',
+        'Validate PNG16, async nonseekable †': 'validator/ValidatePng16Async',
+    }
+    seen = set()
+    def update(table, read=False):
+        result = []
+        for line in table.splitlines():
+            cells = [c.strip() for c in line.split('|')[1:-1]]
+            if cells and cells[0] in mapping:
+                key = mapping[cells[0]]; assert key not in seen; seen.add(key)
+                c = current['cases'][key]; digits = 3 if read else 2
+                cells[1:5] = [f'{c["managedUs"]:,.{digits}f}', f'{c["nativeUs"]:,.{digits}f}',
+                              f'{c["ratio"]:.3f} / {c["upper"]:.3f}', f'{c["allocatedBytes"]:,}']
+                if read: cells[-1] = {'pass': 'Confirmed pass', 'gap': 'Confirmed gap', 'uncertain': 'Confidence open'}[c['status']]
+                line = '| ' + ' | '.join(cells) + ' |'
+            result.append(line)
+        return '\n'.join(result)
+    codecs, reads = update(codecs), update(reads, True)
+    assert seen == set(mapping.values())
+    return codecs, reads
 
 
 def apply_current_vp8_fixed_code(codecs, reads, current):
@@ -2856,20 +2893,15 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
         'PngAsync': 'Identify PNG8, async nonseekable, adapter reference',
     }
     assert set(inspection_owner['identifyCases']) == set(identify_labels)
-    resident_png = json.loads((ROOT / 'benchmarks/png-resident-identify-adjacent-evidence.json').read_text(encoding='utf-8'))
-    resident_qualification = resident_png['qualification']
-    assert resident_png['measurementAccepted'] and not resident_png['productionChanged'] and not resident_png['productionSpeedupClaim']
-    assert resident_png['requiredMaterialPaths'] == 289 and resident_png['newMaterialPaths'] == 0
-    assert resident_png['raw']['mirrored'] and resident_png['raw']['allMembersVerified']
-    assert set(resident_png['cases']) == {'Png8'} and resident_png['design']['operationsPerSubject'] == 32768
-    assert resident_qualification['fullChecksEachOs'] == 6721 and resident_qualification['newBroadOrPackageChecks'] == 0
-    assert resident_qualification['sameActualPackageBothOs'] and resident_qualification['allThreeUsageExamplesBothOs']
-    assert resident_qualification['focusedNormalScalarPassed'] and resident_qualification['pngSamePacketControlsEachMode'] == 21
-    assert resident_qualification['librarySha256'] == resident_png['producers']['linuxSha256']
-    assert resident_qualification['packageSha256'] == resident_png['producers']['packageSha256']
+    resident_png = png_scan_stage()
+    resident_names = {'Png8': 'identify/Png8', 'PngSeekable': 'streamIdentify/PngSeekable', 'PngAsync': 'streamIdentify/PngAsync'}
     for name, label in identify_labels.items():
-        provider = resident_png if name == 'Png8' else inspection_owner
-        c = resident_png['cases'][name] if name == 'Png8' else inspection_owner['identifyCases'][name]
+        provider = resident_png if name in resident_names else inspection_owner
+        if name in resident_names:
+            source = resident_png['cases'][resident_names[name]]
+            c = {**source, **source['metadata'], 'managedActuals': source['actualIterations']}
+        else:
+            c = inspection_owner['identifyCases'][name]
         assert c['librarySha256'] == provider['producers']['linuxSha256']
         assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12
         assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -2955,7 +2987,8 @@ loads before group stores while using checked fixed offsets. Independent byte-fl
 pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
 flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
 **17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
-**18 passes, zero gaps and two uncertainties**. Neither flip is a passing control.
+**17 passes, zero gaps and three uncertainties**, including the current word
+composition control. Neither flip is a passing control.
 Exact samples, tails, cancellation, admission and independent ownership remain.
 Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
 Release-package consumer/all three examples. One core/embedded build per OS, no
@@ -2965,7 +2998,7 @@ physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
 retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
 Earlier copy trials remain linked history, outside current-result dependencies."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
-    png_stream_word_note = current_png_stream_word_note()
+    png_stream_word_note = current_png_stream_word_note(resident_png)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = reader_current['cases']['OpaqueCancelable8']
@@ -3010,6 +3043,9 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     copy_views = snapshot_copy_stage()['currentImageOwnerViewStatuses']
     assert copy_views == {**image_view_counts, 'gaps': image_view_counts['gaps'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
     image_view_counts = copy_views
+    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
+    assert image_view_counts == resident_png['currentImageOwnerViewStatuses']
+    codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3144,18 +3180,23 @@ focused **10 internal /148 public** normal/scalar, the SAME actual package and
 all three examples. One core/embedded build per OS, one pack and no accepted-module
 rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
 retains the prior architecture/profile; stage percentages are not added.
-[Matched resident PNG batches](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md)
-resolve uncertainty as a small gap: **{resident_png['cases']['Png8']['managedUs']:.3f} /
-FFmpeg adapter {resident_png['cases']['Png8']['nativeUs']:.3f} µs**, conservative interval
-**{resident_png['cases']['Png8']['lower']:.6f}–{resident_png['cases']['Png8']['upper']:.6f}**, **96 B/op**.
-One longer comparison uses 32,768 complete calls per subject, twelve alternating
-pairs and twelve native samples before/after. The actual qualified package DLL,
-original input/worker and 21 normal/scalar controls are reused; no production gain
-or broad qualification repeat. Earlier samples stay in history.
+[Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
+**{resident_png['cases']['identify/Png8']['managedUs']:.3f} / FFmpeg adapter
+{resident_png['cases']['identify/Png8']['nativeUs']:.3f} µs**, conservative upper
+**{resident_png['cases']['identify/Png8']['upper']:.3f}**, **96 B/op**. Seekable/async Identify
+also pass on the same timed/package DLL. Four existing 128-bit residues advance
+together under 512-bit hardware guards; the seed, polynomial, joins, tails,
+cancellation positions, portable fallbacks and ownership stay exact. Encoder CRC
+and shared fields/helpers are unchanged. Earlier matched-batch diagnostics remain
+[history](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md).
 [Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its allocation
-reduction and four other source-valid Identify costs: JPEG/WebP resident and both
-PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
-evidence. This is not a whole-release timing refresh. Probe/header admission stays
+reduction and two source-valid JPEG/WebP resident Identify passes. All 60 affected
+PNG costs reconcile before one Windows/Linux qualification milestone: **6,721
+full/live checks per OS**, **84 internal /247 public** normal/AVX512-off/scalar,
+the SAME actual package and all three examples. One core/embedded build per OS,
+one pack and no accepted-module rebuild after timing. No new heap array, static
+field, pool or retained operation storage. Other codec/edit/resize/font/text paths
+reuse unchanged evidence. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 

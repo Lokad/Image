@@ -1,5 +1,8 @@
 # Resident PNG Identify: matched batches
 
+[Wide scan CRC](WIDE-PNG-SCAN-CRC.md) now owns this cost and closes the gap.
+The following diagnosis and original captures remain source-specific history.
+
 The frozen 513×259, 218,775 B PNG complete resident Identify has a small gap:
 **13.098789 / FFmpeg adapter 13.047228 µs**, ratio **1.003952**,
 conservative interval **1.000464–1.007077**, **96 managed B/op**.

@@ -1,5 +1,8 @@
 # Raster copy scheduling
 
+[Wide scan CRC](WIDE-PNG-SCAN-CRC.md) now owns the two PNG composition costs.
+The four unchanged basic copy/clone comparisons retain this producer.
+
 Current borrowed-copy costs are in [prepared copy rows](DRAWING-ROW-PREPARATION.md); current owned flips are in [grouped copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
 
 Normal RGBA16 copying and cloning now pass the original FFmpeg comparisons.
