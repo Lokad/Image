@@ -1,0 +1,274 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PEP1099",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "661ad1454b4079a6aea557f77772a007acbef6250b45120d8185c0cba214dfdd",
+    "linuxSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+    "timedArtifactSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+    "packageSha256": "436c80d44cdce72acfcf006226aacd55f5c257e0f82b6d28e931972150cfbf5c"
+  },
+  "candidateLinuxSha256": "98eca5d1a73e530671ae3cf75e5d3a336f4a99f736f109e8a96921f565731bd4",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd",
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "3e9aa5305e49ea9ed15587609a293c4a847ecf5bf17727cb2dd148f0ac2a88c5",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+    "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+    "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+    "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "dce4a8dd7bb29f772df9d26d342b75f760049e2b9722f46bd9f0d86fee345175"
+  },
+  "candidateTestSources": {
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "4764e38b750ffaaff51d81d7610e3d747d7e5f214578aa482431624e58475823"
+  },
+  "hypothesis": "Current source-valid JIT evaluates two128-bit endpoint vectors at the same band boundaries in both event preparation and scan conversion. One256-bit vector evaluates the four independent lanes in the same subtract/divide/multiply/add order,sharing one kernel and reducing duplicated vector instruction sequences. Extra packing/register pressure may offset all savings;sample locations are not phase costs or gain forecasts.",
+  "intendedEndState": "One shared private PairEndpoints for preparation and execution. AVX guard with existing SSE2/scalar two-edge fallback. No reciprocal,FMA,reassociation,new numeric policy,geometry cache,pool,array,owner,retained state or public API. Existing single-edge kernel remains functional fallback.",
+  "boundaries": "Drawing diagnostics are scoped and retain different working state on each reference side. They do not prove an overall text slowdown. The two complete public one-shot/eight-draw workloads already pass and are refreshed only if the shared drawing production change is retained. Font loading,shaping/layout/fitting remain unchanged;no historical stage sums.",
+  "sourceProof": {
+    "originalProductionSourceReconstructed": true,
+    "allExceptEndpointKernelAndTwoCallsVerbatim": true,
+    "originalLaneOperationOrder": true,
+    "portableEndpointFallbackVerbatim": true,
+    "noNewOwnedCapacityOrRetainedState": true
+  },
+  "sourceTransforms": [
+    [
+      "    private readonly record struct Curve(Point A, Point C, Point B, int Depth);",
+      "    // Evaluate two edges at the same band limits with the original operation\n    // order in every lane. Geometry preparation and drawing share this kernel.\n    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]\n    private static (double FirstTop, double FirstBottom, double SecondTop, double SecondBottom)\n        PairEndpoints(in Edge first, in Edge second, double top, double bottom)\n    {\n        if (System.Runtime.Intrinsics.X86.Avx.IsSupported)\n        {\n            var y = System.Runtime.Intrinsics.Vector256.Create(top, bottom, top, bottom);\n            var originY = System.Runtime.Intrinsics.Vector256.Create(first.originY, first.originY, second.originY, second.originY);\n            var deltaY = System.Runtime.Intrinsics.Vector256.Create(first.deltaY, first.deltaY, second.deltaY, second.deltaY);\n            var fraction = System.Runtime.Intrinsics.X86.Avx.Divide(System.Runtime.Intrinsics.X86.Avx.Subtract(y, originY), deltaY);\n            var deltaX = System.Runtime.Intrinsics.Vector256.Create(first.deltaX, first.deltaX, second.deltaX, second.deltaX);\n            var product = System.Runtime.Intrinsics.X86.Avx.Multiply(deltaX, fraction);\n            var originX = System.Runtime.Intrinsics.Vector256.Create(first.originX, first.originX, second.originX, second.originX);\n            var result = System.Runtime.Intrinsics.X86.Avx.Add(originX, product);\n            return (System.Runtime.Intrinsics.Vector256.GetElement(result, 0), System.Runtime.Intrinsics.Vector256.GetElement(result, 1),\n                System.Runtime.Intrinsics.Vector256.GetElement(result, 2), System.Runtime.Intrinsics.Vector256.GetElement(result, 3));\n        }\n        var a = first.Endpoints(top, bottom); var b = second.Endpoints(top, bottom);\n        return (a.Top, a.Bottom, b.Top, b.Bottom);\n    }\n\n    private readonly record struct Curve(Point A, Point C, Point B, int Depth);"
+    ],
+    [
+      "                var (a, d) = start.Endpoints(top, bottom); var (b, c) = edge.Endpoints(top, bottom);",
+      "                var (a, d, b, c) = PairEndpoints(start, edge, top, bottom);"
+    ],
+    [
+      "                    var (aLow, aHigh) = a.Endpoints(low, high); var (bLow, bHigh) = b.Endpoints(low, high);",
+      "                    var (aLow, aHigh, bLow, bHigh) = PairEndpoints(a, b, low, high);"
+    ]
+  ],
+  "cases": {
+    "baseline": {
+      "screen": {
+        "managedUs": 59.971693033854166,
+        "referenceUs": 47.071832356770834,
+        "allocatedPerOperation": [
+          75968.0
+        ]
+      },
+      "librarySha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+      "actuals": 3,
+      "operationsPerActual": 1024,
+      "quietGuardsPassed": true,
+      "originalInputsReferenceLayoutVisualResetAndOwnershipPassed": true,
+      "raw": "tmp/pep1099-baseline-ordinary-DrawText16-short-receipt.json"
+    },
+    "candidate": {
+      "screen": {
+        "managedUs": 60.75959440104167,
+        "referenceUs": 46.93587630208334,
+        "allocatedPerOperation": [
+          75968.0
+        ]
+      },
+      "librarySha256": "98eca5d1a73e530671ae3cf75e5d3a336f4a99f736f109e8a96921f565731bd4",
+      "actuals": 3,
+      "operationsPerActual": 1024,
+      "quietGuardsPassed": true,
+      "originalInputsReferenceLayoutVisualResetAndOwnershipPassed": true,
+      "raw": "tmp/pep1099-candidate-ordinary-DrawText16-short-receipt.json"
+    }
+  },
+  "rawScreenGain": -0.013137887682155736,
+  "interpretation": "The contemporary current-qualified/candidate shorts are59.971693to60.759594us,1.31percent adverse point,75968timedB unchanged. Reference paired means47.071832to46.935876us. No useful screen,gain,causal regression or parity is established;no independent confirmation,other cases,codegen,broad/package or neighboring vector width follows. Preserve every actual and native bracket. Complete public one-shot/eight-draw evidence remains source-valid after exact restoration;stage costs are not an overall slowdown or historical-stage sum.",
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 265,
+      "public-normal": 161,
+      "internal-avx-off": 265,
+      "public-avx-off": 161,
+      "internal-scalar": 265,
+      "public-scalar": 161
+    },
+    "allEightFrozenFramesExactEachMode": true,
+    "endpointScalarOracleIncludesIndependentTwoEdgeSwappedAndReversedLanes": true,
+    "originalEventsAndFullWordSamplesPreserved": true
+  },
+  "attribution": {
+    "provider": "benchmarks/text-overlap-preparation-trial-evidence.json",
+    "sourceHash": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd",
+    "profile": "NTA1049",
+    "samples": 1991,
+    "locations": {
+      "Band": 371,
+      "BuildEvents": 139
+    },
+    "allInstrumentedTimingsDiscarded": true
+  },
+  "qualification": {
+    "provider": "benchmarks/probe-owner-completion-evidence.json",
+    "fullChecksEachOsReused": 6727,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "PEP1099",
+      "sourceRestored": true,
+      "productionSha256": "661ad1454b4079a6aea557f77772a007acbef6250b45120d8185c0cba214dfdd",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "PEP1099",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "3e9aa5305e49ea9ed15587609a293c4a847ecf5bf17727cb2dd148f0ac2a88c5",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+        "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+        "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+        "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+        "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+        "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14"
+      },
+      "embeddedTestsSha256": "9b3c16da9c7e5308c1b03445f974152bf705ed01553bc7f9a5249591715b2609",
+      "publicTestsSha256": "4a08eaeded86c16bec150c0fe5d3394ee55ad33e4e07c69013317eec37acd134",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "ordinaryPublicAllocatedBytes": 75944,
+    "timedAdapterAllocatedBytes": 24,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "XEB1100 supports exact computed-X hull exclusion. Prototype one temporary admitted range workspace reused across shape event preparation;skip only strictly disjoint certified hulls,retaining original fallback/polls/coordinates and unchanged Band/draw arithmetic. Reuse current qualified baseline and original workers/fixtures. Screen bounded ordinary16;independent confirmation and affected complete public integrations only if useful. No cache,retained plan growth,automatic adoption or permanent family ban.",
+  "raw": {
+    "file": "text-two-edge-endpoint-trial.tar.xz",
+    "sha256": "8d26a300b2bf6c1ba8ee057b7000e6e6df235d54e416b7a82f6616cebb89a7e2",
+    "bytes": 1787400,
+    "members": 85,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "probe-owner-completion-qualified.tar.xz",
+        "sha256": "847a2839ebb2a466b4fcbbdd3abca92fdeece2c07130d8d969503a91d6b32a2f"
+      },
+      {
+        "file": "text-overlap-preparation-trial.tar.xz",
+        "sha256": "0309e6570459a745078b8510aaa618ce7f80aa3841205009f731918a472cdb90"
+      }
+    ]
+  },
+  "nextProof": {
+    "stage": "XEB1100",
+    "productionChanged": false,
+    "testSource": "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs",
+    "testSourceSha256": "71b2c93f28f55f2d677cc21a1cfb9714688a05bf9b61f723be9d0634de018864",
+    "productionRasterSourceSha256": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd",
+    "platforms": {
+      "windows": {
+        "project": "Lokad.Image",
+        "stage": "XEB1100",
+        "platform": "windows",
+        "productionChanged": false,
+        "proofTestSourceSha256": "71b2c93f28f55f2d677cc21a1cfb9714688a05bf9b61f723be9d0634de018864",
+        "productionSha256": "661ad1454b4079a6aea557f77772a007acbef6250b45120d8185c0cba214dfdd",
+        "embeddedTestsSha256": "56b2ad36d74f756cec3fad883c45fcd6cd4ec88d167774d467d0087c5b349b91",
+        "counts": {
+          "normal": 1,
+          "avx-off": 1,
+          "scalar": 1
+        },
+        "productionBuilds": 0,
+        "embeddedBuilds": 1,
+        "publicHarnessNativeFixturePackageBuilds": 0,
+        "broadOrPackageRepeats": 0,
+        "testedScope": "Actual production Edge.X and scalar/SSE2 Endpoints;computed floating-X hulls,strict disjoint-hull exclusion against original crossing signs.19adversarial values plus20000font-scale and20000raw-bit independent edge pairs;atleast60000certified edges/1000nonvacuous excluded overlap pairs. Every selected coordinate remains in the computed hull. Finite endpointY/nonzero finite deltaY and finite originX/deltaX are required;otherwise unbounded envelope. Mathematical monotonicity proof in test comments;not exhaustive testing of binary64 or a CPU claim."
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "stage": "XEB1100",
+        "platform": "linux",
+        "productionChanged": false,
+        "proofTestSourceSha256": "71b2c93f28f55f2d677cc21a1cfb9714688a05bf9b61f723be9d0634de018864",
+        "productionSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+        "embeddedTestsSha256": "83d8969dc4f20d95aa864f8b3c927fcb2b9c16095658566a1c5e5140aa210072",
+        "counts": {
+          "normal": 1,
+          "avx-off": 1,
+          "scalar": 1
+        },
+        "productionBuilds": 0,
+        "embeddedBuilds": 1,
+        "publicHarnessNativeFixturePackageBuilds": 0,
+        "broadOrPackageRepeats": 0,
+        "testedScope": "Actual production Edge.X and scalar/SSE2 Endpoints;computed floating-X hulls,strict disjoint-hull exclusion against original crossing signs.19adversarial values plus20000font-scale and20000raw-bit independent edge pairs;atleast60000certified edges/1000nonvacuous excluded overlap pairs. Every selected coordinate remains in the computed hull. Finite endpointY/nonzero finite deltaY and finite originX/deltaX are required;otherwise unbounded envelope. Mathematical monotonicity proof in test comments;not exhaustive testing of binary64 or a CPU claim."
+      }
+    },
+    "statement": "For finite original endpointY values,finite nonzero rounded deltaY,and finite originX/deltaX,every ordered X(y) in the endpointY interval is enclosed by min/max(originX,rounded(originX+deltaX)). Correctly rounded subtraction,division,multiplication and addition are monotone;the quotient is in0..1. Strictly disjoint such hulls cannot satisfy the original opposite-sign endpoint crossing test. Use an unbounded hull otherwise. Do not substitute original endpointX,which can differ from the computed endpoint. No numerical-policy change.",
+    "futureStorage": "One temporary admitted range workspace reused across shape event preparation;release after actual users finish. No extra retained plan fields/cache,unchanged Band/draw arithmetic and original fallback for uncertified pairs. Production prototype and CPU/peak/alloc/complete-boundary qualification remain outstanding.",
+    "noTimingOrProductionAdoptionClaim": true,
+    "broadAndPackageProofForUnchangedProductionReused": true,
+    "raw": {
+      "file": "text-computed-x-bound-proof.tar.xz",
+      "sha256": "1b9b4cf2d1edf5609fecceff76a0b5fae007b8d11752e4f028d228476568eaa8",
+      "bytes": 1229400,
+      "members": 23,
+      "allMembersVerified": true,
+      "mirrored": true,
+      "dependencies": [
+        {
+          "file": "probe-owner-completion-qualified.tar.xz",
+          "sha256": "847a2839ebb2a466b4fcbbdd3abca92fdeece2c07130d8d969503a91d6b32a2f"
+        }
+      ]
+    }
+  }
+}
