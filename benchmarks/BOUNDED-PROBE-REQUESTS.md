@@ -1,5 +1,8 @@
 # Bounded probe refill requests
 
+[Reader consolidation](STREAM-READER-CONSOLIDATION.md) now owns all five current
+probe/header costs. This report retains the clamp change and its earlier proof.
+
 Bounded refill callers already fit their requested field/chunk at the supplied
 offset. The shared reader uses that request before the input/acquisition clamps,
 removing a redundant capacity minimum. Unbounded read-ahead retains its original

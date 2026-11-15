@@ -643,8 +643,8 @@ def apply_bounded_wide_quartet(editing):
     return '\n'.join(rows)
 
 
-def bounded_probe_stage():
-    owner = json.loads((ROOT / 'benchmarks/bounded-probe-requests-evidence.json').read_text(encoding='utf-8'))
+def stream_reader_stage():
+    owner = json.loads((ROOT / 'benchmarks/stream-reader-consolidation-evidence.json').read_text(encoding='utf-8'))
     assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
     assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
     assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
@@ -2786,7 +2786,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
     assert sq['package']['librarySha256'] == inspection_owner['producers']['linuxSha256']
     assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
-    probe_owner = bounded_probe_stage()
+    probe_owner = stream_reader_stage()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         provider = probe_owner
         if case in provider['cases']:
@@ -3118,16 +3118,19 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Bounded probe requests](../benchmarks/BOUNDED-PROBE-REQUESTS.md) remove a redundant
-capacity clamp while preserving exact read sizes, validation and pending-user
-ownership. Independent complete async JPEG pairs save **2.08% / 5.7 ns**,
-still **568 B/op**. Four probes and complete PNG headers refresh on the SAME actual
-timed/package DLL; their twelve actuals and original FFmpeg AVIO/header adapter
-brackets remain. JPEG probes stay gaps; PNG/WebP probe confidence stays open.
-Complete PNG headers pass. The complete JPEG-header paired guard is inconclusive,
-with no header gain claim. Windows/Linux each pass **6,721 full/live checks**,
-focused **10 internal /148 public** normal/scalar, the SAME actual package and all
-three examples. One core/embedded build per OS, one pack, no post-timing rebuild.
+[Shared reader execution](../benchmarks/STREAM-READER-CONSOLIDATION.md) folds the
+forward-skip loop into its caller and shares one immediate refill completion.
+Independent complete async JPEG pairs save **2.32% / 6.25 ns**, still **568 B/op**.
+The first skip-only stage remains uncertain; no per-part or cumulative gain is
+claimed. All four original probes and complete PNG headers refresh on the SAME
+actual timed/package DLL, with twelve actuals, both original FFmpeg AVIO/header
+adapter brackets and exact acquisition/descriptor/ownership gates. PNG dimensions
+now passes (**upper 0.994**); complete PNG headers pass. JPEG probes remain gaps,
+and WebP remains uncertain. Sync/JPEG-header paired guards are inconclusive;
+there is no gain claim for those paths. Windows/Linux each pass **6,721 full/live
+checks**, focused **10 internal /148 public** normal/scalar, the SAME actual
+package and all three examples. Two Linux builds cover the coherent stages;
+Windows builds once. One pack and no accepted-artifact rebuild after timing.
 [Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
 allocation reduction and source-valid resident/stream Identify costs on their
 identified producer: resident PNG remains uncertain, while JPEG/WebP resident and

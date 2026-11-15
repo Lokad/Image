@@ -53,9 +53,15 @@ internal class InspectionReader : OperationContext, IDisposable
         }
         else requested = (int)Math.Min(buffer.Length - offset, Context.Limits.MaxInputBytes - acquired + 1);
         first = last = offset;
-        if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(offset, requested)), requested));
-        var pending = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);
-        return pending.IsCompletedSuccessfully ? ValueTask.FromResult(CompleteFill(pending.Result, requested)) : AwaitFillAsync(pending, requested);
+        int read;
+        if (!asynchronous) read = input.Read(buffer.AsSpan(offset, requested));
+        else
+        {
+            var pending = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);
+            if (!pending.IsCompletedSuccessfully) return AwaitFillAsync(pending, requested);
+            read = pending.Result;
+        }
+        return ValueTask.FromResult(CompleteFill(read, requested));
     }
 
     private void PrepareBulkStorage()
@@ -150,11 +156,6 @@ internal class InspectionReader : OperationContext, IDisposable
             acquired += count; Context.Cancellation.ThrowIfCancellationRequested();
             return ValueTask.CompletedTask;
         }
-        return SkipForwardAsync(count);
-    }
-
-    private ValueTask SkipForwardAsync(long count)
-    {
         bulk = true;
         while (count != 0)
         {
