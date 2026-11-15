@@ -1804,7 +1804,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-header-validation-evidence.json').read_text(encoding='utf-8'))
+    font_load = json.loads((ROOT / 'benchmarks/font-fixed-header-views-evidence.json').read_text(encoding='utf-8'))
     assert font_load['productionAccepted'] and font_load['allAffectedPerformanceReconciled']
     assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
     fq = font_load['qualification']
@@ -1834,20 +1834,22 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert tq['normalAndScalarSse2FallbackPassed']
     assert text_draw['memory']['addedOwnedCapacityBytes'] == text_draw['memory']['addedRetainedCapacityBytes'] == 8576
     assert all(text_draw['frozenResourceChecks'][mode]['allEightFrozenFramesExact'] for mode in ('normal', 'scalar'))
-    assert font_load['sources']['src/Lokad.Image/TrueTypeFont.cs'] == text_draw['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert font_load['sourceProof']['baselineFontSourceSha256'] == text_draw['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert font_load['sourceProof']['drawingClocksExcludeFontConstruction']
+    assert font_load['unchangedSources']['src/Lokad.Image/Internal/TextRasterizer.cs'] == text_draw['sources']['src/Lokad.Image/Internal/TextRasterizer.cs']
     text_gain = text_draw['comparison']
     assert text_gain['rawGainSeparated'] and text_gain['pairedNormalizedGainSeparated']
     assert not text_gain['worstBracketNormalizedLossSeparated']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_draw['pipelineCases'][case]
+        cost = font_load['pipelineCases'][case]
         assert cost['completeWorkload'] and cost['status'] == 'pass'
         assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_draw['pipelineCases']['Preparation']
-    font_batch = text_draw['pipelineCases']['PrepareDraw8']
+    font_preparation = font_load['pipelineCases']['Preparation']
+    font_batch = font_load['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['statistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
@@ -3049,17 +3051,18 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/TEXT-PREPARED-EDGE-INVARIANTS.md) pass,
+[Current complete text integrations](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
 Creation-only preparation is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
 amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation. Allocations are
 per complete row operation; the repeated row reports the whole batch. Active managed
 prepared capacity is {text_draw['memory']['completePreparedCapacityBytes']:,} B; no font/layout survives preparation. Heap deltas are
 approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
-{tq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
+{fq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
 pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
 comparison, not a release-wide refresh. Font loading saves {font_gain['savedUs']:.2f} µs / {font_gain['rawSavedFraction']:.2%} against a
 contemporary unchanged producer; no complete-pipeline gain is inferred.
+[Direct fixed-header views](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) retain the original eager validation and ownership.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.

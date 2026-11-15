@@ -196,11 +196,10 @@ public sealed partial class TrueTypeFont : IDisposable
     private static void Header(ReadOnlySpan<byte> glyph)
     {
         if (glyph.Length < 10) throw new ImageDataException("Invalid glyph header.");
-        var header = glyph[..10];
-        if (I16(header) != 0)
+        if (I16(glyph) != 0)
         {
             // All four signed coordinates occupy this validated eight-byte extent.
-            var bounds = BinaryPrimitives.ReadUInt64BigEndian(header[2..]);
+            var bounds = BinaryPrimitives.ReadUInt64BigEndian(glyph.Slice(2, 8));
             if (unchecked((short)(bounds >> 48)) > unchecked((short)(bounds >> 16))
                 || unchecked((short)(bounds >> 32)) > unchecked((short)bounds))
                 throw new ImageDataException("Invalid glyph bounds.");
