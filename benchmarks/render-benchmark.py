@@ -250,6 +250,26 @@ def snapshot_copy_stage():
     return stage
 
 
+def owned_flip_confidence():
+    stage = json.loads((ROOT / 'benchmarks/owned-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == 6721 and q['newBroadOrPackageChecks'] == 0
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs'] and q['sourceIdenticalQualificationReused']
+    assert q['packageSha256'] == stage['producers']['packageSha256']
+    assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16'}
+    for c in stage['cases'].values():
+        assert c['librarySha256'] == q['librarySha256'] == stage['producers']['timedArtifactSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 16384
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
+        assert c['allocatedBytes'] == 56
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def owned_edit_costs():
     # Only the selected current case needs validation. Superseded increments and
     # experiment-specific source/build proofs stay in their original reports.
@@ -297,6 +317,7 @@ def owned_edit_costs():
         'passCount': sum(c['status'] == 'pass' for c in cases.values()),
         'gaps': sum(c['status'] == 'gap' for c in cases.values()),
         'uncertain': sum(c['status'] == 'uncertain' for c in cases.values()), 'total': len(cases)}
+    cases.update(owned_flip_confidence()['cases'])
     return {'cases': cases, 'currentImageOwnerViewStatuses': current['currentImageOwnerViewStatuses']}
 
 
@@ -3007,17 +3028,21 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    owned_copy_note = """[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
+    byte_flip, word_flip = (owned_copy['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
+    owned_copy_note = f"""[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
 loads before group stores while using checked fixed offsets. Independent byte-flip
-pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
-flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
-**17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
-**17 passes, zero gaps and three uncertainties**, including the current word
-composition control. Neither flip is a passing control.
+pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**.
+[Longer owned-flip integration](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md)
+resolves word confidence: **{word_flip['managedUs']:.3f} / FFmpeg {word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** passes/stops.
+Byte flipping remains uncertain: **{byte_flip['managedUs']:.3f} / {byte_flip['nativeUs']:.3f} µs, upper {byte_flip['upper']:.6f}**.
+One prespecified 4,096→16,384-call integration retains every original sample and
+conservative confidence rule; no production speedup or identical favorable retry.
+The 20 owned-edit/composition views now have **18 passes, zero gaps and two
+uncertainties**, including the current word composition control.
 Exact samples, tails, cancellation, admission and independent ownership remain.
-Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
-Release-package consumer/all three examples. One core/embedded build per OS, no
-public/harness/native/helper/fixture build, one pack and no Linux rebuild after timing.
+The actual immutable package DLL reuses **6,721 full/live checks per OS**,
+focused normal/scalar and SAME package/all-three-example qualification. One small
+driver build, zero production/embedded/harness/native/fixture/package builds or broad repeats.
 Source/result payload and zero retained workspace stay separate from allocation;
 physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
 retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
@@ -3070,6 +3095,10 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     image_view_counts = copy_views
     image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] - 1, 'uncertain': image_view_counts['uncertain'] + 1}
     assert image_view_counts == resident_png['currentImageOwnerViewStatuses']
+    flips = owned_flip_confidence()
+    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'uncertain': image_view_counts['uncertain'] - 1}
+    assert flips['cases']['WarmVerticalFlip16']['status'] == 'pass' and flips['cases']['WarmVerticalFlip8']['status'] == 'uncertain'
+    assert image_view_counts == flips['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks

@@ -1,6 +1,8 @@
 # Grouped block copying
 
 Current borrowed-copy costs are in [prepared copy rows](DRAWING-ROW-PREPARATION.md); the grouped kernel and owned-edit evidence remain unchanged.
+Current flip costs are in [owned-flip confidence](OWNED-FLIP-CURRENT-CONFIDENCE.md):
+word passes; byte remains uncertain. The earlier costs below are retained history.
 
 Checked 256-byte block refs now expose fixed offsets while keeping four vector
 loads before any group store. One shared loop replaces per-vector indexing;

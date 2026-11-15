@@ -60,22 +60,25 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 
 [Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
 loads before group stores while using checked fixed offsets. Independent byte-flip
-pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**. Standalone byte and word
-flips remain uncertain at **8.483 / 8.321 µs, upper 1.024** and
-**17.641 / 17.595 µs, upper 1.015**. The 20 owned-edit/composition views retain
-**17 passes, zero gaps and three uncertainties**, including the current word
-composition control. Neither flip is a passing control.
+pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**.
+[Longer owned-flip integration](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md)
+resolves word confidence: **17.426 / FFmpeg 17.539 µs, upper 0.997935** passes/stops.
+Byte flipping remains uncertain: **8.494 / 8.412 µs, upper 1.019278**.
+One prespecified 4,096→16,384-call integration retains every original sample and
+conservative confidence rule; no production speedup or identical favorable retry.
+The 20 owned-edit/composition views now have **18 passes, zero gaps and two
+uncertainties**, including the current word composition control.
 Exact samples, tails, cancellation, admission and independent ownership remain.
-Each OS passes **6,721 full/live checks**, focused normal/scalar and the SAME actual
-Release-package consumer/all three examples. One core/embedded build per OS, no
-public/harness/native/helper/fixture build, one pack and no Linux rebuild after timing.
+The actual immutable package DLL reuses **6,721 full/live checks per OS**,
+focused normal/scalar and SAME package/all-three-example qualification. One small
+driver build, zero production/embedded/harness/native/fixture/package builds or broad repeats.
 Source/result payload and zero retained workspace stay separate from allocation;
 physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
 retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
 Earlier copy trials remain linked history, outside current-result dependencies.
 
 The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **192 existing
-image views: 188 pass, 0 gaps, 4 uncertain**. This does not establish full parity:
+image views: 189 pass, 0 gaps, 3 uncertain**. This does not establish full parity:
 uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
 unchanged costs; current copy/composition costs are in their linked family report.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
@@ -376,7 +379,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
-| Vertical flip RGBA8 (uncertain) † | 8.48 | 8.32 | 1.020 / 1.024 | 56.0 |
+| Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
 
 **Inspection and pixel-coding validation**
 
