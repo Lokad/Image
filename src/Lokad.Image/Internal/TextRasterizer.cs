@@ -231,13 +231,27 @@ internal sealed partial class TextRasterizer : IDisposable
     private static double Area(double a, double b, double c, double d, double top, double bottom,
         Span<Point> first, Span<Point> second)
     {
-        first[0] = new(a, top); first[1] = new(b, top); first[2] = new(c, bottom); first[3] = new(d, bottom);
         var leftInside = a >= 0 && b >= 0 && c >= 0 && d >= 0;
+        var rightInside = a <= 1 && b <= 1 && c <= 1 && d <= 1;
+        if (leftInside && rightInside) return QuadArea(a, top, b, top, c, bottom, d, bottom);
+        if (rightInside && a < 0 && d < 0 && b >= 0 && c >= 0)
+        {
+            var cutTop = top + (top - top) * ((0d - a) / (b - a));
+            var cutBottom = bottom + (bottom - bottom) * ((0d - c) / (d - c));
+            return QuadArea(0, cutTop, b, top, c, bottom, 0, cutBottom);
+        }
+        if (leftInside && b > 1 && c > 1 && a <= 1 && d <= 1)
+        {
+            var cutTop = top + (top - top) * ((1d - a) / (b - a));
+            var cutBottom = bottom + (bottom - bottom) * ((1d - c) / (d - c));
+            return QuadArea(a, top, 1, cutTop, 1, cutBottom, d, bottom);
+        }
+        first[0] = new(a, top); first[1] = new(b, top); first[2] = new(c, bottom); first[3] = new(d, bottom);
         ReadOnlySpan<Point> polygon = first[..4];
         if (!leftInside) polygon = second[..Clip(polygon, second, 0, greater: true)];
         // A no-op clip only copies vertices in their original order. Clipping
         // left introduces x=0 vertices, which also satisfy the right boundary.
-        if (!(a <= 1 && b <= 1 && c <= 1 && d <= 1))
+        if (!rightInside)
         {
             var output = leftInside ? second : first;
             polygon = output[..Clip(polygon, output, 1, greater: false)];
@@ -247,6 +261,17 @@ internal sealed partial class TextRasterizer : IDisposable
         foreach (var p in polygon) { result += previous.X * p.Y - p.X * previous.Y; previous = p; }
         return Math.Abs(result) * .5;
     }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private static double QuadArea(double ax, double ay, double bx, double by, double cx, double cy, double dx, double dy)
+    {
+        double result = 0;
+        result += dx * ay - ax * dy;
+        result += ax * by - bx * ay;
+        result += bx * cy - cx * by;
+        result += cx * dy - dx * cy;
+        return Math.Abs(result) * .5;
+    }
+
     private static int Clip(ReadOnlySpan<Point> input, Span<Point> output, double boundary, bool greater)
     {
         if (input.IsEmpty) return 0;
