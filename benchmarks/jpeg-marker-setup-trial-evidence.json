@@ -1,0 +1,276 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JMI1095",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "1d8000f282710fa62fbcc18f7f00368579bd4b550c70752d1bfb4dc7b61006c7",
+    "linuxSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+    "timedArtifactSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+    "packageSha256": "e9f499d029c63253e24b7a9b60b2b076fb4ba64377d7ee0b5f76845ececf7626"
+  },
+  "candidateLinuxSha256": "6c6cccf50dc72b0eeb9ad3f6f0f3a307e54fa0d992d78618b23775629807bc86",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b0c0487921b098e0ea649ca4d32e205670efd0b0282b94dfef622e3f98186f15",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "c77369a98b6ed9b4e84be7f05b98f3f67ff872bc6e0c3a5c93f6de9a7e659b1b"
+  },
+  "hypothesis": "Current accepted-driver profile/map/JIT locates repeated marker-entry setup:1706B marker reader,six callee-save pushes,136B stack adjustment and zeroing. Request inlining into the new shared nongeneric AdvanceJpeg loop,so repeated marker calls can reuse operation-level preparation. Sample entry locations/skid are not phase-time shares or saved-time forecasts;register pressure/code growth can lose.",
+  "intendedEndState": "Keep one canonical marker/refill/parser implementation and unchanged portable/pending paths. Add only the marker method hint. No new kernel,buffer,owner,API,pool,cache or fixture dispatch. Verify a useful complete effect and actual caller code before adopting;otherwise restore exact qualified source/modules without neighboring hints.",
+  "boundaries": "Remove one method annotation to reconstruct the complete original file byte-for-byte. All bodies,read sizes,checks,counters,polls,exception order,pending consumption,substantial admission and actual owner lifetimes are verbatim. The two production callers are AdvanceJpeg and its existing pending-marker continuation. Only JPEG inspection/probing paths are affected;other format readers/codecs/edits/resize/text bodies remain unchanged.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyMarkerMethodAnnotationAdded": true,
+    "allMethodBodiesVerbatim": true,
+    "allOwnershipAndAdmissionVerbatim": true,
+    "noNewAllocationCacheOrRetainedState": true
+  },
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.22592916997273765,
+    "candidateUs": 0.2285843989054362,
+    "ratio": 1.0117335495699051,
+    "lower": 0.8688687299046248,
+    "upper": 1.1780890945835745,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "6c6cccf50dc72b0eeb9ad3f6f0f3a307e54fa0d992d78618b23775629807bc86",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/jmi1095-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "interpretation": "Inconclusive short screen around1.17percent adverse point,568B unchanged;no useful gain established. No causal regression or JIT-inlining/code-size explanation is claimed without candidate codegen. Stop without confirmation,other-case/native/codegen capture,neighboring hint or broad/package campaign.",
+  "profile": {
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allBuilds": 0,
+    "librarySha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+    "totalLocations": 1991,
+    "resolvedManagedLocations": 1686,
+    "selectedMethods": {
+      "ReadAsync": {
+        "codeBytes": 1977,
+        "locations": 192,
+        "hotBlocks": [
+          {
+            "block": "G_M000_IG01",
+            "offset": "0x0",
+            "samples": 32
+          },
+          {
+            "block": "G_M000_IG10",
+            "offset": "0xcc",
+            "samples": 18
+          },
+          {
+            "block": "G_M000_IG31",
+            "offset": "0x2b6",
+            "samples": 17
+          },
+          {
+            "block": "G_M000_IG18",
+            "offset": "0x194",
+            "samples": 16
+          },
+          {
+            "block": "G_M000_IG16",
+            "offset": "0x177",
+            "samples": 15
+          }
+        ]
+      },
+      "SkipAsync": {
+        "codeBytes": 2247,
+        "locations": 110,
+        "hotBlocks": [
+          {
+            "block": "G_M000_IG04",
+            "offset": "0x56",
+            "samples": 18
+          },
+          {
+            "block": "G_M000_IG36",
+            "offset": "0x2fa",
+            "samples": 16
+          },
+          {
+            "block": "G_M000_IG01",
+            "offset": "0x0",
+            "samples": 14
+          },
+          {
+            "block": "G_M000_IG18",
+            "offset": "0x184",
+            "samples": 11
+          },
+          {
+            "block": "G_M000_IG21",
+            "offset": "0x1d2",
+            "samples": 10
+          }
+        ]
+      },
+      "JpegHeaderMarkerAsync": {
+        "codeBytes": 1706,
+        "locations": 359,
+        "hotBlocks": [
+          {
+            "block": "G_M000_IG01",
+            "offset": "0x0",
+            "samples": 266
+          },
+          {
+            "block": "G_M000_IG39",
+            "offset": "0x3dd",
+            "samples": 19
+          },
+          {
+            "block": "G_M000_IG09",
+            "offset": "0x130",
+            "samples": 15
+          },
+          {
+            "block": "G_M000_IG32",
+            "offset": "0x324",
+            "samples": 11
+          },
+          {
+            "block": "G_M000_IG06",
+            "offset": "0xa5",
+            "samples": 11
+          }
+        ]
+      }
+    },
+    "traceSha256": "8b56a17077a7d8685ff08f79bbdc8eb209d2f89ddcf160f13fd1c3bf87bea802",
+    "traceBytes": 737280,
+    "sameProcessMapAndJitSizesMatched": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allInstrumentedTimingsDiscarded": true,
+    "scope": "One bounded2second userCPU sample of the current complete public asyncJPEGprobe,parent process only,after firstActual. CPU0operation/CPU1sampler. Same input,field acquisition,owned result and cleanup;original native/output/reference gates checked. Trace may include runtime/GC and native-reference orchestration,not just parser code;sample counts locate leads,not elapsed-time fractions,standalone costs or peak memory. Existing immutable package/harness/selector/fixtures/workers;zero builds or qualification repeats.",
+    "readerNoInliningHypothesisFalsifiedWithoutBuild": true,
+    "noEmbeddedPendingBuilderStarts": true
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 152,
+      "internal-scalar": 10,
+      "public-scalar": 152
+    },
+    "actualPendingEofCancellationFailureRefusalAndRecoveryReused": true
+  },
+  "qualification": {
+    "provider": "benchmarks/jpeg-inspection-driver-evidence.json",
+    "fullChecksEachOsReused": 6725,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JMI1095",
+      "sourceRestored": true,
+      "productionSha256": "1d8000f282710fa62fbcc18f7f00368579bd4b550c70752d1bfb4dc7b61006c7",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JMI1095",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "aee849fea4a3347bbf1987c092f592ecfa6bf2796adcefe913f2209ffe9f0216",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b0c0487921b098e0ea649ca4d32e205670efd0b0282b94dfef622e3f98186f15",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+        "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+      },
+      "embeddedTestsSha256": "71cb01d77c6aeff13e918384246b9a3c4baec1412b88c47eae83e87181260406",
+      "publicTestsSha256": "29f00f26cdad140018a09db6e58d9e892e26d16932961c2f69005669a1035b8b",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "immediateAllocatedBytes": 568,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "pendingDiagnostic64ByteTradeoffUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Inspect the immediate refill-completion join rather than repeat hints. Existing void-ValueTask VFC1086 trial still checked ValueTask completion and was inconclusive. A genuinely different TryFill path could return a direct completed flag and expose cursor EOF,keeping typed pending work only for real suspension. Require code/source proof and frozen complete-operation screen;do not assume success or optimize uncertainty. No permanent family ban.",
+  "raw": {
+    "file": "jpeg-marker-setup-trial.tar.xz",
+    "sha256": "8c36a4f73b44bd38db727c2f92ebfc022bb451e6f438131372342c13cced3f2f",
+    "bytes": 1977032,
+    "members": 97,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-inspection-driver-qualified.tar.xz",
+        "sha256": "344d8ed3399c39cdc9fd87197698415ff048f974570b06bb6ed994698005a7de"
+      }
+    ]
+  }
+}
