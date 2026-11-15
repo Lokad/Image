@@ -208,6 +208,24 @@ def drawing_row_stage():
     return stage
 
 
+def adjacent_word_copy():
+    stage = json.loads((ROOT / 'benchmarks/rectangle-copy-adjacent-evidence.json').read_text(encoding='utf-8'))
+    q, c = stage['qualification'], stage['cases']['DrawingCopy16']
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == 6721 and q['newBroadOrPackageChecks'] == 0
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs'] and q['sourceIdenticalQualificationReused']
+    assert q['packageSha256'] == stage['producers']['packageSha256']
+    assert q['librarySha256'] == c['librarySha256'] == stage['producers']['timedArtifactSha256']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 65536
+    assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
+    assert c['allocatedBytes'] == 0 and c['borrowedCanvas'] and c['sourceUnchanged']
+    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return c
+
+
 def snapshot_copy_stage():
     stage = json.loads((ROOT / 'benchmarks/snapshot-block-copy-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
@@ -1871,6 +1889,7 @@ No heap capacity or retention is added; validation and independent owners remain
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
     copy_current = drawing_row_stage()
     drawing_cases.update(copy_current['cases'])
+    drawing_cases['DrawingCopy16'] = adjacent_word_copy()
     assert copy_current['borrowedDrawingStatusCounts'] == {
         'passCount': sum(c['status'] == 'pass' for c in drawing_cases.values()),
         'gaps': sum(c['status'] == 'gap' for c in drawing_cases.values()),
@@ -1886,7 +1905,9 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = copy_current['producers']['linuxSha256'] if name.startswith('DrawingCopy') else bq['actualPackage']['librarySha256']
+        library = (drawing_cases['DrawingCopy16']['librarySha256'] if name == 'DrawingCopy16'
+                   else copy_current['producers']['linuxSha256'] if name.startswith('DrawingCopy')
+                   else bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -1906,10 +1927,12 @@ chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
 **2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
 **{b8['managedUs']:.3f} / FFmpeg {b8['nativeUs']:.3f} µs, upper {b8['upper']:.3f}**.
 Overlap passes at **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs, upper {bo['upper']:.3f}**;
-word copy is uncertain at **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
-The word managed point decreases while the reference also moves faster; no causal
-regression or current passing word claim is established. No identical favorable
-retry follows. The larger first-chunk-scalar variant is not retained. Both OSes
+word copy remains uncertain in the [matched adjacent comparison](../benchmarks/RECTANGLE-COPY-ADJACENT.md):
+**{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
+One 65,536-call capture uses equal adjacent batches to reduce drift; all twelve
+pairs/native brackets and the conservative rule remain. No production speedup,
+regression or passing word claim; no identical favorable retry follows. Reuse the
+qualified actual package, with one tool build and no broad campaign. Both OSes
 pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
 three examples. Borrowed capacity and zero retained workspace stay separate from
 allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls

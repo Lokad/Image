@@ -1,5 +1,8 @@
 # Prepared rectangle-copy rows
 
+[Matched adjacent batches](RECTANGLE-COPY-ADJACENT.md) now own the RGBA16 cost;
+it remains uncertain. Byte/overlap costs and the production gain below remain valid.
+
 CopyRegion prepares first-row offsets and signed strides once, then advances
 between valid rows. The same grouped/BCL kernels, logical chunk sequence,
 4,096-pixel cancellation checkpoints, clipping, alias direction and public

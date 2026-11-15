@@ -20,10 +20,12 @@ chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
 **2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
 **1.969 / FFmpeg 1.919 µs, upper 1.032**.
 Overlap passes at **3.669 / 3.778 µs, upper 0.980**;
-word copy is uncertain at **3.783 / 3.780 µs, upper 1.004**.
-The word managed point decreases while the reference also moves faster; no causal
-regression or current passing word claim is established. No identical favorable
-retry follows. The larger first-chunk-scalar variant is not retained. Both OSes
+word copy remains uncertain in the [matched adjacent comparison](../benchmarks/RECTANGLE-COPY-ADJACENT.md):
+**3.776 / 3.768 µs, upper 1.006**.
+One 65,536-call capture uses equal adjacent batches to reduce drift; all twelve
+pairs/native brackets and the conservative rule remain. No production speedup,
+regression or passing word claim; no identical favorable retry follows. Reuse the
+qualified actual package, with one tool build and no broad campaign. Both OSes
 pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
 three examples. Borrowed capacity and zero retained workspace stay separate from
 allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls
@@ -332,7 +334,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.97 | 1.92 | 1.026 / 1.032 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.78 | 3.78 | 1.001 / 1.004 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.78 | 3.77 | 1.002 / 1.006 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.67 | 3.78 | 0.971 / 0.980 | 0 |
