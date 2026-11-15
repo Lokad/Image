@@ -14,18 +14,21 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retains **0 B/op**
-for all seven borrowed drawing controls. Current overlapping copy passes at
-**3.720 / FFmpeg 3.804 µs, upper 0.984**;
-word copy passes at **3.797 / 3.818 µs, upper 0.997**.
-The word path retains BCL copying; no causal word speedup is claimed. Separate
-byte copy remains a gap: **2.028 / 1.915 µs, upper 1.063**.
-Its independent DLL pair saves **1.44% / 0.029 µs**. A targeted unchanged-DLL
-standalone control resolves the apparent adverse historical direction; the two
-contexts have different effect magnitudes, not one universal gain. Every earlier
-capture remains. Both fills/composites pass/stop; exact rational pixels and the
-explicit FFmpeg/ImageSharp references remain. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-retains ownership/history. Six of these seven controls pass; separate byte copy remains open.
+[Prepared copy rows](../benchmarks/DRAWING-ROW-PREPARATION.md) reuse operation-local
+row offsets and signed strides, with the grouped/BCL kernels and every original
+chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
+**2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
+**1.969 / FFmpeg 1.919 µs, upper 1.032**.
+Overlap passes at **3.669 / 3.778 µs, upper 0.980**;
+word copy is uncertain at **3.783 / 3.780 µs, upper 1.004**.
+The word managed point decreases while the reference also moves faster; no causal
+regression or current passing word claim is established. No identical favorable
+retry follows. The larger first-chunk-scalar variant is not retained. Both OSes
+pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
+three examples. Borrowed capacity and zero retained workspace stay separate from
+allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls
+pass; byte copying and word confidence stay open. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evidence.
 
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
@@ -311,11 +314,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.03 | 1.91 | 1.059 / 1.063 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (parity confirmed) | 3.80 | 3.82 | 0.994 / 0.997 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.97 | 1.92 | 1.026 / 1.032 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.78 | 3.78 | 1.001 / 1.004 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.72 | 3.80 | 0.978 / 0.984 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.67 | 3.78 | 0.971 / 0.980 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,147.32 | 6,145.06 | 0.187 / 0.207 | 299,914 |

@@ -84,21 +84,30 @@ public static partial class ImageDrawing
         var sourcePixels = source.Pixels; var canvasPixels = canvas.Pixels;
         var pixelBytes = canvas.BitDepth / 8 * 4;
         var sourceStride = source.Stride; var canvasStride = canvas.Stride;
-        for (var row = 0; row < region.Height; row++)
+        var firstRow = backwardsY ? region.Height - 1 : 0;
+        var sourceRowOffset = (region.SourceY + firstRow) * sourceStride + region.SourceX * pixelBytes;
+        var canvasRowOffset = (region.DestinationY + firstRow) * canvasStride + region.DestinationX * pixelBytes;
+        var sourceRowStep = backwardsY ? -sourceStride : sourceStride;
+        var canvasRowStep = backwardsY ? -canvasStride : canvasStride;
+        var rowsRemaining = region.Height;
+        while (true)
         {
-            var offsetY = backwardsY ? region.Height - row - 1 : row;
             for (var first = 0; first < region.Width;)
             {
                 var count = Math.Min(4096, region.Width - first); cancellationToken.ThrowIfCancellationRequested();
                 var offsetX = backwardsX ? region.Width - first - count : first;
-                var sx = (region.SourceX + offsetX) * pixelBytes; var dx = (region.DestinationX + offsetX) * pixelBytes;
-                var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
-                var input = sourcePixels.Slice(sy * sourceStride + sx, count * pixelBytes);
-                var output = canvasPixels.Slice(dy * canvasStride + dx, count * pixelBytes);
+                var offsetBytes = offsetX * pixelBytes; var countBytes = count * pixelBytes;
+                var input = sourcePixels.Slice(sourceRowOffset + offsetBytes, countBytes);
+                var output = canvasPixels.Slice(canvasRowOffset + offsetBytes, countBytes);
                 if (independentRows) IndependentRowCopy.Copy(input, output);
                 else input.CopyTo(output);
                 first += count;
             }
+            // Advance only between valid rows; never calculate a cursor beyond
+            // the final row of a potentially array-sized caller buffer.
+            if (--rowsRemaining == 0) break;
+            sourceRowOffset += sourceRowStep;
+            canvasRowOffset += canvasRowStep;
         }
     }
 

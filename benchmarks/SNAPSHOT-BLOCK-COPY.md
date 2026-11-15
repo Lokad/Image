@@ -1,5 +1,7 @@
 # Grouped block copying
 
+Current borrowed-copy costs are in [prepared copy rows](DRAWING-ROW-PREPARATION.md); the grouped kernel and owned-edit evidence remain unchanged.
+
 Checked 256-byte block refs now expose fixed offsets while keeping four vector
 loads before any group store. One shared loop replaces per-vector indexing;
 the existing BCL tail and small/scalar fallback cover all remaining bytes.

@@ -184,6 +184,30 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
+def drawing_row_stage():
+    stage = json.loads((ROOT / 'benchmarks/drawing-row-preparation-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled'] and stage['selectedVariant'] == 'A'
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['actualPackage']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
+    assert all(q[name]['actualConsumerPassed'] and q[name]['usageExamples'] == 3 for name in ('actualPackage', 'samePackageWindows'))
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert stage['sourceProof']['allOtherImageDrawingBodiesVerbatim'] and stage['sourceProof']['sharedGroupedKernelVerbatim']
+    assert stage['primaryBytePair']['ratioUpper'] < 1
+    assert stage['memory']['newOwnedHeapCapacityBytes'] == stage['memory']['newAdmittedBytes'] == stage['memory']['retainedOperationBytes'] == 0
+    assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'}
+    for c in stage['cases'].values():
+        assert c['librarySha256'] == stage['producers']['linuxSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
+        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allocatedBytes'] == 0
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def snapshot_copy_stage():
     stage = json.loads((ROOT / 'benchmarks/snapshot-block-copy-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
@@ -196,10 +220,10 @@ def snapshot_copy_stage():
     assert all(q[name]['actualConsumerPassed'] and q[name]['usageExamples'] == 3 for name in ('actualPackage', 'samePackageWindows'))
     assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
     assert stage['jit']['fixedGroupOffsets'] and stage['jit']['fourSourceLoadsBeforeAnyGroupStore']
-    assert stage['pairedByteFlip']['upper'] < 1 and stage['pairedByteCopy']['ratioUpper'] < 1
+    assert stage['pairedByteFlip']['upper'] < 1
     assert stage['memory']['newOwnedHeapCapacityBytes'] == stage['memory']['newAdmittedBytes'] == stage['memory']['retainedOperationBytes'] == 0
-    assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16', 'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'}
-    for c in stage['cases'].values():
+    for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'):
+        c = stage['cases'][name]
         assert c['librarySha256'] == stage['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -1782,8 +1806,12 @@ No heap capacity or retention is added; validation and independent owners remain
     assert len(drawing_cases) == 7
     assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
-    copy_current = snapshot_copy_stage()
-    drawing_cases.update((name, c) for name, c in copy_current['cases'].items() if name.startswith('DrawingCopy'))
+    copy_current = drawing_row_stage()
+    drawing_cases.update(copy_current['cases'])
+    assert copy_current['borrowedDrawingStatusCounts'] == {
+        'passCount': sum(c['status'] == 'pass' for c in drawing_cases.values()),
+        'gaps': sum(c['status'] == 'gap' for c in drawing_cases.values()),
+        'uncertain': sum(c['status'] == 'uncertain' for c in drawing_cases.values()), 'total': len(drawing_cases)}
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1809,18 +1837,21 @@ No heap capacity or retention is added; validation and independent owners remain
         mark = ' †' if name.startswith('DrawingComposite') else ''
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
-    borrowed_drawing_note = f"""[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retains **0 B/op**
-for all seven borrowed drawing controls. Current overlapping copy passes at
-**{bo['managedUs']:.3f} / FFmpeg {bo['nativeUs']:.3f} µs, upper {bo['upper']:.3f}**;
-word copy passes at **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
-The word path retains BCL copying; no causal word speedup is claimed. Separate
-byte copy remains a gap: **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs, upper {b8['upper']:.3f}**.
-Its independent DLL pair saves **1.44% / 0.029 µs**. A targeted unchanged-DLL
-standalone control resolves the apparent adverse historical direction; the two
-contexts have different effect magnitudes, not one universal gain. Every earlier
-capture remains. Both fills/composites pass/stop; exact rational pixels and the
-explicit FFmpeg/ImageSharp references remain. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-retains ownership/history. Six of these seven controls pass; separate byte copy remains open.
+    borrowed_drawing_note = f"""[Prepared copy rows](../benchmarks/DRAWING-ROW-PREPARATION.md) reuse operation-local
+row offsets and signed strides, with the grouped/BCL kernels and every original
+chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
+**2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
+**{b8['managedUs']:.3f} / FFmpeg {b8['nativeUs']:.3f} µs, upper {b8['upper']:.3f}**.
+Overlap passes at **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs, upper {bo['upper']:.3f}**;
+word copy is uncertain at **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
+The word managed point decreases while the reference also moves faster; no causal
+regression or current passing word claim is established. No identical favorable
+retry follows. The larger first-chunk-scalar variant is not retained. Both OSes
+pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
+three examples. Borrowed capacity and zero retained workspace stay separate from
+allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls
+pass; byte copying and word confidence stay open. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
+and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evidence.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282

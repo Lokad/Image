@@ -1,6 +1,6 @@
 # Borrowed drawing validation
 
-Current vertical-flip and borrowed-copy costs are in [grouped block copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
+Current borrowed-copy costs are in [prepared copy rows](DRAWING-ROW-PREPARATION.md); current owned flips are in [grouped copying](SNAPSHOT-BLOCK-COPY.md). This report retains its original evidence/history.
 
 Fill, copy and compositing now validate borrowed storage directly, removing a
 56 B operation owner that never held workspace or a shared-budget scope. The
