@@ -152,23 +152,23 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Direct probe publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) removes a
-temporary full descriptor: **608 → 568 B/op** for all four probes. Independent
-complete JPEG sync/async pairs confirm **3.67% / 5.18%** scoped gains; they do not
-establish FFmpeg parity. The initial generic-dispatch implementation and every
-adverse/uncertain sample remain history. Acquisition/admission, exact metadata,
-actual pending users and independently owned results remain unchanged.
-All ten displayed probe/header/Identify costs now use the same immutable package
-DLL and the matching retained reference harnesses. PNG dimensions and resident
-PNG Identify are uncertain around parity; JPEG/WebP probes remain gaps.
-Complete PNG headers and both PNG stream Identify comparisons pass.
-The references remain explicitly labeled FFmpeg AVIO/header/parser adapters.
-Windows/Linux each pass **6,712 full/live checks**, focused **10 internal /184 public**
-normal/scalar checks, the same actual package and all three examples. Metadata
-mapping controls and unchanged codec/edit/resize/text evidence are reused where
-applicable; this is not a whole-release timing refresh. Shared admission remains
-**512 B initial /8,448 B bulk**, with zero retained operation workspace; physical
-and JIT peaks remain unmeasured.
+[Bounded probe requests](../benchmarks/BOUNDED-PROBE-REQUESTS.md) remove a redundant
+capacity clamp while preserving exact read sizes, validation and pending-user
+ownership. Independent complete async JPEG pairs save **2.08% / 5.7 ns**,
+still **568 B/op**. Four probes and complete PNG headers refresh on the SAME actual
+timed/package DLL; their twelve actuals and original FFmpeg AVIO/header adapter
+brackets remain. JPEG probes stay gaps; PNG/WebP probe confidence stays open.
+Complete PNG headers pass. The complete JPEG-header paired guard is inconclusive,
+with no header gain claim. Windows/Linux each pass **6,721 full/live checks**,
+focused **10 internal /148 public** normal/scalar, the SAME actual package and all
+three examples. One core/embedded build per OS, one pack, no post-timing rebuild.
+[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
+allocation reduction and source-valid resident/stream Identify costs on their
+identified producer: resident PNG remains uncertain, while JPEG/WebP resident and
+both PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
+evidence. This is not a whole-release timing refresh. Shared admission stays
+**512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
+physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed
@@ -358,10 +358,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.123 | 0.123 | 1.001 / 1.026 | 568 | Confidence open |
-| Probe JPEG dimensions, seekable | 0.235 | 0.191 | 1.234 / 1.286 | 568 | Confirmed gap |
-| Probe WebP dimensions, seekable | 0.124 | 0.122 | 1.021 / 1.052 | 568 | Confirmed gap |
-| Probe JPEG dimensions, async nonseekable | 0.280 | 0.203 | 1.380 / 1.427 | 568 | Confirmed gap |
+| Probe PNG dimensions, seekable | 0.122 | 0.125 | 0.977 / 1.005 | 568 | Confidence open |
+| Probe JPEG dimensions, seekable | 0.234 | 0.194 | 1.205 / 1.250 | 568 | Confirmed gap |
+| Probe WebP dimensions, seekable | 0.124 | 0.122 | 1.015 / 1.050 | 568 | Confidence open |
+| Probe JPEG dimensions, async nonseekable | 0.271 | 0.202 | 1.343 / 1.393 | 568 | Confirmed gap |
 | Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |
@@ -370,7 +370,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
-| Inspect PNG8 complete headers, seekable, adapter reference | 0.296 | 0.570 | 0.519 / 0.534 | 568 | Confirmed pass |
+| Inspect PNG8 complete headers, seekable, adapter reference | 0.297 | 0.572 | 0.519 / 0.527 | 568 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 13.083 | 13.053 | 1.002 / 1.005 | 96 | Confidence open |
 | Identify JPEG420, resident, canonical adapter | 0.497 | 1.181 | 0.421 / 0.431 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 5.039 | 0.004 / 0.005 | 96 | Confirmed pass |

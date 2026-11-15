@@ -643,6 +643,32 @@ def apply_bounded_wide_quartet(editing):
     return '\n'.join(rows)
 
 
+def bounded_probe_stage():
+    owner = json.loads((ROOT / 'benchmarks/bounded-probe-requests-evidence.json').read_text(encoding='utf-8'))
+    assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
+    assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
+    assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
+    q = owner['qualification']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256']
+    assert q['package']['librarySha256'] == owner['producers']['linuxSha256']
+    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
+    assert q['focusedEachMode'] == {'internal': 10, 'public': 148}
+    assert owner['primaryPair']['upper'] < 1
+    assert owner['primaryPair']['allocatedBaseline'] == owner['primaryPair']['allocatedCandidate'] == 568
+    assert owner['headerGuard']['lower'] <= 1 <= owner['headerGuard']['upper']
+    assert all(owner['sourceProof'].values())
+    assert set(owner['cases']) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
+    for case in owner['cases'].values():
+        assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
+        assert case['allocatedBytes'] == 568 and case['allActualsRetained']
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed']
+        assert case['librarySha256'] == owner['producers']['linuxSha256']
+        assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+    return owner
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -2760,19 +2786,9 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
     assert sq['package']['librarySha256'] == inspection_owner['producers']['linuxSha256']
     assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert all(inspection_owner['paired'][name]['upper'] < 1
-               and inspection_owner['paired'][name]['allocatedBaseline'] - inspection_owner['paired'][name]['allocatedCandidate'] == 40
-               for name in ('ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'))
-    guard = inspection_owner['paired']['InspectHeadersJpeg']
-    assert guard['lower'] <= 1 <= guard['upper'] and guard['allocatedBaseline'] == guard['allocatedCandidate'] == 8776
-    assert inspection_owner['memory']['probeAllocatedBytes'] == 568
-    assert inspection_owner['memory']['admittedDimensionCapacityBytes'] == 512
-    assert inspection_owner['memory']['retainedAfterOperationBytes'] == 0
-    active_reads = inspection_owner['cases']
-    assert set(active_reads) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
-    assert all(c['managedActuals'] == c['nativeSamplesEachBracket'] == 12 for c in active_reads.values())
+    probe_owner = bounded_probe_stage()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        provider = inspection_owner
+        provider = probe_owner
         if case in provider['cases']:
             current = provider['cases'][case]
             assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
@@ -2824,9 +2840,9 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    headers = inspection_owner['cases']['PngHeaders']
+    headers = probe_owner['cases']['PngHeaders']
     assert headers['descriptorExact'] and headers['allOriginalGatesPassed'] and headers['quietGuardsPassed']
-    assert headers['librarySha256'] == inspection_owner['qualification']['package']['librarySha256']
+    assert headers['librarySha256'] == probe_owner['qualification']['package']['librarySha256']
     assert headers['managedActuals'] == headers['nativeSamplesEachBracket'] == 12 and headers['upper'] <= 1
     read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
                      f'{headers["managedUs"]:,.3f} | {headers["nativeUs"]:,.3f} | '
@@ -3102,23 +3118,23 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Direct probe publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) removes a
-temporary full descriptor: **608 → 568 B/op** for all four probes. Independent
-complete JPEG sync/async pairs confirm **3.67% / 5.18%** scoped gains; they do not
-establish FFmpeg parity. The initial generic-dispatch implementation and every
-adverse/uncertain sample remain history. Acquisition/admission, exact metadata,
-actual pending users and independently owned results remain unchanged.
-All ten displayed probe/header/Identify costs now use the same immutable package
-DLL and the matching retained reference harnesses. PNG dimensions and resident
-PNG Identify are uncertain around parity; JPEG/WebP probes remain gaps.
-Complete PNG headers and both PNG stream Identify comparisons pass.
-The references remain explicitly labeled FFmpeg AVIO/header/parser adapters.
-Windows/Linux each pass **6,712 full/live checks**, focused **10 internal /184 public**
-normal/scalar checks, the same actual package and all three examples. Metadata
-mapping controls and unchanged codec/edit/resize/text evidence are reused where
-applicable; this is not a whole-release timing refresh. Shared admission remains
-**512 B initial /8,448 B bulk**, with zero retained operation workspace; physical
-and JIT peaks remain unmeasured.
+[Bounded probe requests](../benchmarks/BOUNDED-PROBE-REQUESTS.md) remove a redundant
+capacity clamp while preserving exact read sizes, validation and pending-user
+ownership. Independent complete async JPEG pairs save **2.08% / 5.7 ns**,
+still **568 B/op**. Four probes and complete PNG headers refresh on the SAME actual
+timed/package DLL; their twelve actuals and original FFmpeg AVIO/header adapter
+brackets remain. JPEG probes stay gaps; PNG/WebP probe confidence stays open.
+Complete PNG headers pass. The complete JPEG-header paired guard is inconclusive,
+with no header gain claim. Windows/Linux each pass **6,721 full/live checks**,
+focused **10 internal /148 public** normal/scalar, the SAME actual package and all
+three examples. One core/embedded build per OS, one pack, no post-timing rebuild.
+[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
+allocation reduction and source-valid resident/stream Identify costs on their
+identified producer: resident PNG remains uncertain, while JPEG/WebP resident and
+both PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
+evidence. This is not a whole-release timing refresh. Shared admission stays
+**512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
+physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed

@@ -44,12 +44,14 @@ internal class InspectionReader : OperationContext, IDisposable
     {
         Context.Cancellation.ThrowIfCancellationRequested();
         if (adaptiveHeaders && bulk && buffer.Length == 256) PrepareBulkStorage();
-        var requested = (int)Math.Min(buffer.Length - offset, Context.Limits.MaxInputBytes - acquired + 1);
+        int requested;
         if (maxAcquiredBytes is { } maximum)
         {
             if (BytesRead == maximum) throw new ImageLimitException(ImageLimitKind.AcquiredBytes, "Probe acquisition limit exceeded.");
-            requested = (int)Math.Min(Math.Min(requested, needed), maximum - BytesRead);
+            // Every bounded caller already fits needed bytes at this offset.
+            requested = (int)Math.Min(needed, Math.Min(Context.Limits.MaxInputBytes - acquired + 1, maximum - BytesRead));
         }
+        else requested = (int)Math.Min(buffer.Length - offset, Context.Limits.MaxInputBytes - acquired + 1);
         first = last = offset;
         if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(offset, requested)), requested));
         var pending = input.ReadAsync(buffer.AsMemory(offset, requested), Context.Cancellation);

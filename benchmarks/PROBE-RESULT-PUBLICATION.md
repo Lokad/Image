@@ -1,5 +1,9 @@
 # Direct probe result publication
 
+[Bounded probe requests](BOUNDED-PROBE-REQUESTS.md) now owns the four probe and
+complete PNG-header costs. The five unchanged Identify comparisons below retain
+their source-valid producer; this publication round remains their current owner.
+
 Probes now construct their public result directly, removing the temporary
 full descriptor: **608 →568 B/op**. Independent complete JPEG sync/async pairs
 confirm **3.67% /5.18%** scoped gains. Shared grammar and metadata rules remain.
