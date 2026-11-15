@@ -1,0 +1,1705 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TWA1038",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newFixtures": 0,
+  "statisticalTiming": false,
+  "profilingOnly": true,
+  "instrumentedTimingsDiscarded": true,
+  "requiredMaterialPaths": 289,
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "librarySha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "600bcad70dac15e0fa0caa4b993e4a3f649ff34121808420e2953a2fb9d383df",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa"
+  },
+  "completePublicCalls": 27245,
+  "summary": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1996,
+    "managedSamples": 1564,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        687
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        200
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        171
+      ],
+      [
+        "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        90
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        90
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        73
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::Partition(valuetype [System.Runtime]System.Span`1<!!0>,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        69
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        58
+      ],
+      [
+        "valuetype System.UInt128 [System.Private.CoreLib] System.UInt128::op_Division(valuetype System.UInt128,valuetype System.UInt128)[Optimized]",
+        44
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        29
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        21
+      ],
+      [
+        "instance void [TextHarness] WarmText::ValidateCanvas()[Optimized]",
+        14
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+        9
+      ],
+      [
+        "instance void [TextHarness] WarmText::ResetBeforeOperation()[Optimized]",
+        8
+      ],
+      [
+        "instance void [TextProfileRunner] Program+<<Main>$>d__0::MoveNext()[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x76bbf0ab6e00",
+        "size": 472,
+        "name": "valuetype [System.Runtime]System.ValueTuple`4<int32,int32,int32,int32> [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype Lokad.Image.TextBounds,float64,float64,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab7140",
+        "size": 1057,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::.ctor(class Lokad.Image.TextLayout,class Lokad.Image.Internal.OperationContext,int32)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab7590",
+        "size": 113,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Admit(int64)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab7670",
+        "size": 42,
+        "name": "void [System.Private.CoreLib] System.Array+EmptyArray`1[Lokad.Image.Internal.TextRasterizer+Edge]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab76c0",
+        "size": 1230,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEdges(class Lokad.Image.Internal.FontOutline,float64)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab7c10",
+        "size": 444,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Grow(!!0[]&,int32,int32,int64&)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab80e0",
+        "size": 152,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Add(valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype Lokad.Image.Internal.TextRasterizer/Point)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab81a0",
+        "size": 2044,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[])[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab89d0",
+        "size": 440,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Grow(!!0[]&,int32,int32,int64&)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab9390",
+        "size": 60,
+        "name": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0ab99e0",
+        "size": 365,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::ReorderEdges(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Crossing>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abc340",
+        "size": 1904,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abcb00",
+        "size": 2461,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abd500",
+        "size": 28,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abd530",
+        "size": 390,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abd700",
+        "size": 544,
+        "name": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abd980",
+        "size": 263,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0abdaa0",
+        "size": 499,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]"
+      },
+      {
+        "address": "0x76bbf0acb960",
+        "size": 140,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Dispose()[Optimized]"
+      },
+      {
+        "address": "0x76bbf0acba10",
+        "size": 83,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Dispose()[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xdb",
+        "samples": 167
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3a",
+        "samples": 70
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xee",
+        "samples": 70
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x18e",
+        "samples": 22
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xfc",
+        "samples": 22
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x0",
+        "samples": 18
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x182",
+        "samples": 18
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x1ae",
+        "samples": 18
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x18e",
+        "samples": 17
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x4",
+        "samples": 17
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x37",
+        "samples": 17
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x549",
+        "samples": 16
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x118",
+        "samples": 16
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x116",
+        "samples": 16
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x33",
+        "samples": 16
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x26",
+        "samples": 15
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xb8",
+        "samples": 15
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x7f",
+        "samples": 15
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xb1",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x112",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x187",
+        "samples": 13
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x14b",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x1",
+        "samples": 12
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf5",
+        "samples": 11
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xf2",
+        "samples": 10
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x24",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x46b",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x98",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xb9",
+        "samples": 9
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x59",
+        "samples": 9
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x19c",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x62",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x0",
+        "samples": 8
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0xb9",
+        "samples": 8
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x17e",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xaf",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x97",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x605",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xb5",
+        "samples": 7
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0xf0",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xe4",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x7f3",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x9c",
+        "samples": 6
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x3b",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x196",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x153",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x48b",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x19a",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x179",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0xd6",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x9c",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x184",
+        "samples": 6
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x0",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x526",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x1",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x469",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xa2",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x28",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xd0",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+        "offset": "0x0",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x431",
+        "samples": 5
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x1",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5a6",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xe8",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x463",
+        "samples": 5
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x112",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x50b",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x449",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5b8",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0xf7",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x84e",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x1c0",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x185",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x71",
+        "samples": 5
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x171",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x754",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x896",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x816",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x1d",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xf5",
+        "samples": 5
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x90",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x4a",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1f5",
+        "samples": 4
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x1bc",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x431",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x1",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1a2",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x14f",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x8a",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x41f",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x8c4",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xa9",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x16a",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x44f",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5cb",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x81e",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x745",
+        "samples": 4
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0xb6",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x44f",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x85a",
+        "samples": 4
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x1a6",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x709",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x338",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x2ad",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x116",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x478",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4c7",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x534",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4b3",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x79",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x61f",
+        "samples": 3
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x95",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x56",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x175",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x599",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x46d",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x839",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x439",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x12b",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x543",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1",
+        "samples": 3
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x36",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x575",
+        "samples": 3
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x18a",
+        "samples": 3
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x13",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x34",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xb2",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x780",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x83",
+        "samples": 3
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x110",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x883",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xec",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x734",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xe0",
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x116",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x39d",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xef",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x32c",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x218",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+        "offset": "0x1b",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x275",
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x125",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xd6",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x2d3",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1c6",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x7f",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x447",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x13f",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x372",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3ec",
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x1b2",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x508",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x2fc",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x1a7",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x868",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x81",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xce",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x16f",
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x147",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x189",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x730",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+        "offset": "0x5",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x7d1",
+        "samples": 2
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x13f",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x635",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x45b",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x1e3",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x690",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xc1",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x44d",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5f9",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xaa",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x36e",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x486",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x171",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x79a",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4dc",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x304",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x41a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x241",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x58",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xbc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x45f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x773",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x47c",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x12d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5ec",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x16a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4ff",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x329",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xa7",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x40b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1ee",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5ff",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4cf",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x144",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x60",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x6fd",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x43f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4f8",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x6dc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x2b4",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x519",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x13b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x889",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3a7",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x10b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x76e",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x14a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x18c",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x75",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xb9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x611",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5fa",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x25",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x784",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x1e2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x73f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5f3",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x132",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x94",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x61b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x626",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x16e",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x55",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x32f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3b2",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x159",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x2ba",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x64b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x140",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x297",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0xcd",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3c5",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x82a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x631",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x9a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x165",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0xc2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3f0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x28e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5ab",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x697",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3ac",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x71a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x74",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x11b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x248",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x51f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x18f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x163",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4ab",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x132",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4e7",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x15f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4e3",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x39b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x8e",
+        "samples": 1
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+        "offset": "0x19",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x313",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x3d8",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4c6",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x182",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1df",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xc0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x21c",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x154",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xb2",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x175",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x5a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5e0",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x128",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4ce",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x289",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x443",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x2a",
+        "samples": 1
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+        "offset": "0x186",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x65e",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        "offset": "0x90",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x7bf",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        "offset": "0xee",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xa9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x52e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x4dc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x368",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        "offset": "0x2c",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x37f",
+        "samples": 1
+      }
+    ]
+  },
+  "exits": {
+    "collectorExit": 0,
+    "applicationExit": 0,
+    "perfScriptExit": 0
+  },
+  "quietGuardsPassed": true,
+  "allFrozenSourceReferenceOwnerChecksPassed": true,
+  "boundary": "One2second current prepared DrawText16 CPU attribution. Reused prepared frozenfont/layout harness and existingprofile runner; complete publicTextRenderPlan.Draw/scan/composite with explicit retained geometry/workspace and borrowed canvas; resets and frame validation remain separately attributed. Reset and exactcanvas validation occur betweenoperations and samples must distinguish them. Profileelapsed discarded; no timing/CPUgain claim. ImageSharp2.1.7/Fonts2.1.3 publicpipeline approval alreadygranted; staleapprovalfalse flag is not a new gate. Exactframe/visual/ownership checks remain. No newbuild/fixture/settings.",
+  "reference": {
+    "state": "ready",
+    "caseId": "DrawText16",
+    "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "processorCount": 1,
+    "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+    "performanceBaselineApproved": true,
+    "preparedRaster": true,
+    "libraries": {
+      "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+      "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+      "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+    }
+  },
+  "retainedManagedBytes": 40408,
+  "interpretation": "Current prepared-state locations support Band/Area/Clip/endpoint evaluation before another touched-range trial. Counts/inlining/skid/reset/validation are not phase times or gain forecasts. Prior row-range/UInt64composition implementations were inconclusive; different prepared boundary is not automatic merge authority. Passing complete integrations stay stopped until affected.",
+  "partialCapture": {
+    "samples": 18,
+    "reason": "BDN drawing selector has InvocationCount1 to reset/check each operation; actuals ended before useful2ssteady capture. Process terminal verified before using existing continuous profile runner. Unknown exact collector/application exits remain unknown; partial trace/log/JIT/validation retained, no timing claim or identical recapture."
+  },
+  "next": "Bounded paired endpoint SIMD evaluation investigation; preserve scalar operation order/fallback, exact frames, all checkpoints, owner/workspace and full16bit quality. Resolve timing with equivalent per-draw canvas handling, not silent repeated uncleared draws. No production experiment started in this evidence.",
+  "qualificationReuse": {
+    "fullChecksEachOs": 6714,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageRuns": 0
+  },
+  "raw": {
+    "file": "text-prepared-current-attribution.tar.xz",
+    "sha256": "bf5cff94d543c2906d0fb47fcab6ec5f42a3042c876cc1cb894cebe2f80b6282",
+    "bytes": 5186608,
+    "members": 88,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-location-preparation-qualified.tar.xz",
+        "sha256": "2d429199f877b26b63b7192e6d54b91265d4689f46c65d784279a08d7eb4b722"
+      },
+      {
+        "file": "text-render-preparation-qualified.tar.xz",
+        "sha256": "6622835194e308c3763fff695670a9cd55b94ec15d63032878badae499a3b05b"
+      }
+    ]
+  }
+}

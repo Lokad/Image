@@ -59,6 +59,11 @@ restored; current Up16 remains uncertain, without another favorable timing retry
 Copy-cost rendering selects the 20 current records once; superseded gain and
 rejection checks remain in their reports, outside renderer dependencies.
 
+[Current prepared-text attribution](TEXT-PREPARED-CURRENT-ATTRIBUTION.md) retains
+the read-only profile and the insufficient initial capture. It changes no current
+cost, package or qualification claim; complete one-shot/eight-draw comparisons
+remain authoritative and historical stage times are never added.
+
 Preparation/reuse boundaries are described in
 [architectural attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md).
 [Prior coverage](https://github.com/lokad/image/blob/31988ad292e291faa62f156498b0e8c58be9a698/benchmarks/WARM-COVERAGE.md)
