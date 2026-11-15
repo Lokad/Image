@@ -1,0 +1,327 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RBC1056",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baseline": {
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "timedArtifactSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
+  },
+  "candidateLinuxSha256": "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "f83eef503eacaf31184773ceed699502b15e549e9986c9ab1b98e38966d74cd0"
+  },
+  "restoredSources": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "hypothesis": "Reassess safe four-vector block-value copying in the current narrower shared-helper caller set. The former adverse PNG16 pipeline used the helper through word Clone; accepted BCL raster copying has removed that call. Current shared helper serves only vertical flips and disjoint byte drawing rows. This is changed production architecture/effect scope,not another favorable sample of the old artifact.",
+  "intendedEndState": "One shared checked256B value-copy loop plus BCL remainder and unchanged small/scalar fallback. Replace four-vector plus remaining-vector loops;no third specialized path,storage,cache,owner,API,unchecked access or fixture branch.",
+  "changedCallerContext": {
+    "priorOwner": "benchmarks/VECTOR-BLOCK-VALUE-COPY-SCREEN.md",
+    "priorBaselineCommit": "8f5db6a64806bf5dbfd6bd5006d3b53b95395bd9",
+    "priorRaw": {
+      "file": "vector-block-value-copy-screen.tar.xz",
+      "sha256": "6d556bc117f8b933eb9373e089aba598171caf03fef4cf09c33e50c7f7769406",
+      "bytes": 630624,
+      "members": 202,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "owned-edit-long-integration.tar.xz",
+          "sha256": "ed303cbd46ea756b5a43a9e2935146736bd080b25aed38322f205c00b74215e4"
+        },
+        {
+          "file": "word-clone-copy-qualified.tar.xz",
+          "sha256": "9596f8228d0e67e0e9973d78f2e4fe571a86a8ea59be76204bd19640b81e03f9"
+        },
+        {
+          "file": "borrowed-drawing-validation-qualified.tar.xz",
+          "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+        },
+        {
+          "file": "vp8-fixed-code-qualified.tar.xz",
+          "sha256": "b8c44a7151a5855abec730b73e3d9cc4a3c1a93b8cdda670e538ea150f791092"
+        },
+        {
+          "file": "vertical-row-span-screen.tar.xz",
+          "sha256": "85bee9a081c773bbaf44fc20a0d6df89df785b0397b958a56ecdd1f57985528f"
+        }
+      ]
+    },
+    "priorByteFlipConfirmedSavedUs": 0.0463963419596336,
+    "priorPngPipelineAdverseRetained": true,
+    "currentWordCloneUsesBoundedBclInsteadOfSharedHelper": true,
+    "currentNormalOrientationUsesClone": true,
+    "currentCropUsesBcl": true,
+    "priorPngControlUsesNormalOrientationClone": true,
+    "referenceToAcceptedArchitecture": "benchmarks/RASTER-COPY-SCHEDULING.md"
+  },
+  "sourceProof": {
+    "originalReconstructsByteExact": true,
+    "allCallersUnchanged": true,
+    "portableAndSmallFallbackVerbatim": true,
+    "everyRemainderByteCovered": true,
+    "disjointChunkProofUnchanged": true,
+    "cancellationAdmissionAndOwnershipVerbatim": true,
+    "newOwnedCapacity": 0,
+    "newRetainedCapacity": 0
+  },
+  "pairedFlip": {
+    "project": "Lokad.Image",
+    "stage": "RBC1056",
+    "caseId": "WarmVerticalFlip8",
+    "baselineUs": 8.534693806966146,
+    "candidateUs": 8.376200052897135,
+    "ratio": 0.9814295849042645,
+    "lower": 0.9779642114677108,
+    "upper": 0.9849072377401191,
+    "baselineAllocatedBytes": 56.0,
+    "candidateAllocatedBytes": 56.0,
+    "allPairsRetained": true,
+    "pairs": 12,
+    "phase": "confirm",
+    "operationsEachSubject": 4096,
+    "quietGuardsPassed": true,
+    "exactSourceOutputAndIndependentOwnersPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/vsp1009-paired/bin/Release/net10.0/Vsp1009Paired.dll",
+      "tmp/rbc1056-baseline-linux/Lokad.Image.dll",
+      "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "tmp/rbc1056-candidate-linux/Lokad.Image.dll",
+      "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+      "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "WarmVerticalFlip8",
+      "confirm"
+    ],
+    "helperSha256": "92fdb3e0c22aaf4a411fdf64e2b27c650880e7ed2b5a636ef0cfdeae5e82e650",
+    "raw": "tmp/rbc1056-WarmVerticalFlip8-paired-confirm.log"
+  },
+  "pairedOverlap": {
+    "project": "Lokad.Image",
+    "stage": "RBC1056",
+    "caseId": "DrawingCopyOverlap8",
+    "baselineUs": 3.8108524068196616,
+    "candidateUs": 3.731756683349609,
+    "savedUs": 0.07909572347005245,
+    "rawReduction": 0.020755388828102572,
+    "ratioLower": 0.9743451295615608,
+    "ratioUpper": 0.9841709973475067,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+      "tmp/rbc1056-baseline-linux/Lokad.Image.dll",
+      "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "tmp/rbc1056-candidate-linux/Lokad.Image.dll",
+      "05ea1c97b1386f2f0d2bad26655a53dc2acdb4dc6bce8afaa036e07b7ad0f206",
+      "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+      "confirm",
+      "DrawingCopyOverlap8"
+    ],
+    "raw": "tmp/rbc1056-DrawingCopyOverlap8-paired-confirm.log"
+  },
+  "candidateStandalone": {
+    "WarmVerticalFlip8": {
+      "caseId": "WarmVerticalFlip8",
+      "managedUs": 8.297539957682291,
+      "nativeUs": 8.307469360351563,
+      "ratio": 0.998804762047434,
+      "lower": 0.987155190366907,
+      "upper": 1.0079644927183986,
+      "status": "uncertain",
+      "allocatedBytes": 56.0
+    },
+    "WarmVerticalFlip16": {
+      "caseId": "WarmVerticalFlip16",
+      "managedUs": 17.628678670247396,
+      "nativeUs": 17.658828084309896,
+      "ratio": 0.9982926718625633,
+      "lower": 0.9923923184400949,
+      "upper": 1.0012195042774028,
+      "status": "uncertain",
+      "allocatedBytes": 56.0
+    },
+    "DrawingCopy8": {
+      "managedUs": 2.029350389249932,
+      "nativeUs": 1.9258614069620765,
+      "ratio": 1.0537364640642042,
+      "lower": 1.0495771130657976,
+      "upper": 1.0581554602216159,
+      "allocatedBytes": 0,
+      "status": "gap"
+    },
+    "DrawingCopyOverlap8": {
+      "managedUs": 4.592532517717498,
+      "nativeUs": 3.773899831136068,
+      "ratio": 1.216919558867834,
+      "lower": 1.2095506053443015,
+      "upper": 1.2235614257338518,
+      "allocatedBytes": 0,
+      "status": "gap"
+    }
+  },
+  "currentBaselineOverlap": {
+    "caseId": "DrawingCopyOverlap8",
+    "managedUs": 3.8880346747904384,
+    "nativeUs": 3.7656704813639323,
+    "ratio": 1.0324946630439595,
+    "lower": 1.0268385975020473,
+    "upper": 1.0379604599171945,
+    "status": "gap",
+    "allocatedBytes": 0,
+    "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "harnessSha256": "8ab31255f3286061563d5685b4a427aad74c95b1a349c80b9394c57727a45d27",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "borrowedCanvas": true,
+    "sourceAliasesCanvas": true,
+    "sourceUnchanged": false,
+    "referenceLabel": "FFmpeg public av_image_copy_plane",
+    "referenceIdentity": {
+      "sourceSha256": "45ee17ea9fc81739aaf557dbd5b94361b94d50d31da696ad627cd908b3d3eee9",
+      "buildScriptSha256": "01d17922416b1622bd205ad24a654274f490118e52da920c7c7cc4efee5a15b0",
+      "workerSha256": "e18570ca7b6129cf5cdfa4a5454dd9d5854aabc09d8927ee9648407112e0439c"
+    },
+    "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
+    "receipt": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-receipt.json",
+    "observation": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-observation.json",
+    "publicMovesPerPair": 2,
+    "nativeCallsPerPair": 6,
+    "restorationTimed": true,
+    "forwardSha256": "6bc212d5d8b90d7e981a4ce3db6cff91cfdc5e484b0bac4774c5bb747cc4ffa3",
+    "sourceEvidence": {
+      "receipt": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-receipt.json",
+      "observation": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-observation.json",
+      "statistics": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-statistics.json"
+    }
+  },
+  "decision": "Restore. Scoped isolated pairs confirm1.86%byteflip and2.08%overlap gains,but actual standalone overlapping copy4.593us is materially adverse to current baseline3.888us with separated raw intervals. Paired gain does not qualify standalone costs;execution-context dependence remains unexplained. No uniform causal-regression/alignment/JIT claim or favorable rerun. No new kernel/owner/test remains.",
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RBC1056",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+      "sources": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+        "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+      },
+      "embeddedTestsSha256": "ba8e7e0e96237011d58b9b8f6850c4d08547a6b6032cb3857c2de00947fca8b9",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newTests": 0,
+      "newBroadOrPackageChecks": 0,
+      "scope": "Exact qualified source/core/embedded-test snapshots restored in bin+obj on Linux. Windows production/embedded modules were never rebuilt and remain verified qualified hashes. All tests unchanged;reuse same immutable package and source-valid qualification."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RBC1056",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "sources": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/ImageDrawing.cs": "05802cde67c965726ee0cf840b10d8bb6ccb5fda646d4356df76e018bcdba944",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+        "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+      },
+      "embeddedTestsSha256": "56f3d5e83d42fd3ccf74c3e4013cf29e9bbb9ba7b0afb40f64b14746a37ed598",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "newProductionBuilds": 0,
+      "newEmbeddedBuilds": 0,
+      "newTests": 0,
+      "newBroadOrPackageChecks": 0,
+      "scope": "Exact qualified source/core/embedded-test snapshots restored in bin+obj on Linux. Windows production/embedded modules were never rebuilt and remain verified qualified hashes. All tests unchanged;reuse same immutable package and source-valid qualification."
+    }
+  },
+  "qualificationReuse": {
+    "provider": "benchmarks/font-fixed-header-views-evidence.json",
+    "fullChecksEachOs": 6721,
+    "actualPackageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+    "sameActualPackageBothOsAndThreeExamplesPassed": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsCoreEmbedded": 0,
+    "publicHarnessHelperNativeFixture": 0,
+    "restoration": 0,
+    "broadPackage": 0
+  },
+  "focused": {
+    "internal-normal": 25,
+    "public-normal": 190,
+    "internal-scalar": 25,
+    "public-scalar": 190
+  },
+  "memory": "Candidate/source preserve56B per owned flip and0B per borrowed copy;no new owned/admitted/retained storage. Caller ownership and cancellation unchanged. Physical/native/JIT peaks unmeasured.",
+  "rendererDependency": false,
+  "raw": {
+    "file": "row-block-copy-current-screen.tar.xz",
+    "sha256": "65cee3e691a234f4180ef26ba531a67df3ef9c16c38e75c9866ab0fabdaa2f45",
+    "bytes": 2041508,
+    "members": 277,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867"
+      },
+      {
+        "file": "vector-extent-copy-screen.tar.xz",
+        "sha256": "9c39d70ea48cf4ac1a24e439e44fcb2affd8a78c41a7d2539a15a9c95a47557f"
+      },
+      {
+        "file": "vector-block-value-copy-screen.tar.xz",
+        "sha256": "6d556bc117f8b933eb9373e089aba598171caf03fef4cf09c33e50c7f7769406"
+      }
+    ]
+  },
+  "publicationPostponed": true
+}

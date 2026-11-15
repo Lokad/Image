@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "stage": "BOC1023",
+  "stage": "RBC1056baseline",
   "measurementAccepted": true,
   "productionChanged": false,
   "productionSpeedupClaim": false,
@@ -9,20 +9,20 @@
   "warmParityComplete": false,
   "publicationPostponed": true,
   "producers": {
-    "windowsSha256": "9f08b7a5487aff97a18707ac18bac4e6e401b78299dc7d7f3dee1e987f5124fa",
-    "linuxSha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
-    "packageSha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de"
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
   },
   "case": {
     "caseId": "DrawingCopyOverlap8",
-    "managedUs": 3.8497786868121984,
-    "nativeUs": 3.7755132853190103,
-    "ratio": 1.0196702794774866,
-    "lower": 1.0142062318339973,
-    "upper": 1.024483688146519,
+    "managedUs": 3.8880346747904384,
+    "nativeUs": 3.7656704813639323,
+    "ratio": 1.0324946630439595,
+    "lower": 1.0268385975020473,
+    "upper": 1.0379604599171945,
     "status": "gap",
     "allocatedBytes": 0,
-    "librarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+    "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
     "harnessSha256": "8ab31255f3286061563d5685b4a427aad74c95b1a349c80b9394c57727a45d27",
     "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
     "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
@@ -42,16 +42,16 @@
       "workerSha256": "e18570ca7b6129cf5cdfa4a5454dd9d5854aabc09d8927ee9648407112e0439c"
     },
     "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
-    "receipt": "tmp/slp1023-DrawingCopyOverlap8PriorProducer-reference-confirm-receipt.json",
-    "observation": "tmp/bdo973-candidate-DrawingCopyOverlap8-confirm-observation.json",
+    "receipt": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-receipt.json",
+    "observation": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-observation.json",
     "publicMovesPerPair": 2,
     "nativeCallsPerPair": 6,
     "restorationTimed": true,
     "forwardSha256": "6bc212d5d8b90d7e981a4ce3db6cff91cfdc5e484b0bac4774c5bb747cc4ffa3",
     "sourceEvidence": {
-      "receipt": "tmp/slp1023-DrawingCopyOverlap8PriorProducer-reference-confirm-receipt.json",
-      "observation": "tmp/slp1023-DrawingCopyOverlap8PriorProducer-reference-confirm-observation.json",
-      "statistics": "tmp/slp1023-DrawingCopyOverlap8PriorProducer-reference-confirm-statistics.json"
+      "receipt": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-receipt.json",
+      "observation": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-observation.json",
+      "statistics": "tmp/rbc1056baseline-DrawingCopyOverlap8-reference-confirm-statistics.json"
     }
   },
   "sources": {
@@ -59,7 +59,7 @@
     "src/Lokad.Image/Internal/IndependentRowCopy.cs": "195bacf89bf53d5590595d88712e2146c4d29fdf942e48ce43c008a7488a254d",
     "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
   },
-  "reason": "One prior-qualified-producer control through the SAME standalone public harness resolves a material contradiction in the rejected shared vector-extent trial. It also supplies current actual-package overlap cost: a small gap, not a speedup. No identical favorable repeats.",
+  "reason": "One current qualified-producer capture through the same standalone public harness resolves an adverse candidate/isolated-pair contradiction. Retain current actual-package overlap as a small gap;no speedup or favorable repeats.",
   "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
   "memory": {
     "allocatedBytesPerOperation": 0,
@@ -70,27 +70,56 @@
     "physicalNativeJitPeaksMeasured": false
   },
   "qualification": {
-    "fullChecksEachOs": 6696,
-    "actualPackageSha256": "2e38138311d4983c901179849099b074ab2e89a1a7dea5d5d3b5cdd54bfc53de",
-    "actualPackageLibrarySha256": "b9822a4946a02e99b7f1918f644d3e359dc4c7ac7631ae5a0084891147f5d2a1",
+    "fullChecksEachOs": 6721,
+    "actualPackageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5",
+    "actualPackageLibrarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
     "sameActualPackageBothOsAndThreeExamplesPassed": true,
     "productionAndActualPackageByteIdentical": true,
     "fullScalarIsaActualConsumerAndThreeExamplesReused": true,
     "broadOrPackageRepeats": 0,
     "allBuilds": 0,
-    "sourceQualification": "benchmarks/raster-copy-scheduling-evidence.json"
+    "sourceQualification": "benchmarks/font-fixed-header-views-evidence.json"
   },
   "raw": {
-    "file": "vector-extent-copy-screen.tar.xz",
-    "sha256": "9c39d70ea48cf4ac1a24e439e44fcb2affd8a78c41a7d2539a15a9c95a47557f",
-    "bytes": 1959648,
-    "members": 209,
+    "file": "row-block-copy-current-screen.tar.xz",
+    "sha256": "65cee3e691a234f4180ef26ba531a67df3ef9c16c38e75c9866ab0fabdaa2f45",
+    "bytes": 2041508,
+    "members": 277,
     "mirrored": true,
     "allMembersVerified": true,
-    "dependency": {
-      "file": "raster-copy-scheduling-qualified.tar.xz",
-      "sha256": "254540f22edaae5451829452f7b349c3029fed4ef8fa49a38206a4cab9f9372f"
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867"
+      },
+      {
+        "file": "vector-extent-copy-screen.tar.xz",
+        "sha256": "9c39d70ea48cf4ac1a24e439e44fcb2affd8a78c41a7d2539a15a9c95a47557f"
+      },
+      {
+        "file": "vector-block-value-copy-screen.tar.xz",
+        "sha256": "6d556bc117f8b933eb9373e089aba598171caf03fef4cf09c33e50c7f7769406"
+      }
+    ]
+  },
+  "next": "Three borrowed copy controls are small gaps; four fill/composite controls pass and stop. Keep rejected producer timings out of current costs. All289material paths remain required.",
+  "history": {
+    "priorCommit": "355ed728e171d0a5c1ab04af481ad05b5c70b454",
+    "managedUs": 3.8497786868121984,
+    "nativeUs": 3.7755132853190103,
+    "upper": 1.024483688146519,
+    "raw": {
+      "file": "vector-extent-copy-screen.tar.xz",
+      "sha256": "9c39d70ea48cf4ac1a24e439e44fcb2affd8a78c41a7d2539a15a9c95a47557f",
+      "bytes": 1959648,
+      "members": 209,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependency": {
+        "file": "raster-copy-scheduling-qualified.tar.xz",
+        "sha256": "254540f22edaae5451829452f7b349c3029fed4ef8fa49a38206a4cab9f9372f"
+      }
     }
   },
-  "next": "Three borrowed copy controls are small gaps; four fill/composite controls pass and stop. Keep rejected producer timings out of current costs. All289material paths remain required."
+  "experimentReport": "benchmarks/ROW-BLOCK-COPY-CURRENT-SCREEN.md"
 }

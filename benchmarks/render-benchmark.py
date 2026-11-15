@@ -1754,11 +1754,14 @@ No heap capacity or retention is added; validation and independent owners remain
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
     overlap_current = json.loads((ROOT / 'benchmarks/borrowed-overlap-current-evidence.json').read_text(encoding='utf-8'))
     oq = overlap_current['qualification']
+    overlap_qualification = json.loads((ROOT / oq['sourceQualification']).read_text(encoding='utf-8'))
     assert overlap_current['measurementAccepted'] and not overlap_current['productionChanged']
     assert not overlap_current['productionSpeedupClaim']
     assert overlap_current['requiredMaterialPaths'] == 289 and overlap_current['newMaterialPaths'] == 0
     assert overlap_current['raw']['mirrored'] and overlap_current['raw']['allMembersVerified']
-    assert oq['fullChecksEachOs'] == 6696 and oq['productionAndActualPackageByteIdentical']
+    assert oq['fullChecksEachOs'] == overlap_qualification['qualification']['fullChecksEachOs'] and oq['productionAndActualPackageByteIdentical']
+    assert oq['actualPackageSha256'] == overlap_qualification['producers']['packageSha256']
+    assert oq['actualPackageLibrarySha256'] == overlap_qualification['producers']['linuxSha256']
     assert oq['fullScalarIsaActualConsumerAndThreeExamplesReused'] and oq['broadOrPackageRepeats'] == oq['allBuilds'] == 0
     assert oq['sameActualPackageBothOsAndThreeExamplesPassed']
     assert oq['actualPackageSha256'] == overlap_current['producers']['packageSha256']
@@ -1796,7 +1799,7 @@ with unchanged borrowed capacity and zero retained workspace. Earlier copy/pair
 confirmations remain in its report. Current byte
 copy remains a small gap: **{b8['managedUs']:.2f} / FFmpeg {b8['nativeUs']:.2f} µs, upper {b8['upper']:.3f}**;
 word copy is **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**, also a tiny gap.
-The [current actual-package overlap control](../benchmarks/VECTOR-EXTENT-COPY-SCREEN.md)
+The [current actual-package overlap control](../benchmarks/ROW-BLOCK-COPY-CURRENT-SCREEN.md)
 resolves the two-move pair as a small gap: **{bo['managedUs']:.2f} / {bo['nativeUs']:.2f} µs, upper {bo['upper']:.3f}**.
 No production change or speedup is claimed; the adverse shared-copy trial is restored.
 Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled

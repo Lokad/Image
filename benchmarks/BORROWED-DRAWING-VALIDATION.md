@@ -10,7 +10,7 @@ Allocation, admitted capacity, retention and unmeasured physical peaks are disti
 | Complete frozen public operation | Lokad / reference µs | Ratio / upper | GC B/op | Status |
 | --- | ---: | ---: | ---: | --- |
 | Separate RGBA8 copy | 1.976 / 1.926 | 1.026 / 1.029 | 0 | gap |
-| Overlapping RGBA8 two-move pair | 3.850 / 3.776 | 1.020 / 1.024 | 0 | gap |
+| Overlapping RGBA8 two-move pair | 3.888 / 3.766 | 1.032 / 1.038 | 0 | gap |
 | Separate RGBA16 copy | 3.792 / 3.784 | 1.002 / 1.004 | 0 | gap |
 | Clipped RGBA8 fill | 1.236 / 1.567 | 0.789 / 0.793 | 0 | pass |
 | Clipped RGBA16 fill | 2.093 / 4.098 | 0.511 / 0.513 | 0 | pass |
@@ -57,13 +57,15 @@ The fill wrapper's already-recorded comment-only identity refresh is reconciled;
 its original native binary and behavior remain exact. Completed timings never restart.
 
 The [current overlap measurement](borrowed-overlap-current-evidence.json) uses
-the restored, qualified raster-copy DLL and its actual package. One standalone
-prior-producer control resolves a material contradiction in the
-[rejected vector-extent trial](VECTOR-EXTENT-COPY-SCREEN.md); all twelve actuals
-and native brackets remain. Overlap is now a small gap, with zero allocation and
-unchanged ownership. No production change or speedup is claimed. Existing
-**6,696 full/live checks per OS and same-package/all-three-example proofs** are
-reused without rebuilds or broad/package repeats.
+the qualified fixed-header DLL and its actual package. One standalone baseline
+control through the same public harness resolves the material contradiction in
+the [unretained row-block trial](ROW-BLOCK-COPY-CURRENT-SCREEN.md); all twelve
+actuals and native brackets remain. The current two-move pair remains a small
+gap,with zero allocation and unchanged ownership. No production change or speedup
+is claimed. Existing **6,721 full/live checks per OS and same-package/all-three-
+example proofs** are reused without rebuilds or broad/package repeats. The prior
+3.850/3.776µs result and [vector-extent trial](VECTOR-EXTENT-COPY-SCREEN.md) remain
+historical evidence;their costs are not added or used as a current baseline.
 
 Codec, resizing, inspection, independent-result edits and font/text paths retain
 valid evidence and original artifact identities. Current family counts are in

@@ -20,8 +20,8 @@ with unchanged borrowed capacity and zero retained workspace. Earlier copy/pair
 confirmations remain in its report. Current byte
 copy remains a small gap: **1.98 / FFmpeg 1.93 µs, upper 1.029**;
 word copy is **3.792 / 3.784 µs, upper 1.004**, also a tiny gap.
-The [current actual-package overlap control](../benchmarks/VECTOR-EXTENT-COPY-SCREEN.md)
-resolves the two-move pair as a small gap: **3.85 / 3.78 µs, upper 1.024**.
+The [current actual-package overlap control](../benchmarks/ROW-BLOCK-COPY-CURRENT-SCREEN.md)
+resolves the two-move pair as a small gap: **3.89 / 3.77 µs, upper 1.038**.
 No production change or speedup is claimed; the adverse shared-copy trial is restored.
 Both fills and both composites pass/stop. RGBA16 source-over uses explicitly labeled
 ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
@@ -320,7 +320,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Exact rectangle copy into borrowed RGBA16 canvas (gap) | 3.79 | 3.78 | 1.002 / 1.004 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.85 | 3.78 | 1.020 / 1.024 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 3.89 | 3.77 | 1.032 / 1.038 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,147.32 | 6,145.06 | 0.187 / 0.207 | 299,914 |
