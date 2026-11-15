@@ -1,0 +1,138 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JSC1062",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "hypothesis": "Complete ordinary JPEG marker acquisition and segment-length acquisition through one outer parser await. Preserve the two actual reads and their validation/cancellation order. Avoid re-entering the large generic parser between immediately completed marker and length reads.",
+  "intendedEndState": "One shared JPEG grammar; passive packed marker/length result, immediate completion helpers and awaited pending reads. No new buffer, cache, ownership abstraction, output or admission allowance.",
+  "privateStateBoundary": "Item checks the previous item count plus one before any length read. The outer private item counter is published after prefix success; a failed operation is abandoned and never resumed or observed. Stuffed entropy bytes do not count. Restart/EOI/invalid marker checks precede length acquisition exactly as before.",
+  "baseline": {
+    "baselineCommit": "82e2ee1daabba2136ec3c7180a9a8ed6319a8e5d",
+    "windowsSha256": "75689b4582f2311a3535f65d77e830d16a9c48a3fd5d887aaf19f71e8e9f3e30",
+    "linuxSha256": "d78d601a3098176b58689ddd7ba9c104b2f407361811be7bd1ceb057f5c6b07e",
+    "packageSha256": "30a95f3b56db2880551a78da2896ca41bc08617b19f4c866e08b86f82c11cdd0"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/StreamInspection.cs": "03d13f9cccd060fa6898a749c373fc9bea35bf38472deac7f3ebc6f4ccdebf8a"
+  },
+  "candidateLinuxSha256": "f8c6aec77c8e5657134ab59ea81758fc92d0f436aefddba9a70f68cb9da9c979",
+  "measurement": {
+    "project": "Lokad.Image",
+    "stage": "JSC1062",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.27359631220499675,
+    "candidateUs": 0.2954500554402669,
+    "ratio": 1.0798762148510908,
+    "lower": 1.0247286139705498,
+    "upper": 1.1379916823857064,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "f8c6aec77c8e5657134ab59ea81758fc92d0f436aefddba9a70f68cb9da9c979",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/jsc1062-baseline-linux/Lokad.Image.dll",
+      "d78d601a3098176b58689ddd7ba9c104b2f407361811be7bd1ceb057f5c6b07e",
+      "tmp/jsc1062-candidate-linux/Lokad.Image.dll",
+      "f8c6aec77c8e5657134ab59ea81758fc92d0f436aefddba9a70f68cb9da9c979",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "screen"
+    ],
+    "raw": "tmp/jsc1062-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "decision": "Not retained: the original completed-async JPEG short screen is adverse,ratio1.079876 and CI1.024729\u20131.137992. The extra completion helpers are not justified. No variants,successful timing repeats,independent confirmation,standalone native run,Windows candidate build or broad/package campaign. This rejects this implementation,not all parser preparation designs.",
+  "memory": "568B/op on both producers;existing dimension workspace512 admitted bytes and no retained operation scratch. No capacity or ownership change. Logical charges are not physical peaks;native/JIT/physical peaks unmeasured.",
+  "scope": "Three alternating pairs,262144 complete public probe operations per producer per pair,original513x259 JPEG,oneCPU,full-batch warmup,naturalGC and independent owned descriptors. Both quiet guards and exact descriptor/acquisition/ownership checks pass. Scoped DLL effect only,not standalone FFmpeg cost or evidence of broader performance.",
+  "focused": {
+    "linux": {
+      "internal-normal": 10,
+      "public-normal": 148,
+      "internal-scalar": 10,
+      "public-scalar": 148
+    },
+    "windows": "Candidate not built;qualified Windows source and modules unchanged."
+  },
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JSC1062",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "75689b4582f2311a3535f65d77e830d16a9c48a3fd5d887aaf19f71e8e9f3e30",
+      "sourceRestoredByteExactly": true,
+      "coreAndEmbeddedNeverRebuilt": true,
+      "newBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JSC1062",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "d78d601a3098176b58689ddd7ba9c104b2f407361811be7bd1ceb057f5c6b07e",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "d7a6c1026cc767b1ad5b33c93fceb5cf805af95d79f9ce44550d8bafc338f85e",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+      },
+      "embeddedTestsSha256": "d3f77258bd499eb22f3d3bdbaeca35b16ae52fdf539cd5490cfc681483db98b7",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "qualificationReused": "Exactly restored production sources/core/embedded/public modules reuse DRAWING-ROW-PREPARATION.md:6721 full/live checks perOS,focused normal/scalar and SAME actual timed Release-package/all3examples. No accepted production or test changes;current benchmark costs unchanged.",
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0,
+    "restoration": 0,
+    "packs": 0
+  },
+  "raw": {
+    "file": "jpeg-segment-completion-trial.tar.xz",
+    "sha256": "cc1719db96c161f061ac679a44fec549e6be54ffeac9c4648708ff142cc582af",
+    "bytes": 2162676,
+    "members": 54,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      },
+      {
+        "file": "probe-initial-workspace-trial.tar.xz",
+        "sha256": "4bdbee58d1db7bca3f7222fb948827347468de34c1830d453c71a0cfd1613d18"
+      }
+    ]
+  }
+}
