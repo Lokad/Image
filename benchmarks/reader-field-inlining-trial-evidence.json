@@ -1,0 +1,212 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RFI1067",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "d4f3ccb1c9c16eb0004353c930534f82019a3890",
+  "baselineProducers": {
+    "windowsSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+    "linuxSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+    "packageSha256": "8a5d74768e26bd62af7b6c490e4d6b614956093df17440cf8f7ac983394438f7"
+  },
+  "candidateLinuxSha256": "319c2f026cab835fa51450297645bc60700ff1c4fd5707beeda778257c894425",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "2ad66f29e8085c6da8cad46b2b14634871d7ae7a268db4c567344a67db453487"
+  },
+  "hypothesis": "Request JIT inlining of the nonasync ReadAsync field-acquisition method. Current actual public-probe generated code emits a690B callee and direct calls from the generic parser. Inlining may remove repeated call boundaries and specialize fixed field counts;it may instead increase code/register pressure. CPU effect must be measured.",
+  "intendedEndState": "Identical field loop,partial/pending handling,FillAsync,buffer/header aliases,checks,counters and ownership. Only MethodImpl metadata and its namespace import change. No wrapper,parser duplication,newstate,storage,cache,pool or public API.",
+  "sourceProof": {
+    "entireReaderBodyReconstructsAfterRemovingOnlyImportAndAttribute": true,
+    "parsingChecksPollingCountersAndAsyncLifetimesVerbatim": true,
+    "noNewStorageCacheOwnerApiOrDependency": true
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "RFI1067",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.27585947036743164,
+    "candidateUs": 0.27272557830810545,
+    "ratio": 0.9888189040665724,
+    "lower": 0.614267588505434,
+    "upper": 1.591753892498868,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "319c2f026cab835fa51450297645bc60700ff1c4fd5707beeda778257c894425",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/rfi1067-baseline-linux/Lokad.Image.dll",
+      "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "tmp/rfi1067-candidate-linux/Lokad.Image.dll",
+      "319c2f026cab835fa51450297645bc60700ff1c4fd5707beeda778257c894425",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "screen"
+    ],
+    "raw": "tmp/rfi1067-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "independentConfirmation": {
+    "project": "Lokad.Image",
+    "stage": "RFI1067",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "confirm",
+    "baselineUs": 0.27106766573588054,
+    "candidateUs": 0.27694224389394123,
+    "ratio": 1.021745122951783,
+    "lower": 1.0052297497499383,
+    "upper": 1.0385318346730699,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "319c2f026cab835fa51450297645bc60700ff1c4fd5707beeda778257c894425",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/rfi1067-baseline-linux/Lokad.Image.dll",
+      "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "tmp/rfi1067-candidate-linux/Lokad.Image.dll",
+      "319c2f026cab835fa51450297645bc60700ff1c4fd5707beeda778257c894425",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "confirm"
+    ],
+    "raw": "tmp/rfi1067-ProbeDimensionsJpegAsync-paired-confirm.json"
+  },
+  "jit": {
+    "original": {
+      "JpegAsync": {
+        "codeBytes": 7451,
+        "readAsyncCallSites": 6,
+        "prologueStackSubtractBytes": 296
+      },
+      "InspectAsync": {
+        "codeBytes": 3452,
+        "readAsyncCallSites": 3,
+        "prologueStackSubtractBytes": 120
+      }
+    },
+    "candidate": {
+      "JpegAsync": {
+        "codeBytes": 10424,
+        "readAsyncCallSites": 0,
+        "prologueStackSubtractBytes": 600
+      },
+      "InspectAsync": {
+        "codeBytes": 5051,
+        "readAsyncCallSites": 0,
+        "prologueStackSubtractBytes": 320
+      }
+    },
+    "actualOriginalAndCandidateBenchmarkContexts": true,
+    "allInstrumentedTimingsDiscarded": true,
+    "notCpuPhaseAttribution": true,
+    "stackSubtractIsNotTotalStackFootprint": true,
+    "receiptRecovery": "Initial post-capture verifier looked for a candidate confirmation receipt before any confirmation. Use the existing qualified BFR1063 frozen boundary receipt;candidate library/runtime identities remain separately checked. Reuse existing completed capture and passing guards,no recapture or timing repeat."
+  },
+  "decision": "Hint is honored,but independent12pairs favor the original:ratio1.021745,CI1.005230\u20131.038532,568B/op unchanged. Reject without variants,favorable repeats,uninstrumented candidate/native captures,Windows candidate build,broad/package or new fixture campaign. Larger code/prologue storage accompany adversity;no CPU-phase cause is assigned. This tests the acquisition method,not the old PCE31 outer completion wrapper;no permanent family ban.",
+  "focusedLinux": {
+    "internal-normal": 10,
+    "public-normal": 148,
+    "internal-scalar": 10,
+    "public-scalar": 148
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RFI1067",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+      "sourceRestoredByteExactly": true,
+      "coreAndEmbeddedNeverRebuilt": true,
+      "newBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RFI1067",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "d876be66af6c7a7e52cfa296d0537c74a604e2209a5cd9200233a055caec923b",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+      },
+      "embeddedTestsSha256": "6341e75dd6ef2c9497b21cdf9ecda533fe735584dfd55951c43cca6bc9b86f17",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "memory": {
+    "measuredCompleteAllocatedBytesPerOperation": 568,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStorageBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": "Exact original sources and Linux core/embedded/public modules restored byte-for-byte without rebuilding;Windows modules never rebuilt. Current BOUNDED-PROBE-REQUESTS.md package is unchanged:6721full/live checks perOS,focused normal/scalar and SAMEactualtimedpackage/all3examples. No current timing or retained test/API change.",
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0,
+    "restoration": 0,
+    "packs": 0
+  },
+  "raw": {
+    "file": "reader-field-inlining-trial.tar.xz",
+    "sha256": "cd8aad2129289ec5753911bc736301fb131d8eb62dc55458b91bbb8ade4cadc3",
+    "bytes": 826560,
+    "members": 77,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bounded-probe-requests-qualified.tar.xz",
+        "sha256": "c67739464f88e8e929351c2f00b4323edd5429607a8cb5320ae92fdefd4e5fe4"
+      },
+      {
+        "file": "jpeg-exif-outline-trial.tar.xz",
+        "sha256": "cd7881e46e113dbc8251dd25851c39025fafe13607a860973e2fd0749f271097"
+      }
+    ]
+  }
+}
