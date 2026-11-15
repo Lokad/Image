@@ -320,7 +320,7 @@
     "Resident benchmark Input.Copy/ReadAsync methods have389locations. These are part of frozen equivalent delivery,not production optimization targets. No callback,input,read-boundary or reference adjustment is authorized by this attribution.",
     "Nested builder/selector locations remain but the direct-selector trial did not show a useful screen. Do not replay it unchanged or infer removable time from sample counts."
   ],
-  "next": "Test the fixed six-byte JPEG frame view against the existing complete async probe short screen,with verbatim read/check/poll/failure/owner order;independent confirmation and coherent qualification only if useful. No new input/settings grid or unrelated optimization.",
+  "next": "Consider a materially revised JPEG inspection driver separating synchronous grammar advancement from genuine I/O suspension. Keep one grammar,original read/check/poll/error order and public owner wrappers;use operation-private value state,with no extra immediate-path heap owner or parser cache. Pending requests must be consumed exactly once and actual users awaited. This differs from the unhelpful outer-selector shortcut and frame-view trial;requires a concrete design/proof and short complete-operation screen before any broader qualification. Do not replay the already-tested32-to256workspace design unchanged.",
   "currentCostsUnchanged": true,
   "actualPackageAndQualificationReused": true,
   "physicalNativeJitPeaksMeasured": false,
@@ -337,5 +337,195 @@
         "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
       }
     ]
+  },
+  "fixedFrameTrial": {
+    "stage": "JHV1092",
+    "productionAccepted": false,
+    "retainedProductionChanges": 0,
+    "retainedTestChanges": 0,
+    "baselineProducers": {
+      "windowsSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+      "linuxSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+      "timedArtifactSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+      "packageSha256": "fac9093764c7a6ebc1003c574bfe06a79a9b993a072d03de4d0e0bb4be1f150d"
+    },
+    "candidateLinuxSha256": "03c724f97bf881a6f319152ecad062cf9f5349bf947d8c9bb207d4b3de65ea73",
+    "sourcePins": {
+      "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+      "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+      "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+      "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+      "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+      "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+      "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+      "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+      "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+      "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+      "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+      "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+      "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+    },
+    "candidateSources": {
+      "src/Lokad.Image/Internal/StreamInspection.cs": "8c3f99bf2653e6ea0938d3039cc6015c53bbf2a6c37b4e95b40e5de73294e94a"
+    },
+    "hypothesis": "Same current-process trace/map/JIT locates repeated header-array loads and span/index bounds in fixed JPEG frame fields. Borrow one checked six-byte span after the identical six-byte read,then derive depth,height,width and component count from that local view. This can expose fixed lengths and remove repeated loads/checks; no CPU or code-size improvement is assumed.",
+    "intendedEndState": "One local fixed-length frame view,with identical grammar,read sizes,validation/check/failure order,metadata and result factories. No new kernel,owner,storage,cache,API,read coalescing or parser state. The borrowed view has no use across the following await.",
+    "boundaries": "Replacing only the three original frame-field statements with the checked local-span version reconstructs the complete original source. InspectionReader.Header is a readonly owned array of at least32bytes,so its six-byte view cannot introduce a valid operation failure. Parse the same byte0,BE16bytes1..2,BE16bytes3..4 and byte5 in identical order before the same count/size/dimension checks. All acquisition,callbacks,counters,polls,pending/error/owner and other format bodies stay verbatim.",
+    "sourceProof": {
+      "originalSourceReconstructed": true,
+      "sameBytesAndFieldOrder": true,
+      "fixedViewFitsOwnedHeaderInvariant": true,
+      "allAcquisitionAndCheckOrderVerbatim": true,
+      "allPublicOwnerWrappersVerbatim": true,
+      "noNewStorageOrRetainedState": true
+    },
+    "screen": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "screen",
+      "baselineUs": 0.24422773742675782,
+      "candidateUs": 0.23632214228312173,
+      "ratio": 0.9676191722350846,
+      "lower": 0.8726137539376286,
+      "upper": 1.0729682614466707,
+      "allocatedBaseline": 568,
+      "allocatedCandidate": 568,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorOwnershipPassed": true,
+      "librarySha256": "03c724f97bf881a6f319152ecad062cf9f5349bf947d8c9bb207d4b3de65ea73",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "raw": "tmp/jhv1092-ProbeDimensionsJpegAsync-paired-screen.json"
+    },
+    "confirmation": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "confirm",
+      "baselineUs": 0.23552864615122476,
+      "candidateUs": 0.23739766057332357,
+      "ratio": 1.007933536434442,
+      "lower": 1.0037341464873872,
+      "upper": 1.012150495651197,
+      "allocatedBaseline": 568,
+      "allocatedCandidate": 568,
+      "scopedManagedDllEffectOnly": true,
+      "notStandaloneFfmpegPerformance": true,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "originalInputAndDescriptorOwnershipPassed": true,
+      "librarySha256": "03c724f97bf881a6f319152ecad062cf9f5349bf947d8c9bb207d4b3de65ea73",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "raw": "tmp/jhv1092-ProbeDimensionsJpegAsync-paired-confirm.json"
+    },
+    "interpretation": "The favorable3.24percent/7.91ns short point is uncertain. Its independent12pair confirmation is adverse0.793percent/1.87ns,interval1.003734\u20131.012150. Not retained;all original actuals and gates remain. No further sample,other-case/native/codegen capture or broad/package campaign. No causal codegen explanation or permanent field-view ban.",
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 148,
+      "internal-scalar": 10,
+      "public-scalar": 148
+    },
+    "memory": {
+      "allocatedBytes": 568,
+      "newOwnedCapacityBytes": 0,
+      "newAdmissionBytes": 0,
+      "newRetainedBytes": 0,
+      "physicalNativeJitPeaksMeasured": false
+    },
+    "restoration": {
+      "windows": {
+        "project": "Lokad.Image",
+        "stage": "JHV1092",
+        "sourceRestored": true,
+        "productionSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+        "windowsModulesNeverChanged": true,
+        "newBuilds": 0,
+        "newBroadOrPackageChecks": 0,
+        "retainedProductionChanges": 0,
+        "retainedTestChanges": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "stage": "JHV1092",
+        "platform": "linux",
+        "productionRestored": true,
+        "productionSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+          "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+          "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+          "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+          "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+          "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+          "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+          "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+          "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+          "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+          "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+        },
+        "embeddedTestsSha256": "6b7dfe0a0d085e69046d8de3f4fa4301b89d162835763f52053ecf66537857fe",
+        "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+        "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+        "newBuilds": 0,
+        "newBroadOrPackageChecks": 0,
+        "retainedProductionChanges": 0,
+        "retainedTestChanges": 0
+      }
+    },
+    "builds": {
+      "linuxCore": 1,
+      "linuxEmbedded": 1,
+      "windowsProduction": 0,
+      "public": 0,
+      "harness": 0,
+      "helper": 0,
+      "native": 0,
+      "fixture": 0,
+      "package": 0
+    },
+    "sourceModulesAndInventoryExactlyRestored": true,
+    "actualPackageUnchanged": true,
+    "newBroadOrPackageChecks": 0,
+    "qualifiedFullLiveEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "raw": {
+      "file": "jpeg-frame-view-trial.tar.xz",
+      "sha256": "20b7430c40d9f086e319b3bd6972f2bb0c1768a106c966fa1e021ce35bd64077",
+      "bytes": 1787292,
+      "members": 81,
+      "allMembersVerified": true,
+      "mirrored": true,
+      "dependencies": [
+        {
+          "file": "refill-call-inlining-qualified.tar.xz",
+          "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
+        },
+        {
+          "file": "jpeg-probe-current-attribution.tar.xz",
+          "sha256": "432cd62190bec1736584bcf2fd7ddf71415d4b6140f302bff1cf5c2796d754b2"
+        }
+      ]
+    }
+  },
+  "compactWorkspaceAudit": {
+    "provider": "benchmarks/probe-initial-workspace-trial-evidence.json",
+    "sameInitial32ThenBulk256DesignAlreadyTested": true,
+    "earlySeekableAllocationBytes": [
+      568,
+      344
+    ],
+    "nonseekableAsyncAllocationBytes": [
+      568,
+      624
+    ],
+    "originalScreensInconclusive": true,
+    "decision": "Reuse the earlier exact design/evidence rather than replay it on a newer clock: extra initial array and growth machinery made the nonseekable boundary unpromising. No new build,test,timing or production change for this audit.",
+    "allNewBuilds": 0,
+    "allNewStatisticalCaptures": 0
   }
 }
