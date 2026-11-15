@@ -1,0 +1,126 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DRC1082",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "timedArtifactSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "packageSha256": "958275977db3db3b682dfa152b8e81df207cae2b3ae14978869b7db0161628a0"
+  },
+  "candidateLinuxSha256": "10c32c84d84e82bff3afde56256c0358d3a38384f8000abe005055cf0806c5a4",
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+    "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "b2eb36d89fe8e176e8ed8e38919e522f7f73e8fb7b528abca78393b17e303232"
+  },
+  "hypothesis": "Rectangle rows that fit the existing4096-pixel cancellation chunk currently re-evaluate Min,chunk progress,direction and byte extents for every row. Prepare the full-row byte extent and single-chunk decision once;execute the same one chunk directly per row. Eliminate repeated chunk scheduling,without changing the grouped/BCL copy kernels or any owner. The current separate-byte gap is~50ns;no forecast or assumed phase fraction.",
+  "intendedEndState": "One existing public CopyRegion execution loop chooses a direct single-chunk row or the original multi-chunk loop. Common preparation,row advance,clipping and validation remain shared. Both depths and aliases use the same decision;no additional specialized pixel kernel,API,workspace,cache,pool,owner or fixture dispatch.",
+  "boundaries": "For a nonempty region with width<=4096,the original loop has first0,count=width,offsetX=0 in either x direction,countBytes=width*pixelBytes and exactly one cancellation poll. The direct branch executes the same Slice and kernel calls with identical arguments/order. Nonempty regions fit validated ImageBuffer capacity,so rowBytes fitsint. For wider rows,the original loop is retained verbatim apart from indentation. Common inter-row advance,all preconditions,exception order,admission and independent lifetimes are unchanged.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyCopyRegionSchedulingChanged": true,
+    "originalMultiChunkLoopRetained": true,
+    "sameSingleChunkArgumentsAndPolls": true,
+    "sharedRowAdvanceAndValidationVerbatim": true,
+    "allKernelsAndOtherBodiesVerbatim": true,
+    "noNewOwnedCapacity": true,
+    "noNewRetainedStorage": true
+  },
+  "screen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9881408284505206,
+    "candidateUs": 1.9899480082194012,
+    "savedUs": -0.0018071797688805624,
+    "rawReduction": -0.0009089797578820669,
+    "ratioLower": 0.9993031449477999,
+    "ratioUpper": 1.0025161354615495,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "10c32c84d84e82bff3afde56256c0358d3a38384f8000abe005055cf0806c5a4",
+    "raw": "tmp/drc1082-DrawingCopy8-paired-screen.log"
+  },
+  "interpretation": "Inconclusive around a0.091%adverse point. No useful complete-operation gain,regression or FFmpeg parity established. One12pair8192-call screen only;no confirmation,other-case timing,codegen or broad/package campaign. Qualified production restored exactly;no permanent scheduling-family ban.",
+  "qualification": {
+    "provider": "benchmarks/font-typed-location-views-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 25,
+      "public-normal": 190,
+      "internal-scalar": 25,
+      "public-scalar": 190
+    },
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0,
+    "coverage": "Existing DrawingTests cover clipped small rows,both depths,8202-pixel multi-chunk self-overlap in both directions,limits,cancellation and recovery. Source proof preserves exactly one logical chunk for width<=4096 and the original loop for wider rows."
+  },
+  "restoration": {
+    "linuxCoreSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "windowsCoreSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxEmbeddedTestsSha256": "01301bb309b1e2c5dfd1aeabefe5210f84e48509c72faaeb5183603d1d309d3d",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "borrowedCopyAllocatedBytes": 0,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep qualified row preparation and current costs. The byte-copy gap remains;word-copy uncertainty and the word-flip pass remain separate. Require materially revised design or attribution before another scheduling trial;do not repeat this inconclusive candidate solely for favorable bounds.",
+  "raw": {
+    "file": "single-chunk-copy-scheduling-trial.tar.xz",
+    "sha256": "7405019cca28e600670f45f2c7b495be4c06d69e4be24475b564fc3482d7b2ef",
+    "bytes": 1751700,
+    "members": 54,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-typed-location-views-qualified.tar.xz",
+        "sha256": "2b40efee0326c930a7ddc05ba379bf2a84ac007461e5e32a296468f2207c23f5"
+      },
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      }
+    ]
+  }
+}
