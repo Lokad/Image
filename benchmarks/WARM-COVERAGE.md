@@ -64,6 +64,10 @@ the read-only profile and the insufficient initial capture. The [paired-endpoint
 and complete integration costs. Prior captures remain history; historical stage
 times are never added.
 
+[Current ordinary-draw attribution](TEXT-ORDINARY-CURRENT-ATTRIBUTION.md) locates
+event preparation as a bounded next lead on the accepted endpoint DLL. It changes
+no cost or qualification claim and adds no renderer dependency.
+
 Preparation/reuse boundaries are described in
 [architectural attribution](ARCHITECTURAL-PREPARATION-AND-STORAGE.md).
 [Prior coverage](https://github.com/lokad/image/blob/31988ad292e291faa62f156498b0e8c58be9a698/benchmarks/WARM-COVERAGE.md)

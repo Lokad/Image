@@ -1,0 +1,202 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TGP1041",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newFixtures": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "currentCostsUnchanged": true,
+  "requiredMaterialPaths": 289,
+  "publicationPostponed": true,
+  "librarySha256": "6a5b04e3a1d36e08f7010e7ead8d974ab9435e59ae660b458f6ee86ab0006cd2",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "f53701a8d07070362f6ce8f4d8626bb08c07350a35e6a830f2089332e704b671",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "d53e0bce733777d0b81cfb54c1e635a34a5853940769dbe03deb2172aebfb3dd"
+  },
+  "completePublicCalls": 22661,
+  "totalSamples": 1996,
+  "managedSamples": 1599,
+  "locations": [
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "samples": 310
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::Partition(valuetype [System.Runtime]System.Span`1<!!0>,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "samples": 247
+    },
+    {
+      "method": "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>)[Optimized]",
+      "samples": 176
+    },
+    {
+      "method": "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+      "samples": 166
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[])[Optimized]",
+      "samples": 137
+    },
+    {
+      "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::X(float64)[Optimized]",
+      "samples": 123
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "samples": 88
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+      "samples": 66
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEdges(class Lokad.Image.Internal.FontOutline,float64)[Optimized]",
+      "samples": 62
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendWord(valuetype [System.Runtime]System.Span`1<uint16>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+      "samples": 41
+    },
+    {
+      "method": "valuetype System.UInt128 [System.Private.CoreLib] System.UInt128::op_Division(valuetype System.UInt128,valuetype System.UInt128)[Optimized]",
+      "samples": 35
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      "samples": 26
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::ReorderEdges(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Crossing>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "samples": 24
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Grow(!!0[]&,int32,int32,int64&)[Optimized]",
+      "samples": 23
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Add(valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype Lokad.Image.Internal.TextRasterizer/Point)[Optimized]",
+      "samples": 16
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::get_Winding()[Optimized]",
+      "samples": 14
+    },
+    {
+      "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      "samples": 10
+    },
+    {
+      "method": "instance void [TextHarness] WarmText::ResetBeforeOperation()[Optimized]",
+      "samples": 9
+    },
+    {
+      "method": "instance void [TextHarness] WarmText::ValidateCanvas()[Optimized]",
+      "samples": 7
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.FontSegmentEnumerator::Next(valuetype Lokad.Image.Internal.FontSegment&)[Optimized]",
+      "samples": 5
+    },
+    {
+      "method": "stub ReportStubBlock<MethodCallThunk>",
+      "samples": 4
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::.ctor(class Lokad.Image.TextLayout,class Lokad.Image.Internal.OperationContext,int32)[Optimized]",
+      "samples": 3
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.TextLayout+Shape::GetHashCode()[Optimized]",
+      "samples": 2
+    },
+    {
+      "method": "int32 [TextProfileRunner] Program::<<Main>$>g__WorkloadAction|0_0(class [TextHarness]WarmText)[Optimized]",
+      "samples": 1
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Admit(int64)[Optimized]",
+      "samples": 1
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::DrawText(class Lokad.Image.ImageBuffer,class Lokad.Image.TextLayout,float64,float64,valuetype Lokad.Image.RgbaColor,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "samples": 1
+    },
+    {
+      "method": "stub ReportStubBlock<VSD_DispatchStub>",
+      "samples": 1
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Reserve(int64)[Optimized]",
+      "samples": 1
+    }
+  ],
+  "typedSorts": [
+    {
+      "type": "Lokad.Image.Internal.TextRasterSort:Partition[Lokad.Image.Internal.TextRasterizer+Crossing,Lokad.Image.Internal.TextRasterizer+CrossingOrder](System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],int,System.Threading.CancellationToken) (FullOpts)",
+      "codeBytes": 1956,
+      "address": "0x78037e68adc0",
+      "samples": 171
+    },
+    {
+      "type": "Lokad.Image.Internal.TextRasterSort:Partition[double,Lokad.Image.Internal.TextRasterizer+EventOrder](System.Span`1[double],int,System.Threading.CancellationToken) (FullOpts)",
+      "codeBytes": 1481,
+      "address": "0x78037e68b5e0",
+      "samples": 76
+    }
+  ],
+  "sortLeafCallers": {
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]": 44,
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[])[Optimized]": 198,
+    "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Draw(class Lokad.Image.ImageBuffer,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]": 5
+  },
+  "exits": {
+    "collectorExit": 0,
+    "applicationExit": 0,
+    "perfScriptExit": 0
+  },
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "scope": "Frozen DejaVuSans2.37 AV To18px/384x160RGBA16/origin8 complete public ImageDrawing.DrawText, including geometry/events/workspace preparation, scan, composition and cleanup. Font/layout/canvas retained; reset and exact validation outside operation remain separately sampled. No phase-time, stall, removable-percentage, causal gain or overall text-slowdown inference.",
+  "reference": {
+    "state": "ready",
+    "caseId": "DrawText16",
+    "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "processorCount": 1,
+    "reference": "Public ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 pipeline",
+    "performanceBaselineApproved": true,
+    "preparedRaster": false,
+    "libraries": {
+      "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+      "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+      "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+    }
+  },
+  "interpretation": "Current actual-module locations support geometry/event preparation and scalar endpoint work as leads. Sorting type/address/callers resolved from same capture; no new measurement/build. Earlier touched-range/composition trials remain inconclusive and are not replayed.",
+  "next": "Bounded reuse of the accepted exact paired-endpoint primitive inside event-intersection preparation; retain original edge-index orientation, low/high subtraction and event order, scalar fallback, every checkpoint, admission and failure cleanup. Existing independent original all-pair event oracle and eight full frames cover this path. No new cache/workspace/sort algorithm or candidate is accepted from sample counts alone.",
+  "qualificationReuse": {
+    "fullChecksEachOs": 6715,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageRuns": 0,
+    "packageSha256": "2805ceb9cad515878d7657681144fdcf8627f8a4088ee0898f552504d34e449e"
+  },
+  "raw": {
+    "file": "text-ordinary-current-attribution.tar.xz",
+    "sha256": "b6467a0a4243f5d0cddaf20d2159c27428d9b8b09123279603a8858c0ac62bf4",
+    "bytes": 120056,
+    "members": 26,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "text-paired-endpoints-qualified.tar.xz",
+        "sha256": "e632b290ca4e7376d212eba9fe85107c3a4b3d1f12945df7ddb64b57e4409441"
+      },
+      {
+        "file": "text-prepared-current-attribution.tar.xz",
+        "sha256": "bf5cff94d543c2906d0fb47fcab6ec5f42a3042c876cc1cb894cebe2f80b6282"
+      }
+    ]
+  }
+}
