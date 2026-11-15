@@ -47,6 +47,11 @@ Earlier [copy preparation](VERTICAL-COPY-PREPARATION-SCREEN.md),
 studies with raw evidence retained. Current producer-position controls do not
 retroactively qualify an older candidate. Require concrete attribution or a
 materially revised design before another trial; there is no permanent family ban.
+[Bilinear word row-storage trials](BILINEAR-WORD-ROW-STORAGE-TRIALS.md) also stop
+without a retained production change: reduced capacity did not establish useful
+elapsed gains. Qualified sources, producer bindings and package are restored;
+one public-operation ownership/refusal/cancellation test is retained. All adverse
+and inconclusive observations remain, outside current-cost renderer dependencies.
 Copy-cost rendering selects the 20 current records once; superseded gain and
 rejection checks remain in their reports, outside renderer dependencies.
 

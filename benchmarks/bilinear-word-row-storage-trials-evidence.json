@@ -1,0 +1,198 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SBA1028/WDR1029",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "testOnlyAccepted": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "decision": "Do not retain any production candidate: source decoding adds machinery without an established elapsed benefit; two-row/vector-pair construction is demonstrably adverse; final explicit insertion has no established useful gain after reversed producer assignment. No full/package campaign for rejected code. Retain one actual public-operation ownership/refusal/cancellation/recovery test; obsolete decoder-helper test removed.",
+  "attribution": {
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "instrumentedTimingsDiscarded": true,
+    "currentActualPackage": true,
+    "samples": 2089,
+    "mainLocations": 1074,
+    "horizontalRowLocations": 901,
+    "scalarLocations": 50,
+    "reusableGeometryPhaseClaim": false,
+    "phasePercentageOrCpuPrediction": false,
+    "collectorApplicationPerfScriptExitCodes": [
+      0,
+      0,
+      0
+    ]
+  },
+  "variants": {
+    "sourceProductsAndTwoRows": {
+      "admissionBytes": 74000,
+      "originalAdmissionBytes": 131520,
+      "contemporary": {
+        "baseline": {
+          "managedUs": 1812.4040517578126,
+          "nativeUs": 2033.4377021484377,
+          "ratio": 0.8913005054656501,
+          "lower": 0.8829275275563815,
+          "upper": 0.8970346356080623,
+          "status": "pass",
+          "allocatedMeanBytes": 4498558.0,
+          "allActualsRetained": true,
+          "pairs": 12,
+          "operationsPerSubject": 256,
+          "allOriginalPixelNativeOwnerChecksPassed": true
+        },
+        "candidate": {
+          "managedUs": 1800.0732255859375,
+          "nativeUs": 1877.1380169270833,
+          "ratio": 0.9589455912957842,
+          "lower": 0.8552345014298807,
+          "upper": 0.9739739264469232,
+          "status": "pass",
+          "allocatedMeanBytes": 4441075.216145833,
+          "allActualsRetained": true,
+          "pairs": 12,
+          "operationsPerSubject": 256,
+          "allOriginalPixelNativeOwnerChecksPassed": true
+        }
+      },
+      "conclusion": "Raw descriptive0.68% lower; reference-normalized point adverse with changing native brackets. No established CPU gain. Passing candidate native result does not promote restored source or establish a causal improvement."
+    },
+    "vectorPairAndTwoRows": {
+      "admissionBytes": 65792,
+      "independentPair": {
+        "baselineUs": 2037.1288268229168,
+        "candidateUs": 2278.35945703125,
+        "ratio": 1.1184175015581779,
+        "lower": 1.1135755327601344,
+        "upper": 1.1232805238556487,
+        "allocatedBaselineBytes": 4498596.75,
+        "allocatedCandidateBytes": 4432893.9375,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "conclusion": "Confirmed adverse scoped same-process effect.",
+      "jit": "Nested two-half Vector512 creation loads four64B stack temporaries then overwrites both halves in each row-loop iteration."
+    },
+    "explicitInsertAndTwoRows": {
+      "admissionBytes": 65792,
+      "short": {
+        "baselineUs": 2032.075,
+        "candidateUs": 2217.8256666666666,
+        "ratio": 1.091423566506453,
+        "lower": 0.8044861467733811,
+        "upper": 1.4807034357314062,
+        "allocatedBaselineBytes": 4498604.5,
+        "allocatedCandidateBytes": 4432897.166666667,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "reversedConfirmation": {
+        "baselineUs": 2170.8518606770836,
+        "candidateUs": 2227.2653190104165,
+        "ratio": 1.029044849237672,
+        "lower": 0.9322305143211002,
+        "upper": 1.135913580895552,
+        "allocatedBaselineBytes": 4498581.895833333,
+        "allocatedCandidateBytes": 4432889.739583333,
+        "quietGuardsPassed": true,
+        "originalExactSourceIndependentOwnerChecksPassed": true
+      },
+      "reversedAssignment": "Candidate first context, qualified baseline second; raw tool position labels remain, summary roles/ratio inverted explicitly.",
+      "conclusion": "Reversed12pair result inconclusive with adverse point; do not claim a CPU benefit or a confirmed regression for this final implementation. Allocation reduction alone does not justify retaining it."
+    }
+  },
+  "restoredProducers": {
+    "windowsSha256": "eecbce75b06a9cfb350d8bf0c8bf59ed8e648e5c9ac0a4bab0d23ef94c68a05e",
+    "linuxSha256": "2fe8b8482857de6984d4b576f329fa430bf0d7a490460c9608bea433f2b56b8a",
+    "packageSha256": "9d2963881665724768d7d1a37375649bcd3cd7f0efdf397756095ad313f30a5b"
+  },
+  "restoredSources": {
+    "src/Lokad.Image/Internal/BilinearUpsample16.cs": "7063edb8f03f9adba30bb4889d90c0e54cb5f79f3ce225c7632e1b1f5a33584b"
+  },
+  "retainedTest": {
+    "path": "tests/Lokad.Image.Tests/BilinearWordRowStorageTests.cs",
+    "hardwareGuard": "SIMD-specific body executes only when required intrinsics are available; scalar invocation returns at the guard. Existing unchanged portable whole-operation proof is reused.",
+    "sha256": "535cfc8df678a4e033512e3b51e09932895c3a3db0985eb07ab1bb8a32c09ebc",
+    "boundary": "Original actual public RGBA16 bilinear enlargement: exact qualified pixels, aggregate live results, capacity admission, each of three terminal refusal phases, cancellation after row admission, cleanup/recovery, immutable borrowed source and independent survivors."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "WDR1029",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "eecbce75b06a9cfb350d8bf0c8bf59ed8e648e5c9ac0a4bab0d23ef94c68a05e",
+      "testSha256": "535cfc8df678a4e033512e3b51e09932895c3a3db0985eb07ab1bb8a32c09ebc",
+      "internalTestsSha256": "1d35500c572220f8132d26bfcab856654f0c9014728ed21e06ffe5a64509b0d3",
+      "newTestNormal": 1,
+      "newTestScalar": 1,
+      "embeddedBuilds": 1,
+      "productionPublicBuilds": 0,
+      "sourceIdenticalExistingFullLive6702AndSameActualPackageAndThreeExamplesReused": true,
+      "broadOrPackageRepeats": 0,
+      "publicationPostponed": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "WDR1029",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "2fe8b8482857de6984d4b576f329fa430bf0d7a490460c9608bea433f2b56b8a",
+      "testSha256": "535cfc8df678a4e033512e3b51e09932895c3a3db0985eb07ab1bb8a32c09ebc",
+      "internalTestsSha256": "f3a5ade13c59c231883a176815c695b2070faeac14dd7a91a1ea8861da9c4cd8",
+      "newTestNormal": 1,
+      "newTestScalar": 1,
+      "embeddedBuilds": 1,
+      "productionPublicBuilds": 0,
+      "sourceIdenticalExistingFullLive6702AndSameActualPackageAndThreeExamplesReused": true,
+      "broadOrPackageRepeats": 0,
+      "publicationPostponed": true
+    },
+    "sourceIdenticalFullLiveChecksEachOsReused": 6702,
+    "sameActualPackageAndThreeExamplesReused": true,
+    "productionPublicBuildsAfterRestoration": 0,
+    "embeddedTestBuildsEachOs": 1,
+    "newTestNormalAndScalarEachOs": 1,
+    "broadOrPackageRepeats": 0,
+    "experimentalBuilds": {
+      "linuxProduction": 3,
+      "linuxEmbedded": 3,
+      "linuxPublic": 2,
+      "windowsProduction": 0
+    },
+    "helperBuilds": 1,
+    "harnessNativeBuilds": 0,
+    "originalRationalFixtureMaterializations": 1,
+    "analysisFailureRecoveredWithoutTimingRepeat": true
+  },
+  "currentEvidence": "benchmarks/bilinear-word-current-confidence-evidence.json",
+  "currentStatus": "uncertain",
+  "currentImageOwnerViewStatuses": {
+    "passCount": 188,
+    "gaps": 1,
+    "uncertain": 2,
+    "total": 191
+  },
+  "raw": {
+    "file": "bilinear-word-row-storage-trials.tar.xz",
+    "sha256": "112e39fba47c7bffece26b3a0277524416a8b5d22807e6e558ccceebaf808435",
+    "bytes": 11394012,
+    "members": 224,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "streaming-column-reuse-qualified.tar.xz",
+        "sha256": "9ef2ee24cf0c5324d0a60eea89c9d7de4dc18a421220a5a6e027335b19301e37"
+      },
+      {
+        "file": "bilinear-word-long-integration.tar.xz",
+        "sha256": "2c2da9683de79805dde58b09d935205b21dc48b9f1f8fc81c871ee964e4ec932"
+      }
+    ]
+  },
+  "next": "No identical timing replay or permanent family ban. Current Up16 remains uncertain; do not infer a gap. Stop this bounded round and continue independently justified remaining parity work. Preserve exact arithmetic/certification and complete boundaries; no fixture-specific retention increase."
+}
