@@ -24,12 +24,19 @@ namespace Lokad.Image.Internal
             }
             static void Check(Point a, Point b, double top, double bottom)
             {
+                double Original(double y) => a.X + (b.X - a.X) * ((y - a.Y) / (b.Y - a.Y));
                 var edge = new Edge(a, b, 0);
+                Equal(Math.Min(a.Y, b.Y), edge.MinY); Equal(Math.Max(a.Y, b.Y), edge.MaxY);
+                Assert.Equal(b.Y > a.Y ? 1 : -1, edge.Winding);
+                Equal(Original(top), edge.X(top)); Equal(Original(bottom), edge.X(bottom));
                 var pair = edge.Endpoints(top, bottom);
-                Equal(edge.X(top), pair.Top); Equal(edge.X(bottom), pair.Bottom);
+                Equal(Original(top), pair.Top); Equal(Original(bottom), pair.Bottom);
                 var reverse = edge.Endpoints(bottom, top);
-                Equal(edge.X(bottom), reverse.Top); Equal(edge.X(top), reverse.Bottom);
+                Equal(Original(bottom), reverse.Top); Equal(Original(top), reverse.Bottom);
             }
+            var empty = default(Edge);
+            Equal(0d, empty.MinY); Equal(0d, empty.MaxY); Assert.Equal(-1, empty.Winding);
+            Assert.True(double.IsNaN(empty.X(0))); Assert.True(double.IsNaN(empty.Endpoints(0, 1).Top));
             double[] limits = [0d, -0d, double.Epsilon, -double.Epsilon,
                 Math.ScaleB(1d, -1022), -Math.ScaleB(1d, -1022),
                 Math.BitDecrement(1d), 1d, Math.BitIncrement(1d), -1d,

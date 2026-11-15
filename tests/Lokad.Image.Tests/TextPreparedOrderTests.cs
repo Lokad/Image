@@ -50,10 +50,13 @@ namespace Lokad.Image.Internal
                 for (var i = 0; i < count; i++)
                 {
                     var a = expected[i]; var b = edges[i + 1];
-                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.A.X), BitConverter.DoubleToInt64Bits(b.A.X));
-                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.A.Y), BitConverter.DoubleToInt64Bits(b.A.Y));
-                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.B.X), BitConverter.DoubleToInt64Bits(b.B.X));
-                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.B.Y), BitConverter.DoubleToInt64Bits(b.B.Y));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.originX), BitConverter.DoubleToInt64Bits(b.originX));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.originY), BitConverter.DoubleToInt64Bits(b.originY));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.deltaX), BitConverter.DoubleToInt64Bits(b.deltaX));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.deltaY), BitConverter.DoubleToInt64Bits(b.deltaY));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.MinY), BitConverter.DoubleToInt64Bits(b.MinY));
+                    Assert.Equal(BitConverter.DoubleToInt64Bits(a.MaxY), BitConverter.DoubleToInt64Bits(b.MaxY));
+                    Assert.Equal(a.ascending, b.ascending);
                     Assert.Equal(-1, order[i + 1].Index);
                 }
                 Assert.Equal(-7, edges[0].Order); Assert.Equal(-7, edges[^1].Order);

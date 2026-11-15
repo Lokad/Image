@@ -28,7 +28,7 @@ public sealed class TextActiveEdgeTests
         // Physical storage changes with the retained original edge identity.
         // Both arrays must still fit the capacity admitted before allocation.
         var flags = BindingFlags.NonPublic;
-        Assert.Equal(40, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Edge", flags)!));
+        Assert.Equal(56, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Edge", flags)!));
         Assert.Equal(16, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Crossing", flags)!));
     }
 }

@@ -22,26 +22,35 @@ internal sealed partial class TextRasterizer : IDisposable
     {
         internal static Point Mid(Point a, Point b) => new(a.X * .5 + b.X * .5, a.Y * .5 + b.Y * .5);
     }
-    private readonly record struct Edge(Point A, Point B, int Order)
+    private readonly record struct Edge
     {
-        internal double MinY => Math.Min(A.Y, B.Y);
-        internal double MaxY => Math.Max(A.Y, B.Y);
-        internal double X(double y) => A.X + (B.X - A.X) * ((y - A.Y) / (B.Y - A.Y));
+        internal readonly double originX, originY, deltaX, deltaY;
+        internal readonly bool ascending;
+        internal int Order { get; }
+        internal double MinY { get; }
+        internal double MaxY { get; }
+
+        internal Edge(Point a, Point b, int order)
+        {
+            originX = a.X; originY = a.Y; deltaX = b.X - a.X; deltaY = b.Y - a.Y;
+            MinY = Math.Min(a.Y, b.Y); MaxY = Math.Max(a.Y, b.Y);
+            Order = order; ascending = b.Y > a.Y;
+        }
+        internal double X(double y) => originX + deltaX * ((y - originY) / deltaY);
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal (double Top, double Bottom) Endpoints(double top, double bottom)
         {
             if (!System.Runtime.Intrinsics.X86.Sse2.IsSupported) return (X(top), X(bottom));
             var y = System.Runtime.Intrinsics.Vector128.Create(top, bottom);
-            var originY = System.Runtime.Intrinsics.Vector128.Create(A.Y);
-            var deltaY = System.Runtime.Intrinsics.Vector128.Create(B.Y - A.Y);
-            var fraction = System.Runtime.Intrinsics.X86.Sse2.Divide(System.Runtime.Intrinsics.X86.Sse2.Subtract(y, originY), deltaY);
-            var deltaX = System.Runtime.Intrinsics.Vector128.Create(B.X - A.X);
-            var product = System.Runtime.Intrinsics.X86.Sse2.Multiply(deltaX, fraction);
-            var result = System.Runtime.Intrinsics.X86.Sse2.Add(System.Runtime.Intrinsics.Vector128.Create(A.X), product);
+            var fraction = System.Runtime.Intrinsics.X86.Sse2.Divide(
+                System.Runtime.Intrinsics.X86.Sse2.Subtract(y, System.Runtime.Intrinsics.Vector128.Create(originY)),
+                System.Runtime.Intrinsics.Vector128.Create(deltaY));
+            var product = System.Runtime.Intrinsics.X86.Sse2.Multiply(System.Runtime.Intrinsics.Vector128.Create(deltaX), fraction);
+            var result = System.Runtime.Intrinsics.X86.Sse2.Add(System.Runtime.Intrinsics.Vector128.Create(originX), product);
             return (System.Runtime.Intrinsics.Vector128.GetElement(result, 0), System.Runtime.Intrinsics.Vector128.GetElement(result, 1));
         }
-        internal int Winding => B.Y > A.Y ? 1 : -1;
+        internal int Winding => ascending ? 1 : -1;
     }
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
     private readonly record struct Crossing(double X, int Index, int Order);
@@ -435,7 +444,7 @@ internal sealed partial class TextRasterizer : IDisposable
         private void Add(Point a, Point b)
         {
             if (a.Y == b.Y) return;
-            Grow(ref Edges, Count, 40, ref edgeBytes); Edges[Count] = new(a, b, Count); Count++;
+            Grow(ref Edges, Count, 56, ref edgeBytes); Edges[Count] = new(a, b, Count); Count++;
         }
         private void Event(double y) { Grow(ref Events, EventCount, 8, ref eventBytes); Events[EventCount++] = y; }
         private void Grow<T>(ref T[] array, int count, int itemBytes, ref long bytes)
