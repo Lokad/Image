@@ -1,0 +1,177 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JSD1089",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+    "linuxSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "timedArtifactSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "packageSha256": "fac9093764c7a6ebc1003c574bfe06a79a9b993a072d03de4d0e0bb4be1f150d"
+  },
+  "candidateLinuxSha256": "752c1c53de1cc1542aee5fd407c1b3379cb47992d7d40b1818364a653c1f0302",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/StreamInspection.cs": "97031b452c808896c526b6c09e1304ab9da732b53eda16c1535c0180a80a5a1a"
+  },
+  "hypothesis": "Current-process attribution locates nested async-builder setup and selector/parser frames. Remove only the internal format-selector state machine for an immediately completed JPEG signature; forward the parser ValueTask directly. This can remove one start/await/completion per complete JPEG operation. Extra completed-prefix dispatch and a larger pending selector state can offset savings; sample locations are not phase-time shares.",
+  "intendedEndState": "Keep one complete format grammar and unchanged JPEG parser, public async owner wrappers, reader acquisition and pending refill machinery. Consume initial read once. For pending initial reads use one selector state machine, not nested pending helpers. Completed non-JPEG uses the same selector with an already-consumed completed placeholder. No pools, cache, fixture branch or API.",
+  "publicOwnershipBoundary": "Replacing the entry/selector preamble reconstructs the complete original source byte-for-byte. JPEG/PNG/WebP parser bodies and every check/poll/read/counter/admission stay verbatim. Only two production callers exist: async ProbeCore and InspectHeadersCore, both using their reader and awaiting the returned ValueTask. Synchronous internal throws remain captured by those public wrappers; actual pending users retain ownership until their returned parser finishes.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "allParserBodiesVerbatim": true,
+    "allPublicOwnerWrappersVerbatim": true,
+    "initialReadConsumedExactlyOnce": true,
+    "pendingPrefixUsesOneSelectorStateMachine": true
+  },
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.23493305969238282,
+    "candidateUs": 0.23608750788370766,
+    "ratio": 1.0049134163623024,
+    "lower": 0.8799025489990489,
+    "upper": 1.1476850198169453,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "752c1c53de1cc1542aee5fd407c1b3379cb47992d7d40b1818364a653c1f0302",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/jsd1089-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "interpretation": "Inconclusive short screen with no useful point gain; not retained. This does not establish a regression or rule out materially revised async designs. No confirmation, other-case/native/codegen capture, neighboring wrapper variant or broad/package campaign.",
+  "preflight": {
+    "firstGuardRefusedBeforeTiming": true,
+    "cpu0BusyFraction": 0.055776892430278883,
+    "limit": 0.05,
+    "noOverlappingJobs": true,
+    "originalReceipt": "tmp/jsd1089-ProbeDimensionsJpegAsync-paired-screen-preflight-refused.json",
+    "freshBeforeAndAfterGuardsPassed": true,
+    "noStatisticalCaptureRepeated": true
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 148,
+      "internal-scalar": 10,
+      "public-scalar": 148
+    },
+    "alternatingCompletedPendingAllFormats": true,
+    "immediateFaultAndCancellationStatus": true,
+    "originalTokenPreserved": true,
+    "actualPendingReadLifetime": true,
+    "refusalFailureCleanupAndSubsequentRecovery": true
+  },
+  "memory": {
+    "completeImmediateAllocatedBytes": 568,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "pendingStateMachineAllocationMeasured": false,
+    "pendingStateCaveat": "No new workspace or retained object. Immediate complete allocation must remain measured. Pending selector carries a ValueTask argument and may allocate a larger state-machine box; disclose separately rather than infer zero allocation overhead.",
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualification": {
+    "provider": "benchmarks/refill-call-inlining-evidence.json",
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JSD1089",
+      "sourceRestored": true,
+      "productionSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JSD1089",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+        "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+      },
+      "embeddedTestsSha256": "6b7dfe0a0d085e69046d8de3f4fa4301b89d162835763f52053ecf66537857fe",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "raw": {
+    "file": "jpeg-selector-direct-trial.tar.xz",
+    "sha256": "62781c5700b694ae8fbb9055aca31813afb7bba50465d583e8b41266953c7e69",
+    "bytes": 1783336,
+    "members": 74,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "refill-call-inlining-qualified.tar.xz",
+        "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
+      }
+    ]
+  }
+}
