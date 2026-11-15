@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Runtime.CompilerServices;
 using Lokad.Image.Internal;
@@ -154,25 +156,46 @@ public sealed partial class TrueTypeFont : IDisposable
         glyf = Required("glyf"u8, context); loca = Required("loca"u8, context); hmtx = Required("hmtx"u8, context);
         if ((GlyphCount + 1L) * locationWidth > loca.Length || metricCount * 4L + (GlyphCount - metricCount) * 2L > hmtx.Length)
             throw new ImageDataException("Truncated glyph locations or horizontal metrics.");
-        // Directory and total loca extent are validated above. Borrow the two
-        // table views once for the complete glyph-header scan.
+        // Select the validated entry representation once. Typed views do not
+        // copy storage; each read retains the encoded big-endian loca value.
         var locations = Span(loca); var glyphs = Span(glyf);
-        var glyphCount = GlyphCount; var locationBytes = locationWidth; var glyphBytes = glyphs.Length;
-        var cancellation = context.Cancellation;
-        var first = locationBytes == 2 ? (uint)U16(locations) * 2 : U32(locations);
+        if (locationWidth == 2)
+            ValidateGlyphHeaders(MemoryMarshal.Cast<byte, ushort>(locations), glyphs, GlyphCount, context.Cancellation);
+        else
+            ValidateGlyphHeaders(MemoryMarshal.Cast<byte, uint>(locations), glyphs, GlyphCount, context.Cancellation);
+        cmap = SelectMapping(context); cmapFormat = U16(Span(cmap));
+        ValidateMapping(context);
+        mappingCount = cmapFormat == 4 ? U16(Span(cmap)[6..]) / 2 : (int)U32(Span(cmap)[12..]);
+    }
+
+    private static void ValidateGlyphHeaders<T>(ReadOnlySpan<T> locations, ReadOnlySpan<byte> glyphs,
+        int glyphCount, CancellationToken cancellation) where T : unmanaged, IBinaryInteger<T>
+    {
+        var glyphBytes = glyphs.Length;
+        var first = GlyphLocation(locations[0]);
         if (first > glyphBytes) throw new ImageDataException("Invalid glyph location.");
-        for (int i = 0, offset = locationBytes; i < glyphCount; i++, offset += locationBytes)
+        for (var i = 1; i <= glyphCount; i++)
         {
             cancellation.ThrowIfCancellationRequested();
-            var location = locations.Slice(offset, locationBytes);
-            var last = locationBytes == 2 ? (uint)U16(location) * 2 : U32(location);
+            var last = GlyphLocation(locations[i]);
             if (last < first || last > glyphBytes) throw new ImageDataException("Invalid glyph location ordering.");
             if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
             first = last;
         }
-        cmap = SelectMapping(context); cmapFormat = U16(Span(cmap));
-        ValidateMapping(context);
-        mappingCount = cmapFormat == 4 ? U16(Span(cmap)[6..]) / 2 : (int)U32(Span(cmap)[12..]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static uint GlyphLocation<T>(T value) where T : unmanaged, IBinaryInteger<T>
+    {
+        // These private instantiations are ushort/uint only. Type and host byte
+        // order tests fold when each value-type scan is compiled.
+        if (typeof(T) == typeof(ushort))
+        {
+            var bits = ushort.CreateTruncating(value);
+            return (uint)(BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(bits) : bits) * 2;
+        }
+        var location = uint.CreateTruncating(value);
+        return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(location) : location;
     }
 
     private FontGlyphMetrics Metrics(int glyphIndex, OperationContext context)

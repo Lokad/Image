@@ -1,5 +1,8 @@
 # Fixed font-header views
 
+[Typed location views](FONT-TYPED-LOCATION-VIEWS.md) now own font-loading and
+complete integration costs. This report retains the earlier gain and qualification.
+
 HHV1052 reads the two fixed header fields directly after the original ten-byte
 minimum check. It removes an intermediate span and redundant subslice setup;
 zero-contour handling, the same two/eight-byte addresses, signed-bound comparisons,

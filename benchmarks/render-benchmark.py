@@ -1941,7 +1941,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-fixed-header-views-evidence.json').read_text(encoding='utf-8'))
+    font_load = json.loads((ROOT / 'benchmarks/font-typed-location-views-evidence.json').read_text(encoding='utf-8'))
     assert font_load['productionAccepted'] and font_load['allAffectedPerformanceReconciled']
     assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
     fq = font_load['qualification']
@@ -1971,7 +1971,8 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert tq['normalAndScalarSse2FallbackPassed']
     assert text_draw['memory']['addedOwnedCapacityBytes'] == text_draw['memory']['addedRetainedCapacityBytes'] == 8576
     assert all(text_draw['frozenResourceChecks'][mode]['allEightFrozenFramesExact'] for mode in ('normal', 'scalar'))
-    assert font_load['sourceProof']['baselineFontSourceSha256'] == text_draw['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert font_load['sourceProof']['allNonConstructorExistingBodiesVerbatim']
+    assert font_load['sourceProof']['onlyTypedLocationPreparationAndScanChanged']
     assert font_load['sourceProof']['drawingClocksExcludeFontConstruction']
     assert font_load['unchangedSources']['src/Lokad.Image/Internal/TextRasterizer.cs'] == text_draw['sources']['src/Lokad.Image/Internal/TextRasterizer.cs']
     text_gain = text_draw['comparison']
@@ -1988,9 +1989,10 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     font_preparation = font_load['pipelineCases']['Preparation']
     font_batch = font_load['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
-    font_gain = font_load['fontComparison']['views']['statistics']
+    font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
-    assert font_load['fontComparison']['normalizedGainSeparated']
+    assert not font_load['fontComparison']['normalizedGainSeparated']
+    assert not font_load['fontComparison']['normalizedLossSeparated']
     text_confidence = json.loads((ROOT / 'benchmarks/text-draw-current-confidence-evidence.json').read_text(encoding='utf-8'))
     assert text_confidence['measurementAccepted'] and not text_confidence['productionChanged']
     assert text_confidence['sources'] == text_draw['sources']
@@ -3218,8 +3220,9 @@ PNG costs reconcile before one Windows/Linux qualification milestone: **6,721
 full/live checks per OS**, **84 internal /247 public** normal/AVX512-off/scalar,
 the SAME actual package and all three examples. One core/embedded build per OS,
 one pack and no accepted-module rebuild after timing. No new heap array, static
-field, pool or retained operation storage. Other codec/edit/resize/font/text paths
-reuse unchanged evidence. This is not a whole-release timing refresh. Probe/header admission stays
+field, pool or retained operation storage. Other codec/edit/resize paths reuse
+unchanged evidence; font construction and complete text integrations are qualified
+separately below. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
@@ -3231,7 +3234,7 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) pass,
+[Current complete text integrations](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
 Creation-only preparation is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
 amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation. Allocations are
@@ -3240,9 +3243,13 @@ prepared capacity is {text_draw['memory']['completePreparedCapacityBytes']:,} B;
 approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
 {fq['fullChecksEachOs']:,} full/live checks, focused normal/scalar and SAME actual package/three examples
 pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
-comparison, not a release-wide refresh. Font loading saves {font_gain['savedUs']:.2f} µs / {font_gain['rawSavedFraction']:.2%} against a
-contemporary unchanged producer; no complete-pipeline gain is inferred.
-[Direct fixed-header views](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) retain the original eager validation and ownership.
+comparison, not a release-wide refresh. Complete managed font loading saves
+{font_gain['savedUs']:.2f} µs / {font_gain['rawSavedFraction']:.2%} across all twelve actuals against a contemporary unchanged producer;
+filtered intervals also separate. Reference-normalized gain is inconclusive and
+not claimed; no complete-pipeline gain is inferred. [Typed location views](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md)
+select the 2/4-byte representation once, preserving exact eager validation,
+per-glyph cancellation and ownership. [Fixed-header views](../benchmarks/FONT-FIXED-HEADER-VIEWS.md)
+retain earlier history. No new storage or parser policy.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.

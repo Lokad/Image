@@ -184,8 +184,9 @@ PNG costs reconcile before one Windows/Linux qualification milestone: **6,721
 full/live checks per OS**, **84 internal /247 public** normal/AVX512-off/scalar,
 the SAME actual package and all three examples. One core/embedded build per OS,
 one pack and no accepted-module rebuild after timing. No new heap array, static
-field, pool or retained operation storage. Other codec/edit/resize/font/text paths
-reuse unchanged evidence. This is not a whole-release timing refresh. Probe/header admission stays
+field, pool or retained operation storage. Other codec/edit/resize paths reuse
+unchanged evidence; font construction and complete text integrations are qualified
+separately below. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
@@ -197,18 +198,22 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) pass,
+[Current complete text integrations](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
-Creation-only preparation is 1,089.99 / 6,026.75 µs; the directly measured eight-draw batch
-amortizes to 207.79 / 861.58 µs per draw, including preparation. Allocations are
+Creation-only preparation is 1,076.75 / 6,073.69 µs; the directly measured eight-draw batch
+amortizes to 207.55 / 858.58 µs per draw, including preparation. Allocations are
 per complete row operation; the repeated row reports the whole batch. Active managed
 prepared capacity is 48,480 B; no font/layout survives preparation. Heap deltas are
 approximate and exclude idle pools; physical peaks are unmeasured. Windows/Linux
 6,721 full/live checks, focused normal/scalar and SAME actual package/three examples
 pass. Unchanged codec/edit/resize evidence is reused; this is a scoped development
-comparison, not a release-wide refresh. Font loading saves 1.03 µs / 4.67% against a
-contemporary unchanged producer; no complete-pipeline gain is inferred.
-[Direct fixed-header views](../benchmarks/FONT-FIXED-HEADER-VIEWS.md) retain the original eager validation and ownership.
+comparison, not a release-wide refresh. Complete managed font loading saves
+1.13 µs / 5.41% across all twelve actuals against a contemporary unchanged producer;
+filtered intervals also separate. Reference-normalized gain is inconclusive and
+not claimed; no complete-pipeline gain is inferred. [Typed location views](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md)
+select the 2/4-byte representation once, preserving exact eager validation,
+per-glyph cancellation and ownership. [Fixed-header views](../benchmarks/FONT-FIXED-HEADER-VIEWS.md)
+retain earlier history. No new storage or parser policy.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
@@ -340,13 +345,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.67 | 3.78 | 0.971 / 0.980 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
-| Complete text one-shot / ImageSharp public integration (pass) † | 1,147.32 | 6,145.06 | 0.187 / 0.207 | 299,914 |
-| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,662.30 | 6,892.61 | 0.241 / 0.270 | 301,266 |
+| Complete text one-shot / ImageSharp public integration (pass) † | 1,184.03 | 6,163.08 | 0.192 / 0.220 | 299,920 |
+| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,660.42 | 6,868.65 | 0.242 / 0.271 | 301,266 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 54.41 | 44.72 | 1.217 / 1.355 | 75,944 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 58.12 | 47.48 | 1.224 / 1.347 | 75,944 |
 | Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 34.35 | 36.80 | 0.934 / 1.026 | 56 |
 | Text prepared raster RGBA16 / ImageSharp.Drawing (confidence open) † | 36.85 | 37.47 | 0.983 / 1.047 | 56 |
-| Font loading / FreeType 2.13.2 (scoped gap) † | 21.14 | 13.36 | 1.582 / 1.595 | 176 |
+| Font loading / FreeType 2.13.2 (scoped gap) † | 19.74 | 13.32 | 1.482 / 1.495 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
