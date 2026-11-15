@@ -1844,6 +1844,16 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert raster['equivalentPreparedReference']['allEightReferenceFramesExact']
     assert raster['sourceProof']['drawAndBandExactAfterOnlyCopiedGlyphStorageAndExplicitExecutionTokenSubstitution']
     assert raster['raw']['mirrored'] and raster['raw']['allMembersVerified']
+    draw_aggregate = json.loads((ROOT / 'benchmarks/text-prepared-draw-aggregation-evidence.json').read_text(encoding='utf-8'))
+    assert draw_aggregate['measurementAccepted'] and not draw_aggregate['productionChanged']
+    assert draw_aggregate['actuals'] == 12 and draw_aggregate['operationsPerActual'] == 1024
+    assert draw_aggregate['allActualsRetained'] and draw_aggregate['allOriginalGatesPassed'] and draw_aggregate['quietGuardsPassed']
+    assert draw_aggregate['librarySha256'] == font_load['producers']['linuxSha256']
+    assert draw_aggregate['raw']['mirrored'] and draw_aggregate['raw']['allMembersVerified']
+    assert draw_aggregate['activeRasterCapacityBytes'] == 40408
+    assert draw_aggregate['adapterAllocatedBytesPerDraw'] == [80]
+    assert draw_aggregate['status'] == ('pass' if draw_aggregate['upper'] <= 1 else 'gap' if draw_aggregate['lower'] > 1 else 'uncertain')
+    assert math.isclose(draw_aggregate['ratio'], draw_aggregate['managedUs'] / draw_aggregate['referenceUs'], rel_tol=1e-12)
     for case in raster['cases'].values():
         assert case['librarySha256'] == raster['producers']['timedArtifactSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
@@ -1853,6 +1863,12 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         prepared = case['caseId'].startswith('Prepared')
         assert case['allocatedBytes'] == (56 if prepared else 59304)
         assert case['retainedBytes'] == (40408 if prepared else 0)
+        if case['caseId'] == 'Prepared16':
+            # Current repeated individually reset operations supersede only this
+            # scoped diagnostic. Adapter GC is included and disclosed below;
+            # owning integrations, preparation and other draws stay separate.
+            case = {**case, **{k: draw_aggregate[k] for k in ('managedUs', 'ratio', 'lower', 'upper', 'status')},
+                    'nativeUs': draw_aggregate['referenceUs'], 'allocatedBytes': 80}
         depth = case['depth']
         status = 'confidence open' if case['status'] == 'uncertain' else case['status']
         label = f'Text {"prepared raster" if prepared else "ordinary draw"} RGBA{depth} / ImageSharp.Drawing ({status})'
@@ -3047,6 +3063,12 @@ contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
+[Prepared RGBA16 draw aggregation](../benchmarks/TEXT-PREPARED-DRAW-AGGREGATION.md)
+refreshes that diagnostic with individually reset draws: {draw_aggregate['managedUs']:.2f} / {draw_aggregate['referenceUs']:.2f} µs,
+upper {draw_aggregate['upper']:.3f}, retaining every actual. Its **80 B/draw includes adapter
+dispatch**; older rows use public-call-only counters. Active Latin raster capacity
+is **40,408 B**, excluding the borrowed canvas and font; reference allocations and
+physical peaks remain unmeasured. This is a measurement change, not a production gain.
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
 managed pixels. Complete encoder packets and narrow metadata exceptions retain

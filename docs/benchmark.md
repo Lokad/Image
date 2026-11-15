@@ -185,6 +185,12 @@ contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
+[Prepared RGBA16 draw aggregation](../benchmarks/TEXT-PREPARED-DRAW-AGGREGATION.md)
+refreshes that diagnostic with individually reset draws: 52.00 / 37.64 µs,
+upper 1.613, retaining every actual. Its **80 B/draw includes adapter
+dispatch**; older rows use public-call-only counters. Active Latin raster capacity
+is **40,408 B**, excluding the borrowed canvas and font; reference allocations and
+physical peaks remain unmeasured. This is a measurement change, not a production gain.
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
 managed pixels. Complete encoder packets and narrow metadata exceptions retain
@@ -301,7 +307,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 87.12 | 45.40 | 1.919 / 2.945 | 59,304 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 92.57 | 46.48 | 1.992 / 2.975 | 59,304 |
 | Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 53.81 | 37.80 | 1.424 / 1.622 | 56 |
-| Text prepared raster RGBA16 / ImageSharp.Drawing (gap) † | 56.80 | 37.61 | 1.510 / 2.015 | 56 |
+| Text prepared raster RGBA16 / ImageSharp.Drawing (gap) † | 52.00 | 37.64 | 1.382 / 1.613 | 80 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 22.16 | 13.22 | 1.677 / 1.695 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |

@@ -1,0 +1,171 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TEP1039",
+  "productionChanged": false,
+  "measurementAccepted": true,
+  "scope": "Frozen DejaVuSans2.37 LatinKerning AV To18px,384x160RGBA16,origin8/8; explicit retained raster plan and borrowed freshly reset canvas. Scoped draw diagnosis, not one-shot/repeated owning integration or general text slowdown.",
+  "librarySha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
+  "actuals": 12,
+  "operationsPerActual": 1024,
+  "managedUs": 52.00303833007813,
+  "referenceUs": 37.64171565934066,
+  "ratio": 1.3815267826979016,
+  "lower": 1.0762744729228817,
+  "upper": 1.612595018988587,
+  "status": "gap",
+  "managed": {
+    "mean": 52003.038330078125,
+    "standardError": 18.152683387889063,
+    "lower": 51922.49524897229,
+    "upper": 52083.58141118396,
+    "values": [
+      52030.2626953125,
+      52026.8720703125,
+      51998.740234375,
+      51951.11328125,
+      52057.5537109375,
+      51931.0859375,
+      51992.677734375,
+      51922.4482421875,
+      52150.20703125,
+      51952.208984375,
+      51998.77734375,
+      52024.5126953125
+    ]
+  },
+  "referenceBrackets": {
+    "nativeBefore": {
+      "mean": 40270.39663461538,
+      "standardError": 1796.8089972518258,
+      "lower": 32297.992241009506,
+      "upper": 48242.80102822126,
+      "values": [
+        43196.442307692305,
+        44416.4271978022,
+        58327.88736263736,
+        36589.633241758245,
+        38054.46978021978,
+        37837.41346153846,
+        37948.54258241758,
+        36424.87225274725,
+        38245.70054945055,
+        37788.63461538462,
+        36590.50137362637,
+        37824.23489010989
+      ]
+    },
+    "nativeAfter": {
+      "mean": 37641.71565934066,
+      "standardError": 230.88615950055635,
+      "lower": 36617.2785404035,
+      "upper": 38666.15277827782,
+      "values": [
+        38495.91071428572,
+        36690.12362637363,
+        37921.53296703297,
+        39234.71565934066,
+        36402.35851648352,
+        37746.82967032967,
+        37872.46978021978,
+        37634.77472527473,
+        36590.4271978022,
+        37651.39148351648,
+        37550.668956043955,
+        37909.38461538462
+      ]
+    },
+    "paired": {
+      "mean": 38026.71142578125,
+      "standardError": 95.50948385273684,
+      "lower": 37602.9378194251,
+      "upper": 38450.4850321374,
+      "values": [
+        37793.7529296875,
+        38387.2607421875,
+        37902.3359375,
+        38191.1171875,
+        37708.36328125,
+        37955.205078125,
+        38750.740234375,
+        37709.1806640625,
+        38259.1123046875,
+        37925.873046875,
+        37612.09375,
+        38125.501953125
+      ]
+    }
+  },
+  "pairedLog": {
+    "mean": 0.31304718291160094,
+    "standardError": 0.0024614991881590884,
+    "lower": 0.30212556187533535,
+    "upper": 0.32396880394786653,
+    "values": [
+      0.31968170165240023,
+      0.30403470263798327,
+      0.31620674760204975,
+      0.3077001929624782,
+      0.32246800111037277,
+      0.3135109185558137,
+      0.2939530374264134,
+      0.3198476416607602,
+      0.30974638926925757,
+      0.31469069267359573,
+      0.32389456471751754,
+      0.31083160467056886
+    ]
+  },
+  "studentCritical": 4.436979337146836,
+  "confidence": "All twelve unfiltered actuals.99.9%Student intervals; conservative envelope of complete managed arithmetic interval against each of three reference groups and paired log ratios. No overhead subtraction, outlier exclusion or favorable retry.",
+  "adapterAllocatedBytesPerDraw": [
+    80.0
+  ],
+  "publicDrawAllocationEvidence": "56B/draw is reused from unchanged production ownership paths in TRP784; current measured80B includes the timed environment-dispatch adapter. Do not call80B a new production allocation or subtract it from timing.",
+  "activeRasterCapacityBytes": 40408,
+  "borrowedCanvasBytes": 491520,
+  "additionalDrawAdmittedStorageBytes": 0,
+  "referenceAllocations": "Unmeasured by unchanged worker; do not substitute zero. Complete integration allocation evidence remains separate.",
+  "preparationDifferences": "Managed retains geometry,crossings and coverage row; ImageSharp retains positioned/flattened paths and prepares raster working storage per draw. Existing harness additionally holds its font and borrowed canvas on both ordinary/prepared sides; this is not total retained-memory measurement.",
+  "timerBoundary": "Two timestamps per operation on each side; reset excluded equally. Managed exact sample validation and two allocation-counter reads remain outside timer. Adapter dispatch remains timed, as in original TRP784.",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "allActualsRetained": true,
+  "productionBuilds": 0,
+  "referenceBuilds": 0,
+  "toolBuilds": 1,
+  "newFixtures": 0,
+  "initialFailures": "The idle guard caught the tool compiler server before any sample; it was shut down. A zero-sample startup used the wrong dependency manifest and exitedSIGABRT; the immutable existing TextDriver manifest fixed binding with no rebuild. Both failures and a subsequent local preflight assertion are retained.",
+  "completeIntegrations": "Reuse current FONT-HEADER-VALIDATION.md OneShot/PrepareDraw8 passing evidence and separate preparation,allocation,retention. No historical stages are added; no broad or package qualification repeated.",
+  "next": "Numerically exact paired endpoint evaluation is a bounded lead; unchanged full public pipelines remain passing. No production candidate yet.",
+  "raw": {
+    "file": "text-prepared-draw-aggregation.tar.xz",
+    "sha256": "988a1abe76602691d228d9eb95211d3ff317b5f63c473971d0b3c56ea27d22fa",
+    "bytes": 54244,
+    "members": 57,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-location-preparation-qualified.tar.xz",
+        "sha256": "2d429199f877b26b63b7192e6d54b91265d4689f46c65d784279a08d7eb4b722"
+      },
+      {
+        "file": "text-render-preparation-qualified.tar.xz",
+        "sha256": "6622835194e308c3763fff695670a9cd55b94ec15d63032878badae499a3b05b"
+      }
+    ]
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "600bcad70dac15e0fa0caa4b993e4a3f649ff34121808420e2953a2fb9d383df",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "qualificationReuse": {
+    "fullChecksEachOs": 6714,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageRuns": 0,
+    "packageSha256": "026a6f23c16434e5d1dc1a541e81be77e5cebee256a71d5ce38f390e94bdc2fb"
+  }
+}
