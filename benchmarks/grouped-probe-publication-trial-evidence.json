@@ -1,0 +1,146 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GFP1080",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "timedArtifactSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "packageSha256": "958275977db3db3b682dfa152b8e81df207cae2b3ae14978869b7db0161628a0"
+  },
+  "candidateLinuxSha256": "8a59a0f66027a831cc2ffc1d42904895043ff2a9ee100b2aebc0f2d81b946b2c",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "3de47e627013b08fe0392790157ef45be8c2e6540baf284b639dba1165a1aae5",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/ImageProbe.cs": "e1421a3040b5066a103ca8965079335d78464c953258bc47e2595c8a1389d5a3",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "0bebbfeabfadc0bfb38ecd85e77f7de175d5bdbd77c19e5ebf5f99e6deba2a14"
+  },
+  "hypothesis": "Preserve the88B result layout and publish nullable metadata by its five established fact groups. Skip explicit null assignments for unexamined properties and share dimension/source/alpha decisions instead of nine separate conditional nullable initializers. No claimed CPU fraction or allocation saving from the allocation-only audit.",
+  "intendedEndState": "A single internal record constructor initializes known groups;the public empty constructor and every existing init property,record copy/equality/null semantics stay available. ProbeReader forwards the same primitive values and final counters. No packed flags,new object/array,cache,owner,admission or parser boundary.",
+  "boundaries": "For every established-facts bitset,all present properties receive the same values and all absent properties remain their new-object null defaults. Explicit zero enum/component values and false booleans are still nonnull when known. Source-level public property declarations and field layout stay verbatim;constructor writes cannot escape before successful return. Acquisition,grammar,checks,error order,cancellation,root forwarding,refusal and pending lifetimes remain source-verbatim.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "publicPropertiesAndObjectLayoutVerbatim": true,
+    "publicParameterlessConstructionPreserved": true,
+    "factsValuesAndNullSemanticsPreserved": true,
+    "allAcquisitionGrammarChecksAndOwnersVerbatim": true,
+    "noNewAllocationOrRetainedStorage": true
+  },
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.25313602447509764,
+    "candidateUs": 0.2522946917215983,
+    "ratio": 0.9966881177880913,
+    "lower": 0.851793231313368,
+    "upper": 1.1662304507964665,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "8a59a0f66027a831cc2ffc1d42904895043ff2a9ee100b2aebc0f2d81b946b2c",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/gfp1080-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "interpretation": "Inconclusive around a0.331%favorable point. No useful complete-operation gain,regression or FFmpeg parity established. No independent confirmation,other cases,generated-code capture or broad/package campaign. Restore qualified source/modules;not a permanent publication-family ban.",
+  "allocationAttribution": {
+    "project": "Lokad.Image",
+    "stage": "PRA1079",
+    "allocationOnly": true,
+    "noElapsedMeasurementsOrLocalPerformanceClaim": true,
+    "count": 16384,
+    "runtime": ".NET 10.0.8",
+    "platform": "linux-x64",
+    "librarySha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "allocatedBytesPerObject": {
+      "ImageProbeResult.empty": 88,
+      "ImageProbeResult.populated": 88,
+      "ImageInfo": 40
+    },
+    "scope": "Actual independently escaping public metadata objects only; excludes reader, encoded input, stream wrappers and complete-operation cost. Empty/populated objects must allocate equally. No production source, API, image fixture or benchmark-boundary change."
+  },
+  "allocationInterpretation": "Allocation-only16,384-object experiment on the qualified Linux DLL:empty/populated result88B,ImageInfo40B. Not whole-operation allocation or elapsed attribution. More elaborate packed-null representation is not implemented;object size alone forecasts no CPU or retained-peak benefit.",
+  "qualification": {
+    "provider": "benchmarks/font-typed-location-views-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 148,
+      "internal-scalar": 10,
+      "public-scalar": 148
+    },
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "linuxCoreSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "windowsCoreSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxEmbeddedTestsSha256": "01301bb309b1e2c5dfd1aeabefe5210f84e48509c72faaeb5183603d1d309d3d",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "allocationDiagnosticTool": 1,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "completeProbeAllocatedBytes": 568,
+    "metadataResultAllocatedBytes": 88,
+    "newOwnedCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep existing probe costs and the qualified implementation. JPEG probes remain small demonstrated gaps. Do not infer a storage/CPU phase share from descriptor size or replay this inconclusive publication candidate solely for favorable bounds.",
+  "raw": {
+    "file": "grouped-probe-publication-trial.tar.xz",
+    "sha256": "735b5fb591b7f6c1cbce412b51a8a5ab001b7d7c0e71fb1fe60e6eb7bda85a33",
+    "bytes": 1955208,
+    "members": 108,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-typed-location-views-qualified.tar.xz",
+        "sha256": "2b40efee0326c930a7ddc05ba379bf2a84ac007461e5e32a296468f2207c23f5"
+      },
+      {
+        "file": "refill-completion-inlining-qualified.tar.xz",
+        "sha256": "ebd7636b270f0fe6aadab0a9a015bedb5dc7f25bf5144afc0df781eb8a720681"
+      }
+    ]
+  }
+}
