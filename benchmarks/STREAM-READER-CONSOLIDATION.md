@@ -1,5 +1,8 @@
 # Shared stream-reader execution
 
+[Refill completion inlining](REFILL-COMPLETION-INLINING.md) now owns the five
+current probe/header costs. The consolidation, profile and earlier evidence remain.
+
 The forward-skip loop now lives in SkipAsync,removing its private immediate
 wrapper. Synchronous and completed-async refills share one completion block;
 pending helpers remain. Restoring just these two control-flow sections rebuilds

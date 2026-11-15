@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Fixed-space container acquisition; byte admission includes read-ahead and skipped payloads.</summary>
@@ -82,6 +84,7 @@ internal class InspectionReader : OperationContext, IDisposable
     private async ValueTask<bool> AwaitFillAsync(ValueTask<int> pending, int requested)
         => CompleteFill(await pending.ConfigureAwait(false), requested);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool CompleteFill(int read, int requested)
     {
         if ((uint)read > requested) throw new ImageDataException("Stream returned an invalid read count.");

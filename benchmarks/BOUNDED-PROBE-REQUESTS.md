@@ -1,6 +1,6 @@
 # Bounded probe refill requests
 
-[Reader consolidation](STREAM-READER-CONSOLIDATION.md) now owns all five current
+[Refill completion](REFILL-COMPLETION-INLINING.md) now owns all five current
 probe/header costs. This report retains the clamp change and its earlier proof.
 
 Bounded refill callers already fit their requested field/chunk at the supplied

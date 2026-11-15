@@ -1,6 +1,6 @@
 # Direct probe result publication
 
-[Reader consolidation](STREAM-READER-CONSOLIDATION.md) now owns the four probe and
+[Refill completion](REFILL-COMPLETION-INLINING.md) now owns the four probe and
 complete PNG-header costs. The five unchanged Identify comparisons below retain
 their source-valid producer; this publication round remains their current owner.
 

@@ -152,19 +152,20 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Shared reader execution](../benchmarks/STREAM-READER-CONSOLIDATION.md) folds the
-forward-skip loop into its caller and shares one immediate refill completion.
-Independent complete async JPEG pairs save **2.32% / 6.25 ns**, still **568 B/op**.
-The first skip-only stage remains uncertain; no per-part or cumulative gain is
-claimed. All four original probes and complete PNG headers refresh on the SAME
-actual timed/package DLL, with twelve actuals, both original FFmpeg AVIO/header
-adapter brackets and exact acquisition/descriptor/ownership gates. PNG dimensions
-now passes (**upper 0.994**); complete PNG headers pass. JPEG probes remain gaps,
-and WebP remains uncertain. Sync/JPEG-header paired guards are inconclusive;
-there is no gain claim for those paths. Windows/Linux each pass **6,721 full/live
-checks**, focused **10 internal /148 public** normal/scalar, the SAME actual
-package and all three examples. Two Linux builds cover the coherent stages;
-Windows builds once. One pack and no accepted-artifact rebuild after timing.
+[Small refill completion](../benchmarks/REFILL-COMPLETION-INLINING.md) requests
+inlining of the loop-free completion leaf, preserving the entire reader body.
+Independent complete async JPEG pairs save **3.89% / 10.22 ns**, still **568 B/op**.
+All four original probes and complete PNG headers refresh on the SAME actual
+timed/package DLL, with twelve actuals, both original FFmpeg AVIO/header adapter
+brackets and exact acquisition/descriptor/ownership gates. WebP dimensions now
+passes (**upper 0.993**); PNG dimensions and complete headers pass. Both JPEG
+probes remain gaps. Sync/JPEG-header paired guards are inconclusive, with no gain
+claims for those paths. Actual generated code verifies the hint; its observations
+are not CPU-phase attribution. Windows/Linux each pass **6,721 full/live checks**,
+focused **10 internal /148 public** normal/scalar, the SAME actual package and
+all three examples. One core/embedded build per OS, one pack and no accepted-module
+rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
+retains the prior architecture/profile; stage percentages are not added.
 [Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
 allocation reduction and source-valid resident/stream Identify costs on their
 identified producer: resident PNG remains uncertain, while JPEG/WebP resident and
@@ -361,10 +362,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.119 | 0.123 | 0.968 / 0.994 | 568 | Confirmed pass |
-| Probe JPEG dimensions, seekable | 0.234 | 0.191 | 1.221 / 1.265 | 568 | Confirmed gap |
-| Probe WebP dimensions, seekable | 0.122 | 0.122 | 1.003 / 1.034 | 568 | Confidence open |
-| Probe JPEG dimensions, async nonseekable | 0.266 | 0.203 | 1.311 / 1.338 | 568 | Confirmed gap |
+| Probe PNG dimensions, seekable | 0.117 | 0.122 | 0.965 / 0.997 | 568 | Confirmed pass |
+| Probe JPEG dimensions, seekable | 0.226 | 0.192 | 1.175 / 1.227 | 568 | Confirmed gap |
+| Probe WebP dimensions, seekable | 0.118 | 0.122 | 0.969 / 0.993 | 568 | Confirmed pass |
+| Probe JPEG dimensions, async nonseekable | 0.252 | 0.201 | 1.253 / 1.278 | 568 | Confirmed gap |
 | Validate PNG8, span † | 1,276.826 | 1,437.380 | 0.888 / 0.935 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,972.985 | 3,204.750 | 0.928 / 0.932 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.801 | 3.966 | 0.454 / 0.472 | 792 | Confirmed pass |
@@ -373,7 +374,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
-| Inspect PNG8 complete headers, seekable, adapter reference | 0.296 | 0.568 | 0.521 / 0.529 | 568 | Confirmed pass |
+| Inspect PNG8 complete headers, seekable, adapter reference | 0.294 | 0.573 | 0.512 / 0.525 | 568 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 13.083 | 13.053 | 1.002 / 1.005 | 96 | Confidence open |
 | Identify JPEG420, resident, canonical adapter | 0.497 | 1.181 | 0.421 / 0.431 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 5.039 | 0.004 / 0.005 | 96 | Confirmed pass |
