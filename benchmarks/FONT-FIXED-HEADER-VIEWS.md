@@ -62,3 +62,7 @@ SHA-256 `affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867`. Actu
 SHA-256 `14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5`.
 Prior [location preparation](FONT-HEADER-VALIDATION.md) retains its original costs
 and raw evidence. Loading remains a scoped gap; the full 289-path objective is open.
+
+The later [private scan-helper trial](FONT-GLYPH-SCAN-TRIAL.md) was not retained.
+Its short screen supplies no gain or current-cost replacement; the exact qualified
+source, core and embedded-test snapshots were restored.

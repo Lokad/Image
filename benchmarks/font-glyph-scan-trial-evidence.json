@@ -1,0 +1,140 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GVS1054",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "productionChanged": false,
+  "newMaterialPaths": 0,
+  "baseline": {
+    "windowsSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+    "linuxSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "timedArtifactSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "packageSha256": "14ac5ffd20e8c8cddeea54ab534cd8cfdd41e4b5cd6c5db0236b4fe02b988af5"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "5f91ec4d679a9d1c5108c63283c3921de14cef194b32a8e8341308788bad587e"
+  },
+  "candidateLinuxSha256": "8f255af28f29cdb6f4b84edc55433618f6730c880bb6f703cf8d982f5982e505",
+  "hypothesis": "Move the complete eager glyph scan out of the large constructor to shorten setup live ranges and expose a compact loop without changing its arithmetic or per-glyph cancellation.",
+  "design": "One private static scan helper. Borrow identical loca/glyf spans and scalar counts/token; preserve first-location validation, every read/check/header call and error order. No storage,owner,cache,pool,API,ISA or parser-policy change.",
+  "sourceProof": {
+    "wholeSourceReverseReconstructsOriginal": true,
+    "scanLoopMovedVerbatim": true,
+    "originalReadAndErrorOrder": true,
+    "perGlyphPollsUnchanged": true
+  },
+  "decision": "Stop this implementation after the short screen: it gives no compelling improvement against existing context. No independent baseline or gain/regression/parity claim. Exact qualified source/core/embedded snapshots restored; no production or test change retained.",
+  "screen": {
+    "managedUs": 21.04750140765766,
+    "nativeUs": 13.45755153450417,
+    "ratio": 1.5639918861684028,
+    "lower": 1.1207397284316114,
+    "upper": 2.2934777118378378,
+    "allocatedBytes": 176,
+    "status": "gap",
+    "librarySha256": "8f255af28f29cdb6f4b84edc55433618f6730c880bb6f703cf8d982f5982e505",
+    "actuals": 3,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "independentBaselineMeasured": false,
+    "earlierManagedUs": 21.13613566300676,
+    "earlierComparison": "Context only; not contemporary gain or regression evidence.",
+    "reference": "Approved FreeType2.13.2 complete owned-copy/open/retain/dispose; frozen DejaVuSans2.37Regular. Eager/lazy validation differs; scoped diagnostic only."
+  },
+  "jit": {
+    "baselineConstructorBytes": 3094,
+    "candidateConstructorBytes": 2508,
+    "candidateScanHelperBytes": 626,
+    "helperNotInlined": true,
+    "originalHeaderStillInlined": true,
+    "instrumentedChecks": 6,
+    "instrumentedElapsedDiscarded": true,
+    "codeSizeNotPerformanceProof": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "GVS1054",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "f2f6b8058c515bcad80b9dd4df95aa29f8f0f2a7f4bc3f8642cfa040f4143421",
+      "sources": {
+        "src/Lokad.Image/TrueTypeFont.cs": "e5ff72dc0b72530cb02a6b41b8db91ae7ecd41ee5bdbe54cbc25ed22fdc257eb"
+      },
+      "embeddedTestsSha256": "ba8e7e0e96237011d58b9b8f6850c4d08547a6b6032cb3857c2de00947fca8b9",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "additionalBuilds": 0,
+      "newTests": 0,
+      "newPackageOrBroadQualification": 0,
+      "scope": "Exact qualified HHV1052 source/core/embedded-test snapshots restored in bin+obj; test inputs unchanged. Reuse identical source,modules and qualification,not candidate embedded assembly or DLL replacement of embedded code."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "GVS1054",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+      "sources": {
+        "src/Lokad.Image/TrueTypeFont.cs": "e5ff72dc0b72530cb02a6b41b8db91ae7ecd41ee5bdbe54cbc25ed22fdc257eb"
+      },
+      "embeddedTestsSha256": "56f3d5e83d42fd3ccf74c3e4013cf29e9bbb9ba7b0afb40f64b14746a37ed598",
+      "originalEmbeddedAndPublicTestSnapshotsRestored": true,
+      "additionalBuilds": 0,
+      "newTests": 0,
+      "newPackageOrBroadQualification": 0,
+      "scope": "Exact qualified HHV1052 source/core/embedded-test snapshots restored in bin+obj; test inputs unchanged. Reuse identical source,modules and qualification,not candidate embedded assembly or DLL replacement of embedded code."
+    }
+  },
+  "focused": {
+    "windows": {
+      "internal-normal": 265,
+      "public-normal": 161,
+      "internal-scalar": 265,
+      "public-scalar": 161
+    },
+    "linux": {
+      "internal-normal": 265,
+      "public-normal": 161,
+      "internal-scalar": 265,
+      "public-scalar": 161
+    }
+  },
+  "builds": {
+    "candidateCoreEachOs": 1,
+    "candidateEmbeddedEachOs": 1,
+    "publicHarnessNativeFixtures": 0,
+    "restorationBuilds": 0,
+    "broadQualification": 0,
+    "package": 0
+  },
+  "memory": "No storage,allocation,owner,admission,cache or pool change;176B/op remains.757076Bfont+256Bdescriptor through disposal;defaultidle2slots/4MiB,callerrootbypass. Physical/native/JIT peaks unmeasured.",
+  "attribution": {
+    "stage": "FPA1053",
+    "librarySha256": "289e66f6523429d8e033f16f5e88941da830ea44c9d846ff5263bed2bb83cf1e",
+    "samples": 1998,
+    "constructorLocations": 1162,
+    "libcLocations": 776,
+    "constructorCodeBytes": 3094,
+    "scope": "Actual-module CPU0/CPU1 profile with matching-size separate JIT. Counts/skid/inlining are leads,not phasecosts or forecasts. Libc separately identified,not all assumed copying. Original metrics/input/owner/quiet gates pass; instrumented elapsed discarded."
+  },
+  "raw": {
+    "file": "font-glyph-scan-trial.tar.xz",
+    "sha256": "927f3a18cc5d08746cb43b7f2c15d8b0495de29bb3dc7fb673e6df57ccc656ae",
+    "bytes": 959608,
+    "members": 92,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-fixed-header-views-qualified.tar.xz",
+        "sha256": "affae0b21a43cce688d489f70052ab2e90140364501fa4dd21d08d9627a95867",
+        "bytes": 5199384
+      }
+    ]
+  },
+  "currentCostOwner": "FONT-FIXED-HEADER-VIEWS.md",
+  "rendererDependency": false,
+  "pipelineScope": "Current complete OneShot and PrepareDraw8 comparisons pass/stop on restored identical source/module/package. Do not infer end-to-end slowdown or sum stages; differently eager validation/prepared state stay disclosed.",
+  "publicationPostponed": true
+}
