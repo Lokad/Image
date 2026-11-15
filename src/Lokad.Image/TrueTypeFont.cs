@@ -157,14 +157,16 @@ public sealed partial class TrueTypeFont : IDisposable
         // Directory and total loca extent are validated above. Borrow the two
         // table views once for the complete glyph-header scan.
         var locations = Span(loca); var glyphs = Span(glyf);
-        var first = locationWidth == 2 ? (uint)U16(locations) * 2 : U32(locations);
-        if (first > glyf.Length) throw new ImageDataException("Invalid glyph location.");
-        for (var i = 0; i < GlyphCount; i++)
+        var glyphCount = GlyphCount; var locationBytes = locationWidth; var glyphBytes = glyphs.Length;
+        var cancellation = context.Cancellation;
+        var first = locationBytes == 2 ? (uint)U16(locations) * 2 : U32(locations);
+        if (first > glyphBytes) throw new ImageDataException("Invalid glyph location.");
+        for (int i = 0, offset = locationBytes; i < glyphCount; i++, offset += locationBytes)
         {
-            context.Cancellation.ThrowIfCancellationRequested();
-            var location = locations[((i + 1) * locationWidth)..];
-            var last = locationWidth == 2 ? (uint)U16(location) * 2 : U32(location);
-            if (last < first || last > glyf.Length) throw new ImageDataException("Invalid glyph location ordering.");
+            cancellation.ThrowIfCancellationRequested();
+            var location = locations.Slice(offset, locationBytes);
+            var last = locationBytes == 2 ? (uint)U16(location) * 2 : U32(location);
+            if (last < first || last > glyphBytes) throw new ImageDataException("Invalid glyph location ordering.");
             if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
             first = last;
         }

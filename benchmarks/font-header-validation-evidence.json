@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "stage": "FBR1036",
+  "stage": "FLS1037",
   "productionAccepted": true,
   "productionChanged": true,
   "allAffectedPerformanceReconciled": true,
@@ -9,16 +9,13 @@
   "warmParityComplete": false,
   "publicationPostponed": true,
   "producers": {
-    "windowsSha256": "d90e24fb4c9c9ce533c3329678c54079e3e8d2bbe8fdf90179037b1ca2672207",
-    "linuxSha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
-    "timedArtifactSha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
-    "packageSha256": "1439a715fae6dbc6272d369b64ccf767ab583d9c56a6979db2034401d4f481a1"
+    "windowsSha256": "35eaa1520ac8fa9992094d096be3898d99cc8670c1908db84cc3817f62c74f20",
+    "linuxSha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
+    "timedArtifactSha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
+    "packageSha256": "026a6f23c16434e5d1dc1a541e81be77e5cebee256a71d5ce38f390e94bdc2fb"
   },
   "sources": {
-    "src/Lokad.Image/TrueTypeFont.cs": "83813f2a815069d8e0c3ec2a9edbe322960cc980c214e6c8c874927919388dbe"
-  },
-  "testSources": {
-    "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "6816fc87cdf5cdd894bbefdb64b5f141abe350f356074f53ae63378de16b8d89"
+    "src/Lokad.Image/TrueTypeFont.cs": "db85ffa011b96d54120f77f81b4a5bb84a3e37e04c5305072818ce2bd71b352b"
   },
   "unchangedSources": {
     "src/Lokad.Image/TrueTypeFont.Mapping.cs": "6cb204ddb4081d9bbd25ffb5872635318bcfc667c9101a0645e331bfd06cb671",
@@ -35,14 +32,14 @@
     "unrelatedGlyphMappingRasterCodecResizeSourceUnchanged": true
   },
   "font": {
-    "managedUs": 24.240546368481326,
-    "nativeUs": 13.306672043010753,
-    "ratio": 1.8216836103068703,
-    "lower": 1.8022670126858236,
-    "upper": 1.830059216801869,
+    "managedUs": 22.16354110251451,
+    "nativeUs": 13.21756862745098,
+    "ratio": 1.6768243636340225,
+    "lower": 1.6192232775848057,
+    "upper": 1.6947209517757695,
     "allocatedBytes": 176,
     "status": "gap",
-    "librarySha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
+    "librarySha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
     "allOriginalGatesPassed": true,
     "quietGuardsPassed": true,
     "actualIterations": 12,
@@ -76,32 +73,32 @@
   "fontComparison": {
     "views": {
       "statistics": {
-        "baselineUs": 27.54449465833501,
-        "candidateUs": 24.240546368481326,
-        "savedUs": 3.3039482898536843,
-        "rawSavedFraction": 0.11994949738001104,
+        "baselineUs": 24.35135561770428,
+        "candidateUs": 22.16354110251451,
+        "savedUs": 2.187814515189766,
+        "rawSavedFraction": 0.0898436435957245,
         "rawGainSeparated": true
       },
       "unfilteredActualStatistics": {
-        "baselineUs": 27.55404147034368,
-        "candidateUs": 24.250205153827515,
-        "savedUs": 3.3038363165161644,
-        "rawSavedFraction": 0.11990387399511149,
+        "baselineUs": 24.37002017469196,
+        "candidateUs": 22.175445275561465,
+        "savedUs": 2.1945748991304934,
+        "rawSavedFraction": 0.09005223973550669,
         "rawGainSeparated": true
       }
     },
-    "normalizedSavedFraction": 0.10459059237272705,
+    "normalizedSavedFraction": 0.037091943383549264,
     "normalizedGainSeparated": true,
-    "referenceClockChange": -0.017152941298643642,
+    "referenceClockChange": -0.054783735424894786,
     "claim": "Scoped frozen Regular loading improvement only; not overall text speedup or general parser equivalence."
   },
   "pipelineCases": {
     "OneShot": {
-      "managedUs": 1197.1951770833332,
-      "referenceUs": 6148.866078125,
-      "ratio": 0.1947017810881318,
-      "lower": 0.16968265926435996,
-      "upper": 0.2206566310764747,
+      "managedUs": 1199.5052552083332,
+      "referenceUs": 6180.559786458333,
+      "ratio": 0.19407712191967805,
+      "lower": 0.16899048336724412,
+      "upper": 0.22116276552750921,
       "status": "pass",
       "managedAllocatedBytes": 283276.1666666667,
       "referenceAllocatedBytes": 9256953,
@@ -115,13 +112,13 @@
       "quietGuardsPassed": true
     },
     "Preparation": {
-      "managedUs": 1076.1694244791668,
-      "referenceUs": 6042.926291666667,
-      "ratio": 0.17808746500238284,
-      "lower": 0.15906546430923138,
-      "upper": 0.19960618850127976,
+      "managedUs": 1091.010125,
+      "referenceUs": 6006.521578125,
+      "ratio": 0.18163759354054806,
+      "lower": 0.15496703495652792,
+      "upper": 0.2076277694094907,
       "status": "pass",
-      "managedAllocatedBytes": 283277.4166666667,
+      "managedAllocatedBytes": 283279.3333333333,
       "referenceAllocatedBytes": 9227176,
       "amortizedManagedUs": null,
       "amortizedReferenceUs": null,
@@ -133,11 +130,11 @@
       "quietGuardsPassed": true
     },
     "PreparedDraw": {
-      "managedUs": 96.98603385416668,
-      "referenceUs": 75.07448177083333,
-      "ratio": 1.2918641802978925,
-      "lower": 0.7809386926562124,
-      "upper": 2.2873870552245337,
+      "managedUs": 97.0297734375,
+      "referenceUs": 73.7172265625,
+      "ratio": 1.31624286428132,
+      "lower": 0.64965327577105,
+      "upper": 3.5612799321444886,
       "status": "uncertain",
       "managedAllocatedBytes": 169,
       "referenceAllocatedBytes": 33433,
@@ -151,16 +148,16 @@
       "quietGuardsPassed": true
     },
     "PrepareDraw8": {
-      "managedUs": 1888.9484296875,
-      "referenceUs": 6905.470611979167,
-      "ratio": 0.2735437649116446,
-      "lower": 0.24253945372098717,
-      "upper": 0.3082853336637037,
+      "managedUs": 1874.2886588541667,
+      "referenceUs": 6825.8403828125,
+      "ratio": 0.2745872381624444,
+      "lower": 0.23736012321218708,
+      "upper": 0.2979567907931242,
       "status": "pass",
       "managedAllocatedBytes": 284626.25,
       "referenceAllocatedBytes": 9494633,
-      "amortizedManagedUs": 236.1185537109375,
-      "amortizedReferenceUs": 863.1838264973959,
+      "amortizedManagedUs": 234.28608235677083,
+      "amortizedReferenceUs": 853.2300478515625,
       "operationsPerSample": 32,
       "completeWorkload": true,
       "pairs": 12,
@@ -231,13 +228,13 @@
     "physicalNativeJitPeaksMeasured": false
   },
   "referenceDisclosures": "Font loading retains full owned757076Bcopy/eager mapping+glyph-header checks; FreeType2.13.2 validates lazily, not general parser equivalence. ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 complete public integrations include every layout/fitting trial, fresh canvas/explicit clear/drawing/independent owner/disposal. Prepared working state differs. Full16bit samples and frozen exact/visual gates remain.",
-  "pipelineInterpretation": "Complete workloads are measured directly on the new immutable producer. Passing earlier/candidate costs do not establish a causal pipeline gain/regression. PreparedDraw remains a scoped diagnostic with different retained state; unrelated AVTo raster paths remain source-identical. Never add stages to infer complete costs.",
+  "pipelineInterpretation": "Complete workloads are directly measured on this immutable producer; no causal pipeline gain/regression or phase sum follows from historical stages. PreparedDraw is a scoped diagnostic with different retained state; AVTo raster/layout/fitting paths remain source-identical.",
   "noHistoricalStageAddition": true,
   "jit": {
-    "originalConstructorBytes": 3325,
+    "originalConstructorBytes": 3161,
     "originalHeaderBytes": 0,
     "originalHeaderCall": false,
-    "candidateConstructorBytes": 3161,
+    "candidateConstructorBytes": 3169,
     "candidateHeaderCall": false,
     "instrumentedTimesDiscarded": true,
     "codeSizeNotPerformanceProof": true
@@ -245,10 +242,10 @@
   "qualification": {
     "windows": {
       "project": "Lokad.Image",
-      "stage": "FBR1036",
+      "stage": "FLS1037",
       "platform": "windows",
-      "productionSha256": "d90e24fb4c9c9ce533c3329678c54079e3e8d2bbe8fdf90179037b1ca2672207",
-      "embeddedTestsSha256": "dbc5cee4624ee34eb72d42d7d310fa17e0a00eaf1640d7a1a76fd0b425fc8cee",
+      "productionSha256": "35eaa1520ac8fa9992094d096be3898d99cc8670c1908db84cc3817f62c74f20",
+      "embeddedTestsSha256": "4b71b1473569353dc547d30bad0929c680bf5e9c8907b304bbed0a8f323fc511",
       "publicTestsSha256": "bd561cfbab1f6182425b5c9e0b80f13c94c88c9ffe59a110626fa62d77d0f4a0",
       "full": [
         3273,
@@ -265,15 +262,13 @@
       },
       "preparation": {
         "project": "Lokad.Image",
-        "stage": "FBR1036",
+        "stage": "FLS1037",
         "platform": "windows",
-        "productionSha256": "d90e24fb4c9c9ce533c3329678c54079e3e8d2bbe8fdf90179037b1ca2672207",
+        "productionSha256": "35eaa1520ac8fa9992094d096be3898d99cc8670c1908db84cc3817f62c74f20",
         "candidateSources": {
-          "src/Lokad.Image/TrueTypeFont.cs": "83813f2a815069d8e0c3ec2a9edbe322960cc980c214e6c8c874927919388dbe"
+          "src/Lokad.Image/TrueTypeFont.cs": "db85ffa011b96d54120f77f81b4a5bb84a3e37e04c5305072818ce2bd71b352b"
         },
-        "testSources": {
-          "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "6816fc87cdf5cdd894bbefdb64b5f141abe350f356074f53ae63378de16b8d89"
-        },
+        "testSources": {},
         "unchangedSources": {
           "src/Lokad.Image/TrueTypeFont.Mapping.cs": "6cb204ddb4081d9bbd25ffb5872635318bcfc667c9101a0645e331bfd06cb671",
           "src/Lokad.Image/TrueTypeFont.Outlines.cs": "e779da7d53abe81a5e6fec81485de3304d4b5baa70fd7559107bfa963217f0ad",
@@ -290,17 +285,16 @@
           "public-scalar": 161
         },
         "logs": [
-          "tmp/fbr1036-windows-build-core.log",
-          "tmp/fbr1036-windows-build-internal.log",
-          "tmp/fbr1036-windows-build-public.log",
-          "tmp/fbr1036-windows-internal-normal.log",
-          "tmp/fbr1036-windows-public-normal.log",
-          "tmp/fbr1036-windows-internal-scalar.log",
-          "tmp/fbr1036-windows-public-scalar.log"
+          "tmp/fls1037-windows-build-core.log",
+          "tmp/fls1037-windows-build-internal.log",
+          "tmp/fls1037-windows-internal-normal.log",
+          "tmp/fls1037-windows-public-normal.log",
+          "tmp/fls1037-windows-internal-scalar.log",
+          "tmp/fls1037-windows-public-scalar.log"
         ],
         "coreBuilds": 1,
         "embeddedBuilds": 1,
-        "publicBuilds": 1,
+        "publicBuilds": 0,
         "harnessNativeFixtureBuilds": 0
       },
       "allAffectedPerformanceReconciledBeforeBroadQualification": true,
@@ -309,10 +303,10 @@
     },
     "linux": {
       "project": "Lokad.Image",
-      "stage": "FBR1036",
+      "stage": "FLS1037",
       "platform": "linux",
-      "productionSha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
-      "embeddedTestsSha256": "0a040b8f762996a9411091d98730220f02ee23192c78090bbc4ed7b8760d2e87",
+      "productionSha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
+      "embeddedTestsSha256": "306f63b6a8df8ef19b12f8f450c9763a9d04e60149a7f2d5a55dca6989684149",
       "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
       "full": [
         3273,
@@ -329,15 +323,13 @@
       },
       "preparation": {
         "project": "Lokad.Image",
-        "stage": "FBR1036",
+        "stage": "FLS1037",
         "platform": "linux",
-        "productionSha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
+        "productionSha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
         "candidateSources": {
-          "src/Lokad.Image/TrueTypeFont.cs": "83813f2a815069d8e0c3ec2a9edbe322960cc980c214e6c8c874927919388dbe"
+          "src/Lokad.Image/TrueTypeFont.cs": "db85ffa011b96d54120f77f81b4a5bb84a3e37e04c5305072818ce2bd71b352b"
         },
-        "testSources": {
-          "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "6816fc87cdf5cdd894bbefdb64b5f141abe350f356074f53ae63378de16b8d89"
-        },
+        "testSources": {},
         "unchangedSources": {
           "src/Lokad.Image/TrueTypeFont.Mapping.cs": "6cb204ddb4081d9bbd25ffb5872635318bcfc667c9101a0645e331bfd06cb671",
           "src/Lokad.Image/TrueTypeFont.Outlines.cs": "e779da7d53abe81a5e6fec81485de3304d4b5baa70fd7559107bfa963217f0ad",
@@ -354,17 +346,16 @@
           "public-scalar": 161
         },
         "logs": [
-          "tmp/fbr1036-linux-build-core.log",
-          "tmp/fbr1036-linux-build-internal.log",
-          "tmp/fbr1036-linux-build-public.log",
-          "tmp/fbr1036-linux-internal-normal.log",
-          "tmp/fbr1036-linux-public-normal.log",
-          "tmp/fbr1036-linux-internal-scalar.log",
-          "tmp/fbr1036-linux-public-scalar.log"
+          "tmp/fls1037-linux-build-core.log",
+          "tmp/fls1037-linux-build-internal.log",
+          "tmp/fls1037-linux-internal-normal.log",
+          "tmp/fls1037-linux-public-normal.log",
+          "tmp/fls1037-linux-internal-scalar.log",
+          "tmp/fls1037-linux-public-scalar.log"
         ],
         "coreBuilds": 1,
         "embeddedBuilds": 1,
-        "publicBuilds": 1,
+        "publicBuilds": 0,
         "harnessNativeFixtureBuilds": 0
       },
       "allAffectedPerformanceReconciledBeforeBroadQualification": true,
@@ -376,13 +367,13 @@
     "focusedPublicEachModeEachOs": 161,
     "actualPackage": {
       "project": "Lokad.Image",
-      "stage": "FBR1036",
+      "stage": "FLS1037",
       "platform": "linux",
       "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
-      "sha256": "1439a715fae6dbc6272d369b64ccf767ab583d9c56a6979db2034401d4f481a1",
-      "symbolsSha256": "c5d7b73db208bb5ea3440a019769ad90eab6d646947ed506bc67abcb899f16a7",
-      "bytes": 464344,
-      "librarySha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
+      "sha256": "026a6f23c16434e5d1dc1a541e81be77e5cebee256a71d5ce38f390e94bdc2fb",
+      "symbolsSha256": "149fc09c8dad0ae4876d0b7016c37ec9914446ec83c4c09945f2da6a40935a51",
+      "bytes": 464338,
+      "librarySha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
       "actualConsumerPassed": true,
       "allExistingConsumerChecksPassed": true,
       "inspectionAndPendingUserOwnershipPassed": true,
@@ -390,19 +381,19 @@
       "usageExamples": 3,
       "acceptedArtifactRebuildsAfterTiming": 0,
       "packCalls": 1,
-      "packageProducer": "Same immutable Linux DLL used for the independent frozen DejaVu Sans Regular copy/load/dispose confirmation and both complete public text integrations. A single eight-byte bounds read preserves exact signed16 coordinates, the zero-contour shortcut and every original validation/cancellation/ownership boundary. New actual public header tests exercise extrema, rejection, copied inputs and owner recovery. Complete one-shot and preparation-plus-eight-draw costs remain passing; no overall text gain or parser equivalence is inferred. Existing workers/fonts/reference identities reused without builds. Other kernels retain source-valid evidence. No production rebuild after timing.",
+      "packageProducer": "Same immutable Linux DLL used for the independent frozen DejaVu Sans Regular copy/load/dispose confirmation and both complete public text integrations. Prepared immutable scan geometry and the borrowed token preserve exact glyph reads, every per-glyph cancellation poll, eager validation and ownership. No budget snapshot, storage, cache, API or numerical policy is added. Existing public signed-header and short/long-location coverage is reused. Complete one-shot and preparation-plus-eight-draw costs remain passing; no overall text gain or parser equivalence is inferred. Existing workers/fonts/reference identities reused without builds. Other kernels retain source-valid evidence. No production rebuild after timing.",
       "publishedPackagesUnchanged": {},
       "publicationPostponed": true
     },
     "samePackageWindows": {
       "project": "Lokad.Image",
-      "stage": "FBR1036",
+      "stage": "FLS1037",
       "platform": "windows",
       "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
-      "sha256": "1439a715fae6dbc6272d369b64ccf767ab583d9c56a6979db2034401d4f481a1",
-      "symbolsSha256": "c5d7b73db208bb5ea3440a019769ad90eab6d646947ed506bc67abcb899f16a7",
-      "bytes": 464344,
-      "librarySha256": "9bcdaa6892131e3c674e71a6950d02ac37cf8a70e22f793b8207d3fd25855233",
+      "sha256": "026a6f23c16434e5d1dc1a541e81be77e5cebee256a71d5ce38f390e94bdc2fb",
+      "symbolsSha256": "149fc09c8dad0ae4876d0b7016c37ec9914446ec83c4c09945f2da6a40935a51",
+      "bytes": 464338,
+      "librarySha256": "548befe0eaec96bec836303ae558103afc45a84b63e99e870da6321634542d3f",
       "actualConsumerPassed": true,
       "allExistingConsumerChecksPassed": true,
       "inspectionAndPendingUserOwnershipPassed": true,
@@ -410,47 +401,43 @@
       "usageExamples": 3,
       "acceptedArtifactRebuildsAfterTiming": 0,
       "packCalls": 0,
-      "packageProducer": "Same immutable Linux DLL used for the independent frozen DejaVu Sans Regular copy/load/dispose confirmation and both complete public text integrations. A single eight-byte bounds read preserves exact signed16 coordinates, the zero-contour shortcut and every original validation/cancellation/ownership boundary. New actual public header tests exercise extrema, rejection, copied inputs and owner recovery. Complete one-shot and preparation-plus-eight-draw costs remain passing; no overall text gain or parser equivalence is inferred. Existing workers/fonts/reference identities reused without builds. Other kernels retain source-valid evidence. No production rebuild after timing.",
+      "packageProducer": "Same immutable Linux DLL used for the independent frozen DejaVu Sans Regular copy/load/dispose confirmation and both complete public text integrations. Prepared immutable scan geometry and the borrowed token preserve exact glyph reads, every per-glyph cancellation poll, eager validation and ownership. No budget snapshot, storage, cache, API or numerical policy is added. Existing public signed-header and short/long-location coverage is reused. Complete one-shot and preparation-plus-eight-draw costs remain passing; no overall text gain or parser equivalence is inferred. Existing workers/fonts/reference identities reused without builds. Other kernels retain source-valid evidence. No production rebuild after timing.",
       "publishedPackagesUnchanged": {
         "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
       },
       "publicationPostponed": true,
-      "sameActualPackageSha256": "1439a715fae6dbc6272d369b64ccf767ab583d9c56a6979db2034401d4f481a1"
+      "sameActualPackageSha256": "026a6f23c16434e5d1dc1a541e81be77e5cebee256a71d5ce38f390e94bdc2fb"
     },
     "sameActualPackageBothOs": true,
     "usageExamplesEachOs": 3,
     "unchangedArithmeticIsaEvidenceReused": true,
     "productionBuildsEachOs": 1,
     "embeddedBuildsEachOs": 1,
-    "publicBuildsEachOs": 1,
-    "harnessNativeHelperFixtureBuilds": 0,
+    "publicHarnessNativeHelperFixtureBuilds": 0,
     "packCalls": 1,
     "postTimingProductionBuilds": 0
   },
   "invalidation": "Default FontLoadRegular loading-only cost; complete OneShot/PrepareDraw8 integrations own font loading and must reconcile before accepting. Font setup is outside ordinary/prepared raster/layout/fitting and unrelated codecs/resize; reuse those unchanged paths. Do not infer overall slowdown or speedup by summing stages.",
-  "priorCurrentEvidenceCommit": "5bfc4364f66053ac4f1096f098822de13f223b1a",
-  "headerWordModel": {
-    "project": "Lokad.Image",
-    "stage": "FPA1035-header-word-model",
-    "productionChanged": false,
-    "sourceSha256": "ec1dd89f7453e7909a0e5d5175ded72d8a56cbd2d21d863824c6726185015231",
-    "controls": 1310720,
-    "mathematicalProof": "An8-byte big-endian word consists of four disjoint16-bit fields. Each shifted low16bits equals the corresponding original big-endian field for every2^64word. Truncating then interpreting bit15 as negative equals originalReadInt16BigEndian. Therefore xMin>xMax or yMin>yMax is identical. C#implementation must use explicit unchecked signed16truncation.",
-    "failureBoundary": "Keep glyph.Length<10 failure before any field read, the same ten-byte private owned extent and contours==0 shortcut. One8-byte read consumes only already in-bounds immutable owned storage; eager reading of y fields on an invalid x does not call external code or publish/resume failed state. Same structured exception/error string. All constructor location/order/container/memory/cancellation and owner cleanup remain required.",
-    "scope": "Conditional scalar model only, no actual C#candidate/JIT/complete-operation/performance proof or merge authority. Existing owned-copy font and complete integration boundaries unchanged. Current complete operations pass; stage validation policies remain distinct.",
-    "next": "Review prior equivalent implementations; if a candidate is justified, inspect actual lowering and run focused actual-parser source/refusal/cancel tests before immutable-build byte/time screen. Do not forecast CPU gain from fewer slices or profile counts."
+  "priorCurrentEvidenceCommit": "c9e0486894d4b3d02224ff45b6a6136a5450f992",
+  "scanPreparationModel": {
+    "offsetMaximum": 262144,
+    "geometryFieldsReadonly": true,
+    "cancellationAutoPropertyReadonly": true,
+    "tokenSourceStateStillPolled": true,
+    "oldScan": "        var first = locationWidth == 2 ? (uint)U16(locations) * 2 : U32(locations);\n        if (first > glyf.Length) throw new ImageDataException(\"Invalid glyph location.\");\n        for (var i = 0; i < GlyphCount; i++)\n        {\n            context.Cancellation.ThrowIfCancellationRequested();\n            var location = locations[((i + 1) * locationWidth)..];\n            var last = locationWidth == 2 ? (uint)U16(location) * 2 : U32(location);\n            if (last < first || last > glyf.Length) throw new ImageDataException(\"Invalid glyph location ordering.\");\n            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));\n            first = last;\n        }",
+    "newScan": "        var glyphCount = GlyphCount; var locationBytes = locationWidth; var glyphBytes = glyphs.Length;\n        var cancellation = context.Cancellation;\n        var first = locationBytes == 2 ? (uint)U16(locations) * 2 : U32(locations);\n        if (first > glyphBytes) throw new ImageDataException(\"Invalid glyph location.\");\n        for (int i = 0, offset = locationBytes; i < glyphCount; i++, offset += locationBytes)\n        {\n            cancellation.ThrowIfCancellationRequested();\n            var location = locations.Slice(offset, locationBytes);\n            var last = locationBytes == 2 ? (uint)U16(location) * 2 : U32(location);\n            if (last < first || last > glyphBytes) throw new ImageDataException(\"Invalid glyph location ordering.\");\n            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));\n            first = last;\n        }"
   },
   "raw": {
-    "file": "font-header-bounds-qualified.tar.xz",
-    "sha256": "09dcc1a72097f9469a7ca341fcecc14e2e550ce868745a7a4b71b2a965f944ac",
-    "bytes": 5353860,
-    "members": 202,
+    "file": "font-location-preparation-qualified.tar.xz",
+    "sha256": "2d429199f877b26b63b7192e6d54b91265d4689f46c65d784279a08d7eb4b722",
+    "bytes": 3490576,
+    "members": 164,
     "mirrored": true,
     "allMembersVerified": true,
     "dependencies": [
       {
-        "file": "font-header-validation-qualified.tar.xz",
-        "sha256": "0babb5ecf37b8d7d392adfae62d8cd0e228b2b60debc1ef2750da7579bfc5880"
+        "file": "font-header-bounds-qualified.tar.xz",
+        "sha256": "09dcc1a72097f9469a7ca341fcecc14e2e550ce868745a7a4b71b2a965f944ac"
       }
     ]
   },
