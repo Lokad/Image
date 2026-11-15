@@ -1,0 +1,138 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ZBC1066",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "4d8da017dc2682a2a30b40136f8001b67f12d86d",
+  "baselineProducers": {
+    "windowsSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+    "linuxSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+    "timedArtifactSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+    "packageSha256": "8a5d74768e26bd62af7b6c490e4d6b614956093df17440cf8f7ac983394438f7"
+  },
+  "candidateLinuxSha256": "336e44787df0697ac22b3401cd12b28761e616e3c7bcde1fbd3afdbe77d5a1dc",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "f94799967d5895b3c0fcf015419a4b13fd116ed687e69a1521142015faa1e148"
+  },
+  "hypothesis": "Let the safe grouped-copy loop handle zero blocks,and use its existing BCL tail for all0..255B short rows. Remove the separate input.Length>=256 branch. Retained current CopyRegion generated code contains that branch and an additional sourceBlockCount==0 check;removing duplicate dispatch may simplify complete row copying.",
+  "intendedEndState": "One hardware vector path,including zero groups,and the existing portable BCL fallback. Same four-load snapshot before stores,checked block spans,loop order and exact tail. No new loop variant,kernel,cache,owner,storage,API or fixture dispatch.",
+  "sourceProof": {
+    "wholeFileReconstructedByRestoringOneGuard": true,
+    "allPublicCallersUnchanged": true,
+    "shortRowsSkipZeroGroupsThenSameBclTail": true,
+    "vectorGroupsAndTailsVerbatim": true,
+    "allCancellationAdmissionOwnershipAndPortableFallbackUnchanged": true
+  },
+  "screen": {
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9706500854492188,
+    "candidateUs": 1.9746936543782552,
+    "savedUs": -0.004043568929036345,
+    "rawReduction": -0.0020518959499167266,
+    "ratioLower": 1.000154202645726,
+    "ratioUpper": 1.0039547718386364,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+      "tmp/zbc1066-baseline-linux/Lokad.Image.dll",
+      "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "tmp/zbc1066-candidate-linux/Lokad.Image.dll",
+      "336e44787df0697ac22b3401cd12b28761e616e3c7bcde1fbd3afdbe77d5a1dc",
+      "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "confirm",
+      "DrawingCopy8"
+    ],
+    "raw": "tmp/zbc1066-DrawingCopy8-paired-screen.log"
+  },
+  "decision": "Not retained:original complete byte-copy screen is0.205percent/4.04nsadverse,not a useful gain. No independent confirmation,other candidate timing,standalone/native capture,Windows candidate build,broad/package or profiling campaign. This rejects the implementation,not all copy-loop redesigns. Retained prior generated checks are a lead,not CPU-phase attribution.",
+  "focusedLinux": {
+    "internal-normal": 25,
+    "public-normal": 190,
+    "internal-scalar": 25,
+    "public-scalar": 190
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "ZBC1066",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "26dc8442e4e1fb431f9fc5dd10e1f05a0cc10e8fd6038dd667efdaf75d5000d1",
+      "sourceRestoredByteExactly": true,
+      "coreAndEmbeddedNeverRebuilt": true,
+      "newBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "ZBC1066",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "dda48ea4c08b2c0cc5f3916d2973f7641af50783eec9b2d50eda15e189743f86",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "src/Lokad.Image/Internal/CropCopy.cs": "ab544e5bbf04774a3b8b11051b368e42ada27b609441f0b9bee790a37d577c43",
+        "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+      },
+      "embeddedTestsSha256": "6341e75dd6ef2c9497b21cdf9ecda533fe735584dfd55951c43cca6bc9b86f17",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "memory": {
+    "borrowedAllocatedBytesPerOperation": 0,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStorageBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": "Exactly restored sources and Linux core/embedded/public modules;Windows source restored and modules never rebuilt. BOUNDED-PROBE-REQUESTS.md actual package is unchanged:6721full/live checks eachOS,focused normal/scalar,SAMEactualtimedpackage/all3examples. Current copy costs remain owned by DRAWING-ROW-PREPARATION.md and SNAPSHOT-BLOCK-COPY.md. No retained API/test changes.",
+  "postprocessingRecovery": "Immutable raw archive and verified mirror were complete before a report-writer variable collision. Reuse and reverify them;restore the preparation-record variable name without rewriting the archive or repeating tests/timings.",
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0,
+    "restoration": 0,
+    "packs": 0
+  },
+  "raw": {
+    "file": "zero-group-copy-trial.tar.xz",
+    "sha256": "3aea4a8bc6869b47c97b5e4f022a577c3c1b79d4269ca7f9d8a65f088cb760fe",
+    "bytes": 765900,
+    "members": 44,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bounded-probe-requests-qualified.tar.xz",
+        "sha256": "c67739464f88e8e929351c2f00b4323edd5429607a8cb5320ae92fdefd4e5fe4"
+      },
+      {
+        "file": "drawing-row-preparation-qualified.tar.xz",
+        "sha256": "d2b513ae62a98351ad517b316129c15f900bbc8d360498a072bd56244a1fa4d5"
+      }
+    ]
+  }
+}
