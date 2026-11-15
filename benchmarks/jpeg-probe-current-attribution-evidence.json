@@ -1,0 +1,341 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JPC1091",
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newBroadOrPackageChecks": 0,
+  "producers": {
+    "windowsSha256": "c8f8409ca23f02ccfdabb5a16fe02e5f2f23386ec6f75333b0b47b8eb97f9678",
+    "linuxSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "timedArtifactSha256": "9351a52aa369275a795176dc2c7e26a84ac70d6f7d3d6254d500aaf943ebdccd",
+    "packageSha256": "fac9093764c7a6ebc1003c574bfe06a79a9b993a072d03de4d0e0bb4be1f150d"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+  },
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "totalLocations": 1993,
+  "resolvedManagedLocations": 1699,
+  "methods": [
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.StreamInspection+<JpegAsync>d__10`2[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory]::MoveNext()[Optimized]",
+      "sampleLocations": 319
+    },
+    {
+      "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+      "sampleLocations": 225
+    },
+    {
+      "name": "instance int32 [Lokad.Image.Benchmarks] WarmImageRead+Input::Copy(valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "sampleLocations": 216
+    },
+    {
+      "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image.Benchmarks] WarmImageRead+Input::ReadAsync(valuetype [System.Runtime]System.Memory`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      "sampleLocations": 173
+    },
+    {
+      "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+      "sampleLocations": 158
+    },
+    {
+      "name": "void [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncMethodBuilderCore::Start(!!0&)[Optimized]",
+      "sampleLocations": 111
+    },
+    {
+      "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::SkipAsync(int64)[Optimized]",
+      "sampleLocations": 96
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.ImageCodec+<ProbeCore>d__32::MoveNext()[Optimized]",
+      "sampleLocations": 59
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.StreamInspection+<InspectAsync>d__0`2[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory]::MoveNext()[Optimized]",
+      "sampleLocations": 39
+    },
+    {
+      "name": "instance class Lokad.Image.ImageProbeResult [Lokad.Image] Lokad.Image.Internal.ProbeReader::Result(valuetype Lokad.Image.ImageFormat,int32,int32,int32,bool,valuetype Lokad.Image.ImageOrientation,valuetype Lokad.Image.SourceColorModel,valuetype Lokad.Image.SourceAlphaRepresentation,uint8)[Optimized]",
+      "sampleLocations": 30
+    },
+    {
+      "name": "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+      "sampleLocations": 25
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::.ctor(class [System.Runtime]System.IO.Stream,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken,bool,valuetype [System.Runtime]System.Nullable`1<int64>,bool,bool)[Optimized]",
+      "sampleLocations": 25
+    },
+    {
+      "name": "instance bool [Lokad.Image.Benchmarks] WarmImageRead::get_Async()[Optimized]",
+      "sampleLocations": 24
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Item(class Lokad.Image.Internal.InspectionReader,int32&)[Optimized]",
+      "sampleLocations": 23
+    },
+    {
+      "name": "instance bool [Lokad.Image.Benchmarks] WarmImageRead+Input::get_CanSeek()[Optimized]",
+      "sampleLocations": 20
+    },
+    {
+      "name": "instance valuetype System.Threading.Tasks.ValueTask`1<!0> [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1[Lokad.Image.Internal.ProbeResult]::get_Task()[Optimized]",
+      "sampleLocations": 18
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::DeclaredEnd(int64)[Optimized]",
+      "sampleLocations": 16
+    },
+    {
+      "name": "instance object [Lokad.Image.Benchmarks] WarmImageRead::Invoke(class WarmImageRead/Input)[Optimized]",
+      "sampleLocations": 16
+    },
+    {
+      "name": "valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<!!0> [Lokad.Image] Lokad.Image.Internal.StreamInspection::InspectAsync(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+      "sampleLocations": 14
+    },
+    {
+      "name": "instance object [Lokad.Image.Benchmarks] WarmImageRead::Managed()[Optimized]",
+      "sampleLocations": 12
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Reserve(int64)[Optimized]",
+      "sampleLocations": 10
+    },
+    {
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.OperationContext::get_HasMemoryBudget()[Optimized]",
+      "sampleLocations": 10
+    },
+    {
+      "name": "instance valuetype Lokad.Image.SourceColorModel [Lokad.Image] Lokad.Image.Internal.JpegSourceMetadata::get_Color()[Optimized]",
+      "sampleLocations": 9
+    },
+    {
+      "name": "stub ReportStubBlock<MethodCallThunk>",
+      "sampleLocations": 8
+    },
+    {
+      "name": "valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<!!0> [Lokad.Image] Lokad.Image.Internal.StreamInspection::JpegAsync(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+      "sampleLocations": 8
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::Dispose()[Optimized]",
+      "sampleLocations": 8
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Dimensions(class Lokad.Image.Internal.InspectionReader,int32,int32)[Optimized]",
+      "sampleLocations": 7
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+      "sampleLocations": 6
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.ExifOrientation::ValidatePolicy(valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+      "sampleLocations": 5
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Metadata(class Lokad.Image.Internal.InspectionReader,int64,int64&)[Optimized]",
+      "sampleLocations": 5
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.ImageLimits::Validate()[Optimized]",
+      "sampleLocations": 3
+    },
+    {
+      "name": "instance void [ReadDriver] BenchmarkDotNet.Autogenerated.Runnable_0::WorkloadActionUnroll(int64)[Optimized]",
+      "sampleLocations": 1
+    }
+  ],
+  "readerMethods": {
+    "ReadAsync": {
+      "codeBytes": 1977,
+      "locations": 225,
+      "hotBlocks": [
+        {
+          "block": "G_M000_IG18",
+          "offset": "0x194",
+          "samples": 31
+        },
+        {
+          "block": "G_M000_IG01",
+          "offset": "0x0",
+          "samples": 27
+        },
+        {
+          "block": "G_M000_IG31",
+          "offset": "0x2b6",
+          "samples": 24
+        },
+        {
+          "block": "G_M000_IG15",
+          "offset": "0x146",
+          "samples": 18
+        },
+        {
+          "block": "G_M000_IG60",
+          "offset": "0x522",
+          "samples": 16
+        }
+      ]
+    },
+    "SkipAsync": {
+      "codeBytes": 2247,
+      "locations": 96,
+      "hotBlocks": [
+        {
+          "block": "G_M000_IG01",
+          "offset": "0x0",
+          "samples": 22
+        },
+        {
+          "block": "G_M000_IG04",
+          "offset": "0x56",
+          "samples": 16
+        },
+        {
+          "block": "G_M000_IG08",
+          "offset": "0xdb",
+          "samples": 8
+        },
+        {
+          "block": "G_M000_IG22",
+          "offset": "0x1fa",
+          "samples": 8
+        },
+        {
+          "block": "G_M000_IG59",
+          "offset": "0x4d5",
+          "samples": 8
+        }
+      ]
+    },
+    "JpegHeaderMarkerAsync": {
+      "codeBytes": 1706,
+      "locations": 158,
+      "hotBlocks": [
+        {
+          "block": "G_M000_IG06",
+          "offset": "0xa5",
+          "samples": 41
+        },
+        {
+          "block": "G_M000_IG01",
+          "offset": "0x0",
+          "samples": 25
+        },
+        {
+          "block": "G_M000_IG03",
+          "offset": "0x47",
+          "samples": 21
+        },
+        {
+          "block": "G_M000_IG02",
+          "offset": "0x3b",
+          "samples": 15
+        },
+        {
+          "block": "G_M000_IG39",
+          "offset": "0x3dd",
+          "samples": 12
+        }
+      ]
+    }
+  },
+  "jpegParser": {
+    "codeBytes": 7451,
+    "locations": 319,
+    "hotBlocks": [
+      {
+        "block": "G_M000_IG72",
+        "offset": "0x7b1",
+        "samples": 58
+      },
+      {
+        "block": "G_M000_IG38",
+        "offset": "0x413",
+        "samples": 47
+      },
+      {
+        "block": "G_M000_IG102",
+        "offset": "0xb07",
+        "samples": 32
+      },
+      {
+        "block": "G_M000_IG59",
+        "offset": "0x5d2",
+        "samples": 26
+      },
+      {
+        "block": "G_M000_IG52",
+        "offset": "0x547",
+        "samples": 23
+      },
+      {
+        "block": "G_M000_IG121",
+        "offset": "0xc6f",
+        "samples": 20
+      },
+      {
+        "block": "G_M000_IG87",
+        "offset": "0x95b",
+        "samples": 17
+      }
+    ]
+  },
+  "scope": "One bounded2second userCPU sample of the current complete public asyncJPEGprobe,parent process only,after firstActual. CPU0operation/CPU1sampler. Same input,field acquisition,owned result and cleanup;original native/output/reference gates checked. Trace may include runtime/GC and native-reference orchestration,not just parser code;sample counts locate leads,not elapsed-time fractions,standalone costs or peak memory. Existing immutable package/harness/selector/fixtures/workers;zero builds or qualification repeats.",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "allInstrumentedTimingsDiscarded": true,
+  "sameProcessMapJitAndMethodSizesVerified": true,
+  "sharedProofRestored": true,
+  "trace": {
+    "sha256": "897d3c509e42e5fa32e1d06ce4645eb0187658fd49bb719bf702b0f115a8241a",
+    "bytes": 747072,
+    "sampleSeconds": 2,
+    "frequencyHz": 999,
+    "operationCpu": 0,
+    "collectorCpu": 1,
+    "event": "cpu-clock:u",
+    "parentOnly": true
+  },
+  "findings": [
+    "The current code has no separately sampled FillAsync body;its work is inside the reader callers. Do not compare old separate-method counts as elapsed savings.",
+    "Current JPEG frame-field code reloads the header array and checks spans/indexes repeatedly between width/height/count stores. A checked six-byte local span is a concrete bounded lead;generated-code observations and locations do not predict a CPU gain.",
+    "Resident benchmark Input.Copy/ReadAsync methods have389locations. These are part of frozen equivalent delivery,not production optimization targets. No callback,input,read-boundary or reference adjustment is authorized by this attribution.",
+    "Nested builder/selector locations remain but the direct-selector trial did not show a useful screen. Do not replay it unchanged or infer removable time from sample counts."
+  ],
+  "next": "Test the fixed six-byte JPEG frame view against the existing complete async probe short screen,with verbatim read/check/poll/failure/owner order;independent confirmation and coherent qualification only if useful. No new input/settings grid or unrelated optimization.",
+  "currentCostsUnchanged": true,
+  "actualPackageAndQualificationReused": true,
+  "physicalNativeJitPeaksMeasured": false,
+  "raw": {
+    "file": "jpeg-probe-current-attribution.tar.xz",
+    "sha256": "432cd62190bec1736584bcf2fd7ddf71415d4b6140f302bff1cf5c2796d754b2",
+    "bytes": 214420,
+    "members": 41,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "refill-call-inlining-qualified.tar.xz",
+        "sha256": "30c3060d4515c28faf7f48f3241b95b7c872b774c63393aa91e16ee35467e82c"
+      }
+    ]
+  }
+}
