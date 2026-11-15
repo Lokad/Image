@@ -1,5 +1,8 @@
 # Nonseekable skip preparation
 
+[Inspection ownership](INSPECTION-OWNER.md) supersedes the current-cost and allocation
+figures below. This report retains the skip stage's scoped effects and qualification.
+
 The complete immediate-async JPEG dimension probe improves **10.76%** in a controlled
 comparison. Already-completed payload reads stay in a direct loop; only a genuinely
 pending/faulted/canceled read enters the awaited continuation. This follows the

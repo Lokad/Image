@@ -1,5 +1,8 @@
 # JPEG marker preparation
 
+[Inspection ownership](INSPECTION-OWNER.md) supersedes the current-cost and allocation
+figures below. This report retains this stage's scoped effects and qualification.
+
 Complete sync/async probes and full header inspection improve without additional
 storage. Only certified buffered FF/non-FF header pairs bypass async setup. Filler,
 partial reads and errors use the original shared marker parser; its entropy loop,
@@ -18,8 +21,8 @@ parsing, independent descriptor and source/workspace disposal. Full headers incl
 framing, entropy and EOF, with permitted seek skips. Source bytes and complete
 descriptors/lifetimes match. These paired effects are not FFmpeg costs.
 
-The later [nonseekable skip stage](NONSEEKABLE-SKIP-PREPARATION.md) supersedes only
-the async probe cost below. The sync cost and this stage's scoped gains remain.
+The later [nonseekable skip stage](NONSEEKABLE-SKIP-PREPARATION.md) first superseded
+the async probe cost. Both stages' scoped gains remain historical evidence.
 Independent original-reference confirmations give JPEG probe **0.260 / 0.194 µs,
 upper 1.387**, and immediate-async **0.330 / 0.205 µs, upper 1.650**. Both remain
 gaps to the explicitly labeled **FFmpeg AVIO + bounded header adapter**, not its

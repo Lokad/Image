@@ -1,9 +1,9 @@
 namespace Lokad.Image.Internal;
 
 // Facts share the acquisition owner, including while a stream read is pending.
-internal sealed class ProbeReader(Stream input, OperationContext context, bool asynchronous,
+internal sealed class ProbeReader(Stream input, ImageLimits limits, CancellationToken cancellation, bool asynchronous,
     long maxAcquiredBytes, ImageProbeFacts requested)
-    : InspectionReader(input, context, asynchronous, maxAcquiredBytes,
+    : InspectionReader(input, limits, cancellation, asynchronous, maxAcquiredBytes,
         dimensionsOnly: requested == ImageProbeFacts.Dimensions)
 {
     private ImageProbeFacts established;

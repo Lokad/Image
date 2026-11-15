@@ -2671,41 +2671,26 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
-    header_storage = json.loads((ROOT / 'benchmarks/probe-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert header_storage['productionAccepted'] and header_storage['qualification']['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert header_storage['qualification']['fullChecksEachOs'] == 6692
-    assert header_storage['qualification']['sameActualPackageBothOs']
-    assert header_storage['qualification']['package']['sha256'] == header_storage['qualification']['windowsPackage']['sameActualPackageSha256']
-    assert header_storage['raw']['mirrored'] and header_storage['raw']['allMembersVerified']
-    assert set(header_storage['cases']) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
-    jpeg_markers = json.loads((ROOT / 'benchmarks/jpeg-marker-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_markers['productionAccepted'] and jpeg_markers['qualification']['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert jpeg_markers['qualification']['fullChecksEachOs'] == 6696
-    assert jpeg_markers['qualification']['sameActualPackageBothOs']
-    assert jpeg_markers['qualification']['package']['sha256'] == jpeg_markers['qualification']['windowsPackage']['sameActualPackageSha256']
-    assert jpeg_markers['raw']['mirrored'] and jpeg_markers['raw']['allMembersVerified']
-    assert set(jpeg_markers['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'}
-    skip_preparation = json.loads((ROOT / 'benchmarks/nonseekable-skip-preparation-evidence.json').read_text(encoding='utf-8'))
-    sq = skip_preparation['qualification']
-    assert skip_preparation['productionAccepted'] and skip_preparation['allAffectedPerformanceReconciled']
-    assert skip_preparation['requiredMaterialPaths'] == 289 and skip_preparation['newMaterialPaths'] == 0
-    assert skip_preparation['raw']['mirrored'] and skip_preparation['raw']['allMembersVerified']
-    assert sq['fullChecksEachOs'] == sq['windows']['total'] == sq['linux']['total'] == 6700
+    inspection_owner = json.loads((ROOT / 'benchmarks/inspection-owner-evidence.json').read_text(encoding='utf-8'))
+    sq = inspection_owner['qualification']
+    assert inspection_owner['productionAccepted'] and inspection_owner['allAffectedPerformanceReconciled']
+    assert inspection_owner['requiredMaterialPaths'] == 289 and inspection_owner['newMaterialPaths'] == 0
+    assert inspection_owner['raw']['mirrored'] and inspection_owner['raw']['allMembersVerified']
+    assert sq['fullChecksEachOs'] == sq['windows']['total'] == sq['linux']['total'] == 6712
     assert sq['sameActualPackageBothOs'] and sq['allThreeUsageExamplesBothOs']
     assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
-    assert sq['package']['librarySha256'] == skip_preparation['producers']['linuxSha256']
+    assert sq['package']['librarySha256'] == inspection_owner['producers']['linuxSha256']
     assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert sq['newPublicSuspendedPayloadCases'] == sq['actualPackageSuspendedPayloadCases'] == 4
-    assert set(skip_preparation['cases']) == {'ProbeDimensionsJpegAsync'}
-    skip_probe = skip_preparation['cases']['ProbeDimensionsJpegAsync']
-    assert skip_preparation['paired']['ProbeDimensionsJpegAsync']['upper'] < 1
-    assert skip_preparation['memory']['probeAllocatedBytes'] == 632
-    assert skip_preparation['memory']['admittedDimensionCapacityBytes'] == 512
-    assert skip_preparation['memory']['retainedAfterOperationBytes'] == 0
-    active_reads = {**header_storage['cases'], **jpeg_markers['cases'], **skip_preparation['cases']}
+    assert all(c['upper'] < 1 and c['allocatedBaseline'] - c['allocatedCandidate'] == 24
+               for c in inspection_owner['paired'].values())
+    assert inspection_owner['memory']['probeAllocatedBytes'] == 608
+    assert inspection_owner['memory']['admittedDimensionCapacityBytes'] == 512
+    assert inspection_owner['memory']['retainedAfterOperationBytes'] == 0
+    active_reads = inspection_owner['cases']
+    assert set(active_reads) == {'ProbeDimensionsPng', 'ProbeDimensionsWebp', 'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
     assert all(c['managedActuals'] == c['nativeSamplesEachBracket'] == 12 for c in active_reads.values())
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        provider = skip_preparation if case in skip_preparation['cases'] else jpeg_markers if case in jpeg_markers['cases'] else header_storage
+        provider = inspection_owner
         if case in provider['cases']:
             current = provider['cases'][case]
             assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
@@ -2757,9 +2742,9 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    headers = header_storage['cases']['PngHeaders']
+    headers = inspection_owner['cases']['PngHeaders']
     assert headers['descriptorExact'] and headers['allOriginalGatesPassed'] and headers['quietGuardsPassed']
-    assert headers['librarySha256'] == header_storage['qualification']['package']['librarySha256']
+    assert headers['librarySha256'] == inspection_owner['qualification']['package']['librarySha256']
     assert headers['managedActuals'] == headers['nativeSamplesEachBracket'] == 12 and headers['upper'] <= 1
     read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
                      f'{headers["managedUs"]:,.3f} | {headers["nativeUs"]:,.3f} | '
@@ -3047,20 +3032,17 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Probe preparation](../benchmarks/PROBE-PREPARATION.md) combines facts with their
-reader and avoids allocating default options: **688 → 632 B/op**, with unchanged
-**512 B** admission and zero retained scratch or new cache. This establishes an
-allocation reduction; historical clocks do not establish a causal CPU gain.
-Four probes remain small absolute gaps: PNG/WebP/JPEG/async JPEG
-**0.132/0.133/0.260/{skip_probe['managedUs']:.3f} µs**, with upper **1.116/1.105/1.387/{skip_probe['upper']:.3f}**.
-Complete PNG headers pass at **0.304 / FFmpeg AVIO/header adapter 0.569 µs,
-upper .546**, **592 B/op**. [JPEG marker preparation](../benchmarks/JPEG-MARKER-PREPARATION.md)
-retains the source-valid sync JPEG cost. [Nonseekable skip preparation](../benchmarks/NONSEEKABLE-SKIP-PREPARATION.md)
-refreshes the async cost on its actual package DLL and confirms **10.76%** scoped
-complete-operation gain, with unchanged allocations. The seekable-header guard
-is inconclusive; no header gain or universal non-regression claim.
+[Inspection ownership](../benchmarks/INSPECTION-OWNER.md) combines acquisition and
+admission in one operation owner: **632 → 608 B/op** for all four probes,
+**592 → 568 B/op** for PNG headers. Existing **512 B** initial / **8,448 B** bulk
+admission and zero retained workspace remain. Controlled complete JPEG sync,
+immediate-async and header gains are **3.17% / 3.45% / 3.88%** after an explicit
+helper warmup correction; original adverse/inconclusive captures remain history.
+Four small probe gaps remain; the table uses all five current standalone comparisons
+on the same immutable package DLL. Complete PNG headers pass at
+**{headers['managedUs']:.3f} / {headers['nativeUs']:.3f} µs, upper {headers['upper']:.3f}**.
 The reference is **FFmpeg AVIO + bounded header adapter**, not its public codec parser.
-Windows/Linux each pass **6,700 full/live checks**, the same actual package and all three examples,
+Windows/Linux each pass **6,712 full/live checks**, the same actual package and all three examples,
 including suspended-payload cancellation/failure cleanup and subsequent recovery.
 Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
 

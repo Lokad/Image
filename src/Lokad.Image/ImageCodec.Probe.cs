@@ -31,8 +31,9 @@ public static partial class ImageCodec
         var metadataPolicy = options?.MetadataPolicy ?? ImageMetadataPolicy.Strict;
         if (facts == 0 || (facts & ~ImageProbeFacts.All) != 0 || maximum < 1)
             throw new ArgumentOutOfRangeException(nameof(options));
-        using var context = ReadContext(options is null ? ImageLimits.Default : options.Limits, cancellationToken, metadataPolicy);
-        using var reader = new ProbeReader(input, context, asynchronous, maximum, facts);
+        ExifOrientation.ValidatePolicy(metadataPolicy);
+        using var reader = new ProbeReader(input, options is null ? ImageLimits.Default : options.Limits,
+            cancellationToken, asynchronous, maximum, facts);
         var info = await StreamInspection.InspectAsync(reader, reader, metadataPolicy).ConfigureAwait(false);
         return reader.Result(info);
     }

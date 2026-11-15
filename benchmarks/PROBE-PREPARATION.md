@@ -1,7 +1,7 @@
 # Probe preparation
 
-[JPEG marker preparation](JPEG-MARKER-PREPARATION.md) supersedes the two JPEG
-timings below. The PNG/WebP probes, PNG headers and allocation proof remain current.
+[Inspection ownership](INSPECTION-OWNER.md) supersedes all five costs and allocation
+figures below. This report retains the earlier implementation and qualification.
 
 Four dimension probes now allocate **632 rather than 688 B/op**, saving 56 B per
 complete operation. Default values are normalized without an options allocation

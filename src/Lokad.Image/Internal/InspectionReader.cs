@@ -1,7 +1,7 @@
 namespace Lokad.Image.Internal;
 
 /// <summary>Fixed-space container acquisition; byte admission includes read-ahead and skipped payloads.</summary>
-internal class InspectionReader : IDisposable
+internal class InspectionReader : OperationContext, IDisposable
 {
     internal const int WorkingBytes = 8192 + 256;
     private const int HeaderBytes = 32;
@@ -12,7 +12,7 @@ internal class InspectionReader : IDisposable
     private readonly bool directFields;
     private bool bulk;
     internal readonly byte[] Header;
-    internal readonly OperationContext Context;
+    internal OperationContext Context => this;
     private int first, last;
     private long acquired;
     private readonly long? maxAcquiredBytes;
@@ -21,18 +21,23 @@ internal class InspectionReader : IDisposable
     internal long Position => acquired - (last - first);
     internal long BytesTraversed => acquired;
 
-    internal InspectionReader(Stream input, OperationContext context, bool asynchronous, long? maxAcquiredBytes = null,
-        bool dimensionsOnly = false, bool adaptiveHeaders = false)
+    internal InspectionReader(Stream input, ImageLimits limits, CancellationToken cancellation, bool asynchronous,
+        long? maxAcquiredBytes = null, bool dimensionsOnly = false, bool adaptiveHeaders = false)
+        : base(limits, cancellation)
     {
-        this.input = input; Context = context; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
-        this.adaptiveHeaders = adaptiveHeaders && input.CanSeek && !dimensionsOnly;
-        directFields = dimensionsOnly && maxAcquiredBytes.HasValue;
-        // Seekable container inspection skips opaque payloads. Acquire bulk scratch
-        // only if a later scan actually needs it; probes retain their small buffer.
-        var capacity = dimensionsOnly || this.adaptiveHeaders ? 256 : 8192;
-        context.Reserve(capacity + 256);
-        try { buffer = new byte[capacity]; Header = directFields ? buffer : new byte[HeaderBytes]; }
-        catch { context.Release(capacity + 256); throw; }
+        try
+        {
+            ArgumentNullException.ThrowIfNull(input);
+            this.input = input; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
+            this.adaptiveHeaders = adaptiveHeaders && input.CanSeek && !dimensionsOnly;
+            directFields = dimensionsOnly && maxAcquiredBytes.HasValue;
+            // The acquisition owner also owns its admission scope. No context or
+            // workspace escapes a failed constructor, including reserve refusal.
+            var capacity = dimensionsOnly || this.adaptiveHeaders ? 256 : 8192;
+            Reserve(capacity + 256);
+            buffer = new byte[capacity]; Header = directFields ? buffer : new byte[HeaderBytes];
+        }
+        catch { base.Dispose(); throw; }
     }
 
     private ValueTask<bool> FillAsync(int needed, int offset = 0)
@@ -233,5 +238,19 @@ internal class InspectionReader : IDisposable
         if (end > Context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
     }
 
-    public void Dispose() { if (!disposed) { disposed = true; Context.Release(buffer.Length + 256); } }
+    public new void Dispose()
+    {
+        if (disposed) return;
+        disposed = true;
+        // Without a shared budget, Reserve never creates a scope/reservation.
+        // Finish local accounting without disposing an empty shared owner.
+        if (HasMemoryBudget) DisposeAdmitted();
+        else Release(buffer.Length + 256);
+    }
+
+    private void DisposeAdmitted()
+    {
+        try { Release(buffer.Length + 256); }
+        finally { base.Dispose(); }
+    }
 }

@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
-internal sealed class OperationContext : IDisposable
+internal class OperationContext : IDisposable
 {
     public ImageLimits Limits { get; }
     public CancellationToken Cancellation { get; }

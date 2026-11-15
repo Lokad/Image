@@ -30,9 +30,9 @@ public static partial class ImageCodec
     private static async ValueTask<ImageInfo> InspectHeadersCore(Stream input, ImageLimits? limits, CancellationToken cancellationToken,
         bool asynchronous, ImageMetadataPolicy metadataPolicy)
     {
-        using var context = ReadContext(limits ?? ImageLimits.Default, cancellationToken, metadataPolicy);
-        ArgumentNullException.ThrowIfNull(input);
-        using var reader = new InspectionReader(input, context, asynchronous, adaptiveHeaders: true);
+        ExifOrientation.ValidatePolicy(metadataPolicy);
+        using var reader = new InspectionReader(input, limits ?? ImageLimits.Default, cancellationToken,
+            asynchronous, adaptiveHeaders: true);
         return await StreamInspection.InspectAsync(reader, metadataPolicy: metadataPolicy).ConfigureAwait(false);
     }
 }
