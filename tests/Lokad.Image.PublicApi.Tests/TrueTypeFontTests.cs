@@ -236,4 +236,57 @@ public sealed class TrueTypeFontTests
             Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         }
     }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void SignedGlyphHeadersPreserveBoundsAndOwnedFailureCleanup(bool longLocations)
+    {
+        // Loading checks headers; outline syntax is checked when an outline is used.
+        (short Contours, short XMin, short YMin, short XMax, short YMax, bool Accepted)[] cases =
+        [
+            (1, short.MinValue, short.MinValue, short.MaxValue, short.MaxValue, true),
+            (1, -20, -10, -1, -1, true),
+            (1, short.MinValue, 0, short.MinValue, 0, true),
+            (-1, 0, short.MinValue, short.MaxValue, -1, true),
+            (1, short.MaxValue, short.MaxValue, short.MaxValue, short.MaxValue, true),
+            (1, 0, 0, -1, short.MaxValue, false),
+            (1, short.MinValue, 0, short.MaxValue, -1, false),
+            (-1, 1, short.MinValue, -1, short.MaxValue, false),
+            (-1, short.MinValue, short.MaxValue, short.MaxValue, short.MinValue, false),
+            (0, short.MaxValue, short.MaxValue, short.MinValue, short.MinValue, true),
+            (1, 0, 0, 0, 0, true)
+        ];
+        foreach (var c in cases)
+        {
+            var header = new byte[10];
+            short[] fields = [c.Contours, c.XMin, c.YMin, c.XMax, c.YMax];
+            for (var i = 0; i < fields.Length; i++) BinaryPrimitives.WriteInt16BigEndian(header.AsSpan(i * 2), fields[i]);
+            var input = AuthoredTrueType.Build(longLocations: longLocations, glyphOverrides: new Dictionary<int, byte[]> { [2] = header });
+            var unchanged = input.ToArray();
+            using var root = new TestMemoryBudget(input.Length + 256L);
+            var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * input.Length + 256 };
+            if (c.Accepted)
+            {
+                using var font = TrueTypeFont.Load(input, limits);
+                Assert.Equal(font.StorageBytes, root.Bytes);
+                var metrics = font.GetGlyphMetrics(2);
+                Assert.Equal(c.Contours != 0, metrics.HasOutline);
+                Assert.Equal(c.Contours == 0 ? (0, 0, 0, 0) : ((int)c.XMin, c.YMin, c.XMax, c.YMax),
+                    (metrics.XMin, metrics.YMin, metrics.XMax, metrics.YMax));
+                Assert.Equal(unchanged, input);
+                input.AsSpan().Fill(0xA7);
+                Assert.Equal(metrics, font.GetGlyphMetrics(2));
+            }
+            else
+            {
+                Assert.Throws<ImageDataException>(() => TrueTypeFont.Load(input, limits));
+                Assert.Equal(unchanged, input);
+            }
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+            header[0] = header[1] = 0;
+            var recovery = AuthoredTrueType.Build(longLocations: longLocations, glyphOverrides: new Dictionary<int, byte[]> { [2] = header });
+            using (var recovered = TrueTypeFont.Load(recovery, limits)) Assert.Equal(recovered.StorageBytes, root.Bytes);
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+    }
 }

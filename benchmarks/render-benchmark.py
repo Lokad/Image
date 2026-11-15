@@ -1834,6 +1834,8 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     font_preparation = font_load['pipelineCases']['Preparation']
     font_batch = font_load['pipelineCases']['PrepareDraw8']
     font_gain = font_load['fontComparison']['views']['statistics']
+    assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
+    assert font_load['fontComparison']['normalizedGainSeparated']
     raster = json.loads((ROOT / 'benchmarks/text-render-preparation-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
     assert raster['qualification']['fullChecksEachOs'] == 6244
