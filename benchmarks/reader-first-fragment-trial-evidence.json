@@ -1,0 +1,142 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RFS1072",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "789cf03374f6fc8ed3aea2a01b2eca2bec57dd11",
+  "baselineProducers": {
+    "windowsSha256": "5634cd38f36d7912d5afc5c4494427671cd0efd297a9d0831c08f6d710a27096",
+    "linuxSha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+    "packageSha256": "f7b691dd41b1937162f24c154cdd2a0dbe4acd8e1b65295e1232fbb16e865933"
+  },
+  "candidateLinuxSha256": "ad72e3ca0d64c4f0fcb9e43efb5e8939c2f1e5ca4c7b5a23615c8b9b18fa5d92",
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "c4f4d00bdc1822e152698ea8797a6e8d1d6dbd6a98850aa53a544b637b6cdfdd"
+  },
+  "hypothesis": "Separate the initial field acquisition/completion from the uncommon remaining-fragments loop. The actual current ReadAsync is690B with a loop-carried copied accumulator and first-fragment offset selection. An initial zero offset and direct completion may simplify the common path without forcing it into generic parsers. Code-size reduction alone is not a timing claim.",
+  "intendedEndState": "A straight-line ReadAsync validates count,handles zero,acquires the first field fragment and returns immediately when complete. A nonasync ReadRemainderAsync retains the synchronous fragment loop and delegates only actually pending/faulted reads to the existing unchanged AwaitReadAsync. No extra async transition,cache,buffer or parser.",
+  "sourceProof": {
+    "onlyInitialFieldAndSynchronousRemainderControlFlowChanges": true,
+    "allOtherReaderCodeVerbatim": true,
+    "initialFillOffsetAlwaysZero": true,
+    "remainderEnteredOnlyWithEmptyBuffer": true,
+    "pendingHelperUnchanged": true,
+    "noNewAsyncTransitionStorageCacheOwnerApiOrDependency": true
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "RFS1072",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.2532722129821777,
+    "candidateUs": 0.2549626884460449,
+    "ratio": 1.0065281089226248,
+    "lower": 0.6955213679233739,
+    "upper": 1.4566034643567831,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "ad72e3ca0d64c4f0fcb9e43efb5e8939c2f1e5ca4c7b5a23615c8b9b18fa5d92",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/rfs1072-baseline-linux/Lokad.Image.dll",
+      "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+      "tmp/rfs1072-candidate-linux/Lokad.Image.dll",
+      "ad72e3ca0d64c4f0fcb9e43efb5e8939c2f1e5ca4c7b5a23615c8b9b18fa5d92",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "screen"
+    ],
+    "raw": "tmp/rfs1072-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "decision": "The original three-pair screen is inconclusive around a0.65%adverse point with unchanged568B/op. No useful evidence supports continuation. Reject this implementation without independent confirmation,codegen/profile,standalone native captures,Windows candidate build,broad/package or fixture expansion. This is an inconclusive measurement,not proof of an architectural impossibility or a permanent family ban.",
+  "focusedLinux": {
+    "internal-normal": 10,
+    "public-normal": 148,
+    "internal-scalar": 10,
+    "public-scalar": 148
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "RFS1072",
+      "platform": "windows",
+      "productionRestored": true,
+      "productionSha256": "5634cd38f36d7912d5afc5c4494427671cd0efd297a9d0831c08f6d710a27096",
+      "sourceRestoredByteExactly": true,
+      "coreAndEmbeddedNeverRebuilt": true,
+      "newBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "RFS1072",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "3de47e627013b08fe0392790157ef45be8c2e6540baf284b639dba1165a1aae5",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+      },
+      "embeddedTestsSha256": "fe5eede4aaca5030363a297794ece5c3c5f74886682694aebdeff25ca3497094",
+      "publicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "memory": {
+    "measuredCompleteAllocatedBytesPerOperation": 568,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStorageBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": "Exact FCI1071 original sources and Linux core/embedded/public modules restored without rebuilding;Windows modules never rebuilt. Actual package remains immutable and matches the current timed producer. Prior6721full/live checks perOS,focused normal/scalar and SAMEactualpackage/all3examples remain valid. No current cost or accepted production/test/API change.",
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windows": 0,
+    "publicHarnessNativeFixture": 0,
+    "restoration": 0,
+    "packs": 0
+  },
+  "raw": {
+    "file": "reader-first-fragment-trial.tar.xz",
+    "sha256": "97093aa3a1ace42e499ab3b4351feb7bc404bbce9aff40a569cf21f8601163fd",
+    "bytes": 776540,
+    "members": 49,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "refill-completion-inlining-qualified.tar.xz",
+        "sha256": "ebd7636b270f0fe6aadab0a9a015bedb5dc7f25bf5144afc0df781eb8a720681"
+      }
+    ]
+  }
+}
