@@ -1,0 +1,147 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DMI1083",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "timedArtifactSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "packageSha256": "958275977db3db3b682dfa152b8e81df207cae2b3ae14978869b7db0161628a0"
+  },
+  "candidateLinuxSha256": "7f98d4726f922a40280009cb77e6be1043aece2c40fb822d769ee3eaa5227620",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "3de47e627013b08fe0392790157ef45be8c2e6540baf284b639dba1165a1aae5",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "e9183c1db0467523bd386f1e5d3d5688e97abc1ff82f0c20c19db166b4854dd4",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "17c475a48187dd86b0099900ea218c2aa69f15864157e49c94824de25dcd574f",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "c6a77b4bae7a86dffccd621cd6d2fad0370f7fa157a225e8b5d466b24d9bb7d2",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "0a4b2122fddc12c84e169337b35ce851e424c783ac1789f70b3a22942f85ab31"
+  },
+  "candidateTestSources": {
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "6e20bfa05a22ac2e5eefcb547b4d06cdf024895bc980519dcb0e16598f83fdb9",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeMemoryStorageTests.cs": "66341ff8df0635ebb034d66fc1d9e26fd20352712b6cffba1472e133e6b44b4b"
+  },
+  "hypothesis": "An ordinary exact MemoryStream dimension probe never drains skipped payloads and stops at the first dimensions before entropy scanning. Its fields fit32B,yet it owns256B. Select32B once only for this known stream type and the existing direct-fields mode;remove224Ballocation/admittedcapacity without promotion or extra per-read state. UnlikeIWP1057,custom/nonseekable streams keep256B and never pay an extra allocation.",
+  "intendedEndState": "One constructor capacity choice using the existing HeaderBytes constant,then unchanged reader/parser/storage owner. No new field,type,method,buffer promotion,cache,pool,API,fixture check or independent allowance. GetType is nonvirtual;no new user callbacks or Length/Position/CanSeek queries before admission.",
+  "boundaries": "Every ReadAsync field is bounded byHeaderBytes32;Byte/marker acquisition uses1/2B. Exact ordinary MemoryStream remains seekable until disposal,so all pre-dimension payload skips seek. Valid JPEG returns at its first SOF before scan;SOS before frame fails first. PNG returns atIHDR,WebP atVP8X/VP8/VP8L. Header field bound32 and real read/cancellation/counter/error logic remain verbatim. MemoryStream subclasses retain the original capacity and callbacks. Resource refusal remains before allocation/read;only required owned capacity falls512->288.",
+  "sourceProof": {
+    "originalSourceReconstructed": true,
+    "onlyConstructorCapacityChoiceChanged": true,
+    "allReadSizesAndParserBodiesVerbatim": true,
+    "noEarlyUserStreamMetadataQueries": true,
+    "sameAdmissionOwnerAndActualAsyncLifetimes": true,
+    "noGrowthOrNewRetainedStorage": true
+  },
+  "screen": {
+    "caseId": "ProbeDimensionsJpeg",
+    "phase": "screen",
+    "baselineUs": 0.22203502400716146,
+    "candidateUs": 0.21882825342814127,
+    "ratio": 0.9855580157792339,
+    "lower": 0.9054717093301362,
+    "upper": 1.0727277202125753,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "7f98d4726f922a40280009cb77e6be1043aece2c40fb822d769ee3eaa5227620",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "raw": "tmp/dmi1083-ProbeDimensionsJpeg-paired-screen.json"
+  },
+  "interpretation": "Not retained:the original probe helper uses its sealed custom Stream callbacks on both sync/nonseekable-async boundaries,not an ordinary MemoryStream. The candidate capacity branch is not selected and allocation stays568B/op. The1.44%favorable scoped point has a confidence interval spanning parity;no complete-operation gain,regression or FFmpeg parity established. No confirmation,other-case timing,new delivery benchmark,codegen or broad/package campaign.",
+  "inputBoundaryAudit": {
+    "helperSource": "tmp/roi1030-warm-paired/Program.cs",
+    "helperSourceSha256": "acb1e2bca9cdb125c53817b57b6ca5dbddfbe6a1a0daf4026059f0558825d375",
+    "actualInputType": "Private sealed Input : Stream with original seekable/synchronous or nonseekable/immediate-async callbacks",
+    "ordinaryMemoryStreamBranchSelected": false,
+    "frozenInputAndDeliveryPreserved": true,
+    "newBenchmarkWorkloads": 0
+  },
+  "qualification": {
+    "provider": "benchmarks/font-typed-location-views-evidence.json",
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 154,
+      "internal-scalar": 10,
+      "public-scalar": 154
+    },
+    "newPublicControls": 6,
+    "compactMemoryPrefixFactsCountersAndIndependentDescriptorPassed": true,
+    "sharedRefusalCancellationFailureRecoveryPassed": true,
+    "derivedMemoryStreamCallbackAdmissionPassed": true,
+    "fullChecksEachOsReused": 6721,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "initialFailure": "Initial focused run found four stale non-ProbeReader expectations:both test constructor routes explicitly select directFields mode. Both now expect288B. Production DLL/public test build reused unchanged;only embedded tests rebuilt before focused checks. Retain initial failure logs;zero timing before this fix.",
+  "restoration": {
+    "linuxCoreSha256": "dc2674db381bfdea18ab0aa6b8949e91a228e36ec2697b31ee317aced4b46c86",
+    "windowsCoreSha256": "c2d9c683f923a5921ebe9eabf7bebfb4145c629f23f5aa0fb3f098cdbd2c39fc",
+    "linuxEmbeddedTestsSha256": "01301bb309b1e2c5dfd1aeabefe5210f84e48509c72faaeb5183603d1d309d3d",
+    "linuxPublicTestsSha256": "c52772b8a841c490fa9c922fdfd0394465bae5ac046d07dae34103111b499a68",
+    "noRestorationRebuild": true
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 2,
+    "linuxPublic": 1,
+    "windowsProduction": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "originalControlAllocatedBytes": 568,
+    "originalControlAdmittedBytes": 512,
+    "candidateOrdinaryMemoryStreamOwnedBufferBytes": 32,
+    "candidateOrdinaryMemoryStreamAdmittedBytes": 288,
+    "ordinaryMemoryStreamLogicalCapacitySavingBytes": 224,
+    "ordinaryMemoryStreamTotalAllocationMeasured": false,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep qualified storage and current costs. Audit actual delivery and source identities before a storage hypothesis. The demonstrated JPEG gaps are in custom-callback stream acquisition/parsing. Revisit ordinary MemoryStream only if a concrete required workload warrants that separate path;do not alter frozen delivery to favor this candidate or blindly replay the earlier growth design.",
+  "raw": {
+    "file": "memory-stream-probe-storage-trial.tar.xz",
+    "sha256": "b3ec78ed6d6e3332a0a1c60268aa4281e9e1217df62cdf76e0448d3ae69e30ba",
+    "bytes": 2137040,
+    "members": 76,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "font-typed-location-views-qualified.tar.xz",
+        "sha256": "2b40efee0326c930a7ddc05ba379bf2a84ac007461e5e32a296468f2207c23f5"
+      },
+      {
+        "file": "refill-completion-inlining-qualified.tar.xz",
+        "sha256": "ebd7636b270f0fe6aadab0a9a015bedb5dc7f25bf5144afc0df781eb8a720681"
+      }
+    ]
+  }
+}
