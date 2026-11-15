@@ -1,0 +1,234 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JPT1098",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProducers": {
+    "windowsSha256": "661ad1454b4079a6aea557f77772a007acbef6250b45120d8185c0cba214dfdd",
+    "linuxSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+    "timedArtifactSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+    "packageSha256": "436c80d44cdce72acfcf006226aacd55f5c257e0f82b6d28e931972150cfbf5c"
+  },
+  "candidateLinuxSha256": "81b9f2f0abdeff0a89e4e4154051fe9774e8f081775294802bb4a9f14e28333b",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b6ce510d9b959494e5f5e4502b100609ad12135d6e7eea17682061088044c9c5",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/StreamInspection.cs": "22179745c52392731e4797a71a0b527fea9fe68e57ba7d111253d660040b14a0"
+  },
+  "hypothesis": "The parser stores three typed pending tasks plus a redundant tag although only one can be active and the existing resume label determines its kind. Use one ValueTask<int> and one driver awaiter,removing unused immediate-entry zeroing/copies and duplicate suspension state. Void/nullableEXIF tasks need functional out-of-line adapters on suspension,which may offset allocation or CPU savings. No CPU or heap saving is presumed.",
+  "intendedEndState": "One typed pending task;reuse existing resume labels. Marker task passes through;void pending adapter yields0,EXIF yields orientation1..8 or0fornull. Remove JpegPending and JpegPendingKind entirely. Keep one grammar/driver;no cache,pool,array,new owner/API or admission model.",
+  "boundaries": "Reverse the three pending transports and parameter type to reconstruct the full AdvanceJpeg grammar exactly. Resume.Marker is set only before publishing a marker task;Resume.Exif only before EXIF;all other states await void operations and ignore their integer. Valid parsed orientations are1..8;null maps0 and preserves the former orientation. Both adapters await their single actual user exactly once before resumption and retain compiler cancellation/failure behavior. Advance still clears pending before use and driver clears after consumption. Reader owner remains the unchanged public wrapper. No reads,checks,polls,metadata,resource limits,publication or encoder change.",
+  "sourceProof": {
+    "grammarReconstructedExactly": true,
+    "existingResumeTagDeterminesPendingResult": true,
+    "nullOrientationPreservedAndValidSamplesOneThroughEight": true,
+    "pendingConsumedOnceBeforeResumption": true,
+    "allAcquisitionAndPublicOwnerBodiesVerbatim": true,
+    "noNewOwnedArrayCapacityCacheStateOrApi": true
+  },
+  "sourceTransforms": [
+    [
+      "            switch (pending.Kind)\n            {\n                case JpegPendingKind.Marker: state.Marker = await pending.Marker.ConfigureAwait(false); break;\n                case JpegPendingKind.Exif: state.Orientation = (await pending.Exif.ConfigureAwait(false)) ?? state.Orientation; break;\n                default: await pending.Operation.ConfigureAwait(false); break;\n            }",
+      "            var value = await pending.ConfigureAwait(false);\n            if (state.Resume == JpegResume.Marker) state.Marker = value;\n            else if (state.Resume == JpegResume.Exif && value != 0) state.Orientation = (ImageOrientation)value;"
+    ],
+    [
+      "    private enum JpegPendingKind { Operation, Marker, Exif }\n",
+      ""
+    ],
+    [
+      "    private readonly struct JpegPending\n    {\n        internal readonly JpegPendingKind Kind;\n        internal readonly ValueTask Operation;\n        internal readonly ValueTask<int> Marker;\n        internal readonly ValueTask<ImageOrientation?> Exif;\n\n        internal JpegPending(ValueTask operation) { Kind = JpegPendingKind.Operation; Operation = operation; }\n        internal JpegPending(ValueTask<int> marker) { Kind = JpegPendingKind.Marker; Marker = marker; }\n        internal JpegPending(ValueTask<ImageOrientation?> exif) { Kind = JpegPendingKind.Exif; Exif = exif; }\n    }\n\n",
+      "    // Only genuine suspension needs a result adapter. The existing resume state\n    // identifies marker/EXIF results; zero means no orientation was established.\n    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]\n    private static async ValueTask<int> AwaitJpegOperation(ValueTask operation)\n    {\n        await operation.ConfigureAwait(false);\n        return 0;\n    }\n\n    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]\n    private static async ValueTask<int> AwaitJpegExif(ValueTask<ImageOrientation?> exif)\n        => (int)((await exif.ConfigureAwait(false)) ?? default);\n\n"
+    ],
+    [
+      "JpegInspectionState state, JpegPending pending)",
+      "JpegInspectionState state, ValueTask<int> pending)"
+    ],
+    [
+      "ref JpegInspectionState state, ref JpegPending pending)",
+      "ref JpegInspectionState state, ref ValueTask<int> pending)"
+    ],
+    [
+      "ref JpegInspectionState state, out JpegPending pending)",
+      "ref JpegInspectionState state, out ValueTask<int> pending)"
+    ],
+    [
+      "pending = new JpegPending(operation);",
+      "pending = AwaitJpegOperation(operation);"
+    ],
+    [
+      "pending = new JpegPending(marker);",
+      "pending = marker;"
+    ],
+    [
+      "pending = new JpegPending(exif);",
+      "pending = AwaitJpegExif(exif);"
+    ]
+  ],
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.21436015446980794,
+    "candidateUs": 0.21122316614786782,
+    "ratio": 0.9853324049365653,
+    "lower": 0.8595836930661614,
+    "upper": 1.129476927086549,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "raw": "tmp/jpt1098-ProbeDimensionsJpegAsync-paired-screen.json"
+  },
+  "confirmation": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "confirm",
+    "baselineUs": 0.2164206565221151,
+    "candidateUs": 0.21738871002197266,
+    "ratio": 1.0045145627968723,
+    "lower": 0.9901201265527942,
+    "upper": 1.0191182663704674,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "raw": "tmp/jpt1098-ProbeDimensionsJpegAsync-paired-confirm.json"
+  },
+  "interpretation": "The favorable1.46percent/3.14ns short point is uncertain. Independent12pairs show no useful CPUgain:0.216421to0.217389us,interval0.990120\u20131.019118. No causal regression or JIT explanation. One pending task/awaiter reduces marker-suspension allocations88B but adds40B at full-header EOF because a void-task adapter is needed. No universal memory saving or immediate allocation saving. This mixed tradeoff does not justify adoption or more timing. Restore exactly;no native/other-case/codegen/Windows/broad/package campaign or neighboring task representation.",
+  "pendingAllocationDiagnostic": {
+    "costs": {
+      "ProbeAsync": {
+        "baselineBytes": 1960,
+        "candidateBytes": 1872,
+        "differenceBytes": -88
+      },
+      "InspectHeadersAsync": {
+        "baselineBytes": 9984,
+        "candidateBytes": 10024,
+        "differenceBytes": 40
+      }
+    },
+    "includesIdenticalInputGateBridgeAndBatchOverhead": true,
+    "notStandaloneProductionGcCosts": true,
+    "genuineSuspension": true,
+    "quietGuardsPassed": true,
+    "sourceUnchanged": true,
+    "independentOutputs": true,
+    "noElapsedOrNativePerformanceClaim": true,
+    "helperBuilds": 0
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 10,
+      "public-normal": 154,
+      "internal-scalar": 10,
+      "public-scalar": 154
+    },
+    "allActualPendingExifEofFailureCancellationRefusalAndRecoveryPassed": true
+  },
+  "qualification": {
+    "provider": "benchmarks/probe-owner-completion-evidence.json",
+    "fullChecksEachOsReused": 6727,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "actualPackageUnchanged": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JPT1098",
+      "sourceRestored": true,
+      "productionSha256": "661ad1454b4079a6aea557f77772a007acbef6250b45120d8185c0cba214dfdd",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JPT1098",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b6ce510d9b959494e5f5e4502b100609ad12135d6e7eea17682061088044c9c5",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+        "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+        "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "eb157252acef83f6e2938276d2fc8b3561c77d21318adc29e6d393a5256df2cf"
+      },
+      "embeddedTestsSha256": "9b3c16da9c7e5308c1b03445f974152bf705ed01553bc7f9a5249591715b2609",
+      "publicTestsSha256": "4a08eaeded86c16bec150c0fe5d3394ee55ad33e4e07c69013317eec37acd134",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "memory": {
+    "immediateAllocatedBytes": 568,
+    "newOwnedArrayCapacityBytes": 0,
+    "newAdmissionBytes": 0,
+    "newRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep the qualified typed pending tasks. Do not repeat this completion normalization or infer general wins from fewer source fields. A further production design requires materially revised attribution or end-state reasoning;no permanent family ban. Current JPEG gap/uncertainties and independent drawing/editing work remain available.",
+  "raw": {
+    "file": "jpeg-pending-task-trial.tar.xz",
+    "sha256": "3ab8ce75a00d53057f0978285348e8550f3ba0ddbe3660134a435ff7fe52b63b",
+    "bytes": 1881188,
+    "members": 94,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "probe-owner-completion-qualified.tar.xz",
+        "sha256": "847a2839ebb2a466b4fcbbdd3abca92fdeece2c07130d8d969503a91d6b32a2f"
+      }
+    ]
+  }
+}
