@@ -166,11 +166,18 @@ focused **10 internal /148 public** normal/scalar, the SAME actual package and
 all three examples. One core/embedded build per OS, one pack and no accepted-module
 rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
 retains the prior architecture/profile; stage percentages are not added.
-[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
-allocation reduction and source-valid resident/stream Identify costs on their
-identified producer: resident PNG remains uncertain, while JPEG/WebP resident and
-both PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
-evidence. This is not a whole-release timing refresh. Shared admission stays
+[Matched resident PNG batches](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md)
+resolve uncertainty as a small gap: **13.099 /
+FFmpeg adapter 13.047 µs**, conservative interval
+**1.000464–1.007077**, **96 B/op**.
+One longer comparison uses 32,768 complete calls per subject, twelve alternating
+pairs and twelve native samples before/after. The actual qualified package DLL,
+original input/worker and 21 normal/scalar controls are reused; no production gain
+or broad qualification repeat. Earlier samples stay in history.
+[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its allocation
+reduction and four other source-valid Identify costs: JPEG/WebP resident and both
+PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
+evidence. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 
@@ -375,7 +382,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,785.658 | 3,607.668 | 0.772 / 0.775 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.294 | 0.573 | 0.512 / 0.525 | 568 | Confirmed pass |
-| Identify PNG8 complete container, resident, adapter reference | 13.083 | 13.053 | 1.002 / 1.005 | 96 | Confidence open |
+| Identify PNG8 complete container, resident, adapter reference | 13.099 | 13.047 | 1.004 / 1.007 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.497 | 1.181 | 0.421 / 0.431 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 5.039 | 0.004 / 0.005 | 96 | Confirmed pass |
 | Identify PNG8, fresh seekable Stream, adapter reference | 15.046 | 15.883 | 0.947 / 0.950 | 192 | Confirmed pass |

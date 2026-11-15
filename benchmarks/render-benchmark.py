@@ -2856,9 +2856,21 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
         'PngAsync': 'Identify PNG8, async nonseekable, adapter reference',
     }
     assert set(inspection_owner['identifyCases']) == set(identify_labels)
+    resident_png = json.loads((ROOT / 'benchmarks/png-resident-identify-adjacent-evidence.json').read_text(encoding='utf-8'))
+    resident_qualification = resident_png['qualification']
+    assert resident_png['measurementAccepted'] and not resident_png['productionChanged'] and not resident_png['productionSpeedupClaim']
+    assert resident_png['requiredMaterialPaths'] == 289 and resident_png['newMaterialPaths'] == 0
+    assert resident_png['raw']['mirrored'] and resident_png['raw']['allMembersVerified']
+    assert set(resident_png['cases']) == {'Png8'} and resident_png['design']['operationsPerSubject'] == 32768
+    assert resident_qualification['fullChecksEachOs'] == 6721 and resident_qualification['newBroadOrPackageChecks'] == 0
+    assert resident_qualification['sameActualPackageBothOs'] and resident_qualification['allThreeUsageExamplesBothOs']
+    assert resident_qualification['focusedNormalScalarPassed'] and resident_qualification['pngSamePacketControlsEachMode'] == 21
+    assert resident_qualification['librarySha256'] == resident_png['producers']['linuxSha256']
+    assert resident_qualification['packageSha256'] == resident_png['producers']['packageSha256']
     for name, label in identify_labels.items():
-        c = inspection_owner['identifyCases'][name]
-        assert c['librarySha256'] == inspection_owner['producers']['linuxSha256']
+        provider = resident_png if name == 'Png8' else inspection_owner
+        c = resident_png['cases'][name] if name == 'Png8' else inspection_owner['identifyCases'][name]
+        assert c['librarySha256'] == provider['producers']['linuxSha256']
         assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12
         assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['descriptorExact'] and c['independentOwnedOutput']
@@ -3132,11 +3144,18 @@ focused **10 internal /148 public** normal/scalar, the SAME actual package and
 all three examples. One core/embedded build per OS, one pack and no accepted-module
 rebuild after timing. [Reader consolidation](../benchmarks/STREAM-READER-CONSOLIDATION.md)
 retains the prior architecture/profile; stage percentages are not added.
-[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its earlier
-allocation reduction and source-valid resident/stream Identify costs on their
-identified producer: resident PNG remains uncertain, while JPEG/WebP resident and
-both PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
-evidence. This is not a whole-release timing refresh. Shared admission stays
+[Matched resident PNG batches](../benchmarks/PNG-RESIDENT-IDENTIFY-ADJACENT.md)
+resolve uncertainty as a small gap: **{resident_png['cases']['Png8']['managedUs']:.3f} /
+FFmpeg adapter {resident_png['cases']['Png8']['nativeUs']:.3f} µs**, conservative interval
+**{resident_png['cases']['Png8']['lower']:.6f}–{resident_png['cases']['Png8']['upper']:.6f}**, **96 B/op**.
+One longer comparison uses 32,768 complete calls per subject, twelve alternating
+pairs and twelve native samples before/after. The actual qualified package DLL,
+original input/worker and 21 normal/scalar controls are reused; no production gain
+or broad qualification repeat. Earlier samples stay in history.
+[Direct publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) retains its allocation
+reduction and four other source-valid Identify costs: JPEG/WebP resident and both
+PNG stream Identify pass. Codec/edit/resize/font/text paths reuse unchanged
+evidence. This is not a whole-release timing refresh. Probe/header admission stays
 **512 B dimension /8,448 B bulk maximum**, zero retained operation workspace;
 physical/native/JIT peaks are unmeasured. No historical stage gains are added.
 

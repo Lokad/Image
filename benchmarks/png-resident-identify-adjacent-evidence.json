@@ -1,0 +1,351 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PIA1073",
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "measurementAccepted": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "5634cd38f36d7912d5afc5c4494427671cd0efd297a9d0831c08f6d710a27096",
+    "linuxSha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+    "timedArtifactSha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+    "packageSha256": "f7b691dd41b1937162f24c154cdd2a0dbe4acd8e1b65295e1232fbb16e865933"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "src/Lokad.Image/ImageInfo.cs": "d843659bfe7b445e956706f100d2bac72b19442c287d5e777598298c0b19a341",
+    "src/Lokad.Image/Internal/PngIdentifier.cs": "144b885365b3b02f81ddea129aad18f74532de1be7f25767924120a2668fda27",
+    "src/Lokad.Image/Internal/ContainerHeaders.cs": "2620bcfc0aa5b6727804afafb32cefce90655b948cd2762be7f71b0d59ce2966",
+    "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "727a76b97f1d7262bea0dc9850fc72eb47848413f1ec2e2be5a2e7613d98010b",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22"
+  },
+  "cases": {
+    "Png8": {
+      "managedUs": 13.098788846333822,
+      "nativeUs": 13.047227742513021,
+      "ratio": 1.0039518819505844,
+      "lower": 1.0004643956448525,
+      "upper": 1.0070772308648657,
+      "status": "gap",
+      "allocatedBytes": 96,
+      "librarySha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+      "benchmarkAssemblySha256": "1bbbbde95df1d3aeb53a16c464a88886268aed7cb2c936a44cc45165b7db2870",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "inputBytes": 218775,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident frozen 218775-byte original RGBA8 PNG (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, input/default-limit admission, full chunk scan/CRC, required metadata validation and descriptor construction. FFmpeg public PNG parser/CRC with original timed structural/metadata compatibility adapter and fresh AVCodecParameters acquisition/materialization/release; no pixel decoder or inflation on either side. Parser/context/input reused, descriptor never cached. All nine metadata fields exact, including encoded source color/alpha/components; native live descriptor independence and 21 same-packet controls including invalid Deflate/valid CRC, changed width, orientation6, CRC, truncation, ordering, IEND/EOF and limits. Direct managed span controls also cover exact input/working limits and cancellation. Only this resident PNG boundary is measured. Startup, IPC, I/O, generation/hashing/validation excluded; one CPU, normal SIMD, no concurrency.",
+      "nativeIdentity": {
+        "sourceSha256": "79f06c4e321e3bae15cdc293462f7cc20573cbdd3ab1e6574c173a726a7517e0",
+        "buildScriptSha256": "b9b8ed0cf5d8fb3b3efe9da14a66662ce49db7f3dd862cf8fa5ad521f326954d",
+        "workerSha256": "f099612f298b3d633de4524940b3096abd62f6bb387b45ee784b3f4e1169fc37"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/pia1073-resident.json",
+        "receipt": "tmp/pia1073-resident-receipt.json"
+      },
+      "operationsPerSubject": 32768,
+      "managedActualNanoseconds": [
+        13132.702331542969,
+        13125.95932006836,
+        13081.821746826172,
+        13095.683685302734,
+        13082.781127929688,
+        13122.70394897461,
+        13092.278869628906,
+        13093.835479736328,
+        13077.870666503906,
+        13093.671936035156,
+        13082.608093261719,
+        13103.548950195312
+      ],
+      "nativeBracketMeansUs": [
+        13.050060440063477,
+        13.047227742513021,
+        13.052015602111817
+      ],
+      "sampling": "One fixed matched32768-operation adjacent12pair natural-GC capture;all actuals and fastest-three-bracket conservative confidence. Old global/shorter samples remain history. No production gain claim."
+    }
+  },
+  "confidence": {
+    "method": "Twelve fixed adjacent managed/native pairs with alternating order and the declared fixed batch of complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, fresh independently owned metadata result creation and delegate dispatch; no output copy or IDisposable result. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/input/scratch retained. No timing or baseline-setting changes in production.",
+    "pairedRatioConfidence": [
+      1.0017096673713968,
+      1.0061981728417948
+    ],
+    "views": [
+      {
+        "view": "allActual",
+        "statistics": {
+          "OriginalValues": [
+            13132.702331542969,
+            13125.95932006836,
+            13081.821746826172,
+            13095.683685302734,
+            13082.781127929688,
+            13122.70394897461,
+            13092.278869628906,
+            13093.835479736328,
+            13077.870666503906,
+            13093.671936035156,
+            13082.608093261719,
+            13103.548950195312
+          ],
+          "N": 12,
+          "Min": 13077.870666503906,
+          "LowerFence": 13044.338123321533,
+          "Q1": 13082.737869262695,
+          "Median": 13093.753707885742,
+          "Mean": 13098.788846333822,
+          "Q3": 13108.337699890137,
+          "UpperFence": 13146.737445831299,
+          "Max": 13132.702331542969,
+          "InterquartileRange": 25.599830627441406,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 5.386013600091349,
+          "Variance": 348.10971000442765,
+          "StandardDeviation": 18.657698411230353,
+          "Skewness": 0.6403873249961257,
+          "Kurtosis": 1.7928698944941281,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 13098.788846333822,
+            "StandardError": 5.386013600091349,
+            "Level": 12,
+            "Margin": 23.897631053197156,
+            "Lower": 13074.891215280624,
+            "Upper": 13122.68647738702
+          },
+          "Percentiles": {
+            "P0": 13077.870666503906,
+            "P25": 13082.737869262695,
+            "P50": 13093.753707885742,
+            "P67": 13098.593833312989,
+            "P80": 13118.87294921875,
+            "P85": 13123.843328857423,
+            "P90": 13125.633782958985,
+            "P95": 13128.993675231934,
+            "P100": 13132.702331542969
+          }
+        },
+        "nativeConfidenceLower": 13030.46685517596,
+        "nativeConfidenceUpper": 13068.822111208829,
+        "ratioLower": 1.0004643956448525,
+        "ratioUpper": 1.0070772308648657
+      },
+      {
+        "view": "upperOutlierDiagnostic",
+        "statistics": {
+          "OriginalValues": [
+            13132.702331542969,
+            13125.95932006836,
+            13081.821746826172,
+            13095.683685302734,
+            13082.781127929688,
+            13122.70394897461,
+            13092.278869628906,
+            13093.835479736328,
+            13077.870666503906,
+            13093.671936035156,
+            13082.608093261719,
+            13103.548950195312
+          ],
+          "N": 12,
+          "Min": 13077.870666503906,
+          "LowerFence": 13044.338123321533,
+          "Q1": 13082.737869262695,
+          "Median": 13093.753707885742,
+          "Mean": 13098.788846333822,
+          "Q3": 13108.337699890137,
+          "UpperFence": 13146.737445831299,
+          "Max": 13132.702331542969,
+          "InterquartileRange": 25.599830627441406,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 5.386013600091349,
+          "Variance": 348.10971000442765,
+          "StandardDeviation": 18.657698411230353,
+          "Skewness": 0.6403873249961257,
+          "Kurtosis": 1.7928698944941281,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 13098.788846333822,
+            "StandardError": 5.386013600091349,
+            "Level": 12,
+            "Margin": 23.897631053197156,
+            "Lower": 13074.891215280624,
+            "Upper": 13122.68647738702
+          },
+          "Percentiles": {
+            "P0": 13077.870666503906,
+            "P25": 13082.737869262695,
+            "P50": 13093.753707885742,
+            "P67": 13098.593833312989,
+            "P80": 13118.87294921875,
+            "P85": 13123.843328857423,
+            "P90": 13125.633782958985,
+            "P95": 13128.993675231934,
+            "P100": 13132.702331542969
+          }
+        },
+        "nativeConfidenceLower": 13030.46685517596,
+        "nativeConfidenceUpper": 13068.822111208829,
+        "ratioLower": 1.0004643956448525,
+        "ratioUpper": 1.0070772308648657
+      }
+    ]
+  },
+  "design": {
+    "reason": "Resolve existing residentPNG Identify uncertainty before optimizing. Existing global BDN200ms managed/50ms native sampling gives13.083/13.053us upper1.005245. One longer matched32768-operation (~0.43s) adjacent twelve-pair capture with alternating order and twelve native batches before/after; all actuals/conservative confidence unchanged. Preserve original evidence and exact public operation/input/reference. No identical favorable repeats. Pass stops;separated gap supports attribution;uncertainty remains open.",
+    "toolChange": "Reuse immutable current actual package DLL,original frozen Identify harness,FFmpeg worker and21same-packet controls. Existing adjacent driver statistical/sample bodies are unchanged. Only metadata harness/count guard and reference-return sink replace int-return handling; one small driver build,zero production/embedded/harness/native/fixture/package builds. Setup/full validation outside both clocks. Managed fresh ImageInfo is independently owned and not IDisposable; latest descriptor lives through measurement only. Native fresh descriptor creation/release remains timed. Natural nonconcurrent workstation GC;no forced collection.",
+    "originalDriverSourceSha256": "1b01a82d2bc5e14693faf44dda5d2b36b91b2c8180339954f5a454cfb29144be",
+    "driverSourceSha256": "7b2e348f6c64a32d2504ed92db83af5017d4dfc2b57ee897ec104fb1ce586fe2",
+    "driverProjectSha256": "34c3ef7f2d237b7a8002d98615b17af76a5fe15389988a8caaecea9fb6bf978e",
+    "operationsPerSubject": 32768,
+    "pairs": 12,
+    "nativeBrackets": 3,
+    "initialToolBuildFailure": {
+      "sourceSha256": "a8c650fc0036180efa0120ddba53e1c0954f568a5319457e8a632a702f96f9e2",
+      "reason": "Nullable compiler error in benchmark return sink;zero measurement actuals or production builds. Add nullable annotation only;retain original source/log."
+    }
+  },
+  "qualification": {
+    "provider": "benchmarks/refill-completion-inlining-evidence.json",
+    "fullChecksEachOs": 6721,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f7b691dd41b1937162f24c154cdd2a0dbe4acd8e1b65295e1232fbb16e865933",
+    "librarySha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+    "newBroadOrPackageChecks": 0,
+    "sourceIdenticalQualificationReused": true,
+    "pngSamePacketControlsEachMode": 21,
+    "focusedNormalScalarPassed": true
+  },
+  "memory": {
+    "allocatedBytesPerOperation": 96,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStorageBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "physicalNativeJitPeaksRemeasured": false,
+    "nativeAllocationMeasured": false,
+    "scope": "Complete public span Identify;fresh independently owned descriptor and operation scaffolding. Original resident input retained outside both operation clocks. No descriptor cache,encoded-input copy or pixel decoding. Total allocations,logical capacity and retention are distinct."
+  },
+  "profile": {
+    "profilingOnly": true,
+    "allInstrumentedTimingsDiscarded": true,
+    "librarySha256": "8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6",
+    "totalSamples": 1995,
+    "resolvedManagedSamples": 1990,
+    "methodLocations": [
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1962
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]",
+        16
+      ],
+      [
+        "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.PngIdentifier::Identify(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        10
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Dispose()[Optimized]",
+        1
+      ]
+    ],
+    "traceSha256": "8e464c2195e0bdee240cf8a36c23bbcb4a8dbe25942df616611866837f8caef5",
+    "traceBytes": 644092,
+    "sampleDurationSeconds": 2,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "scope": "One bounded2second userCPU sample of the current complete public residentPNG Identify,parent process only,after firstActual. CPU0operation/CPU1sampler. Same borrowed packet,full framing/CRC/metadata,owned descriptor and cleanup;original native/output/reference gates checked. Trace may include runtime/GC and native-reference orchestration,not just parser code;sample counts locate leads,not elapsed-time fractions,standalone costs or peak memory. Existing immutable package/harness/selector/fixtures/workers;zero builds or qualification repeats.",
+    "receiptRecovery": {
+      "reason": "Completed capture used a random validation filename rather than the guessed suffix. Resolve by recorded runId;recheck existing full output gates and module identities. Recover only analysis/receipt;no process or sampling repeated.",
+      "capturedApplicationAndCollectorZeroExitsEstablishedByOriginalScriptControlFlow": true,
+      "collectorArgumentsRecoveredFromOriginalScriptAndRecordedTargetPid": true,
+      "originalFailureInvocation": "tmp/pia1073-profile-invocation.log",
+      "perfHeader": "tmp/pia1073-current-png-identify-profile-perf-header.txt",
+      "allInstrumentedTimingsDiscarded": true
+    },
+    "interpretation": "Sample locations overwhelmingly identify the existing CRC Compute method. Counts include skid,inlining,runtime and parent-only sampling;they are location leads,not independently timed phase fractions or predicted gains. Existing encoder ComputeChunk has a guarded512-bit folding path,whereas Compute still advances four128-bit residues. Investigate that material difference while preserving exactly ordered polynomial results and cancellation cadence;do not infer acceptance from instruction width."
+  },
+  "previousEvidence": {
+    "provider": "benchmarks/probe-result-publication-evidence.json",
+    "case": {
+      "managedUs": 13.083449783889046,
+      "nativeUs": 13.052613606770834,
+      "ratio": 1.0023624523062735,
+      "lower": 0.9995442939260201,
+      "upper": 1.0052446020995545,
+      "status": "uncertain",
+      "allocatedBytes": 96,
+      "librarySha256": "11165942f8867bef4dde4335a6915e716f14b94d7838a38756398649f23c0b83",
+      "benchmarkAssemblySha256": "1bbbbde95df1d3aeb53a16c464a88886268aed7cb2c936a44cc45165b7db2870",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "inputBytes": 218775,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentOwnedOutput": true,
+      "boundary": "One resident frozen 218775-byte original RGBA8 PNG (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, input/default-limit admission, full chunk scan/CRC, required metadata validation and descriptor construction. FFmpeg public PNG parser/CRC with original timed structural/metadata compatibility adapter and fresh AVCodecParameters acquisition/materialization/release; no pixel decoder or inflation on either side. Parser/context/input reused, descriptor never cached. All nine metadata fields exact, including encoded source color/alpha/components; native live descriptor independence and 21 same-packet controls including invalid Deflate/valid CRC, changed width, orientation6, CRC, truncation, ordering, IEND/EOF and limits. Direct managed span controls also cover exact input/working limits and cancellation. Only this resident PNG boundary is measured. Startup, IPC, I/O, generation/hashing/validation excluded; one CPU, normal SIMD, no concurrency.",
+      "nativeIdentity": {
+        "sourceSha256": "79f06c4e321e3bae15cdc293462f7cc20573cbdd3ab1e6574c173a726a7517e0",
+        "buildScriptSha256": "b9b8ed0cf5d8fb3b3efe9da14a66662ce49db7f3dd862cf8fa5ad521f326954d",
+        "workerSha256": "f099612f298b3d633de4524940b3096abd62f6bb387b45ee784b3f4e1169fc37"
+      },
+      "sourceEvidence": {
+        "observation": "tmp/psm1031v-retained-IdentifyPng8-confirm-observation.json",
+        "receipt": "tmp/psm1031v-retained-IdentifyPng8-confirm-receipt.json"
+      }
+    },
+    "allOriginalSamplesRetained": true
+  },
+  "builds": {
+    "driverSuccessful": 1,
+    "driverInitialCompileFailures": 1,
+    "production": 0,
+    "embedded": 0,
+    "harness": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "next": "ResidentPNG Identify is a demonstrated small gap on the current immutable package. Investigate the attributed CRC folding difference with original correctness/polling/ownership and complete-operation boundaries. No favorable repeat of this measurement;stop the other source-valid passing Identify controls. Full289-path objective remains open.",
+  "raw": {
+    "file": "png-resident-identify-adjacent.tar.xz",
+    "sha256": "9baacaf7a977278ab8ed749e60b19d11194d2c2329b3015be54c3b722c256947",
+    "bytes": 190692,
+    "members": 89,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "refill-completion-inlining-qualified.tar.xz",
+        "sha256": "ebd7636b270f0fe6aadab0a9a015bedb5dc7f25bf5144afc0df781eb8a720681"
+      },
+      {
+        "file": "probe-result-publication-qualified.tar.xz",
+        "sha256": "1fed7a9df4e5647b3885edc4e208a684b69a33b5b43612e65735c9adbfcaf98b"
+      }
+    ]
+  }
+}

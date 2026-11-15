@@ -1,8 +1,9 @@
 # Direct probe result publication
 
 [Refill completion](REFILL-COMPLETION-INLINING.md) now owns the four probe and
-complete PNG-header costs. The five unchanged Identify comparisons below retain
-their source-valid producer; this publication round remains their current owner.
+complete PNG-header costs. [Matched resident PNG batches](PNG-RESIDENT-IDENTIFY-ADJACENT.md)
+now own that Identify cost and resolve its uncertainty as a small gap. The other
+four unchanged Identify comparisons retain this source-valid producer.
 
 Probes now construct their public result directly, removing the temporary
 full descriptor: **608 →568 B/op**. Independent complete JPEG sync/async pairs

@@ -49,4 +49,5 @@ timed DLL `8d186aaa377681a5879d3b29990357bff88ef83e0471775027e6a8b6496e3fd6`. Ra
 `refill-completion-inlining-qualified.tar.xz`:4,609,016B/176members,SHA256
 `ebd7636b270f0fe6aadab0a9a015bedb5dc7f25bf5144afc0df781eb8a720681`,mirrored/member-verified. [Reader consolidation](STREAM-READER-CONSOLIDATION.md)
 retains the prior architecture/profile;[direct publication](PROBE-RESULT-PUBLICATION.md)
-still owns unchanged complete Identify costs.
+retains four unchanged complete Identify costs. [Matched resident PNG batches](PNG-RESIDENT-IDENTIFY-ADJACENT.md)
+now own the fifth, resolving its uncertainty without a production change.
