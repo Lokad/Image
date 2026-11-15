@@ -377,6 +377,32 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task StreamCancellationPreservesAnUnsignaledTokenAndReleasesAdmission(bool faultedRead)
+    {
+        using var root = new TestMemoryBudget(Workspace);
+        using var cancellation = new CancellationTokenSource();
+        using var input = new CanceledProbeInput(cancellation.Token, faultedRead);
+        var options = new ImageProbeOptions { Limits = new() { MemoryBudget = root } };
+        var pending = ImageCodec.ProbeAsync(input, options);
+        Assert.True(pending.IsCanceled);
+        var error = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending.AsTask());
+        Assert.Equal(cancellation.Token, error.CancellationToken);
+        Assert.False(cancellation.IsCancellationRequested);
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(input.CanRead);
+        using var next = new MemoryStream(OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded);
+        Assert.Equal(17, (await ImageCodec.ProbeAsync(next, options)).Width);
+        Assert.Equal(0, root.Bytes); Assert.True(next.CanRead);
+    }
+
+    private sealed class CanceledProbeInput(CancellationToken token, bool faultedRead) : MemoryStream
+    {
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+            => faultedRead ? ValueTask.FromException<int>(new OperationCanceledException(token))
+                : throw new OperationCanceledException(token);
+    }
+
+    [Theory]
     [InlineData(false, false, MetadataProfile.Png8, null)] [InlineData(true, false, MetadataProfile.Png8, null)]
     [InlineData(false, true, MetadataProfile.Png8, null)] [InlineData(true, true, MetadataProfile.Png8, null)]
     [InlineData(false, false, MetadataProfile.JpegBaseline420, 2)] [InlineData(true, false, MetadataProfile.JpegBaseline420, 2)]

@@ -22,20 +22,40 @@ public static partial class ImageCodec
         CancellationToken cancellationToken = default)
         => ProbeCore(input, options, cancellationToken, true);
 
-    private static async ValueTask<ImageProbeResult> ProbeCore(Stream input, ImageProbeOptions? options,
+    private static ValueTask<ImageProbeResult> ProbeCore(Stream input, ImageProbeOptions? options,
         CancellationToken cancellationToken, bool asynchronous)
     {
-        ArgumentNullException.ThrowIfNull(input);
-        var facts = options?.Facts ?? ImageProbeFacts.Dimensions;
-        var maximum = options?.MaxAcquiredBytes ?? ImageProbeOptions.DefaultMaxAcquiredBytes;
-        var metadataPolicy = options?.MetadataPolicy ?? ImageMetadataPolicy.Strict;
-        if (facts == 0 || (facts & ~ImageProbeFacts.All) != 0 || maximum < 1)
-            throw new ArgumentOutOfRangeException(nameof(options));
-        ExifOrientation.ValidatePolicy(metadataPolicy);
-        using var reader = new ProbeReader(input, options is null ? ImageLimits.Default : options.Limits,
-            cancellationToken, asynchronous, maximum, facts);
-        var result = await StreamInspection.InspectAsync<ProbeResult, ProbeResultFactory>(reader, reader, metadataPolicy)
-            .ConfigureAwait(false);
-        return result.Value;
+        ProbeReader? reader = null;
+        try
+        {
+            ArgumentNullException.ThrowIfNull(input);
+            var facts = options?.Facts ?? ImageProbeFacts.Dimensions;
+            var maximum = options?.MaxAcquiredBytes ?? ImageProbeOptions.DefaultMaxAcquiredBytes;
+            var metadataPolicy = options?.MetadataPolicy ?? ImageMetadataPolicy.Strict;
+            if (facts == 0 || (facts & ~ImageProbeFacts.All) != 0 || maximum < 1)
+                throw new ArgumentOutOfRangeException(nameof(options));
+            ExifOrientation.ValidatePolicy(metadataPolicy);
+            reader = new ProbeReader(input, options is null ? ImageLimits.Default : options.Limits,
+                cancellationToken, asynchronous, maximum, facts);
+            var pending = StreamInspection.InspectAsync<ProbeResult, ProbeResultFactory>(reader, reader, metadataPolicy);
+            if (!pending.IsCompletedSuccessfully) return AwaitProbe(pending, reader);
+            var result = pending.Result.Value;
+            reader.Dispose();
+            return ValueTask.FromResult(result);
+        }
+        catch (Exception error) { return ProbeFailure(reader, error); }
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static async ValueTask<ImageProbeResult> AwaitProbe(ValueTask<ProbeResult> pending, ProbeReader reader)
+    {
+        using (reader) return (await pending.ConfigureAwait(false)).Value;
+    }
+
+    // Async exception handling preserves canceled status and the original token,
+    // including an OperationCanceledException whose token was not requested.
+    private static async ValueTask<ImageProbeResult> ProbeFailure(ProbeReader? reader, Exception error)
+    {
+        using (reader) return await ValueTask.FromException<ImageProbeResult>(error).ConfigureAwait(false);
     }
 }

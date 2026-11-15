@@ -158,29 +158,34 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[JPEG inspection advancement](../benchmarks/JPEG-INSPECTION-DRIVER.md) separates
-one grammar from genuine I/O suspension. Independent complete async-probe pairs
-save **11.98% /
-30.66 ns**;
-complete-header pairs save **10.67% /
-0.649 µs**.
-Both paired and all-actual intervals separate; these scoped effects are not added
-to earlier gains or described as FFmpeg parity. Current JPEG sync is uncertain at
-**0.199 µs, upper 1.085**;
-async remains a gap at **0.229 µs, upper 1.192**.
-Both refresh on the SAME actual timed/package DLL. Unchanged PNG/WebP dimensions
-and PNG headers retain their [identified source-valid producer](../benchmarks/REFILL-CALL-INLINING.md).
-Original inputs, callbacks, native brackets and exact descriptor/owner gates stay fixed.
-Immediate GC remains **568 B/probe /8,776 B/complete JPEG header**. A diagnostic
-forcing one pending marker or EOF read adds **64 B/operation**, including unchanged
-gated-input/bridge overhead; its absolute totals are not production GC costs.
-Admission remains **512 B dimensions /8,448 B bulk**, with zero added arrays,
-cache or retained workspace. Source grows by 110 lines and selected native code grows;
-physical/native/JIT peaks are unmeasured. Windows/Linux each pass **6,725 full/live
-checks**, **10 internal/152 public** normal/scalar, the SAME actual package and
-all three examples. Four new EOF cancel/failure/ownership cases also pass the
-baseline. One coherent qualification/pack milestone follows reconciliation;
-the accepted timed Linux DLL is never rebuilt. All earlier and adverse evidence remains.
+[Probe owner completion](../benchmarks/PROBE-OWNER-COMPLETION.md) avoids the
+outer async wrapper for immediate completion and transfers pending work with its
+owner. Independent complete async-probe pairs save
+**3.55% /
+8.01 ns**;
+paired and all-actual intervals separate. These scoped effects are not added to
+earlier gains or described as FFmpeg parity. All four affected dimension probes
+refresh on the SAME actual immutable timed/package DLL:PNG/WebP pass and stop;
+JPEG sync is uncertain at **0.199 µs,
+upper 1.078**;async remains a gap at
+**0.220 µs,
+upper 1.124**.
+Filtered results and all-actual statistics remain separate;the displayed upper
+takes the worse view. Original inputs,callbacks,native brackets and exact
+descriptor/owner gates stay fixed. Unchanged PNG-header costs retain their
+[source-valid producer](../benchmarks/REFILL-CALL-INLINING.md);
+[JPEG grammar/header evidence](../benchmarks/JPEG-INSPECTION-DRIVER.md) remains.
+Immediate GC stays **568 B/probe**. One-gated-read allocation diagnostics add
+**8 B/probe**,with unchanged full-header diagnostic allocation. Absolute totals
+include equal gated-input/bridge overhead and are not production GC costs.
+Admission remains **512 B dimensions /8,448 B bulk**,with zero added arrays,
+cache or retained workspace;physical/native/JIT peaks are unmeasured.
+Windows/Linux each pass **6,727 full/live checks**, **10 internal/154 public**
+normal/scalar,the SAME actual package and all three examples. Two new stream
+cancellation cases also pass baseline,including unsignaled tokens. Actual pending
+users retain ownership;late I/O failure,cleanup,refusal and recovery checks remain.
+One coherent qualification/pack milestone follows performance reconciliation;
+the accepted timed Linux DLL is never rebuilt. Earlier/adverse evidence remains.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **6.733 / FFmpeg adapter
 13.068 µs**, conservative upper
@@ -394,10 +399,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.115 | 0.122 | 0.940 / 0.966 | 568 | Confirmed pass |
-| Probe JPEG dimensions, seekable | 0.199 | 0.193 | 1.031 / 1.085 | 568 | Confidence open |
-| Probe WebP dimensions, seekable | 0.114 | 0.123 | 0.932 / 0.957 | 568 | Confirmed pass |
-| Probe JPEG dimensions, async nonseekable | 0.229 | 0.203 | 1.128 / 1.192 | 568 | Confirmed gap |
+| Probe PNG dimensions, seekable | 0.109 | 0.122 | 0.888 / 0.922 | 568 | Confirmed pass |
+| Probe JPEG dimensions, seekable | 0.199 | 0.195 | 1.022 / 1.078 | 568 | Confidence open |
+| Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
+| Probe JPEG dimensions, async nonseekable | 0.220 | 0.202 | 1.085 / 1.124 | 568 | Confirmed gap |
 | Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |
