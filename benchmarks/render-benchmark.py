@@ -1821,12 +1821,12 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert font_cost['allocatedBytes'] == 176
     assert font_cost['status'] == ('pass' if font_cost['upper'] <= 1 else 'gap' if font_cost['lower'] > 1 else 'uncertain')
     assert math.isclose(font_cost['ratio'], font_cost['managedUs'] / font_cost['nativeUs'], rel_tol=1e-12)
-    text_draw = json.loads((ROOT / 'benchmarks/text-paired-endpoints-evidence.json').read_text(encoding='utf-8'))
+    text_draw = json.loads((ROOT / 'benchmarks/text-natural-run-preparation-evidence.json').read_text(encoding='utf-8'))
     assert text_draw['productionAccepted'] and text_draw['allAffectedPerformanceReconciled']
     assert text_draw['requiredMaterialPaths'] == 289 and text_draw['newMaterialPaths'] == 0
     assert text_draw['raw']['mirrored'] and text_draw['raw']['allMembersVerified']
     tq = text_draw['qualification']
-    assert tq['windows']['total'] == tq['linux']['total'] == tq['fullChecksEachOs'] == 6715
+    assert tq['windows']['total'] == tq['linux']['total'] == tq['fullChecksEachOs'] == 6721
     assert tq['actualPackage']['sha256'] == tq['samePackageWindows']['sha256']
     assert tq['actualPackage']['librarySha256'] == text_draw['producers']['timedArtifactSha256']
     assert all(tq[k]['actualConsumerPassed'] and tq[k]['usageExamples'] == 3
@@ -3042,7 +3042,7 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**.
-[Current complete text integrations](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) pass,
+[Current complete text integrations](../benchmarks/TEXT-NATURAL-RUN-PREPARATION.md) pass,
 including every layout/fitting call and fresh canvas/clear/ownership/disposal.
 Creation-only preparation is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs; the directly measured eight-draw batch
 amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation. Allocations are
@@ -3056,16 +3056,20 @@ contemporary unchanged producer; no complete-pipeline gain is inferred.
 Loading and prepared-draw rows remain scoped diagnostics: eager/lazy validation
 and retained raster state differ; historical stage times are never added to infer
 overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose**.
-[Paired endpoint evaluation](../benchmarks/TEXT-PAIRED-ENDPOINTS.md) saves
-{text_gain['savedUs']:.2f} µs / {text_gain['rawSavedFraction']:.2%} in contemporary prepared-word pairs;
+[Natural-run preparation](../benchmarks/TEXT-NATURAL-RUN-PREPARATION.md) saves
+{text_gain['savedUs']:.2f} µs / {text_gain['rawSavedFraction']:.2%} in the bounded ordinary-word comparison;
 paired-normalized gain is {text_gain['pairedNormalizedSavedFraction']:.2%}. Both intervals separate,
 while wider bracket-normalized gain remains inconclusive. Four individually reset
 drawing diagnostics remain scoped gaps. Their GC columns use current public-only
 counters (**59,304 B ordinary / 56 B prepared**); timed adapters add **24 B/draw**.
 Active Latin raster capacity is **40,408 B**, excluding the borrowed canvas and font;
 reference drawing allocations and physical peaks remain unmeasured. No overall
-pipeline gain is claimed. Earlier one-invocation/aggregation evidence stays linked
-as history, outside current-cost renderer dependencies.
+pipeline gain is claimed. Prepared RGBA8 is launch-sensitive: the same DLL produced
+55.84 and 47.19 µs; one current baseline/candidate control measured 47.64/47.19 µs.
+The table keeps the higher original cost and its upper bound; no favorable capture
+replaces it. An existing frozen Arabic managed-DLL check saves **173.84 µs / 23.52%**,
+with **441,696 B/draw** unchanged; this is not external-reference parity. Earlier
+captures remain linked history, outside current-cost renderer dependencies.
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
 managed pixels. Complete encoder packets and narrow metadata exceptions retain

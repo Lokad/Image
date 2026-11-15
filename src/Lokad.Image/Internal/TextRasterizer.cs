@@ -375,7 +375,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 previousLow = low; previousHigh = high;
                 order[i] = new(low, i, i);
             }
-            TextRasterSort.Sort<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
+            TextRasterSort.SortGeometry<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
             for (var i = 0; i < Count; i++)
             {
                 owner.context.Cancellation.ThrowIfCancellationRequested();
@@ -388,7 +388,8 @@ internal sealed partial class TextRasterizer : IDisposable
                     var other = order[j].Index;
                     var a = Edges[Math.Min(index, other)]; var b = Edges[Math.Max(index, other)];
                     var low = Math.Max(a.MinY, b.MinY); var high = Math.Min(a.MaxY, b.MaxY);
-                    var d0 = a.X(low) - b.X(low); var d1 = a.X(high) - b.X(high);
+                    var (aLow, aHigh) = a.Endpoints(low, high); var (bLow, bHigh) = b.Endpoints(low, high);
+                    var d0 = aLow - bLow; var d1 = aHigh - bHigh;
                     if (d0 < 0 && d1 > 0 || d0 > 0 && d1 < 0)
                     {
                         var y = low + (high - low) * (d0 / (d0 - d1));
@@ -396,7 +397,7 @@ internal sealed partial class TextRasterizer : IDisposable
                     }
                 }
             }
-            TextRasterSort.Sort<double, EventOrder>(Events.AsSpan(0, EventCount), owner.context.Cancellation);
+            TextRasterSort.SortGeometry<double, EventOrder>(Events.AsSpan(0, EventCount), owner.context.Cancellation);
             var unique = 0;
             for (var i = 0; i < EventCount; i++)
             { owner.context.Cancellation.ThrowIfCancellationRequested(); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }

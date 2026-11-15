@@ -26,10 +26,13 @@ public sealed class TextRasterSortTests
                 values[i] = shape switch { 0 => i, 1 => count - i, 2 => 1, 3 => Math.Min(i, count - i), _ => random.Next(-50, 51) };
             if (shape == 4 && count > 5)
             { values[0] = double.NaN; values[1] = double.PositiveInfinity; values[2] = double.NegativeInfinity; values[3] = -0.0; values[4] = 0; }
-            var expected = values.ToArray(); Array.Sort(expected);
+            var expected = values.ToArray(); var geometry = values.ToArray(); Array.Sort(expected);
             TextRasterSort.Sort<double, Order>(values, default);
             Assert.Equal(expected, values);
             Assert.Equal(expected.Select(BitConverter.DoubleToInt64Bits).Order(), values.Select(BitConverter.DoubleToInt64Bits).Order());
+            TextRasterSort.SortGeometry<double, Order>(geometry, default);
+            Assert.Equal(expected, geometry);
+            Assert.Equal(expected.Select(BitConverter.DoubleToInt64Bits).Order(), geometry.Select(BitConverter.DoubleToInt64Bits).Order());
         }
     }
 
@@ -41,5 +44,9 @@ public sealed class TextRasterSortTests
         var failure = Assert.Throws<OperationCanceledException>(() => TextRasterSort.Sort<double, Order>(values, cancellation.Token));
         Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal([3d, 1d, 2d], values);
         TextRasterSort.Sort<double, Order>(values, default); Assert.Equal([1d, 2d, 3d], values);
+        values = [3, 1, 2];
+        failure = Assert.Throws<OperationCanceledException>(() => TextRasterSort.SortGeometry<double, Order>(values, cancellation.Token));
+        Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal([3d, 1d, 2d], values);
+        TextRasterSort.SortGeometry<double, Order>(values, default); Assert.Equal([1d, 2d, 3d], values);
     }
 }
