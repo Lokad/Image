@@ -19,19 +19,21 @@ internal sealed class ProbeReader(Stream input, ImageLimits limits, Cancellation
         return (established & requested) == requested;
     }
 
-    internal ImageProbeResult Result(ImageInfo info)
+    internal ImageProbeResult Result(ImageFormat format, int width, int height, int bitDepth, bool hasAlpha,
+        ImageOrientation orientation, SourceColorModel sourceColor, SourceAlphaRepresentation sourceAlpha,
+        byte sourceComponentCount)
     {
         var dimensions = (established & ImageProbeFacts.Dimensions) != 0;
         var source = (established & ImageProbeFacts.SourceRepresentation) != 0;
         var alpha = (established & ImageProbeFacts.Transparency) != 0;
         return new()
         {
-            Format = info.Format, EstablishedFacts = established,
-            Width = dimensions ? info.Width : null, Height = dimensions ? info.Height : null,
-            BitDepth = source ? info.BitDepth : null, SourceColor = source ? info.SourceColor : null,
-            SourceComponentCount = source ? info.SourceComponentCount : null,
-            SourceAlpha = alpha ? info.SourceAlpha : null, HasAlpha = alpha ? info.HasAlpha : null,
-            Orientation = (established & ImageProbeFacts.Orientation) != 0 ? info.Orientation : null,
+            Format = format, EstablishedFacts = established,
+            Width = dimensions ? width : null, Height = dimensions ? height : null,
+            BitDepth = source ? bitDepth : null, SourceColor = source ? sourceColor : null,
+            SourceComponentCount = source ? sourceComponentCount : null,
+            SourceAlpha = alpha ? sourceAlpha : null, HasAlpha = alpha ? hasAlpha : null,
+            Orientation = (established & ImageProbeFacts.Orientation) != 0 ? orientation : null,
             IsAnimated = (established & ImageProbeFacts.Animation) != 0 ? animated : null,
             BytesRead = BytesRead, BytesTraversed = BytesTraversed
         };

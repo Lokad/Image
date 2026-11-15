@@ -3,23 +3,29 @@ namespace Lokad.Image.Internal;
 internal static class ImageSourceMetadata
 {
     internal static ImageInfo Png(int width, int height, int depth, int color, bool transparency, ImageOrientation orientation)
-        => new(ImageFormat.Png, width, height, depth, color is 4 or 6 || transparency, orientation)
-        {
-            SourceColor = color switch { 0 or 4 => SourceColorModel.Grayscale, 3 => SourceColorModel.Indexed, _ => SourceColorModel.Rgb },
-            SourceAlpha = color is 4 or 6 ? SourceAlphaRepresentation.Channel
+        => Png<InfoResult, InfoResultFactory>(null, width, height, depth, color, transparency, orientation).Value;
+
+    internal static TResult Png<TResult, TFactory>(ProbeReader? probe, int width, int height, int depth,
+        int color, bool transparency, ImageOrientation orientation)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+        => TFactory.Create(probe, ImageFormat.Png, width, height, depth, color is 4 or 6 || transparency, orientation,
+            color switch { 0 or 4 => SourceColorModel.Grayscale, 3 => SourceColorModel.Indexed, _ => SourceColorModel.Rgb },
+            color is 4 or 6 ? SourceAlphaRepresentation.Channel
                 : !transparency ? SourceAlphaRepresentation.None
                 : color == 3 ? SourceAlphaRepresentation.PaletteTransparency : SourceAlphaRepresentation.ColorKeyTransparency,
-            SourceComponentCount = color switch { 0 or 3 => 1, 2 => 3, 4 => 2, _ => 4 }
-        };
+            color switch { 0 or 3 => 1, 2 => 3, 4 => 2, _ => 4 });
 
     internal static ImageInfo Webp(int width, int height, bool alpha, bool lossless, bool alphaChunk, ImageOrientation orientation)
-        => new(ImageFormat.WebP, width, height, 8, alpha, orientation)
-        {
-            SourceColor = lossless ? SourceColorModel.Rgb : SourceColorModel.YCbCr,
+        => Webp<InfoResult, InfoResultFactory>(null, width, height, alpha, lossless, alphaChunk, orientation).Value;
+
+    internal static TResult Webp<TResult, TFactory>(ProbeReader? probe, int width, int height, bool alpha,
+        bool lossless, bool alphaChunk, ImageOrientation orientation)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+        => TFactory.Create(probe, ImageFormat.WebP, width, height, 8, alpha, orientation,
+            lossless ? SourceColorModel.Rgb : SourceColorModel.YCbCr,
             // VP8L logically codes four components even when its alpha hint is unset.
-            SourceAlpha = lossless || alphaChunk ? SourceAlphaRepresentation.Channel : SourceAlphaRepresentation.None,
-            SourceComponentCount = lossless || alphaChunk ? (byte)4 : (byte)3
-        };
+            lossless || alphaChunk ? SourceAlphaRepresentation.Channel : SourceAlphaRepresentation.None,
+            lossless || alphaChunk ? (byte)4 : (byte)3);
 }
 
 // T.81 frame identifiers and JFIF/Adobe APP declarations identify some source
@@ -45,12 +51,12 @@ internal struct JpegSourceMetadata
     }
 
     internal ImageInfo Info(int width, int height, ImageOrientation orientation)
-        => new(ImageFormat.Jpeg, width, height, 8, false, orientation)
-        {
-            SourceColor = Color,
-            SourceAlpha = SourceAlphaRepresentation.None,
-            SourceComponentCount = (byte)components
-        };
+        => Info<InfoResult, InfoResultFactory>(null, width, height, orientation).Value;
+
+    internal TResult Info<TResult, TFactory>(ProbeReader? probe, int width, int height, ImageOrientation orientation)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+        => TFactory.Create(probe, ImageFormat.Jpeg, width, height, 8, false, orientation,
+            Color, SourceAlphaRepresentation.None, (byte)components);
 
     private readonly SourceColorModel Color => components switch
     {

@@ -1,5 +1,8 @@
 # Inspection acquisition and admission ownership
 
+[Direct result publication](PROBE-RESULT-PUBLICATION.md) supersedes the five costs
+and probe allocations below. This report retains the ownership stage and its effects.
+
 One private reader now owns acquisition and the existing admission scope.
 Four probes allocate **608 instead of632 B/op**; complete PNG headers allocate
 **568 instead of592 B/op**. All five current comparisons use the same immutable

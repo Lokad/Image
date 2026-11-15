@@ -6,22 +6,23 @@ namespace Lokad.Image.Internal;
 // RFC9649 RIFF/VP8 headers and CIPA Exif IFD0. Pixel syntax and PNG CRCs are opaque.
 internal static class StreamInspection
 {
-    internal static async ValueTask<ImageInfo> InspectAsync(InspectionReader r, ProbeReader? probe = null,
+    internal static async ValueTask<TResult> InspectAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe = null,
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
         await r.ReadAsync(2).ConfigureAwait(false);
         if (r.Header[0] == 137 && r.Header[1] == 80)
         {
             await r.ReadAsync(6).ConfigureAwait(false);
             if (!r.Header.AsSpan(0, 6).SequenceEqual(PngCodec.Signature[2..])) throw new ImageDataException("Invalid PNG signature.");
-            return await PngAsync(r, probe, metadataPolicy).ConfigureAwait(false);
+            return await PngAsync<TResult, TFactory>(r, probe, metadataPolicy).ConfigureAwait(false);
         }
-        if (r.Header[0] == 255 && r.Header[1] == 216) return await JpegAsync(r, probe, metadataPolicy).ConfigureAwait(false);
+        if (r.Header[0] == 255 && r.Header[1] == 216) return await JpegAsync<TResult, TFactory>(r, probe, metadataPolicy).ConfigureAwait(false);
         if (r.Header[0] == 'R' && r.Header[1] == 'I')
         {
             await r.ReadAsync(10).ConfigureAwait(false);
             if (!r.Header.AsSpan(0, 2).SequenceEqual("FF"u8) || !r.Header.AsSpan(6, 4).SequenceEqual("WEBP"u8)) throw new ImageDataException("Invalid WebP RIFF header.");
-            return await WebpAsync(r, BinaryPrimitives.ReadUInt32LittleEndian(r.Header.AsSpan(2)) + 8L, probe, metadataPolicy).ConfigureAwait(false);
+            return await WebpAsync<TResult, TFactory>(r, BinaryPrimitives.ReadUInt32LittleEndian(r.Header.AsSpan(2)) + 8L, probe, metadataPolicy).ConfigureAwait(false);
         }
         throw new UnsupportedImageException(UnsupportedImageFeature.Format, "Expected a still PNG, JPEG or WebP image.");
     }
@@ -54,7 +55,8 @@ internal static class StreamInspection
         foreach (var b in type) if (b is not (>= 65 and <= 90) and not (>= 97 and <= 122)) throw new ImageDataException("Invalid PNG chunk name.");
     }
 
-    private static async ValueTask<ImageInfo> PngAsync(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<TResult> PngAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
         int items = 0, width = 0, height = 0, depth = 0, color = 0, palette = 0;
         long metadata = 0, compressed = 0;
@@ -80,7 +82,7 @@ internal static class StreamInspection
                 Dimensions(r, width, height); header = true;
                 if (probe?.Reached(ImageProbeFacts.Dimensions | ImageProbeFacts.SourceRepresentation
                     | (color is 4 or 6 ? ImageProbeFacts.Transparency : 0)) == true)
-                    return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                    return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
             }
             else if (type == Four("PLTE"u8))
             {
@@ -99,7 +101,7 @@ internal static class StreamInspection
                     for (var i = 0; i < size; i += 2) if (BinaryPrimitives.ReadUInt16BigEndian(r.Header.AsSpan(i)) > (1 << depth) - 1) throw new ImageDataException("PNG transparency sample exceeds bit depth.");
                 }
                 if (probe?.Reached(ImageProbeFacts.Transparency) == true)
-                    return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                    return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
             }
             else if (type == Four("IDAT"u8))
             {
@@ -111,7 +113,7 @@ internal static class StreamInspection
                     if (!exif && probe.WantsOrientation && metadataPolicy == ImageMetadataPolicy.Strict) probe.Orientation();
                     probe.Reached(ImageProbeFacts.Animation);
                     if (probe.Reached(ImageProbeFacts.Transparency))
-                        return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                        return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
                 }
             }
             else if (type == Four("IEND"u8))
@@ -120,7 +122,7 @@ internal static class StreamInspection
                 await r.SkipAsync(4).ConfigureAwait(false); await r.EndAsync().ConfigureAwait(false);
                 if (probe?.WantsOrientation == true) probe.Orientation();
                 probe?.Reached(ImageProbeFacts.All);
-                return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
             }
             else if (type == Four("acTL"u8) || type == Four("fcTL"u8) || type == Four("fdAT"u8))
             {
@@ -133,7 +135,7 @@ internal static class StreamInspection
                     if (BinaryPrimitives.ReadUInt32BigEndian(r.Header) == 0) throw new ImageDataException("Invalid PNG animation frame count.");
                 }
                 probe.Animation(true);
-                if (probe.Reached(0)) return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                if (probe.Reached(0)) return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
             }
             else
             {
@@ -144,7 +146,7 @@ internal static class StreamInspection
                     if ((exif || data) && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
                     orientation = (await ExifAsync(r, size, true, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
                     if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
-                    if (probe?.Reached(0) == true) return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
+                    if (probe?.Reached(0) == true) return ImageSourceMetadata.Png<TResult, TFactory>(probe, width, height, depth, color, transparency, orientation);
                 }
             }
             await r.SkipAsync(end - r.Position).ConfigureAwait(false);
@@ -152,7 +154,8 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> JpegAsync(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<TResult> JpegAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
         int items = 0, width = 0, height = 0; long metadata = 0;
         bool frame = false, scan = false, scanSeen = false, exif = false;
@@ -172,7 +175,7 @@ internal static class StreamInspection
                 probe?.Animation(false);
                 if (probe?.WantsOrientation == true) probe.Orientation();
                 probe?.Reached(ImageProbeFacts.All);
-                return source.Info(width, height, orientation);
+                return source.Info<TResult, TFactory>(probe, width, height, orientation);
             }
             if (marker is 0 or 0xD8 or 1) throw new ImageDataException("Invalid JPEG marker sequence.");
             await r.ReadAsync(2).ConfigureAwait(false); var length = BinaryPrimitives.ReadUInt16BigEndian(r.Header);
@@ -193,7 +196,7 @@ internal static class StreamInspection
                 probe?.Animation(false);
                 if (probe?.Reached(ImageProbeFacts.Dimensions | ImageProbeFacts.Transparency
                     | (count == 1 ? ImageProbeFacts.SourceRepresentation : 0)) == true)
-                    return source.Info(width, height, orientation);
+                    return source.Info<TResult, TFactory>(probe, width, height, orientation);
             }
             else if (marker == 0xDA)
             {
@@ -219,7 +222,7 @@ internal static class StreamInspection
                         if (exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
                         orientation = (await ExifAsync(r, size - 6, false, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
                         if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
-                        if (frame && probe?.Reached(0) == true) return source.Info(width, height, orientation);
+                        if (frame && probe?.Reached(0) == true) return source.Info<TResult, TFactory>(probe, width, height, orientation);
                     }
                 }
             }
@@ -227,7 +230,8 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> WebpAsync(InspectionReader r, long end, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+    private static async ValueTask<TResult> WebpAsync<TResult, TFactory>(InspectionReader r, long end, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
         if (end < 12) throw new ImageDataException("Invalid WebP RIFF length."); r.DeclaredEnd(end);
         int items = 0, width = 0, height = 0, canvasW = 0, canvasH = 0; long metadata = 0;
@@ -254,7 +258,7 @@ internal static class StreamInspection
                     if ((flags & 8) == 0) probe.Orientation();
                     // VP8X settles the alpha hint, not whether a separate ALPH or VP8L channel follows.
                     if (probe.Reached(ImageProbeFacts.Dimensions))
-                        return ImageSourceMetadata.Webp(canvasW, canvasH, alpha, false, false, orientation);
+                        return ImageSourceMetadata.Webp<TResult, TFactory>(probe, canvasW, canvasH, alpha, false, false, orientation);
                 }
             }
             else if (type == Four("ANIM"u8) || type == Four("ANMF"u8))
@@ -289,7 +293,7 @@ internal static class StreamInspection
                     if (!extended || exif && metadataPolicy == ImageMetadataPolicy.Strict || (flags & 8) == 0) throw new ImageDataException("Invalid WebP EXIF chunk.");
                     orientation = (await ExifAsync(r, size, true, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
                     if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
-                    if (pixels && probe?.Reached(0) == true) return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
+                    if (pixels && probe?.Reached(0) == true) return ImageSourceMetadata.Webp<TResult, TFactory>(probe, width, height, alpha, lossless, alphaChunk, orientation);
                 }
                 else if (type == Four("ICCP"u8))
                 {
@@ -306,7 +310,7 @@ internal static class StreamInspection
                 Dimensions(r, width, height);
                 if (!extended) { probe.Animation(false); probe.Orientation(); }
                 if (probe.Reached(ImageProbeFacts.Dimensions | ImageProbeFacts.SourceRepresentation | ImageProbeFacts.Transparency))
-                    return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
+                    return ImageSourceMetadata.Webp<TResult, TFactory>(probe, width, height, alpha, lossless, alphaChunk, orientation);
             }
             await r.SkipAsync(payloadEnd - r.Position).ConfigureAwait(false);
             if ((size & 1) != 0) { if (await r.ByteAsync().ConfigureAwait(false) != 0) throw new ImageDataException("Invalid WebP padding."); }
@@ -316,7 +320,7 @@ internal static class StreamInspection
         Dimensions(r, width, height); await r.EndAsync().ConfigureAwait(false);
         if (probe?.WantsOrientation == true) probe.Orientation();
         probe?.Animation(false); probe?.Reached(ImageProbeFacts.All);
-        return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
+        return ImageSourceMetadata.Webp<TResult, TFactory>(probe, width, height, alpha, lossless, alphaChunk, orientation);
     }
 
     private static async ValueTask<ImageOrientation?> ExifAsync(InspectionReader r, long length, bool optionalPrefix,

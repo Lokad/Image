@@ -1,5 +1,8 @@
 # Current resident JPEG and WebP Identify
 
+[Direct result publication](PROBE-RESULT-PUBLICATION.md) owns current costs on the
+new package DLL. This report retains the reference boundaries and earlier evidence.
+
 Both existing named controls pass independently:JPEG **0.420×/upper0.426** and
 WebP **0.00436×/upper0.00483**, each96B/op. This qualifies current complete metadata
 inspection on these two frozen packets; it is not a production speedup claim.

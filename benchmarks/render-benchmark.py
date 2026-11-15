@@ -155,7 +155,7 @@ def apply_current_jpeg_preparation(codecs, read_rows):
 
 
 def apply_current_prepared_input(codecs, read_rows):
-    """Refresh complete synchronous stream costs; keep async/resident evidence."""
+    """Refresh codec stream costs; Identify has its own current owner."""
     current = json.loads((ROOT / 'benchmarks/prepared-memory-input-evidence.json').read_text(encoding='utf-8'))
     q = current['qualification']
     assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
@@ -181,11 +181,6 @@ def apply_current_prepared_input(codecs, read_rows):
         label = found[0].split('|')[1].strip().replace(' (confidence open)', '')
         if c['status'] == 'uncertain': label = label.replace(' †', ' (confidence open) †')
         codecs = codecs.replace(found[0], f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
-    c = current['cases']['PngSeekable']
-    indices = [i for i, line in enumerate(read_rows) if line.startswith('| Identify PNG8, fresh seekable Stream')]
-    assert len(indices) == 1 and c['status'] == 'pass'
-    i = indices[0]; label = read_rows[i].split('|')[1].strip()
-    read_rows[i] = f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | Confirmed pass |'
     return codecs, read_rows
 
 
@@ -1002,9 +997,6 @@ def render():
         assert live_case['sourceUnchanged'] and live_case['independentOwnedOutput']
         assert live_case['librarySha256'] == png_live['producers']['windowsSha256']
         assert live_case['status'] == 'uncertain' and live_case['lower'] <= 1 < live_case['upper']
-    resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
-    resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
-    stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
     resident_decode = json.loads((ROOT / 'benchmarks/webp-palette-output-evidence.json').read_text(encoding='utf-8'))
     assert resident_decode['productionAccepted'] and resident_decode['requiredMaterialPaths'] == 283
@@ -1085,9 +1077,6 @@ def render():
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
-    assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
-    assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
-    assert not stream_identify['productionChanged'] and len(stream_identify['cases']) == 2
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
@@ -2671,7 +2660,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
-    inspection_owner = json.loads((ROOT / 'benchmarks/inspection-owner-evidence.json').read_text(encoding='utf-8'))
+    inspection_owner = json.loads((ROOT / 'benchmarks/probe-result-publication-evidence.json').read_text(encoding='utf-8'))
     sq = inspection_owner['qualification']
     assert inspection_owner['productionAccepted'] and inspection_owner['allAffectedPerformanceReconciled']
     assert inspection_owner['requiredMaterialPaths'] == 289 and inspection_owner['newMaterialPaths'] == 0
@@ -2681,9 +2670,12 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     assert sq['package']['sha256'] == sq['windowsPackage']['sameActualPackageSha256']
     assert sq['package']['librarySha256'] == inspection_owner['producers']['linuxSha256']
     assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert all(c['upper'] < 1 and c['allocatedBaseline'] - c['allocatedCandidate'] == 24
-               for c in inspection_owner['paired'].values())
-    assert inspection_owner['memory']['probeAllocatedBytes'] == 608
+    assert all(inspection_owner['paired'][name]['upper'] < 1
+               and inspection_owner['paired'][name]['allocatedBaseline'] - inspection_owner['paired'][name]['allocatedCandidate'] == 40
+               for name in ('ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'))
+    guard = inspection_owner['paired']['InspectHeadersJpeg']
+    assert guard['lower'] <= 1 <= guard['upper'] and guard['allocatedBaseline'] == guard['allocatedCandidate'] == 8776
+    assert inspection_owner['memory']['probeAllocatedBytes'] == 568
     assert inspection_owner['memory']['admittedDimensionCapacityBytes'] == 512
     assert inspection_owner['memory']['retainedAfterOperationBytes'] == 0
     active_reads = inspection_owner['cases']
@@ -2750,38 +2742,23 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
                      f'{headers["managedUs"]:,.3f} | {headers["nativeUs"]:,.3f} | '
                      f'{headers["ratio"]:.3f} / {headers["upper"]:.3f} | '
                      f'{headers["allocatedBytes"]:,} | Confirmed pass |')
-    identified = png_gfni['cases']['PngResident'][-1]
-    assert identified['receipt']['descriptorExact'] and identified['receipt']['typedSourceMetadataExact']
-    assert identified['receipt']['descriptorFields'] == 9 and identified['receipt']['nativeReady']['outputBytes'] == 36
-    assert identified['receipt']['librarySha256'] == png_gfni['producers']['linuxSha256']
-    assert len(identified['managed']['actual']) == 12 and all(q['passed'] for q in identified['quietness'].values())
-    read_rows.append(f'| Identify PNG8 complete container, resident, adapter reference | '
-                     f'{identified["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
-                     f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
-                     f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
-                     f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed gap |')
-    for case, label in [('Jpeg8', 'Identify JPEG420, resident, canonical adapter'),
-                        ('Webp8', 'Identify VP8L+alpha, resident, parser adapter')]:
-        identified = resident_other['cases'][case][-1]
-        assert resident_other['status'][case] == 'confirmed-pass' and identified['conservativeRatioUpper'] <= 1
-        assert identified['receipt']['typedSourceMetadataExact'] and identified['receipt']['descriptorFields'] == 9
-        assert identified['receipt']['librarySha256'] == resident_other['producers']['linuxSha256']
-        assert len(identified['managed']['actual']) == 12 and all(q['passed'] for q in identified['quietness'].values())
-        read_rows.append(f'| {label} | {identified["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
-                         f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
-                         f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
-                         f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed pass |')
-    for case, label, samples in [('PngSeekable', 'Identify PNG8, fresh seekable Stream, adapter reference', 12),
-                                  ('PngAsync', 'Identify PNG8, async nonseekable, adapter reference', 12)]:
-        identified = png_gfni['cases'][case][-1]
-        assert identified['receipt']['typedSourceMetadataExact'] and identified['receipt']['descriptorFields'] == 9
-        assert identified['receipt']['librarySha256'] == png_gfni['producers']['linuxSha256']
-        assert len(identified['managed']['actual']) == samples and all(q['passed'] for q in identified['quietness'].values())
-        status = 'Confirmed gap' if samples == 12 else 'Screen gap'
-        read_rows.append(f'| {label} | {identified["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
-                         f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
-                         f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
-                         f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
+    identify_labels = {
+        'Png8': 'Identify PNG8 complete container, resident, adapter reference',
+        'Jpeg8': 'Identify JPEG420, resident, canonical adapter',
+        'Webp8': 'Identify VP8L+alpha, resident, parser adapter',
+        'PngSeekable': 'Identify PNG8, fresh seekable Stream, adapter reference',
+        'PngAsync': 'Identify PNG8, async nonseekable, adapter reference',
+    }
+    assert set(inspection_owner['identifyCases']) == set(identify_labels)
+    for name, label in identify_labels.items():
+        c = inspection_owner['identifyCases'][name]
+        assert c['librarySha256'] == inspection_owner['producers']['linuxSha256']
+        assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['descriptorExact'] and c['independentOwnedOutput']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        status = 'Confirmed pass' if c['status'] == 'pass' else 'Confirmed gap' if c['status'] == 'gap' else 'Confidence open'
+        read_rows.append(f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |')
     assert refreshed_png_reads == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
     current = jpeg_read['freshContextCase']
     assert current['nativeReady']['freshDecoderFrameAndPackingContextTimed']
@@ -2852,9 +2829,7 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
         label = found[0].split('|')[1].strip()
         replacement = f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |'
         codecs = codecs.replace(found[0], replacement)
-    for name, prefix in [('PngSeekable', '| Identify PNG8, fresh seekable Stream'),
-                         ('PngAsync', '| Identify PNG8, async nonseekable'),
-                         ('ValidatePng16Async', '| Validate PNG16, async nonseekable')]:
+    for name, prefix in [('ValidatePng16Async', '| Validate PNG16, async nonseekable')]:
         c = direct_inputs['cases'][name]
         indices = [i for i, line in enumerate(read_rows) if line.startswith(prefix)]
         assert len(indices) == 1
@@ -2936,7 +2911,8 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
-**15.08 / reference adapter 15.88 µs, upper .953**, **192 B/op**. One owned input
+**15.05 / reference adapter 15.88 µs, upper .950**, **192 B/op** on the
+current [publication round](../benchmarks/PROBE-RESULT-PUBLICATION.md). One owned input
 capacity replaces geometric growth for ordinary synchronous `MemoryStream` inputs
 up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144 B**;
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
@@ -3032,19 +3008,23 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Inspection ownership](../benchmarks/INSPECTION-OWNER.md) combines acquisition and
-admission in one operation owner: **632 → 608 B/op** for all four probes,
-**592 → 568 B/op** for PNG headers. Existing **512 B** initial / **8,448 B** bulk
-admission and zero retained workspace remain. Controlled complete JPEG sync,
-immediate-async and header gains are **3.17% / 3.45% / 3.88%** after an explicit
-helper warmup correction; original adverse/inconclusive captures remain history.
-Four small probe gaps remain; the table uses all five current standalone comparisons
-on the same immutable package DLL. Complete PNG headers pass at
-**{headers['managedUs']:.3f} / {headers['nativeUs']:.3f} µs, upper {headers['upper']:.3f}**.
-The reference is **FFmpeg AVIO + bounded header adapter**, not its public codec parser.
-Windows/Linux each pass **6,712 full/live checks**, the same actual package and all three examples,
-including suspended-payload cancellation/failure cleanup and subsequent recovery.
-Other source-valid costs are reused; this is not a fresh whole-release timing refresh.
+[Direct probe publication](../benchmarks/PROBE-RESULT-PUBLICATION.md) removes a
+temporary full descriptor: **608 → 568 B/op** for all four probes. Independent
+complete JPEG sync/async pairs confirm **3.67% / 5.18%** scoped gains; they do not
+establish FFmpeg parity. The initial generic-dispatch implementation and every
+adverse/uncertain sample remain history. Acquisition/admission, exact metadata,
+actual pending users and independently owned results remain unchanged.
+All ten displayed probe/header/Identify costs now use the same immutable package
+DLL and the matching retained reference harnesses. PNG dimensions and resident
+PNG Identify are uncertain around parity; JPEG/WebP probes remain gaps.
+Complete PNG headers and both PNG stream Identify comparisons pass.
+The references remain explicitly labeled FFmpeg AVIO/header/parser adapters.
+Windows/Linux each pass **6,712 full/live checks**, focused **10 internal /184 public**
+normal/scalar checks, the same actual package and all three examples. Metadata
+mapping controls and unchanged codec/edit/resize/text evidence are reused where
+applicable; this is not a whole-release timing refresh. Shared admission remains
+**512 B initial /8,448 B bulk**, with zero retained operation workspace; physical
+and JIT peaks remain unmeasured.
 
 † Reference boundaries require care. Codec contexts or filter graphs may remain
 prepared; packed conversion, independent payload acquisition and release are timed

@@ -1,5 +1,8 @@
 # Prepared complete stream input
 
+[Direct result publication](PROBE-RESULT-PUBLICATION.md) refreshes the Identify cost
+below. This stage's input-preparation effect and ownership proof remain history.
+
 [Current PNG16 stream confidence](PNG-STREAM-WORD-CURRENT-CONFIDENCE.md) supersedes
 the earlier PNG16 decode and composition uncertainties below. Both complete
 operations pass on the current actual-package DLL under alternating managed/native

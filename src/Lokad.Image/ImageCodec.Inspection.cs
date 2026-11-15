@@ -33,6 +33,8 @@ public static partial class ImageCodec
         ExifOrientation.ValidatePolicy(metadataPolicy);
         using var reader = new InspectionReader(input, limits ?? ImageLimits.Default, cancellationToken,
             asynchronous, adaptiveHeaders: true);
-        return await StreamInspection.InspectAsync(reader, metadataPolicy: metadataPolicy).ConfigureAwait(false);
+        var result = await StreamInspection.InspectAsync<InfoResult, InfoResultFactory>(reader, metadataPolicy: metadataPolicy)
+            .ConfigureAwait(false);
+        return result.Value;
     }
 }

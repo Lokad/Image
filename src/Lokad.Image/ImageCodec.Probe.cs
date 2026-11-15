@@ -34,7 +34,8 @@ public static partial class ImageCodec
         ExifOrientation.ValidatePolicy(metadataPolicy);
         using var reader = new ProbeReader(input, options is null ? ImageLimits.Default : options.Limits,
             cancellationToken, asynchronous, maximum, facts);
-        var info = await StreamInspection.InspectAsync(reader, reader, metadataPolicy).ConfigureAwait(false);
-        return reader.Result(info);
+        var result = await StreamInspection.InspectAsync<ProbeResult, ProbeResultFactory>(reader, reader, metadataPolicy)
+            .ConfigureAwait(false);
+        return result.Value;
     }
 }

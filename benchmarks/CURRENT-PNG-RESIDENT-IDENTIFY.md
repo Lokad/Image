@@ -1,5 +1,8 @@
 # Current resident PNG Identify
 
+[Direct result publication](PROBE-RESULT-PUBLICATION.md) owns the current cost and
+confidence. This report retains the original boundary qualification and raw evidence.
+
 The existing218775B RGBA8 PNG (513×259) screens **16.133µs versus13.073µs**,
 **1.234× / upper1.312**, allocating96B/op. This is a measured gap, not an
 independent confirmation or a production speedup. All three actuals, native
