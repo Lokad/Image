@@ -188,8 +188,10 @@ overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose*
 [Prepared immutable edges](../benchmarks/TEXT-PREPARED-EDGE-INVARIANTS.md) saves
 5.39 µs / 12.87% in the bounded prepared-word comparison;
 paired-normalized gain is 13.05%. Both intervals separate,
-while wider bracket-normalized gain remains inconclusive. Four individually reset
-drawing diagnostics remain uncertain around parity. Their GC columns use current public-only
+while wider bracket-normalized gain remains inconclusive.
+[Longer reference integration](../benchmarks/TEXT-DRAW-CURRENT-CONFIDENCE.md) confirms two ordinary-draw gaps;
+prepared8/16 remain uncertain. These are current costs on the same immutable DLL,
+with every earlier capture retained and no CPU gain claimed. Their GC columns use public-only
 counters (**75,944 B ordinary / 56 B prepared**); timed adapters add **24 B/draw**.
 Active Latin raster capacity is **48,984 B**, excluding the borrowed canvas and font;
 Latin capacity grows **40,408 → 48,984 B** and ordinary GC **59,304 → 75,944 B/draw**;
@@ -313,10 +315,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,167.24 | 6,182.75 | 0.189 / 0.214 | 299,916 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,653.58 | 6,783.43 | 0.244 / 0.269 | 301,270 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 54.67 | 45.03 | 1.214 / 1.507 | 75,944 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 58.03 | 46.16 | 1.257 / 1.513 | 75,944 |
-| Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 33.42 | 37.39 | 0.894 / 1.028 | 56 |
-| Text prepared raster RGBA16 / ImageSharp.Drawing (confidence open) † | 36.50 | 37.66 | 0.969 / 1.123 | 56 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 54.41 | 44.72 | 1.217 / 1.355 | 75,944 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 58.12 | 47.48 | 1.224 / 1.347 | 75,944 |
+| Text prepared raster RGBA8 / ImageSharp.Drawing (confidence open) † | 34.35 | 36.80 | 0.934 / 1.026 | 56 |
+| Text prepared raster RGBA16 / ImageSharp.Drawing (confidence open) † | 36.85 | 37.47 | 0.983 / 1.047 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 22.16 | 13.22 | 1.677 / 1.695 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |

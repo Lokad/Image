@@ -1852,7 +1852,14 @@ ImageSharp 3.1.12; RGBA8 uses FFmpeg. Exact managed pixels/checkpoints remain.
     font_gain = font_load['fontComparison']['views']['statistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert font_load['fontComparison']['normalizedGainSeparated']
-    for case in text_draw['cases'].values():
+    text_confidence = json.loads((ROOT / 'benchmarks/text-draw-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert text_confidence['measurementAccepted'] and not text_confidence['productionChanged']
+    assert text_confidence['sources'] == text_draw['sources']
+    assert text_confidence['producers'] == text_draw['producers']
+    assert text_confidence['nativeSampleTargetMs'] == 200 and text_confidence['original50msAllRetained']
+    assert text_confidence['raw']['mirrored'] and text_confidence['raw']['allMembersVerified']
+    assert text_confidence['statusCounts'] == {'pass': 0, 'gap': 2, 'uncertain': 2}
+    for case in text_confidence['cases'].values():
         assert case['librarySha256'] == text_draw['producers']['timedArtifactSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['actuals'] == 12 and case['operationsPerActual'] == 1024
@@ -3059,8 +3066,10 @@ overall text cost. Font loading uses **FreeType 2.13.2 copy/open/retain/dispose*
 [Prepared immutable edges](../benchmarks/TEXT-PREPARED-EDGE-INVARIANTS.md) saves
 {text_gain['savedUs']:.2f} µs / {text_gain['rawSavedFraction']:.2%} in the bounded prepared-word comparison;
 paired-normalized gain is {text_gain['pairedNormalizedSavedFraction']:.2%}. Both intervals separate,
-while wider bracket-normalized gain remains inconclusive. Four individually reset
-drawing diagnostics remain uncertain around parity. Their GC columns use current public-only
+while wider bracket-normalized gain remains inconclusive.
+[Longer reference integration](../benchmarks/TEXT-DRAW-CURRENT-CONFIDENCE.md) confirms two ordinary-draw gaps;
+prepared8/16 remain uncertain. These are current costs on the same immutable DLL,
+with every earlier capture retained and no CPU gain claimed. Their GC columns use public-only
 counters (**{text_draw['memory']['publicDrawingAllocatedBytes']['ordinary']:,} B ordinary / 56 B prepared**); timed adapters add **24 B/draw**.
 Active Latin raster capacity is **{text_draw['memory']['latinPreparedCapacityBytes']:,} B**, excluding the borrowed canvas and font;
 Latin capacity grows **40,408 → {text_draw['memory']['latinPreparedCapacityBytes']:,} B** and ordinary GC **59,304 → {text_draw['memory']['publicDrawingAllocatedBytes']['ordinary']:,} B/draw**;

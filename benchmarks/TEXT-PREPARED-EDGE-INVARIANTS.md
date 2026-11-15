@@ -1,5 +1,7 @@
 # Prepared immutable text edges
 
+[Current drawing confidence](TEXT-DRAW-CURRENT-CONFIDENCE.md) supersedes the four drawing costs below; this report retains the accepted production stage.
+
 EIP1047 computes edge deltas, Y bounds and winding once during geometry preparation,
 removing repeated immutable arithmetic from event preparation and scan conversion.
 Original ordered scalar/SSE2 endpoint expressions, signed-zero/nonfinite/default
