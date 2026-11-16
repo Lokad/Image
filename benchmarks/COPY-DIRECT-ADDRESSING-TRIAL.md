@@ -1,5 +1,8 @@
 # Direct-address copy trial
 
+The later [fixed-size tail trial](COPY-PACKED-TAIL-TRIAL.md) is also unaccepted;
+qualified production and current costs remain unchanged.
+
 RCH1138 is **inconclusive and unaccepted**. Current production, package and
 reference costs remain unchanged. Further copy experiments are deferred behind
 the five authored-font comparisons, ordinary text and meaningful loading costs.

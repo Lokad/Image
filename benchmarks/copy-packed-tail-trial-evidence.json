@@ -1,0 +1,286 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CTR1147",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "CTR1147",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "baselineCommit": "0cc07032",
+    "baselineWindowsSha256": "410a455f8fb33adf04ac7715e1150998abf621feefc85d91d74cc141dfb9adb2",
+    "baselineLinuxSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "hypothesis": "Current original2056byte word-overlap rows call SpanHelpers.Memmove for an8byte remainder after four-vector groups,258tailcalls per complete two-move operation. Replace exact4/8byte onepixel remainders with safe fixed-size managed reads/writes,keeping other tails and bulk kernel unchanged. Eliminate per-row variablecopydispatch rather than repeat inconclusive directaddress/groupunroll trials. Existing gap is~0.499us;instruction sites are not phase attribution or a gain forecast.",
+    "endState": "One explicit bounded packed-pixel remainder dispatch in existing IndependentRowCopy;unchanged four-load snapshot/bulk loop,BCLotherremainder and portablefallback. No workspace,cache,pool,API,ISApolicy or admission/cancel changes.",
+    "boundaries": "Screen original complete257x129wordoverlap pair on frozen513x259canvas with existing worker and independent snapshots. If promising confirm controlledpairs;then actual reference and affected copy/verticalflip controls before any broad/package milestone. Stop source-unaffected codec/text/resize passes.",
+    "correctness": "Use existing190public editing/ownership cases normal/scalar plus actualwordworker fullword/snapshot/input/cancellation/refusal/recovery checks;bounded original tiny-tail coverage for widths64n+1/32n+1 and bothdepths if adopted. Allmanagedsamples/hiddenRGB/untouchedregions exact.",
+    "continuation": "One3pair shortcomplete screen;retain adverse/inconclusive observations without samplingretries. No production promotion without useful independent effect and affected reference reconciliation.",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+    },
+    "candidateSourceSha256": "82d3442bcf19265d0b105b7c2bb897a38c970e722e891ff3c6fdbf9d12be6521"
+  },
+  "producers": {
+    "windowsSha256": "410a455f8fb33adf04ac7715e1150998abf621feefc85d91d74cc141dfb9adb2",
+    "linuxSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "isolatedPrototypeSha256": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+    "actualPackageSha256": "8ca826fc97e74973349a7c86b30d8e9e85dcc3a128315cf6fa6f75c1e08f705e"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+  },
+  "candidateSourceSha256": "82d3442bcf19265d0b105b7c2bb897a38c970e722e891ff3c6fdbf9d12be6521",
+  "sourceProof": {
+    "originalWholeHelperReconstructed": true,
+    "allOtherProductionSourcesVerbatim": true,
+    "qualifiedArtifactsUnchanged": true
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "CTR1147",
+    "allActualsRetained": true,
+    "pairs": 3,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "candidateSha256": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+    "baseline": {
+      "mean": 7112.564066569011,
+      "lower": 5642.848762905724,
+      "upper": 8582.279370232298,
+      "values": [
+        7205.130187988281,
+        7074.2532958984375,
+        7058.3087158203125
+      ]
+    },
+    "candidate": {
+      "mean": 5974.084615071614,
+      "lower": 5501.719306214929,
+      "upper": 6446.4499239282995,
+      "values": [
+        6003.508239746094,
+        5954.781494140625,
+        5963.964111328125
+      ]
+    },
+    "ratio": 0.8399340321096636,
+    "ratioLower": 0.7361873077484509,
+    "ratioUpper": 0.9583708391174831,
+    "elapsedReduction": 0.16006596789033645,
+    "savedUs": 1.1384794514973964,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "confirmation": {
+    "project": "Lokad.Image",
+    "stage": "CTR1147",
+    "allActualsRetained": true,
+    "pairs": 12,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "candidateSha256": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+    "baseline": {
+      "mean": 5752.90375773112,
+      "lower": 5605.394455016343,
+      "upper": 5900.413060445897,
+      "values": [
+        5778.9161376953125,
+        5755.5450439453125,
+        5705.6654052734375,
+        5710.635070800781,
+        6109.655456542969,
+        5699.564880371094,
+        5741.275329589844,
+        5702.131042480469,
+        5703.8046875,
+        5698.65771484375,
+        5719.931396484375,
+        5709.062927246094
+      ]
+    },
+    "candidate": {
+      "mean": 5702.350860595703,
+      "lower": 5567.44640047084,
+      "upper": 5837.2553207205665,
+      "values": [
+        5885.031433105469,
+        5660.703430175781,
+        5622.740783691406,
+        5750.7220458984375,
+        5896.274475097656,
+        5809.155212402344,
+        5638.9708251953125,
+        5655.625671386719,
+        5611.523193359375,
+        5640.4775390625,
+        5624.0323486328125,
+        5632.953369140625
+      ]
+    },
+    "ratio": 0.9912126294364857,
+    "ratioLower": 0.971203665434035,
+    "ratioUpper": 1.0116800503188177,
+    "elapsedReduction": 0.008787370563514307,
+    "savedUs": 0.05055289713541697,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All12alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "preparationWindows": {
+    "stage": "CTR1147",
+    "prototype": "tmp\\ctr1147-prototype-src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll",
+    "prototypeSha256": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+    },
+    "candidateSourceSha256": "82d3442bcf19265d0b105b7c2bb897a38c970e722e891ff3c6fdbf9d12be6521",
+    "focusedPublic": {
+      "normal": 190,
+      "scalar": 190
+    },
+    "canonicalUnchanged": true,
+    "productionBuilds": 0,
+    "isolatedWindowsBuilds": 1
+  },
+  "preparationLinux": {
+    "stage": "CTR1147",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "baselineSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "prototypeSha256": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+    "coreModifiedTimeNs": 1794847407787401761,
+    "focusedPublic": {
+      "normal": 190,
+      "scalar": 190
+    },
+    "workerChecks": {
+      "baseline/normal": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      },
+      "baseline/scalar": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      },
+      "candidate/normal": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      },
+      "candidate/scalar": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      }
+    },
+    "runtimes": {
+      "baseline": "tmp/ctr1147-baseline-runtime",
+      "candidate": "tmp/ctr1147-candidate-runtime"
+    },
+    "identities": {
+      "baseline": {
+        "WordOverlapWorker.pdb": "704036dc936afc70193ef6bb113312e44ceb70b3670b0cabc17f57750a1ceaaa",
+        "WordOverlapWorker": "641abdd7509ef53ab82d370e1dec98656bc0c93fdaa48f8a91602c4be1d7991e",
+        "WordOverlapWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Lokad.Image.dll": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+        "WordOverlapWorker.dll": "1aadfe43a30a51667cd44bb1c357a96ef97a716edb358e6f688d027aeb791e41",
+        "WordOverlapWorker.deps.json": "e54b07e680ccc36f3232b1bb440e85c39df2d0b99b484314b1b193bfaab3f820"
+      },
+      "candidate": {
+        "WordOverlapWorker.pdb": "704036dc936afc70193ef6bb113312e44ceb70b3670b0cabc17f57750a1ceaaa",
+        "WordOverlapWorker": "641abdd7509ef53ab82d370e1dec98656bc0c93fdaa48f8a91602c4be1d7991e",
+        "WordOverlapWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Lokad.Image.dll": "bdc9d3496840be4185eb1e1b70d15639a9db8b9d97c56703ca34364f4bbf0604",
+        "WordOverlapWorker.dll": "1aadfe43a30a51667cd44bb1c357a96ef97a716edb358e6f688d027aeb791e41",
+        "WordOverlapWorker.deps.json": "e54b07e680ccc36f3232b1bb440e85c39df2d0b99b484314b1b193bfaab3f820"
+      }
+    },
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+    },
+    "allBuilds": 0
+  },
+  "codegen": {
+    "copyRegionBytes": {
+      "baseline": 1364,
+      "candidate": 1585
+    },
+    "fixedQwordDwordMovesEmitted": true,
+    "bulkFourLoadSnapshotUnchanged": true,
+    "instrumentedElapsedDiscarded": true,
+    "codeSizeNotPerformanceProof": true
+  },
+  "allocations": {
+    "bytesPerOperation": 0,
+    "newOwnedCapacity": 0,
+    "newRetainedCapacity": 0,
+    "callerCanvasBytes": 1062936,
+    "physicalNativeJitPeakUnmeasured": true
+  },
+  "qualificationReuse": {
+    "fullLiveEachOs": 6750,
+    "focusedTextEachMode": {
+      "internal": 268,
+      "public": 166
+    },
+    "sameActualPackageEachOs": true,
+    "allThreeExamplesEachOs": true,
+    "reference": "ordinary-word-text-dispatch-evidence.json",
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0
+  },
+  "builds": {
+    "isolatedWindowsPrototype": 1,
+    "vm": 0,
+    "canonical": 0,
+    "embeddedTests": 0,
+    "publicTests": 0,
+    "existingHarnessReferenceFixture": 0,
+    "package": 0
+  },
+  "preparationRecovery": "Windows prototype path separators initially failed before VM runtimes/checks. Resumed only VM preparation using normalized path;zero repeatedWindowschecks,builds or benchmark jobs.",
+  "decision": "Inconclusive/unaccepted. Short16.0066percent/1.138479us effect does not hold independently:confirmation0.878737percent/0.050553us,interval.971204-1.011680. All originalactuals retained,no favorable repeat,reference retiming,promotion,neighboringvariant or broad/package campaign. Qualified source/DLLs/actualpackage never change. Existing copy/flip costs remaincurrent;next resolve named PNG16composition uncertainty with justified measurement boundaries.",
+  "raw": {
+    "file": "copy-packed-tail-trial.tar.xz",
+    "sha256": "d6dedd1e068841f26095baba7d16f3c8c0d5b0a314d8aee115e70635d81d76e9",
+    "bytes": 2091428,
+    "members": 69,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "copy-direct-addressing-trial.tar.xz",
+        "sha256": "01294b8228312aad35ee67b2c417d9431a4ff46cd9b55250d5ba02a2b6a66c28"
+      },
+      {
+        "file": "ordinary-word-text-dispatch-qualified.tar.xz",
+        "sha256": "1e48e6d6d9e09cfd48155fc982d46932b4999dbbfd8ef0165c984f7283fca26d"
+      }
+    ]
+  }
+}
