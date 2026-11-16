@@ -286,14 +286,37 @@ internal sealed partial class TextRasterizer : IDisposable
         if (leftInside && rightInside) return QuadArea(a, top, b, top, c, bottom, d, bottom);
         if (rightInside && a < 0 && d < 0 && b >= 0 && c >= 0)
         {
-            var cutTop = top + (top - top) * ((0d - a) / (b - a));
-            var cutBottom = bottom + (bottom - bottom) * ((0d - c) / (d - c));
+            double cutTop, cutBottom;
+            // A finite sum certifies finite operands; overflow conservatively
+            // keeps the original path. Both horizontal ratios are nonnegative,
+            // except the bottom ratio is -0 when c is zero. Preserve that sign.
+            if (double.IsFinite(a + d + top + bottom))
+            {
+                cutTop = top + 0d;
+                cutBottom = bottom + (c == 0 ? -0d : 0d);
+            }
+            else
+            {
+                cutTop = top + (top - top) * ((0d - a) / (b - a));
+                cutBottom = bottom + (bottom - bottom) * ((0d - c) / (d - c));
+            }
             return QuadArea(0, cutTop, b, top, c, bottom, 0, cutBottom);
         }
         if (leftInside && b > 1 && c > 1 && a <= 1 && d <= 1)
         {
-            var cutTop = top + (top - top) * ((1d - a) / (b - a));
-            var cutBottom = bottom + (bottom - bottom) * ((1d - c) / (d - c));
+            double cutTop, cutBottom;
+            // Here both finite horizontal ratios have a positive sign, so
+            // each zero Y difference contributes +0, including at a == 1.
+            if (double.IsFinite(b + c + top + bottom))
+            {
+                cutTop = top + 0d;
+                cutBottom = bottom + 0d;
+            }
+            else
+            {
+                cutTop = top + (top - top) * ((1d - a) / (b - a));
+                cutBottom = bottom + (bottom - bottom) * ((1d - c) / (d - c));
+            }
             return QuadArea(a, top, 1, cutTop, 1, cutBottom, d, bottom);
         }
         first[0] = new(a, top); first[1] = new(b, top); first[2] = new(c, bottom); first[3] = new(d, bottom);

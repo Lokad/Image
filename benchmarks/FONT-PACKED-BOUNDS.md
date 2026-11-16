@@ -1,5 +1,9 @@
 # Packed signed font bounds
 
+[Finite horizontal clipping](TEXT-FINITE-HORIZONTAL-CLIPPING.md) owns current
+ordinary drawing/complete integration costs. Unchanged prepared execution and
+font-loading evidence retain their scoped validity; historical observations follow.
+
 Eager glyph-header validation compares both signed coordinate pairs together
 after the same validated eight-byte read. SSE2 observes only the two relevant
 lanes; the original scalar predicate is the portable fallback. Location checks,

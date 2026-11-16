@@ -13,6 +13,10 @@ namespace Lokad.Image.Tests
 
         [Fact]
         public void InteriorRunsKeepNonfiniteAndBoundaryClipping() => Internal.TextRasterizer.VerifyInteriorRuns(true);
+
+        [Fact]
+        public void HorizontalIntersectionsMatchClippingAtFloatingPointBoundaries()
+            => Internal.TextRasterizer.VerifyHorizontalIntersections();
     }
 }
 
@@ -20,6 +24,31 @@ namespace Lokad.Image.Internal
 {
     internal sealed partial class TextRasterizer
     {
+        internal static void VerifyHorizontalIntersections()
+        {
+            double[] left = [double.NegativeInfinity, -double.MaxValue, -1e100, -2, -1, -double.Epsilon];
+            double[] right = [Math.BitIncrement(1), 2, 1e100, double.MaxValue, double.PositiveInfinity];
+            double[] inside = [-0d, 0d, double.Epsilon, .25, Math.BitDecrement(1), 1];
+            double[] heights = [double.NegativeInfinity, -double.MaxValue, -1, -double.Epsilon,
+                -0d, 0d, double.Epsilon, .25, 1, double.MaxValue, double.PositiveInfinity, double.NaN];
+            Span<Point> first = stackalloc Point[10]; Span<Point> second = stackalloc Point[10];
+            var canary = new Point(2468, -1357); first.Fill(canary); second.Fill(canary);
+            foreach (var top in heights)
+            foreach (var bottom in heights)
+            foreach (var one in inside)
+            foreach (var two in inside)
+            {
+                foreach (var a in left)
+                foreach (var d in left)
+                    Check(a, one, two, d, top, bottom, first[1..9], second[1..9]);
+                foreach (var b in right)
+                foreach (var c in right)
+                    Check(one, b, c, two, top, bottom, first[1..9], second[1..9]);
+            }
+            Assert.Equal(canary, first[0]); Assert.Equal(canary, first[9]);
+            Assert.Equal(canary, second[0]); Assert.Equal(canary, second[9]);
+        }
+
         internal static void VerifyInteriorRuns(bool special)
         {
             double[] values = special

@@ -1,5 +1,9 @@
 # Prepared exact text coverage
 
+[Finite horizontal clipping](TEXT-FINITE-HORIZONTAL-CLIPPING.md) owns current
+ordinary drawing/complete integration costs. Unchanged prepared execution and
+font-loading evidence retain their scoped validity; historical observations follow.
+
 Current complete one-shot/eight-draw costs are in [packed signed font bounds](FONT-PACKED-BOUNDS.md). The four drawing costs, retained coverage design and frame/owner evidence here remain source-valid; font construction is outside those drawing clocks.
 
 `TextRenderPlan` prepares exact 16-bit coverage once, retaining compact row runs

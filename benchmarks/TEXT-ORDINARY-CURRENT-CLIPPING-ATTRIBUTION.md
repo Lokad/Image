@@ -1,5 +1,9 @@
 # Current ordinary text clipping attribution
 
+[Finite horizontal clipping](TEXT-FINITE-HORIZONTAL-CLIPPING.md) owns current
+ordinary drawing/complete integration costs. Unchanged prepared execution and
+font-loading evidence retain their scoped validity; historical observations follow.
+
 One two-second profile uses the current immutable package on the existing
 DejaVu Sans 2.37 “AV To”, 18 px, 384×160 RGBA16 control. Font/layout are retained;
 each public DrawText includes geometry/events/workspace preparation, scan,
