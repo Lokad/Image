@@ -1,5 +1,8 @@
 # PNG16 composition precision
 
+[Subsequent untimed storage attribution](PNG-COMPOSITION-STORAGE.md) reconciles
+the full allocation and simultaneous owners without changing production.
+
 The original retained-native comparison remains **uncertain** on the current
 immutable actual-package DLL: **3,084.462 / FFmpeg 2,985.741 µs**, ratio **1.033064**,
 conservative interval **0.920724–1.103471**, **338,160 B/op**. No production change,

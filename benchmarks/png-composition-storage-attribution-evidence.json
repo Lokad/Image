@@ -1,0 +1,604 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PAL1149",
+  "productionChanged": false,
+  "timingClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "sourceCommit": "794b73c0",
+  "producers": {
+    "windowsSha256": "410a455f8fb33adf04ac7715e1150998abf621feefc85d91d74cc141dfb9adb2",
+    "linuxSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "timedArtifactSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "packageSha256": "8ca826fc97e74973349a7c86b30d8e9e85dcc3a128315cf6fa6f75c1e08f705e"
+  },
+  "trace": {
+    "project": "Lokad.Image",
+    "stage": "PAL1149",
+    "profilingOnly": true,
+    "timingClaim": false,
+    "productionChanged": false,
+    "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "rounds": 3,
+    "allFramesExact": true,
+    "records": [
+      {
+        "round": 0,
+        "step": "decoded",
+        "allocatedBytes": 4155504,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "oriented",
+        "allocatedBytes": 1063016,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "cropped",
+        "allocatedBytes": 264272,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 33574638
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "fit",
+        "allocatedBytes": 65944,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 33574638
+          },
+          {
+            "capacity": 65024,
+            "identity": 27252167
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "crop released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 33574638
+          },
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 65024,
+            "identity": 27252167
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "orientation released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 33574638
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 65024,
+            "identity": 27252167
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "decode released; independent result alive",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 65024,
+            "identity": 27252167
+          }
+        ]
+      },
+      {
+        "round": 0,
+        "step": "result released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": []
+      },
+      {
+        "round": 1,
+        "step": "decoded",
+        "allocatedBytes": 8600,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "oriented",
+        "allocatedBytes": 56,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "cropped",
+        "allocatedBytes": 264272,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 43942917
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "fit",
+        "allocatedBytes": 65160,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 43942917
+          },
+          {
+            "capacity": 65024,
+            "identity": 59941933
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "crop released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 43942917
+          },
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 65024,
+            "identity": 59941933
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "orientation released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 43942917
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 65024,
+            "identity": 59941933
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "decode released; independent result alive",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 65024,
+            "identity": 59941933
+          }
+        ]
+      },
+      {
+        "round": 1,
+        "step": "result released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": []
+      },
+      {
+        "round": 2,
+        "step": "decoded",
+        "allocatedBytes": 8600,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "oriented",
+        "allocatedBytes": 56,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "cropped",
+        "allocatedBytes": 264272,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 2606490
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "fit",
+        "allocatedBytes": 65160,
+        "idle": {
+          "first": null,
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 264192,
+            "identity": 2606490
+          },
+          {
+            "capacity": 65024,
+            "identity": 23458411
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "crop released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 2606490
+          },
+          "second": null
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 1062936,
+            "identity": 18643596
+          },
+          {
+            "capacity": 65024,
+            "identity": 23458411
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "orientation released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 264192,
+            "identity": 2606490
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          {
+            "capacity": 65024,
+            "identity": 23458411
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "decode released; independent result alive",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": [
+          {
+            "capacity": 65024,
+            "identity": 23458411
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "step": "result released",
+        "allocatedBytes": 0,
+        "idle": {
+          "first": {
+            "capacity": 1062936,
+            "identity": 54267293
+          },
+          "second": {
+            "capacity": 1062936,
+            "identity": 18643596
+          }
+        },
+        "owners": []
+      }
+    ]
+  },
+  "warmAllocations": [
+    {
+      "decoded": 8600,
+      "oriented": 56,
+      "cropped": 264272,
+      "fit": 65160
+    },
+    {
+      "decoded": 8600,
+      "oriented": 56,
+      "cropped": 264272,
+      "fit": 65160
+    }
+  ],
+  "completeAllocationReconciliation": {
+    "apiStages": 338088,
+    "originalTimedMemoryStream": 72,
+    "complete": 338160,
+    "cropAndNearest": 329432
+  },
+  "findings": [
+    "Three original complete publicpipeline traces,all exactfrozen frames. Four imageowners actually overlap at peak;the2fullframe arrays are reused,while264192Bcrop and65024Bnearestresult are allocated eachtime.",
+    "Current two-slot policy retains2x1062936B arrays;ReturnLargest replaces the disposedcrop with the large decodedframe. NearestResize uses the cleared/nonreusable Allocate path even though its private result is completely overwritten before success.",
+    "Within-operation reuse cannot alias these four simultaneous independent owners. Consider existing boundedstorage topology only after preservingactual lifetimes;no independent availablebudget or new generalcache.",
+    "This is untimed allocation/ownership attribution. Trace scaffolding is outside stageallocationreads;no elapsedtime or directGCpausecause claim. GCcounts in previousprecisioncapture establish a lead,not predicted CPUgains."
+  ],
+  "qualificationReuse": {
+    "fullChecksEachOs": 6750,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0
+  },
+  "builds": {
+    "windowsDiagnostic": 1,
+    "production": 0,
+    "embeddedPublicHarnessNativeFixturePackage": 0
+  },
+  "raw": {
+    "file": "png-composition-storage-attribution.tar.xz",
+    "sha256": "832a0e038a2eb412b7401b49d1b3b352fc1fd3276a51cb346b7e3a136659eaf2",
+    "bytes": 620800,
+    "members": 22,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "png-word-composition-precision.tar.xz",
+        "sha256": "3d3902d6fe9d671b28e457e5ea2dda7cbdda0f92693d2fa98b2dcae047917670"
+      },
+      {
+        "file": "ordinary-word-text-dispatch-qualified.tar.xz",
+        "sha256": "1e48e6d6d9e09cfd48155fc982d46932b4999dbbfd8ef0165c984f7283fca26d"
+      }
+    ]
+  }
+}
