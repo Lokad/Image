@@ -1,6 +1,8 @@
 # Packed signed font bounds
 
-The later [paired-glyph trial](FONT-PAIRED-GLYPH-TRIAL.md) is not retained; these source-valid font-loading costs remain current.
+The later [paired-glyph](FONT-PAIRED-GLYPH-TRIAL.md) and
+[batched-location](FONT-LOCATION-BATCH-TRIAL.md) trials are not retained; these
+source-valid font-loading costs remain current.
 
 [Glyph-bounded rows](TEXT-GLYPH-ROW-BOUNDS.md) owns current
 ordinary drawing/complete integration costs. Unchanged prepared execution and
