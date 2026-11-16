@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-16. **289 material required paths** remain
-in scope; the 159 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 160 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
