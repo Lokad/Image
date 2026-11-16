@@ -1,5 +1,9 @@
 # Complete one-shot RGBA16 PNG composition
 
+[Current retained-native precision](PNG-WORD-COMPOSITION-PRECISION.md) remains
+uncertain on the latest actual package. The scoped milestone observations below
+are retained; the independent equivalent one-shot pass stays valid.
+
 The existing frozen 513×259 RGBA16 seekable-PNG control now has an equivalent
 fresh-state comparison: Decode → AutoOrient(Normal) → centered 256×129 crop →
 nearest fit inside 128×64, producing an independently owned 127×64 result.

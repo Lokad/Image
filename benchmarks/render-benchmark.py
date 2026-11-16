@@ -369,7 +369,18 @@ def png_scan_stage():
 
 def current_png_stream_word_note(current, one_shot):
     c = current['cases']['pngStream/Png16']
-    composition = current['cases']['pngStream/PngCropFit16']
+    precision = json.loads((ROOT / 'benchmarks/png-word-composition-precision-evidence.json').read_text(encoding='utf-8'))
+    composition = precision['case']
+    assert precision['measurementAccepted'] and not precision['productionChanged'] and not precision['productionSpeedupClaim']
+    assert precision['requiredMaterialPaths'] == 289 and precision['newMaterialPaths'] == 0
+    assert precision['raw']['mirrored'] and precision['raw']['allMembersVerified']
+    assert precision['qualification']['fullChecksEachOs'] == 6750 and precision['qualification']['sameActualPackageBothOs']
+    assert composition['librarySha256'] == precision['producers']['timedArtifactSha256']
+    assert precision['qualification']['packageSha256'] == precision['producers']['packageSha256']
+    assert precision['receipt']['allOriginalGatesPassed'] and precision['receipt']['quietGuardsPassed']
+    assert precision['receipt']['allActualsRetained'] and precision['receipt']['operationsEach'] == 1024
+    assert composition['status'] == current['cases']['pngStream/PngCropFit16']['status'] == 'uncertain'
+    assert math.isclose(composition['ratio'], composition['managedUs'] / composition['nativeUs'], rel_tol=1e-12)
     fresh = one_shot['case']
     diagnostic = one_shot['nativeLifetimeDiagnostic']
     return ('[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) retains passing evidence '
@@ -383,8 +394,14 @@ def current_png_stream_word_note(current, one_shot):
             'all managed public calls/intermediate owners remain. '
             f'A controlled native lifetime comparison measures **{diagnostic["extraCompleteNativeUs"]:,.2f} µs** extra for fresh state, '
             'including lost reuse, not a pure setup duration or managed speedup. '
-            f'The earlier retained-native view stays uncertain, upper **{composition["upper"]:.6f}**. '
-            'Original/short/independent captures remain linked; unchanged package qualification is reused.')
+            '[Longer retained-native PNG16 composition](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) '
+            f'remains uncertain at **{composition["managedUs"]:,.2f} / FFmpeg {composition["nativeUs"]:,.2f} µs**, '
+            f'interval **{composition["lower"]:.6f}–{composition["upper"]:.6f}**, **{composition["allocatedBytes"]:,} B/op**. '
+            'One prespecified 256→1,024-call precision capture keeps every actual and the same confidence gates; '
+            'its wider interval and 378 generation-2 collections over 12,288 managed operations warrant '
+            'allocation-lifetime attribution, not another unchanged timing capture or a causal GC claim. '
+            'No production speedup is claimed. The same current package reuses 6,750 full/live checks per OS; '
+            'original/short/independent captures and exact pixel/ownership checks remain linked.')
 
 
 def apply_current_png_scan(codecs, reads, current):

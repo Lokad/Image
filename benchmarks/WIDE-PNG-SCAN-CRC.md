@@ -1,5 +1,9 @@
 # Wide PNG scan CRC
 
+[Current retained-native precision](PNG-WORD-COMPOSITION-PRECISION.md) remains
+uncertain on the latest actual package. The scoped milestone observations below
+are retained; the independent equivalent one-shot pass stays valid.
+
 The subsequent [equivalent one-shot composition](PNG-COMPOSITION-ONE-SHOT.md)
 passes on the current immutable package. This report retains its original
 retained-native comparison and uncertainty; the new lifetime view does not
