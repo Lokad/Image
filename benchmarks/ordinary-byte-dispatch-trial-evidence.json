@@ -1,0 +1,108 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TDB1168",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Inconclusive short screen,no demonstrated useful gain. Stop this implementation;no independent confirmation,standalone reference refresh,production promotion or broad/package repeat.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "TDB1168",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "6e91cf0ea4812c8c903f405eb23cfe898f3ed168",
+    "baselineWindowsSha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+    "baselineLinuxSha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+    "prototypePath": "tmp/tdb1168-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "9cd35c17add6bba6afe0c8425bfc50bf786e1328eb65885bb493f82f8561c887",
+    "sourcePins": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f"
+    },
+    "candidateSourceSha256": "9854046a2c9ede2abe6036dd2b5208719d0f7160cbf5b1296e11b998a1b1ddbc",
+    "hypothesis": "Ordinary RGBA8 transparent-destination dispatch removes3variable UInt64 channel quotients using exact16bit->8bit nearest conversion. Unlike inconclusive TZA703 shared both-depth change,this touches only ordinary byte call boundary;accepted TDW1145 ordinaryword dispatch staysverbatim. Current ordinary8 scoped gap1.72us;no speed forecast.",
+    "endState": "One small ordinary-byte dispatch;no duplicated general blend. Preserve all geometry,prepared/sharedblend,worddispatch,nonzero-destination fallback and original positive-SA checkpoint/invariant.",
+    "sourceProof": {
+      "onlyOrdinaryByteDispatchChanges": true,
+      "positiveSaEstablishedBeforeCall": true,
+      "sharedPreparedAndWordBlendVerbatim": true,
+      "noNewStorageOwnershipApiCachePolicy": true,
+      "cancellationAndAdmissionVerbatim": true
+    },
+    "invalidation": "Ordinary8/16 share Rasterize JIT,authored8/16 complete layout+draw and complete owning integrations must reconcile if accepted;prepared rendering/layout/fontload/otherpixelcodecresize remain unchanged.",
+    "qualification": "Independent rational proof and targeted196case392draw401408pixel byte probe versus unchanged prepared blend;allfrozen8/16frames and existing public font/text/admission/ownership normal/scalar bothOS. One short4096operation3paired screen then independent12pairs only if promising;no favorable replay. Reconcile actual standalone references before broad/package qualification.",
+    "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "smallByteActor": 1,
+      "smallByteProbe": 1,
+      "allCanonicalEmbeddedPublicExistingHarnessReferenceFixturePackageBuilds": 0
+    }
+  },
+  "screen": {
+    "baselineUs": 47.02481681315104,
+    "candidateUs": 46.61106266276042,
+    "ratio": 0.9912069809629213,
+    "lower": 0.8798973119041148,
+    "upper": 1.116597659542224,
+    "publicAllocatedBytes": 83216,
+    "timedAdapterBytes": 24,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "focusedPublicEachOs": {
+    "windows": {
+      "normal": 166,
+      "scalar": 166
+    },
+    "linux": {
+      "normal": 166,
+      "scalar": 166
+    }
+  },
+  "targetedPixelChecks": {
+    "casesPerMode": 196,
+    "drawsPerMode": 392,
+    "pixelsPerMode": 401408,
+    "normalAndScalarBothOs": true,
+    "oracle": "Unchanged prepared rational blend;full16bit sourcecolor/alpha,clipping,overlap,hiddenRGB,zero-source,mixed destinations,borrowed root and zero final charge"
+  },
+  "sourceProof": {
+    "onlyOrdinaryByteDispatchChanges": true,
+    "positiveSaEstablishedBeforeCall": true,
+    "sharedPreparedAndWordBlendVerbatim": true,
+    "noNewStorageOwnershipApiCachePolicy": true,
+    "cancellationAndAdmissionVerbatim": true
+  },
+  "memory": {
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "commit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "fullLiveEachOs": 6776,
+    "actualPackageSha256": "3167deb580ba05ecf4121a062515140e333964039576c30b73b89ba708b6aa38",
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "preparationRecovery": "Initial small actor build had missing local reference HintPaths;copied frozen VM TextHarness and corrected only actor refs,then resumed its pending build. Canonical/prototype/probe not rebuilt. Local design serialization then resumed after missing local sha variable;zero operations repeated.",
+  "next": "No neighboring blend variant selected from this result. Inspect remaining material CopyRegion traversal and named ownership uncertainties,using existing exact operation boundaries and retaining unchanged passing paths.",
+  "raw": {
+    "file": "ordinary-byte-dispatch-trial.tar.xz",
+    "sha256": "4d91bf0aadc768e5071a4e2b602f5cdeae1638f23db2689b19cba496f2f9c658",
+    "bytes": 1278228,
+    "members": 83,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "nearest-row-reuse-qualified.tar.xz SHA256 a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+      "ordinary-word-text-dispatch.tar.xz (see ordinary-word-text-dispatch-evidence.json)",
+      "text-transparent-destination-experiment.tar.xz SHA256 f6d014d7b45a9b2bc24a7217643e24bfe2944e876592c148dbc4e9aeb843f22b"
+    ]
+  }
+}
