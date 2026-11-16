@@ -19,8 +19,8 @@ with an easier operation. The following finite list is the inherited 17:
 | `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Reconciled pass-stop:current `PngHeaders` has the exact218775B packet,fresh seekable grammar/EOF/owner boundary and identical native reference identity. 0.290585/0.579888us,upper.509395,568B/op;reuse [RCI1098](REFILL-CALL-INLINING.md). |
 | `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. [Stuffed-pair acquisition](JPEG-STUFFED-PAIRS.md) saves31.743% in controlled pairs; current3.769/AVIO-headeradapter2.835us,upper1.367175,8768B/op remains a gap. Fresh opaque seekable source/full scan/independent9-field output. |
 | `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. [Current header guard](JPEG-STUFFED-PAIRS.md) passes/stops.142106/AVIO-headeradapter.310231us,upper.471884,552B/op; full RIFF/late metadata/EOF/independent9-fields. Identify/probe remain different. |
-| `FillRectangle/Rgba8Clipped` | Clipped byte replacement. Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel. |
-| `FillRectangle/Rgba16Clipped` | Clipped full-word replacement. Current fill passes; same original-recipe reconciliation remains. |
+| `FillRectangle/Rgba8Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 1.194663/FFmpegpublicfill1.730184us,upper0.696649,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
+| `FillRectangle/Rgba16Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
 | `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
 | `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
 | `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
@@ -95,6 +95,12 @@ JPEGheaderupper1.367175 and asyncprefixupper1.133673 remain gaps;WebPupper.47188
 passes/stops. The asyncprefix2.698ns/1.255% regression is explicit. Full6747eachOS,
 normal/scalar ownership guards and SAMEactualpackage/all3examples pass. Older
 HBC1129costs above remain baseline history, not current production proof.
+
+CLF1131independently qualifies both original254pixel clipped-fill tails against
+FFmpegpublicfill:byteupper.696649 and wordupper.456739,0B/op. Both pass/stop with
+exact normal/scalar current-package samples. Existing256pixel costs remain
+separate. No production change,new image/path or broad/package campaign. Original
+byte-copy/composite and six authored-font boundaries remain unmeasured.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay

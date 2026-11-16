@@ -56,7 +56,7 @@ static void apply(Work *work)
     if (av_image_fill_color(data, strides, work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE,
                             color, right - left, bottom - top, 0))
         fail("Public FFmpeg fill failed.");
-    work->observed += work->canvas[19 * work->stride];
+    work->observed += work->canvas[top * work->stride + left * work->pixel_bytes];
     work->completed++;
 }
 static void check_and_write(Work *work, const char *path)
@@ -71,7 +71,7 @@ static void check_and_write(Work *work, const char *path)
             expected |= work->original[offset + 1] << 8;
             actual |= work->canvas[offset + 1] << 8;
         }
-        if (x < 256 && y >= 19 && y < 148)
+        if (x >= work->x && x < work->x + work->width && y >= work->y && y < work->y + work->height)
             expected = work->depth == 8 ? (work->rgba16[c] + 128) / 257 : work->rgba16[c];
         if (actual != expected) fail("Full fill canvas/untouched pixels differ.");
     }
@@ -81,13 +81,14 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "fill-rectangle"))
-        fail("Usage: ffmpeg-fill-rectangle-warm fill-rectangle INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW");
+    if ((argc != 7 && argc != 8) || strcmp(argv[1], "fill-rectangle") || (argc == 8 && strcmp(argv[7], "original-clipped")))
+        fail("Usage: ffmpeg-fill-rectangle-warm fill-rectangle INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [original-clipped]");
     Work work = {0}; work.cpu = affinity_cpu();
     int width = number(argv[3]), height = number(argv[4]); work.depth = number(argv[5]);
     if (width != 513 || height != 259 || (work.depth != 8 && work.depth != 16)) fail("Fixed RGBA8/16 geometry differs.");
     work.pixel_bytes = work.depth / 8 * 4; work.stride = width * work.pixel_bytes; work.bytes = (size_t)work.stride * height;
-    work.x = -17; work.y = 19; work.width = 273; work.height = 129;
+    work.x = argc == 8 ? -3 : -17; work.y = argc == 8 ? 5 : 19;
+    work.width = argc == 8 ? 257 : 273; work.height = 129;
     uint32_t color8[4] = { 23, 57, 91, 128 }, color16[4] = { 12345, 23456, 34567, 45678 };
     for (int c = 0; c < 4; c++) work.rgba16[c] = work.depth == 8 ? color8[c] * 257 : color16[c];
     work.original = malloc(work.bytes); work.canvas = malloc(work.bytes);
@@ -98,8 +99,9 @@ int main(int argc, char **argv)
     if (fclose(input)) fail("Close input failed.");
     memcpy(work.canvas, work.original, work.bytes);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"fill-rectangle\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"x\":-17,\"y\":19,\"fillWidth\":273,\"fillHeight\":129,\"clippedX\":0,\"clippedY\":19,\"clippedWidth\":256,\"clippedHeight\":129,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"colorNormalizationTimed\":true,\"clippingTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
-           work.depth, work.cpu, work.stride, av_version_info(), avutil_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"fill-rectangle\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"x\":%d,\"y\":%d,\"fillWidth\":%d,\"fillHeight\":129,\"clippedX\":0,\"clippedY\":%d,\"clippedWidth\":%d,\"clippedHeight\":129,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"colorNormalizationTimed\":true,\"clippingTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
+           work.depth, work.cpu, work.x, work.y, work.width, work.y, work.x + work.width,
+           work.stride, av_version_info(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

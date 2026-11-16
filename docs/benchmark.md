@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **155 comparisons** summarize that scope.
+**289 named material paths**; these **157 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -32,8 +32,8 @@ Release package and all three examples pass on both platforms. One core/embedded
 build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
 the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
 zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. 6 of 9 measured borrowed drawing controls pass,
-2 gaps and 1 uncertainty remain. Prior fills/composites retain valid evidence.
+separate. That earlier 9-control subset retains 6 passes,
+2 gaps and 1 uncertainty. Prior fills/composites retain valid evidence.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
@@ -52,6 +52,19 @@ No production speedup or broader content/settings claim.
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
+
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) now pass and stop:
+**RGBA8 1.195 / FFmpeg 1.730 µs, upper .696649** and **RGBA16 2.184 / 4.829 µs,
+upper .456739**, both **0 B/op**. Their original request(-3,5,257,129) yields
+254 pixels per row, distinct from the earlier256-pixel controls. Complete public
+validation, clipping, color normalization and borrowed mutation match the public
+FFmpeg fill boundary; preparation, resets and output allocation are excluded equally.
+Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
+normal/scalar. Reuse unchanged platform/package qualification; no production change,
+speedup claim, new image or broad campaign. Allocation/admission/retained operation
+storage stays zero; physical/native/JIT peaks are unmeasured. These two inherited
+paths bring measured borrowed drawing to **eleven: eight passes, two gaps, one uncertain**.
+Two original drawing and six authored-font boundaries still lack measurements.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -471,6 +484,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
 | Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
+| Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
+| Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
 
 **Inspection and pixel-coding validation**
 

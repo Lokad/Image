@@ -1977,8 +1977,8 @@ Release package and all three examples pass on both platforms. One core/embedded
 build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
 the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
 zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. {drawing_counts['passCount']} of {drawing_counts['total']} measured borrowed drawing controls pass,
-{drawing_counts['gaps']} gaps and {drawing_counts['uncertain']} uncertainty remain. Prior fills/composites retain valid evidence.
+separate. That earlier {drawing_counts['total']}-control subset retains {drawing_counts['passCount']} passes,
+{drawing_counts['gaps']} gaps and {drawing_counts['uncertain']} uncertainty. Prior fills/composites retain valid evidence.
 """
     wc = word_composite['case']
     borrowed_drawing_note += f"""
@@ -3152,6 +3152,27 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
         read_table += (f'\n| {label} ({c["status"]}) | {c["managedUs"]:.3f} | {c["nativeUs"]:.3f} | '
                        f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,.0f} |')
+    original_fills = json.loads((ROOT / 'benchmarks/original-clipped-fill-evidence.json').read_text(encoding='utf-8'))
+    fq = original_fills['qualification']
+    assert original_fills['measurementAccepted'] and not original_fills['productionChanged']
+    assert not original_fills['productionSpeedupClaim'] and original_fills['newRequiredPaths'] == 0
+    assert original_fills['requiredMaterialPaths'] == 289 and original_fills['producers'] == jpeg_markers['producers']
+    assert fq['reusedForUnchangedProduction'] and fq['newBroadOrPackageChecks'] == 0
+    assert fq['fullChecksEachOs'] == 6747 and fq['sameActualPackageBothOs'] and fq['usageExamples'] == 3
+    assert fq['packageSha256'] == jpeg_markers['producers']['packageSha256']
+    assert original_fills['raw']['mirrored'] and original_fills['raw']['allMembersVerified']
+    for depth in (8, 16):
+        c = original_fills['cases'][f'DrawingFill{depth}OriginalClipped']
+        assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12
+        assert c['librarySha256'] == jpeg_markers['producers']['linuxSha256'] and c['allocatedBytes'] == 0
+        assert (c['x'], c['y'], c['fillWidth'], c['fillHeight'], c['clippedWidth']) == (-3, 5, 257, 129, 254)
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                                 'fullCanvasExact', 'alphaExact', 'hiddenRgbExact', 'untouchedExact', 'callerBuffersAlive'))
+        assert c['status'] == 'pass' and c['upper'] < 1
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+        assert original_fills['scalar'][f'DrawingFill{depth}OriginalClipped']['sameCurrentPackageLibrary']
+        editing += (f'\n| Original clipped RGBA{depth} fill, 254×129 (parity confirmed) | {c["managedUs"]:.3f} | '
+                    f'{c["nativeUs"]:.3f} | {c["ratio"]:.3f} / {c["upper"]:.6f} | 0 |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3167,6 +3188,19 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
+
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) now pass and stop:
+**RGBA8 1.195 / FFmpeg 1.730 µs, upper .696649** and **RGBA16 2.184 / 4.829 µs,
+upper .456739**, both **0 B/op**. Their original request(-3,5,257,129) yields
+254 pixels per row, distinct from the earlier256-pixel controls. Complete public
+validation, clipping, color normalization and borrowed mutation match the public
+FFmpeg fill boundary; preparation, resets and output allocation are excluded equally.
+Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
+normal/scalar. Reuse unchanged platform/package qualification; no production change,
+speedup claim, new image or broad campaign. Allocation/admission/retained operation
+storage stays zero; physical/native/JIT peaks are unmeasured. These two inherited
+paths bring measured borrowed drawing to **eleven: eight passes, two gaps, one uncertain**.
+Two original drawing and six authored-font boundaries still lack measurements.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -3445,7 +3479,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 155, 'Expected 155 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 157, 'Expected 157 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

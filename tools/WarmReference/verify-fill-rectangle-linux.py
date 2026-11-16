@@ -1,5 +1,6 @@
 """Correctness-only controls for the borrowed-canvas rectangle-fill reference."""
 import hashlib
+import itertools
 import json
 import os
 from pathlib import Path
@@ -9,10 +10,10 @@ import tempfile
 root = Path(__file__).resolve().parents[2]
 worker = root / 'external/warm-reference/ffmpeg-fill-rectangle-warm'
 records = []
-for depth, relative, pinned in [
+for (depth, relative, pinned), original in itertools.product([
     (8, 'artifacts/warm-reference/webp-decode/source.rgba', '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80'),
     (16, 'artifacts/warm-reference/bilinear16-audit/input.rgba64le', '3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9'),
-]:
+], [False, True]):
     source = root / relative
     pixels = source.read_bytes()
     assert hashlib.sha256(pixels).hexdigest() == pinned
@@ -22,12 +23,15 @@ for depth, relative, pinned in [
     import struct
     color = [23, 57, 91, 128] if depth == 8 else [12345, 23456, 34567, 45678]
     pattern = bytes(color) if depth == 8 else struct.pack('<4H', *color)
-    for y in range(19, 148):
-        expected[y * stride:y * stride + 256 * pixel] = pattern * 256
+    top, clipped_width = (5, 254) if original else (19, 256)
+    for y in range(top, top + 129):
+        expected[y * stride:y * stride + clipped_width * pixel] = pattern * clipped_width
     with tempfile.TemporaryDirectory(prefix='lokad-image-fill-rectangle-') as name:
         folder = Path(name)
         output = folder / 'output.rgba'
         arguments = [str(worker), 'fill-rectangle', str(source), '513', '259', str(depth), str(output)]
+        if original:
+            arguments.append('original-clipped')
 
         def run(values, protocol='quit\n', cpus='0'):
             return subprocess.run(['taskset', '-c', cpus, *values], input=protocol, capture_output=True, text=True, timeout=30)
@@ -38,6 +42,8 @@ for depth, relative, pinned in [
         assert ready['operation'] == 'fill-rectangle' and ready['depth'] == depth
         assert ready['affinityCount'] == ready['workerThreads'] == 1 and ready['cpu'] == 0
         assert ready['colorNormalizationTimed'] and ready['clippingTimed'] and ready['borrowedCanvas'] and ready['canvasMutationTimed']
+        assert ready['y'] == top and ready['clippedWidth'] == clipped_width
+        assert ready['x'] == (-3 if original else -17) and ready['fillWidth'] == (257 if original else 273)
         assert not ready['sourcePreparationTimed'] and not ready['canvasPreparationTimed'] and not ready['outputAllocationTimed']
         assert sample['operations'] == 1 and sample['completedOperations'] == ready['initialCompletedOperations'] + 1
         assert sample['outputStride'] == stride and check['exact'] and check['sourceUnchanged']
@@ -49,7 +55,8 @@ for depth, relative, pinned in [
             assert result.returncode != 0 and result.stderr, label
             controls.append(label)
 
-        reject('missing output', arguments[:-1])
+        reject('missing output', arguments[:6])
+        reject('unknown layout', arguments[:7] + ['unknown'])
         for label, index, value in [('operation', 1, 'crop'), ('zero width', 3, '0'),
                                     ('width text', 3, '513x'), ('wrong width', 3, '512'),
                                     ('dimension bound', 4, '32769'), ('depth', 5, '12')]:
@@ -67,7 +74,7 @@ for depth, relative, pinned in [
         allowed = sorted(os.sched_getaffinity(0))
         assert len(allowed) >= 2
         reject('multiple CPUs', arguments, cpus=','.join(map(str, allowed[:2])))
-        records.append(dict(depth=depth, sourceSha256=pinned, outputSha256=hashlib.sha256(expected).hexdigest(),
+        records.append(dict(depth=depth, originalClipped=original, sourceSha256=pinned, outputSha256=hashlib.sha256(expected).hexdigest(),
                             fullCanvasExact=True, alphaExact=True, hiddenRgbExact=True, sourceUnchanged=True,
                             countersExact=True, controls=controls))
 record = dict(schemaVersion=1, project='Lokad.Image', correctnessOnly=True, noTimingClaim=True,

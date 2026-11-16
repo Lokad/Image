@@ -35,12 +35,12 @@
     {
       "originalRequiredName": "FillRectangle/Rgba8Clipped",
       "requiredPath": "Clipped byte replacement",
-      "currentState": "Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel."
+      "currentState": "CLF1131independent pass-stop:original(-3,5,257,129) effective254x129 on original513x259raster. Current1.194663/FFmpegpublicfill1.730184us,upper0.696649,0B/op. Exact fullcanvas/alpha/hiddenRGB/untouched and currentpackageLinuxnormal/scalar;unchangedplatform/packagequalification reused. No production change or speedup claim."
     },
     {
       "originalRequiredName": "FillRectangle/Rgba16Clipped",
       "requiredPath": "Clipped full-word replacement",
-      "currentState": "Current fill passes; same original-recipe reconciliation remains."
+      "currentState": "CLF1131independent pass-stop:original(-3,5,257,129) effective254x129 on original513x259raster. Current2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact fullcanvas/alpha/hiddenRGB/untouched and currentpackageLinuxnormal/scalar;unchangedplatform/packagequalification reused. No production change or speedup claim."
     },
     {
       "originalRequiredName": "CopyRegion/Rgba8Independent",
@@ -107,7 +107,7 @@
   "firstExecuted": "CopyRegion/Rgba16Overlapping:original513x259word raster,257x129,shift(1,1). Original prose fixes extent and shift but no absolute origin;freeze(0,0)->(1,1),thenreverse in both complete totals. Tool-only OWC1125measurement;same current immutable package,zero production builds.",
   "qualification": "Reuse current6745checks eachOS and actual package/all3examples for unchanged production;the new benchmark additionally verifies full-word snapshots/untouched pixels,cancellation/refusal/recovery and scalar execution.",
   "currentCopyEvidence": "benchmarks/word-alias-dispatch-evidence.json",
-  "lastReconciliation": "SMP1130",
+  "lastReconciliation": "CLF1131",
   "resolvedAliases": [
     {
       "project": "Lokad.Image",
@@ -167,5 +167,6 @@
     }
   ],
   "confirmedOriginalWordCompositeEvidence": "benchmarks/original-word-composite-evidence.json",
-  "confirmedOriginalHeaderEvidence": "benchmarks/jpeg-stuffed-pairs-evidence.json"
+  "confirmedOriginalHeaderEvidence": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+  "confirmedOriginalFillEvidence": "benchmarks/original-clipped-fill-evidence.json"
 }

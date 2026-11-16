@@ -177,6 +177,11 @@ geometry, ownership, exact-pixel checks and immutable-driver reproduction.
 
 Clipped fills similarly use build-fill-rectangle-linux.sh and
 verify-fill-rectangle-linux.py, family FillRectangle and DrawingFill8/16.
+The original required `(-3,5,257,129)` request is selected explicitly with
+`DrawingFill8OriginalClipped`, `DrawingFill16OriginalClipped`, or `OriginalClipped`
+for both. It clips to254pixels per row; the earlier defaults remain256pixels.
+The native worker accepts optional `original-clipped`; its verifier covers both
+named layouts at both depths. See [current results](../../benchmarks/ORIGINAL-CLIPPED-FILL.md).
 Public FFmpeg av_image_fill_color includes clipping and required color
 normalization inside each borrowed-canvas operation.
 [Both controls pass and stop](../../benchmarks/WARM-RECTANGLE-FILL-PACKED.md).

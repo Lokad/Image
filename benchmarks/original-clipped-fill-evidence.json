@@ -1,0 +1,210 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CLF1131",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "38b8112f2a68d4482a70f1005063ce68f91cf9e24669bc8976a3613f061f2bbf",
+    "linuxSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "timedArtifactSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298"
+  },
+  "sourcePins": {
+    "benchmarks/Lokad.Image.Benchmarks/WarmFillRectangle.cs": "118a0e69f65b047f67958ddf6efadc32e0f60b05c60561c7a790731ae0c54cb4",
+    "benchmarks/Lokad.Image.Benchmarks/NativeWarmReference.FillRectangle.cs": "f8ac3ea71f9837e34f228eac2f87188ea068b1c0f3acf58bce961ab5092ea91e",
+    "tools/WarmReference/ffmpeg-fill-rectangle-warm.c": "e4d053893c21b8f62a31324c760bbb5f8a5bc35cda1bbec6aa2d65e01bfb9c88",
+    "tools/WarmReference/verify-fill-rectangle-linux.py": "db96af5e0303ec93383495104e638165b2d15e894837e5cda91e53f6c2e801ff"
+  },
+  "unchangedProductionSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "originalScopeRevision": "39402e74e0f95c82ab209e5a950066a206c2af65",
+  "cases": {
+    "DrawingFill8OriginalClipped": {
+      "originalRequiredControl": "FillRectangle/Rgba8Clipped",
+      "managedUs": 1.1946625778302642,
+      "nativeUs": 1.7301841710408528,
+      "ratio": 0.690482896460423,
+      "lower": 0.6857393856372169,
+      "upper": 0.6966490325978018,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "harnessSha256": "e2c35e2889cd09c9e0031124b5da6aee8aa1b165585ce4ab83a46ec8b1df362f",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "730866258248622031843dc14f772083c2e786a5211126e2d7e50a1b64cb7c4c",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "x": -3,
+      "y": 5,
+      "fillWidth": 257,
+      "fillHeight": 129,
+      "clippedX": 0,
+      "clippedY": 5,
+      "clippedWidth": 254,
+      "clippedHeight": 129,
+      "boundary": "One complete public FillRectangle into the resident original 513x259 RGBA8 canvas: requested x=-3,y=5,w=257,h=129, clipped to x=0,y=5,w=254,h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Canvas preparation/reset, startup, IPC, I/O and verification excluded equally; overwrites are idempotent, no reset/output allocation/full-frame copy. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD; only this rectangle/color per depth is measured.",
+      "allActualsRetained": true,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "fullCanvasExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "untouchedExact": true,
+      "borrowedCanvas": true,
+      "callerBuffersAlive": true
+    },
+    "DrawingFill16OriginalClipped": {
+      "originalRequiredControl": "FillRectangle/Rgba16Clipped",
+      "managedUs": 2.1835475349040134,
+      "nativeUs": 4.829109202067057,
+      "ratio": 0.45216362760431367,
+      "lower": 0.4487619801513912,
+      "upper": 0.4567389140012512,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "harnessSha256": "e2c35e2889cd09c9e0031124b5da6aee8aa1b165585ce4ab83a46ec8b1df362f",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "7d0b1b268688b6478cb3d80dc2a8bcdc1a68fdaa743502193d9a24b7db263d5d",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "x": -3,
+      "y": 5,
+      "fillWidth": 257,
+      "fillHeight": 129,
+      "clippedX": 0,
+      "clippedY": 5,
+      "clippedWidth": 254,
+      "clippedHeight": 129,
+      "boundary": "One complete public FillRectangle into the resident original 513x259 RGBA16 canvas: requested x=-3,y=5,w=257,h=129, clipped to x=0,y=5,w=254,h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Canvas preparation/reset, startup, IPC, I/O and verification excluded equally; overwrites are idempotent, no reset/output allocation/full-frame copy. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD; only this rectangle/color per depth is measured.",
+      "allActualsRetained": true,
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "fullCanvasExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "untouchedExact": true,
+      "borrowedCanvas": true,
+      "callerBuffersAlive": true
+    }
+  },
+  "short": {
+    "DrawingFill8OriginalClipped": {
+      "managedUs": 1.1700333118052295,
+      "ratio": 0.6754944846255088,
+      "upper": 0.7372509673222905,
+      "allocatedBytes": 0,
+      "actuals": 3
+    },
+    "DrawingFill16OriginalClipped": {
+      "managedUs": 2.222725632902044,
+      "ratio": 0.45045464577050803,
+      "upper": 0.5298435368275827,
+      "allocatedBytes": 0,
+      "actuals": 3
+    }
+  },
+  "scalar": {
+    "DrawingFill8OriginalClipped": {
+      "fullCanvasExact": true,
+      "alphaHiddenRgbUntouchedExact": true,
+      "sameCurrentPackageLibrary": true,
+      "noTimingClaim": true
+    },
+    "DrawingFill16OriginalClipped": {
+      "fullCanvasExact": true,
+      "alphaHiddenRgbUntouchedExact": true,
+      "sameCurrentPackageLibrary": true,
+      "noTimingClaim": true
+    }
+  },
+  "reference": {
+    "label": "FFmpeg n8.1 public av_image_fill_color",
+    "identity": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "e4d053893c21b8f62a31324c760bbb5f8a5bc35cda1bbec6aa2d65e01bfb9c88",
+      "buildScriptSha256": "8ea6032d15f8edbb3508962a4ad4daea692197a7097efaf7d432438fb02be99c",
+      "workerSha256": "1e7ec07e9f91049d55035be7d6a3a35f5a7d21a743a85c423da25bc4cbe08418",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+      },
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeWorkingCanvas": "Borrowed original513x259RGBA8/16canvas prepared outside timing on both sides. Peroperation normalization,clipping and complete mutation included;idempotent writes,no reset or output allocation."
+  },
+  "memory": {
+    "managedGcBytesEachOperation": 0,
+    "newOperationOwnedAdmittedBytes": 0,
+    "newOperationRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false,
+    "interpretation": "Zero peroperation allocations/admission/retained state;pre-existing caller canvas stays outside operation ownership. Prepared fixture/expected snapshots are correctness tooling. Native allocation/allocator retention/physical/JIT peaks are not inferred from GC figures."
+  },
+  "qualification": {
+    "provider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6747,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298",
+    "newBroadOrPackageChecks": 0,
+    "newLinuxNormalScalarControls": 2,
+    "defaultAndOriginalNativeDepthControls": 4
+  },
+  "builds": {
+    "parentHarness": 1,
+    "generatedChildHarness": 2,
+    "native": 1,
+    "canonicalProduction": 0,
+    "discardedGeneratedProductionDependencies": 2,
+    "embedded": 0,
+    "public": 0,
+    "package": 0,
+    "fixtures": 0,
+    "clarification": "BDN preparation built2private production dependency copies under its ArtifactsPath. First pre-timing identity guard rejected one. Rebind existing children to exact current package DLL10440506without another build;all actual measurements and normal/scalar current gates use that artifact. Canonical source/bin library stayed byte-identical and unmodified;preparation clocks discarded. One parent/two child harness builds,one native build,zero embedded/public/package builds.",
+    "discardedLibraryHashes": {
+      "short": "d75cde206d2cbcd1725b58b31afbc3ad648a774e354af9e78793e147b9b8f170",
+      "confirm": "9937f389ea9a8f6e88454e764bfec02881c7ac2f34ed59babb1fd526b3561100"
+    }
+  },
+  "preflight": "One initial core-identity failure before any actual/quiet capture. Keep its log/script;reuse existing children after rebinding exact current10440506package DLL. No completed capture is restarted. All preparation/BDN private-copy clocks are discarded.",
+  "invalidation": "Changed FillRectangle validation,clipping,color conversion,fill/cancel loops,buffer ownership or actual frozen inputs/reference APIs invalidate affected evidence. JPEG marker and unrelated codec/resize/font paths do not. Tool defaults retain their earlier geometry and costs as separately identified history;new254pixel tail is not an alias.",
+  "raw": {
+    "file": "original-clipped-fill-confirmation.tar.xz",
+    "sha256": "92658709f9969c7874bb481f88be4ac77b952ba165d31a748353a331fff35bb7",
+    "bytes": 13032644,
+    "members": 171,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-stuffed-pairs-qualified.tar.xz",
+        "sha256": "3828e4155a1ad79b0c81fd9d8a9ff1d952429315ef5b583cf52587c3577fdffe"
+      }
+    ]
+  }
+}
