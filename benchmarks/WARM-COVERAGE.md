@@ -201,6 +201,14 @@ ownership and actual async completion. Do not substitute normalization/RGBA outp
 when the requested operation does not require it.
 
 Sixteen required text/drawing additions use the existing raster/font/text recipes.
+
+[Authored-font preflight](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) adds correctness-only
+observations for the six remaining original tiny-face controls, using the same
+actual package on Windows/Linux. All retained-owner/shared-root checks pass;
+default variation is ready for its short screen. The other five retain reference
+tab/placement or cmap4 issues and remain unscored. No CPU-gap or overall text
+slowdown claim follows. Existing complete one-shot/repeated integrations stay
+passing and stopped; independent codec/copy/resize work remains available.
 The [original omission audit](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md) records their
 provenance; its former pending-reference/timing statements are historical. Use the
 approved scopes and current evidence above.

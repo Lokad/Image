@@ -3233,6 +3233,10 @@ native graph/allocator retention and unmeasured physical/JIT peaks stay separate
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
 three gaps, one uncertain**. Six authored-font original boundaries remain unmeasured.
+Their [correctness-only preflight](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
+finds default variation comparison-ready; five need reference-output alignment.
+All six retained-owner checks pass on both operating systems. These observations
+establish no CPU gap or overall text slowdown and add no timing row.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged

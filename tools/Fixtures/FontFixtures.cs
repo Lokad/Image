@@ -28,10 +28,10 @@ internal static class FontFixtures
         var fonts = new List<object>();
         foreach (var (name, bytes) in new[] { ("original", ordinary), ("components", components), ("packed", packed) })
         {
-            var font = TrueTypeFont.Load(bytes); var glyphs = new List<object>();
+            using var font = TrueTypeFont.Load(bytes); var glyphs = new List<object>();
             foreach (var code in new[] { 65, 103, 193, 769, 0xE000 })
             {
-                var layout = TextLayout.Create(font, new Rune(code).ToString(), new() { FontSize = 10, Kerning = false });
+                using var layout = TextLayout.Create(font, new Rune(code).ToString(), new() { FontSize = 10, Kerning = false });
                 var ink = layout.InkBounds; var scale = layout.FontSize / font.UnitsPerEm; var baseline = layout.GetGlyph(0).BaselineY;
                 glyphs.Add(new { codePoint = code, glyphIndex = layout.GetGlyph(0).GlyphIndex,
                     advance = layout.GetGlyph(0).AdvanceWidth / scale,
@@ -55,8 +55,8 @@ internal static class FontFixtures
             ("implied", "packed", 65), ("metrics", "components", 193), ("matrix", "components", 0xE000)
         })
         {
-            var font = TrueTypeFont.Load(File.ReadAllBytes(Path.Combine(output, file + ".ttf")));
-            var layout = TextLayout.Create(font, new Rune(code).ToString(), new() { FontSize = 10, Kerning = false });
+            using var font = TrueTypeFont.Load(File.ReadAllBytes(Path.Combine(output, file + ".ttf")));
+            using var layout = TextLayout.Create(font, new Rune(code).ToString(), new() { FontSize = 10, Kerning = false });
             foreach (var depth in new[] { 8, 16 })
             {
                 using var canvas = ImageBuffer.Create(20, 16, depth);

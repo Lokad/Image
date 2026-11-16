@@ -47,6 +47,13 @@ only the six authored-font boundaries remain unmeasured. The original JPEGheader
 word-overlap copy and clipped byte-copy gaps stay open. Related passes do not
 retire them. Functional checks, shared memory and performance remain separate.
 
+[AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) now checks those six font boundaries
+on both operating systems using the same actual package. All retained-owner/shared
+budget checks pass. Default variation is comparison-ready; the other five need
+reference tab/placement alignment, including a demonstrated cmap4 delta omission
+in the pinned reference. None has a performance result yet. Keep their exact and
+visual gates and frozen inputs; failed comparisons establish no CPU gap.
+
 Current measurements and exact boundaries are linked in the table. Source-valid
 PNGheader,Arabic/fitting and unchanged-path qualification retain their producer
 identities. New byte-composite uses a retained FFmpeg graph/static source,not

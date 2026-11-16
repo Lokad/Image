@@ -1,0 +1,224 @@
+{
+  "project": "Lokad.Image",
+  "stage": "AFP1134",
+  "correctnessOnly": true,
+  "timingClaim": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producers": {
+    "windowsSha256": "38b8112f2a68d4482a70f1005063ce68f91cf9e24669bc8976a3613f061f2bbf",
+    "linuxSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "timedArtifactSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298"
+  },
+  "references": [
+    {
+      "name": "SixLabors.Fonts",
+      "sha256": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff"
+    },
+    {
+      "name": "SixLabors.ImageSharp.Drawing",
+      "sha256": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308"
+    },
+    {
+      "name": "SixLabors.ImageSharp",
+      "sha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+    }
+  ],
+  "sourcePins": {
+    "tools/Fixtures/FontFixtures.cs": "1cfc7cedd33259a1e634e01330a446a301ce4d2c962b49cc8bce64f48b1235b2",
+    "tools/Shared/AuthoredTrueType.cs": "f3591c3f0fd1f561f08d91ed0dd59f511c8ad94fc15818b06dd9b10bd78b64d7",
+    "tools/Shared/AuthoredOpenType.cs": "760aec2f6ff62b78f9b7d9772b5dd9b2c56a619747516b8823a959fc49aff882",
+    "tools/Shared/TestMemoryBudget.cs": "cc79e05d0cbc6b8fef82ad398036fb1047c526ad1bd68537b47c995da7deacd2",
+    "tmp/afp1134/Program.cs": "d53a7ee624de436647025cfa34ef1f21f69620fadd0fb83ea6b8782a4cc9708a",
+    "tmp/afp1134/ReferenceLayout.cs": "c1c559dd009f432530ec7a848f40608c32dcb07c0d2228943da870ca833d0f1c",
+    "tmp/afp1134/AuthoredProbe.csproj": "2f72aa3e3847b1081caffc6261a8e3f26602bf852c2df3b70411b52a2bf631f3"
+  },
+  "fonts": {
+    "original": {
+      "bytes": 1248,
+      "sha256": "f80b2757617702c6e215dadfb20652e1bf26965b4ab178dadeca5945a23c0491"
+    },
+    "packed": {
+      "bytes": 1072,
+      "sha256": "33f2cd56e4c41dabf0baa3cf38a0f4ae1b37491276de4094bc477d172f88edf2"
+    },
+    "components": {
+      "bytes": 1256,
+      "sha256": "85fc6053de0874548fe7ec2b45f859f5347540be3640145b4b4c05ffdd79ff92"
+    },
+    "variation": {
+      "bytes": 1548,
+      "sha256": "458a38863f17caceffb581a7de6c4389da1684a6256c4bfe366e9e9a32e84ef5"
+    }
+  },
+  "cases": {
+    "TextLayout/OriginalUnicode": {
+      "comparisonReady": false,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": false,
+      "exactClusters": false,
+      "exactLines": true,
+      "positionError": null,
+      "logicalError": 1.0681152318170462e-06,
+      "inkError": 2.6702880902007564e-06,
+      "boundsError": 1.144409182529671e-06,
+      "raster": null
+    },
+    "TextLayout/PackedBmp": {
+      "comparisonReady": false,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": false,
+      "exactClusters": false,
+      "exactLines": true,
+      "positionError": null,
+      "logicalError": 3.519997711181638,
+      "inkError": 4.800000190734863,
+      "boundsError": 2.8800000000000026,
+      "raster": null
+    },
+    "TextLayout/CompositeTransforms": {
+      "comparisonReady": false,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": false,
+      "exactClusters": false,
+      "exactLines": true,
+      "positionError": null,
+      "logicalError": 1.0681152318170462e-06,
+      "inkError": 0.5599984741210928,
+      "boundsError": 1.983642583525125e-06,
+      "raster": null
+    },
+    "TextRender/Rgba8Clipped": {
+      "comparisonReady": false,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": false,
+      "exactClusters": false,
+      "exactLines": true,
+      "positionError": null,
+      "logicalError": 1.0681152318170462e-06,
+      "inkError": 2.6702880902007564e-06,
+      "boundsError": 1.144409182529671e-06,
+      "raster": {
+        "mean": 75.6203821656051,
+        "rmse": 128.91744259939935,
+        "coverage": 0.012598451475103457,
+        "edge": 0,
+        "union": 785,
+        "fullPrecisionSamples": true,
+        "pass": false,
+        "managedSha256": "7136198281e23f636212bee8f639bb86ae42d638c32767d1b11accb8c7854230",
+        "referenceSha256": "50f3639c9fec30e06d8779856fc3e4aa8ce3f15ea997b37dff5178f73d340964"
+      }
+    },
+    "TextRender/Rgba16Clipped": {
+      "comparisonReady": false,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": false,
+      "exactClusters": false,
+      "exactLines": true,
+      "positionError": null,
+      "logicalError": 1.0681152318170462e-06,
+      "inkError": 2.6702880902007564e-06,
+      "boundsError": 1.144409182529671e-06,
+      "raster": {
+        "mean": 74.92721966749204,
+        "rmse": 128.34053211483777,
+        "coverage": 0.01252826288892274,
+        "edge": 0,
+        "union": 792,
+        "fullPrecisionSamples": true,
+        "pass": false,
+        "managedSha256": "d7a1c34b78379fd4b4b3eb6754d125633c5d82f73345255fb2144c5cb43a5233",
+        "referenceSha256": "8d33953248879dc10983764fe8908a5d7d7c231a201aaf661830914c607dc078"
+      }
+    },
+    "TextLayout/OpenTypeDefaultVariation": {
+      "comparisonReady": true,
+      "performanceMeasured": false,
+      "managedOwnerSurvivesFontDisposal": true,
+      "sharedBudgetCleanup": true,
+      "windowsLinuxAgree": true,
+      "exactGlyphs": true,
+      "exactClusters": true,
+      "exactLines": true,
+      "positionError": 1.5258789058947286e-06,
+      "logicalError": 6.866455066756316e-07,
+      "inkError": 1.5258789058947286e-06,
+      "boundsError": 6.866455066756316e-07,
+      "raster": null
+    }
+  },
+  "mappingProof": {
+    "scalar": 65,
+    "format": 4,
+    "glyphArrayValue": 1,
+    "idDelta": 1,
+    "specifiedGlyph": 2,
+    "managedGlyph": 2,
+    "referenceGlyph": 1
+  },
+  "referenceSource": {
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/SixLabors/Fonts",
+      "commit": "eadc8dbc041d1b335ecf790ce400b5e069f075de"
+    },
+    "checkoutUnchanged": true,
+    "files": {
+      "src/SixLabors.Fonts/Tables/General/CMap/Format4SubTable.cs": "b6be49ee96ae2c3f4563bdfba7b58019414be615853a5e28ba207aff178df2e8",
+      "src/SixLabors.Fonts/TextLayout.cs": "2a1675c704c7e89547e1bdbfb39b7b8ece121c073439437deb23458626fc52b8",
+      "src/SixLabors.Fonts/TextOptions.cs": "ff56e9dabec8513a52b6f0caca4a8979301377a3ae924a82a78d3c3d0fd0001c"
+    },
+    "specification": "https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#format-4-segment-mapping-to-delta-values"
+  },
+  "findings": [
+    "Positive line-gap origin mapping corrected in reference adapter through public metrics/options;default variation then passes unchanged tolerances.",
+    "Packed fixture has nonzero cmap4glyph-array delta. Pinned reader returns arrayvalue1 without required delta1;managed/spec return2. No font bytes or reference DLL is modified.",
+    "Logical layout omits a tab from emitted glyphs while reference emits a nonrendered tab placeholder. Tab width/stop behavior and resulting later positions differ;explicit TabWidth4 still records8px on this fixture. This needs a valid adapter/baseline boundary,not a tolerance relaxation.",
+    "Compound fixture retains an additional ink/bearing/point-placement difference after line-gap alignment;root cause remains unproven.",
+    "Rgba8/16visual gates fail for current reference placement. Full16-bit frames retained;do not time or score those failed comparisons."
+  ],
+  "qualification": {
+    "provider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+    "productionUnchanged": true,
+    "fullChecksEachOs": 6747,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "newBroadOrPackageChecks": 0,
+    "focusedProbeCasesEachOs": 6,
+    "vmBuilds": 0
+  },
+  "scope": "Four original authored fonts:threeexistingFontFixturescontrols plus newly frozen required default-variation program. Six inherited cases,no font/style/size/grid expansion. Only correctness observations;no local or VM elapsed claims. Eager/lazy font validation and reference working-state differences remain disclosed. Existing DejaVu complete public integrations still pass/source-valid,not replaced by these tiny-face controls.",
+  "next": "Measure DefaultVariation on quiet VM with the same package/reference identities and complete layout/outline/owned-output boundary. Keep all other inherited cases open until reference-quality gates pass;do not infer CPU gaps or overall text slowdown. Independent codec/copy/resize work remains available.",
+  "raw": {
+    "file": "authored-font-reference-preflight.tar.xz",
+    "sha256": "29ff07e91a36b24f02b6e574c068b7335766034a21bd7e16c993d9adabde076b",
+    "bytes": 2609948,
+    "members": 69,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-stuffed-pairs-qualified.tar.xz",
+        "sha256": "3828e4155a1ad79b0c81fd9d8a9ff1d952429315ef5b583cf52587c3577fdffe"
+      }
+    ]
+  }
+}
