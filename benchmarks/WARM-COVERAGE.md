@@ -88,7 +88,7 @@ older illustrative timings.
 
 ## Finite required inventory
 
-The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md) recovers the 17 required cases carried outside the numeric snapshot. Different recipes/aliases are reconciled explicitly;missing original operations remain open,with no new path or workload grid. OWC1125 first confirms the original word-overlap gap;WAD1126 reduces it with current upper1.104081. See that finite high-priority list before another tiny optimization.
+The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md) recovers the 17 required cases carried outside the numeric snapshot. Different recipes/aliases are reconciled explicitly;missing original operations remain open,with no new path or workload grid. OWC1125 first confirms the original word-overlap gap;WAD1126 reduces it with current upper1.104081. COV1127 reconciles original PNGheaders as an existing pass-stop:identical218775B packet,complete seekable/EOF/owner boundary and reference identity,upper.509395,568B/op,zero new builds/measurements. See that finite high-priority list before another tiny optimization.
 
 The [pinned original inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls with their original inputs, shapes, depths, sampling/settings

@@ -16,7 +16,7 @@ with an easier operation. The following finite list is the inherited 17:
 
 | Original required name | Distinct path / current action |
 | --- | --- |
-| `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Current PNG-header pass exists; reconcile original input/recipe explicitly before marking this name complete. |
+| `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Reconciled pass-stop:current `PngHeaders` has the exact218775B packet,fresh seekable grammar/EOF/owner boundary and identical native reference identity. 0.290585/0.579888us,upper.509395,568B/op;reuse [RCI1098](REFILL-CALL-INLINING.md). |
 | `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. JPEG driver has scoped DLL costs; standalone equivalent full-header reference/confirmation still missing. |
 | `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. No current full-header external confirmation; Identify/probe timings are different boundaries. |
 | `FillRectangle/Rgba8Clipped` | Clipped byte replacement. Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel. |
@@ -51,6 +51,21 @@ No production build or broader package campaign is needed for this measurement.
 [Word-alias dispatch](WORD-ALIAS-DISPATCH.md) subsequently reduces this gap with a
 controlled16.697%gain;current5.576/5.077us,upper1.104081 remains open. Both reports
 retain producers,raw actuals and source identities;no historical-clock gain is inferred.
+
+COV1127 resolves the original PNG-header name using existing evidence. The bridge
+receipt names `InspectHeaders/PngRgba8FreshSeekable`; its frozen packet SHA-256
+`4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f`
+and all three native source/build/worker identities match the RCI1098 provider.
+The reference is explicitly FFmpeg AVIO/descriptor APIs plus the original bounded
+header/EXIF adapter,not public PNG-parser performance. Current typed nine-field
+metadata, fresh source/workspace/descriptor acquisition/release, opaque IDAT seek,
+late metadata and EOF are included;CRC/pixels are excluded equally. RCI1098's
+shared reader and the public header entry remain;JID changes only JPEG with
+outside-range reconstruction,and POC changes Probe wrappers only. Eight scoped
+source pins still match. Stop this pass;zero new builds,measurements or broad
+checks. Reuse the current platform/package qualification for unchanged paths.
+The evidence records precise acquisition/grammar/factory/refill/owner/reference
+changes that would invalidate reuse;related JPEG/font/copy edits do not.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay
