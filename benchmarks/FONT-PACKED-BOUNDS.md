@@ -1,6 +1,6 @@
 # Packed signed font bounds
 
-[Finite horizontal clipping](TEXT-FINITE-HORIZONTAL-CLIPPING.md) owns current
+[Finite horizontal clipping](TEXT-GLYPH-ROW-BOUNDS.md) owns current
 ordinary drawing/complete integration costs. Unchanged prepared execution and
 font-loading evidence retain their scoped validity; historical observations follow.
 

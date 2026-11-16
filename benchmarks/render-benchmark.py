@@ -2005,28 +2005,28 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert fq['fullChecksEachOs'] == 6731 and fq['focusedInternalEachModeEachOs'] == 267 and fq['focusedPublicEachModeEachOs'] == 163
     assert fq['modes'] == ['normal', 'avx-off', 'scalar'] and fq['legacySse2EncodingPassed']
     assert fq['acceptedTimedLinuxArtifactRebuildsAfterMeasurement'] == 0
-    text_finite = json.loads((ROOT / 'benchmarks/text-finite-horizontal-clipping-evidence.json').read_text(encoding='utf-8'))
-    tfq = text_finite['qualification']
-    assert text_finite['productionAccepted'] and text_finite['allAffectedPerformanceReconciled'] and all(text_finite['sourceProof'].values())
-    assert text_finite['raw']['mirrored'] and text_finite['raw']['allMembersVerified']
-    assert tfq['windows']['total'] == tfq['linux']['total'] == tfq['fullChecksEachOs'] == 6743
-    assert tfq['package']['sha256'] == tfq['windowsPackage']['sameActualPackageSha256'] == text_finite['producers']['packageSha256']
-    assert tfq['package']['librarySha256'] == text_finite['producers']['timedArtifactSha256']
+    text_drawing = json.loads((ROOT / 'benchmarks/text-glyph-row-bounds-evidence.json').read_text(encoding='utf-8'))
+    tfq = text_drawing['qualification']
+    assert text_drawing['productionAccepted'] and text_drawing['allAffectedPerformanceReconciled'] and all(text_drawing['sourceProof'].values())
+    assert text_drawing['raw']['mirrored'] and text_drawing['raw']['allMembersVerified']
+    assert tfq['windows']['total'] == tfq['linux']['total'] == tfq['fullChecksEachOs'] == 6745
+    assert tfq['package']['sha256'] == tfq['windowsPackage']['sameActualPackageSha256'] == text_drawing['producers']['packageSha256']
+    assert tfq['package']['librarySha256'] == text_drawing['producers']['timedArtifactSha256']
     assert all(tfq[k]['actualConsumerPassed'] and tfq[k]['usageExamples'] == 3 for k in ('package', 'windowsPackage'))
-    assert tfq['focusedEachMode'] == {'internal': 268, 'public': 163} and tfq['allEightFrozenFramesBothOs'] and tfq['newIndependentBoundaryCases'] == 316224
-    assert text_finite['pairedEffect']['upper'] < 1 and text_finite['pairedEffect']['allActualMeanIntervalsSeparated']
-    assert text_finite['reuse']['preparedTimedPathsVerbatim'] and not text_finite['arabicGeneralization']['regressionConfirmed']
+    assert tfq['focusedEachMode'] == {'internal': 268, 'public': 165} and tfq['allEightFrozenFramesBothOs'] and tfq['newSparseCanvasComparisons'] == 48
+    assert text_drawing['pairedEffect']['upper'] < 1 and text_drawing['pairedEffect']['allActualMeanIntervalsSeparated']
+    assert text_drawing['reuse']['preparedTimedPathsVerbatim'] and not text_drawing['arabicGeneralization']['regressionConfirmed']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_finite['pipelineCases'][case]
+        cost = text_drawing['pipelineCases'][case]
         assert cost['completeWorkload'] and cost['status'] == 'pass'
         assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == text_finite['producers']['linuxSha256']
+        assert cost['librarySha256'] == text_drawing['producers']['linuxSha256']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_finite['pipelineCases']['Preparation']
-    font_batch = text_finite['pipelineCases']['PrepareDraw8']
+    font_preparation = text_drawing['pipelineCases']['Preparation']
+    font_batch = text_drawing['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
@@ -2034,14 +2034,14 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if not prepared: case = text_finite['cases'][name]
-        assert case['librarySha256'] == (text_coverage if prepared else text_finite)['producers']['linuxSha256']
+        if not prepared: case = text_drawing['cases'][name]
+        assert case['librarySha256'] == (text_coverage if prepared else text_drawing)['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['actuals'] == 12 and case['operationsPerActual'] == 1024
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert not prepared or case['status'] == 'pass'
         assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
-        assert case['allocatedBytes'] == (56 if prepared else 83136) and case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
+        assert case['allocatedBytes'] == (56 if prepared else 83216) and case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
         assert case['retainedBytes'] == (2112 if prepared else 0)
         status = 'confidence open' if case['status'] == 'uncertain' else case['status']
         label = f'Text {"prepared coverage" if prepared else "ordinary draw"} RGBA{case["depth"]} / ImageSharp.Drawing ({status})'
@@ -3277,9 +3277,10 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 never FFmpeg or a bare shaping engine. [Packed signed font bounds](../benchmarks/FONT-PACKED-BOUNDS.md)
 retains an independently verified
 **{font_gain['savedUs']:.3f} µs / {font_gain['rawSavedFraction']:.2%}** owned-font loading gain.
-[Finite horizontal clipping](../benchmarks/TEXT-FINITE-HORIZONTAL-CLIPPING.md) independently
-saves **1.668 µs / 3.01%** per ordinary16 draw without added storage. Current
-complete public costs use that same timed/package DLL. Both one-shot and preparation-plus-eight-draw controls pass, including every
+[Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
+**2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
+shape**, within its existing coarse admission; no array or retained capacity is added.
+Current complete public costs use that same timed/package DLL. Both one-shot and preparation-plus-eight-draw controls pass, including every
 layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
 and disposal. The reference retains positioned paths; managed preparation retains
 exact 16-bit coverage. Eager/lazy font validation and GC-driven reference font
@@ -3293,11 +3294,11 @@ including preparation; table allocation covers the whole batch. Reference comple
 one-shot/batch allocations are **9,256,953 / 9,494,633 B**.
 
 Retained Latin capacity **2,112 B**, complete-fit capacity **4,160 B**, and full-fit
-governed peak **822,460 B** are unchanged. Preparation allocates **314,471 B**.
+governed peak **822,460 B** are unchanged. Preparation allocates **{font_preparation['managedAllocatedBytes']:,.2f} B**.
 Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
 these are neither total allocations nor physical/native/JIT peaks. No font/layout
 survives preparation. Font loading stays **176 B/op**, with no new cache or storage.
-Windows/Linux each pass **6,743 full/live checks**, **268 internal/163 public**
+Windows/Linux each pass **6,745 full/live checks**, **268 internal/165 public**
 normal/AVX-disabled/scalar and the SAME actual timed package/all three examples.
 This is a scoped development update, not a release-wide timing refresh.
 
@@ -3308,11 +3309,11 @@ clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs are [refreshed](../benchmarks/TEXT-FINITE-HORIZONTAL-CLIPPING.md);
+Current ordinary costs are [refreshed](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md);
 unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
-draws pass; ordinary8 remains uncertain and ordinary16 a scoped gap. Prepared
-drawing stays **56 B/op** and ordinary Latin **83,136 B/op**; timing adapters add
+draws pass; both ordinary depths remain uncertain. Prepared
+drawing stays **56 B/op** and ordinary Latin **83,216 B/op**; timing adapters add
 24 B. Their earlier narrow-wrap capacity/peak tradeoff and inconclusive Arabic
 timing remain in that report. No unchanged drawing control is retuned.
 

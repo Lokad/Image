@@ -1,5 +1,7 @@
 # Certified finite horizontal text clipping
 
+Current affected ordinary/complete integration costs: [glyph-bounded rows](TEXT-GLYPH-ROW-BOUNDS.md). This report retains its original artifact and scoped evidence.
+
 Two clipping fast paths replace horizontal-intersection ratios multiplied by zero
 with their exact signed-zero additions. A finite-sum guard certifies finite
 operands; overflow and nonfinite cases retain the original arithmetic. The left

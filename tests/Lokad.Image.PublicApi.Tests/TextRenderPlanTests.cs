@@ -144,6 +144,35 @@ public sealed class TextRenderPlanTests
     }
 
     [Theory] [InlineData(8)] [InlineData(16)]
+    public void SparseGlyphRowsMatchFullRowCoverageWithClippingAndOverlap(int depth)
+    {
+        using var font = TrueTypeFont.Load(AuthoredTrueType.Build());
+        // Long and short lines reuse one row with widely separated glyphs.
+        // Tight line spacing overlaps contours; fractional off-canvas positions
+        // exercise both ends of the bounded ordinary clear/compose interval.
+        using var layout = TextLayout.Create(font, "A       VgA\ng\nV        A", new()
+        {
+            FontSize = 13.25, LineSpacing = .35
+        });
+        foreach (var x in new[] { -15.375, 4.125, 99.625 })
+        {
+            using var plan = TextRenderPlan.Create(layout, 128, 40, depth, x, -1.375);
+            foreach (ushort alpha in new ushort[] { 1, 257, 32769, 65535 })
+            {
+                using var ordinary = OriginalPixels.Buffer(128, 40, depth, phase: alpha % 5);
+                using var prepared = ordinary.Clone(); var color = Ink with { A = alpha };
+                for (var repeat = 0; repeat < 2; repeat++)
+                {
+                    ImageDrawing.DrawText(ordinary, layout, x, -1.375, color);
+                    // Prepared capture still clears/scans the full layout row.
+                    plan.Draw(prepared, color);
+                    Assert.Equal(OriginalPixels.Bytes(prepared), OriginalPixels.Bytes(ordinary));
+                }
+            }
+        }
+    }
+
+    [Theory] [InlineData(8)] [InlineData(16)]
     public void PreparedDrawingPreservesOverlappingGlyphsColorsAndRepeatedCompositing(int depth)
     {
         using var font = TrueTypeFont.Load(AuthoredTrueType.Build());

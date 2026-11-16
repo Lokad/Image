@@ -158,12 +158,28 @@ internal sealed partial class TextRasterizer : IDisposable
             var dx = x + glyph.X; var dy = y + glyph.Y;
             var first = Math.Max(top, Math.Floor(shape.MinY + dy)); var last = Math.Min(bottom, Math.Ceiling(shape.MaxY + dy));
             if (first >= last) continue;
+            var rowFirst = 0; var rowLast = row.Length;
+            if (plan is null)
+            {
+                var low = shape.MinX + dx; var high = shape.MaxX + dx;
+                // Events split every edge endpoint, so active band endpoints
+                // remain within the edge's certified X range. Translation is
+                // monotone too. Nonfinite ranges retain the full-row path.
+                if (double.IsFinite(low) && double.IsFinite(high))
+                {
+                    rowFirst = (int)Math.Clamp(Math.Floor(low), left, right) - left;
+                    rowLast = (int)Math.Clamp(Math.Ceiling(high), left, right) - left;
+                }
+            }
             var eventIndex = 0; var activeCount = 0; var nextEdge = 0;
             for (var py = (int)first; py < last; py++)
             {
-                for (var offset = 0; offset < row.Length;)
+                // Empty horizontal intervals still visit bands, including gaps
+                // with no active edges. Keep cancellation bounded by one row.
+                if (rowFirst == rowLast) cancellation.ThrowIfCancellationRequested();
+                for (var offset = rowFirst; offset < rowLast;)
                 {
-                    var count = Math.Min(4096, row.Length - offset); cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(4096, rowLast - offset); cancellation.ThrowIfCancellationRequested();
                     row.AsSpan(offset, count).Clear(); offset += count;
                 }
                 var band = py - dy; var rowEnd = py + 1 - dy;
@@ -180,13 +196,19 @@ internal sealed partial class TextRasterizer : IDisposable
                     plan.CaptureCoverageRow(row, left, py, cancellation);
                     continue;
                 }
-                for (var i = 0; i < row.Length;)
+                var byteDepth = canvas!.BitDepth == 8;
+                var byteRow = byteDepth ? canvas.GetRow8(py) : default;
+                var wordRow = byteDepth ? default : canvas.GetRow16(py);
+                for (var i = rowFirst; i < rowLast;)
                 {
-                    var count = Math.Min(128, row.Length - i); cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(128, rowLast - i); cancellation.ThrowIfCancellationRequested();
                     for (var j = i; j < i + count; j++)
                     {
                         var coverage = (uint)Math.Clamp(Math.Floor(row[j] * 65535 + .5), 0, 65535);
-                        if (coverage != 0) Blend(canvas!, left + j, py, color, coverage);
+                        var sa = (ulong)color.A * coverage;
+                        if (sa == 0) continue;
+                        if (byteDepth) BlendByte(byteRow.Slice((left + j) * 4, 4), color, sa);
+                        else BlendWord(wordRow.Slice((left + j) * 4, 4), color, sa);
                     }
                     i += count;
                 }
@@ -428,6 +450,7 @@ internal sealed partial class TextRasterizer : IDisposable
         internal double[] Events = [];
         internal int Count, EventCount;
         internal double MinY, MaxY;
+        internal double MinX = double.PositiveInfinity, MaxX = double.NegativeInfinity;
         private long edgeBytes, eventBytes;
 
         internal void BuildEdges(FontOutline outline, double scale)
@@ -473,6 +496,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 previousLow = low; previousHigh = high;
                 order[i] = new(low, i, i);
                 ranges[i] = EdgeRange.Create(Edges[i]);
+                MinX = Math.Min(MinX, ranges[i].Low); MaxX = Math.Max(MaxX, ranges[i].High);
             }
             TextRasterSort.SortGeometry<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
             for (var i = 0; i < Count; i++)

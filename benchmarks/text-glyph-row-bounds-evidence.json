@@ -1,0 +1,703 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GBC1120B",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+    "linuxSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "timedArtifactSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "d64652443382860ce3899da4ca05b80febf079113fb29022a7b66c13cb7d15e3"
+  },
+  "testSources": {
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "f2b1dc95c86fd6b17d2e3a19dca4992f883e0176f8be1f6170cb65d1e2778280"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "baselineSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "cb1ae6fff088ad79e248ebbc2e91e2d7bf2f85e425ba79b6692fd46a20d2c14b",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "a59b4b093bc5f365da99960f1ab1fa8030b30da267d7bf43aa8f2274efbf6762",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "sourceProof": {
+    "onlyOrdinaryRasterizeAndTwoShapeScalarsChanged": true,
+    "bandAreaBlendAndGeometryArithmeticVerbatim": true,
+    "edgeEventOrderingAndTieBreakingVerbatim": true,
+    "preparedFullRowCaptureAndDrawPreserved": true,
+    "admissionAndOwnerMethodsVerbatim": true,
+    "emptyRowCancellationCheckpoint": true
+  },
+  "proof": "Active edges are split at every endpoint event, so band endpoints lie within closed edge Y intervals. Existing EdgeRange encloses computed scalar/SSE2 X at those endpoints. Monotone translation plus floor/ceil/clamp encloses every Band write. Nonfinite envelopes retain full-row scans; Band execution is never skipped. Each glyph clears its own certified interval before accumulation and reads only that interval. Prepared capture retains full-row clearing. Blend arithmetic/order and canvas ownership are unchanged.",
+  "cases": {
+    "Ordinary8": {
+      "caseId": "DrawText8",
+      "boundary": "ordinary",
+      "managedUs": 48.30805680338541,
+      "referenceUs": 44.91780177472449,
+      "lower": 0.9261255438966517,
+      "upper": 1.207569848750829,
+      "status": "uncertain",
+      "allocatedBytes": 83216,
+      "timedAdapterBytes": 24,
+      "managed": {
+        "mean": 48308.056803385414,
+        "standardError": 505.5866373815514,
+        "lower": 46064.77934018592,
+        "upper": 50551.334266584905,
+        "values": [
+          53659.8642578125,
+          48283.0283203125,
+          48048.2001953125,
+          47686.7138671875,
+          48008.9580078125,
+          47162.830078125,
+          47894.962890625,
+          47546.2548828125,
+          48858.2802734375,
+          47360.0029296875,
+          47962.3056640625,
+          47225.2802734375
+        ]
+      },
+      "nativeBrackets": {
+        "nativeBefore": {
+          "mean": 45800.638006297406,
+          "standardError": 887.6761031088264,
+          "lower": 41862.03747872452,
+          "upper": 49739.238533870295,
+          "values": [
+            55527.817947617004,
+            45295.33319021039,
+            44747.64491197939,
+            45566.25246887076,
+            45002.24259338772,
+            44892.0725633319,
+            44746.363675397166,
+            44790.42421640189,
+            44898.81623014169,
+            44805.990553885786,
+            44601.968656075565,
+            44732.72906826964
+          ]
+        },
+        "nativeAfter": {
+          "mean": 44917.80177472449,
+          "standardError": 40.09680933614526,
+          "lower": 44739.8930602145,
+          "upper": 45095.71048923448,
+          "values": [
+            45106.42979819665,
+            44936.96693860026,
+            45159.26663804208,
+            45058.94847574066,
+            44919.52984113353,
+            44739.5972520395,
+            44945.64104765994,
+            44870.52812365822,
+            44835.00300558179,
+            44874.88965221125,
+            44687.339630742805,
+            44879.48089308716
+          ]
+        },
+        "paired": {
+          "mean": 45360.944580078125,
+          "standardError": 127.14905253373414,
+          "lower": 44796.78686124815,
+          "upper": 45925.1022989081,
+          "values": [
+            45258.5078125,
+            46067.689453125,
+            45133.69921875,
+            45526.4736328125,
+            44819.16015625,
+            45771.78515625,
+            44864.171875,
+            45839.986328125,
+            45043.53125,
+            45631.794921875,
+            44756.0,
+            45618.53515625
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.06242144903990432,
+        "standardError": 0.010911232254878575,
+        "lower": 0.014008536982198005,
+        "upper": 0.11083436109761063,
+        "values": [
+          0.1702746448939268,
+          0.04696829364813587,
+          0.0625754992572103,
+          0.04635882897850497,
+          0.06875188860815491,
+          0.029938227343672734,
+          0.0653708176002529,
+          0.03654625006981707,
+          0.08129448489758084,
+          0.03717332182746876,
+          0.06918988978852988,
+          0.03461524156559677
+        ]
+      },
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "all12ActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/gbc1120b-candidate-ordinary-DrawText8-confirm-receipt.json",
+      "ratio": 1.075476868740461,
+      "managedExact": true,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "allActualsRetained": true,
+      "depth": 8,
+      "retainedBytes": 0,
+      "adapterAllocatedBytes": 83240
+    },
+    "Ordinary16": {
+      "caseId": "DrawText16",
+      "boundary": "ordinary",
+      "managedUs": 51.82513273111979,
+      "referenceUs": 46.033634755427315,
+      "lower": 0.9811672957587909,
+      "upper": 1.2442628000331044,
+      "status": "uncertain",
+      "allocatedBytes": 83216,
+      "timedAdapterBytes": 24,
+      "managed": {
+        "mean": 51825.13273111979,
+        "standardError": 570.6364407414629,
+        "lower": 49293.2306345269,
+        "upper": 54357.034827712676,
+        "values": [
+          57904.7900390625,
+          51660.2255859375,
+          51545.4150390625,
+          50777.70703125,
+          51335.001953125,
+          50620.49609375,
+          51317.197265625,
+          50678.3798828125,
+          51522.5302734375,
+          50732.580078125,
+          51545.953125,
+          52261.31640625
+        ]
+      },
+      "nativeBrackets": {
+        "nativeBefore": {
+          "mean": 46962.75532426491,
+          "standardError": 738.4795671319523,
+          "lower": 43686.136743995296,
+          "upper": 50239.37390453452,
+          "values": [
+            55056.13231657049,
+            45986.275762572135,
+            45898.398186314924,
+            46538.70403957131,
+            46282.1681780709,
+            45968.52473206925,
+            46070.08367683429,
+            46367.31162407255,
+            46317.158697444356,
+            46598.53009068425,
+            46182.97856553998,
+            46286.79802143446
+          ]
+        },
+        "nativeAfter": {
+          "mean": 46033.634755427316,
+          "standardError": 65.0492159971523,
+          "lower": 45745.01272815035,
+          "upper": 46322.25678270428,
+          "values": [
+            45948.27741137675,
+            46001.55441055235,
+            46501.42003297609,
+            46299.87180544106,
+            46147.665704863975,
+            45879.52926628195,
+            46135.065127782356,
+            45933.19579554823,
+            45809.78812860676,
+            46188.508656224236,
+            45780.58367683429,
+            45778.15704863974
+          ]
+        },
+        "paired": {
+          "mean": 46534.586181640625,
+          "standardError": 120.98118984149983,
+          "lower": 45997.79514213045,
+          "upper": 47071.3772211508,
+          "values": [
+            46246.5576171875,
+            46734.8564453125,
+            46305.728515625,
+            47323.3212890625,
+            46289.2294921875,
+            46604.349609375,
+            45823.7001953125,
+            46724.890625,
+            46008.2080078125,
+            46924.5751953125,
+            46585.0078125,
+            46844.609375
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.1070897831934745,
+        "standardError": 0.011509945743337496,
+        "lower": 0.05602039175860485,
+        "upper": 0.15815917462834414,
+        "values": [
+          0.22481307938479567,
+          0.10019787744528384,
+          0.10719758501297677,
+          0.07045419580221136,
+          0.10346350912543748,
+          0.08266267938686972,
+          0.11322449655803492,
+          0.08122237484244792,
+          0.1131993775164654,
+          0.07802677971815704,
+          0.10119493489507878,
+          0.10942050863393503
+        ]
+      },
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "all12ActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/gbc1120b-candidate-ordinary-DrawText16-confirm-receipt.json",
+      "ratio": 1.1258101387488126,
+      "managedExact": true,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "allActualsRetained": true,
+      "depth": 16,
+      "retainedBytes": 0,
+      "adapterAllocatedBytes": 83240
+    }
+  },
+  "pipelineCases": {
+    "OneShot": {
+      "managedUs": 1151.4904375,
+      "referenceUs": 6195.0307734375,
+      "ratio": 0.18587323931258873,
+      "lower": 0.1675951154071399,
+      "upper": 0.20547799636635727,
+      "managedAllocatedBytes": 306168,
+      "referenceAllocatedBytes": 9256953,
+      "status": "pass",
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "completeWorkload": true,
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "Preparation": {
+      "managedUs": 1117.5768151041668,
+      "referenceUs": 6132.817924479167,
+      "ratio": 0.18222892459326967,
+      "lower": 0.16165791153182463,
+      "upper": 0.20619592443210172,
+      "managedAllocatedBytes": 314545.25,
+      "referenceAllocatedBytes": 9227176,
+      "status": "pass",
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "completeWorkload": false,
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "PreparedDraw": {
+      "managedUs": 15.068684895833334,
+      "referenceUs": 75.4816875,
+      "ratio": 0.19963365148445222,
+      "lower": 0.1396042708789247,
+      "upper": 0.28711349749991766,
+      "managedAllocatedBytes": 169,
+      "referenceAllocatedBytes": 33433,
+      "status": "pass",
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "completeWorkload": false,
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "PrepareDraw8": {
+      "managedUs": 1249.3513463541667,
+      "referenceUs": 6867.824395833333,
+      "ratio": 0.18191369993562162,
+      "lower": 0.15837196045412932,
+      "upper": 0.21010666442125392,
+      "managedAllocatedBytes": 315892.1666666667,
+      "referenceAllocatedBytes": 9494633,
+      "status": "pass",
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "completeWorkload": true,
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "amortizedManagedUs": 156.16891829427084,
+      "amortizedReferenceUs": 858.4780494791667
+    }
+  },
+  "pairedEffect": {
+    "baselineUs": 53.11440657552083,
+    "candidateUs": 50.6601572265625,
+    "gainPercent": 4.620575528740667,
+    "lower": 0.93809662842557,
+    "upper": 0.9697545366660971,
+    "allActualMeanIntervalsSeparated": true,
+    "all12PairsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "screenLower": 0.9363281342333754,
+    "screenUpper": 0.9698197504654427
+  },
+  "arabicGeneralization": {
+    "baseline": {
+      "statistics": {
+        "mean": 420.48335221354165,
+        "lower": 409.25052353803386,
+        "upper": 431.71618088904944,
+        "values": [
+          448.1892109375,
+          419.778703125,
+          419.39146875,
+          417.7846875,
+          417.202265625,
+          417.0358828125,
+          417.728796875,
+          418.7837734375,
+          417.73709375,
+          417.2629765625,
+          417.3573671875,
+          417.548
+        ]
+      },
+      "allocatedBytes": [
+        590552
+      ]
+    },
+    "candidate": {
+      "statistics": {
+        "mean": 396.04922330729164,
+        "lower": 385.26850016426005,
+        "upper": 406.82994645032323,
+        "values": [
+          421.697328125,
+          392.575078125,
+          394.2176953125,
+          395.5952109375,
+          400.5242890625,
+          392.986515625,
+          392.6764921875,
+          392.532625,
+          392.2109453125,
+          392.7982109375,
+          392.9221171875,
+          391.854171875
+        ]
+      },
+      "allocatedBytes": [
+        590824
+      ]
+    },
+    "gainConfirmed": true,
+    "regressionConfirmed": false
+  },
+  "memory": {
+    "addedObjectBytesPerUniqueShape": 16,
+    "coarseDescriptorAllowanceBytes": 512,
+    "newAdmittedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "newArrays": 0,
+    "caseCapacities": {
+      "NarrowLongWord": {
+        "retainedCapacityBytes": 8256,
+        "preparationPeakBytes": 17232,
+        "ordinaryAllocationBytes": [],
+        "preparedDrawAllocationBytes": []
+      },
+      "LatinKerning": {
+        "retainedCapacityBytes": 2112,
+        "preparationPeakBytes": 58264,
+        "ordinaryAllocationBytes": [
+          83216,
+          83216,
+          83216
+        ],
+        "preparedDrawAllocationBytes": [
+          56,
+          56,
+          56
+        ]
+      },
+      "ArabicMarksDigits": {
+        "retainedCapacityBytes": 6208,
+        "preparationPeakBytes": 318736,
+        "ordinaryAllocationBytes": [],
+        "preparedDrawAllocationBytes": []
+      },
+      "ConstrainedFit": {
+        "retainedCapacityBytes": 4160,
+        "preparationPeakBytes": 56736,
+        "ordinaryAllocationBytes": [],
+        "preparedDrawAllocationBytes": []
+      }
+    },
+    "completeFitRetainedCapacityBytes": 4160,
+    "completeGovernedPeakBytes": 822460,
+    "preparationManagedAllocatedBytes": 314545.25,
+    "physicalNativeJitPeaksUnmeasured": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "GBC1120B",
+      "platform": "windows",
+      "productionSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+      "embeddedTestsSha256": "a4795ef001e0a3fb719f48e682374d20402788ca8b56304cc65e8c852d241614",
+      "publicTestsSha256": "3253cd293d2183059b6c3c15c81bd758f3dca98811ef40fb93d70ac97959a1a3",
+      "full": [
+        3294,
+        2503,
+        948
+      ],
+      "total": 6745,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 268,
+        "public-normal": 165,
+        "internal-avx-off": 268,
+        "public-avx-off": 165,
+        "internal-scalar": 268,
+        "public-scalar": 165
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "GBC1120B",
+        "platform": "windows",
+        "productionSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "d64652443382860ce3899da4ca05b80febf079113fb29022a7b66c13cb7d15e3"
+        },
+        "testSources": {
+          "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "f2b1dc95c86fd6b17d2e3a19dca4992f883e0176f8be1f6170cb65d1e2778280"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+          "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 268,
+          "public-normal": 165,
+          "internal-avx-off": 268,
+          "public-avx-off": 165,
+          "internal-scalar": 268,
+          "public-scalar": 165
+        },
+        "logs": [
+          "tmp/gbc1120b-windows-build-core.log",
+          "tmp/gbc1120b-windows-build-internal.log",
+          "tmp/gbc1120b-windows-internal-normal.log",
+          "tmp/gbc1120b-windows-public-normal.log",
+          "tmp/gbc1120b-windows-internal-avx-off.log",
+          "tmp/gbc1120b-windows-public-avx-off.log",
+          "tmp/gbc1120b-windows-internal-scalar.log",
+          "tmp/gbc1120b-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "GBC1120B",
+      "platform": "linux",
+      "productionSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "embeddedTestsSha256": "b1c5d9b11b8dc029aef4ed15cfe11b4a87eb699f7045eb7ce2532b37dd95374f",
+      "publicTestsSha256": "d0e00432a5a85eb66c5959534217ec6ccb599b36f12cee3ad7c1c2389481496b",
+      "full": [
+        3294,
+        2503,
+        948
+      ],
+      "total": 6745,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 268,
+        "public-normal": 165,
+        "internal-avx-off": 268,
+        "public-avx-off": 165,
+        "internal-scalar": 268,
+        "public-scalar": 165
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "GBC1120B",
+        "platform": "linux",
+        "productionSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "d64652443382860ce3899da4ca05b80febf079113fb29022a7b66c13cb7d15e3"
+        },
+        "testSources": {
+          "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "f2b1dc95c86fd6b17d2e3a19dca4992f883e0176f8be1f6170cb65d1e2778280"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+          "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 268,
+          "public-normal": 165,
+          "internal-avx-off": 268,
+          "public-avx-off": 165,
+          "internal-scalar": 268,
+          "public-scalar": 165
+        },
+        "logs": [
+          "tmp/gbc1120b-linux-build-core.log",
+          "tmp/gbc1120b-linux-build-internal.log",
+          "tmp/gbc1120b-linux-internal-normal.log",
+          "tmp/gbc1120b-linux-public-normal.log",
+          "tmp/gbc1120b-linux-internal-avx-off.log",
+          "tmp/gbc1120b-linux-public-avx-off.log",
+          "tmp/gbc1120b-linux-internal-scalar.log",
+          "tmp/gbc1120b-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "GBC1120B",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c",
+      "symbolsSha256": "b149aef4a9ad7b35f12e4b3506e4c9cfc185414a219e80a00a516abe78766a4d",
+      "bytes": 468292,
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable timed Linux glyph-envelope/borrowed-row design, with empty-row cancellation checkpoint. Exact geometry, coverage, blend arithmetic, order and retained prepared draw remain. Independent final complete ordinary16pairs save4.62percent;allocation+80B for five shapes, no new arrays/owners/admitted or retained capacity. Current ordinary8/16uncertain;complete one-shot/prepplus8pass,Arabic generalizationgain. EachOS6745full/live plus268internal/165public normal/AVXoff/scalar,48new sparse-clipped-overlap canvas comparisons,all8frozen frames and SAMEactualpackage/all3examples. Prototype and final revision each core/embeddedbuildperOS;publiconceperOS for newtests,zero harness/reference/fixturebuilds,oneNoBuildpack,no accepted timedLinuxrebuild. No historical-stage sums or overall text slowdown claim. Publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "GBC1120B",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c",
+      "symbolsSha256": "b149aef4a9ad7b35f12e4b3506e4c9cfc185414a219e80a00a516abe78766a4d",
+      "bytes": 468292,
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable timed Linux glyph-envelope/borrowed-row design, with empty-row cancellation checkpoint. Exact geometry, coverage, blend arithmetic, order and retained prepared draw remain. Independent final complete ordinary16pairs save4.62percent;allocation+80B for five shapes, no new arrays/owners/admitted or retained capacity. Current ordinary8/16uncertain;complete one-shot/prepplus8pass,Arabic generalizationgain. EachOS6745full/live plus268internal/165public normal/AVXoff/scalar,48new sparse-clipped-overlap canvas comparisons,all8frozen frames and SAMEactualpackage/all3examples. Prototype and final revision each core/embeddedbuildperOS;publiconceperOS for newtests,zero harness/reference/fixturebuilds,oneNoBuildpack,no accepted timedLinuxrebuild. No historical-stage sums or overall text slowdown claim. Publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+    },
+    "fullChecksEachOs": 6745,
+    "focusedEachMode": {
+      "internal": 268,
+      "public": 165
+    },
+    "modes": [
+      "normal",
+      "avx-off",
+      "scalar"
+    ],
+    "allEightFrozenFramesBothOs": true,
+    "newSparseCanvasComparisons": 48,
+    "acceptedTimedLinuxRebuildsAfterMeasurement": 0
+  },
+  "reuse": {
+    "fontLoadingProvider": "benchmarks/font-packed-bounds-evidence.json",
+    "preparedDrawProvider": "benchmarks/text-prepared-coverage-evidence.json",
+    "preparedTimedPathsVerbatim": true,
+    "encodersDecodersResizingAndFontParsingUnchanged": true
+  },
+  "workflow": "Prototype and final revision each core/embeddedbuildperOS;publiconceperOS for newtests,zero harness/native/fixturebuilds,oneNoBuildpack,SAMEactualpackage/all3examples after affected reconciliation. Final revision adds an empty-horizontal-row cancellation checkpoint;prototype timings remain scoped to their exact artifact. Accepted timed Linux DLL never rebuilt.",
+  "raw": {
+    "file": "text-glyph-row-bounds-qualified.tar.xz",
+    "sha256": "fe37d7b79882d4918770ea95d48717d5d0e5f74589011dc1f04abc26f59b123e",
+    "bytes": 5312592,
+    "members": 265,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-finite-horizontal-clipping-qualified.tar.xz",
+        "sha256": "a0c09f829d4eed391a8a1bae6cc4448cb1f855d50b51543de48e76c3c3f13988"
+      },
+      {
+        "file": "text-prepared-coverage-qualified.tar.xz",
+        "sha256": "e2587bd8aa2ea210a4b48e4b9c2cd821c861f70d42862a85a3a6edd5b224bb1b"
+      },
+      {
+        "file": "font-packed-bounds-qualified.tar.xz",
+        "sha256": "102241c2f54f218d9b49d3567bc9b327b152bb25d0b31676be847cda005c8f5d"
+      }
+    ]
+  },
+  "interpretation": "A materially revised static glyph-envelope/borrowed-row design confirms a scoped ordinary16 gain with 80B extra allocation on five shapes, no new arrays/owners/retained or admitted capacity. Original standalone ordinary8/16 and complete public one-shot/eight-draw integrations reconcile the final immutable DLL. Separate stage diagnostics are not overall text performance; no historical stage sums or wider face/settings claim. Prepared draw execution, font parser and codecs/resizing are unchanged. Prototype receipts remain diagnostics for their exact DLL; final revision adds an explicit empty-horizontal-row cancellation checkpoint."
+}
