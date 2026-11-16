@@ -1,0 +1,262 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VFO1170",
+  "productionChanged": false,
+  "performanceMeasurement": false,
+  "currentCostsChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "managed": {
+    "windows": {
+      "8": {
+        "project": "Lokad.Image",
+        "stage": "VFO1170",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "depth": 8,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "librarySha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+        "originalSetupOwnershipSequence": true,
+        "liveResultsIndependent": true,
+        "allOriginalPixelsExact": true,
+        "sourceUnchanged": true,
+        "repeatedBackingSequence": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "distinctRepeatedBackings": 2,
+        "liveSourceCapacityBytes": 531468,
+        "idleResultCapacityBytes": 1062936,
+        "retainedResultsCapacityBytes": 0,
+        "physicalCacheNativeJitPeaksMeasured": false,
+        "scope": "Eight complete public flips after original two-live-result verification;untimed reflection observes actual owned-array identity. No performance or native allocator claim."
+      },
+      "16": {
+        "project": "Lokad.Image",
+        "stage": "VFO1170",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "depth": 16,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "librarySha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+        "originalSetupOwnershipSequence": true,
+        "liveResultsIndependent": true,
+        "allOriginalPixelsExact": true,
+        "sourceUnchanged": true,
+        "repeatedBackingSequence": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "distinctRepeatedBackings": 2,
+        "liveSourceCapacityBytes": 1062936,
+        "idleResultCapacityBytes": 2125872,
+        "retainedResultsCapacityBytes": 0,
+        "physicalCacheNativeJitPeaksMeasured": false,
+        "scope": "Eight complete public flips after original two-live-result verification;untimed reflection observes actual owned-array identity. No performance or native allocator claim."
+      }
+    },
+    "linux": {
+      "8": {
+        "project": "Lokad.Image",
+        "stage": "VFO1170",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "depth": 8,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "librarySha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+        "originalSetupOwnershipSequence": true,
+        "liveResultsIndependent": true,
+        "allOriginalPixelsExact": true,
+        "sourceUnchanged": true,
+        "repeatedBackingSequence": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "distinctRepeatedBackings": 2,
+        "liveSourceCapacityBytes": 531468,
+        "idleResultCapacityBytes": 1062936,
+        "retainedResultsCapacityBytes": 0,
+        "physicalCacheNativeJitPeaksMeasured": false,
+        "scope": "Eight complete public flips after original two-live-result verification;untimed reflection observes actual owned-array identity. No performance or native allocator claim."
+      },
+      "16": {
+        "project": "Lokad.Image",
+        "stage": "VFO1170",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "depth": 16,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "librarySha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+        "originalSetupOwnershipSequence": true,
+        "liveResultsIndependent": true,
+        "allOriginalPixelsExact": true,
+        "sourceUnchanged": true,
+        "repeatedBackingSequence": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "distinctRepeatedBackings": 2,
+        "liveSourceCapacityBytes": 1062936,
+        "idleResultCapacityBytes": 2125872,
+        "retainedResultsCapacityBytes": 0,
+        "physicalCacheNativeJitPeaksMeasured": false,
+        "scope": "Eight complete public flips after original two-live-result verification;untimed reflection observes actual owned-array identity. No performance or native allocator claim."
+      }
+    }
+  },
+  "nativeWordDiagnostic": {
+    "project": "Lokad.Image",
+    "stage": "VFO1170",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "allInstrumentedClocksDiscarded": true,
+    "sourceSha256": "bace5a3f15856499a4f80ac4deebfe36c93f330b5771900a6c2a66d74a16d7a0",
+    "instrumentedSourceSha256": "02d69c50afb810f36dd86456d6960ae802af33a33021a49ef9de830079b280e1",
+    "workerSha256": "951f4f3f7b52a11a65cc9ee825db2ab55f24fd75c451c5c10df2109f627db2eb",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "external/warm-reference/vfo1170/ffmpeg-vflip-storage-trace",
+      "vflip",
+      "/home/lokad/image-warm-png-20261009/tmp/owc1125-data/input.rgba",
+      "513",
+      "259",
+      "16",
+      "tmp/vfo1170-native16-output.rgba"
+    ],
+    "buildCommand": [
+      "gcc",
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-I/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/include",
+      "tmp/vfo1170-vflip-trace.c",
+      "-o",
+      "external/warm-reference/vfo1170/ffmpeg-vflip-storage-trace",
+      "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib",
+      "-lavfilter",
+      "-lm",
+      "-lzimg",
+      "-lstdc++",
+      "-lswscale",
+      "-lavutil",
+      "-lm",
+      "-lz",
+      "-latomic",
+      "-pthread"
+    ],
+    "bufferAddressesRecorded": 16396,
+    "warmupOperations": 16384,
+    "followingOperations": 8,
+    "followingAddressPattern": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "distinctFollowingAddresses": 1,
+    "allOriginalOwnershipPixelsAndSourceChecksPassed": true,
+    "librarySha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+    "allProductionHarnessReferenceBaselineBuilds": 0,
+    "diagnosticWorkerBuilds": 1,
+    "scope": "Original word16 native owned-flip operation with only a fixed static address recorder;no dynamic allocation/formatting/IO added in apply. All clocks discarded;this instrumented worker is not the reference baseline. No CPU/cache-cost claim."
+  },
+  "boundaryFindings": [
+    "Both complete operations materialize independent owned pixels and dispose before returning;no missing native materialization was found.",
+    "Native keeps graph/source/frame wrappers and padded rows;managed creates its public result owner each call and uses packed rows. These disclosed differences remain;not a one-shot/preparation-equivalence claim.",
+    "Original managed two-live-result verification leaves two same-size idle arrays. Current FIFO exact-size Take/ReturnLargest rotates both during repeated public flips on bothOS.",
+    "Instrumented native word worker retains its original two-live-output/source/fullpixel checks;after16384warm operations its next8outputs reuse one address. No general native allocator/cache/speed claim."
+  ],
+  "memory": {
+    "managedLiveSourceBytes8": 531468,
+    "managedLiveSourceBytes16": 1062936,
+    "managedIdleResultCapacityBytes8": 1062936,
+    "managedIdleResultCapacityBytes16": 2125872,
+    "retainedCallerResultsAtObservation": 0,
+    "nativeDiagnosticStaticRecorderBytes": 131200,
+    "physicalCacheNativeJitPeaksMeasured": false,
+    "proposedRecencyChangesRetainedSetOrCeiling": false
+  },
+  "nextHypothesis": "Within existing ReturnLargest admission/replacement policy,publish newly returned image storage before older same-size idle storage. Keep exact retained set/slots/4MiBceiling,duplicate/live-owner protection,Return/ReturnLatest semantics and governed-root bypass. No newpool/cache/API or pixel/kernel change. Isolated completewordflip screen,then independentconfirmation and affected defaultstorage reconciliation only if promising. This is a preparation/reuse hypothesis,not a proven gain.",
+  "qualificationReused": {
+    "commit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "fullLiveEachOs": 6776,
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "actualPackageSha256": "3167deb580ba05ecf4121a062515140e333964039576c30b73b89ba708b6aa38",
+    "newBroadOrPackageChecks": 0
+  },
+  "toolingRecovery": "gdb unavailable;one original-adapter diagnostic build instead. First preparation used an incorrect return anchor;then pkg-config lacked explicit pinned prefix. Both failed before any native build/operation. Resume only pending native preparation;zero managed observations repeated. Original reference/toolchain binaries unchanged.",
+  "raw": {
+    "file": "owned-flip-storage-boundary.tar.xz",
+    "sha256": "863ca9d326d1fc41eabe7172d431e26a3bfab9e59861e67d83f0eccff474059a",
+    "bytes": 1589316,
+    "members": 38,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "nearest-row-reuse-qualified.tar.xz",
+        "sha256": "a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+        "bytes": 5278740,
+        "members": 275,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+          "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+          "copy-attribution-nearest-guard.tar.xz SHA256 42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+        ]
+      },
+      {
+        "file": "composition-storage-reuse-qualified.tar.xz",
+        "sha256": "fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+        "bytes": 34553720,
+        "members": 708,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "ordinary-word-text-dispatch-qualified.tar.xz",
+            "sha256": "1e48e6d6d9e09cfd48155fc982d46932b4999dbbfd8ef0165c984f7283fca26d"
+          },
+          {
+            "file": "png-composition-storage-prototype.tar.xz",
+            "sha256": "7f09eefd42f84b70e5230ca52d8d1f7480017f83c99f065f0b8b6cfaed45256b"
+          }
+        ]
+      }
+    ]
+  }
+}
