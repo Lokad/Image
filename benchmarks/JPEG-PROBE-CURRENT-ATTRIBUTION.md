@@ -1,4 +1,6 @@
-# Current JPEG probe attribution
+# Historical JPEG probe attribution
+
+The advancement/suspension proposal below was completed by [JPEG inspection advancement](JPEG-INSPECTION-DRIVER.md). [Current-package profiling and the completed-read trial](JPEG-COMPLETED-READ-TRIAL.md) supersede this profile as an active lead; original source-specific evidence remains below.
 
 Read-only profile of the [qualified refill-inlining DLL](REFILL-CALL-INLINING.md):
 one bounded **two-second** CPU sample, operation on CPU0, observer on CPU1.

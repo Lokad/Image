@@ -1,0 +1,291 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JCS1122",
+  "productionAccepted": false,
+  "decision": "Not retained: independent CPU effect is inconclusive and allocations/admission/retention are unchanged. No causal codegen explanation, confirmed regression or permanent design-family ban.",
+  "baselineProducers": {
+    "windowsSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+    "linuxSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "timedArtifactSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "candidateLinuxSha256": "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+  "baselineSources": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+    "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+    "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b6ce510d9b959494e5f5e4502b100609ad12135d6e7eea17682061088044c9c5"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/StreamInspection.cs": "e036c0dccddab8da4564bc31869e3da6900c21d589bda580745e13ab15483798"
+  },
+  "hypothesis": "Remove repeated general ValueTask status/result handling for the default completed sentinel returned after private header acquisition has already consumed its users. Keep all nondefault Task/source handling in one out-of-line original helper. One grammar, no new state owner or allocation.",
+  "sourceProof": {
+    "onlyCompletionHelperChanged": true,
+    "nondefaultCompletionBodyVerbatim": true,
+    "allAcquisitionGrammarReadsChecksPollsOwnersVerbatim": true,
+    "defaultValueTaskHasNoTaskSourceOrGetResultEffects": true,
+    "newArrays": 0,
+    "newRetainedOrAdmittedCapacity": 0
+  },
+  "currentBaselineProfile": {
+    "stage": "JCP1121",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c",
+    "sourcePins": {
+      "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+      "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+      "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+      "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+      "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+      "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+      "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+      "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+      "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+      "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b6ce510d9b959494e5f5e4502b100609ad12135d6e7eea17682061088044c9c5"
+    },
+    "locations": 1990,
+    "resolvedManagedLocations": 1729,
+    "methods": {
+      "ReadAsync": {
+        "codeBytes": 1977,
+        "sampleLocations": 270
+      },
+      "SkipAsync": {
+        "codeBytes": 2247,
+        "sampleLocations": 109
+      },
+      "JpegHeaderMarkerAsync": {
+        "codeBytes": 1706,
+        "sampleLocations": 191
+      },
+      "AdvanceJpeg": {
+        "codeBytes": 8264,
+        "sampleLocations": 284
+      }
+    },
+    "inputCallbackLocations": 354,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "scope": "One bounded2second userCPU sample of the current complete public asyncJPEGprobe,parent process only,after firstActual. CPU0operation/CPU1sampler. Same input,field acquisition,owned result and cleanup;original native/output/reference gates checked. Trace may include runtime/GC and native-reference orchestration,not just parser code;sample counts locate leads,not elapsed-time fractions,standalone costs or peak memory. Existing immutable package/harness/selector/fixtures/workers;zero builds or qualification repeats.",
+    "lead": "Repeated completed-read handling led to the bounded candidate; its inconclusive confirmation does not establish a benefit or machine-code explanation."
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "JCS1122",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.2250444018046061,
+    "candidateUs": 0.21154579544067384,
+    "ratio": 0.9399962909544415,
+    "lower": 0.7913831303724975,
+    "upper": 1.1165173897404244,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/jcs1122-baseline-linux/Lokad.Image.dll",
+      "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "tmp/jcs1122-candidate-linux/Lokad.Image.dll",
+      "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "screen"
+    ],
+    "raw": "tmp/jcs1122-ProbeDimensionsJpegAsync-paired-screen-idle-ready.json"
+  },
+  "confirmation": {
+    "project": "Lokad.Image",
+    "stage": "JCS1122",
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "confirm",
+    "baselineUs": 0.21574373277028402,
+    "candidateUs": 0.21257195568084716,
+    "ratio": 0.9854162210280504,
+    "lower": 0.9647226823439919,
+    "upper": 1.0065536412037601,
+    "allocatedBaseline": 568,
+    "allocatedCandidate": 568,
+    "scopedManagedDllEffectOnly": true,
+    "notStandaloneFfmpegPerformance": true,
+    "quietGuardsPassed": true,
+    "allPairsRetained": true,
+    "originalInputAndDescriptorOwnershipPassed": true,
+    "librarySha256": "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/jcs1122-baseline-linux/Lokad.Image.dll",
+      "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "tmp/jcs1122-candidate-linux/Lokad.Image.dll",
+      "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "confirm"
+    ],
+    "raw": "tmp/jcs1122-ProbeDimensionsJpegAsync-paired-confirm.json"
+  },
+  "initialGuard": {
+    "measurementSamples": 0,
+    "overlappingJobs": [],
+    "aggregateIoWaitFraction": 0.0175,
+    "cpu0IoWaitFraction": 0,
+    "reason": "Before-guard rejected aggregate IO wait. Authoritative observation confirmed no measurement output existed;one distinct idle-ready attempt supplied the sole short screen."
+  },
+  "qualification": {
+    "candidateLinux": {
+      "project": "Lokad.Image",
+      "stage": "JCS1122",
+      "platform": "linux",
+      "productionSha256": "0042ce24e3450e3994d8e85ed9631801f03b12b5e01fb3b532e2e979e986db1e",
+      "candidateSources": {
+        "src/Lokad.Image/Internal/StreamInspection.cs": "e036c0dccddab8da4564bc31869e3da6900c21d589bda580745e13ab15483798"
+      },
+      "testSources": {},
+      "unchangedSources": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+        "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+        "src/Lokad.Image/Internal/InspectionResult.cs": "d613eae83c93da6fcacfcd0401d29535254e573c6b96476e7ecce936c25e97b1",
+        "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+        "src/Lokad.Image/ImageProbe.cs": "586e02369651f88c0a79d2ee1679e237cda20e3a5ec8b2e98807de19024d7823",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "tests/Lokad.Image.Tests/InspectionOwnerTests.cs": "3458a7abacdc97a95b2440e1f9ae405974445e06414b40c93e894d416f2fcaae",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "b6ce510d9b959494e5f5e4502b100609ad12135d6e7eea17682061088044c9c5"
+      },
+      "focusedPassed": true,
+      "counts": {
+        "internal-normal": 10,
+        "public-normal": 154,
+        "internal-scalar": 10,
+        "public-scalar": 154
+      },
+      "logs": [
+        "tmp/jcs1122-linux-build-core.log",
+        "tmp/jcs1122-linux-build-internal.log",
+        "tmp/jcs1122-linux-internal-normal.log",
+        "tmp/jcs1122-linux-public-normal.log",
+        "tmp/jcs1122-linux-internal-scalar.log",
+        "tmp/jcs1122-linux-public-scalar.log"
+      ],
+      "coreBuilds": 1,
+      "embeddedBuilds": 1,
+      "publicBuilds": 0,
+      "harnessNativeFixtureBuilds": 0
+    },
+    "linuxRestoration": {
+      "project": "Lokad.Image",
+      "stage": "JCS1122",
+      "productionAdopted": false,
+      "allOriginalSourcesExact": true,
+      "qualifiedCoreEmbeddedAndPublicIdentitiesExact": true,
+      "restored": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "b1c5d9b11b8dc029aef4ed15cfe11b4a87eb699f7045eb7ce2532b37dd95374f",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "e3d9870acc9261f0cae4eaa59e667335cfed9531b914be245141c8ad87e4d282",
+        "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll": "b1c5d9b11b8dc029aef4ed15cfe11b4a87eb699f7045eb7ce2532b37dd95374f",
+        "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb": "e3d9870acc9261f0cae4eaa59e667335cfed9531b914be245141c8ad87e4d282"
+      },
+      "sourceManifestExact": true,
+      "sourceEntriesVerified": 4279,
+      "packageUnchanged": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c",
+      "restorationBuilds": 0,
+      "broadQualificationRepeated": false
+    },
+    "windowsRestoration": {
+      "project": "Lokad.Image",
+      "allOriginalSourcesExact": true,
+      "productionModulesNeverChanged": true,
+      "packageNeverChanged": true,
+      "allBuilds": 0
+    },
+    "currentProvider": "benchmarks/text-glyph-row-bounds-evidence.json",
+    "currentProviderSha256": "cfa566e10790d94b386d29aa3346ab303f73256b4e10307d9790bea0ebf18083",
+    "fullChecksEachOsReused": 6745,
+    "sameActualPackageConsumersAndThreeExamplesReused": true,
+    "windowsProductionNeverChanged": true,
+    "coreBuilds": 1,
+    "embeddedBuilds": 1,
+    "allOtherBuilds": 0,
+    "newBroadOrPackageChecks": 0,
+    "restorationBuilds": 0
+  },
+  "memory": {
+    "immediateManagedAllocatedBytes": 568,
+    "newArrays": 0,
+    "newAdmission": 0,
+    "newRetainedStorage": 0,
+    "physicalNativeJitPeaksUnmeasured": true
+  },
+  "raw": {
+    "file": "jpeg-completed-read-trial.tar.xz",
+    "sha256": "1436dc73e1226bf45f7770fb35e78476fd511054ffb2e5d7d82eecd5ce457eba",
+    "bytes": 9148072,
+    "members": 119,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-glyph-row-bounds-qualified.tar.xz",
+        "sha256": "fe37d7b79882d4918770ea95d48717d5d0e5f74589011dc1f04abc26f59b123e"
+      },
+      {
+        "file": "probe-owner-completion-qualified.tar.xz",
+        "sha256": "847a2839ebb2a466b4fcbbdd3abca92fdeece2c07130d8d969503a91d6b32a2f"
+      }
+    ]
+  },
+  "currentCostsChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true
+}
