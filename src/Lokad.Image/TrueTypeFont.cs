@@ -176,6 +176,24 @@ public sealed partial class TrueTypeFont : IDisposable
         var glyphBytes = glyphs.Length;
         var first = GlyphLocation(locations[0]);
         if (first > glyphBytes) throw new ImageDataException("Invalid glyph location.");
+        // A token with no source cannot be canceled. Select that loop once;
+        // cancelable tokens retain the original checkpoint before every glyph.
+        if (!cancellation.CanBeCanceled)
+        {
+            for (var i = 1; i <= glyphCount; i++)
+            {
+                if (Avx2.IsSupported && i <= glyphCount - 3
+                    && TryFourGlyphBounds(locations, glyphs, i, first, out var fourth))
+                {
+                    first = fourth; i += 3; continue;
+                }
+                var last = GlyphLocation(locations[i]);
+                if (last < first || last > glyphBytes) throw new ImageDataException("Invalid glyph location ordering.");
+                if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
+                first = last;
+            }
+            return;
+        }
         for (var i = 1; i <= glyphCount; i++)
         {
             cancellation.ThrowIfCancellationRequested();
@@ -184,6 +202,43 @@ public sealed partial class TrueTypeFont : IDisposable
             if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
             first = last;
         }
+    }
+
+    // Speculative classification is private and stateless. On any failure the
+    // caller runs the original one-glyph checks, preserving first-error order.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryFourGlyphBounds<T>(ReadOnlySpan<T> locations, ReadOnlySpan<byte> glyphs,
+        int index, uint first, out uint last) where T : unmanaged, IBinaryInteger<T>
+    {
+        last = first;
+        if (index > locations.Length - 4) return false;
+        var batch = locations.Slice(index, 4);
+        var a = GlyphLocation(batch[0]); var b = GlyphLocation(batch[1]);
+        var c = GlyphLocation(batch[2]); var d = GlyphLocation(batch[3]);
+        if (!TryHeaderBounds(glyphs, first, a, out var x0)
+            || !TryHeaderBounds(glyphs, a, b, out var x1)
+            || !TryHeaderBounds(glyphs, b, c, out var x2)
+            || !TryHeaderBounds(glyphs, c, d, out var x3)) return false;
+        // Four little-endian loads contain big-endian signed coordinate words.
+        // Swap within each word, then compare xmin/ymin with xmax/ymax.
+        var raw = Vector256.Create(x0, x1, x2, x3).AsUInt16();
+        var words = Avx2.Or(Avx2.ShiftLeftLogical(raw, 8), Avx2.ShiftRightLogical(raw, 8));
+        var maxima = Avx2.ShiftRightLogical128BitLane(words.AsByte(), 4).AsInt16();
+        if ((Avx2.MoveMask(Avx2.CompareGreaterThan(words.AsInt16(), maxima).AsByte()) & 0x0F0F0F0F) != 0)
+            return false;
+        last = d; return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryHeaderBounds(ReadOnlySpan<byte> glyphs, uint first, uint last, out ulong bounds)
+    {
+        bounds = 0;
+        if (last < first || last > glyphs.Length) return false;
+        if (last == first) return true;
+        if (last - first < 10) return false;
+        var header = glyphs.Slice((int)first, 10);
+        if (I16(header) != 0) bounds = BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

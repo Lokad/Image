@@ -24,6 +24,7 @@
   output-row execution without additional workspace.
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
+- Speed up supplied-font loading with exact batched glyph-bound checks.
 
 Declared exact encoder packets and managed pixel contracts remain unchanged.
 Resource limits, cooperative memory admission, cancellation and portable

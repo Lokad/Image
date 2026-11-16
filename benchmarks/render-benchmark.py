@@ -2011,7 +2011,18 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert font_load['sourceProof']['originalSourceReconstructed']
     assert font_load['memory']['addedOwnedCapacityBytes'] == font_load['memory']['addedRetainedCapacityBytes'] == 0
     storage_reuse = composition_storage()
-    font_cost = storage_reuse['cases']['FontLoadRegular']
+    font_current = json.loads((ROOT / 'benchmarks/font-header-batching-evidence.json').read_text(encoding='utf-8'))
+    assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
+    assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
+    assert font_current['raw']['mirrored'] and font_current['raw']['allMembersVerified']
+    hq = font_current['qualification']
+    assert hq['windows']['total'] == hq['linux']['total'] == 6772
+    assert hq['linux']['actualPackage']['sha256'] == hq['windowsPackage']['sameActualPackageSha256'] == font_current['producers']['packageSha256']
+    assert hq['linux']['actualPackage']['librarySha256'] == font_current['producers']['timedArtifactSha256']
+    assert hq['linux']['actualPackage']['actualConsumerPassed'] and hq['windowsPackage']['actualConsumerPassed']
+    assert hq['linux']['actualPackage']['usageExamples'] == hq['windowsPackage']['usageExamples'] == 3
+    assert all(font_current['sourceProof'].values())
+    font_cost = font_current['font']
     assert font_cost['actualIterations'] == font_cost['nativeSamplesEachBracket'] == 12
     assert font_cost['allOriginalGatesPassed'] and font_cost['quietGuardsPassed'] and font_cost['allActualsRetained']
     assert font_cost['allocatedBytes'] == 176
@@ -2062,13 +2073,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert text_dispatch['pairedEffect']['upper'] < 1 and text_dispatch['pairedEffect']['allActualMeanIntervalsSeparated']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = storage_reuse['pipelineCases'][case]
+        cost = font_current['pipelineCases'][case]
         assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = storage_reuse['pipelineCases']['Preparation']
-    font_batch = storage_reuse['pipelineCases']['PrepareDraw8']
+    font_preparation = font_current['pipelineCases']['Preparation']
+    font_batch = font_current['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
@@ -3271,8 +3282,9 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
-This is an incremental update. The storage round's fresh costs use its immutable
-actual-package DLL; unchanged paths reuse identified evidence. Other entries that
+This is an incremental update. Font-loading and complete-text costs use the header-
+batching package; storage costs retain their source-valid artifact. Unchanged
+paths reuse identified evidence. Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
 proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
@@ -3548,7 +3560,7 @@ retains an independently verified
 [Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
 **2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
 shape**, within its existing coarse admission; no array or retained capacity is added.
-Current complete public costs use the [storage reuse](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+Current complete public costs use the [glyph-header batching](../benchmarks/FONT-HEADER-BATCHING.md)
 timed/package DLL. The earlier [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
 controlled ordinary16 comparison saves **{text_dispatch['pairedEffect']['savedUs']:.3f} µs /
 {text_dispatch['pairedEffect']['gainPercent']:.2f}%**, with unchanged allocation and owned capacity.
@@ -3570,17 +3582,22 @@ governed peak **822,460 B** are unchanged. Preparation allocates **{font_prepara
 Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
 these are neither total allocations nor physical/native/JIT peaks. No font/layout
 survives preparation. Font loading stays **176 B/op**; shared idle retention is
-reported above. Windows/Linux each pass **6,760 full/live checks**, **86 internal/441 public**
-normal/scalar and the SAME actual timed package/all three examples. The new public
-regression covers196color/alpha/destination cases,392draws and401,408wordpixels.
+reported above. Windows/Linux each pass **6,772 full/live checks**, **269 internal/441 public**
+normal/AVX2-disabled/scalar and the SAME actual timed package/all three examples.
+Twelve new public font cases cover mixed headers/tails, ordered failures and
+ownership/refusal cleanup; existing exact text/word-pixel proofs remain.
 This is a scoped development update, not a release-wide timing refresh.
 
 Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
 diagnostic, with eager/lazy validation differences. Its current upper **{font_cost['upper']:.3f}**
-retains a scoped gap. Earlier packed-bounds controlled gains remain attributed to their own
-artifacts; current absolute clocks are not a cumulative speedup claim. No uniform
-pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
-contract follows.
+retains a scoped gap. [Four-header SIMD validation](../benchmarks/FONT-HEADER-BATCHING.md)
+independently saves **{font_current['pairedEffect']['savedUs']:.3f} µs /
+{font_current['pairedEffect']['gainPercent']:.2f}%** in complete final-DLL controlled
+loads, at unchanged **176 B/op** and owned/retained capacity. All ordered header
+checks remain; malformed groups use the original scalar error order and cancelable
+tokens retain every glyph checkpoint. AVX2-disabled/scalar paths remain.
+These are scoped incremental costs, not general parser equivalence or a pipeline
+gain. Earlier packed-bounds and noncancelable-dispatch effects are not added.
 
 [Current ordinary text integration](../benchmarks/ORDINARY-TEXT-LONG-INTEGRATION.md)
 resolves both existing controls as scoped gaps: **46.510 / ImageSharp 44.790 µs**
