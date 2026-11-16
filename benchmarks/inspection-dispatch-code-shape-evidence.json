@@ -1,0 +1,110 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JDI1108",
+  "readOnly": true,
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newStatisticalTimings": 0,
+  "allInstrumentedElapsedDiscarded": true,
+  "subjects": {
+    "baseline": {
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "disassemblySha256": "e446aaf302de143a539009c2d6ea4d2ae306e4899e6cf57a77f9a7777530f96e",
+      "selectedDisassemblySha256": "6c1224d588974fa37ed2cb9598b4a65192c9506e3d17676b1a5e9002fa21217f",
+      "selectedMethods": [
+        {
+          "method": "; Assembly listing for method Lokad.Image.ImageCodec:ProbeCore(System.IO.Stream,Lokad.Image.ImageProbeOptions,System.Threading.CancellationToken,bool):System.Threading.Tasks.ValueTask`1[Lokad.Image.ImageProbeResult] (FullOpts)",
+          "codeBytes": 733
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.StreamInspection:InspectAsync[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory](Lokad.Image.Internal.InspectionReader,Lokad.Image.Internal.ProbeReader,int):System.Threading.Tasks.ValueTask`1[Lokad.Image.Internal.ProbeResult] (FullOpts)",
+          "codeBytes": 90
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.StreamInspection+<InspectAsync>d__0`2[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory]:MoveNext():this (FullOpts)",
+          "codeBytes": 3452
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.InspectionReader:ReadAsync(int):System.Threading.Tasks.ValueTask:this (FullOpts)",
+          "codeBytes": 1977
+        }
+      ]
+    },
+    "candidate": {
+      "librarySha256": "123d780fe5239eaf6614533b10b27237174efb388df9fc1f90501061e45d5517",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "disassemblySha256": "4b02c2e8e42f975302d8bc2bdb24538d3effdd5289530b67849901461ba50bc4",
+      "selectedDisassemblySha256": "2ddf53286be191b49a7da401ce044c2dbdfa6b66837704cf785b0c2f810726d7",
+      "selectedMethods": [
+        {
+          "method": "; Assembly listing for method Lokad.Image.ImageCodec:ProbeCore(System.IO.Stream,Lokad.Image.ImageProbeOptions,System.Threading.CancellationToken,bool):System.Threading.Tasks.ValueTask`1[Lokad.Image.ImageProbeResult] (FullOpts)",
+          "codeBytes": 733
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.StreamInspection:InspectAsync[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory](Lokad.Image.Internal.InspectionReader,Lokad.Image.Internal.ProbeReader,int):System.Threading.Tasks.ValueTask`1[Lokad.Image.Internal.ProbeResult] (FullOpts)",
+          "codeBytes": 507
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.InspectionReader:ReadAsync(int):System.Threading.Tasks.ValueTask:this (FullOpts)",
+          "codeBytes": 1977
+        },
+        {
+          "method": "; Assembly listing for method Lokad.Image.Internal.StreamInspection:AfterInspectionPrefix[Lokad.Image.Internal.ProbeResult,Lokad.Image.Internal.ProbeResultFactory](Lokad.Image.Internal.InspectionReader,Lokad.Image.Internal.ProbeReader,int):System.Threading.Tasks.ValueTask`1[Lokad.Image.Internal.ProbeResult] (FullOpts)",
+          "codeBytes": 218
+        }
+      ]
+    }
+  },
+  "normalizedUnchangedMethods": {
+    "ImageCodec:ProbeCore": {
+      "sameInstructionsAfterAddressNormalization": true,
+      "instructions": 178,
+      "sha256": "07ed8f68b3b046ae53f6c90912a627b1308201d3505f892f00c92e9a8bea8bb6"
+    },
+    "InspectionReader:ReadAsync": {
+      "sameInstructionsAfterAddressNormalization": true,
+      "instructions": 497,
+      "sha256": "cb2b71f069fdb60a74d77100bc4bf6ffe7b4935d80d2fa2787c4c89adc5eab6e"
+    }
+  },
+  "priorStandaloneGcDiagnostics": {
+    "baseline": {
+      "gen0": 29,
+      "gen1": 0,
+      "gen2": 0,
+      "allocatedBytes": 501593984,
+      "operations": 883088,
+      "gen0PerOperation": 3.283930933270523e-05,
+      "allocatedBytesPerOperation": 568
+    },
+    "candidate": {
+      "gen0": 24,
+      "gen1": 0,
+      "gen2": 0,
+      "allocatedBytes": 416603008,
+      "operations": 733456,
+      "gen0PerOperation": 3.272179926266879e-05,
+      "allocatedBytesPerOperation": 568
+    }
+  },
+  "interpretation": "The rejected version actually removes the outer compiler dispatcher:old90Bentry+3452BMoveNext become507Bentry+218Bpost-prefix dispatch. ProbeCore733B and ReadAsync1977B are instruction-identical after address normalization. This verifies code shape only,not speed attribution. Prior standalone diagnostics allocate568B/operation,bothhave zeroGen1/2 and similarGen0 collections/operation;these counts do not establish equalGC time or exclude runtime/layout sensitivity. The paired/standalone direction contradiction remains unresolved;discard every newly instrumented elapsed observation. Do not accept the archived candidate or retime it for a favorable outcome.",
+  "qualification": "Qualified source/modules/package remain unchanged;reuse6728full/live perOS,affectedISA and SAMEactualpackage/all3examples. No broad/package or font/text campaign.",
+  "next": "Stop unsupported dispatch-inlining/GC-volume explanations. Any future codec experiment needs a materially different design or direct actual-boundary attribution. Prioritize substantial repeated work elsewhere rather than further nanosecond hints.",
+  "raw": {
+    "file": "inspection-dispatch-code-shape.tar.xz",
+    "sha256": "977178ef4f322e139f99646974613c8544ab4adc2014d02995d88d624e0dcc85",
+    "bytes": 54440,
+    "members": 24,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "inspection-format-dispatch-trial.tar.xz",
+        "sha256": "c9f0d4bd7eb719d49a825544d828b79c0e9488121a84175a586039a84d982613"
+      }
+    ]
+  }
+}
