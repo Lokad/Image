@@ -6,6 +6,54 @@ public sealed class TextRenderPlanTests
 {
     private static readonly RgbaColor Ink = new(12345, 54321, 32769, 45678);
 
+    [Fact]
+    public void OrdinaryWordDrawingMatchesPreparedRationalPixelsOnTransparentAndMixedDestinations()
+    {
+        using var root = new TestMemoryBudget(4 * 1024 * 1024);
+        var limits = new ImageLimits { MemoryBudget = root };
+        using var font = TrueTypeFont.Load(AuthoredTrueType.Build(), limits);
+        using var layout = TextLayout.Create(font, "AV g\n\u00c1\u0301",
+            new() { FontSize = 13.25, WrapWidth = 30, LineSpacing = 1.25, Limits = limits });
+        using var firstPlan = TextRenderPlan.Create(layout, 32, 32, 16, -.375, 1.625, limits);
+        using var secondPlan = TextRenderPlan.Create(layout, 32, 32, 16, .875, -.375, limits);
+        using var actual = ImageBuffer.Create(32, 32, 16, limits);
+        using var expected = ImageBuffer.Create(32, 32, 16, limits);
+        var resident = root.Bytes;
+        RgbaColor[] colors = [new(0, 0, 0), new(65535, 65535, 65535), new(1, 32769, 65534),
+            new(256, 257, 258), Ink, new(17, 641, 65000), new(32767, 32768, 32769)];
+        ushort[] alphas = [0, 1, 2, 128, 257, 32768, 65535];
+        for (var destination = 0; destination < 4; destination++)
+        foreach (var color in colors)
+        foreach (var alpha in alphas)
+        {
+            for (var y = 0; y < 32; y++)
+            {
+                var row = actual.GetRow16(y);
+                for (var x = 0; x < 32; x++)
+                {
+                    row[x * 4] = (ushort)(x * 1931 + y * 719);
+                    row[x * 4 + 1] = (ushort)(x * 97 + y * 1351);
+                    row[x * 4 + 2] = (ushort)(x * 1913 + y * 335);
+                    row[x * 4 + 3] = destination switch
+                    { 0 => 0, 1 => (ushort)(x % 3 == 0 ? 0 : 1), 2 => (ushort)(x * 697 + y * 887), _ => 65535 };
+                }
+                row.CopyTo(expected.GetRow16(y));
+            }
+            var ink = color with { A = alpha };
+            ImageDrawing.DrawText(actual, layout, -.375, 1.625, ink, limits);
+            firstPlan.Draw(expected, ink);
+            Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+            var overlay = ink with { R = color.B, G = color.R, B = color.G };
+            ImageDrawing.DrawText(actual, layout, .875, -.375, overlay, limits);
+            secondPlan.Draw(expected, overlay);
+            Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+            Assert.Equal(resident, root.Bytes);
+        }
+        actual.Dispose(); expected.Dispose(); firstPlan.Dispose(); secondPlan.Dispose();
+        layout.Dispose(); font.Dispose();
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Theory]
     [InlineData(8, -.375, 1.625)] [InlineData(16, -.375, 1.625)]
     [InlineData(8, 4.125, -2.375)] [InlineData(16, 4.125, -2.375)]

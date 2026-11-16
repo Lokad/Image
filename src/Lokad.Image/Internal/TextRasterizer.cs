@@ -208,7 +208,7 @@ internal sealed partial class TextRasterizer : IDisposable
                         var sa = (ulong)color.A * coverage;
                         if (sa == 0) continue;
                         if (byteDepth) BlendByte(byteRow.Slice((left + j) * 4, 4), color, sa);
-                        else BlendWord(wordRow.Slice((left + j) * 4, 4), color, sa);
+                        else BlendWordForDrawing(wordRow.Slice((left + j) * 4, 4), color, sa);
                     }
                     i += count;
                 }
@@ -405,6 +405,18 @@ internal sealed partial class TextRasterizer : IDisposable
         pixel[1] = (byte)((color.G * sourceWeight + pixel[1] * backgroundWeight + half) / divisor);
         pixel[2] = (byte)((color.B * sourceWeight + pixel[2] * backgroundWeight + half) / divisor);
         pixel[3] = (byte)((alpha + denominator / 2) / denominator);
+    }
+
+    // Ordinary drawing dispatch only. Prepared coverage keeps its shared blend.
+    // With destination alpha zero and sa>0, each word channel's old numerator
+    // is source*(sa*65535^2) and its divisor is that same weight. Rounding
+    // therefore returns the source exactly, even if stored alpha rounds to zero.
+    private static void BlendWordForDrawing(Span<ushort> pixel, RgbaColor color, ulong sa)
+    {
+        if (pixel[3] != 0) { BlendWord(pixel, color, sa); return; }
+        const ulong maximum = 65535, denominator = maximum * maximum;
+        pixel[0] = color.R; pixel[1] = color.G; pixel[2] = color.B;
+        pixel[3] = (ushort)((sa * maximum + denominator / 2) / denominator);
     }
 
     private static void BlendWord(Span<ushort> pixel, RgbaColor color, ulong sa)

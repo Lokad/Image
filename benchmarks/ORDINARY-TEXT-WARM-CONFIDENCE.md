@@ -1,5 +1,7 @@
 # Ordinary text warm confidence
 
+[Ordinary word dispatch](ORDINARY-WORD-TEXT-DISPATCH.md) now owns the affected costs; this report retains the completed measurement investigation.
+
 OTC1144 resolves both ordinary-drawing uncertainties as **scoped gaps** on the
 unchanged actual-package DLL. This is a measurement update, not a production
 speedup or an overall text-processing slowdown. Qualified owning one-shot,

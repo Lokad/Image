@@ -2035,30 +2035,32 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert tfq['focusedEachMode'] == {'internal': 268, 'public': 165} and tfq['allEightFrozenFramesBothOs'] and tfq['newSparseCanvasComparisons'] == 48
     assert text_drawing['pairedEffect']['upper'] < 1 and text_drawing['pairedEffect']['allActualMeanIntervalsSeparated']
     assert text_drawing['reuse']['preparedTimedPathsVerbatim'] and not text_drawing['arabicGeneralization']['regressionConfirmed']
+    text_dispatch = json.loads((ROOT / 'benchmarks/ordinary-word-text-dispatch-evidence.json').read_text(encoding='utf-8'))
+    tdq = text_dispatch['qualification']
+    assert text_dispatch['productionAccepted'] and text_dispatch['allAffectedPerformanceReconciled'] and all(text_dispatch['sourceProof'].values())
+    assert text_dispatch['raw']['mirrored'] and text_dispatch['raw']['allMembersVerified']
+    assert tdq['windows']['total'] == tdq['linux']['total'] == tdq['fullChecksEachOs'] == 6750
+    assert tdq['linux']['actualPackage']['sha256'] == tdq['windows']['sameActualPackageSha256'] == text_dispatch['producers']['packageSha256']
+    assert tdq['linux']['actualPackage']['librarySha256'] == text_dispatch['producers']['timedArtifactSha256']
+    assert text_dispatch['pairedEffect']['upper'] < 1 and text_dispatch['pairedEffect']['allActualMeanIntervalsSeparated']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_drawing['pipelineCases'][case]
-        assert cost['completeWorkload'] and cost['status'] == 'pass'
-        assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == text_drawing['producers']['linuxSha256']
+        cost = text_dispatch['pipelineCases'][case]
+        assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_drawing['pipelineCases']['Preparation']
-    font_batch = text_drawing['pipelineCases']['PrepareDraw8']
+    font_preparation = text_dispatch['pipelineCases']['Preparation']
+    font_batch = text_dispatch['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
-    ordinary_confidence = json.loads((ROOT / 'benchmarks/ordinary-text-warm-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert ordinary_confidence['measurementAccepted'] and not ordinary_confidence['productionChanged']
-    assert ordinary_confidence['requiredMaterialPaths'] == 289 and ordinary_confidence['newMaterialPaths'] == 0
-    assert ordinary_confidence['raw']['mirrored'] and ordinary_confidence['raw']['allMembersVerified']
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if not prepared: case = ordinary_confidence['cases'][name]
-        assert case['librarySha256'] == (text_coverage if prepared else ordinary_confidence)['producers']['linuxSha256']
+        if not prepared: case = text_dispatch['cases'][name]
+        assert case['librarySha256'] == (text_coverage if prepared else text_dispatch)['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['actuals'] == 12 and case['operationsPerActual'] == (1024 if prepared else 4096)
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
@@ -3244,7 +3246,7 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     for name, label in [('OriginalUnicode', 'Authored Unicode layout'), ('PackedBmp', 'Authored cmap4 layout'),
                         ('CompositeTransforms', 'Authored compound layout'), ('Render8', 'Authored RGBA8 layout + draw'),
                         ('Render16', 'Authored RGBA16 layout + draw')]:
-        a = authored['cases'][name]
+        a = text_dispatch['authoredCases'][name] if name in text_dispatch['authoredCases'] else authored['cases'][name]
         assert a['actualsEach'] == 12 and a['status'] == 'pass' and a['upper'] < 1
         assert all(a[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'exactManagedObservations', 'independentOutputs'))
         editing += (f'\n| {label} / corrected ImageSharp integration (parity confirmed) | '
@@ -3288,7 +3290,8 @@ outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-sh
 font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
 and unmeasured reference/physical retention are separate from allocations.
 The [five original authored-font controls](../benchmarks/AUTHORED-FONT-COMPARISONS.md)
-now pass/stop on the unchanged actual-package DLL. Their reference is explicitly
+remain passing: affected rendering costs use the current dispatch package, while
+the three layout costs reuse unchanged paths. Their reference is explicitly
 **source-corrected Fonts 2.1.3 / Drawing 2.1.7 public integration**, retaining stock
 identities, exact patches and independent defect reproductions. All nine public
 layout calls/tab adaptation, owned results, optional drawing and disposal stay timed;
@@ -3522,7 +3525,10 @@ retains an independently verified
 [Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
 **2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
 shape**, within its existing coarse admission; no array or retained capacity is added.
-Current complete public costs use that same timed/package DLL. Both one-shot and preparation-plus-eight-draw controls pass, including every
+Current complete public costs use the [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
+timed/package DLL. Its controlled ordinary16 comparison saves **{text_dispatch['pairedEffect']['savedUs']:.3f} µs /
+{text_dispatch['pairedEffect']['gainPercent']:.2f}%**, with unchanged allocation and owned capacity.
+These separate stage gains are not added. Both one-shot and preparation-plus-eight-draw controls pass, including every
 layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
 and disposal. The reference retains positioned paths; managed preparation retains
 exact 16-bit coverage. Eager/lazy font validation and GC-driven reference font
@@ -3540,8 +3546,9 @@ governed peak **822,460 B** are unchanged. Preparation allocates **{font_prepara
 Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
 these are neither total allocations nor physical/native/JIT peaks. No font/layout
 survives preparation. Font loading stays **176 B/op**, with no new cache or storage.
-Windows/Linux each pass **6,745 full/live checks**, **268 internal/165 public**
-normal/AVX-disabled/scalar and the SAME actual timed package/all three examples.
+Windows/Linux each pass **6,750 full/live checks**, **268 internal/166 public**
+normal/scalar and the SAME actual timed package/all three examples. The new public
+regression covers196color/alpha/destination cases,392draws and401,408wordpixels.
 This is a scoped development update, not a release-wide timing refresh.
 
 Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
@@ -3551,12 +3558,13 @@ clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-TEXT-WARM-CONFIDENCE.md)
-on the unchanged actual-package DLL:4,096 warmup operations per side before all
-statistical groups,then12fixed4,096-operation actuals and all three reference
-groups. Both ordinary depths are now scoped gaps,with conservative intervals
-**1.016202–1.059120 /1.093911–1.122973**. Earlier uncertain samples stay retained;
-this is a measurement update,not a speedup or an overall text-processing claim.
+Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
+on the final immutable package DLL: 4,096 warmup operations per side before all
+statistical groups, then 12 fixed 4,096-operation actuals and all three reference
+groups. Both ordinary depths remain uncertain,with conservative intervals
+**0.962359–1.095680 /0.937233–1.119569**. The same final DLL independently confirms
+the scoped 8.17% ordinary16 gain in controlled pairs; those pairs do not prove
+standalone parity. Earlier gaps/uncertainty and all adverse samples stay retained.
 Unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
 draws pass and stop. Prepared

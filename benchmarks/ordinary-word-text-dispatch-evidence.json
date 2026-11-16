@@ -1,0 +1,3364 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TDW1145",
+  "productionAccepted": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "410a455f8fb33adf04ac7715e1150998abf621feefc85d91d74cc141dfb9adb2",
+    "linuxSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "timedArtifactSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+    "packageSha256": "8ca826fc97e74973349a7c86b30d8e9e85dcc3a128315cf6fa6f75c1e08f705e"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "489f78a6b80547f9cb0c12abed45fb0b6008f7fbb2cc9a5fc308f2d6eb557b99"
+  },
+  "baselineSources": {
+    "textRasterizer": "d64652443382860ce3899da4ca05b80febf079113fb29022a7b66c13cb7d15e3"
+  },
+  "sourceProof": {
+    "onlyOrdinaryWordDispatchAndNewPrivateHelperChanged": true,
+    "restoringCallAndRemovingHelperExactlyRestoresBaseline": true,
+    "sharedPreparedGeneralBlendVerbatim": true,
+    "geometrySortingRowSchedulingByteBlendVerbatim": true,
+    "admissionCancellationOwnershipVerbatim": true,
+    "noNewArrayPoolCacheOwnerApiOrState": true,
+    "samePrototypeAndFinalSourceBytes": true
+  },
+  "proof": "Caller skips sa==0. For destination alpha0,the word channel numerator is source*(sa*65535^2),divisor is that same positive weight;rounding returns source exactly. Original alpha rounding retained,including hiddenRGB when stored alpha rounds0. Nonzero destination uses original general rational blend. Dispatch is ordinary-word-only;prepared/shared blend unchanged.",
+  "pairedEffect": {
+    "baselineUs": 50.70260473632813,
+    "candidateUs": 46.558724121093746,
+    "gainPercent": 8.173013839952548,
+    "savedUs": 4.14388061523438,
+    "lower": 0.9067099920322553,
+    "upper": 0.9299771108001178,
+    "allActualMeanIntervalsSeparated": true,
+    "actuals": 12,
+    "operationsEach": 1024,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "allocationPublicBytes": 83216,
+    "timedAdapterBytes": 24,
+    "source": "tmp/tdw1145-final-confirm-ordinary16.json"
+  },
+  "cases": {
+    "Ordinary8": {
+      "caseId": "DrawText8",
+      "boundary": "ordinary",
+      "managedUs": 47.78336661783854,
+      "referenceUs": 45.27837219238281,
+      "lower": 0.9623588038761893,
+      "upper": 1.0956802392268792,
+      "status": "uncertain",
+      "allocatedBytes": 83216,
+      "timedAdapterBytes": 24,
+      "referenceAllocatedBytes": null,
+      "managed": {
+        "mean": 47783.36661783854,
+        "standardError": 188.9173718558957,
+        "lower": 46945.14414248584,
+        "upper": 48621.589093191236,
+        "values": [
+          49773.19482421875,
+          47539.91357421875,
+          47787.41357421875,
+          47518.6142578125,
+          47863.714599609375,
+          47274.720458984375,
+          47723.90771484375,
+          47340.054931640625,
+          47666.391845703125,
+          47461.171630859375,
+          47597.467529296875,
+          47853.83447265625
+        ]
+      },
+      "nativeBrackets": {
+        "nativeBefore": {
+          "mean": 46578.521158854164,
+          "standardError": 496.4662880970248,
+          "lower": 44375.71049697768,
+          "upper": 48781.33182073065,
+          "values": [
+            49391.812744140625,
+            49554.094970703125,
+            48329.04443359375,
+            47715.352783203125,
+            46387.09912109375,
+            45031.219482421875,
+            45113.99951171875,
+            45070.432373046875,
+            46047.69677734375,
+            45465.37939453125,
+            45002.310546875,
+            45833.811767578125
+          ]
+        },
+        "nativeAfter": {
+          "mean": 45363.94278971354,
+          "standardError": 88.05756142709231,
+          "lower": 44973.23320918199,
+          "upper": 45754.65237024509,
+          "values": [
+            45539.3193359375,
+            46080.5341796875,
+            45235.55126953125,
+            45555.92578125,
+            45346.59130859375,
+            45214.66650390625,
+            45104.541015625,
+            45116.745361328125,
+            45088.177490234375,
+            45310.90576171875,
+            45074.908447265625,
+            45699.447021484375
+          ]
+        },
+        "paired": {
+          "mean": 45278.37219238281,
+          "standardError": 48.90148424010499,
+          "lower": 45061.39731725366,
+          "upper": 45495.34706751197,
+          "values": [
+            45408.182861328125,
+            45517.2998046875,
+            45488.66748046875,
+            45101.82666015625,
+            45118.8125,
+            45188.000732421875,
+            45391.586181640625,
+            45261.1181640625,
+            45074.073974609375,
+            45476.61328125,
+            45089.47705078125,
+            45224.8076171875
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.053770428797677974,
+        "standardError": 0.0037962152092350467,
+        "lower": 0.036926700354939515,
+        "upper": 0.07061415724041643,
+        "values": [
+          0.09178425453429553,
+          0.04347717479022675,
+          0.04929906190581002,
+          0.05219876525695293,
+          0.059058405196277385,
+          0.04514412037067441,
+          0.050105720808673,
+          0.04490841920086708,
+          0.055919351323913624,
+          0.042713737406417054,
+          0.05413066218822109,
+          0.056505472589806774
+        ]
+      },
+      "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+      "actualsEach": 12,
+      "operationsPerActual": 4096,
+      "all12ActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/tdw1145-final-confirm-DrawText8-receipt.json",
+      "ratio": 1.055324303948302,
+      "depth": 8,
+      "managedExact": true,
+      "allActualsRetained": true,
+      "actuals": 12,
+      "adapterAllocatedBytes": 83240,
+      "retainedBytes": 0
+    },
+    "Ordinary16": {
+      "caseId": "DrawText16",
+      "boundary": "ordinary",
+      "managedUs": 49.51604524739584,
+      "referenceUs": 48.32425903320313,
+      "lower": 0.937232973358116,
+      "upper": 1.1195692954764416,
+      "status": "uncertain",
+      "allocatedBytes": 83216,
+      "timedAdapterBytes": 24,
+      "referenceAllocatedBytes": null,
+      "managed": {
+        "mean": 49516.045247395836,
+        "standardError": 533.593383063199,
+        "lower": 47148.502432306144,
+        "upper": 51883.58806248553,
+        "values": [
+          47590.18359375,
+          47281.880859375,
+          49740.04541015625,
+          47570.76123046875,
+          51746.959716796875,
+          51028.36474609375,
+          51839.451904296875,
+          50151.479248046875,
+          47820.68603515625,
+          47413.329345703125,
+          51361.50634765625,
+          50647.89453125
+        ]
+      },
+      "nativeBrackets": {
+        "nativeBefore": {
+          "mean": 48324.259033203125,
+          "standardError": 446.65646169975184,
+          "lower": 46342.45354183821,
+          "upper": 50306.06452456804,
+          "values": [
+            48644.8681640625,
+            50284.31005859375,
+            49917.32421875,
+            49627.126953125,
+            49927.709716796875,
+            49460.635498046875,
+            48032.962890625,
+            46123.71240234375,
+            46218.71728515625,
+            48050.89208984375,
+            47132.031494140625,
+            46470.817626953125
+          ]
+        },
+        "nativeAfter": {
+          "mean": 49164.836446126305,
+          "standardError": 82.29123285232893,
+          "lower": 48799.71194633218,
+          "upper": 49529.96094592043,
+          "values": [
+            49578.819091796875,
+            49313.308349609375,
+            49136.13427734375,
+            49033.531982421875,
+            49267.12548828125,
+            49252.465087890625,
+            49662.789306640625,
+            48786.167724609375,
+            48814.516845703125,
+            48893.945556640625,
+            48928.94775390625,
+            49310.285888671875
+          ]
+        },
+        "paired": {
+          "mean": 48574.55303955078,
+          "standardError": 377.8176006086692,
+          "lower": 46898.18415243972,
+          "upper": 50250.921926661846,
+          "values": [
+            46248.86279296875,
+            48644.408203125,
+            48423.15380859375,
+            47653.1962890625,
+            49843.611328125,
+            50083.169921875,
+            50008.414794921875,
+            47329.30810546875,
+            46876.471923828125,
+            48553.87451171875,
+            49529.59130859375,
+            49700.573486328125
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.018891913812447463,
+        "standardError": 0.007336351793231987,
+        "lower": -0.013659327504162998,
+        "upper": 0.05144315512905792,
+        "values": [
+          0.028589637551596388,
+          -0.02840970913117996,
+          0.026832267517018928,
+          -0.001731393681468646,
+          0.03747535070209915,
+          0.018696627659615182,
+          0.03596019198792952,
+          0.057918285152720156,
+          0.01994242328536223,
+          -0.023770597126011983,
+          0.03631869297562657,
+          0.018881188856062023
+        ]
+      },
+      "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+      "actualsEach": 12,
+      "operationsPerActual": 4096,
+      "all12ActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/tdw1145-final-confirm-DrawText16-receipt.json",
+      "ratio": 1.0246622760086987,
+      "depth": 16,
+      "managedExact": true,
+      "allActualsRetained": true,
+      "actuals": 12,
+      "adapterAllocatedBytes": 83240,
+      "retainedBytes": 0
+    }
+  },
+  "authoredCases": {
+    "Render8": {
+      "originalRequiredControl": "TextRender/Rgba8Clipped",
+      "managedUs": 42.01283333333333,
+      "referenceUs": 244.08866666666665,
+      "ratio": 0.17212119639584525,
+      "lower": 0.0912223978102011,
+      "upper": 0.31934123686005933,
+      "status": "pass",
+      "actualsEach": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "exactManagedObservations": true,
+      "independentOutputs": true,
+      "resetBeforeEveryDraw": true,
+      "allocatedBytes": 49448,
+      "referenceAllocatedBytes": 417912.0,
+      "managedAllocationSamples": [
+        49448,
+        49453,
+        49448
+      ],
+      "referenceAllocationSamples": [
+        417912,
+        417912,
+        417912,
+        417912,
+        417912,
+        417912
+      ],
+      "bdnGc": {
+        "managed": {
+          "allocatedBytes": 50184,
+          "operations": 1,
+          "bytesPerOperation": 50184.0
+        },
+        "reference-before": {
+          "allocatedBytes": 417912,
+          "operations": 1,
+          "bytesPerOperation": 417912.0
+        },
+        "reference-after": {
+          "allocatedBytes": 417912,
+          "operations": 1,
+          "bytesPerOperation": 417912.0
+        }
+      },
+      "governedMemory": {
+        "faceCapacity": 1504,
+        "residentFaceAndCanvasBytes": 532972,
+        "fontCanvasAndLayoutBytes": 543352,
+        "governedPeak": 578240,
+        "retainedLayoutAfterOtherOwnersDispose": 10380,
+        "afterDisposal": 0,
+        "borrowedInputBytes": 1248,
+        "physicalNativeJitPeakMeasured": false
+      },
+      "referencePublicLayoutCalls": 9,
+      "referenceTabRounds": 2,
+      "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d"
+    },
+    "Render16": {
+      "originalRequiredControl": "TextRender/Rgba16Clipped",
+      "managedUs": 40.356833333333334,
+      "referenceUs": 246.852,
+      "ratio": 0.16348594839552985,
+      "lower": 0.10271336149933012,
+      "upper": 0.2681060531269555,
+      "status": "pass",
+      "actualsEach": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "exactManagedObservations": true,
+      "independentOutputs": true,
+      "resetBeforeEveryDraw": true,
+      "allocatedBytes": 49448,
+      "referenceAllocatedBytes": 417912.0,
+      "managedAllocationSamples": [
+        49448,
+        49453,
+        49448
+      ],
+      "referenceAllocationSamples": [
+        417912,
+        417912,
+        417912,
+        417912,
+        417912,
+        417912
+      ],
+      "bdnGc": {
+        "managed": {
+          "allocatedBytes": 50184,
+          "operations": 1,
+          "bytesPerOperation": 50184.0
+        },
+        "reference-before": {
+          "allocatedBytes": 417912,
+          "operations": 1,
+          "bytesPerOperation": 417912.0
+        },
+        "reference-after": {
+          "allocatedBytes": 417912,
+          "operations": 1,
+          "bytesPerOperation": 417912.0
+        }
+      },
+      "governedMemory": {
+        "faceCapacity": 1504,
+        "residentFaceAndCanvasBytes": 1064440,
+        "fontCanvasAndLayoutBytes": 1074820,
+        "governedPeak": 1109708,
+        "retainedLayoutAfterOtherOwnersDispose": 10380,
+        "afterDisposal": 0,
+        "borrowedInputBytes": 1248,
+        "physicalNativeJitPeakMeasured": false
+      },
+      "referencePublicLayoutCalls": 9,
+      "referenceTabRounds": 2,
+      "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d"
+    }
+  },
+  "pipelineCases": {
+    "OneShot": {
+      "id": "OneShot",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1313856.875,
+            "AllocatedBytes": 306191
+          },
+          "Reference": {
+            "Nanoseconds": 6160106.3125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.21328477275366828
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1244283.6875,
+            "AllocatedBytes": 306168
+          },
+          "Reference": {
+            "Nanoseconds": 6604484.46875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.18839982036258762
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1244311.875,
+            "AllocatedBytes": 306145
+          },
+          "Reference": {
+            "Nanoseconds": 7134327.03125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17441194797345658
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1243524.125,
+            "AllocatedBytes": 306168
+          },
+          "Reference": {
+            "Nanoseconds": 6914122.375,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17985277921841816
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1240211.625,
+            "AllocatedBytes": 306145
+          },
+          "Reference": {
+            "Nanoseconds": 6281011.875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.19745411243948652
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1258090.5625,
+            "AllocatedBytes": 306191
+          },
+          "Reference": {
+            "Nanoseconds": 7121443.15625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17666230494248356
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1242517.90625,
+            "AllocatedBytes": 306145
+          },
+          "Reference": {
+            "Nanoseconds": 6371890.09375,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.19499989610127602
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1257237.0625,
+            "AllocatedBytes": 306168
+          },
+          "Reference": {
+            "Nanoseconds": 7513849.46875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.16732263105999556
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1258475.8125,
+            "AllocatedBytes": 306145
+          },
+          "Reference": {
+            "Nanoseconds": 6313292,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.1993374950026072
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1259332.125,
+            "AllocatedBytes": 306168
+          },
+          "Reference": {
+            "Nanoseconds": 6925270.15625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.18184592031596963
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1356964,
+            "AllocatedBytes": 306145
+          },
+          "Reference": {
+            "Nanoseconds": 6547575.1875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.20724679918003613
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1254865.03125,
+            "AllocatedBytes": 306168
+          },
+          "Reference": {
+            "Nanoseconds": 7018691.3125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17878903279520744
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 6726963.03125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6523763.5,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6797725.8125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6801677.75,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6648312.71875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6792495.09375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7382225.1875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6475594,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6304496.5,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6726754.625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6655562.4375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7177130.59375,
+          "AllocatedBytes": 9256953
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 6353106.96875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7211702,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6250797.0625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6510697.25,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6605854.9375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6617048.75,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6502682.125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7653825.125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6545477.25,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6371099.125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6472181.5625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6646437.03125,
+          "AllocatedBytes": 9256953
+        }
+      ],
+      "managedStatistics": {
+        "OriginalValues": [
+          1313856.875,
+          1244283.6875,
+          1244311.875,
+          1243524.125,
+          1240211.625,
+          1258090.5625,
+          1242517.90625,
+          1257237.0625,
+          1258475.8125,
+          1259332.125,
+          1356964,
+          1254865.03125
+        ],
+        "N": 12,
+        "Min": 1240211.625,
+        "LowerFence": 1222199.65625,
+        "Q1": 1244093.796875,
+        "Median": 1256051.046875,
+        "Mean": 1264472.5572916667,
+        "Q3": 1258689.890625,
+        "UpperFence": 1280584.03125,
+        "Max": 1356964,
+        "InterquartileRange": 14596.09375,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          1313856.875,
+          1356964
+        ],
+        "AllOutliers": [
+          1313856.875,
+          1356964
+        ],
+        "StandardError": 10137.213743857268,
+        "Variance": 1233157229.8637843,
+        "StandardDeviation": 35116.33850309261,
+        "Skewness": 1.6536538633973017,
+        "Kurtosis": 4.397588126654555,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1264472.5572916667,
+          "StandardError": 10137.213743857268,
+          "Level": 12,
+          "Margin": 44978.607917735615,
+          "Lower": 1219493.9493739312,
+          "Upper": 1309451.1652094023
+        },
+        "Percentiles": {
+          "P0": 1240211.625,
+          "P25": 1244093.796875,
+          "P50": 1256051.046875,
+          "P67": 1258233.105,
+          "P80": 1259160.8625,
+          "P85": 1278415.7875,
+          "P90": 1308404.4,
+          "P95": 1333255.0812499998,
+          "P100": 1356964
+        }
+      },
+      "referenceStatistics": [
+        {
+          "OriginalValues": [
+            6726963.03125,
+            6523763.5,
+            6797725.8125,
+            6801677.75,
+            6648312.71875,
+            6792495.09375,
+            7382225.1875,
+            6475594,
+            6304496.5,
+            6726754.625,
+            6655562.4375,
+            7177130.59375
+          ],
+          "N": 12,
+          "Min": 6304496.5,
+          "LowerFence": 6344867.83984375,
+          "Q1": 6617175.4140625,
+          "Median": 6726858.828125,
+          "Mean": 6751058.4375,
+          "Q3": 6798713.796875,
+          "UpperFence": 7071021.37109375,
+          "Max": 7382225.1875,
+          "InterquartileRange": 181538.3828125,
+          "LowerOutliers": [
+            6304496.5
+          ],
+          "UpperOutliers": [
+            7177130.59375,
+            7382225.1875
+          ],
+          "AllOutliers": [
+            6304496.5,
+            7177130.59375,
+            7382225.1875
+          ],
+          "StandardError": 84125.39096273451,
+          "Variance": 84924976855.59517,
+          "StandardDeviation": 291418.90270810365,
+          "Skewness": 0.6916447014332636,
+          "Kurtosis": 2.773746988428827,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6751058.4375,
+            "StandardError": 84125.39096273451,
+            "Level": 12,
+            "Margin": 373262.62143105216,
+            "Lower": 6377795.816068948,
+            "Upper": 7124321.058931052
+          },
+          "Percentiles": {
+            "P0": 6304496.5,
+            "P25": 6617175.4140625,
+            "P50": 6726858.828125,
+            "P67": 6794430.4596875,
+            "P80": 6800887.3625,
+            "P85": 6933086.2453125,
+            "P90": 7139585.309375,
+            "P95": 7269423.1609375,
+            "P100": 7382225.1875
+          }
+        },
+        {
+          "OriginalValues": [
+            6160106.3125,
+            6604484.46875,
+            7134327.03125,
+            6914122.375,
+            6281011.875,
+            7121443.15625,
+            6371890.09375,
+            7513849.46875,
+            6313292,
+            6925270.15625,
+            6547575.1875,
+            7018691.3125
+          ],
+          "N": 12,
+          "Min": 6160106.3125,
+          "LowerFence": 5326532.515625,
+          "Q1": 6357240.5703125,
+          "Median": 6759303.421875,
+          "Mean": 6742171.953125,
+          "Q3": 7044379.2734375,
+          "UpperFence": 8075087.328125,
+          "Max": 7513849.46875,
+          "InterquartileRange": 687138.703125,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 121916.97175936123,
+          "Variance": 178364976035.67462,
+          "StandardDeviation": 422332.77878430724,
+          "Skewness": 0.19009863238652375,
+          "Kurtosis": 1.6272399220358336,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6742171.953125,
+            "StandardError": 121916.97175936123,
+            "Level": 12,
+            "Margin": 540943.0845438001,
+            "Lower": 6201228.8685812,
+            "Upper": 7283115.0376688
+          },
+          "Percentiles": {
+            "P0": 6160106.3125,
+            "P25": 6357240.5703125,
+            "P50": 6759303.421875,
+            "P67": 6959835.9840625,
+            "P80": 7100892.7875,
+            "P85": 7125952.512500001,
+            "P90": 7133038.643750001,
+            "P95": 7305112.128125,
+            "P100": 7513849.46875
+          }
+        },
+        {
+          "OriginalValues": [
+            6353106.96875,
+            7211702,
+            6250797.0625,
+            6510697.25,
+            6605854.9375,
+            6617048.75,
+            6502682.125,
+            7653825.125,
+            6545477.25,
+            6371099.125,
+            6472181.5625,
+            6646437.03125
+          ],
+          "N": 12,
+          "Min": 6250797.0625,
+          "LowerFence": 6180683.65234375,
+          "Q1": 6446910.953125,
+          "Median": 6528087.25,
+          "Mean": 6645075.765625,
+          "Q3": 6624395.8203125,
+          "UpperFence": 6890623.12109375,
+          "Max": 7653825.125,
+          "InterquartileRange": 177484.8671875,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            7211702,
+            7653825.125
+          ],
+          "AllOutliers": [
+            7211702,
+            7653825.125
+          ],
+          "StandardError": 114642.94627909859,
+          "Variance": 157716061578.6274,
+          "StandardDeviation": 397134.8153695762,
+          "Skewness": 1.4503480613729431,
+          "Kurtosis": 3.944297358404388,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6645075.765625,
+            "StandardError": 114642.94627909859,
+            "Level": 12,
+            "Margin": 508668.38378999516,
+            "Lower": 6136407.381835005,
+            "Upper": 7153744.149414995
+          },
+          "Percentiles": {
+            "P0": 6250797.0625,
+            "P25": 6446910.953125,
+            "P50": 6528087.25,
+            "P67": 6609996.648125,
+            "P80": 6640559.375,
+            "P85": 6844279.7703125,
+            "P90": 7155175.503125001,
+            "P95": 7410657.40625,
+            "P100": 7653825.125
+          }
+        }
+      ],
+      "logRatioStatistics": {
+        "OriginalValues": [
+          -1.54512704492483,
+          -1.669188870329779,
+          -1.7463352608317804,
+          -1.7156166559800938,
+          -1.6222490637151121,
+          -1.7335152504136677,
+          -1.6347562532325013,
+          -1.787831407812697,
+          -1.6127559359780552,
+          -1.7045955421369507,
+          -1.5738449293319015,
+          -1.7215487559583755
+        ],
+        "N": 12,
+        "Min": -1.787831407812697,
+        "LowerFence": -1.881537276259225,
+        "Q1": -1.7245403795721987,
+        "Median": -1.6868922062333649,
+        "Mean": -1.6722804142204788,
+        "Q3": -1.6198757817808478,
+        "UpperFence": -1.4628788850938212,
+        "Max": -1.54512704492483,
+        "InterquartileRange": 0.10466459779135096,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.02154223622425209,
+        "Variance": 0.005568815298497746,
+        "StandardDeviation": 0.0746244952981107,
+        "Skewness": 0.19758212496027333,
+        "Kurtosis": 1.6365205856448164,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": -1.6722804142204788,
+          "StandardError": 0.02154223622425209,
+          "Level": 12,
+          "Margin": 0.09558245700294259,
+          "Lower": -1.7678628712234215,
+          "Upper": -1.5766979572175361
+        },
+        "Percentiles": {
+          "P0": -1.787831407812697,
+          "P25": -1.7245403795721987,
+          "P50": -1.6868922062333649,
+          "P67": -1.6301285931110674,
+          "P80": -1.6146545615254666,
+          "P85": -1.5991370836519014,
+          "P90": -1.5777360299965169,
+          "P95": -1.5609218813487193,
+          "P100": -1.54512704492483
+        }
+      },
+      "confidenceViews": [
+        {
+          "view": "allActual",
+          "statistics": {
+            "OriginalValues": [
+              1313856.875,
+              1244283.6875,
+              1244311.875,
+              1243524.125,
+              1240211.625,
+              1258090.5625,
+              1242517.90625,
+              1257237.0625,
+              1258475.8125,
+              1259332.125,
+              1356964,
+              1254865.03125
+            ],
+            "N": 12,
+            "Min": 1240211.625,
+            "LowerFence": 1222199.65625,
+            "Q1": 1244093.796875,
+            "Median": 1256051.046875,
+            "Mean": 1264472.5572916667,
+            "Q3": 1258689.890625,
+            "UpperFence": 1280584.03125,
+            "Max": 1356964,
+            "InterquartileRange": 14596.09375,
+            "LowerOutliers": [],
+            "UpperOutliers": [
+              1313856.875,
+              1356964
+            ],
+            "AllOutliers": [
+              1313856.875,
+              1356964
+            ],
+            "StandardError": 10137.213743857268,
+            "Variance": 1233157229.8637843,
+            "StandardDeviation": 35116.33850309261,
+            "Skewness": 1.6536538633973017,
+            "Kurtosis": 4.397588126654555,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 1264472.5572916667,
+              "StandardError": 10137.213743857268,
+              "Level": 12,
+              "Margin": 44978.607917735615,
+              "Lower": 1219493.9493739312,
+              "Upper": 1309451.1652094023
+            },
+            "Percentiles": {
+              "P0": 1240211.625,
+              "P25": 1244093.796875,
+              "P50": 1256051.046875,
+              "P67": 1258233.105,
+              "P80": 1259160.8625,
+              "P85": 1278415.7875,
+              "P90": 1308404.4,
+              "P95": 1333255.0812499998,
+              "P100": 1356964
+            }
+          },
+          "referenceConfidenceLower": 6136407.381835005,
+          "referenceConfidenceUpper": 7283115.0376688,
+          "ratioLower": 0.16744125872880214,
+          "ratioUpper": 0.2133905204999329
+        },
+        {
+          "view": "upperOutlierDiagnostic",
+          "statistics": {
+            "OriginalValues": [
+              1244283.6875,
+              1244311.875,
+              1243524.125,
+              1240211.625,
+              1258090.5625,
+              1242517.90625,
+              1257237.0625,
+              1258475.8125,
+              1259332.125,
+              1254865.03125
+            ],
+            "N": 10,
+            "Min": 1240211.625,
+            "LowerFence": 1222469.2578125,
+            "Q1": 1243714.015625,
+            "Median": 1249588.453125,
+            "Mean": 1250284.98125,
+            "Q3": 1257877.1875,
+            "UpperFence": 1279121.9453125,
+            "Max": 1259332.125,
+            "InterquartileRange": 14163.171875,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 2490.824449263458,
+            "Variance": 62042064.3704861,
+            "StandardDeviation": 7876.678511307041,
+            "Skewness": -0.0064112510429249646,
+            "Kurtosis": 0.942635432505347,
+            "ConfidenceInterval": {
+              "N": 10,
+              "Mean": 1250284.98125,
+              "StandardError": 2490.824449263458,
+              "Level": 12,
+              "Margin": 11908.413955556314,
+              "Lower": 1238376.5672944437,
+              "Upper": 1262193.3952055562
+            },
+            "Percentiles": {
+              "P0": 1240211.625,
+              "P25": 1243714.015625,
+              "P50": 1249588.453125,
+              "P67": 1257262.6675,
+              "P80": 1258167.6125,
+              "P85": 1258340.975,
+              "P90": 1258561.44375,
+              "P95": 1258946.784375,
+              "P100": 1259332.125
+            }
+          },
+          "referenceConfidenceLower": 6096977.8610216435,
+          "referenceConfidenceUpper": 7325046.337687772,
+          "ratioLower": 0.1690605779410469,
+          "ratioUpper": 0.20701951425391202
+        }
+      ],
+      "managedUs": 1264.4725572916668,
+      "referenceUs": 6645.075765625,
+      "ratio": 0.1902871542613235,
+      "lower": 0.16744125872880214,
+      "upper": 0.2133905204999329,
+      "managedAllocatedBytes": 306162.25,
+      "referenceAllocatedBytes": 9256953,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "Preparation": {
+      "id": "Preparation",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1192682.5625,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6189304.0625,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.19270059290288746
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1322667.125,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6536419.46875,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.20235346451119696
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1316797.6875,
+            "AllocatedBytes": 314528
+          },
+          "Reference": {
+            "Nanoseconds": 6427310.25,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.20487538897005944
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1196462.65625,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6371508.5,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.1877832629823848
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1264005.8125,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6830517.0625,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.18505272747790608
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1193184.53125,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 7282836.3125,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.16383514334958493
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1285725.65625,
+            "AllocatedBytes": 314528
+          },
+          "Reference": {
+            "Nanoseconds": 6653795.25,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.19323192372804077
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1198511.875,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6326297.25,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.18944918767451213
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1197797.375,
+            "AllocatedBytes": 314528
+          },
+          "Reference": {
+            "Nanoseconds": 6335622.25,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.1890575744158358
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1191854.09375,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6632821.125,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17969037175716088
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1188485.5625,
+            "AllocatedBytes": 314528
+          },
+          "Reference": {
+            "Nanoseconds": 7444781.90625,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.15964007777074699
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1263140.4375,
+            "AllocatedBytes": 314551
+          },
+          "Reference": {
+            "Nanoseconds": 6206620.9375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.20351499635948245
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 6673642.9375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6414802.8125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6384729.75,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6702658.53125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6536565.90625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6593396.75,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7050535.9375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6318328.8125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6417969.125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7126660.46875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6142588.96875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6984409.125,
+          "AllocatedBytes": 9227176
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 6818679.96875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6240371.4375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6800692.375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6549751.8125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6706775.21875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6415836.15625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6412615,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7226075.875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6156140.15625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6443818.25,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7007599.09375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6614075.375,
+          "AllocatedBytes": 9227176
+        }
+      ],
+      "managedStatistics": {
+        "OriginalValues": [
+          1192682.5625,
+          1322667.125,
+          1316797.6875,
+          1196462.65625,
+          1264005.8125,
+          1193184.53125,
+          1285725.65625,
+          1198511.875,
+          1197797.375,
+          1191854.09375,
+          1188485.5625,
+          1263140.4375
+        ],
+        "N": 12,
+        "Min": 1188485.5625,
+        "LowerFence": 1078493.9375,
+        "Q1": 1193059.0390625,
+        "Median": 1198154.625,
+        "Mean": 1234276.28125,
+        "Q3": 1269435.7734375,
+        "UpperFence": 1384000.875,
+        "Max": 1322667.125,
+        "InterquartileRange": 76376.734375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 15161.109874137786,
+        "Variance": 2758311031.3881392,
+        "StandardDeviation": 52519.62520228166,
+        "Skewness": 0.5620150286619837,
+        "Kurtosis": 1.476769547570233,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1234276.28125,
+          "StandardError": 15161.109874137786,
+          "Level": 12,
+          "Margin": 67269.53123976222,
+          "Lower": 1167006.7500102378,
+          "Upper": 1301545.8124897622
+        },
+        "Percentiles": {
+          "P0": 1188485.5625,
+          "P25": 1193059.0390625,
+          "P50": 1198154.625,
+          "P67": 1263460.62625,
+          "P80": 1281381.6875,
+          "P85": 1296600.8671875,
+          "P90": 1313690.484375,
+          "P95": 1319438.9343750002,
+          "P100": 1322667.125
+        }
+      },
+      "referenceStatistics": [
+        {
+          "OriginalValues": [
+            6673642.9375,
+            6414802.8125,
+            6384729.75,
+            6702658.53125,
+            6536565.90625,
+            6593396.75,
+            7050535.9375,
+            6318328.8125,
+            6417969.125,
+            7126660.46875,
+            6142588.96875,
+            6984409.125
+          ],
+          "N": 12,
+          "Min": 6142588.96875,
+          "LowerFence": 5858567.09765625,
+          "Q1": 6407284.546875,
+          "Median": 6564981.328125,
+          "Mean": 6612190.760416667,
+          "Q3": 6773096.1796875,
+          "UpperFence": 7321813.62890625,
+          "Max": 7126660.46875,
+          "InterquartileRange": 365811.6328125,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 89133.38876740799,
+          "Variance": 95337131917.9427,
+          "StandardDeviation": 308767.1159918794,
+          "Skewness": 0.33058616780244326,
+          "Kurtosis": 1.7235824074449455,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6612190.760416667,
+            "StandardError": 89133.38876740799,
+            "Level": 12,
+            "Margin": 395483.0042108651,
+            "Lower": 6216707.756205802,
+            "Upper": 7007673.764627532
+          },
+          "Percentiles": {
+            "P0": 6142588.96875,
+            "P25": 6407284.546875,
+            "P50": 6564981.328125,
+            "P67": 6684378.7071875,
+            "P80": 6928059.006250001,
+            "P85": 7007553.509375,
+            "P90": 7043923.256250001,
+            "P95": 7084791.9765625,
+            "P100": 7126660.46875
+          }
+        },
+        {
+          "OriginalValues": [
+            6189304.0625,
+            6536419.46875,
+            6427310.25,
+            6371508.5,
+            6830517.0625,
+            7282836.3125,
+            6653795.25,
+            6326297.25,
+            6335622.25,
+            6632821.125,
+            7444781.90625,
+            6206620.9375
+          ],
+          "N": 12,
+          "Min": 6189304.0625,
+          "LowerFence": 5786263.9453125,
+          "Q1": 6333291,
+          "Median": 6481864.859375,
+          "Mean": 6603152.864583333,
+          "Q3": 6697975.703125,
+          "UpperFence": 7245002.7578125,
+          "Max": 7444781.90625,
+          "InterquartileRange": 364684.703125,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            7282836.3125,
+            7444781.90625
+          ],
+          "AllOutliers": [
+            7282836.3125,
+            7444781.90625
+          ],
+          "StandardError": 116489.41662923656,
+          "Variance": 162837410239.43823,
+          "StandardDeviation": 403531.1762917931,
+          "Skewness": 0.9261644636025708,
+          "Kurtosis": 2.4725636287836688,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6603152.864583333,
+            "StandardError": 116489.41662923656,
+            "Level": 12,
+            "Margin": 516861.1345802116,
+            "Lower": 6086291.730003121,
+            "Upper": 7120013.999163545
+          },
+          "Percentiles": {
+            "P0": 6189304.0625,
+            "P25": 6333291,
+            "P50": 6481864.859375,
+            "P67": 6640581.55125,
+            "P80": 6795172.7,
+            "P85": 6988828.799999999,
+            "P90": 7237604.3875,
+            "P95": 7355711.8296875,
+            "P100": 7444781.90625
+          }
+        },
+        {
+          "OriginalValues": [
+            6818679.96875,
+            6240371.4375,
+            6800692.375,
+            6549751.8125,
+            6706775.21875,
+            6415836.15625,
+            6412615,
+            7226075.875,
+            6156140.15625,
+            6443818.25,
+            7007599.09375,
+            6614075.375
+          ],
+          "N": 12,
+          "Min": 6156140.15625,
+          "LowerFence": 5829793.2578125,
+          "Q1": 6415030.8671875,
+          "Median": 6581913.59375,
+          "Mean": 6616035.893229167,
+          "Q3": 6805189.2734375,
+          "UpperFence": 7390426.8828125,
+          "Max": 7226075.875,
+          "InterquartileRange": 390158.40625,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 90328.1470808785,
+          "Variance": 97910089860.7778,
+          "StandardDeviation": 312905.8801952718,
+          "Skewness": 0.3544236830368315,
+          "Kurtosis": 2.0322797262831727,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6616035.893229167,
+            "StandardError": 90328.1470808785,
+            "Level": 12,
+            "Margin": 400784.12216061814,
+            "Lower": 6215251.771068549,
+            "Upper": 7016820.015389785
+          },
+          "Percentiles": {
+            "P0": 6156140.15625,
+            "P25": 6415030.8671875,
+            "P50": 6581913.59375,
+            "P67": 6741524.5665625,
+            "P80": 6815082.45,
+            "P85": 6884801.6625,
+            "P90": 6988707.181249999,
+            "P95": 7105913.645312499,
+            "P100": 7226075.875
+          }
+        }
+      ],
+      "logRatioStatistics": {
+        "OriginalValues": [
+          -1.6466176267482442,
+          -1.5977392864270592,
+          -1.5853533433473552,
+          -1.6724668376790799,
+          -1.687114481118327,
+          -1.8088945802120393,
+          -1.6438641341662157,
+          -1.6636344293361043,
+          -1.6657036837729244,
+          -1.7165200661652822,
+          -1.8348335116384364,
+          -1.592015584630434
+        ],
+        "N": 12,
+        "Min": -1.8348335116384364,
+        "LowerFence": -1.7876653101030247,
+        "Q1": -1.6944658773800658,
+        "Median": -1.6646690565545144,
+        "Mean": -1.6762297971034588,
+        "Q3": -1.6323329222314267,
+        "UpperFence": -1.539133489508468,
+        "Max": -1.5853533433473552,
+        "InterquartileRange": 0.062132955148639146,
+        "LowerOutliers": [
+          -1.8348335116384364,
+          -1.8088945802120393
+        ],
+        "UpperOutliers": [],
+        "AllOutliers": [
+          -1.8348335116384364,
+          -1.8088945802120393
+        ],
+        "StandardError": 0.0227330035994062,
+        "Variance": 0.006201473431807381,
+        "StandardDeviation": 0.0787494344856354,
+        "Skewness": -0.7673395878330754,
+        "Kurtosis": 2.391222210243788,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": -1.6762297971034588,
+          "StandardError": 0.0227330035994062,
+          "Level": 12,
+          "Margin": 0.10086586724184995,
+          "Lower": -1.7770956643453086,
+          "Upper": -1.575363929861609
+        },
+        "Percentiles": {
+          "P0": -1.8348335116384364,
+          "P25": -1.6944658773800658,
+          "P50": -1.6646690565545144,
+          "P67": -1.6455988344928936,
+          "P80": -1.6069642559748905,
+          "P85": -1.5957359907982402,
+          "P90": -1.5925879548100965,
+          "P95": -1.5890175760530485,
+          "P100": -1.5853533433473552
+        }
+      },
+      "confidenceViews": [
+        {
+          "view": "allActual",
+          "statistics": {
+            "OriginalValues": [
+              1192682.5625,
+              1322667.125,
+              1316797.6875,
+              1196462.65625,
+              1264005.8125,
+              1193184.53125,
+              1285725.65625,
+              1198511.875,
+              1197797.375,
+              1191854.09375,
+              1188485.5625,
+              1263140.4375
+            ],
+            "N": 12,
+            "Min": 1188485.5625,
+            "LowerFence": 1078493.9375,
+            "Q1": 1193059.0390625,
+            "Median": 1198154.625,
+            "Mean": 1234276.28125,
+            "Q3": 1269435.7734375,
+            "UpperFence": 1384000.875,
+            "Max": 1322667.125,
+            "InterquartileRange": 76376.734375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 15161.109874137786,
+            "Variance": 2758311031.3881392,
+            "StandardDeviation": 52519.62520228166,
+            "Skewness": 0.5620150286619837,
+            "Kurtosis": 1.476769547570233,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 1234276.28125,
+              "StandardError": 15161.109874137786,
+              "Level": 12,
+              "Margin": 67269.53123976222,
+              "Lower": 1167006.7500102378,
+              "Upper": 1301545.8124897622
+            },
+            "Percentiles": {
+              "P0": 1188485.5625,
+              "P25": 1193059.0390625,
+              "P50": 1198154.625,
+              "P67": 1263460.62625,
+              "P80": 1281381.6875,
+              "P85": 1296600.8671875,
+              "P90": 1313690.484375,
+              "P95": 1319438.9343750002,
+              "P100": 1322667.125
+            }
+          },
+          "referenceConfidenceLower": 6086291.730003121,
+          "referenceConfidenceUpper": 7120013.999163545,
+          "ratioLower": 0.16390512015107514,
+          "ratioUpper": 0.21384873913842029
+        },
+        {
+          "view": "upperOutlierDiagnostic",
+          "statistics": {
+            "OriginalValues": [
+              1192682.5625,
+              1322667.125,
+              1316797.6875,
+              1196462.65625,
+              1264005.8125,
+              1193184.53125,
+              1285725.65625,
+              1198511.875,
+              1197797.375,
+              1191854.09375,
+              1188485.5625,
+              1263140.4375
+            ],
+            "N": 12,
+            "Min": 1188485.5625,
+            "LowerFence": 1078493.9375,
+            "Q1": 1193059.0390625,
+            "Median": 1198154.625,
+            "Mean": 1234276.28125,
+            "Q3": 1269435.7734375,
+            "UpperFence": 1384000.875,
+            "Max": 1322667.125,
+            "InterquartileRange": 76376.734375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 15161.109874137786,
+            "Variance": 2758311031.3881392,
+            "StandardDeviation": 52519.62520228166,
+            "Skewness": 0.5620150286619837,
+            "Kurtosis": 1.476769547570233,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 1234276.28125,
+              "StandardError": 15161.109874137786,
+              "Level": 12,
+              "Margin": 67269.53123976222,
+              "Lower": 1167006.7500102378,
+              "Upper": 1301545.8124897622
+            },
+            "Percentiles": {
+              "P0": 1188485.5625,
+              "P25": 1193059.0390625,
+              "P50": 1198154.625,
+              "P67": 1263460.62625,
+              "P80": 1281381.6875,
+              "P85": 1296600.8671875,
+              "P90": 1313690.484375,
+              "P95": 1319438.9343750002,
+              "P100": 1322667.125
+            }
+          },
+          "referenceConfidenceLower": 6086291.730003121,
+          "referenceConfidenceUpper": 7120013.999163545,
+          "ratioLower": 0.16390512015107514,
+          "ratioUpper": 0.21384873913842029
+        }
+      ],
+      "managedUs": 1234.27628125,
+      "referenceUs": 6603.152864583333,
+      "ratio": 0.18692226373709497,
+      "lower": 0.16390512015107514,
+      "upper": 0.21384873913842029,
+      "managedAllocatedBytes": 314543.3333333333,
+      "referenceAllocatedBytes": 9227176,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "PreparedDraw": {
+      "id": "PreparedDraw",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16819.21875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 95529.34375,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.17606337581482653
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16399.1875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 94235.8125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.17402288010197822
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16691.84375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 93833.03125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.1778887831677078
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16261.1875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 225465.78125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.07212264056144883
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16567.28125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 80440.25,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.20595760517899933
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16494.0625,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 79751.0625,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.2068193448833362
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16161.34375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 80161.0625,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.20161089743539765
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16590.125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 79361.40625,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.2090452498754708
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16178.875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 79725.09375,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.2029332828473469
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16463.375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 79873.75,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.20611746662702077
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 16134.4375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 79887.53125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.20196440229838747
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 16226.75,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 80003,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.20282676899616264
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 94535.34375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 93958.21875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94044.59375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 93950.6875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94095.9375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94612.3125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94571.625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 95075.1875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94357.875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94879.3125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94612.625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 94565.0625,
+          "AllocatedBytes": 33433
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 80151.375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80032.125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80100.03125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79862.5,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80085.3125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79819.3125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80177.03125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 127685.1875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79821.78125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79675.65625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79877.8125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 79548.25,
+          "AllocatedBytes": 33433
+        }
+      ],
+      "managedStatistics": {
+        "OriginalValues": [
+          16819.21875,
+          16399.1875,
+          16691.84375,
+          16261.1875,
+          16567.28125,
+          16494.0625,
+          16161.34375,
+          16590.125,
+          16178.875,
+          16463.375,
+          16134.4375,
+          16226.75
+        ],
+        "N": 12,
+        "Min": 16134.4375,
+        "LowerFence": 15677.46484375,
+        "Q1": 16214.78125,
+        "Median": 16431.28125,
+        "Mean": 16415.640625,
+        "Q3": 16572.9921875,
+        "UpperFence": 17110.30859375,
+        "Max": 16819.21875,
+        "InterquartileRange": 358.2109375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 65.17098183185907,
+        "Variance": 50967.082475142044,
+        "StandardDeviation": 225.75890342385622,
+        "Skewness": 0.244881721072835,
+        "Kurtosis": 1.5804809463747018,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 16415.640625,
+          "StandardError": 65.17098183185907,
+          "Level": 12,
+          "Margin": 289.16229976953053,
+          "Lower": 16126.47832523047,
+          "Upper": 16704.80292476953
+        },
+        "Percentiles": {
+          "P0": 16134.4375,
+          "P25": 16214.78125,
+          "P50": 16431.28125,
+          "P67": 16521.1534375,
+          "P80": 16585.55625,
+          "P85": 16625.7265625,
+          "P90": 16681.671875,
+          "P95": 16749.1625,
+          "P100": 16819.21875
+        }
+      },
+      "referenceStatistics": [
+        {
+          "OriginalValues": [
+            94535.34375,
+            93958.21875,
+            94044.59375,
+            93950.6875,
+            94095.9375,
+            94612.3125,
+            94571.625,
+            95075.1875,
+            94357.875,
+            94879.3125,
+            94612.625,
+            94565.0625
+          ],
+          "N": 12,
+          "Min": 93950.6875,
+          "LowerFence": 93289.16796875,
+          "Q1": 94083.1015625,
+          "Median": 94550.203125,
+          "Mean": 94438.23177083333,
+          "Q3": 94612.390625,
+          "UpperFence": 95406.32421875,
+          "Max": 95075.1875,
+          "InterquartileRange": 529.2890625,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 104.84396123036328,
+          "Variance": 131907.074477687,
+          "StandardDeviation": 363.19013543554155,
+          "Skewness": 0.055723042380518964,
+          "Kurtosis": 1.6874598554498794,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 94438.23177083333,
+            "StandardError": 104.84396123036328,
+            "Level": 12,
+            "Margin": 465.1904896037458,
+            "Lower": 93973.04128122958,
+            "Upper": 94903.42226043707
+          },
+          "Percentiles": {
+            "P0": 93950.6875,
+            "P25": 94083.1015625,
+            "P50": 94550.203125,
+            "P67": 94586.679375,
+            "P80": 94612.5625,
+            "P85": 94705.965625,
+            "P90": 94852.64375,
+            "P95": 94967.45625,
+            "P100": 95075.1875
+          }
+        },
+        {
+          "OriginalValues": [
+            95529.34375,
+            94235.8125,
+            93833.03125,
+            225465.78125,
+            80440.25,
+            79751.0625,
+            80161.0625,
+            79361.40625,
+            79725.09375,
+            79873.75,
+            79887.53125,
+            80003
+          ],
+          "N": 12,
+          "Min": 79361.40625,
+          "LowerFence": 58707.10546875,
+          "Q1": 79843.078125,
+          "Median": 80082.03125,
+          "Mean": 95688.92708333333,
+          "Q3": 93933.7265625,
+          "UpperFence": 115069.69921875,
+          "Max": 225465.78125,
+          "InterquartileRange": 14090.6484375,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            225465.78125
+          ],
+          "AllOutliers": [
+            225465.78125
+          ],
+          "StandardError": 11947.660367689756,
+          "Variance": 1712959059.139974,
+          "StandardDeviation": 41387.90957683142,
+          "Skewness": 2.5320928137003835,
+          "Kurtosis": 8.070043344087342,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 95688.92708333333,
+            "StandardError": 11947.660367689756,
+            "Level": 12,
+            "Margin": 53011.52217868761,
+            "Lower": 42677.404904645715,
+            "Upper": 148700.44926202093
+          },
+          "Percentiles": {
+            "P0": 79361.40625,
+            "P25": 79843.078125,
+            "P50": 80082.03125,
+            "P67": 85395.57906250001,
+            "P80": 94155.25625,
+            "P85": 94688.5484375,
+            "P90": 95399.990625,
+            "P95": 154000.74062499992,
+            "P100": 225465.78125
+          }
+        },
+        {
+          "OriginalValues": [
+            80151.375,
+            80032.125,
+            80100.03125,
+            79862.5,
+            80085.3125,
+            79819.3125,
+            80177.03125,
+            127685.1875,
+            79821.78125,
+            79675.65625,
+            79877.8125,
+            79548.25
+          ],
+          "N": 12,
+          "Min": 79548.25,
+          "LowerFence": 79383.609375,
+          "Q1": 79821.1640625,
+          "Median": 79954.96875,
+          "Mean": 83903.03125,
+          "Q3": 80112.8671875,
+          "UpperFence": 80550.421875,
+          "Max": 127685.1875,
+          "InterquartileRange": 291.703125,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            127685.1875
+          ],
+          "AllOutliers": [
+            127685.1875
+          ],
+          "StandardError": 3980.590565912647,
+          "Variance": 190141215.0411932,
+          "StandardDeviation": 13789.170208580108,
+          "Skewness": 2.64524364896015,
+          "Kurtosis": 8.475897488647519,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 83903.03125,
+            "StandardError": 3980.590565912647,
+            "Level": 12,
+            "Margin": 17661.798090596043,
+            "Lower": 66241.23315940396,
+            "Upper": 101564.82934059604
+          },
+          "Percentiles": {
+            "P0": 79548.25,
+            "P25": 79821.1640625,
+            "P50": 79954.96875,
+            "P67": 80090.7584375,
+            "P80": 80141.10625,
+            "P85": 80160.3546875,
+            "P90": 80174.465625,
+            "P95": 101555.70156249998,
+            "P100": 127685.1875
+          }
+        }
+      ],
+      "logRatioStatistics": {
+        "OriginalValues": [
+          -1.7369112589038094,
+          -1.7485684935733412,
+          -1.7265967376320182,
+          -2.6293872678751127,
+          -1.5800849314742478,
+          -1.5759095967995338,
+          -1.6014156895067526,
+          -1.5652045438702935,
+          -1.5948780098839437,
+          -1.579309046365059,
+          -1.5996638233562082,
+          -1.5954030189534512
+        ],
+        "N": 12,
+        "Min": -2.6293872678751127,
+        "LowerFence": -1.9531019795794893,
+        "Q1": -1.729175367949966,
+        "Median": -1.5975334211548295,
+        "Mean": -1.7111110348494811,
+        "Q3": -1.5798909601969504,
+        "UpperFence": -1.355964348567427,
+        "Max": -1.5652045438702935,
+        "InterquartileRange": 0.14928440775301555,
+        "LowerOutliers": [
+          -2.6293872678751127
+        ],
+        "UpperOutliers": [],
+        "AllOutliers": [
+          -2.6293872678751127
+        ],
+        "StandardError": 0.08576745813867767,
+        "Variance": 0.08827268250683788,
+        "StandardDeviation": 0.29710719026445304,
+        "Skewness": -2.409947445536639,
+        "Kurtosis": 7.626197846017472,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": -1.7111110348494811,
+          "StandardError": 0.08576745813867767,
+          "Level": 12,
+          "Margin": 0.38054843956091905,
+          "Lower": -2.0916594744104002,
+          "Upper": -1.330562595288562
+        },
+        "Percentiles": {
+          "P0": -2.6293872678751127,
+          "P25": -1.729175367949966,
+          "P50": -1.5975334211548295,
+          "P67": -1.589404570872356,
+          "P80": -1.5794642233868967,
+          "P85": -1.5781192390171253,
+          "P90": -1.5762495417560864,
+          "P95": -1.5710923229813756,
+          "P100": -1.5652045438702935
+        }
+      },
+      "confidenceViews": [
+        {
+          "view": "allActual",
+          "statistics": {
+            "OriginalValues": [
+              16819.21875,
+              16399.1875,
+              16691.84375,
+              16261.1875,
+              16567.28125,
+              16494.0625,
+              16161.34375,
+              16590.125,
+              16178.875,
+              16463.375,
+              16134.4375,
+              16226.75
+            ],
+            "N": 12,
+            "Min": 16134.4375,
+            "LowerFence": 15677.46484375,
+            "Q1": 16214.78125,
+            "Median": 16431.28125,
+            "Mean": 16415.640625,
+            "Q3": 16572.9921875,
+            "UpperFence": 17110.30859375,
+            "Max": 16819.21875,
+            "InterquartileRange": 358.2109375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 65.17098183185907,
+            "Variance": 50967.082475142044,
+            "StandardDeviation": 225.75890342385622,
+            "Skewness": 0.244881721072835,
+            "Kurtosis": 1.5804809463747018,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 16415.640625,
+              "StandardError": 65.17098183185907,
+              "Level": 12,
+              "Margin": 289.16229976953053,
+              "Lower": 16126.47832523047,
+              "Upper": 16704.80292476953
+            },
+            "Percentiles": {
+              "P0": 16134.4375,
+              "P25": 16214.78125,
+              "P50": 16431.28125,
+              "P67": 16521.1534375,
+              "P80": 16585.55625,
+              "P85": 16625.7265625,
+              "P90": 16681.671875,
+              "P95": 16749.1625,
+              "P100": 16819.21875
+            }
+          },
+          "referenceConfidenceLower": 42677.404904645715,
+          "referenceConfidenceUpper": 148700.44926202093,
+          "ratioLower": 0.10844942570963219,
+          "ratioUpper": 0.39142030688354024
+        },
+        {
+          "view": "upperOutlierDiagnostic",
+          "statistics": {
+            "OriginalValues": [
+              16819.21875,
+              16399.1875,
+              16691.84375,
+              16261.1875,
+              16567.28125,
+              16494.0625,
+              16161.34375,
+              16590.125,
+              16178.875,
+              16463.375,
+              16134.4375,
+              16226.75
+            ],
+            "N": 12,
+            "Min": 16134.4375,
+            "LowerFence": 15677.46484375,
+            "Q1": 16214.78125,
+            "Median": 16431.28125,
+            "Mean": 16415.640625,
+            "Q3": 16572.9921875,
+            "UpperFence": 17110.30859375,
+            "Max": 16819.21875,
+            "InterquartileRange": 358.2109375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 65.17098183185907,
+            "Variance": 50967.082475142044,
+            "StandardDeviation": 225.75890342385622,
+            "Skewness": 0.244881721072835,
+            "Kurtosis": 1.5804809463747018,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 16415.640625,
+              "StandardError": 65.17098183185907,
+              "Level": 12,
+              "Margin": 289.16229976953053,
+              "Lower": 16126.47832523047,
+              "Upper": 16704.80292476953
+            },
+            "Percentiles": {
+              "P0": 16134.4375,
+              "P25": 16214.78125,
+              "P50": 16431.28125,
+              "P67": 16521.1534375,
+              "P80": 16585.55625,
+              "P85": 16625.7265625,
+              "P90": 16681.671875,
+              "P95": 16749.1625,
+              "P100": 16819.21875
+            }
+          },
+          "referenceConfidenceLower": 42677.404904645715,
+          "referenceConfidenceUpper": 148700.44926202093,
+          "ratioLower": 0.10844942570963219,
+          "ratioUpper": 0.39142030688354024
+        }
+      ],
+      "managedUs": 16.415640625,
+      "referenceUs": 83.90303125,
+      "ratio": 0.1956501497077914,
+      "lower": 0.10844942570963219,
+      "upper": 0.39142030688354024,
+      "managedAllocatedBytes": 169,
+      "referenceAllocatedBytes": 33433,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "PrepareDraw8": {
+      "id": "PrepareDraw8",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1338050.40625,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 7776470.8125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17206396558438827
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1339361.75,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 7195048.875,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.18615047281384867
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1411348.25,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 6841897.90625,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.2062802265305287
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1341005.59375,
+            "AllocatedBytes": 315919
+          },
+          "Reference": {
+            "Nanoseconds": 7902659.84375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.1696904106040405
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1378668,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 6801180.0625,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.20271011608729922
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1533480.78125,
+            "AllocatedBytes": 315919
+          },
+          "Reference": {
+            "Nanoseconds": 8212248.375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.18673093058391577
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1333743.65625,
+            "AllocatedBytes": 315873
+          },
+          "Reference": {
+            "Nanoseconds": 7450863.46875,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17900524708900034
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1338111.53125,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 6936304.8125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.1929141765567414
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1337806.09375,
+            "AllocatedBytes": 315873
+          },
+          "Reference": {
+            "Nanoseconds": 7576963.03125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17656230975820097
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1340848.46875,
+            "AllocatedBytes": 315896
+          },
+          "Reference": {
+            "Nanoseconds": 7546919.6875,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17766831028702398
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1329691.59375,
+            "AllocatedBytes": 315873
+          },
+          "Reference": {
+            "Nanoseconds": 8075539,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.16465669892127324
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1336860.90625,
+            "AllocatedBytes": 315919
+          },
+          "Reference": {
+            "Nanoseconds": 6826572.59375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.19583193291959564
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 8668004.78125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 6999240.5,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8126198.46875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7444109.75,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 6786494.3125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7739907.625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7792455,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 6811200.78125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7192496.25,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7268920.40625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8025583,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7482558.90625,
+          "AllocatedBytes": 9494633
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 7097703.53125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7401050.1875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7512444.9375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7322416.90625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7511442.46875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7038643.0625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8021764.0625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7166146.3125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8341928.375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 6868193.78125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7564330.375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7228497.84375,
+          "AllocatedBytes": 9494633
+        }
+      ],
+      "managedStatistics": {
+        "OriginalValues": [
+          1338050.40625,
+          1339361.75,
+          1411348.25,
+          1341005.59375,
+          1378668,
+          1533480.78125,
+          1333743.65625,
+          1338111.53125,
+          1337806.09375,
+          1340848.46875,
+          1329691.59375,
+          1336860.90625
+        ],
+        "N": 12,
+        "Min": 1329691.59375,
+        "LowerFence": 1318292.69921875,
+        "Q1": 1337569.796875,
+        "Median": 1338736.640625,
+        "Mean": 1363248.0859375,
+        "Q3": 1350421.1953125,
+        "UpperFence": 1369698.29296875,
+        "Max": 1533480.78125,
+        "InterquartileRange": 12851.3984375,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          1378668,
+          1411348.25,
+          1533480.78125
+        ],
+        "AllOutliers": [
+          1378668,
+          1411348.25,
+          1533480.78125
+        ],
+        "StandardError": 16900.891055921442,
+        "Variance": 3427681421.8095036,
+        "StandardDeviation": 58546.40400408469,
+        "Skewness": 2.0273276287967046,
+        "Kurtosis": 6.027148973307632,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1363248.0859375,
+          "StandardError": 16900.891055921442,
+          "Level": 12,
+          "Margin": 74988.9043944932,
+          "Lower": 1288259.1815430068,
+          "Upper": 1438236.9903319932
+        },
+        "Percentiles": {
+          "P0": 1329691.59375,
+          "P25": 1337569.796875,
+          "P50": 1338736.640625,
+          "P67": 1340906.605,
+          "P80": 1371135.51875,
+          "P85": 1390106.0875,
+          "P90": 1408080.225,
+          "P95": 1466307.8890625,
+          "P100": 1533480.78125
+        }
+      },
+      "referenceStatistics": [
+        {
+          "OriginalValues": [
+            8668004.78125,
+            6999240.5,
+            8126198.46875,
+            7444109.75,
+            6786494.3125,
+            7739907.625,
+            7792455,
+            6811200.78125,
+            7192496.25,
+            7268920.40625,
+            8025583,
+            7482558.90625
+          ],
+          "N": 12,
+          "Min": 6786494.3125,
+          "LowerFence": 6084350.28125,
+          "Q1": 7144182.3125,
+          "Median": 7463334.328125,
+          "Mean": 7528097.481770833,
+          "Q3": 7850737,
+          "UpperFence": 8910569.03125,
+          "Max": 8668004.78125,
+          "InterquartileRange": 706554.6875,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 164037.32502885634,
+          "Variance": 322898928031.472,
+          "StandardDeviation": 568241.9625753381,
+          "Skewness": 0.3933672081534618,
+          "Kurtosis": 2.0353935906654286,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 7528097.481770833,
+            "StandardError": 164037.32502885634,
+            "Level": 12,
+            "Margin": 727830.2216738751,
+            "Lower": 6800267.260096958,
+            "Upper": 8255927.703444708
+          },
+          "Percentiles": {
+            "P0": 6786494.3125,
+            "P25": 7144182.3125,
+            "P50": 7463334.328125,
+            "P67": 7759350.1537500005,
+            "P80": 7978957.4,
+            "P85": 8060798.4140625,
+            "P90": 8116136.921875,
+            "P95": 8370011.309374999,
+            "P100": 8668004.78125
+          }
+        },
+        {
+          "OriginalValues": [
+            7776470.8125,
+            7195048.875,
+            6841897.90625,
+            7902659.84375,
+            6801180.0625,
+            8212248.375,
+            7450863.46875,
+            6936304.8125,
+            7576963.03125,
+            7546919.6875,
+            8075539,
+            6826572.59375
+          ],
+          "N": 12,
+          "Min": 6801180.0625,
+          "LowerFence": 5569730.609375,
+          "Q1": 6912703.0859375,
+          "Median": 7498891.578125,
+          "Mean": 7428555.705729167,
+          "Q3": 7808018.0703125,
+          "UpperFence": 9150990.546875,
+          "Max": 8212248.375,
+          "InterquartileRange": 895314.984375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 145958.20440774775,
+          "Variance": 255645569207.20642,
+          "StandardDeviation": 505614.05163148546,
+          "Skewness": 0.06882780555159347,
+          "Kurtosis": 1.3830490441415666,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 7428555.705729167,
+            "StandardError": 145958.20440774775,
+            "Level": 12,
+            "Margin": 647613.537044231,
+            "Lower": 6780942.168684936,
+            "Upper": 8076169.242773398
+          },
+          "Percentiles": {
+            "P0": 6801180.0625,
+            "P25": 6912703.0859375,
+            "P50": 7498891.578125,
+            "P67": 7650780.9103125,
+            "P80": 7877422.0375,
+            "P85": 7963167.5484375,
+            "P90": 8058251.084375,
+            "P95": 8137058.21875,
+            "P100": 8212248.375
+          }
+        },
+        {
+          "OriginalValues": [
+            7097703.53125,
+            7401050.1875,
+            7512444.9375,
+            7322416.90625,
+            7511442.46875,
+            7038643.0625,
+            8021764.0625,
+            7166146.3125,
+            8341928.375,
+            6868193.78125,
+            7564330.375,
+            7228497.84375
+          ],
+          "N": 12,
+          "Min": 6868193.78125,
+          "LowerFence": 6584464.59765625,
+          "Q1": 7149035.6171875,
+          "Median": 7361733.546875,
+          "Mean": 7422880.153645833,
+          "Q3": 7525416.296875,
+          "UpperFence": 8089987.31640625,
+          "Max": 8341928.375,
+          "InterquartileRange": 376380.6796875,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            8341928.375
+          ],
+          "AllOutliers": [
+            8341928.375
+          ],
+          "StandardError": 120431.86107929866,
+          "Variance": 174045997956.28186,
+          "StandardDeviation": 417188.2044788441,
+          "Skewness": 0.812843920768686,
+          "Kurtosis": 2.6852923704038045,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 7422880.153645833,
+            "StandardError": 120431.86107929866,
+            "Level": 12,
+            "Margin": 534353.6791429864,
+            "Lower": 6888526.474502847,
+            "Upper": 7957233.832788819
+          },
+          "Percentiles": {
+            "P0": 6868193.78125,
+            "P25": 7149035.6171875,
+            "P50": 7361733.546875,
+            "P67": 7511813.3821875,
+            "P80": 7553953.2875,
+            "P85": 7724432.165624999,
+            "P90": 7976020.69375,
+            "P95": 8165838.003125,
+            "P100": 8341928.375
+          }
+        }
+      ],
+      "logRatioStatistics": {
+        "OriginalValues": [
+          -1.7598889783712306,
+          -1.6811999387050538,
+          -1.5785197116298797,
+          -1.7737796162699953,
+          -1.5959783200733817,
+          -1.6780865721834466,
+          -1.720340160224639,
+          -1.6455098700303448,
+          -1.7340814351176332,
+          -1.7278368923807172,
+          -1.803892585161274,
+          -1.630498472706375
+        ],
+        "N": 12,
+        "Min": -1.803892585161274,
+        "LowerFence": -1.888697771278553,
+        "Q1": -1.7405333209310325,
+        "Median": -1.7007700494648463,
+        "Mean": -1.6941343794044978,
+        "Q3": -1.6417570206993521,
+        "UpperFence": -1.4935925703518316,
+        "Max": -1.5785197116298797,
+        "InterquartileRange": 0.09877630023168038,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.020592057007030977,
+        "Variance": 0.005088393741369762,
+        "StandardDeviation": 0.07133297793706472,
+        "Skewness": 0.1465361584268874,
+        "Kurtosis": 1.6155288836175437,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": -1.6941343794044978,
+          "StandardError": 0.020592057007030977,
+          "Level": 12,
+          "Margin": 0.09136653144954617,
+          "Lower": -1.785500910854044,
+          "Upper": -1.6027678479549516
+        },
+        "Percentiles": {
+          "P0": -1.803892585161274,
+          "P25": -1.7405333209310325,
+          "P50": -1.7007700494648463,
+          "P67": -1.6660331923867988,
+          "P80": -1.633500752171169,
+          "P85": -1.6184164192848272,
+          "P90": -1.599430335336681,
+          "P95": -1.5881219462738057,
+          "P100": -1.5785197116298797
+        }
+      },
+      "confidenceViews": [
+        {
+          "view": "allActual",
+          "statistics": {
+            "OriginalValues": [
+              1338050.40625,
+              1339361.75,
+              1411348.25,
+              1341005.59375,
+              1378668,
+              1533480.78125,
+              1333743.65625,
+              1338111.53125,
+              1337806.09375,
+              1340848.46875,
+              1329691.59375,
+              1336860.90625
+            ],
+            "N": 12,
+            "Min": 1329691.59375,
+            "LowerFence": 1318292.69921875,
+            "Q1": 1337569.796875,
+            "Median": 1338736.640625,
+            "Mean": 1363248.0859375,
+            "Q3": 1350421.1953125,
+            "UpperFence": 1369698.29296875,
+            "Max": 1533480.78125,
+            "InterquartileRange": 12851.3984375,
+            "LowerOutliers": [],
+            "UpperOutliers": [
+              1378668,
+              1411348.25,
+              1533480.78125
+            ],
+            "AllOutliers": [
+              1378668,
+              1411348.25,
+              1533480.78125
+            ],
+            "StandardError": 16900.891055921442,
+            "Variance": 3427681421.8095036,
+            "StandardDeviation": 58546.40400408469,
+            "Skewness": 2.0273276287967046,
+            "Kurtosis": 6.027148973307632,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 1363248.0859375,
+              "StandardError": 16900.891055921442,
+              "Level": 12,
+              "Margin": 74988.9043944932,
+              "Lower": 1288259.1815430068,
+              "Upper": 1438236.9903319932
+            },
+            "Percentiles": {
+              "P0": 1329691.59375,
+              "P25": 1337569.796875,
+              "P50": 1338736.640625,
+              "P67": 1340906.605,
+              "P80": 1371135.51875,
+              "P85": 1390106.0875,
+              "P90": 1408080.225,
+              "P95": 1466307.8890625,
+              "P100": 1533480.78125
+            }
+          },
+          "referenceConfidenceLower": 6780942.168684936,
+          "referenceConfidenceUpper": 8255927.703444708,
+          "ratioLower": 0.15604051147462117,
+          "ratioUpper": 0.2120998755857135
+        },
+        {
+          "view": "upperOutlierDiagnostic",
+          "statistics": {
+            "OriginalValues": [
+              1338050.40625,
+              1339361.75,
+              1341005.59375,
+              1333743.65625,
+              1338111.53125,
+              1337806.09375,
+              1340848.46875,
+              1329691.59375,
+              1336860.90625
+            ],
+            "N": 9,
+            "Min": 1329691.59375,
+            "LowerFence": 1333109.640625,
+            "Q1": 1336860.90625,
+            "Median": 1338050.40625,
+            "Mean": 1337275.5555555555,
+            "Q3": 1339361.75,
+            "UpperFence": 1343113.015625,
+            "Max": 1341005.59375,
+            "InterquartileRange": 2500.84375,
+            "LowerOutliers": [
+              1329691.59375
+            ],
+            "UpperOutliers": [],
+            "AllOutliers": [
+              1329691.59375
+            ],
+            "StandardError": 1194.748602348202,
+            "Variance": 12846818.005316839,
+            "StandardDeviation": 3584.245807044606,
+            "Skewness": -0.8989682422251398,
+            "Kurtosis": 2.5853502944101865,
+            "ConfidenceInterval": {
+              "N": 9,
+              "Mean": 1337275.5555555555,
+              "StandardError": 1194.748602348202,
+              "Level": 12,
+              "Margin": 6023.092617256086,
+              "Lower": 1331252.4629382994,
+              "Upper": 1343298.6481728116
+            },
+            "Percentiles": {
+              "P0": 1329691.59375,
+              "P25": 1336860.90625,
+              "P50": 1338050.40625,
+              "P67": 1338561.6099999999,
+              "P80": 1339956.4375,
+              "P85": 1340551.125,
+              "P90": 1340879.8937499998,
+              "P95": 1340942.74375,
+              "P100": 1341005.59375
+            }
+          },
+          "referenceConfidenceLower": 6692735.817203324,
+          "referenceConfidenceUpper": 8355059.739264892,
+          "ratioLower": 0.15933488263190176,
+          "ratioUpper": 0.20070994655428254
+        }
+      ],
+      "managedUs": 1363.2480859375,
+      "referenceUs": 7422.880153645833,
+      "ratio": 0.1836548695007456,
+      "lower": 0.15604051147462117,
+      "upper": 0.2120998755857135,
+      "managedAllocatedBytes": 315896,
+      "referenceAllocatedBytes": 9494633,
+      "status": "pass",
+      "amortizedManagedUs": 170.4060107421875,
+      "amortizedReferenceUs": 927.8600192057291
+    }
+  },
+  "pipelineChecks": {
+    "project": "Lokad.Image",
+    "caseId": "ConstrainedFit16",
+    "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "selectedSize": 16.75,
+    "fittingTrials": 30,
+    "fullWordSamplesPreserved": true,
+    "managedSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+    "historicalDirectDrawTextSha256": "9cf3afc8852807237c02b8b319899f480877c6ff143e302527631f1bd925707f",
+    "referenceOneShotLayoutFillSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "referencePreparedSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "managedExactGlyphsClustersLinesPositionsBoundsAndFit": true,
+    "referenceFrozenGlyphsClustersLinesAndFit": true,
+    "referencePositionBoundsTolerance": 0.0001,
+    "managedOwnedPreparedBytes": 4160,
+    "managedGovernedPeakBytes": 822460,
+    "borrowedRootAndInputPreserved": true,
+    "independentSurvivingOwners": true,
+    "oneShotVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "preparedVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "newFontsImagesOrSettings": 0,
+    "timingClaim": false
+  },
+  "pipelineFootprint": {
+    "managedOwnedPreparedCapacityBytes": 4160,
+    "ownedFontAndLayoutRetainedAfterPreparation": 0,
+    "managedHeapBefore": 5040096,
+    "managedHeapRetained": 5044432,
+    "managedHeapAfterDispose": 5040096,
+    "referenceHeapBefore": 5040096,
+    "referenceHeapRetained": 5062600,
+    "referenceHeapAfterRelease": 5040096,
+    "managedApproximateLiveHeapDelta": 4336,
+    "referenceApproximateLiveHeapDelta": 22504,
+    "method": "Untimed warmed-process full-GC heap observations around one live prepared owner. Raw signed values retained; includes approximate managed backing graphs, excludes unchanged idle pools in baseline. No object census or allocation-to-retention equivalence. Production's explicit admitted capacity and governed peak are separate; no reference admission model. Physical/native/JIT stack peaks unmeasured."
+  },
+  "memory": {
+    "newOwnedOrRetainedCapacity": false,
+    "newAllocations": false,
+    "ordinaryPublicAllocatedBytes": 83216,
+    "timedAdapterBytes": 24,
+    "preparedExecutionAllocatedBytes": 56,
+    "latinRetainedCapacityBytes": 2112,
+    "completeFitRetainedCapacityBytes": 4160,
+    "completeGovernedPeakBytes": 822460,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualification": {
+    "fullChecksEachOs": 6750,
+    "windows": {
+      "stage": "TDW1145",
+      "platform": "windows",
+      "productionSha256": "410a455f8fb33adf04ac7715e1150998abf621feefc85d91d74cc141dfb9adb2",
+      "full": [
+        3294,
+        2508,
+        948
+      ],
+      "total": 6750,
+      "fullLivePassed": true,
+      "focusedEachMode": {
+        "internal": 268,
+        "public": 166
+      },
+      "modes": [
+        "normal",
+        "scalar"
+      ],
+      "sameActualPackageSha256": "8ca826fc97e74973349a7c86b30d8e9e85dcc3a128315cf6fa6f75c1e08f705e",
+      "actualPackageLibrarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+      "actualConsumerPassed": true,
+      "usageExamples": 3,
+      "published020Unchanged": true,
+      "builds": {
+        "core": 1,
+        "embedded": 1,
+        "public": 1
+      },
+      "packageBuilds": 0
+    },
+    "linux": {
+      "stage": "TDW1145",
+      "platform": "linux",
+      "productionSha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+      "full": [
+        3294,
+        2508,
+        948
+      ],
+      "total": 6750,
+      "fullLivePassed": true,
+      "actualPackage": {
+        "path": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+        "sha256": "8ca826fc97e74973349a7c86b30d8e9e85dcc3a128315cf6fa6f75c1e08f705e",
+        "bytes": 468438,
+        "librarySha256": "58822411f81726ca70da4759e8b51be02cbd1dac7a098532fb8c6fe1b8cc121d",
+        "symbolsSha256": "3c35eeeb4ff9e5002622db7a9fa6c1bc74e7da080b97ec85694ad18d17815b78",
+        "actualConsumerPassed": true,
+        "usageExamples": 3
+      },
+      "timedArtifactNotRebuilt": true,
+      "coreModifiedTimeNs": 1794847407787401761,
+      "productionBuildsAfterMeasurement": 0,
+      "packageBuilds": 1,
+      "published020Verification": "Not present on VM;published artifact checked on Windows. Only0.2.1package/symbol paths written.",
+      "resume": "Original full/pack/actual-consumer commands completed successfully. Resume only terminal record after an incorrect assumed0.2.0file location;zero repeated tests/builds/packing/consumers."
+    },
+    "focusedEachMode": {
+      "internal": 268,
+      "public": 166
+    },
+    "modes": [
+      "normal",
+      "scalar"
+    ],
+    "newPublicRegressionCases": 196,
+    "newPublicRegressionDraws": 392,
+    "newPublicRegressionPixelChecks": 401408,
+    "oldBigIntegerCompositionOracleRetained": true,
+    "full16BitWordsAndFrozenFramesPassed": true,
+    "acceptedTimedArtifactRebuildsAfterMeasurement": 0,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true
+  },
+  "reuse": {
+    "preparedExecutionSourceVerbatim": true,
+    "preparedCostsProvider": "benchmarks/text-prepared-coverage-evidence.json",
+    "fontLoadingLayoutCodecResizeCopySourcePathsUnchanged": true,
+    "threeAuthoredLayoutCostsProvider": "benchmarks/authored-font-comparisons-evidence.json",
+    "sourceValidQualificationReusedForUnchangedPaths": true
+  },
+  "experiments": {
+    "priorImplementation": "benchmarks/TEXT-TRANSPARENT-DESTINATION-EXPERIMENT.md",
+    "revision": "Earlier trial edited shared blend at both depths;current isolated ordinary-word dispatch preserves shared/prepared kernels and uses the current much-reduced raster path/current attribution. No gain inferred from old trial.",
+    "prototypeCandidateSha256": "3e195af9093d1ca00bc81e1a784e86c1c4d5834907df02c16dde60f35d2ac731",
+    "prototypeConfirmation": "tmp/tdw1145-confirm-resumed-ordinary16.json",
+    "finalArtifactReconciliation": "tmp/tdw1145-final-confirm-ordinary16.json",
+    "rejectedPreflight": {
+      "source": "tmp/tdw1145-confirm-rejected-before.json",
+      "ioWaitFraction": 0.04809619238476954,
+      "limit": 0.01,
+      "statisticalSamples": 0,
+      "resumedOnlyAfterGuardPassed": true
+    },
+    "allScreenConfirmationStandaloneAndAdverseSamplesRetained": true
+  },
+  "workflow": {
+    "canonicalCoreBuildsEachOs": 1,
+    "embeddedBuildsEachOs": 1,
+    "publicBuildsEachOs": 1,
+    "isolatedLinuxPrototypeBuilds": 1,
+    "windowsProbeBuilds": 1,
+    "existingHarnessReferenceFixtureBuilds": 0,
+    "noBuildPackCount": 1,
+    "packageOutput": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "qualificationResume": "A final record assumed0.2.0package existed on VM;full tests/pack/consumer had already passed. Resume verified terminal logs/artifacts only;published0.2.0hash checked Windows. Zero repeated tests/builds/packing/consumer."
+  },
+  "invalidation": "Changed ordinary-word dispatch/sharedRasterize code invalidates ordinary8/16,authoredrender8/16,and complete text preparation/integrations;all refreshed on final immutable DLL. Shared/prepared pixel blend,public font load/layout,codecs/resizing/copies unchanged;reuse identified proofs. Final release-wide refresh still required.",
+  "interpretation": "Final actual DLL confirms8.17%/4.144us scoped complete ordinary16paired improvement at unchanged allocations. Standalone ordinary depths remain uncertain,not passing parity. Source-valid unchanged prepared/layout passes stop;affected authored render and complete integrations pass on actual package. No CPUgain claim from comparing unrelated standalone points,no historical-stage sum or wider font/content claim.",
+  "next": "Preserve accepted gain;do not repeat captures solely to obtain passing confidence. Investigate meaningful owned-font loading costs/shared preparation and remaining copy gaps by absolute savings;ordinary uncertainty remains open until a justified measurement/design change. Keep independent tasks available and final whole-package refresh pending.",
+  "raw": {
+    "file": "ordinary-word-text-dispatch-qualified.tar.xz",
+    "sha256": "1e48e6d6d9e09cfd48155fc982d46932b4999dbbfd8ef0165c984f7283fca26d",
+    "bytes": 33164368,
+    "members": 389,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "ordinary-text-warm-confidence.tar.xz",
+        "sha256": "b5c3f87a6361ac38b8289fa38073d3e476339d2276226c0cba92be1f806b44ec"
+      },
+      {
+        "file": "authored-font-comparisons-qualified.tar.xz",
+        "sha256": "319213ffbf9981e8939ee3d63f261ad94a199ff7b8482e592e320dc4afe76b0d"
+      }
+    ]
+  }
+}
