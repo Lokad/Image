@@ -1,0 +1,213 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SQA1110",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineCommit": "4a0c8f7bece8db029d0ddfe655ac09fb9059a0f0",
+  "baselineProducers": {
+    "windowsSha256": "99708bbafe0f0951f0e60f6970e1da8e9b746f089cab4f85535b686bba2645ec",
+    "linuxSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "timedArtifactSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "packageSha256": "7b89e4563dbe12856ee35876d317928f6dfd873a0b4ec5dfc37690fb27a626e0"
+  },
+  "candidateLinuxSha256": "bd323078d3e3c1d3a0524c82956d45e8e3f4e25ddf4a9301ce262f529ef1265c",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "91ca667323bf8dee9d1f4f32f0be3b52689fb2ebad62137aa25e37538f45f9d6",
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+    "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+    "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+    "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "a59b4b093bc5f365da99960f1ab1fa8030b30da267d7bf43aa8f2274efbf6762"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "e5337353b17ceec9b87259c28fb0636f242015410affbc81b544042651f792ba"
+  },
+  "hypothesis": "Ordinary drawing still computes four independent shoelace cross-products for every direct quadrilateral. Evaluate the exact multiply/subtract terms in four AVX lanes,then retain original scalar addition order. Vector construction/live registers may cost more than removed scalar work;no gain is presumed. Current source-identical area attribution is a lead,not a phase-cost forecast.",
+  "intendedEndState": "One guarded AVX branch inside existing QuadArea;original scalar fallback verbatim. Four multiply/subtract terms remain independent and four additions keep original order from+0,then sameAbs*.5. No FMA,horizontal reduction,clipping/event/pixel policy,cache,storage,owner or API change.",
+  "sourceProof": {
+    "wholeAcceptedSourceReconstructed": true,
+    "originalScalarFallbackVerbatim": true,
+    "perLaneMultiplySubtractExpressionsPreserved": true,
+    "orderedScalarAdditionsPreserved": true,
+    "noFmaOrHorizontalReduction": true,
+    "allOtherProductionBodiesVerbatim": true,
+    "noOwnedStorageCacheOwnerApiOrPixelPolicyChange": true
+  },
+  "proof": "Lane0=dx*ay-ax*dy,lane1=ax*by-bx*ay,lane2=bx*cy-cx*by,lane3=cx*dy-dx*cy. AVX multiply/subtract has the same per-lane IEEE operations as scalar;no fused instruction is requested. Ordered scalar extraction/addition retains every accumulated rounding and signedzero behavior. Removing the added branch reconstructs the entire accepted source. Existing always-clipped oracle covers30736finite/generated+4096special cases,poisoned reused spans/canaries;all8frozen full-word frames and current overlap/color/owner checks remain. PreparedDraw executes only unchanged run/blending code and reuses current passing evidence if accepted;preparation and ordinary/fullpipelines would refresh.",
+  "measurement": {
+    "libraryIdentities": {
+      "baseline": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+      "candidate": "bd323078d3e3c1d3a0524c82956d45e8e3f4e25ddf4a9301ce262f529ef1265c"
+    },
+    "helperSha256": "7a5c8143bab0252e97782fb6c1fa0a86b57ee94b8c48c5ad817020dcf769af69",
+    "all12PairsRetained": true,
+    "operationsPerActual": 1024,
+    "warmupsEach": 1024,
+    "helperBuilds": 0,
+    "quietGuardsPassed": true,
+    "originalChecksPassed": true,
+    "subjects": {
+      "baseline": {
+        "mean": 55.63658740234375,
+        "lower": 54.96955343944276,
+        "upper": 56.30362136524474,
+        "values": [
+          56.485501953125,
+          56.15074609375,
+          55.21684765625,
+          56.074982421875,
+          55.139685546875,
+          55.686611328125,
+          55.1238349609375,
+          56.175,
+          55.0131005859375,
+          55.78176953125,
+          55.0071494140625,
+          55.7838193359375
+        ]
+      },
+      "candidate": {
+        "mean": 57.18945198567708,
+        "lower": 56.82180327616706,
+        "upper": 57.5571006951871,
+        "values": [
+          57.8714638671875,
+          57.1894404296875,
+          57.3124638671875,
+          57.296345703125,
+          57.046423828125,
+          57.01070703125,
+          57.12815234375,
+          57.303107421875,
+          57.251912109375,
+          56.7586865234375,
+          57.2957294921875,
+          56.8089912109375
+        ]
+      }
+    },
+    "ratio": 1.027940263939173,
+    "lower": 1.0159219180479377,
+    "upper": 1.0401007867392782,
+    "boundary": "Two persistent original-harness workers alternate12adjacent1024-operation batches in reversed order. One CPU0operation at a time;independent processes and natural nonconcurrent GC. Full1024warmups each. Original complete ordinary DrawText,reset/validation and two per-operation clocks;IPC/reset/validation/allocation reads outside clocks. Original ImageSharp checks run in correctness-only mode and do not supply elapsed reference costs. This resolves the scoped DLL effect only and does not replace original separate-run uncertainty or standalone external comparisons. No image/settings grid or favorable repeat.",
+    "externalElapsedMeasured": false,
+    "allActualMeanIntervalsSeparate": true
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 266,
+      "public-normal": 163,
+      "internal-avx-off": 266,
+      "public-avx-off": 163,
+      "internal-scalar": 266,
+      "public-scalar": 163
+    },
+    "allEightFrozenFramesExactEachMode": true,
+    "alwaysClippedOracleFiniteGeneratedCases": 30736,
+    "additionalSpecialCases": 4096,
+    "poisonedWorkspaceAndCanariesPassed": true,
+    "allGrowthRefusalCancellationCleanupAndRecoveryPassed": true
+  },
+  "memory": {
+    "baselinePublicGcBytes": 83136,
+    "candidatePublicGcBytes": 83136,
+    "timedAdapterBytes": 24,
+    "newOwnedCapacityBytes": 0,
+    "retainedStorageUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false,
+    "fullPipelineCostsNotMeasured": true
+  },
+  "interpretation": "Not retained. Exact four-lane multiply/subtract terms with original ordered scalar additions cost2.79percent complete ordinary-RGBA16 elapsed. Paired interval1.015922to1.040101 and all-actual mean intervals are above baseline. This is a scoped managed DLL diagnostic,not native parity or evidence of an overall text-processing slowdown. No particular causal code-generation explanation is established. Exactness passes do not imply elapsed gains. No independent confirmation,reference elapsed,neighboring-width trial,broad or package campaign follows.",
+  "qualification": {
+    "provider": "benchmarks/text-prepared-coverage-evidence.json",
+    "fullChecksEachOsReused": 6730,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "actualPackageUnchanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "SQA1110",
+      "sourceRestored": true,
+      "productionSha256": "99708bbafe0f0951f0e60f6970e1da8e9b746f089cab4f85535b686bba2645ec",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "SQA1110",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "91ca667323bf8dee9d1f4f32f0be3b52689fb2ebad62137aa25e37538f45f9d6",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+        "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+        "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+        "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+        "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+        "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+        "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f",
+        "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "a59b4b093bc5f365da99960f1ab1fa8030b30da267d7bf43aa8f2274efbf6762"
+      },
+      "embeddedTestsSha256": "c64775398035b860d1cdac182d37620e55f52b60fdd4274ddb1d67a85ed0a793",
+      "publicTestsSha256": "ce9c40c11a97f4cbef55ecef005564c15396ee261364aed69f930220ad960c27",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "next": "Reuse current qualified production,complete public one-shot/eight-draw passes and prepared-draw evidence. Any further font/text design must remove attributable repeated work or storage and preserve complete-boundary accounting;pending diagnostics do not block independent work. No blind neighboring SIMD replay or permanent family ban.",
+  "raw": {
+    "file": "text-simd-shoelace-trial.tar.xz",
+    "sha256": "bbced1ca482eb7bf858b2e79e326477b0ffa70eaf50f3521002e6d381355a5f5",
+    "bytes": 1818216,
+    "members": 99,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-prepared-coverage-qualified.tar.xz",
+        "sha256": "e2587bd8aa2ea210a4b48e4b9c2cd821c861f70d42862a85a3a6edd5b224bb1b"
+      }
+    ]
+  }
+}
