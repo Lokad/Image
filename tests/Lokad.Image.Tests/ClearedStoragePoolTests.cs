@@ -65,10 +65,11 @@ public sealed class ClearedStoragePoolTests
         Assert.NotSame(stale, pool.RentPreservingIdle(16));
     }
 
-    [Fact]
-    public async Task ConcurrentClearedLeasesStayZeroedAndNeverAliasLiveStorage()
+    [Theory]
+    [InlineData(2)] [InlineData(4)]
+    public async Task ConcurrentClearedLeasesStayZeroedAndNeverAliasLiveStorage(int retainedArrays)
     {
-        var pool = new PixelStoragePool(2048);
+        var pool = new PixelStoragePool(2048, retainedArrays);
         await Task.WhenAll(Enumerable.Range(1, 4).Select(tag => Task.Run(() =>
         {
             for (var i = 0; i < 32; i++)

@@ -367,41 +367,40 @@ def png_scan_stage():
     return current
 
 
+def composition_storage():
+    current = json.loads((ROOT / 'benchmarks/composition-storage-reuse-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
+    assert q['windows']['total'] == q['linux']['total'] == 6760
+    assert q['linux']['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256']
+    assert q['linux']['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert q['windowsPackage']['actualConsumerPassed'] and q['linux']['actualPackage']['actualConsumerPassed']
+    assert q['windowsPackage']['usageExamples'] == q['linux']['actualPackage']['usageExamples'] == 3
+    for c in current['cases'].values():
+        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+        assert c['librarySha256'] == current['producers']['timedArtifactSha256']
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    return current
+
+
 def current_png_stream_word_note(current, one_shot):
-    c = current['cases']['pngStream/Png16']
-    precision = json.loads((ROOT / 'benchmarks/png-word-composition-precision-evidence.json').read_text(encoding='utf-8'))
-    composition = precision['case']
-    assert precision['measurementAccepted'] and not precision['productionChanged'] and not precision['productionSpeedupClaim']
-    assert precision['requiredMaterialPaths'] == 289 and precision['newMaterialPaths'] == 0
-    assert precision['raw']['mirrored'] and precision['raw']['allMembersVerified']
-    assert precision['qualification']['fullChecksEachOs'] == 6750 and precision['qualification']['sameActualPackageBothOs']
-    assert composition['librarySha256'] == precision['producers']['timedArtifactSha256']
-    assert precision['qualification']['packageSha256'] == precision['producers']['packageSha256']
-    assert precision['receipt']['allOriginalGatesPassed'] and precision['receipt']['quietGuardsPassed']
-    assert precision['receipt']['allActualsRetained'] and precision['receipt']['operationsEach'] == 1024
-    assert composition['status'] == current['cases']['pngStream/PngCropFit16']['status'] == 'uncertain'
-    assert math.isclose(composition['ratio'], composition['managedUs'] / composition['nativeUs'], rel_tol=1e-12)
-    fresh = one_shot['case']
-    diagnostic = one_shot['nativeLifetimeDiagnostic']
-    return ('[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) retains passing evidence '
-            'for all 47 decode controls and four coding validators. '
-            f'Word stream decode is **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
-            f'**{c["allocatedBytes"]:,} B/op**.\n\n'
-            '[Equivalent one-shot PNG16 composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) '
-            f'passes at **{fresh["managedUs"]:,.2f} / FFmpeg {fresh["nativeUs"]:,.2f} µs, upper {fresh["upper"]:.3f}**, '
-            f'**{fresh["allocatedBytesMinimum"]:,.0f}–{fresh["allocatedBytesMaximum"]:,.0f} B/op**. '
-            'Fresh native decoder/graph/wrappers, exact full-word conversion and independent output/disposal are timed; '
-            'all managed public calls/intermediate owners remain. '
-            f'A controlled native lifetime comparison measures **{diagnostic["extraCompleteNativeUs"]:,.2f} µs** extra for fresh state, '
-            'including lost reuse, not a pure setup duration or managed speedup. '
-            '[Longer retained-native PNG16 composition](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) '
-            f'remains uncertain at **{composition["managedUs"]:,.2f} / FFmpeg {composition["nativeUs"]:,.2f} µs**, '
-            f'interval **{composition["lower"]:.6f}–{composition["upper"]:.6f}**, **{composition["allocatedBytes"]:,} B/op**. '
-            'One prespecified 256→1,024-call precision capture keeps every actual and the same confidence gates; '
-            'its wider interval and 378 generation-2 collections over 12,288 managed operations warrant '
-            'allocation-lifetime attribution, not another unchanged timing capture or a causal GC claim. '
-            'No production speedup is claimed. The same current package reuses 6,750 full/live checks per OS; '
-            'original/short/independent captures and exact pixel/ownership checks remain linked.')
+    stage = composition_storage()
+    word, byte = (stage['cases'][name] for name in ('PngCropFit16', 'PngCropFit8'))
+    return ('[Shared composition storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) '
+            f'qualifies the current complete PNG16 pipeline at **{word["managedUs"]:,.2f} / FFmpeg {word["nativeUs"]:,.2f} µs, '
+            f'upper {word["upper"]:.6f}**, **{word["allocatedBytes"]:,.2f} B/op**. '
+            f'The byte control passes at **{byte["managedUs"]:,.2f} / {byte["nativeUs"]:,.2f} µs, upper {byte["upper"]:.6f}**, '
+            f'**{byte["allocatedBytes"]:,.2f} B/op**. Both retain native decoder/graph contexts between operations; '
+            'managed decoding, orientation, crop, nearest fit, every intermediate and independent result/disposal stay timed. '
+            'Final controlled DLL pairs establish about **97.4% less allocation**, with **no confirmed CPU gain**. '
+            'Three original direct-nearest controls pass; the fourth retains a rejected post-run I/O guard and remains unqualified. '
+            'All source/output hashes and exact pixel/ownership gates remain unchanged. '
+            'The earlier [precision capture](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) and '
+            '[equivalent one-shot comparison](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) remain historical: '
+            'the latter includes fresh native preparation and is not replaced by this retained-context result. '
+            'Its displayed prior-artifact cost still needs the final storage refresh.')
 
 
 def apply_current_png_scan(codecs, reads, current):
@@ -2011,7 +2010,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert fq['actualPackage']['librarySha256'] == font_load['producers']['timedArtifactSha256']
     assert font_load['sourceProof']['originalSourceReconstructed']
     assert font_load['memory']['addedOwnedCapacityBytes'] == font_load['memory']['addedRetainedCapacityBytes'] == 0
-    font_cost = font_load['font']
+    storage_reuse = composition_storage()
+    font_cost = storage_reuse['cases']['FontLoadRegular']
     assert font_cost['actualIterations'] == font_cost['nativeSamplesEachBracket'] == 12
     assert font_cost['allOriginalGatesPassed'] and font_cost['quietGuardsPassed'] and font_cost['allActualsRetained']
     assert font_cost['allocatedBytes'] == 176
@@ -2062,13 +2062,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert text_dispatch['pairedEffect']['upper'] < 1 and text_dispatch['pairedEffect']['allActualMeanIntervalsSeparated']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_dispatch['pipelineCases'][case]
+        cost = storage_reuse['pipelineCases'][case]
         assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_dispatch['pipelineCases']['Preparation']
-    font_batch = text_dispatch['pipelineCases']['PrepareDraw8']
+    font_preparation = storage_reuse['pipelineCases']['Preparation']
+    font_batch = storage_reuse['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
@@ -3074,27 +3074,19 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
-        c = owned_copy['cases'][name]
+        c = storage_reuse['cases'][name] if name == 'WarmVerticalFlip8' else owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    byte_flip, word_flip = (owned_copy['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
-    owned_copy_note = f"""[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
-loads before group stores while using checked fixed offsets. Independent byte-flip
-pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**.
-[Longer owned-flip integration](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md)
-resolves word confidence: **{word_flip['managedUs']:.3f} / FFmpeg {word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** passes/stops.
-Byte flipping remains uncertain: **{byte_flip['managedUs']:.3f} / {byte_flip['nativeUs']:.3f} µs, upper {byte_flip['upper']:.6f}**.
-One prespecified 4,096→16,384-call integration retains every original sample and
-conservative confidence rule; no production speedup or identical favorable retry.
-The 20 owned-edit/composition views now have **18 passes, zero gaps and two
-uncertainties**, including the current word composition control.
-Exact samples, tails, cancellation, admission and independent ownership remain.
-The actual immutable package DLL reuses **6,721 full/live checks per OS**,
-focused normal/scalar and SAME package/all-three-example qualification. One small
-driver build, zero production/embedded/harness/native/fixture/package builds or broad repeats.
-Source/result payload and zero retained workspace stay separate from allocation;
-physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
-retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
-Earlier copy trials remain linked history, outside current-result dependencies."""
+    byte_flip, word_flip = (storage_reuse['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
+    owned_copy_note = f"""[Current owned-flip checks](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+retain uncertainty at **{byte_flip['managedUs']:.3f} / FFmpeg {byte_flip['nativeUs']:.3f} µs,
+upper {byte_flip['upper']:.6f}** for RGBA8 and **{word_flip['managedUs']:.3f} /
+{word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** for RGBA16, **56 B/op** each.
+The same complete public calls, independent outputs, original full samples and all
+12 actuals/three native brackets remain. Neither is a current passing claim.
+[Earlier copy/flip evidence](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md) stays
+linked, including useful kernel gains; its old storage costs do not qualify the
+changed shared pool. Borrowed rectangle copies do not call that pool and reuse
+their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
@@ -3273,8 +3265,12 @@ Earlier copy trials remain linked history, outside current-result dependencies."
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
-This is an incremental update: affected costs use the qualified immutable package
-DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
+This is an incremental update. The storage round's fresh costs use its immutable
+actual-package DLL; unchanged paths reuse identified evidence. Other entries that
+call the changed shared image/font pool, PNG workspace or async encoded-output
+pool retain **historical artifact costs pending refresh**, not current timing
+proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
+This is not a full release refresh or a whole-library parity claim.
 
 {jpeg_direct_note}
 
@@ -3374,10 +3370,12 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 
 {owned_copy_note}
 
-The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **{image_view_counts['total']} existing
-image views: {image_view_counts['passCount']} pass, {image_view_counts['gaps']} gaps, {image_view_counts['uncertain']} uncertain**. This does not establish full parity:
-uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
-unchanged costs; current copy/composition costs are in their linked family report.
+The [family reports](../benchmarks/WARM-COVERAGE.md) retain a historical reconciliation
+of **{image_view_counts['total']} image views: {image_view_counts['passCount']} pass,
+{image_view_counts['gaps']} gaps, {image_view_counts['uncertain']} uncertain**.
+This is not a current shared-storage status count; affected costs await refresh.
+Unchanged borrowed operations retain source-valid evidence; remaining uncertainty,
+drawing and inspection gaps keep whole-library parity open.
 {bicubic_adjacent_note}
 [RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CURRENT-CONFIDENCE.md)
 remains uncertain: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
@@ -3465,8 +3463,10 @@ all actuals retained. Upper ≤1 passes, lower >1 is a gap; otherwise uncertaint
 **GC B/op** reports managed allocation, including result ownership where applicable,
 not peak live capacity or native allocation.
 
-The default store still has **two slots / 4 MiB**. Source-derived word-composition
-idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,088 B**.
+The shared image/font store now has **four slots / 4 MiB**; codec-local pools
+retain **two slots / 4 MiB** each. Source-derived word-composition idle payload
+is **2,455,088 B**, up from **2,125,872 B**; four simultaneous image payloads still
+total **2,455,088 B**. This added idle retention is separate from reduced allocation.
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
@@ -3542,8 +3542,9 @@ retains an independently verified
 [Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
 **2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
 shape**, within its existing coarse admission; no array or retained capacity is added.
-Current complete public costs use the [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-timed/package DLL. Its controlled ordinary16 comparison saves **{text_dispatch['pairedEffect']['savedUs']:.3f} µs /
+Current complete public costs use the [storage reuse](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+timed/package DLL. The earlier [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
+controlled ordinary16 comparison saves **{text_dispatch['pairedEffect']['savedUs']:.3f} µs /
 {text_dispatch['pairedEffect']['gainPercent']:.2f}%**, with unchanged allocation and owned capacity.
 These separate stage gains are not added. Both one-shot and preparation-plus-eight-draw controls pass, including every
 layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
@@ -3562,21 +3563,21 @@ Retained Latin capacity **2,112 B**, complete-fit capacity **4,160 B**, and full
 governed peak **822,460 B** are unchanged. Preparation allocates **{font_preparation['managedAllocatedBytes']:,.2f} B**.
 Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
 these are neither total allocations nor physical/native/JIT peaks. No font/layout
-survives preparation. Font loading stays **176 B/op**, with no new cache or storage.
-Windows/Linux each pass **6,750 full/live checks**, **268 internal/166 public**
+survives preparation. Font loading stays **176 B/op**; shared idle retention is
+reported above. Windows/Linux each pass **6,760 full/live checks**, **86 internal/441 public**
 normal/scalar and the SAME actual timed package/all three examples. The new public
 regression covers196color/alpha/destination cases,392draws and401,408wordpixels.
 This is a scoped development update, not a release-wide timing refresh.
 
 Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
-diagnostic, with eager/lazy validation differences. Its current upper **1.324**
-retains a scoped gap. The normalized 13.57% point separates while the reference
-clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
+diagnostic, with eager/lazy validation differences. Its current upper **{font_cost['upper']:.3f}**
+retains a scoped gap. Earlier packed-bounds controlled gains remain attributed to their own
+artifacts; current absolute clocks are not a cumulative speedup claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
 Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-on the final immutable package DLL: 4,096 warmup operations per side before all
+on their unchanged ordinary-draw paths: 4,096 warmup operations per side before all
 statistical groups, then 12 fixed 4,096-operation actuals and all three reference
 groups. Both ordinary depths remain uncertain,with conservative intervals
 **0.962359–1.095680 /0.937233–1.119569**. The same final DLL independently confirms

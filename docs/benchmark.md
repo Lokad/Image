@@ -2,8 +2,12 @@
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **165 comparisons** summarize that scope.
-This is an incremental update: affected costs use the qualified immutable package
-DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
+This is an incremental update. The storage round's fresh costs use its immutable
+actual-package DLL; unchanged paths reuse identified evidence. Other entries that
+call the changed shared image/font pool, PNG workspace or async encoded-output
+pool retain **historical artifact costs pending refresh**, not current timing
+proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
+This is not a full release refresh or a whole-library parity claim.
 
 [Direct JPEG block emission](../benchmarks/JPEG-DIRECT-BLOCK-EMISSION.md) closes
 the restart gap: **1,339.28 / FFmpeg 1,609.15 µs, upper 0.841**,
@@ -111,9 +115,7 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) retains passing evidence for all 47 decode controls and four coding validators. Word stream decode is **2,823.39 / FFmpeg 3,083.60 µs, upper 0.921**, **8,664 B/op**.
-
-[Equivalent one-shot PNG16 composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) passes at **2,856.94 / FFmpeg 3,301.31 µs, upper 0.871**, **338,156–338,160 B/op**. Fresh native decoder/graph/wrappers, exact full-word conversion and independent output/disposal are timed; all managed public calls/intermediate owners remain. A controlled native lifetime comparison measures **349.33 µs** extra for fresh state, including lost reuse, not a pure setup duration or managed speedup. [Longer retained-native PNG16 composition](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) remains uncertain at **3,084.46 / FFmpeg 2,985.74 µs**, interval **0.920724–1.103471**, **338,160 B/op**. One prespecified 256→1,024-call precision capture keeps every actual and the same confidence gates; its wider interval and 378 generation-2 collections over 12,288 managed operations warrant allocation-lifetime attribution, not another unchanged timing capture or a causal GC claim. No production speedup is claimed. The same current package reuses 6,750 full/live checks per OS; original/short/independent captures and exact pixel/ownership checks remain linked.
+[Shared composition storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) qualifies the current complete PNG16 pipeline at **2,768.86 / FFmpeg 2,939.76 µs, upper 0.950634**, **8,888.16 B/op**. The byte control passes at **1,185.83 / 1,481.92 µs, upper 0.804558**, **4,792.08 B/op**. Both retain native decoder/graph contexts between operations; managed decoding, orientation, crop, nearest fit, every intermediate and independent result/disposal stay timed. Final controlled DLL pairs establish about **97.4% less allocation**, with **no confirmed CPU gain**. Three original direct-nearest controls pass; the fourth retains a rejected post-run I/O guard and remains unqualified. All source/output hashes and exact pixel/ownership gates remain unchanged. The earlier [precision capture](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) and [equivalent one-shot comparison](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) remain historical: the latter includes fresh native preparation and is not replaced by this retained-context result. Its displayed prior-artifact cost still needs the final storage refresh.
 
 [Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
 stream pass: **5,701.59 / FFmpeg
@@ -129,29 +131,23 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
-[Grouped block copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) preserves four
-loads before group stores while using checked fixed offsets. Independent byte-flip
-pairs save **1.30% / 0.111 µs**, unchanged **56 B/op**.
-[Longer owned-flip integration](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md)
-resolves word confidence: **17.426 / FFmpeg 17.539 µs, upper 0.997935** passes/stops.
-Byte flipping remains uncertain: **8.494 / 8.412 µs, upper 1.019278**.
-One prespecified 4,096→16,384-call integration retains every original sample and
-conservative confidence rule; no production speedup or identical favorable retry.
-The 20 owned-edit/composition views now have **18 passes, zero gaps and two
-uncertainties**, including the current word composition control.
-Exact samples, tails, cancellation, admission and independent ownership remain.
-The actual immutable package DLL reuses **6,721 full/live checks per OS**,
-focused normal/scalar and SAME package/all-three-example qualification. One small
-driver build, zero production/embedded/harness/native/fixture/package builds or broad repeats.
-Source/result payload and zero retained workspace stay separate from allocation;
-physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
-retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
-Earlier copy trials remain linked history, outside current-result dependencies.
+[Current owned-flip checks](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+retain uncertainty at **8.693 / FFmpeg 8.330 µs,
+upper 1.101581** for RGBA8 and **17.658 /
+17.586 µs, upper 1.010163** for RGBA16, **56 B/op** each.
+The same complete public calls, independent outputs, original full samples and all
+12 actuals/three native brackets remain. Neither is a current passing claim.
+[Earlier copy/flip evidence](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md) stays
+linked, including useful kernel gains; its old storage costs do not qualify the
+changed shared pool. Borrowed rectangle copies do not call that pool and reuse
+their unchanged-path evidence. No favorable retry or pixel-kernel retuning.
 
-The [current family reports](../benchmarks/WARM-COVERAGE.md) reconcile **192 existing
-image views: 189 pass, 0 gaps, 3 uncertain**. This does not establish full parity:
-uncertainties, in-place drawing and inspection gaps remain. The tables retain source-valid
-unchanged costs; current copy/composition costs are in their linked family report.
+The [family reports](../benchmarks/WARM-COVERAGE.md) retain a historical reconciliation
+of **192 image views: 189 pass,
+0 gaps, 3 uncertain**.
+This is not a current shared-storage status count; affected costs await refresh.
+Unchanged borrowed operations retain source-valid evidence; remaining uncertainty,
+drawing and inspection gaps keep whole-library parity open.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
 [RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CURRENT-CONFIDENCE.md)
 remains uncertain: **1,805.35 / FFmpeg 1,924.57µs,
@@ -239,8 +235,10 @@ all actuals retained. Upper ≤1 passes, lower >1 is a gap; otherwise uncertaint
 **GC B/op** reports managed allocation, including result ownership where applicable,
 not peak live capacity or native allocation.
 
-The default store still has **two slots / 4 MiB**. Source-derived word-composition
-idle payload is **2,125,872 B**; four simultaneous image payloads total **2,455,088 B**.
+The shared image/font store now has **four slots / 4 MiB**; codec-local pools
+retain **two slots / 4 MiB** each. Source-derived word-composition idle payload
+is **2,455,088 B**, up from **2,125,872 B**; four simultaneous image payloads still
+total **2,455,088 B**. This added idle retention is separate from reduced allocation.
 Caller-governed storage bypasses that cache. Logical admitted
 capacity, allocation and retained storage are separate; physical/native/JIT peaks
 are unmeasured. Prepared word Lanczos reduction retains **156,248 B** of plan
@@ -316,8 +314,9 @@ retains an independently verified
 [Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
 **2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
 shape**, within its existing coarse admission; no array or retained capacity is added.
-Current complete public costs use the [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-timed/package DLL. Its controlled ordinary16 comparison saves **4.144 µs /
+Current complete public costs use the [storage reuse](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+timed/package DLL. The earlier [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
+controlled ordinary16 comparison saves **4.144 µs /
 8.17%**, with unchanged allocation and owned capacity.
 These separate stage gains are not added. Both one-shot and preparation-plus-eight-draw controls pass, including every
 layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
@@ -326,31 +325,31 @@ exact 16-bit coverage. Eager/lazy font validation and GC-driven reference font
 release remain explicit differences. Do not infer overall text slowdown or gain
 from stage diagnostics or add historical times.
 
-Preparation-only is 1,234.28 / 6,603.15 µs,
+Preparation-only is 1,114.50 / 6,116.03 µs,
 with prepared-owner disposal outside only that diagnostic. The directly measured
-eight-draw batch amortizes to 170.41 / 927.86 µs/draw,
+eight-draw batch amortizes to 157.47 / 854.41 µs/draw,
 including preparation; table allocation covers the whole batch. Reference complete
 one-shot/batch allocations are **9,256,953 / 9,494,633 B**.
 
 Retained Latin capacity **2,112 B**, complete-fit capacity **4,160 B**, and full-fit
-governed peak **822,460 B** are unchanged. Preparation allocates **314,543.33 B**.
+governed peak **822,460 B** are unchanged. Preparation allocates **314,541.42 B**.
 Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
 these are neither total allocations nor physical/native/JIT peaks. No font/layout
-survives preparation. Font loading stays **176 B/op**, with no new cache or storage.
-Windows/Linux each pass **6,750 full/live checks**, **268 internal/166 public**
+survives preparation. Font loading stays **176 B/op**; shared idle retention is
+reported above. Windows/Linux each pass **6,760 full/live checks**, **86 internal/441 public**
 normal/scalar and the SAME actual timed package/all three examples. The new public
 regression covers196color/alpha/destination cases,392draws and401,408wordpixels.
 This is a scoped development update, not a release-wide timing refresh.
 
 Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
-diagnostic, with eager/lazy validation differences. Its current upper **1.324**
-retains a scoped gap. The normalized 13.57% point separates while the reference
-clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
+diagnostic, with eager/lazy validation differences. Its current upper **1.377**
+retains a scoped gap. Earlier packed-bounds controlled gains remain attributed to their own
+artifacts; current absolute clocks are not a cumulative speedup claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
 Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-on the final immutable package DLL: 4,096 warmup operations per side before all
+on their unchanged ordinary-draw paths: 4,096 warmup operations per side before all
 statistical groups, then 12 fixed 4,096-operation actuals and all three reference
 groups. Both ordinary depths remain uncertain,with conservative intervals
 **0.962359–1.095680 /0.937233–1.119569**. The same final DLL independently confirms
@@ -476,13 +475,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
-| Complete text one-shot / ImageSharp public integration (pass) † | 1,264.47 | 6,645.08 | 0.190 / 0.213 | 306,162 |
-| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,363.25 | 7,422.88 | 0.184 / 0.212 | 315,896 |
+| Complete text one-shot / ImageSharp public integration (pass) † | 1,108.45 | 6,208.69 | 0.179 / 0.194 | 306,164 |
+| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,259.79 | 6,835.32 | 0.184 / 0.207 | 315,890 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 47.78 | 45.28 | 1.055 / 1.096 | 83,216 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 49.52 | 48.32 | 1.025 / 1.120 | 83,216 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
-| Font loading / FreeType 2.13.2 (scoped gap) † | 18.42 | 14.33 | 1.286 / 1.324 | 176 |
+| Font loading / FreeType 2.13.2 (scoped gap) † | 18.39 | 13.80 | 1.332 / 1.377 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
@@ -510,7 +509,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
-| Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
+| Vertical flip RGBA8 (uncertain) † | 8.69 | 8.33 | 1.044 / 1.102 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
 | Original clipped RGBA8 copy, 254×129 (gap) | 1.942 | 1.901 | 1.021 / 1.026874 | 0 |

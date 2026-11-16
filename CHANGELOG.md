@@ -10,8 +10,9 @@
   the default, with container, checksum and pixel checks preserved.
 - Read complete stream inputs directly into admitted capacity, removing staging
   copies and sharing acquisition across inspection and decoding.
-- Reuse released image storage within the existing two-array ceiling. Calls with
-  a caller memory budget retain explicit admission and ownership.
+- Reuse released image storage with up to four arrays within the existing 4 MiB
+  ceiling. Codec-local pools keep two slots; caller budgets retain explicit
+  admission and ownership.
 - Improve PNG encoding/decoding through shared Deflate and row workspace, bounded
   match scans, SIMD reconstruction/CRC and adaptive prediction for predictable content.
 - Improve JPEG encoding/decoding through shared block preparation, SIMD chroma

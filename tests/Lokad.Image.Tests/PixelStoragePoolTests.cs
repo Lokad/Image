@@ -86,10 +86,11 @@ public sealed class PixelStoragePoolTests
         Assert.NotSame(tooLarge, pool.Rent(tooLarge.Length));
     }
 
-    [Fact]
-    public async Task ConcurrentLeasesKeepAllLiveSamplesIndependent()
+    [Theory]
+    [InlineData(2)] [InlineData(4)]
+    public async Task ConcurrentLeasesKeepAllLiveSamplesIndependent(int retainedArrays)
     {
-        var pool = new PixelStoragePool();
+        var pool = new PixelStoragePool(retainedArrays: retainedArrays);
         await Task.WhenAll(Enumerable.Range(1, 8).Select(tag => Task.Run(() =>
         {
             for (var iteration = 0; iteration < 100; iteration++)
@@ -102,4 +103,51 @@ public sealed class PixelStoragePoolTests
             }
         })));
     }
+    [Fact]
+    public void FourFittingExactSizesSurviveUntilIndependentlyRented()
+    {
+        var pool = new PixelStoragePool(100, retainedArrays: 4);
+        byte[][] buffers = [new byte[24], new byte[23], new byte[22], new byte[21]];
+        foreach (var buffer in buffers) pool.Return(buffer);
+        var discarded = new byte[20]; pool.Return(discarded);
+        foreach (var buffer in buffers)
+            Assert.Same(buffer, pool.RentPreservingIdle(buffer.Length));
+        Assert.NotSame(discarded, pool.RentPreservingIdle(discarded.Length));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new PixelStoragePool(100, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new PixelStoragePool(100, 3));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new PixelStoragePool(100, 5));
+    }
+
+    [Fact]
+    public void FourSlotLargestReplacementKeepsTheCombinedByteCeiling()
+    {
+        var pool = new PixelStoragePool(100, retainedArrays: 4);
+        byte[][] buffers = [new byte[24], new byte[23], new byte[22], new byte[21]];
+        foreach (var buffer in buffers) pool.Return(buffer);
+        var replacement = new byte[25]; pool.ReturnLargest(replacement);
+        var oversized = new byte[75]; pool.ReturnLargest(oversized);
+        Assert.NotSame(oversized, pool.RentPreservingIdle(75));
+        Assert.NotSame(buffers[3], pool.RentPreservingIdle(21));
+        Assert.Same(replacement, pool.RentPreservingIdle(25));
+        foreach (var buffer in buffers.Take(3))
+            Assert.Same(buffer, pool.RentPreservingIdle(buffer.Length));
+    }
+
+    [Fact]
+    public void FourSlotLatestReturnDropsOnlyStorageThatDoesNotFit()
+    {
+        var pool = new PixelStoragePool(100, retainedArrays: 4);
+        byte[][] buffers = [new byte[24], new byte[23], new byte[22], new byte[21]];
+        foreach (var buffer in buffers) pool.Return(buffer);
+        var latest = new byte[70]; pool.ReturnLatest(latest);
+        Assert.Same(latest, pool.RentPreservingIdle(70));
+        Assert.Same(buffers[0], pool.RentPreservingIdle(24));
+        foreach (var buffer in buffers.Skip(1))
+            Assert.NotSame(buffer, pool.RentPreservingIdle(buffer.Length));
+        var zero = new PixelStoragePool(0, retainedArrays: 4);
+        var positive = new byte[1]; zero.ReturnLatest(positive);
+        Assert.NotSame(positive, zero.RentPreservingIdle(1));
+        Assert.Empty(zero.RentImage(0, default, clear: true));
+    }
+
 }

@@ -9,7 +9,7 @@ internal static class NearestResize
     {
         // Resize has already admitted the source and target geometry. No scratch
         // storage is needed, including under an exact two-buffer memory budget.
-        var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
+        var result = ImageBuffer.AllocateForOverwrite(width, height, source.BitDepth, context);
         try
         {
             if (source.BitDepth == 8)

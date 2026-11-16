@@ -17,7 +17,7 @@ public sealed class FilteredResizeStorageTests
 
     private static byte[] Poison(int length)
     {
-        // Two distinct lengths empty either of the existing exact-size slots.
+        // Different requested lengths discard all previous idle sizes.
         _ = PixelStoragePool.Shared.Rent(length + 1);
         var storage = PixelStoragePool.Shared.Rent(length);
         storage.AsSpan().Fill(0xa5);
@@ -26,6 +26,7 @@ public sealed class FilteredResizeStorageTests
     }
 
     [Theory]
+    [InlineData(8, ResizeFilter.Nearest)] [InlineData(16, ResizeFilter.Nearest)]
     [InlineData(8, ResizeFilter.Bilinear)] [InlineData(16, ResizeFilter.Bilinear)]
     [InlineData(8, ResizeFilter.Bicubic)] [InlineData(16, ResizeFilter.Bicubic)]
     public void DirtyStorageIsCompletelyWrittenAndLiveOutputsNeverShare(int depth, ResizeFilter filter)
@@ -55,6 +56,7 @@ public sealed class FilteredResizeStorageTests
     }
 
     [Theory]
+    [InlineData(8, ResizeFilter.Nearest)] [InlineData(16, ResizeFilter.Nearest)]
     [InlineData(8, ResizeFilter.Bilinear)] [InlineData(16, ResizeFilter.Bilinear)]
     [InlineData(8, ResizeFilter.Bicubic)] [InlineData(16, ResizeFilter.Bicubic)]
     public async Task SharedOutputsStayChargedThroughRefusalCancellationAndAsyncUse(int depth, ResizeFilter filter)

@@ -74,7 +74,7 @@ capacity rather than measured GC allocation or process RSS. Minor objects/runtim
 storage are approximate; allow runtime/collection headroom. Calls with a shared
 root bypass uncharged global pixel/coefficient/input/output pools, including font
 copies. Caller-root storage never enters those caches. Default font copies,
-canvases and decoded/transformed images share a two-array, 4 MiB storage ceiling.
+canvases and decoded/transformed images share up to four idle arrays under a 4 MiB\nstorage ceiling. Codec-local PNG/encoded-output pools keep two slots under their\nexisting byte ceilings.
 Only disposed owners return storage. Canvases are cleared before publication;
 overwrite images stay private until every result sample is written, and font
 copies are fully written before parsing. Image
