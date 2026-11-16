@@ -5,6 +5,49 @@ namespace Lokad.Image.Tests;
 
 public sealed class FontOutlineTests
 {
+    private delegate void HeaderReader(ReadOnlySpan<byte> bytes);
+
+    [Fact]
+    public void SuppliedFontHeadersPreserveSignedBoundsAndTruncation()
+    {
+        // Exercise the actual eager validator, including signed coordinates,
+        // empty/composite headers, unaligned reads and poisoned neighboring bytes.
+        var read = typeof(TrueTypeFont).GetMethod("Header", System.Reflection.BindingFlags.Static
+            | System.Reflection.BindingFlags.NonPublic)!.CreateDelegate<HeaderReader>();
+        var ordinal = 0;
+        void Check(short contours, short xmin, short ymin, short xmax, short ymax)
+        {
+            var bytes = new byte[24]; Array.Fill(bytes, (byte)0xa5); var offset = ordinal++ % 8;
+            var header = bytes.AsSpan(offset, 10);
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16BigEndian(header, contours);
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16BigEndian(header[2..], xmin);
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16BigEndian(header[4..], ymin);
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16BigEndian(header[6..], xmax);
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16BigEndian(header[8..], ymax);
+            var unchanged = bytes.ToArray();
+            if (contours == 0 || xmin <= xmax && ymin <= ymax) read(bytes.AsSpan(offset, 10));
+            else Assert.Throws<ImageDataException>(() => read(bytes.AsSpan(offset, 10)));
+            Assert.Equal(unchanged, bytes);
+        }
+        short[] limits = [short.MinValue, short.MinValue + 1, -1, 0, 1, short.MaxValue - 1, short.MaxValue];
+        foreach (var xmin in limits) foreach (var ymin in limits)
+            foreach (var xmax in limits) foreach (var ymax in limits)
+            {
+                Check(1, xmin, ymin, xmax, ymax);
+                Check(-1, xmin, ymin, xmax, ymax);
+            }
+        var random = new Random(0x1114);
+        short Coordinate() => (short)random.Next(short.MinValue, short.MaxValue + 1);
+        for (var i = 0; i < 4096; i++)
+            Check(i % 3 == 0 ? (short)0 : short.MinValue, Coordinate(), Coordinate(), Coordinate(), Coordinate());
+        var truncated = new byte[10];
+        for (var length = 0; length < 10; length++)
+        {
+            var count = length;
+            Assert.Throws<ImageDataException>(() => read(truncated.AsSpan(0, count)));
+        }
+    }
+
     [Fact]
     public void OnCurveAndOffCurveEndpointsProduceClosedQuadraticSegments()
     {

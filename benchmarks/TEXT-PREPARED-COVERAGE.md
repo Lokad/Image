@@ -1,5 +1,7 @@
 # Prepared exact text coverage
 
+Current complete one-shot/eight-draw costs are in [packed signed font bounds](FONT-PACKED-BOUNDS.md). The four drawing costs, retained coverage design and frame/owner evidence here remain source-valid; font construction is outside those drawing clocks.
+
 `TextRenderPlan` prepares exact 16-bit coverage once, retaining compact row runs
 in glyph order. Temporary geometry/events/crossings/working rows are released
 before publication. Each draw reads fresh caller pixels and colors through the

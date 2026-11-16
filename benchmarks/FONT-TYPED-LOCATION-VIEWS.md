@@ -1,5 +1,7 @@
 # Typed font-location views
 
+Current font-loading and complete public-integration costs are in [packed signed bounds](FONT-PACKED-BOUNDS.md). This report retains the qualified typed-location milestone and earlier measurements.
+
 Eager glyph validation now selects the 2/4-byte loca representation once and scans
 a borrowed ushort/uint view. Big-endian values, short-entry scaling, check/error
 order, every glyph cancellation poll, fixed headers, mapping and ownership remain.

@@ -1,6 +1,8 @@
 using System.Buffers.Binary;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Runtime.CompilerServices;
 using Lokad.Image.Internal;
@@ -223,8 +225,19 @@ public sealed partial class TrueTypeFont : IDisposable
         {
             // All four signed coordinates occupy this validated eight-byte extent.
             var bounds = BinaryPrimitives.ReadUInt64BigEndian(glyph.Slice(2, 8));
-            if (unchecked((short)(bounds >> 48)) > unchecked((short)(bounds >> 16))
-                || unchecked((short)(bounds >> 32)) > unchecked((short)bounds))
+            bool reversed;
+            if (Sse2.IsSupported)
+            {
+                // Low signed words are ymax,xmax,ymin,xmin after the same
+                // big-endian load. Compare ymin/xmin with ymax/xmax together;
+                // the upper comparison lanes are outside the two coordinates.
+                var packed = Vector128.CreateScalar(bounds).AsInt16();
+                var minima = Sse2.ShiftRightLogical128BitLane(packed.AsByte(), 4).AsInt16();
+                reversed = (Sse2.MoveMask(Sse2.CompareGreaterThan(minima, packed).AsByte()) & 15) != 0;
+            }
+            else reversed = unchecked((short)(bounds >> 48)) > unchecked((short)(bounds >> 16))
+                || unchecked((short)(bounds >> 32)) > unchecked((short)bounds);
+            if (reversed)
                 throw new ImageDataException("Invalid glyph bounds.");
         }
     }

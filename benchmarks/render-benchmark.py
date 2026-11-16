@@ -1947,7 +1947,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-typed-location-views-evidence.json').read_text(encoding='utf-8'))
+    font_load = json.loads((ROOT / 'benchmarks/font-packed-bounds-evidence.json').read_text(encoding='utf-8'))
     assert font_load['productionAccepted'] and font_load['allAffectedPerformanceReconciled']
     assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
     fq = font_load['qualification']
@@ -1982,22 +1982,27 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert memory['completeGovernedPeakBytes'] == 822460 and memory['completeFitRetainedCapacityBytes'] == 4160
     assert memory['latinRetainedCapacityBytes'] == 2112
     assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
-    assert font_load['sources']['src/Lokad.Image/TrueTypeFont.cs'] == text_coverage['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert font_load['baselineSources']['src/Lokad.Image/TrueTypeFont.cs'] == text_coverage['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert all(font_load['unchangedSources'][name] == text_coverage['sources'][name]
+               for name in ('src/Lokad.Image/Internal/TextRasterizer.cs', 'src/Lokad.Image/TextRenderPlan.cs'))
+    assert fq['fullChecksEachOs'] == 6731 and fq['focusedInternalEachModeEachOs'] == 267 and fq['focusedPublicEachModeEachOs'] == 163
+    assert fq['modes'] == ['normal', 'avx-off', 'scalar'] and fq['legacySse2EncodingPassed']
+    assert fq['acceptedTimedLinuxArtifactRebuildsAfterMeasurement'] == 0
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_coverage['pipelineCases'][case]
+        cost = font_load['pipelineCases'][case]
         assert cost['completeWorkload'] and cost['status'] == 'pass'
         assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == text_coverage['producers']['linuxSha256']
+        assert cost['librarySha256'] == font_load['producers']['linuxSha256']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_coverage['pipelineCases']['Preparation']
-    font_batch = text_coverage['pipelineCases']['PrepareDraw8']
+    font_preparation = font_load['pipelineCases']['Preparation']
+    font_batch = font_load['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
-    assert not font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
+    assert font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
@@ -3250,36 +3255,44 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**,
-never FFmpeg or a bare shaping engine. [Prepared exact coverage](../benchmarks/TEXT-PREPARED-COVERAGE.md)
-closes both prepared-draw uncertainties. Managed plans retain exact 16-bit coverage;
-the reference retains positioned paths and rasterizes while drawing. Ordinary8
-remains uncertain and ordinary16 a gap; these scoped diagnostics do not establish
-an overall text slowdown. Both complete public integrations pass, including every
-layout/fitting call, fresh owned explicit-clear canvases and disposal.
+never FFmpeg or a bare shaping engine. [Packed signed font bounds](../benchmarks/FONT-PACKED-BOUNDS.md)
+refreshes the complete public integrations after an independently verified
+**{font_gain['savedUs']:.3f} µs / {font_gain['rawSavedFraction']:.2%}** owned-font loading gain.
+Both one-shot and preparation-plus-eight-draw controls pass, including every
+layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
+and disposal. The reference retains positioned paths; managed preparation retains
+exact 16-bit coverage. Eager/lazy font validation and GC-driven reference font
+release remain explicit differences. Do not infer overall text slowdown or gain
+from stage diagnostics or add historical times.
+
 Preparation-only is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs,
-with disposal outside only that diagnostic. The directly measured eight-draw batch
-amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs/draw,
-including preparation. Its table allocation covers the whole batch.
+with prepared-owner disposal outside only that diagnostic. The directly measured
+eight-draw batch amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs/draw,
+including preparation; table allocation covers the whole batch. Reference complete
+one-shot/batch allocations are **9,256,953 / 9,494,633 B**.
 
-Retained Latin capacity falls **48,984→2,112 B** and complete-fit capacity
-**48,480→4,160 B**; full-fit governed peak stays **822,460 B**. Narrow wrapping
-retains more (**6,896→8,256 B**) and has a higher construction peak; the report
-retains every cost. Prepared drawing stays **56 B/draw**, ordinary Latin **83,136 B**;
-adapters add 24 B. Preparation allocates **314,465 B**. Approximate full-GC retained
-heap deltas **4,336 /22,504 B** exclude idle pools and are not allocation counts
-or physical/native/JIT peaks. No font/layout survives preparation. Arabic ordinary
-timing is inconclusive with unchanged allocation, not a generalization gain.
-Windows/Linux each pass **6,730 full/live checks**, **266 internal/163 public**
-normal/AVX-disabled/scalar, all eight frozen full-word frames and the SAME actual
-timed package/all three examples. This is a scoped development comparison,
-not a release-wide refresh or a gain computed from historical stages.
+Retained Latin capacity **2,112 B**, complete-fit capacity **4,160 B**, and full-fit
+governed peak **822,460 B** are unchanged. Preparation allocates **314,467 B**.
+Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
+these are neither total allocations nor physical/native/JIT peaks. No font/layout
+survives preparation. Font loading stays **176 B/op**, with no new cache or storage.
+Windows/Linux each pass **6,731 full/live checks**, **267 internal/163 public**
+normal/AVX-disabled/scalar and the SAME actual timed package/all three examples.
+This is a scoped development update, not a release-wide timing refresh.
 
-Font loading remains a scoped **FreeType 2.13.2 copy/open/retain/dispose** diagnostic:
-eager/lazy validation differs. Its unchanged [typed-location producer](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md)
-retains the **{font_gain['savedUs']:.2f} µs /{font_gain['rawSavedFraction']:.2%}** managed gain,
-with inconclusive reference normalization. Earlier [range/preparation evidence](../benchmarks/TEXT-COMPUTED-X-RANGES.md)
-remains history. No new parser policy, font/script claim, production dependency
-or relaxed managed pixel contract.
+Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
+diagnostic, with eager/lazy validation differences. Its current upper **1.324**
+retains a scoped gap. The normalized 13.57% point separates while the reference
+clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
+pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
+contract follows.
+
+The unchanged [ordinary/prepared drawing paths](../benchmarks/TEXT-PREPARED-COVERAGE.md)
+reuse source-valid costs, full-word frames and ownership evidence. Both prepared
+draws pass; ordinary8 remains uncertain and ordinary16 a scoped gap. Prepared
+drawing stays **56 B/op** and ordinary Latin **83,136 B/op**; timing adapters add
+24 B. Their earlier narrow-wrap capacity/peak tradeoff and inconclusive Arabic
+timing remain in that report. No unchanged drawing control is retuned.
 
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
