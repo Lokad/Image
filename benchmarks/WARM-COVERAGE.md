@@ -7,26 +7,32 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
 gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
-[Font-header batching](FONT-HEADER-BATCHING.md) is the current bounded round:
-complete controlled font loads save 6.05% / 1.150 us with unchanged 176 B/op.
-Standalone FreeType comparison remains a scoped eager/lazy-validation gap;
-both complete public text integrations pass. Unchanged borrowed text/editing
-and codec/resize paths reuse their identified evidence.
+[Completed nearest rows](NEAREST-ROW-REUSE.md) is the current bounded round:
+complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged
+4,264,364 B/op. Current standalone 949.453/FFmpeg981.396 us upper.981828 passes.
+All four original direct-nearest controls pass/stop; other three allocate112B/op.
+Both affected complete PNG pipelines pass. The I/O preparation correction keeps
+only untimed temporary image files in bounded tmpfs; all original checks and
+idle-v2 thresholds remain. The dual-context screen stays diagnostic; accepted
+gain uses one default-loader process per DLL. [Font-header batching](FONT-HEADER-BATCHING.md)
+and unchanged borrowed text/editing/codec/other resize paths retain their identified
+evidence; its scoped FreeType gap is not remeasured.
 
 [Shared composition storage](COMPOSITION-STORAGE-REUSE.md) retains the original
-PNG16/8 complete decode/orient/crop/fit controls, passing at
-2768.861/2939.761us and1185.833/1481.925us,8888.16/4792.08B/op.
+PNG16/8 complete decode/orient/crop/fit contracts. Current final-module costs are
+2772.041/2937.903us and1185.369/1475.389us,8888.16/4792.08B/op.
 Final controlled pairs establish97.4%lessallocation,not a confirmedCPUgain.
-Three original direct-nearest controls pass;Up16 retains all12actuals and a failed
-post-I/Oguard,so remains unqualified. Both current ownedflips are uncertain.
+The previous Up16 guard-rejected captures remain in their reports; the corrected
+complete measurement and accepted row reuse close that named path. Both current
+owned flips remain uncertain, using their recorded shared-storage costs.
 The previous192-view/189pass aggregate is historical,not current storage proof.
 Other default ownedimage/font,privatePNGworkspace andasyncencoded-output costs
 retain their identified historical artifacts pending refresh;the report names
 the affected boundaries. Borrowed drawing/text/copies,caller JPEGsamples and
 header/probe paths retain unchanged evidence. No passing pixelkernel is retuned.
 
-Each OS passes **6,772 full/live checks** after font-header batching,
-269internal/441public checks per normal/AVX2-disabled/scalar mode,and the **same actual
+Each OS passes **6,776 full/live checks** after nearest row reuse,
+534internal/204public checks per normal/scalar mode,and the **same actual
 Release-package consumer /three examples**. Prior text/raster arithmetic proofs
 remain valid;these do not turn historical storage costs into current timings.
 Inspection reuses unchanged10internal/
@@ -43,7 +49,7 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
 | PNG decoding | [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) owns all 47 decode controls and four coding validators; all pass/stop on the same timed/package DLL. The caller-root two-retained-result decode also passes, with unchanged peak/lifetimes. Exact samples, cancellation positions and admission remain. Earlier storage/Adler reports retain history. |
-| Stream decode/composition | [Current shared storage](COMPOSITION-STORAGE-REUSE.md):original retained-native PNG16/8 pipelines pass,upper.950634/.804558,8888.16/4792.08B/op. Every public call/intermediate/result/disposal remains;exact fullword/source/stream/owner gates pass. Final controlled wordpair allocation falls338156.20->8889.94B/op;CPUgain inconclusive. Earlier [precision](PNG-WORD-COMPOSITION-PRECISION.md) and [equivalent one-shot](PNG-COMPOSITION-ONE-SHOT.md) captures remain historical,with their distinct native preparation boundaries. Other pool-dependent stream/decode/async-output costs need finalrefresh;no silent current-DLL parity claim. |
+| Stream decode/composition | [Current completed-row package](NEAREST-ROW-REUSE.md): original retained-native PNG16/8 pipelines pass at 2772.041/2937.903 us and 1185.369/1475.389 us, upper .951202/.807373, 8888.16/4792.08 B/op. All four original direct-nearest controls pass/stop; Up16 is 949.453/981.396 us upper .981828, 4264364 B/op. Independent controlled complete Up16 gain 10.35%/110.756 us; exact cells/hidden RGB, 1024-pixel polls, no new capacity or pool-cap change. Shared-storage allocation gains remain separately attributed. Every public pipeline call/intermediate/output/disposal and original pixel/source/stream/owner gate remains. Earlier fresh-native one-shot and other historical pool-dependent costs still need the final complete package refresh. |
 | JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | All 18 declared comparisons pass/stop. [Direct block emission](JPEG-DIRECT-BLOCK-EMISSION.md) closes restart33: 1,339.28 / FFmpeg 1,609.15 µs, upper .841, 151,180 B/op, exact 58,010 / 58,012 B packets with the strict 2 B attribution exception. Separate complete paired steps save 19.21% and 17.00%; no summed gain. The 17 [adaptive replay controls](JPEG-LOCAL-ENTROPY-REPLAY.md) reuse unchanged paths/artifact identities. SIMD libjpeg-turbo grayscale stays explicitly labeled. Native contexts/table preparation remain retained; managed preparation stays timed. No added storage or broader content/settings claim. |
 | PNG encoding | All 17 equivalent fresh-state controls pass/stop. [Longer Gray8 integration](PNG-GRAY-CURRENT-PATH.md) resolves uncertainty:1,964.07/FFmpeg1,978.51µs,upper.999681,546523B/op,exact72586B. No production speedup; original samples retained. Sixteen passing controls reuse unchanged [compressed heap](PNG-HUFFMAN-HEAP-ENTRIES.md) and [stored](PNG-STORED-WORD-NORMALIZATION.md) evidence. Stored-word naturalGC64 passes/stops; postGC4 retained-word uncertainty remains a distinct diagnostic. |

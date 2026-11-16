@@ -2,9 +2,9 @@
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **165 comparisons** summarize that scope.
-This is an incremental update. Font-loading and complete-text costs use the header-
-batching package; storage costs retain their source-valid artifact. Unchanged
-paths reuse identified evidence. Other entries that
+This is an incremental update. Nearest resizing and PNG composition use the
+completed-row package; font/text costs retain the source-valid header-batching
+artifact. Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
 proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
@@ -116,7 +116,7 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Shared composition storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) qualifies the current complete PNG16 pipeline at **2,768.86 / FFmpeg 2,939.76 µs, upper 0.950634**, **8,888.16 B/op**. The byte control passes at **1,185.83 / 1,481.92 µs, upper 0.804558**, **4,792.08 B/op**. Both retain native decoder/graph contexts between operations; managed decoding, orientation, crop, nearest fit, every intermediate and independent result/disposal stay timed. Final controlled DLL pairs establish about **97.4% less allocation**, with **no confirmed CPU gain**. Three original direct-nearest controls pass; the fourth retains a rejected post-run I/O guard and remains unqualified. All source/output hashes and exact pixel/ownership gates remain unchanged. The earlier [precision capture](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) and [equivalent one-shot comparison](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) remain historical: the latter includes fresh native preparation and is not replaced by this retained-context result. Its displayed prior-artifact cost still needs the final storage refresh.
+[Completed nearest rows](../benchmarks/NEAREST-ROW-REUSE.md) qualify the current complete PNG16 pipeline at **2,772.04 / FFmpeg 2,937.90 µs, upper 0.951202**, **8,888.16 B/op**. PNG8 passes at **1,185.37 / 1,475.39 µs, upper 0.807373**, **4,792.08 B/op**. Native contexts remain retained; managed stream delivery, decode, orientation, crop, nearest fit, every intermediate and independent output/disposal stay timed. All four original direct-nearest controls pass and stop. RGBA16 enlargement is **949.45 / FFmpeg 981.40 µs, upper 0.981828**, **4,264,364 B/op**; the other three allocate112B/op. Independent final-DLL pairs save **110.756 µs / 10.35%**, with unchanged allocation and owned/retained capacity. Copies retain exact complete samples and1024-pixel cancellation checkpoints; no pool-cap or numerical change. The original I/O-guard failures remain: bounded tmpfs holds only untimed temporary images, with original inputs/settings, complete-operation boundaries and idle-v2 thresholds unchanged. A dual-context screen stays diagnostic; accepted gain uses one default-loader process per DLL. Windows/Linux each pass6776full/live checks,534internal/204public normal/scalar and the SAME actual package/all three examples. Earlier [shared storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) independently establishes97.4%lessallocation, not a summed CPU gain. Earlier fresh-native [one-shot composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) and other historical storage-dependent costs still await the final complete package refresh.
 
 [Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
 stream pass: **5,701.59 / FFmpeg

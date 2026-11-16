@@ -310,16 +310,18 @@ def owned_edit_costs(png):
         selected.update((key, (case, stage)) for key, case in stage['cases'].items())
     prior_counts = {**stage['combinedOwnedEditStatusCounts']}
     flips = owned_flip_confidence()
-    selected.update((key, (case, flips)) for key, case in flips['cases'].items())
+    storage = composition_storage()
+    selected.update((key, (storage['cases'][key], storage)) for key in flips['cases'])
+    nearest = nearest_row_reuse()
     for name in ('PngCropFit8', 'PngCropFit16'):
-        selected[name] = (png['cases']['pngStream/' + name], png)
+        selected[name] = (nearest['cases'][name], nearest)
     assert len(selected) == 20
     for name, (case, owner) in selected.items():
         q = owner['qualification']
         assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
         assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
         assert case['librarySha256'] == owner['producers']['linuxSha256']
-        if owner is not flips:  # Flip qualification is checked by its current owner above.
+        if owner is not storage:  # Current storage qualification is checked above.
             assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
             package = q.get('actualPackage', q.get('package'))
             windows = q.get('samePackageWindows', q.get('windowsPackage'))
@@ -335,13 +337,14 @@ def owned_edit_costs(png):
         if name.startswith('PngCropFit'):
             assert all(case['metadata'][key] for key in ('allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput'))
         else:
-            assert all(case[key] for key in ('managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
+            if owner is not storage:
+                assert all(case[key] for key in ('managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
             assert case['allocatedBytes'] == 56
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
     cases = {name: case for name, (case, _) in selected.items()}
     counts = {state: sum(case['status'] == state for case in cases.values()) for state in ('pass', 'gap', 'uncertain')}
-    assert flips['combinedOwnedEditStatusCounts'] == {'passCount': counts['pass'], 'gaps': counts['gap'], 'uncertain': counts['uncertain'], 'total': len(cases)}
+    assert counts == {'pass': 18, 'gap': 0, 'uncertain': 2} and len(cases) == 20
     return {'cases': cases, 'statusCounts': counts, 'priorStatusCounts': prior_counts,
             'currentImageOwnerViewStatuses': flips['currentImageOwnerViewStatuses']}
 
@@ -385,22 +388,50 @@ def composition_storage():
     return current
 
 
+def nearest_row_reuse():
+    stage = json.loads((ROOT / 'benchmarks/nearest-row-reuse-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6776
+    assert q['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['actualPackage']['librarySha256'] == stage['producers']['timedArtifactSha256']
+    assert q['actualPackage']['actualConsumerPassed'] and q['windowsPackage']['actualConsumerPassed']
+    assert q['actualPackage']['usageExamples'] == q['windowsPackage']['usageExamples'] == 3
+    assert stage['pairedEffect']['upper'] < 1 and all(stage['sourceProof'].values())
+    assert set(stage['cases']) == {'Down8', 'Down16', 'Up8', 'Up16', 'PngCropFit8', 'PngCropFit16'}
+    for case in stage['cases'].values():
+        assert case['status'] == 'pass' and case['upper'] <= 1
+        assert case['librarySha256'] == stage['producers']['linuxSha256']
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12
+        assert case['allActualsRetained'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
+        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def current_png_stream_word_note(current, one_shot):
-    stage = composition_storage()
-    word, byte = (stage['cases'][name] for name in ('PngCropFit16', 'PngCropFit8'))
-    return ('[Shared composition storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) '
-            f'qualifies the current complete PNG16 pipeline at **{word["managedUs"]:,.2f} / FFmpeg {word["nativeUs"]:,.2f} µs, '
+    stage = nearest_row_reuse()
+    word, byte, up = (stage['cases'][name] for name in ('PngCropFit16', 'PngCropFit8', 'Up16'))
+    gain = stage['pairedEffect']
+    return ('[Completed nearest rows](../benchmarks/NEAREST-ROW-REUSE.md) qualify the current complete '
+            f'PNG16 pipeline at **{word["managedUs"]:,.2f} / FFmpeg {word["nativeUs"]:,.2f} µs, '
             f'upper {word["upper"]:.6f}**, **{word["allocatedBytes"]:,.2f} B/op**. '
-            f'The byte control passes at **{byte["managedUs"]:,.2f} / {byte["nativeUs"]:,.2f} µs, upper {byte["upper"]:.6f}**, '
-            f'**{byte["allocatedBytes"]:,.2f} B/op**. Both retain native decoder/graph contexts between operations; '
-            'managed decoding, orientation, crop, nearest fit, every intermediate and independent result/disposal stay timed. '
-            'Final controlled DLL pairs establish about **97.4% less allocation**, with **no confirmed CPU gain**. '
-            'Three original direct-nearest controls pass; the fourth retains a rejected post-run I/O guard and remains unqualified. '
-            'All source/output hashes and exact pixel/ownership gates remain unchanged. '
-            'The earlier [precision capture](../benchmarks/PNG-WORD-COMPOSITION-PRECISION.md) and '
-            '[equivalent one-shot comparison](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) remain historical: '
-            'the latter includes fresh native preparation and is not replaced by this retained-context result. '
-            'Its displayed prior-artifact cost still needs the final storage refresh.')
+            f'PNG8 passes at **{byte["managedUs"]:,.2f} / {byte["nativeUs"]:,.2f} µs, upper {byte["upper"]:.6f}**, '
+            f'**{byte["allocatedBytes"]:,.2f} B/op**. Native contexts remain retained; managed stream delivery, '
+            'decode, orientation, crop, nearest fit, every intermediate and independent output/disposal stay timed. '
+            f'All four original direct-nearest controls pass and stop. RGBA16 enlargement is **{up["managedUs"]:,.2f} / '
+            f'FFmpeg {up["nativeUs"]:,.2f} µs, upper {up["upper"]:.6f}**, **{up["allocatedBytes"]:,.0f} B/op**; '
+            'the other three allocate112B/op. Independent final-DLL pairs save '
+            f'**{gain["savedUs"]:.3f} µs / {gain["gainPercent"]:.2f}%**, with unchanged allocation and owned/retained capacity. '
+            'Copies retain exact complete samples and1024-pixel cancellation checkpoints; no pool-cap or numerical change. '
+            'The original I/O-guard failures remain: bounded tmpfs holds only untimed temporary images, with original '
+            'inputs/settings, complete-operation boundaries and idle-v2 thresholds unchanged. A dual-context screen stays '
+            'diagnostic; accepted gain uses one default-loader process per DLL. Windows/Linux each pass6776full/live '
+            'checks,534internal/204public normal/scalar and the SAME actual package/all three examples. '
+            'Earlier [shared storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) independently establishes97.4%lessallocation, '
+            'not a summed CPU gain. Earlier fresh-native [one-shot composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) '
+            'and other historical storage-dependent costs still await the final complete package refresh.')
 
 
 def apply_current_png_scan(codecs, reads, current):
@@ -3091,7 +3122,7 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
-        c = storage_reuse['cases'][name] if name == 'WarmVerticalFlip8' else owned_copy['cases'][name]
+        c = storage_reuse['cases'][name] if name in {'WarmVerticalFlip8', 'WarmVerticalFlip16'} else owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
     byte_flip, word_flip = (storage_reuse['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
     owned_copy_note = f"""[Current owned-flip checks](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
@@ -3282,9 +3313,9 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
-This is an incremental update. Font-loading and complete-text costs use the header-
-batching package; storage costs retain their source-valid artifact. Unchanged
-paths reuse identified evidence. Other entries that
+This is an incremental update. Nearest resizing and PNG composition use the
+completed-row package; font/text costs retain the source-valid header-batching
+artifact. Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
 proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.

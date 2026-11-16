@@ -1,5 +1,8 @@
 # Remaining copy attribution and nearest uncertainty
 
+The later [nearest row-reuse round](NEAREST-ROW-REUSE.md) resolves the I/O
+preparation issue and qualifies Up16; these original rejected captures remain.
+
 CPA1158/NCR1159 change no production code, reference, fixture or required path.
 The current immutable package and all qualified passing controls remain stopped.
 

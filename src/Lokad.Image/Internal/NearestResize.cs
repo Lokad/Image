@@ -35,11 +35,28 @@ internal static class NearestResize
         var initialRemainder = sourceWidth % denominator;
         var step = 2L * sourceWidth / denominator;
         var remainderStep = 2L * sourceWidth % denominator;
+        var previousSourceY = -1;
         for (var y = 0; y < result.Height; y++)
         {
             var sy = ResizeSampling.Nearest(y, source.Height, result.Height);
-            var row = input.Slice(sy * sourceWidth, sourceWidth);
             var destination = output.Slice(y * width, width);
+            if (sy == previousSourceY)
+            {
+                // The previous complete row selected the same source cells.
+                // Copy only already-written pixels; preserve each 1024-pixel
+                // cancellation boundary without allocating coordinate storage.
+                var previous = output.Slice((y - 1) * width, width);
+                for (var x = 0; x < width;)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(1024, width - x);
+                    previous.Slice(x, count).CopyTo(destination.Slice(x, count));
+                    x += count;
+                }
+                continue;
+            }
+            previousSourceY = sy;
+            var row = input.Slice(sy * sourceWidth, sourceWidth);
             var sx = first;
             var remainder = initialRemainder;
             for (var x = 0; x < width; x++)
