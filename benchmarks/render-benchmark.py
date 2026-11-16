@@ -234,21 +234,21 @@ def apply_current_prepared_input(codecs, read_rows):
     return codecs, read_rows
 
 
-def drawing_row_stage():
-    stage = json.loads((ROOT / 'benchmarks/drawing-row-preparation-evidence.json').read_text(encoding='utf-8'))
+def borrowed_copy_stage():
+    stage = json.loads((ROOT / 'benchmarks/word-alias-dispatch-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
-    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled'] and stage['selectedVariant'] == 'A'
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
     assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6721
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == stage['producers']['packageSha256']
-    assert q['actualPackage']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
-    assert all(q[name]['actualConsumerPassed'] and q[name]['usageExamples'] == 3 for name in ('actualPackage', 'samePackageWindows'))
-    assert q['acceptedArtifactRebuildsAfterTiming'] == 0 and q['allAffectedPerformanceReconciledBeforeBroadQualification']
-    assert stage['sourceProof']['allOtherImageDrawingBodiesVerbatim'] and stage['sourceProof']['sharedGroupedKernelVerbatim']
-    assert stage['primaryBytePair']['ratioUpper'] < 1
-    assert stage['memory']['newOwnedHeapCapacityBytes'] == stage['memory']['newAdmittedBytes'] == stage['memory']['retainedOperationBytes'] == 0
-    assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'}
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6745
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['package']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
+    assert all(q[n]['actualConsumerPassed'] and q[n]['usageExamples'] == 3 for n in ('package', 'windowsPackage'))
+    assert stage['builds']['acceptedTimedLinuxRebuilds'] == 0
+    assert all(stage['sourceProof'].values())
+    assert stage['paired']['ratioUpper'] < 1 and stage['byteContradiction']['ratioLower'] < 1 < stage['byteContradiction']['ratioUpper']
+    assert stage['memory']['managedAllocatedBytesPerOperation'] == stage['memory']['newAdmittedCapacityBytes'] == stage['memory']['newRetainedCapacityBytes'] == 0
+    assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap'}
     for c in stage['cases'].values():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
@@ -256,24 +256,6 @@ def drawing_row_stage():
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     return stage
-
-
-def adjacent_word_copy():
-    stage = json.loads((ROOT / 'benchmarks/rectangle-copy-adjacent-evidence.json').read_text(encoding='utf-8'))
-    q, c = stage['qualification'], stage['cases']['DrawingCopy16']
-    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == 6721 and q['newBroadOrPackageChecks'] == 0
-    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs'] and q['sourceIdenticalQualificationReused']
-    assert q['packageSha256'] == stage['producers']['packageSha256']
-    assert q['librarySha256'] == c['librarySha256'] == stage['producers']['timedArtifactSha256']
-    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 65536
-    assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
-    assert c['allocatedBytes'] == 0 and c['borrowedCanvas'] and c['sourceUnchanged']
-    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    return c
 
 
 def owned_flip_confidence():
@@ -1910,9 +1892,8 @@ No heap capacity or retention is added; validation and independent owners remain
     assert len(drawing_cases) == 7
     assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
-    copy_current = drawing_row_stage()
+    copy_current = borrowed_copy_stage()
     drawing_cases.update(copy_current['cases'])
-    drawing_cases['DrawingCopy16'] = adjacent_word_copy()
     assert copy_current['borrowedDrawingStatusCounts'] == {
         'passCount': sum(c['status'] == 'pass' for c in drawing_cases.values()),
         'gaps': sum(c['status'] == 'gap' for c in drawing_cases.values()),
@@ -1923,44 +1904,49 @@ No heap capacity or retention is added; validation and independent owners remain
         'DrawingFill8': 'Exact clipped fill into borrowed RGBA8 canvas',
         'DrawingFill16': 'Exact clipped fill into borrowed RGBA16 canvas',
         'DrawingCopyOverlap8': 'Overlapping RGBA8 copy + reverse restoration, per pair',
+        'OriginalWordOverlap': 'Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair',
         'DrawingComposite8': 'RGBA8 source-over / FFmpeg overlay',
         'DrawingComposite16': 'RGBA16 source-over / ImageSharp 3.1.12',
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = (drawing_cases['DrawingCopy16']['librarySha256'] if name == 'DrawingCopy16'
-                   else copy_current['producers']['linuxSha256'] if name.startswith('DrawingCopy')
+        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases']
                    else bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs']/c['nativeUs'], rel_tol=1e-12)
-        if name == 'DrawingCopyOverlap8':
-            assert c['sourceAliasesCanvas'] and c['publicMovesPerPair'] == 2 and c['nativeCallsPerPair'] == 6 and c['restorationTimed']
+        if name in {'DrawingCopyOverlap8', 'OriginalWordOverlap'}:
+            assert c['sourceAliasesCanvas'] and c['publicMovesPerPair'] == 2 and c['restorationTimed']
+            assert c['nativeCallsPerPair'] == (258 if name == 'OriginalWordOverlap' else 6)
         else:
             assert c['sourceUnchanged']
         status = 'parity confirmed' if c['status'] == 'pass' else 'gap' if c['status'] == 'gap' else 'confidence open'
         mark = ' †' if name.startswith('DrawingComposite') else ''
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
-    borrowed_drawing_note = f"""[Prepared copy rows](../benchmarks/DRAWING-ROW-PREPARATION.md) reuse operation-local
-row offsets and signed strides, with the grouped/BCL kernels and every original
-chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
-**2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
-**{b8['managedUs']:.3f} / FFmpeg {b8['nativeUs']:.3f} µs, upper {b8['upper']:.3f}**.
-Overlap passes at **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs, upper {bo['upper']:.3f}**;
-word copy remains uncertain in the [matched adjacent comparison](../benchmarks/RECTANGLE-COPY-ADJACENT.md):
-**{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs, upper {bw['upper']:.3f}**.
-One 65,536-call capture uses equal adjacent batches to reduce drift; all twelve
-pairs/native brackets and the conservative rule remain. No production speedup,
-regression or passing word claim; no identical favorable retry follows. Reuse the
-qualified actual package, with one tool build and no broad campaign. Both OSes
-pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
-three examples. Borrowed capacity and zero retained workspace stay separate from
-allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls
-pass; byte copying and word confidence stay open. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evidence.
+    word_overlap = drawing_cases['OriginalWordOverlap']
+    borrowed_drawing_note = f"""[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) reuses the existing safe
+row kernel for disjoint RGBA16 rows, preserving traversal, clipping, chunk polls,
+validation and ownership. Controlled complete pairs save **16.697% / 1.235 µs**,
+**0 B/op**. Its current standalone original control remains a gap:
+**{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} µs**, upper
+**{word_overlap['upper']:.6f}** per forward/reverse pair. All four affected copy
+boundaries reconcile before qualification. Separate-byte **{b8['managedUs']:.3f} /
+{b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, remains a gap; one controlled
+DLL comparison does not establish the apparent historical-clock regression.
+Separate-word **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**,
+remains uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
+upper **{bo['upper']:.6f}**, passes/stops. No favorable capture retry follows.
+Each OS passes **6,745 full/live checks**, focused normal/scalar and original
+full-word snapshots/refusal/cancellation/recovery. The SAME actual immutable
+Release package and all three examples pass on both platforms. One core/embedded
+build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
+the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
+zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
+separate. Five of eight measured borrowed drawing controls pass, two gaps and
+one uncertainty remain. Prior fills/composites retain valid evidence.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
@@ -3077,22 +3063,6 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
     assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
-    original_overlap = json.loads((ROOT / 'benchmarks/original-word-overlap-evidence.json').read_text(encoding='utf-8'))
-    overlap_case = original_overlap['case']
-    overlap_q = json.loads((ROOT / original_overlap['qualification']['provider']).read_text(encoding='utf-8'))
-    assert original_overlap['measurementAccepted'] and not original_overlap['productionChanged']
-    assert not original_overlap['productionSpeedupClaim'] and original_overlap['newRequiredPaths'] == 0
-    assert original_overlap['requiredMaterialPaths'] == 289
-    assert original_overlap['producers'] == overlap_q['producers']
-    assert overlap_case['librarySha256'] == overlap_q['qualification']['package']['librarySha256']
-    assert original_overlap['raw']['mirrored'] and original_overlap['raw']['allMembersVerified']
-    assert overlap_case['actuals'] == 12 and overlap_case['operationsPerActual'] == 16384
-    assert all(overlap_case[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'exactFullWordSnapshotAndUntouchedPixels'))
-    assert overlap_case['status'] == 'gap' and overlap_case['lower'] > 1 and overlap_case['allocatedBytes'] == 0
-    assert math.isclose(overlap_case['ratio'], overlap_case['managedUs'] / overlap_case['nativeUs'], rel_tol=1e-12)
-    editing += (f'\n| Original overlapping copy RGBA16, 257×129, shift (1,1), pair (gap) | '
-                f'{overlap_case["managedUs"]:.3f} | {overlap_case["nativeUs"]:.3f} | '
-                f'{overlap_case["ratio"]:.3f} / {overlap_case["upper"]:.6f} | {overlap_case["allocatedBytes"]} |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3106,12 +3076,8 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 {borrowed_drawing_note}
 
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
-retains the inherited unmeasured names. The original RGBA16 self-overlap now has
-[independent evidence](../benchmarks/ORIGINAL-WORD-OVERLAP.md): **7.010 / FFmpeg
-5.092 µs per forward/reverse pair**, interval **1.366637–1.379847**, **0 B/op**.
-This is a demonstrated gap on an existing required boundary, not a production
-speedup. Full-word snapshots, untouched pixels, cancellation/refusal/recovery and
-normal/scalar checks pass on both platforms using the actual immutable package DLL.
+retains inherited unmeasured names. Passing related inputs or different public
+boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:

@@ -14,32 +14,31 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Prepared copy rows](../benchmarks/DRAWING-ROW-PREPARATION.md) reuse operation-local
-row offsets and signed strides, with the grouped/BCL kernels and every original
-chunk/cancellation/ownership boundary. Independent complete byte-copy pairs save
-**2.87% / 0.058 µs**, still **0 B/op**. Current byte copy remains a gap:
-**1.969 / FFmpeg 1.919 µs, upper 1.032**.
-Overlap passes at **3.669 / 3.778 µs, upper 0.980**;
-word copy remains uncertain in the [matched adjacent comparison](../benchmarks/RECTANGLE-COPY-ADJACENT.md):
-**3.776 / 3.768 µs, upper 1.006**.
-One 65,536-call capture uses equal adjacent batches to reduce drift; all twelve
-pairs/native brackets and the conservative rule remain. No production speedup,
-regression or passing word claim; no identical favorable retry follows. Reuse the
-qualified actual package, with one tool build and no broad campaign. Both OSes
-pass **6,721 full/live checks**, focused normal/scalar and the SAME actual package/
-three examples. Borrowed capacity and zero retained workspace stay separate from
-allocation and unmeasured physical/native/JIT peaks. Five of seven drawing controls
-pass; byte copying and word confidence stay open. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
-and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evidence.
+[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) reuses the existing safe
+row kernel for disjoint RGBA16 rows, preserving traversal, clipping, chunk polls,
+validation and ownership. Controlled complete pairs save **16.697% / 1.235 µs**,
+**0 B/op**. Its current standalone original control remains a gap:
+**5.576 / FFmpeg 5.077 µs**, upper
+**1.104081** per forward/reverse pair. All four affected copy
+boundaries reconcile before qualification. Separate-byte **2.056 /
+1.883 µs**, upper **1.142**, remains a gap; one controlled
+DLL comparison does not establish the apparent historical-clock regression.
+Separate-word **4.103 / 4.124 µs**, upper **1.002100**,
+remains uncertain. Byte overlap **3.624 / 3.867 µs**,
+upper **0.940570**, passes/stops. No favorable capture retry follows.
+Each OS passes **6,745 full/live checks**, focused normal/scalar and original
+full-word snapshots/refusal/cancellation/recovery. The SAME actual immutable
+Release package and all three examples pass on both platforms. One core/embedded
+build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
+the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
+zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
+separate. Five of eight measured borrowed drawing controls pass, two gaps and
+one uncertainty remain. Prior fills/composites retain valid evidence.
 
 
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
-retains the inherited unmeasured names. The original RGBA16 self-overlap now has
-[independent evidence](../benchmarks/ORIGINAL-WORD-OVERLAP.md): **7.010 / FFmpeg
-5.092 µs per forward/reverse pair**, interval **1.366637–1.379847**, **0 B/op**.
-This is a demonstrated gap on an existing required boundary, not a production
-speedup. Full-word snapshots, untouched pixels, cancellation/refusal/recovery and
-normal/scalar checks pass on both platforms using the actual immutable package DLL.
+retains inherited unmeasured names. Passing related inputs or different public
+boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -392,11 +391,12 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.97 | 1.92 | 1.026 / 1.032 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.78 | 3.77 | 1.002 / 1.006 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.06 | 1.88 | 1.092 / 1.142 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.10 | 4.12 | 0.995 / 1.002 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.67 | 3.78 | 0.971 / 0.980 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.62 | 3.87 | 0.937 / 0.941 | 0 |
+| Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair (gap) | 5.58 | 5.08 | 1.098 / 1.104 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,151.49 | 6,195.03 | 0.186 / 0.205 | 306,168 |
@@ -434,7 +434,6 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
 | Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
-| Original overlapping copy RGBA16, 257×129, shift (1,1), pair (gap) | 7.010 | 5.092 | 1.377 / 1.379847 | 0 |
 
 **Inspection and pixel-coding validation**
 

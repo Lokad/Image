@@ -9,6 +9,7 @@ p.add_argument('--core-sha256', required=True)
 p.add_argument('--input', required=True)
 p.add_argument('--prefix', required=True)
 p.add_argument('--mode', choices=['short', 'confirm'], required=True)
+p.add_argument('--production-changed', action='store_true')
 a = p.parse_args()
 prefix = Path(a.prefix)
 n = 3 if a.mode == 'short' else 12
@@ -127,7 +128,7 @@ native_lower = min(v['lower'] for v in native.values())
 upper = max(managed['upper'] / native_lower if native_lower > 0 else math.inf, math.exp(paired['upper']))
 reference = min(v['mean'] for v in native.values())
 result = dict(project='Lokad.Image', originalRequiredControl='CopyRegion/Rgba16Overlapping',
-    productionChanged=False, newRequiredPaths=0, librarySha256=a.core_sha256,
+    productionChanged=a.production_changed, newRequiredPaths=0, librarySha256=a.core_sha256,
     mode=a.mode, actuals=n, operationsPerActual=operations, allActualsRetained=True,
     managedUs=managed['mean']/1000, nativeUs=reference/1000, ratio=managed['mean']/reference,
     lower=lower, upper=upper, status='pass' if upper <= 1 else 'gap' if lower > 1 else 'uncertain',

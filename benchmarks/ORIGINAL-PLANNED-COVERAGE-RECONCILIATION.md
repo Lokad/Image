@@ -22,7 +22,7 @@ with an easier operation. The following finite list is the inherited 17:
 | `FillRectangle/Rgba8Clipped` | Clipped byte replacement. Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel. |
 | `FillRectangle/Rgba16Clipped` | Clipped full-word replacement. Current fill passes; same original-recipe reconciliation remains. |
 | `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
-| `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 now independently confirms a gap:7.010/FFmpeg5.092us,upper1.379847,0B/op. Next demonstrated material copy gap. |
+| `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
 | `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
 | `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. Separate-owner Rgba64 comparison does not exercise self-aliasing; no original-boundary current timing. |
 | `TextLayout/OriginalUnicode` | Authored cmap12/long-loca,quadratic extrema and compound accent. Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input. |
@@ -42,14 +42,15 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-OWC1125 executes the first missing boundary on the actual immutable package:
+OWC1125 executes the first missing boundary on its actual immutable package:
 original RGBA16 self-overlap,257×129,shift(1,1). The prose did not fix the absolute
 origin; freeze(0,0)→(1,1),then reverse in both timed totals. It independently shows
 7.010/FFmpeg5.092µs,upper1.379847,0managedB/op. Full-word snapshot/untouched pixels,
 normal/scalar,refusal/cancellation/recovery and equivalent borrowed ownership pass.
 No production build or broader package campaign is needed for this measurement.
-This demonstrated gap takes priority over tiny copying/probe differences; it is
-not a speedup. Its own report retains producers, raw samples and source identities.
+[Word-alias dispatch](WORD-ALIAS-DISPATCH.md) subsequently reduces this gap with a
+controlled16.697%gain;current5.576/5.077us,upper1.104081 remains open. Both reports
+retain producers,raw actuals and source identities;no historical-clock gain is inferred.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay

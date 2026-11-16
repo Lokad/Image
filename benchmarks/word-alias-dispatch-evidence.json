@@ -1,0 +1,838 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAD1126",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+    "linuxSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "timedArtifactSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "packageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8"
+  },
+  "baselineProducers": {
+    "windowsSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+    "linuxSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "timedArtifactSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "sourceProof": {
+    "wholeOriginalDrawingSourceReconstructed": true,
+    "onlyCopyRegionSelectionChanged": true,
+    "existingKernelVerbatim": true,
+    "byteDecisionsEquivalent": true,
+    "separateWordAndSameRowMemmovePreserved": true,
+    "allOtherMethodsVerbatim": true,
+    "traversalClippingValidationPollsOwnershipVerbatim": true
+  },
+  "hypothesis": "Use the existing bounded disjoint-row kernel for RGBA16 self-aliases with unequal row coordinates. Distinct packed rows cannot overlap; existing two-dimensional traversal preserves snapshot semantics. Avoid repeated runtime memmove dispatch for each small word row.",
+  "intendedEndState": "One existing row-copy implementation, no added loops, buffer or owner. Preserve separate-word BCL copying and same-row memmove at both depths. All traversal, chunk cancellation, clipping, validation, admission and exact pixels remain verbatim.",
+  "cases": {
+    "DrawingCopy8": {
+      "caseId": "DrawingCopy8",
+      "managedUs": 2.056110157178008,
+      "nativeUs": 1.8827532730102539,
+      "ratio": 1.0920762622765652,
+      "lower": 1.0402260984690175,
+      "upper": 1.1415456830881558,
+      "status": "gap",
+      "allocatedBytes": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "harnessSha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+        "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+        "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "copy-region",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "workerThreads": 1,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "sourceX": 127,
+        "sourceY": 65,
+        "copyWidth": 256,
+        "copyHeight": 129,
+        "destinationX": 17,
+        "destinationY": 19,
+        "borrowedSource": true,
+        "borrowedCanvas": true,
+        "canvasMutationTimed": true,
+        "sourcePreparationTimed": false,
+        "canvasPreparationTimed": false,
+        "outputAllocationTimed": false,
+        "initialCompletedOperations": 1,
+        "inputStride": 2052,
+        "ffmpegVersion": "n8.1",
+        "avutilVersion": 3938916
+      },
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "observation": "tmp/wad1126-copy-DrawingCopy8-confirm-observation.json",
+      "nativeSamplesEachBracket": 12,
+      "sourceUnchanged": true
+    },
+    "DrawingCopyOverlap8": {
+      "caseId": "DrawingCopyOverlap8",
+      "managedUs": 3.624037424516909,
+      "nativeUs": 3.867204060872396,
+      "ratio": 0.9371208158328652,
+      "lower": 0.9339706876671492,
+      "upper": 0.9405704020716137,
+      "status": "pass",
+      "allocatedBytes": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "harnessSha256": "8ab31255f3286061563d5685b4a427aad74c95b1a349c80b9394c57727a45d27",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "f4e16979890bec62df43d6c0f5c22e7ed3e397f848cc374c6ddee95dc5e2ed23",
+      "boundary": "One complete paired overlapping-copy operation on the original resident 513x259 RGBA8 canvas. Forward source17,19/256x129 to127,65, then reverse source127,65/256x129 to17,19. TWO public CopyRegion calls and their admission/cancellation/scope cleanup per managed operation; reverse restoration included in BOTH elapsed/allocation totals. Native public FFmpeg plane copies use three disjoint46-row-or-smaller bands in the correct direction per move, SIX calls per pair, no temporary pixels. One borrowed mutable canvas; snapshot semantics, full forward/final pixels, alpha/hiddenRGB and untouched pixels exact. Pair state stable after preparation; forward still changes overlap pixels. No reset/output allocation/full-frame copy on either subject. Startup/preparation/IPC/I/O/verification excluded. One CPU, normal SIMD. Costs are per pair, not per single move; only these fixed directions/rectangle/depth are measured.",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "45ee17ea9fc81739aaf557dbd5b94361b94d50d31da696ad627cd908b3d3eee9",
+        "buildScriptSha256": "01d17922416b1622bd205ad24a654274f490118e52da920c7c7cc4efee5a15b0",
+        "workerSha256": "e18570ca7b6129cf5cdfa4a5454dd9d5854aabc09d8927ee9648407112e0439c",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "copy-region-overlap",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "workerThreads": 1,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "publicMovesPerPair": 2,
+        "nativeCallsPerPair": 6,
+        "bandHeight": 46,
+        "sourceAliasesCanvas": true,
+        "borrowedCanvas": true,
+        "canvasMutationTimed": true,
+        "restorationTimed": true,
+        "canvasPreparationTimed": false,
+        "sourcePreparationTimed": false,
+        "outputAllocationTimed": false,
+        "temporaryPixelBytes": 0,
+        "disjointNativeRanges": true,
+        "initialCompletedOperations": 1,
+        "inputStride": 2052,
+        "ffmpegVersion": "n8.1",
+        "avutilVersion": 3938916
+      },
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": true,
+      "observation": "tmp/wad1126-copy-DrawingCopyOverlap8-confirm-observation.json",
+      "nativeSamplesEachBracket": 12,
+      "publicMovesPerPair": 2,
+      "nativeCallsPerPair": 6,
+      "restorationTimed": true
+    },
+    "DrawingCopy16": {
+      "caseId": "DrawingCopy16",
+      "managedUs": 4.103302145640056,
+      "nativeUs": 4.124162419637044,
+      "ratio": 0.9949419368408812,
+      "lower": 0.9857309715058983,
+      "upper": 1.0020999196222875,
+      "status": "uncertain",
+      "allocatedBytes": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "harnessSha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+      "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA16 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+        "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+        "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "copy-region",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "workerThreads": 1,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "sourceX": 127,
+        "sourceY": 65,
+        "copyWidth": 256,
+        "copyHeight": 129,
+        "destinationX": 17,
+        "destinationY": 19,
+        "borrowedSource": true,
+        "borrowedCanvas": true,
+        "canvasMutationTimed": true,
+        "sourcePreparationTimed": false,
+        "canvasPreparationTimed": false,
+        "outputAllocationTimed": false,
+        "initialCompletedOperations": 1,
+        "inputStride": 4104,
+        "ffmpegVersion": "n8.1",
+        "avutilVersion": 3938916
+      },
+      "actualIterations": 12,
+      "operationsPerSubject": 65536,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": false,
+      "observation": "tmp/wad1126-copy-DrawingCopy16.json",
+      "nativeSamplesEachBracket": 12,
+      "sourceUnchanged": true
+    },
+    "OriginalWordOverlap": {
+      "project": "Lokad.Image",
+      "originalRequiredControl": "CopyRegion/Rgba16Overlapping",
+      "productionChanged": true,
+      "newRequiredPaths": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "mode": "confirm",
+      "actuals": 12,
+      "operationsPerActual": 16384,
+      "allActualsRetained": true,
+      "managedUs": 5.57625298055013,
+      "nativeUs": 5.077064208984375,
+      "ratio": 1.0983223278292187,
+      "lower": 1.0896174095187419,
+      "upper": 1.104080879550427,
+      "status": "gap",
+      "allocatedBytes": 0,
+      "managed": {
+        "mean": 5576.25298055013,
+        "lower": 5554.025060831026,
+        "upper": 5598.480900269234,
+        "values": [
+          5613.095703125,
+          5572.461853027344,
+          5576.6937255859375,
+          5593.256896972656,
+          5542.894348144531,
+          5580.435974121094,
+          5558.590759277344,
+          5568.6419677734375,
+          5578.612548828125,
+          5574.9937744140625,
+          5586.055480957031,
+          5569.302734375
+        ]
+      },
+      "nativeBrackets": {
+        "before": {
+          "mean": 5077.064208984375,
+          "lower": 5071.509877705232,
+          "upper": 5082.618540263518,
+          "values": [
+            5082.439758300781,
+            5069.0081787109375,
+            5079.0526123046875,
+            5078.441955566406,
+            5075.3984375,
+            5075.224792480469,
+            5084.823669433594,
+            5076.3673095703125,
+            5072.927001953125,
+            5078.527587890625,
+            5079.4310302734375,
+            5073.128173828125
+          ]
+        },
+        "paired": {
+          "mean": 5085.60676574707,
+          "lower": 5073.988567656505,
+          "upper": 5097.224963837635,
+          "values": [
+            5112.606689453125,
+            5082.304504394531,
+            5081.855163574219,
+            5076.798095703125,
+            5081.372314453125,
+            5081.207275390625,
+            5083.2984619140625,
+            5086.583435058594,
+            5084.189697265625,
+            5081.78125,
+            5089.222351074219,
+            5086.061950683594
+          ]
+        },
+        "after": {
+          "mean": 5077.755661010742,
+          "lower": 5070.71628896326,
+          "upper": 5084.795033058224,
+          "values": [
+            5089.517517089844,
+            5081.122253417969,
+            5078.341552734375,
+            5070.4151611328125,
+            5082.896179199219,
+            5070.4903564453125,
+            5071.14013671875,
+            5076.2247314453125,
+            5077.425842285156,
+            5078.141662597656,
+            5079.410705566406,
+            5077.941833496094
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.09209971186517373,
+        "lower": 0.08891647744448324,
+        "upper": 0.09528294628586421,
+        "values": [
+          0.09339299657362238,
+          0.0920721393553406,
+          0.0929196938812509,
+          0.09688097991000831,
+          0.08693544409614687,
+          0.09371801891260204,
+          0.08938426116385591,
+          0.0905448379694995,
+          0.09280443307943913,
+          0.09262936075411538,
+          0.0931483604770233,
+          0.09076601620918039
+        ]
+      },
+      "quietGuardsPassed": true,
+      "exactFullWordSnapshotAndUntouchedPixels": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+      "clocksPerBatch": 2,
+      "outputOwnership": "One borrowed aliased canvas;two public moves,no output allocation/reset per operation.",
+      "confidence": "All actuals;two-sided99.9%Student-t;paired log ratio and managed mean versus fastest of three native bracket lower bounds;no sample filtering.",
+      "boundary": "Original513x259RGBA16,257x129rectangle,forward(0,0)to(1,1),thenreverse. Complete validation/clipping/cancellation and both moves stay timed. FFmpeg public av_image_copy_plane uses258disjoint one-row calls per pair with scheduling timed. Both borrow one mutable canvas;no per-op reset/output allocation. Preparation,hashing,verification,IPC and startup excluded equally. Native arguments prevalidated;managed public validation remains included.",
+      "caseId": "OriginalWordOverlap",
+      "actualIterations": 12,
+      "allOriginalGatesPassed": true,
+      "managedExact": true,
+      "borrowedCanvas": true,
+      "sourceAliasesCanvas": true,
+      "nativeSamplesEachBracket": 12,
+      "publicMovesPerPair": 2,
+      "nativeCallsPerPair": 258,
+      "restorationTimed": true
+    }
+  },
+  "short": {
+    "project": "Lokad.Image",
+    "originalRequiredControl": "CopyRegion/Rgba16Overlapping",
+    "productionChanged": true,
+    "newRequiredPaths": 0,
+    "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "mode": "short",
+    "actuals": 3,
+    "operationsPerActual": 16384,
+    "allActualsRetained": true,
+    "managedUs": 5.567570943196614,
+    "nativeUs": 5.020230407714844,
+    "ratio": 1.1090269750648585,
+    "lower": 1.0765733323393791,
+    "upper": 1.142394317827429,
+    "status": "gap",
+    "allocatedBytes": 0,
+    "managed": {
+      "mean": 5567.570943196614,
+      "lower": 5479.67126996878,
+      "upper": 5655.470616424449,
+      "values": [
+        5562.041931152344,
+        5570.87060546875,
+        5569.80029296875
+      ]
+    },
+    "nativeBrackets": {
+      "before": {
+        "mean": 5020.4671630859375,
+        "lower": 4997.467180466351,
+        "upper": 5043.467145705524,
+        "values": [
+          5019.363586425781,
+          5021.841125488281,
+          5020.19677734375
+        ]
+      },
+      "paired": {
+        "mean": 5023.573262532552,
+        "lower": 4978.981406412939,
+        "upper": 5068.165118652165,
+        "values": [
+          5024.104675292969,
+          5020.907043457031,
+          5025.708068847656
+        ]
+      },
+      "after": {
+        "mean": 5020.230407714844,
+        "lower": 4950.541619622069,
+        "upper": 5089.919195807618,
+        "values": [
+          5022.675476074219,
+          5015.82861328125,
+          5022.1871337890625
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": 0.10281720588311598,
+      "lower": 0.08253829779243232,
+      "upper": 0.12309611397379963,
+      "values": [
+        0.1017180306464946,
+        0.10394074099332161,
+        0.10279284600953172
+      ]
+    },
+    "quietGuardsPassed": true,
+    "exactFullWordSnapshotAndUntouchedPixels": true,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+    "clocksPerBatch": 2,
+    "outputOwnership": "One borrowed aliased canvas;two public moves,no output allocation/reset per operation.",
+    "confidence": "All actuals;two-sided99.9%Student-t;paired log ratio and managed mean versus fastest of three native bracket lower bounds;no sample filtering.",
+    "boundary": "Original513x259RGBA16,257x129rectangle,forward(0,0)to(1,1),thenreverse. Complete validation/clipping/cancellation and both moves stay timed. FFmpeg public av_image_copy_plane uses258disjoint one-row calls per pair with scheduling timed. Both borrow one mutable canvas;no per-op reset/output allocation. Preparation,hashing,verification,IPC and startup excluded equally. Native arguments prevalidated;managed public validation remains included."
+  },
+  "paired": {
+    "project": "Lokad.Image",
+    "stage": "WAD1126",
+    "allActualsRetained": true,
+    "pairs": 12,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "candidateSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "baseline": {
+      "mean": 7396.000422159831,
+      "lower": 7382.344678183698,
+      "upper": 7409.656166135964,
+      "values": [
+        7391.342346191406,
+        7397.4342041015625,
+        7370.619323730469,
+        7411.972229003906,
+        7395.3509521484375,
+        7392.67724609375,
+        7390.156982421875,
+        7402.240661621094,
+        7389.887390136719,
+        7403.80126953125,
+        7407.681640625,
+        7398.8408203125
+      ]
+    },
+    "candidate": {
+      "mean": 6161.067881266276,
+      "lower": 6150.494024774886,
+      "upper": 6171.641737757666,
+      "values": [
+        6161.928161621094,
+        6152.773681640625,
+        6160.4439697265625,
+        6160.368225097656,
+        6151.33349609375,
+        6158.065490722656,
+        6156.88330078125,
+        6150.6690673828125,
+        6175.53271484375,
+        6167.660095214844,
+        6162.0845947265625,
+        6175.07177734375
+      ]
+    },
+    "ratio": 0.8330269780416101,
+    "ratioLower": 0.8309072685874906,
+    "ratioUpper": 0.835152313249352,
+    "elapsedReduction": 0.16697302195838992,
+    "savedUs": 1.2349325408935548,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All12alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "byteContradiction": {
+    "project": "Lokad.Image",
+    "stage": "WAD1126",
+    "caseId": "DrawingCopy8",
+    "baselineUs": 1.9830416971842448,
+    "candidateUs": 1.9845564778645832,
+    "savedUs": -0.00151478068033839,
+    "rawReduction": -0.0007638672865473151,
+    "ratioLower": 0.9988315851410593,
+    "ratioUpper": 1.0027010726300076,
+    "baselineAllocatedBytes": 0.0,
+    "candidateAllocatedBytes": 0.0,
+    "pairs": 12,
+    "operationsEachSubject": 8192,
+    "allActualsRetained": true,
+    "outputExact": true,
+    "borrowedCanvas": true,
+    "independentSubjects": true,
+    "quietGuardsPassed": true,
+    "managedOnlyIncrementalComparison": true,
+    "notNativeParity": true,
+    "productionSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/bdo973-paired/bin/Release/net10.0/Bdo973Paired.dll",
+      "tmp/wad1126-baseline-linux/Lokad.Image.dll",
+      "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "tmp/wad1126-candidate-linux/Lokad.Image.dll",
+      "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+      "confirm",
+      "DrawingCopy8"
+    ],
+    "raw": "tmp/wad1126-DrawingCopy8-paired-confirm.log"
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "WAD1126",
+      "platform": "windows",
+      "productionSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+      "embeddedTestsSha256": "565f02849d52d5e3087c97686c1cd9ede36de177ff1322a0ac1d25b6c60b75e8",
+      "publicTestsSha256": "3253cd293d2183059b6c3c15c81bd758f3dca98811ef40fb93d70ac97959a1a3",
+      "full": [
+        3294,
+        2503,
+        948
+      ],
+      "total": 6745,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 190,
+        "internal-scalar": 25,
+        "public-scalar": 190
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "WAD1126",
+        "platform": "windows",
+        "productionSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+        "candidateSources": {
+          "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7"
+        },
+        "testSources": {},
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+          "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 190,
+          "internal-scalar": 25,
+          "public-scalar": 190
+        },
+        "logs": [
+          "tmp/wad1126-windows-build-core.log",
+          "tmp/wad1126-windows-build-internal.log",
+          "tmp/wad1126-windows-internal-normal.log",
+          "tmp/wad1126-windows-public-normal.log",
+          "tmp/wad1126-windows-internal-scalar.log",
+          "tmp/wad1126-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "WAD1126",
+      "platform": "linux",
+      "productionSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "embeddedTestsSha256": "6e85aa8074ca4ed009ef47030f4d6ce20fc7a229d2dc142daffa3cc45db0edb7",
+      "publicTestsSha256": "d0e00432a5a85eb66c5959534217ec6ccb599b36f12cee3ad7c1c2389481496b",
+      "full": [
+        3294,
+        2503,
+        948
+      ],
+      "total": 6745,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 25,
+        "public-normal": 190,
+        "internal-scalar": 25,
+        "public-scalar": 190
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "WAD1126",
+        "platform": "linux",
+        "productionSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "candidateSources": {
+          "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7"
+        },
+        "testSources": {},
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+          "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+          "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 25,
+          "public-normal": 190,
+          "internal-scalar": 25,
+          "public-scalar": 190
+        },
+        "logs": [
+          "tmp/wad1126-linux-build-core.log",
+          "tmp/wad1126-linux-build-internal.log",
+          "tmp/wad1126-linux-internal-normal.log",
+          "tmp/wad1126-linux-public-normal.log",
+          "tmp/wad1126-linux-internal-scalar.log",
+          "tmp/wad1126-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 0,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "WAD1126",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8",
+      "symbolsSha256": "0006aef80b69b1035a7247a59e278edb6a795515b9c4e0188dd0e81ebc1713cd",
+      "bytes": 468289,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable timed Linux word-self-alias row dispatch;existing kernel,byte/separate-word/same-row behavior,validation,traversal,polls and owners preserved. Controlled original word-overlap pairs save16.697percent/1.234933us;standalone gap remains. Allfour CopyRegion boundaries reconcile before qualification;byte point adversity has no controlled causal regression,wordindependent uncertain,byteoverlap passes. EachOS6745full/live,25internal190public normal/scalar and original fullword worker;SAMEactualpackage/all3examples. Onecore/embedded buildperOS,zero public/harness/native/fixturebuilds,oneNoBuildpack,no timedLinux rebuild. No new allocated/admitted/retained capacity;publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "WAD1126",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8",
+      "symbolsSha256": "0006aef80b69b1035a7247a59e278edb6a795515b9c4e0188dd0e81ebc1713cd",
+      "bytes": 468289,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable timed Linux word-self-alias row dispatch;existing kernel,byte/separate-word/same-row behavior,validation,traversal,polls and owners preserved. Controlled original word-overlap pairs save16.697percent/1.234933us;standalone gap remains. Allfour CopyRegion boundaries reconcile before qualification;byte point adversity has no controlled causal regression,wordindependent uncertain,byteoverlap passes. EachOS6745full/live,25internal190public normal/scalar and original fullword worker;SAMEactualpackage/all3examples. Onecore/embedded buildperOS,zero public/harness/native/fixturebuilds,oneNoBuildpack,no timedLinux rebuild. No new allocated/admitted/retained capacity;publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8"
+    },
+    "originalWordLinux": {
+      "normal": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      },
+      "scalar": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      }
+    },
+    "originalWordWindows": {
+      "project": "Lokad.Image",
+      "stage": "WAD1126",
+      "productionSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+      "checks": {
+        "normal": {
+          "state": "checked",
+          "exact": true,
+          "libraryHash": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "fullWordSnapshotExact": true,
+          "cancellationAndRefusalRecovery": true
+        },
+        "scalar": {
+          "state": "checked",
+          "exact": true,
+          "libraryHash": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "fullWordSnapshotExact": true,
+          "cancellationAndRefusalRecovery": true
+        }
+      },
+      "allBuilds": 0,
+      "noTimings": true
+    },
+    "fullChecksEachOs": 6745,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3
+  },
+  "memory": {
+    "managedAllocatedBytesPerOperation": 0,
+    "newAdmittedCapacityBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "originalWordBorrowedCanvasBytes": 1062936,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "builds": {
+    "coreEachOs": 1,
+    "embeddedEachOs": 1,
+    "publicEachOs": 0,
+    "managedTools": 0,
+    "native": 0,
+    "harness": 0,
+    "fixtures": 0,
+    "package": 1,
+    "acceptedTimedLinuxRebuilds": 0
+  },
+  "borrowedDrawingStatusCounts": {
+    "passCount": 5,
+    "gaps": 2,
+    "uncertain": 1,
+    "total": 8
+  },
+  "invalidation": "Only the four public CopyRegion comparisons are refreshed for this method/JIT shape. Fill/composite,clone/orientation,codec/resizing and font/text production bodies remain unchanged;their identified evidence is reused. The original7.010us measurement is historical after adoption;current word5.576us remains a gap. No whole-library method audit or unrelated timing campaign.",
+  "interpretation": "Controlled original word-alias reduction16.697percent/1.234933us;standalone current gap remains. Earlier short and every adverse actual retained. Separate-byte standalone is adverse versus historical cost,but a justified controlled DLL pair finds-.076percent point,CI.998832-1.002701;no demonstrated causal regression or historical-clock gain. Separate-word remains uncertain;byte-overlap passes. No repeated favorable standalone capture. No broader speedup/parity claim.",
+  "preflight": "First neighbor launch lacked a retained temporary controller script;failed before any workload sample. Restored that unchanged script and resumed the already prepared runtime,with failure log retained. A local paired receipt download used its prior prefix;recovered the existing four completed files without resampling. No failed sample was discarded or repeated.",
+  "raw": {
+    "file": "word-alias-dispatch-qualified.tar.xz",
+    "sha256": "5ae813b07fcaf5a88464400712d560efcbc41034a517944854649c174c1b5b51",
+    "bytes": 4589296,
+    "members": 148,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "original-word-overlap-confirmation.tar.xz",
+        "sha256": "91ae1f043d02666e0bf9cd942f49eb7696e4fd815de9cd615cc4ee80a6310799"
+      },
+      {
+        "file": "text-glyph-row-bounds-qualified.tar.xz",
+        "sha256": "fe37d7b79882d4918770ea95d48717d5d0e5f74589011dc1f04abc26f59b123e"
+      },
+      {
+        "file": "borrowed-drawing-validation-qualified.tar.xz",
+        "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+      },
+      {
+        "file": "rectangle-copy-adjacent.tar.xz",
+        "sha256": "df5c5abb3b57248b7c74cd5779f188be099e8562abc5f67ac279c619239576e4"
+      }
+    ]
+  }
+}

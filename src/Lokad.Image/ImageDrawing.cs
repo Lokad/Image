@@ -74,9 +74,9 @@ public static partial class ImageDrawing
         if (region.Width == 0 || region.Height == 0) return;
         ValidateRegion(region, limits);
         var sameBuffer = ReferenceEquals(source, canvas);
-        // The measured byte fast path requires disjoint row slices. Word copies
-        // retain the existing runtime kernel; traversal still handles all aliases.
-        var independentRows = canvas.BitDepth == 8 && (!sameBuffer || region.SourceY != region.DestinationY);
+        // Different packed rows are disjoint at either depth; traversal below
+        // handles cross-row aliases. Keep same-row memmove and separate-word copies.
+        var independentRows = sameBuffer ? region.SourceY != region.DestinationY : canvas.BitDepth == 8;
         var backwardsY = sameBuffer && region.DestinationY > region.SourceY;
         var backwardsX = sameBuffer && region.DestinationX > region.SourceX;
         // Admission and geometry are already validated. Borrow each packed

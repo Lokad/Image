@@ -1,5 +1,8 @@
 # Original word-overlap copy
 
+This is the initial immutable baseline. [Word-alias dispatch](WORD-ALIAS-DISPATCH.md)
+owns current costs after its accepted production change;this evidence is retained.
+
 The original required `CopyRegion/Rgba16Overlapping` boundary has a confirmed
 warm single-CPU gap: **7.010 / FFmpeg 5.092 µs per forward/reverse pair**, ratio
 **1.376832**, conservative interval **1.366637–1.379847**, **0 managed B/op**.
