@@ -3232,6 +3232,19 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     assert default_variation['qualification']['newBroadOrPackageChecks'] == 0
     editing += (f'\n| Authored default-variation layout / ImageSharp public integration (parity confirmed) | '
                 f'{dv["managedUs"]:.3f} | {dv["referenceUs"]:.3f} | {dv["ratio"]:.3f} / {dv["upper"]:.6f} | {dv["allocatedBytes"]:,} |')
+    authored = json.loads((ROOT / 'benchmarks/authored-font-comparisons-evidence.json').read_text(encoding='utf-8'))
+    assert authored['measurementAccepted'] and not authored['productionChanged']
+    assert authored['requiredMaterialPaths'] == 289 and authored['newRequiredPaths'] == 0
+    assert authored['producers'] == entropy['producers']
+    assert authored['raw']['mirrored'] and authored['raw']['allMembersVerified']
+    for name, label in [('OriginalUnicode', 'Authored Unicode layout'), ('PackedBmp', 'Authored cmap4 layout'),
+                        ('CompositeTransforms', 'Authored compound layout'), ('Render8', 'Authored RGBA8 layout + draw'),
+                        ('Render16', 'Authored RGBA16 layout + draw')]:
+        a = authored['cases'][name]
+        assert a['actualsEach'] == 12 and a['status'] == 'pass' and a['upper'] < 1
+        assert all(a[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'exactManagedObservations', 'independentOutputs'))
+        editing += (f'\n| {label} / corrected ImageSharp integration (parity confirmed) | '
+                    f'{a["managedUs"]:.3f} | {a["referenceUs"]:.3f} | {a["ratio"]:.3f} / {a["upper"]:.6f} | {a["allocatedBytes"]:,} |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3270,9 +3283,17 @@ measurement, independent output and disposal are included; fonts are prepared
 outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-shot
 font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
 and unmeasured reference/physical retention are separate from allocations.
-Five original font boundaries need [reference-output alignment](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
-and remain unmeasured. All six retained-owner checks pass on both operating systems;
-the mismatches establish no CPU gap or overall text slowdown.
+The [five original authored-font controls](../benchmarks/AUTHORED-FONT-COMPARISONS.md)
+now pass/stop on the unchanged actual-package DLL. Their reference is explicitly
+**source-corrected Fonts 2.1.3 / Drawing 2.1.7 public integration**, retaining stock
+identities, exact patches and independent defect reproductions. All nine public
+layout calls/tab adaptation, owned results, optional drawing and disposal stay timed;
+fonts and per-operation canvas reset stay outside both. Managed frames/fixtures and
+all exact/visual gates remain unchanged. Public-operation allocations are listed;
+single-invocation BDN drawing additionally counts 736 B of common scaffolding.
+Independent confirmation retains all actuals/guards and stops all five. All 17
+inherited names now have measurements: **15 passes, two copy gaps**. Broader text
+processing and the remaining 289-path objective stay open; no historical stage sums.
 
 [Batched JPEG entropy inspection](../benchmarks/JPEG-BATCHED-ENTROPY.md) saves
 **{ep['elapsedReduction']:.2%} / {ep['savedUs']:.3f} µs** in independent controlled
@@ -3488,7 +3509,9 @@ managed Q30/rational pixel guarantees remain exact. One-shot and prepared result
 are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP uses
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
-Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**,
+Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
+the five authored controls explicitly label their scoped source corrections above.
+They are
 never FFmpeg or a bare shaping engine. [Packed signed font bounds](../benchmarks/FONT-PACKED-BOUNDS.md)
 retains an independently verified
 **{font_gain['savedUs']:.3f} µs / {font_gain['rawSavedFraction']:.2%}** owned-font loading gain.
@@ -3558,7 +3581,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 160, 'Expected 160 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 165, 'Expected 165 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

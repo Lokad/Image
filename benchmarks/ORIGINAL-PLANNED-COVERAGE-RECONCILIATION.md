@@ -25,11 +25,11 @@ with an easier operation. The following finite list is the inherited 17:
 | `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
 | `Composite/Rgba8StraightAlpha` | [Original clipped composite](ORIGINAL-CLIPPED-COMPOSITE.md) passes/stops78.567/retained FFmpegoverlay526.201us,upper.159260,0B/publicoperation. Fullsourceat(-3,5),effective510x254;reset excluded before EVERY operation both. Exactmanaged and approved nativeRGB/alpha/untouched/zero-alpha gates. Graph preparation outside,not one-shot. |
 | `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. [Original self-composite](ORIGINAL-WORD-COMPOSITE.md) now passes/stops649.772/ImageSharp716.960us,upper.976714. Reference includes necessary sourceClone+Rgba64SrcOver+Dispose;0/26800GC B/op. Full-word exact/native/owner gates pass;no production change. |
-| `TextLayout/OriginalUnicode` | Authored cmap12/long-loca,quadratic extrema and compound accent. Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input. |
-| `TextLayout/PackedBmp` | Authored cmap4/short-loca,packed/repeated flags and implied points. Unmeasured distinct required mapping/outline path. |
-| `TextLayout/CompositeTransforms` | Authored matrices,point attachment and inherited metrics. Unmeasured distinct required compound outline path. |
-| `TextRender/Rgba8Clipped` | Original authored face,layout+coverage+borrowed-byte drawing. Original layout+draw boundary remains unmeasured; prepared-layout drawing is different. |
-| `TextRender/Rgba16Clipped` | Original authored face,layout+full-word coverage/composition. Same missing original complete operation; preserve full16-bit gates. |
+| `TextLayout/OriginalUnicode` | [Complete authored layout](AUTHORED-FONT-COMPARISONS.md) passes/stops2.585/117.234µs,upper.023246,5592/367584B;explicitly source-corrected public ImageSharp integration,all nine layout calls/tab adaptation and owned disposal included. |
+| `TextLayout/PackedBmp` | [Complete authored cmap4 layout](AUTHORED-FONT-COMPARISONS.md) passes/stops2.610/120.738µs,upper.022768,5088/385016B;frozen short-loca/packed/implied-point inputs,corrected reference delta mapping. |
+| `TextLayout/CompositeTransforms` | [Complete authored compound layout](AUTHORED-FONT-COMPARISONS.md) passes/stops2.604/112.021µs,upper.023809,6152/366960B;independent FreeType geometry,explicit point-attachment/metric reference corrections. |
+| `TextRender/Rgba8Clipped` | [Original layout+coverage+borrowed drawing](AUTHORED-FONT-COMPARISONS.md) passes/stops40.938/223.704µs,upper.305806,49448/417912B;reset outside every operation both sides,corrected reference scan-span defect,unchanged managed frame/gates. |
+| `TextRender/Rgba16Clipped` | [Original complete word drawing](AUTHORED-FONT-COMPARISONS.md) passes/stops45.314/224.872µs,upper.331074,49448/417912B;full16-bit samples retained,exact managed frame and approved visual gates unchanged. |
 | `TextLayout/OpenTypeArabicMarksDigits` | Joining,bidi,GSUB and mark positioning. Current TextLayoutOpenTypeArabic pass/source-valid evidence; keep frozen scenario and public API multiplicity. |
 | `TextFit/OpenTypeConstrained` | Thirty fitting trials and owned winner. Current TextFitOpenType pass/source-valid evidence; retain all trials and winner reconstruction. |
 | `TextLayout/OpenTypeDefaultVariation` | [Authored default variation](DEFAULT-VARIATION.md) passes/stops:3.551/ImageSharp public integration20.357us,upper.184945,3608/58496B. Exact glyph/cluster/line/position/owned outputs;four reference public calls and disposal inside,fonts outside. |
@@ -42,17 +42,18 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-Of the 17 inherited controls, 12 are now measured: ten passes and two gaps;
-only five authored-font boundaries remain unmeasured. The original word-overlap
+All 17 inherited controls are now measured: 15 passes and two gaps.
+The original word-overlap
 copy and clipped byte-copy gaps stay open. Related passes do not
 retire them. Functional checks, shared memory and performance remain separate.
 
-[AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) now checks those six font boundaries
-on both operating systems using the same actual package. All retained-owner/shared
-budget checks pass. Default variation now has independent passing timing; the other five need
-reference tab/placement alignment, including a demonstrated cmap4 delta omission
-in the pinned reference. Those five have no performance result yet. Keep their exact and
-visual gates and frozen inputs; failed comparisons establish no CPU gap.
+[AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) retains the superseded reference
+failures. [ATS1142/AFT1143](AUTHORED-FONT-COMPARISONS.md) separates the defects,
+corrects explicitly labeled tooling and independently confirms all five complete
+operations. All original fixture bytes, managed observations/frames, exact and
+visual gates remain unchanged. Windows/Linux normal/scalar and retained-owner/root
+cleanup pass. Stock and corrected identities, patches and minimal reproductions
+remain retained; existing default-variation evidence keeps its original reference.
 
 Current measurements and exact boundaries are linked in the table. Source-valid
 PNGheader,Arabic/fitting and unchanged-path qualification retain their producer

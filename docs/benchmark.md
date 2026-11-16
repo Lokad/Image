@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **160 comparisons** summarize that scope.
+**289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -61,9 +61,17 @@ measurement, independent output and disposal are included; fonts are prepared
 outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-shot
 font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
 and unmeasured reference/physical retention are separate from allocations.
-Five original font boundaries need [reference-output alignment](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
-and remain unmeasured. All six retained-owner checks pass on both operating systems;
-the mismatches establish no CPU gap or overall text slowdown.
+The [five original authored-font controls](../benchmarks/AUTHORED-FONT-COMPARISONS.md)
+now pass/stop on the unchanged actual-package DLL. Their reference is explicitly
+**source-corrected Fonts 2.1.3 / Drawing 2.1.7 public integration**, retaining stock
+identities, exact patches and independent defect reproductions. All nine public
+layout calls/tab adaptation, owned results, optional drawing and disposal stay timed;
+fonts and per-operation canvas reset stay outside both. Managed frames/fixtures and
+all exact/visual gates remain unchanged. Public-operation allocations are listed;
+single-invocation BDN drawing additionally counts 736 B of common scaffolding.
+Independent confirmation retains all actuals/guards and stops all five. All 17
+inherited names now have measurements: **15 passes, two copy gaps**. Broader text
+processing and the remaining 289-path objective stay open; no historical stage sums.
 
 [Batched JPEG entropy inspection](../benchmarks/JPEG-BATCHED-ENTROPY.md) saves
 **47.63% / 1.912 µs** in independent controlled
@@ -298,7 +306,9 @@ managed Q30/rational pixel guarantees remain exact. One-shot and prepared result
 are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP uses
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
-Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**,
+Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
+the five authored controls explicitly label their scoped source corrections above.
+They are
 never FFmpeg or a bare shaping engine. [Packed signed font bounds](../benchmarks/FONT-PACKED-BOUNDS.md)
 retains an independently verified
 **1.288 µs / 6.53%** owned-font loading gain.
@@ -495,6 +505,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original clipped RGBA8 copy, 254×129 (gap) | 1.942 | 1.901 | 1.021 / 1.026874 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 | Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
+| Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |
+| Authored cmap4 layout / corrected ImageSharp integration (parity confirmed) | 2.610 | 120.738 | 0.022 / 0.022768 | 5,088 |
+| Authored compound layout / corrected ImageSharp integration (parity confirmed) | 2.604 | 112.021 | 0.023 / 0.023809 | 6,152 |
+| Authored RGBA8 layout + draw / corrected ImageSharp integration (parity confirmed) | 40.938 | 223.704 | 0.183 / 0.305806 | 49,448 |
+| Authored RGBA16 layout + draw / corrected ImageSharp integration (parity confirmed) | 45.314 | 224.872 | 0.202 / 0.331074 | 49,448 |
 
 **Inspection and pixel-coding validation**
 

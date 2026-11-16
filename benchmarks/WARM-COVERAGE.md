@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-16. **289 material required paths** remain
-in scope; the 160 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 165 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
@@ -95,10 +95,16 @@ older illustrative timings.
 ## Finite required inventory
 
 The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
-retains all 17 inherited names outside the numeric snapshot. Twelve are measured:
-ten passes and two copy gaps; five authored-font reference-output mismatches stay
-unmeasured. Current JPEGheaders pass via [batched inspection](JPEG-BATCHED-ENTROPY.md),
-while default variation passes its complete public layout boundary. Related inputs
+retains all 17 inherited names outside the numeric snapshot. All are measured:
+15 passes and two copy gaps. [Five authored-font comparisons](AUTHORED-FONT-COMPARISONS.md)
+now pass/stop after independent confirmation on the unchanged actual package.
+Their explicitly source-corrected Fonts/Drawing public integration includes all
+nine layout calls/tab adaptation, owned outputs, optional drawing and disposal;
+stock references, exact patches and independent defect reproductions are retained.
+Frozen fixtures/managed frames and exact/visual gates remain unchanged; Windows,
+Linux normal/scalar and survivor/root cleanup checks pass. Current JPEGheaders pass
+via [batched inspection](JPEG-BATCHED-ENTROPY.md), while default variation retains
+its original passing reference/boundary. Related inputs
 or different boundaries do not retire a missing original control. No new path or
 workload grid;all 289 material paths remain required. Prior rounds and raw evidence
 remain linked in that reconciliation rather than repeated here.

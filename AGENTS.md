@@ -62,6 +62,13 @@ pipeline. Disclose font parser validation differences and include every layout
 call and fitting trial. RGBA16 compositing uses explicitly labeled ImageSharp
 3.1.12 Rgba64 SrcOver, not FFmpeg. Keep the recorded case-specific native pixel
 bounds and visual text tolerances distinct from exact managed pixel contracts.
+The five original authored-font controls use explicitly labeled source-corrected
+Fonts 2.1.3 / Drawing 2.1.7 tooling described in
+benchmarks/AUTHORED-FONT-COMPARISONS.md. Retain stock identities, exact patches and
+independent defect reproductions. Include public tab adaptation and every layout
+call in timing; do not infer general parser equivalence or change other qualified
+reference identities. Every timed drawing operation requires its own untimed
+canvas reset; generated BDN unroll delegates must honor the actual operation count.
 Distinguish one-shot operations from repeated operations with prepared state.
 Include necessary setup, working storage and independent output ownership on
 equivalent sides; label existing comparisons that retain native contexts/plans.
