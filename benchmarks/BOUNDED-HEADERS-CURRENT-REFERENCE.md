@@ -1,5 +1,8 @@
 # Complete JPEG and WebP header references
 
+Current production costs are in [JPEG stuffed-pair acquisition](JPEG-STUFFED-PAIRS.md).
+The measurements below retain the pre-change baseline and reference qualification.
+
 The two previously unconfirmed original boundaries now have independent current
 measurements. **JPEG is a demonstrated gap;WebP passes and stops.** These are
 complete `InspectHeaders(Stream)` operations,not dimension-only probes or pixel

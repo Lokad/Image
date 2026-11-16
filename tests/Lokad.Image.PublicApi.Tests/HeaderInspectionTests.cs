@@ -40,6 +40,34 @@ public sealed class HeaderInspectionTests
     }
 
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task StuffedEntropyAcrossSingleByteReadsKeepsLateMetadataAndRestartLimits(bool asynchronous)
+    {
+        // Header inspection accepts opaque entropy. Force every FF/suffix pair
+        // across a read boundary, including genuinely pending asynchronous reads.
+        using var bytes = new MemoryStream();
+        bytes.Write(new byte[] { 255,216,255,192,0,11,8,0,2,0,3,1,1,0x11,0,255,218,0,8,1,1,0,0,63,0 });
+        for (var i = 0; i < 4097; i++) bytes.Write(new byte[] { 255,0 });
+        bytes.Write(new byte[] { 255,208,255,209,255,225,0,34 });
+        bytes.Write("Exif\0\0"u8); bytes.Write(Tiff(6)); bytes.Write(new byte[] { 255,217 });
+        var data = bytes.ToArray();
+        var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxInputBytes = data.Length, MaxContainerItems = 6 };
+        using var input = SparseInput.Bytes(data, asynchronous, chunk: 1, seekable: true);
+        var result = asynchronous ? await ImageCodec.InspectHeadersAsync(input, limits) : ImageCodec.InspectHeaders(input, limits);
+        Assert.Equal(new ImageInfo(ImageFormat.Jpeg, 3, 2, 8, false, ImageOrientation.Rotate90)
+            { SourceColor = SourceColorModel.Grayscale, SourceAlpha = SourceAlphaRepresentation.None, SourceComponentCount = 1 }, result);
+        Assert.Equal(data.Length, input.Position); Assert.False(input.WasDisposed);
+
+        // Stuffed data is not a container item; both restart markers still are.
+        using var exhausted = SparseInput.Bytes(data, asynchronous, chunk: 1, seekable: true);
+        ImageLimitException failure;
+        if (asynchronous) failure = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.InspectHeadersAsync(exhausted,
+            limits with { MaxContainerItems = 5 }).AsTask());
+        else failure = Assert.Throws<ImageLimitException>(() => ImageCodec.InspectHeaders(exhausted, limits with { MaxContainerItems = 5 }));
+        Assert.Equal(ImageLimitKind.ContainerItems, failure.Limit); Assert.False(exhausted.WasDisposed);
+    }
+
+    [Theory]
     [InlineData(0, 1)] [InlineData(0, 16)] [InlineData(2, 8)] [InlineData(3, 1)] [InlineData(3, 8)]
     public async Task PackedPaletteAndColorKeyHeadersPreserveDeclaredPrecisionAndAlpha(int color, int depth)
     {

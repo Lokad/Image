@@ -2884,6 +2884,31 @@ No production speedup or broader content/settings claim.
     assert sq['package']['librarySha256'] == inspection_owner['producers']['linuxSha256']
     assert sq['acceptedArtifactRebuildsAfterTiming'] == 0 and sq['allAffectedPerformanceReconciledBeforeBroadQualification']
     probe_owner = stream_reader_stage()
+    jpeg_markers = json.loads((ROOT / 'benchmarks/jpeg-stuffed-pairs-evidence.json').read_text(encoding='utf-8'))
+    jq = jpeg_markers['qualification']
+    assert jpeg_markers['productionAccepted'] and jpeg_markers['allAffectedPerformanceReconciled']
+    assert jpeg_markers['requiredMaterialPaths'] == 289 and jpeg_markers['newRequiredPaths'] == 0
+    assert jq['windows']['total'] == jq['linux']['total'] == jq['fullChecksEachOs'] == 6747
+    assert jq['sameActualPackageBothOs'] and jq['allThreeUsageExamplesBothOs']
+    assert jq['package']['sha256'] == jq['windowsPackage']['sameActualPackageSha256']
+    assert jq['package']['librarySha256'] == jpeg_markers['producers']['linuxSha256']
+    assert jq['allAffectedPerformanceReconciledBeforeBroadQualification'] and jq['acceptedArtifactRebuildsAfterTiming'] == 0
+    assert jq['focusedEachMode'] == {'internal': 10, 'public': 156}
+    assert jq['originalAndCandidateNewGuardsLinuxNormalScalar'] and jq['sameTimedPackageHeadersWindowsNormalScalar']
+    assert jpeg_markers['raw']['mirrored'] and jpeg_markers['raw']['allMembersVerified']
+    assert all(jpeg_markers['sourceProof'].values())
+    pair, adverse = jpeg_markers['incremental'], jpeg_markers['asyncProbeTradeoff']
+    assert pair['upper'] < 1 < adverse['lower']
+    assert pair['baselineAllocatedBytes'] == pair['candidateAllocatedBytes'] == 8776
+    assert adverse['baselineAllocatedBytes'] == adverse['candidateAllocatedBytes'] == 568
+    # Only the affected async prefix cost supersedes the prior owner. Other
+    # dimension cases keep their source-valid producers, not a new build identity.
+    current_async = jpeg_markers['cases']['ProbeDimensionsJpegAsync']
+    assert current_async['librarySha256'] == jpeg_markers['producers']['linuxSha256']
+    assert current_async['managedActuals'] == current_async['nativeSamplesEachBracket'] == 12
+    assert current_async['lower'] > 1 and current_async['status'] == 'gap'
+    assert math.isclose(current_async['ratio'], current_async['managedUs'] / current_async['nativeUs'], rel_tol=1e-12)
+    probe_owner['cases']['ProbeDimensionsJpegAsync'] = current_async
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         provider = probe_owner
         if case in provider['cases']:
@@ -3110,13 +3135,10 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
     assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
-    header_reference = json.loads((ROOT / 'benchmarks/bounded-headers-current-reference-evidence.json').read_text(encoding='utf-8'))
+    header_reference = jpeg_markers
     hq = header_reference['qualification']
-    assert header_reference['measurementAccepted'] and not header_reference['productionChanged']
-    assert not header_reference['productionSpeedupClaim'] and header_reference['newRequiredPaths'] == 0
-    assert header_reference['requiredMaterialPaths'] == 289 and header_reference['producers'] == copy_current['producers']
-    assert hq['reusedForUnchangedProduction'] and hq['newBroadOrPackageChecks'] == 0
-    assert hq['fullChecksEachOs'] == 6745 and hq['packageSha256'] == header_reference['producers']['packageSha256']
+    assert header_reference['productionChanged'] and header_reference['newRequiredPaths'] == 0
+    assert hq['fullChecksEachOs'] == 6747 and hq['package']['sha256'] == header_reference['producers']['packageSha256']
     assert header_reference['raw']['mirrored'] and header_reference['raw']['allMembersVerified']
     for case, label in [('JpegHeaders', 'Complete JPEG headers, fresh source / FFmpeg AVIO adapter'),
                         ('WebpHeaders', 'Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter')]:
@@ -3146,18 +3168,26 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Complete header comparisons](../benchmarks/BOUNDED-HEADERS-CURRENT-REFERENCE.md)
-confirm **JPEG 5.566 / 2.816 µs, upper 1.994260, 8,768 B/op** as a material gap;
-**WebP .131984 / .296087 µs, upper .456690, 552 B/op** passes/stops. References are
+[JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
+**31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
+allocation. Current standalone **JPEG 3.769 / 2.835 µs, upper 1.367175,
+8,768 B/op** remains a gap; **WebP .142106 / .310231 µs, upper .471884,
+552 B/op** passes/stops. A measured **2.698 ns / 1.255% async JPEG dimension-probe
+regression** is accepted and retained; its refreshed cost is **.220388 / .201119 µs,
+upper1.133673**, still a gap. Sync probe pairs are inconclusive; unchanged prefix
+paths reuse their identified evidence. Different wrappers'8,776/8,768B are not an
+allocation improvement. Header references are
 explicitly **FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF
 adapters**, not public packet-parser performance. Both include fresh non-exposed
 source/working state/descriptor ownership, complete late-metadata/EOF checks and
 exact nine-field source metadata, with no pixels or whole-input copy. Twenty
-same-packet controls and Windows/Linux normal/scalar owner/cancel/refusal gates pass.
-One managed/native tool build each; unchanged production/package evidence is reused.
-Native bounded scratch is16,416B; context/descriptor and physical/native peaks are
-separate/unmeasured. A short current-JPEG profile identifies the next hypothesis;
-its instrumented clocks and sample counts are not speedup evidence.
+same-packet controls and two new one-byte/pending/late-EXIF/restart-limit cases pass.
+After affected costs reconcile, Windows/Linux each pass **6,747 full/live checks**,
+**10 internal/156 public normal/scalar**, the **SAME actual package/all three examples**.
+One core/embedded/public build per OS, zero helper/native/harness/fixture builds,
+one NoBuild pack, no timed Linux rebuild. New storage/retention stays zero;
+admission remains512/8,448B. Native scratch16,416B excludes contexts/descriptors;
+physical/native/JIT peaks remain unmeasured. Packets/pixels and ownership stay exact.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -3293,12 +3323,14 @@ owner. Independent complete async-probe pairs save
 **{1-probe_owner['primaryPair']['candidateUs']/probe_owner['primaryPair']['baselineUs']:.2%} /
 {(probe_owner['primaryPair']['baselineUs']-probe_owner['primaryPair']['candidateUs'])*1000:.2f} ns**;
 paired and all-actual intervals separate. These scoped effects are not added to
-earlier gains or described as FFmpeg parity. All four affected dimension probes
-refresh on the SAME actual immutable timed/package DLL:PNG/WebP pass and stop;
+earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
+probes; unchanged PNG/WebP pass and stop. Source-valid
 JPEG sync is uncertain at **{probe_owner['cases']['ProbeDimensionsJpeg']['managedUs']:.3f} µs,
 upper {probe_owner['cases']['ProbeDimensionsJpeg']['upper']:.3f}**;async remains a gap at
 **{probe_owner['cases']['ProbeDimensionsJpegAsync']['managedUs']:.3f} µs,
 upper {probe_owner['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**.
+The async cost uses the current stuffed-pair package above, including its small
+measured regression; other cases retain their original source-valid producers.
 Filtered results and all-actual statistics remain separate;the displayed upper
 takes the worse view. Original inputs,callbacks,native brackets and exact
 descriptor/owner gates stay fixed. Unchanged PNG-header costs retain their

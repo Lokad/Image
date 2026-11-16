@@ -207,6 +207,7 @@ internal class InspectionReader : OperationContext, IDisposable
 
     internal async ValueTask<int> JpegMarkerAsync(bool entropy)
     {
+    Scan:
         if (entropy)
         {
             bulk = true;
@@ -227,8 +228,11 @@ internal class InspectionReader : OperationContext, IDisposable
             if (buffer[first++] != 255) throw new ImageDataException("Invalid JPEG marker.");
         }
         int marker;
-        do { marker = await ByteAsync().ConfigureAwait(false); } while (marker == 255);
+        do { marker = first != last ? buffer[first++] : await ByteAsync().ConfigureAwait(false); } while (marker == 255);
         if (marker < 0) throw new ImageDataException("Truncated JPEG marker.");
+        // Stuffed FF00 is scan data, not a container item. Continue within this
+        // acquisition; real/restart markers still reach the outer grammar.
+        if (entropy && marker == 0) goto Scan;
         // A small complete JPEG may fit the initial read. Its final EOF probe
         // needs no entropy-scan scratch when that buffer has just been drained.
         if (marker == 217) bulk = false;

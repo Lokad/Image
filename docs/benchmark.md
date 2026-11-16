@@ -53,18 +53,26 @@ No production speedup or broader content/settings claim.
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Complete header comparisons](../benchmarks/BOUNDED-HEADERS-CURRENT-REFERENCE.md)
-confirm **JPEG 5.566 / 2.816 µs, upper 1.994260, 8,768 B/op** as a material gap;
-**WebP .131984 / .296087 µs, upper .456690, 552 B/op** passes/stops. References are
+[JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
+**31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
+allocation. Current standalone **JPEG 3.769 / 2.835 µs, upper 1.367175,
+8,768 B/op** remains a gap; **WebP .142106 / .310231 µs, upper .471884,
+552 B/op** passes/stops. A measured **2.698 ns / 1.255% async JPEG dimension-probe
+regression** is accepted and retained; its refreshed cost is **.220388 / .201119 µs,
+upper1.133673**, still a gap. Sync probe pairs are inconclusive; unchanged prefix
+paths reuse their identified evidence. Different wrappers'8,776/8,768B are not an
+allocation improvement. Header references are
 explicitly **FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF
 adapters**, not public packet-parser performance. Both include fresh non-exposed
 source/working state/descriptor ownership, complete late-metadata/EOF checks and
 exact nine-field source metadata, with no pixels or whole-input copy. Twenty
-same-packet controls and Windows/Linux normal/scalar owner/cancel/refusal gates pass.
-One managed/native tool build each; unchanged production/package evidence is reused.
-Native bounded scratch is16,416B; context/descriptor and physical/native peaks are
-separate/unmeasured. A short current-JPEG profile identifies the next hypothesis;
-its instrumented clocks and sample counts are not speedup evidence.
+same-packet controls and two new one-byte/pending/late-EXIF/restart-limit cases pass.
+After affected costs reconcile, Windows/Linux each pass **6,747 full/live checks**,
+**10 internal/156 public normal/scalar**, the **SAME actual package/all three examples**.
+One core/embedded/public build per OS, zero helper/native/harness/fixture builds,
+one NoBuild pack, no timed Linux rebuild. New storage/retention stays zero;
+admission remains512/8,448B. Native scratch16,416B excludes contexts/descriptors;
+physical/native/JIT peaks remain unmeasured. Packets/pixels and ownership stay exact.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -219,12 +227,14 @@ owner. Independent complete async-probe pairs save
 **3.55% /
 8.01 ns**;
 paired and all-actual intervals separate. These scoped effects are not added to
-earlier gains or described as FFmpeg parity. All four affected dimension probes
-refresh on the SAME actual immutable timed/package DLL:PNG/WebP pass and stop;
+earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
+probes; unchanged PNG/WebP pass and stop. Source-valid
 JPEG sync is uncertain at **0.199 µs,
 upper 1.078**;async remains a gap at
 **0.220 µs,
-upper 1.124**.
+upper 1.134**.
+The async cost uses the current stuffed-pair package above, including its small
+measured regression; other cases retain their original source-valid producers.
 Filtered results and all-actual statistics remain separate;the displayed upper
 takes the worse view. Original inputs,callbacks,native brackets and exact
 descriptor/owner gates stay fixed. Unchanged PNG-header costs retain their
@@ -469,7 +479,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Probe PNG dimensions, seekable | 0.109 | 0.122 | 0.888 / 0.922 | 568 | Confirmed pass |
 | Probe JPEG dimensions, seekable | 0.199 | 0.195 | 1.022 / 1.078 | 568 | Confidence open |
 | Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
-| Probe JPEG dimensions, async nonseekable | 0.220 | 0.202 | 1.085 / 1.124 | 568 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.220 | 0.201 | 1.096 / 1.134 | 568 | Confirmed gap |
 | Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |
@@ -485,8 +495,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify PNG8, fresh seekable Stream, adapter reference | 8.802 | 15.951 | 0.552 / 0.555 | 192 | Confirmed pass |
 | Identify PNG8, async nonseekable, adapter reference | 11.801 | 19.297 | 0.612 / 0.621 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
-| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (gap) | 5.566 | 2.816 | 1.976 / 1.994260 | 8,768 |
-| Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter (pass) | 0.132 | 0.296 | 0.446 / 0.456690 | 552 |
+| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (gap) | 3.769 | 2.835 | 1.329 / 1.367175 | 8,768 |
+| Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter (pass) | 0.142 | 0.310 | 0.458 / 0.471884 | 552 |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
 remaining paths, boundaries, allocations, references and raw evidence. Superseded

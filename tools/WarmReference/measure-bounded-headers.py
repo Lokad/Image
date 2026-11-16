@@ -11,6 +11,7 @@ p.add_argument('--expected', required=True)
 p.add_argument('--format', choices=['jpeg', 'webp'], required=True)
 p.add_argument('--prefix', required=True)
 p.add_argument('--mode', choices=['short', 'confirm'], required=True)
+p.add_argument('--production-changed', action='store_true')
 a = p.parse_args()
 prefix, expected = Path(a.prefix), json.loads(a.expected)
 n = 3 if a.mode == 'short' else 12
@@ -139,7 +140,7 @@ allocations = [v['managed']['allocatedBytes']/operations for v in raw['pairs']]
 assert len(set(allocations)) == 1, allocations
 result = dict(project='Lokad.Image', caseId='JpegHeaders' if a.format == 'jpeg' else 'WebpHeaders',
     originalRequiredControl='InspectHeaders/Jpeg420FreshStream' if a.format == 'jpeg' else 'InspectHeaders/WebpLosslessRgba8FreshSeekable',
-    productionChanged=False, newRequiredPaths=0, librarySha256=a.core_sha256, mode=a.mode,
+    productionChanged=a.production_changed, newRequiredPaths=0, librarySha256=a.core_sha256, mode=a.mode,
     actualIterations=n, nativeSamplesEachBracket=n, operationsPerActual=operations, allActualsRetained=True,
     managedUs=managed['mean']/1000, nativeUs=reference/1000, ratio=managed['mean']/reference, lower=lower, upper=upper,
     status='pass' if upper <= 1 else 'gap' if lower > 1 else 'uncertain', allocatedBytes=allocations[0],
