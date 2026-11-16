@@ -1,5 +1,8 @@
 # Direct-address copy trial
 
+The later [actual native-worker attribution](COPY-ATTRIBUTION-NEAREST-GUARD.md)
+confirms the libc path and preserves this trial's inconclusive outcome.
+
 The later [fixed-size tail trial](COPY-PACKED-TAIL-TRIAL.md) is also unaccepted;
 qualified production and current costs remain unchanged.
 

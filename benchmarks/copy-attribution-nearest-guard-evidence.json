@@ -1,0 +1,192 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "CPA1158",
+    "NCR1159"
+  ],
+  "productionChanged": false,
+  "newRequiredPaths": 0,
+  "requiredMaterialPaths": 289,
+  "allBuilds": 0,
+  "copyAttribution": {
+    "project": "Lokad.Image",
+    "stage": "CPA1158",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "productionChanged": false,
+    "librarySha256": "02c8a14900b52d4da539619fcc50586e76cf79b2053e594a7bbb909b078ab960",
+    "nativeBinary": "/home/lokad/image-warm-png-20261009/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+    "nativeSha256": "a34962a9ca990017220b790972fed0f4f41d26f0d6c19994a4c53eb64cb832b9",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/lokad/image-warm-png-20261009/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+      "copy-region-word-overlap",
+      "/home/lokad/image-warm-png-20261009/tmp/owc1125-data/input.rgba",
+      "513",
+      "259",
+      "16",
+      "tmp/cpa1158-native-copy.rgba"
+    ],
+    "totalSamples": 1998,
+    "dsoSamples": {
+      "/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm": 658,
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": 1340
+    },
+    "symbolSamples": [
+      [
+        "[unknown]",
+        1340
+      ],
+      [
+        "image_copy_plane",
+        482
+      ],
+      [
+        "apply",
+        161
+      ],
+      [
+        "av_image_copy_plane",
+        12
+      ],
+      [
+        "memcpy@plt",
+        3
+      ]
+    ],
+    "hotLocations": [
+      {
+        "file": "/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+        "offset": "0x7f87",
+        "samples": 192
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a1747",
+        "samples": 192
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a17e6",
+        "samples": 173
+      },
+      {
+        "file": "/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+        "offset": "0x7f76",
+        "samples": 169
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a1640",
+        "samples": 152
+      },
+      {
+        "file": "/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+        "offset": "0x7d37",
+        "samples": 86
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a18f9",
+        "samples": 74
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a18f2",
+        "samples": 68
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a1854",
+        "samples": 60
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a18eb",
+        "samples": 58
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a1846",
+        "samples": 55
+      },
+      {
+        "file": "/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/warm-reference/owc1125/ffmpeg-copy-region-word-overlap-warm",
+        "offset": "0x7cdf",
+        "samples": 53
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a184d",
+        "samples": 50
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a191b",
+        "samples": 48
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a18ff",
+        "samples": 46
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a185b",
+        "samples": 44
+      }
+    ],
+    "libc": {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a"
+    },
+    "snapshotInputCleanupChecksPassed": true,
+    "quietGuardsPassed": true,
+    "newRequiredPaths": 0
+  },
+  "nearest": {
+    "caseId": "Up16",
+    "status": "unqualified",
+    "measurementAccepted": false,
+    "allOriginalGatesPassed": true,
+    "allActualsRetained": true,
+    "quietGuardsPassed": false,
+    "actuals": 12,
+    "operationsEach": 512,
+    "postIoWaitFraction": 0.014007003501750876,
+    "threshold": 0.01,
+    "oldRejectedGuardPreserved": true,
+    "scope": "Only original nearest Up16; passing Down8/Down16/Up8 not repeated. No statistical performance claim from either guard-rejected capture.",
+    "reasonForAttempt": "Resolve missing valid evidence for the current production path, not a retry of an accepted unfavorable measurement.",
+    "recovery": "Initial renamed historical receipt path failed before runtime preparation/measurements; corrected and resumed once. Full completed result/validation recovered after guard failure without any repeated operation."
+  },
+  "qualificationReused": {
+    "report": "FONT-HEADER-BATCHING.md",
+    "fullEachOs": 6772,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "linuxSha256": "02c8a14900b52d4da539619fcc50586e76cf79b2053e594a7bbb909b078ab960",
+    "productionCommit": "b365f26bde77582e0ae65ffadc9ada7f4c261292",
+    "ciRun": 43960385597,
+    "ciConclusion": "success"
+  },
+  "raw": {
+    "file": "copy-attribution-nearest-guard.tar.xz",
+    "sha256": "42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984",
+    "bytes": 1468484,
+    "members": 48,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+      "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117"
+    ]
+  },
+  "next": "Keep named copy gaps open; native aligned-store/direction evidence is not an automatic managed implementation. Diagnose I/O activity before further nearest confirmation; do not weaken guard, repeat favorable sampling, or infer an optimization requirement from ineligible times. Independent work remains available."
+}
