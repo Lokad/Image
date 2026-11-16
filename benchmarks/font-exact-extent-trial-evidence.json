@@ -1,0 +1,242 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FSL1113",
+  "attributionStage": "FPA1112",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineCommit": "e7311312b3462b79d63bf6e903090eff8d5e73bd",
+  "baselineProducers": {
+    "windowsSha256": "99708bbafe0f0951f0e60f6970e1da8e9b746f089cab4f85535b686bba2645ec",
+    "linuxSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "timedArtifactSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "packageSha256": "7b89e4563dbe12856ee35876d317928f6dfd873a0b4ec5dfc37690fb27a626e0"
+  },
+  "candidateLinuxSha256": "35d401454b66aafb074e808e3819b93fc545184662375c53944e1310ce95b48a",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "91ca667323bf8dee9d1f4f32f0be3b52689fb2ebad62137aa25e37538f45f9d6",
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+    "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+    "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+    "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f",
+    "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "a59b4b093bc5f365da99960f1ab1fa8030b30da267d7bf43aa8f2274efbf6762"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "515831d553bdd85bde9f92b576f52f28585934bd245d3c3ec9b1b9728d13e786"
+  },
+  "sourceProof": {
+    "wholeAcceptedSourceReconstructed": true,
+    "validatedPrivateExtentBeforeCall": true,
+    "sameDeclaredEntriesAndOrder": true,
+    "sameEveryGlyphPoll": true,
+    "allOtherProductionBodiesVerbatim": true,
+    "noStorageOwnershipApiOrParserPolicyChange": true
+  },
+  "sourceTransforms": [
+    {
+      "before": "        var glyphBytes = glyphs.Length;\n        var first = GlyphLocation(locations[0]);\n        if (first > glyphBytes) throw new ImageDataException(\"Invalid glyph location.\");\n        for (var i = 1; i <= glyphCount; i++)\n        {\n            cancellation.ThrowIfCancellationRequested();\n            var last = GlyphLocation(locations[i]);\n            if (last < first || last > glyphBytes) throw new ImageDataException(\"Invalid glyph location ordering.\");\n            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));\n            first = last;\n        }\n    }\n\n",
+      "after": "        // The caller has validated the complete declared loca extent. Borrow\n        // exactly those entries so the loop and indexed read share one bound.\n        locations = locations[..(glyphCount + 1)];\n        var glyphBytes = glyphs.Length;\n        var first = GlyphLocation(locations[0]);\n        if (first > glyphBytes) throw new ImageDataException(\"Invalid glyph location.\");\n        for (var i = 1; i < locations.Length; i++)\n        {\n            cancellation.ThrowIfCancellationRequested();\n            var last = GlyphLocation(locations[i]);\n            if (last < first || last > glyphBytes) throw new ImageDataException(\"Invalid glyph location ordering.\");\n            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));\n            first = last;\n        }\n    }\n\n"
+    }
+  ],
+  "hypothesis": "Current glyph scan has a separate per-index span bound and glyphCount loop bound despite the constructor having validated all declared entries. Slice the borrowed typed loca span to glyphCount+1 once and loop against its exact Length. This may remove repeated bounds work and live count state;source simplification is not a presumed CPU gain.",
+  "intendedEndState": "One borrowed exact-extent ushort/uint location view per complete eager validation. No additional read,allocation,owner,cache,pool,parser policy or lazy-validation substitution. Original first-location check,per-glyph poll,last monotonic/range check,header validation and next iteration remain in the same order. Extra encoded loca entries remain ignored.",
+  "proof": "The constructor has already required(GlyphCount+1)*locationWidth<=loca.Length. MemoryMarshal.Cast length therefore contains at least GlyphCount+1 entries for either validated2/4byte width. GlyphCount is a validated positive ushort,so+1 cannot overflow. Slicing cannot fail at this private call boundary. Indices1..GlyphCount are exactly1..<newLength;all per-entry reads/checks/errors/polls remain identical. Reversing the one helper-body transformation reconstructs entire accepted source. No broad parser equivalence or summed-stage performance claim.",
+  "boundaries": "Current qualified public one-shot/eight-draw comparisons pass before this trial. Loading is an approved FreeType2.13.2 ownedcopy/open/retain/dispose diagnostic with explicit eager/lazy validation difference,not overall text-processing cost. Reuse original frozenDejaVuSans2.37 and all reference/input/quality/owner checks. If promising refresh affected completepublic pipelines before acceptance;draw-only/shaping/fitting paths unchanged.",
+  "attribution": {
+    "stage": "FPA1112",
+    "currentLibrarySha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "profileLibrarySha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+    "sourceSha256": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "totalSamples": 1992,
+    "glyphScanSamples": 1003,
+    "managedSamples": 1078,
+    "profileSeconds": 2,
+    "frequency": 999,
+    "currentUintScanJitBytes": 537,
+    "perLocationSpanCheckPresent": true,
+    "independentLoopCountPresent": true,
+    "countsNotPhaseCostsOrPredictedSavings": true,
+    "allInstrumentedElapsedDiscarded": true,
+    "allBuilds": 0,
+    "nativeLibcSamples": 898,
+    "managedMappingSamples": 37,
+    "noPhaseCostOrSpeedupFromSampleCounts": true,
+    "perfLostSamples": 0,
+    "currentUintCodegenBytes": 537,
+    "libraryDllNeverRebuiltForAttribution": true
+  },
+  "codegen": {
+    "methods": {
+      "baseline": [
+        {
+          "method": "Lokad.Image.TrueTypeFont:ValidateGlyphHeaders[uint](System.ReadOnlySpan`1[uint],System.ReadOnlySpan`1[byte],int,System.Threading.CancellationToken) (FullOpts)",
+          "bytes": 537
+        },
+        {
+          "method": "Lokad.Image.TrueTypeFont:ValidateGlyphHeaders[ushort](System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[byte],int,System.Threading.CancellationToken) (FullOpts)",
+          "bytes": 553
+        }
+      ],
+      "candidate": [
+        {
+          "method": "Lokad.Image.TrueTypeFont:ValidateGlyphHeaders[uint](System.ReadOnlySpan`1[uint],System.ReadOnlySpan`1[byte],int,System.Threading.CancellationToken) (FullOpts)",
+          "bytes": 543
+        },
+        {
+          "method": "Lokad.Image.TrueTypeFont:ValidateGlyphHeaders[ushort](System.ReadOnlySpan`1[ushort],System.ReadOnlySpan`1[byte],int,System.Threading.CancellationToken) (FullOpts)",
+          "bytes": 559
+        }
+      ]
+    },
+    "perIterationLocationRangeCheckRemoved": true,
+    "extraExactExtentCheckOnce": true,
+    "allHeaderChecksAndPerGlyphPollsRetained": true,
+    "allInstrumentedElapsedDiscarded": true
+  },
+  "screen": {
+    "actualsEach": 3,
+    "allActualsRetained": true,
+    "costs": {
+      "baseline": {
+        "managedUs": 19.82061923127637,
+        "nativeUs": 13.697534759358287,
+        "ratio": 1.447020911389528,
+        "lower": 1.2360536123726118,
+        "upper": 1.6706796167861666,
+        "allocatedBytes": 176,
+        "status": "gap",
+        "librarySha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528"
+      },
+      "candidate": {
+        "managedUs": 19.724791503139716,
+        "nativeUs": 13.261022896393817,
+        "ratio": 1.4874260950490967,
+        "lower": 1.0293904078534672,
+        "upper": 2.292331827498259,
+        "allocatedBytes": 176,
+        "status": "gap",
+        "librarySha256": "35d401454b66aafb074e808e3819b93fc545184662375c53944e1310ce95b48a"
+      }
+    },
+    "rawPointSavedUs": 0.09582772813665486,
+    "rawPointSavedFraction": 0.004834749460573939,
+    "confirmedGain": false,
+    "independentConfirmation": false,
+    "referenceIdentity": "FreeType2.13.2 ownedcopy/open/retain/dispose;eager/lazyvalidation differs",
+    "scope": "Complete ownedfontload/dispose on frozenDejaVuSansRegular. No overall text-speed claim or historical-stage sum."
+  },
+  "memory": {
+    "publicGcBytes": 176,
+    "fontOwnedBytes": 757076,
+    "fontDescriptorAllowanceBytes": 256,
+    "additionalArraysOrCapacity": 0,
+    "retainedStorageUnchanged": true,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 266,
+      "public-normal": 163,
+      "internal-scalar": 266,
+      "public-scalar": 163
+    },
+    "currentOriginalFontAndAdmissionGatesPassed": true,
+    "existingStructuredFailureCancellationOwnershipAndRecoveryPassed": true
+  },
+  "interpretation": "Not adopted. Exact extent removes a real repeated span check and its conditional branch,but total scan codegrows6B. Three-actual ownedload screen19.820619to19.724792us is an inconclusive0.48percent/0.096us point with unchanged176B allocation. This is a successful code-shape experiment,not a verified CPUgain or a demonstrated regression. No independentconfirmation,extra timings,completepipeline refresh,broad or package campaign. Scope remains diagnostic;eager/lazyvalidation and prepared-state differences do not imply an overall text slowdown. A material packed-coordinate comparison is a source-attributed next hypothesis,not an automatic merge.",
+  "qualification": {
+    "provider": "benchmarks/text-prepared-coverage-evidence.json",
+    "fullChecksEachOsReused": 6730,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "actualPackageUnchanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "FSL1113",
+      "sourceRestored": true,
+      "productionSha256": "99708bbafe0f0951f0e60f6970e1da8e9b746f089cab4f85535b686bba2645ec",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "FSL1113",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "7d927946381a5086e7c6746451715bdbf1f177a82dd43a9613aeaedb8a1e0528",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "91ca667323bf8dee9d1f4f32f0be3b52689fb2ebad62137aa25e37538f45f9d6",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+        "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+        "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+        "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+        "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+        "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+        "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f",
+        "tests/Lokad.Image.PublicApi.Tests/TextRenderPlanTests.cs": "a59b4b093bc5f365da99960f1ab1fa8030b30da267d7bf43aa8f2274efbf6762"
+      },
+      "embeddedTestsSha256": "c64775398035b860d1cdac182d37620e55f52b60fdd4274ddb1d67a85ed0a793",
+      "publicTestsSha256": "ce9c40c11a97f4cbef55ecef005564c15396ee261364aed69f930220ad960c27",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "next": "Preserve originalqualifiedproduction and completed public one-shot/eight-draw passes. Consider current packed glyph-bound validation only from actual scalar extraction attribution;preserve every eager check/poll and scalar fallback. No replay of this unchanged extent trial.",
+  "raw": {
+    "file": "font-exact-extent-trial.tar.xz",
+    "sha256": "7d36bb63ddebb25da95b86f48d5c962fc2ecbf01506e3f2caec25756b9bad024",
+    "bytes": 1909136,
+    "members": 106,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-prepared-coverage-qualified.tar.xz",
+        "sha256": "e2587bd8aa2ea210a4b48e4b9c2cd821c861f70d42862a85a3a6edd5b224bb1b"
+      },
+      {
+        "file": "font-typed-location-views-qualified.tar.xz",
+        "sha256": "2b40efee0326c930a7ddc05ba379bf2a84ac007461e5e32a296468f2207c23f5"
+      }
+    ]
+  }
+}
