@@ -1,0 +1,168 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BCT1169",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Inconclusive screen,no useful gain:baseline5.656552us/candidate5.685088us,ratio1.005045 interval.989047-1.021300. Stop this implementation;no confirmation,standalone reference refresh or broad/package repeat.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "BCT1169",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineWindowsSha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+    "baselineLinuxSha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+    "prototypePath": "tmp/bct1169-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "b8b57a8f983193843124ff4e46fc051e98331f66ce36cc47e50ff0e12f921522",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+    },
+    "candidateSourceSha256": "d60a30bee6d4f7cd6a4eed0a2798c90a86b251670cad6bcfeaea5e251162dff1",
+    "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+    "hypothesis": "Remove per-row innerloop/count/min/offset bookkeeping for any clipped rectangle fitting one existing4096pixel cancellation chunk. Current originalwordoverlap gap~.5us. This changes traversal,not previously inconclusive addressing/tail/eight-vector kernels.",
+    "endState": "One bounded-row branch and unchanged wide-copy body share existing rowstride advance and all validation/ownership. Same roworder and same independent/BCL kernel selection;no buffer/cache/API or fixedfixture assumption.",
+    "sourceProof": {
+      "onlyBoundedRowTraversalChanges": true,
+      "wideChunkTraversalVerbatim": true,
+      "kernelsVerbatim": true,
+      "rowAdvanceAndPublicValidationVerbatim": true,
+      "sameLogicalCancellationCheckpoints": true,
+      "noAddedStorageOwnershipOrApi": true
+    },
+    "invalidation": "All six named rectangle-copy controls if accepted;unchanged copy kernels do not invalidate codec/resize/font/text/verticalflip costs. Pair completeoriginalwordoverlap first;reconcile original standalone references/allaffectedcases before broad/package.",
+    "continuation": "One3paired16384operation screen,independent12pairs only if useful credible effect. Retain adverse/inconclusive results;no favorable replays or neighboring bulkkernels.",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "allCanonicalEmbeddedPublicHarnessReferenceFixturePackageBuilds": 0
+    }
+  },
+  "screen": {
+    "baselineUs": 5.656551961263021,
+    "candidateUs": 5.685087768554688,
+    "ratio": 1.0050447352887562,
+    "lower": 0.9890471794445002,
+    "upper": 1.021300283574308,
+    "allocatedBytes": 0,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "focusedPublicEachOs": {
+    "windows": {
+      "normal": 190,
+      "scalar": 190
+    },
+    "linux": {
+      "normal": 190,
+      "scalar": 190
+    }
+  },
+  "workerChecks": {
+    "baseline/normal": {
+      "state": "checked",
+      "exact": true,
+      "libraryHash": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+      "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "fullWordSnapshotExact": true,
+      "cancellationAndRefusalRecovery": true
+    },
+    "baseline/scalar": {
+      "state": "checked",
+      "exact": true,
+      "libraryHash": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+      "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "fullWordSnapshotExact": true,
+      "cancellationAndRefusalRecovery": true
+    },
+    "candidate/normal": {
+      "state": "checked",
+      "exact": true,
+      "libraryHash": "b8b57a8f983193843124ff4e46fc051e98331f66ce36cc47e50ff0e12f921522",
+      "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "fullWordSnapshotExact": true,
+      "cancellationAndRefusalRecovery": true
+    },
+    "candidate/scalar": {
+      "state": "checked",
+      "exact": true,
+      "libraryHash": "b8b57a8f983193843124ff4e46fc051e98331f66ce36cc47e50ff0e12f921522",
+      "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "fullWordSnapshotExact": true,
+      "cancellationAndRefusalRecovery": true
+    }
+  },
+  "sourceProof": {
+    "onlyBoundedRowTraversalChanges": true,
+    "wideChunkTraversalVerbatim": true,
+    "kernelsVerbatim": true,
+    "rowAdvanceAndPublicValidationVerbatim": true,
+    "sameLogicalCancellationCheckpoints": true,
+    "noAddedStorageOwnershipOrApi": true
+  },
+  "codeGeneration": {
+    "candidateCopyRegionBytes": 1726,
+    "baselinePriorSourceValidBytes": 1364,
+    "intendedBoundedRowBranchRealized": true,
+    "instrumentedClocksDiscarded": true,
+    "noCausalExplanationForNullEffect": true
+  },
+  "memory": {
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "commit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "fullLiveEachOs": 6776,
+    "actualPackageSha256": "3167deb580ba05ecf4121a062515140e333964039576c30b73b89ba708b6aa38",
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "next": "Keep qualified traversal,kernels and all source-valid costs. No neighbor bounded-row/kernel variants from this screen. Resolve named measurement/ownership uncertainty with a concrete diagnostic before further small copy tuning;do not reopen passing paths.",
+  "raw": {
+    "file": "copy-bounded-traversal-trial.tar.xz",
+    "sha256": "80d32167dc46d9eafee9c6f87442e8e2e97c436a835d917ab61867c21c5bde59",
+    "bytes": 2043508,
+    "members": 52,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "nearest-row-reuse-qualified.tar.xz",
+        "sha256": "a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+        "bytes": 5278740,
+        "members": 275,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+          "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+          "copy-attribution-nearest-guard.tar.xz SHA256 42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+        ]
+      },
+      {
+        "file": "copy-packed-tail-trial.tar.xz",
+        "sha256": "d6dedd1e068841f26095baba7d16f3c8c0d5b0a314d8aee115e70635d81d76e9",
+        "bytes": 2091428,
+        "members": 69,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "copy-direct-addressing-trial.tar.xz",
+            "sha256": "01294b8228312aad35ee67b2c417d9431a4ff46cd9b55250d5ba02a2b6a66c28"
+          },
+          {
+            "file": "ordinary-word-text-dispatch-qualified.tar.xz",
+            "sha256": "1e48e6d6d9e09cfd48155fc982d46932b4999dbbfd8ef0165c984f7283fca26d"
+          }
+        ]
+      }
+    ]
+  }
+}
