@@ -344,10 +344,15 @@ clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs are [refreshed](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md);
-unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
+Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-TEXT-WARM-CONFIDENCE.md)
+on the unchanged actual-package DLL:4,096 warmup operations per side before all
+statistical groups,then12fixed4,096-operation actuals and all three reference
+groups. Both ordinary depths are now scoped gaps,with conservative intervals
+**1.016202–1.059120 /1.093911–1.122973**. Earlier uncertain samples stay retained;
+this is a measurement update,not a speedup or an overall text-processing claim.
+Unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
-draws pass; both ordinary depths remain uncertain. Prepared
+draws pass and stop. Prepared
 drawing stays **56 B/op** and ordinary Latin **83,216 B/op**; timing adapters add
 24 B. Their earlier narrow-wrap capacity/peak tradeoff and inconclusive Arabic
 timing remain in that report. No unchanged drawing control is retuned.
@@ -467,8 +472,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,151.49 | 6,195.03 | 0.186 / 0.205 | 306,168 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,249.35 | 6,867.82 | 0.182 / 0.210 | 315,892 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 48.31 | 44.92 | 1.075 / 1.208 | 83,216 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 51.83 | 46.03 | 1.126 / 1.244 | 83,216 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 47.29 | 45.44 | 1.041 / 1.059 | 83,216 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 51.74 | 46.59 | 1.111 / 1.123 | 83,216 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 18.42 | 14.33 | 1.286 / 1.324 | 176 |

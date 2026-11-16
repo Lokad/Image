@@ -2050,13 +2050,17 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
+    ordinary_confidence = json.loads((ROOT / 'benchmarks/ordinary-text-warm-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert ordinary_confidence['measurementAccepted'] and not ordinary_confidence['productionChanged']
+    assert ordinary_confidence['requiredMaterialPaths'] == 289 and ordinary_confidence['newMaterialPaths'] == 0
+    assert ordinary_confidence['raw']['mirrored'] and ordinary_confidence['raw']['allMembersVerified']
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if not prepared: case = text_drawing['cases'][name]
-        assert case['librarySha256'] == (text_coverage if prepared else text_drawing)['producers']['linuxSha256']
+        if not prepared: case = ordinary_confidence['cases'][name]
+        assert case['librarySha256'] == (text_coverage if prepared else ordinary_confidence)['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
-        assert case['actuals'] == 12 and case['operationsPerActual'] == 1024
+        assert case['actuals'] == 12 and case['operationsPerActual'] == (1024 if prepared else 4096)
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert not prepared or case['status'] == 'pass'
         assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
@@ -3547,10 +3551,15 @@ clock moves +8.26%; the raw 6.53% effect above is the causal claim. No uniform
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs are [refreshed](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md);
-unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
+Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-TEXT-WARM-CONFIDENCE.md)
+on the unchanged actual-package DLL:4,096 warmup operations per side before all
+statistical groups,then12fixed4,096-operation actuals and all three reference
+groups. Both ordinary depths are now scoped gaps,with conservative intervals
+**1.016202–1.059120 /1.093911–1.122973**. Earlier uncertain samples stay retained;
+this is a measurement update,not a speedup or an overall text-processing claim.
+Unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
-draws pass; both ordinary depths remain uncertain. Prepared
+draws pass and stop. Prepared
 drawing stays **56 B/op** and ordinary Latin **83,216 B/op**; timing adapters add
 24 B. Their earlier narrow-wrap capacity/peak tradeoff and inconclusive Arabic
 timing remain in that report. No unchanged drawing control is retuned.

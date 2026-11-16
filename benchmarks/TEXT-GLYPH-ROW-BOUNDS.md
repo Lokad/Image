@@ -1,5 +1,7 @@
 # Glyph-bounded ordinary text rows
 
+[Fixed warm confidence](ORDINARY-TEXT-WARM-CONFIDENCE.md) supersedes the two ordinary drawing costs below; this report retains the accepted production change and unchanged complete integrations.
+
 Ordinary drawing reuses existing conservative computed edge-X envelopes to clear
 and round only the current glyph's columns, and borrows each destination row once.
 Every band still executes; nonfinite envelopes retain full-row scans and empty
