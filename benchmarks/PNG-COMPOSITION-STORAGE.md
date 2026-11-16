@@ -1,5 +1,8 @@
 # PNG composition storage attribution
 
+The subsequent [bounded storage prototype](PNG-COMPOSITION-STORAGE-PROTOTYPE.md)
+confirms scoped allocation/CPU gains and remains unpromoted pending affected qualification.
+
 Three untimed traces of the original public PNG16 composition reproduce every
 frozen output sample on the current actual-package DLL. The two warm rounds agree:
 
