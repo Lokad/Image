@@ -1,0 +1,590 @@
+{
+  "project": "Lokad.Image",
+  "stage": "XRI1103",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "1f96629de19bec6cbe63dbd58e3267e3be6dd3ebc6d029d7d26f4be9967428e8",
+    "linuxSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+    "timedArtifactSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+    "packageSha256": "b2e2a78dc56392484b12447de4e7c4e49a44433101f946b176a562693d763995"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "f112946b123900cee65ab536d9cd5cb57fa137f1f88e2ed797c3c45624ec38a7"
+  },
+  "testSources": {
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+    "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+  },
+  "unchangedSources": {
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+    "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+    "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+    "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14"
+  },
+  "baseRasterSourceSha256": "bf05143fc117ae74abcbfeffdc356dc143da937f3cb770057e84ab97e72d17dd",
+  "sourceProof": {
+    "originalProductionSourceReconstructed": true,
+    "entireDrawBandClipBlendSourceVerbatim": true,
+    "strictConservativeExclusionOnly": true,
+    "allOriginalPairPollsBeforeExclusion": true,
+    "uncertifiedPairsKeepOriginalArithmetic": true,
+    "retainedEdgeRepresentationAndGeometryUnchanged": true,
+    "noNewCacheOwnerApiOrRetainedWorkspace": true,
+    "sameRangeAlgorithmWithExplicitInlineOnly": true
+  },
+  "hypothesis": "Event preparation evaluates rounded endpoint coordinates for every overlappingY edge pair,including many pairs whose computedX hulls are strictly disjoint. Precompute conservative hulls once per edge,then reject certified separated pairs before division. This removes repeated endpoint work rather than widening its SIMD. Extra range preparation,branches,allocated capacity and admitted peak may offset savings. Revision:actual XRE1101 codegen shows a232B out-of-line Create call in the per-edge preparation loop,which already loaded Y bounds. Force-inline this functional builder so those values/address checks can be shared;the range algorithm and storage are otherwise identical. No saving is presumed.",
+  "intendedEndState": "One temporary EdgeRange workspace sized to maximum shape count,reused across non-overlapping shape preparations. Reserve before allocation and release after actual users finish on success/failure. Retained raster fields,edge56B representation and Band/draw bodies remain unchanged. Nonfinite/degenerate edges get unbounded hulls and preserve original path. No cache,pool,parser/layout policy or public API.",
+  "mathematicalProof": "XEB1100 validates the monotonic-rounding certificate on actual Edge operations. For finite originalY/nonzero finite rounded deltaY and finite originX/deltaX,the rounded fraction is0..1 and computedX lies between originX and rounded(originX+deltaX). Strictly disjoint hulls cannot make original endpoint differences opposite in sign,so no original intersection event can be omitted. Do not substitute original endpointX. All pair polls occur before the new exclusion. For other pairs every bound,endpoint/subtraction/intersection operation and event order is verbatim. Reversing five substitutions reconstructs the whole original production source;Band/draw source is explicitly identical.",
+  "cases": {
+    "Ordinary8": {
+      "managedUs": 53.47587353515625,
+      "referenceUs": 44.926798339399454,
+      "ratio": 1.1902889925779447,
+      "lower": 1.0262875842466055,
+      "upper": 1.3141344487844564,
+      "status": "gap",
+      "allocatedBytes": 83136,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/xri1103-candidate-ordinary-DrawText8-confirm-receipt.json",
+      "boundary": "ordinary",
+      "depth": 8,
+      "adapterAllocatedBytes": 83160,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "allActualsRetained": true
+    },
+    "Ordinary16": {
+      "managedUs": 56.53632153320312,
+      "referenceUs": 46.09221287470645,
+      "ratio": 1.226591608584451,
+      "lower": 1.069954374699911,
+      "upper": 1.3561165472371899,
+      "status": "gap",
+      "allocatedBytes": 83136,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "sourceEvidence": "tmp/xri1103-candidate-ordinary-DrawText16-confirm-receipt.json",
+      "boundary": "ordinary",
+      "depth": 16,
+      "adapterAllocatedBytes": 83160,
+      "retainedBytes": 0,
+      "managedExact": true,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "allActualsRetained": true
+    }
+  },
+  "pipelineCases": {
+    "OneShot": {
+      "managedUs": 1156.270578125,
+      "referenceUs": 6174.5711640625,
+      "ratio": 0.18726330094869986,
+      "lower": 0.1638247337959429,
+      "upper": 0.2116293834621232,
+      "managedAllocatedBytes": 306084.1666666667,
+      "referenceAllocatedBytes": 9256953,
+      "status": "pass",
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeWorkload": true,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34"
+    },
+    "Preparation": {
+      "managedUs": 1090.1536692708332,
+      "referenceUs": 6177.008744791667,
+      "ratio": 0.17648569304520242,
+      "lower": 0.15655452669293973,
+      "upper": 0.19958531120384804,
+      "managedAllocatedBytes": 306087.3333333333,
+      "referenceAllocatedBytes": 9227176,
+      "status": "pass",
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeWorkload": false,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34"
+    },
+    "PrepareDraw8": {
+      "managedUs": 1649.2503072916668,
+      "referenceUs": 6766.074411458333,
+      "ratio": 0.24375290707691077,
+      "lower": 0.20450913267853352,
+      "upper": 0.2707458863765259,
+      "managedAllocatedBytes": 307430.4166666667,
+      "referenceAllocatedBytes": 9494633,
+      "status": "pass",
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeWorkload": true,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "amortizedManagedUs": 206.15628841145835,
+      "amortizedReferenceUs": 845.7593014322916
+    }
+  },
+  "pipelineChecks": {
+    "project": "Lokad.Image",
+    "caseId": "ConstrainedFit16",
+    "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "selectedSize": 16.75,
+    "fittingTrials": 30,
+    "fullWordSamplesPreserved": true,
+    "managedSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+    "historicalDirectDrawTextSha256": "9cf3afc8852807237c02b8b319899f480877c6ff143e302527631f1bd925707f",
+    "referenceOneShotLayoutFillSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "referencePreparedSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "managedExactGlyphsClustersLinesPositionsBoundsAndFit": true,
+    "referenceFrozenGlyphsClustersLinesAndFit": true,
+    "referencePositionBoundsTolerance": 0.0001,
+    "managedOwnedPreparedBytes": 48480,
+    "managedGovernedPeakBytes": 822460,
+    "borrowedRootAndInputPreserved": true,
+    "independentSurvivingOwners": true,
+    "oneShotVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "preparedVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "newFontsImagesOrSettings": 0,
+    "timingClaim": false
+  },
+  "pipelineFootprint": {
+    "managedOwnedPreparedCapacityBytes": 48480,
+    "ownedFontAndLayoutRetainedAfterPreparation": 0,
+    "managedHeapBefore": 5039752,
+    "managedHeapRetained": 5082248,
+    "managedHeapAfterDispose": 5039752,
+    "referenceHeapBefore": 5039752,
+    "referenceHeapRetained": 5062256,
+    "referenceHeapAfterRelease": 5039752,
+    "managedApproximateLiveHeapDelta": 42496,
+    "referenceApproximateLiveHeapDelta": 22504,
+    "method": "Untimed warmed-process full-GC heap observations around one live prepared owner. Raw signed values retained; includes approximate managed backing graphs, excludes unchanged idle pools in baseline. No object census or allocation-to-retention equivalence. Production's explicit admitted capacity and governed peak are separate; no reference admission model. Physical/native/JIT stack peaks unmeasured."
+  },
+  "reusedPreparedCases": {
+    "Prepared8": {
+      "caseId": "Prepared8",
+      "boundary": "prepared",
+      "depth": 8,
+      "managedUs": 34.35048160807291,
+      "referenceUs": 36.79568158075601,
+      "ratio": 0.9335465503657927,
+      "lower": 0.8264178092550497,
+      "upper": 1.02555221009658,
+      "status": "uncertain",
+      "allocatedBytes": 56,
+      "adapterAllocatedBytes": 80.0,
+      "retainedBytes": 48984,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "librarySha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+      "allActualsRetained": true,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tca1048-current-prepared-DrawText8-confirm-receipt.json",
+      "allBuilds": 0
+    },
+    "Prepared16": {
+      "caseId": "Prepared16",
+      "boundary": "prepared",
+      "depth": 16,
+      "managedUs": 36.850125325520835,
+      "referenceUs": 37.469529866757,
+      "ratio": 0.9834691136120791,
+      "lower": 0.8959096317858417,
+      "upper": 1.0468878543567854,
+      "status": "uncertain",
+      "allocatedBytes": 56,
+      "adapterAllocatedBytes": 80.0,
+      "retainedBytes": 48984,
+      "actuals": 12,
+      "operationsPerActual": 1024,
+      "librarySha256": "50987a9c6e842078151a7d9ed05ea067bbe3cab2e6a93890415cd8500e800e41",
+      "allActualsRetained": true,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tca1048-current-prepared-DrawText16-confirm-receipt.json",
+      "allBuilds": 0
+    }
+  },
+  "reusedPreparedProvider": "benchmarks/text-draw-current-confidence-evidence.json",
+  "pairedEffect": {
+    "libraryIdentities": {
+      "baseline": "fb17f12e3153953b7bbd9687d3294ffd9b30f1eec5167eec1776a501d5007018",
+      "candidate": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34"
+    },
+    "helperSha256": "7a5c8143bab0252e97782fb6c1fa0a86b57ee94b8c48c5ad817020dcf769af69",
+    "helperSourcePins": {
+      "tmp/xra1102-worker/Program.cs": "5b04fac6b4ce3c5c65083df51a4e12747644470ccdc2a6c83c0137da5953b355",
+      "tmp/xra1102-worker/TextManagedWorker.csproj": "b6476c47cf75ee76ea7cb4b1bd439278f4a50f827ea616c5fe4f8ef37a2410be"
+    },
+    "helperBuilds": 0,
+    "allOtherBuilds": 0,
+    "subjects": {
+      "baseline": {
+        "mean": 55.93730590820312,
+        "lower": 55.184991317190466,
+        "upper": 56.68962049921578,
+        "values": [
+          56.2856162109375,
+          56.1040693359375,
+          55.3954296875,
+          56.2343349609375,
+          56.443033203125,
+          55.776841796875,
+          55.2874521484375,
+          55.877412109375,
+          55.36503515625,
+          57.293734375,
+          55.317478515625,
+          55.8672333984375
+        ]
+      },
+      "candidate": {
+        "mean": 54.83999031575521,
+        "lower": 54.54865208226427,
+        "upper": 55.13132854924615,
+        "values": [
+          55.33852734375,
+          54.8053134765625,
+          54.68861328125,
+          54.9845439453125,
+          54.91740625,
+          54.4321064453125,
+          54.6162958984375,
+          54.851044921875,
+          54.760986328125,
+          54.94292578125,
+          55.001947265625,
+          54.7401728515625
+        ]
+      }
+    },
+    "ratio": 0.9804246609853356,
+    "lower": 0.9686454043960765,
+    "upper": 0.9923471597612257,
+    "all12PairsRetained": true,
+    "quietGuardsPassed": true,
+    "originalInputsFramesLayoutVisualQualityAndOwnershipPassed": true,
+    "boundary": "Two persistent original-harness workers alternate12adjacent1024-operation batches in reversed order. One CPU0operation at a time;independent processes and natural nonconcurrent GC. Full1024warmups each. Original complete ordinary DrawText,reset/validation and two per-operation clocks;IPC/reset/validation/allocation reads outside clocks. Original ImageSharp checks run in correctness-only mode and do not supply elapsed reference costs. This resolves the scoped DLL effect only and does not replace original separate-run uncertainty or standalone external comparisons. No image/settings grid or favorable repeat."
+  },
+  "arabicGeneralization": {
+    "baseline": {
+      "statistics": {
+        "mean": 443.4826087239583,
+        "lower": 432.4300157921233,
+        "upper": 454.53520165579334,
+        "values": [
+          470.70421875,
+          441.9385546875,
+          441.4035625,
+          440.690421875,
+          439.6760625,
+          441.867890625,
+          439.90240625,
+          440.396421875,
+          443.105265625,
+          441.427328125,
+          440.33734375,
+          440.341828125
+        ]
+      },
+      "allocatedBytes": [
+        583776
+      ]
+    },
+    "candidate": {
+      "statistics": {
+        "mean": 427.31928776041667,
+        "lower": 417.0103450207617,
+        "upper": 437.62823050007165,
+        "values": [
+          452.8214921875,
+          425.943125,
+          425.1889921875,
+          425.327390625,
+          423.832890625,
+          424.6018359375,
+          425.450640625,
+          425.1543046875,
+          424.94303125,
+          424.6606875,
+          425.254203125,
+          424.652859375
+        ]
+      },
+      "allocatedBytes": [
+        590552
+      ]
+    },
+    "gainConfirmed": false,
+    "interpretation": "Lower point estimate,overlapping independent all-actual intervals;no confirmed speedup or regression and no external-reference performance claim."
+  },
+  "memory": {
+    "byControl": {
+      "LatinKerning": {
+        "oldPeak": 52920,
+        "newPeak": 58264,
+        "retainedCapacity": 48984,
+        "oldOrdinaryAllocation": [
+          75944,
+          75944,
+          75944
+        ],
+        "newOrdinaryAllocation": [
+          83136,
+          83136,
+          83136
+        ]
+      },
+      "ArabicMarksDigits": {
+        "oldPeak": 311376,
+        "newPeak": 318160,
+        "retainedCapacity": 310448,
+        "oldOrdinaryAllocation": [],
+        "newOrdinaryAllocation": []
+      },
+      "ConstrainedFit": {
+        "oldPeak": 53064,
+        "newPeak": 56736,
+        "retainedCapacity": 48480,
+        "oldOrdinaryAllocation": [],
+        "newOrdinaryAllocation": []
+      }
+    },
+    "ordinaryPublicAllocatedBytes": 83136,
+    "ordinaryAdditionalAllocatedBytes": 7192,
+    "timedAdapterBytes": 24,
+    "preparedPublicAllocatedBytes": 56,
+    "latinRetainedCapacityBytes": 48984,
+    "completeRetainedCapacityBytes": 48480,
+    "completeGovernedPeakBytes": 822460,
+    "completeAddedGovernedPeakBytes": 3672,
+    "addedRetainedCapacityBytes": 0,
+    "newStaticCacheBytes": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "productionSha256": "1f96629de19bec6cbe63dbd58e3267e3be6dd3ebc6d029d7d26f4be9967428e8",
+      "embeddedTestsSha256": "ee5c78d3d1e44243ff0a0beb68f4508fa48c8518f140f126f1815c0e7356ab0d",
+      "publicTestsSha256": "69e7e90e168f1d8aca66fe53b216e43315f9fc8b670bec4ddfe2e10bbe3e7b2a",
+      "full": [
+        3281,
+        2499,
+        948
+      ],
+      "total": 6728,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 266,
+        "public-normal": 161,
+        "internal-avx-off": 266,
+        "public-avx-off": 161,
+        "internal-scalar": 266,
+        "public-scalar": 161
+      }
+    },
+    "linux": {
+      "productionSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "embeddedTestsSha256": "adda1247d6a940e82bd4e66b0d92a2a3ecb7733d401302760ebd3ed8e65edb7f",
+      "publicTestsSha256": "4a08eaeded86c16bec150c0fe5d3394ee55ad33e4e07c69013317eec37acd134",
+      "full": [
+        3281,
+        2499,
+        948
+      ],
+      "total": 6728,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 266,
+        "public-normal": 161,
+        "internal-avx-off": 266,
+        "public-avx-off": 161,
+        "internal-scalar": 266,
+        "public-scalar": 161
+      }
+    },
+    "fullChecksEachOs": 6728,
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "XRI1103",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "b2e2a78dc56392484b12447de4e7c4e49a44433101f946b176a562693d763995",
+      "symbolsSha256": "a6cc92796a5a4211e7927f336dcd7fa20e5da39c7787446e3b205b4d2bd8b60c",
+      "bytes": 467062,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable timed Linux conservative computed-X event exclusion. Adjacent ordinary16effect1.96percent/1.10us verified;two ordinary drawing references remain gaps,both complete public integrations pass,Arabic effect inconclusive. Full16-bit exact frames/events,polls,ownership and every-growth refusal/cancel/recovery preserved. Temporary ranges raise allocations/peak,not retained capacity;fit governed peak822460B. 6728full/live perOS and SAMEactualpackage/all3examples follow affected performance reconciliation. Earlier trial/uncertainty/void observation retained;publication postponed,published packages immutable",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "XRI1103",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "b2e2a78dc56392484b12447de4e7c4e49a44433101f946b176a562693d763995",
+      "symbolsSha256": "a6cc92796a5a4211e7927f336dcd7fa20e5da39c7787446e3b205b4d2bd8b60c",
+      "bytes": 467062,
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable timed Linux conservative computed-X event exclusion. Adjacent ordinary16effect1.96percent/1.10us verified;two ordinary drawing references remain gaps,both complete public integrations pass,Arabic effect inconclusive. Full16-bit exact frames/events,polls,ownership and every-growth refusal/cancel/recovery preserved. Temporary ranges raise allocations/peak,not retained capacity;fit governed peak822460B. 6728full/live perOS and SAMEactualpackage/all3examples follow affected performance reconciliation. Earlier trial/uncertainty/void observation retained;publication postponed,published packages immutable",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "b2e2a78dc56392484b12447de4e7c4e49a44433101f946b176a562693d763995"
+    },
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "focusedEachMode": {
+      "internal": 266,
+      "public": 161
+    },
+    "modes": [
+      "normal",
+      "avx-off",
+      "scalar"
+    ],
+    "allEightFrozenFramesEachMode": true,
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "acceptedProductionAndEmbeddedBuildsEachOs": 1,
+    "priorUnacceptedLinuxCoreAndEmbeddedBuilds": 1,
+    "publicBuilds": 0,
+    "harnessReferenceFixtureBuilds": 0,
+    "diagnosticHelperBuilds": 1,
+    "packCalls": 1
+  },
+  "earlierImplementation": {
+    "stage": "XRE1101",
+    "candidateLinuxSha256": "243c85c398302bab0112ba2db61bf1bda1d24134f44898b390c414c64e567b0c",
+    "confirmation": {
+      "savedUs": 1.9918749999999932,
+      "rawSavedFraction": 0.034541969882923906,
+      "rawGainSeparated": false,
+      "rawLossSeparated": false,
+      "pairedNormalizedSavedFraction": 0.030319666092774922,
+      "pairedNormalizedGainSeparated": false,
+      "pairedNormalizedLossSeparated": false,
+      "worstBracketNormalizedSavedFraction": 0.032132077425229055,
+      "worstBracketNormalizedGainSeparated": false,
+      "worstBracketNormalizedLossSeparated": false,
+      "pairedReferenceClockChange": -0.004366791130410608
+    },
+    "interpretation": "Separate-run3.45percent lower point,inconclusive raw and normalized intervals. Retained with every actual;not a confirmed gain. Exact original source/modules/tests/inventory restored before the revised implementation."
+  },
+  "observationFailure": {
+    "stage": "XRA1102",
+    "originalRun": "completed-void",
+    "rawTimingsLost": true,
+    "originalMeasurementReruns": 0,
+    "productionChanged": false,
+    "cause": "A statistics file present locally was assumed to exist on the VM. The postprocessing lookup ran after all12adjacent pairs completed and before aggregate raw timings were saved. Worker timing stdout was consumed without durable capture and cannot be recovered.",
+    "fix": "Preserve original failed controller;preflight and pin the critical value before workers start;fsync every received worker line immediately;save the raw aggregate before statistics. A completed-run guard forbids replay. The corrected template is syntax-checked only;no new measurement or helper build.",
+    "fixedTemplateOnly": true
+  },
+  "jit": {
+    "prior": {
+      "project": "Lokad.Image",
+      "stage": "XRE1101",
+      "codegenOnly": true,
+      "allInstrumentedElapsedDiscarded": true,
+      "allBuilds": 0,
+      "librarySha256": "243c85c398302bab0112ba2db61bf1bda1d24134f44898b390c414c64e567b0c",
+      "allEightFrozenFramesExact": true,
+      "quietGuardsPassed": true,
+      "createOutOfLineCalls": [
+        "call     [Lokad.Image.Internal.TextRasterizer+EdgeRange:Create(byref):Lokad.Image.Internal.TextRasterizer+EdgeRange]"
+      ],
+      "jitSha256": "19c9c9764492549e8ab85b2f641a6e9ee08c7520192339704cd5c6c846cf2d03",
+      "jitBytes": 26138,
+      "scope": "Archived immutable candidate after production restoration;generated-code attribution only,no gain/timing or current-production claim."
+    },
+    "revised": {
+      "librarySha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "allInstrumentedElapsedDiscarded": true,
+      "allBuilds": 0,
+      "allEightFrozenFramesExact": true,
+      "quietGuardsPassed": true,
+      "createOutOfLineCalls": [],
+      "jitSha256": "949cb290d29e25c5df2bd92d325bd1552bf50ec8c2ec94f4a242178735839c9b",
+      "jitBytes": 25176
+    },
+    "interpretation": "Original232B Create is out of line;revised actual code has no call. Attribution only,no standalone inlining speedup or physical/JIT peak claim."
+  },
+  "invalidation": "Only event preparation changes. Refresh ordinary8/16,complete public one-shot/eight-draw and creation diagnostic on the actual timed/package DLL. Retained geometry,prepared Draw/Band/Area/Blend bodies and their two existing scoped costs remain source-valid. Font loading,layout/fitting without raster,codecs,editing,resizing and valid unrelated evidence are unchanged. Incidental complete-fit prepared-draw capture remains in raw and is not a new optimization/current-cost claim. Not a release-wide refresh.",
+  "referenceDisclosures": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 public integration,not FFmpeg/bare shaping. Retained preparation differs;ordinary drawing is scoped,not an overall text slowdown. Complete pipelines include every layout/fitting call,fresh owned explicit-clear canvases,output ownership and disposal. Font eager/lazy differences remain separate. Visual16-bit gates retain full samples and do not imply sample-exact reference output.",
+  "raw": {
+    "file": "text-computed-x-ranges-qualified.tar.xz",
+    "sha256": "c17e60b8608197b45dff8d1baa20c7e89d8ba94b1b331d69ed9f9568d81cc2ff",
+    "bytes": 6364692,
+    "members": 275,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "probe-owner-completion-qualified.tar.xz",
+        "sha256": "847a2839ebb2a466b4fcbbdd3abca92fdeece2c07130d8d969503a91d6b32a2f"
+      },
+      {
+        "file": "text-two-edge-endpoint-trial.tar.xz",
+        "sha256": "8d26a300b2bf6c1ba8ee057b7000e6e6df235d54e416b7a82f6616cebb89a7e2"
+      },
+      {
+        "file": "text-computed-x-bound-proof.tar.xz",
+        "sha256": "1b9b4cf2d1edf5609fecceff76a0b5fae007b8d11752e4f028d228476568eaa8"
+      },
+      {
+        "file": "font-typed-location-views-qualified.tar.xz",
+        "sha256": "2b40efee0326c930a7ddc05ba379bf2a84ac007461e5e32a296468f2207c23f5"
+      }
+    ]
+  }
+}

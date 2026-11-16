@@ -23,12 +23,15 @@ namespace Lokad.Image.Internal
             // Degenerate/nonfinite inputs cannot use this certificate.
             static (double Low, double High) Envelope(Edge edge)
             {
+                var range = EdgeRange.Create(edge);
                 if (!(double.IsFinite(edge.MinY) && double.IsFinite(edge.MaxY)
                     && double.IsFinite(edge.deltaY) && edge.deltaY != 0
                     && double.IsFinite(edge.originX) && double.IsFinite(edge.deltaX)))
-                    return (double.NegativeInfinity, double.PositiveInfinity);
-                var end = edge.originX + edge.deltaX;
-                return (Math.Min(edge.originX, end), Math.Max(edge.originX, end));
+                {
+                    Assert.True(double.IsNegativeInfinity(range.Low));
+                    Assert.True(double.IsPositiveInfinity(range.High));
+                }
+                return (range.Low, range.High);
             }
 
             var checkedEdges = 0; var excludedPairs = 0;

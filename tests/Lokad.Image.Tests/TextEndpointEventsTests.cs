@@ -65,13 +65,13 @@ namespace Lokad.Image.Internal
                     if (cancel)
                     {
                         var held = root.Bytes; cancellation.Cancel();
-                        var failure = Assert.Throws<OperationCanceledException>(() => shape.BuildEvents(new Crossing[count]));
+                        var failure = Assert.Throws<OperationCanceledException>(() => shape.BuildEvents(new Crossing[count], new EdgeRange[count]));
                         Assert.Equal(cancellation.Token, failure.CancellationToken);
                         Assert.Equal(0, shape.EventCount); Assert.Equal(unchanged, edges); Assert.Equal(held, root.Bytes);
                     }
                     else
                     {
-                        shape.BuildEvents(new Crossing[count]); Assert.Equal(unique.Count, shape.EventCount);
+                        shape.BuildEvents(new Crossing[count], new EdgeRange[count]); Assert.Equal(unique.Count, shape.EventCount);
                         for (var i = 0; i < unique.Count; i++)
                         {
                             // Zero signs describe the same event coordinate; all

@@ -52,6 +52,24 @@ internal sealed partial class TextRasterizer : IDisposable
         }
         internal int Winding => ascending ? 1 : -1;
     }
+    // Enclose the computed X(y), not the original endpoint X. For finite Y
+    // endpoints/delta, the rounded fraction stays in [0,1]. Monotone rounded
+    // multiply/add therefore remain between originX and (originX+deltaX).
+    private readonly record struct EdgeRange(double Low, double High)
+    {
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        internal static EdgeRange Create(in Edge edge)
+        {
+            if (!(double.IsFinite(edge.MinY) && double.IsFinite(edge.MaxY)
+                && double.IsFinite(edge.deltaY) && edge.deltaY != 0
+                && double.IsFinite(edge.originX) && double.IsFinite(edge.deltaX)))
+                return new(double.NegativeInfinity, double.PositiveInfinity);
+            var end = edge.originX + edge.deltaX;
+            return new(Math.Min(edge.originX, end), Math.Max(edge.originX, end));
+        }
+        internal bool Disjoint(EdgeRange other) => High < other.Low || other.High < Low;
+    }
+
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
     private readonly record struct Crossing(double X, int Index, int Order);
 
@@ -101,7 +119,15 @@ internal sealed partial class TextRasterizer : IDisposable
             crossings = new Crossing[maximum]; row = new double[width];
             // Preparation and scan conversion do not overlap. Reuse the crossing
             // storage to order edge intervals before it holds scan-band crossings.
-            foreach (var prepared in shapes) prepared.BuildEvents(crossings);
+            var rangeBytes = 32 + maximum * 16L;
+            Admit(rangeBytes);
+            try
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var ranges = new EdgeRange[maximum];
+                foreach (var prepared in shapes) prepared.BuildEvents(crossings, ranges);
+            }
+            finally { Release(rangeBytes); }
             context.Cancellation.ThrowIfCancellationRequested();
         }
         catch { Dispose(); throw; }
@@ -394,7 +420,7 @@ internal sealed partial class TextRasterizer : IDisposable
             }
             finally { owner.Release((depthLimit + 1) * 64); }
         }
-        internal void BuildEvents(Crossing[] order)
+        internal void BuildEvents(Crossing[] order, Span<EdgeRange> ranges)
         {
             var previousLow = double.NaN; var previousHigh = double.NaN;
             for (var i = 0; i < Count; i++)
@@ -408,6 +434,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 if (high != previousLow && high != previousHigh) Event(high);
                 previousLow = low; previousHigh = high;
                 order[i] = new(low, i, i);
+                ranges[i] = EdgeRange.Create(Edges[i]);
             }
             TextRasterSort.SortGeometry<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
             for (var i = 0; i < Count; i++)
@@ -420,6 +447,7 @@ internal sealed partial class TextRasterizer : IDisposable
                     // Preserve original edge-index orientation and arithmetic:
                     // sorting changes which pairs are visited, not their results.
                     var other = order[j].Index;
+                    if (ranges[index].Disjoint(ranges[other])) continue;
                     var a = Edges[Math.Min(index, other)]; var b = Edges[Math.Max(index, other)];
                     var low = Math.Max(a.MinY, b.MinY); var high = Math.Min(a.MaxY, b.MaxY);
                     var (aLow, aHigh) = a.Endpoints(low, high); var (bLow, bHigh) = b.Endpoints(low, high);
