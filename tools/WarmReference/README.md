@@ -211,6 +211,20 @@ untouched/zero-alpha exactness and normal/scalar owner/cancellation/refusal gate
 are in [the report](../../benchmarks/ORIGINAL-WORD-COMPOSITE.md). GC allocations,
 borrowed canvas and reference snapshot/pool capacity are distinct figures.
 
+Complete JPEG/WebP header controls use `build-bounded-headers-linux.sh [OUTPUT]
+[IMMUTABLE_LIBRARY_DLL]`. This builds only the new tooling around the existing
+library. Run `verify-bounded-headers.py --worker DLL --native WORKER
+--core-sha256 SHA --output NEW_DIRECTORY` for20 same-packet grammar controls.
+`measure-bounded-headers.py --worker DLL --native WORKER --core-sha256 SHA
+--input PACKET --expected JSON --format jpeg|webp --prefix OUTPUT --mode short|confirm`
+uses fresh opaque seekable sources and independently owned exact9-field metadata
+through EOF. The reference is explicitly FFmpeg AVIO/descriptor APIs plus an
+original bounded structural/EXIF adapter, not public packet-parser performance.
+No pixel decoding,whole-input copy,cached result or input view. Native scratch is
+8192B AVIO+8192B staging+32B header;contexts and descriptor are additional.
+[Current results](../../benchmarks/BOUNDED-HEADERS-CURRENT-REFERENCE.md) identify the
+frozen existing packets,ownership,all-actual confidence and separate memory figures.
+
 ## CMYK decode context boundaries
 
 The CMYK RGBA worker retains its decoder, frame wrapper and packing context by

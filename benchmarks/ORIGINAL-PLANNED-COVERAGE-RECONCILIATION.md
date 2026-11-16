@@ -17,8 +17,8 @@ with an easier operation. The following finite list is the inherited 17:
 | Original required name | Distinct path / current action |
 | --- | --- |
 | `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Reconciled pass-stop:current `PngHeaders` has the exact218775B packet,fresh seekable grammar/EOF/owner boundary and identical native reference identity. 0.290585/0.579888us,upper.509395,568B/op;reuse [RCI1098](REFILL-CALL-INLINING.md). |
-| `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. JPEG driver has scoped DLL costs; standalone equivalent full-header reference/confirmation still missing. |
-| `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. No current full-header external confirmation; Identify/probe timings are different boundaries. |
+| `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. [Complete header reference](BOUNDED-HEADERS-CURRENT-REFERENCE.md) now confirms5.566/AVIO-headeradapter2.816us,upper1.994260,8768B/op gap. Fresh opaque seekable source/full scan/independent9-field output;priority coalesce stuffed-pair handoffs. |
+| `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. [Complete header reference](BOUNDED-HEADERS-CURRENT-REFERENCE.md) now passes/stops.131984/AVIO-headeradapter.296087us,upper.456690,552B/op;full RIFF/late metadata/EOF/independent9-fields. Identify/probe remain different. |
 | `FillRectangle/Rgba8Clipped` | Clipped byte replacement. Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel. |
 | `FillRectangle/Rgba16Clipped` | Clipped full-word replacement. Current fill passes; same original-recipe reconciliation remains. |
 | `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
@@ -77,6 +77,17 @@ at-least1062936B reference snapshot payload and unmeasured retained allocator
 capacity. Existing independent-source costs did not substitute for this boundary.
 One successful tooling build after a pre-check compile correction;no production,
 existing harness,Windows,broad or package builds. Reuse current qualification.
+
+HBC1129 freezes the existing complete-JPEG guard input(65,163B,SHA5d3a88c6)
+and original lossless WebP packet(533,100B,SHAa4ed2454). Independent complete
+header comparisons use the same opaque seekable/EOF/descriptor boundaries and
+labeled FFmpegAVIO/descriptor APIs plus original bounded structural/EXIF adapters.
+JPEGupper1.994260 is a demonstrated gap;WebPupper.456690 passes/stops. Twenty
+same-packet controls and bothOS normal/scalar/owner/cancel/refusal/recovery pass.
+This adds no image or required path;source/worker/packet identities and bounded
+memory differences are explicit. Old scoped JPEG-guard clocks are not substituted
+for standalone reference evidence. Next JPEG coalescing hypothesis follows one
+current-process profile;its sample counts/instrumented clocks are not gain claims.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay

@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **153 comparisons** summarize that scope.
+**289 named material paths**; these **155 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -52,6 +52,19 @@ No production speedup or broader content/settings claim.
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
+
+[Complete header comparisons](../benchmarks/BOUNDED-HEADERS-CURRENT-REFERENCE.md)
+confirm **JPEG 5.566 / 2.816 µs, upper 1.994260, 8,768 B/op** as a material gap;
+**WebP .131984 / .296087 µs, upper .456690, 552 B/op** passes/stops. References are
+explicitly **FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF
+adapters**, not public packet-parser performance. Both include fresh non-exposed
+source/working state/descriptor ownership, complete late-metadata/EOF checks and
+exact nine-field source metadata, with no pixels or whole-input copy. Twenty
+same-packet controls and Windows/Linux normal/scalar owner/cancel/refusal gates pass.
+One managed/native tool build each; unchanged production/package evidence is reused.
+Native bounded scratch is16,416B; context/descriptor and physical/native peaks are
+separate/unmeasured. A short current-JPEG profile identifies the next hypothesis;
+its instrumented clocks and sample counts are not speedup evidence.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -472,6 +485,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify PNG8, fresh seekable Stream, adapter reference | 8.802 | 15.951 | 0.552 / 0.555 | 192 | Confirmed pass |
 | Identify PNG8, async nonseekable, adapter reference | 11.801 | 19.297 | 0.612 / 0.621 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
+| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (gap) | 5.566 | 2.816 | 1.976 / 1.994260 | 8,768 |
+| Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter (pass) | 0.132 | 0.296 | 0.446 / 0.456690 | 552 |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
 remaining paths, boundaries, allocations, references and raw evidence. Superseded

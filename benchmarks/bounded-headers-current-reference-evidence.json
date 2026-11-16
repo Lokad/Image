@@ -1,0 +1,2887 @@
+{
+  "project": "Lokad.Image",
+  "stage": "HBC1129",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+    "linuxSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "timedArtifactSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "packageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7",
+    "tools/WarmReference/ffmpeg-bounded-headers-warm.c": "28a29999d9cd882e76f5825073a5193341adde9907666031ad09cd43c06b6f92",
+    "tools/WarmReference/HeaderWorker/HeaderWorker.csproj": "3233238878d6fe421a8f025677ae5fa5854196609a7fbd9011a6cd1292fe4715",
+    "tools/WarmReference/HeaderWorker/Program.cs": "4e502d5d6bac06d46ef953d2ae07ac374416c48370099ff857c4da28d978c688",
+    "tools/WarmReference/build-bounded-headers-linux.sh": "61d89291eb78bb32e36b3634b5684e2904be27a81a1387981ccf37ba28084604",
+    "tools/WarmReference/verify-bounded-headers.py": "6f4cd9f6a9b1a48886882a839dde68d587f1438630553c73281396bce319e1bc",
+    "tools/WarmReference/measure-bounded-headers.py": "826a2b82b04ebb5743b116bf6895632f8d4c92117d96d4bd506b22d982bd562a"
+  },
+  "cases": {
+    "JpegHeaders": {
+      "project": "Lokad.Image",
+      "caseId": "JpegHeaders",
+      "originalRequiredControl": "InspectHeaders/Jpeg420FreshStream",
+      "productionChanged": false,
+      "newRequiredPaths": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "mode": "confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerActual": 16384,
+      "allActualsRetained": true,
+      "managedUs": 5.566462987263997,
+      "nativeUs": 2.816403981526693,
+      "ratio": 1.9764433738112297,
+      "lower": 1.951797808883266,
+      "upper": 1.9942597417506476,
+      "status": "gap",
+      "allocatedBytes": 8768.0,
+      "managed": {
+        "mean": 5566.462987263997,
+        "lower": 5532.401074329573,
+        "upper": 5600.524900198421,
+        "values": [
+          5627.295654296875,
+          5565.577453613281,
+          5553.509033203125,
+          5573.5228271484375,
+          5578.452209472656,
+          5542.690002441406,
+          5538.063232421875,
+          5542.977294921875,
+          5543.9425048828125,
+          5602.21923828125,
+          5563.966125488281,
+          5565.340270996094
+        ]
+      },
+      "nativeBrackets": {
+        "before": {
+          "mean": 2820.726114908854,
+          "lower": 2818.0877350282176,
+          "upper": 2823.3644947894904,
+          "values": [
+            2821.3333740234375,
+            2820.1573486328125,
+            2822.5730590820312,
+            2821.8927612304688,
+            2820.7521362304688,
+            2815.7158203125,
+            2818.8314208984375,
+            2823.96435546875,
+            2822.0272216796875,
+            2820.8150634765625,
+            2820.3871459960938,
+            2820.263671875
+          ]
+        },
+        "paired": {
+          "mean": 2816.403981526693,
+          "lower": 2808.322698868723,
+          "upper": 2824.485264184663,
+          "values": [
+            2817.7739868164062,
+            2816.1033325195312,
+            2819.5619506835938,
+            2812.3286743164062,
+            2817.3374633789062,
+            2811.637939453125,
+            2811.2443237304688,
+            2808.6775512695312,
+            2809.3658447265625,
+            2817.8931274414062,
+            2826.21142578125,
+            2828.712158203125
+          ]
+        },
+        "after": {
+          "mean": 2821.7881622314453,
+          "lower": 2809.060859208335,
+          "upper": 2834.5154652545557,
+          "values": [
+            2815.4229736328125,
+            2812.2779541015625,
+            2817.2531127929688,
+            2820.5436401367188,
+            2817.3338623046875,
+            2815.976806640625,
+            2816.639404296875,
+            2826.1038208007812,
+            2849.994384765625,
+            2827.5164794921875,
+            2819.5882568359375,
+            2822.8072509765625
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.6812908242474975,
+        "lower": 0.6755214238538394,
+        "upper": 0.6870602246411557,
+        "values": [
+          0.6916817742939404,
+          0.6812466121844094,
+          0.6778484499550975,
+          0.6840144686204134,
+          0.6831190790748055,
+          0.678712732790599,
+          0.6780176374373462,
+          0.6798180240136678,
+          0.6797471112984094,
+          0.6871733239984184,
+          0.6773740899191801,
+          0.6767365873836833
+        ]
+      },
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentSurvivingOutputs": true,
+      "eofChecked": true,
+      "inputUnchanged": true,
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "expected": {
+        "Format": 1,
+        "Width": 513,
+        "Height": 259,
+        "BitDepth": 8,
+        "HasAlpha": false,
+        "Orientation": 1,
+        "SourceColor": 0,
+        "SourceAlpha": 1,
+        "SourceComponentCount": 3
+      },
+      "outputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+      "nativeReady": {
+        "state": "ready",
+        "format": 1,
+        "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+        "cpu": 0,
+        "inputBytes": 65163,
+        "independentLiveOutputs": true,
+        "freshSeekableStream": true,
+        "inputView": false,
+        "wholeInputCopy": false,
+        "avioScratchBytes": 8192,
+        "adapterBufferBytes": 8192,
+        "headerBytes": 32,
+        "eofChecked": true,
+        "pixelDecode": false,
+        "sourceAcquisitionAndReleaseTimed": true,
+        "descriptorAcquisitionAndReleaseTimed": true,
+        "reads": 10,
+        "readBytes": 65163,
+        "seeks": 0,
+        "ffmpegVersion": "n8.1"
+      },
+      "clocksPerBatch": 2,
+      "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+      "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+    },
+    "WebpHeaders": {
+      "project": "Lokad.Image",
+      "caseId": "WebpHeaders",
+      "originalRequiredControl": "InspectHeaders/WebpLosslessRgba8FreshSeekable",
+      "productionChanged": false,
+      "newRequiredPaths": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "mode": "confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerActual": 131072,
+      "allActualsRetained": true,
+      "managedUs": 0.13198361460367838,
+      "nativeUs": 0.29608685874938967,
+      "ratio": 0.4457597853587632,
+      "lower": 0.43439093051661765,
+      "upper": 0.45669002512206947,
+      "status": "pass",
+      "allocatedBytes": 552.0,
+      "managed": {
+        "mean": 131.98361460367838,
+        "lower": 129.64568094689398,
+        "upper": 134.32154826046278,
+        "values": [
+          136.6368637084961,
+          132.3400421142578,
+          130.7352066040039,
+          131.57227325439453,
+          130.90575408935547,
+          133.97750854492188,
+          130.34652709960938,
+          132.2291030883789,
+          130.8538818359375,
+          132.39835357666016,
+          130.04248809814453,
+          131.76537322998047
+        ]
+      },
+      "nativeBrackets": {
+        "before": {
+          "mean": 296.28683217366535,
+          "lower": 294.11973301707155,
+          "upper": 298.45393133025914,
+          "values": [
+            296.6850357055664,
+            295.2392807006836,
+            295.45628356933594,
+            295.7155456542969,
+            295.5345993041992,
+            301.40057373046875,
+            296.525634765625,
+            295.77796936035156,
+            295.48754119873047,
+            296.68013763427734,
+            295.3030090332031,
+            295.6363754272461
+          ]
+        },
+        "paired": {
+          "mean": 296.08685874938965,
+          "lower": 295.361888589186,
+          "upper": 296.8118289095933,
+          "values": [
+            296.01827239990234,
+            295.70125579833984,
+            297.02941131591797,
+            295.3973693847656,
+            296.33492279052734,
+            296.2339096069336,
+            296.45719146728516,
+            295.6092758178711,
+            296.98480224609375,
+            295.5862808227539,
+            295.40641021728516,
+            296.283203125
+          ]
+        },
+        "after": {
+          "mean": 296.15063794453937,
+          "lower": 295.1349155997778,
+          "upper": 297.16636028930094,
+          "values": [
+            295.9387512207031,
+            296.0898895263672,
+            296.49906158447266,
+            296.37750244140625,
+            296.7200393676758,
+            295.17266845703125,
+            296.9145050048828,
+            295.4086227416992,
+            295.39930725097656,
+            295.5659484863281,
+            295.7728729248047,
+            297.948486328125
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": -0.8080599758795064,
+        "lower": -0.8262025554770707,
+        "upper": -0.7899173962819421,
+        "values": [
+          -0.7730944066757339,
+          -0.8039749869040358,
+          -0.8206572079635509,
+          -0.8087651576560035,
+          -0.8170126807273622,
+          -0.7934774382278191,
+          -0.8217063313400262,
+          -0.8045025206296325,
+          -0.8195996717642814,
+          -0.8031455685032832,
+          -0.8204908414060713,
+          -0.8102928987562762
+        ]
+      },
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentSurvivingOutputs": true,
+      "eofChecked": true,
+      "inputUnchanged": true,
+      "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+      "inputBytes": 533100,
+      "expected": {
+        "Format": 2,
+        "Width": 513,
+        "Height": 259,
+        "BitDepth": 8,
+        "HasAlpha": true,
+        "Orientation": 1,
+        "SourceColor": 2,
+        "SourceAlpha": 2,
+        "SourceComponentCount": 4
+      },
+      "outputSha256": "ee76119ca8c5b7c9e1d68c48bab664c4d7edea414425c759e5f9220fbb08997e",
+      "nativeReady": {
+        "state": "ready",
+        "format": 2,
+        "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+        "cpu": 0,
+        "inputBytes": 533100,
+        "independentLiveOutputs": true,
+        "freshSeekableStream": true,
+        "inputView": false,
+        "wholeInputCopy": false,
+        "avioScratchBytes": 8192,
+        "adapterBufferBytes": 8192,
+        "headerBytes": 32,
+        "eofChecked": true,
+        "pixelDecode": false,
+        "sourceAcquisitionAndReleaseTimed": true,
+        "descriptorAcquisitionAndReleaseTimed": true,
+        "reads": 3,
+        "readBytes": 8192,
+        "seeks": 1,
+        "ffmpegVersion": "n8.1"
+      },
+      "clocksPerBatch": 2,
+      "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+      "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+    }
+  },
+  "short": {
+    "JpegHeaders": {
+      "project": "Lokad.Image",
+      "caseId": "JpegHeaders",
+      "originalRequiredControl": "InspectHeaders/Jpeg420FreshStream",
+      "productionChanged": false,
+      "newRequiredPaths": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "mode": "short",
+      "actualIterations": 3,
+      "nativeSamplesEachBracket": 3,
+      "operationsPerActual": 16384,
+      "allActualsRetained": true,
+      "managedUs": 6.028972737630208,
+      "nativeUs": 2.7865020751953127,
+      "ratio": 2.163634756025661,
+      "lower": 1.4880161307742508,
+      "upper": 2.8796093116237937,
+      "status": "gap",
+      "allocatedBytes": 8768.0,
+      "managed": {
+        "mean": 6028.972737630208,
+        "lower": 4266.603667239051,
+        "upper": 7791.341808021365,
+        "values": [
+          6140.358642578125,
+          5968.111145019531,
+          5978.448425292969
+        ]
+      },
+      "nativeBrackets": {
+        "before": {
+          "mean": 2789.7417602539062,
+          "lower": 2754.556624515839,
+          "upper": 2824.9268959919737,
+          "values": [
+            2788.6007690429688,
+            2788.656005859375,
+            2791.968505859375
+          ]
+        },
+        "paired": {
+          "mean": 2786.5020751953125,
+          "lower": 2705.6940594583216,
+          "upper": 2867.3100909323034,
+          "values": [
+            2787.9915771484375,
+            2781.5199584960938,
+            2789.9946899414062
+          ]
+        },
+        "after": {
+          "mean": 2788.4398193359375,
+          "lower": 2735.6119693659875,
+          "upper": 2841.2676693058875,
+          "values": [
+            2786.5935668945312,
+            2791.7771606445312,
+            2786.94873046875
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.7717053402809396,
+        "lower": 0.48933005454091677,
+        "upper": 1.0540806260209625,
+        "values": [
+          0.789561679511715,
+          0.7634329602723074,
+          0.7621213810587966
+        ]
+      },
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentSurvivingOutputs": true,
+      "eofChecked": true,
+      "inputUnchanged": true,
+      "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "inputBytes": 65163,
+      "expected": {
+        "Format": 1,
+        "Width": 513,
+        "Height": 259,
+        "BitDepth": 8,
+        "HasAlpha": false,
+        "Orientation": 1,
+        "SourceColor": 0,
+        "SourceAlpha": 1,
+        "SourceComponentCount": 3
+      },
+      "outputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+      "nativeReady": {
+        "state": "ready",
+        "format": 1,
+        "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+        "cpu": 0,
+        "inputBytes": 65163,
+        "independentLiveOutputs": true,
+        "freshSeekableStream": true,
+        "inputView": false,
+        "wholeInputCopy": false,
+        "avioScratchBytes": 8192,
+        "adapterBufferBytes": 8192,
+        "headerBytes": 32,
+        "eofChecked": true,
+        "pixelDecode": false,
+        "sourceAcquisitionAndReleaseTimed": true,
+        "descriptorAcquisitionAndReleaseTimed": true,
+        "reads": 10,
+        "readBytes": 65163,
+        "seeks": 0,
+        "ffmpegVersion": "n8.1"
+      },
+      "clocksPerBatch": 2,
+      "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+      "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+    },
+    "WebpHeaders": {
+      "project": "Lokad.Image",
+      "caseId": "WebpHeaders",
+      "originalRequiredControl": "InspectHeaders/WebpLosslessRgba8FreshSeekable",
+      "productionChanged": false,
+      "newRequiredPaths": 0,
+      "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "mode": "short",
+      "actualIterations": 3,
+      "nativeSamplesEachBracket": 3,
+      "operationsPerActual": 131072,
+      "allActualsRetained": true,
+      "managedUs": 0.13097575124104818,
+      "nativeUs": 0.2877208201090495,
+      "ratio": 0.4552181909929454,
+      "lower": 0.20018159116511522,
+      "upper": 0.9549573244886896,
+      "status": "pass",
+      "allocatedBytes": 552.0,
+      "managed": {
+        "mean": 130.9757512410482,
+        "lower": 77.45379212985182,
+        "upper": 184.49771035224455,
+        "values": [
+          134.33484649658203,
+          129.67576599121094,
+          128.91664123535156
+        ]
+      },
+      "nativeBrackets": {
+        "before": {
+          "mean": 290.05880482991535,
+          "lower": 193.19995315081718,
+          "upper": 386.9176565090135,
+          "values": [
+            286.9483184814453,
+            287.03902435302734,
+            296.18907165527344
+          ]
+        },
+        "paired": {
+          "mean": 287.7208201090495,
+          "lower": 282.3759054875994,
+          "upper": 293.06573473049957,
+          "values": [
+            287.4831848144531,
+            288.04815673828125,
+            287.63111877441406
+          ]
+        },
+        "after": {
+          "mean": 287.9561360677083,
+          "lower": 284.3160201738939,
+          "upper": 291.59625196152274,
+          "values": [
+            288.1299133300781,
+            287.73824310302734,
+            288.00025177001953
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": -0.7871440337840733,
+        "lower": -1.204864196443156,
+        "upper": -0.3694238711249907,
+        "values": [
+          -0.7608288334673582,
+          -0.7980904498269513,
+          -0.8025128180579102
+        ]
+      },
+      "quietGuardsPassed": true,
+      "descriptorExact": true,
+      "independentSurvivingOutputs": true,
+      "eofChecked": true,
+      "inputUnchanged": true,
+      "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+      "inputBytes": 533100,
+      "expected": {
+        "Format": 2,
+        "Width": 513,
+        "Height": 259,
+        "BitDepth": 8,
+        "HasAlpha": true,
+        "Orientation": 1,
+        "SourceColor": 2,
+        "SourceAlpha": 2,
+        "SourceComponentCount": 4
+      },
+      "outputSha256": "ee76119ca8c5b7c9e1d68c48bab664c4d7edea414425c759e5f9220fbb08997e",
+      "nativeReady": {
+        "state": "ready",
+        "format": 2,
+        "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+        "cpu": 0,
+        "inputBytes": 533100,
+        "independentLiveOutputs": true,
+        "freshSeekableStream": true,
+        "inputView": false,
+        "wholeInputCopy": false,
+        "avioScratchBytes": 8192,
+        "adapterBufferBytes": 8192,
+        "headerBytes": 32,
+        "eofChecked": true,
+        "pixelDecode": false,
+        "sourceAcquisitionAndReleaseTimed": true,
+        "descriptorAcquisitionAndReleaseTimed": true,
+        "reads": 3,
+        "readBytes": 8192,
+        "seeks": 1,
+        "ffmpegVersion": "n8.1"
+      },
+      "clocksPerBatch": 2,
+      "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+      "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+    }
+  },
+  "reference": {
+    "label": "FFmpeg n8.1 AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+    "nativeSha256": "1ed2bf6fa6ae62b19496a93b705092e1477e154368080a43c32bc9c1122e2c8d",
+    "nativeCommand": [
+      "gcc",
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-I/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/include",
+      "tools/WarmReference/ffmpeg-bounded-headers-warm.c",
+      "-o",
+      "external/warm-reference/hbc1129/ffmpeg-bounded-headers-warm",
+      "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib",
+      "-lavformat",
+      "-lm",
+      "-lavcodec",
+      "-lm",
+      "-lwebp",
+      "-lsharpyuv",
+      "-lavutil",
+      "-lm",
+      "-lz",
+      "-latomic",
+      "-pthread"
+    ],
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "nativeArchives": {
+      "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+      "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+      "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+      "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+      "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+      "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+      "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+      "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+      "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+      "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+      "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+      "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+    },
+    "publicParserDecision": "Local pinned FFmpeg sources:MJPEG jpeg_parse complete-frames branch requires complete packet;otherwise ff_combine_frame can accumulate it. WebP parser also combines packets. No bounded fresh opaque-stream full-header API with equivalent late metadata/EOF validation. Reuse the PNG approach:public AVIO/descriptor APIs with an original bounded structural/EXIF adapter,explicitly not public packet-parser performance.",
+    "sourceInsightRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "sourceInsightFiles": [
+      "libavcodec/mjpeg_parser.c",
+      "libavcodec/webp_parser.c",
+      "libavcodec/mjpegdec.c"
+    ]
+  },
+  "worker": {
+    "binary": "tools/WarmReference/HeaderWorker/bin/Release/net10.0/HeaderWorker.dll",
+    "runtimeHashes": {
+      "Lokad.Image.pdb": "2af790dd1f11ac09f509e0e1dfdfb4a4472c2883791d6545382a51d284bf99f0",
+      "Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+      "HeaderWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "HeaderWorker.deps.json": "bea4beace53014ee6ea8812a3ace72a76c105220ca192885060cc98a1f06cffe",
+      "HeaderWorker": "4a1feacc6fa32b8cdaa852b6dfa51d4017adadafb849171ccec6d5acb509c716",
+      "Lokad.Image.dll": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "HeaderWorker.pdb": "307b80845e1cec60425e2043ac6a0ad09d240c5891d966fc163bd7c8a6f7e5b1",
+      "HeaderWorker.dll": "1c2399c83fe2426d805eed7663760b1547f0b9ad47a5360ec0692266c8c1e297"
+    }
+  },
+  "checks": {
+    "linux": {
+      "JpegHeaders": {
+        "normal": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "inputBytes": 65163,
+          "info": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "scalar": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "inputBytes": 65163,
+          "info": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "nativeReady": {
+          "state": "ready",
+          "format": 1,
+          "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+          "cpu": 0,
+          "inputBytes": 65163,
+          "independentLiveOutputs": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "wholeInputCopy": false,
+          "avioScratchBytes": 8192,
+          "adapterBufferBytes": 8192,
+          "headerBytes": 32,
+          "eofChecked": true,
+          "pixelDecode": false,
+          "sourceAcquisitionAndReleaseTimed": true,
+          "descriptorAcquisitionAndReleaseTimed": true,
+          "reads": 10,
+          "readBytes": 65163,
+          "seeks": 0,
+          "ffmpegVersion": "n8.1"
+        }
+      },
+      "WebpHeaders": {
+        "normal": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+          "inputBytes": 533100,
+          "info": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "scalar": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+          "inputBytes": 533100,
+          "info": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "nativeReady": {
+          "state": "ready",
+          "format": 2,
+          "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+          "cpu": 0,
+          "inputBytes": 533100,
+          "independentLiveOutputs": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "wholeInputCopy": false,
+          "avioScratchBytes": 8192,
+          "adapterBufferBytes": 8192,
+          "headerBytes": 32,
+          "eofChecked": true,
+          "pixelDecode": false,
+          "sourceAcquisitionAndReleaseTimed": true,
+          "descriptorAcquisitionAndReleaseTimed": true,
+          "reads": 3,
+          "readBytes": 8192,
+          "seeks": 1,
+          "ffmpegVersion": "n8.1"
+        }
+      }
+    },
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "HBC1129",
+      "sameImmutableTimedPackageLibrary": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "runtimeHashes": {
+        "Lokad.Image.pdb": "2af790dd1f11ac09f509e0e1dfdfb4a4472c2883791d6545382a51d284bf99f0",
+        "Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "HeaderWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "HeaderWorker.deps.json": "bea4beace53014ee6ea8812a3ace72a76c105220ca192885060cc98a1f06cffe",
+        "HeaderWorker": "4a1feacc6fa32b8cdaa852b6dfa51d4017adadafb849171ccec6d5acb509c716",
+        "Lokad.Image.dll": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "HeaderWorker.pdb": "307b80845e1cec60425e2043ac6a0ad09d240c5891d966fc163bd7c8a6f7e5b1",
+        "HeaderWorker.dll": "1c2399c83fe2426d805eed7663760b1547f0b9ad47a5360ec0692266c8c1e297"
+      },
+      "checks": {
+        "JpegHeaders-normal": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "inputBytes": 65163,
+          "info": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "JpegHeaders-scalar": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "inputBytes": 65163,
+          "info": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "WebpHeaders-normal": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+          "inputBytes": 533100,
+          "info": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "WebpHeaders-scalar": {
+          "state": "checked",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+          "inputBytes": 533100,
+          "info": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4,
+            "OrientedWidth": 513,
+            "OrientedHeight": 259
+          },
+          "exact": true,
+          "freshSeekableStream": true,
+          "inputView": false,
+          "eof": true,
+          "independentSurvivingDescriptors": true,
+          "callerInputLeftOpen": true,
+          "cancellationRefusalRecovery": true,
+          "timingClaim": false
+        }
+      },
+      "allBuilds": 0,
+      "allTimingsAbsent": true
+    },
+    "controls": {
+      "project": "Lokad.Image",
+      "correctnessOnly": true,
+      "timingClaim": false,
+      "controls": 20,
+      "originalImages": 2,
+      "newImages": 0,
+      "workerSha256": "1c2399c83fe2426d805eed7663760b1547f0b9ad47a5360ec0692266c8c1e297",
+      "nativeSha256": "1ed2bf6fa6ae62b19496a93b705092e1477e154368080a43c32bc9c1122e2c8d",
+      "coreSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "cases": [
+        {
+          "name": "jpeg-original",
+          "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "bytes": 65163,
+          "expected": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 1,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": false,
+              "Orientation": 1,
+              "SourceColor": 0,
+              "SourceAlpha": 1,
+              "SourceComponentCount": 3,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-opaque-entropy",
+          "inputSha256": "27b9e042e6a4af897b524a1cd19c439bb11a32ced30cd00843bdd1d5cf6fcce6",
+          "bytes": 325,
+          "expected": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 1,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": false,
+              "Orientation": 1,
+              "SourceColor": 0,
+              "SourceAlpha": 1,
+              "SourceComponentCount": 3,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-late-exif",
+          "inputSha256": "a834e94e3500787ca6fb5e95a5756038b9b860cf5f3b36fca127f686a86a5078",
+          "bytes": 65199,
+          "expected": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 6,
+            "SourceColor": 0,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 1,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": false,
+              "Orientation": 6,
+              "SourceColor": 0,
+              "SourceAlpha": 1,
+              "SourceComponentCount": 3,
+              "OrientedWidth": 259,
+              "OrientedHeight": 513
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-late-adobe",
+          "inputSha256": "4d1fdecbd0cf0efb3a6ba65f03d183f866c1a11b98e0947d1331d8f8679b79f0",
+          "bytes": 65179,
+          "expected": {
+            "Format": 1,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": false,
+            "Orientation": 1,
+            "SourceColor": 4,
+            "SourceAlpha": 1,
+            "SourceComponentCount": 3
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 1,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": false,
+              "Orientation": 1,
+              "SourceColor": 4,
+              "SourceAlpha": 1,
+              "SourceComponentCount": 3,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-missing-eoi",
+          "inputSha256": "9a398c04d8ff463e037c95367ad484283c8ffa35c5ed86b4127ed80366a2a950",
+          "bytes": 65161,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-trailing-byte",
+          "inputSha256": "06fa19932167e69a9f48359b108f678d637f5fd11a0526a2a65b156e3f92fa9e",
+          "bytes": 65164,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-invalid-segment-length",
+          "inputSha256": "1881573aaa90e6723a0057cf12b9db4b903528bacdbb3ffda6fe62c8700c9334",
+          "bytes": 65163,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-restart-before-scan",
+          "inputSha256": "cb0f123592973f76b717fbf4942029ce9dc50d9439fbdd2ed3356c505216a935",
+          "bytes": 65165,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "jpeg-duplicate-frame",
+          "inputSha256": "ee9ca919d84e345963dfa80e1c7d60349adf062aed96cf3eb6e218cc205d0b1f",
+          "bytes": 65182,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-original",
+          "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+          "bytes": 533100,
+          "expected": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 2,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": true,
+              "Orientation": 1,
+              "SourceColor": 2,
+              "SourceAlpha": 2,
+              "SourceComponentCount": 4,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-opaque-image-payload",
+          "inputSha256": "a70413a5744f0bd4891c6c97742768ba2e94cfd7c5bc2792422f89cc87434174",
+          "bytes": 26,
+          "expected": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 2,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": true,
+              "Orientation": 1,
+              "SourceColor": 2,
+              "SourceAlpha": 2,
+              "SourceComponentCount": 4,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-late-exif",
+          "inputSha256": "197cd64f330a8ea3b53016abc94e24b35ed7c95960e0ed921d66d86a1d02c6f7",
+          "bytes": 533152,
+          "expected": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 6,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 2,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": true,
+              "Orientation": 6,
+              "SourceColor": 2,
+              "SourceAlpha": 2,
+              "SourceComponentCount": 4,
+              "OrientedWidth": 259,
+              "OrientedHeight": 513
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-truncated",
+          "inputSha256": "0f719abbbf628030511eb4143a99ee0f34270dff967dfede2b789a4680e40860",
+          "bytes": 533099,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-trailing-byte",
+          "inputSha256": "fd80cf892ac2607b3197ee17595946212117dfa370a432dda120948db5e4c0df",
+          "bytes": 533101,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-missing-pixels",
+          "inputSha256": "b44c8b72e8d38fdc09304d9e3afdb26c7ab22b91b9f2211da92a01af820933cc",
+          "bytes": 24,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-unsupported-version",
+          "inputSha256": "1c830b7acdb118c9cc39b5de0054992e0e94947545bf52f99b0ffbf6e67db553",
+          "bytes": 26,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "UnsupportedImageException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-nonzero-padding",
+          "inputSha256": "a56212aff2740ed0c6740400c3a5b84618832dded5d5cdbef7a136db7d0200ff",
+          "bytes": 26,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-missing-flagged-exif",
+          "inputSha256": "b41d4bfe24b7807e9c3c3174b806483d5e01a891ec26c19f488447976c0822a8",
+          "bytes": 533118,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-unknown-padded-chunk",
+          "inputSha256": "ca5d50d73ec9cbcf45c1749f88c145f83451a79baac26a472b7cfed5963332ab",
+          "bytes": 533110,
+          "expected": {
+            "Format": 2,
+            "Width": 513,
+            "Height": 259,
+            "BitDepth": 8,
+            "HasAlpha": true,
+            "Orientation": 1,
+            "SourceColor": 2,
+            "SourceAlpha": 2,
+            "SourceComponentCount": 4
+          },
+          "nativeAccepted": true,
+          "managed": {
+            "accepted": true,
+            "info": {
+              "Format": 2,
+              "Width": 513,
+              "Height": 259,
+              "BitDepth": 8,
+              "HasAlpha": true,
+              "Orientation": 1,
+              "SourceColor": 2,
+              "SourceAlpha": 2,
+              "SourceComponentCount": 4,
+              "OrientedWidth": 513,
+              "OrientedHeight": 259
+            },
+            "eof": true,
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        },
+        {
+          "name": "webp-duplicate-image",
+          "inputSha256": "08da15e4c72277bdc203c9f751b23da166752607b288ac3844c6cd9546094b13",
+          "bytes": 1066188,
+          "expected": null,
+          "nativeAccepted": false,
+          "managed": {
+            "accepted": false,
+            "errorType": "ImageDataException",
+            "callerOpen": true,
+            "timingClaim": false
+          }
+        }
+      ]
+    }
+  },
+  "qualification": {
+    "provider": "benchmarks/word-alias-dispatch-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6745,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "newBroadOrPackageChecks": 0,
+    "packageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8"
+  },
+  "memory": {
+    "jpegManagedGcBytes": 8768.0,
+    "webpManagedGcBytes": 552.0,
+    "managedInitialAdmissionBytes": 512,
+    "managedBulkMaximumAdmissionBytes": 8448,
+    "nativeAvioScratchBytes": 8192,
+    "nativeAdapterStagingBytes": 8192,
+    "nativeHeaderBytes": 32,
+    "newRetainedOperationWorkspaceBytes": 0,
+    "nativeAllocationAndPhysicalPeaksMeasured": false,
+    "interpretation": "Both borrow the same resident encoded packet;no whole-input copy or retained parser/context/result cache. All fresh source/reader/descriptor acquisition and source/workspace release stay timed. Managed small independent ImageInfo survives input/sibling disposal;native owned parameters survive AVIO release and are disposed peroperation. Native16416Bbounded scratch excludes contexts/descriptor and is not a measured total peak. Input fixture/harnessverification/preparation are outside timing;GC allocation,logical admission,retained storage and physical/native/JIT peaks are distinct.",
+    "wrapperDifference": "Earlier complete-JPEG scoped driver reports8776B with a different Stream wrapper. This new complete-worker reports8768B;production is unchanged,no allocation reduction is claimed."
+  },
+  "builds": {
+    "managedTool": 1,
+    "nativeTool": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "existingHarness": 0,
+    "fixtures": 0,
+    "package": 0,
+    "windows": 0
+  },
+  "profile": {
+    "project": "Lokad.Image",
+    "stage": "HBC1129",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "sourcePins": {
+      "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+      "src/Lokad.Image/Internal/InspectionReader.cs": "42dcace131a18f9d698dc02f19ea0e76b0073f47b12a204c2fed86cc9be17b12",
+      "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+      "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "c8867bb8a409a9f3f76cdba3fa9c3c936e6bab8de1822d42125c103101802eb7"
+    },
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "packetStuffedPairs": 191,
+    "totalSamples": 1991,
+    "resolvedManagedSamples": 832,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        290
+      ],
+      [
+        "void [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncMethodBuilderCore::Start(!!0&)[Optimized]",
+        238
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        140
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        113
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        11
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+        9
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        6
+      ],
+      [
+        "instance int32 [HeaderWorker] Input::Read(valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        5
+      ],
+      [
+        "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+        3
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.OperationContext::get_HasMemoryBudget()[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.ImageCodec+<InspectHeadersCore>d__27::MoveNext()[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::EndAsync()[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::SkipAsync(int64)[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype Lokad.Image.SourceColorModel [Lokad.Image] Lokad.Image.Internal.JpegSourceMetadata::get_Color()[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::.ctor(class [System.Runtime]System.IO.Stream,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken,bool,valuetype [System.Runtime]System.Nullable`1<int64>,bool,bool)[Optimized]",
+        1
+      ],
+      [
+        "valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<!!0> [Lokad.Image] Lokad.Image.Internal.StreamInspection::JpegAsync(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        1
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.ExifOrientation::ValidatePolicy(valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<EndAsync>d__39::MoveNext()[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "class [Lokad.Image]Lokad.Image.ImageInfo [HeaderWorker] Program::<<Main>$>g__Run|0_1(valuetype Program/<>c__DisplayClass0_0&)[Optimized]",
+        1
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Item(class Lokad.Image.Internal.InspectionReader,int32&)[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<VSD_DispatchStub>",
+        1
+      ]
+    ],
+    "dsoSamples": {
+      "(/usr/lib/x86_64-linux-gnu/libc.so.6)": 190,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libcoreclr.so)": 71,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/System.Private.CoreLib.dll)": 847,
+      "(/memfd:doublemapper (deleted))": 832,
+      "(/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)": 51
+    },
+    "targetCode": [
+      {
+        "address": "0x790a3f077670",
+        "size": 91,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::.ctor(class [System.Runtime]System.Type,class System.Text.Json.Serialization.Metadata.JsonTypeInfo,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0776f0",
+        "size": 3,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::get_PropertyTypeCanBeNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f077710",
+        "size": 9,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::DetermineReflectionPropertyAccessors(class [System.Runtime]System.Reflection.MemberInfo,bool)[Optimized]"
+      },
+      {
+        "address": "0x790a3f078090",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::SetGetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0784a0",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::SetSetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f078620",
+        "size": 703,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::ConfigureIgnoreCondition(valuetype [System.Runtime]System.Nullable`1<valuetype System.Text.Json.Serialization.JsonIgnoreCondition>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f078b80",
+        "size": 131,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::AddJsonParameterInfo(class System.Text.Json.Serialization.Metadata.JsonParameterInfoValues)[Optimized]"
+      },
+      {
+        "address": "0x790a3f078c20",
+        "size": 155,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonParameterInfo`1[Lokad.Image.ImageFormat]::.ctor(class System.Text.Json.Serialization.Metadata.JsonParameterInfoValues,class System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0790e0",
+        "size": 91,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::.ctor(class [System.Runtime]System.Type,class System.Text.Json.Serialization.Metadata.JsonTypeInfo,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f079160",
+        "size": 3,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::get_PropertyTypeCanBeNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f079180",
+        "size": 9,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::DetermineReflectionPropertyAccessors(class [System.Runtime]System.Reflection.MemberInfo,bool)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0796f0",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::SetGetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f079b00",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::SetSetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f079c80",
+        "size": 703,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::ConfigureIgnoreCondition(valuetype [System.Runtime]System.Nullable`1<valuetype System.Text.Json.Serialization.JsonIgnoreCondition>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f079f70",
+        "size": 131,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::AddJsonParameterInfo(class System.Text.Json.Serialization.Metadata.JsonParameterInfoValues)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07a010",
+        "size": 155,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonParameterInfo`1[Lokad.Image.ImageOrientation]::.ctor(class System.Text.Json.Serialization.Metadata.JsonParameterInfoValues,class System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07a0d0",
+        "size": 91,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::.ctor(class [System.Runtime]System.Type,class System.Text.Json.Serialization.Metadata.JsonTypeInfo,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07a150",
+        "size": 3,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::get_PropertyTypeCanBeNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07a170",
+        "size": 9,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::DetermineReflectionPropertyAccessors(class [System.Runtime]System.Reflection.MemberInfo,bool)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07a6e0",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::SetGetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07aaf0",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::SetSetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07ac70",
+        "size": 703,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::ConfigureIgnoreCondition(valuetype [System.Runtime]System.Nullable`1<valuetype System.Text.Json.Serialization.JsonIgnoreCondition>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07af60",
+        "size": 91,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::.ctor(class [System.Runtime]System.Type,class System.Text.Json.Serialization.Metadata.JsonTypeInfo,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07afe0",
+        "size": 3,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::get_PropertyTypeCanBeNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07b000",
+        "size": 9,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::DetermineReflectionPropertyAccessors(class [System.Runtime]System.Reflection.MemberInfo,bool)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07b570",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::SetGetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07b980",
+        "size": 343,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::SetSetter(class [System.Runtime]System.Delegate)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07bb00",
+        "size": 703,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::ConfigureIgnoreCondition(valuetype [System.Runtime]System.Nullable`1<valuetype System.Text.Json.Serialization.JsonIgnoreCondition>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07d140",
+        "size": 1184,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::.ctor(valuetype System.Text.Json.Serialization.Converters.EnumConverterOptions,class System.Text.Json.JsonNamingPolicy,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07d600",
+        "size": 82,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::.ctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07d670",
+        "size": 6,
+        "name": "instance valuetype System.Text.Json.ConverterStrategy [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::GetDefaultConverterStrategy()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07d690",
+        "size": 7,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::get_HandleNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07d6c0",
+        "size": 1046,
+        "name": "class System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldInfo<!0>[] [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::ResolveEnumFields(class System.Text.Json.JsonNamingPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07de80",
+        "size": 189,
+        "name": "class [System.Runtime]System.Collections.Generic.IEnumerable`1<class [System.Runtime]System.Reflection.FieldInfo> [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::<ResolveEnumFields>g__GetFields|23_0()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07df60",
+        "size": 425,
+        "name": "uint64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::ConvertToUInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07e150",
+        "size": 82,
+        "name": "void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07e1c0",
+        "size": 174,
+        "name": "string [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::ResolveAndValidateJsonName(string,class System.Text.Json.JsonNamingPolicy,valuetype System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldNameKind<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07f3a0",
+        "size": 5,
+        "name": "instance class [System.Runtime]System.Type [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::get_Type()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07f3c0",
+        "size": 101,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonTypeInfo [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::CreateJsonTypeInfo(class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07f450",
+        "size": 133,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonPropertyInfo [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonTypeInfo`1[Lokad.Image.ImageFormat]::CreatePropertyInfoForTypeInfo()[Optimized]"
+      },
+      {
+        "address": "0x790a3f07f600",
+        "size": 149,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::DetermineEffectiveConverter(class System.Text.Json.Serialization.Metadata.JsonTypeInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07fae0",
+        "size": 1184,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::.ctor(valuetype System.Text.Json.Serialization.Converters.EnumConverterOptions,class System.Text.Json.JsonNamingPolicy,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f07ffa0",
+        "size": 82,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::.ctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080010",
+        "size": 6,
+        "name": "instance valuetype System.Text.Json.ConverterStrategy [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::GetDefaultConverterStrategy()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080030",
+        "size": 7,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::get_HandleNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080060",
+        "size": 1045,
+        "name": "class System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldInfo<!0>[] [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::ResolveEnumFields(class System.Text.Json.JsonNamingPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0806a0",
+        "size": 189,
+        "name": "class [System.Runtime]System.Collections.Generic.IEnumerable`1<class [System.Runtime]System.Reflection.FieldInfo> [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::<ResolveEnumFields>g__GetFields|23_0()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080780",
+        "size": 424,
+        "name": "uint64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::ConvertToUInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f080960",
+        "size": 82,
+        "name": "void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0809d0",
+        "size": 174,
+        "name": "string [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::ResolveAndValidateJsonName(string,class System.Text.Json.JsonNamingPolicy,valuetype System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldNameKind<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f080aa0",
+        "size": 5,
+        "name": "instance class [System.Runtime]System.Type [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::get_Type()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080ac0",
+        "size": 101,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonTypeInfo [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::CreateJsonTypeInfo(class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f080b50",
+        "size": 133,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonPropertyInfo [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonTypeInfo`1[Lokad.Image.ImageOrientation]::CreatePropertyInfoForTypeInfo()[Optimized]"
+      },
+      {
+        "address": "0x790a3f080d00",
+        "size": 149,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::DetermineEffectiveConverter(class System.Text.Json.Serialization.Metadata.JsonTypeInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f080dc0",
+        "size": 1184,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::.ctor(valuetype System.Text.Json.Serialization.Converters.EnumConverterOptions,class System.Text.Json.JsonNamingPolicy,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f081280",
+        "size": 82,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::.ctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0812f0",
+        "size": 6,
+        "name": "instance valuetype System.Text.Json.ConverterStrategy [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::GetDefaultConverterStrategy()[Optimized]"
+      },
+      {
+        "address": "0x790a3f081310",
+        "size": 7,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::get_HandleNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f081340",
+        "size": 1046,
+        "name": "class System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldInfo<!0>[] [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::ResolveEnumFields(class System.Text.Json.JsonNamingPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f081970",
+        "size": 189,
+        "name": "class [System.Runtime]System.Collections.Generic.IEnumerable`1<class [System.Runtime]System.Reflection.FieldInfo> [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::<ResolveEnumFields>g__GetFields|23_0()[Optimized]"
+      },
+      {
+        "address": "0x790a3f081a50",
+        "size": 581,
+        "name": "uint64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::ConvertToUInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f081cd0",
+        "size": 82,
+        "name": "void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f081d40",
+        "size": 174,
+        "name": "string [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::ResolveAndValidateJsonName(string,class System.Text.Json.JsonNamingPolicy,valuetype System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldNameKind<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f081e10",
+        "size": 5,
+        "name": "instance class [System.Runtime]System.Type [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::get_Type()[Optimized]"
+      },
+      {
+        "address": "0x790a3f081e30",
+        "size": 101,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonTypeInfo [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::CreateJsonTypeInfo(class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f081ec0",
+        "size": 133,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonPropertyInfo [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonTypeInfo`1[Lokad.Image.SourceColorModel]::CreatePropertyInfoForTypeInfo()[Optimized]"
+      },
+      {
+        "address": "0x790a3f082070",
+        "size": 149,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::DetermineEffectiveConverter(class System.Text.Json.Serialization.Metadata.JsonTypeInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f082140",
+        "size": 1184,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::.ctor(valuetype System.Text.Json.Serialization.Converters.EnumConverterOptions,class System.Text.Json.JsonNamingPolicy,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f082600",
+        "size": 82,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::.ctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f082670",
+        "size": 6,
+        "name": "instance valuetype System.Text.Json.ConverterStrategy [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::GetDefaultConverterStrategy()[Optimized]"
+      },
+      {
+        "address": "0x790a3f082690",
+        "size": 7,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::get_HandleNull()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0826c0",
+        "size": 1046,
+        "name": "class System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldInfo<!0>[] [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::ResolveEnumFields(class System.Text.Json.JsonNamingPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f082cf0",
+        "size": 189,
+        "name": "class [System.Runtime]System.Collections.Generic.IEnumerable`1<class [System.Runtime]System.Reflection.FieldInfo> [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::<ResolveEnumFields>g__GetFields|23_0()[Optimized]"
+      },
+      {
+        "address": "0x790a3f082dd0",
+        "size": 581,
+        "name": "uint64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::ConvertToUInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f083050",
+        "size": 82,
+        "name": "void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0830c0",
+        "size": 174,
+        "name": "string [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::ResolveAndValidateJsonName(string,class System.Text.Json.JsonNamingPolicy,valuetype System.Text.Json.Serialization.Converters.EnumConverter`1/EnumFieldNameKind<!0>)[Optimized]"
+      },
+      {
+        "address": "0x790a3f083190",
+        "size": 5,
+        "name": "instance class [System.Runtime]System.Type [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::get_Type()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0831b0",
+        "size": 101,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonTypeInfo [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::CreateJsonTypeInfo(class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f083240",
+        "size": 133,
+        "name": "instance class System.Text.Json.Serialization.Metadata.JsonPropertyInfo [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonTypeInfo`1[Lokad.Image.SourceAlphaRepresentation]::CreatePropertyInfoForTypeInfo()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0833f0",
+        "size": 149,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::DetermineEffectiveConverter(class System.Text.Json.Serialization.Metadata.JsonTypeInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0849d0",
+        "size": 132,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::TryReadAsObject(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.ReadStack&,object&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f084a70",
+        "size": 545,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::TryRead(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.ReadStack&,!0&,bool&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f084cc0",
+        "size": 98,
+        "name": "instance !0 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::Read(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f084ed0",
+        "size": 132,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::TryReadAsObject(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.ReadStack&,object&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f084f70",
+        "size": 545,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::TryRead(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.ReadStack&,!0&,bool&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0851c0",
+        "size": 98,
+        "name": "instance !0 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::Read(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f085950",
+        "size": 619,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::ReadJsonAndSetMember(object,valuetype System.Text.Json.ReadStack&,valuetype System.Text.Json.Utf8JsonReader&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f085be0",
+        "size": 110,
+        "name": "instance !0 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::Read(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f085c70",
+        "size": 619,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::ReadJsonAndSetMember(object,valuetype System.Text.Json.ReadStack&,valuetype System.Text.Json.Utf8JsonReader&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f085f00",
+        "size": 110,
+        "name": "instance !0 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::Read(valuetype System.Text.Json.Utf8JsonReader&,class [System.Runtime]System.Type,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f087100",
+        "size": 1207,
+        "name": "instance void [Lokad.Image] Lokad.Image.ImageCodec+<InspectHeadersCore>d__27::MoveNext()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0875f0",
+        "size": 68,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.ExifOrientation::ValidatePolicy(valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f087650",
+        "size": 49,
+        "name": "void [Lokad.Image] Lokad.Image.ImageLimits::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0876a0",
+        "size": 52,
+        "name": "instance void [Lokad.Image] Lokad.Image.ImageLimits::.ctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0876f0",
+        "size": 449,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::.ctor(class [System.Runtime]System.IO.Stream,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken,bool,valuetype [System.Runtime]System.Nullable`1<int64>,bool,bool)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0878e0",
+        "size": 145,
+        "name": "instance void [Lokad.Image] Lokad.Image.ImageLimits::Validate()[Optimized]"
+      },
+      {
+        "address": "0x790a3f0879b0",
+        "size": 277,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Reserve(int64)[Optimized]"
+      },
+      {
+        "address": "0x790a3f087c60",
+        "size": 3452,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.StreamInspection+<InspectAsync>d__0`2[Lokad.Image.Internal.InfoResult,Lokad.Image.Internal.InfoResultFactory]::MoveNext()[Optimized]"
+      },
+      {
+        "address": "0x790a3f088a40",
+        "size": 1977,
+        "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0892e0",
+        "size": 426,
+        "name": "valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<!!0> [Lokad.Image] Lokad.Image.Internal.StreamInspection::JpegAsync(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0898c0",
+        "size": 8264,
+        "name": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08b9c0",
+        "size": 1706,
+        "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08c0a0",
+        "size": 137,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Item(class Lokad.Image.Internal.InspectionReader,int32&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08c150",
+        "size": 81,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::DeclaredEnd(int64)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08c1c0",
+        "size": 93,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Metadata(class Lokad.Image.Internal.InspectionReader,int64,int64&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08c240",
+        "size": 2247,
+        "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::SkipAsync(int64)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08cc20",
+        "size": 246,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Dimensions(class Lokad.Image.Internal.InspectionReader,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08cea0",
+        "size": 4293,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08dfd0",
+        "size": 178,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::PrepareBulkStorage()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08e0b0",
+        "size": 144,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08e160",
+        "size": 1556,
+        "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08e7a0",
+        "size": 91,
+        "name": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::EndAsync()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08e980",
+        "size": 1091,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<EndAsync>d__39::MoveNext()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08ee00",
+        "size": 134,
+        "name": "instance valuetype Lokad.Image.SourceColorModel [Lokad.Image] Lokad.Image.Internal.JpegSourceMetadata::get_Color()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08eeb0",
+        "size": 53,
+        "name": "void [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1[Lokad.Image.Internal.InfoResult]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08ef00",
+        "size": 139,
+        "name": "instance valuetype System.Threading.Tasks.ValueTask`1<!0> [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1[Lokad.Image.Internal.InfoResult]::get_Task()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08efb0",
+        "size": 87,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::Dispose()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f020",
+        "size": 16,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.OperationContext::get_HasMemoryBudget()[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f040",
+        "size": 107,
+        "name": "instance bool [Lokad.Image] Lokad.Image.ImageInfo::Equals(class Lokad.Image.ImageInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f0c0",
+        "size": 412,
+        "name": "class [Lokad.Image]Lokad.Image.ImageInfo [HeaderWorker] Program::<<Main>$>g__Run|0_1(valuetype Program/<>c__DisplayClass0_0&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f3c0",
+        "size": 227,
+        "name": "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.ImageCodec::InspectHeaders(class [System.Runtime]System.IO.Stream,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f960",
+        "size": 55,
+        "name": "instance void [Lokad.Image] Lokad.Image.ImageLimitException::.ctor(valuetype Lokad.Image.ImageLimitKind,string)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f9b0",
+        "size": 18,
+        "name": "instance void [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncValueTaskMethodBuilder`1[Lokad.Image.Internal.InfoResult]::SetException(class System.Exception)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08f9e0",
+        "size": 164,
+        "name": "void [System.Private.CoreLib] System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1[Lokad.Image.Internal.InfoResult]::SetException(class System.Exception,class System.Threading.Tasks.Task`1<!0>&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f08faa0",
+        "size": 223,
+        "name": "uint8[] [HeaderWorker] Program::<<Main>$>g__Bytes|0_3(class [Lokad.Image]Lokad.Image.ImageInfo)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0911f0",
+        "size": 1401,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageFormat]::GetMemberAndWriteJson(object,valuetype System.Text.Json.WriteStack&,class System.Text.Json.Utf8JsonWriter)[Optimized]"
+      },
+      {
+        "address": "0x790a3f091790",
+        "size": 299,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageFormat]::TryWrite(class System.Text.Json.Utf8JsonWriter,!0&,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.WriteStack&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0918e0",
+        "size": 635,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::Write(class System.Text.Json.Utf8JsonWriter,!0,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f091b80",
+        "size": 4,
+        "name": "int64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageFormat]::ConvertToInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f091ba0",
+        "size": 1401,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.ImageOrientation]::GetMemberAndWriteJson(object,valuetype System.Text.Json.WriteStack&,class System.Text.Json.Utf8JsonWriter)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092140",
+        "size": 299,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.ImageOrientation]::TryWrite(class System.Text.Json.Utf8JsonWriter,!0&,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.WriteStack&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092290",
+        "size": 635,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::Write(class System.Text.Json.Utf8JsonWriter,!0,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092530",
+        "size": 4,
+        "name": "int64 [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.ImageOrientation]::ConvertToInt64(!0)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092550",
+        "size": 1404,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceColorModel]::GetMemberAndWriteJson(object,valuetype System.Text.Json.WriteStack&,class System.Text.Json.Utf8JsonWriter)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092af0",
+        "size": 302,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceColorModel]::TryWrite(class System.Text.Json.Utf8JsonWriter,!0&,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.WriteStack&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092c40",
+        "size": 638,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceColorModel]::Write(class System.Text.Json.Utf8JsonWriter,!0,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f092ee0",
+        "size": 1404,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1[Lokad.Image.SourceAlphaRepresentation]::GetMemberAndWriteJson(object,valuetype System.Text.Json.WriteStack&,class System.Text.Json.Utf8JsonWriter)[Optimized]"
+      },
+      {
+        "address": "0x790a3f093480",
+        "size": 302,
+        "name": "instance bool [System.Text.Json] System.Text.Json.Serialization.JsonConverter`1[Lokad.Image.SourceAlphaRepresentation]::TryWrite(class System.Text.Json.Utf8JsonWriter,!0&,class System.Text.Json.JsonSerializerOptions,valuetype System.Text.Json.WriteStack&)[Optimized]"
+      },
+      {
+        "address": "0x790a3f0935d0",
+        "size": 638,
+        "name": "instance void [System.Text.Json] System.Text.Json.Serialization.Converters.EnumConverter`1[Lokad.Image.SourceAlphaRepresentation]::Write(class System.Text.Json.Utf8JsonWriter,!0,class System.Text.Json.JsonSerializerOptions)[Optimized]"
+      },
+      {
+        "address": "0x790a3f093f60",
+        "size": 14,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.ImageInfo::get_OrientedWidth()[Optimized]"
+      },
+      {
+        "address": "0x790a3f093f80",
+        "size": 14,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.ImageInfo::get_OrientedHeight()[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0100",
+        "size": 384,
+        "name": "Lokad.Image.ImageInfo /* MT: 0x790a3f124060 */ [System.Text.Json] dynamicClass::.ctor(object[])[Optimized]"
+      },
+      {
+        "address": "0x790a3fca02f0",
+        "size": 45,
+        "name": "void [System.Text.Json] dynamicClass::SourceColorSetter(object,Lokad.Image.SourceColorModel /* MT: 0x790a3f123f20 */)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0380",
+        "size": 45,
+        "name": "void [System.Text.Json] dynamicClass::SourceAlphaSetter(object,Lokad.Image.SourceAlphaRepresentation /* MT: 0x790a3f123fc8 */)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca07a0",
+        "size": 45,
+        "name": "Lokad.Image.ImageInfo /* MT: 0x790a3f124060 */ [System.Text.Json] dynamicClass::infoGetter(object)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0830",
+        "size": 44,
+        "name": "Lokad.Image.ImageFormat /* MT: 0x790a3f123dd0 */ [System.Text.Json] dynamicClass::FormatGetter(object)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0b00",
+        "size": 44,
+        "name": "Lokad.Image.ImageOrientation /* MT: 0x790a3f123e78 */ [System.Text.Json] dynamicClass::OrientationGetter(object)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0b90",
+        "size": 45,
+        "name": "Lokad.Image.SourceColorModel /* MT: 0x790a3f123f20 */ [System.Text.Json] dynamicClass::SourceColorGetter(object)[Optimized]"
+      },
+      {
+        "address": "0x790a3fca0c20",
+        "size": 45,
+        "name": "Lokad.Image.SourceAlphaRepresentation /* MT: 0x790a3f123fc8 */ [System.Text.Json] dynamicClass::SourceAlphaGetter(object)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x904",
+        "samples": 55
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x435",
+        "samples": 35
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x972",
+        "samples": 34
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x43d",
+        "samples": 21
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x540",
+        "samples": 17
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1b5",
+        "samples": 16
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x3f",
+        "samples": 15
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x44f",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x94d",
+        "samples": 14
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x16",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1da",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x19",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xfa5",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xfcf",
+        "samples": 13
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x1",
+        "samples": 13
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x121",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x10b",
+        "samples": 12
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x90f",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xfe6",
+        "samples": 10
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x36",
+        "samples": 10
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xe6",
+        "samples": 10
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8e7",
+        "samples": 9
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x1f",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8f8",
+        "samples": 9
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x0",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x0",
+        "samples": 8
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x915",
+        "samples": 8
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x455",
+        "samples": 7
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x983",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8fc",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+        "offset": "0x1",
+        "samples": 7
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x418",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8ff",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1e9",
+        "samples": 6
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x928",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8e2",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8e4",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xa80",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x917",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8f",
+        "samples": 4
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x33",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1e7",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x624",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x998",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x674",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::EndAsync()[Optimized]",
+        "offset": "0x48",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0xed",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x8fe",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xfa",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x423",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x53d",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x41d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x649",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x939",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype Lokad.Image.SourceColorModel [Lokad.Image] Lokad.Image.Internal.JpegSourceMetadata::get_Color()[Optimized]",
+        "offset": "0x19",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x651",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader::.ctor(class [System.Runtime]System.IO.Stream,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken,bool,valuetype [System.Runtime]System.Nullable`1<int64>,bool,bool)[Optimized]",
+        "offset": "0x174",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x401",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0xfb9",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x3b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x8f0",
+        "samples": 1
+      },
+      {
+        "method": "valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<!!0> [Lokad.Image] Lokad.Image.Internal.StreamInspection::JpegAsync(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.OperationContext::get_HasMemoryBudget()[Optimized]",
+        "offset": "0xc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.ImageCodec+<InspectHeadersCore>d__27::MoveNext()[Optimized]",
+        "offset": "0x2b7",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ExifOrientation::ValidatePolicy(valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x520",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x105",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<EndAsync>d__39::MoveNext()[Optimized]",
+        "offset": "0xc4",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::ByteAsync()[Optimized]",
+        "offset": "0x427",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x6b2",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x4f1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x665",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.ImageCodec+<InspectHeadersCore>d__27::MoveNext()[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0xe1",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x51b",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x1be",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x62",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::SkipAsync(int64)[Optimized]",
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::SkipAsync(int64)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x91a",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0xc9a",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x8c",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x4c2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1e1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x1cc",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x444",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.OperationContext::get_HasMemoryBudget()[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x19",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x655",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0xb9d",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x267",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x2fa",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.InspectionReader+<JpegMarkerAsync>d__38::MoveNext()[Optimized]",
+        "offset": "0x62c",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask [Lokad.Image] Lokad.Image.Internal.InspectionReader::ReadAsync(int32)[Optimized]",
+        "offset": "0x16a",
+        "samples": 1
+      },
+      {
+        "method": "class [Lokad.Image]Lokad.Image.ImageInfo [HeaderWorker] Program::<<Main>$>g__Run|0_1(valuetype Program/<>c__DisplayClass0_0&)[Optimized]",
+        "offset": "0x8b",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x100",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x8d3",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.StreamInspection::Item(class Lokad.Image.Internal.InspectionReader,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0xfa",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.StreamInspection::AdvanceJpeg(class Lokad.Image.Internal.InspectionReader,class Lokad.Image.Internal.ProbeReader,valuetype Lokad.Image.ImageMetadataPolicy,valuetype Lokad.Image.Internal.StreamInspection/JpegInspectionState&,valuetype Lokad.Image.Internal.StreamInspection/JpegPending&)[Optimized]",
+        "offset": "0x899",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Threading.Tasks.ValueTask`1<int32> [Lokad.Image] Lokad.Image.Internal.InspectionReader::JpegHeaderMarkerAsync()[Optimized]",
+        "offset": "0x33f",
+        "samples": 1
+      }
+    ],
+    "traceSha256": "b3cb0d02c0912e0eb0f4454ba3e68044c9707875a11c347ea5d6adeb551f3c0a",
+    "traceBytes": 550288,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tools/WarmReference/HeaderWorker/bin/Release/net10.0/HeaderWorker.dll",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "tmp/hbc1129-jpeg-profile.info",
+      "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3}"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "3812005",
+      "-o",
+      "tmp/hbc1129-jpeg-profile.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "allHeaderOwnerAndOutputGatesPassed": true,
+    "quietGuardsPassed": true,
+    "scope": "One current-process2second profile of complete JPEG InspectHeaders on CPU0;samplerCPU1. Retain raw/map/selected JIT,discard all instrumented clocks. Leaf sample counts locate leads,not phase costs or removable-time predictions."
+  },
+  "nextHypothesis": "Coalesce entropy-stuffedFF00pairs within marker acquisition instead of handing every zero result through async builder and outer JPEG driver. Evaluate buffered suffix access with the existing safe byte path. One marker grammar,unchanged read sizes/order/positions,container/restart counts,cancellation,pending-user/owner lifetimes,limits and failure semantics;no cache or new storage. Keep nonentropy and restart behavior. Profile has191rawstuffedpairs,1991locations/832mapped,including marker290/asyncStart238/ByteAsync140/AdvanceJpeg113;counts locate leads,not removable-time predictions. This differs materially from old prefix-probe marker/default-read trials.",
+  "invalidation": "Changes to actual header entry/reader/grammar/factories/acquisition/ownership/cancellation or frozen packet/reference settings require affected confirmation. New production inputs remain absent;reuse platform/package/codec/edit/resize/text qualification and stop unchanged passes.",
+  "raw": {
+    "file": "bounded-headers-current-reference.tar.xz",
+    "sha256": "fb208712fb2eb6e26c6e0def6c7b18815a6a243036c516b33360b7a07e4a132d",
+    "bytes": 721524,
+    "members": 101,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "word-alias-dispatch-qualified.tar.xz",
+        "sha256": "5ae813b07fcaf5a88464400712d560efcbc41034a517944854649c174c1b5b51"
+      }
+    ]
+  }
+}

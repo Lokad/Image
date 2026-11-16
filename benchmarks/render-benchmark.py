@@ -3110,6 +3110,26 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
     assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
+    header_reference = json.loads((ROOT / 'benchmarks/bounded-headers-current-reference-evidence.json').read_text(encoding='utf-8'))
+    hq = header_reference['qualification']
+    assert header_reference['measurementAccepted'] and not header_reference['productionChanged']
+    assert not header_reference['productionSpeedupClaim'] and header_reference['newRequiredPaths'] == 0
+    assert header_reference['requiredMaterialPaths'] == 289 and header_reference['producers'] == copy_current['producers']
+    assert hq['reusedForUnchangedProduction'] and hq['newBroadOrPackageChecks'] == 0
+    assert hq['fullChecksEachOs'] == 6745 and hq['packageSha256'] == header_reference['producers']['packageSha256']
+    assert header_reference['raw']['mirrored'] and header_reference['raw']['allMembersVerified']
+    for case, label in [('JpegHeaders', 'Complete JPEG headers, fresh source / FFmpeg AVIO adapter'),
+                        ('WebpHeaders', 'Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter')]:
+        c = header_reference['cases'][case]
+        assert c['librarySha256'] == header_reference['producers']['linuxSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        assert all(c[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'descriptorExact', 'eofChecked',
+                                 'independentSurvivingOutputs', 'inputUnchanged'))
+        assert c['nativeReady']['freshSeekableStream'] and not c['nativeReady']['inputView'] and not c['nativeReady']['wholeInputCopy']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+        read_table += (f'\n| {label} ({c["status"]}) | {c["managedUs"]:.3f} | {c["nativeUs"]:.3f} | '
+                       f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,.0f} |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3125,6 +3145,19 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
+
+[Complete header comparisons](../benchmarks/BOUNDED-HEADERS-CURRENT-REFERENCE.md)
+confirm **JPEG 5.566 / 2.816 µs, upper 1.994260, 8,768 B/op** as a material gap;
+**WebP .131984 / .296087 µs, upper .456690, 552 B/op** passes/stops. References are
+explicitly **FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF
+adapters**, not public packet-parser performance. Both include fresh non-exposed
+source/working state/descriptor ownership, complete late-metadata/EOF checks and
+exact nine-field source metadata, with no pixels or whole-input copy. Twenty
+same-packet controls and Windows/Linux normal/scalar owner/cancel/refusal gates pass.
+One managed/native tool build each; unchanged production/package evidence is reused.
+Native bounded scratch is16,416B; context/descriptor and physical/native peaks are
+separate/unmeasured. A short current-JPEG profile identifies the next hypothesis;
+its instrumented clocks and sample counts are not speedup evidence.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -3380,7 +3413,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 153, 'Expected 153 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 155, 'Expected 155 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
