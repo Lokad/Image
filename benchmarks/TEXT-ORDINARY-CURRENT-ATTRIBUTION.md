@@ -1,5 +1,9 @@
 # Ordinary text drawing attribution
 
+[Current clipping attribution](TEXT-ORDINARY-CURRENT-CLIPPING-ATTRIBUTION.md)
+uses the latest immutable package. This earlier profile retains history; its
+location distribution is not current proof.
+
 TGP1041 profiles the accepted `6a5b04e3` DLL after paired endpoint evaluation.
 The existing runner performs 22,661 public RGBA16 draws, resetting and checking
 every canvas. Font/layout are retained; geometry/events/workspace preparation,

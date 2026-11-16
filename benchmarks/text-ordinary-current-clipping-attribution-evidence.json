@@ -1,0 +1,136 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TOC1118",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newFixtures": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "currentPerformanceCostsUnchanged": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "461fc039aa8d0967719d91b518ca7be6f4d2dc097b292a8e90df76b642d50f76",
+    "linuxSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "timedArtifactSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "packageSha256": "e58932e09d4a7c82d0a4bd4e5e4b0a56a6c1621b12f7d0379b5b1b3461d8e416"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "91ca667323bf8dee9d1f4f32f0be3b52689fb2ebad62137aa25e37538f45f9d6",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a"
+  },
+  "workload": {
+    "caseId": "DrawText16",
+    "description": "Frozen DejaVuSans2.37 AV To18px,384x160RGBA16. Retained font/layout;complete public ordinaryDrawText includes geometry/events/workspace,scan/composition and cleanup. Existing reset/full-word validation occur between operations and remain in the profile,not in timing claims.",
+    "publicCalls": 27016,
+    "allOriginalFrameLayoutVisualAndOwnerGatesPassed": true,
+    "reference": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12,correctness only;zero reference elapsed samples"
+  },
+  "sampling": {
+    "seconds": 2,
+    "applicationCpu": 0,
+    "collectorCpu": 1,
+    "totalSamples": 1994,
+    "mappedManagedSamples": 1478,
+    "quietGuardsPassed": true,
+    "collectorExit": 0,
+    "applicationExit": 0,
+    "traceSha256": "56c0845d8aa4fff719a5ae464f848f682349dd3b7d4ad8d4747b3fc21a6be2f8",
+    "traceBytes": 513376
+  },
+  "locations": {
+    "band": 345,
+    "area": 250,
+    "buildEdges": 122,
+    "buildEvents": 115,
+    "rasterize": 102,
+    "mergeBuffered": 94,
+    "partition": 65,
+    "tryNatural": 40,
+    "clip": 22
+  },
+  "sameCaptureAudit": {
+    "areaCodeBytes": 938,
+    "bandCodeBytes": 2401,
+    "resolvedSorts": [
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:Partition[Lokad.Image.Internal.TextRasterizer+Crossing,Lokad.Image.Internal.TextRasterizer+CrossingOrder](System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],int,System.Threading.CancellationToken) (FullOpts)",
+        "codeBytes": 1956,
+        "samples": 64
+      },
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:Partition[double,Lokad.Image.Internal.TextRasterizer+EventOrder](System.Span`1[double],int,System.Threading.CancellationToken) (FullOpts)",
+        "codeBytes": 1481,
+        "samples": 1
+      },
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:TryNatural[Lokad.Image.Internal.TextRasterizer+Crossing,Lokad.Image.Internal.TextRasterizer+CrossingOrder](System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],System.Threading.CancellationToken):bool (FullOpts)",
+        "codeBytes": 1255,
+        "samples": 25
+      },
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:MergeBuffered[Lokad.Image.Internal.TextRasterizer+Crossing,Lokad.Image.Internal.TextRasterizer+CrossingOrder](System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],int,int,int,System.Span`1[Lokad.Image.Internal.TextRasterizer+Crossing],System.Threading.CancellationToken) (FullOpts)",
+        "codeBytes": 1109,
+        "samples": 69
+      },
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:TryNatural[double,Lokad.Image.Internal.TextRasterizer+EventOrder](System.Span`1[double],System.Threading.CancellationToken):bool (FullOpts)",
+        "codeBytes": 1222,
+        "samples": 15
+      },
+      {
+        "jitName": "Lokad.Image.Internal.TextRasterSort:MergeBuffered[double,Lokad.Image.Internal.TextRasterizer+EventOrder](System.Span`1[double],int,int,int,System.Span`1[double],System.Threading.CancellationToken) (FullOpts)",
+        "codeBytes": 857,
+        "samples": 25
+      }
+    ],
+    "horizontalIntersectionBlocks": [
+      {
+        "block": "G_M000_IG22",
+        "samples": 112,
+        "divisionInstructions": 2
+      },
+      {
+        "block": "G_M000_IG23",
+        "samples": 22,
+        "divisionInstructions": 2
+      }
+    ],
+    "interpretation": "Two sampled Area blocks compute horizontal intersection ratios followed by zero products. Location counts do not prove division stalls,phase durations,removable percentages or a gain forecast. Full profile includes resets/validation/GC;do not sum historical stages or infer overall text slowdown."
+  },
+  "nextHypothesis": {
+    "repeatedWork": "Two horizontal clipping-intersection divisions followed by zero products in finite trapezoid fast paths.",
+    "endState": "Certified finite zero-delta intersection arithmetic with exact signed-zero handling;original nonfinite arithmetic,polygon/area order,coverage and blending preserved.",
+    "acceptance": "Independent always-clipped bit oracle over finite/extreme/subnormal/signedzero and nonfinite cases;existing eight full-word frames and layout/visual/admission/cancellation gates;complete ordinary16 scoped DLL screen and independent confirmation if useful;reconcile affected complete costs before one coherent W/L/package milestone. Prepared draw execution stays stopped unless its timed path changes.",
+    "risks": "Guard/code-size cost may outweigh removed divisions;NaN and signed-zero behavior needs proof. Samples identify locations,not stalls,phase costs or a gain forecast. No production change selected yet."
+  },
+  "qualification": {
+    "provider": "benchmarks/lanczos-identity-axis-evidence.json",
+    "sameImmutableActualPackageVerified": true,
+    "fullChecksEachOsReused": 6742,
+    "sameActualPackageConsumerAndThreeExamplesBothOsReused": true,
+    "broadOrPackageRepeats": 0
+  },
+  "raw": {
+    "file": "text-ordinary-current-clipping-attribution.tar.xz",
+    "sha256": "8ce71444ed18859f8c064df0383b1d7e32bafd41b0c517018f7bee273f50017e",
+    "bytes": 382548,
+    "members": 35,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "lanczos-identity-axis-qualified.tar.xz",
+        "sha256": "6d967730048bee285c339bea9d7e5af8848927234c8d9020cb9cfb78f956ca08"
+      },
+      {
+        "file": "text-ordinary-current-attribution.tar.xz",
+        "sha256": "b6467a0a4243f5d0cddaf20d2159c27428d9b8b09123279603a8858c0ac62bf4"
+      }
+    ]
+  }
+}
