@@ -88,7 +88,7 @@ older illustrative timings.
 
 ## Finite required inventory
 
-The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md) recovers the 17 required cases carried outside the numeric snapshot. Different recipes/aliases are reconciled explicitly;missing original operations remain open,with no new path or workload grid. OWC1125 first confirms the original word-overlap gap;WAD1126 reduces it with current upper1.104081. COV1127 reconciles original PNGheaders as an existing pass-stop:identical218775B packet,complete seekable/EOF/owner boundary and reference identity,upper.509395,568B/op,zero new builds/measurements. WAC1128 independently qualifies original word self-compositing atupper.976714 against the labeled ImageSharp complete snapshot/draw/disposal program. HBC1129qualifies both complete-header references;SMP1130accepts31.743% controlled JPEG savings and refreshes currentcosts:JPEGgapupper1.367175,WebPpassupper.471884. Asyncprefix2.698ns regression remains explicit,currentupper1.133673gap. CLF1131closes both original clipped-fill measurements as passes;CCB1132measures original clipped byte-copy as a small gap;OCM1133closes the last original drawing measurement;only six authored-font original boundaries remain unmeasured. See that finite high-priority list before another tiny optimization.
+The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md) recovers the 17 required cases carried outside the numeric snapshot. Different recipes/aliases are reconciled explicitly;missing original operations remain open,with no new path or workload grid. OWC1125 first confirms the original word-overlap gap;WAD1126 reduces it with current upper1.104081. COV1127 reconciles original PNGheaders as an existing pass-stop:identical218775B packet,complete seekable/EOF/owner boundary and reference identity,upper.509395,568B/op,zero new builds/measurements. WAC1128 independently qualifies original word self-compositing atupper.976714 against the labeled ImageSharp complete snapshot/draw/disposal program. HBC1129qualifies both complete-header references;SMP1130accepts31.743% controlled JPEG savings and refreshes currentcosts:JPEGgapupper1.367175,WebPpassupper.471884. Asyncprefix2.698ns regression remains explicit,currentupper1.133673gap. CLF1131closes both original clipped-fill measurements as passes;CCB1132measures original clipped byte-copy as a small gap;OCM1133closes the last original drawing measurement;default variation subsequently passes;only five authored-font original boundaries remain unmeasured. See that finite high-priority list before another tiny optimization.
 
 The [pinned original inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls with their original inputs, shapes, depths, sampling/settings
@@ -205,7 +205,13 @@ Sixteen required text/drawing additions use the existing raster/font/text recipe
 [Authored-font preflight](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) adds correctness-only
 observations for the six remaining original tiny-face controls, using the same
 actual package on Windows/Linux. All retained-owner/shared-root checks pass;
-default variation is ready for its short screen. The other five retain reference
+default variation subsequently [passes/stops](DEFAULT-VARIATION.md) at
+3.551/ImageSharp public integration20.357us,upper.184945,3608/58496B per operation.
+Four reference public layout calls plus outlines/measurement/independent outputs
+and disposal are inside timing;fonts outside. Managed retained-layout charge3568B
+and governedpeak5738B are separate from allocation;reference/physical peaks remain
+unmeasured. Zero production/VM/package builds;reuse unchanged qualification.
+The other five retain reference
 tab/placement or cmap4 issues and remain unscored. No CPU-gap or overall text
 slowdown claim follows. Existing complete one-shot/repeated integrations stay
 passing and stopped; independent codec/copy/resize work remains available.

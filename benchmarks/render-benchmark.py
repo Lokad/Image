@@ -3201,6 +3201,21 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     assert pg['alphaMaximum'] == 0 and pg['untouchedExactPixels'] > 0 and pg['zeroSourceAlphaExactPixels'] > 0
     editing += (f'\n| Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | {oc["managedUs"]:.3f} | '
                 f'{oc["nativeUs"]:.3f} | {oc["ratio"]:.3f} / {oc["upper"]:.6f} | 0 |')
+    default_variation = json.loads((ROOT / 'benchmarks/default-variation-evidence.json').read_text(encoding='utf-8'))
+    dv = default_variation['case']
+    assert default_variation['measurementAccepted'] and not default_variation['productionChanged']
+    assert not default_variation['productionSpeedupClaim'] and default_variation['newRequiredPaths'] == 0
+    assert default_variation['producers'] == jpeg_markers['producers']
+    assert default_variation['raw']['mirrored'] and default_variation['raw']['allMembersVerified']
+    assert dv['originalRequiredControl'] == 'TextLayout/OpenTypeDefaultVariation'
+    assert dv['actualsEach'] == 12 and dv['allocatedBytes'] == 3608 and dv['referenceAllocatedBytes'] == 58496
+    assert all(dv[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                              'exactManagedObservations', 'referenceObservationsUnchanged', 'independentOutputs'))
+    assert dv['status'] == 'pass' and dv['upper'] < 1
+    assert math.isclose(dv['ratio'], dv['managedUs'] / dv['referenceUs'], rel_tol=1e-12)
+    assert default_variation['qualification']['newBroadOrPackageChecks'] == 0
+    editing += (f'\n| Authored default-variation layout / ImageSharp public integration (parity confirmed) | '
+                f'{dv["managedUs"]:.3f} | {dv["referenceUs"]:.3f} | {dv["ratio"]:.3f} / {dv["upper"]:.6f} | {dv["allocatedBytes"]:,} |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3232,11 +3247,16 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
-three gaps, one uncertain**. Six authored-font original boundaries remain unmeasured.
-Their [correctness-only preflight](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
-finds default variation comparison-ready; five need reference-output alignment.
-All six retained-owner checks pass on both operating systems. These observations
-establish no CPU gap or overall text slowdown and add no timing row.
+three gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
+with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
+measurement, independent output and disposal are included; fonts are prepared
+outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-shot
+font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
+and unmeasured reference/physical retention are separate from allocations.
+Five original font boundaries need [reference-output alignment](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
+and remain unmeasured. All six retained-owner checks pass on both operating systems;
+the mismatches establish no CPU gap or overall text slowdown.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -3515,7 +3535,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 159, 'Expected 159 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 160, 'Expected 160 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

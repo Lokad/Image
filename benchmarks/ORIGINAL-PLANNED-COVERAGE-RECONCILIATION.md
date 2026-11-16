@@ -32,7 +32,7 @@ with an easier operation. The following finite list is the inherited 17:
 | `TextRender/Rgba16Clipped` | Original authored face,layout+full-word coverage/composition. Same missing original complete operation; preserve full16-bit gates. |
 | `TextLayout/OpenTypeArabicMarksDigits` | Joining,bidi,GSUB and mark positioning. Current TextLayoutOpenTypeArabic pass/source-valid evidence; keep frozen scenario and public API multiplicity. |
 | `TextFit/OpenTypeConstrained` | Thirty fitting trials and owned winner. Current TextFitOpenType pass/source-valid evidence; retain all trials and winner reconstruction. |
-| `TextLayout/OpenTypeDefaultVariation` | Authored contextual GSUB plus GDEF region/delta/default-zero data. Unmeasured declared default-instance path; private inputs are not fixtures. |
+| `TextLayout/OpenTypeDefaultVariation` | [Authored default variation](DEFAULT-VARIATION.md) passes/stops:3.551/ImageSharp public integration20.357us,upper.184945,3608/58496B. Exact glyph/cluster/line/position/owned outputs;four reference public calls and disposal inside,fonts outside. |
 
 The three tiny-face layout controls retain `AV g Á\u0301 \uE000\nAV\tg AV`,
 size16,wrap64,line spacing1.25; the original byte/word rendering controls retain
@@ -42,16 +42,16 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-Of the 17 inherited controls, 11 are now measured: eight passes and three gaps;
-only the six authored-font boundaries remain unmeasured. The original JPEGheaders,
+Of the 17 inherited controls, 12 are now measured: nine passes and three gaps;
+only five authored-font boundaries remain unmeasured. The original JPEGheaders,
 word-overlap copy and clipped byte-copy gaps stay open. Related passes do not
 retire them. Functional checks, shared memory and performance remain separate.
 
 [AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) now checks those six font boundaries
 on both operating systems using the same actual package. All retained-owner/shared
-budget checks pass. Default variation is comparison-ready; the other five need
+budget checks pass. Default variation now has independent passing timing; the other five need
 reference tab/placement alignment, including a demonstrated cmap4 delta omission
-in the pinned reference. None has a performance result yet. Keep their exact and
+in the pinned reference. Those five have no performance result yet. Keep their exact and
 visual gates and frozen inputs; failed comparisons establish no CPU gap.
 
 Current measurements and exact boundaries are linked in the table. Source-valid
@@ -60,7 +60,7 @@ identities. New byte-composite uses a retained FFmpeg graph/static source,not
 one-shot graph preparation;reset is excluded before EVERY operation both sides.
 All managed samples remain exact;case-specific native bounds stay explicit.
 
-Production/package are unchanged by the last three measurement rounds. Reuse
+Production/package are unchanged by these tooling rounds. Reuse
 6,747 full/live checks per OS and SAME actual Release-package consumer/all 3 examples.
 Normal/scalar current-package drawing checks and independent confirmations remain;
 no broad campaign or favorable repetition. Allocation, admission, prepared retention

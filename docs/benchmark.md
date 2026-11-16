@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **159 comparisons** summarize that scope.
+**289 named material paths**; these **160 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -54,11 +54,16 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
-three gaps, one uncertain**. Six authored-font original boundaries remain unmeasured.
-Their [correctness-only preflight](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
-finds default variation comparison-ready; five need reference-output alignment.
-All six retained-owner checks pass on both operating systems. These observations
-establish no CPU gap or overall text slowdown and add no timing row.
+three gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
+with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
+measurement, independent output and disposal are included; fonts are prepared
+outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-shot
+font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
+and unmeasured reference/physical retention are separate from allocations.
+Five original font boundaries need [reference-output alignment](../benchmarks/AUTHORED-FONT-REFERENCE-PREFLIGHT.md)
+and remain unmeasured. All six retained-owner checks pass on both operating systems;
+the mismatches establish no CPU gap or overall text slowdown.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -482,6 +487,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
 | Original clipped RGBA8 copy, 254×129 (gap) | 1.942 | 1.901 | 1.021 / 1.026874 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
+| Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
 
 **Inspection and pixel-coding validation**
 

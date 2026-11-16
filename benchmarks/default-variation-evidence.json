@@ -1,0 +1,127 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ADV1135",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "38b8112f2a68d4482a70f1005063ce68f91cf9e24669bc8976a3613f061f2bbf",
+    "linuxSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "timedArtifactSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298"
+  },
+  "case": {
+    "managedUs": 3.5510892235461413,
+    "referenceUs": 20.356822484052664,
+    "ratio": 0.17444221593659964,
+    "lower": 0.16437865511062566,
+    "upper": 0.18494503895483894,
+    "status": "pass",
+    "originalRequiredControl": "TextLayout/OpenTypeDefaultVariation",
+    "allocatedBytes": 3608,
+    "referenceAllocatedBytes": 58496,
+    "actualsEach": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "exactManagedObservations": true,
+    "referenceObservationsUnchanged": true,
+    "independentOutputs": true,
+    "librarySha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "inputSha256": "458a38863f17caceffb581a7de6c4389da1684a6256c4bfe366e9e9a32e84ef5",
+    "boundary": "Resident supplied face prepared outside both timers;complete layout,outline decoding,measurement,positioned independently owned output and disposal inside. Reference four public layout calls plus retained path/advance/glyph arrays. No drawing or fitting. Font eager/lazy validation/prepared retention differs;not overall text-processing performance."
+  },
+  "short": {
+    "managedUs": 3.407410388443461,
+    "referenceUs": 19.17375865925358,
+    "ratio": 0.17771217678277113,
+    "lower": 0.15709810011947062,
+    "upper": 0.21058511457656545,
+    "status": "pass"
+  },
+  "sourcePins": {
+    "tmp/adv1135/WarmAuthored.cs": "e3f2292a894d5d68564136ac4c122ef705f6be87510a878df70d6b56a740aaaa",
+    "tmp/adv1135/Driver.cs": "d72166df7fb2cc7d80b38cdb4bcf00a9c266383b15266be10a6da0e40f8a71a1",
+    "tmp/adv1135/ReferenceLayout.cs": "c1c559dd009f432530ec7a848f40608c32dcb07c0d2228943da870ca833d0f1c",
+    "tmp/adv1135/AuthoredWarm.csproj": "ab1b98def0413c438e8548c29367a3b9ebea3caef666b3cb8a2623b9f5857ff3",
+    "tools/Shared/TestMemoryBudget.cs": "cc79e05d0cbc6b8fef82ad398036fb1047c526ad1bd68537b47c995da7deacd2",
+    "tmp/adv1135-prepare.py": "9f1f021a7b5a6bde3c350cbffc464b210758f471e3500107a778dc671f74a9cb",
+    "tmp/adv1135-deploy.py": "7b2d42731091c181c53ff352f06c508b51650ccf1a4b1d9b6206b5be5b224fca",
+    "tmp/adv1135-measure.py": "e9a966f5ff805cb4a0fecfc6a1c98c6d93a406a2bde2c2378e4041655da1816e"
+  },
+  "reference": {
+    "identity": "ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 public integration",
+    "libraries": {
+      "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+      "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+      "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353"
+    },
+    "publicLayoutCalls": 4,
+    "shapingEngineOnly": false,
+    "retainedPathsAndArraysIncluded": true,
+    "fontPreparationOutsideBothTimers": true,
+    "fontValidationDifferences": "Managed eager validation;reference lazy parsing/caching. This retained-font repeated layout does not measure owned loading or complete one-shot text processing.",
+    "referenceRetainedCapacityMeasured": false
+  },
+  "memory": {
+    "managedAllocatedBytes": 3608,
+    "referenceAllocatedBytes": 58496,
+    "source": "BDN GC totals/operations cross-checked against separate warmed public-operation3x128 diagnostics;normal/scalar.",
+    "governed": {
+      "faceCapacity": 1804,
+      "fontAndLayout": 5372,
+      "retainedLayout": 3568,
+      "governedPeak": 5738,
+      "afterDisposal": 0,
+      "borrowedInputBytes": 1548,
+      "physicalNativeJitPeakMeasured": false
+    },
+    "windowsReferenceAllocationDiagnostic": 66240,
+    "windowsTimingPublished": false,
+    "physicalNativeJitPeaksMeasured": false,
+    "referenceRetainedCapacityMeasured": false,
+    "crossOperationWorkspaceAdded": false
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "provider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+    "fullChecksEachOs": 6747,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298",
+    "newBroadOrPackageChecks": 0,
+    "normalScalarCurrentPackage": true,
+    "windowsFocusedSides": 2,
+    "linuxFocusedSidesModes": 4
+  },
+  "builds": {
+    "production": 0,
+    "embeddedTest": 0,
+    "publicTest": 0,
+    "package": 0,
+    "vm": 0,
+    "toolWindows": 3,
+    "notes": "Initial build;add correctness-only entry;correct JSON float readback to original single precision before timing. No changed outputs/gates or timing restarts."
+  },
+  "invalidation": "Frozen font/text/options,public layout calls/outline/measurement/owned-output boundaries,reference DLLs,production font/parser/shaping/geometry/layout/ownership paths or runtime/CPU boundary changes invalidate reuse. Unchanged codecs/copies do not. Reuse the existing complete DejaVu integrations;no historical stage sums.",
+  "scope": "One existing original two-glyph default-variation program only. Four public reference layout calls and independent result/disposal. Not FFmpeg,not bare shaping,not complete font-load/draw pipeline,not broad font/script parity.",
+  "next": "Stop confirmed default-variation case. Five other original authored-font boundaries remain unmeasured due reference-output mismatches;preserve existing gates and inputs. Resolve a justified baseline boundary without inferring CPU gaps. Independent codec/copy/resizing work continues;full289path objective open.",
+  "raw": {
+    "file": "default-variation-confirmation.tar.xz",
+    "sha256": "cf4c3172618f631703fbf3b107357cab358c9ffd23886113d9eebe7a65d026c6",
+    "bytes": 5729172,
+    "members": 97,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "authored-font-reference-preflight.tar.xz",
+        "sha256": "29ff07e91a36b24f02b6e574c068b7335766034a21bd7e16c993d9adabde076b"
+      }
+    ]
+  }
+}

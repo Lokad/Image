@@ -6,6 +6,10 @@ not timing evidence or an overall text-processing slowdown claim.** The existing
 complete DejaVu one-shot and prepare/eight-draw integrations remain passing and
 stopped. No production implementation, reference assembly or acceptance gate changes.
 
+Subsequent [ADV1135 measurement](DEFAULT-VARIATION.md) confirms default variation
+as a pass-stop. This preflight retains its earlier correctness-only observations;
+the other five controls still need reference-output alignment before timing.
+
 | Original control | Current comparison readiness |
 | --- | --- |
 | `TextLayout/OriginalUnicode` | Open: reference emits a nonrendered tab placeholder; tab increments and managed tab stops produce different later positions. |
