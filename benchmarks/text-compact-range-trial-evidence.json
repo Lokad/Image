@@ -1,0 +1,305 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CFX1105",
+  "measurementStage": "CFX1106",
+  "productionAccepted": false,
+  "retainedProductionChanges": 0,
+  "retainedTestChanges": 0,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineCommit": "899f83f0408d5ef3eecfe7ef857fc8c5be1c06fd",
+  "baselineProducers": {
+    "windowsSha256": "1f96629de19bec6cbe63dbd58e3267e3be6dd3ebc6d029d7d26f4be9967428e8",
+    "linuxSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+    "timedArtifactSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+    "packageSha256": "b2e2a78dc56392484b12447de4e7c4e49a44433101f946b176a562693d763995"
+  },
+  "candidateLinuxSha256": "21089bd9c96494c6978d51a9da1fb9e610e1f3d893abd8147816764e001a672d",
+  "sourcePins": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "f112946b123900cee65ab536d9cd5cb57fa137f1f88e2ed797c3c45624ec38a7",
+    "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+    "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+    "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+    "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+    "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+    "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+    "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+    "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+  },
+  "candidateSources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "6b4aafd06b22f6107f572e4d36c2312f517768dffc37d1b3f2e1d07f3a35b817"
+  },
+  "candidateTestSources": {
+    "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "2bedc0208bf08648f21293aa1fbd31f38998bbfc75cc64d6834d4d43993be49d"
+  },
+  "hypothesis": "The accepted exclusion uses16B per temporary hull. Outward-rounded float bounds can enclose the same computed-double hull in8B,halving scratch allocation/admission without changing any pixel or event arithmetic. Conversion/neighbor correction and less selective hulls may cost CPU;allocation reduction is not assumed to imply elapsed savings.",
+  "intendedEndState": "Same single operation-owned range array,reused across shapes and promptly released. Only private rejection bounds use float;coordinate/event/coverage samples retain double/full16-bit contracts. Invalid edges remain unbounded. No new owner/cache/pool/API or retained storage.",
+  "sourceProof": {
+    "originalProductionSourceReconstructed": true,
+    "onlyConservativeRejectionBoundsCompacted": true,
+    "doubleCoordinatesEventsAndCoverageVerbatim": true,
+    "outwardEnclosureRequired": true,
+    "allPollsAndOwnershipVerbatim": true,
+    "noNewRetainedStorageCacheOwnerOrApi": true
+  },
+  "sourceTransforms": [
+    [
+      "private readonly record struct EdgeRange(double Low, double High)",
+      "private readonly record struct EdgeRange(float Low, float High)"
+    ],
+    [
+      "return new(double.NegativeInfinity, double.PositiveInfinity);",
+      "return new(float.NegativeInfinity, float.PositiveInfinity);"
+    ],
+    [
+      "            return new(Math.Min(edge.originX, end), Math.Max(edge.originX, end));",
+      "            var low = Math.Min(edge.originX, end); var high = Math.Max(edge.originX, end);\n            var low32 = (float)low; var high32 = (float)high;\n            // Round bounds outward. Coordinates/events still use double.\n            if (low32 > low) low32 = MathF.BitDecrement(low32);\n            if (high32 < high) high32 = MathF.BitIncrement(high32);\n            return new(low32, high32);"
+    ],
+    [
+      "var rangeBytes = 32 + maximum * 16L;",
+      "var rangeBytes = 32 + maximum * 8L;"
+    ]
+  ],
+  "proof": "For a double lower bound l,cast f=(float)l. If f>l,the preceding float is<=l;otherwise f already encloses l. Symmetrically increment an upper cast only if below its double bound. This includes overflow to infinities and underflow/signedzero. Widened float intervals contain original double intervals,so strict separation can only remove a subset of the old rejection decisions;remaining pairs execute the identical double event equations. Existing independent actual-edge/event oracles check enclosure and all crossing signs,including additional float-boundary controls. Four reversible substitutions reconstruct the accepted production source. All original polls,ownership,lifetimes,root refusal semantics and final pixels remain.",
+  "boundaries": "Drawing diagnostics are scoped and retain different working state on each reference side. They do not prove an overall text slowdown. The two complete public one-shot/eight-draw workloads already pass and are refreshed only if the shared drawing production change is retained. Font loading,shaping/layout/fitting remain unchanged;no historical stage sums.",
+  "measurement": {
+    "libraryIdentities": {
+      "baseline": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "candidate": "21089bd9c96494c6978d51a9da1fb9e610e1f3d893abd8147816764e001a672d"
+    },
+    "helperSha256": "7a5c8143bab0252e97782fb6c1fa0a86b57ee94b8c48c5ad817020dcf769af69",
+    "all12PairsRetained": true,
+    "operationsPerActual": 1024,
+    "helperBuilds": 0,
+    "quietGuardsPassed": true,
+    "originalChecksPassed": true,
+    "subjects": {
+      "baseline": {
+        "mean": 55.04021704101562,
+        "lower": 54.48731212404591,
+        "upper": 55.59312195798534,
+        "values": [
+          55.828404296875,
+          55.3237890625,
+          54.5287275390625,
+          55.325857421875,
+          54.484646484375,
+          54.9264013671875,
+          54.6274755859375,
+          55.5780810546875,
+          55.0392861328125,
+          55.188884765625,
+          54.5913154296875,
+          55.0397353515625
+        ]
+      },
+      "candidate": {
+        "mean": 56.41712972005208,
+        "lower": 55.77234384575528,
+        "upper": 57.06191559434888,
+        "values": [
+          57.0799853515625,
+          56.395685546875,
+          56.6089912109375,
+          56.354365234375,
+          56.485349609375,
+          55.92821875,
+          56.5497861328125,
+          55.9742197265625,
+          57.55576953125,
+          55.877123046875,
+          56.26803125,
+          55.92803125
+        ]
+      }
+    },
+    "ratio": 1.0250081399719677,
+    "lower": 1.0099075534449393,
+    "upper": 1.0403345171792249,
+    "boundary": "Two persistent original-harness workers alternate12adjacent1024-operation batches in reversed order. One CPU0operation at a time;independent processes and natural nonconcurrent GC. Full1024warmups each. Original complete ordinary DrawText,reset/validation and two per-operation clocks;IPC/reset/validation/allocation reads outside clocks. Original ImageSharp checks run in correctness-only mode and do not supply elapsed reference costs. This resolves the scoped DLL effect only and does not replace original separate-run uncertainty or standalone external comparisons. No image/settings grid or favorable repeat.",
+    "externalElapsedMeasured": false,
+    "allActualMeanIntervalsSeparate": true
+  },
+  "correctness": {
+    "focusedLinux": {
+      "internal-normal": 266,
+      "public-normal": 161,
+      "internal-avx-off": 266,
+      "public-avx-off": 161,
+      "internal-scalar": 266,
+      "public-scalar": 161
+    },
+    "allEightFrozenFramesExactEachMode": true,
+    "outwardEnclosureAndIndependentOriginalEventOracles": true,
+    "allGrowthRefusalCancellationCleanupAndRecovery": true
+  },
+  "memory": {
+    "baselinePublicGcBytes": 83136,
+    "candidatePublicGcBytes": 79552,
+    "timedAdapterBytes": 24,
+    "savedAllocationBytes": 3584,
+    "savedAllocationFraction": 0.04311008468052348,
+    "retainedStorageUnchanged": true,
+    "caseCapacity": [
+      {
+        "name": "NarrowLongWord",
+        "depth": 8,
+        "baselinePreparationPeak": 7952,
+        "candidatePreparationPeak": 7952,
+        "retainedCapacityUnchanged": 6896,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "NarrowLongWord",
+        "depth": 16,
+        "baselinePreparationPeak": 7952,
+        "candidatePreparationPeak": 7952,
+        "retainedCapacityUnchanged": 6896,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "LatinKerning",
+        "depth": 8,
+        "baselinePreparationPeak": 58264,
+        "candidatePreparationPeak": 54680,
+        "retainedCapacityUnchanged": 48984,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "LatinKerning",
+        "depth": 16,
+        "baselinePreparationPeak": 58264,
+        "candidatePreparationPeak": 54680,
+        "retainedCapacityUnchanged": 48984,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "ArabicMarksDigits",
+        "depth": 8,
+        "baselinePreparationPeak": 318160,
+        "candidatePreparationPeak": 314784,
+        "retainedCapacityUnchanged": 310448,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "ArabicMarksDigits",
+        "depth": 16,
+        "baselinePreparationPeak": 318160,
+        "candidatePreparationPeak": 314784,
+        "retainedCapacityUnchanged": 310448,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "ConstrainedFit",
+        "depth": 8,
+        "baselinePreparationPeak": 56736,
+        "candidatePreparationPeak": 53664,
+        "retainedCapacityUnchanged": 48480,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      },
+      {
+        "name": "ConstrainedFit",
+        "depth": 16,
+        "baselinePreparationPeak": 56736,
+        "candidatePreparationPeak": 53664,
+        "retainedCapacityUnchanged": 48480,
+        "candidateDrawAdditionalPeak": 0,
+        "chargeAfterDisposal": 0
+      }
+    ],
+    "physicalNativeJitPeaksMeasured": false,
+    "candidateFullPipelineAllocationOrPeakNotMeasured": true
+  },
+  "interpretation": "Private outward-rounded float hulls save3584GC bytes (4.31percent of complete Latin draw allocation) and3584B Latin admitted preparation peak. They cost2.50percent complete ordinary-RGBA16 elapsed;paired ratio1.009908to1.040335 and all-actual mean intervals are above baseline. Not retained: this bounded tradeoff does not improve current end-state design. No independent confirmation,reference elapsed,other timing,codegen,broad or package campaign. Correctness passes do not imply CPU gains. This is a scoped managed DLL comparison,not overall text performance or native parity.",
+  "qualification": {
+    "provider": "benchmarks/text-computed-x-ranges-evidence.json",
+    "fullChecksEachOsReused": 6728,
+    "sameActualPackageBothOsAndThreeExamplesReused": true,
+    "sourceAndModulesExactlyRestored": true,
+    "sourceInventoryExactlyRestored": true,
+    "windowsProductionModulesNeverChanged": true,
+    "actualPackageUnchanged": true,
+    "newBroadOrPackageChecks": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "CFX1105",
+      "sourceRestored": true,
+      "productionSha256": "1f96629de19bec6cbe63dbd58e3267e3be6dd3ebc6d029d7d26f4be9967428e8",
+      "windowsModulesNeverChanged": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "CFX1105",
+      "platform": "linux",
+      "productionRestored": true,
+      "productionSha256": "a55e954dcc79453cd6e2c80811d5cc485dbf1bb0e2c8a8cbc6bdc6ab2bd20b34",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "f112946b123900cee65ab536d9cd5cb57fa137f1f88e2ed797c3c45624ec38a7",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "src/Lokad.Image/TextRenderPlan.cs": "05fcbf3c6287943e2363dc342831f7431abb583d1304220850a4986e3f10cdfa",
+        "src/Lokad.Image/TrueTypeFont.cs": "1b916190a434423bd6b34b0fd94618b3b443dc827f741c8ecbc4ced28c907d69",
+        "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+        "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+        "tests/Lokad.Image.Tests/TextClipWorkspaceTests.cs": "97a27bb4f583e516f784e7675cdfc5300441c4c5343370685e01115900d2170b",
+        "tests/Lokad.Image.Tests/TextPairedEndpointTests.cs": "8d96543bcea3ca834fa682d7ff27a355718614baf1c4c04fdcf3d82d92a905ab",
+        "tests/Lokad.Image.Tests/TextPreparedOrderTests.cs": "ae44b9f1badc293f280a7b2259abf91cd88f276912e6681411cded0197ff99b5",
+        "tests/Lokad.Image.Tests/TextActiveEdgeTests.cs": "19f0e55224c962be5a4911977f7d74740cdda1fdad88acdf3c09e2bc607daece",
+        "tests/Lokad.Image.Tests/TextRasterizerTests.cs": "fa9530664195d63eaec04b4d1039128d5143df0c5c93c8136797f04bf5af2f14",
+        "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+      },
+      "embeddedTestsSha256": "adda1247d6a940e82bd4e66b0d92a2a3ecb7733d401302760ebd3ed8e65edb7f",
+      "publicTestsSha256": "4a08eaeded86c16bec150c0fe5d3394ee55ad33e4e07c69013317eec37acd134",
+      "exactOriginalSourcesCoreEmbeddedAndPublicMainModulesRestored": true,
+      "newBuilds": 0,
+      "newBroadOrPackageChecks": 0,
+      "retainedProductionChanges": 0,
+      "retainedTestChanges": 0
+    }
+  },
+  "builds": {
+    "linuxCore": 1,
+    "linuxEmbedded": 1,
+    "windowsProduction": 0,
+    "public": 0,
+    "harness": 0,
+    "helper": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "next": "Stop this compact-float implementation. Reuse current complete one-shot/eight-draw passes and unchanged qualified producer. Prioritize the next justified independent codec/resize/ownership item;do not repeat neighboring hull representations without a concrete materially different design. Pending diagnostic gaps do not block independent work. No fixed family ban.",
+  "raw": {
+    "file": "text-compact-range-trial.tar.xz",
+    "sha256": "e8cedfce1bf7e999033050130e634d330dd750c50fb27cba175bacd52f429030",
+    "bytes": 1812888,
+    "members": 98,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-computed-x-ranges-qualified.tar.xz",
+        "sha256": "c17e60b8608197b45dff8d1baa20c7e89d8ba94b1b331d69ed9f9568d81cc2ff"
+      }
+    ]
+  }
+}
