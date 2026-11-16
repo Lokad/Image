@@ -2073,13 +2073,19 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
+    ordinary_latest = json.loads((ROOT / 'benchmarks/ordinary-text-long-integration-evidence.json').read_text(encoding='utf-8'))
+    assert ordinary_latest['measurementAccepted'] and not ordinary_latest['productionChanged']
+    assert ordinary_latest['producers'] == storage_reuse['producers'] and ordinary_latest['newMaterialPaths'] == 0
+    assert ordinary_latest['raw']['mirrored'] and ordinary_latest['raw']['allMembersVerified']
+    assert ordinary_latest['qualification']['newBroadOrPackageChecks'] == 0 and ordinary_latest['qualification']['fullChecksEachOs'] == 6760
+    assert all(ordinary_latest['sourceProof'].values()) and set(ordinary_latest['cases']) == {'Ordinary8', 'Ordinary16'}
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if not prepared: case = text_dispatch['cases'][name]
-        assert case['librarySha256'] == (text_coverage if prepared else text_dispatch)['producers']['linuxSha256']
+        if not prepared: case = ordinary_latest['cases'][name]
+        assert case['librarySha256'] == (text_coverage if prepared else ordinary_latest)['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
-        assert case['actuals'] == 12 and case['operationsPerActual'] == (1024 if prepared else 4096)
+        assert case['actuals'] == 12 and case['operationsPerActual'] == (1024 if prepared else 16384)
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert not prepared or case['status'] == 'pass'
         assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
@@ -3576,13 +3582,16 @@ artifacts; current absolute clocks are not a cumulative speedup claim. No unifor
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-on their unchanged ordinary-draw paths: 4,096 warmup operations per side before all
-statistical groups, then 12 fixed 4,096-operation actuals and all three reference
-groups. Both ordinary depths remain uncertain,with conservative intervals
-**0.962359–1.095680 /0.937233–1.119569**. The same final DLL independently confirms
-the scoped 8.17% ordinary16 gain in controlled pairs; those pairs do not prove
-standalone parity. Earlier gaps/uncertainty and all adverse samples stay retained.
+[Current ordinary text integration](../benchmarks/ORDINARY-TEXT-LONG-INTEGRATION.md)
+resolves both existing controls as scoped gaps: **46.510 / ImageSharp 44.790 µs**
+for RGBA8 and **47.202 /46.256 µs** for RGBA16, with intervals
+**1.025100–1.046179 /1.002524–1.027033**. One predeclared 4,096→16,384-draw
+integration retains all twelve actuals, three reference groups, exact frames and
+the same conservative confidence. Both sides warm before all groups and reset
+outside EVERY operation. No production change, favorable retry or added fixture.
+Outside-clock GC counts are diagnostics, not pause attribution or sample filters.
+The earlier word-dispatch comparison retains its scoped 8.17% gain; these current
+absolute clocks are not a cumulative effect. Existing uncertain/adverse samples remain.
 Unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
 draws pass and stop. Prepared

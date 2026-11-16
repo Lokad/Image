@@ -348,13 +348,16 @@ artifacts; current absolute clocks are not a cumulative speedup claim. No unifor
 pipeline speedup, parser equivalence, broader font/script claim or relaxed pixel
 contract follows.
 
-Current ordinary costs use [fixed warm integration](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-on their unchanged ordinary-draw paths: 4,096 warmup operations per side before all
-statistical groups, then 12 fixed 4,096-operation actuals and all three reference
-groups. Both ordinary depths remain uncertain,with conservative intervals
-**0.962359–1.095680 /0.937233–1.119569**. The same final DLL independently confirms
-the scoped 8.17% ordinary16 gain in controlled pairs; those pairs do not prove
-standalone parity. Earlier gaps/uncertainty and all adverse samples stay retained.
+[Current ordinary text integration](../benchmarks/ORDINARY-TEXT-LONG-INTEGRATION.md)
+resolves both existing controls as scoped gaps: **46.510 / ImageSharp 44.790 µs**
+for RGBA8 and **47.202 /46.256 µs** for RGBA16, with intervals
+**1.025100–1.046179 /1.002524–1.027033**. One predeclared 4,096→16,384-draw
+integration retains all twelve actuals, three reference groups, exact frames and
+the same conservative confidence. Both sides warm before all groups and reset
+outside EVERY operation. No production change, favorable retry or added fixture.
+Outside-clock GC counts are diagnostics, not pause attribution or sample filters.
+The earlier word-dispatch comparison retains its scoped 8.17% gain; these current
+absolute clocks are not a cumulative effect. Existing uncertain/adverse samples remain.
 Unchanged [prepared drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md) reuses valid
 costs, full-word frames and ownership evidence. Both prepared
 draws pass and stop. Prepared
@@ -477,8 +480,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,108.45 | 6,208.69 | 0.179 / 0.194 | 306,164 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,259.79 | 6,835.32 | 0.184 / 0.207 | 315,890 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 47.78 | 45.28 | 1.055 / 1.096 | 83,216 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 49.52 | 48.32 | 1.025 / 1.120 | 83,216 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 46.51 | 44.79 | 1.038 / 1.046 | 83,216 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (gap) † | 47.20 | 46.26 | 1.020 / 1.027 | 83,216 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 18.39 | 13.80 | 1.332 / 1.377 | 176 |
