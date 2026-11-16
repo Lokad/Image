@@ -1964,58 +1964,53 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     assert font_cost['allocatedBytes'] == 176
     assert font_cost['status'] == ('pass' if font_cost['upper'] <= 1 else 'gap' if font_cost['lower'] > 1 else 'uncertain')
     assert math.isclose(font_cost['ratio'], font_cost['managedUs'] / font_cost['nativeUs'], rel_tol=1e-12)
-    text_ranges = json.loads((ROOT / 'benchmarks/text-computed-x-ranges-evidence.json').read_text(encoding='utf-8'))
-    assert text_ranges['productionAccepted'] and text_ranges['allAffectedPerformanceReconciled']
-    assert text_ranges['requiredMaterialPaths'] == 289 and text_ranges['newMaterialPaths'] == 0
-    assert text_ranges['raw']['mirrored'] and text_ranges['raw']['allMembersVerified']
-    tq = text_ranges['qualification']
-    assert tq['windows']['total'] == tq['linux']['total'] == tq['fullChecksEachOs'] == 6728
-    assert tq['package']['sha256'] == tq['windowsPackage']['sameActualPackageSha256'] == text_ranges['producers']['packageSha256']
-    assert tq['package']['librarySha256'] == text_ranges['producers']['timedArtifactSha256']
+    text_coverage = json.loads((ROOT / 'benchmarks/text-prepared-coverage-evidence.json').read_text(encoding='utf-8'))
+    assert text_coverage['productionAccepted'] and text_coverage['allAffectedPerformanceReconciled']
+    assert text_coverage['requiredMaterialPaths'] == 289 and text_coverage['newMaterialPaths'] == 0
+    assert text_coverage['raw']['mirrored'] and text_coverage['raw']['allMembersVerified']
+    tq = text_coverage['qualification']
+    assert tq['windows']['total'] == tq['linux']['total'] == tq['fullChecksEachOs'] == 6730
+    assert tq['package']['sha256'] == tq['windowsPackage']['sameActualPackageSha256'] == text_coverage['producers']['packageSha256']
+    assert tq['package']['librarySha256'] == text_coverage['producers']['timedArtifactSha256']
     assert all(tq[k]['actualConsumerPassed'] and tq[k]['usageExamples'] == 3 for k in ('package', 'windowsPackage'))
     assert tq['allAffectedPerformanceReconciledBeforeBroadQualification'] and tq['acceptedArtifactRebuildsAfterTiming'] == 0
-    assert tq['focusedEachMode'] == {'internal': 266, 'public': 161} and tq['modes'] == ['normal', 'avx-off', 'scalar']
-    assert tq['allEightFrozenFramesEachMode'] and all(text_ranges['sourceProof'].values())
-    assert text_ranges['pairedEffect']['upper'] < 1 and text_ranges['pairedEffect']['all12PairsRetained']
-    assert text_ranges['pairedEffect']['subjects']['candidate']['upper'] < text_ranges['pairedEffect']['subjects']['baseline']['lower']
-    assert not text_ranges['arabicGeneralization']['gainConfirmed']
-    assert text_ranges['memory']['addedRetainedCapacityBytes'] == text_ranges['memory']['newStaticCacheBytes'] == 0
-    assert text_ranges['memory']['completeGovernedPeakBytes'] == 822460
-    assert font_load['sources']['src/Lokad.Image/TrueTypeFont.cs'] == text_ranges['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
+    assert tq['focusedEachMode'] == {'internal': 266, 'public': 163} and tq['modes'] == ['normal', 'avx-off', 'scalar']
+    assert tq['allEightFrozenFramesEachMode'] and tq['allEightFrozenFramesBothOs'] and all(text_coverage['sourceProof'].values())
+    assert not text_coverage['arabicGeneralization']['gainConfirmed'] and not text_coverage['arabicGeneralization']['regressionConfirmed']
+    memory = text_coverage['memory']
+    assert memory['temporaryGeometryReleasedBeforePublication'] and memory['newStaticCacheBytes'] == memory['newIdlePoolBytes'] == 0
+    assert memory['completeGovernedPeakBytes'] == 822460 and memory['completeFitRetainedCapacityBytes'] == 4160
+    assert memory['latinRetainedCapacityBytes'] == 2112
+    assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
+    assert font_load['sources']['src/Lokad.Image/TrueTypeFont.cs'] == text_coverage['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_ranges['pipelineCases'][case]
+        cost = text_coverage['pipelineCases'][case]
         assert cost['completeWorkload'] and cost['status'] == 'pass'
         assert cost['pairs'] == 12 and cost['allActualsRetained'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
-        assert cost['librarySha256'] == text_ranges['producers']['linuxSha256']
+        assert cost['librarySha256'] == text_coverage['producers']['linuxSha256']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_ranges['pipelineCases']['Preparation']
-    font_batch = text_ranges['pipelineCases']['PrepareDraw8']
+    font_preparation = text_coverage['pipelineCases']['Preparation']
+    font_batch = text_coverage['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
     assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
     assert not font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
-    previous = json.loads((ROOT / text_ranges['reusedPreparedProvider']).read_text(encoding='utf-8'))
-    assert previous['measurementAccepted'] and previous['raw']['mirrored'] and previous['raw']['allMembersVerified']
-    assert previous['sources']['src/Lokad.Image/Internal/TextRasterizer.cs'] == text_ranges['baseRasterSourceSha256']
-    assert set(text_ranges['cases']) == {'Ordinary8', 'Ordinary16'}
-    assert set(text_ranges['reusedPreparedCases']) == {'Prepared8', 'Prepared16'}
-    for name, case in {**text_ranges['cases'], **text_ranges['reusedPreparedCases']}.items():
+    assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
+    for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if prepared:
-            assert case == previous['cases'][name] and case['status'] == 'uncertain'
-        else:
-            assert case['librarySha256'] == text_ranges['producers']['linuxSha256']
+        assert case['librarySha256'] == text_coverage['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['actuals'] == 12 and case['operationsPerActual'] == 1024
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
+        assert not prepared or case['status'] == 'pass'
         assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
         assert case['allocatedBytes'] == (56 if prepared else 83136) and case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
-        assert case['retainedBytes'] == (48984 if prepared else 0)
+        assert case['retainedBytes'] == (2112 if prepared else 0)
         status = 'confidence open' if case['status'] == 'uncertain' else case['status']
-        label = f'Text {"prepared raster" if prepared else "ordinary draw"} RGBA{case["depth"]} / ImageSharp.Drawing ({status})'
+        label = f'Text {"prepared coverage" if prepared else "ordinary draw"} RGBA{case["depth"]} / ImageSharp.Drawing ({status})'
         rows.append(('editing', f'| {label} † | {case["managedUs"]:,.2f} | {case["referenceUs"]:,.2f} | '
                      f'{case["ratio"]:.3f} / {case["upper"]:.3f} | {case["allocatedBytes"]:,} |'))
     rows.append(('editing', f'| Font loading / FreeType 2.13.2 (scoped {font_cost["status"]}) † | {font_cost["managedUs"]:,.2f} | '
@@ -3255,40 +3250,36 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 **libwebp exact=1** where labeled. These are benchmark tools, never production dependencies.
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**,
-never FFmpeg or a bare shaping engine. [Computed-X event ranges](../benchmarks/TEXT-COMPUTED-X-RANGES.md)
-retain both complete public integration passes, including every layout/fitting call,
-fresh owned explicit-clear canvases and disposal. Creation-only preparation is
-{font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs, with disposal excluded only there.
-The directly measured eight-draw batch amortizes to {font_batch['amortizedManagedUs']:,.2f} /
-{font_batch['amortizedReferenceUs']:,.2f} µs per draw, including preparation.
-Allocations in its table row cover the whole batch. Active complete-fit capacity
-stays **48,480 B**; governed peak rises **818,788→822,460 B**. No font/layout survives
-preparation. Approximate retained heap deltas **42,496 /22,504 B** exclude idle pools;
-physical/native/JIT peaks are unmeasured. Windows/Linux each pass **6,728 full/live
-checks**, **266 internal/161 public** normal/AVX-disabled/scalar, the SAME actual
-timed package and all three examples. This is a scoped development comparison,
-not a release-wide refresh or an overall text-processing speedup claim.
+never FFmpeg or a bare shaping engine. [Prepared exact coverage](../benchmarks/TEXT-PREPARED-COVERAGE.md)
+closes both prepared-draw uncertainties. Managed plans retain exact 16-bit coverage;
+the reference retains positioned paths and rasterizes while drawing. Ordinary8
+remains uncertain and ordinary16 a gap; these scoped diagnostics do not establish
+an overall text slowdown. Both complete public integrations pass, including every
+layout/fitting call, fresh owned explicit-clear canvases and disposal.
+Preparation-only is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs,
+with disposal outside only that diagnostic. The directly measured eight-draw batch
+amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs/draw,
+including preparation. Its table allocation covers the whole batch.
 
-Twelve adjacent ordinary-RGBA16 DLL pairs verify **1.96% /1.10 µs** saved,
-interval **.968645–.992347**, with separate all-actual mean intervals. The two
-standalone ordinary drawing comparisons remain gaps. Prepared8/16 drawing costs
-reuse their [unchanged source paths](../benchmarks/TEXT-DRAW-CURRENT-CONFIDENCE.md)
-and remain uncertain. Ordinary Latin GC increases **75,944→83,136 B/draw** and
-admitted preparation peak **52,920→58,264 B**; retained Latin capacity stays
-**48,984 B**. Public prepared drawing remains **56 B/draw**; timed adapters add 24 B/draw.
-The existing Arabic control has a lower point but overlapping intervals: no
-confirmed Arabic speedup/regression or external-reference claim. Its GC rises
-**583,776→590,552 B**, with retained capacity unchanged. Every original adverse
-sample, inconclusive capture and void observation remains linked in the report.
+Retained Latin capacity falls **48,984→2,112 B** and complete-fit capacity
+**48,480→4,160 B**; full-fit governed peak stays **822,460 B**. Narrow wrapping
+retains more (**6,896→8,256 B**) and has a higher construction peak; the report
+retains every cost. Prepared drawing stays **56 B/draw**, ordinary Latin **83,136 B**;
+adapters add 24 B. Preparation allocates **314,465 B**. Approximate full-GC retained
+heap deltas **4,336 /22,504 B** exclude idle pools and are not allocation counts
+or physical/native/JIT peaks. No font/layout survives preparation. Arabic ordinary
+timing is inconclusive with unchanged allocation, not a generalization gain.
+Windows/Linux each pass **6,730 full/live checks**, **266 internal/163 public**
+normal/AVX-disabled/scalar, all eight frozen full-word frames and the SAME actual
+timed package/all three examples. This is a scoped development comparison,
+not a release-wide refresh or a gain computed from historical stages.
 
-Loading and prepared drawing are scoped diagnostics: eager/lazy validation and
-retained raster state differ. Historical stage timings are never added to infer
-overall cost. Loading uses **FreeType 2.13.2 copy/open/retain/dispose**; its unchanged
-[typed-location producer](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md) retains the
-scoped **{font_gain['savedUs']:.2f} µs /{font_gain['rawSavedFraction']:.2%}** managed gain,
-with inconclusive reference normalization. Earlier kernel/preparation experiments
-remain [history](../benchmarks/TEXT-PREPARED-EDGE-INVARIANTS.md). No new parser policy,
-font/script claim, production dependency or relaxed managed pixel contract.
+Font loading remains a scoped **FreeType 2.13.2 copy/open/retain/dispose** diagnostic:
+eager/lazy validation differs. Its unchanged [typed-location producer](../benchmarks/FONT-TYPED-LOCATION-VIEWS.md)
+retains the **{font_gain['savedUs']:.2f} µs /{font_gain['rawSavedFraction']:.2%}** managed gain,
+with inconclusive reference normalization. Earlier [range/preparation evidence](../benchmarks/TEXT-COMPUTED-X-RANGES.md)
+remains history. No new parser policy, font/script claim, production dependency
+or relaxed managed pixel contract.
 
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact

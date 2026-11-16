@@ -141,6 +141,16 @@ internal sealed partial class TextRasterizer : IDisposable
 
     internal void Draw(ImageBuffer canvas, double x, double y, RgbaColor color,
         int left, int top, int right, int bottom, CancellationToken cancellation)
+        => Rasterize(canvas, null, x, y, color, left, top, right, bottom, cancellation);
+
+    internal void PrepareCoverage(TextRenderPlan plan, double x, double y,
+        int left, int top, int right, int bottom, CancellationToken cancellation)
+        => Rasterize(null, plan, x, y, default, left, top, right, bottom, cancellation);
+
+    // Scan conversion is identical for immediate drawing and retained coverage.
+    // Select the destination once per completed row, outside the pixel loop.
+    private void Rasterize(ImageBuffer? canvas, TextRenderPlan? plan, double x, double y, RgbaColor color,
+        int left, int top, int right, int bottom, CancellationToken cancellation)
     {
         foreach (var glyph in glyphs)
         {
@@ -165,13 +175,18 @@ internal sealed partial class TextRasterizer : IDisposable
                     band = end;
                 }
                 if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right, ref activeCount, ref nextEdge, cancellation);
+                if (plan is not null)
+                {
+                    plan.CaptureCoverageRow(row, left, py, cancellation);
+                    continue;
+                }
                 for (var i = 0; i < row.Length;)
                 {
                     var count = Math.Min(128, row.Length - i); cancellation.ThrowIfCancellationRequested();
                     for (var j = i; j < i + count; j++)
                     {
                         var coverage = (uint)Math.Clamp(Math.Floor(row[j] * 65535 + .5), 0, 65535);
-                        if (coverage != 0) Blend(canvas, left + j, py, color, coverage);
+                        if (coverage != 0) Blend(canvas!, left + j, py, color, coverage);
                     }
                     i += count;
                 }
@@ -325,7 +340,7 @@ internal sealed partial class TextRasterizer : IDisposable
         return count;
     }
 
-    private static void Blend(ImageBuffer canvas, int x, int y, RgbaColor color, uint coverage)
+    internal static void Blend(ImageBuffer canvas, int x, int y, RgbaColor color, uint coverage)
     {
         var sa = (ulong)color.A * coverage; if (sa == 0) return;
         if (canvas.BitDepth == 8) BlendByte(canvas.GetRow8(y).Slice(x * 4, 4), color, sa);

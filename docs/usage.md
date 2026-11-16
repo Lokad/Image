@@ -214,9 +214,10 @@ to check positioned overflow. Render with `ImageDrawing.DrawText(canvas, layout,
 x, y, RgbaColor.From8(20, 40, 60))`; destinations clip and preserve canvas precision.
 For repeated drawing at a fixed origin and canvas shape/depth, development 0.2.1
 provides `TextRenderPlan.Create(layout, width, height, depth, x, y, limits)`.
-Call `plan.Draw(canvas, color)` on matching canvases. The plan owns copied positions,
-geometry and workspace; the font and layout may be disposed after creation.
-Dispose the plan to release admitted capacity. Creation cancellation governs only
+Call `plan.Draw(canvas, color)` on matching canvases. The plan retains exact coverage
+in glyph order; temporary geometry is released during creation. Font and layout may
+then be disposed. `StorageBytes` reports retained capacity, separately from construction
+peak memory. Dispose the plan to release admission. Creation cancellation governs only
 preparation; each draw takes its own token. Draws and disposal must not overlap.
 No canvas is retained. Ordinary `DrawText` prepares its workspace on every call.
 

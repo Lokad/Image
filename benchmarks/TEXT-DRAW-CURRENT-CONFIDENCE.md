@@ -1,5 +1,8 @@
 # Current drawing confidence
 
+[Prepared exact coverage](TEXT-PREPARED-COVERAGE.md) now owns the four current
+drawing and complete public-integration costs. This report retains prior evidence.
+
 TCA1048 is a read-only measurement update on the accepted [prepared-edge module](TEXT-PREPARED-EDGE-INVARIANTS.md).
 Longer reference integration confirms **two ordinary-draw gaps**; both prepared
 intervals remain open. Favorable prepared point estimates do not establish parity.

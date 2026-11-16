@@ -1,5 +1,8 @@
 # Conservative text event ranges
 
+[Prepared exact coverage](TEXT-PREPARED-COVERAGE.md) now owns the four current
+drawing and complete public-integration costs. This report retains prior evidence.
+
 Event preparation skips endpoint division only when certified computed-X hulls
 are strictly disjoint. One temporary admitted range array is reused across shapes
 and released after its actual users finish. Retained geometry, drawing arithmetic,

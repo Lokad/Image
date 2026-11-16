@@ -142,4 +142,31 @@ public sealed class TextRenderPlanTests
             Assert.Throws<ObjectDisposedException>(() => plan.Draw(disposed, Ink));
         }
     }
+
+    [Theory] [InlineData(8)] [InlineData(16)]
+    public void PreparedDrawingPreservesOverlappingGlyphsColorsAndRepeatedCompositing(int depth)
+    {
+        using var font = TrueTypeFont.Load(AuthoredTrueType.Build());
+        // Narrow wrapping and tight line spacing overlap multiple glyphs. They
+        // must compose in placement order, rather than as one combined mask.
+        using var layout = TextLayout.Create(font, "AgA\nVgA", new()
+        {
+            FontSize = 13.25, WrapWidth = 11, LineSpacing = .25
+        });
+        using var root = new TestMemoryBudget(1_000_000);
+        using var plan = TextRenderPlan.Create(layout, 48, 36, depth, -.375, 1.625, new() { MemoryBudget = root });
+        var held = root.Bytes;
+        foreach (ushort alpha in new ushort[] { 0, 1, 257, 32769, 65535 })
+        {
+            using var actual = OriginalPixels.Buffer(48, 36, depth, phase: alpha % 5);
+            using var expected = actual.Clone(); var color = Ink with { A = alpha };
+            for (var repeat = 0; repeat < 2; repeat++)
+            {
+                ImageDrawing.DrawText(expected, layout, -.375, 1.625, color);
+                plan.Draw(actual, color);
+                Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+                Assert.Equal(held, root.Bytes);
+            }
+        }
+    }
 }

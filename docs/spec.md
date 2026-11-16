@@ -129,11 +129,12 @@ depths; it allocates no full-frame mask. Rasterization differences have explicit
 comparison tolerances, not a promise of identical antialiasing.
 
 Development 0.2.1 adds caller-owned `TextRenderPlan` for repeated drawing at a fixed
-origin and canvas shape/depth. It owns copied glyph positions, geometry and workspace,
-independent of font/layout lifetime, and uses the same exact raster arithmetic as
-`DrawText`. Retained capacity remains admitted until disposal. Creation and draw
-tokens are independent; drawing and disposal require exclusive access. Canvases
-are borrowed, with no retained pixel mask or output alias.
+origin and canvas shape/depth. It prepares exact 16-bit coverage in glyph/row order
+and releases temporary geometry before returning. Font/layout lifetime is independent;
+drawing uses `DrawText`'s exact blending on fresh caller pixels and colors.
+Retained coverage capacity stays admitted until disposal; construction also admits
+temporary and replacement overlap. Creation/draw tokens are independent, and
+drawing/disposal require exclusive access. Canvases are borrowed without output aliases.
 
 ## Inspection, streams and failures
 
