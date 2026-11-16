@@ -1,0 +1,739 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JSC1137",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineProvider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+  "producers": {
+    "windowsSha256": "755e5ff8d551678e01b9e0eb1459c36a2eb53cb5032c6ebfa4129946047c9f9f",
+    "linuxSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "timedArtifactSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "packageSha256": "e46206b68b44e88b3832e66cb085179aceb97aa944ff389b96e5f7de094c589b"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/InspectionReader.cs": "fa93f98d21f13f0a76e81b97864a9d400fe282c6bdd28b5d9a8a400673b5aad7",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+    "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+    "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "testPins": {
+    "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "917b527ddece237596774b3a22c90f70b349183907b3ffb08ccc3536c1be7368"
+  },
+  "sourceProof": {
+    "wholeOriginalSourceReconstructed": true,
+    "onlyEntropyPrefixSearchAndOwnHelperChanged": true,
+    "readerFieldsOwnersReadFillSkipAndSuffixParserUnchanged": true,
+    "noNewHeapStorageFieldsCacheOrApi": true,
+    "stuffedDataStillExcludedFromContainerItems": true,
+    "realFillerRestartAndPartialPrefixesReturnToOriginalParser": true,
+    "normalDimensionProbeNeverReachesEntropyBranch": true,
+    "nonJpegPathsUnchanged": true
+  },
+  "case": {
+    "project": "Lokad.Image",
+    "caseId": "JpegHeaders",
+    "originalRequiredControl": "InspectHeaders/Jpeg420FreshStream",
+    "productionChanged": true,
+    "newRequiredPaths": 0,
+    "librarySha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "mode": "confirm",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerActual": 16384,
+    "allActualsRetained": true,
+    "managedUs": 1.9985378723144531,
+    "nativeUs": 2.7989056803385415,
+    "ratio": 0.7140425939872044,
+    "lower": 0.6958892875023013,
+    "upper": 0.7301930765309751,
+    "status": "pass",
+    "allocatedBytes": 8768.0,
+    "managed": {
+      "mean": 1998.5378723144531,
+      "lower": 1961.780145114406,
+      "upper": 2035.2955995145003,
+      "values": [
+        2055.6090087890625,
+        2016.96533203125,
+        2001.9419555664062,
+        2026.5531616210938,
+        1975.4222412109375,
+        2028.6229858398438,
+        1964.7249145507812,
+        1999.2467651367188,
+        1972.829833984375,
+        1965.6137084960938,
+        1980.6541748046875,
+        1994.2703857421875
+      ]
+    },
+    "nativeBrackets": {
+      "before": {
+        "mean": 2803.218505859375,
+        "lower": 2787.3389449046113,
+        "upper": 2819.0980668141387,
+        "values": [
+          2794.3340454101562,
+          2799.29150390625,
+          2838.1553344726562,
+          2815.8619995117188,
+          2797.2462158203125,
+          2796.9429931640625,
+          2797.0230712890625,
+          2802.765380859375,
+          2804.673828125,
+          2797.2027587890625,
+          2797.6477661132812,
+          2797.4771728515625
+        ]
+      },
+      "paired": {
+        "mean": 2798.9056803385415,
+        "lower": 2794.2144167963347,
+        "upper": 2803.5969438807483,
+        "values": [
+          2798.5170288085938,
+          2799.6001586914062,
+          2797.67529296875,
+          2798.0108642578125,
+          2798.7218017578125,
+          2801.5214233398438,
+          2796.9362182617188,
+          2797.7938232421875,
+          2809.3128051757812,
+          2795.8096923828125,
+          2795.25830078125,
+          2797.7107543945312
+        ]
+      },
+      "after": {
+        "mean": 2807.0923207600913,
+        "lower": 2802.7970185097333,
+        "upper": 2811.3876230104493,
+        "values": [
+          2804.2880859375,
+          2806.3255004882812,
+          2805.64697265625,
+          2806.8175048828125,
+          2808.5089721679688,
+          2809.7920532226562,
+          2813.0947265625,
+          2811.717529296875,
+          2807.3292236328125,
+          2802.202392578125,
+          2802.3594970703125,
+          2807.025390625
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": -0.3369059465516039,
+      "lower": -0.355288440030916,
+      "upper": -0.3185234530722918,
+      "values": [
+        -0.30851748562221326,
+        -0.3278825355798172,
+        -0.334671132570349,
+        -0.32257235913878424,
+        -0.34838064506057803,
+        -0.3228054043063214,
+        -0.35317236740879343,
+        -0.336060694148038,
+        -0.35347092414542314,
+        -0.35231724140944565,
+        -0.3444973361886311,
+        -0.3385232330408522
+      ]
+    },
+    "quietGuardsPassed": true,
+    "descriptorExact": true,
+    "independentSurvivingOutputs": true,
+    "eofChecked": true,
+    "inputUnchanged": true,
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "inputBytes": 65163,
+    "expected": {
+      "Format": 1,
+      "Width": 513,
+      "Height": 259,
+      "BitDepth": 8,
+      "HasAlpha": false,
+      "Orientation": 1,
+      "SourceColor": 0,
+      "SourceAlpha": 1,
+      "SourceComponentCount": 3
+    },
+    "outputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+    "nativeReady": {
+      "state": "ready",
+      "format": 1,
+      "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "cpu": 0,
+      "inputBytes": 65163,
+      "independentLiveOutputs": true,
+      "freshSeekableStream": true,
+      "inputView": false,
+      "wholeInputCopy": false,
+      "avioScratchBytes": 8192,
+      "adapterBufferBytes": 8192,
+      "headerBytes": 32,
+      "eofChecked": true,
+      "pixelDecode": false,
+      "sourceAcquisitionAndReleaseTimed": true,
+      "descriptorAcquisitionAndReleaseTimed": true,
+      "reads": 10,
+      "readBytes": 65163,
+      "seeks": 0,
+      "ffmpegVersion": "n8.1"
+    },
+    "clocksPerBatch": 2,
+    "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+    "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+    "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+  },
+  "short": {
+    "project": "Lokad.Image",
+    "caseId": "JpegHeaders",
+    "originalRequiredControl": "InspectHeaders/Jpeg420FreshStream",
+    "productionChanged": true,
+    "newRequiredPaths": 0,
+    "librarySha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "mode": "short",
+    "actualIterations": 3,
+    "nativeSamplesEachBracket": 3,
+    "operationsPerActual": 16384,
+    "allActualsRetained": true,
+    "managedUs": 2.018955342610677,
+    "nativeUs": 2.791363708496094,
+    "ratio": 0.7232863766429176,
+    "lower": 0.5778287668854175,
+    "upper": 0.8677601301130139,
+    "status": "pass",
+    "allocatedBytes": 8768.0,
+    "managed": {
+      "mean": 2018.955342610677,
+      "lower": 1651.7551553178214,
+      "upper": 2386.1555299035326,
+      "values": [
+        2034.6578369140625,
+        2025.94287109375,
+        1996.2653198242188
+      ]
+    },
+    "nativeBrackets": {
+      "before": {
+        "mean": 2791.3637084960938,
+        "lower": 2785.988038849682,
+        "upper": 2796.7393781425053,
+        "values": [
+          2791.6930541992188,
+          2791.1250610351562,
+          2791.2730102539062
+        ]
+      },
+      "paired": {
+        "mean": 2805.356486002604,
+        "lower": 2752.158240953956,
+        "upper": 2858.554731051252,
+        "values": [
+          2807.3197021484375,
+          2802.005859375,
+          2806.743896484375
+        ]
+      },
+      "after": {
+        "mean": 2801.8819783528647,
+        "lower": 2782.2760417626955,
+        "upper": 2821.487914943034,
+        "values": [
+          2801.7827758789062,
+          2803.0028076171875,
+          2800.8603515625
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": -0.32898327076756717,
+      "lower": -0.5161265912261921,
+      "upper": -0.14183995030894223,
+      "values": [
+        -0.32190251984744483,
+        -0.3243003315046381,
+        -0.3407469609506185
+      ]
+    },
+    "quietGuardsPassed": true,
+    "descriptorExact": true,
+    "independentSurvivingOutputs": true,
+    "eofChecked": true,
+    "inputUnchanged": true,
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "inputBytes": 65163,
+    "expected": {
+      "Format": 1,
+      "Width": 513,
+      "Height": 259,
+      "BitDepth": 8,
+      "HasAlpha": false,
+      "Orientation": 1,
+      "SourceColor": 0,
+      "SourceAlpha": 1,
+      "SourceComponentCount": 3
+    },
+    "outputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+    "nativeReady": {
+      "state": "ready",
+      "format": 1,
+      "backend": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+      "cpu": 0,
+      "inputBytes": 65163,
+      "independentLiveOutputs": true,
+      "freshSeekableStream": true,
+      "inputView": false,
+      "wholeInputCopy": false,
+      "avioScratchBytes": 8192,
+      "adapterBufferBytes": 8192,
+      "headerBytes": 32,
+      "eofChecked": true,
+      "pixelDecode": false,
+      "sourceAcquisitionAndReleaseTimed": true,
+      "descriptorAcquisitionAndReleaseTimed": true,
+      "reads": 10,
+      "readBytes": 65163,
+      "seeks": 0,
+      "ffmpegVersion": "n8.1"
+    },
+    "clocksPerBatch": 2,
+    "reference": "FFmpeg AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+    "boundary": "Complete public InspectHeaders on fresh non-exposed seekable source through EOF,including source/workspace/descriptor acquisition and source/workspace release. Independent output survives source/sibling release. Exact9typed source fields;no pixels,whole-input copy,cached descriptor or input view. Native AVIO8192B+adapter8192B+header32B is bounded separately from managed reader. Both borrow identical resident packet;preparation,JIT,IPC,hashing and controls excluded equally. OneCPU,natural nonconcurrent workstationGC.",
+    "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three native bracket lower bounds;no filtering or forcedGC."
+  },
+  "incremental": {
+    "project": "Lokad.Image",
+    "stage": "JSC1137",
+    "caseId": "InspectHeadersJpeg",
+    "baselineUs": 4.013275527954102,
+    "candidateUs": 2.1017659759521483,
+    "ratio": 0.5237033842586911,
+    "lower": 0.5165661392080134,
+    "upper": 0.5309171762877835,
+    "elapsedReduction": 0.4762966157413089,
+    "savedUs": 1.9115095520019536,
+    "baselineAllocatedBytes": 8776.0,
+    "candidateAllocatedBytes": 8776.0,
+    "pairs": 12,
+    "allActualsRetained": true,
+    "allOriginalOwnerAndDescriptorGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedDllEffectOnly": true,
+    "notStandaloneReferencePerformance": true,
+    "baselineSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "candidateSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/jha1136b-baseline-linux/Lokad.Image.dll",
+      "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "InspectHeadersJpeg",
+      "confirm"
+    ]
+  },
+  "reference": {
+    "label": "FFmpeg n8.1 AVIO/owned descriptor APIs plus original bounded structural/EXIF adapter;not public packet-parser performance",
+    "nativeSha256": "1ed2bf6fa6ae62b19496a93b705092e1477e154368080a43c32bc9c1122e2c8d",
+    "nativeArchives": {
+      "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+      "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+      "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+      "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+      "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+      "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+      "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+      "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+      "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+      "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+      "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+      "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+    },
+    "publicParserDecision": "Local pinned FFmpeg sources:MJPEG jpeg_parse complete-frames branch requires complete packet;otherwise ff_combine_frame can accumulate it. WebP parser also combines packets. No bounded fresh opaque-stream full-header API with equivalent late metadata/EOF validation. Reuse the PNG approach:public AVIO/descriptor APIs with an original bounded structural/EXIF adapter,explicitly not public packet-parser performance."
+  },
+  "memory": {
+    "jpegManagedGcBytes": 8768.0,
+    "webpManagedGcBytes": 552.0,
+    "managedInitialAdmissionBytes": 512,
+    "managedBulkMaximumAdmissionBytes": 8448,
+    "nativeAvioScratchBytes": 8192,
+    "nativeAdapterStagingBytes": 8192,
+    "nativeHeaderBytes": 32,
+    "newRetainedOperationWorkspaceBytes": 0,
+    "nativeAllocationAndPhysicalPeaksMeasured": false,
+    "interpretation": "Both borrow the same resident encoded packet;no whole-input copy or retained parser/context/result cache. All fresh source/reader/descriptor acquisition and source/workspace release stay timed. Managed small independent ImageInfo survives input/sibling disposal;native owned parameters survive AVIO release and are disposed peroperation. Native16416Bbounded scratch excludes contexts/descriptor and is not a measured total peak. Input fixture/harnessverification/preparation are outside timing;GC allocation,logical admission,retained storage and physical/native/JIT peaks are distinct.",
+    "wrapperDifference": "Controlled original JpegPair helper allocates8776B on both DLLs. The complete standalone HeaderWorker allocates8768B on both DLLs. This8B wrapper difference is not a production allocation gain."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JSC1137",
+      "platform": "windows",
+      "productionSha256": "755e5ff8d551678e01b9e0eb1459c36a2eb53cb5032c6ebfa4129946047c9f9f",
+      "embeddedTestsSha256": "d247a079d2d435fb70641f2ce4538398ab4564cc5b5f5b1a390c62faa0ce90da",
+      "publicTestsSha256": "51c55ec010e58bd2c9e2f0c7ca57716f67514a494f4d15c2bb5666c5abc2e949",
+      "full": [
+        3294,
+        2507,
+        948
+      ],
+      "total": 6749,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 10,
+        "public-normal": 158,
+        "internal-scalar": 10,
+        "public-scalar": 158
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JSC1137",
+        "platform": "windows",
+        "productionSha256": "755e5ff8d551678e01b9e0eb1459c36a2eb53cb5032c6ebfa4129946047c9f9f",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/InspectionReader.cs": "fa93f98d21f13f0a76e81b97864a9d400fe282c6bdd28b5d9a8a400673b5aad7"
+        },
+        "testSources": {
+          "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "917b527ddece237596774b3a22c90f70b349183907b3ffb08ccc3536c1be7368"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+          "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+          "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 10,
+          "public-normal": 158,
+          "internal-scalar": 10,
+          "public-scalar": 158
+        },
+        "logs": [
+          "tmp/jha1136b-windows-build-core.log",
+          "tmp/jha1136b-windows-build-internal.log",
+          "tmp/jha1136b-windows-build-public.log",
+          "tmp/jha1136b-windows-internal-normal.log",
+          "tmp/jha1136b-windows-public-normal.log",
+          "tmp/jha1136b-windows-internal-scalar.log",
+          "tmp/jha1136b-windows-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JSC1137",
+      "platform": "linux",
+      "productionSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+      "embeddedTestsSha256": "77dadcbe973b1f2143528164b5aa4e917a024727358d5c36e1a07657fc0afbc6",
+      "publicTestsSha256": "6c4f0972e4fc2b64493d905c44c6f7f5da0fd06be6746377c07f14dddba9a7bb",
+      "full": [
+        3294,
+        2507,
+        948
+      ],
+      "total": 6749,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 10,
+        "public-normal": 158,
+        "internal-scalar": 10,
+        "public-scalar": 158
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "stage": "JSC1137",
+        "platform": "linux",
+        "productionSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+        "candidateSources": {
+          "src/Lokad.Image/Internal/InspectionReader.cs": "fa93f98d21f13f0a76e81b97864a9d400fe282c6bdd28b5d9a8a400673b5aad7"
+        },
+        "testSources": {
+          "tests/Lokad.Image.PublicApi.Tests/HeaderInspectionTests.cs": "917b527ddece237596774b3a22c90f70b349183907b3ffb08ccc3536c1be7368"
+        },
+        "unchangedSources": {
+          "src/Lokad.Image/Internal/StreamInspection.cs": "8eca821420972e1ba366f5188edb409a5445b957240d5e397473726d5543d1db",
+          "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+          "src/Lokad.Image/ImageCodec.Inspection.cs": "39ca3c540c3aa59f6f7e9eb7d09709363a6bfd77f9bdab713b485a00a7ed01ad",
+          "src/Lokad.Image/ImageCodec.Probe.cs": "7d7c46a0d5e43c335b74d0ac21ec1733772f5713c9bc9810737751a19ec8da6c",
+          "src/Lokad.Image/Internal/ProbeReader.cs": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+          "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+        },
+        "focusedPassed": true,
+        "counts": {
+          "internal-normal": 10,
+          "public-normal": 158,
+          "internal-scalar": 10,
+          "public-scalar": 158
+        },
+        "logs": [
+          "tmp/jha1136b-linux-build-core.log",
+          "tmp/jha1136b-linux-build-internal.log",
+          "tmp/jha1136b-linux-build-public.log",
+          "tmp/jha1136b-linux-internal-normal.log",
+          "tmp/jha1136b-linux-public-normal.log",
+          "tmp/jha1136b-linux-internal-scalar.log",
+          "tmp/jha1136b-linux-public-scalar.log"
+        ],
+        "coreBuilds": 1,
+        "embeddedBuilds": 1,
+        "publicBuilds": 1,
+        "harnessNativeFixtureBuilds": 0
+      },
+      "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+      "additionalProductionOrEmbeddedBuilds": 0,
+      "unchangedArithmeticIsaEvidenceReused": true
+    },
+    "fullChecksEachOs": 6749,
+    "focusedEachMode": {
+      "internal": 10,
+      "public": 158
+    },
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "package": {
+      "project": "Lokad.Image",
+      "stage": "JSC1137",
+      "platform": "linux",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "e46206b68b44e88b3832e66cb085179aceb97aa944ff389b96e5f7de094c589b",
+      "symbolsSha256": "d978b05ae37cbc506f306510064bdc317500fa52f5d47565e1af6f3f4840e688",
+      "bytes": 468374,
+      "librarySha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 1,
+      "packageProducer": "Same immutable timed Linux batched JPEG entropy classifier. Own bounded Vector256 masks skip complete FF00 pairs;real/filler/partial prefixes retain existing parser. Exact typed descriptors/read boundaries/EOF/cancellation/admission/owners preserved. Actual paired gain47.6297percent/1.911510us,8776B unchanged. Actual standalone1.998538/AVIOheaderadapter2.798906us upper.730193 passes;8768B unchanged. Unchanged prefix/codec/edit/text paths reuse identified evidence. EachOS6749full/live,10internal158public normal/scalar,new32lane synchronous/pending guards pass old/new andAVX2off. SAMEactualpackage/all3examples. One core/embedded/public build eachOS,two isolated Windows prototypes,zero existing helper/native/harness/fixture builds,oneNoBuildpack,no timedLinux rebuild. No added fields/storage/cache/API,encoder packet or pixel change;publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {},
+      "publicationPostponed": true
+    },
+    "windowsPackage": {
+      "project": "Lokad.Image",
+      "stage": "JSC1137",
+      "platform": "windows",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "e46206b68b44e88b3832e66cb085179aceb97aa944ff389b96e5f7de094c589b",
+      "symbolsSha256": "d978b05ae37cbc506f306510064bdc317500fa52f5d47565e1af6f3f4840e688",
+      "bytes": 468374,
+      "librarySha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+      "actualConsumerPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "inspectionAndPendingUserOwnershipPassed": true,
+      "fontAndIndependentLayoutConsumerPassed": true,
+      "usageExamples": 3,
+      "acceptedArtifactRebuildsAfterTiming": 0,
+      "packCalls": 0,
+      "packageProducer": "Same immutable timed Linux batched JPEG entropy classifier. Own bounded Vector256 masks skip complete FF00 pairs;real/filler/partial prefixes retain existing parser. Exact typed descriptors/read boundaries/EOF/cancellation/admission/owners preserved. Actual paired gain47.6297percent/1.911510us,8776B unchanged. Actual standalone1.998538/AVIOheaderadapter2.798906us upper.730193 passes;8768B unchanged. Unchanged prefix/codec/edit/text paths reuse identified evidence. EachOS6749full/live,10internal158public normal/scalar,new32lane synchronous/pending guards pass old/new andAVX2off. SAMEactualpackage/all3examples. One core/embedded/public build eachOS,two isolated Windows prototypes,zero existing helper/native/harness/fixture builds,oneNoBuildpack,no timedLinux rebuild. No added fields/storage/cache/API,encoder packet or pixel change;publicationpostponed;publishedpackagesimmutable",
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true,
+      "sameActualPackageSha256": "e46206b68b44e88b3832e66cb085179aceb97aa944ff389b96e5f7de094c589b"
+    },
+    "allAffectedPerformanceReconciledBeforeBroadQualification": true,
+    "acceptedArtifactRebuildsAfterTiming": 0,
+    "newPublicGuardCases": 2,
+    "originalAndCurrentNewGuardsNormalScalarBothOs": true,
+    "currentNewGuardsAvx2DisabledBothOs": true,
+    "existingSamePacketControls": 20
+  },
+  "builds": {
+    "coreEachOs": 1,
+    "embeddedEachOs": 1,
+    "publicEachOs": 1,
+    "isolatedPrototypeWindows": 2,
+    "existingHelperHarnessReferenceFixture": 0,
+    "packCalls": 1,
+    "timedArtifactRebuilds": 0
+  },
+  "stoppedPrototype": {
+    "stage": "JHA1136A",
+    "mechanism": "Buffered synchronous front end over original async marker acquisition",
+    "screen": {
+      "project": "Lokad.Image",
+      "stage": "JHA1136",
+      "caseId": "InspectHeadersJpeg",
+      "mode": "screen",
+      "baselineUs": 3.8258923950195314,
+      "candidateUs": 3.793714558919271,
+      "ratio": 0.9915894560594153,
+      "lower": 0.768854431786834,
+      "upper": 1.278782394378864,
+      "savedUs": 0.03217783610026048,
+      "baselineAllocatedBytes": 8776.0,
+      "candidateAllocatedBytes": 8776.0,
+      "pairs": 3,
+      "allActualsRetained": true,
+      "allOriginalOwnerAndDescriptorGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedDllEffectOnly": true,
+      "notStandaloneReferencePerformance": true,
+      "baselineSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "candidateSha256": "f6a1ad53c62eb285cf33a9000ea76e4583c782bf9321148320bb27826482897c",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+        "tmp/jha1136-prototype-src/bin/Release/net10.0/Lokad.Image.dll",
+        "f6a1ad53c62eb285cf33a9000ea76e4583c782bf9321148320bb27826482897c",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "InspectHeadersJpeg",
+        "screen"
+      ]
+    },
+    "status": "inconclusive,not accepted;no confirmation or favorable repeat"
+  },
+  "prototypeB": {
+    "stage": "JHA1136B",
+    "mechanism": "Batched FF00 classifier",
+    "screen": {
+      "project": "Lokad.Image",
+      "stage": "JHA1136B",
+      "caseId": "InspectHeadersJpeg",
+      "mode": "screen",
+      "baselineUs": 3.78593613688151,
+      "candidateUs": 1.9784293212890625,
+      "ratio": 0.5225733477159765,
+      "lower": 0.4436029110250345,
+      "upper": 0.6155660861139907,
+      "savedUs": 1.8075068155924476,
+      "baselineAllocatedBytes": 8776.0,
+      "candidateAllocatedBytes": 8776.0,
+      "pairs": 3,
+      "allActualsRetained": true,
+      "allOriginalOwnerAndDescriptorGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedDllEffectOnly": true,
+      "notStandaloneReferencePerformance": true,
+      "baselineSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "candidateSha256": "72def637db6f618abaf736448adc86d71489af245a04fee2e7b8792ac839a54f",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+        "tmp/jha1136b-prototype-src/bin/Release/net10.0/Lokad.Image.dll",
+        "72def637db6f618abaf736448adc86d71489af245a04fee2e7b8792ac839a54f",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "InspectHeadersJpeg",
+        "screen"
+      ]
+    },
+    "confirmation": {
+      "project": "Lokad.Image",
+      "stage": "JHA1136B",
+      "caseId": "InspectHeadersJpeg",
+      "mode": "confirm",
+      "baselineUs": 4.092424560546875,
+      "candidateUs": 2.1528201904296873,
+      "ratio": 0.5260500611749832,
+      "lower": 0.5226233220298196,
+      "upper": 0.5294866618901302,
+      "savedUs": 1.9396043701171877,
+      "baselineAllocatedBytes": 8776.0,
+      "candidateAllocatedBytes": 8776.0,
+      "pairs": 12,
+      "allActualsRetained": true,
+      "allOriginalOwnerAndDescriptorGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedDllEffectOnly": true,
+      "notStandaloneReferencePerformance": true,
+      "baselineSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+      "candidateSha256": "72def637db6f618abaf736448adc86d71489af245a04fee2e7b8792ac839a54f",
+      "helperSha256": "f3a0bf5f9f75c76ec09c4274d0022183c8c681f19d511f570ee969f6779b7e1b",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+        "tmp/jha1136b-prototype-src/bin/Release/net10.0/Lokad.Image.dll",
+        "72def637db6f618abaf736448adc86d71489af245a04fee2e7b8792ac839a54f",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "InspectHeadersJpeg",
+        "confirm"
+      ]
+    },
+    "productionClaimUsesSeparateActualProductionPair": true
+  },
+  "profile": {
+    "profilingOnly": true,
+    "instrumentedClocksDiscarded": true,
+    "totalSamples": 1992,
+    "mappedManagedSamples": 403,
+    "mappedMarkerSamples": 279,
+    "originalMarkerJitBytes": 4669,
+    "scope": "One2second current baseline profile. R2R/CoreLib locations largely unresolved;leaf counts locate leads,not phase/removable-time estimates."
+  },
+  "preparation": "One isolated Windows build per prototype and one core/embedded/public build perOS for accepted source. Initial isolated VSTest discovery setup returned no tests onLinux;normal project NoBuild runner supplies adapter configuration. Windows runner-copy selector initially omitted test files and was corrected without rebuilding. An existing controls-directory collision occurred before any statistical timing;fresh accepted-stage prefix then ran once. All initial observations/logs retained;no actual captures restarted.",
+  "invalidation": "Complete JPEG entropy inspection costs from older producers are superseded. Changes to prefix classification,suffix/filler/restart grammar,reader fill/read/cancellation/admission/owners,metadata output,fixture or reference invalidate this scoped evidence. Whole original reader reconstructs after removing only the helper/imports and restoring its entropy-only IndexOf expression. Normal JPEG dimension probes terminate before entropy;PNG/WebP and codec/edit/font paths are unchanged and retain their explicitly identified producers/costs. No overall performance claim.",
+  "next": "Stop confirmed JPEG full-header control. Keep unchanged prefix gaps,borrowed-copy gaps and uncertainty visible;resolve justified measurements before further optimization. Five original authored-font reference-output mismatches remain unscored. Independent work continues and the full289path objective stays open.",
+  "raw": {
+    "file": "jpeg-batched-entropy-qualified.tar.xz",
+    "sha256": "fd8bca4fd4a894affdb84a16a8514c6d5b014588371933aa2224c34d6061b6ba",
+    "bytes": 8471312,
+    "members": 237,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-stuffed-pairs-qualified.tar.xz",
+        "sha256": "3828e4155a1ad79b0c81fd9d8a9ff1d952429315ef5b583cf52587c3577fdffe"
+      }
+    ]
+  }
+}

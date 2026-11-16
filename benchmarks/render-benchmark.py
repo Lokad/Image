@@ -3126,10 +3126,26 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     assert header_reference['productionChanged'] and header_reference['newRequiredPaths'] == 0
     assert hq['fullChecksEachOs'] == 6747 and hq['package']['sha256'] == header_reference['producers']['packageSha256']
     assert header_reference['raw']['mirrored'] and header_reference['raw']['allMembersVerified']
+    entropy = json.loads((ROOT / 'benchmarks/jpeg-batched-entropy-evidence.json').read_text(encoding='utf-8'))
+    eq = entropy['qualification']
+    assert entropy['productionAccepted'] and entropy['allAffectedPerformanceReconciled']
+    assert entropy['requiredMaterialPaths'] == 289 and entropy['newRequiredPaths'] == 0
+    assert eq['fullChecksEachOs'] == 6749 and eq['sameActualPackageBothOs']
+    assert eq['package']['sha256'] == entropy['producers']['packageSha256']
+    assert eq['package']['librarySha256'] == entropy['producers']['linuxSha256']
+    assert eq['package']['acceptedArtifactRebuildsAfterTiming'] == 0
+    assert entropy['raw']['mirrored'] and entropy['raw']['allMembersVerified']
+    assert all(entropy['sourceProof'].values())
+    assert entropy['reference']['nativeSha256'] == header_reference['reference']['nativeSha256']
+    ep = entropy['incremental']
+    assert ep['upper'] < 1 and ep['allActualsRetained']
+    assert ep['baselineAllocatedBytes'] == ep['candidateAllocatedBytes'] == 8776
+    assert entropy['case']['status'] == 'pass' and entropy['case']['allocatedBytes'] == 8768
     for case, label in [('JpegHeaders', 'Complete JPEG headers, fresh source / FFmpeg AVIO adapter'),
                         ('WebpHeaders', 'Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter')]:
-        c = header_reference['cases'][case]
-        assert c['librarySha256'] == header_reference['producers']['linuxSha256']
+        c = entropy['case'] if case == 'JpegHeaders' else header_reference['cases'][case]
+        producer = entropy if case == 'JpegHeaders' else header_reference
+        assert c['librarySha256'] == producer['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
         assert all(c[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'descriptorExact', 'eofChecked',
                                  'independentSurvivingOutputs', 'inputUnchanged'))
@@ -3258,12 +3274,19 @@ Five original font boundaries need [reference-output alignment](../benchmarks/AU
 and remain unmeasured. All six retained-owner checks pass on both operating systems;
 the mismatches establish no CPU gap or overall text slowdown.
 
-[JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
-**31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
-allocation. Current standalone **JPEG 3.769 / 2.835 µs, upper 1.367175,
-8,768 B/op** remains a gap; **WebP .142106 / .310231 µs, upper .471884,
-552 B/op** passes/stops. A measured **2.698 ns / 1.255% async JPEG dimension-probe
-regression** is accepted and retained; its refreshed cost is **.220388 / .201119 µs,
+[Batched JPEG entropy inspection](../benchmarks/JPEG-BATCHED-ENTROPY.md) saves
+**{ep['elapsedReduction']:.2%} / {ep['savedUs']:.3f} µs** in independent controlled
+complete-operation pairs. Current standalone **JPEG {entropy['case']['managedUs']:.3f} /
+{entropy['case']['nativeUs']:.3f} µs, upper {entropy['case']['upper']:.6f}, 8,768 B/op**
+passes/stops. Two new lane/buffer/pending-read controls pass original/current,
+scalar and AVX2-disabled execution; **6,749 full/live checks per OS** and the SAME
+actual package/all three examples pass, without rebuilding the timed artifact.
+No added heap capacity or retention; admission stays 512/8,448 B, native bounded
+scratch 16,416 B excluding contexts/descriptors, physical/JIT peaks unmeasured.
+The [earlier stuffed-pair round](../benchmarks/JPEG-STUFFED-PAIRS.md) retains history;
+its gains are not added. Source-valid **WebP .142106 / .310231 µs, upper .471884,
+552 B/op** stays stopped. The earlier **2.698 ns / 1.255% async JPEG dimension-probe
+regression** remains explicit; its unchanged-path cost is **.220388 / .201119 µs,
 upper1.133673**, still a gap. Sync probe pairs are inconclusive; unchanged prefix
 paths reuse their identified evidence. Different wrappers'8,776/8,768B are not an
 allocation improvement. Header references are

@@ -17,7 +17,7 @@ with an easier operation. The following finite list is the inherited 17:
 | Original required name | Distinct path / current action |
 | --- | --- |
 | `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Reconciled pass-stop:current `PngHeaders` has the exact218775B packet,fresh seekable grammar/EOF/owner boundary and identical native reference identity. 0.290585/0.579888us,upper.509395,568B/op;reuse [RCI1098](REFILL-CALL-INLINING.md). |
-| `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. [Stuffed-pair acquisition](JPEG-STUFFED-PAIRS.md) saves31.743% in controlled pairs; current3.769/AVIO-headeradapter2.835us,upper1.367175,8768B/op remains a gap. Fresh opaque seekable source/full scan/independent9-field output. |
+| `InspectHeaders/Jpeg420FreshStream` | [Batched entropy inspection](JPEG-BATCHED-ENTROPY.md) passes/stops:1.999/AVIO-headeradapter2.799us,upper.730193,8768B/op. Controlled actual-DLL pairs save47.63%/1.912us. Fresh opaque seekable source,full entropy/late metadata/EOF and independent9-field output remain inside. |
 | `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. [Current header guard](JPEG-STUFFED-PAIRS.md) passes/stops.142106/AVIO-headeradapter.310231us,upper.471884,552B/op; full RIFF/late metadata/EOF/independent9-fields. Identify/probe remain different. |
 | `FillRectangle/Rgba8Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 1.194663/FFmpegpublicfill1.730184us,upper0.696649,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
 | `FillRectangle/Rgba16Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
@@ -42,9 +42,9 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-Of the 17 inherited controls, 12 are now measured: nine passes and three gaps;
-only five authored-font boundaries remain unmeasured. The original JPEGheaders,
-word-overlap copy and clipped byte-copy gaps stay open. Related passes do not
+Of the 17 inherited controls, 12 are now measured: ten passes and two gaps;
+only five authored-font boundaries remain unmeasured. The original word-overlap
+copy and clipped byte-copy gaps stay open. Related passes do not
 retire them. Functional checks, shared memory and performance remain separate.
 
 [AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) now checks those six font boundaries
@@ -60,8 +60,9 @@ identities. New byte-composite uses a retained FFmpeg graph/static source,not
 one-shot graph preparation;reset is excluded before EVERY operation both sides.
 All managed samples remain exact;case-specific native bounds stay explicit.
 
-Production/package are unchanged by these tooling rounds. Reuse
-6,747 full/live checks per OS and SAME actual Release-package consumer/all 3 examples.
+[Batched entropy inspection](JPEG-BATCHED-ENTROPY.md) now qualifies the changed JPEG
+path with 6,749 full/live checks per OS and SAME actual package/all three examples.
+Unchanged drawing/font paths retain their explicitly identified producers/costs.
 Normal/scalar current-package drawing checks and independent confirmations remain;
 no broad campaign or favorable repetition. Allocation, admission, prepared retention
 and physical/native/JIT peaks are separate. All 289 required paths stay in scope.

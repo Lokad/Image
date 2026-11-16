@@ -78,6 +78,52 @@ public sealed class HeaderInspectionTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
+    public async Task BufferedEntropyPrefixesPreserveReadBoundariesAndCleanup(bool asynchronous)
+    {
+        // Opaque entropy is intentional: header inspection does not decode it.
+        // Move stuffing, filler/restart prefixes and the final marker across
+        // every vector lane and the initial/bulk buffer replacement boundary.
+        using var budget = new TestMemoryBudget(Workspace);
+        for (var lane = 0; lane < 32; lane++)
+        {
+            using var bytes = new MemoryStream();
+            bytes.Write(new byte[] { 255,216,255,192,0,11,8,0,2,0,3,1,1,0x11,0,255,218,0,8,1,1,0,0,63,0 });
+            bytes.Write(new byte[64 + lane]);
+            for (var i = 0; i < 4200; i++) bytes.Write(new byte[] { 255,0 });
+            bytes.Write(new byte[] { 255,255,0,255,255,208,255,255,255,209,255,225,0,34 });
+            bytes.Write("Exif\0\0"u8); bytes.Write(Tiff(6)); bytes.Write(new byte[] { 255,217 });
+            var data = bytes.ToArray();
+            var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxInputBytes = data.Length,
+                MaxContainerItems = 6, MemoryBudget = budget };
+            using var sync = SparseInput.Bytes(data, false, seekable: true); sync.Requests = [];
+            var expected = ImageCodec.InspectHeaders(sync, limits);
+            Assert.Equal(new ImageInfo(ImageFormat.Jpeg, 3, 2, 8, false, ImageOrientation.Rotate90)
+                { SourceColor = SourceColorModel.Grayscale, SourceAlpha = SourceAlphaRepresentation.None, SourceComponentCount = 1 }, expected);
+            Assert.Equal(0, budget.Bytes);
+
+            using var input = SparseInput.Bytes(data, asynchronous, seekable: true); input.Requests = [];
+            var actual = asynchronous ? await ImageCodec.InspectHeadersAsync(input, limits) : ImageCodec.InspectHeaders(input, limits);
+            Assert.Equal(expected, actual); Assert.NotSame(expected, actual);
+            Assert.Equal(sync.Requests, input.Requests); Assert.Equal(data.Length, input.Position);
+            Assert.False(input.WasDisposed); Assert.Equal(0, budget.Bytes);
+
+            using var truncated = SparseInput.Bytes(data[..^1], asynchronous, seekable: true);
+            if (asynchronous) await Assert.ThrowsAsync<ImageDataException>(() => ImageCodec.InspectHeadersAsync(truncated, limits).AsTask());
+            else Assert.Throws<ImageDataException>(() => ImageCodec.InspectHeaders(truncated, limits));
+            Assert.False(truncated.WasDisposed); Assert.Equal(0, budget.Bytes);
+
+            using var exhausted = SparseInput.Bytes(data, asynchronous, seekable: true);
+            ImageLimitException failure;
+            if (asynchronous) failure = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.InspectHeadersAsync(exhausted,
+                limits with { MaxContainerItems = 5 }).AsTask());
+            else failure = Assert.Throws<ImageLimitException>(() => ImageCodec.InspectHeaders(exhausted, limits with { MaxContainerItems = 5 }));
+            Assert.Equal(ImageLimitKind.ContainerItems, failure.Limit); Assert.False(exhausted.WasDisposed);
+            Assert.Equal(0, budget.Bytes); Assert.False(budget.IsDisposed);
+        }
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
     public async Task FourComponentProgressiveRestartAndQuarterWidthHeadersRemainInspectable(bool progressive)
     {
         foreach (var values in new[] { new byte[] { 180, 90, 140 }, new byte[] { 180, 90, 140, 200 } })
@@ -272,6 +318,7 @@ ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
         public bool WasDisposed, FalseSeek;
         public long FailAfter = long.MaxValue;
         public CancellationToken LastToken;
+        internal List<(long Position, int Count)>? Requests;
         internal static SparseInput Bytes(byte[] data, bool asynchronous, int chunk = int.MaxValue, bool seekable = false)
             => new(data.Length, seekable, asynchronous, [(0, data)], chunk);
         private int ReadCore(Span<byte> buffer)
@@ -288,12 +335,12 @@ ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
         }
         public override int Read(Span<byte> buffer)
         {
-            if (asynchronous) throw new InvalidOperationException("Sync read forbidden."); ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length); return ReadCore(buffer);
+            if (asynchronous) throw new InvalidOperationException("Sync read forbidden."); Requests?.Add((position, buffer.Length)); ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length); return ReadCore(buffer);
         }
         public override int Read(byte[] buffer, int offset, int count) => Read(buffer.AsSpan(offset, count));
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            if (!asynchronous) throw new InvalidOperationException("Async read forbidden."); ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length); LastToken = cancellationToken;
+            if (!asynchronous) throw new InvalidOperationException("Async read forbidden."); Requests?.Add((position, buffer.Length)); ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length); LastToken = cancellationToken;
             await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
             return ReadCore(buffer.Span);
         }

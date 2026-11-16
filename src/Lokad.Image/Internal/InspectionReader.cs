@@ -1,4 +1,7 @@
 using System.Runtime.CompilerServices;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace Lokad.Image.Internal;
 
@@ -214,7 +217,7 @@ internal class InspectionReader : OperationContext, IDisposable
             while (true)
             {
                 if (first == last && !await FillAsync(buffer.Length).ConfigureAwait(false)) throw new ImageDataException("JPEG is missing EOI.");
-                var n = buffer.AsSpan(first, last - first).IndexOf((byte)255);
+                var n = EntropyMarkerPrefix(buffer.AsSpan(first, last - first));
                 if (n < 0) { first = last; continue; }
                 first += n + 1; break;
             }
@@ -237,6 +240,42 @@ internal class InspectionReader : OperationContext, IDisposable
         // needs no entropy-scan scratch when that buffer has just been drained.
         if (marker == 217) bulk = false;
         return marker;
+    }
+
+    // Skip complete FF00 data pairs in batches. A final FF, filler prefix or
+    // real marker returns to the shared parser at its original byte position.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static int EntropyMarkerPrefix(ReadOnlySpan<byte> value)
+    {
+        var offset = 0;
+        if (Vector256.IsHardwareAccelerated)
+        {
+            ref var start = ref MemoryMarshal.GetReference(value);
+            var prefix = Vector256.Create((byte)255);
+            while (value.Length - offset >= Vector256<byte>.Count)
+            {
+                var data = Vector256.LoadUnsafe(ref start, (nuint)offset);
+                var matches = Vector256.ExtractMostSignificantBits(Vector256.Equals(data, prefix));
+                if (matches != 0)
+                {
+                    var zeros = Vector256.ExtractMostSignificantBits(Vector256.Equals(data, Vector256<byte>.Zero));
+                    // Bit i of zeros >> 1 describes the byte after prefix i.
+                    // The final lane is deliberately returned for suffix parsing.
+                    var markers = matches & ~(zeros >> 1);
+                    if (markers != 0) return offset + BitOperations.TrailingZeroCount(markers);
+                }
+                offset += Vector256<byte>.Count;
+            }
+        }
+        while (offset < value.Length)
+        {
+            var n = value[offset..].IndexOf((byte)255);
+            if (n < 0) return -1;
+            offset += n;
+            if (offset + 1 == value.Length || value[offset + 1] != 0) return offset;
+            offset += 2;
+        }
+        return -1;
     }
 
     internal async ValueTask EndAsync()

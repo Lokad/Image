@@ -65,12 +65,19 @@ Five original font boundaries need [reference-output alignment](../benchmarks/AU
 and remain unmeasured. All six retained-owner checks pass on both operating systems;
 the mismatches establish no CPU gap or overall text slowdown.
 
-[JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
-**31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
-allocation. Current standalone **JPEG 3.769 / 2.835 µs, upper 1.367175,
-8,768 B/op** remains a gap; **WebP .142106 / .310231 µs, upper .471884,
-552 B/op** passes/stops. A measured **2.698 ns / 1.255% async JPEG dimension-probe
-regression** is accepted and retained; its refreshed cost is **.220388 / .201119 µs,
+[Batched JPEG entropy inspection](../benchmarks/JPEG-BATCHED-ENTROPY.md) saves
+**47.63% / 1.912 µs** in independent controlled
+complete-operation pairs. Current standalone **JPEG 1.999 /
+2.799 µs, upper 0.730193, 8,768 B/op**
+passes/stops. Two new lane/buffer/pending-read controls pass original/current,
+scalar and AVX2-disabled execution; **6,749 full/live checks per OS** and the SAME
+actual package/all three examples pass, without rebuilding the timed artifact.
+No added heap capacity or retention; admission stays 512/8,448 B, native bounded
+scratch 16,416 B excluding contexts/descriptors, physical/JIT peaks unmeasured.
+The [earlier stuffed-pair round](../benchmarks/JPEG-STUFFED-PAIRS.md) retains history;
+its gains are not added. Source-valid **WebP .142106 / .310231 µs, upper .471884,
+552 B/op** stays stopped. The earlier **2.698 ns / 1.255% async JPEG dimension-probe
+regression** remains explicit; its unchanged-path cost is **.220388 / .201119 µs,
 upper1.133673**, still a gap. Sync probe pairs are inconclusive; unchanged prefix
 paths reuse their identified evidence. Different wrappers'8,776/8,768B are not an
 allocation improvement. Header references are
@@ -512,7 +519,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify PNG8, fresh seekable Stream, adapter reference | 8.802 | 15.951 | 0.552 / 0.555 | 192 | Confirmed pass |
 | Identify PNG8, async nonseekable, adapter reference | 11.801 | 19.297 | 0.612 / 0.621 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
-| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (gap) | 3.769 | 2.835 | 1.329 / 1.367175 | 8,768 |
+| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (pass) | 1.999 | 2.799 | 0.714 / 0.730193 | 8,768 |
 | Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter (pass) | 0.142 | 0.310 | 0.458 / 0.471884 | 552 |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify
