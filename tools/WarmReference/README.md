@@ -187,6 +187,16 @@ Both subjects count forward movement and reverse restoration on one canvas.
 [Current cost](../../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md) is per pair;
 native plane calls use disjoint bands without temporary pixels.
 
+The original required RGBA16 self-overlap has its own bounded worker, preserving
+the original 257×129 rectangle and (1,1) shift on the frozen 513×259 canvas.
+`build-word-overlap-linux.sh [OUTPUT] [IMMUTABLE_LIBRARY_DLL]` builds only the
+two tooling workers. `measure-word-overlap.py --managed DLL --native WORKER
+--core-sha256 SHA --input INPUT --prefix OUTPUT --mode short|confirm` uses
+CPU0, idle-v2 guards and all-actual three-bracket confidence. Both moves and 258
+native disjoint-band calls stay timed; no output allocation/reset on either side.
+Reuse existing current qualification; [the report](../../benchmarks/ORIGINAL-WORD-OVERLAP.md)
+retains exact full-word, normal/scalar, cancellation/refusal/recovery and raw evidence.
+
 ## CMYK decode context boundaries
 
 The CMYK RGBA worker retains its decoder, frame wrapper and packing context by

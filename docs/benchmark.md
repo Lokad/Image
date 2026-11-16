@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **151 comparisons** summarize that scope.
+**289 named material paths**; these **152 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -32,6 +32,14 @@ allocation and unmeasured physical/native/JIT peaks. Five of seven drawing contr
 pass; byte copying and word confidence stay open. [Borrowed validation](../benchmarks/BORROWED-DRAWING-VALIDATION.md)
 and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evidence.
 
+
+[Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
+retains the inherited unmeasured names. The original RGBA16 self-overlap now has
+[independent evidence](../benchmarks/ORIGINAL-WORD-OVERLAP.md): **7.010 / FFmpeg
+5.092 µs per forward/reverse pair**, interval **1.366637–1.379847**, **0 B/op**.
+This is a demonstrated gap on an existing required boundary, not a production
+speedup. Full-word snapshots, untouched pixels, cancellation/refusal/recovery and
+normal/scalar checks pass on both platforms using the actual immutable package DLL.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -426,6 +434,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
 | Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
+| Original overlapping copy RGBA16, 257×129, shift (1,1), pair (gap) | 7.010 | 5.092 | 1.377 / 1.379847 | 0 |
 
 **Inspection and pixel-coding validation**
 

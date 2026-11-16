@@ -1,0 +1,109 @@
+{
+  "project": "Lokad.Image",
+  "stage": "COV1124",
+  "productionChanged": false,
+  "measurementsInAudit": 0,
+  "allBuildsInAudit": 0,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "retiredPaths": [],
+  "sources": {
+    "numericInventoryRevision": "27fc0425be9e21d913e7bd049fe3ce629bf28955",
+    "numericInventoryPath": "docs/benchmark-pre-cleanup.md",
+    "numericInventorySha256": "6c0ba65c8a0d0dcad6ff45beadac552172d7693290c84024a4dfb2b3c997c3f3",
+    "plannedInventoryRevision": "39402e74e0f95c82ab209e5a950066a206c2af65",
+    "plannedInventoryPath": "benchmarks/WARM-COVERAGE.md",
+    "plannedInventorySha256": "02134adecd8afb3d5ee2443080b02ea9c7e9e7b147f25c3a0be51f87ec0abb9a"
+  },
+  "finding": "The pinned numeric snapshot explicitly says240numeric+17unmeasured. The planned17are enumerated in the pre-cleanup coverage document,not its numeric tables. The later14-path omission audit checked zero numeric text/drawing rows and cannot retire earlier planned cases. Some current aliases exercise different inputs/ownership/operation boundaries. Preserve289declared slots and every named case;do not infer complete coverage from image-view counts or the displayed summary.",
+  "cases": [
+    {
+      "originalRequiredName": "InspectHeaders/PngRgba8FreshSeekable",
+      "requiredPath": "Complete chunk/EXIF/EOF grammar without pixel/CRC decoding",
+      "currentState": "Current PNG-header pass exists; reconcile original input/recipe explicitly before marking this name complete."
+    },
+    {
+      "originalRequiredName": "InspectHeaders/Jpeg420FreshStream",
+      "requiredPath": "Complete marker/stuffing scan through entropy and late metadata",
+      "currentState": "JPEG driver has scoped DLL costs; standalone equivalent full-header reference/confirmation still missing."
+    },
+    {
+      "originalRequiredName": "InspectHeaders/WebpLosslessRgba8FreshSeekable",
+      "requiredPath": "Complete RIFF and late-metadata framing through EOF",
+      "currentState": "No current full-header external confirmation; Identify/probe timings are different boundaries."
+    },
+    {
+      "originalRequiredName": "FillRectangle/Rgba8Clipped",
+      "requiredPath": "Clipped byte replacement",
+      "currentState": "Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel."
+    },
+    {
+      "originalRequiredName": "FillRectangle/Rgba16Clipped",
+      "requiredPath": "Clipped full-word replacement",
+      "currentState": "Current fill passes; same original-recipe reconciliation remains."
+    },
+    {
+      "originalRequiredName": "CopyRegion/Rgba8Independent",
+      "requiredPath": "Clipped borrowed separate-owner copy",
+      "currentState": "Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe."
+    },
+    {
+      "originalRequiredName": "CopyRegion/Rgba16Overlapping",
+      "requiredPath": "Word memmove and reverse traversal with one owner",
+      "currentState": "OWC1125 now independently confirms a gap:7.010/FFmpeg5.092us,upper1.379847,0B/op. Next demonstrated material copy gap."
+    },
+    {
+      "originalRequiredName": "Composite/Rgba8StraightAlpha",
+      "requiredPath": "Clipped straight-alpha source-over",
+      "currentState": "Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation."
+    },
+    {
+      "originalRequiredName": "Composite/Rgba16Overlapping",
+      "requiredPath": "Rational word arithmetic plus alias traversal",
+      "currentState": "Separate-owner Rgba64 comparison does not exercise self-aliasing; no original-boundary current timing."
+    },
+    {
+      "originalRequiredName": "TextLayout/OriginalUnicode",
+      "requiredPath": "Authored cmap12/long-loca,quadratic extrema and compound accent",
+      "currentState": "Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input."
+    },
+    {
+      "originalRequiredName": "TextLayout/PackedBmp",
+      "requiredPath": "Authored cmap4/short-loca,packed/repeated flags and implied points",
+      "currentState": "Unmeasured distinct required mapping/outline path."
+    },
+    {
+      "originalRequiredName": "TextLayout/CompositeTransforms",
+      "requiredPath": "Authored matrices,point attachment and inherited metrics",
+      "currentState": "Unmeasured distinct required compound outline path."
+    },
+    {
+      "originalRequiredName": "TextRender/Rgba8Clipped",
+      "requiredPath": "Original authored face,layout+coverage+borrowed-byte drawing",
+      "currentState": "Original layout+draw boundary remains unmeasured; prepared-layout drawing is different."
+    },
+    {
+      "originalRequiredName": "TextRender/Rgba16Clipped",
+      "requiredPath": "Original authored face,layout+full-word coverage/composition",
+      "currentState": "Same missing original complete operation; preserve full16-bit gates."
+    },
+    {
+      "originalRequiredName": "TextLayout/OpenTypeArabicMarksDigits",
+      "requiredPath": "Joining,bidi,GSUB and mark positioning",
+      "currentState": "Current TextLayoutOpenTypeArabic pass/source-valid evidence; keep frozen scenario and public API multiplicity."
+    },
+    {
+      "originalRequiredName": "TextFit/OpenTypeConstrained",
+      "requiredPath": "Thirty fitting trials and owned winner",
+      "currentState": "Current TextFitOpenType pass/source-valid evidence; retain all trials and winner reconstruction."
+    },
+    {
+      "originalRequiredName": "TextLayout/OpenTypeDefaultVariation",
+      "requiredPath": "Authored contextual GSUB plus GDEF region/delta/default-zero data",
+      "currentState": "Unmeasured declared default-instance path; private inputs are not fixtures."
+    }
+  ],
+  "execution": "Reconcile existing evidence/recipes first;measure named missing distinct algorithms or public boundaries with original inputs and approved references. Do not expand depth/shape/filter/quality grids. Stop passes,resolve uncertainty before optimization,and prioritize demonstrated material gaps. Independent codec/resizing/ownership work is not blocked by a missing text reference.",
+  "firstExecuted": "CopyRegion/Rgba16Overlapping:original513x259word raster,257x129,shift(1,1). Original prose fixes extent and shift but no absolute origin;freeze(0,0)->(1,1),thenreverse in both complete totals. Tool-only OWC1125measurement;same current immutable package,zero production builds.",
+  "qualification": "Reuse current6745checks eachOS and actual package/all3examples for unchanged production;the new benchmark additionally verifies full-word snapshots/untouched pixels,cancellation/refusal/recovery and scalar execution."
+}

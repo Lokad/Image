@@ -1,0 +1,356 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OWC1125",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "originalRequiredControl": "CopyRegion/Rgba16Overlapping",
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+    "linuxSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "timedArtifactSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "ae3dd33a54b1a59a8cd44d9ab8e4fb7d3257c12ad317227e727e946dc0f4ace3",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+    "tools/WarmReference/build-word-overlap-linux.sh": "252d21ead6ef9b3c54b4f48a5261d3fccfe402ef7d629d9d83d3e5ac44b4fb97",
+    "tools/WarmReference/measure-word-overlap.py": "93c4fbfb2c21a38d81560bfc4297a4d6ba886934bf5ba41454788ffd4eb53ef1",
+    "tools/WarmReference/ffmpeg-copy-region-word-overlap-warm.c": "f67a82a632514a3787628890b3b191ea2157cc671e47891ae29e83fc516356c4",
+    "tools/WarmReference/WordOverlapWorker/Program.cs": "493a64b2d18c535bbaa4595a9aa53a7fc5c0d147a07a8386bbdf719b8c445df4",
+    "tools/WarmReference/WordOverlapWorker/WordOverlapWorker.csproj": "1ead981d1881aba1208edb85d30e707925925655bee657633d03024d7eead0e9"
+  },
+  "short": {
+    "project": "Lokad.Image",
+    "originalRequiredControl": "CopyRegion/Rgba16Overlapping",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "mode": "short",
+    "actuals": 3,
+    "operationsPerActual": 16384,
+    "allActualsRetained": true,
+    "managedUs": 6.685812723795573,
+    "nativeUs": 5.073380594889323,
+    "ratio": 1.3178220318283504,
+    "lower": 1.1732241144166777,
+    "upper": 1.4652683833595954,
+    "status": "gap",
+    "allocatedBytes": 0,
+    "managed": {
+      "mean": 6685.812723795573,
+      "lower": 6455.126255093151,
+      "upper": 6916.499192497996,
+      "values": [
+        6681.731018066406,
+        6699.994140625,
+        6675.7130126953125
+      ]
+    },
+    "nativeBrackets": {
+      "before": {
+        "mean": 5073.380594889323,
+        "lower": 5006.33381744816,
+        "upper": 5140.427372330487,
+        "values": [
+          5077.256164550781,
+          5072.9398193359375,
+          5069.94580078125
+        ]
+      },
+      "paired": {
+        "mean": 5079.04443359375,
+        "lower": 4943.74735176345,
+        "upper": 5214.34151542405,
+        "values": [
+          5083.9837646484375,
+          5082.632873535156,
+          5070.516662597656
+        ]
+      },
+      "after": {
+        "mean": 5111.167663574219,
+        "lower": 4720.295115246883,
+        "upper": 5502.040211901554,
+        "values": [
+          5086.9625244140625,
+          5127.69921875,
+          5118.841247558594
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": 0.2748641565251263,
+      "lower": 0.24741094217741105,
+      "upper": 0.30231737087284155,
+      "values": [
+        0.27328192851883687,
+        0.27627724234243234,
+        0.27503329871410975
+      ]
+    },
+    "quietGuardsPassed": true,
+    "exactFullWordSnapshotAndUntouchedPixels": true,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+    "clocksPerBatch": 2,
+    "outputOwnership": "One borrowed aliased canvas;two public moves,no output allocation/reset per operation.",
+    "confidence": "All actuals;two-sided99.9%Student-t;paired log ratio and managed mean versus fastest of three native bracket lower bounds;no sample filtering.",
+    "boundary": "Original513x259RGBA16,257x129rectangle,forward(0,0)to(1,1),thenreverse. Complete validation/clipping/cancellation and both moves stay timed. FFmpeg public av_image_copy_plane uses258disjoint one-row calls per pair with scheduling timed. Both borrow one mutable canvas;no per-op reset/output allocation. Preparation,hashing,verification,IPC and startup excluded equally. Native arguments prevalidated;managed public validation remains included."
+  },
+  "case": {
+    "project": "Lokad.Image",
+    "originalRequiredControl": "CopyRegion/Rgba16Overlapping",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "mode": "confirm",
+    "actuals": 12,
+    "operationsPerActual": 16384,
+    "allActualsRetained": true,
+    "managedUs": 7.010171717325846,
+    "nativeUs": 5.09152409362793,
+    "ratio": 1.3768316889826988,
+    "lower": 1.3666370459427768,
+    "upper": 1.3798467426890249,
+    "status": "gap",
+    "allocatedBytes": 0,
+    "managed": {
+      "mean": 7010.171717325847,
+      "lower": 7007.383338824352,
+      "upper": 7012.960095827341,
+      "values": [
+        7006.53515625,
+        7010.8734130859375,
+        7014.0875244140625,
+        7008.3641357421875,
+        7010.246826171875,
+        7012.1802978515625,
+        7010.595886230469,
+        7010.3843994140625,
+        7008.9173583984375,
+        7008.251037597656,
+        7012.98779296875,
+        7008.636779785156
+      ]
+    },
+    "nativeBrackets": {
+      "before": {
+        "mean": 5092.371058146159,
+        "lower": 5088.598146343976,
+        "upper": 5096.143969948343,
+        "values": [
+          5090.533630371094,
+          5090.586181640625,
+          5093.8173828125,
+          5090.001770019531,
+          5091.905334472656,
+          5090.369812011719,
+          5088.841552734375,
+          5096.09375,
+          5093.5374755859375,
+          5096.748474121094,
+          5089.180847167969,
+          5096.836486816406
+        ]
+      },
+      "paired": {
+        "mean": 5104.942184448242,
+        "lower": 5082.419575206293,
+        "upper": 5127.464793690191,
+        "values": [
+          5094.3602294921875,
+          5097.631164550781,
+          5100.204650878906,
+          5155.6058349609375,
+          5097.036437988281,
+          5092.4334716796875,
+          5102.6485595703125,
+          5100.1661376953125,
+          5106.30517578125,
+          5097.0455322265625,
+          5120.531982421875,
+          5095.3370361328125
+        ]
+      },
+      "after": {
+        "mean": 5091.52409362793,
+        "lower": 5086.405499091551,
+        "upper": 5096.642688164308,
+        "values": [
+          5096.493591308594,
+          5091.41259765625,
+          5096.168395996094,
+          5094.1541748046875,
+          5090.3270263671875,
+          5088.675354003906,
+          5088.949157714844,
+          5082.568664550781,
+          5090.4254150390625,
+          5092.874816894531,
+          5090.122253417969,
+          5096.11767578125
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": 0.3171584378175606,
+      "lower": 0.31271463991593423,
+      "upper": 0.32160223571918695,
+      "values": [
+        0.31870921679117953,
+        0.3186863343017354,
+        0.3186399636222886,
+        0.307019677973783,
+        0.318713630766311,
+        0.31989287443228176,
+        0.31766297226870793,
+        0.31811942018974465,
+        0.31670716155882206,
+        0.31842711010716573,
+        0.31450549245358306,
+        0.31881739934512426
+      ]
+    },
+    "quietGuardsPassed": true,
+    "exactFullWordSnapshotAndUntouchedPixels": true,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+    "clocksPerBatch": 2,
+    "outputOwnership": "One borrowed aliased canvas;two public moves,no output allocation/reset per operation.",
+    "confidence": "All actuals;two-sided99.9%Student-t;paired log ratio and managed mean versus fastest of three native bracket lower bounds;no sample filtering.",
+    "boundary": "Original513x259RGBA16,257x129rectangle,forward(0,0)to(1,1),thenreverse. Complete validation/clipping/cancellation and both moves stay timed. FFmpeg public av_image_copy_plane uses258disjoint one-row calls per pair with scheduling timed. Both borrow one mutable canvas;no per-op reset/output allocation. Preparation,hashing,verification,IPC and startup excluded equally. Native arguments prevalidated;managed public validation remains included."
+  },
+  "reference": {
+    "name": "FFmpeg n8.1 public av_image_copy_plane",
+    "nativeSha256": "a34962a9ca990017220b790972fed0f4f41d26f0d6c19994a4c53eb64cb832b9",
+    "archiveSha256": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "flags": "gcc -std=c11 -O3 -Wall -Wextra -Werror; pkg-config --cflags libavutil / --static --libs libavutil; exact first build recipe is retained in raw tmp/owc1125-prepare-vm.py",
+    "ready": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "copy-region-word-overlap",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "affinityCount": 1,
+      "workerThreads": 1,
+      "outputWidth": 513,
+      "outputHeight": 259,
+      "publicMovesPerPair": 2,
+      "nativeCallsPerPair": 258,
+      "bandHeight": 1,
+      "sourceAliasesCanvas": true,
+      "borrowedCanvas": true,
+      "canvasMutationTimed": true,
+      "restorationTimed": true,
+      "canvasPreparationTimed": false,
+      "sourcePreparationTimed": false,
+      "outputAllocationTimed": false,
+      "temporaryPixelBytes": 0,
+      "disjointNativeRanges": true,
+      "initialCompletedOperations": 1,
+      "inputStride": 4104,
+      "ffmpegVersion": "n8.1",
+      "avutilVersion": 3938916
+    }
+  },
+  "ownership": {
+    "borrowedCanvasBytes": 1062936,
+    "managedAllocatedBytesPerOperation": 0,
+    "newWorkspaceBytes": 0,
+    "newRetainedCapacityBytes": 0,
+    "nativeAllocationAndPhysicalPeakMeasured": false,
+    "verification": "Harness owns resident seed, mutable canvas and independent full snapshots outside timing. These are not per-operation library allocations or retained results. No shared-admission reservation is needed for this borrowed zero-workspace operation; existing local capacity limits still apply."
+  },
+  "checks": {
+    "linux": {
+      "normal": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      },
+      "scalar": {
+        "state": "checked",
+        "exact": true,
+        "libraryHash": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true
+      }
+    },
+    "windows": {
+      "sameImmutableTimedLibrary": true,
+      "productionSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "checks": {
+        "normal": {
+          "state": "checked",
+          "exact": true,
+          "libraryHash": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "fullWordSnapshotExact": true,
+          "cancellationAndRefusalRecovery": true
+        },
+        "scalar": {
+          "state": "checked",
+          "exact": true,
+          "libraryHash": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "fullWordSnapshotExact": true,
+          "cancellationAndRefusalRecovery": true
+        }
+      },
+      "allBuilds": 0,
+      "packageRebuilt": false,
+      "allTimingsAbsent": true
+    },
+    "nativeExact": true,
+    "managedFullWordAndUntouchedPixels": true,
+    "managedCancellationRefusalRecovery": true
+  },
+  "qualification": {
+    "provider": "benchmarks/text-glyph-row-bounds-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "windowsFullLive": 6745,
+    "linuxFullLive": 6745,
+    "sameActualPackageConsumer": true,
+    "usageExamples": 3,
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "builds": {
+    "managedTool": 2,
+    "nativeTool": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "existingHarness": 0,
+    "package": 0,
+    "windows": 0
+  },
+  "raw": {
+    "file": "original-word-overlap-confirmation.tar.xz",
+    "sha256": "91ae1f043d02666e0bf9cd942f49eb7696e4fd815de9cd615cc4ee80a6310799",
+    "bytes": 1243140,
+    "members": 65,
+    "allMembersVerified": true,
+    "memberPathNormalization": "tarfile strips leading slash from absolute native worker path;verification uses that normalized archive member name;archive was not rewritten",
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-glyph-row-bounds-qualified.tar.xz",
+        "sha256": "fe37d7b79882d4918770ea95d48717d5d0e5f74589011dc1f04abc26f59b123e"
+      }
+    ]
+  },
+  "preflight": "First untimed managed preflight detected that the frozen drawing raster clears two alpha samples. Corrected only the new worker before any performance sample; retained the failed log and both managed tool builds. One native build was reused. Archive verification subsequently normalized the leading slash of the native member; the archive itself and every capture were preserved.",
+  "next": "Test the existing disjoint-row kernel for word self-aliases whose source/destination rows differ. Retain two-dimensional traversal, same-row memmove, separate-word runtime kernel, cancellation and ownership. This is a hypothesis, not an accepted production change. Reconcile affected public CopyRegion boundaries before broad qualification."
+}

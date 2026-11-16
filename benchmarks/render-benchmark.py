@@ -3077,6 +3077,22 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
     assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
+    original_overlap = json.loads((ROOT / 'benchmarks/original-word-overlap-evidence.json').read_text(encoding='utf-8'))
+    overlap_case = original_overlap['case']
+    overlap_q = json.loads((ROOT / original_overlap['qualification']['provider']).read_text(encoding='utf-8'))
+    assert original_overlap['measurementAccepted'] and not original_overlap['productionChanged']
+    assert not original_overlap['productionSpeedupClaim'] and original_overlap['newRequiredPaths'] == 0
+    assert original_overlap['requiredMaterialPaths'] == 289
+    assert original_overlap['producers'] == overlap_q['producers']
+    assert overlap_case['librarySha256'] == overlap_q['qualification']['package']['librarySha256']
+    assert original_overlap['raw']['mirrored'] and original_overlap['raw']['allMembersVerified']
+    assert overlap_case['actuals'] == 12 and overlap_case['operationsPerActual'] == 16384
+    assert all(overlap_case[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'exactFullWordSnapshotAndUntouchedPixels'))
+    assert overlap_case['status'] == 'gap' and overlap_case['lower'] > 1 and overlap_case['allocatedBytes'] == 0
+    assert math.isclose(overlap_case['ratio'], overlap_case['managedUs'] / overlap_case['nativeUs'], rel_tol=1e-12)
+    editing += (f'\n| Original overlapping copy RGBA16, 257×129, shift (1,1), pair (gap) | '
+                f'{overlap_case["managedUs"]:.3f} | {overlap_case["nativeUs"]:.3f} | '
+                f'{overlap_case["ratio"]:.3f} / {overlap_case["upper"]:.6f} | {overlap_case["allocatedBytes"]} |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3088,6 +3104,14 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 {jpeg_direct_note}
 
 {borrowed_drawing_note}
+
+[Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
+retains the inherited unmeasured names. The original RGBA16 self-overlap now has
+[independent evidence](../benchmarks/ORIGINAL-WORD-OVERLAP.md): **7.010 / FFmpeg
+5.092 µs per forward/reverse pair**, interval **1.366637–1.379847**, **0 B/op**.
+This is a demonstrated gap on an existing required boundary, not a production
+speedup. Full-word snapshots, untouched pixels, cancellation/refusal/recovery and
+normal/scalar checks pass on both platforms using the actual immutable package DLL.
 
 [Prepared stream input](../benchmarks/PREPARED-MEMORY-INPUT.md) saves **2.75 µs /
 15.40% raw**, **15.01% reference-normalized**, on complete PNG `Identify(Stream)`:
@@ -3343,7 +3367,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 151, 'Expected 151 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 152, 'Expected 152 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

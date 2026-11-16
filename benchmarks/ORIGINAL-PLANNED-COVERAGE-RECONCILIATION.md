@@ -1,0 +1,56 @@
+# Original planned coverage reconciliation
+
+The original finite scope explicitly contains **240 numeric + 17 unmeasured**
+controls. Its numeric snapshot does not enumerate the 17; their recipes survive in
+[the pre-cleanup coverage document](https://github.com/lokad/image/blob/39402e74e0f95c82ab209e5a950066a206c2af65/benchmarks/WARM-COVERAGE.md).
+The later text/drawing omission audit searched numeric rows and benchmark sources;
+that did not retire earlier planned operations. Current views sometimes have
+other inputs, aliasing or operation boundaries. Functional checks and a passing
+related algorithm are not performance proof for a different declared recipe.
+
+**Keep the declared 289-path scope and every original name.** This reconciliation
+adds no required path or workload grid and retires none. Image-view counts and the
+current summary are subsets, not completion proofs. Resolve recipe aliases using
+valid evidence before adding measurement; never replace a missing original boundary
+with an easier operation. The following finite list is the inherited 17:
+
+| Original required name | Distinct path / current action |
+| --- | --- |
+| `InspectHeaders/PngRgba8FreshSeekable` | Complete chunk/EXIF/EOF grammar without pixel/CRC decoding. Current PNG-header pass exists; reconcile original input/recipe explicitly before marking this name complete. |
+| `InspectHeaders/Jpeg420FreshStream` | Complete marker/stuffing scan through entropy and late metadata. JPEG driver has scoped DLL costs; standalone equivalent full-header reference/confirmation still missing. |
+| `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. No current full-header external confirmation; Identify/probe timings are different boundaries. |
+| `FillRectangle/Rgba8Clipped` | Clipped byte replacement. Current fill passes; original257x129/(-3,5) recipe differs from current effective256x129/y19. Reconcile without assuming a missing kernel. |
+| `FillRectangle/Rgba16Clipped` | Clipped full-word replacement. Current fill passes; same original-recipe reconciliation remains. |
+| `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
+| `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 now independently confirms a gap:7.010/FFmpeg5.092us,upper1.379847,0B/op. Next demonstrated material copy gap. |
+| `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
+| `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. Separate-owner Rgba64 comparison does not exercise self-aliasing; no original-boundary current timing. |
+| `TextLayout/OriginalUnicode` | Authored cmap12/long-loca,quadratic extrema and compound accent. Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input. |
+| `TextLayout/PackedBmp` | Authored cmap4/short-loca,packed/repeated flags and implied points. Unmeasured distinct required mapping/outline path. |
+| `TextLayout/CompositeTransforms` | Authored matrices,point attachment and inherited metrics. Unmeasured distinct required compound outline path. |
+| `TextRender/Rgba8Clipped` | Original authored face,layout+coverage+borrowed-byte drawing. Original layout+draw boundary remains unmeasured; prepared-layout drawing is different. |
+| `TextRender/Rgba16Clipped` | Original authored face,layout+full-word coverage/composition. Same missing original complete operation; preserve full16-bit gates. |
+| `TextLayout/OpenTypeArabicMarksDigits` | Joining,bidi,GSUB and mark positioning. Current TextLayoutOpenTypeArabic pass/source-valid evidence; keep frozen scenario and public API multiplicity. |
+| `TextFit/OpenTypeConstrained` | Thirty fitting trials and owned winner. Current TextFitOpenType pass/source-valid evidence; retain all trials and winner reconstruction. |
+| `TextLayout/OpenTypeDefaultVariation` | Authored contextual GSUB plus GDEF region/delta/default-zero data. Unmeasured declared default-instance path; private inputs are not fixtures. |
+
+The three tiny-face layout controls retain `AV g Á\u0301 \uE000\nAV\tg AV`,
+size16,wrap64,line spacing1.25; the original byte/word rendering controls retain
+513×259 canvases and position(-.25,1.5),with font preparation outside but layout and
+drawing inside timing. Default variation uses the existing authored two-glyph
+contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
+approved public reference pipelines and existing quality/layout/full16-bit gates;
+no private face becomes a fixture and no expanded face/script/settings grid.
+
+OWC1125 executes the first missing boundary on the actual immutable package:
+original RGBA16 self-overlap,257×129,shift(1,1). The prose did not fix the absolute
+origin; freeze(0,0)→(1,1),then reverse in both timed totals. It independently shows
+7.010/FFmpeg5.092µs,upper1.379847,0managedB/op. Full-word snapshot/untouched pixels,
+normal/scalar,refusal/cancellation/recovery and equivalent borrowed ownership pass.
+No production build or broader package campaign is needed for this measurement.
+This demonstrated gap takes priority over tiny copying/probe differences; it is
+not a speedup. Its own report retains producers, raw samples and source identities.
+
+The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
+pins both historical sources and all 17 names. Existing qualifying paths stay
+stopped; uncertainty and independent work remain distinct. Publication stays postponed.
