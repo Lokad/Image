@@ -9,9 +9,10 @@ import tempfile
 root = Path(__file__).resolve().parents[2]
 worker = root / 'external/warm-reference/ffmpeg-copy-region-warm'
 records = []
-for depth, relative, pinned in [
-    (8, 'artifacts/warm-reference/webp-decode/source.rgba', '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80'),
-    (16, 'artifacts/warm-reference/bilinear16-audit/input.rgba64le', '3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9'),
+for depth, relative, pinned, original in [
+    (8, 'artifacts/warm-reference/webp-decode/source.rgba', '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80', False),
+    (16, 'artifacts/warm-reference/bilinear16-audit/input.rgba64le', '3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9', False),
+    (8, 'artifacts/warm-reference/webp-decode/source.rgba', '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80', True),
 ]:
     source = root / relative
     pixels = source.read_bytes()
@@ -20,13 +21,16 @@ for depth, relative, pinned in [
     stride = 513 * pixel
     expected = bytearray(pixels)
     for y in range(129):
-        start = (y + 65) * stride + 127 * pixel
-        destination = (y + 19) * stride + 17 * pixel
-        expected[destination:destination + 256 * pixel] = pixels[start:start + 256 * pixel]
+        start = (y + (0 if original else 65)) * stride + (3 if original else 127) * pixel
+        destination = (y + (5 if original else 19)) * stride + (0 if original else 17) * pixel
+        count = (254 if original else 256) * pixel
+        expected[destination:destination + count] = pixels[start:start + count]
     with tempfile.TemporaryDirectory(prefix='lokad-image-copy-region-') as name:
         folder = Path(name)
         output = folder / 'output.rgba'
         arguments = [str(worker), 'copy-region', str(source), '513', '259', str(depth), str(output)]
+        if original:
+            arguments.append('original-clipped')
 
         def run(values, protocol='quit\n', cpus='0'):
             return subprocess.run(['taskset', '-c', cpus, *values], input=protocol, capture_output=True, text=True, timeout=30)
@@ -37,6 +41,7 @@ for depth, relative, pinned in [
         assert ready['operation'] == 'copy-region' and ready['depth'] == depth
         assert ready['affinityCount'] == ready['workerThreads'] == 1 and ready['cpu'] == 0
         assert ready['borrowedSource'] and ready['borrowedCanvas'] and ready['canvasMutationTimed']
+        assert ready['clippingTimed'] and ready['clippedWidth'] == (254 if original else 256)
         assert not ready['sourcePreparationTimed'] and not ready['canvasPreparationTimed'] and not ready['outputAllocationTimed']
         assert sample['operations'] == 1 and sample['completedOperations'] == ready['initialCompletedOperations'] + 1
         assert sample['outputStride'] == stride and check['exact'] and check['sourceUnchanged']
@@ -48,7 +53,10 @@ for depth, relative, pinned in [
             assert result.returncode != 0 and result.stderr, label
             controls.append(label)
 
-        reject('missing output', arguments[:-1])
+        reject('missing output', arguments[:6])
+        reject('unknown layout', arguments[:7] + ['unknown'])
+        if depth == 16:
+            reject('original control depth', arguments + ['original-clipped'])
         for label, index, value in [('operation', 1, 'crop'), ('zero width', 3, '0'),
                                     ('width text', 3, '513x'), ('wrong width', 3, '512'),
                                     ('dimension bound', 4, '32769'), ('depth', 5, '12')]:
@@ -66,7 +74,7 @@ for depth, relative, pinned in [
         allowed = sorted(os.sched_getaffinity(0))
         assert len(allowed) >= 2
         reject('multiple CPUs', arguments, cpus=','.join(map(str, allowed[:2])))
-        records.append(dict(depth=depth, sourceSha256=pinned, outputSha256=hashlib.sha256(expected).hexdigest(),
+        records.append(dict(depth=depth, originalClipped=original, sourceSha256=pinned, outputSha256=hashlib.sha256(expected).hexdigest(),
                             fullCanvasExact=True, alphaExact=True, hiddenRgbExact=True, sourceUnchanged=True,
                             countersExact=True, controls=controls))
 record = dict(schemaVersion=1, project='Lokad.Image', correctnessOnly=True, noTimingClaim=True,

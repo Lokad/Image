@@ -21,7 +21,7 @@ with an easier operation. The following finite list is the inherited 17:
 | `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. [Current header guard](JPEG-STUFFED-PAIRS.md) passes/stops.142106/AVIO-headeradapter.310231us,upper.471884,552B/op; full RIFF/late metadata/EOF/independent9-fields. Identify/probe remain different. |
 | `FillRectangle/Rgba8Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 1.194663/FFmpegpublicfill1.730184us,upper0.696649,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
 | `FillRectangle/Rgba16Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
-| `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
+| `CopyRegion/Rgba8Independent` | [Original clipped byte copy](ORIGINAL-CLIPPED-COPY.md) confirms1.941619/FFmpegpubliccopy1.901433us,interval1.017439–1.026874,0B/op gap. Freeze unspecified source origin(0,0);request257x129,dst(-3,5),effective254x129. Peroperation clipping/fullcanvas/source/normal/scalar gates;no production change. |
 | `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
 | `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
 | `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. [Original self-composite](ORIGINAL-WORD-COMPOSITE.md) now passes/stops649.772/ImageSharp716.960us,upper.976714. Reference includes necessary sourceClone+Rgba64SrcOver+Dispose;0/26800GC B/op. Full-word exact/native/owner gates pass;no production change. |
@@ -101,6 +101,12 @@ FFmpegpublicfill:byteupper.696649 and wordupper.456739,0B/op. Both pass/stop wit
 exact normal/scalar current-package samples. Existing256pixel costs remain
 separate. No production change,new image/path or broad/package campaign. Original
 byte-copy/composite and six authored-font boundaries remain unmeasured.
+
+CCB1132resolves the original clipped-copy measurement as a small2.1%/40ns gap,
+not another optimization campaign. Complete clipping/borrowed-source ownership
+and exact normal/scalar pixels pass on the unchanged package;zero production/
+package builds. Only original byte-composite and six authored-font boundaries
+remain unmeasured;earlier missing-state paragraphs retain checkpoint history.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay

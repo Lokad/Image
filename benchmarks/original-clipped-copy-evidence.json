@@ -1,0 +1,163 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CCB1132",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "38b8112f2a68d4482a70f1005063ce68f91cf9e24669bc8976a3613f061f2bbf",
+    "linuxSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "timedArtifactSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298"
+  },
+  "sourcePins": {
+    "benchmarks/Lokad.Image.Benchmarks/WarmCopyRegion.cs": "f4728f5c03a9af04f65ea85c3e5326b7ad16a364ffe3bd04d4b7414b517139b8",
+    "benchmarks/Lokad.Image.Benchmarks/NativeWarmReference.CopyRegion.cs": "be19949ba4422b7531ebca64b1260035be922577a3b8b32d64a831324ad1a2e0",
+    "tools/WarmReference/ffmpeg-copy-region-warm.c": "e2bff073312009fd73db89bfa500e2641e06f539865c416b03bd336a438ab583",
+    "tools/WarmReference/verify-copy-region-linux.py": "bcd0135a46387508aa8cec3b63415e471c91911ebe496abfa473ad5b92eba9f1"
+  },
+  "unchangedProductionSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "originalScopeRevision": "39402e74e0f95c82ab209e5a950066a206c2af65",
+  "case": {
+    "originalRequiredControl": "CopyRegion/Rgba8Independent",
+    "managedUs": 1.9416185141842468,
+    "nativeUs": 1.9014334360758465,
+    "ratio": 1.0211340967009257,
+    "lower": 1.0174391410634311,
+    "upper": 1.0268736519306716,
+    "status": "gap",
+    "allocatedBytes": 0,
+    "librarySha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "harnessSha256": "4fdfc5c797debf2d4c9b0cc6480e95166a18d86821cdbbfcc8f83ccf5cf0cf76",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "636e42e409137df49fb66f18a2938b57332a36145b68facb32e565675238443d",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "sourceX": 0,
+    "sourceY": 0,
+    "destinationX": -3,
+    "destinationY": 5,
+    "copyWidth": 257,
+    "copyHeight": 129,
+    "clippedSourceX": 3,
+    "clippedSourceY": 0,
+    "clippedX": 0,
+    "clippedY": 5,
+    "clippedWidth": 254,
+    "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x0,y0,w257,h129 to x-3,y5 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, clipping, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas with peroperation clipping. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+    "allActualsRetained": true,
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "fullCanvasExact": true,
+    "alphaExact": true,
+    "hiddenRgbExact": true,
+    "untouchedExact": true,
+    "sourceUnchanged": true,
+    "borrowedCanvas": true,
+    "borrowedSource": true,
+    "callerBuffersAlive": true,
+    "clippingTimed": true
+  },
+  "short": {
+    "managedUs": 1.9619704855505327,
+    "ratio": 1.0551532164718058,
+    "upper": 1.555989904815936,
+    "allocatedBytes": 0,
+    "actuals": 3
+  },
+  "sourceOrigin": "Original prose fixes257x129 and destination(-3,5),not absolute source origin. Freeze source(0,0);effective source(3,0)->canvas(0,5),254x129.",
+  "scalar": {
+    "fullCanvasExact": true,
+    "sourceAlphaHiddenRgbUntouchedExact": true,
+    "sameCurrentPackageLibrary": true,
+    "noTimingClaim": true
+  },
+  "reference": {
+    "label": "FFmpeg n8.1 public av_image_copy_plane plus original peroperation rectangle clipping",
+    "identity": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "e2bff073312009fd73db89bfa500e2641e06f539865c416b03bd336a438ab583",
+      "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+      "workerSha256": "b16ae1ccffb33b06982d1adf1b1d46549e3885b0caafc70cd04a6eca80646cf1",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+      },
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "linkInventoryClarification": "The pinned build script actually links pkg-config --static --libs libavutil. Its identity libraries field queries a broader libavfilter/libavutil inventory; it is not the actual linker command. Worker hash, source, script and libavutil archive identify the measured reference."
+  },
+  "memory": {
+    "managedGcBytesEachOperation": 0,
+    "newOperationOwnedAdmittedBytes": 0,
+    "newOperationRetainedBytes": 0,
+    "physicalNativeJitPeaksMeasured": false,
+    "interpretation": "Both borrow separate prepared source/canvas storage. Peroperation output/workspace is absent;oracle copies are excluded tooling. Source and canvas remain caller owned. Native allocator retention/physical/JIT peaks unmeasured."
+  },
+  "qualification": {
+    "provider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6747,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298",
+    "newBroadOrPackageChecks": 0,
+    "newLinuxNormalScalarControls": 1,
+    "defaultAndOriginalNativeControls": 3
+  },
+  "builds": {
+    "parentHarness": 1,
+    "generatedChildHarness": 2,
+    "native": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "package": 0,
+    "fixtures": 0
+  },
+  "preparation": {
+    "directAssemblyReferenceProject": "tmp/ccb1132-harness/Harness.csproj",
+    "referenceProjectSha256": "2ca9840ce5490713e0fdbba4704ce442d9517b5e1477c2ed9bd4fb3fd5b41603",
+    "allGeneratedChildrenUseSamePackageCore": true,
+    "canonicalCoreModifiedTimeNs": 1794824536489668841,
+    "preparationAndScalarClocksDiscarded": true,
+    "localPreflight": "A nested-string syntax error was corrected before any VM preparation;the original authoring script is retained. No measurement failed or was repeated."
+  },
+  "invalidation": "Changes to CopyRegion clipping/validation/row copying/cancel/borrowed ownership,actual fixture/rectangle or native API/settings invalidate affected costs. Unrelated JPEG/resize/font changes do not. Earlier interior-copy costs retain their own source/reference identities;new clipping/native worker is not silently substituted.",
+  "next": "Record the roughly40ns/2.1percent original-copy gap without favorable repeats or immediate micro-tuning. Larger demonstrated gaps and the remaining original composite/six authored-font missing boundaries take priority.",
+  "raw": {
+    "file": "original-clipped-copy-confirmation.tar.xz",
+    "sha256": "f5f4cb89987cc882afb7a43d8dd4eb62354c47a3d5cd7b7145edda6410ae6189",
+    "bytes": 12999040,
+    "members": 137,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-stuffed-pairs-qualified.tar.xz",
+        "sha256": "3828e4155a1ad79b0c81fd9d8a9ff1d952429315ef5b583cf52587c3577fdffe"
+      }
+    ]
+  }
+}

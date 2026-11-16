@@ -3173,6 +3173,26 @@ Earlier copy trials remain linked history, outside current-result dependencies."
         assert original_fills['scalar'][f'DrawingFill{depth}OriginalClipped']['sameCurrentPackageLibrary']
         editing += (f'\n| Original clipped RGBA{depth} fill, 254×129 (parity confirmed) | {c["managedUs"]:.3f} | '
                     f'{c["nativeUs"]:.3f} | {c["ratio"]:.3f} / {c["upper"]:.6f} | 0 |')
+    clipped_copy = json.loads((ROOT / 'benchmarks/original-clipped-copy-evidence.json').read_text(encoding='utf-8'))
+    cq, cc = clipped_copy['qualification'], clipped_copy['case']
+    assert clipped_copy['measurementAccepted'] and not clipped_copy['productionChanged']
+    assert not clipped_copy['productionSpeedupClaim'] and clipped_copy['newRequiredPaths'] == 0
+    assert clipped_copy['requiredMaterialPaths'] == 289 and clipped_copy['producers'] == jpeg_markers['producers']
+    assert cq['reusedForUnchangedProduction'] and cq['newBroadOrPackageChecks'] == 0
+    assert cq['fullChecksEachOs'] == 6747 and cq['sameActualPackageBothOs'] and cq['usageExamples'] == 3
+    assert cq['packageSha256'] == jpeg_markers['producers']['packageSha256']
+    assert clipped_copy['raw']['mirrored'] and clipped_copy['raw']['allMembersVerified']
+    assert cc['managedActuals'] == cc['nativeSamplesEachBracket'] == 12
+    assert cc['librarySha256'] == jpeg_markers['producers']['linuxSha256'] and cc['allocatedBytes'] == 0
+    assert (cc['sourceX'], cc['sourceY'], cc['destinationX'], cc['destinationY'], cc['copyWidth'], cc['copyHeight'], cc['clippedWidth']) == (0, 0, -3, 5, 257, 129, 254)
+    assert all(cc[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'clippingTimed',
+                              'fullCanvasExact', 'alphaExact', 'hiddenRgbExact', 'untouchedExact', 'sourceUnchanged', 'callerBuffersAlive'))
+    assert cc['status'] == 'gap' and cc['lower'] > 1
+    assert math.isclose(cc['ratio'], cc['managedUs'] / cc['nativeUs'], rel_tol=1e-12)
+    assert clipped_copy['scalar']['sameCurrentPackageLibrary'] and clipped_copy['builds']['production'] == 0
+    assert clipped_copy['preparation']['allGeneratedChildrenUseSamePackageCore']
+    editing += (f'\n| Original clipped RGBA8 copy, 254×129 (gap) | {cc["managedUs"]:.3f} | '
+                f'{cc["nativeUs"]:.3f} | {cc["ratio"]:.3f} / {cc["upper"]:.6f} | 0 |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3198,9 +3218,21 @@ FFmpeg fill boundary; preparation, resets and output allocation are excluded equ
 Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
 normal/scalar. Reuse unchanged platform/package qualification; no production change,
 speedup claim, new image or broad campaign. Allocation/admission/retained operation
-storage stays zero; physical/native/JIT peaks are unmeasured. These two inherited
-paths bring measured borrowed drawing to **eleven: eight passes, two gaps, one uncertain**.
-Two original drawing and six authored-font boundaries still lack measurements.
+storage stays zero; physical/native/JIT peaks are unmeasured. Both inherited fill
+paths retain passing evidence and stop.
+
+[Original clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) measures
+**{cc['managedUs']:.3f} / FFmpeg {cc['nativeUs']:.3f} µs**, interval
+**{cc['lower']:.6f}–{cc['upper']:.6f}**, **0 B/op**: a small gap. Freeze the originally
+unspecified source origin at(0,0); request257×129 at(-3,5), effective source(3,0)
+to canvas(0,5),254×129. Both include clipping per operation; reference is explicitly
+public av_image_copy_plane plus original rectangle clipping. Full-canvas/source/
+alpha/hidden-RGB/untouched checks pass on the same package DLL, normal/scalar.
+Direct assembly-reference preparation builds no production dependencies or package;
+reuse unchanged platform qualification. No speedup or cross-recipe claim; retain
+the roughly40ns gap behind larger opportunities. Measured borrowed drawing is now
+**twelve: eight passes, three gaps, one uncertain**. One original byte-composite and
+six authored-font boundaries still lack measurements.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -3479,7 +3511,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 157, 'Expected 157 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 158, 'Expected 158 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

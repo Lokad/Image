@@ -36,17 +36,22 @@ static int affinity_cpu(void)
 }
 typedef struct {
     uint8_t *original, *source, *canvas;
-    int depth, pixel_bytes, stride, cpu;
+    int depth, pixel_bytes, stride, cpu, original_clipped;
+    int sx, sy, dx, dy, width, height;
     size_t bytes;
     uint64_t completed, observed;
 } Work;
 
 static void apply(Work *work)
 {
-    av_image_copy_plane(work->canvas + 19 * work->stride + 17 * work->pixel_bytes, work->stride,
-                        work->source + 65 * work->stride + 127 * work->pixel_bytes, work->stride,
-                        256 * work->pixel_bytes, 129);
-    work->observed += work->canvas[19 * work->stride + 17 * work->pixel_bytes];
+    int left = work->dx < 0 ? -work->dx : 0, top = work->dy < 0 ? -work->dy : 0;
+    int right = work->width < 513 - work->dx ? work->width : 513 - work->dx;
+    int bottom = work->height < 259 - work->dy ? work->height : 259 - work->dy;
+    uint8_t *destination = work->canvas + (work->dy + top) * work->stride + (work->dx + left) * work->pixel_bytes;
+    av_image_copy_plane(destination, work->stride,
+                        work->source + (work->sy + top) * work->stride + (work->sx + left) * work->pixel_bytes, work->stride,
+                        (right - left) * work->pixel_bytes, bottom - top);
+    work->observed += *destination;
     work->completed++;
 }
 static void check_and_write(Work *work, const char *path)
@@ -56,9 +61,9 @@ static void check_and_write(Work *work, const char *path)
     uint8_t *expected = malloc(work->bytes); if (!expected) fail("Allocate check pixels failed.");
     memcpy(expected, work->original, work->bytes);
     for (int y = 0; y < 129; y++)
-        memcpy(expected + (y + 19) * work->stride + 17 * work->pixel_bytes,
-               work->original + (y + 65) * work->stride + 127 * work->pixel_bytes,
-               256 * work->pixel_bytes);
+        memcpy(expected + (y + (work->original_clipped ? 5 : 19)) * work->stride + (work->original_clipped ? 0 : 17) * work->pixel_bytes,
+               work->original + (y + (work->original_clipped ? 0 : 65)) * work->stride + (work->original_clipped ? 3 : 127) * work->pixel_bytes,
+               (work->original_clipped ? 254 : 256) * work->pixel_bytes);
     if (memcmp(expected, work->canvas, work->bytes)) fail("Canvas pixels/untouched region differ.");
     free(expected);
     FILE *output = fopen(path, "wb"); if (!output) fail("Open result file failed.");
@@ -67,13 +72,18 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "copy-region"))
-        fail("Usage: ffmpeg-copy-region-warm copy-region INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW");
+    if ((argc != 7 && argc != 8) || strcmp(argv[1], "copy-region") || (argc == 8 && strcmp(argv[7], "original-clipped")))
+        fail("Usage: ffmpeg-copy-region-warm copy-region INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [original-clipped]");
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     int width = number(argv[3]), height = number(argv[4]); work.depth = number(argv[5]);
     if (width != 513 || height != 259 || (work.depth != 8 && work.depth != 16))
         fail("The fixed copy requires 513x259 RGBA8 or RGBA16.");
+    work.original_clipped = argc == 8;
+    if (work.original_clipped && work.depth != 8) fail("The original clipped-copy control requires RGBA8.");
+    work.sx = work.original_clipped ? 0 : 127; work.sy = work.original_clipped ? 0 : 65;
+    work.dx = work.original_clipped ? -3 : 17; work.dy = work.original_clipped ? 5 : 19;
+    work.width = work.original_clipped ? 257 : 256; work.height = 129;
     work.pixel_bytes = work.depth / 8 * 4; work.stride = width * work.pixel_bytes;
     work.bytes = (size_t)work.stride * height;
     work.original = malloc(work.bytes); work.source = malloc(work.bytes); work.canvas = malloc(work.bytes);
@@ -84,8 +94,9 @@ int main(int argc, char **argv)
     if (fclose(input)) fail("Close input failed.");
     memcpy(work.source, work.original, work.bytes); memcpy(work.canvas, work.original, work.bytes);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"copy-region\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"sourceX\":127,\"sourceY\":65,\"copyWidth\":256,\"copyHeight\":129,\"destinationX\":17,\"destinationY\":19,\"borrowedSource\":true,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
-           work.depth, work.cpu, work.stride, av_version_info(), avutil_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"copy-region\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"sourceX\":%d,\"sourceY\":%d,\"copyWidth\":%d,\"copyHeight\":129,\"destinationX\":%d,\"destinationY\":%d,\"clippedWidth\":%d,\"clippingTimed\":true,\"borrowedSource\":true,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
+           work.depth, work.cpu, work.sx, work.sy, work.width, work.dx, work.dy, work.original_clipped ? 254 : 256,
+           work.stride, av_version_info(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

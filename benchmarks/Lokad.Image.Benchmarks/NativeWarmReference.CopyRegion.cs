@@ -7,10 +7,11 @@ internal sealed partial class NativeWarmReference
     {
         var depth = copyCase switch
         {
-            WarmCopyRegionCase.DrawingCopy8 => 8,
+            WarmCopyRegionCase.DrawingCopy8 or WarmCopyRegionCase.DrawingCopy8OriginalClipped => 8,
             WarmCopyRegionCase.DrawingCopy16 => 16,
             _ => throw new ArgumentOutOfRangeException(nameof(copyCase))
         };
+        var original = copyCase == WarmCopyRegionCase.DrawingCopy8OriginalClipped;
         Executable = Path.Combine(state.Root, "external/warm-reference/ffmpeg-copy-region-warm");
         using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external/warm-reference/copy-region-identity.json"))))
             BuildIdentity = document.RootElement.Clone();
@@ -21,6 +22,7 @@ internal sealed partial class NativeWarmReference
         var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in new[] { "copy-region", state.Input, "513", "259", depth.ToString(System.Globalization.CultureInfo.InvariantCulture), state.NativeOutput })
             start.ArgumentList.Add(argument);
+        if (original) start.ArgumentList.Add("original-clipped");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start rectangle-copy reference.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -30,10 +32,12 @@ internal sealed partial class NativeWarmReference
                 || Ready.GetProperty("operation").GetString() != "copy-region" || Ready.GetProperty("width").GetInt32() != 513
                 || Ready.GetProperty("height").GetInt32() != 259 || Ready.GetProperty("depth").GetInt32() != depth
                 || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1
-                || Ready.GetProperty("workerThreads").GetInt32() != 1 || Ready.GetProperty("sourceX").GetInt32() != 127
-                || Ready.GetProperty("sourceY").GetInt32() != 65 || Ready.GetProperty("copyWidth").GetInt32() != 256
-                || Ready.GetProperty("copyHeight").GetInt32() != 129 || Ready.GetProperty("destinationX").GetInt32() != 17
-                || Ready.GetProperty("destinationY").GetInt32() != 19
+                || Ready.GetProperty("workerThreads").GetInt32() != 1 || Ready.GetProperty("sourceX").GetInt32() != (original ? 0 : 127)
+                || Ready.GetProperty("sourceY").GetInt32() != (original ? 0 : 65) || Ready.GetProperty("copyWidth").GetInt32() != (original ? 257 : 256)
+                || Ready.GetProperty("copyHeight").GetInt32() != 129 || Ready.GetProperty("destinationX").GetInt32() != (original ? -3 : 17)
+                || Ready.GetProperty("destinationY").GetInt32() != (original ? 5 : 19)
+                || !Ready.GetProperty("clippingTimed").GetBoolean()
+                || Ready.GetProperty("clippedWidth").GetInt32() != (original ? 254 : 256)
                 || new[] { "borrowedSource", "borrowedCanvas", "canvasMutationTimed" }.Any(key => !Ready.GetProperty(key).GetBoolean())
                 || new[] { "sourcePreparationTimed", "canvasPreparationTimed", "outputAllocationTimed" }.Any(key => Ready.GetProperty(key).GetBoolean()))
                 throw new InvalidOperationException("Rectangle-copy geometry/CPU/borrowed boundary differs.");

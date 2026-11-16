@@ -174,6 +174,13 @@ DrawingCopy16 on the existing original rasters. Both subjects mutate a borrowed
 existing canvas; resident preparation and reset are excluded equally. See
 [current evidence](../../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) for frozen
 geometry, ownership, exact-pixel checks and immutable-driver reproduction.
+`DrawingCopy8OriginalClipped` selects the original257×129 request at(-3,5), with
+source origin frozen at(0,0), yielding254×129. Native optional `original-clipped`
+performs clipping inside every operation; defaults retain their earlier geometry.
+See [the separate current comparison](../../benchmarks/ORIGINAL-CLIPPED-COPY.md).
+For preparation, the existing `LOKAD_IMAGE_WARM_PROJECT` hook can select a harness
+with a direct reference to the immutable package DLL, avoiding production dependency
+builds. Reuse the prepared jobs and verify their actual DLL identities before timing.
 
 Clipped fills similarly use build-fill-rectangle-linux.sh and
 verify-fill-rectangle-linux.py, family FillRectangle and DrawingFill8/16.

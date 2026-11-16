@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **157 comparisons** summarize that scope.
+**289 named material paths**; these **158 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -62,9 +62,21 @@ FFmpeg fill boundary; preparation, resets and output allocation are excluded equ
 Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
 normal/scalar. Reuse unchanged platform/package qualification; no production change,
 speedup claim, new image or broad campaign. Allocation/admission/retained operation
-storage stays zero; physical/native/JIT peaks are unmeasured. These two inherited
-paths bring measured borrowed drawing to **eleven: eight passes, two gaps, one uncertain**.
-Two original drawing and six authored-font boundaries still lack measurements.
+storage stays zero; physical/native/JIT peaks are unmeasured. Both inherited fill
+paths retain passing evidence and stop.
+
+[Original clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) measures
+**1.942 / FFmpeg 1.901 µs**, interval
+**1.017439–1.026874**, **0 B/op**: a small gap. Freeze the originally
+unspecified source origin at(0,0); request257×129 at(-3,5), effective source(3,0)
+to canvas(0,5),254×129. Both include clipping per operation; reference is explicitly
+public av_image_copy_plane plus original rectangle clipping. Full-canvas/source/
+alpha/hidden-RGB/untouched checks pass on the same package DLL, normal/scalar.
+Direct assembly-reference preparation builds no production dependencies or package;
+reuse unchanged platform qualification. No speedup or cross-recipe claim; retain
+the roughly40ns gap behind larger opportunities. Measured borrowed drawing is now
+**twelve: eight passes, three gaps, one uncertain**. One original byte-composite and
+six authored-font boundaries still lack measurements.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -486,6 +498,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Vertical flip RGBA8 (uncertain) † | 8.49 | 8.41 | 1.010 / 1.019 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
+| Original clipped RGBA8 copy, 254×129 (gap) | 1.942 | 1.901 | 1.021 / 1.026874 | 0 |
 
 **Inspection and pixel-coding validation**
 
