@@ -295,3 +295,10 @@ Keep the current summary at three tables or fewer and verify it with
 source/reference identities and mirrored member-verified raw evidence. Historical
 reports and published release artifacts remain preserved, without an arbitrary
 checkout-size cap.
+
+[Text edge-capacity trials](TEXT-EDGE-CAPACITY-TRIALS.md) remain unpromoted.
+Both reduce public ordinary-draw allocation83,216->51,264B;the separate-pass CPU
+effect is inconclusive,and retained-hint confirmation regresses2.53%/1.224us.
+All actuals/guards/exactframes are retained. Production/package/current costs
+remain unchanged;no broad/package repeat or renderer dependency. Further work
+needs attributable useful work,not favorable recaptures of either implementation.

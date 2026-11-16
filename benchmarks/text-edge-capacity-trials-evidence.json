@@ -1,0 +1,999 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TEXT-EDGE-CAPACITY",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "publicationPostponed": true,
+  "baselineCommit": "e24ea5256a832cfb049b6a21edfe1b06e96948ea",
+  "producers": {
+    "windowsSha256": "6b057bcb685fc25fcfae201f2b5cf040e40af49273cb0482279cbebbbb77cdd4",
+    "linuxSha256": "fd31bf263698c03bba7e6593f1ce4dbb3640b08fb950cf9ddf315a5b6b3cb57a",
+    "timedArtifactSha256": "fd31bf263698c03bba7e6593f1ce4dbb3640b08fb950cf9ddf315a5b6b3cb57a",
+    "packageSha256": "1a1c30bc7ecfa886bad4cef595b8cf7c62d32457db80a94845b3ef72fb3176c8"
+  },
+  "attribution": {
+    "stage": "OAA1153",
+    "sourceOnlyProductionUnchanged": true,
+    "productionSha256": "fd31bf263698c03bba7e6593f1ce4dbb3640b08fb950cf9ddf315a5b6b3cb57a",
+    "publicBytes": 83216,
+    "contextBytes": 56,
+    "rasterPreparationBytes": 83160,
+    "drawProbeAllocatedBytes": 0,
+    "finalEdgeEventPayload": 34304,
+    "replacedGrowthPayloadSourceDerived": 32256,
+    "coarseAdmittedRasterBytes": 48984,
+    "observations": 6,
+    "noTimingClaim": true,
+    "fullFrozenPixelsExact": true,
+    "quietGuardsPassed": true,
+    "rawAttributionPath": "tmp/oaa1153b-attribution.json",
+    "rawAttributionSha256": "4916df7775c25a9235718ac7fe2cd02d2bc021078d814c4b2bd19b7b92cb3900",
+    "next": "Preserve reproducibility and consider bounded edge capacity estimation before any production/performance claim.",
+    "raw": {
+      "file": "ordinary-text-allocation-attribution.tar.xz",
+      "sha256": "aba551b4327e77a9e9509663e9a67c8041e91f294493ca1326e7bdae4be4e907",
+      "bytes": 406052,
+      "members": 36,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "variants": {
+    "rce1154": {
+      "prototypeSha256": "a9888db7adbe0239afcf0362aa9adf36bd9b3171f079bfb8eba984cb198e52f2",
+      "description": "OAA1153 attributes all83216B publicordinary allocation to56Bcontext+83160Braster construction. Superseded edge/event growth payload32256B,curvedshape448edges currentlyendscapacity512. A bounded coarse per-segment curvature pass predicts initialedgecapacity,removing replacement allocations/copies while retaining exactBuildEdges/subdivision/order,normalGrow and terminaladmission. No event preallocation,cache/fixture specialization,API or pixel change.",
+      "source": "73f5081cf006dc868a0ed7870f2280fa73e0af4111e482d6b74f8800e2f2a756",
+      "focused": {
+        "windows": {
+          "normal": 441,
+          "scalar": 441
+        },
+        "linux": {
+          "normal": 441,
+          "scalar": 441
+        }
+      },
+      "allocationObservations": [
+        {
+          "caseName": "DrawText8",
+          "round": 3,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText8",
+          "round": 4,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText8",
+          "round": 5,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 3,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 4,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 5,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        }
+      ],
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 47.1343037109375,
+            "lower": 39.55369969261217,
+            "upper": 54.71490772926283,
+            "values": [
+              47.5622421875,
+              47.108236328125,
+              46.7324326171875
+            ]
+          },
+          "candidate": {
+            "mean": 47.917466796875004,
+            "lower": 40.199832567648,
+            "upper": 55.63510102610201,
+            "values": [
+              48.405744140625,
+              47.6852841796875,
+              47.6613720703125
+            ]
+          }
+        },
+        "ratio": 1.0166155641507342,
+        "lower": 0.9472631797529568,
+        "upper": 1.091045474334863,
+        "allocations": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            51288.0
+          ]
+        },
+        "critical": 31.599054576443834,
+        "helperSha256": "7a5c8143bab0252e97782fb6c1fa0a86b57ee94b8c48c5ad817020dcf769af69",
+        "boundary": "Two persistent original public-harness workers alternate adjacent1024-operation batches in reversed order;one CPU0operation at a time,natural nonconcurrent GC. Full1024warmups each;reset/fullframe validation/IPC/allocation reads outside two per-operation clocks. Original ImageSharp correctness-only checks supply no elapsed baseline. Incremental DLL effect only;standalone reference required if adopted."
+      },
+      "confirm": {
+        "subjects": {
+          "baseline": {
+            "mean": 49.0970439453125,
+            "lower": 47.911748197538905,
+            "upper": 50.282339693086094,
+            "values": [
+              49.7802783203125,
+              49.8381025390625,
+              49.4836708984375,
+              49.132453125,
+              48.7501572265625,
+              50.271783203125,
+              49.17732421875,
+              47.857181640625,
+              47.656234375,
+              50.3979560546875,
+              48.907724609375,
+              47.9116611328125
+            ]
+          },
+          "candidate": {
+            "mean": 49.32801554361979,
+            "lower": 48.60149454220976,
+            "upper": 50.054536545029826,
+            "values": [
+              49.931234375,
+              49.6226494140625,
+              49.2171767578125,
+              48.6741396484375,
+              49.7326923828125,
+              48.68520703125,
+              49.617142578125,
+              48.7160859375,
+              49.4108955078125,
+              50.4066455078125,
+              49.256203125,
+              48.6661142578125
+            ]
+          }
+        },
+        "ratio": 1.004807738070592,
+        "lower": 0.9827845586629349,
+        "upper": 1.0273244340144487,
+        "allocations": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            51288.0
+          ]
+        },
+        "critical": 4.436979337146836,
+        "helperSha256": "7a5c8143bab0252e97782fb6c1fa0a86b57ee94b8c48c5ad817020dcf769af69",
+        "boundary": "Two persistent original public-harness workers alternate adjacent1024-operation batches in reversed order;one CPU0operation at a time,natural nonconcurrent GC. Full1024warmups each;reset/fullframe validation/IPC/allocation reads outside two per-operation clocks. Original ImageSharp correctness-only checks supply no elapsed baseline. Incremental DLL effect only;standalone reference required if adopted."
+      }
+    },
+    "tch1155": {
+      "prototypeSha256": "701a7211c402b16c990fb29bdc255ce50f4122d94c3acf152a8059588bf9ccfe",
+      "description": "RCE1154 removes31952B publicdraw allocation but its extra segmentprepass yields CPUinconclusive+0.48%point. Derive capacityhint during EXISTING FontOutline.TightBounds segment/axis traversal,retained in the already-owned TextLayout.Shape. Consume atdraw without another outlinepass. Preserve all bounds/flatten/subdivision/Add arithmetic and fallbackGrow;no fixturecache or new array. Extra8physical bytes peruniqueShape fit existing512Bcoarse preadmitted descriptor. Same explicit layoutowner/lifetime;full layout/fitting/publicpipeline costs must include preparation.",
+      "source": {
+        "src/Lokad.Image/TextLayout.cs": "d1927a0e08655ebc19c800574eb00234d24df2bd5b602daf8165ea965329515a",
+        "src/Lokad.Image/Internal/FontOutline.cs": "b44f4fb7eab6f019963608b3edbb0425e5332212cba33deaa6afda1c100667d8",
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "4133b858cd33a5e4c6fc32f2ca45463ca361d76cc73685c18d38f10b35e67e14"
+      },
+      "focused": {
+        "windows": {
+          "normal": 441,
+          "scalar": 441
+        },
+        "linux": {
+          "normal": 441,
+          "scalar": 441
+        }
+      },
+      "allocationObservations": [
+        {
+          "caseName": "DrawText8",
+          "round": 3,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText8",
+          "round": 4,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText8",
+          "round": 5,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 3,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 4,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        },
+        {
+          "caseName": "DrawText16",
+          "round": 5,
+          "publicBytes": 51264,
+          "preparationBytes": 51208,
+          "drawBytesIncludingReflection": 0,
+          "clip": [
+            8,
+            11,
+            56,
+            25
+          ],
+          "admittedRasterBytes": 45400,
+          "shapes": [
+            {
+              "count": 6,
+              "edgeCapacity": 8,
+              "eventCount": 5,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 0,
+              "edgeCapacity": 0,
+              "eventCount": 0,
+              "eventCapacity": 0,
+              "finalPayload": 0,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 4,
+              "edgeCapacity": 8,
+              "eventCount": 3,
+              "eventCapacity": 8,
+              "finalPayload": 512,
+              "replacedPayloadSourceDerived": 0
+            },
+            {
+              "count": 448,
+              "edgeCapacity": 448,
+              "eventCount": 318,
+              "eventCapacity": 512,
+              "finalPayload": 29184,
+              "replacedPayloadSourceDerived": 32256
+            }
+          ],
+          "fullFrozenSamplesExact": true,
+          "timingClaim": false
+        }
+      ],
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 48.75611271158854,
+            "lower": 42.36441470013733,
+            "upper": 55.147810723039754,
+            "values": [
+              48.44607299804687,
+              49.136192626953125,
+              48.68607250976562
+            ]
+          },
+          "candidate": {
+            "mean": 49.13531689453125,
+            "lower": 45.938959593480384,
+            "upper": 52.33167419558212,
+            "values": [
+              49.054673583984375,
+              49.3363203125,
+              49.01495678710938
+            ]
+          }
+        },
+        "ratio": 1.007790628790139,
+        "lower": 0.9317042429919382,
+        "upper": 1.090090507923137,
+        "allocations": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            51288.0
+          ]
+        },
+        "critical": 31.599054576443834,
+        "helperSha256": "f2fa581ac8afa3702fa26314894b7fc84905e58cbe803259c4f3a75c7ec47286",
+        "boundary": "Two persistent original public-harness workers alternate adjacent4096-operation batches in reversed order;one CPU0operation at a time,natural nonconcurrent GC. Full4096warmups each;reset/fullframe validation/IPC/allocation reads outside two per-operation clocks. Original ImageSharp correctness-only checks supply no elapsed baseline. Incremental DLL effect only;standalone reference required if adopted."
+      },
+      "confirm": {
+        "subjects": {
+          "baseline": {
+            "mean": 48.442017964680986,
+            "lower": 47.86722827631175,
+            "upper": 49.01680765305022,
+            "values": [
+              49.020186767578124,
+              48.34797436523438,
+              47.89927856445313,
+              48.81339916992187,
+              48.222486328125,
+              48.68871557617187,
+              48.46444262695312,
+              48.48994067382812,
+              48.647697265625,
+              47.476004638671874,
+              48.235600341796875,
+              48.9984892578125
+            ]
+          },
+          "candidate": {
+            "mean": 49.66645367431641,
+            "lower": 49.30199798322847,
+            "upper": 50.03090936540435,
+            "values": [
+              49.811958984375,
+              49.93284521484375,
+              49.61144873046875,
+              49.89665087890625,
+              50.007926513671876,
+              49.53513793945312,
+              50.08041430664063,
+              49.67164208984375,
+              49.31768090820312,
+              49.17744604492187,
+              49.52601440429687,
+              49.42827807617188
+            ]
+          }
+        },
+        "ratio": 1.02530137626681,
+        "lower": 1.0128876365167903,
+        "upper": 1.0378672562237248,
+        "allocations": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            51288.0
+          ]
+        },
+        "critical": 4.436979337146836,
+        "helperSha256": "f2fa581ac8afa3702fa26314894b7fc84905e58cbe803259c4f3a75c7ec47286",
+        "boundary": "Two persistent original public-harness workers alternate adjacent4096-operation batches in reversed order;one CPU0operation at a time,natural nonconcurrent GC. Full4096warmups each;reset/fullframe validation/IPC/allocation reads outside two per-operation clocks. Original ImageSharp correctness-only checks supply no elapsed baseline. Incremental DLL effect only;standalone reference required if adopted."
+      }
+    }
+  },
+  "outcome": "RCE1154:38.4%less allocation but CPU inconclusive;unpromoted. TCH1155:layout-retainedhint removes extra segmentpass but independent complete-draw CPUregresses2.53%/1.224us,interval1.012888-1.037867;unpromoted. Preserve these implementation results,not a permanentban or a wider typography performance claim.",
+  "reuse": {
+    "currentFullChecksEachOs": 6760,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "newBroadOrPackageChecks": 0,
+    "unchangedProduction": true
+  },
+  "next": "Stop both implementations and unchanged timing repeats. Original ordinary8/16 gaps remain current. Investigate meaningfulfontloading cancellation-dispatch work using currentcodegeneration and exact eagervalidation/cancellation/ownership gates. Keep finitecoverage/objective;do not retime unaffectedpassingpaths.",
+  "raw": {
+    "file": "text-edge-capacity-trials.tar.xz",
+    "sha256": "b450ac8b4c369620d9e667a19ff325df5261b9ca7dedaab6e3564963f84a6562",
+    "bytes": 35433920,
+    "members": 362,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "ordinary-text-allocation-attribution.tar.xz",
+        "sha256": "aba551b4327e77a9e9509663e9a67c8041e91f294493ca1326e7bdae4be4e907"
+      },
+      {
+        "file": "ordinary-text-long-integration.tar.xz",
+        "sha256": "aec8ddf8c7720b4aa106ade3b0e8f9d34fac3fdb07d1c372a988d0f7c7ddeafb"
+      },
+      {
+        "file": "composition-storage-reuse-qualified.tar.xz",
+        "sha256": "fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117"
+      }
+    ]
+  }
+}
