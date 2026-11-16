@@ -1,0 +1,183 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FGP1123B",
+  "productionAccepted": false,
+  "decision": "Neither paired layout is retained. Both short managed points are adverse with unchanged allocation/admission/retention;no useful gain is demonstrated. No independent confirmation or causal CPU-regression/code-size explanation. Materially revised designs are not banned.",
+  "baselineProducers": {
+    "windowsSha256": "16c1e10cc7dd5064357172dd0813c8d20e51f4c448b9e0220c3a8ebc7fb88ace",
+    "linuxSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "timedArtifactSha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+    "packageSha256": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c"
+  },
+  "baselineSources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "d535d0aa9607a3947a89864125479f69947a3f0d1be6a3e46f33035d7949c96a",
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "d64652443382860ce3899da4ca05b80febf079113fb29022a7b66c13cb7d15e3",
+    "src/Lokad.Image/TextRenderPlan.cs": "cf4900783d69fa5fbff5fec3456f41181e38a41b9400144dc2965466e150662e",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "candidateSources": {
+    "paired": {
+      "src/Lokad.Image/TrueTypeFont.cs": "9c81569ea1dcc59b8c92961f263d1142c18fa9a7e9111c8665d31d17c70882aa"
+    },
+    "outlined": {
+      "src/Lokad.Image/TrueTypeFont.cs": "f5c9329c4261af2b765332507345ad120625b62bf8a053d4e054b2e5bf099044"
+    }
+  },
+  "candidateLibraries": {
+    "paired": "a034b08a4752b5136460af43e3bab92951c8863ab2350584741b439c02e849b2",
+    "outlined": "86326af9e1da40f397d1496871458cb9b79080ae483dca5028614627406d7b63"
+  },
+  "hypothesis": "Pair two already copied, privately owned glyph headers into one SSE2 signed-bound comparison. Preserve eager range/header checks and scalar fallback/error order;speculation reads only validated private extents and cannot publish/throw. Poll at each pair start and after certifying its second glyph, preserving per-glyph cooperative checkpoints. Bad pairs execute the original one-glyph path before any second-glyph checkpoint.",
+  "revision": "Actual paired scan is925B versus510B baseline,with both paired/scalar packed predicates. Outline rare SSE2 single-glyph work;portable hardware retains original inline scalar body. One coherent revision;first adverse screen retained.",
+  "observations": {
+    "baseline": {
+      "managedUs": 17.555634139972145,
+      "nativeUs": 13.554332320162107,
+      "ratio": 1.2952046419769485,
+      "lower": 0.8918536485565602,
+      "upper": 1.8065060639509216,
+      "status": "uncertain",
+      "allocatedBytes": 176,
+      "librarySha256": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+      "sourceEvidence": "tmp/fgp1123-baseline-short-observation.json",
+      "allActualsRetained": true,
+      "receipt": "tmp/fgp1123-baseline-short-receipt.json"
+    },
+    "paired": {
+      "managedUs": 18.215820978682167,
+      "nativeUs": 13.464077608142494,
+      "ratio": 1.352920081778645,
+      "lower": 1.1956342320359277,
+      "upper": 1.5312145661804144,
+      "status": "gap",
+      "allocatedBytes": 176,
+      "librarySha256": "a034b08a4752b5136460af43e3bab92951c8863ab2350584741b439c02e849b2",
+      "sourceEvidence": "tmp/fgp1123-candidate-short-observation.json",
+      "allActualsRetained": true,
+      "receipt": "tmp/fgp1123-candidate-short-receipt.json"
+    },
+    "outlined": {
+      "managedUs": 19.583143652343747,
+      "nativeUs": 13.27950425925926,
+      "ratio": 1.4746893611400602,
+      "lower": 1.14459903962339,
+      "upper": 1.9528609623968658,
+      "status": "gap",
+      "allocatedBytes": 176,
+      "librarySha256": "86326af9e1da40f397d1496871458cb9b79080ae483dca5028614627406d7b63",
+      "sourceEvidence": "tmp/fgp1123b-candidate-short-observation.json",
+      "allActualsRetained": true,
+      "receipt": "tmp/fgp1123b-candidate-short-receipt.json"
+    }
+  },
+  "codeShape": {
+    "earlierSourceValidPackedScanBytes": 510,
+    "earlierProducer": "benchmarks/font-packed-bounds-evidence.json",
+    "pairedCurrentProcessScanBytes": 925,
+    "outlinedCurrentProcessScanBytes": 704,
+    "outlinedSingleGlyphCallObserved": true,
+    "instrumentedElapsedDiscarded": true,
+    "notCpuAttribution": true,
+    "pairedBoundPreparationCallsInlined": true
+  },
+  "correctness": {
+    "authoredScalarOrderCasesEachModeEachCandidate": 8192,
+    "shortAndLongLocations": true,
+    "signedZeroContourEmptyTruncationInvalidLocationsOddTailsAndUnalignedPoisonedInput": true,
+    "exactErrorTypeAndMessageAndInputBytes": true,
+    "preCancelledTokenPreserved": true,
+    "focusedEachCandidateEachMode": {
+      "internal": 269,
+      "public": 165
+    },
+    "modes": [
+      "normal",
+      "scalar"
+    ],
+    "eightFrozenFramesAndOwnersEachCandidateNormal": true,
+    "newCandidateOnlyTestRemoved": true
+  },
+  "qualification": {
+    "linuxRestoration": {
+      "project": "Lokad.Image",
+      "stage": "FGP1123B",
+      "productionAdopted": false,
+      "allOriginalSourcesExact": true,
+      "qualifiedCoreEmbeddedAndPublicIdentitiesExact": true,
+      "restored": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "src/Lokad.Image/obj/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "aa4a59ca8fe2ea623126d4b3a97793aec46625a59455da56d74a0f89e7a15d26",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "870749ed01ac9e9ee2320cd497a85903201a89f76780dc738143243795793a94",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "b1c5d9b11b8dc029aef4ed15cfe11b4a87eb699f7045eb7ce2532b37dd95374f",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "e3d9870acc9261f0cae4eaa59e667335cfed9531b914be245141c8ad87e4d282",
+        "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll": "b1c5d9b11b8dc029aef4ed15cfe11b4a87eb699f7045eb7ce2532b37dd95374f",
+        "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb": "e3d9870acc9261f0cae4eaa59e667335cfed9531b914be245141c8ad87e4d282"
+      },
+      "newCandidateOnlyTestRemoved": true,
+      "sourceManifestExact": true,
+      "sourceEntriesVerified": 4282,
+      "packageUnchanged": "924e81be4bb1ab477c705f54ff0e851d6552b26f3002983be360220652392b7c",
+      "restorationBuilds": 0,
+      "broadQualificationRepeated": false
+    },
+    "windowsRestoration": {
+      "allOriginalProductionSourcesExact": true,
+      "productionModulesAndPackageNeverChanged": true,
+      "allBuilds": 0
+    },
+    "currentProvider": "benchmarks/text-glyph-row-bounds-evidence.json",
+    "currentProviderSha256": "cfa566e10790d94b386d29aa3346ab303f73256b4e10307d9790bea0ebf18083",
+    "fullChecksEachOsReused": 6745,
+    "sameActualPackageAndThreeExamplesReused": true,
+    "linuxCoreBuilds": 2,
+    "linuxEmbeddedBuilds": 2,
+    "allOtherBuilds": 0,
+    "broadOrPackageRepeats": 0,
+    "restorationBuilds": 0
+  },
+  "scope": "Frozen DejaVuSans2.37Regular,757076bytes/6253glyphs,original public owned-copy/load/dispose and explicitly labeled FreeType2.13.2 ownedcopy/open/retain/dispose. Eager/lazy validation differs. Short stage diagnostics are not proof of overall text slowdown,parser equivalence or wider faces/settings. Existing complete one-shot/repeated public integrations remain valid on the exactly restored package.",
+  "memory": {
+    "allocatedBytes": 176,
+    "addedArrays": 0,
+    "addedAdmissionOrRetainedCapacityBytes": 0,
+    "fontOwnedCapacityBytes": 757332,
+    "borrowedInputBytes": 757076,
+    "physicalNativeJitPeaksUnmeasured": true
+  },
+  "raw": {
+    "file": "font-paired-glyph-trial.tar.xz",
+    "sha256": "b6229b7a7471225f26ab43b653be022f456baa92748c604a8bf9e7e4b77b2380",
+    "bytes": 4807816,
+    "members": 110,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "font-packed-bounds-qualified.tar.xz",
+        "sha256": "102241c2f54f218d9b49d3567bc9b327b152bb25d0b31676be847cda005c8f5d"
+      },
+      {
+        "file": "text-glyph-row-bounds-qualified.tar.xz",
+        "sha256": "fe37d7b79882d4918770ea95d48717d5d0e5f74589011dc1f04abc26f59b123e"
+      }
+    ]
+  },
+  "currentCostsChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true
+}

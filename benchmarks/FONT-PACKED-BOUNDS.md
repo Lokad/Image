@@ -1,6 +1,8 @@
 # Packed signed font bounds
 
-[Finite horizontal clipping](TEXT-GLYPH-ROW-BOUNDS.md) owns current
+The later [paired-glyph trial](FONT-PAIRED-GLYPH-TRIAL.md) is not retained; these source-valid font-loading costs remain current.
+
+[Glyph-bounded rows](TEXT-GLYPH-ROW-BOUNDS.md) owns current
 ordinary drawing/complete integration costs. Unchanged prepared execution and
 font-loading evidence retain their scoped validity; historical observations follow.
 
