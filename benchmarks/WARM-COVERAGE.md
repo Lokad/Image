@@ -224,8 +224,12 @@ Four reference public layout calls plus outlines/measurement/independent outputs
 and disposal are inside timing;fonts outside. Managed retained-layout charge3568B
 and governedpeak5738B are separate from allocation;reference/physical peaks remain
 unmeasured. Zero production/VM/package builds;reuse unchanged qualification.
-The other five retain reference
-tab/placement or cmap4 issues and remain unscored. No CPU-gap or overall text
+[Source-built cmap4 correction](AUTHORED-FONT-CMAP4-CORRECTION.md) now isolates the
+reference mapping defect:unmodified source control matches all six stock
+observations,and corrected non-tab packed glyphs match,with all18observations
+perOS agreeing across the three reference contexts. Fixtures/managed results and
+stock identities remain unchanged. Tab positioning/control representation and
+compound/raster attribution are next;all five complete cases remain unscored. No CPU-gap or overall text
 slowdown claim follows. Existing complete one-shot/repeated integrations stay
 passing and stopped; independent codec/copy/resize work remains available.
 The [original omission audit](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md) records their

@@ -10,6 +10,10 @@ Subsequent [ADV1135 measurement](DEFAULT-VARIATION.md) confirms default variatio
 as a pass-stop. This preflight retains its earlier correctness-only observations;
 the other five controls still need reference-output alignment before timing.
 
+[AFC1140](AUTHORED-FONT-CMAP4-CORRECTION.md) subsequently isolates and corrects the
+stock cmap4 forward-array mapping in a labeled source-built reference. Non-tab
+packed glyphs now match; the complete comparison still needs tab alignment.
+
 | Original control | Current comparison readiness |
 | --- | --- |
 | `TextLayout/OriginalUnicode` | Open: reference emits a nonrendered tab placeholder; tab increments and managed tab stops produce different later positions. |
