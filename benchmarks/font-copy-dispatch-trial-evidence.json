@@ -1,0 +1,268 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FCP1167",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "newMaterialPaths": 0,
+  "requiredMaterialPaths": 289,
+  "outcome": "Reject this implementation:9.4percent slower in the complete owned-font operation. No independent confirmation, standalone retiming, broad/package repeat or production promotion. No permanent copy-family ban.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "FCP1167",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "baselineWindowsSha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+    "baselineLinuxSha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+    "prototypePath": "tmp/fcp1167-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "5fa5bace65dede187c02a377e360f92e5048701da4486b1eca7ec584dda13e02",
+    "sourcePins": {
+      "src/Lokad.Image/TrueTypeFont.cs": "144666be728b0ce99edcd0063a7d152b13561f222d28082bea50851d2f4a858d",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+    },
+    "candidateSourceSha256": "55ecc7f3f93ea1b22b7a36df7d7bb77f60de48d54f2249273da31918a455d939",
+    "hypothesis": "Current owned-load trace resolves1098/1994leaves into libc,hot repmovsb. Try existing bounded safeVector512 independent-copy primitive only at complete owned-font copy. Preserve overlappinginput memmove and portable/small fallback. No newcopykernel/cache/pinning/allocation/API,allbytes stillcopied beforeall eagervalidation and publication.",
+    "endState": "One existing copy primitive reused at a proven-disjoint boundary; original input/owner/admission/constructor/error/cancellation bodies unchanged.",
+    "sourceProof": {
+      "onlyOwnedCopyDispatchChanges": true,
+      "allValidationAndCancellationVerbatim": true,
+      "copyKernelVerbatim": true,
+      "ownedCapacityAndAdmissionUnchanged": true,
+      "overlappingViewsKeepMemmove": true,
+      "noNewStateApiOrCache": true
+    },
+    "invalidation": "Owned-font load and complete public one-shot/preparation text workloads if accepted; borrowed text/drawing/layout and other pixel/codec/resize/copy kernels unchanged. Reconcile actual standalone boundaries before broad/package qualification.",
+    "qualification": "Existing font/text/OpenType/Arabic/admission/retained-owner controls normal/scalar on bothOS with actual prototype; original font worker all source/metrics/independence/cleanup gates; actual code generation realizes bounded copy. Short complete-load paired screen then independent confirmation only if promising; reject regressions/inconclusive wins without favorable replay.",
+    "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "allCanonicalEmbeddedPublicHarnessReferenceFixturePackageBuilds": 0
+    }
+  },
+  "screen": {
+    "baselineUs": 16.633772115071615,
+    "candidateUs": 18.198805155436197,
+    "ratio": 1.0940868923238205,
+    "lower": 1.0883858717919186,
+    "upper": 1.0998177750911187,
+    "allocatedBytes": 176,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "nativeAttribution": {
+    "project": "Lokad.Image",
+    "stage": "FNA1166",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "productionChanged": false,
+    "totalSamples": 1997,
+    "dsoSamples": {
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": 1441,
+      "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1": 553,
+      "/home/lokad/image-warm-png-20261009/tmp/frw67-font-load-warm": 3
+    },
+    "symbolSamples": [
+      [
+        "[unknown]",
+        1930
+      ],
+      [
+        "malloc",
+        29
+      ],
+      [
+        "cfree",
+        16
+      ],
+      [
+        "FT_Get_Module",
+        5
+      ],
+      [
+        "FT_Done_Face",
+        2
+      ],
+      [
+        "__libc_calloc",
+        2
+      ],
+      [
+        "realloc",
+        2
+      ],
+      [
+        "FT_New_Size",
+        1
+      ],
+      [
+        "apply.constprop.0",
+        1
+      ],
+      [
+        "FT_New_Memory_Face",
+        1
+      ],
+      [
+        "_IO_fgets",
+        1
+      ],
+      [
+        "load.constprop.0",
+        1
+      ]
+    ],
+    "hotLocations": [
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "offset": "0x1a19d2",
+        "samples": 1284
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x611df",
+        "samples": 85
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x5a6e0",
+        "samples": 22
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x60554",
+        "samples": 21
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x1a14b",
+        "samples": 19
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x604f2",
+        "samples": 18
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x5a6fc",
+        "samples": 18
+      },
+      {
+        "file": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+        "offset": "0x1a068",
+        "samples": 16
+      }
+    ],
+    "referenceIdentity": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+      "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+      "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+      "libraryVersion": "2.13.2",
+      "headerHashes": {
+        "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+        "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+      },
+      "flags": [
+        "-O2",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "performanceBaselineApproved": false
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "tmp/frw67-font-load-warm",
+      "external/text-reference/fonts/DejaVuSans.ttf",
+      "tmp/fna1166-native-font-witness.ttf"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "4059751",
+      "-o",
+      "tmp/fna1166-native-font.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "originalChecksAndCleanupPassed": true,
+    "quietGuardsPassed": true,
+    "scope": "One2second original full FreeType owned copy/open/retain/dispose profile. Inputs/reference/ownership unchanged. Leaf counts locate paths,not phase costs or parser equivalence."
+  },
+  "focusedEachOs": {
+    "windows": {
+      "normal": 166,
+      "scalar": 166,
+      "avx512-off": 166
+    },
+    "linux": {
+      "normal": 166,
+      "scalar": 166,
+      "avx512-off": 166
+    }
+  },
+  "sourceProof": {
+    "onlyOwnedCopyDispatchChanges": true,
+    "allValidationAndCancellationVerbatim": true,
+    "copyKernelVerbatim": true,
+    "ownedCapacityAndAdmissionUnchanged": true,
+    "overlappingViewsKeepMemmove": true,
+    "noNewStateApiOrCache": true
+  },
+  "qualificationReused": {
+    "commit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "ciRun": 43974547412,
+    "ciConclusion": "success",
+    "fullLiveEachOs": 6776,
+    "actualPackageSha256": "3167deb580ba05ecf4121a062515140e333964039576c30b73b89ba708b6aa38",
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "memory": {
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "fontDataBytes": 757076,
+    "descriptorAllowanceBytes": 256,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "next": "Keep managed and native original copies;current native/managed hot addressbothlibc1a19d2rep movsb is mandatorycopy,not a reference defect. Do not replay neighboringcopy variants without distinct attribution. Next independent ordinary-byte composition gap:existingword-onlydispatch motivates checking a materiallydifferentordinary-onlybyte boundary;preserve shared/prepared blend and existing factor/pixel proofs.",
+  "raw": {
+    "file": "font-copy-dispatch-trial.tar.xz",
+    "sha256": "a10630a2ecdd1ff3757f9fddf55029d5fe45eef7eaedd24ba3b92713dfedb54c",
+    "bytes": 1582004,
+    "members": 72,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "font-load-current-attribution.tar.xz SHA256 ae65c9b72e3a7385d705a080ebf651e8f2999831626335efe5b9f7fba51dab2b",
+      "nearest-row-reuse-qualified.tar.xz SHA256 a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+      "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d"
+    ]
+  }
+}
