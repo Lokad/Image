@@ -1,0 +1,316 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PCF1117",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "newComparisonViews": 1,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "testedScope": "Existing513x259RGBA16 seekable-PNG Decode\u2192AutoOrient(Normal)\u2192CropCentered256x129\u2192ResizeToFit128x64(false,Nearest),independent127x64result/disposal. Frozen packet/settings/exact full-word samples;no content/shape/filter grid.",
+  "producers": {
+    "windowsSha256": "461fc039aa8d0967719d91b518ca7be6f4d2dc097b292a8e90df76b642d50f76",
+    "linuxSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "timedArtifactSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "packageSha256": "e58932e09d4a7c82d0a4bd4e5e4b0a56a6c1621b12f7d0379b5b1b3461d8e416"
+  },
+  "case": {
+    "caseId": "PngCropFit16OneShot",
+    "managedUs": 2856.9377044270836,
+    "nativeUs": 3301.3055572916664,
+    "ratio": 0.8653963272551073,
+    "lower": 0.8575613370789469,
+    "upper": 0.8711607280266133,
+    "status": "pass",
+    "allocatedBytesMean": 338159.1041666667,
+    "allocatedBytesMinimum": 338155.875,
+    "allocatedBytesMaximum": 338159.75,
+    "observedAllocationValues": [
+      338155.875,
+      338159.75
+    ],
+    "librarySha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "benchmarkAssemblySha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+    "driverSha256": "546fdf27be0f454dbc587b2467802bd87e0983a1d6bad7685b150779b7c62c0b",
+    "actuals": 12,
+    "operationsPerSubject": 64,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalInputPixelOwnershipAndStreamGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allRgbaSamplesExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "nativeCliNormalScalarPixelsExact": true,
+    "encodedInputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+    "encodedInputBytes": 960565,
+    "sourceRasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+    "sourceWidth": 513,
+    "sourceHeight": 259,
+    "depth": 16,
+    "outputWidth": 127,
+    "outputHeight": 64,
+    "freshSeekableStream": true,
+    "inputConsumedToEnd": true,
+    "callerStreamLeftOpen": true,
+    "publicBufferExposed": false,
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm RGBA16 PNG composition FFmpeg worker",
+      "sourceSha256": "88b63e728669749016ed9b0341484b362a46610d85d7f6ab1b381a31344d5fcf",
+      "buildScriptSha256": "f02d7b55088447248469ec3f69ca76057e699e3edc595f9fd9850ed96b99163f",
+      "workerSha256": "22f0f118c94b7cc6208075a9bcea7a48214c47f5f69eaf69d39a26aabecce24f",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavformat -lm -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "decoderPreparationTimed": true,
+      "graphPreparationTimed": true,
+      "resultWrapperPreparationTimed": true,
+      "preparedStateRetainedBetweenOperations": false,
+      "preparedStateReleasedBeforeOutputPublication": true,
+      "operation": "png-stream16-crop-fit",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "nativeEndianConversionTimed": true,
+      "graphCropBeforeEndianConversion": true,
+      "sourcePixelFormat": "rgba64be",
+      "outputPixelFormat": "rgba64le",
+      "cpu": 0,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "conversionThreads": 1,
+      "filterThreads": 1,
+      "outputWidth": 127,
+      "outputHeight": 64,
+      "orientation": "Normal",
+      "cropWidth": 256,
+      "cropHeight": 129,
+      "fitMaxWidth": 128,
+      "fitMaxHeight": 64,
+      "pointSampling": true,
+      "threadType": 0,
+      "activeThreadType": 0,
+      "independentLiveOutputs": true,
+      "initialCompletedOperations": 3,
+      "freshSeekableStream": true,
+      "inputCopyTimed": true,
+      "inputLengthQueryTimed": true,
+      "inputView": false,
+      "eofChecked": true,
+      "streamScratchBytes": 8192,
+      "inputBytes": 960565,
+      "outputBytes": 65024,
+      "ffmpegVersion": "n8.1"
+    },
+    "confidence": {
+      "managedAllActuals": {
+        "N": 12,
+        "Mean": 2856937.7044270835,
+        "StandardError": 3278.7196105192243,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2856937.7044270835,
+          "StandardError": 3278.7196105192243,
+          "Level": 12,
+          "Margin": 14547.61116417192,
+          "Lower": 2842390.093262912,
+          "Upper": 2871485.315591255
+        }
+      },
+      "nativeBrackets": [
+        {
+          "N": 12,
+          "Mean": 3301305.5572916665,
+          "StandardError": 1017.8868039899673,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 3301305.5572916665,
+            "StandardError": 1017.8868039899673,
+            "Level": 12,
+            "Margin": 4516.3427168579165,
+            "Lower": 3296789.2145748087,
+            "Upper": 3305821.9000085243
+          }
+        },
+        {
+          "N": 12,
+          "Mean": 3305331.87109375,
+          "StandardError": 2067.0990130009777,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 3305331.87109375,
+            "StandardError": 2067.0990130009777,
+            "Level": 12,
+            "Margin": 9171.675608521957,
+            "Lower": 3296160.195485228,
+            "Upper": 3314503.546702272
+          }
+        },
+        {
+          "N": 12,
+          "Mean": 3305623.7122395835,
+          "StandardError": 1246.7964214635863,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 3305623.7122395835,
+            "StandardError": 1246.7964214635863,
+            "Level": 12,
+            "Margin": 5532.00995966255,
+            "Lower": 3300091.702279921,
+            "Upper": 3311155.722199246
+          }
+        }
+      ],
+      "pairedBounds": [
+        0.8583531667341843,
+        0.8703640698429657
+      ],
+      "conservativeViews": [
+        {
+          "view": "allActual",
+          "N": 12,
+          "ratioLower": 0.8575613370789469,
+          "ratioUpper": 0.8711607280266133
+        },
+        {
+          "view": "upperOutlierDiagnostic",
+          "N": 12,
+          "ratioLower": 0.8575613370789469,
+          "ratioUpper": 0.8711607280266133
+        }
+      ]
+    },
+    "receipt": "tmp/pcf1117-confirm-receipt.json"
+  },
+  "boundaries": {
+    "managed": "Fresh public read-only MemoryStream with non-exposed backing buffer;complete Decode(Stream) acquisition/buffering/EOF,AutoOrient(Normal),CropCentered(256,129),ResizeToFit(128,64,false,Nearest),independently owned127x64result and disposal of every intermediate,result and stream. Resident encoded source borrowed;caller stream and source remain owned by the caller.",
+    "native": "Fresh PNG codec/options,packet/decoded/result wrappers and filter graph configured every operation;fresh AVIO/scratch,length/acquisition/EOF,full PNG decoding,crop/orientation/point-fit,full-word conversion,independent owned output and disposal. Resident encoded source borrowed. Prepared state released before output publication;retained outputs survive later calls and context disposal.",
+    "frozenHarnessWordingDisclosure": "The unchanged harness/driver generic strings mention retained native contexts. This round uses the explicit fresh nativeReady flags,source reconstruction and native boundary above. Those raw strings are historical wording;no gate or workload is omitted."
+  },
+  "sourceProof": {
+    "originalApplyBodyUnchangedExceptPreparationAndRelease": true,
+    "originalValidationBodyUnchanged": true,
+    "graphPreparationBodyMovedVerbatimExceptHeldValidationWrapper": true,
+    "inputAcquisitionAndPixelGraphUnchanged": true,
+    "outputWrapperCreatedAndDisposedEachOperation": true
+  },
+  "originalAsymmetric": {
+    "provider": "benchmarks/wide-png-scan-crc-evidence.json",
+    "caseId": "pngStream/PngCropFit16",
+    "managedUs": 2871.4634947916666,
+    "nativeUs": 2943.0357080078124,
+    "lower": 0.9286883313319889,
+    "upper": 1.0219578731971137,
+    "status": "uncertain",
+    "unchanged": true,
+    "notRelabeledByFreshView": true
+  },
+  "nativeLifetimeDiagnostic": {
+    "provider": "tmp/pcf1117-native-attribution.json",
+    "preparedUs": 2942.7456145833335,
+    "freshUs": 3292.0734908854165,
+    "extraCompleteNativeUs": 349.32787630208304,
+    "ratio": 1.1187013203393104,
+    "lower": 1.1133715519819045,
+    "upper": 1.1240566025790253,
+    "actuals": 12,
+    "operationsPerSubject": 64,
+    "allPairsRetained": true,
+    "quietGuardsPassed": true,
+    "notManagedSpeedupOrPureSetupPhaseCost": true,
+    "interpretation": "Changing decoder/graph/wrapper lifetime includes both preparation/disposal work and reuse of internal buffers/caches. It does not isolate individual phase durations. Complete native input acquisition,PNG decode,graph/pixel conversion,output ownership and disposal stay inside both clocks."
+  },
+  "memory": {
+    "managedGcIsNotPeakOrRetainedCapacity": true,
+    "sourceDerivedSimultaneousImagePayloadBytes": 2455088,
+    "sourceDerivedDefaultIdlePayloadBytes": 2125872,
+    "defaultIdlePolicy": "two arrays/up to4MiB;caller-root storage bypasses idle storage",
+    "newProductionOwnedOrRetainedCapacityBytes": 0,
+    "governedAdmittedPeakMeasuredThisRound": false,
+    "nativeAllocationAndRetentionAndPhysicalJitPeaksMeasured": false,
+    "nativePreparedStateReleasedBeforeOutputPublication": true,
+    "nativeResultOwnsStorageUntilDisposal": true
+  },
+  "qualification": {
+    "provider": "benchmarks/lanczos-identity-axis-evidence.json",
+    "sameImmutableActualPackageReused": true,
+    "packageAndCoreIdentityVerifiedBothOs": true,
+    "fullChecksEachOsReused": 6742,
+    "focusedPngInternalPublicReused": [
+      84,
+      247
+    ],
+    "normalScalarAndAvx512OffEvidenceReused": true,
+    "sameActualPackageConsumerAndThreeExamplesBothOsReused": true,
+    "broadOrPackageRepeats": 0
+  },
+  "workflow": {
+    "productionBuilds": 0,
+    "managedHarnessBuilds": 0,
+    "driverBuilds": 0,
+    "fixtureBuilds": 0,
+    "nativeAdapterBuilds": 1,
+    "completedTimingJobsRepeated": 0,
+    "short": {
+      "actuals": 12,
+      "operationsPerSubject": 8,
+      "managedUs": 2867.2111145833337,
+      "nativeUs": 3924.8200729166665,
+      "upper": 0.763475296255804
+    },
+    "confirmation": {
+      "actuals": 12,
+      "operationsPerSubject": 64
+    },
+    "allOriginalActualsAndSetupCorrectionsRetained": true
+  },
+  "raw": {
+    "file": "png-composition-one-shot.tar.xz",
+    "sha256": "08cf04d9c811bb00398dc738e29ae2cb974e503e2a8ac0fdcede5bc2f45532b8",
+    "bytes": 10759100,
+    "members": 191,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "lanczos-identity-axis-qualified.tar.xz",
+        "sha256": "6d967730048bee285c339bea9d7e5af8848927234c8d9020cb9cfb78f956ca08"
+      },
+      {
+        "file": "wide-png-scan-crc-qualified.tar.xz",
+        "sha256": "a63897c47f90bc95a56bc7678307537b5aadc385a4cc1809c7f79a2989f1f82b"
+      }
+    ]
+  },
+  "next": "Stop equivalent one-shot pipeline;retain asymmetric uncertainty and scope. Continue independently with demonstrated gaps/current attribution;no identical favorable retry or historical-stage sums."
+}

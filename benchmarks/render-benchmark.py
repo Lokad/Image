@@ -131,6 +131,24 @@ def apply_current_lanczos(editing):
     return '\n'.join(rows)
 
 
+def append_one_shot_png_composition(editing):
+    evidence = json.loads((ROOT / 'benchmarks/png-composition-one-shot-evidence.json').read_text(encoding='utf-8'))
+    case, qualification = evidence['case'], evidence['qualification']
+    assert evidence['measurementAccepted'] and not evidence['productionChanged'] and not evidence['productionSpeedupClaim']
+    assert evidence['requiredMaterialPaths'] == 289 and evidence['newMaterialPaths'] == 0 and evidence['newComparisonViews'] == 1
+    assert evidence['raw']['mirrored'] and evidence['raw']['allMembersVerified'] and all(evidence['sourceProof'].values())
+    assert qualification['sameImmutableActualPackageReused'] and qualification['packageAndCoreIdentityVerifiedBothOs'] and qualification['broadOrPackageRepeats'] == 0
+    assert case['librarySha256'] == evidence['producers']['timedArtifactSha256'] and case['actuals'] == case['nativeSamplesEachBracket'] == 12
+    assert case['status'] == 'pass' and case['upper'] <= 1 and case['operationsPerSubject'] == 64 and case['allActualsRetained']
+    assert all(case[k] for k in ('allOriginalInputPixelOwnershipAndStreamGatesPassed', 'quietGuardsPassed', 'allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput', 'nativeCliNormalScalarPixelsExact', 'callerStreamLeftOpen', 'inputConsumedToEnd'))
+    assert all(case['nativeReady'][k] for k in ('decoderPreparationTimed', 'graphPreparationTimed', 'resultWrapperPreparationTimed', 'preparedStateReleasedBeforeOutputPublication'))
+    assert not case['nativeReady']['preparedStateRetainedBetweenOperations'] and evidence['originalAsymmetric']['unchanged']
+    assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+    allocated = f"{case['allocatedBytesMinimum']:,.0f}–{case['allocatedBytesMaximum']:,.0f}"
+    row = f"| PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | {case['managedUs']:,.2f} | {case['nativeUs']:,.2f} | {case['ratio']:.3f} / {case['upper']:.3f} | {allocated} |"
+    return editing + '\n' + row, evidence
+
+
 def apply_current_jpeg_preparation(codecs, read_rows):
     """Replace affected JPEG costs from their qualified current owner."""
     current = json.loads((ROOT / 'benchmarks/jpeg-horizontal-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -344,17 +362,24 @@ def png_scan_stage():
     return current
 
 
-def current_png_stream_word_note(current):
+def current_png_stream_word_note(current, one_shot):
     c = current['cases']['pngStream/Png16']
     composition = current['cases']['pngStream/PngCropFit16']
-    return (f'[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) qualifies all 60 affected existing boundaries: '
-            '**59 pass, one remains uncertain**. All 47 decode controls and four coding validators pass. '
+    fresh = one_shot['case']
+    diagnostic = one_shot['nativeLifetimeDiagnostic']
+    return ('[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) retains passing evidence '
+            'for all 47 decode controls and four coding validators. '
             f'Word stream decode is **{c["managedUs"]:,.2f} / FFmpeg {c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**, '
-            f'**{c["allocatedBytes"]:,} B/op**. Complete word decode/orient/crop/fit is '
-            f'**{composition["managedUs"]:,.2f} / {composition["nativeUs"]:,.2f} µs**, interval '
-            f'**{composition["lower"]:.6f}–{composition["upper"]:.6f}**, **{composition["allocatedBytes"]:,} B/op**: uncertain. '
-            'One controlled DLL comparison spans parity around a 0.575% favorable point with identical allocations; '
-            'no separate pipeline gain or regression is established. Original evidence stays linked; no favorable native replay.')
+            f'**{c["allocatedBytes"]:,} B/op**.\n\n'
+            '[Equivalent one-shot PNG16 composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) '
+            f'passes at **{fresh["managedUs"]:,.2f} / FFmpeg {fresh["nativeUs"]:,.2f} µs, upper {fresh["upper"]:.3f}**, '
+            f'**{fresh["allocatedBytesMinimum"]:,.0f}–{fresh["allocatedBytesMaximum"]:,.0f} B/op**. '
+            'Fresh native decoder/graph/wrappers, exact full-word conversion and independent output/disposal are timed; '
+            'all managed public calls/intermediate owners remain. '
+            f'A controlled native lifetime comparison measures **{diagnostic["extraCompleteNativeUs"]:,.2f} µs** extra for fresh state, '
+            'including lost reuse, not a pure setup duration or managed speedup. '
+            f'The earlier retained-native view stays uncertain, upper **{composition["upper"]:.6f}**. '
+            'Original/short/independent captures remain linked; unchanged package qualification is reused.')
 
 
 def apply_current_png_scan(codecs, reads, current):
@@ -2959,6 +2984,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     codecs, read_rows = apply_current_jpeg_preparation(codecs, read_rows)
     codecs, read_rows = apply_current_prepared_input(codecs, read_rows)
     editing = apply_current_lanczos(editing)
+    editing, png_composition_one_shot = append_one_shot_png_composition(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     owned_copy = owned_edit_costs(resident_png)
@@ -2991,7 +3017,7 @@ physical/native/JIT peaks remain unmeasured. Unchanged normal/clone word copies
 retain their [raster-copy scheduling](../benchmarks/RASTER-COPY-SCHEDULING.md) passes.
 Earlier copy trials remain linked history, outside current-result dependencies."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
-    png_stream_word_note = current_png_stream_word_note(resident_png)
+    png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = reader_current['cases']['OpaqueCancelable8']
@@ -3301,7 +3327,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 150, 'Expected 150 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 151, 'Expected 151 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

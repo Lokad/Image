@@ -1,5 +1,10 @@
 # Wide PNG scan CRC
 
+The subsequent [equivalent one-shot composition](PNG-COMPOSITION-ONE-SHOT.md)
+passes on the current immutable package. This report retains its original
+retained-native comparison and uncertainty; the new lifetime view does not
+relabel that earlier measurement.
+
 PNG scanning now advances its four existing 128-bit residues with guarded 512-bit
 instructions. The seed, polynomial powers, lane order, serial joins, reduction,
 tails and cancellation positions remain exact. Existing 128-bit and scalar

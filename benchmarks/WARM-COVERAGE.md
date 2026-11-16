@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-16. **289 material required paths** remain
-in scope; the 150 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 151 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
@@ -32,7 +32,7 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
 | PNG decoding | [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) owns all 47 decode controls and four coding validators; all pass/stop on the same timed/package DLL. The caller-root two-retained-result decode also passes, with unchanged peak/lifetimes. Exact samples, cancellation positions and admission remain. Earlier storage/Adler reports retain history. |
-| Stream decode/composition | [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) refreshes the five existing PNG boundaries. Word stream 2823.39/FFmpeg 3083.60µs, upper 0.921, 8664B/op passes. Byte complete composition 1227.89/1480.31µs, upper 0.836 passes. Word composition 2871.46/2943.04µs, interval 0.928688–1.021958, 338160B/op is uncertain. Original64-operation controlled DLL comparison spans parity with identical allocations; no regression or separate pipeline gain established. Other PNG stream/async views pass. JPEG/WebP/VP8 source-valid passes are unchanged. Preserve uncertainty; no favorable native repeat or phase sums. |
+| Stream decode/composition | [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) retains five original PNG views;word composition with native retained decoder/graph stays uncertain at2871.46/2943.04µs,interval.928688–1.021958,338160B/op. [Equivalent one-shot PNG16 composition](PNG-COMPOSITION-ONE-SHOT.md) passes/stops at2856.94/FFmpeg3301.31µs,upper.871,338156–338160B/op:both sides include necessary fresh preparation and independent output/disposal. Exact full-word/input/stream/owner gates and immutable actual package remain;zero production/managed/package builds or broad repeats,one isolated native adapter build. A single native64-call paired diagnostic measures2942.75retained/3292.07freshµs,extra349.33µs including preparation/disposal and lost internal reuse,not pure phase time or managed gain. All original/short/independent actuals remain;old uncertainty is not relabeled. Other PNG/JPEG/WebP/VP8 stream/async passes are source-valid and stop. |
 | JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | All 18 declared comparisons pass/stop. [Direct block emission](JPEG-DIRECT-BLOCK-EMISSION.md) closes restart33: 1,339.28 / FFmpeg 1,609.15 µs, upper .841, 151,180 B/op, exact 58,010 / 58,012 B packets with the strict 2 B attribution exception. Separate complete paired steps save 19.21% and 17.00%; no summed gain. The 17 [adaptive replay controls](JPEG-LOCAL-ENTROPY-REPLAY.md) reuse unchanged paths/artifact identities. SIMD libjpeg-turbo grayscale stays explicitly labeled. Native contexts/table preparation remain retained; managed preparation stays timed. No added storage or broader content/settings claim. |
 | PNG encoding | All 17 equivalent fresh-state controls pass/stop. [Longer Gray8 integration](PNG-GRAY-CURRENT-PATH.md) resolves uncertainty:1,964.07/FFmpeg1,978.51µs,upper.999681,546523B/op,exact72586B. No production speedup; original samples retained. Sixteen passing controls reuse unchanged [compressed heap](PNG-HUFFMAN-HEAP-ENTRIES.md) and [stored](PNG-STORED-WORD-NORMALIZATION.md) evidence. Stored-word naturalGC64 passes/stops; postGC4 retained-word uncertainty remains a distinct diagnostic. |
@@ -120,6 +120,13 @@ on its frozen 513×259→1027×519 RGBA16 input/settings. Native graph/context/g
 first-use storage and result wrappers are fresh per operation; resident inputs are
 borrowed on both sides. This adds one comparison view, no required material path
 or settings grid. Its pass does not relabel the earlier asymmetric uncertainty.
+
+The existing `PngCropFit16` stream pipeline also has an [equivalent one-shot view](PNG-COMPOSITION-ONE-SHOT.md)
+on its frozen513×259 packet and127×64 output. Fresh native codec/options, graph,
+wrappers, input acquisition, full decode/conversion and owned result/disposal are
+inside timing. Managed public calls and all intermediate owners stay unchanged.
+It passes/stops; the previous retained-native observation remains uncertain.
+This is one comparison view, no new required material path or fixture/settings grid.
 
 The canonical Lanczos identity-axis branch now has two named additional views of
 the existing public one-shot resize boundary: `Horizontal16`513×259→256×259 and

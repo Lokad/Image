@@ -60,5 +60,5 @@ worker, reused ImageProbe, scalar/output checks and all captures. Its
 managed helper/source, input and qualification. Reproduce with the archived
 `tmp/lax1116-{prepare,measure,record}.py` recipes in a fresh ignored experiment
 workspace with the pinned producer/reference dependencies; do not overwrite a
-completed capture. PLAN remains unchanged outside its authorized font/text section.
+completed capture.
 The full 289-path objective remains open and publication postponed.

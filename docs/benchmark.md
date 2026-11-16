@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **150 comparisons** summarize that scope.
+**289 named material paths**; these **151 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -42,7 +42,9 @@ up to 4 MiB. This control's logical acquisition peak falls **393,216 → 262,144
 no idle-pool or complete-decode peak saving is inferred. The original uncertain
 stream captures remain linked beside their current confirmations.
 
-[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) qualifies all 60 affected existing boundaries: **59 pass, one remains uncertain**. All 47 decode controls and four coding validators pass. Word stream decode is **2,823.39 / FFmpeg 3,083.60 µs, upper 0.921**, **8,664 B/op**. Complete word decode/orient/crop/fit is **2,871.46 / 2,943.04 µs**, interval **0.928688–1.021958**, **338,160 B/op**: uncertain. One controlled DLL comparison spans parity around a 0.575% favorable point with identical allocations; no separate pipeline gain or regression is established. Original evidence stays linked; no favorable native replay.
+[Wide PNG scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) retains passing evidence for all 47 decode controls and four coding validators. Word stream decode is **2,823.39 / FFmpeg 3,083.60 µs, upper 0.921**, **8,664 B/op**.
+
+[Equivalent one-shot PNG16 composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) passes at **2,856.94 / FFmpeg 3,301.31 µs, upper 0.871**, **338,156–338,160 B/op**. Fresh native decoder/graph/wrappers, exact full-word conversion and independent output/disposal are timed; all managed public calls/intermediate owners remain. A controlled native lifetime comparison measures **349.33 µs** extra for fresh state, including lost reuse, not a pure setup duration or managed speedup. The earlier retained-native view stays uncertain, upper **1.021958**. Original/short/independent captures remain linked; unchanged package qualification is reused.
 
 [Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
 stream pass: **5,701.59 / FFmpeg
@@ -412,6 +414,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 608.60 | 2,105.19 | 0.289 / 0.294 | 44,712–44,720 |
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 735.96 | 2,061.40 | 0.357 / 0.362 | 254,672–254,679 |
+| PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | 2,856.94 | 3,301.31 | 0.865 / 0.871 | 338,156–338,160 |
 | Plain transpose RGBA16 † → 259×513 | 34.98 | 43.85 | 0.798 / 0.859 | 56 |
 | Plain transpose RGBA8 † → 259×513 | 26.85 | 37.83 | 0.710 / 0.716 | 56 |
 | Counterclockwise quarter turn RGBA8 † → 259×513 | 28.57 | 37.43 | 0.763 / 0.772 | 56 |
