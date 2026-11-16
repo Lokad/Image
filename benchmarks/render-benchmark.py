@@ -258,6 +258,29 @@ def borrowed_copy_stage():
     return stage
 
 
+def original_word_composite_stage(copy_stage):
+    stage = json.loads((ROOT / 'benchmarks/original-word-composite-evidence.json').read_text(encoding='utf-8'))
+    c, q = stage['case'], stage['qualification']
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
+    assert stage['producers'] == copy_stage['producers']
+    assert q['reusedForUnchangedProduction'] and q['newBroadOrPackageChecks'] == 0
+    assert q['fullChecksEachOs'] == 6745 and q['sameActualPackageBothOs'] and q['usageExamples'] == 3
+    assert q['packageSha256'] == stage['producers']['packageSha256']
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert not stage['probe']['direct']['Passed'] and stage['probe']['snapshot']['Passed']
+    assert c['librarySha256'] == stage['producers']['linuxSha256']
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerActual'] == 128
+    assert c['status'] == 'pass' and c['upper'] <= 1 and c['allocatedBytes'] == 0
+    assert all(c[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'managedExact', 'allOriginalGatesPassed',
+                             'snapshotCreationAndDisposalTimed', 'resetExcludedBeforeEveryOperation', 'fullWordSamples'))
+    assert c['nativeQuality']['Passed'] and c['nativeQuality']['RgbMax'] <= 1 and c['nativeQuality']['AlphaMax'] <= 1
+    assert c['nativeQuality']['RgbRmse'] <= .25 and c['nativeQuality']['AlphaRmse'] <= .25
+    assert c['nativeQuality']['UntouchedExact'] and c['nativeQuality']['ZeroSourceAlphaExact']
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def owned_flip_confidence():
     stage = json.loads((ROOT / 'benchmarks/owned-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
@@ -1898,6 +1921,12 @@ No heap capacity or retention is added; validation and independent owners remain
         'passCount': sum(c['status'] == 'pass' for c in drawing_cases.values()),
         'gaps': sum(c['status'] == 'gap' for c in drawing_cases.values()),
         'uncertain': sum(c['status'] == 'uncertain' for c in drawing_cases.values()), 'total': len(drawing_cases)}
+    word_composite = original_word_composite_stage(copy_current)
+    drawing_cases['OriginalWordComposite'] = word_composite['case']
+    drawing_counts = {field: sum(c['status'] == state for c in drawing_cases.values())
+                      for field, state in (('passCount', 'pass'), ('gaps', 'gap'), ('uncertain', 'uncertain'))}
+    drawing_counts['total'] = len(drawing_cases)
+    assert drawing_counts == word_composite['borrowedDrawingStatusCounts']
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1907,10 +1936,11 @@ No heap capacity or retention is added; validation and independent owners remain
         'OriginalWordOverlap': 'Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair',
         'DrawingComposite8': 'RGBA8 source-over / FFmpeg overlay',
         'DrawingComposite16': 'RGBA16 source-over / ImageSharp 3.1.12',
+        'OriginalWordComposite': 'Original self-composite RGBA16 / ImageSharp snapshot + SrcOver',
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases']
+        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] or name == 'OriginalWordComposite'
                    else bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
@@ -1920,10 +1950,12 @@ No heap capacity or retention is added; validation and independent owners remain
         if name in {'DrawingCopyOverlap8', 'OriginalWordOverlap'}:
             assert c['sourceAliasesCanvas'] and c['publicMovesPerPair'] == 2 and c['restorationTimed']
             assert c['nativeCallsPerPair'] == (258 if name == 'OriginalWordOverlap' else 6)
+        elif name == 'OriginalWordComposite':
+            assert c['sourceAliasesCanvas'] and c['snapshotCreationAndDisposalTimed']
         else:
             assert c['sourceUnchanged']
         status = 'parity confirmed' if c['status'] == 'pass' else 'gap' if c['status'] == 'gap' else 'confidence open'
-        mark = ' †' if name.startswith('DrawingComposite') else ''
+        mark = ' †' if name.startswith('DrawingComposite') or name == 'OriginalWordComposite' else ''
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
     word_overlap = drawing_cases['OriginalWordOverlap']
@@ -1945,8 +1977,23 @@ Release package and all three examples pass on both platforms. One core/embedded
 build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
 the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
 zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. Five of eight measured borrowed drawing controls pass, two gaps and
-one uncertainty remain. Prior fills/composites retain valid evidence.
+separate. {drawing_counts['passCount']} of {drawing_counts['total']} measured borrowed drawing controls pass,
+{drawing_counts['gaps']} gaps and {drawing_counts['uncertain']} uncertainty remain. Prior fills/composites retain valid evidence.
+"""
+    wc = word_composite['case']
+    borrowed_drawing_note += f"""
+[Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
+passes/stops at **{wc['managedUs']:.3f} / ImageSharp {wc['nativeUs']:.3f} µs**, upper
+**{wc['upper']:.6f}**, **0 / {wc['referenceAllocatedBytes']:,.0f} GC B/op**. This is explicitly
+ImageSharp 3.1.12 Rgba64 **source Clone + public SrcOver + Dispose**, not FFmpeg;
+direct self-drawing fails snapshot semantics. The required snapshot stays timed.
+Reset is excluded before EVERY operation on both sides. Exact managed full-word
+pixels and approved reference max1/RMSE.25, untouched/zero-alpha exactness and
+normal/scalar checks pass on both OSes. Its snapshot has at least1,062,936B of
+pixel payload, possibly pooled; retained reference pool/reserved/physical peaks
+are unmeasured. Reuse unchanged production/package qualification: one successful
+tool build after a pre-check compile correction, zero other builds or broad repeats.
+No production speedup or broader content/settings claim.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
@@ -3333,7 +3380,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 152, 'Expected 152 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 153, 'Expected 153 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

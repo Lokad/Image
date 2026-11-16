@@ -197,6 +197,20 @@ native disjoint-band calls stay timed; no output allocation/reset on either side
 Reuse existing current qualification; [the report](../../benchmarks/ORIGINAL-WORD-OVERLAP.md)
 retains exact full-word, normal/scalar, cancellation/refusal/recovery and raw evidence.
 
+The original `Composite/Rgba16Overlapping` uses the same frozen word canvas at
+shift (1,1). Build only its tooling with `build-word-composite-linux.sh [OUTPUT]
+[IMMUTABLE_LIBRARY_DLL] [APPROVED_IMAGESHARP_DLL]`. The worker's `probe` mode
+demonstrates that direct ImageSharp self-drawing lacks snapshot semantics; the
+qualified reference is explicitly ImageSharp 3.1.12 Rgba64 Clone + DrawImage
+normal SrcOver + Dispose, with that necessary snapshot fully timed. It is not
+FFmpeg. `measure-word-composite.py --worker DLL --core-sha256 SHA --input INPUT
+--prefix OUTPUT --mode short|confirm` retains every actual and three reference
+brackets. Canvas reset is excluded before EVERY operation on both sides, matching
+the original composite boundary. Full-word pixels, approved max1/RMSE.25 bounds,
+untouched/zero-alpha exactness and normal/scalar owner/cancellation/refusal gates
+are in [the report](../../benchmarks/ORIGINAL-WORD-COMPOSITE.md). GC allocations,
+borrowed canvas and reference snapshot/pool capacity are distinct figures.
+
 ## CMYK decode context boundaries
 
 The CMYK RGBA worker retains its decoder, frame wrapper and packing context by

@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **152 comparisons** summarize that scope.
+**289 named material paths**; these **153 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -32,8 +32,21 @@ Release package and all three examples pass on both platforms. One core/embedded
 build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
 the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
 zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. Five of eight measured borrowed drawing controls pass, two gaps and
-one uncertainty remain. Prior fills/composites retain valid evidence.
+separate. 6 of 9 measured borrowed drawing controls pass,
+2 gaps and 1 uncertainty remain. Prior fills/composites retain valid evidence.
+
+[Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
+passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
+**0.976714**, **0 / 26,800 GC B/op**. This is explicitly
+ImageSharp 3.1.12 Rgba64 **source Clone + public SrcOver + Dispose**, not FFmpeg;
+direct self-drawing fails snapshot semantics. The required snapshot stays timed.
+Reset is excluded before EVERY operation on both sides. Exact managed full-word
+pixels and approved reference max1/RMSE.25, untouched/zero-alpha exactness and
+normal/scalar checks pass on both OSes. Its snapshot has at least1,062,936B of
+pixel payload, possibly pooled; retained reference pool/reserved/physical peaks
+are unmeasured. Reuse unchanged production/package qualification: one successful
+tool build after a pre-check compile correction, zero other builds or broad repeats.
+No production speedup or broader content/settings claim.
 
 
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
@@ -399,6 +412,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair (gap) | 5.58 | 5.08 | 1.098 / 1.104 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
+| Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,151.49 | 6,195.03 | 0.186 / 0.205 | 306,168 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,249.35 | 6,867.82 | 0.182 / 0.210 | 315,892 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 48.31 | 44.92 | 1.075 / 1.208 | 83,216 |

@@ -24,7 +24,7 @@ with an easier operation. The following finite list is the inherited 17:
 | `CopyRegion/Rgba8Independent` | Clipped borrowed separate-owner copy. Current256x129/(127,65)->(17,19) cost does not prove original clipped257x129/(-3,5) recipe. |
 | `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
 | `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
-| `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. Separate-owner Rgba64 comparison does not exercise self-aliasing; no original-boundary current timing. |
+| `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. [Original self-composite](ORIGINAL-WORD-COMPOSITE.md) now passes/stops649.772/ImageSharp716.960us,upper.976714. Reference includes necessary sourceClone+Rgba64SrcOver+Dispose;0/26800GC B/op. Full-word exact/native/owner gates pass;no production change. |
 | `TextLayout/OriginalUnicode` | Authored cmap12/long-loca,quadratic extrema and compound accent. Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input. |
 | `TextLayout/PackedBmp` | Authored cmap4/short-loca,packed/repeated flags and implied points. Unmeasured distinct required mapping/outline path. |
 | `TextLayout/CompositeTransforms` | Authored matrices,point attachment and inherited metrics. Unmeasured distinct required compound outline path. |
@@ -66,6 +66,17 @@ source pins still match. Stop this pass;zero new builds,measurements or broad
 checks. Reuse the current platform/package qualification for unchanged paths.
 The evidence records precise acquisition/grammar/factory/refill/owner/reference
 changes that would invalidate reuse;related JPEG/font/copy edits do not.
+
+WAC1128 independently confirms the original full-word self-composite at(1,1),
+effective512×258. Direct ImageSharp self-drawing fails snapshot semantics;the
+explicitly labeled sourceClone+Rgba64SrcOver+Dispose reference includes that
+necessary work in timing. Both restore the canvas outside each draw. The current
+upper.976714 passes/stops,with exact managedBigInteger pixels and unchanged
+reference max1/RMSE.25/untouched/zero-alpha gates. GC0/26800B is distinct from
+at-least1062936B reference snapshot payload and unmeasured retained allocator
+capacity. Existing independent-source costs did not substitute for this boundary.
+One successful tooling build after a pre-check compile correction;no production,
+existing harness,Windows,broad or package builds. Reuse current qualification.
 
 The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
 pins both historical sources and all 17 names. Existing qualifying paths stay

@@ -1,0 +1,635 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAC1128",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "originalRequiredControl": "Composite/Rgba16Overlapping",
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "e97e305ab8e6d0b2aa6513a0809302703b96d290f15b221b5d389d0a51836e99",
+    "linuxSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "timedArtifactSha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "packageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8"
+  },
+  "case": {
+    "project": "Lokad.Image",
+    "originalRequiredControl": "Composite/Rgba16Overlapping",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "reference": "ImageSharp 3.1.12 Rgba64 Clone + DrawImage normal SrcOver opacity1 + Dispose;not FFmpeg",
+    "referenceSha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+    "mode": "confirm",
+    "actuals": 12,
+    "operationsPerActual": 128,
+    "allActualsRetained": true,
+    "managedUs": 649.771875,
+    "nativeUs": 716.960298828125,
+    "ratio": 0.9062871069179914,
+    "lower": 0.8037016541969526,
+    "upper": 0.9767143195166658,
+    "status": "pass",
+    "allocatedBytes": 0,
+    "referenceAllocatedBytes": 26800.0,
+    "managed": {
+      "mean": 649771.875,
+      "lower": 622518.5933010568,
+      "upper": 677025.1566989432,
+      "values": [
+        668336.4921875,
+        666232.0390625,
+        663860.9921875,
+        621100.875,
+        620951.7890625,
+        621504.125,
+        620836.171875,
+        661051.78125,
+        661035.5078125,
+        662258.65625,
+        664629.4140625,
+        665464.65625
+      ]
+    },
+    "referenceBrackets": {
+      "before": {
+        "mean": 761903.3776041666,
+        "lower": 749242.4749804063,
+        "upper": 774564.2802279269,
+        "values": [
+          760040.96875,
+          767567.7734375,
+          756856.8203125,
+          747914.375,
+          747306.9296875,
+          747119.109375,
+          774929.84375,
+          771691.546875,
+          768261.8125,
+          767090.7109375,
+          767755.2109375,
+          766305.4296875
+        ]
+      },
+      "paired": {
+        "mean": 739186.7805989584,
+        "lower": 710209.0577320505,
+        "upper": 768164.5034658662,
+        "values": [
+          761386.59375,
+          760487.390625,
+          733213.53125,
+          709288.7421875,
+          710025.3359375,
+          710197.171875,
+          711402.515625,
+          748614.625,
+          755463.5390625,
+          753610.4296875,
+          757667.21875,
+          758884.2734375
+        ]
+      },
+      "after": {
+        "mean": 716960.298828125,
+        "lower": 693165.998665786,
+        "upper": 740754.598990464,
+        "values": [
+          759497.328125,
+          753579.484375,
+          713136.4765625,
+          708396.6875,
+          708720.734375,
+          708656.1171875,
+          708557.3828125,
+          708889.15625,
+          708725.3125,
+          708933.9921875,
+          708389.0,
+          708041.9140625
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": -0.12899472629271497,
+      "lower": -0.14152652732230972,
+      "upper": -0.11646292526312021,
+      "values": [
+        -0.13034945889890165,
+        -0.1323215143256237,
+        -0.09936419241063017,
+        -0.1327691880048437,
+        -0.1340472092578289,
+        -0.1334000902512626,
+        -0.13617116194638973,
+        -0.12439215721828306,
+        -0.1335239631430529,
+        -0.1292193639483212,
+        -0.1310146506111412,
+        -0.1313637654963008
+      ]
+    },
+    "quietGuardsPassed": true,
+    "exactManagedRationalPixels": true,
+    "fullWordSamples": true,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+    "referenceOutputSha256": "6c855d165bcc1130c713bc7fa88d2b025b2c6ffa0fa2c5983f551aa5cd098d0f",
+    "nativeQuality": {
+      "RgbMax": 1,
+      "AlphaMax": 1,
+      "RgbRmse": 0.04270689659600043,
+      "AlphaRmse": 0.042145133794165276,
+      "UntouchedExact": true,
+      "ZeroSourceAlphaExact": true,
+      "Passed": true
+    },
+    "clocksPerOperation": 2,
+    "resetExcludedBeforeEveryOperation": true,
+    "snapshotCreationAndDisposalTimed": true,
+    "boundary": "Original513x259RGBA16self-composite shifted(1,1),effective512x258. Complete public managed operation;ImageSharp source snapshot+publicSrcOver+snapshot disposal are timed. Both mutate borrowed canvas,restored from the same resident seed before EVERY operation outside both clocks. OneCPU,no concurrent operations. Setup,JIT,IPC,hashes,BigIntegeroracle,verification and reset excluded equally. Outputs are full16-bit samples;no metadata/quality adjustment.",
+    "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three reference bracket lower bounds;no sample filtering or forcedGC.",
+    "caseId": "OriginalWordComposite",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "managedExact": true,
+    "borrowedCanvas": true,
+    "sourceAliasesCanvas": true,
+    "referenceLabel": "ImageSharp3.1.12 Rgba64 sourceClone+DrawImage normalSrcOver+Dispose;notFFmpeg"
+  },
+  "short": {
+    "project": "Lokad.Image",
+    "originalRequiredControl": "Composite/Rgba16Overlapping",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "librarySha256": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "reference": "ImageSharp 3.1.12 Rgba64 Clone + DrawImage normal SrcOver opacity1 + Dispose;not FFmpeg",
+    "referenceSha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+    "mode": "short",
+    "actuals": 3,
+    "operationsPerActual": 128,
+    "allActualsRetained": true,
+    "managedUs": 620.6999114583334,
+    "nativeUs": 708.9425989583334,
+    "ratio": 0.8755291505551266,
+    "lower": 0.836270532713805,
+    "upper": 0.9149367953517158,
+    "status": "pass",
+    "allocatedBytes": 0,
+    "referenceAllocatedBytes": 26800.0,
+    "managed": {
+      "mean": 620699.9114583334,
+      "lower": 610481.1923019887,
+      "upper": 630918.630614678,
+      "values": [
+        620852.53125,
+        621167.90625,
+        620079.296875
+      ]
+    },
+    "referenceBrackets": {
+      "before": {
+        "mean": 709790.3098958334,
+        "lower": 689576.1912954252,
+        "upper": 730004.4284962416,
+        "values": [
+          708653.1328125,
+          709851.1640625,
+          710866.6328125
+        ]
+      },
+      "paired": {
+        "mean": 709719.4921875,
+        "lower": 708474.904757064,
+        "upper": 710964.079617936,
+        "values": [
+          709746.3984375,
+          709641.921875,
+          709770.15625
+        ]
+      },
+      "after": {
+        "mean": 708942.5989583334,
+        "lower": 704619.0292740179,
+        "upper": 713266.1686426488,
+        "values": [
+          708690.875,
+          708975.5078125,
+          709161.4140625
+        ]
+      }
+    },
+    "pairedLogStatistics": {
+      "mean": -0.1340223481992299,
+      "lower": -0.1519747912265235,
+      "upper": -0.11606990517193629,
+      "values": [
+        -0.13381413700390585,
+        -0.13315908160611048,
+        -0.13509382598767333
+      ]
+    },
+    "quietGuardsPassed": true,
+    "exactManagedRationalPixels": true,
+    "fullWordSamples": true,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+    "referenceOutputSha256": "6c855d165bcc1130c713bc7fa88d2b025b2c6ffa0fa2c5983f551aa5cd098d0f",
+    "nativeQuality": {
+      "RgbMax": 1,
+      "AlphaMax": 1,
+      "RgbRmse": 0.04270689659600043,
+      "AlphaRmse": 0.042145133794165276,
+      "UntouchedExact": true,
+      "ZeroSourceAlphaExact": true,
+      "Passed": true
+    },
+    "clocksPerOperation": 2,
+    "resetExcludedBeforeEveryOperation": true,
+    "snapshotCreationAndDisposalTimed": true,
+    "boundary": "Original513x259RGBA16self-composite shifted(1,1),effective512x258. Complete public managed operation;ImageSharp source snapshot+publicSrcOver+snapshot disposal are timed. Both mutate borrowed canvas,restored from the same resident seed before EVERY operation outside both clocks. OneCPU,no concurrent operations. Setup,JIT,IPC,hashes,BigIntegeroracle,verification and reset excluded equally. Outputs are full16-bit samples;no metadata/quality adjustment.",
+    "confidence": "All actuals;two-sided99.9percentStudentt,pairedlogratio and managed mean against fastest of three reference bracket lower bounds;no sample filtering or forcedGC."
+  },
+  "probe": {
+    "state": "probed",
+    "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+    "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+    "expectedHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+    "direct": {
+      "RgbMax": 62575,
+      "AlphaMax": 65264,
+      "RgbRmse": 19553.37864063596,
+      "AlphaRmse": 22414.382727814995,
+      "UntouchedExact": true,
+      "ZeroSourceAlphaExact": false,
+      "Passed": false
+    },
+    "snapshot": {
+      "RgbMax": 1,
+      "AlphaMax": 1,
+      "RgbRmse": 0.04270689659600043,
+      "AlphaRmse": 0.042145133794165276,
+      "UntouchedExact": true,
+      "ZeroSourceAlphaExact": true,
+      "Passed": true
+    },
+    "directEqualsSnapshot": false,
+    "completeReferenceSnapshotMustBeTimedIfRequired": true,
+    "timingClaim": false
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "tools/WarmReference/WordCompositeWorker/Program.cs": "0f4413faea77265541887d9eba5b3da6fd5c26d7b8bb6f32903cf45b61f82fc7",
+    "tools/WarmReference/WordCompositeWorker/WordCompositeWorker.csproj": "7e51e57490316ec2df87a792f52656a31f82f526fc14f470b8b2a6af19e2ec13",
+    "tools/WarmReference/measure-word-composite.py": "074b1bf6df280b70539f1d8054e5e382a3f974d9f7f122bfd45dca6c3ee870de",
+    "tools/WarmReference/build-word-composite-linux.sh": "b65d2434ba109a2e4ddfea4cd04437ad37b3a0ed777b13126030079887802b38"
+  },
+  "worker": {
+    "binary": "tools/WarmReference/WordCompositeWorker/bin/Release/net10.0/WordCompositeWorker.dll",
+    "runtimeHashes": {
+      "Lokad.Image.pdb": "2af790dd1f11ac09f509e0e1dfdfb4a4472c2883791d6545382a51d284bf99f0",
+      "Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+      "SixLabors.ImageSharp.dll": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+      "WordCompositeWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "WordCompositeWorker.pdb": "d1749ef73574a3d311d45e57674ab8ddac677002b2261579406f323c9adb7793",
+      "WordCompositeWorker.deps.json": "3eccf846a3161c9f36625bec4584be439621d15925fa912751a430a1ad79ec85",
+      "WordCompositeWorker.dll": "c180cf21ebf843019d278805a0b86b347e74c0fa428e6ec4ddc7a21ded903320",
+      "Lokad.Image.dll": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "WordCompositeWorker": "c6d50d379ae1368548e7e58f6bedf1dbff53e04df73d150bee35543f326d9faa"
+    }
+  },
+  "checks": {
+    "linuxManaged": {
+      "normal": {
+        "state": "checked",
+        "subject": "managed",
+        "exactManaged": true,
+        "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+        "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "quality": {
+          "RgbMax": 0,
+          "AlphaMax": 0,
+          "RgbRmse": 0,
+          "AlphaRmse": 0,
+          "UntouchedExact": true,
+          "ZeroSourceAlphaExact": true,
+          "Passed": true
+        },
+        "fullWordSamples": true,
+        "borrowedCanvas": true,
+        "sourceAliasesCanvas": true,
+        "cancellationAndRefusalRecovery": true,
+        "timingClaim": false
+      },
+      "scalar": {
+        "state": "checked",
+        "subject": "managed",
+        "exactManaged": true,
+        "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+        "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "quality": {
+          "RgbMax": 0,
+          "AlphaMax": 0,
+          "RgbRmse": 0,
+          "AlphaRmse": 0,
+          "UntouchedExact": true,
+          "ZeroSourceAlphaExact": true,
+          "Passed": true
+        },
+        "fullWordSamples": true,
+        "borrowedCanvas": true,
+        "sourceAliasesCanvas": true,
+        "cancellationAndRefusalRecovery": true,
+        "timingClaim": false
+      }
+    },
+    "linuxReference": {
+      "normal": {
+        "state": "checked",
+        "subject": "snapshot",
+        "exactManaged": false,
+        "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputHash": "6c855d165bcc1130c713bc7fa88d2b025b2c6ffa0fa2c5983f551aa5cd098d0f",
+        "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "quality": {
+          "RgbMax": 1,
+          "AlphaMax": 1,
+          "RgbRmse": 0.04270689659600043,
+          "AlphaRmse": 0.042145133794165276,
+          "UntouchedExact": true,
+          "ZeroSourceAlphaExact": true,
+          "Passed": true
+        },
+        "fullWordSamples": true,
+        "borrowedCanvas": true,
+        "sourceAliasesCanvas": true,
+        "cancellationAndRefusalRecovery": false,
+        "timingClaim": false
+      },
+      "scalar": {
+        "state": "checked",
+        "subject": "snapshot",
+        "exactManaged": false,
+        "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputHash": "6fce5864ad0d1d1984788d5a92f873a01af98002bd350460880dc3a97f1c9a74",
+        "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "quality": {
+          "RgbMax": 1,
+          "AlphaMax": 1,
+          "RgbRmse": 0.04337719249731649,
+          "AlphaRmse": 0.042145133794165276,
+          "UntouchedExact": true,
+          "ZeroSourceAlphaExact": true,
+          "Passed": true
+        },
+        "fullWordSamples": true,
+        "borrowedCanvas": true,
+        "sourceAliasesCanvas": true,
+        "cancellationAndRefusalRecovery": false,
+        "timingClaim": false
+      }
+    },
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "WAC1128",
+      "sameImmutableTimedPackageLibrary": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+      "runtimeHashes": {
+        "Lokad.Image.pdb": "2af790dd1f11ac09f509e0e1dfdfb4a4472c2883791d6545382a51d284bf99f0",
+        "Lokad.Image.xml": "083791513f22a0206231d9c41e7777c60aa5571b313e221f2a15e4089238dffe",
+        "SixLabors.ImageSharp.dll": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "WordCompositeWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "WordCompositeWorker.pdb": "d1749ef73574a3d311d45e57674ab8ddac677002b2261579406f323c9adb7793",
+        "WordCompositeWorker.deps.json": "3eccf846a3161c9f36625bec4584be439621d15925fa912751a430a1ad79ec85",
+        "WordCompositeWorker.dll": "c180cf21ebf843019d278805a0b86b347e74c0fa428e6ec4ddc7a21ded903320",
+        "Lokad.Image.dll": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+        "WordCompositeWorker": "c6d50d379ae1368548e7e58f6bedf1dbff53e04df73d150bee35543f326d9faa"
+      },
+      "checks": {
+        "probe-normal": {
+          "state": "probed",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "expectedHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+          "direct": {
+            "RgbMax": 62575,
+            "AlphaMax": 65264,
+            "RgbRmse": 19553.37864063596,
+            "AlphaRmse": 22414.382727814995,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": false,
+            "Passed": false
+          },
+          "snapshot": {
+            "RgbMax": 1,
+            "AlphaMax": 1,
+            "RgbRmse": 0.04270689659600043,
+            "AlphaRmse": 0.042145133794165276,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "directEqualsSnapshot": false,
+          "completeReferenceSnapshotMustBeTimedIfRequired": true,
+          "timingClaim": false
+        },
+        "managed-normal": {
+          "state": "checked",
+          "subject": "managed",
+          "exactManaged": true,
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "quality": {
+            "RgbMax": 0,
+            "AlphaMax": 0,
+            "RgbRmse": 0,
+            "AlphaRmse": 0,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "fullWordSamples": true,
+          "borrowedCanvas": true,
+          "sourceAliasesCanvas": true,
+          "cancellationAndRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "snapshot-normal": {
+          "state": "checked",
+          "subject": "snapshot",
+          "exactManaged": false,
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputHash": "6c855d165bcc1130c713bc7fa88d2b025b2c6ffa0fa2c5983f551aa5cd098d0f",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "quality": {
+            "RgbMax": 1,
+            "AlphaMax": 1,
+            "RgbRmse": 0.04270689659600043,
+            "AlphaRmse": 0.042145133794165276,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "fullWordSamples": true,
+          "borrowedCanvas": true,
+          "sourceAliasesCanvas": true,
+          "cancellationAndRefusalRecovery": false,
+          "timingClaim": false
+        },
+        "probe-scalar": {
+          "state": "probed",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "expectedHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+          "direct": {
+            "RgbMax": 62575,
+            "AlphaMax": 65264,
+            "RgbRmse": 19553.376725278395,
+            "AlphaRmse": 22414.382727814995,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": false,
+            "Passed": false
+          },
+          "snapshot": {
+            "RgbMax": 1,
+            "AlphaMax": 1,
+            "RgbRmse": 0.04337719249731649,
+            "AlphaRmse": 0.042145133794165276,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "directEqualsSnapshot": false,
+          "completeReferenceSnapshotMustBeTimedIfRequired": true,
+          "timingClaim": false
+        },
+        "managed-scalar": {
+          "state": "checked",
+          "subject": "managed",
+          "exactManaged": true,
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputHash": "015cac447db580f81d09c86f8c777a0b71ce78ffdc0913361dc330e86b6b737c",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "quality": {
+            "RgbMax": 0,
+            "AlphaMax": 0,
+            "RgbRmse": 0,
+            "AlphaRmse": 0,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "fullWordSamples": true,
+          "borrowedCanvas": true,
+          "sourceAliasesCanvas": true,
+          "cancellationAndRefusalRecovery": true,
+          "timingClaim": false
+        },
+        "snapshot-scalar": {
+          "state": "checked",
+          "subject": "snapshot",
+          "exactManaged": false,
+          "coreHash": "d93b517eba50980eef5ac1fee6038a55c5f00ae31713fbb3d81335896dd71547",
+          "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputHash": "6fce5864ad0d1d1984788d5a92f873a01af98002bd350460880dc3a97f1c9a74",
+          "referenceHash": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+          "quality": {
+            "RgbMax": 1,
+            "AlphaMax": 1,
+            "RgbRmse": 0.04337719249731649,
+            "AlphaRmse": 0.042145133794165276,
+            "UntouchedExact": true,
+            "ZeroSourceAlphaExact": true,
+            "Passed": true
+          },
+          "fullWordSamples": true,
+          "borrowedCanvas": true,
+          "sourceAliasesCanvas": true,
+          "cancellationAndRefusalRecovery": false,
+          "timingClaim": false
+        }
+      },
+      "allBuilds": 0,
+      "allTimingsAbsent": true
+    }
+  },
+  "memory": {
+    "managedAllocatedBytesPerOperation": 0,
+    "referenceGcAllocatedBytesPerOperation": 26800.0,
+    "borrowedCanvasBytes": 1062936,
+    "referenceSnapshotMinimumPixelPayloadBytes": 1062936,
+    "newManagedOwnedWorkspaceBytes": 0,
+    "newManagedRetainedCapacityBytes": 0,
+    "referencePoolRetainedCapacityMeasured": false,
+    "physicalNativeJitPeaksMeasured": false,
+    "interpretation": "Both retain the caller canvas and immutable reset seed outside the operation. Lokad owns no operation storage. Reference needs a temporary source snapshot;creation,draw and disposal stay timed. Its at-least1062936B pixel payload can reuse ImageSharp allocator pools;26800B GC allocation is not total storage or a measured peak. Native/reserved/physical/JIT and retained reference pool capacity are unmeasured. Harness oracle,verification arrays,IPC and startup are excluded equally."
+  },
+  "qualification": {
+    "provider": "benchmarks/word-alias-dispatch-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6745,
+    "focusedInternalEachModeEachOs": 25,
+    "focusedPublicEachModeEachOs": 190,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "packageSha256": "daf541eb919b6f8a6596ffb5712a242908064d70834d0b7bd05346491a84a3b8",
+    "newBroadOrPackageChecks": 0
+  },
+  "builds": {
+    "managedToolAttempts": 2,
+    "successfulManagedTools": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "existingHarness": 0,
+    "native": 0,
+    "fixtures": 0,
+    "package": 0,
+    "windows": 0
+  },
+  "borrowedDrawingStatusCounts": {
+    "passCount": 6,
+    "gaps": 2,
+    "uncertain": 1,
+    "total": 9
+  },
+  "interpretation": "This original required public boundary independently passes and stops. No production optimization or broader compositing claim. Direct reference self-drawing is an untimed diagnostic with wrong snapshot pixels;the complete sourceClone+DrawImage+Dispose program is the frozen approved-quality reference. Reset is excluded before EVERY draw on both sides,matching existing composite controls. All actuals,original short and confirmation remain;no favorable repeat or settings grid.",
+  "preflight": "One initial tooling compile failed because overload resolution made the oracle output span read-only. Explicit writable AsSpan fixed it before any correctness check or timing;initial source archive and failure log retained. One successful Linux tool build;portable worker/current package reused on Windows. No production or qualification rebuild.",
+  "invalidation": "Changes to aliased Composite traversal/math/validation/admission/cancellation,canvas representation,frozen input/shift,reference version/settings/snapshot or reset/ownership boundary require affected requalification. Unchanged other paths retain identified evidence.",
+  "raw": {
+    "file": "original-word-composite-confirmation.tar.xz",
+    "sha256": "ee5cc5e151ad16e1a4663f66c1fb0f5289cfc375478386fa2272c3ca4c2a0ddb",
+    "bytes": 1436900,
+    "members": 65,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "word-alias-dispatch-qualified.tar.xz",
+        "sha256": "5ae813b07fcaf5a88464400712d560efcbc41034a517944854649c174c1b5b51"
+      },
+      {
+        "file": "borrowed-drawing-validation-qualified.tar.xz",
+        "sha256": "9959c7dbc95acb9a62d519b9a6aef878cf17161a896dc7e71accdc7c5f414f4f"
+      }
+    ]
+  }
+}
