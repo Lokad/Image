@@ -1,5 +1,10 @@
 # Canonical Lanczos identity-axis preparation
 
+The subsequent [one-axis reference round](LANCZOS-IDENTITY-AXIS-REFERENCE.md)
+qualifies both formerly diagnostic shapes against equivalent complete zimg
+operations on this same package. This report retains the original controlled
+effects and eight source-valid comparisons.
+
 An unchanged axis now retains one exact Q30 unit weight per integer sample.
 The previous seven-tap support contained only zero neighbors. This removes
 coefficient scratch, repeated normalization and unnecessary ring rows while

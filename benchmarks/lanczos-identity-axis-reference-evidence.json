@@ -1,0 +1,301 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LAX1116",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "newComparisonViews": 2,
+  "reason": "Two one-axis controls exercise newly canonical identity-axis preparation omitted from eight existing external comparisons. No shape/depth/filter grid.",
+  "testedScope": "Existing frozen513x259RGBA16 input;complete one-shot horizontal256x259 and vertical513x129 Lanczos3. Existing public one-shot boundary;canonical identity preparation is now externally measured. No general shape/depth/content claim.",
+  "producers": {
+    "windowsSha256": "461fc039aa8d0967719d91b518ca7be6f4d2dc097b292a8e90df76b642d50f76",
+    "linuxSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "timedArtifactSha256": "843fa82f57827a4a5c4f0fe38061db9da92723207d9e0733a3f4d6c70613e045",
+    "packageSha256": "e58932e09d4a7c82d0a4bd4e5e4b0a56a6c1621b12f7d0379b5b1b3461d8e416"
+  },
+  "reference": {
+    "identity": "zimg3.0.6,explicitly labeled FFmpeg zscale backend",
+    "adapter": {
+      "sourceSha256": "ec1ea4b50831f9df88d2c9c7aa23a8ad76fd3d13accd5c236df39df4476f9555",
+      "workerSha256": "b82c67370a35b21ee35748c217f6df960cf9408e4a673de65ea835db18f26026",
+      "zimgArchiveSha256": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e",
+      "buildCommand": [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/include",
+        "tmp/lax1116-zimg-lanczos.c",
+        "-o",
+        "tmp/lax1116-zimg-lanczos",
+        "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib",
+        "-lzimg",
+        "-lstdc++",
+        "-lstdc++",
+        "-lm"
+      ],
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "staticallyLinked": true,
+    "argumentGuardOnlyChanged": true
+  },
+  "boundaries": {
+    "managed": "Complete public one-shot Resize including fresh axis/work preparation, independent owned output and disposal;resident borrowed packed RGBA16 source.",
+    "native": "Complete zimg one-shot graph/input-plane/scratch preparation,halo packing,filtering,full-word normalization,independent owned packed output and disposal;resident borrowed packed RGBA16 source.",
+    "notPreparedComparison": true,
+    "unmodifiedDefaultManagedIdleStorage": "Up to two arrays/4MiB;timed operations include normal acquire/release;separate caller-root probes bypass idle storage.",
+    "nativeAllocatorRetention": "malloc/free allocator caching not measured;no graph or scratch retained between calls."
+  },
+  "input": {
+    "path": "artifacts/warm-reference/bilinear16-audit/input.rgba64le",
+    "sha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "width": 513,
+    "height": 259,
+    "depth": 16
+  },
+  "cases": {
+    "Horizontal16": {
+      "width": 256,
+      "height": 259,
+      "depth": 16,
+      "managedUs": 608.6,
+      "nativeUs": 2105.1934088541666,
+      "ratio": 0.2890945779329863,
+      "pairedGeometricRatio": 0.2890728353054962,
+      "lower": 0.28427277691324343,
+      "upper": 0.2939539445842223,
+      "status": "pass",
+      "allocatedBytesMinimum": 44712.0,
+      "allocatedBytesMaximum": 44719.75,
+      "observedAllocations": [
+        44712.0,
+        44719.75
+      ],
+      "managedAdmittedOneShotPeakBytes": 577088,
+      "separateRetainedPlanBytes": 46656,
+      "nativeScratchBytes": 223808,
+      "nativeAllocationsAndPhysicalPeaksUnmeasured": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutputs": true,
+      "managedExactContractPreserved": true,
+      "allActualsRetained": true,
+      "actuals": 12,
+      "operationsPerActual": 32,
+      "nativeBracketsEachActual": true,
+      "outputSha256": "cb6a14970c3f4fbd492b5b3aedde3b656c285ef72b35e6855e8973c98748b8f1",
+      "nativeOutputSha256": "3500136fddf014098d287c7be4a016f3e53955ec10f8aa8745a6c296bf5abfcd",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.0019103925353925353,
+        "alphaMeanSquared": 0.0012065637065637065
+      },
+      "scalarQuality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002639358108108108,
+        "alphaMeanSquared": 0.0016288610038610039
+      },
+      "stats": {
+        "managed": {
+          "N": 12,
+          "mean": 608.6,
+          "standardError": 2.2878508499463828,
+          "lower": 598.4488530523141,
+          "upper": 618.7511469476859,
+          "values": [
+            597.3,
+            598.115625,
+            608.165625,
+            607.81875,
+            606.15,
+            610.365625,
+            612.6625,
+            611.4625,
+            612.090625,
+            604.109375,
+            606.7875,
+            628.171875
+          ]
+        },
+        "reference": {
+          "N": 12,
+          "mean": 2105.1934088541666,
+          "standardError": 1.2466596470869127,
+          "lower": 2099.6620057595874,
+          "upper": 2110.724811948746,
+          "values": [
+            2107.857890625,
+            2111.379765625,
+            2103.84853125,
+            2105.0725625,
+            2107.369015625,
+            2105.253296875,
+            2106.056390625,
+            2101.06696875,
+            2101.025953125,
+            2095.7528125,
+            2107.6643125,
+            2109.97340625
+          ]
+        }
+      }
+    },
+    "Vertical16": {
+      "width": 513,
+      "height": 129,
+      "depth": 16,
+      "managedUs": 735.9575520833333,
+      "nativeUs": 2061.4017526041666,
+      "ratio": 0.3570180102707291,
+      "pairedGeometricRatio": 0.3570018796282066,
+      "lower": 0.3523899836494822,
+      "upper": 0.3616741336917389,
+      "status": "pass",
+      "allocatedBytesMinimum": 254671.5,
+      "allocatedBytesMaximum": 254679.25,
+      "observedAllocations": [
+        254671.5,
+        254679.25
+      ],
+      "managedAdmittedOneShotPeakBytes": 786516,
+      "separateRetainedPlanBytes": 257100,
+      "nativeScratchBytes": 149824,
+      "nativeAllocationsAndPhysicalPeaksUnmeasured": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutputs": true,
+      "managedExactContractPreserved": true,
+      "allActualsRetained": true,
+      "actuals": 12,
+      "operationsPerActual": 32,
+      "nativeBracketsEachActual": true,
+      "outputSha256": "99ed3d979ee4c3e186ed31b5f125270960d6f6784d0d8ba5e7fd092eed48da21",
+      "nativeOutputSha256": "2455b8e93f5715b9e4681e5d9f5b162e8f52e2c09e0eb63dc841fc41da182ed9",
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.0024429434194156077,
+        "alphaMeanSquared": 0.0016017649636580686
+      },
+      "scalarQuality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 1,
+        "alphaMaximum": 1,
+        "rgbMeanSquared": 0.002800570188031088,
+        "alphaMeanSquared": 0.0018737627876754764
+      },
+      "stats": {
+        "managed": {
+          "N": 12,
+          "mean": 735.9575520833333,
+          "standardError": 2.1651968555777934,
+          "lower": 726.3506183742794,
+          "upper": 745.5644857923872,
+          "values": [
+            742.1125,
+            734.240625,
+            733.978125,
+            739.0125,
+            727.95,
+            738.709375,
+            737.553125,
+            733.19375,
+            730.234375,
+            755.0375,
+            731.809375,
+            727.659375
+          ]
+        },
+        "reference": {
+          "N": 12,
+          "mean": 2061.4017526041666,
+          "standardError": 1.2512168804256012,
+          "lower": 2055.850129159429,
+          "upper": 2066.9533760489044,
+          "values": [
+            2056.51325,
+            2058.7895,
+            2064.1671875,
+            2060.534953125,
+            2060.53040625,
+            2063.937453125,
+            2067.8356875,
+            2069.989125,
+            2058.407515625,
+            2061.514890625,
+            2056.1635,
+            2058.4375625
+          ]
+        }
+      }
+    }
+  },
+  "statusCounts": {
+    "passes": 2,
+    "gaps": 0,
+    "uncertain": 0
+  },
+  "measurement": {
+    "shortActuals": 3,
+    "independentConfirmationActuals": 12,
+    "operationsPerActual": 32,
+    "nativeBracketsEachActual": true,
+    "warmupsEachCase": 64,
+    "quietGuardsPassed": true,
+    "oneCpu0OperationAtATime": true,
+    "naturalGc": true,
+    "allActualsRetained": true,
+    "critical": 4.436979337146836,
+    "newProductionOrManagedHarnessBuilds": 0,
+    "nativeAdapterBuilds": 1,
+    "completedTimingJobsRepeated": 0
+  },
+  "qualification": {
+    "provider": "benchmarks/lanczos-identity-axis-evidence.json",
+    "sameImmutablePackageAndCoreVerifiedBothOs": true,
+    "sourcePinsUnchangedBothOs": true,
+    "fullChecksEachOsReused": 6742,
+    "focusedInternalPublicReused": [
+      163,
+      15
+    ],
+    "modesReused": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "sameActualPackageConsumerAndThreeExamplesBothOsReused": true,
+    "broadOrPackageRepeats": 0
+  },
+  "raw": {
+    "file": "lanczos-identity-axis-reference.tar.xz",
+    "sha256": "ad1563d71a068c70a33b9ae02de23571a6b6d083b58ea4233b75e84af4a3a6a6",
+    "bytes": 1626904,
+    "members": 60,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "lanczos-identity-axis-qualified.tar.xz",
+        "sha256": "6d967730048bee285c339bea9d7e5af8848927234c8d9020cb9cfb78f956ca08"
+      }
+    ]
+  },
+  "warmParityComplete": false,
+  "publicationPostponed": true
+}

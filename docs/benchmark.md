@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **148 comparisons** summarize that scope.
+**289 named material paths**; these **150 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -140,9 +140,13 @@ Two additional complete managed-DLL diagnostics use the existing full-word input
 Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
 about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
 **798,780→786,516 B**. Ranges and raw observations remain in the report.
-These are prior/candidate DLL comparisons, **not external one-axis parity proof**.
-The declared external scope and full 289-path objective stay open; no historical
-stage sum, numerical relaxation or broader workload grid is implied.
+Those diagnostics establish only scoped prior/candidate effects. Two subsequent
+[equivalent one-shot comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md)
+on the same immutable package now pass: horizontal **608.60 / 2,105.19µs,
+upper0.294**, vertical **735.96 / 2,061.40µs, upper0.362**.
+Managed GC ranges **44,712–44,720 / 254,672–254,679B/op** remain separate from
+retained plans and governed peaks. All ten Lanczos views pass/stop; no stage-cost
+sum or broader grid is implied. The full289-path objective stays open.
 Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
 normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
 the SAME actual package/all three examples, including one-axis asynchronous
@@ -406,6 +410,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 398.55 | 422.93 | 0.942 / 0.952 | 137 |
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
+| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 608.60 | 2,105.19 | 0.289 / 0.294 | 44,712–44,720 |
+| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 735.96 | 2,061.40 | 0.357 / 0.362 | 254,672–254,679 |
 | Plain transpose RGBA16 † → 259×513 | 34.98 | 43.85 | 0.798 / 0.859 | 56 |
 | Plain transpose RGBA8 † → 259×513 | 26.85 | 37.83 | 0.710 / 0.716 | 56 |
 | Counterclockwise quarter turn RGBA8 † → 259×513 | 28.57 | 37.43 | 0.763 / 0.772 | 56 |

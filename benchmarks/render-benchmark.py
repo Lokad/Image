@@ -113,6 +113,21 @@ def apply_current_lanczos(editing):
             line = '| ' + ' | '.join(cells) + ' |'
         rows.append(line)
     assert seen == set(current['cases']) and len(seen) == 8
+    one_axis = json.loads((ROOT / 'benchmarks/lanczos-identity-axis-reference-evidence.json').read_text(encoding='utf-8'))
+    assert one_axis['measurementAccepted'] and not one_axis['productionChanged'] and not one_axis['productionSpeedupClaim']
+    assert one_axis['newMaterialPaths'] == 0 and one_axis['newComparisonViews'] == 2
+    assert one_axis['producers'] == current['producers'] and one_axis['raw']['mirrored'] and one_axis['raw']['allMembersVerified']
+    assert one_axis['qualification']['sameImmutablePackageAndCoreVerifiedBothOs'] and one_axis['qualification']['broadOrPackageRepeats'] == 0
+    assert one_axis['measurement']['quietGuardsPassed'] and one_axis['measurement']['independentConfirmationActuals'] == 12
+    assert set(one_axis['cases']) == {'Horizontal16', 'Vertical16'}
+    for case in one_axis['cases'].values():
+        assert case['status'] == 'pass' and case['upper'] <= 1 and case['allActualsRetained'] and case['managedExactContractPreserved']
+        assert case['actuals'] == 12 and case['operationsPerActual'] == 32 and case['sourceUnchanged'] and case['independentOwnedOutputs']
+        for quality in (case['quality'], case['scalarQuality']):
+            assert quality['matched'] and quality['sourceUnchanged'] and quality['rgbMaximum'] <= 1 and quality['alphaMaximum'] <= 1
+            assert quality['rgbMeanSquared'] <= .0625 and quality['alphaMeanSquared'] <= .0625
+        allocated = f"{case['allocatedBytesMinimum']:,.0f}–{case['allocatedBytesMaximum']:,.0f}"
+        rows.append(f"| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → {case['width']}×{case['height']} | {case['managedUs']:,.2f} | {case['nativeUs']:,.2f} | {case['ratio']:.3f} / {case['upper']:.3f} | {allocated} |")
     return '\n'.join(rows)
 
 
@@ -3126,9 +3141,13 @@ Two additional complete managed-DLL diagnostics use the existing full-word input
 Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
 about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
 **798,780→786,516 B**. Ranges and raw observations remain in the report.
-These are prior/candidate DLL comparisons, **not external one-axis parity proof**.
-The declared external scope and full 289-path objective stay open; no historical
-stage sum, numerical relaxation or broader workload grid is implied.
+Those diagnostics establish only scoped prior/candidate effects. Two subsequent
+[equivalent one-shot comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md)
+on the same immutable package now pass: horizontal **608.60 / 2,105.19µs,
+upper0.294**, vertical **735.96 / 2,061.40µs, upper0.362**.
+Managed GC ranges **44,712–44,720 / 254,672–254,679B/op** remain separate from
+retained plans and governed peaks. All ten Lanczos views pass/stop; no stage-cost
+sum or broader grid is implied. The full289-path objective stays open.
 Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
 normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
 the SAME actual package/all three examples, including one-axis asynchronous
@@ -3282,7 +3301,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 148, 'Expected 148 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 150, 'Expected 150 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
