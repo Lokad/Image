@@ -1,5 +1,9 @@
 # Lanczos word product reuse
 
+[Canonical identity-axis preparation](LANCZOS-IDENTITY-AXIS.md) now owns the concise
+eight-case status. The four one-shot costs refresh there; unchanged prepared
+nonidentity costs and their original producer evidence remain source-valid.
+
 Accepted LZB916D shares one paired-output schedule across byte and word reduction. Word
 execution expands exact source products once per needed row pair, then reuses
 them across overlapping horizontal windows. The original UInt32 producer remains

@@ -74,29 +74,46 @@ def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata)
     return result
 
 
-def apply_current_lanczos_enlargement_confidence(editing):
-    current = json.loads((ROOT / 'benchmarks/lanczos-enlargement-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    c, q, m = current['case'], current['qualification'], current['measurement']
-    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+def apply_current_lanczos(editing):
+    current = json.loads((ROOT / 'benchmarks/lanczos-identity-axis-evidence.json').read_text(encoding='utf-8'))
+    q = current['qualification']
+    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['productionAndActualPackageByteIdentical'] and q['fullChecksEachOs'] == 6600
-    assert q['fullScalarIsaActualConsumerAndThreeExamplesReused'] and q['broadOrPackageRepeats'] == 0
-    assert c['librarySha256'] == q['actualPackageLibrarySha256'] == current['producers']['timedArtifactSha256']
-    assert m['pairs'] == m['nativeSamplesEachBracket'] == 12 and m['allActualsRetained'] and m['operationsEachSubject'] == 16
-    assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
-    assert c['sourceUnchanged'] and c['independentOwnedOutput'] and c['quality']['matched']
-    assert c['status'] == 'pass' and c['upper'] <= 1 and c['retainedManagedBytes'] == 333396 and c['nativeScratchBytes'] == 274240
-    assert c['quality']['rgbMaximum'] <= 1 and c['quality']['alphaMaximum'] <= 1
-    assert c['quality']['rgbMeanSquared'] <= .25**2 and c['quality']['alphaMeanSquared'] <= .25**2
-    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    prefix = '| Lanczos3 prepared RGBA16 / zimg prepared'
-    found = [line for line in editing.splitlines() if line.startswith(prefix) and '1027×519' in line]
-    assert len(found) == 1
-    editing = editing.replace(found[0], f'{prefix} † → 1027×519 | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |')
-    lanczos_rows = [line for line in editing.splitlines() if line.startswith('| Lanczos3 ')]
-    assert len(lanczos_rows) == 8 and all(float(line.split('|')[4].split('/')[1]) <= 1 for line in lanczos_rows)
-    return editing
+    assert current['statusCounts'] == {'passCount': 8, 'gap': 0, 'uncertain': 0}
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6742
+    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256'] == current['producers']['packageSha256']
+    assert q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
+    assert all(q[key]['actualConsumerPassed'] and q[key]['usageExamples'] == 3 for key in ('actualPackage', 'samePackageWindows'))
+    assert q['threeNamedResizeStorageSuitesExplicitlyIncluded'] and q['oneAxisRetainedAndAsynchronousSurvivorConsumerBothOs']
+    assert q['modes'] == ['normal', 'avx512-off', 'scalar'] and q['acceptedTimedLinuxArtifactRebuildsAfterMeasurement'] == 0
+    assert all(current['sourceProof'].values())
+    axis = current['identityAxisDiagnostics']
+    assert axis['Vertical16']['cpuGainConfirmed'] and axis['Vertical16']['allActualMeanIntervalsSeparated']
+    assert not axis['Horizontal16']['cpuGainConfirmed'] and not axis['Horizontal16']['cpuRegressionConfirmed']
+    assert all(case['noExternalReferenceElapsedOrParityClaim'] and case['all12PairsRetained'] for case in axis.values())
+    mapping = {f'Lanczos3 {"prepared" if prepared else "one-shot"} RGBA{depth} / zimg {"prepared" if prepared else "one-shot"} † → {size}': case
+               for case, prepared, depth, size in [
+                   ('OneShot8', False, 8, '256×129'), ('Repeated8', True, 8, '256×129'),
+                   ('OneShot16', False, 16, '256×129'), ('Repeated16', True, 16, '256×129'),
+                   ('OneShotEnlarge8', False, 8, '1027×519'), ('RepeatedEnlarge8', True, 8, '1027×519'),
+                   ('OneShotEnlarge16', False, 16, '1027×519'), ('RepeatedEnlarge16', True, 16, '1027×519')]}
+    rows, seen = [], set()
+    for line in editing.splitlines():
+        cells = [part.strip() for part in line.strip('|').split('|')]
+        label = re.sub(r' \((?:gap|uncertain)\)', '', cells[0])
+        if label in mapping:
+            case = mapping[label]; c = current['cases'][case]; assert case not in seen; seen.add(case)
+            assert c['status'] == 'pass' and c['upper'] <= 1 and c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+            assert c['allActualsRetained'] and c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+            assert c['reusedUnchangedPath'] or c['librarySha256'] == current['producers']['timedArtifactSha256']
+            assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+            cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
+                         f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
+            line = '| ' + ' | '.join(cells) + ' |'
+        rows.append(line)
+    assert seen == set(current['cases']) and len(seen) == 8
+    return '\n'.join(rows)
 
 
 def apply_current_jpeg_preparation(codecs, read_rows):
@@ -619,46 +636,6 @@ def apply_mixed_word_cache(editing):
         rows.append(line)
     assert seen == 1
     return '\n'.join(rows)
-
-
-def apply_lanczos_product_reuse(editing):
-    current = json.loads((ROOT / 'benchmarks/lanczos-word-product-reuse-evidence.json').read_text(encoding='utf-8'))
-    q = current['qualification']
-    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['currentImageOwnerViewStatuses'] == {'pass': 164, 'gap': 11, 'uncertain': 16}
-    assert current['currentEightLanczosStatus'] == {'pass': 7, 'gap': 0, 'uncertain': 1}
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6573
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['actualConsumerPassed'] and q['samePackageWindows']['actualConsumerPassed']
-    assert q['actualPackage']['usageExamples'] == q['samePackageWindows']['usageExamples'] == 3
-    mapping = {
-        'Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129': 'OneShot8',
-        'Lanczos3 prepared RGBA8 / zimg prepared † → 256×129': 'Repeated8',
-        'Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129': 'OneShot16',
-        'Lanczos3 prepared RGBA16 / zimg prepared † → 256×129': 'Repeated16',
-        'Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519': 'RepeatedEnlarge16',
-    }
-    seen, rows = set(), []
-    for line in editing.splitlines():
-        cells = [c.strip() for c in line.strip('|').split('|')]
-        label = re.sub(r' \((?:gap|uncertain)\)', '', cells[0])
-        if label in mapping:
-            case = mapping[label]; c = current['cases'][case]
-            assert case not in seen; seen.add(case)
-            assert c['actualIterations'] == 12 and c['allActualsRetained']
-            assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['managedExact']
-            assert c['librarySha256'] == q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-            assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-            if c['status'] != 'pass': label = label.replace(' †', f" ({c['status']}) †")
-            assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-            cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
-                         f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
-            line = '| ' + ' | '.join(cells) + ' |'
-        rows.append(line)
-    assert seen == set(mapping.values())
-    return '\n'.join(rows), current
 
 
 def apply_bounded_wide_quartet(editing):
@@ -2032,38 +2009,8 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
         rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-word-rows-evidence.json').read_text(encoding='utf-8'))
-    lanczos_qualification = lanczos_current['qualification']
-    assert lanczos_current['productionAccepted'] and lanczos_current['storage']['primaryExtraOwnedCapacityBytes'] == 8208
-    assert lanczos_current['sourceProof']['existingByteSingleAndPairedWordArithmeticSourceVerbatim']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for case in ['Repeated16', 'OneShot16']
-               for v in lanczos_current['mechanismComparisons'][case]['views'].values())
-    assert all(v['normalizedGainSeparated'] for v in lanczos_current['currentComparisons']['Repeated16']['views'].values())
-    assert not any(v['normalizedLossSeparated'] for v in lanczos_current['currentComparisons']['Repeated8']['views'].values())
-    assert lanczos_qualification['fullChecksEachOs'] == 6197
-    assert lanczos_qualification['actualPackage']['sha256'] == lanczos_qualification['samePackageLinux']['sameActualPackageSha256']
-    assert lanczos_current['raw']['mirrored'] and lanczos_current['raw']['allMembersVerified']
-    assert len(lanczos_current['cases']) == 8
-    assert lanczos_current['statusCounts'] == {'pass': 6, 'gap': 1, 'uncertain': 1}
-    assert lanczos_current['cases']['RepeatedEnlarge16']['upper'] <= 1
-    # Only the current displayed confidence depends on this read-only owner;
-    # its unselected implementations remain linked history, not renderer gates.
-    lanczos_confidence = json.loads((ROOT / 'benchmarks/lanczos-byte-product-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert lanczos_confidence['measurementAccepted'] and not lanczos_confidence['productionChanged']
-    assert lanczos_confidence['requiredMaterialPaths'] == 289
-    assert lanczos_confidence['raw']['mirrored'] and lanczos_confidence['raw']['allMembersVerified']
-    byte_confidence = lanczos_confidence['case']
-    assert byte_confidence['librarySha256'] == lanczos_confidence['producers']['windowsSha256']
-    assert byte_confidence['actualIterations'] == byte_confidence['nativeSamplesEachBracket'] == 12
-    assert byte_confidence['managedExact'] and byte_confidence['sourceUnchanged'] and byte_confidence['independentOwnedOutput']
-    assert byte_confidence['allOriginalGatesPassed'] and byte_confidence['quietGuardsPassed']
-    assert byte_confidence['status'] == 'uncertain' and byte_confidence['lower'] <= 1 < byte_confidence['upper']
-    assert byte_confidence['retainedBytes'] == 139800 and byte_confidence['allocatedBytes'] == 138
-    assert math.isclose(byte_confidence['ratio'], byte_confidence['managedUs'] / byte_confidence['nativeUs'], rel_tol=1e-12)
-    assert all(lanczos_current['sources'][name] == digest
-               for name, digest in lanczos_confidence['sourceProof']['restoredExactly'].items())
-    lanczos_costs = {**lanczos_current['cases'], 'Repeated8': byte_confidence}
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-identity-axis-evidence.json').read_text(encoding='utf-8'))
+    lanczos_costs = lanczos_current['cases']
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
     for case, label, size in [
@@ -2996,8 +2943,7 @@ and [grouped copying](../benchmarks/SNAPSHOT-BLOCK-COPY.md) retain earlier evide
     codecs, editing, read_rows, storage_current = apply_released_image_storage(codecs, editing, read_rows)
     codecs, read_rows = apply_current_jpeg_preparation(codecs, read_rows)
     codecs, read_rows = apply_current_prepared_input(codecs, read_rows)
-    editing, lanczos_current = apply_lanczos_product_reuse(editing)
-    editing = apply_current_lanczos_enlargement_confidence(editing)
+    editing = apply_current_lanczos(editing)
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     owned_copy = owned_edit_costs(resident_png)
@@ -3166,11 +3112,27 @@ Allocations, capacity and retention are unchanged. Both OSes pass **6,692 full/l
 focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.
-The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
-pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
-now passes on the unchanged package DLL; all eight declared Lanczos comparisons
-pass and stop. This confidence update does not establish a production speedup.
-No pipeline speedup is inferred from historical stage sums.
+[Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
+zero-only coefficient storage and size working rows from actual taps. Four affected
+one-shot reference comparisons refresh on the immutable timed/package DLL; four
+unchanged prepared nonidentity paths reuse qualified evidence. **All eight declared
+Lanczos comparisons pass/stop**; equivalent bicubic controls are unchanged.
+
+Two additional complete managed-DLL diagnostics use the existing full-word input:
+513×259→513×129 independently improves **{lanczos_current['identityAxisDiagnostics']['Vertical16']['rawSavedFraction']:.2%} /
+{lanczos_current['identityAxisDiagnostics']['Vertical16']['savedUs']:.2f} µs**. The horizontal
+513×259→256×259 CPU effect is inconclusive, while allocations fall about
+**100,136→44,712 B/op** and retained preparation **102,000→46,656 B**.
+Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
+about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
+**798,780→786,516 B**. Ranges and raw observations remain in the report.
+These are prior/candidate DLL comparisons, **not external one-axis parity proof**.
+The declared external scope and full 289-path objective stay open; no historical
+stage sum, numerical relaxation or broader workload grid is implied.
+Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
+normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
+the SAME actual package/all three examples, including one-axis asynchronous
+survivors. Allocation, retained admission and physical peaks stay distinct.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
 The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;

@@ -20,6 +20,7 @@ internal sealed class LanczosPlan : IDisposable
 
     internal static LanczosPlan Create(int source, int target, OperationContext context)
     {
+        if (source == target) return CreateIdentity(source, context);
         var plan = new LanczosPlan(source, context); long temporary = 0;
         try
         {
@@ -74,6 +75,32 @@ internal sealed class LanczosPlan : IDisposable
         }
         catch { plan.Dispose(); throw; }
         finally { if (temporary != 0) context.Release(temporary); }
+    }
+
+    // An unchanged axis has exact integer sample locations: sinc is one at
+    // the center and zero at every other integer in the radius-three support.
+    // Store only that contribution, so retained rows track actual live users.
+    private static LanczosPlan CreateIdentity(int length, OperationContext context)
+    {
+        var plan = new LanczosPlan(length, context);
+        try
+        {
+            var windowsBytes = 32 + length * 16L;
+            Buffer(windowsBytes); context.Reserve(windowsBytes); plan.storage += windowsBytes;
+            context.Cancellation.ThrowIfCancellationRequested();
+            plan.Windows = new Window[length];
+            var weightsBytes = 32 + length * 4L;
+            Buffer(weightsBytes); context.Reserve(weightsBytes); plan.storage += weightsBytes;
+            context.Cancellation.ThrowIfCancellationRequested();
+            plan.Weights = new int[length]; plan.MaximumCount = 1;
+            for (var x = 0; x < length; x++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                plan.Windows[x] = new(x, 1, x); plan.Weights[x] = (int)One;
+            }
+            return plan;
+        }
+        catch { plan.Dispose(); throw; }
     }
 
     internal static (long First, long Last) Support(int destination, int source, int target)

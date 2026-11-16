@@ -126,11 +126,27 @@ Allocations, capacity and retention are unchanged. Both OSes pass **6,692 full/l
 focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.
-The four Lanczos reduction and eight equivalent bicubic one-shot/prepared controls
-pass and stop. [Prepared word Lanczos enlargement](../benchmarks/LANCZOS-ENLARGEMENT-CURRENT-CONFIDENCE.md)
-now passes on the unchanged package DLL; all eight declared Lanczos comparisons
-pass and stop. This confidence update does not establish a production speedup.
-No pipeline speedup is inferred from historical stage sums.
+[Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
+zero-only coefficient storage and size working rows from actual taps. Four affected
+one-shot reference comparisons refresh on the immutable timed/package DLL; four
+unchanged prepared nonidentity paths reuse qualified evidence. **All eight declared
+Lanczos comparisons pass/stop**; equivalent bicubic controls are unchanged.
+
+Two additional complete managed-DLL diagnostics use the existing full-word input:
+513×259→513×129 independently improves **34.22% /
+381.16 µs**. The horizontal
+513×259→256×259 CPU effect is inconclusive, while allocations fall about
+**100,136→44,712 B/op** and retained preparation **102,000→46,656 B**.
+Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
+about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
+**798,780→786,516 B**. Ranges and raw observations remain in the report.
+These are prior/candidate DLL comparisons, **not external one-axis parity proof**.
+The declared external scope and full 289-path objective stay open; no historical
+stage sum, numerical relaxation or broader workload grid is implied.
+Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
+normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
+the SAME actual package/all three examples, including one-axis asynchronous
+survivors. Allocation, retained admission and physical peaks stay distinct.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
 The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
@@ -330,13 +346,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 596.90 | 1,576.30 | 0.379 / 0.382 | 138,647 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 588.87 | 1,568.56 | 0.375 / 0.378 | 138,650 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 462.40 | 488.52 | 0.947 / 0.953 | 138 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 661.63 | 1,809.24 | 0.366 / 0.382 | 155,078 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 623.14 | 1,806.50 | 0.345 / 0.350 | 155,075 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 485.36 | 512.07 | 0.948 / 0.958 | 138 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,770.44 | 5,255.86 | 0.717 / 0.727 | 319,224 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,768.25 | 5,225.86 | 0.721 / 0.726 | 319,224 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,554.71 | 4,074.82 | 0.872 / 0.882 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,117.46 | 5,096.28 | 0.808 / 0.821 | 4,592,777 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,080.93 | 5,074.41 | 0.804 / 0.808 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
 | Bicubic resize RGBA8 † → 256×129 | 415.34 | 419.25 | 0.991 / 0.997 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |

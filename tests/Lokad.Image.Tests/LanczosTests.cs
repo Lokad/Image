@@ -22,6 +22,16 @@ public sealed class LanczosTests
     private static byte[] Bytes(ImageBuffer source) => source.Pixels.ToArray();
     public static IEnumerable<object[]> Cases()
     {
+        // One unchanged axis exercises canonical identity geometry and both
+        // directions while independent decimal/BigInteger pixels stay exact.
+        yield return [8, 9, 7, 5, 7, false];
+        yield return [8, 9, 7, 13, 7, false];
+        yield return [8, 9, 7, 9, 3, false];
+        yield return [8, 9, 7, 9, 11, false];
+        yield return [16, 9, 7, 5, 7, false];
+        yield return [16, 9, 7, 13, 7, false];
+        yield return [16, 9, 7, 9, 3, false];
+        yield return [16, 9, 7, 9, 11, false];
         yield return [8, 5, 3, 11, 7, true];
         yield return [8, 9, 7, 5, 3, false];
         yield return [16, 5, 3, 11, 7, false];

@@ -6,6 +6,67 @@ namespace Lokad.Image.Tests;
 
 public sealed class LanczosPlanTests
 {
+    [Fact]
+    public void IdentityAxesKeepExactUnitWeightsAndRetainedOwnership()
+    {
+        foreach (var length in new[] { 1, 2, 7, 31, 259, 513 })
+        {
+            using var root = new TestMemoryBudget(1 << 20);
+            using var context = new OperationContext(new() { MemoryBudget = root }, default);
+            using (var plan = LanczosPlan.Create(length, length, context))
+            {
+                Assert.Equal(plan.StorageBytes, root.Bytes);
+                Assert.Equal(1, plan.MaximumCount); Assert.Equal(length, plan.Weights.Length);
+                Assert.Equal(192 + length * 20L, plan.StorageBytes);
+                for (var x = 0; x < length; x++)
+                {
+                    var window = plan.Windows[x];
+                    Assert.Equal((x, 1, x), (window.First, window.Count, window.Offset));
+                    Assert.Equal(LanczosPlan.One, plan.Weights[window.Offset]);
+                    // Independent radius-three definition at integer distances.
+                    for (var sample = Math.Max(0, x - 3); sample <= Math.Min(length - 1, x + 3); sample++)
+                        Assert.Equal(sample == x ? LanczosPlan.One : 0,
+                            sample == window.First ? plan.Weights[window.Offset] : 0L);
+                }
+            }
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+    }
+
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void IdentityPreparationRefusalAndCancellationReleaseStorageBeforeRecovery(bool cancel)
+    {
+        long growths;
+        using (var root = new TestMemoryBudget(1 << 20))
+        {
+            using (var context = new OperationContext(new() { MemoryBudget = root }, default))
+            using (var plan = LanczosPlan.Create(31, 31, context)) growths = root.GrowthAttempts;
+            Assert.Equal(0, root.Bytes);
+        }
+        for (var stop = 1L; stop <= growths; stop++)
+        {
+            using var root = new TestMemoryBudget(1 << 20);
+            using var cancellation = new CancellationTokenSource();
+            if (cancel) root.Admitted = _ => { if (root.GrowthAttempts == stop) cancellation.Cancel(); };
+            else root.RefuseAtGrowth = stop;
+            using (var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token))
+            {
+                if (cancel) Assert.ThrowsAny<OperationCanceledException>(() => LanczosPlan.Create(31, 31, context));
+                else
+                {
+                    var error = Assert.Throws<ImageLimitException>(() => LanczosPlan.Create(31, 31, context));
+                    Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+                    Assert.Equal(1, root.Refusals); Assert.Equal(stop, root.GrowthAttempts);
+                }
+                Assert.Equal(0, root.Bytes);
+            }
+            root.Admitted = null; root.RefuseAtGrowth = 0;
+            using (var context = new OperationContext(new() { MemoryBudget = root }, default))
+            using (var plan = LanczosPlan.Create(31, 31, context)) Assert.Equal(plan.StorageBytes, root.Bytes);
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+    }
+
     // Authored plans captured from the qualified implementation on both OSes.
     // Hash covers dimensions, every window/offset and every signed Q30 weight.
     [Theory]

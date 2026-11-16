@@ -1,5 +1,9 @@
 # Current prepared Lanczos enlargement confidence
 
+[Canonical identity-axis preparation](LANCZOS-IDENTITY-AXIS.md) now owns the concise
+eight-case status. The four one-shot costs refresh there; unchanged prepared
+nonidentity costs and their original producer evidence remain source-valid.
+
 The prepared RGBA16 enlargement passes on the current immutable package DLL.
 Together with seven source-valid controls, **all eight declared Lanczos comparisons
 pass and stop**. This resolves uncertainty without a production change or speed claim.

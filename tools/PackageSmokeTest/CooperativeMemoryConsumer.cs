@@ -752,7 +752,7 @@ internal static class CooperativeMemoryConsumer
 
     private static async Task VerifyLanczosPlans()
     {
-        foreach (var (width, height, depth) in new[] { (17, 11, 8), (17, 11, 16), (65, 39, 16) })
+        foreach (var (width, height, depth) in new[] { (17, 11, 8), (17, 11, 16), (65, 39, 16), (17, 19, 16), (31, 11, 16) })
         {
             using var root = new TestMemoryBudget(3 * 1024 * 1024);
             var limits = new ImageLimits { MemoryBudget = root };
