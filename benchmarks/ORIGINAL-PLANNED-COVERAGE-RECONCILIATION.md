@@ -23,7 +23,7 @@ with an easier operation. The following finite list is the inherited 17:
 | `FillRectangle/Rgba16Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
 | `CopyRegion/Rgba8Independent` | [Original clipped byte copy](ORIGINAL-CLIPPED-COPY.md) confirms1.941619/FFmpegpubliccopy1.901433us,interval1.017439–1.026874,0B/op gap. Freeze unspecified source origin(0,0);request257x129,dst(-3,5),effective254x129. Peroperation clipping/fullcanvas/source/normal/scalar gates;no production change. |
 | `CopyRegion/Rgba16Overlapping` | Word memmove and reverse traversal with one owner. OWC1125 establishes the initial gap;current [word-alias dispatch](WORD-ALIAS-DISPATCH.md) reduces it to5.576/FFmpeg5.077us,upper1.104081,0B/op. Still open. |
-| `Composite/Rgba8StraightAlpha` | Clipped straight-alpha source-over. Current separate-owner composition passes at(17,19); original(-3,5) recipe still needs reconciliation. |
+| `Composite/Rgba8StraightAlpha` | [Original clipped composite](ORIGINAL-CLIPPED-COMPOSITE.md) passes/stops78.567/retained FFmpegoverlay526.201us,upper.159260,0B/publicoperation. Fullsourceat(-3,5),effective510x254;reset excluded before EVERY operation both. Exactmanaged and approved nativeRGB/alpha/untouched/zero-alpha gates. Graph preparation outside,not one-shot. |
 | `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. [Original self-composite](ORIGINAL-WORD-COMPOSITE.md) now passes/stops649.772/ImageSharp716.960us,upper.976714. Reference includes necessary sourceClone+Rgba64SrcOver+Dispose;0/26800GC B/op. Full-word exact/native/owner gates pass;no production change. |
 | `TextLayout/OriginalUnicode` | Authored cmap12/long-loca,quadratic extrema and compound accent. Unmeasured original tiny-face complete layout; DejaVu timings do not cover this declared input. |
 | `TextLayout/PackedBmp` | Authored cmap4/short-loca,packed/repeated flags and implied points. Unmeasured distinct required mapping/outline path. |
@@ -42,72 +42,30 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-OWC1125 executes the first missing boundary on its actual immutable package:
-original RGBA16 self-overlap,257×129,shift(1,1). The prose did not fix the absolute
-origin; freeze(0,0)→(1,1),then reverse in both timed totals. It independently shows
-7.010/FFmpeg5.092µs,upper1.379847,0managedB/op. Full-word snapshot/untouched pixels,
-normal/scalar,refusal/cancellation/recovery and equivalent borrowed ownership pass.
-No production build or broader package campaign is needed for this measurement.
-[Word-alias dispatch](WORD-ALIAS-DISPATCH.md) subsequently reduces this gap with a
-controlled16.697%gain;current5.576/5.077us,upper1.104081 remains open. Both reports
-retain producers,raw actuals and source identities;no historical-clock gain is inferred.
+Of the 17 inherited controls, 11 are now measured: eight passes and three gaps;
+only the six authored-font boundaries remain unmeasured. The original JPEGheaders,
+word-overlap copy and clipped byte-copy gaps stay open. Related passes do not
+retire them. Functional checks, shared memory and performance remain separate.
 
-COV1127 resolves the original PNG-header name using existing evidence. The bridge
-receipt names `InspectHeaders/PngRgba8FreshSeekable`; its frozen packet SHA-256
-`4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f`
-and all three native source/build/worker identities match the RCI1098 provider.
-The reference is explicitly FFmpeg AVIO/descriptor APIs plus the original bounded
-header/EXIF adapter,not public PNG-parser performance. Current typed nine-field
-metadata, fresh source/workspace/descriptor acquisition/release, opaque IDAT seek,
-late metadata and EOF are included;CRC/pixels are excluded equally. RCI1098's
-shared reader and the public header entry remain;JID changes only JPEG with
-outside-range reconstruction,and POC changes Probe wrappers only. Eight scoped
-source pins still match. Stop this pass;zero new builds,measurements or broad
-checks. Reuse the current platform/package qualification for unchanged paths.
-The evidence records precise acquisition/grammar/factory/refill/owner/reference
-changes that would invalidate reuse;related JPEG/font/copy edits do not.
+Current measurements and exact boundaries are linked in the table. Source-valid
+PNGheader,Arabic/fitting and unchanged-path qualification retain their producer
+identities. New byte-composite uses a retained FFmpeg graph/static source,not
+one-shot graph preparation;reset is excluded before EVERY operation both sides.
+All managed samples remain exact;case-specific native bounds stay explicit.
 
-WAC1128 independently confirms the original full-word self-composite at(1,1),
-effective512×258. Direct ImageSharp self-drawing fails snapshot semantics;the
-explicitly labeled sourceClone+Rgba64SrcOver+Dispose reference includes that
-necessary work in timing. Both restore the canvas outside each draw. The current
-upper.976714 passes/stops,with exact managedBigInteger pixels and unchanged
-reference max1/RMSE.25/untouched/zero-alpha gates. GC0/26800B is distinct from
-at-least1062936B reference snapshot payload and unmeasured retained allocator
-capacity. Existing independent-source costs did not substitute for this boundary.
-One successful tooling build after a pre-check compile correction;no production,
-existing harness,Windows,broad or package builds. Reuse current qualification.
+Production/package are unchanged by the last three measurement rounds. Reuse
+6,747 full/live checks per OS and SAME actual Release-package consumer/all 3 examples.
+Normal/scalar current-package drawing checks and independent confirmations remain;
+no broad campaign or favorable repetition. Allocation, admission, prepared retention
+and physical/native/JIT peaks are separate. All 289 required paths stay in scope.
 
-HBC1129 freezes the existing complete-JPEG guard input(65,163B,SHA5d3a88c6)
-and original lossless WebP packet(533,100B,SHAa4ed2454). Independent complete
-header comparisons use the same opaque seekable/EOF/descriptor boundaries and
-labeled FFmpegAVIO/descriptor APIs plus original bounded structural/EXIF adapters.
-JPEGupper1.994260 is a demonstrated gap;WebPupper.456690 passes/stops. Twenty
-same-packet controls and bothOS normal/scalar/owner/cancel/refusal/recovery pass.
-This adds no image or required path;source/worker/packet identities and bounded
-memory differences are explicit. Old scoped JPEG-guard clocks are not substituted
-for standalone reference evidence. Next JPEG coalescing hypothesis follows one
-current-process profile;its sample counts/instrumented clocks are not gain claims.
+Completed-round history remains in [word-overlap](ORIGINAL-WORD-OVERLAP.md),
+[word dispatch](WORD-ALIAS-DISPATCH.md), [word compositing](ORIGINAL-WORD-COMPOSITE.md),
+[complete-header references](BOUNDED-HEADERS-CURRENT-REFERENCE.md),
+[JPEG acquisition](JPEG-STUFFED-PAIRS.md), [clipped fills](ORIGINAL-CLIPPED-FILL.md),
+[clipped copy](ORIGINAL-CLIPPED-COPY.md) and [clipped composite](ORIGINAL-CLIPPED-COMPOSITE.md).
+Their cited raw archives and reproducibility remain; superseded costs are history.
 
-SMP1130 accepts31.743%/1.753749us complete-JPEG savings with unchanged allocation,
-then independently refreshes current JPEG/WebP headers and async JPEG dimensions.
-JPEGheaderupper1.367175 and asyncprefixupper1.133673 remain gaps;WebPupper.471884
-passes/stops. The asyncprefix2.698ns/1.255% regression is explicit. Full6747eachOS,
-normal/scalar ownership guards and SAMEactualpackage/all3examples pass. Older
-HBC1129costs above remain baseline history, not current production proof.
-
-CLF1131independently qualifies both original254pixel clipped-fill tails against
-FFmpegpublicfill:byteupper.696649 and wordupper.456739,0B/op. Both pass/stop with
-exact normal/scalar current-package samples. Existing256pixel costs remain
-separate. No production change,new image/path or broad/package campaign. Original
-byte-copy/composite and six authored-font boundaries remain unmeasured.
-
-CCB1132resolves the original clipped-copy measurement as a small2.1%/40ns gap,
-not another optimization campaign. Complete clipping/borrowed-source ownership
-and exact normal/scalar pixels pass on the unchanged package;zero production/
-package builds. Only original byte-composite and six authored-font boundaries
-remain unmeasured;earlier missing-state paragraphs retain checkpoint history.
-
-The audit is read-only and creates no new coverage machinery. [Evidence](original-planned-coverage-reconciliation-evidence.json)
-pins both historical sources and all 17 names. Existing qualifying paths stay
-stopped; uncertainty and independent work remain distinct. Publication stays postponed.
+[Evidence](original-planned-coverage-reconciliation-evidence.json) retains the
+original sources, 17 names, precise source/ownership/reference invalidation proofs
+and current providers. Publication stays postponed; independent work continues.

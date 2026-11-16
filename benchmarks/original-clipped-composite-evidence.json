@@ -1,0 +1,219 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OCM1133",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "38b8112f2a68d4482a70f1005063ce68f91cf9e24669bc8976a3613f061f2bbf",
+    "linuxSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "timedArtifactSha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298"
+  },
+  "sourcePins": {
+    "tmp/ocm1133-harness/CompositeHarness.csproj": "59fc8bd74e578666c76b976802571bc43a0ffbdc7a253a7f7dd30cd1847db57f",
+    "tmp/ocm1133-harness/CompositeReference.cs": "4ddb17933d2021f6d606f53a2586760bad6ce82482dd71928c1039dbfb16a244",
+    "tmp/ocm1133-harness/Program.cs": "f455df96546007ba979f292109bf4de7a96fc2679cf6c072f617a6f15d7993cb",
+    "tmp/ocm1133-harness/WarmComposite.cs": "a617e2e9d41f2d610af7ddfe14dd7a2980d59fff30e394a0b94ff04649b4dc51",
+    "tmp/ocm1133-driver/CompositeDriver.csproj": "9f16142ad1741bdec6bf9dca66660f36b08de519a7a34abf5cab7a88a5cc84b7",
+    "tmp/ocm1133-driver/Program.cs": "f82c33697c6ec38f1d98e0e253c4b8c56d899519650c17132d55aa6d274f0058",
+    "tmp/ocm1133-composite8.c": "7b892c5ebba8e1c914fda8495d715d0f0155d66bc88302019031e7f1b83a53a5"
+  },
+  "unchangedProductionSources": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/ImageDrawing.Composite8.cs": "6c4b62ebf1ca49fe91c0958f08b80252887dc69292196c38e8de1017560ca7bd",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a"
+  },
+  "case": {
+    "originalRequiredControl": "Composite/Rgba8StraightAlpha",
+    "managedUs": 78.56733333333332,
+    "nativeUs": 526.2007543402777,
+    "ratio": 0.14931056765936573,
+    "lower": 0.13943817820680002,
+    "upper": 0.15925984526558337,
+    "status": "pass",
+    "allocatedBytes": 0,
+    "allocationSource": {
+      "BytesAllocatedPerOperation": 0,
+      "source": "Separate warmed public Composite+reset+validation allocation diagnostic;3x128operations each normal/scalar,all0B. BDN custom driver reports no GC line.",
+      "bdnRawGc": null
+    },
+    "librarySha256": "1044050692533101e4b6d09349c1c0541060084be843719097e43957d1c50ead",
+    "harnessSha256": "207e00b121007a04822e27a7595a7222c4165315c813d42019cfe793f4eedf12",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "92fa8dda9b7fdfa76db44bae1083ac89e9d55c6c55a18b100e91d109adf7fbf9",
+    "width": 513,
+    "height": 259,
+    "x": -3,
+    "y": 5,
+    "effectiveWidth": 510,
+    "effectiveHeight": 254,
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "exactManagedPixels": true,
+    "sourceUnchanged": true,
+    "borrowedCanvas": true,
+    "resetExcludedBeforeEveryOperation": true,
+    "managedInvocationsPerIteration": 1,
+    "managedUnrollFactor": 1,
+    "referenceReady": {
+      "state": "ready",
+      "caseId": "DrawingComposite8OriginalClipped",
+      "x": -3,
+      "y": 5,
+      "effectiveWidth": 510,
+      "effectiveHeight": 254,
+      "graphThreads": 1,
+      "threadType": 0,
+      "cpu": 0,
+      "canvasStride": 2080,
+      "sourceStride": 2080,
+      "ffmpegVersion": "n8.1",
+      "performanceBaselineApproved": true
+    },
+    "boundary": "Complete Composite into borrowed canvas at-3,5 with separate immutable source, default local limits/admission/cancellation/context cleanup. Original513x259 pixels; reset excluded before EVERY operation BOTH subjects. Native uses per-operation clock reads; managed invocation/unroll1 with iteration reset. Source/canvas setup and validation excluded. Reference is retained FFmpeg n8.1 overlay graph/source, prepared outside timing;approved native-only RGBmax1/RMSE.5,exact alpha/untouched/zero-source-alpha. No one-shot graph preparation claim."
+  },
+  "short": {
+    "managedUs": 72.109,
+    "nativeUs": 490.7204411764706,
+    "ratio": 0.1469451727487107,
+    "upper": 0.16430154052641674,
+    "actuals": 3
+  },
+  "pixelGates": {
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.4033068195884693,
+    "nativeActiveRgbRmse": 0.40845308809105396,
+    "alphaMaximum": 0,
+    "untouchedExactPixels": 3327,
+    "zeroSourceAlphaExactPixels": 264,
+    "nativeHash": "20ac4e6ea9e1a4a62225de248b32c7c8994a00b15e96925655091968cea70b2d",
+    "managedHash": "92fa8dda9b7fdfa76db44bae1083ac89e9d55c6c55a18b100e91d109adf7fbf9",
+    "snapshotProtocol": [
+      {
+        "state": "ready",
+        "caseId": "DrawingComposite8OriginalClipped",
+        "x": -3,
+        "y": 5,
+        "effectiveWidth": 510,
+        "effectiveHeight": 254,
+        "graphThreads": 1,
+        "threadType": 0,
+        "cpu": 0,
+        "canvasStride": 2080,
+        "sourceStride": 2080,
+        "ffmpegVersion": "n8.1",
+        "performanceBaselineApproved": true
+      },
+      {
+        "state": "checked",
+        "caseId": "DrawingComposite8OriginalClipped",
+        "completeOperations": 3,
+        "frozenPixelsExact": true,
+        "sourceUnchanged": true,
+        "borrowedCanvasStoragePreserved": true,
+        "completedOperations": 3,
+        "timingClaim": false
+      },
+      {
+        "state": "stopped",
+        "timedSamples": 0,
+        "sourceUnchanged": true,
+        "operationResultsDisposed": true
+      }
+    ],
+    "noTimingClaim": true
+  },
+  "reference": {
+    "label": "FFmpeg n8.1 retained single-thread overlay graph/static source;complete borrowed-canvas mutation,not one-shot graph preparation",
+    "identity": {
+      "workerSha256": "d76f1d2107669cd45b99bbb5933e0fd5bcce4db6a99d9296fe57a338c3015325",
+      "sourceSha256": "7b892c5ebba8e1c914fda8495d715d0f0155d66bc88302019031e7f1b83a53a5",
+      "command": [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-I/home/lokad/image-warm-png-20261009/external/cmf61-native/include",
+        "tmp/ocm1133-composite8.c",
+        "-o",
+        "tmp/ocm1133-composite8",
+        "-L/home/lokad/image-warm-png-20261009/external/cmf61-native/lib",
+        "-lavfilter",
+        "-lm",
+        "-lavutil",
+        "-lm",
+        "-latomic",
+        "-pthread"
+      ],
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "archives": {
+        "libavfilter.a": "4fb1027dbe3057ad8a98f7231bef6a61fc54ff8fb9ea892aedbd1e33321c6c31",
+        "libavutil.a": "8935f27fb14c3fe7155d8901b8ed623115173cec31ae54e854e5b05ef874c7ea"
+      }
+    },
+    "nativeOnlyBounds": "RGBmax1/RMSE<=.5;alpha,untouched and zero-source-alpha exact. Managed rational oracle remains exact."
+  },
+  "qualification": {
+    "provider": "benchmarks/jpeg-stuffed-pairs-evidence.json",
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6747,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "packageSha256": "111953920719c60b30b8c3752636d11109be762c7465829c7be1198891e72298",
+    "newBroadOrPackageChecks": 0,
+    "normalScalarCurrentPackage": true
+  },
+  "memory": {
+    "managedGcBytesEachOperation": 0,
+    "allocationDiagnostic": "Public Composite+reset+validation,3x128operations each normal/scalar,allzero. BDN custom driver emits no GC line.",
+    "newOperationOwnedAdmittedBytes": 0,
+    "newOperationRetainedBytes": 0,
+    "callerSourceCanvasPixelBytes": 1062936,
+    "nativeSourceCanvasPixelPayloadAtLeast": 1077440,
+    "physicalNativeJitPeaksMeasured": false,
+    "interpretation": "Caller source/canvas and native graph/static-source buffers are prepared outside the repeated-mutation boundary. They remain live across draws;zero peroperation owned capacity does not mean zero total storage. Default managed idle-pool policy is unchanged. Native graph/allocator retention and physical/JIT peaks are unmeasured."
+  },
+  "builds": {
+    "harness": 2,
+    "native": 2,
+    "acceptedNative": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "package": 0,
+    "fixtures": 0
+  },
+  "preparation": {
+    "coreModifiedTimeNs": 1794824536489668841,
+    "preflightFailures": "Initial Cworker linked codec-only FFmpeg prefix lacking overlay;reject before timing and preserve it. Reuse qualified cmf61overlay archives for corrected worker. Harness check first lacked runtimeconfig;run existing DLL through driver runtime/deps without rebuild. Checks completed normal/scalar;undefined metadata source variable then failed record writing. Recover both completed checks without rerunning them. No actual timing was attempted/restarted.",
+    "observerRecovery": "One completed short capture was recovered after the older observer required a nativeBuild field absent from composite receipts. No actual capture restarted;new composite observer reads actual native brackets directly.",
+    "source": "Existing authored coh72borrowed harness/generated BDN driver and cow71public API adapter,adapted only for original placement/reference identity/check launch. Sources/binaries retained in raw archive,not production inputs."
+  },
+  "invalidation": "Changes to Composite clipping,exact arithmetic/SIMD/tails,validation/cancellation/borrowed ownership or frozen input/native graph/settings invalidate affected costs. Unrelated JPEG/resize/font work does not. Earlier(17,19)control retains its own worker/source/producer identity;no historical-clock speedup or one-shot claim.",
+  "next": "All six inherited drawing recipes now have measurements;copy gaps remain open. Six authored-font original boundaries remain unmeasured. Stop this passing control;retain larger current gaps and existing uncertainty.",
+  "raw": {
+    "file": "original-clipped-composite-confirmation.tar.xz",
+    "sha256": "c203f65dae6f61ebbca222ba5f0e6ae15f9954e4f2906f141b3ed0138e461cda",
+    "bytes": 7538124,
+    "members": 107,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-stuffed-pairs-qualified.tar.xz",
+        "sha256": "3828e4155a1ad79b0c81fd9d8a9ff1d952429315ef5b583cf52587c3577fdffe"
+      }
+    ]
+  }
+}

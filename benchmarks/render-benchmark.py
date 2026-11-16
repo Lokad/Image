@@ -1959,41 +1959,27 @@ No heap capacity or retention is added; validation and independent owners remain
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
     word_overlap = drawing_cases['OriginalWordOverlap']
-    borrowed_drawing_note = f"""[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) reuses the existing safe
-row kernel for disjoint RGBA16 rows, preserving traversal, clipping, chunk polls,
-validation and ownership. Controlled complete pairs save **16.697% / 1.235 µs**,
-**0 B/op**. Its current standalone original control remains a gap:
+    borrowed_drawing_note = f"""[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) retains its controlled
+**16.697% / 1.235 µs** gain with **0 B/op**. Current standalone cost remains a gap:
 **{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} µs**, upper
-**{word_overlap['upper']:.6f}** per forward/reverse pair. All four affected copy
-boundaries reconcile before qualification. Separate-byte **{b8['managedUs']:.3f} /
-{b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, remains a gap; one controlled
-DLL comparison does not establish the apparent historical-clock regression.
+**{word_overlap['upper']:.6f}** per forward/reverse pair. Separate-byte
+**{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, remains a gap.
 Separate-word **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**,
 remains uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
-upper **{bo['upper']:.6f}**, passes/stops. No favorable capture retry follows.
-Each OS passes **6,745 full/live checks**, focused normal/scalar and original
-full-word snapshots/refusal/cancellation/recovery. The SAME actual immutable
-Release package and all three examples pass on both platforms. One core/embedded
-build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
-the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
-zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. That earlier {drawing_counts['total']}-control subset retains {drawing_counts['passCount']} passes,
-{drawing_counts['gaps']} gaps and {drawing_counts['uncertain']} uncertainty. Prior fills/composites retain valid evidence.
+upper **{bo['upper']:.6f}**, passes/stops. These copies allocate **0 B/op** and add no
+owned/admitted/retained workspace. Caller canvas storage and unmeasured physical
+peaks stay separate. Source-valid platform/package qualification is reused.
 """
     wc = word_composite['case']
     borrowed_drawing_note += f"""
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **{wc['managedUs']:.3f} / ImageSharp {wc['nativeUs']:.3f} µs**, upper
-**{wc['upper']:.6f}**, **0 / {wc['referenceAllocatedBytes']:,.0f} GC B/op**. This is explicitly
-ImageSharp 3.1.12 Rgba64 **source Clone + public SrcOver + Dispose**, not FFmpeg;
-direct self-drawing fails snapshot semantics. The required snapshot stays timed.
-Reset is excluded before EVERY operation on both sides. Exact managed full-word
-pixels and approved reference max1/RMSE.25, untouched/zero-alpha exactness and
-normal/scalar checks pass on both OSes. Its snapshot has at least1,062,936B of
-pixel payload, possibly pooled; retained reference pool/reserved/physical peaks
-are unmeasured. Reuse unchanged production/package qualification: one successful
-tool build after a pre-check compile correction, zero other builds or broad repeats.
-No production speedup or broader content/settings claim.
+**{wc['upper']:.6f}**, **0 / {wc['referenceAllocatedBytes']:,.0f} GC B/op**. The reference is explicitly
+ImageSharp 3.1.12 Rgba64 **source Clone + SrcOver + Dispose**, with the necessary
+snapshot timed; reset is excluded before EVERY operation on both sides. Exact
+managed/full-word and reference max1/RMSE .25, untouched/zero-alpha gates pass.
+Snapshot payload is at least 1,062,936 B, possibly pooled; retained pool and physical
+peaks are unmeasured. No broader content/settings or historical-clock gain claim.
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
@@ -3193,6 +3179,28 @@ Earlier copy trials remain linked history, outside current-result dependencies."
     assert clipped_copy['preparation']['allGeneratedChildrenUseSamePackageCore']
     editing += (f'\n| Original clipped RGBA8 copy, 254×129 (gap) | {cc["managedUs"]:.3f} | '
                 f'{cc["nativeUs"]:.3f} | {cc["ratio"]:.3f} / {cc["upper"]:.6f} | 0 |')
+    clipped_composite = json.loads((ROOT / 'benchmarks/original-clipped-composite-evidence.json').read_text(encoding='utf-8'))
+    oq, oc = clipped_composite['qualification'], clipped_composite['case']
+    assert clipped_composite['measurementAccepted'] and not clipped_composite['productionChanged']
+    assert not clipped_composite['productionSpeedupClaim'] and clipped_composite['newRequiredPaths'] == 0
+    assert clipped_composite['requiredMaterialPaths'] == 289 and clipped_composite['producers'] == jpeg_markers['producers']
+    assert oq['reusedForUnchangedProduction'] and oq['newBroadOrPackageChecks'] == 0
+    assert oq['fullChecksEachOs'] == 6747 and oq['sameActualPackageBothOs'] and oq['normalScalarCurrentPackage']
+    assert oq['packageSha256'] == jpeg_markers['producers']['packageSha256']
+    assert clipped_composite['raw']['mirrored'] and clipped_composite['raw']['allMembersVerified']
+    assert oc['managedActuals'] == oc['nativeSamplesEachBracket'] == 12 and oc['allocatedBytes'] == 0
+    assert oc['librarySha256'] == jpeg_markers['producers']['linuxSha256']
+    assert (oc['x'], oc['y'], oc['effectiveWidth'], oc['effectiveHeight']) == (-3, 5, 510, 254)
+    assert all(oc[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                              'exactManagedPixels', 'sourceUnchanged', 'borrowedCanvas', 'resetExcludedBeforeEveryOperation'))
+    assert oc['managedInvocationsPerIteration'] == oc['managedUnrollFactor'] == 1
+    assert oc['status'] == 'pass' and oc['upper'] < 1
+    assert math.isclose(oc['ratio'], oc['managedUs'] / oc['nativeUs'], rel_tol=1e-12)
+    pg = clipped_composite['pixelGates']
+    assert pg['nativeRgbMaximum'] <= 1 and pg['nativeRgbRmse'] <= .5 and pg['nativeActiveRgbRmse'] <= .5
+    assert pg['alphaMaximum'] == 0 and pg['untouchedExactPixels'] > 0 and pg['zeroSourceAlphaExactPixels'] > 0
+    editing += (f'\n| Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | {oc["managedUs"]:.3f} | '
+                f'{oc["nativeUs"]:.3f} | {oc["ratio"]:.3f} / {oc["upper"]:.6f} | 0 |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3209,30 +3217,22 @@ DLL; unchanged paths reuse their identified evidence. It is not a full release r
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) now pass and stop:
-**RGBA8 1.195 / FFmpeg 1.730 µs, upper .696649** and **RGBA16 2.184 / 4.829 µs,
-upper .456739**, both **0 B/op**. Their original request(-3,5,257,129) yields
-254 pixels per row, distinct from the earlier256-pixel controls. Complete public
-validation, clipping, color normalization and borrowed mutation match the public
-FFmpeg fill boundary; preparation, resets and output allocation are excluded equally.
-Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
-normal/scalar. Reuse unchanged platform/package qualification; no production change,
-speedup claim, new image or broad campaign. Allocation/admission/retained operation
-storage stays zero; physical/native/JIT peaks are unmeasured. Both inherited fill
-paths retain passing evidence and stop.
-
-[Original clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) measures
-**{cc['managedUs']:.3f} / FFmpeg {cc['nativeUs']:.3f} µs**, interval
-**{cc['lower']:.6f}–{cc['upper']:.6f}**, **0 B/op**: a small gap. Freeze the originally
-unspecified source origin at(0,0); request257×129 at(-3,5), effective source(3,0)
-to canvas(0,5),254×129. Both include clipping per operation; reference is explicitly
-public av_image_copy_plane plus original rectangle clipping. Full-canvas/source/
-alpha/hidden-RGB/untouched checks pass on the same package DLL, normal/scalar.
-Direct assembly-reference preparation builds no production dependencies or package;
-reuse unchanged platform qualification. No speedup or cross-recipe claim; retain
-the roughly40ns gap behind larger opportunities. Measured borrowed drawing is now
-**twelve: eight passes, three gaps, one uncertain**. One original byte-composite and
-six authored-font boundaries still lack measurements.
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
+[clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) retains its roughly 40 ns/
+2.1% gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
+passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
+Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
+excluded before EVERY operation on both sides; graph preparation is outside this
+repeated borrowed mutation, not a one-shot cost. Managed pixels remain exact;
+native RGB max 1/RMSE .403307, alpha/untouched/zero-source-alpha gates pass.
+All four original clipped operations allocate **0 B/public operation**; composite
+allocation uses a separate 3×128 normal/scalar diagnostic because its BDN driver
+emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
+native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
+Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
+drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
+three gaps, one uncertain**. Six authored-font original boundaries remain unmeasured.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -3511,7 +3511,7 @@ verify with `--check`.
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 158, 'Expected 158 comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 159, 'Expected 159 comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'

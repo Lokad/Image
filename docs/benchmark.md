@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Current development version **0.2.1**. Warm single-CPU parity remains open across
-**289 named material paths**; these **158 comparisons** summarize that scope.
+**289 named material paths**; these **159 comparisons** summarize that scope.
 This is an incremental update: affected costs use the qualified immutable package
 DLL; unchanged paths reuse their identified evidence. It is not a full release refresh.
 
@@ -14,69 +14,47 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) reuses the existing safe
-row kernel for disjoint RGBA16 rows, preserving traversal, clipping, chunk polls,
-validation and ownership. Controlled complete pairs save **16.697% / 1.235 µs**,
-**0 B/op**. Its current standalone original control remains a gap:
+[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) retains its controlled
+**16.697% / 1.235 µs** gain with **0 B/op**. Current standalone cost remains a gap:
 **5.576 / FFmpeg 5.077 µs**, upper
-**1.104081** per forward/reverse pair. All four affected copy
-boundaries reconcile before qualification. Separate-byte **2.056 /
-1.883 µs**, upper **1.142**, remains a gap; one controlled
-DLL comparison does not establish the apparent historical-clock regression.
+**1.104081** per forward/reverse pair. Separate-byte
+**2.056 / 1.883 µs**, upper **1.142**, remains a gap.
 Separate-word **4.103 / 4.124 µs**, upper **1.002100**,
 remains uncertain. Byte overlap **3.624 / 3.867 µs**,
-upper **0.940570**, passes/stops. No favorable capture retry follows.
-Each OS passes **6,745 full/live checks**, focused normal/scalar and original
-full-word snapshots/refusal/cancellation/recovery. The SAME actual immutable
-Release package and all three examples pass on both platforms. One core/embedded
-build per OS, zero public/harness/native/fixture/tool builds, one NoBuild pack;
-the timed DLL is never rebuilt. New allocated/admitted/retained capacity stays
-zero; borrowed canvas capacity and unmeasured physical/native/JIT peaks stay
-separate. That earlier 9-control subset retains 6 passes,
-2 gaps and 1 uncertainty. Prior fills/composites retain valid evidence.
+upper **0.940570**, passes/stops. These copies allocate **0 B/op** and add no
+owned/admitted/retained workspace. Caller canvas storage and unmeasured physical
+peaks stay separate. Source-valid platform/package qualification is reused.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
-**0.976714**, **0 / 26,800 GC B/op**. This is explicitly
-ImageSharp 3.1.12 Rgba64 **source Clone + public SrcOver + Dispose**, not FFmpeg;
-direct self-drawing fails snapshot semantics. The required snapshot stays timed.
-Reset is excluded before EVERY operation on both sides. Exact managed full-word
-pixels and approved reference max1/RMSE.25, untouched/zero-alpha exactness and
-normal/scalar checks pass on both OSes. Its snapshot has at least1,062,936B of
-pixel payload, possibly pooled; retained reference pool/reserved/physical peaks
-are unmeasured. Reuse unchanged production/package qualification: one successful
-tool build after a pre-check compile correction, zero other builds or broad repeats.
-No production speedup or broader content/settings claim.
+**0.976714**, **0 / 26,800 GC B/op**. The reference is explicitly
+ImageSharp 3.1.12 Rgba64 **source Clone + SrcOver + Dispose**, with the necessary
+snapshot timed; reset is excluded before EVERY operation on both sides. Exact
+managed/full-word and reference max1/RMSE .25, untouched/zero-alpha gates pass.
+Snapshot payload is at least 1,062,936 B, possibly pooled; retained pool and physical
+peaks are unmeasured. No broader content/settings or historical-clock gain claim.
 
 
 [Original planned coverage](../benchmarks/ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) now pass and stop:
-**RGBA8 1.195 / FFmpeg 1.730 µs, upper .696649** and **RGBA16 2.184 / 4.829 µs,
-upper .456739**, both **0 B/op**. Their original request(-3,5,257,129) yields
-254 pixels per row, distinct from the earlier256-pixel controls. Complete public
-validation, clipping, color normalization and borrowed mutation match the public
-FFmpeg fill boundary; preparation, resets and output allocation are excluded equally.
-Exact full-canvas/alpha/hidden-RGB/untouched gates pass on the current package core,
-normal/scalar. Reuse unchanged platform/package qualification; no production change,
-speedup claim, new image or broad campaign. Allocation/admission/retained operation
-storage stays zero; physical/native/JIT peaks are unmeasured. Both inherited fill
-paths retain passing evidence and stop.
-
-[Original clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) measures
-**1.942 / FFmpeg 1.901 µs**, interval
-**1.017439–1.026874**, **0 B/op**: a small gap. Freeze the originally
-unspecified source origin at(0,0); request257×129 at(-3,5), effective source(3,0)
-to canvas(0,5),254×129. Both include clipping per operation; reference is explicitly
-public av_image_copy_plane plus original rectangle clipping. Full-canvas/source/
-alpha/hidden-RGB/untouched checks pass on the same package DLL, normal/scalar.
-Direct assembly-reference preparation builds no production dependencies or package;
-reuse unchanged platform qualification. No speedup or cross-recipe claim; retain
-the roughly40ns gap behind larger opportunities. Measured borrowed drawing is now
-**twelve: eight passes, three gaps, one uncertain**. One original byte-composite and
-six authored-font boundaries still lack measurements.
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
+[clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) retains its roughly 40 ns/
+2.1% gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
+passes at **78.567 / 526.201 µs**, upper **0.159260**, over 510×254 pixels.
+Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
+excluded before EVERY operation on both sides; graph preparation is outside this
+repeated borrowed mutation, not a one-shot cost. Managed pixels remain exact;
+native RGB max 1/RMSE .403307, alpha/untouched/zero-source-alpha gates pass.
+All four original clipped operations allocate **0 B/public operation**; composite
+allocation uses a separate 3×128 normal/scalar diagnostic because its BDN driver
+emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
+native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
+Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
+drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
+three gaps, one uncertain**. Six authored-font original boundaries remain unmeasured.
 
 [JPEG stuffed-pair acquisition](../benchmarks/JPEG-STUFFED-PAIRS.md) saves
 **31.743% / 1.754 µs** in controlled complete-operation pairs, with unchanged
@@ -499,6 +477,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
 | Original clipped RGBA8 copy, 254×129 (gap) | 1.942 | 1.901 | 1.021 / 1.026874 | 0 |
+| Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 
 **Inspection and pixel-coding validation**
 
