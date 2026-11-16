@@ -1,0 +1,135 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RCH1138",
+  "productionChanged": false,
+  "accepted": false,
+  "measurement": "Inconclusive,not a proven gain or causal regression",
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineProducers": {
+    "windowsSha256": "755e5ff8d551678e01b9e0eb1459c36a2eb53cb5032c6ebfa4129946047c9f9f",
+    "linuxSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "timedArtifactSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "packageSha256": "e46206b68b44e88b3832e66cb085179aceb97aa944ff389b96e5f7de094c589b"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6"
+  },
+  "prototypeSha256": "c6980e984f7cc71b0bf595c2fd06f0a6b2bb0a2ae1798bfe6b8b00bdac658909",
+  "candidateSourceSha256": "dd8b41074b8e9c6359845d4434a532b8120c82e21c1beea282811a3891c0d60e",
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "RCH1138",
+    "allActualsRetained": true,
+    "pairs": 3,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "6fa0bfbce0a3a778e9f0f0ff1e383fd0fa9d4d2fec7c5b3d0e5bbe6b2a803f75",
+    "candidateSha256": "c6980e984f7cc71b0bf595c2fd06f0a6b2bb0a2ae1798bfe6b8b00bdac658909",
+    "baseline": {
+      "mean": 6074.499613444011,
+      "lower": 5979.0314815811325,
+      "upper": 6169.967745306889,
+      "values": [
+        6068.457336425781,
+        6077.479187011719,
+        6077.562316894531
+      ]
+    },
+    "candidate": {
+      "mean": 6094.229390462239,
+      "lower": 5912.295318898431,
+      "upper": 6276.1634620260475,
+      "values": [
+        6105.639465332031,
+        6089.8685302734375,
+        6087.18017578125
+      ]
+    },
+    "ratio": 1.00324796744979,
+    "ratioLower": 0.9586444278446521,
+    "ratioUpper": 1.0499254544912755,
+    "elapsedReduction": -0.003247967449790057,
+    "savedUs": -0.01972977701822856,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "profile": {
+    "totalSamples": 1999,
+    "mappedSamples": 1846,
+    "copyRegionLeafSamples": 1841,
+    "scope": "One2second current complete original word-overlap pair profile. Leaf counts locate the grouped vector loop,not phase costs or removable-time estimates;instrumented clocks discarded."
+  },
+  "codegen": {
+    "baselineBytes": 1364,
+    "candidateBytes": 1366,
+    "groupBytes": 256,
+    "vectorLoadsBeforeStores": 4,
+    "removedGroupBaseLeas": 2,
+    "numericalContractUnchanged": true,
+    "scope": "Four snapshot loads/stores preserved;direct base/index addressing replaces checked block refs. Code shape,size and fewer instructions do not establish CPU gain."
+  },
+  "boundaries": "Original513x259word canvas,257x129,selfshift(1,1)andreverse;two complete public moves per pair including validation/clipping/cancellation. Borrowed canvas,no reset or allocation;current worker/frozen input reused. Managed-DLL effects only,not reference parity.",
+  "qualification": {
+    "focusedPublicEachModeEachOs": 190,
+    "modes": [
+      "normal",
+      "scalar"
+    ],
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6749,
+    "sameActualPackageBothOs": true,
+    "usageExamples": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "addedOwnedCapacity": 0,
+    "addedRetainedCapacity": 0,
+    "callerCanvasBytes": 1062936,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "builds": {
+    "isolatedWindowsPrototype": 1,
+    "production": 0,
+    "embedded": 0,
+    "public": 0,
+    "vm": 0,
+    "harnessReferenceFixture": 0,
+    "package": 0
+  },
+  "nativeInsight": {
+    "project": "Lokad.Image",
+    "stage": "RCH1138",
+    "inspectionOnly": true,
+    "statisticalTiming": false,
+    "library": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+    "librarySha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a",
+    "functionFileOffset": "0x1a1640",
+    "codeBytes": 2048,
+    "codeSha256": "3c87561d58db38c3b674d6659b028596525d811906f6d9bf115e22df7a3b3445",
+    "scope": "Same-host libc memcpy IFUNC probe;inspect vector strategy only,not elapsed performance or proof of native worker phase costs."
+  },
+  "preparation": "A filename-only scp suffix error followed completed measurement. Existing captures were downloaded without rerunning actuals. No production modification or restoration build.",
+  "next": "User priority update:defer further copy variants. Resolve five authored-font reference/output mismatches first,then ordinary-text uncertainty and meaningful font-loading costs. Current qualified copying/package remain unchanged;no repeat of closed failed/inconclusive studies without a materially revised evidence-backed hypothesis.",
+  "raw": {
+    "file": "copy-direct-addressing-trial.tar.xz",
+    "sha256": "01294b8228312aad35ee67b2c417d9431a4ff46cd9b55250d5ba02a2b6a66c28",
+    "bytes": 1831876,
+    "members": 66,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-batched-entropy-qualified.tar.xz",
+        "sha256": "fd8bca4fd4a894affdb84a16a8514c6d5b014588371933aa2224c34d6061b6ba"
+      },
+      {
+        "file": "word-alias-dispatch-qualified.tar.xz",
+        "sha256": "5ae813b07fcaf5a88464400712d560efcbc41034a517944854649c174c1b5b51"
+      }
+    ]
+  }
+}
