@@ -3,7 +3,8 @@
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; rectangle copies use the prepared-row package. Current
+completed-row package; rectangle copies reuse prepared-row evidence, with a current
+package confirmation for separate-word copying. Current
 font loading reuses its header-normalization evidence; affected text costs use
 the conditional-polygon-scratch package.
 Other entries that
@@ -27,15 +28,17 @@ Current standalone word cost **5.004 / FFmpeg 4.457 µs**, upper
 **1.133517**, remains a gap. Native clocks are faster than older
 captures; historical clocks and gains are not added. Separate byte copy is
 **1.964 / 1.881 µs**, upper **1.050**, a gap.
-Separate word copy **4.029 / 3.801 µs**, upper **1.101418**,
-remains uncertain on the frozen 262,144-operation cadence. Both sides drift within
-that run; all actuals stay, without a causal regression claim or favorable replay.
+Separate word copy **4.064 / 3.830 µs**, upper **1.114918**,
+remains uncertain in its [current-package confirmation](../benchmarks/COPY-WORD-CURRENT-PACKAGE.md)
+on the frozen 262,144-operation cadence. All actuals and three native brackets stay,
+without a causal regression claim, assumed gap or favorable replay.
 Byte overlap **3.497 / 3.766 µs**, upper **0.931853**, passes/stops.
 These copies allocate **0 B/op** and add no owned/admitted/retained workspace.
 Caller canvas storage and unmeasured physical/native/JIT peaks stay separate.
-Windows/Linux each pass **6,794 full/live checks**, normal/AVX-512-disabled/scalar
-focused checks and the **SAME actual timed package/all three usage examples**.
-All five affected references reconcile before qualification; the DLL is not rebuilt.
+The four unchanged copy costs retain their **6,794 checks per OS** and actual
+prepared-row package/all three examples. Current separate-word evidence reuses
+**6,803 checks per OS** and the SAME current package/all examples, with zero builds
+or qualification repeats. Each timed DLL remains immutable.
 The first identity-mismatched byte capture remains unqualified in the report.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
@@ -452,7 +455,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.96 | 1.88 | 1.044 / 1.050 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.03 | 3.80 | 1.060 / 1.101 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.06 | 3.83 | 1.061 / 1.115 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.50 | 3.77 | 0.929 / 0.932 | 0 |

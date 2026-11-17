@@ -259,6 +259,23 @@ def borrowed_copy_stage():
     return stage
 
 
+def current_word_copy_confirmation():
+    stage = json.loads((ROOT / 'benchmarks/copy-word-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0 and not stage['warmParityComplete']
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    q, c = stage['qualificationReuse'], stage['case']
+    assert q['fullChecksEachOs'] == 6803 and q['sameActualPackageBothOs'] and q['usageExamplesEachOs'] == 3
+    assert q['sourceIdenticalQualificationReused'] and q['allBuildsOrBroadPackageRepeats'] == 0
+    assert c['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
+    assert c['caseId'] == 'DrawingCopy16' and c['operationsPerSubject'] == 262144
+    assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allocatedBytes'] == 0
+    assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
+    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def original_word_composite_stage(copy_stage):
     stage = json.loads((ROOT / 'benchmarks/original-word-composite-evidence.json').read_text(encoding='utf-8'))
     c, q = stage['case'], stage['qualification']
@@ -1990,6 +2007,8 @@ No heap capacity or retention is added; validation and independent owners remain
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
     copy_current = borrowed_copy_stage()
     drawing_cases.update((name, case) for name, case in copy_current['cases'].items() if name != 'OriginalClippedCopy8')
+    word_copy_current = current_word_copy_confirmation()
+    drawing_cases['DrawingCopy16'] = word_copy_current['case']
     assert len(drawing_cases) == 8
     word_composite = original_word_composite_stage(copy_current)
     drawing_cases['OriginalWordComposite'] = word_composite['case']
@@ -2010,7 +2029,8 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] else
+        library = (word_copy_current['producers']['linuxSha256'] if name == 'DrawingCopy16' else
+                   copy_current['producers']['linuxSha256'] if name in copy_current['cases'] else
                    word_composite['producers']['linuxSha256'] if name == 'OriginalWordComposite' else
                    bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
@@ -2037,14 +2057,16 @@ Current standalone word cost **{word_overlap['managedUs']:.3f} / FFmpeg {word_ov
 captures; historical clocks and gains are not added. Separate byte copy is
 **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, a gap.
 Separate word copy **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**,
-remains uncertain on the frozen 262,144-operation cadence. Both sides drift within
-that run; all actuals stay, without a causal regression claim or favorable replay.
+remains uncertain in its [current-package confirmation](../benchmarks/COPY-WORD-CURRENT-PACKAGE.md)
+on the frozen 262,144-operation cadence. All actuals and three native brackets stay,
+without a causal regression claim, assumed gap or favorable replay.
 Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**, upper **{bo['upper']:.6f}**, passes/stops.
 These copies allocate **0 B/op** and add no owned/admitted/retained workspace.
 Caller canvas storage and unmeasured physical/native/JIT peaks stay separate.
-Windows/Linux each pass **6,794 full/live checks**, normal/AVX-512-disabled/scalar
-focused checks and the **SAME actual timed package/all three usage examples**.
-All five affected references reconcile before qualification; the DLL is not rebuilt.
+The four unchanged copy costs retain their **6,794 checks per OS** and actual
+prepared-row package/all three examples. Current separate-word evidence reuses
+**6,803 checks per OS** and the SAME current package/all examples, with zero builds
+or qualification repeats. Each timed DLL remains immutable.
 The first identity-mismatched byte capture remains unqualified in the report.
 """
     wc = word_composite['case']
@@ -3286,7 +3308,8 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; rectangle copies use the prepared-row package. Current
+completed-row package; rectangle copies reuse prepared-row evidence, with a current
+package confirmation for separate-word copying. Current
 font loading reuses its header-normalization evidence; affected text costs use
 the conditional-polygon-scratch package.
 Other entries that
