@@ -391,3 +391,9 @@ effect is inconclusive,and retained-hint confirmation regresses2.53%/1.224us.
 All actuals/guards/exactframes are retained. Production/package/current costs
 remain unchanged;no broad/package repeat or renderer dependency. Further work
 needs attributable useful work,not favorable recaptures of either implementation.
+
+[Whole-row copy preparation](WHOLE-ROW-COPY-PREPARATION-TRIALS.md) stays private.
+Both original separate-word screens have adverse means; the extent-proof revision
+removes duplicate JIT loops but remains inconclusive. No confirmation, production
+change, reference refresh or broad/package repeat. Current gaps and qualified
+mapping package remain; the earlier row-view risk is reconciled explicitly.
