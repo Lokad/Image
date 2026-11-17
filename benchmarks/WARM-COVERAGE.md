@@ -70,6 +70,11 @@ resolved and meaningful loading work is qualified. Remaining copy gaps require
 distinct attribution before another implementation trial; rejected variants
 are not replayed solely because their family remains open.
 
+[Post-fusion font attribution](FONT-POST-FUSION-ATTRIBUTION.md) reuses the current
+package for one diagnostic trace. The required owned copy and eager header scan
+remain dominant locations, not phase costs. Current font/text comparisons stay
+unchanged; no neighboring rejected implementation is automatically replayed.
+
 [Exact edge storage](TEXT-EDGE-STORAGE-TRIAL.md) remains unpromoted: ordinary
 allocation falls 8,320 B, but independent complete draws are 0.498 us/1.07% slower.
 Current production/package costs stay unchanged; retain the adverse evidence
