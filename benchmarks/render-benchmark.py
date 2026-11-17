@@ -803,45 +803,29 @@ def stream_reader_stage():
 
 
 
-def text_polygon_scratch_stage():
-    stage = json.loads((ROOT / 'benchmarks/text-conditional-polygon-scratch-evidence.json').read_text(encoding='utf-8'))
+def text_scan_band_stage():
+    stage = json.loads((ROOT / 'benchmarks/text-scan-band-coordinates-evidence.json').read_text(encoding='utf-8'))
     assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0 and not stage['warmParityComplete']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
     assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
     q = stage['qualification']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6803
-    assert q['linux']['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
-    assert q['linux']['actualPackage']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
-    assert q['windowsPackage']['actualConsumerPassed'] and q['windowsPackage']['usageExamples'] == 3
-    assert q['linux']['actualPackage']['actualConsumerPassed'] and q['linux']['actualPackage']['usageExamples'] == 3
-    assert q['allAffectedPerformanceReconciledBeforeBroad'] and q['productionRebuildsAfterTiming'] == 0
-    assert stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
-    assert q['focusedEachMode'] == {'internal': 292, 'public': 222} and q['modes'] == ['normal', 'avx-off', 'scalar']
-    assert stage['memory']['ordinaryPublicAllocatedBytes'] == 75840 and stage['memory']['ordinaryAllocationReductionBytes'] == 0
-    assert stage['memory']['governedCompleteFitPeakBytes'] == 821900 and stage['memory']['retainedPlanCapacityBytes'] == 4160
-    for name, c in stage['cases'].items():
-        assert name in ('Ordinary8', 'Ordinary16') and c['librarySha256'] == stage['producers']['linuxSha256']
-        assert c['actuals'] == 12 and c['operationsPerActual'] == 16384 and c['allActualsRetained']
-        assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-    return stage
-
-
-def ordinary_text_checks():
-    stage = json.loads((ROOT / 'benchmarks/ordinary-draw-symmetric-checks-evidence.json').read_text(encoding='utf-8'))
-    assert not stage['productionChanged'] and stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
-    assert stage['allOriginalGatesPassed'] and stage['allPreflightNormalScalarChecks'] == 4
-    assert not stage['reference']['stockPublicLibraryCodeChanged'] and stage['reference']['samplingToolChanged']
-    q = stage['qualificationReused']
-    assert q['fullLiveEachOs'] == 6819 and q['sameActualPackageBothOs'] and q['usageExamplesEachOs'] == 3
-    assert q['newBroadPackageChecks'] == 0 and stage['builds'] == {'referenceTool': 1, 'productionHarnessVmFixturesPackage': 0}
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6824
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['package']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
+    assert all(q[k]['actualConsumerPassed'] and q[k]['usageExamples'] == 3 for k in ('package', 'windowsPackage'))
+    assert q['allAffectedPerformanceReconciledBeforeBroad'] and q['acceptedArtifactRebuildsAfterTiming'] == 0
+    assert q['focusedEachMode'] == {'internal': 307, 'public': 177} and q['modes'] == ['normal', 'avx-off', 'scalar']
+    assert stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['operationsEach'] == 16384
     assert set(stage['cases']) == {'Ordinary8', 'Ordinary16'}
-    for case in stage['cases'].values():
-        assert case['librarySha256'] == stage['producers']['linuxSha256']
-        assert case['actuals'] == 12 and case['operationsPerActual'] == 16384 and case['everyReferenceDrawChecked']
-        assert case['referenceAllocatedBytes'] == 48576 and len(case['referenceAllocationSamples']) == 36
+    for c in stage['cases'].values():
+        assert c['librarySha256'] == stage['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['operationsPerActual'] == 16384 and c['everyReferenceDrawChecked']
+        assert c['referenceAllocatedBytes'] == 48576 and len(c['referenceAllocationSamples']) == 36
+    assert set(stage['authoredCases']) == {'Render8', 'Render16'}
+    assert stage['memory']['ordinaryPublicAllocatedBytes'] == 83008
+    assert stage['memory']['governedCompleteFitPeakBytes'] == 748984
+    assert stage['memory']['retainedPlanCapacityBytes'] == 4160
     return stage
-
 
 
 def render():
@@ -2091,8 +2075,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    text_storage = text_polygon_scratch_stage()
-    ordinary_text = ordinary_text_checks()
+    text_band = text_scan_band_stage()
+    ordinary_text = text_band
     font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
@@ -2132,13 +2116,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = font_current['pipelineCases'][case]
+        cost = text_band['pipelineCases'][case]
         assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = font_current['pipelineCases']['Preparation']
-    font_batch = font_current['pipelineCases']['PrepareDraw8']
+    font_preparation = text_band['pipelineCases']['Preparation']
+    font_batch = text_band['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
@@ -2150,7 +2134,7 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert not prepared or case['status'] == 'pass'
         assert math.isclose(case['ratio'], case['managedUs'] / case['referenceUs'], rel_tol=1e-12)
-        assert case['allocatedBytes'] == (56 if prepared else 75840) and case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
+        assert case['allocatedBytes'] == (56 if prepared else 83008) and case['adapterAllocatedBytes'] == case['allocatedBytes'] + 24
         assert case['retainedBytes'] == (2112 if prepared else 0)
         status = 'confidence open' if case['status'] == 'uncertain' else case['status']
         label = f'Text {"prepared coverage" if prepared else "ordinary draw"} RGBA{case["depth"]} / ImageSharp.Drawing ({status})'
@@ -3321,7 +3305,7 @@ costs. The complete final-package refresh remains outstanding."""
     for name, label in [('OriginalUnicode', 'Authored Unicode layout'), ('PackedBmp', 'Authored cmap4 layout'),
                         ('CompositeTransforms', 'Authored compound layout'), ('Render8', 'Authored RGBA8 layout + draw'),
                         ('Render16', 'Authored RGBA16 layout + draw')]:
-        a = text_storage['authoredCases'][name] if name in text_storage['authoredCases'] else authored['cases'][name]
+        a = text_band['authoredCases'][name] if name in text_band['authoredCases'] else authored['cases'][name]
         assert a['actualsEach'] == 12 and a['status'] == 'pass' and a['upper'] < 1
         assert all(a[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'exactManagedObservations', 'independentOutputs'))
         editing += (f'\n| {label} / corrected ImageSharp integration (parity confirmed) | '
@@ -3333,8 +3317,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading, complete text integrations and ordinary drawing use the retained-prefix
-package; clipped drawing retains the conditional-polygon-scratch evidence.
+font loading retains the source-valid retained-prefix package; ordinary/clipped
+drawing and complete text integrations use the scan-band-coordinate package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3609,33 +3593,32 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
-[Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-retains clipped costs and the controlled complete RGBA8 gain **{text_storage['pairedEffect']['savedUs']:.3f} µs /
-{text_storage['pairedEffect']['gainPercent']:.2f}%** with separated intervals. Allocations remain
-**75,840 B/draw** plus 24 B of adapter storage.
-[Symmetric output checks](../benchmarks/ORDINARY-DRAW-SYMMETRIC-CHECKS.md) now own
-ordinary costs on the current immutable package: RGBA8 is a scoped gap, interval
-**{ordinary_text['cases']['Ordinary8']['lower']:.6f}–{ordinary_text['cases']['Ordinary8']['upper']:.6f}**;
-RGBA16 passes/stops, upper **{ordinary_text['cases']['Ordinary16']['upper']:.6f}**.
-Reference allocations are **48,576 B/draw** at both depths. Both sampling sides
-now check the full frozen frame and read allocation counters outside every timer.
-The stock public reference pipeline, per-operation reset, every actual, three
-reference groups and conservative confidence remain; this is a sampling correction,
-not a production or historical-clock gain. Standing preparation and harness oracle
-storage remain separate from production allocations and admitted capacity.
+[Shared scan-band coordinates](../benchmarks/TEXT-SCAN-BAND-COORDINATES.md)
+save **{text_band['pairedEffect']['savedUs']:.3f} µs / {text_band['pairedEffect']['gainPercent']:.2f}%**
+in controlled complete ordinary-RGBA8 final-DLL pairs. Standalone RGBA8 now passes,
+upper **{ordinary_text['cases']['Ordinary8']['upper']:.6f}**. Affected RGBA16 remains
+**uncertain**, interval **{ordinary_text['cases']['Ordinary16']['lower']:.6f}–{ordinary_text['cases']['Ordinary16']['upper']:.6f}**;
+all samples, including shared managed/reference phase variation, remain retained.
+Do not infer a regression or replay solely for a pass. Original exact frames,
+stock reference identities, symmetric per-operation reset/checks, all twelve
+16,384-operation actuals and three reference groups remain unchanged.
+Ordinary public allocations are **83,008 B/draw**, up **7,168 B**, plus 24 B of
+adapter storage; reference allocations remain **48,576 B/draw**. Clipped controls
+retain their approved source-corrected references and both pass.
 
-[Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
-one-shot and preparation-plus-eight-draw integrations. Both pass, including
-all public layout calls, 30 fitting trials, fresh owned explicitly cleared canvases,
-independent results and disposal. The measured batch amortizes to
+Current complete one-shot and preparation-plus-eight-draw integrations also pass,
+including all public layout calls, 30 fitting trials, fresh explicitly cleared
+owned canvases, independent results and disposal. These are complete public-API
+integrations, not bare shaping-engine comparisons. The measured batch amortizes to
 **{font_batch['amortizedManagedUs']:.2f} / {font_batch['amortizedReferenceUs']:.2f} µs/draw**.
-Preparation-only **{font_preparation['managedUs']:.2f} / {font_preparation['referenceUs']:.2f} µs** is diagnostic;
-historical stages are never summed. The reference retains positioned paths and
-managed preparation retains full 16-bit coverage. Validation eagerness and
-GC-driven reference font release differ. Reference one-shot/batch allocations are
-**9,256,953 /9,494,633 B**. Latin/fit retained plans remain **2,112 /4,160 B** and
-the full-fit governed peak is **742,840 B**, down **79,060 B** with the font prefix. Allocations, admitted capacity
-and unmeasured physical/native/JIT peaks are distinct.
+Preparation-only **{font_preparation['managedUs']:.2f} / {font_preparation['referenceUs']:.2f} µs**
+is diagnostic; historical stages are never summed. Reference preparation retains
+positioned paths; managed preparation retains full 16-bit coverage. Validation
+eagerness and GC-driven reference font release differ. Reference one-shot/batch
+allocations are **9,256,953 /9,494,633 B**. Latin/fit retained plans remain
+**2,112 /4,160 B**. Full-fit governed peak is **748,984 B**, up **6,144 B** for
+temporary crossings. Total allocations, peak admitted capacity, retained state
+and unmeasured physical/native/JIT peaks are separate.
 
 [Font loading](../benchmarks/FONT-RETAINED-PREFIX.md) saves
 **{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%** in controlled
@@ -3648,9 +3631,9 @@ directory/input limits remain; owned tables retain exact offsets/bytes. Eager/la
 validation differs, not general parser equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
 passes/stops at **56 B/op** with its distinct retained-state boundary.
 
-Windows/Linux each pass **6,819 full/live checks**, focused **306 internal/222 public**
-normal/AVX2-disabled/scalar checks and the SAME actual retained-prefix package/all
-three examples. Affected performance reconciles before qualification; no timed DLL
+Windows/Linux each pass **6,824 full/live checks**, focused **307 internal/177 public**
+normal/AVX-disabled/scalar checks and the SAME actual scan-band package/all three
+examples. Affected performance reconciles before qualification; no timed DLL
 rebuild occurs. Other families retain identified unchanged-path evidence. The
 complete final-package refresh remains pending.
 

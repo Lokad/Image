@@ -29,6 +29,6 @@ public sealed class TextActiveEdgeTests
         // Both arrays must still fit the capacity admitted before allocation.
         var flags = BindingFlags.NonPublic;
         Assert.Equal(56, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Edge", flags)!));
-        Assert.Equal(16, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Crossing", flags)!));
+        Assert.Equal(32, Marshal.SizeOf(typeof(TextRasterizer).GetNestedType("Crossing", flags)!));
     }
 }

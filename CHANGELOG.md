@@ -28,7 +28,8 @@
   word self-copies share backing and row-step state. Vertical flips reuse the
   same prepared row execution when a row fits one cancellation chunk.
   Text construction uses bounded initial edge storage to reduce temporary allocations,
-  and prepares polygon scratch only for general clipping.
+  prepares polygon scratch only for general clipping, and shares exact scan-band
+  coordinate preparation across edges.
 - Speed up supplied-font loading with exact batched glyph-bound checks and shared
   header normalization. Retain the source prefix needed by supported tables,
   reducing copying and owned capacity while preserving directory validation.

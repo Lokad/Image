@@ -50,6 +50,23 @@ internal sealed partial class TextRasterizer : IDisposable
             var result = System.Runtime.Intrinsics.X86.Sse2.Add(System.Runtime.Intrinsics.Vector128.Create(originX), product);
             return (System.Runtime.Intrinsics.Vector128.GetElement(result, 0), System.Runtime.Intrinsics.Vector128.GetElement(result, 1));
         }
+        // Prepare the same three ordered coordinates together. Every lane
+        // keeps subtraction, division, multiplication and addition separate.
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        internal System.Runtime.Intrinsics.Vector256<double> Positions(double top, double middle, double bottom)
+        {
+            if (!System.Runtime.Intrinsics.X86.Avx.IsSupported)
+            {
+                var ends = Endpoints(top, bottom);
+                return System.Runtime.Intrinsics.Vector256.Create(ends.Top, X(middle), ends.Bottom, 0d);
+            }
+            var y = System.Runtime.Intrinsics.Vector256.Create(top, middle, bottom, top);
+            var fraction = System.Runtime.Intrinsics.X86.Avx.Divide(
+                System.Runtime.Intrinsics.X86.Avx.Subtract(y, System.Runtime.Intrinsics.Vector256.Create(originY)),
+                System.Runtime.Intrinsics.Vector256.Create(deltaY));
+            var product = System.Runtime.Intrinsics.X86.Avx.Multiply(System.Runtime.Intrinsics.Vector256.Create(deltaX), fraction);
+            return System.Runtime.Intrinsics.X86.Avx.Add(System.Runtime.Intrinsics.Vector256.Create(originX), product);
+        }
         internal int Winding => ascending ? 1 : -1;
     }
     // Enclose the computed X(y), not the original endpoint X. For finite Y
@@ -71,7 +88,7 @@ internal sealed partial class TextRasterizer : IDisposable
     }
 
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
-    private readonly record struct Crossing(double X, int Index, int Order);
+    private readonly record struct Crossing(double X, int Index, int Order, double Top = 0, double Bottom = 0);
 
     internal static (int Left, int Top, int Right, int Bottom) Clip(TextBounds bounds,
         double x, double y, int width, int height)
@@ -115,7 +132,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 }
                 glyphs[index++] = new(prepared, p.X, p.Y);
             }
-            Admit(32 + maximum * 16L); Admit(32 + width * 8L);
+            Admit(32 + maximum * 32L); Admit(32 + width * 8L);
             crossings = new Crossing[maximum]; row = new double[width];
             // Preparation and scan conversion do not overlap. Reuse the crossing
             // storage to order edge intervals before it holds scan-band crossings.
@@ -225,23 +242,33 @@ internal sealed partial class TextRasterizer : IDisposable
         for (var i = 0; i < activeCount; i++)
         {
             cancellation.ThrowIfCancellationRequested(); var index = crossings[i].Index; var edge = shape.Edges[index];
-            if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
+            if (middle < edge.MaxY)
+            {
+                var positions = edge.Positions(top, middle, bottom);
+                crossings[count++] = new(System.Runtime.Intrinsics.Vector256.GetElement(positions, 1), index, edge.Order,
+                    System.Runtime.Intrinsics.Vector256.GetElement(positions, 0), System.Runtime.Intrinsics.Vector256.GetElement(positions, 2));
+            }
         }
         while (nextEdge < shape.Count && shape.Edges[nextEdge].MinY < middle)
         {
             cancellation.ThrowIfCancellationRequested(); var index = nextEdge++; var edge = shape.Edges[index];
-            if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
+            if (middle < edge.MaxY)
+            {
+                var positions = edge.Positions(top, middle, bottom);
+                crossings[count++] = new(System.Runtime.Intrinsics.Vector256.GetElement(positions, 1), index, edge.Order,
+                    System.Runtime.Intrinsics.Vector256.GetElement(positions, 0), System.Runtime.Intrinsics.Vector256.GetElement(positions, 2));
+            }
         }
         activeCount = count;
         TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), cancellation);
-        var winding = 0; Edge start = default;
+        var winding = 0; Crossing start = default;
         for (var i = 0; i < count; i++)
         {
-            cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[crossings[i].Index]; var previous = winding; winding += edge.Winding;
-            if (previous == 0 && winding != 0) start = edge;
+            cancellation.ThrowIfCancellationRequested(); var crossing = crossings[i]; var edge = shape.Edges[crossing.Index]; var previous = winding; winding += edge.Winding;
+            if (previous == 0 && winding != 0) start = crossing;
             else if (previous != 0 && winding == 0)
             {
-                var (a, d) = start.Endpoints(top, bottom); var (b, c) = edge.Endpoints(top, bottom);
+                var a = start.Top; var d = start.Bottom; var b = crossing.Top; var c = crossing.Bottom;
                 a += dx; b += dx; c += dx; d += dx;
                 var first = Math.Max(left, Math.Floor(Math.Min(a, d))); var last = Math.Min(right, Math.Ceiling(Math.Max(b, c)));
                 if (first >= last) continue;

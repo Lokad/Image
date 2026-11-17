@@ -4,8 +4,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading, complete text integrations and ordinary drawing use the retained-prefix
-package; clipped drawing retains the conditional-polygon-scratch evidence.
+font loading retains the source-valid retained-prefix package; ordinary/clipped
+drawing and complete text integrations use the scan-band-coordinate package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -341,33 +341,32 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
-[Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-retains clipped costs and the controlled complete RGBA8 gain **0.769 µs /
-1.65%** with separated intervals. Allocations remain
-**75,840 B/draw** plus 24 B of adapter storage.
-[Symmetric output checks](../benchmarks/ORDINARY-DRAW-SYMMETRIC-CHECKS.md) now own
-ordinary costs on the current immutable package: RGBA8 is a scoped gap, interval
-**1.002961–1.028560**;
-RGBA16 passes/stops, upper **0.997532**.
-Reference allocations are **48,576 B/draw** at both depths. Both sampling sides
-now check the full frozen frame and read allocation counters outside every timer.
-The stock public reference pipeline, per-operation reset, every actual, three
-reference groups and conservative confidence remain; this is a sampling correction,
-not a production or historical-clock gain. Standing preparation and harness oracle
-storage remain separate from production allocations and admitted capacity.
+[Shared scan-band coordinates](../benchmarks/TEXT-SCAN-BAND-COORDINATES.md)
+save **2.555 µs / 5.33%**
+in controlled complete ordinary-RGBA8 final-DLL pairs. Standalone RGBA8 now passes,
+upper **0.983139**. Affected RGBA16 remains
+**uncertain**, interval **0.852923–1.023865**;
+all samples, including shared managed/reference phase variation, remain retained.
+Do not infer a regression or replay solely for a pass. Original exact frames,
+stock reference identities, symmetric per-operation reset/checks, all twelve
+16,384-operation actuals and three reference groups remain unchanged.
+Ordinary public allocations are **83,008 B/draw**, up **7,168 B**, plus 24 B of
+adapter storage; reference allocations remain **48,576 B/draw**. Clipped controls
+retain their approved source-corrected references and both pass.
 
-[Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
-one-shot and preparation-plus-eight-draw integrations. Both pass, including
-all public layout calls, 30 fitting trials, fresh owned explicitly cleared canvases,
-independent results and disposal. The measured batch amortizes to
-**174.10 / 961.97 µs/draw**.
-Preparation-only **1246.65 / 6879.74 µs** is diagnostic;
-historical stages are never summed. The reference retains positioned paths and
-managed preparation retains full 16-bit coverage. Validation eagerness and
-GC-driven reference font release differ. Reference one-shot/batch allocations are
-**9,256,953 /9,494,633 B**. Latin/fit retained plans remain **2,112 /4,160 B** and
-the full-fit governed peak is **742,840 B**, down **79,060 B** with the font prefix. Allocations, admitted capacity
-and unmeasured physical/native/JIT peaks are distinct.
+Current complete one-shot and preparation-plus-eight-draw integrations also pass,
+including all public layout calls, 30 fitting trials, fresh explicitly cleared
+owned canvases, independent results and disposal. These are complete public-API
+integrations, not bare shaping-engine comparisons. The measured batch amortizes to
+**163.66 / 864.34 µs/draw**.
+Preparation-only **1122.54 / 6072.91 µs**
+is diagnostic; historical stages are never summed. Reference preparation retains
+positioned paths; managed preparation retains full 16-bit coverage. Validation
+eagerness and GC-driven reference font release differ. Reference one-shot/batch
+allocations are **9,256,953 /9,494,633 B**. Latin/fit retained plans remain
+**2,112 /4,160 B**. Full-fit governed peak is **748,984 B**, up **6,144 B** for
+temporary crossings. Total allocations, peak admitted capacity, retained state
+and unmeasured physical/native/JIT peaks are separate.
 
 [Font loading](../benchmarks/FONT-RETAINED-PREFIX.md) saves
 **1.376 µs / 8.29%** in controlled
@@ -380,9 +379,9 @@ directory/input limits remain; owned tables retain exact offsets/bytes. Eager/la
 validation differs, not general parser equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
 passes/stops at **56 B/op** with its distinct retained-state boundary.
 
-Windows/Linux each pass **6,819 full/live checks**, focused **306 internal/222 public**
-normal/AVX2-disabled/scalar checks and the SAME actual retained-prefix package/all
-three examples. Affected performance reconciles before qualification; no timed DLL
+Windows/Linux each pass **6,824 full/live checks**, focused **307 internal/177 public**
+normal/AVX-disabled/scalar checks and the SAME actual scan-band package/all three
+examples. Affected performance reconciles before qualification; no timed DLL
 rebuild occurs. Other families retain identified unchanged-path evidence. The
 complete final-package refresh remains pending.
 
@@ -499,10 +498,10 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
-| Complete text one-shot / ImageSharp public integration (pass) † | 1,226.78 | 6,894.19 | 0.178 / 0.200 | 298,786 |
-| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,392.80 | 7,695.72 | 0.181 / 0.199 | 308,518 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 48.36 | 47.50 | 1.018 / 1.029 | 75,840 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (pass) † | 47.70 | 48.58 | 0.982 / 0.998 | 75,840 |
+| Complete text one-shot / ImageSharp public integration (pass) † | 1,130.56 | 6,205.59 | 0.182 / 0.212 | 304,926 |
+| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,309.27 | 6,914.69 | 0.189 / 0.220 | 314,656 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (pass) † | 43.82 | 44.96 | 0.975 / 0.983 | 83,008 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 44.60 | 46.17 | 0.966 / 1.024 | 83,008 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 14.98 | 14.46 | 1.036 / 1.048 | 176 |
@@ -542,8 +541,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |
 | Authored cmap4 layout / corrected ImageSharp integration (parity confirmed) | 2.610 | 120.738 | 0.022 / 0.022768 | 5,088 |
 | Authored compound layout / corrected ImageSharp integration (parity confirmed) | 2.604 | 112.021 | 0.023 / 0.023809 | 6,152 |
-| Authored RGBA8 layout + draw / corrected ImageSharp integration (parity confirmed) | 41.223 | 224.429 | 0.184 / 0.299789 | 41,064 |
-| Authored RGBA16 layout + draw / corrected ImageSharp integration (parity confirmed) | 38.190 | 225.899 | 0.169 / 0.294813 | 41,064 |
+| Authored RGBA8 layout + draw / corrected ImageSharp integration (parity confirmed) | 37.325 | 225.481 | 0.166 / 0.289477 | 44,136 |
+| Authored RGBA16 layout + draw / corrected ImageSharp integration (parity confirmed) | 34.925 | 226.992 | 0.154 / 0.265146 | 44,136 |
 
 **Inspection and pixel-coding validation**
 
