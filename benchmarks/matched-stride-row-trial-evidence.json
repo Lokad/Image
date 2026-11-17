@@ -1,0 +1,198 @@
+{
+  "project": "Lokad.Image",
+  "stage": "MSR1224",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "MSR1224",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "baselineCommit": "deca0d3d35f29f80d69bcfbb712f684bf091ba3d",
+    "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "prototypePath": "tmp/msr1224-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "2214b26baf675dc282a8fb5e39de238edddd467ccfe926af33c5a6cf52945ec2",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+    },
+    "candidateSourcePins": {
+      "tmp/msr1224-src/Lokad.Image/ImageDrawing.cs": "613468b4e1e94954ff1dd5ee60965da488deb1a54633da6972dbe3d0cffd9cde",
+      "tmp/msr1224-src/Lokad.Image/Internal/IndependentRowCopy.cs": "27071293b25b3653eb3e1f7cb61284255cfec95c0c1cb6a368d258602d631e29"
+    },
+    "focusedInternalFilter": "FullyQualifiedName~RectangleBulkRowTests|FullyQualifiedName~SelfRowStorageTests|FullyQualifiedName~MatchedStrideRowsTests",
+    "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+    "sourceProof": {
+      "originalKernelsVerbatim": true,
+      "onlySeparateMatchedStrideByteRowsSelectNewHelper": true,
+      "bulkAndTailOperationsVerbatimUnderSharedCursor": true,
+      "rectangleExtentsFitBothExistingBuffersAndInt32": true,
+      "rowPollsAndFinalCursorRulePreserved": true,
+      "noStorageOwnershipLimitOrApiChange": true
+    },
+    "hypothesis": "Prepare separate matched-stride forward ROI spans once;one cursor/step removes three scalar arguments and repeated row state. Keep existing grouped512-bit loads/stores/tails/checkpoints. Current demonstrated separate/clipped-byte gaps only;no assumed word gap or fixed-fixture shortcut.",
+    "boundsProof": "Different buffers imply backwardsY=false. Clipped source/canvas rectangles fit their real packed storage. (height-1)*stride+rowBytes <=remaining bytes from each ROI origin <=Array.MaxLength;all terms nonnegative,so Int32 arithmetic is bounded before Slice. Existing Vector512,rowBytes>=256,width<=4096 eligibility remains.",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbedded": 1,
+      "canonicalVmPublicHarnessNativeFixturePackage": 0,
+      "smallManagedActor": 1
+    },
+    "actor": {
+      "sourceSha256": "d60cf45174b86c3aba3fe331556cae596b49f2ffa0a7c6c85cf2e89e6ae201f8",
+      "sha256": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+      "path": "tmp/msr1224-actor/bin/Release/net10.0/CopyActor.dll",
+      "operationsPerActual": 65536,
+      "newPublicOperationOrFixture": false
+    }
+  },
+  "focusedWindows": {
+    "stage": "MSR1224",
+    "counts": {
+      "internal/normal": 10,
+      "internal/avx512-off": 10,
+      "internal/scalar": 10,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "canonicalUnchanged": true
+  },
+  "focusedLinux": {
+    "focusedInternal": {
+      "normal": 10,
+      "avx512-off": 10,
+      "scalar": 10
+    },
+    "focusedPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "baselineSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "prototypeSha256": "2214b26baf675dc282a8fb5e39de238edddd467ccfe926af33c5a6cf52945ec2",
+    "coreModifiedTimeNs": 1794918244866850910
+  },
+  "screens": {
+    "DrawingCopy8": {
+      "subjects": {
+        "baseline": {
+          "mean": 1.9678589935302735,
+          "lower": 1.7023117653969981,
+          "upper": 2.233406221663549,
+          "values": [
+            1.9828583679199219,
+            1.9537921295166016,
+            1.966926483154297
+          ]
+        },
+        "candidate": {
+          "mean": 1.990797327677409,
+          "lower": 1.5448274240112585,
+          "upper": 2.436767231343559,
+          "values": [
+            1.998183074951172,
+            1.963510986328125,
+            2.0106979217529295
+          ]
+        }
+      },
+      "ratio": 1.0116239148998178,
+      "lower": 0.8560132182196083,
+      "upper": 1.1955223627571219,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "OriginalClippedCopy8": {
+      "subjects": {
+        "baseline": {
+          "mean": 1.9569693145751954,
+          "lower": 1.8838234936944125,
+          "upper": 2.0301151354559783,
+          "values": [
+            1.953219696044922,
+            1.9611957855224609,
+            1.9564924621582032
+          ]
+        },
+        "candidate": {
+          "mean": 1.9583881327311197,
+          "lower": 1.9544933571922445,
+          "upper": 1.9622829082699949,
+          "values": [
+            1.9581745452880859,
+            1.9583883361816405,
+            1.9586015167236328
+          ]
+        }
+      },
+      "ratio": 1.0007264037340597,
+      "lower": 0.9647608769647225,
+      "upper": 1.0380326970567275,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    }
+  },
+  "codegen": {
+    "stage": "MSR1224-CODEGEN",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "quietGuardsPassed": true,
+    "results": {
+      "baseline": {
+        "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "methods": {
+          "Lokad.Image.ImageDrawing:CopyRegion(Lokad.Image.ImageBuffer,int,int,int,int,Lokad.Image.ImageBuffer,int,int,Lokad.Image.ImageLimits,System.Threading.CancellationToken) (FullOpts)": 1531,
+          "Lokad.Image.Internal.IndependentRowCopy:CopyRows(System.ReadOnlySpan`1[byte],System.Span`1[byte],int,int,int,int,int,int,System.Threading.CancellationToken) (FullOpts)": 438
+        },
+        "correctnessPassed": true,
+        "managedTimedSamples": 0,
+        "codegenOnly": true,
+        "allInstrumentedClocksDiscarded": true
+      },
+      "candidate": {
+        "librarySha256": "2214b26baf675dc282a8fb5e39de238edddd467ccfe926af33c5a6cf52945ec2",
+        "methods": {
+          "Lokad.Image.ImageDrawing:CopyRegion(Lokad.Image.ImageBuffer,int,int,int,int,Lokad.Image.ImageBuffer,int,int,Lokad.Image.ImageLimits,System.Threading.CancellationToken) (FullOpts)": 1646,
+          "Lokad.Image.Internal.IndependentRowCopy:CopyMatchedRows(System.ReadOnlySpan`1[byte],System.Span`1[byte],int,int,int,System.Threading.CancellationToken) (FullOpts)": 371
+        },
+        "correctnessPassed": true,
+        "managedTimedSamples": 0,
+        "codegenOnly": true,
+        "allInstrumentedClocksDiscarded": true
+      }
+    },
+    "interpretation": "Generated code and selected methods only;not a phase cost,cycle saving or timing result. Existing smoke native clocks discarded. No managed sample command or statistical repeat."
+  },
+  "decision": "No useful complete-operation gain established by either shortscreen;no independent confirmation,promotion or broad/package campaign. Actual optimized method selected and smaller371B,but public caller grows1531->1646B;do not infer causal timing from code size or source state removal. Keep original measured general/self/portable kernels. No neighboring parameter/kernel sweep.",
+  "next": "Reconcile demonstrated byte gaps with equivalent adjacent managed/reference scheduling before selecting more kernel work. Current private complete baseline clocks differ materially from earlier standalone contexts;no historical speed claim. Reuse frozen inputs/settings and qualified SRSartifact,original bytecontrols and nowprepared interleaved driver;one bounded capture percase,unchanged conservative gate.",
+  "baselineQualificationOnly": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "prototypeBroadlyQualified": false,
+    "newBroadPackageChecks": 0
+  },
+  "raw": {
+    "file": "matched-stride-row-trial.tar.xz",
+    "sha256": "0df094564818f4af1fa704941f8e2e41a7f20f7be72162564948aa739a3b0722",
+    "bytes": 1928232,
+    "members": 80,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e",
+      "self-row-storage-qualified.tar.xz SHA25632a9632881c333c26d4f44af679d869f0377832c687cbdd1571cc92baf464ea9"
+    ]
+  }
+}
