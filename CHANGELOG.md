@@ -25,6 +25,7 @@
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
   Rectangle copies prepare bulk execution once and use bounded vector ends.
+  Text construction uses bounded initial edge storage to reduce temporary allocations.
 - Speed up supplied-font loading with exact batched glyph-bound checks and shared
   header normalization.
 - Reuse completed nearest-neighbor output rows during enlargement.

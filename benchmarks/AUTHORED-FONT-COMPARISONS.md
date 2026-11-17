@@ -1,6 +1,6 @@
 # Authored-font public comparisons
 
-[Ordinary word dispatch](ORDINARY-WORD-TEXT-DISPATCH.md) refreshes the two affected rendering costs; the three layout comparisons and reference corrections below remain valid.
+[Initial edge storage](TEXT-INITIAL-EDGE-STORAGE.md) owns the current two rendering costs; the three layout comparisons and reference corrections below remain valid.
 
 ATS1142 resolves the five original authored-font reference mismatches without a
 Lokad.Image production change. AFT1143 measures their complete operations on the

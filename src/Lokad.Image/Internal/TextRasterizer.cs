@@ -472,24 +472,30 @@ internal sealed partial class TextRasterizer : IDisposable
             try
             {
                 Span<Curve> stack = stackalloc Curve[depthLimit + 1];
+                // This initial edge prefix shares the already admitted 4 KiB
+                // raster frame. Later event/sort users start after we return.
+                Span<Edge> storage = stackalloc Edge[64];
                 var segments = outline.Segments();
                 Point Position(FontPoint p) => new((p.X - outline.Left.X) * scale, -p.Y * scale);
                 while (segments.Next(out var segment))
                 {
                     owner.context.Cancellation.ThrowIfCancellationRequested(); var a = Position(segment.Start); var b = Position(segment.End);
-                    if (!segment.Quadratic) { Add(a, b); continue; }
+                    if (!segment.Quadratic) { Add(a, b, ref storage); continue; }
                     var used = 1; stack[0] = new(a, Position(segment.Control), b, 0);
                     while (used != 0)
                     {
                         owner.context.Cancellation.ThrowIfCancellationRequested(); var curve = stack[--used];
                         var deviation = Math.Max(Math.Abs(curve.A.X - 2 * curve.C.X + curve.B.X), Math.Abs(curve.A.Y - 2 * curve.C.Y + curve.B.Y)) * .25;
-                        if (deviation <= 1.0 / 1024) { Add(curve.A, curve.B); continue; }
+                        if (deviation <= 1.0 / 1024) { Add(curve.A, curve.B, ref storage); continue; }
                         if (curve.Depth == depthLimit) throw new UnsupportedImageException(UnsupportedImageFeature.FontOutline, "Text curve subdivision exceeds 24 levels.");
                         var ac = Point.Mid(curve.A, curve.C); var cb = Point.Mid(curve.C, curve.B); var mid = Point.Mid(ac, cb);
                         stack[used++] = new(mid, cb, curve.B, curve.Depth + 1);
                         stack[used++] = new(curve.A, ac, mid, curve.Depth + 1);
                     }
                 }
+                // No stack view survives preparation. Small shapes allocate
+                // their initialized prefix once; spilled shapes already own it.
+                if (Count != 0 && Edges.Length == 0) ResizeEdges(ref storage, Count);
             }
             finally { owner.Release((depthLimit + 1) * 64); }
         }
@@ -543,10 +549,30 @@ internal sealed partial class TextRasterizer : IDisposable
             // ordinal order. Their indexes retire after event preparation.
             ReorderEdges(Edges.AsSpan(0, Count), order.AsSpan(0, Count), owner.context.Cancellation);
         }
-        private void Add(Point a, Point b)
+        private void Add(Point a, Point b, ref Span<Edge> storage)
         {
             if (a.Y == b.Y) return;
-            Grow(ref Edges, Count, 56, ref edgeBytes); Edges[Count] = new(a, b, Count); Count++;
+            if (Count == owner.context.Limits.MaxContainerItems)
+                throw new ImageLimitException(ImageLimitKind.ContainerItems, "Text raster edge/event limit exceeded.");
+            if (Count == storage.Length)
+            {
+                var capacity = (int)Math.Min(owner.context.Limits.MaxContainerItems,
+                    Math.Max(Count + 1L, Math.Max(8, storage.Length * 2L)));
+                ResizeEdges(ref storage, capacity);
+            }
+            storage[Count] = new(a, b, Count); Count++;
+        }
+        private void ResizeEdges(ref Span<Edge> storage, int capacity)
+        {
+            var nextBytes = 32 + capacity * 56L; owner.Admit(nextBytes);
+            Edge[] next;
+            try
+            {
+                owner.context.Cancellation.ThrowIfCancellationRequested();
+                next = new Edge[capacity]; storage[..Count].CopyTo(next);
+            }
+            catch { owner.Release(nextBytes); throw; }
+            owner.Release(edgeBytes); edgeBytes = nextBytes; Edges = next; storage = next;
         }
         private void Event(double y) { Grow(ref Events, EventCount, 8, ref eventBytes); Events[EventCount++] = y; }
         private void Grow<T>(ref T[] array, int count, int itemBytes, ref long bytes)

@@ -1,5 +1,8 @@
 # Font-header normalization
 
+Font loading remains source-valid. Current complete text-integration costs use
+[initial edge storage](TEXT-INITIAL-EDGE-STORAGE.md); earlier integration observations below retain history.
+
 Accepted complete owned-font loads improve **15.893 → 14.922 µs**, saving
 **0.971 µs / 6.11%**, with paired ratio interval **0.937376–0.940380** and
 separated raw mean intervals. Allocation remains **176 B/op**. All twelve reversed

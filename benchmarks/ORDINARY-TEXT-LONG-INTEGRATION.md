@@ -1,5 +1,8 @@
 # Ordinary text: longer integration
 
+Historical costs: [initial edge storage](TEXT-INITIAL-EDGE-STORAGE.md) owns the
+current ordinary confirmations, preserving this integration cadence and all earlier actuals.
+
 The two existing ordinary public-draw controls now establish **small scoped
 gaps**, resolving their earlier uncertainty. Production and the qualified
 package are unchanged; this is a measurement update, not a speedup.

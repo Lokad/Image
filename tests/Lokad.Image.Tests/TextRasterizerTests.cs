@@ -13,12 +13,12 @@ public sealed class TextRasterizerTests
     [Fact]
     public void ExactPeakAdmissionCountsSubdivisionStackAndReleasesEveryLease()
     {
-        var layout = Rectangle(); var context = new OperationContext(new() { MaxWorkingBytes = 6744 }, default);
+        var layout = Rectangle(); var context = new OperationContext(new() { MaxWorkingBytes = 6408 }, default);
         var raster = new TextRasterizer(layout, context, 10); Assert.Equal(1328, context.RemainingWorkingBytes);
-        raster.Dispose(); raster.Dispose(); Assert.Equal(6744, context.RemainingWorkingBytes);
-        var denied = new OperationContext(new() { MaxWorkingBytes = 6743 }, default);
+        raster.Dispose(); raster.Dispose(); Assert.Equal(6408, context.RemainingWorkingBytes);
+        var denied = new OperationContext(new() { MaxWorkingBytes = 6407 }, default);
         var failure = Assert.Throws<ImageLimitException>(() => new TextRasterizer(layout, denied, 10));
-        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(6743, denied.RemainingWorkingBytes);
+        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(6407, denied.RemainingWorkingBytes);
     }
 
     [Theory]
