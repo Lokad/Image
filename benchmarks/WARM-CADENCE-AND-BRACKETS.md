@@ -1,5 +1,9 @@
 # Warm cadence and reference brackets
 
+The separate-word result below is superseded by [partitioned actuals](COPY-PARTITIONED-REFERENCE.md),
+which resolve its uncertainty as a gap on the same artifact. The rejected text
+trial and all original raw samples remain unchanged.
+
 Two bounded measurement investigations leave production unchanged. They retain
 every actual, original fixture, pixel/ownership check and conservative gate.
 

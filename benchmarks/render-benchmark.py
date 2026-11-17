@@ -248,14 +248,6 @@ def borrowed_copy_stage():
     assert q['modes'] == ['normal', 'avx512-off', 'scalar'] and q['focusedInternalEachMode'] == 6 and q['focusedPublicEachMode'] == 190
     assert all(stage['sourceProof'].values()) and stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
     assert stage['memory']['managedAllocatedBytesPerOperation'] == stage['memory']['newAdmittedCapacityBytes'] == stage['memory']['newRetainedCapacityBytes'] == 0
-    word = json.loads((ROOT / 'benchmarks/copy-word-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
-    assert word['measurementAccepted'] and not word['productionChanged'] and not word['productionSpeedupClaim']
-    assert word['requiredMaterialPaths'] == 289 and word['newRequiredPaths'] == 0
-    assert word['raw']['mirrored'] and word['raw']['allMembersVerified'] and all(word['sourceProof'].values())
-    assert word['allOriginalGatesPassed'] and word['quietGuardsPassed'] and word['allActualsRetained']
-    assert word['producers'] == stage['producers'] and word['qualificationReused']['newBroadPackageChecks'] == 0
-    assert word['case']['referenceBracketsInterleaved'] and word['case']['operationsPerSubject'] == 262144
-    stage['cases']['DrawingCopy16'] = word['case']
     byte = json.loads((ROOT / 'benchmarks/byte-copy-reference-reconciliation-evidence.json').read_text(encoding='utf-8'))
     assert byte['measurementAccepted'] and not byte['productionChanged'] and not byte['productionSpeedupClaim']
     assert byte['requiredMaterialPaths'] == 289 and byte['newRequiredPaths'] == 0
@@ -264,7 +256,23 @@ def borrowed_copy_stage():
     assert byte['producers'] == stage['producers'] and byte['qualificationReused']['newBroadPackageChecks'] == byte['allBuilds'] == 0
     assert set(byte['cases']) == {'DrawingCopy8', 'OriginalClippedCopy8'}
     assert all(c['referenceBracketsInterleaved'] and c['operationsPerSubject'] == 65536 for c in byte['cases'].values())
-    stage['cases'].update(byte['cases'])
+    stage['cases']['DrawingCopy8'] = byte['cases']['DrawingCopy8']
+    current = json.loads((ROOT / 'benchmarks/copy-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
+    assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['requiredMaterialPaths'] == 289 and current['newRequiredPaths'] == 0
+    assert current['producers'] == stage['producers'] and current['qualificationReused']['fullLiveEachOs'] == 6805
+    assert current['raw']['mirrored'] and current['raw']['allMembersVerified'] and all(current['sourceProof'].values())
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
+    assert current['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == current['qualificationReused']['newBroadPackageChecks'] == 0
+    assert set(current['cases']) == {'OriginalClippedCopy8', 'DrawingCopy16'}
+    for name, c in current['cases'].items():
+        m = current['measurements'][name]
+        assert m['actualPairs'] == m['statisticalUnitsPerGroup'] == 12 and m['nativeGroups'] == 3
+        assert m['segmentsPerUnit'] * m['operationsPerSegment'] == m['operationsPerSubject'] == c['operationsPerSubject']
+        assert m['allSubdivisionCountsAndAggregationVerified'] and all(s['N'] == 12 for s in [m['managedStatistics'], *m['nativeStatistics']])
+        assert c['lower'] > 1 and c['status'] == 'gap'
+    stage['cases'].update(current['cases'])
+    stage['currentBorrowedDrawingCounts'] = current['currentBorrowedDrawingCounts']
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
     for c in stage['cases'].values():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
@@ -2065,14 +2073,16 @@ historical clocks and prototype effects are not added.
 
 Separate byte copy is **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper
 **{b8['upper']:.3f}**, a gap. Separate word copy **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**,
-upper **{bw['upper']:.6f}**, remains uncertain on the frozen 262,144-operation cadence.
-Its [reference groups now interleave](../benchmarks/WARM-CADENCE-AND-BRACKETS.md)
-around each pair, with unchanged counts, operation bodies and confidence gate.
-All actuals and three native brackets stay, without an assumed gap, causal
-regression claim or favorable replay. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
-upper **{bo['upper']:.6f}**, passes/stops. The two byte controls now use the
-[same interleaved schedule](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
-at 65,536 operations per actual. Clipped byte copy is uncertain, not a demonstrated gap.
+upper **{bw['upper']:.6f}**, is also a demonstrated gap. Finer
+[reference interleaving](../benchmarks/COPY-PARTITIONED-REFERENCE.md) resolves both
+copy uncertainties, preserving frozen 262,144/65,536-operation actuals, twelve statistical units/group,
+three groups, original warmups and conservative gate. All subdivisions stay raw;
+more timer reads remain included and native client work outside. No production
+speedup, host cause, extra confidence samples or favorable replay. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
+upper **{bo['upper']:.6f}**, passes/stops. The
+[existing separate-byte capture](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
+remains valid at 65,536 operations per actual and is not repeated.
+Clipped byte copy is a demonstrated gap. Both self-copy passes stay stopped.
 All five actual-reference costs use the same final timed/package DLL; other
 primitives retain their identified source-valid evidence.
 
@@ -3299,6 +3309,11 @@ costs. The complete final-package refresh remains outstanding."""
     pg = clipped_composite['pixelGates']
     assert pg['nativeRgbMaximum'] <= 1 and pg['nativeRgbRmse'] <= .5 and pg['nativeActiveRgbRmse'] <= .5
     assert pg['alphaMaximum'] == 0 and pg['untouchedExactPixels'] > 0 and pg['zeroSourceAlphaExactPixels'] > 0
+    all_borrowed_cases = [*drawing_cases.values(), *original_fills['cases'].values(), cc, oc]
+    all_borrowed_counts = {field: sum(c['status'] == status for c in all_borrowed_cases)
+                           for field, status in [('passCount', 'pass'), ('gaps', 'gap'), ('uncertain', 'uncertain')]}
+    all_borrowed_counts['total'] = len(all_borrowed_cases)
+    assert all_borrowed_counts == copy_current['currentBorrowedDrawingCounts']
     editing += (f'\n| Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | {oc["managedUs"]:.3f} | '
                 f'{oc["nativeUs"]:.3f} | {oc["ratio"]:.3f} / {oc["upper"]:.6f} | 0 |')
     default_variation = json.loads((ROOT / 'benchmarks/default-variation-evidence.json').read_text(encoding='utf-8'))
@@ -3353,7 +3368,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md) remains uncertain. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/COPY-PARTITIONED-REFERENCE.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -3366,7 +3381,7 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-one gap, two uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+three gaps, no uncertainties**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared

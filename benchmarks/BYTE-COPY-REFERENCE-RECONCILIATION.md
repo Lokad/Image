@@ -1,5 +1,9 @@
 # Byte-copy reference reconciliation
 
+Clipped-byte costs below are superseded by [partitioned actuals](COPY-PARTITIONED-REFERENCE.md),
+which resolve its uncertainty as a gap. The separate-byte capture remains current;
+all original samples and uncertainty stay retained.
+
 Two existing byte controls use the same qualified immutable DLL and frozen
 FFmpeg plane-copy reference, with explicitly interleaved reference groups.
 Production is unchanged. These are current complete-operation costs, not a gain

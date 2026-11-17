@@ -1,9 +1,9 @@
 # Shared self-row execution state
 
-Separate-word costs now use [interleaved reference groups](WARM-CADENCE-AND-BRACKETS.md)
-on this same immutable artifact; the original samples and accepted self-row gain remain.
-The two byte costs use the [same explicit schedule](BYTE-COPY-REFERENCE-RECONCILIATION.md);
-clipped copy is uncertain rather than a demonstrated gap.
+[Partitioned actuals](COPY-PARTITIONED-REFERENCE.md) now own separate-word and
+clipped-byte costs on this same immutable artifact. Both resolve as gaps; earlier
+uncertainties and the accepted self-row gain remain. Separate-byte costs retain
+the unchanged [interleaved capture](BYTE-COPY-REFERENCE-RECONCILIATION.md).
 
 The original RGBA16 overlap gap closes on the final timed/package DLL:
 **5.186 /FFmpeg 5.602 µs**, upper **0.930762**, **pass**.
@@ -16,8 +16,8 @@ This scopes the final-artifact effect; private/historical gains are never summed
 | --- | ---: | --- | ---: |
 | Original RGBA16 overlap + reverse, 257×129 | 5.186 /5.602 | 0.930762 /pass | 0 |
 | Separate RGBA8, 256×129 | 1.987 /1.915 | 1.043571 /gap | 0 |
-| Clipped RGBA8, 254×129 effective | 2.098 /1.999 | 1.121784 /uncertain | 0 |
-| Separate RGBA16, 256×129 | 3.903 /3.902 | 1.091016 /uncertain | 0 |
+| Clipped RGBA8, 254×129 effective | 1.957 /1.910 | 1.028517 /gap | 0 |
+| Separate RGBA16, 256×129 | 3.817 /3.768 | 1.022959 /gap | 0 |
 | RGBA8 overlap + reverse | 3.885 /4.183 | 0.938291 /pass | 0 |
 
 Known self-copies pass one bounded packed span and one row step instead of two
@@ -44,8 +44,8 @@ every actual, native bracket and idle-v2 guard stay. Native public plane argumen
 are prevalidated; managed public validation/clipping/cancellation remain timed.
 Both sides borrow resident source/canvas, without per-operation output allocation
 or disposal. Source/canvas preparation, IPC, checks and final disposal stay outside.
-Separate-word keeps its262144-operation cadence and uncertainty; do not infer its
-kernel needs optimization. Passing original word/byte overlap paths stop.
+Separate-word keeps its262144-operation count; current intra-actual interleaving
+resolves its uncertainty as a gap, without changing the conservative gate. Passing original word/byte overlap paths stop.
 
 Windows/Linux each pass **6,805 full/live checks** (3,345 internal,2,512 public,
 948 differential), plus the SAME actual Release package/all three examples.
@@ -64,7 +64,7 @@ their pin/value-plan machinery is absent from production.
 
 Public CopyRegion selection changes, so all five copy costs refresh. Earlier
 [prepared-row](RECTANGLE-COPY-PREPARED-ROWS.md) and [separate-word](COPY-WORD-CURRENT-PACKAGE.md)
-captures retain history. One byte gap, clipped/separate-word uncertainties and other named
+captures retain history. Three copy gaps and other named
 requirements keep the full289 objective/final165comparison package refresh open.
 Publication remains postponed; published packages remain immutable.
 
