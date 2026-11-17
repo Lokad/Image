@@ -151,12 +151,14 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
-[Current owned-flip checks](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
-retain uncertainty at **8.693 / FFmpeg 8.330 µs,
-upper 1.101581** for RGBA8 and **17.658 /
-17.586 µs, upper 1.010163** for RGBA16, **56 B/op** each.
+[Current owned-flip checks](../benchmarks/OWNED-FLIP-INTERLEAVED-REFERENCE.md)
+retain uncertainty at **9.107 / FFmpeg 9.137 µs,
+upper 1.006960** for RGBA8 and **18.646 /
+18.650 µs, upper 1.004353** for RGBA16, **56 B/op** each.
 The same complete public calls, independent outputs, original full samples and all
-12 actuals/three native brackets remain. Neither is a current passing claim.
+12 actuals/three native groups remain, now interleaved across the run with unchanged
+counts, complete warmups and conservative statistics. The current immutable package
+DLL reuses 6,819 checks per OS/SAME package/all three examples. Neither is a current passing claim.
 [Earlier copy/flip evidence](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md) stays
 linked, including useful kernel gains; its old storage costs do not qualify the
 changed shared pool. Borrowed rectangle copies do not call that pool and reuse
@@ -520,7 +522,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
 | Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
 | Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
-| Vertical flip RGBA8 (uncertain) † | 8.69 | 8.33 | 1.044 / 1.102 | 56 |
+| Vertical flip RGBA8 (uncertain) † | 9.11 | 9.14 | 0.997 / 1.007 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
 | Original clipped RGBA8 copy, 254×129 (uncertain) | 2.098 | 1.999 | 1.050 / 1.121784 | 0 |

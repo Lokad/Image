@@ -1,5 +1,9 @@
 # Shared image-storage reuse
 
+Later [interleaved owned-flip comparisons](OWNED-FLIP-INTERLEAVED-REFERENCE.md)
+own the two current flip costs on the unchanged production paths. Both remain
+uncertain; this report retains the accepted storage change and original actuals.
+
 Retain the verified allocation reduction. The final controlled DLL comparison
 does **not** establish a CPU gain: 3,170.933→3,165.833 µs, interval
 0.917117–1.083007, with **338,156.20→8,889.94 B/op** (97.4% less allocation).

@@ -319,6 +319,30 @@ def owned_flip_confidence():
     return stage
 
 
+def owned_flip_reference_stage():
+    stage = json.loads((ROOT / 'benchmarks/owned-flip-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
+    qualified = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
+    q = qualified['qualification']
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
+    assert stage['producers'] == qualified['producers'] and qualified['productionAccepted'] and qualified['allAffectedPerformanceReconciled']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == stage['qualificationReused']['fullLiveEachOs'] == 6819
+    assert q['linux']['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['linux']['actualPackage']['librarySha256'] == stage['producers']['timedArtifactSha256']
+    assert all(p['actualConsumerPassed'] and p['usageExamples'] == 3 for p in (q['linux']['actualPackage'], q['windowsPackage']))
+    assert stage['qualificationReused']['newBroadPackageChecks'] == stage['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == 0
+    assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16'}
+    for c in stage['cases'].values():
+        assert c['librarySha256'] == stage['producers']['linuxSha256']
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 16384
+        assert c['referenceGroupsInterleaved'] and c['allocatedBytes'] == 56
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    return stage
+
+
 def owned_edit_costs(png):
     # Select current records first. Fully superseded flip/experiment providers
     # stay in their reports, without becoming renderer dependencies.
@@ -361,6 +385,7 @@ def owned_edit_costs(png):
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
     cases = {name: case for name, (case, _) in selected.items()}
+    cases.update(owned_flip_reference_stage()['cases'])
     counts = {state: sum(case['status'] == state for case in cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert counts == {'pass': 18, 'gap': 0, 'uncertain': 2} and len(cases) == 20
     return {'cases': cases, 'statusCounts': counts, 'priorStatusCounts': prior_counts,
@@ -3157,15 +3182,17 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
-        c = storage_reuse['cases'][name] if name in {'WarmVerticalFlip8', 'WarmVerticalFlip16'} else owned_copy['cases'][name]
+        c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
-    byte_flip, word_flip = (storage_reuse['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
-    owned_copy_note = f"""[Current owned-flip checks](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
+    byte_flip, word_flip = (owned_copy['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
+    owned_copy_note = f"""[Current owned-flip checks](../benchmarks/OWNED-FLIP-INTERLEAVED-REFERENCE.md)
 retain uncertainty at **{byte_flip['managedUs']:.3f} / FFmpeg {byte_flip['nativeUs']:.3f} µs,
 upper {byte_flip['upper']:.6f}** for RGBA8 and **{word_flip['managedUs']:.3f} /
 {word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** for RGBA16, **56 B/op** each.
 The same complete public calls, independent outputs, original full samples and all
-12 actuals/three native brackets remain. Neither is a current passing claim.
+12 actuals/three native groups remain, now interleaved across the run with unchanged
+counts, complete warmups and conservative statistics. The current immutable package
+DLL reuses 6,819 checks per OS/SAME package/all three examples. Neither is a current passing claim.
 [Earlier copy/flip evidence](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md) stays
 linked, including useful kernel gains; its old storage costs do not qualify the
 changed shared pool. Borrowed rectangle copies do not call that pool and reuse

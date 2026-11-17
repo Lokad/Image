@@ -1,0 +1,232 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OFR1227",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producers": {
+    "windowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "linuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "timedArtifactSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "packageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+    "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5"
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "OFR1227",
+    "productionChanged": false,
+    "productionSpeedupClaim": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "producers": {
+      "windowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+      "linuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "timedArtifactSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "packageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+      "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5"
+    },
+    "sourcePins": {
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+      "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+      "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "fbb94756a61e09f23c325f6d5c7e88f1b5f226541b3ea76f277272ddbcf1706a",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+      "benchmarks/Lokad.Image.Benchmarks/WarmStreamDecode.cs": "0df6784c3ff749f5c4a45fb29d8096c8f807a84b3786a91fdbb8ecefd90c1006"
+    },
+    "sourceProof": {
+      "existingFlipTransformsImageBufferLimitsAndContextVerbatim": true,
+      "sharedPoolSameAsLastFlipProducer": true,
+      "calledSingleRowCopyMethodVerbatim": true,
+      "currentPackageFullyQualified": true,
+      "managedTimedBodyVerbatim": true,
+      "conservativeStatisticsVerbatim": true,
+      "operationWarmupValidationAndOwnershipUnchanged": true,
+      "onlyReferenceGroupScheduleChangesVersusOwnedFlipDriver": true
+    },
+    "review": {
+      "WarmVerticalFlip8": {
+        "operations": 16384,
+        "managedValuesUs": [
+          9.086008666992187,
+          9.066911743164063,
+          9.034494506835937,
+          8.573504638671874,
+          8.40979736328125,
+          8.994593994140626,
+          8.956964416503906,
+          8.451419189453125,
+          8.439566528320313,
+          8.441892456054687,
+          8.4386728515625,
+          8.420446350097656
+        ],
+        "nativeGroupMeansUs": [
+          9.033415715535483,
+          8.616062276204428,
+          8.32997518412272
+        ],
+        "lower": 0.9168512897802846,
+        "upper": 1.1015805697885865,
+        "status": "uncertain"
+      },
+      "WarmVerticalFlip16": {
+        "operations": 16384,
+        "managedValuesUs": [
+          17.63092401123047,
+          17.67642413330078,
+          17.629526916503906,
+          17.65916229248047,
+          17.620562561035158,
+          17.66508984375,
+          17.64239611816406,
+          17.666789184570312,
+          17.604158935546874,
+          17.64267364501953,
+          17.81189050292969,
+          17.64473126220703
+        ],
+        "nativeGroupMeansUs": [
+          17.657635116577147,
+          17.64671696472168,
+          17.58633362833659
+        ],
+        "lower": 0.9912065301791346,
+        "upper": 1.010163439970167,
+        "status": "uncertain"
+      }
+    },
+    "operationsPerSubject": 16384,
+    "actualPairs": 12,
+    "nativeGroups": 3,
+    "reason": "Earlier finalsharedstorage byteflip nativegroup means9.033/8.616/8.330us andmanagedvalues change duringpairedphase;word17.658/17.647/17.586us. BOTHsides alreadywarm. Do not assigncause orassume optimization. Distribute same36native actuals across12pairs with interleaved before/after,unchanged16384ops/fourwarmups/conservativeallactual+outlierdiagnostic+pairedloggate. One bounded capture percase,no favorableidentical replay. No gain claim from historicalclocks.",
+    "cases": {
+      "WarmVerticalFlip8": {
+        "harnessCase": "Whole8",
+        "originalReceipt": "tmp/psr1151-final-WarmVerticalFlip8-receipt.json"
+      },
+      "WarmVerticalFlip16": {
+        "harnessCase": "Whole16",
+        "originalReceipt": "tmp/psr1151-final-WarmVerticalFlip16-receipt.json"
+      }
+    },
+    "driverPath": "tmp/ofr1227-driver/bin/Release/net10.0/OwnedFlipInterleaved.dll",
+    "driverSha256": "ffa26c14df2212d3a73ae9848373f54a0ad8f5ed2ea3131f06ffd8deeeace9fb",
+    "driverSourceSha256": "3926d82e20837cc8682e526973327907b2ed8165cfaa7017fb236b6db4f502a0",
+    "sourceCopyMethodProofCommit": "b34ee5854eda2cb04c256872f18579e821c8c0f1",
+    "builds": {
+      "driver": 1,
+      "productionEmbeddedPublicHarnessNativeFixturePackage": 0
+    },
+    "qualificationReused": {
+      "fullLiveEachOs": 6819,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "newBroadPackageChecks": 0
+    }
+  },
+  "cases": {
+    "WarmVerticalFlip8": {
+      "ratio": 0.9967157040892268,
+      "lower": 0.9830155766881654,
+      "upper": 1.0069603922534145,
+      "status": "uncertain",
+      "managedUs": 9.106841451009116,
+      "nativeUs": 9.136849568684896,
+      "allocatedBytes": 56,
+      "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "benchmarkAssemblySha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "operationsPerSubject": 16384,
+      "referenceGroupsInterleaved": true,
+      "sourceUnchanged": true,
+      "managedExact": true,
+      "independentOwnedOutput": true,
+      "observation": "tmp/ofr1227-WarmVerticalFlip8.json",
+      "receipt": "tmp/ofr1227-WarmVerticalFlip8-receipt.json"
+    },
+    "WarmVerticalFlip16": {
+      "ratio": 0.9997540172390542,
+      "lower": 0.9942224048294359,
+      "upper": 1.0043533572337626,
+      "status": "uncertain",
+      "managedUs": 18.645502716064453,
+      "nativeUs": 18.65009031677246,
+      "allocatedBytes": 56,
+      "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "benchmarkAssemblySha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+      "operationsPerSubject": 16384,
+      "referenceGroupsInterleaved": true,
+      "sourceUnchanged": true,
+      "managedExact": true,
+      "independentOwnedOutput": true,
+      "observation": "tmp/ofr1227-WarmVerticalFlip16.json",
+      "receipt": "tmp/ofr1227-WarmVerticalFlip16-receipt.json"
+    }
+  },
+  "sourceProof": {
+    "existingFlipTransformsImageBufferLimitsAndContextVerbatim": true,
+    "sharedPoolSameAsLastFlipProducer": true,
+    "calledSingleRowCopyMethodVerbatim": true,
+    "currentPackageFullyQualified": true,
+    "managedTimedBodyVerbatim": true,
+    "conservativeStatisticsVerbatim": true,
+    "operationWarmupValidationAndOwnershipUnchanged": true,
+    "onlyReferenceGroupScheduleChangesVersusOwnedFlipDriver": true
+  },
+  "allOriginalGatesPassed": true,
+  "allActualsRetained": true,
+  "quietGuardsPassed": true,
+  "qualificationReused": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0
+  },
+  "builds": {
+    "driver": 1,
+    "productionEmbeddedPublicHarnessNativeFixturePackage": 0
+  },
+  "memory": {
+    "gcBytesPerOperation": 56,
+    "sourceResultPayloadBytesByDepth": {
+      "8": 531468,
+      "16": 1062936
+    },
+    "newWorkspaceCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "sharedPoolSlots": 4,
+    "sharedPoolCeilingBytes": 4194304,
+    "physicalNativeJitPeakUnmeasured": true
+  },
+  "decision": "Both existing current ownedflips remain uncertain with near-equal means;retain allactuals/oldphases and do not repeat unchanged captures forpasses. No production gain orgeneralnative/managedcopyengine claim. Next assess preparation reuse of existing rectanglebulk helper,not already rejected getterhoisting/flatrow/runtimecopy replay. Passing unrelatedpaths stop.",
+  "raw": {
+    "file": "owned-flip-interleaved-reference.tar.xz",
+    "sha256": "18a32f758b5193b8bcb37802436cdda3aa073d3051eed34a70ca9d1e627db66f",
+    "bytes": 62548,
+    "members": 38,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e",
+      "composition-storage-reuse-qualified.tar.xz SHA256fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+      "warm-cadence-and-brackets.tar.xz SHA256136fb7b9f032db924f654ca05f1dcd7b9421281af30444c7b8eba1e898e9c7e8"
+    ]
+  }
+}
