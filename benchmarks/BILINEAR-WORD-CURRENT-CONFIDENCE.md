@@ -1,5 +1,8 @@
 # Current RGBA16 bilinear enlargement confidence
 
+The [current-package interleaved comparison](BILINEAR-CURRENT-INTERLEAVED-REFERENCE.md)
+supersedes this cost and retains uncertainty. Original observations below remain history.
+
 The existing513×259→1027×519 complete Resize stays **uncertain** on the current
 actual package: **1,805.35/FFmpeg1,924.57µs**, ratio
 **0.938053**, conservative interval **0.879672–1.000415**,

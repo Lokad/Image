@@ -3170,12 +3170,16 @@ costs. The complete final-package refresh remains outstanding."""
     opaque_live = reader_current['cases']['OpaqueCancelable8']
     image_view_counts = streaming_current['currentImageOwnerViewStatuses']
     assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
-    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-word-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-current-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
     assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
-    assert bilinear_word_current['measurement']['allBuilds'] == bilinear_word_current['measurement']['broadOrPackageRepeats'] == 0
+    assert bilinear_word_current['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == bilinear_word_current['qualificationReused']['newBroadPackageChecks'] == 0
+    assert bilinear_word_current['qualificationReused']['fullLiveEachOs'] == 6823
+    assert all(bilinear_word_current['sourceProof'].values())
+    assert bilinear_word_current['producers'] == owned_flip_reference_stage()['producers']
+    assert bilinear_word_current['measurement']['referenceGroupsInterleaved'] and bilinear_word_current['measurement']['operationsPerSubject'] == 256
     assert bilinear_word_current['raw']['mirrored'] and bilinear_word_current['raw']['allMembersVerified']
-    assert bilinear_word_case['librarySha256'] == policy_q['actualPackage']['librarySha256']
+    assert bilinear_word_case['librarySha256'] == bilinear_word_current['producers']['linuxSha256']
     assert bilinear_word_case['allActualsRetained'] and bilinear_word_case['allOriginalGatesPassed'] and bilinear_word_case['quietGuardsPassed']
     assert bilinear_word_case['managedRationalReferenceExact'] and bilinear_word_case['sourceUnchanged'] and bilinear_word_case['independentOwnedOutput']
     assert bilinear_word_case['lower'] <= 1 < bilinear_word_case['upper'] and bilinear_word_case['status'] == 'uncertain'
@@ -3441,11 +3445,16 @@ This is not a current shared-storage status count; affected costs await refresh.
 Unchanged borrowed operations retain source-valid evidence; remaining uncertainty,
 drawing and inspection gaps keep whole-library parity open.
 {bicubic_adjacent_note}
-[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CURRENT-CONFIDENCE.md)
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-CURRENT-INTERLEAVED-REFERENCE.md)
 remains uncertain: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
-upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**. The longer
-integration retains every native fluctuation; this is not a pass or a production
-speedup. Necessary managed preparation and the native prepared-graph boundary stay explicit.
+upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**. Current
+qualified package costs use all twelve fixed256-operation pairs and three interleaved
+native groups, with unchanged warmups and conservative statistics. Reuse6,823checks
+per OS/SAME actual package/all three examples; no production/harness/native/package
+build or broad repeat. Frozen reference assets are restored by hash before samples;
+completed results survive a recorder-schema correction without replay. This is not
+a pass or a production speedup. Necessary managed preparation and the native
+prepared-graph boundary stay explicit; no identical favorable retry follows.
 [Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
 **{bilinear_fresh_case['managedUs']:,.2f} / FFmpeg {bilinear_fresh_case['nativeUs']:,.2f} µs, upper {bilinear_fresh_case['upper']:.3f}**,
 **{bilinear_fresh_case['allocatedBytes']:,} B/op**. Fresh graph/context/geometry, lazy first use,
