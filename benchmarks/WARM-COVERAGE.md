@@ -96,6 +96,14 @@ no confirmation,standalone refresh or broad/package repeat. BothOS308internal/
 recorded tool assertion correction reflects existing retained-prefix ownership,
 without changing inputs or correctness gates. Current costs remain unchanged.
 
+[Eight-header wide bounds](FONT-WIDE-BOUNDS-TRIALS.md) also stays private. The
+512-bit predicate screens13.860->14.157us; a codegen-driven constant/native-mask
+revision screens13.959->13.927us,interval.971060–1.025125,176B unchanged.
+BothOS308internal/222public focused checks,65,536actual-helper batches and the
+original16,384ordered oracle pass. Instruction changes occur without a useful
+complete-load gain; no confirmation, reference refresh or broad/package repeat.
+Keep qualified production, font costs and passing integrations unchanged.
+
 [Prepared copy-tail trials](COPY-VECTOR-TAIL-TRIALS.md) remain rejected. A private
 confirmation's .961811–.998421 interval does not transfer: the final DLL is
 adverse at1.009814–1.024389 despite matching source, dependencies and selected
