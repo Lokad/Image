@@ -2042,12 +2042,12 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert font_load['sourceProof']['originalSourceReconstructed']
     assert font_load['memory']['addedOwnedCapacityBytes'] == font_load['memory']['addedRetainedCapacityBytes'] == 0
     storage_reuse = composition_storage()
-    font_current = json.loads((ROOT / 'benchmarks/font-header-batching-evidence.json').read_text(encoding='utf-8'))
+    font_current = json.loads((ROOT / 'benchmarks/fused-font-header-validation-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
     assert font_current['raw']['mirrored'] and font_current['raw']['allMembersVerified']
     hq = font_current['qualification']
-    assert hq['windows']['total'] == hq['linux']['total'] == 6772
+    assert hq['windows']['total'] == hq['linux']['total'] == 6790
     assert hq['linux']['actualPackage']['sha256'] == hq['windowsPackage']['sameActualPackageSha256'] == font_current['producers']['packageSha256']
     assert hq['linux']['actualPackage']['librarySha256'] == font_current['producers']['timedArtifactSha256']
     assert hq['linux']['actualPackage']['actualConsumerPassed'] and hq['windowsPackage']['actualConsumerPassed']
@@ -2112,9 +2112,6 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     font_preparation = font_current['pipelineCases']['Preparation']
     font_batch = font_current['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
-    font_gain = font_load['fontComparison']['views']['unfilteredActualStatistics']
-    assert all(view['rawGainSeparated'] for view in font_load['fontComparison']['views'].values())
-    assert font_load['fontComparison']['normalizedGainSeparated'] and not font_load['fontComparison']['normalizedLossSeparated']
     ordinary_latest = json.loads((ROOT / 'benchmarks/ordinary-text-long-integration-evidence.json').read_text(encoding='utf-8'))
     assert ordinary_latest['measurementAccepted'] and not ordinary_latest['productionChanged']
     assert ordinary_latest['producers'] == storage_reuse['producers'] and ordinary_latest['newMaterialPaths'] == 0
@@ -3314,8 +3311,8 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; font/text costs retain the source-valid header-batching
-artifact. Other entries that
+completed-row package; current font/text costs use the fused-validation package.
+Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
 proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
@@ -3585,50 +3582,38 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
 the five authored controls explicitly label their scoped source corrections above.
 They are
-never FFmpeg or a bare shaping engine. [Packed signed font bounds](../benchmarks/FONT-PACKED-BOUNDS.md)
-retains an independently verified
-**{font_gain['savedUs']:.3f} µs / {font_gain['rawSavedFraction']:.2%}** owned-font loading gain.
-[Glyph-bounded rows](../benchmarks/TEXT-GLYPH-ROW-BOUNDS.md) independently save
-**2.454 µs / 4.62%** per ordinary16 draw. Two scalar fields add **16 B per unique
-shape**, within its existing coarse admission; no array or retained capacity is added.
-Current complete public costs use the [glyph-header batching](../benchmarks/FONT-HEADER-BATCHING.md)
-timed/package DLL. The earlier [ordinary word dispatch](../benchmarks/ORDINARY-WORD-TEXT-DISPATCH.md)
-controlled ordinary16 comparison saves **{text_dispatch['pairedEffect']['savedUs']:.3f} µs /
-{text_dispatch['pairedEffect']['gainPercent']:.2f}%**, with unchanged allocation and owned capacity.
-These separate stage gains are not added. Both one-shot and preparation-plus-eight-draw controls pass, including every
-layout/fitting call, fresh owned explicitly cleared canvases, independent outputs
-and disposal. The reference retains positioned paths; managed preparation retains
-exact 16-bit coverage. Eager/lazy font validation and GC-driven reference font
-release remain explicit differences. Do not infer overall text slowdown or gain
-from stage diagnostics or add historical times.
+never FFmpeg or a bare shaping engine. Current complete font/text costs use the
+[fused glyph-header validation](../benchmarks/FUSED-FONT-HEADER-VALIDATION.md)
+immutable timed/package DLL. One-shot and preparation-plus-eight-draw controls
+pass, including every layout call, all 30 fitting trials, fresh owned explicitly
+cleared canvases, independent outputs and disposal. The reference retains
+positioned paths; managed preparation retains exact 16-bit coverage. Font parser
+validation and GC-driven reference font release differ. These are complete public
+integration workloads; historical stage times are never added.
 
 Preparation-only is {font_preparation['managedUs']:,.2f} / {font_preparation['referenceUs']:,.2f} µs,
-with prepared-owner disposal outside only that diagnostic. The directly measured
-eight-draw batch amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs/draw,
-including preparation; table allocation covers the whole batch. Reference complete
-one-shot/batch allocations are **9,256,953 / 9,494,633 B**.
+with prepared-owner disposal outside only that diagnostic. Directly measured
+preparation plus eight draws amortizes to {font_batch['amortizedManagedUs']:,.2f} / {font_batch['amortizedReferenceUs']:,.2f} µs/draw;
+table allocation covers the whole batch. Reference complete one-shot/batch
+allocations are **9,256,953 / 9,494,633 B**. Retained Latin/complete-fit capacity
+**2,112 / 4,160 B** and full-fit governed peak **822,460 B** are unchanged.
+Approximate prepared heap deltas **4,336 / 22,504 B** exclude idle pools and
+unmeasured physical/native/JIT peaks. Font loading allocates **176 B/op**.
 
-Retained Latin capacity **2,112 B**, complete-fit capacity **4,160 B**, and full-fit
-governed peak **822,460 B** are unchanged. Preparation allocates **{font_preparation['managedAllocatedBytes']:,.2f} B**.
-Approximate full-GC prepared heap deltas **4,336 / 22,504 B** exclude idle pools;
-these are neither total allocations nor physical/native/JIT peaks. No font/layout
-survives preparation. Font loading stays **176 B/op**; shared idle retention is
-reported above. Windows/Linux each pass **6,772 full/live checks**, **269 internal/441 public**
-normal/AVX2-disabled/scalar and the SAME actual timed package/all three examples.
-Twelve new public font cases cover mixed headers/tails, ordered failures and
-ownership/refusal cleanup; existing exact text/word-pixel proofs remain.
-This is a scoped development update, not a release-wide timing refresh.
+Font loading uses explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**,
+with eager/lazy validation differences. Its current upper **{font_cost['upper']:.3f}**
+retains a scoped gap. Fused structural classification/header gathering independently
+saves **{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%**
+in final-DLL controlled loads, at unchanged owned/retained capacity. Ordered eager
+errors, every cancelable glyph checkpoint and portable paths remain. This is not
+general parser equivalence or a pipeline speedup claim. Earlier experiments and
+separate stage gains are linked in the report.
 
-Font loading remains an explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**
-diagnostic, with eager/lazy validation differences. Its current upper **{font_cost['upper']:.3f}**
-retains a scoped gap. [Four-header SIMD validation](../benchmarks/FONT-HEADER-BATCHING.md)
-independently saves **{font_current['pairedEffect']['savedUs']:.3f} µs /
-{font_current['pairedEffect']['gainPercent']:.2f}%** in complete final-DLL controlled
-loads, at unchanged **176 B/op** and owned/retained capacity. All ordered header
-checks remain; malformed groups use the original scalar error order and cancelable
-tokens retain every glyph checkpoint. AVX2-disabled/scalar paths remain.
-These are scoped incremental costs, not general parser equivalence or a pipeline
-gain. Earlier packed-bounds and noncancelable-dispatch effects are not added.
+Windows/Linux each pass **6,790 full/live checks**, **283 internal/166 public**
+normal/AVX2-disabled/scalar checks, and the SAME actual timed package/all three
+examples. Fourteen new public-operation cases cover batch/tail boundaries,
+ordered errors, ownership and recovery. This scoped development update does not
+replace the pending complete final-package timing refresh.
 
 [Current ordinary text integration](../benchmarks/ORDINARY-TEXT-LONG-INTEGRATION.md)
 resolves both existing controls as scoped gaps: **46.510 / ImageSharp 44.790 µs**

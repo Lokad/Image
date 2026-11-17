@@ -180,6 +180,8 @@ public sealed partial class TrueTypeFont : IDisposable
         // cancelable tokens retain the original checkpoint before every glyph.
         if (!cancellation.CanBeCanceled)
         {
+            if (typeof(T) == typeof(uint) && Avx2.IsSupported
+                && TryLongGlyphHeaders(MemoryMarshal.Cast<T, uint>(locations), glyphs, glyphCount, first)) return;
             for (var i = 1; i <= glyphCount; i++)
             {
                 if (Avx2.IsSupported && i <= glyphCount - 3
@@ -215,10 +217,24 @@ public sealed partial class TrueTypeFont : IDisposable
         var batch = locations.Slice(index, 4);
         var a = GlyphLocation(batch[0]); var b = GlyphLocation(batch[1]);
         var c = GlyphLocation(batch[2]); var d = GlyphLocation(batch[3]);
-        if (!TryHeaderBounds(glyphs, first, a, out var x0)
-            || !TryHeaderBounds(glyphs, a, b, out var x1)
-            || !TryHeaderBounds(glyphs, b, c, out var x2)
-            || !TryHeaderBounds(glyphs, c, d, out var x3)) return false;
+        if (!TryFourGlyphBoundsAtOffsets(glyphs, first, a, b, c, d, recordsValidated: false)) return false;
+        last = d; return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryFourGlyphBoundsAtOffsets(ReadOnlySpan<byte> glyphs, uint first,
+        uint a, uint b, uint c, uint d, bool recordsValidated)
+    {
+        ulong x0, x1, x2, x3;
+        if (recordsValidated)
+        {
+            x0 = ProvenHeaderBounds(glyphs, first, a); x1 = ProvenHeaderBounds(glyphs, a, b);
+            x2 = ProvenHeaderBounds(glyphs, b, c); x3 = ProvenHeaderBounds(glyphs, c, d);
+        }
+        else if (!TryHeaderBounds(glyphs, first, a, out x0)
+            || !TryHeaderBounds(glyphs, a, b, out x1)
+            || !TryHeaderBounds(glyphs, b, c, out x2)
+            || !TryHeaderBounds(glyphs, c, d, out x3)) return false;
         // Four little-endian loads contain big-endian signed coordinate words.
         // Swap within each word, then compare xmin/ymin with xmax/ymax.
         var raw = Vector256.Create(x0, x1, x2, x3).AsUInt16();
@@ -226,7 +242,71 @@ public sealed partial class TrueTypeFont : IDisposable
         var maxima = Avx2.ShiftRightLogical128BitLane(words.AsByte(), 4).AsInt16();
         if ((Avx2.MoveMask(Avx2.CompareGreaterThan(words.AsInt16(), maxima).AsByte()) & 0x0F0F0F0F) != 0)
             return false;
-        last = d; return true;
+        return true;
+    }
+
+    // Only the noncancelable long-loca path enters here. The constructor owns
+    // its private input copy, so offsets cannot change between classification
+    // and gathering. Check each eight-record extent batch, then feed
+    // those decoded offsets to the shared bounds kernel. A failed classification
+    // returns to the original ordered validator, preserving first-error order.
+    private static bool TryLongGlyphHeaders(ReadOnlySpan<uint> locations, ReadOnlySpan<byte> glyphs,
+        int glyphCount, uint first)
+    {
+        if (glyphCount < 8 || glyphCount >= locations.Length) return false;
+        var swap = Vector256.Create((byte)3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12,
+            3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12);
+        var maximum = Vector256.Create(glyphs.Length); var ten = Vector256.Create(10);
+        var i = 1;
+        for (; i <= glyphCount - 7; i += 8)
+        {
+            var previous = Avx2.Shuffle(MemoryMarshal.Cast<uint, Vector256<byte>>(locations.Slice(i - 1, 8))[0], swap).AsInt32();
+            var current = Avx2.Shuffle(MemoryMarshal.Cast<uint, Vector256<byte>>(locations.Slice(i, 8))[0], swap).AsInt32();
+            // A valid offset fits the positive signed array-length range. Reject
+            // unsigned high-bit values before interpreting monotonic differences.
+            var invalid = Avx2.Or(Avx2.CompareGreaterThan(Vector256<int>.Zero, current),
+                Avx2.CompareGreaterThan(current, maximum));
+            invalid = Avx2.Or(invalid, Avx2.CompareGreaterThan(previous, current));
+            var tooShort = Avx2.AndNot(Avx2.CompareEqual(previous, current),
+                Avx2.CompareGreaterThan(ten, Avx2.Subtract(current, previous)));
+            if (Avx2.MoveMask(Avx2.Or(invalid, tooShort).AsByte()) != 0) return false;
+            var lower = current.GetLower();
+            var a = (uint)lower.GetElement(0); var b = (uint)lower.GetElement(1);
+            var c = (uint)lower.GetElement(2); var d = (uint)lower.GetElement(3);
+            if (!TryFourGlyphBoundsAtOffsets(glyphs, first, a, b, c, d, recordsValidated: true)) return false;
+            // Retain the classified upper half in SIMD until the first four
+            // headers have been consumed; avoid eight simultaneously live offsets.
+            var upper = current.GetUpper();
+            var e = (uint)upper.GetElement(0); var f = (uint)upper.GetElement(1);
+            var g = (uint)upper.GetElement(2); var h = (uint)upper.GetElement(3);
+            if (!TryFourGlyphBoundsAtOffsets(glyphs, d, e, f, g, h, recordsValidated: true)) return false;
+            first = h;
+        }
+        for (; i <= glyphCount - 3; i += 4)
+        {
+            if (!TryFourGlyphBounds(locations, glyphs, i, first, out var last)) return false;
+            first = last;
+        }
+        // Earlier headers are valid. Remaining locations retain the original
+        // checks before a scalar header can report its first error directly.
+        for (; i <= glyphCount; i++)
+        {
+            var last = GlyphLocation(locations[i]);
+            if (last < first || last > glyphs.Length) return false;
+            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
+            first = last;
+        }
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static ulong ProvenHeaderBounds(ReadOnlySpan<byte> glyphs, uint first, uint last)
+    {
+        if (first == last) return 0;
+        // The structural pass proves this record has at least ten bytes. Keep
+        // the ordinary bounded span slice; no unchecked reference or widened read.
+        var header = glyphs.Slice((int)first, 10);
+        return I16(header) == 0 ? 0 : BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

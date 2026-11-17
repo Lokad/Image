@@ -82,13 +82,76 @@ public sealed class FontHeaderValidationTests
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    private static byte[] Headers(bool longLocations)
+    [Theory]
+    [InlineData(8)] [InlineData(9)] [InlineData(15)] [InlineData(16)]
+    [InlineData(17)] [InlineData(31)] [InlineData(32)] [InlineData(33)]
+    public void LongLocationBatchBoundariesKeepEmptyAndZeroContourHeaders(int count)
+    {
+        var input = Headers(true, count);
+        using var root = new TestMemoryBudget(input.Length + 256L);
+        var limits = new ImageLimits { MemoryBudget = root };
+        using var cancellation = new CancellationTokenSource();
+        foreach (var token in new[] { CancellationToken.None, cancellation.Token })
+        {
+            using (var font = TrueTypeFont.Load(input, limits, token))
+            {
+                Assert.Equal(count, font.GlyphCount);
+                for (var i = 0; i < count; i++)
+                {
+                    var metrics = font.GetGlyphMetrics(i);
+                    Assert.Equal(i % 4 is not (1 or 2), metrics.HasOutline);
+                    if (!metrics.HasOutline) continue;
+                    Assert.Equal(short.MinValue, metrics.XMin);
+                    Assert.Equal(short.MinValue, metrics.YMin);
+                    Assert.Equal(short.MaxValue, metrics.XMax);
+                    Assert.Equal(short.MaxValue, metrics.YMax);
+                }
+                Assert.Equal(input.Length + 256L, root.Bytes);
+            }
+            Assert.Equal(0, root.Bytes);
+        }
+        Assert.False(root.IsDisposed);
+    }
+
+    [Theory]
+    [InlineData(17, 0)] [InlineData(17, 7)] [InlineData(17, 8)]
+    [InlineData(33, 15)] [InlineData(33, 16)] [InlineData(33, 31)]
+    public void EarlierBoundsFailureWinsAcrossLongLocationBatches(int count, int badGlyph)
+    {
+        var clean = Headers(true, count);
+        using var root = new TestMemoryBudget(clean.Length + 256L);
+        var limits = new ImageLimits { MemoryBudget = root };
+        using var cancellation = new CancellationTokenSource();
+        foreach (var token in new[] { CancellationToken.None, cancellation.Token })
+        {
+            var input = clean.ToArray();
+            var locations = Table(input, "loca"u8);
+            var start = BinaryPrimitives.ReadUInt32BigEndian(input.AsSpan(locations + badGlyph * 4));
+            var header = Table(input, "glyf"u8) + checked((int)start);
+            BinaryPrimitives.WriteInt16BigEndian(input.AsSpan(header + 2), short.MaxValue);
+            BinaryPrimitives.WriteInt16BigEndian(input.AsSpan(header + 6), short.MinValue);
+            var earlier = Assert.Throws<ImageDataException>(() => TrueTypeFont.Load(input, limits, token));
+            Assert.Equal(0, root.Bytes);
+            foreach (var later in new[] { 0x80000000u, uint.MaxValue })
+            {
+                BinaryPrimitives.WriteUInt32BigEndian(input.AsSpan(locations + (badGlyph + 2) * 4), later);
+                var both = Assert.Throws<ImageDataException>(() => TrueTypeFont.Load(input, limits, token));
+                Assert.Equal(earlier.Message, both.Message);
+                Assert.Equal(0, root.Bytes);
+            }
+            using (var recovered = TrueTypeFont.Load(clean, limits, token)) Assert.Equal(count, recovered.GlyphCount);
+            Assert.Equal(0, root.Bytes);
+        }
+        Assert.False(root.IsDisposed);
+    }
+
+    private static byte[] Headers(bool longLocations, int count = 9)
     {
         // Original header-only records: loading validates their eager headers,
         // not the deferred outline bodies. Include empty/zero-contour records,
         // signed extremes, two four-header groups and a final scalar tail.
         var glyphs = new Dictionary<int, byte[]>();
-        for (var i = 0; i < 9; i++)
+        for (var i = 0; i < count; i++)
         {
             if (i % 4 == 2) { glyphs.Add(i, []); continue; }
             var header = new byte[12];
