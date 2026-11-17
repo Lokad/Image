@@ -1,0 +1,2995 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "CVT1236",
+    "CVU1237"
+  ],
+  "productionAccepted": false,
+  "canonicalSourceAndQualifiedBuildsRestored": true,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "designs": [
+    {
+      "project": "Lokad.Image",
+      "stage": "CVT1236",
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "requiredMaterialPaths": 289,
+      "newRequiredPaths": 0,
+      "baselineCommit": "9304c0776e242750e0e00860c95d42f95e6be8e6",
+      "baselineWindowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+      "baselineLinuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "prototypePath": "tmp/cvt1236-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "prototypeSha256": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+      },
+      "candidateSourcePins": {
+        "tmp/cvt1236-src/Lokad.Image/Internal/IndependentRowCopy.cs": "cc7e2d13c3e6a83ddbcd43299d98b8c4ab25e31fefdbc08015b2666508d284c4"
+      },
+      "focusedInternalFilter": "FullyQualifiedName~RectangleBulkRowTests|FullyQualifiedName~SelfRowStorageTests|FullyQualifiedName~VerticalPreparedRowsTests",
+      "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+      "sourceProof": {
+        "onlyTwoBoundedTailLoopsReplaced": true,
+        "allBulkGeometryAndRowSchedulingVerbatim": true,
+        "exactSameOrderedVectorAccessesForTailLengthsOneToFour": true,
+        "allRowCancellationAndFinalCursorChecksVerbatim": true,
+        "noMemoryOwnershipAdmissionApiOrPortableChange": true
+      },
+      "hypothesis": "Share a fixed1..4-vector tail helper instead oftwo dynamic tail loops in prepared independent rows. Remove tiny-loop iteration state while retaining exactaccesses/order and existing kernels. Source sharing simplifies maintenance. Branch/code size effects may negate savings;original complete separatebyte case decides,not sourcecounts.",
+      "acceptance": "Reuse775length two-direction snapshot oracle plus rectangle/chunk/vertical boundary and publicediting/ownership tests bothOS/modes. Original65536-op separatebyte short screen only;confirm ifuseful. Ifaccepted,reconcile fouraffected copycases andbothverticalflips onfinalimmutableDLL before broad/package. Separateword BCL path andotherfont/codec/resize passes unchanged.",
+      "builds": {
+        "privateWindowsCore": 1,
+        "privateEmbedded": 1,
+        "canonicalVmPublicHarnessNativeFixturesPackage": 0
+      }
+    },
+    {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "requiredMaterialPaths": 289,
+      "newRequiredPaths": 0,
+      "baselineCommit": "9304c0776e242750e0e00860c95d42f95e6be8e6",
+      "baselineWindowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+      "baselineLinuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "prototypePath": "tmp/cvu1237-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "prototypeSha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+      },
+      "candidateSourcePins": {
+        "tmp/cvu1237-src/Lokad.Image/Internal/IndependentRowCopy.cs": "607a59c21b142589bb4144cf0d427d848beb3e9997c8e89fddfc47f907b1b7f8"
+      },
+      "focusedInternalFilter": "FullyQualifiedName~RectangleBulkRowTests|FullyQualifiedName~SelfRowStorageTests|FullyQualifiedName~VerticalPreparedRowsTests",
+      "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+      "sourceProof": {
+        "onlyTwoBoundedTailLoopsReplaced": true,
+        "allBulkGeometryAndRowSchedulingVerbatim": true,
+        "exactSameOrderedVectorAccessesForTailLengthsOneToFour": true,
+        "allRowCancellationAndFinalCursorChecksVerbatim": true,
+        "noMemoryOwnershipAdmissionApiOrPortableChange": true
+      },
+      "hypothesis": "Coherent revision of CVT1236:unsigned <=1/<=2 guards express explicit upper-index proofs for valid1..4vector spans. Equality guards left additional bound checks inactual507B helper andcompletebyte screen regressed1.35percent. Preserveexactorderedaccesses;firstverify selectedgeneratedcode then sameone complete original control. No dimension/filter/tail sweep.",
+      "acceptance": "Reuse775length two-direction snapshot oracle plus rectangle/chunk/vertical boundary and publicediting/ownership tests bothOS/modes. Original65536-op separatebyte short screen only;confirm ifuseful. Ifaccepted,reconcile fouraffected copycases andbothverticalflips onfinalimmutableDLL before broad/package. Separateword BCL path andotherfont/codec/resize passes unchanged.",
+      "builds": {
+        "privateWindowsCore": 1,
+        "privateEmbedded": 1,
+        "canonicalVmPublicHarnessNativeFixturesPackage": 0
+      }
+    }
+  ],
+  "captures": [
+    {
+      "project": "Lokad.Image",
+      "stage": "CVT1236",
+      "caseId": "DrawingCopy8",
+      "mode": "screen",
+      "productionChanged": false,
+      "productionAccepted": false,
+      "pairedManagedOnly": true,
+      "allBuilds": 0,
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ready": {
+        "baseline": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        "candidate": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        }
+      },
+      "stopped": {
+        "baseline": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8"
+        },
+        "candidate": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+          "caseId": "DrawingCopy8"
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128566873,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130293486,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130268299,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128543127,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128515675,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130279876,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "commands": {
+        "baseline": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "DrawingCopy8",
+          "65536"
+        ],
+        "candidate": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-candidate/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-candidate/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+          "DrawingCopy8",
+          "65536"
+        ]
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 1.9613936106363932,
+          "lower": 1.9542612144430827,
+          "upper": 1.9685260068297037,
+          "values": [
+            1.9617747955322267,
+            1.9614124603271483,
+            1.9609935760498047
+          ]
+        },
+        "candidate": {
+          "mean": 1.9879234873453777,
+          "lower": 1.9844139404982835,
+          "upper": 1.991433034192472,
+          "values": [
+            1.988120819091797,
+            1.9877364959716797,
+            1.9879131469726563
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.01343538394661921,
+        "lower": 0.010294034441950303,
+        "upper": 0.016576733451288118,
+        "values": [
+          0.013340309136699369,
+          0.013331695423285748,
+          0.013634147279872517
+        ]
+      },
+      "ratio": 1.013526044281326,
+      "lower": 1.0103472002882445,
+      "upper": 1.016714889835385,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "validations": {
+        "baseline": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvt1236-screen2-DrawingCopy8-baseline",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 7682,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 7682
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10005,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10005
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        },
+        "candidate": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvt1236-screen2-DrawingCopy8-candidate",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 6630,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 6630
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10135,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10135
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        }
+      }
+    },
+    {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "caseId": "DrawingCopy8",
+      "mode": "screen",
+      "productionChanged": false,
+      "productionAccepted": false,
+      "pairedManagedOnly": true,
+      "allBuilds": 0,
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ready": {
+        "baseline": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        "candidate": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        }
+      },
+      "stopped": {
+        "baseline": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8"
+        },
+        "candidate": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8"
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130355727,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128039960,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128190528,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130070725,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130021712,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128068093,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "commands": {
+        "baseline": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "DrawingCopy8",
+          "65536"
+        ],
+        "candidate": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "DrawingCopy8",
+          "65536"
+        ]
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 1.9859220581054688,
+          "lower": 1.9357118964900344,
+          "upper": 2.036132219720903,
+          "values": [
+            1.989070541381836,
+            1.9847217559814454,
+            1.983973876953125
+          ]
+        },
+        "candidate": {
+          "mean": 1.9546436614990235,
+          "lower": 1.932358268688595,
+          "upper": 1.976929054309452,
+          "values": [
+            1.9537347412109376,
+            1.9560322265625,
+            1.9541640167236327
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": -0.015874902971813,
+        "lower": -0.048687647351340645,
+        "upper": 0.016937841407714642,
+        "values": [
+          -0.017924672273245942,
+          -0.014560683780260427,
+          -0.01513935286193263
+        ]
+      },
+      "ratio": 0.9842504391591381,
+      "lower": 0.9524785924505904,
+      "upper": 1.017082099968782,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "validations": {
+        "baseline": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-screen-DrawingCopy8-baseline",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 5669,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 5669
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 9925,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 9925
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        },
+        "candidate": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-screen-DrawingCopy8-candidate",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 4407,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4407
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 9674,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 9674
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        }
+      }
+    },
+    {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "caseId": "DrawingCopy8",
+      "mode": "confirm",
+      "productionChanged": false,
+      "productionAccepted": false,
+      "pairedManagedOnly": true,
+      "allBuilds": 0,
+      "actuals": 12,
+      "operationsPerActual": 65536,
+      "ready": {
+        "baseline": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        "candidate": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        }
+      },
+      "stopped": {
+        "baseline": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8"
+        },
+        "candidate": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8"
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139096283,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 134937234,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 136230854,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138525608,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 136517859,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 134403126,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 3,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 132444920,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137238259,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 4,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 135998962,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 129392638,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 5,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 129036458,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 133693731,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 6,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138723638,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 135654832,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 7,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137782163,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139078155,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 8,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138656086,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137891489,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 9,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138417615,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138887206,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 10,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139186629,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137579787,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 11,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137731906,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138750349,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "commands": {
+        "baseline": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "DrawingCopy8",
+          "65536"
+        ],
+        "candidate": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "DrawingCopy8",
+          "65536"
+        ]
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 2.1036183230082193,
+          "lower": 2.0705704441097414,
+          "upper": 2.136666201906697,
+          "values": [
+            2.1224408416748046,
+            2.1137330322265626,
+            2.083097213745117,
+            2.094089645385742,
+            2.075179473876953,
+            2.040004440307617,
+            2.1167547302246095,
+            2.1221642303466797,
+            2.1157239685058595,
+            2.1192505798339845,
+            2.123819412231445,
+            2.1171623077392576
+          ]
+        },
+        "candidate": {
+          "mean": 2.061847714742025,
+          "lower": 1.9979577710892409,
+          "upper": 2.125737658394809,
+          "values": [
+            2.058978790283203,
+            2.0787178649902343,
+            2.050828948974609,
+            2.0209490966796877,
+            1.974374969482422,
+            1.9689400939941406,
+            2.069928466796875,
+            2.102388961791992,
+            2.104057144165039,
+            2.112085189819336,
+            2.09930094909668,
+            2.101622100830078
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": -0.02025868601324898,
+        "lower": -0.038937038552672595,
+        "upper": -0.001580333473825364,
+        "values": [
+          -0.030356639799392248,
+          -0.01670430127480069,
+          -0.015611754484540002,
+          -0.035551671217239574,
+          -0.049795766259613614,
+          -0.03545660986496713,
+          -0.022370078624349442,
+          -0.009362132323174453,
+          -0.005529601539435576,
+          -0.0033868249904928796,
+          -0.011611669345634464,
+          -0.007367182435347665
+        ]
+      },
+      "ratio": 0.9799451424136274,
+      "lower": 0.9618112642692819,
+      "upper": 0.998420914595577,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "validations": {
+        "baseline": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-confirm-DrawingCopy8-baseline",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 19910,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 19910
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10115,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10115
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        },
+        "candidate": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-confirm-DrawingCopy8-candidate",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 5057,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 5057
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10125,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10125
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        }
+      }
+    },
+    {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "caseId": "DrawingCopy8",
+      "mode": "confirm",
+      "productionChanged": true,
+      "productionAccepted": false,
+      "pairedManagedOnly": true,
+      "allBuilds": 0,
+      "actuals": 12,
+      "operationsPerActual": 65536,
+      "ready": {
+        "baseline": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        "candidate": {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        }
+      },
+      "stopped": {
+        "baseline": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "caseId": "DrawingCopy8"
+        },
+        "candidate": {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "caseId": "DrawingCopy8"
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 137858319,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 142297822,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141137234,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138967698,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139186370,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141058274,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 3,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141116803,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139011064,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 4,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138473691,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140845672,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 5,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140952033,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138797441,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 6,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139839579,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140917451,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 7,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140793313,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138497007,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 8,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138500051,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141458150,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 9,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140889339,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138609156,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 10,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138710520,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141188361,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 11,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 141395285,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 139160581,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "commands": {
+        "baseline": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "DrawingCopy8",
+          "65536"
+        ],
+        "candidate": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+          "--runtimeconfig",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/CopyActor.dll",
+          "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks.dll",
+          "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "DrawingCopy8",
+          "65536"
+        ]
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 2.1179345156351723,
+          "lower": 2.1083378967658715,
+          "upper": 2.127531134504473,
+          "values": [
+            2.1035510101318358,
+            2.120478790283203,
+            2.123815460205078,
+            2.1211405029296877,
+            2.1129408416748046,
+            2.117880874633789,
+            2.1337826385498047,
+            2.113296615600586,
+            2.1133430633544923,
+            2.115007873535156,
+            2.1165545654296873,
+            2.1234219512939454
+          ]
+        },
+        "candidate": {
+          "mean": 2.1540956331888834,
+          "lower": 2.1460597585207064,
+          "upper": 2.1621315078570604,
+          "values": [
+            2.1712924499511717,
+            2.153583282470703,
+            2.152378448486328,
+            2.1532715301513674,
+            2.1491343994140624,
+            2.150757339477539,
+            2.1502296600341797,
+            2.148335464477539,
+            2.1584800720214843,
+            2.149800704956055,
+            2.1543634185791016,
+            2.1575208282470704
+          ]
+        }
+      },
+      "pairedLogStatistics": {
+        "mean": 0.01693150490220104,
+        "lower": 0.009766222963951646,
+        "upper": 0.024096786840450433,
+        "values": [
+          0.03169571543297754,
+          0.015491190182851708,
+          0.013359269337696896,
+          0.015034410438095525,
+          0.016984415221107937,
+          0.015404029707230753,
+          0.00767836371323591,
+          0.016444234412803294,
+          0.021133219762074752,
+          0.016316607270843508,
+          0.017705720886536977,
+          0.015930882460957682
+        ]
+      },
+      "ratio": 1.0170756552428664,
+      "lower": 1.0098140681481769,
+      "upper": 1.0243894605119672,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "validations": {
+        "baseline": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-final-confirm-DrawingCopy8-baseline",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 7121,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 7121
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10556,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10556
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        },
+        "candidate": {
+          "schemaVersion": 1,
+          "name": "WarmCopyRegion",
+          "caseId": "DrawingCopy8",
+          "smoke": true,
+          "runId": "cvu1237-final-confirm-DrawingCopy8-candidate",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "outputWidth": 513,
+          "outputHeight": 259,
+          "sourceX": 127,
+          "sourceY": 65,
+          "copyWidth": 256,
+          "copyHeight": 129,
+          "destinationX": 17,
+          "destinationY": 19,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "sourceIdentity": {
+            "sourceSha256": "7423b354b20c5f4cb3b64850a243b253e18c04649b0d2cea69cc7f3202c526a0",
+            "sourceRevision": "b34ee5854eda2cb04c256872f18579e821c8c0f1"
+          },
+          "nativeSampleTargetMilliseconds": "50",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "untouchedCanvasExact": true,
+          "sourceUnchanged": true,
+          "borrowedSource": true,
+          "borrowedCanvas": true,
+          "callerBuffersAlive": true,
+          "sourcePreparationTimed": false,
+          "canvasPreparationTimed": false,
+          "outputAllocationTimed": false,
+          "nativeExitCode": 0,
+          "librarySha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "benchmarkAssemblySha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm FFmpeg worker",
+            "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+            "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+            "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+            },
+            "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "copy-region",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "workerThreads": 1,
+            "outputWidth": 513,
+            "outputHeight": 259,
+            "sourceX": 127,
+            "sourceY": 65,
+            "copyWidth": 256,
+            "copyHeight": 129,
+            "destinationX": 17,
+            "destinationY": 19,
+            "borrowedSource": true,
+            "borrowedCanvas": true,
+            "canvasMutationTimed": true,
+            "sourcePreparationTimed": false,
+            "canvasPreparationTimed": false,
+            "outputAllocationTimed": false,
+            "initialCompletedOperations": 1,
+            "inputStride": 2052,
+            "ffmpegVersion": "n8.1",
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 7211,
+              "CompletedOperations": 2,
+              "Observed": 256,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 7211
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 1,
+              "ElapsedNanoseconds": 10326,
+              "CompletedOperations": 3,
+              "Observed": 384,
+              "OutputStride": 2052,
+              "Cpu": 0,
+              "OutputBytes": 0,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 10326
+            }
+          ],
+          "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA8 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured."
+        }
+      }
+    }
+  ],
+  "windowsFocused": {
+    "cvt1236": {
+      "stage": "CVT1236",
+      "counts": {
+        "internal/normal": 10,
+        "internal/avx512-off": 10,
+        "internal/scalar": 10,
+        "public/normal": 190,
+        "public/avx512-off": 190,
+        "public/scalar": 190
+      },
+      "canonicalUnchanged": true
+    },
+    "cvu1237": {
+      "stage": "CVU1237",
+      "counts": {
+        "internal/normal": 10,
+        "internal/avx512-off": 10,
+        "internal/scalar": 10,
+        "public/normal": 190,
+        "public/avx512-off": 190,
+        "public/scalar": 190
+      },
+      "canonicalUnchanged": true
+    }
+  },
+  "linuxPreparation": {
+    "cvt1236": {
+      "stage": "CVT1236",
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "baselineSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "prototypeSha256": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+      "coreModifiedTimeNs": 1794941281875913491,
+      "focusedPublic": {
+        "normal": 190,
+        "avx512-off": 190,
+        "scalar": 190
+      },
+      "focusedInternal": {
+        "normal": 10,
+        "avx512-off": 10,
+        "scalar": 10
+      },
+      "runtimes": {
+        "DrawingCopy8": {
+          "baseline": "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline",
+          "candidate": "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-candidate"
+        }
+      },
+      "identities": {
+        "DrawingCopy8": {
+          "baseline": {
+            "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+            "Lokad.Image.pdb": "d9cdc761640bb05dc57bf4b558bd3fc1c5e23d1425e691a1b88da0d01d51f10c",
+            "CopyActor.dll": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+            "Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+            "Lokad.Image.xml": "b0f430426cca548e992c3220081d94b0fb3bbf9f9519a601dc62a500992d6f6e",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.pdb": "6d802bea22514ae6ed2f9cc7f013d9de6dba61935e60dc7cc3cfe38b6520c952",
+            "Lokad.Image.Benchmarks.pdb": "77c4ed24fc7e1c59766a6c2d26e5570fea67545cb7826fe8784b215f7b59d68e",
+            "System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+            "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+            "Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+            "CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+            "Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+            "Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+            "Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+            "BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+            "Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+            "Measurement.pdb": "512d9f00495d8ba2956214af1844795705730cc7029a6faa196750fe58f91701",
+            "Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+            "Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+            "TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+            "Lokad.Image.Benchmarks-WarmConfirm-1": "93b4ff0d786d244b41f2192b3c1c4ac32c647f7e1cc64597010d926c4da12a54",
+            "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+            "System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+            "Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+            "Lokad.Image.Benchmarks.dll": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+            "Lokad.Image.dll": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+            "Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+            "Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+            "Measurement.deps.json": "9c8dffe55dccc5ea62f06e4ff74b701c9a0981b89dfbc97c314cd28f683cafd0",
+            "Crp54CopyShort.dll": "a10f22d172cc40a73b3cf763c538b1ac236646083613de073b7f3cf9a0f5f683",
+            "Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+            "Measurement.dll": "8d34321c9e24aa88febb7982f993676a04e6e8814c270a76a694cd3cbfe7f689",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll.config": "73fe4d4dfa49a010555c4867abc643f8fac04cccef7cf3c2cb80ce43cb45be70",
+            "Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll": "10dee9cc5583d1d3692a15f42062a913500411507c307d6d4c880d3aab777a68",
+            "Crp54CopyShort.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+            "Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+            "Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+            "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.deps.json": "5496e92c5f709083ee5a4157dc7ef8bc4c7fd41c14956399d9cf71c084a56eed"
+          },
+          "candidate": {
+            "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+            "Lokad.Image.pdb": "8211a0d9b7d0052e74f6527ae4db1913afca0ab37fec3d65c78ab92c398152a1",
+            "CopyActor.dll": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+            "Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+            "Lokad.Image.xml": "f79c794cdea2b12bbe9060b19ad605c1210de6375f548dec38f6d3584e2e228e",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.pdb": "6d802bea22514ae6ed2f9cc7f013d9de6dba61935e60dc7cc3cfe38b6520c952",
+            "Lokad.Image.Benchmarks.pdb": "77c4ed24fc7e1c59766a6c2d26e5570fea67545cb7826fe8784b215f7b59d68e",
+            "System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+            "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+            "Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+            "CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+            "Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+            "Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+            "Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+            "BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+            "Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+            "Measurement.pdb": "512d9f00495d8ba2956214af1844795705730cc7029a6faa196750fe58f91701",
+            "Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+            "Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+            "TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+            "Lokad.Image.Benchmarks-WarmConfirm-1": "93b4ff0d786d244b41f2192b3c1c4ac32c647f7e1cc64597010d926c4da12a54",
+            "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+            "System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+            "Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+            "Lokad.Image.Benchmarks.dll": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+            "Lokad.Image.dll": "ab9d583ad1a03a7bc3a984ef04c2201857b5135b1f3725b924637908954dfb70",
+            "Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+            "Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+            "Measurement.deps.json": "9c8dffe55dccc5ea62f06e4ff74b701c9a0981b89dfbc97c314cd28f683cafd0",
+            "Crp54CopyShort.dll": "a10f22d172cc40a73b3cf763c538b1ac236646083613de073b7f3cf9a0f5f683",
+            "Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+            "Measurement.dll": "8d34321c9e24aa88febb7982f993676a04e6e8814c270a76a694cd3cbfe7f689",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll.config": "73fe4d4dfa49a010555c4867abc643f8fac04cccef7cf3c2cb80ce43cb45be70",
+            "Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll": "10dee9cc5583d1d3692a15f42062a913500411507c307d6d4c880d3aab777a68",
+            "Crp54CopyShort.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+            "Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+            "Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+            "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.deps.json": "5496e92c5f709083ee5a4157dc7ef8bc4c7fd41c14956399d9cf71c084a56eed"
+          }
+        }
+      },
+      "referenceRoots": {
+        "DrawingCopy8": "tmp/dwc1177-frozen-root"
+      },
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+      },
+      "allBuilds": 0
+    },
+    "cvu1237": {
+      "stage": "CVU1237",
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "baselineSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "prototypeSha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+      "coreModifiedTimeNs": 1794941281875913491,
+      "focusedPublic": {
+        "normal": 190,
+        "avx512-off": 190,
+        "scalar": 190
+      },
+      "focusedInternal": {
+        "normal": 10,
+        "avx512-off": 10,
+        "scalar": 10
+      },
+      "runtimes": {
+        "DrawingCopy8": {
+          "baseline": "tmp/dwc1177-frozen-root/runtime-cvt1236-DrawingCopy8-baseline",
+          "candidate": "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate"
+        }
+      },
+      "identities": {
+        "DrawingCopy8": {
+          "baseline": {
+            "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+            "Lokad.Image.pdb": "d9cdc761640bb05dc57bf4b558bd3fc1c5e23d1425e691a1b88da0d01d51f10c",
+            "CopyActor.dll": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+            "Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+            "Lokad.Image.xml": "b0f430426cca548e992c3220081d94b0fb3bbf9f9519a601dc62a500992d6f6e",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.pdb": "6d802bea22514ae6ed2f9cc7f013d9de6dba61935e60dc7cc3cfe38b6520c952",
+            "Lokad.Image.Benchmarks.pdb": "77c4ed24fc7e1c59766a6c2d26e5570fea67545cb7826fe8784b215f7b59d68e",
+            "System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+            "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+            "Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+            "CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+            "Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+            "Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+            "Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+            "BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+            "Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+            "Measurement.pdb": "512d9f00495d8ba2956214af1844795705730cc7029a6faa196750fe58f91701",
+            "Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+            "Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+            "TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+            "Lokad.Image.Benchmarks-WarmConfirm-1": "93b4ff0d786d244b41f2192b3c1c4ac32c647f7e1cc64597010d926c4da12a54",
+            "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+            "System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+            "Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+            "Lokad.Image.Benchmarks.dll": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+            "Lokad.Image.dll": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+            "Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+            "Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+            "Measurement.deps.json": "9c8dffe55dccc5ea62f06e4ff74b701c9a0981b89dfbc97c314cd28f683cafd0",
+            "Crp54CopyShort.dll": "a10f22d172cc40a73b3cf763c538b1ac236646083613de073b7f3cf9a0f5f683",
+            "Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+            "Measurement.dll": "8d34321c9e24aa88febb7982f993676a04e6e8814c270a76a694cd3cbfe7f689",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll.config": "73fe4d4dfa49a010555c4867abc643f8fac04cccef7cf3c2cb80ce43cb45be70",
+            "Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll": "10dee9cc5583d1d3692a15f42062a913500411507c307d6d4c880d3aab777a68",
+            "Crp54CopyShort.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+            "Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+            "Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+            "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.deps.json": "5496e92c5f709083ee5a4157dc7ef8bc4c7fd41c14956399d9cf71c084a56eed"
+          },
+          "candidate": {
+            "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+            "Lokad.Image.pdb": "2d621dfe670e3360d89a0b05cf7eb3abe9609b87c0a5807abfa0f5179cd14e1e",
+            "CopyActor.dll": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+            "Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+            "Lokad.Image.xml": "f79c794cdea2b12bbe9060b19ad605c1210de6375f548dec38f6d3584e2e228e",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.pdb": "6d802bea22514ae6ed2f9cc7f013d9de6dba61935e60dc7cc3cfe38b6520c952",
+            "Lokad.Image.Benchmarks.pdb": "77c4ed24fc7e1c59766a6c2d26e5570fea67545cb7826fe8784b215f7b59d68e",
+            "System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+            "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+            "Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+            "CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+            "Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+            "Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+            "Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+            "BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+            "Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+            "Measurement.pdb": "512d9f00495d8ba2956214af1844795705730cc7029a6faa196750fe58f91701",
+            "Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+            "Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+            "TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+            "Lokad.Image.Benchmarks-WarmConfirm-1": "93b4ff0d786d244b41f2192b3c1c4ac32c647f7e1cc64597010d926c4da12a54",
+            "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+            "System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+            "Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+            "Lokad.Image.Benchmarks.dll": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+            "Lokad.Image.dll": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+            "Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+            "Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+            "Measurement.deps.json": "9c8dffe55dccc5ea62f06e4ff74b701c9a0981b89dfbc97c314cd28f683cafd0",
+            "Crp54CopyShort.dll": "a10f22d172cc40a73b3cf763c538b1ac236646083613de073b7f3cf9a0f5f683",
+            "Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+            "Measurement.dll": "8d34321c9e24aa88febb7982f993676a04e6e8814c270a76a694cd3cbfe7f689",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll.config": "73fe4d4dfa49a010555c4867abc643f8fac04cccef7cf3c2cb80ce43cb45be70",
+            "Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.dll": "10dee9cc5583d1d3692a15f42062a913500411507c307d6d4c880d3aab777a68",
+            "Crp54CopyShort.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+            "Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+            "Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+            "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+            "Lokad.Image.Benchmarks-WarmConfirm-1.deps.json": "5496e92c5f709083ee5a4157dc7ef8bc4c7fd41c14956399d9cf71c084a56eed"
+          }
+        }
+      },
+      "referenceRoots": {
+        "DrawingCopy8": "tmp/dwc1177-frozen-root"
+      },
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+      },
+      "allBuilds": 0
+    }
+  },
+  "finalBuilds": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "platform": "windows",
+      "productionAccepted": false,
+      "productionSha256": "a8110120d8493ad20c28209b39900baebd4b9a35e427175ecb87206cd683d4e4",
+      "coreModifiedTimeNs": 1794947090233832100,
+      "baselineSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+      "baselineModule": "tmp/cvu1237-baseline-windows/Lokad.Image.dll",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "607a59c21b142589bb4144cf0d427d848beb3e9997c8e89fddfc47f907b1b7f8"
+      },
+      "focused": {
+        "internal/normal": 10,
+        "public/normal": 190,
+        "internal/avx512-off": 10,
+        "public/avx512-off": 190,
+        "internal/scalar": 10,
+        "public/scalar": 190
+      },
+      "commands": {
+        "core": [
+          "dotnet",
+          "build",
+          "src/Lokad.Image/Lokad.Image.csproj",
+          "-c",
+          "Release",
+          "--no-restore",
+          "--no-dependencies",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-m:1",
+          "-nr:false",
+          "-p:UseSharedCompilation=false"
+        ],
+        "internal": [
+          "dotnet",
+          "build",
+          "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj",
+          "-c",
+          "Release",
+          "--no-restore",
+          "--no-dependencies",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-m:1",
+          "-nr:false",
+          "-p:UseSharedCompilation=false"
+        ]
+      },
+      "builds": {
+        "core": 1,
+        "embedded": 1,
+        "public": 0,
+        "harnessReferenceFixturePackage": 0
+      },
+      "performanceReconciliationPending": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "platform": "linux",
+      "productionAccepted": false,
+      "productionSha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+      "coreModifiedTimeNs": 1794947091019864531,
+      "baselineSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "baselineModule": "tmp/cvu1237-baseline-linux/Lokad.Image.dll",
+      "sourcePins": {
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "607a59c21b142589bb4144cf0d427d848beb3e9997c8e89fddfc47f907b1b7f8"
+      },
+      "focused": {
+        "internal/normal": 10,
+        "public/normal": 190,
+        "internal/avx512-off": 10,
+        "public/avx512-off": 190,
+        "internal/scalar": 10,
+        "public/scalar": 190
+      },
+      "commands": {
+        "core": [
+          "dotnet",
+          "build",
+          "src/Lokad.Image/Lokad.Image.csproj",
+          "-c",
+          "Release",
+          "--no-restore",
+          "--no-dependencies",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-m:1",
+          "-nr:false",
+          "-p:UseSharedCompilation=false"
+        ],
+        "internal": [
+          "dotnet",
+          "build",
+          "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj",
+          "-c",
+          "Release",
+          "--no-restore",
+          "--no-dependencies",
+          "--tl:off",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-m:1",
+          "-nr:false",
+          "-p:UseSharedCompilation=false"
+        ]
+      },
+      "builds": {
+        "core": 1,
+        "embedded": 1,
+        "public": 0,
+        "harnessReferenceFixturePackage": 0
+      },
+      "performanceReconciliationPending": true
+    }
+  },
+  "transferInspection": {
+    "sourceBytesEqual": true,
+    "allNonCoreRuntimeIdentitiesEqual": true,
+    "selectedInstructionTextEqualIgnoringAddresses": true,
+    "privateCodegen": {
+      "project": "Lokad.Image",
+      "stage": "CVU1237",
+      "profilingOnly": true,
+      "allInstrumentedTimingsDiscarded": true,
+      "allBuilds": 0,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+        "--runtimeconfig",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/CopyActor.dll",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-DrawingCopy8-candidate/Lokad.Image.Benchmarks.dll",
+        "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+        "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+        "DrawingCopy8",
+        "65536"
+      ],
+      "records": [
+        {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+          "caseId": "DrawingCopy8"
+        }
+      ],
+      "methodCodeBytes": [
+        495
+      ],
+      "jitSha256": "98eab80e07746472ef76f93af9fd66ce19144551564233119c71ed034df0f3b2",
+      "sampleCommands": 0,
+      "coreUnchanged": true
+    },
+    "finalCodegen": {
+      "project": "Lokad.Image",
+      "stage": "CVU1237-FINAL",
+      "profilingOnly": true,
+      "allInstrumentedTimingsDiscarded": true,
+      "allBuilds": 0,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+        "--runtimeconfig",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/CopyActor.dll",
+        "tmp/dwc1177-frozen-root/runtime-cvu1237-final-DrawingCopy8/Lokad.Image.Benchmarks.dll",
+        "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+        "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+        "DrawingCopy8",
+        "65536"
+      ],
+      "records": [
+        {
+          "state": "ready",
+          "operations": 65536,
+          "warmups": 65536,
+          "librarySha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "caseId": "DrawingCopy8",
+          "originalManagedPixelsChecked": true
+        },
+        {
+          "state": "stopped",
+          "originalChecksAndCleanupPassed": true,
+          "librarySha256": "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06",
+          "caseId": "DrawingCopy8"
+        }
+      ],
+      "methodCodeBytes": [
+        495
+      ],
+      "jitSha256": "98eab80e07746472ef76f93af9fd66ce19144551564233119c71ed034df0f3b2",
+      "sampleCommands": 0,
+      "coreUnchanged": true
+    },
+    "timingCaptureRepeated": false,
+    "allBuilds": 0
+  },
+  "runtimeDifferences": {
+    "different": {
+      "Lokad.Image.dll": [
+        "99775b0bda50bc56e7daed4701beba5c0170f5ac6b42b9bd06c1a857c9f0f37c",
+        "e9193a67f5f14d72662e84ce49c93592219fdca3757771f69f84460925456c06"
+      ],
+      "Lokad.Image.pdb": [
+        "2d621dfe670e3360d89a0b05cf7eb3abe9609b87c0a5807abfa0f5179cd14e1e",
+        "2434c5f634f6f47e7c3d0a896d3e8d97e65f53f27905e0f7301b5fe4f014230f"
+      ],
+      "Lokad.Image.xml": [
+        "f79c794cdea2b12bbe9060b19ad605c1210de6375f548dec38f6d3584e2e228e",
+        "b0f430426cca548e992c3220081d94b0fb3bbf9f9519a601dc62a500992d6f6e"
+      ]
+    },
+    "allNonCoreRuntimeIdentitiesEqual": true
+  },
+  "restoration": {
+    "windows": {
+      "sourceRestored": true,
+      "productionSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+      "coreModifiedTimeNs": 1794941246033195600,
+      "embeddedAssemblySha256": "727575016d0cce904c7e7b3c0bb3b2f856baef3827833056a61e14510bfbe351",
+      "qualifiedEmbeddedAssemblyRestored": true,
+      "packageUnchanged": true,
+      "rejectedSymbolsRetainedSeparately": true,
+      "allBuilds": 0
+    },
+    "linux": {
+      "sourceRestored": true,
+      "productionSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "coreModifiedTimeNs": 1794941281875913491,
+      "embeddedAssemblySha256": "a0ddc11d3979f48d88cb62f7957f91bea70789b334cfbec34704c4014c8ea098",
+      "qualifiedEmbeddedAssemblyRestored": true,
+      "packageUnchanged": true,
+      "rejectedSymbolsRetainedSeparately": true,
+      "sourceManifestRestored": true,
+      "allBuilds": 0
+    }
+  },
+  "currentProducers": {
+    "windowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+    "linuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "timedArtifactSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "packageSha256": "539cbe19a9a9ed060cef9d10eb2b600d60c1e4ab9d897455224572c6b1840ff6",
+    "symbolsSha256": "d4488a292f1f2115eae53697269ab14d1806f8de24d3b0be6c027f3dc80462ed"
+  },
+  "qualificationReused": {
+    "provider": "benchmarks/text-scan-band-coordinates-evidence.json",
+    "fullLiveEachOs": 6824,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "ciRun": 44161514834,
+    "allThreeCiJobsPassed": true,
+    "newBroadPackageChecks": 0
+  },
+  "memory": {
+    "publicAllocatedBytesPerCopy": 0,
+    "newWorkspaceBytes": 0,
+    "newRetainedBytes": 0,
+    "callerBuffersUnchanged": true,
+    "physicalNativeJitPeakUnmeasured": true
+  },
+  "decision": "Reject final-stage production change: private confirmation does not transfer to final DLL. Identical selected code/source/non-core dependencies do not resolve adverse complete-operation evidence. Restore original sources, exact qualified core/embedded DLLs and package;no standalone-reference retries,broad checks or package generation. Cause remains unproved.",
+  "builds": {
+    "isolatedWindowsCore": 2,
+    "isolatedEmbedded": 2,
+    "finalWindowsCore": 1,
+    "finalWindowsEmbedded": 1,
+    "finalLinuxCore": 1,
+    "finalLinuxEmbedded": 1,
+    "publicHarnessReferenceFixturesPackage": 0
+  },
+  "raw": {
+    "file": "copy-vector-tail-trials.tar.xz",
+    "sha256": "51fda2970cc3b28358b57c73af6821e93712ff3b022dae1b65f6e7b38bfa1020",
+    "bytes": 4166080,
+    "members": 258,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-scan-band-coordinates-qualified.tar.xz",
+        "sha256": "52e461cda54471ba1f935bb7905d5cb8a593f8105a55488bdc8f1ab927fec598"
+      },
+      {
+        "file": "matched-stride-row-trial.tar.xz",
+        "sha256": "0df094564818f4af1fa704941f8e2e41a7f20f7be72162564948aa739a3b0722"
+      }
+    ]
+  }
+}

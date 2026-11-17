@@ -96,6 +96,13 @@ no confirmation,standalone refresh or broad/package repeat. BothOS308internal/
 recorded tool assertion correction reflects existing retained-prefix ownership,
 without changing inputs or correctness gates. Current costs remain unchanged.
 
+[Prepared copy-tail trials](COPY-VECTOR-TAIL-TRIALS.md) remain rejected. A private
+confirmation's .961811–.998421 interval does not transfer: the final DLL is
+adverse at1.009814–1.024389 despite matching source, dependencies and selected
+machine code. Restore the exact qualified sources, Windows/Linux core and embedded
+DLLs, and unchanged package; retain all captures without another timing attempt.
+No standalone refresh, broad/package repeat or current-cost change follows.
+
 [Endpoint classification](FONT-ENDPOINT-CLASSIFICATION-TRIAL.md) preserves ordered
 validation and ownership but its independent confirmation remains inconclusive.
 It is not promoted; current font costs and passing integrations stay unchanged.
