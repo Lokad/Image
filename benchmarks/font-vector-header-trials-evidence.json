@@ -1,0 +1,338 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "FVG1194",
+    "FHG1195",
+    "FHC1196"
+  ],
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "d53a7aa1b1b17294f8690769f76c7dbd0ffb15e1",
+  "sources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6"
+  },
+  "producers": {
+    "windowsSha256": "695017bb38d0f8cd3caf8a0739e9aa1464d97712032395d90afac6a029ce14fc",
+    "linuxSha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "timedArtifactSha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "packageSha256": "de899a42bedb28e55b780c0501a69c02f95379f333e6dab16796f7f32a91289b",
+    "symbolsSha256": "339a96c3966fd51e789351e7901bca5a095b6c99975d16647cccb2e4a734ea8f"
+  },
+  "feasibility": {
+    "project": "Lokad.Image",
+    "stage": "FVG1194",
+    "feasibilityOnly": true,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newProfiles": 0,
+    "newStatisticalCaptures": 0,
+    "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "inputBytes": 757076,
+    "glyphCount": 6253,
+    "longLocations": true,
+    "emptyGlyphs": 63,
+    "shortNonemptyGlyphs": 0,
+    "nonemptyAtLeast16": 6190,
+    "zeroContourNonempty": 0,
+    "eightRecordBlocks": 781,
+    "eligibleEightRecordBlocks": 765,
+    "eligibleFraction": 0.9795134443021767,
+    "tailRecords": 5,
+    "predicateModel": {
+      "cases": 531491,
+      "contourValuesAll65536EachHeaderLane": true,
+      "signedCoordinateBoundaries": true,
+      "unselectedOutlineWordsIgnored": true,
+      "selectedByteMask": "0x3c003c003c003c",
+      "actualSimdOrPublicOperationProof": false
+    },
+    "hypothesis": "For structurally proven8records all>=16bytes,load4boundedVector128headers intoVector512,swapwordbytes,comparexmin/yminagainstxmax/ymax andsuppresszero-contourlanes withSIMDbroadcast. Reduce repeatedscalarcontourloads/branches/GPpacking,not only anotherreduction/shuffle tweak. Extra6bytesreadperrecord staywithinrecord;extra cacheline traffic andnewdispatch maylose.",
+    "intendedEndState": "Small AVX512BW gated header kernel nestedinsideexistingnoncancelablelong-loca validator. Existing8extentclassification/orderedfailurefallback,empty/shortrecords,AVX2/scalar/cancelable paths/owner/admission unchanged. No array/cache/pool/API/uncheckedref orparserpolicychange.",
+    "qualificationDependencies": "Existing12byte-record oracle willnotenter fastpath. Add exact16byteboundary/zero-contour/signedextreme/first-error tests beforetiming;actualSIMDnormal/AVX512off/scalar bothOS andoriginal completeownedfont operation. Reconcile actualstandaloneFreeType andaffectedowningintegrations before coherentacceptedstagequalification.",
+    "next": "Credible onlyiflarge original-blockcoverage andactualgeneratedkernelavoidsnew scalarpacking/spills. Freeze one candidate/one completeoriginalfontscreen afterexactgates;do not infergain fromcoverage/model."
+  },
+  "trials": {
+    "fhg1195": {
+      "prototypeSha256": "c329f9a7e6f584b6ce2a6a1032a885c4f3553b9a1534488b5ed9b9096e9c1276",
+      "candidateSourceSha256": "0228e76a723a4f7dfa20f984b18be3d5144080f5418a9c968aa226fda65fc7ae",
+      "subjects": {
+        "baseline": {
+          "mean": 14.98146885172526,
+          "lower": 14.734316143440182,
+          "upper": 15.228621560010339,
+          "values": [
+            14.995637268066407,
+            14.968642639160157,
+            14.980126647949218
+          ]
+        },
+        "candidate": {
+          "mean": 15.248650573730469,
+          "lower": 15.037451250225457,
+          "upper": 15.45984989723548,
+          "values": [
+            15.237522033691405,
+            15.247801330566407,
+            15.260628356933594
+          ]
+        }
+      },
+      "ratio": 1.0178342291498375,
+      "lower": 0.9912360254270838,
+      "upper": 1.045146152333072,
+      "allocatedBytes": 176,
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245688521,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 249651561,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 249819977,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245246241,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245434395,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 250030135,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          }
+        }
+      ],
+      "codegen": {
+        "methodCodeBytes": [
+          2281
+        ],
+        "hasZmm": true,
+        "hasByteShuffle": true,
+        "sha256": "4427810bb92638f3ffc4a8c1c906e163642b1917179b607467f57f50ea63c8a0",
+        "originalFontWorkerPassed": true
+      },
+      "revision": null,
+      "outcome": "Inconclusive with adverse mean; no useful gain established. Not promoted, independently repeated or used for standalone-reference claims."
+    },
+    "fhc1196": {
+      "prototypeSha256": "a34279dc71a1504041642aa173975fccbfbd604664cb7a80bdf1877d8250b40f",
+      "candidateSourceSha256": "b59efe8625db1b6b5d21881d64c9c4792e6329abc141607124016ae1ac65b09d",
+      "subjects": {
+        "baseline": {
+          "mean": 14.984656778971354,
+          "lower": 14.411042717882047,
+          "upper": 15.558270840060661,
+          "values": [
+            15.020675476074219,
+            14.97059356689453,
+            14.962701293945312
+          ]
+        },
+        "candidate": {
+          "mean": 15.252536214192709,
+          "lower": 13.977370858751176,
+          "upper": 16.527701569634242,
+          "values": [
+            15.292987915039063,
+            15.292793518066405,
+            15.171827209472657
+          ]
+        }
+      },
+      "ratio": 1.0178712698534376,
+      "lower": 0.9511954600346394,
+      "upper": 1.0892208442156777,
+      "allocatedBytes": 176,
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 246098747,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 250560314,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 250557129,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245278205,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245148898,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 248575217,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          }
+        }
+      ],
+      "codegen": {
+        "methodCodeBytes": [
+          2215
+        ],
+        "hasZmm": true,
+        "hasByteShuffle": true,
+        "sha256": "04ee557ba58eb3b585e5cb80c3bb2b9cfa694895282ee7978eaa2bb460240c55",
+        "originalFontWorkerPassed": true
+      },
+      "revision": "FHG1195screen14.981469->15.248651us CI.991236-1.045146,inconclusive adverse point. CapturedJIT builds both512bit operands usingtwo inserts each plusconstantbroadcast. FHC1196 preserves newboundedloads/predicate but constructsconstant512 mask directly andoverwritesupperhalf ofwidenedlowerwithoneinsert. Upperhalf neverread beforeoverwrite. No uncheckedmemory,extraarray orpolicychange. One freshscreen ofdistinctimplementation,not rerunofFHG.",
+      "outcome": "Inconclusive with adverse mean; no useful gain established. Not promoted, independently repeated or used for standalone-reference claims."
+    }
+  },
+  "hypothesis": "Replace scalar contour branches and packing with four bounded16-byte records, vector byte reversal, signed bounds and perrecord zero-contour masking. Keep existing extent checks and ordered failure fallback. More reads, dispatch and packing may offset removed work.",
+  "exactness": "Every eight record extent is structurally admitted before choosing>=16byte path. Extra6bytes remain inside each ownrecord. Selectedmask0x003C003C003C003C observes onlyxmin/ymin comparisons to xmax/ymax; zero-contour broadcasts suppress invalid bounds exactly. Empty/short/AVX2/scalar/cancelable/tail fallback remains original. Failure returnsfalse to original earliest-error validator. FHC overwrites all upperhalf bits before their first read; no uncheckedmemory or unsafe compilation.",
+  "correctness": {
+    "internalEachOsEachNormalAvx512OffScalar": 292,
+    "publicEachOsEachNormalScalar": 166,
+    "orderedOracleCasesEachOsEachNormalAvx512OffScalar": 16384,
+    "newTests": 9,
+    "actualPredicateCasesOnAvx512Bw": 269347,
+    "recordLengths": [
+      10,
+      12,
+      14,
+      15,
+      16,
+      20
+    ],
+    "ownedGlyphCounts": [
+      8,
+      9,
+      16,
+      17,
+      33
+    ],
+    "allContourWordsEachHeaderLane": true,
+    "signedCoordinateBoundaries": true,
+    "earliestBoundsBeforeLaterLocationError": true,
+    "sourceMutationOwnerIndependenceAndBorrowedRootRelease": true,
+    "refusalAndSubsequentRecovery": true,
+    "linuxGeneratedKernelObserved": true,
+    "originalCompleteActorMetricsNativeCorrectnessOwnersCleanupPassed": true,
+    "windowsActualVectorPredicateFeatureGated": true
+  },
+  "memory": {
+    "gcBytesPerLoad": 176,
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "codegenBytes": [
+      1731,
+      2281,
+      2215
+    ],
+    "codeSizeNotPerformanceProof": true
+  },
+  "qualificationReused": {
+    "fullLiveEachOs": 6794,
+    "sameActualPackageBothOs": true,
+    "examplesEachOs": 3,
+    "packageSha256": "de899a42bedb28e55b780c0501a69c02f95379f333e6dab16796f7f32a91289b",
+    "newBroadOrPackageChecks": 0
+  },
+  "reproduction": {
+    "builds": {
+      "isolatedWindowsCore": 2,
+      "isolatedEmbeddedTests": 2,
+      "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+    },
+    "timings": "Original complete public load/copy/admission/eagerchecks/glyphcount/dispose. CPU0 sequential natural nonconcurrent GC,16384warmups and3reversed16384operationpairs eachartifact,idle-v2 before/after. Originalfont/nativecorrectness/independentretainedowners remain. No barekernel clock,profile,independentconfirmation orstandaloneFreeType retiming.",
+    "tooling": "FHC is one coherent generated-code revision: direct512bit constantmask andone upperhalf insertion replace repeatedtwo-insert mask/header assembly. Its capturedJIT verifies change. Both first captures remain;no favorable repeat."
+  },
+  "interpretation": "97.95percent eligibleblockcoverage and fewer scalarbranches do not predict whole-operation gain. Both completed stages retain adversepoint/inconclusiveCI. Canonical source/core/package and all current benchmark costs remain unchanged. Scoped font gap is not overall textslowdown; complete stock public integrations already pass.",
+  "next": "Continue remaining independent copy/ownership boundary review using existing evidence. No automatic neighboring fontwidth/reduction/copy or certificate/sorter replay; a materially different evidenced design remains eligible. Full289path objective and finalimmutablepackage refresh stay open; publication postponed.",
+  "raw": {
+    "file": "font-vector-header-trials.tar.xz",
+    "sha256": "710f15b7d28fb50ccaca5427b96e63e2f8a25d6c6cba4ff08b34d8c20f3cd396",
+    "bytes": 3593928,
+    "members": 109,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "rectangle-copy-prepared-rows-qualified.tar.xz",
+        "sha256": "11477dfaad5fb561773ed7dd057ab15f92f3938da790386d669ab3f8adc7df02"
+      },
+      {
+        "file": "font-header-normalization-qualified.tar.xz",
+        "sha256": "64aa1ab63fcb1fb889d2846cc02e7cb512b5aaefb06168853ad53056e0548e95"
+      }
+    ]
+  }
+}
