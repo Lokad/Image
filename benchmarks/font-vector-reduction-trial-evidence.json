@@ -1,0 +1,275 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FZT1173",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Inconclusive,no usefulcomplete-load gain:16.662238->16.675965us,ratio1.000825 interval.978612-1.023541. Stop this implementation;no independentconfirmation/standalone refresh/promotion/broadpackage repeat.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "FZT1173",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "e8ffe3134440956a80073aeb5c7c04c04ba87ca0",
+    "baselineWindowsSha256": "09b7165b60db3305be6330cdc439e556228e660b1ea2d4f9548cd9397722b5af",
+    "baselineLinuxSha256": "e3f81889640ef8cc8bb7302f9e1805186bab9b86034f5170e8f73b695fbed0e9",
+    "prototypePath": "tmp/fzt1173-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "be9d593aff09f6fe90f9b3d9f906cb46c3ef059666cfd76c8a064c1f1dcec627",
+    "sourcePins": {
+      "src/Lokad.Image/TrueTypeFont.cs": "144666be728b0ce99edcd0063a7d152b13561f222d28082bea50851d2f4a858d"
+    },
+    "candidateSourceSha256": "fff00382d0a5056ddfdde5771d8403804ef511ca3e7a7f2074e4f1df55c07081",
+    "hypothesis": "FHI1172 maps existing780header leaves to matching1408B current codegen;175leaves sit atMoveMask/test/branch,not phasecost. Test maskedSIMDzero reduction to remove vector-to-GP result extraction and scalar mask without changing selected words or any validation path.",
+    "endState": "Existing4header AVX2 comparison uses VPTEST on exactlylow32bits per64bit header. No widening,storage,cache,policy,API,bytecopy or validation/cancellation/ownership change.",
+    "exactPredicateProof": "Signed CompareGreaterThan yields each16bit lane either0 or0xffff. MoveMask&0x0F0F0F0F observes exactlythelow4bytes ofeach8byteheader(xmin/ymin). ANDwith repeated0x00000000ffffffff then TestZ iszero iff those same lanes areallzero. Otherword lanes ignored. AVX2 guard impliesAVX.TestZ availability. Allzero/zero-contour sentinels and orderedscalarfailure fallback unchanged.",
+    "sourceProof": {
+      "onlyFourHeaderReductionChanges": true,
+      "allLoadsBoundsErrorOrderAndEagerValidationVerbatim": true,
+      "scalarCancelableAndAdmissionVerbatim": true,
+      "noStorageOwnershipApiOrNumericalPolicyChange": true
+    },
+    "invalidation": "Ifaccepted:ownedfontload and completeone-shot/preparation integrations. Borrowedfontlayout/drawing,codecs,resize and copy kernels/sourcepathsunchanged. Reconcile actualstandalone boundary before coherent Windows/Linux/package proof.",
+    "qualification": "Reuse existing16384caseorderedvalidator oracle,candidate normal/AVX2off/scalar bothOS;publicfont/text/Arabic/admission tests;fulloriginalFontLoad worker source/metrics/independentsurvivors/cleanup. ConfirmactualVPTEST/noMoveMask codegen. Shortcomplete-load3paired screen then independent12pairs only if promising;no favorable retries.",
+    "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "allCanonicalEmbeddedPublicHarnessReferenceFixturePackageBuilds": 0
+    }
+  },
+  "screen": {
+    "baselineUs": 16.662237915039064,
+    "candidateUs": 16.675965393066406,
+    "ratio": 1.0008246679017256,
+    "lower": 0.9786123325450043,
+    "upper": 1.0235411741395928,
+    "allocatedBytes": 176,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "focusedEachOs": {
+    "windows": {
+      "normal": 166,
+      "scalar": 166
+    },
+    "linux": {
+      "normal": 166,
+      "scalar": 166
+    }
+  },
+  "orderedOracleCasesEach": {
+    "windows": {
+      "normal": 16384,
+      "avx2-off": 16384,
+      "scalar": 16384
+    },
+    "linux": {
+      "normal": 16384,
+      "avx2-off": 16384,
+      "scalar": 16384
+    }
+  },
+  "codegen": {
+    "headerCodeBytes": 1402,
+    "hasVptest": true,
+    "noYmmMoveMask": true,
+    "sha256": "34afe07ed9f2dd39cb04893d25a3ddc6d425f44f6bd8bde9477bf0ffcdeca968",
+    "originalFontWorkerPassed": true
+  },
+  "existingTraceReconciliation": {
+    "project": "Lokad.Image",
+    "stage": "FHI1172",
+    "offlineOnly": true,
+    "sourceMapCodeBytes": 1408,
+    "currentCodegenBytes": 1408,
+    "sampleCount": 780,
+    "mappedSampleCount": 780,
+    "unmatchedOffsets": {},
+    "topInstructionLeads": [
+      {
+        "offset": "0x2fd",
+        "samples": 92,
+        "instruction": "vpmovmskb r11d, ymm0"
+      },
+      {
+        "offset": "0x308",
+        "samples": 48,
+        "instruction": "jne      SHORT G_M000_IG16"
+      },
+      {
+        "offset": "0x260",
+        "samples": 43,
+        "instruction": "movsx    r13, r13w"
+      },
+      {
+        "offset": "0x2e0",
+        "samples": 41,
+        "instruction": "vinserti128 ymm0, ymm0, xmm1"
+      },
+      {
+        "offset": "0x2da",
+        "samples": 35,
+        "instruction": "vpinsrq  xmm1, xmm1, r15, 1"
+      },
+      {
+        "offset": "0x301",
+        "samples": 35,
+        "instruction": "test     r11d, 0xF0F0F0F"
+      },
+      {
+        "offset": "0x288",
+        "samples": 26,
+        "instruction": "je       SHORT G_M000_IG15"
+      },
+      {
+        "offset": "0x213",
+        "samples": 23,
+        "instruction": "mov      qword ptr [rbp-0x40], r12"
+      },
+      {
+        "offset": "0x234",
+        "samples": 23,
+        "instruction": "sub      r12d, r15d"
+      },
+      {
+        "offset": "0x20a",
+        "samples": 22,
+        "instruction": "je       SHORT G_M000_IG13"
+      },
+      {
+        "offset": "0x119",
+        "samples": 20,
+        "instruction": "cmp      r9d, r10d"
+      },
+      {
+        "offset": "0x15d",
+        "samples": 20,
+        "instruction": "jb       G_M000_IG16"
+      },
+      {
+        "offset": "0x18e",
+        "samples": 19,
+        "instruction": "ja       G_M000_IG27"
+      },
+      {
+        "offset": "0x2b3",
+        "samples": 19,
+        "instruction": "movbe    r13w, word  ptr [r14]"
+      },
+      {
+        "offset": "0x10c",
+        "samples": 18,
+        "instruction": "cmp      r9d, r10d"
+      },
+      {
+        "offset": "0x2b9",
+        "samples": 17,
+        "instruction": "movsx    r13, r13w"
+      },
+      {
+        "offset": "0x1e7",
+        "samples": 17,
+        "instruction": "add      r13, 10"
+      },
+      {
+        "offset": "0x1ee",
+        "samples": 17,
+        "instruction": "cmp      r13, r12"
+      },
+      {
+        "offset": "0x267",
+        "samples": 16,
+        "instruction": "je       SHORT G_M000_IG14"
+      },
+      {
+        "offset": "0x138",
+        "samples": 16,
+        "instruction": "lea      r10, bword ptr [rdi+4*r10]"
+      },
+      {
+        "offset": "0x1b6",
+        "samples": 15,
+        "instruction": "xor      r12d, r12d"
+      },
+      {
+        "offset": "0x1bd",
+        "samples": 15,
+        "instruction": "cmp      r15d, r11d"
+      },
+      {
+        "offset": "0x10f",
+        "samples": 14,
+        "instruction": "jg       G_M000_IG16"
+      },
+      {
+        "offset": "0x2f9",
+        "samples": 13,
+        "instruction": "vpcmpgtw ymm0, ymm0, ymm1"
+      },
+      {
+        "offset": "0x16f",
+        "samples": 12,
+        "instruction": "je       SHORT G_M000_IG12"
+      }
+    ],
+    "limitation": "Fresh matching-artifact codegen and captured profile have distinct compilation instances. Equal method length/all sampled boundaries support an instruction lead;do not establish identical machine bytes,stall or phase costs. No new perf sampling or statistical retiming."
+  },
+  "exactPredicateProof": "Signed CompareGreaterThan yields each16bit lane either0 or0xffff. MoveMask&0x0F0F0F0F observes exactlythelow4bytes ofeach8byteheader(xmin/ymin). ANDwith repeated0x00000000ffffffff then TestZ iszero iff those same lanes areallzero. Otherword lanes ignored. AVX2 guard impliesAVX.TestZ availability. Allzero/zero-contour sentinels and orderedscalarfailure fallback unchanged.",
+  "memory": {
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "newReadonlyJitConstantBytes": 32,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "commit": "10bd64a5420b439abecd94f33dcd7a10163c324e",
+    "fullLiveEachOs": 6776,
+    "actualPackageSha256": "3167deb580ba05ecf4121a062515140e333964039576c30b73b89ba708b6aa38",
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "next": "Keep current four-header reduction. No neighboring mask/shuffle/wider-vector trial from thisnullresult. Assess coherent long-loca structural-pass separation to remove repeated scalar range/record checks from headergather,without unsafe/unbounded reads,newstorage or changed publicerror/cancellation/admission semantics. Independent ordinary/copy work remains available.",
+  "raw": {
+    "file": "font-vector-reduction-trial.tar.xz",
+    "sha256": "b73ea0fa17840a2d6e715227c0232cfb08cb2907f64544a22b69bc191cdf1aa4",
+    "bytes": 1298828,
+    "members": 74,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "nearest-row-reuse-qualified.tar.xz",
+        "sha256": "a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+        "bytes": 5278740,
+        "members": 275,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+          "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+          "copy-attribution-nearest-guard.tar.xz SHA256 42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+        ]
+      },
+      {
+        "file": "font-header-batching-qualified.tar.xz",
+        "sha256": "e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+        "bytes": 28082844,
+        "members": 321,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          "font-noncancelable-dispatch-trial.tar.xz SHA256 7f8292eea3ea450b5d452bdd2ed0d285c29dc6653c5f26f703c7a439f6e93496",
+          "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117"
+        ]
+      },
+      {
+        "file": "font-load-current-attribution.tar.xz",
+        "sha256": "ae65c9b72e3a7385d705a080ebf651e8f2999831626335efe5b9f7fba51dab2b"
+      }
+    ]
+  }
+}
