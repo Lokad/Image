@@ -29,14 +29,16 @@ cost **5.186 / FFmpeg 5.602 µs**, upper
 **0.930762**, passes/stops. This is a scoped final-DLL gain;
 historical clocks and prototype effects are not added.
 
-Separate byte copy is **2.172 / 2.080 µs**, upper
-**1.059**, a gap. Separate word copy **3.903 / 3.902 µs**,
+Separate byte copy is **1.987 / 1.915 µs**, upper
+**1.044**, a gap. Separate word copy **3.903 / 3.902 µs**,
 upper **1.091016**, remains uncertain on the frozen 262,144-operation cadence.
 Its [reference groups now interleave](../benchmarks/WARM-CADENCE-AND-BRACKETS.md)
 around each pair, with unchanged counts, operation bodies and confidence gate.
 All actuals and three native brackets stay, without an assumed gap, causal
 regression claim or favorable replay. Byte overlap **3.885 / 4.183 µs**,
-upper **0.938291**, passes/stops. Clipped byte copy retains a small gap.
+upper **0.938291**, passes/stops. The two byte controls now use the
+[same interleaved schedule](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
+at 65,536 operations per actual. Clipped byte copy is uncertain, not a demonstrated gap.
 All five actual-reference costs use the same final timed/package DLL; other
 primitives retain their identified source-valid evidence.
 
@@ -63,7 +65,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/RECTANGLE-COPY-PREPARED-ROWS.md) retains a scoped gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md) remains uncertain. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **78.567 / 526.201 µs**, upper **0.159260**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -76,7 +78,7 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-two gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+one gap, two uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared
@@ -475,7 +477,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.17 | 2.08 | 1.044 / 1.059 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.99 | 1.91 | 1.038 / 1.044 | 0 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.90 | 3.90 | 1.000 / 1.091 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
@@ -521,7 +523,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Vertical flip RGBA8 (uncertain) † | 8.69 | 8.33 | 1.044 / 1.102 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
-| Original clipped RGBA8 copy, 254×129 (gap) | 2.145 | 2.091 | 1.026 / 1.034826 | 0 |
+| Original clipped RGBA8 copy, 254×129 (uncertain) | 2.098 | 1.999 | 1.050 / 1.121784 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 | Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
 | Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |

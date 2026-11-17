@@ -256,6 +256,15 @@ def borrowed_copy_stage():
     assert word['producers'] == stage['producers'] and word['qualificationReused']['newBroadPackageChecks'] == 0
     assert word['case']['referenceBracketsInterleaved'] and word['case']['operationsPerSubject'] == 262144
     stage['cases']['DrawingCopy16'] = word['case']
+    byte = json.loads((ROOT / 'benchmarks/byte-copy-reference-reconciliation-evidence.json').read_text(encoding='utf-8'))
+    assert byte['measurementAccepted'] and not byte['productionChanged'] and not byte['productionSpeedupClaim']
+    assert byte['requiredMaterialPaths'] == 289 and byte['newRequiredPaths'] == 0
+    assert byte['raw']['mirrored'] and byte['raw']['allMembersVerified'] and all(byte['sourceProof'].values())
+    assert byte['allOriginalGatesPassed'] and byte['quietGuardsPassed'] and byte['allActualsRetained']
+    assert byte['producers'] == stage['producers'] and byte['qualificationReused']['newBroadPackageChecks'] == byte['allBuilds'] == 0
+    assert set(byte['cases']) == {'DrawingCopy8', 'OriginalClippedCopy8'}
+    assert all(c['referenceBracketsInterleaved'] and c['operationsPerSubject'] == 65536 for c in byte['cases'].values())
+    stage['cases'].update(byte['cases'])
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
     for c in stage['cases'].values():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
@@ -2070,7 +2079,9 @@ Its [reference groups now interleave](../benchmarks/WARM-CADENCE-AND-BRACKETS.md
 around each pair, with unchanged counts, operation bodies and confidence gate.
 All actuals and three native brackets stay, without an assumed gap, causal
 regression claim or favorable replay. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
-upper **{bo['upper']:.6f}**, passes/stops. Clipped byte copy retains a small gap.
+upper **{bo['upper']:.6f}**, passes/stops. The two byte controls now use the
+[same interleaved schedule](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
+at 65,536 operations per actual. Clipped byte copy is uncertain, not a demonstrated gap.
 All five actual-reference costs use the same final timed/package DLL; other
 primitives retain their identified source-valid evidence.
 
@@ -3342,7 +3353,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/RECTANGLE-COPY-PREPARED-ROWS.md) retains a scoped gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md) remains uncertain. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -3355,7 +3366,7 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-two gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+one gap, two uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared
