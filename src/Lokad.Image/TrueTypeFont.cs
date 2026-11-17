@@ -20,7 +20,7 @@ public readonly record struct FontGlyphMetrics(int GlyphIndex, int AdvanceWidth,
 /// <summary>An immutable, independently owned standalone TrueType face.</summary>
 /// <remarks>Unicode cmap formats 4/12 and short/long loca are supported. Font loading
 /// validates table ranges, selected mapping and glyph headers, not all outlines or
-/// checksums. No font instructions are executed. Caller input is copied once.</remarks>
+/// checksums. No font instructions are executed. Required source bytes are independently copied.</remarks>
 public sealed partial class TrueTypeFont : IDisposable
 {
     private const int DescriptorBytes = 256;
@@ -50,14 +50,16 @@ public sealed partial class TrueTypeFont : IDisposable
         var context = InputContext(input.Length, limits, cancellationToken);
         try
         {
-            // Admission owns this exact capacity before allocation. Copy every
-            // byte before parsing or publishing the independently owned face.
-            // Governed faces never enter the default idle-storage pool.
+            var retained = RetainedLength(input, context);
+            context.Reserve(retained + (long)DescriptorBytes);
+            context.Cancellation.ThrowIfCancellationRequested();
+            // Own the actual retained prefix before allocation. Encoded input
+            // remains borrowed; governed faces never enter the idle-storage pool.
             var ownerPool = context.HasMemoryBudget ? null : pool;
-            var owned = ownerPool is null ? GC.AllocateUninitializedArray<byte>(input.Length)
-                : ownerPool.RentPreservingIdle(input.Length);
-            input.CopyTo(owned);
-            var font = new TrueTypeFont(owned, context) { storageOwner = context, storagePool = ownerPool };
+            var owned = ownerPool is null ? GC.AllocateUninitializedArray<byte>(retained)
+                : ownerPool.RentPreservingIdle(retained);
+            input[..retained].CopyTo(owned);
+            var font = new TrueTypeFont(owned, input.Length, context) { storageOwner = context, storagePool = ownerPool };
             return font;
         }
         catch { context.Dispose(); throw; }
@@ -71,11 +73,45 @@ public sealed partial class TrueTypeFont : IDisposable
             if (length > context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Font input limit exceeded.");
             if (length > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Owned font exceeds the managed array limit.");
             context.ReserveBorrowed(length);
-            context.Reserve(length + (long)DescriptorBytes);
             context.Cancellation.ThrowIfCancellationRequested();
             return context;
         }
         catch { context.Dispose(); throw; }
+    }
+
+    // Keep every current consumer, including tables parsed lazily by text work.
+    // New TableForText/Find consumers must be added here before use.
+    private static bool RetainedTable(uint tag) => tag is
+        0x47444546 or 0x47504F53 or 0x47535542 // GDEF, GPOS, GSUB
+        or 0x636D6170 or 0x676C7966 or 0x68656164 // cmap, glyf, head
+        or 0x68686561 or 0x686D7478 or 0x6B65726E // hhea, hmtx, kern
+        or 0x6C6F6361 or 0x6D617870 // loca, maxp
+        or 0x76686561 or 0x766D7478; // vhea, vmtx
+
+    private static int RetainedLength(ReadOnlySpan<byte> input, OperationContext context)
+    {
+        // Classification is not parsing. Malformed directories take the original
+        // full-copy parser, retaining its ordered data/unsupported-feature errors.
+        // Admission refusal is never retried through this path.
+        if (input.Length < 12) return input.Length;
+        var version = U32(input);
+        if (version != 0x00010000 && version != Tag("true"u8)) return input.Length;
+        var count = U16(input[4..]); var directoryBytes = 12 + count * 16;
+        if (count == 0 || directoryBytes > input.Length || count > context.Limits.MaxContainerItems)
+            return input.Length;
+        var retained = directoryBytes; uint previous = 0;
+        for (var i = 0; i < count; i++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var entry = input.Slice(12 + i * 16, 16);
+            var tag = U32(entry); var offset = U32(entry[8..]); var length = U32(entry[12..]);
+            if (i != 0 && tag <= previous || offset > input.Length || length > input.Length - (long)offset
+                || length != 0 && (offset < directoryBytes || (offset & 3) != 0))
+                return input.Length;
+            if (RetainedTable(tag)) retained = Math.Max(retained, (int)(offset + length));
+            previous = tag;
+        }
+        return retained;
     }
 
     /// <summary>Map a Unicode scalar to a glyph index, returning zero for an absent character.</summary>
@@ -121,7 +157,7 @@ public sealed partial class TrueTypeFont : IDisposable
 
     // Format facts: Microsoft OpenType specifications otff/head/hhea/maxp/hmtx/loca/glyf.
     // All offsets are range-checked before conversion to managed indexes.
-    private TrueTypeFont(byte[] data, OperationContext context)
+    private TrueTypeFont(byte[] data, int encodedLength, OperationContext context)
     {
         this.data = data;
         if (data.Length < 12) throw new ImageDataException("Truncated font directory.");
@@ -136,8 +172,9 @@ public sealed partial class TrueTypeFont : IDisposable
         {
             context.Cancellation.ThrowIfCancellationRequested(); var entry = data.AsSpan(12 + i * 16, 16);
             var tag = U32(entry); var offset = U32(entry[8..]); var length = U32(entry[12..]);
-            if (i != 0 && tag <= previous || offset > data.Length || length > data.Length - (long)offset
-                || length != 0 && (offset < 12 + tableCount * 16 || (offset & 3) != 0))
+            if (i != 0 && tag <= previous || offset > encodedLength || length > encodedLength - (long)offset
+                || length != 0 && (offset < 12 + tableCount * 16 || (offset & 3) != 0)
+                || (offset > data.Length || length > data.Length - (long)offset) && RetainedTable(tag))
                 throw new ImageDataException("Invalid font table range or ordering.");
             previous = tag;
         }

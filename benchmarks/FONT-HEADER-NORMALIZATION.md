@@ -1,7 +1,9 @@
 # Font-header normalization
 
-Font loading remains source-valid. Current complete text-integration costs use
-[conditional polygon scratch](TEXT-CONDITIONAL-POLYGON-SCRATCH.md); earlier integration observations below retain history.
+Current owned loading and complete integrations use [retained prefixes](FONT-RETAINED-PREFIX.md); the measurements below retain history.
+
+The normalization kernel is unchanged. Complete-operation costs below precede
+retained-prefix preparation and ownership.
 
 Accepted complete owned-font loads improve **15.893 → 14.922 µs**, saving
 **0.971 µs / 6.11%**, with paired ratio interval **0.937376–0.940380** and

@@ -17,9 +17,13 @@ public sealed class FontInputAdmissionTests
     public void MaximumLengthAdmissionUsesLongArithmeticWithoutAllocatingTheFont()
     {
         var limits = new ImageLimits { MaxInputBytes = int.MaxValue, MaxWorkingBytes = 2L * Array.MaxLength + 256};
-        var context = TrueTypeFont.InputContext(Array.MaxLength, limits, default);
-        Assert.Equal(0, context.RemainingWorkingBytes);         var failure = Assert.Throws<ImageLimitException>(() => TrueTypeFont.InputContext(Array.MaxLength,
-            limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }, default));
+        using var context = TrueTypeFont.InputContext(Array.MaxLength, limits, default);
+        Assert.Equal(Array.MaxLength + 256L, context.RemainingWorkingBytes);
+        context.Reserve(Array.MaxLength + 256L);
+        Assert.Equal(0, context.RemainingWorkingBytes);
+        using var smaller = TrueTypeFont.InputContext(Array.MaxLength,
+            limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }, default);
+        var failure = Assert.Throws<ImageLimitException>(() => smaller.Reserve(Array.MaxLength + 256L));
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
     }
 }

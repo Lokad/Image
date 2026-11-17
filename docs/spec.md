@@ -106,6 +106,8 @@ style, font collection, CFF/WOFF, hint execution or variation-axis selection is
 provided. Select an actual supplied regular/bold/italic face. Unsupported selected
 features fail explicitly; malformed structure is a data failure. Missing characters
 use glyph zero. Loading validates structure; outlines are checked as used.
+Fonts independently copy source data needed by supported tables; input limits
+still cover all supplied bytes.
 
 `TextLayout.Create` measures and retains the exact placements/outlines later used
 by `DrawText`. Font size is pixels per em. Logical layout is the default;

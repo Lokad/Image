@@ -4,8 +4,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading reuses its header-normalization evidence; affected text costs use
-the conditional-polygon-scratch package.
+font loading and complete text integrations use the retained-prefix package;
+ordinary/clipped drawing retains the conditional-polygon-scratch evidence.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -325,35 +325,42 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
 [Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-owns current ordinary, clipped and complete-integration costs on the actual timed
-package DLL. Controlled complete RGBA8 draws save **0.769 µs /
+owns source-valid ordinary and clipped costs on its identified timed/package DLL. Controlled complete RGBA8 draws save **0.769 µs /
 1.65%** with separated intervals. Allocations remain
 **75,840 B/draw** plus 24 B of adapter storage. Current 16,384-operation ordinary
 RGBA8/16 confirmations remain uncertain: upper **1.127899 /
 1.054277**. All actuals, three reference groups, resets
 and exact frames remain; no historical-clock or cumulative gain is claimed.
 
-Complete one-shot and preparation-plus-eight-draw integrations pass, including
+[Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
+one-shot and preparation-plus-eight-draw integrations. Both pass, including
 all public layout calls, 30 fitting trials, fresh owned explicitly cleared canvases,
 independent results and disposal. The measured batch amortizes to
-**158.84 / 868.28 µs/draw**.
-Preparation-only **1159.78 / 6212.83 µs** is diagnostic;
+**174.10 / 961.97 µs/draw**.
+Preparation-only **1246.65 / 6879.74 µs** is diagnostic;
 historical stages are never summed. The reference retains positioned paths and
 managed preparation retains full 16-bit coverage. Validation eagerness and
 GC-driven reference font release differ. Reference one-shot/batch allocations are
 **9,256,953 /9,494,633 B**. Latin/fit retained plans remain **2,112 /4,160 B** and
-the full-fit governed peak remains **821,900 B**. Allocations, admitted capacity
+the full-fit governed peak is **742,840 B**, down **79,060 B** with the font prefix. Allocations, admitted capacity
 and unmeasured physical/native/JIT peaks are distinct.
 
-[Font loading](../benchmarks/FONT-HEADER-NORMALIZATION.md) reuses unchanged
-**FreeType 2.13.2 copy/open/retain/dispose** evidence: **176 B/op**, upper
-**1.165**, a scoped eager/lazy-validation gap, not general parser equivalence
-or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
+[Font loading](../benchmarks/FONT-RETAINED-PREFIX.md) saves
+**1.376 µs / 8.29%** in controlled
+complete final-DLL pairs. Current **14.982 / 14.459 µs**,
+upper **1.047861**, remains a scoped **FreeType 2.13.2
+copy/open/retain/dispose** gap at **176 B/op**. The original borrowed face is
+757,076 B; managed owned backing is 678,016 B, native owned input stays 757,076 B.
+Managed live admission is 678,272 B; default idle storage is separate. Original
+directory/input limits remain; owned tables retain exact offsets/bytes. Eager/lazy
+validation differs, not general parser equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
 passes/stops at **56 B/op** with its distinct retained-state boundary.
 
-Windows/Linux each pass **6,803 full/live checks**, focused **292 internal/222 public**
-normal/AVX-disabled/scalar checks and the SAME actual timed package/all three
-examples. No timed DLL rebuild occurs. The complete final-package refresh remains pending.
+Windows/Linux each pass **6,819 full/live checks**, focused **306 internal/222 public**
+normal/AVX2-disabled/scalar checks and the SAME actual retained-prefix package/all
+three examples. Affected performance reconciles before qualification; no timed DLL
+rebuild occurs. Other families retain identified unchanged-path evidence. The
+complete final-package refresh remains pending.
 
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact
@@ -468,13 +475,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
-| Complete text one-shot / ImageSharp public integration (pass) † | 1,206.81 | 6,552.16 | 0.184 / 0.210 | 298,786 |
-| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,270.75 | 6,946.25 | 0.183 / 0.208 | 308,516 |
+| Complete text one-shot / ImageSharp public integration (pass) † | 1,226.78 | 6,894.19 | 0.178 / 0.200 | 298,786 |
+| Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,392.80 | 7,695.72 | 0.181 / 0.199 | 308,518 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 48.13 | 45.27 | 1.063 / 1.128 | 75,840 |
 | Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 47.17 | 47.04 | 1.003 / 1.054 | 75,840 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
-| Font loading / FreeType 2.13.2 (scoped gap) † | 15.24 | 13.19 | 1.156 / 1.165 | 176 |
+| Font loading / FreeType 2.13.2 (scoped gap) † | 14.98 | 14.46 | 1.036 / 1.048 | 176 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |

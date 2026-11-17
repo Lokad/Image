@@ -29,7 +29,8 @@
   Text construction uses bounded initial edge storage to reduce temporary allocations,
   and prepares polygon scratch only for general clipping.
 - Speed up supplied-font loading with exact batched glyph-bound checks and shared
-  header normalization.
+  header normalization. Retain the source prefix needed by supported tables,
+  reducing copying and owned capacity while preserving directory validation.
 - Reuse completed nearest-neighbor output rows during enlargement.
 
 Declared exact encoder packets and managed pixel contracts remain unchanged.

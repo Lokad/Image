@@ -1,0 +1,1469 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FSP1212",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "baselineCommit": "9ba542ac56928f69bf07b5c5ef32ffa300ced72b",
+  "producers": {
+    "windowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "linuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "timedArtifactSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "packageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+    "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5"
+  },
+  "sources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "9eb17e74df87a0cdd4258063457967a4a3d1dfb139fae46141d569d774a25bbf",
+    "tests/Lokad.Image.Tests/FontInputAdmissionTests.cs": "b7fc24f0cdabe36cd683fd16a2c5d6bf1290de5668858f0cc8ecbad8948f37cd",
+    "tests/Lokad.Image.Tests/FontHeaderValidationTests.cs": "d476de969504f4668af66034a0ee313e0d10f1a55736fb198a8f24e2791a8293",
+    "tests/Lokad.Image.Tests/FontStorageTests.cs": "64dca928189ef14678df54e269da7885cd7324bd086131894f1fb972b77a51af",
+    "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "96a7a1edd12401b730427ff8b7e21b8f80da9ac10056fa80c981dbb801bf218d",
+    "tests/Lokad.Image.Tests/FontPrefixStorageTests.cs": "35e5ef8b5e837052ee3c6645ff38ccac1cbec264c70b101254550cd57cc45b31"
+  },
+  "baselineSourcePins": {
+    "src/Lokad.Image/TrueTypeFont.cs": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6",
+    "src/Lokad.Image/TrueTypeFont.Kerning.cs": "5dd677efe28b118685fb16e5897779085c41f2555df0ba147fb4029be3f6e37e",
+    "src/Lokad.Image/TrueTypeFont.Mapping.cs": "6cb204ddb4081d9bbd25ffb5872635318bcfc667c9101a0645e331bfd06cb671",
+    "src/Lokad.Image/TrueTypeFont.Outlines.cs": "e779da7d53abe81a5e6fec81485de3304d4b5baa70fd7559107bfa963217f0ad",
+    "src/Lokad.Image/Internal/TextShaper.cs": "b0b3a9bfb77d7d317f5442b269bc10bb9081fdd41141db5ce8972296d109401b",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "fbb94756a61e09f23c325f6d5c7e88f1b5f226541b3ea76f277272ddbcf1706a"
+  },
+  "sourceProof": {
+    "glyphHeaderValidatorAndAllFollowingMethodsVerbatim": true,
+    "mappingOutlinesKerningTextShaperAndOwnershipHelpersVerbatim": true,
+    "noOffsetRebasingOrSecondArray": true,
+    "allCurrentConsumersRetained": true,
+    "originalAndCopiedRangesRevalidated": true,
+    "actualCapacityAdmittedBeforeAllocation": true,
+    "noCallerDataOrBudgetOwnership": true,
+    "noRefusalRetryOrNewCache": true
+  },
+  "pairedEffect": {
+    "managedBeforeUs": 16.603153060913087,
+    "managedAfterUs": 15.227348999023437,
+    "ratio": 0.9171451933619494,
+    "lower": 0.9111651379587303,
+    "upper": 0.9231644963846568,
+    "savedUs": 1.3758040618896494,
+    "gainPercent": 8.285480663805057,
+    "allocatedBytes": 176,
+    "allActualMeanIntervalsSeparated": true
+  },
+  "font": {
+    "managedUs": 14.981658644352292,
+    "nativeUs": 14.458918499895244,
+    "ratio": 1.0361534747194845,
+    "lower": 1.0078692143576042,
+    "upper": 1.0478607751069875,
+    "status": "gap",
+    "allocatedBytes": 176,
+    "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allActualsRetained": true
+  },
+  "pipelineCases": {
+    "OneShot": {
+      "id": "OneShot",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1228893.4375,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 7756617.3125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.15843161883461812
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1217022.9375,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 6591796.65625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.18462689323798875
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1213340.8125,
+            "AllocatedBytes": 298769
+          },
+          "Reference": {
+            "Nanoseconds": 7231028.5625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.16779643476895753
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1266406.5625,
+            "AllocatedBytes": 298815
+          },
+          "Reference": {
+            "Nanoseconds": 7385436.125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17147349744359205
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1204442.28125,
+            "AllocatedBytes": 298769
+          },
+          "Reference": {
+            "Nanoseconds": 6592330.71875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.18270355851903913
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1221485.1875,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 7227212.65625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.16901193386687957
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1212699.03125,
+            "AllocatedBytes": 298769
+          },
+          "Reference": {
+            "Nanoseconds": 7184288.15625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.16879877377900102
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1216597.125,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 6925467,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17567004867686178
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1210214.3125,
+            "AllocatedBytes": 298769
+          },
+          "Reference": {
+            "Nanoseconds": 8082169.84375,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.14973878746632224
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1290123.375,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 6497224.15625,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.19856531712223086
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1216191.84375,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 7105843.1875,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.17115376904030505
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1223966.125,
+            "AllocatedBytes": 298792
+          },
+          "Reference": {
+            "Nanoseconds": 6974205.03125,
+            "AllocatedBytes": 9256953
+          },
+          "Ratio": 0.175499016664359
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 6618932.78125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6670155.125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7573400.75,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6744752.90625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6698213.59375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6557986.9375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6440429.96875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7944584.46875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6823996.15625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6677348.21875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7290167.9375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6690333.21875,
+          "AllocatedBytes": 9256953
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 6777115.6875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7078991.84375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7212775.4375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7626405.21875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7339179.09375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6627422.9375,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6865475.6875,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6673495.65625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6878101.125,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7594888,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 6824264.40625,
+          "AllocatedBytes": 9256953
+        },
+        {
+          "Nanoseconds": 7334891.34375,
+          "AllocatedBytes": 9256953
+        }
+      ],
+      "managedUs": 1226.7819192708332,
+      "referenceUs": 6894.191838541667,
+      "ratio": 0.17794426787090034,
+      "lower": 0.15446147195754922,
+      "upper": 0.1997008009982789,
+      "managedAllocatedBytes": 298786.25,
+      "referenceAllocatedBytes": 9256953,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "Preparation": {
+      "id": "Preparation",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1197556.3125,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6834433.875,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.1752239226251933
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1214463.15625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6574622.59375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.18471982823842983
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1211478.375,
+            "AllocatedBytes": 307152
+          },
+          "Reference": {
+            "Nanoseconds": 7099228.125,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17064930914584464
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1278850.34375,
+            "AllocatedBytes": 307198
+          },
+          "Reference": {
+            "Nanoseconds": 6770521.09375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.1888850689691421
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1223436.53125,
+            "AllocatedBytes": 307152
+          },
+          "Reference": {
+            "Nanoseconds": 6976529.25,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17536463869193983
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1218867.125,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6967557.8125,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17493462670856022
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1271405.90625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 7065868.46875,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17993625438585617
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1266802.0625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6689796.96875,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.18936330480844235
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1281903.15625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 7045247.375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.18195289505359633
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1227416.65625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6895492.15625,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17800276302794177
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1216397.625,
+            "AllocatedBytes": 307152
+          },
+          "Reference": {
+            "Nanoseconds": 7024836.59375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.17315671457500229
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1351184.65625,
+            "AllocatedBytes": 307175
+          },
+          "Reference": {
+            "Nanoseconds": 6612735.09375,
+            "AllocatedBytes": 9227176
+          },
+          "Ratio": 0.20433067968004143
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 7088954.78125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6534618.65625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6708072.8125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7360694.28125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6490448.15625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7472451.5,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6660535.6875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7048432.59375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6978174.59375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6460024.375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7185449.1875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7201540.5625,
+          "AllocatedBytes": 9227176
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 6742011.46875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7281740.6875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6712894.96875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7831049.90625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6284886.1875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6706738.59375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6692789.375,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7424260.5625,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6418616,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6733418.21875,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 6888418.28125,
+          "AllocatedBytes": 9227176
+        },
+        {
+          "Nanoseconds": 7439459.8125,
+          "AllocatedBytes": 9227176
+        }
+      ],
+      "managedUs": 1246.6468255208333,
+      "referenceUs": 6879.7391171875,
+      "ratio": 0.18120553763533898,
+      "lower": 0.15822087984970315,
+      "upper": 0.20562423385186204,
+      "managedAllocatedBytes": 307171.1666666667,
+      "referenceAllocatedBytes": 9227176,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "PreparedDraw": {
+      "id": "PreparedDraw",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17488.09375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 82039.125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21316772637445852
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17515.3125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 82089.53125,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21336840682714947
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17448.96875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 80961.875,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21552080840519072
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17272.4375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 82104.875,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21037042562941605
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17407.03125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81120.875,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21458140398510248
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17482.4375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81729,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21390739517184842
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17137.25,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81409.4375,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21050692065032386
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17626.09375,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 82312.34375,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21413670109472493
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17440.21875,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81073.9375,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21511498377638313
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17326.28125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81426.65625,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21278389716512522
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 17484.03125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81306.46875,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.21503862507864727
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 17517.53125,
+            "AllocatedBytes": 169
+          },
+          "Reference": {
+            "Nanoseconds": 81374.0625,
+            "AllocatedBytes": 33433
+          },
+          "Ratio": 0.2152716813173731
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 81341.53125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81109.3125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80884.5625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81278.625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80638.875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81237.625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80964.375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81182.21875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80963.46875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81274.21875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81927.40625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81212.875,
+          "AllocatedBytes": 33433
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 242160.78125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81123.0625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81222.59375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80464.875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80834.8125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80751.5625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81043.5625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80492.125,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80816.65625,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 81491.4375,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80405.71875,
+          "AllocatedBytes": 33433
+        },
+        {
+          "Nanoseconds": 80367.875,
+          "AllocatedBytes": 33433
+        }
+      ],
+      "managedUs": 17.42880729166667,
+      "referenceUs": 81.16792447916667,
+      "ratio": 0.21472530440445242,
+      "lower": 0.11215317060403851,
+      "upper": 0.5084136658088741,
+      "managedAllocatedBytes": 169,
+      "referenceAllocatedBytes": 33433,
+      "status": "pass",
+      "amortizedManagedUs": null,
+      "amortizedReferenceUs": null
+    },
+    "PrepareDraw8": {
+      "id": "PrepareDraw8",
+      "operationsPerSample": 32,
+      "pairs": [
+        {
+          "Index": 0,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1381576.9375,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 8753963.09375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.15782302514919144
+        },
+        {
+          "Index": 1,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1391425.3125,
+            "AllocatedBytes": 308543
+          },
+          "Reference": {
+            "Nanoseconds": 7322070.875,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.19003166402701613
+        },
+        {
+          "Index": 2,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1435963.09375,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7733676.90625,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.1856766336578557
+        },
+        {
+          "Index": 3,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1383565.59375,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7886574.125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17543302983283632
+        },
+        {
+          "Index": 4,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1389837.28125,
+            "AllocatedBytes": 308497
+          },
+          "Reference": {
+            "Nanoseconds": 8060469.125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17242635133224954
+        },
+        {
+          "Index": 5,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1413611.375,
+            "AllocatedBytes": 308543
+          },
+          "Reference": {
+            "Nanoseconds": 7632073.25,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.1852198385281483
+        },
+        {
+          "Index": 6,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1434289,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7711204.09375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.1860006534080072
+        },
+        {
+          "Index": 7,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1374967.875,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7787414.53125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17656282062325201
+        },
+        {
+          "Index": 8,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1369959.34375,
+            "AllocatedBytes": 308497
+          },
+          "Reference": {
+            "Nanoseconds": 7741420.46875,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17696485409624135
+        },
+        {
+          "Index": 9,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1384223.25,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7814064.375,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17714510446428208
+        },
+        {
+          "Index": 10,
+          "First": "Lokad.Image",
+          "Managed": {
+            "Nanoseconds": 1374972.65625,
+            "AllocatedBytes": 308497
+          },
+          "Reference": {
+            "Nanoseconds": 7940495.3125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.17315955770233948
+        },
+        {
+          "Index": 11,
+          "First": "ImageSharp public integration",
+          "Managed": {
+            "Nanoseconds": 1379259.15625,
+            "AllocatedBytes": 308520
+          },
+          "Reference": {
+            "Nanoseconds": 7653829.125,
+            "AllocatedBytes": 9494633
+          },
+          "Ratio": 0.18020511481565119
+        }
+      ],
+      "referenceBefore": [
+        {
+          "Nanoseconds": 9250727.84375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7546474.875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7414797.90625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7784251.59375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7649696.53125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7902930.46875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8885226,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7251077.6875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7693348.59375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7941287.625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7863640.9375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7991390.71875,
+          "AllocatedBytes": 9494633
+        }
+      ],
+      "referenceAfter": [
+        {
+          "Nanoseconds": 8315159.0625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7368077.78125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7630425.5,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8454050.09375,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7349488.03125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7144182.78125,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 8124191.21875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7581498.71875,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7266777.0625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7938652.90625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7756532.5625,
+          "AllocatedBytes": 9494633
+        },
+        {
+          "Nanoseconds": 7419632.6875,
+          "AllocatedBytes": 9494633
+        }
+      ],
+      "managedUs": 1392.8042395833334,
+      "referenceUs": 7695.7223671875,
+      "ratio": 0.1809842108548351,
+      "lower": 0.15642845797588195,
+      "upper": 0.19892426860409984,
+      "managedAllocatedBytes": 308518.0833333333,
+      "referenceAllocatedBytes": 9494633,
+      "status": "pass",
+      "amortizedManagedUs": 174.10052994791667,
+      "amortizedReferenceUs": 961.9652958984375
+    }
+  },
+  "pipelineChecks": {
+    "project": "Lokad.Image",
+    "caseId": "ConstrainedFit16",
+    "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "selectedSize": 16.75,
+    "fittingTrials": 30,
+    "fullWordSamplesPreserved": true,
+    "managedSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+    "historicalDirectDrawTextSha256": "9cf3afc8852807237c02b8b319899f480877c6ff143e302527631f1bd925707f",
+    "referenceOneShotLayoutFillSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "referencePreparedSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+    "managedExactGlyphsClustersLinesPositionsBoundsAndFit": true,
+    "referenceFrozenGlyphsClustersLinesAndFit": true,
+    "referencePositionBoundsTolerance": 0.0001,
+    "managedOwnedPreparedBytes": 4160,
+    "managedGovernedPeakBytes": 742840,
+    "borrowedRootAndInputPreserved": true,
+    "independentSurvivingOwners": true,
+    "oneShotVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "preparedVisual": {
+      "meanAlpha255": 4.010459429550565,
+      "rmseAlpha255": 6.920275025102693,
+      "relativeCoverageError": 0.01542176330079232,
+      "edgeErrorPixels": 0,
+      "passed": true
+    },
+    "newFontsImagesOrSettings": 0,
+    "timingClaim": false
+  },
+  "capacityReconciliation": {
+    "previousPeakBytes": 821900,
+    "currentPeakBytes": 742840,
+    "reductionBytes": 79060,
+    "allOtherChecksExact": true,
+    "originalCaptureFailure": "Historical TCM1109 peak constant compared unchanged; current PCS1202 baseline and actual retained-prefix reduction now explicit."
+  },
+  "qualification": {
+    "windows": {
+      "stage": "FSP1212",
+      "platform": "windows",
+      "productionSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+      "full": [
+        3359,
+        2512,
+        948
+      ],
+      "total": 6819,
+      "fullLivePassed": true,
+      "coreModifiedTimeNs": 1794918185568838600,
+      "productionBuildsAfterMeasurement": 0,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "test.ps1",
+        "-Differential",
+        "-NoBuild"
+      ],
+      "focused": {
+        "internal/normal": 306,
+        "public/normal": 222,
+        "internal/avx2-off": 306,
+        "public/avx2-off": 222,
+        "internal/scalar": 306,
+        "public/scalar": 222
+      }
+    },
+    "linux": {
+      "stage": "FSP1212",
+      "platform": "linux",
+      "productionSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "full": [
+        3359,
+        2512,
+        948
+      ],
+      "total": 6819,
+      "fullLivePassed": true,
+      "coreModifiedTimeNs": 1794918244866850910,
+      "productionBuildsAfterMeasurement": 0,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "test.ps1",
+        "-Differential",
+        "-NoBuild"
+      ],
+      "focused": {
+        "internal/normal": 306,
+        "public/normal": 222,
+        "internal/avx2-off": 306,
+        "public/avx2-off": 222,
+        "internal/scalar": 306,
+        "public/scalar": 222
+      },
+      "packagedDocumentSha256": {
+        "docs/spec.md": "2dc87a52f9dd8153976cfd0ac13927f4a822dd7c20de2bf8a437cb5a2afec3bd",
+        "docs/resource-admission.md": "d79c5b1b7ecfe8ead88c16a4ac15261c0255a98a3f91066a60352314407a8cfc"
+      },
+      "initialPackageSupersededForDocsOnly": "46dbb63c3037fbd46a15cb1ac3b881df9fce3ede2b757682c00a232d24a106ef",
+      "actualPackage": {
+        "path": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+        "sha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+        "bytes": 471113,
+        "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5",
+        "actualConsumerPassed": true,
+        "usageExamples": 3
+      },
+      "packageBuilds": 3,
+      "timedArtifactNotRebuilt": true
+    },
+    "windowsPackage": {
+      "stage": "FSP1212",
+      "platform": "windows",
+      "sameActualPackageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+      "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "actualConsumerPassed": true,
+      "usageExamples": 3,
+      "published020Unchanged": true,
+      "coreUnchanged": true,
+      "productionBuildsAfterMeasurement": 0
+    },
+    "fullChecksEachOs": 6819,
+    "modes": [
+      "normal",
+      "avx2-off",
+      "scalar"
+    ],
+    "focusedEachMode": {
+      "internal": 306,
+      "public": 222
+    },
+    "allAffectedPerformanceReconciledBeforeBroad": true,
+    "productionRebuildsAfterTiming": 0,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3
+  },
+  "memory": {
+    "allocatedBytesPerLoad": 176,
+    "inputBytes": 757076,
+    "previousFontBackingBytes": 757076,
+    "fontBackingBytes": 678016,
+    "savedBackingBytes": 79060,
+    "fontDescriptorAllowanceBytes": 256,
+    "liveFontAdmissionBytes": 678272,
+    "idleFontPayloadBytes": 678016,
+    "retainedPlanCapacityBytes": 4160,
+    "previousGovernedCompleteFitPeakBytes": 821900,
+    "governedCompleteFitPeakBytes": 742840,
+    "standingPoolArrayCeiling": 4,
+    "standingPoolBytesCeiling": 4194304,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "capacityEvidence": "Owned prefix length and admission are source-derived and exercised by focused ownership tests; governed complete-fit peak is measured by original pipeline checks. Idle capacity is bounded separately. Allocations are actual complete-operation GC measurements; no speedup follows from byte counts alone."
+  },
+  "scope": {
+    "invalidation": "LoadCore/InputContext and font construction change; refresh owned load and complete one-shot/preparation+eight operations. Existing borrowed font/text operations construct fonts outside timing, retain identical consumed bytes/offsets, and execute unchanged methods; their timings/quality evidence remain source-valid. Codec/resize/drawing/copy production paths stay unchanged.",
+    "reference": "FreeType2.13.2 full757076B owned copy/open/retain/dispose versus managed678016B required prefix; same borrowed original face. Eager/lazy validation differs, not general parser equivalence.",
+    "text": "Stock ImageSharp.Drawing2.1.7/Fonts2.1.3/ImageSharp3.1.12 complete public API integration, all layout calls and30 fitting trials, fresh owned explicitly cleared RGBA16 canvases, independent output and disposal. Prepared state differs; full16bit samples and existing exact/visual gates remain.",
+    "performance": "Final controlled DLL effect only; private screen/confirmation and historical clocks are not cumulative. Standalone font gap remains. Unchanged borrowed cases retain identified evidence."
+  },
+  "trials": {
+    "screen": {
+      "project": "Lokad.Image",
+      "stage": "FSP1212",
+      "mode": "screen",
+      "actuals": 3,
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "pairedManagedDllDiagnosticOnly": true,
+      "standaloneReferencePerformance": false,
+      "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+      "subjects": {
+        "baseline": {
+          "mean": 15.158752563476563,
+          "lower": 14.797052913628354,
+          "upper": 15.520452213324772,
+          "values": [
+            15.137041259765626,
+            15.175895812988282,
+            15.163320617675781
+          ]
+        },
+        "candidate": {
+          "mean": 13.859252583821615,
+          "lower": 13.588988870950514,
+          "upper": 14.129516296692715,
+          "values": [
+            13.868961303710938,
+            13.866595031738282,
+            13.842201416015625
+          ]
+        }
+      },
+      "allocations": {
+        "baseline": [
+          176.0
+        ],
+        "candidate": [
+          176.0
+        ]
+      },
+      "ratio": 0.914274123160876,
+      "lower": 0.8830387258641295,
+      "upper": 0.9466143984382918,
+      "critical": 31.599054576443834,
+      "allPairsRetained": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "allBuilds": 0,
+      "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the directory-driven retained-prefix ownership through original complete public load;never a replacement standalone FreeType gate."
+    },
+    "independentConfirmation": {
+      "project": "Lokad.Image",
+      "stage": "FSP1212",
+      "mode": "confirm",
+      "actuals": 12,
+      "productionAccepted": false,
+      "canonicalProductionChanged": false,
+      "pairedManagedDllDiagnosticOnly": true,
+      "standaloneReferencePerformance": false,
+      "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+      "subjects": {
+        "baseline": {
+          "mean": 16.042483647664387,
+          "lower": 15.927357463483595,
+          "upper": 16.15760983184518,
+          "values": [
+            16.027120239257812,
+            16.0845595703125,
+            16.04761639404297,
+            16.04612609863281,
+            16.1266533203125,
+            16.040552490234376,
+            15.966672302246094,
+            16.040432067871095,
+            15.861318603515626,
+            16.15212579345703,
+            16.177977966308593,
+            15.93864892578125
+          ]
+        },
+        "candidate": {
+          "mean": 14.671395401000977,
+          "lower": 14.577736360069334,
+          "upper": 14.76505444193262,
+          "values": [
+            14.779335998535156,
+            14.716703308105469,
+            14.680197875976562,
+            14.676818725585937,
+            14.744983459472657,
+            14.58885528564453,
+            14.554043701171874,
+            14.564395629882812,
+            14.708275024414062,
+            14.663586364746093,
+            14.74202606201172,
+            14.637523376464843
+          ]
+        }
+      },
+      "allocations": {
+        "baseline": [
+          176.0
+        ],
+        "candidate": [
+          176.0
+        ]
+      },
+      "ratio": 0.9145366708966925,
+      "lower": 0.9071675641133758,
+      "upper": 0.9219656384344411,
+      "critical": 4.436979337146836,
+      "allPairsRetained": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "allBuilds": 0,
+      "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the directory-driven retained-prefix ownership through original complete public load;never a replacement standalone FreeType gate."
+    }
+  },
+  "builds": {
+    "privateCore": 1,
+    "privateEmbedded": 2,
+    "finalCoreEachOs": 1,
+    "finalEmbeddedEachOs": 1,
+    "finalPublicEachOs": 1,
+    "harnessNativeFixture": 0,
+    "noBuildReleasePacks": 3,
+    "initialPackagesSupersededForDocsAndLineEndingsOnly": true,
+    "acceptedArtifactRebuildsAfterTiming": 0
+  },
+  "raw": {
+    "file": "font-retained-prefix-qualified.tar.xz",
+    "sha256": "708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e",
+    "bytes": 5726108,
+    "members": 208,
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

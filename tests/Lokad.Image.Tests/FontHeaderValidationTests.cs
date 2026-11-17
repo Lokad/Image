@@ -17,7 +17,7 @@ public sealed class FontHeaderValidationTests
         var limits = new ImageLimits { MemoryBudget = root };
         using var font = TrueTypeFont.Load(input, limits, token);
         Assert.Equal(9, font.GlyphCount);
-        Assert.Equal(input.Length + 256L, root.Bytes);
+        Assert.Equal(font.StorageBytes, root.Bytes);
         input.AsSpan().Fill(0xa5);
         var metric = font.GetGlyphMetrics(8);
         Assert.Equal(short.MinValue, metric.XMin); Assert.Equal(short.MinValue, metric.YMin);
@@ -25,7 +25,7 @@ public sealed class FontHeaderValidationTests
         Assert.True(metric.HasOutline);
         var refused = Assert.Throws<ImageLimitException>(() => TrueTypeFont.Load(original, limits, token));
         Assert.Equal(ImageLimitScope.SharedBudget, refused.Scope);
-        Assert.Equal(original.Length + 256L, root.Bytes);
+        Assert.Equal(font.StorageBytes, root.Bytes);
         font.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         using (var subsequent = TrueTypeFont.Load(original, limits, token)) Assert.Equal(9, subsequent.GlyphCount);
         Assert.Equal(0, root.Bytes);
@@ -106,7 +106,7 @@ public sealed class FontHeaderValidationTests
                     Assert.Equal(short.MaxValue, metrics.XMax);
                     Assert.Equal(short.MaxValue, metrics.YMax);
                 }
-                Assert.Equal(input.Length + 256L, root.Bytes);
+                Assert.Equal(font.StorageBytes, root.Bytes);
             }
             Assert.Equal(0, root.Bytes);
         }

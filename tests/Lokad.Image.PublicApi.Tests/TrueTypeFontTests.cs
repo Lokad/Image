@@ -65,9 +65,9 @@ public sealed class TrueTypeFontTests
     public void CallerAndOwnedCopyPlusDescriptorFitExactlyAndRemainIndependent()
     {
         var data = AuthoredTrueType.Build();
-        var limits = new ImageLimits { MaxInputBytes = data.Length, MaxWorkingBytes = 2L * data.Length + 256, MaxContainerItems = 11 };
+        var limits = new ImageLimits { MaxInputBytes = data.Length, MaxWorkingBytes = data.Length + (long)AuthoredTrueType.Offset(data, "maxp") + 32 + 256, MaxContainerItems = 11 };
         var font = TrueTypeFont.Load(data, limits);
-        Assert.Equal(data.Length + 256L, font.StorageBytes);
+        Assert.Equal(AuthoredTrueType.Offset(data, "maxp") + 32 + 256L, font.StorageBytes);
         var failure = Assert.Throws<ImageLimitException>(() => TrueTypeFont.Load(data, limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }));
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
         var lookupLimits = limits with { MaxWorkingBytes = font.StorageBytes };
@@ -229,7 +229,7 @@ public sealed class TrueTypeFontTests
             Assert.Equal(unchanged, input); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
             using (var recovered = TrueTypeFont.Load(original, limits))
             {
-                Assert.Equal(original.Length + 256L, recovered.StorageBytes);
+                Assert.Equal(AuthoredTrueType.Offset(original, "maxp") + 32 + 256L, recovered.StorageBytes);
                 Assert.Equal(recovered.StorageBytes, root.Bytes);
                 Assert.Equal(600, recovered.GetGlyphMetrics(2).AdvanceWidth);
             }

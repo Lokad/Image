@@ -2070,12 +2070,14 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     storage_reuse = composition_storage()
     text_storage = text_polygon_scratch_stage()
-    font_current = json.loads((ROOT / 'benchmarks/font-header-normalization-evidence.json').read_text(encoding='utf-8'))
+    font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
     assert font_current['raw']['mirrored'] and font_current['raw']['allMembersVerified']
     hq = font_current['qualification']
-    assert hq['windows']['total'] == hq['linux']['total'] == 6790
+    assert hq['windows']['total'] == hq['linux']['total'] == hq['fullChecksEachOs'] == 6819
+    assert hq['focusedEachMode'] == {'internal': 306, 'public': 222}
+    assert hq['allAffectedPerformanceReconciledBeforeBroad'] and hq['productionRebuildsAfterTiming'] == 0
     assert hq['linux']['actualPackage']['sha256'] == hq['windowsPackage']['sameActualPackageSha256'] == font_current['producers']['packageSha256']
     assert hq['linux']['actualPackage']['librarySha256'] == font_current['producers']['timedArtifactSha256']
     assert hq['linux']['actualPackage']['actualConsumerPassed'] and hq['windowsPackage']['actualConsumerPassed']
@@ -2107,13 +2109,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_storage['pipelineCases'][case]
+        cost = font_current['pipelineCases'][case]
         assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_storage['pipelineCases']['Preparation']
-    font_batch = text_storage['pipelineCases']['PrepareDraw8']
+    font_preparation = font_current['pipelineCases']['Preparation']
+    font_batch = font_current['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
@@ -3295,8 +3297,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading reuses its header-normalization evidence; affected text costs use
-the conditional-polygon-scratch package.
+font loading and complete text integrations use the retained-prefix package;
+ordinary/clipped drawing retains the conditional-polygon-scratch evidence.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3567,15 +3569,15 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
 [Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-owns current ordinary, clipped and complete-integration costs on the actual timed
-package DLL. Controlled complete RGBA8 draws save **{text_storage['pairedEffect']['savedUs']:.3f} µs /
+owns source-valid ordinary and clipped costs on its identified timed/package DLL. Controlled complete RGBA8 draws save **{text_storage['pairedEffect']['savedUs']:.3f} µs /
 {text_storage['pairedEffect']['gainPercent']:.2f}%** with separated intervals. Allocations remain
 **75,840 B/draw** plus 24 B of adapter storage. Current 16,384-operation ordinary
 RGBA8/16 confirmations remain uncertain: upper **{text_storage['cases']['Ordinary8']['upper']:.6f} /
 {text_storage['cases']['Ordinary16']['upper']:.6f}**. All actuals, three reference groups, resets
 and exact frames remain; no historical-clock or cumulative gain is claimed.
 
-Complete one-shot and preparation-plus-eight-draw integrations pass, including
+[Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
+one-shot and preparation-plus-eight-draw integrations. Both pass, including
 all public layout calls, 30 fitting trials, fresh owned explicitly cleared canvases,
 independent results and disposal. The measured batch amortizes to
 **{font_batch['amortizedManagedUs']:.2f} / {font_batch['amortizedReferenceUs']:.2f} µs/draw**.
@@ -3584,18 +3586,25 @@ historical stages are never summed. The reference retains positioned paths and
 managed preparation retains full 16-bit coverage. Validation eagerness and
 GC-driven reference font release differ. Reference one-shot/batch allocations are
 **9,256,953 /9,494,633 B**. Latin/fit retained plans remain **2,112 /4,160 B** and
-the full-fit governed peak remains **821,900 B**. Allocations, admitted capacity
+the full-fit governed peak is **742,840 B**, down **79,060 B** with the font prefix. Allocations, admitted capacity
 and unmeasured physical/native/JIT peaks are distinct.
 
-[Font loading](../benchmarks/FONT-HEADER-NORMALIZATION.md) reuses unchanged
-**FreeType 2.13.2 copy/open/retain/dispose** evidence: **176 B/op**, upper
-**1.165**, a scoped eager/lazy-validation gap, not general parser equivalence
-or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
+[Font loading](../benchmarks/FONT-RETAINED-PREFIX.md) saves
+**{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%** in controlled
+complete final-DLL pairs. Current **{font_cost['managedUs']:.3f} / {font_cost['nativeUs']:.3f} µs**,
+upper **{font_cost['upper']:.6f}**, remains a scoped **FreeType 2.13.2
+copy/open/retain/dispose** gap at **176 B/op**. The original borrowed face is
+757,076 B; managed owned backing is 678,016 B, native owned input stays 757,076 B.
+Managed live admission is 678,272 B; default idle storage is separate. Original
+directory/input limits remain; owned tables retain exact offsets/bytes. Eager/lazy
+validation differs, not general parser equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
 passes/stops at **56 B/op** with its distinct retained-state boundary.
 
-Windows/Linux each pass **6,803 full/live checks**, focused **292 internal/222 public**
-normal/AVX-disabled/scalar checks and the SAME actual timed package/all three
-examples. No timed DLL rebuild occurs. The complete final-package refresh remains pending.
+Windows/Linux each pass **6,819 full/live checks**, focused **306 internal/222 public**
+normal/AVX2-disabled/scalar checks and the SAME actual retained-prefix package/all
+three examples. Affected performance reconciles before qualification; no timed DLL
+rebuild occurs. Other families retain identified unchanged-path evidence. The
+complete final-package refresh remains pending.
 
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact

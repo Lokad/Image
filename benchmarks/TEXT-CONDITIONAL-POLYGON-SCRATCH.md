@@ -1,5 +1,7 @@
 # Conditional polygon scratch
 
+Ordinary/clipped drawing remains source-valid here. Current owned-font loading and complete integrations use [retained prefixes](FONT-RETAINED-PREFIX.md).
+
 Complete ordinary RGBA8 drawing saves **0.769 µs /1.65%** on the
 final timed DLL: **46.671672 →45.902237 µs**, paired ratio interval
 **0.978329–0.988739**, with separated raw mean intervals. Allocations remain
@@ -7,14 +9,14 @@ final timed DLL: **46.671672 →45.902237 µs**, paired ratio interval
 effect; prototype and historical clocks are not cumulative gains.
 Measurements use the quiet VM, Release, CPU0 and natural nonconcurrent GC.
 
-| Current complete operation | Lokad /reference µs | Ratio upper /status | Managed GC B/op |
+| Operation at this milestone | Lokad /reference µs | Ratio upper /status | Managed GC B/op |
 | --- | ---: | --- | ---: |
 | Ordinary RGBA8 | 48.134 /45.273 | 1.127899 /uncertain | 75,840 |
 | Ordinary RGBA16 | 47.173 /47.040 | 1.054277 /uncertain | 75,840 |
 | Authored clipped RGBA8 layout + draw | 41.223 /224.429 | 0.299789 /pass | 41,064 |
 | Authored clipped RGBA16 layout + draw | 38.190 /225.899 | 0.294813 /pass | 41,064 |
-| Complete constrained-fit one-shot | 1,206.808 /6,552.156 | 0.209938 /pass | 298,786 |
-| Complete preparation + eight draws | 1,270.748 /6,946.246 | 0.207805 /pass | 308,516 |
+| Earlier complete constrained-fit one-shot | 1,206.808 /6,552.156 | 0.209938 /pass | 298,786 |
+| Earlier complete preparation + eight draws | 1,270.748 /6,946.246 | 0.207805 /pass | 308,516 |
 
 References remain stock ImageSharp.Drawing 2.1.7 /Fonts 2.1.3 /ImageSharp 3.1.12
 for ordinary/complete integration and explicitly [source-corrected tooling](AUTHORED-FONT-COMPARISONS.md)
