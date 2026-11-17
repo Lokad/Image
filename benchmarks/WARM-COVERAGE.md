@@ -81,6 +81,11 @@ unpromising with an inconclusive interval and higher allocation/lifetime.
 Current ordering, package and costs remain unchanged. Independent copy work
 continues from concrete alignment attribution rather than another sort variant.
 
+[Pinned copy alignment](PINNED-COPY-ALIGNMENT-TRIAL.md) is unpromoted: the complete
+original word pair is 13.20%/0.803 us slower despite a real alignment opportunity.
+Qualified copying and current costs remain unchanged; pinning costs stay inside
+measurement and no neighboring implementation is automatically replayed.
+
 [Exact edge storage](TEXT-EDGE-STORAGE-TRIAL.md) remains unpromoted: ordinary
 allocation falls 8,320 B, but independent complete draws are 0.498 us/1.07% slower.
 Current production/package costs stay unchanged; retain the adverse evidence

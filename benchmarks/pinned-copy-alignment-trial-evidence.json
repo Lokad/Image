@@ -1,0 +1,202 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PBA1181",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Complete original word overlap13.2023percent/0.803401us slower,ratio interval1.101823-1.163052,0GC B/op. Stop withoutconfirmation/generalization/standalone-reference refresh/productionpromotion/broad orpackage repeat. Do not attribute the slowdown solely to pin overhead.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "PBA1181",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "8959bcc0f019f97653098b962d6e1b98d908e5a2",
+    "baselineWindowsSha256": "926707b9526b73a35b338366d258b60cd97e507aa1771e0c6aecffed0cff06ae",
+    "baselineLinuxSha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+    "prototypePath": "tmp/pba1181-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "e04b444be573afd801dcee2d268e36b79e23ed7636d237740ab86b202478fdf6",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+    },
+    "candidateSourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "c5f282a29422d3e58428546d5280d115e09e784b699c225c8490787b480cdcc4",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "a5d980241f4a4598104c71b63531a94f9c45909c0d771274905def76cc17f05b",
+      "src/Lokad.Image/ImageBuffer.cs": "8b5082ac55b8be377821cf729e53e9a6848f5cbaf97126846ea26546a8035c63"
+    },
+    "audit": {
+      "project": "Lokad.Image",
+      "stage": "PBA1181",
+      "productionChanged": false,
+      "accepted": false,
+      "allBuilds": 1,
+      "sourcePins": {
+        "src/Lokad.Image/ImageDrawing.cs": "3bdbdc4ef9169976d9d4f1a77267b1fb1ce04ce065a1981af4a69eb6c31750e7",
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": "495e802c6bdc83bd4cfd79874940ad299d8f82899b55adc8cd5039c0f0a5d6a6",
+        "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+      },
+      "existingNativeEvidence": "benchmarks/COPY-ATTRIBUTION-NEAREST-GUARD.md:actualworker reaches libc aligned AVX512 stores;not a speed forecast.",
+      "checks": {
+        "windows": {
+          "project": "Lokad.Image",
+          "stage": "PBA1181",
+          "correctnessOnly": true,
+          "timingClaim": false,
+          "librarySha256": "926707b9526b73a35b338366d258b60cd97e507aa1771e0c6aecffed0cff06ae",
+          "originalWordDestinationRows": 129,
+          "unalignedRows": 113,
+          "rowResidues": [
+            0,
+            8,
+            16,
+            24,
+            32,
+            40,
+            48,
+            56
+          ],
+          "prefixChecks": 1408,
+          "boundedPrefixBytes": 63,
+          "addressStableThroughForcedCompactingGc": true,
+          "pinFreedBeforeBufferDisposal": true,
+          "rawAddressesExposed": false,
+          "productionChanged": false,
+          "scope": "Untimed managed-address residue/pin-lifetime diagnostic,not store throughput or a complete-operation performance comparison.",
+          "capture": "Preserved first tool stdout;unchanged Windows probe not rerun."
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "stage": "PBA1181",
+          "correctnessOnly": true,
+          "timingClaim": false,
+          "librarySha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+          "originalWordDestinationRows": 129,
+          "unalignedRows": 113,
+          "rowResidues": [
+            0,
+            8,
+            16,
+            24,
+            32,
+            40,
+            48,
+            56
+          ],
+          "prefixChecks": 1408,
+          "boundedPrefixBytes": 63,
+          "addressStableThroughForcedCompactingGc": true,
+          "pinFreedBeforeBufferDisposal": true,
+          "rawAddressesExposed": false,
+          "productionChanged": false,
+          "scope": "Untimed managed-address residue/pin-lifetime diagnostic,not store throughput or a complete-operation performance comparison."
+        }
+      },
+      "hypothesis": "Current managed grouped stores areunaligned at113/129originalworddestrows. A short CLR GCHandle pin canestablish actualdestination alignment safely whileallloads/stores remainboundscheckedSpans. Copy <=63byteprefix thenreuseexistinggroupedkernel at64bytealigneddest. Includepin/addresscalc/free in completeoperation;pin/table overhead mayerasebenefit.",
+      "design": "Operation-local handleownedbyCopyRegion,alwaysfreedfinally;borrowpixelarray/IMemoryBudgetroot,neverdisposecallerbuffer/root. No pointerdereference,unsafe,externalnativebinding,subprocess,dependency,newpixelbuffer/globalcache/pool orpersistedaddress. Scalar/small/same-row/unsupportedpaths unchanged. Candidate guardfreeze:existingdisjointRowkernel plusrow>=512B,total>=64KiB,normal512SIMD. This is generalamortization guard,not fixture identity;needone boundedgeneralization if promising.",
+      "correctness": "Existing190editing/root/cancel/refusal/recoverybothOSnormal/scalar plusdirectpin/prefix/forcedGCtests,fullwordoriginalsnapshot andsourceidentity. Pinmustcoveractualaddressusers;neverderivealignment fromunpinned/movablearray orcachedaddress. Prefix/tailremainwithin originalclippedchunk,reversetraversal/cancellation preserved.",
+      "memory": "No pixelcopy/ownedcapacity added. Runtimehandle isfixedminor metadata,chargedcoarselyperbrief;reportmanagedGCallocation andtemporarypin lifetime separately,do notclaimzerototalruntimeallocation. Caller-ownedcharges unchanged.",
+      "next": "Constructoneignoredprototype,verifyoriginalactor/pixels/pin cleanup andsafeportability,thenone3paircompleteoriginalwordoverlap screen. Do notretimepassingneighborsunlessproductionchangeaccepted;freeze alloriginalinput/reference identities beforetiming. No newshape/depth/settingsgrid."
+    },
+    "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+    "focusedInternalFilter": "FullyQualifiedName~PinnedCopy|FullyQualifiedName~Copy|FullyQualifiedName~Drawing",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbedded": 1,
+      "productionPublicHarnessNativeFixturePackage": 0
+    },
+    "preparationRecovery": "Record serialization reused an audit variable for a source offset;reload audit andserialize completed builds only. No rebuild,test or timed operation repeated."
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "PBA1181",
+    "allActualsRetained": true,
+    "pairs": 3,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+    "candidateSha256": "e04b444be573afd801dcee2d268e36b79e23ed7636d237740ab86b202478fdf6",
+    "baseline": {
+      "mean": 6085.311462402344,
+      "lower": 5963.40349918085,
+      "upper": 6207.219425623837,
+      "values": [
+        6081.548645019531,
+        6093.026611328125,
+        6081.359130859375
+      ]
+    },
+    "candidate": {
+      "mean": 6888.712158203125,
+      "lower": 6825.874054643154,
+      "upper": 6951.550261763096,
+      "values": [
+        6892.5821533203125,
+        6885.9827880859375,
+        6887.571533203125
+      ]
+    },
+    "ratio": 1.132022937653156,
+    "ratioLower": 1.10182281722476,
+    "ratioUpper": 1.163051560997974,
+    "elapsedReduction": -0.1320229376531561,
+    "savedUs": -0.8034006958007812,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "focusedChecks": {
+    "internalEachOsEachNormalScalar": 21,
+    "publicEachOsEachNormalScalar": 190,
+    "prefixLengthCasesPerMode": 1024,
+    "linuxOriginalFullWordWorkerBothDllsBothModes": true,
+    "originalInputSnapshotAlphaHiddenRgbCancellationRefusalRecovery": true,
+    "pinOwnerBorrowedRootAndSubsequentAllocationAfterDisposal": true
+  },
+  "codegen": {
+    "copyRegionBytes": 1751,
+    "copyAlignedBytes": 671,
+    "actualPinAddressAndNormalExceptionFreeCallsPresent": true,
+    "allInstrumentedClocksDiscarded": true
+  },
+  "memory": {
+    "publicGcAllocatedBytesPerOperation": 0,
+    "addedPixelCopyCapacityBytes": 0,
+    "newCrossOperationRetentionBytes": 0,
+    "operationLocalRuntimePinAdded": true,
+    "runtimePinTableMetadataBytesMeasured": false,
+    "note": "Runtime handle metadata isfixedminor scope,not GCbytes/zero-totalallocation. Callerbudget/imageborrowed,library-ownedpinfreedfinallyafteractualusers. No newquota/lease/cache/pool/ownerframework.",
+    "physicalNativeAndJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "commit": "1f164cb3d00dcbbe001d3d5ebef9e2fc134395d6",
+    "fullLiveEachOs": 6790,
+    "actualPackageSha256": "4a2ae52dca5eed9e78158340e5cabb1c88a18ff3b04118a38719c6b2444abde9",
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "builds": {
+    "smallPinDiagnostic": 1,
+    "isolatedWindowsCore": 1,
+    "isolatedEmbedded": 1,
+    "allVmCanonicalPublicHarnessNativeFixturePackage": 0
+  },
+  "next": "Keep qualified copying and currentcosts. No neighboring pin/group/tail variants fromthis adverse screen. Remaininglargestfontgap requires currentinstruction reconciliation before another candidate;reuse post-fusion trace andactualimmutableDLL,not another statisticalcapture. Independent scoped work remains;no whole-goal block.",
+  "archiveRecovery": "Initial member verification retained an absolute fixture path while tar normalized its leading slash. Preserve first archive,normalize only archival fixturepath relative toworkspace,andverify rebuilt archive. No build/test/timed operations repeat.",
+  "raw": {
+    "file": "pinned-copy-alignment-trial.tar.xz",
+    "sha256": "a384e8034d694b2265d3b4887c0ddca451fb6db1927d536e9a8f33d9912a20f0",
+    "bytes": 4502064,
+    "members": 86,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+      "copy-attribution-nearest-guard.tar.xz SHA25642f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+    ]
+  }
+}
