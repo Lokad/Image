@@ -1,6 +1,6 @@
 # Ordinary text: longer integration
 
-Historical costs: [initial edge storage](TEXT-INITIAL-EDGE-STORAGE.md) owns the
+Historical costs: [conditional polygon scratch](TEXT-CONDITIONAL-POLYGON-SCRATCH.md) owns the
 current ordinary confirmations, preserving this integration cadence and all earlier actuals.
 
 The two existing ordinary public-draw controls now establish **small scoped

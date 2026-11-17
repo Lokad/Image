@@ -234,7 +234,6 @@ internal sealed partial class TextRasterizer : IDisposable
         }
         activeCount = count;
         TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), cancellation);
-        Span<Point> firstPolygon = stackalloc Point[8]; Span<Point> secondPolygon = stackalloc Point[8];
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
         {
@@ -252,7 +251,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 for (; px < insideFirst; px++)
                 {
                     cancellation.ThrowIfCancellationRequested();
-                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
+                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1);
                 }
                 if (px < insideLast)
                 {
@@ -266,7 +265,7 @@ internal sealed partial class TextRasterizer : IDisposable
                 for (; px < last; px++)
                 {
                     cancellation.ThrowIfCancellationRequested();
-                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1, firstPolygon, secondPolygon);
+                    row[px - left] += Area(a - px, b - px, c - px, d - px, y0, y1);
                 }
             }
         }
@@ -300,8 +299,7 @@ internal sealed partial class TextRasterizer : IDisposable
     }
 
     // Polygon clipping happens in pixel-local coordinates before the area sum.
-    private static double Area(double a, double b, double c, double d, double top, double bottom,
-        Span<Point> first, Span<Point> second)
+    private static double Area(double a, double b, double c, double d, double top, double bottom)
     {
         var leftInside = a >= 0 && b >= 0 && c >= 0 && d >= 0;
         var rightInside = a <= 1 && b <= 1 && c <= 1 && d <= 1;
@@ -341,6 +339,16 @@ internal sealed partial class TextRasterizer : IDisposable
             }
             return QuadArea(a, top, 1, cutTop, 1, cutBottom, d, bottom);
         }
+        return ClippedArea(a, b, c, d, top, bottom, leftInside, rightInside);
+    }
+
+    // Fast area cases never need polygons. Keep bounded scratch with its actual
+    // clipping users rather than preparing it for every scan band and area call.
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static double ClippedArea(double a, double b, double c, double d, double top, double bottom,
+        bool leftInside, bool rightInside)
+    {
+        Span<Point> first = stackalloc Point[8]; Span<Point> second = stackalloc Point[8];
         first[0] = new(a, top); first[1] = new(b, top); first[2] = new(c, bottom); first[3] = new(d, bottom);
         ReadOnlySpan<Point> polygon = first[..4];
         if (!leftInside) polygon = second[..Clip(polygon, second, 0, greater: true)];

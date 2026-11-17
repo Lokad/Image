@@ -801,8 +801,8 @@ def stream_reader_stage():
 
 
 
-def text_initial_storage_stage():
-    stage = json.loads((ROOT / 'benchmarks/text-initial-edge-storage-evidence.json').read_text(encoding='utf-8'))
+def text_polygon_scratch_stage():
+    stage = json.loads((ROOT / 'benchmarks/text-conditional-polygon-scratch-evidence.json').read_text(encoding='utf-8'))
     assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
     assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0 and not stage['warmParityComplete']
     assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
@@ -812,17 +812,17 @@ def text_initial_storage_stage():
     assert q['linux']['actualPackage']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
     assert q['windowsPackage']['actualConsumerPassed'] and q['windowsPackage']['usageExamples'] == 3
     assert q['linux']['actualPackage']['actualConsumerPassed'] and q['linux']['actualPackage']['usageExamples'] == 3
-    assert q['initialAffectedReconciliationBeforeBroad'] and q['unchangedQualificationReusedAfterCadenceCorrection']
-    assert q['productionRebuildsAfterTiming'] == 0 and stage['pairedEffect']['upper'] < 1
-    assert not stage['pairedEffect']['allActualMeanIntervalsSeparated']  # paired proof; raw mean intervals overlap
+    assert q['allAffectedPerformanceReconciledBeforeBroad'] and q['productionRebuildsAfterTiming'] == 0
+    assert stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
     assert q['focusedEachMode'] == {'internal': 292, 'public': 222} and q['modes'] == ['normal', 'avx-off', 'scalar']
-    assert stage['memory']['ordinaryPublicAllocatedBytes'] == 75840 and stage['memory']['ordinaryAllocationReductionBytes'] == 7376
+    assert stage['memory']['ordinaryPublicAllocatedBytes'] == 75840 and stage['memory']['ordinaryAllocationReductionBytes'] == 0
     assert stage['memory']['governedCompleteFitPeakBytes'] == 821900 and stage['memory']['retainedPlanCapacityBytes'] == 4160
     for name, c in stage['cases'].items():
         assert name in ('Ordinary8', 'Ordinary16') and c['librarySha256'] == stage['producers']['linuxSha256']
         assert c['actuals'] == 12 and c['operationsPerActual'] == 16384 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
     return stage
+
 
 
 def render():
@@ -2061,7 +2061,7 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     storage_reuse = composition_storage()
-    text_storage = text_initial_storage_stage()
+    text_storage = text_polygon_scratch_stage()
     font_current = json.loads((ROOT / 'benchmarks/font-header-normalization-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
@@ -3288,7 +3288,7 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the prepared-row package. Current
 font loading reuses its header-normalization evidence; affected text costs use
-the initial-edge-storage package.
+the conditional-polygon-scratch package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3325,7 +3325,7 @@ outside both. This is ImageSharp integration, not FFmpeg, bare shaping or one-sh
 font loading. Managed surviving-layout charge **3,568 B**, governed peak **5,738 B**
 and unmeasured reference/physical retention are separate from allocations.
 The [five original authored-font controls](../benchmarks/AUTHORED-FONT-COMPARISONS.md)
-remain passing: affected rendering costs use the initial-edge-storage package, while
+remain passing: affected rendering costs use the conditional-polygon-scratch package, while
 the three layout costs reuse unchanged paths. Their reference is explicitly
 **source-corrected Fonts 2.1.3 / Drawing 2.1.7 public integration**, retaining stock
 identities, exact patches and independent defect reproductions. All nine public
@@ -3557,38 +3557,37 @@ are distinct. Grayscale JPEG uses approved **SIMD libjpeg-turbo**; lossless WebP
 
 Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.12**;
 the five authored controls explicitly label their scoped source corrections above.
-They are never FFmpeg or a bare shaping engine. [Initial edge storage](../benchmarks/TEXT-INITIAL-EDGE-STORAGE.md)
+They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
+[Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
 owns current ordinary, clipped and complete-integration costs on the actual timed
 package DLL. Controlled complete RGBA8 draws save **{text_storage['pairedEffect']['savedUs']:.3f} µs /
-{text_storage['pairedEffect']['gainPercent']:.2f}%**; paired confidence passes while raw mean intervals overlap.
-Public allocation falls **83,216 → 75,840 B/draw**; adapters add 24 B. No cumulative
-or historical-clock gain is claimed. Current 16,384-operation ordinary RGBA8/16
-confirmations remain uncertain: upper **{text_storage['cases']['Ordinary8']['upper']:.6f} /
-{text_storage['cases']['Ordinary16']['upper']:.6f}**. All actuals, three reference groups, per-operation resets
-and exact frames stay. The initial shorter integration remains diagnostic evidence.
+{text_storage['pairedEffect']['gainPercent']:.2f}%** with separated intervals. Allocations remain
+**75,840 B/draw** plus 24 B of adapter storage. Current 16,384-operation ordinary
+RGBA8/16 confirmations remain uncertain: upper **{text_storage['cases']['Ordinary8']['upper']:.6f} /
+{text_storage['cases']['Ordinary16']['upper']:.6f}**. All actuals, three reference groups, resets
+and exact frames remain; no historical-clock or cumulative gain is claimed.
 
 Complete one-shot and preparation-plus-eight-draw integrations pass, including
 all public layout calls, 30 fitting trials, fresh owned explicitly cleared canvases,
-independent results and disposal. Directly measured batch cost amortizes to
+independent results and disposal. The measured batch amortizes to
 **{font_batch['amortizedManagedUs']:.2f} / {font_batch['amortizedReferenceUs']:.2f} µs/draw**.
-Preparation-only **{font_preparation['managedUs']:.2f} / {font_preparation['referenceUs']:.2f} µs** is a separate diagnostic;
+Preparation-only **{font_preparation['managedUs']:.2f} / {font_preparation['referenceUs']:.2f} µs** is diagnostic;
 historical stages are never summed. The reference retains positioned paths and
 managed preparation retains full 16-bit coverage. Validation eagerness and
-GC-driven reference font release differ. Reference complete one-shot/batch
-allocations are **9,256,953 / 9,494,633 B**. Retained Latin/fit plans remain
-**2,112 /4,160 B**; the measured full-fit governed peak falls **822,460 →821,900 B**.
-Allocations, admitted capacity and unmeasured physical/native/JIT peaks are distinct.
+GC-driven reference font release differ. Reference one-shot/batch allocations are
+**9,256,953 /9,494,633 B**. Latin/fit retained plans remain **2,112 /4,160 B** and
+the full-fit governed peak remains **821,900 B**. Allocations, admitted capacity
+and unmeasured physical/native/JIT peaks are distinct.
 
 [Font loading](../benchmarks/FONT-HEADER-NORMALIZATION.md) reuses unchanged
 **FreeType 2.13.2 copy/open/retain/dispose** evidence: **176 B/op**, upper
-**1.165**, a scoped eager/lazy-validation gap. This is not general parser
-equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
-passes/stops at **56 B/op**; its retained-state boundary is distinct.
+**1.165**, a scoped eager/lazy-validation gap, not general parser equivalence
+or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
+passes/stops at **56 B/op** with its distinct retained-state boundary.
 
 Windows/Linux each pass **6,803 full/live checks**, focused **292 internal/222 public**
 normal/AVX-disabled/scalar checks and the SAME actual timed package/all three
-examples. The longer-cadence correction reuses that immutable DLL and qualification.
-This development update does not replace the pending full final-package refresh.
+examples. No timed DLL rebuild occurs. The complete final-package refresh remains pending.
 
 RGBA16 compositing uses **ImageSharp Rgba64 SrcOver**, not FFmpeg. Keep the approved
 [visual/native bounds](../benchmarks/TEXT-DRAWING-CURRENT.md) distinct from exact

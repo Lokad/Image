@@ -3,7 +3,7 @@ namespace Lokad.Image.Tests
     public sealed class TextClipWorkspaceTests
     {
         [Fact]
-        public void ReusedWorkspaceMatchesAlwaysClippedAreaExactly() => Internal.TextRasterizer.VerifyClipWorkspace(false);
+        public void ConditionalWorkspaceMatchesAlwaysClippedAreaExactly() => Internal.TextRasterizer.VerifyClipWorkspace(false);
 
         [Fact]
         public void DegenerateAndNonfiniteCoordinatesPreserveClippingSemantics() => Internal.TextRasterizer.VerifyClipWorkspace(true);
@@ -76,10 +76,9 @@ namespace Lokad.Image.Internal
             const int left = 0, right = 8;
             InteriorRun(a, b, c, d, top, bottom, left, right, out var start, out var end);
             Assert.InRange(start, left, right); Assert.InRange(end, start, right);
-            Span<Point> first = stackalloc Point[8]; Span<Point> second = stackalloc Point[8];
             for (var x = left; x < right; x++)
             {
-                var expected = Area(a - x, b - x, c - x, d - x, top, bottom, first, second);
+                var expected = Area(a - x, b - x, c - x, d - x, top, bottom);
                 var actual = expected;
                 if (start <= x && x < end)
                 {
@@ -133,7 +132,13 @@ namespace Lokad.Image.Internal
                 { var p = referenceFirst[i]; expected += previous.X * p.Y - p.X * previous.Y; previous = p; }
                 expected = Math.Abs(expected) * .5;
             }
-            var actual = Area(a, b, c, d, top, bottom, first, second);
+            // Exercise the production clipping primitive with bounded caller
+            // workspace and canaries as well as the new private area boundary.
+            first[0] = new(a, top); first[1] = new(b, top);
+            first[2] = new(c, bottom); first[3] = new(d, bottom);
+            var clipped = Clip(first[..4], second, 0, greater: true);
+            Clip(second[..clipped], first, 1, greater: false);
+            var actual = Area(a, b, c, d, top, bottom);
             if (double.IsNaN(expected)) Assert.True(double.IsNaN(actual));
             else Assert.Equal(BitConverter.DoubleToInt64Bits(expected), BitConverter.DoubleToInt64Bits(actual));
         }

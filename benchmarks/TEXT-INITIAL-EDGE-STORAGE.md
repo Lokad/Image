@@ -1,5 +1,8 @@
 # Single-pass initial edge storage
 
+Accepted-stage history. Current affected text costs use
+[conditional polygon scratch](TEXT-CONDITIONAL-POLYGON-SCRATCH.md); its allocation reduction remains valid.
+
 Complete ordinary RGBA8 drawing independently saves **1.323 µs /2.56%** on the
 final timed DLL: **51.699457 →50.376303 µs**, paired ratio interval
 **.968268–.980547**. Raw mean intervals overlap; the paired confidence establishes
