@@ -112,6 +112,13 @@ machine code. Restore the exact qualified sources, Windows/Linux core and embedd
 DLLs, and unchanged package; retain all captures without another timing attempt.
 No standalone refresh, broad/package repeat or current-cost change follows.
 
+[Prepared separate-word rows](PREPARED-WORD-ROWS-TRIAL.md) also stays private:
+3.795249→3.840771us,interval.970497–1.055266,0B unchanged. The existing prepared
+kernel runs, but one eligibility change establishes no useful complete-operation
+gain. BothOS10internal/190public checks in three modes and original full-word
+checks pass. No confirmation, passing-path retiming or broad/package repeat;
+qualified production and all three measured copy gaps remain unchanged.
+
 [Endpoint classification](FONT-ENDPOINT-CLASSIFICATION-TRIAL.md) preserves ordered
 validation and ownership but its independent confirmation remains inconclusive.
 It is not promoted; current font costs and passing integrations stay unchanged.
