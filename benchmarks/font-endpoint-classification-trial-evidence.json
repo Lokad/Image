@@ -1,0 +1,1210 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FEC1204",
+  "status": "inconclusive",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "canonicalProductionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "warmParityComplete": false,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "FEC1204",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "c98a9955d16a1f8bf4526ff4fe244dea3d4f3f48",
+    "baselineWindowsSha256": "10666033a629e5995fd6a2238fa987b3d19163cc1a97401cb9a0bacce2ea02bc",
+    "baselineLinuxSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+    "prototypePath": "tmp/fec1204-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+    "sourcePins": {
+      "src/Lokad.Image/TrueTypeFont.cs": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6",
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3"
+    },
+    "candidateSourceSha256": "f6c47378af9a091cef04ef5320b90245b29673c5578044b36611bcd76a9f0488",
+    "sourceProof": {
+      "onlyEightRecordStructuralClassificationChanged": true,
+      "allHeaderGathersAndFallbacksVerbatim": true,
+      "allOtherFontSourceVerbatim": true,
+      "noStorageOwnerCancellationOrApiChanges": true
+    },
+    "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic",
+    "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbeddedTests": 1,
+      "canonicalVmPublicHarnessReferenceFixturePackage": 0
+    },
+    "sourceReview": {
+      "stage": "PHB1203",
+      "productionChanged": false,
+      "allBuilds": 0,
+      "statisticalMeasurements": 0,
+      "newFontsImagesOrWorkloads": 0,
+      "sourceSha256": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6",
+      "reusedAttribution": "benchmarks/font-post-fusion-attribution-evidence.json",
+      "sourceValidLoadingEvidence": "benchmarks/font-header-normalization-evidence.json",
+      "preconditions": [
+        "Private owned font bytes do not change during classification.",
+        "ValidateGlyphHeaders proves initial loca0<=glyphLength.",
+        "Every successful block publishes its final decoded offset as first;next previous lane0 reads that same encoded entry.",
+        "Array lengths fit the nonnegative signed Int32 range."
+      ],
+      "proof": [
+        "Signed nondecreasing adjacency from valid nonnegative first implies every current lane is nonnegative; the first high-bit transition would fail adjacency.",
+        "Signed adjacency is then ordinary unsigned ordering. If the last lane is within glyphLength, all previous lanes are within it.",
+        "For admitted lanes subtraction cannot overflow signed Int32; original empty/ten-byte predicates remain verbatim.",
+        "Any structural failure still returns false before header gathers; the original ordered fallback preserves first-error semantics."
+      ],
+      "modelCases": 73728,
+      "modelOnlyNotProductionQualification": true,
+      "hypothesis": "Replace two per-lane negative/maximum vector predicates with one final-offset bound, retaining monotonic/empty/minimum-length predicates and every header check. Remove redundant classification rather than weakening validation.",
+      "endState": "The same private8-record classifier proves all extents using an established first offset, signed adjacency and final endpoint; all other paths and ownership remain unchanged.",
+      "risks": "Early upper-lane extraction may lengthen live registers or add scalar/JIT costs. No elapsed gain follows from fewer source predicates. Source/JIT and complete-operation evidence must decide.",
+      "next": "One isolated candidate only after proving source boundaries; reuse existing ordered-error oracle/focused checks and frozen complete owned-load actor. No neighboring header-width/reduction/copy/loca-extent trial replay.",
+      "qualification": "No production candidate has been built or tested. Current qualified PCS1202 package and all unaffected paths remain unchanged."
+    }
+  },
+  "sourceModel": {
+    "stage": "PHB1203",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "statisticalMeasurements": 0,
+    "newFontsImagesOrWorkloads": 0,
+    "sourceSha256": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6",
+    "reusedAttribution": "benchmarks/font-post-fusion-attribution-evidence.json",
+    "sourceValidLoadingEvidence": "benchmarks/font-header-normalization-evidence.json",
+    "preconditions": [
+      "Private owned font bytes do not change during classification.",
+      "ValidateGlyphHeaders proves initial loca0<=glyphLength.",
+      "Every successful block publishes its final decoded offset as first;next previous lane0 reads that same encoded entry.",
+      "Array lengths fit the nonnegative signed Int32 range."
+    ],
+    "proof": [
+      "Signed nondecreasing adjacency from valid nonnegative first implies every current lane is nonnegative; the first high-bit transition would fail adjacency.",
+      "Signed adjacency is then ordinary unsigned ordering. If the last lane is within glyphLength, all previous lanes are within it.",
+      "For admitted lanes subtraction cannot overflow signed Int32; original empty/ten-byte predicates remain verbatim.",
+      "Any structural failure still returns false before header gathers; the original ordered fallback preserves first-error semantics."
+    ],
+    "modelCases": 73728,
+    "modelOnlyNotProductionQualification": true,
+    "hypothesis": "Replace two per-lane negative/maximum vector predicates with one final-offset bound, retaining monotonic/empty/minimum-length predicates and every header check. Remove redundant classification rather than weakening validation.",
+    "endState": "The same private8-record classifier proves all extents using an established first offset, signed adjacency and final endpoint; all other paths and ownership remain unchanged.",
+    "risks": "Early upper-lane extraction may lengthen live registers or add scalar/JIT costs. No elapsed gain follows from fewer source predicates. Source/JIT and complete-operation evidence must decide.",
+    "next": "One isolated candidate only after proving source boundaries; reuse existing ordered-error oracle/focused checks and frozen complete owned-load actor. No neighboring header-width/reduction/copy/loca-extent trial replay.",
+    "qualification": "No production candidate has been built or tested. Current qualified PCS1202 package and all unaffected paths remain unchanged."
+  },
+  "prototypeSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+  "candidateSourceSha256": "f6c47378af9a091cef04ef5320b90245b29673c5578044b36611bcd76a9f0488",
+  "screen": {
+    "project": "Lokad.Image",
+    "stage": "FEC1204",
+    "mode": "screen",
+    "actuals": 3,
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "pairedManagedDllDiagnosticOnly": true,
+    "standaloneReferencePerformance": false,
+    "commands": {
+      "baseline": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/fec1204-baseline-runtime/FontLoadDriver.deps.json",
+        "--runtimeconfig",
+        "tmp/fec1204-baseline-runtime/FontLoadDriver.runtimeconfig.json",
+        "tmp/fec1204-baseline-runtime/flb1146-FontManagedWorker.dll",
+        "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427"
+      ],
+      "candidate": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/fec1204-candidate-runtime/FontLoadDriver.deps.json",
+        "--runtimeconfig",
+        "tmp/fec1204-candidate-runtime/FontLoadDriver.runtimeconfig.json",
+        "tmp/fec1204-candidate-runtime/flb1146-FontManagedWorker.dll",
+        "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      ]
+    },
+    "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+    "ready": {
+      "baseline": {
+        "state": "ready",
+        "librarySha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "warmups": 16384,
+        "operations": 16384
+      },
+      "candidate": {
+        "state": "ready",
+        "librarySha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+        "warmups": 16384,
+        "operations": 16384
+      }
+    },
+    "stopped": {
+      "baseline": {
+        "state": "stopped",
+        "originalChecksAndCleanupPassed": true
+      },
+      "candidate": {
+        "state": "stopped",
+        "originalChecksAndCleanupPassed": true
+      }
+    },
+    "validations": {
+      "baseline": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "name": "WarmFontLoad",
+        "caseId": "FontLoadRegular",
+        "runId": "fec1204-paired-screen-baseline",
+        "mode": "check",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "inputBytes": 757076,
+        "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "sourceUnchanged": true,
+        "metricsExact": true,
+        "independentRetainedFaces": true,
+        "finalOwnedCopiesReleased": true,
+        "cpu": 0,
+        "managedAffinityCount": 1,
+        "processorCount": 1,
+        "serverGc": false,
+        "gcConfiguration": {
+          "ServerGC": false,
+          "ConcurrentGC": false,
+          "RetainVM": false,
+          "NoAffinitize": false,
+          "GCCpuGroup": false,
+          "GCLargePages": false,
+          "LOHThreshold": 85000,
+          "HeapCount": 1,
+          "MaxHeapCount": 0,
+          "GCHeapAffinitizeMask": 0,
+          "GCHeapAffinitizeRanges": "",
+          "GCHighMemPercent": 90,
+          "GCGen0MaxBudget": 134217728,
+          "GCHeapHardLimit": 0,
+          "GCHeapHardLimitPercent": 0,
+          "GCRegionRange": 33532829696,
+          "GCRegionSize": 0,
+          "UOHWaitBGCSizeIncPercent": 200,
+          "GCHeapHardLimitSOH": 0,
+          "GCHeapHardLimitLOH": 0,
+          "GCHeapHardLimitPOH": 0,
+          "GCHeapHardLimitSOHPercent": 0,
+          "GCHeapHardLimitLOHPercent": 0,
+          "GCHeapHardLimitPOHPercent": 0,
+          "GCConserveMem": 0,
+          "GCName": "",
+          "GCPath": "",
+          "GCDynamicAdaptationMode": 1,
+          "GCDTargetTCP": 0,
+          "GCDGen0GrowthPercent": 0,
+          "GCDGen0GrowthMinFactor": 0,
+          "GCDGen0GrowthMaxFactor": 0
+        },
+        "runtime": ".NET 10.0.8",
+        "platform": "linux-x64",
+        "librarySha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "harnessSha256": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+          "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+          "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+          "libraryVersion": "2.13.2",
+          "headerHashes": {
+            "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+            "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+          },
+          "flags": [
+            "-O2",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "performanceBaselineApproved": false
+        },
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "font-load",
+          "reference": "FreeType2.13.2",
+          "cpu": 0,
+          "affinityCount": 1,
+          "workerThreads": 1,
+          "inputBytes": 757076,
+          "glyphCount": 6253,
+          "unitsPerEm": 2048,
+          "initialCompletedOperations": 1,
+          "timedSamples": 0,
+          "inputCopyTimed": true,
+          "faceOpenTimed": true,
+          "faceAndCopyDisposalTimed": true,
+          "librarySetupTimed": false,
+          "inputSetupTimed": false,
+          "ioTimed": false,
+          "ownedCopyBytes": 0,
+          "ownershipAndMetricsExact": true
+        },
+        "nativeBefore": [],
+        "nativeAfter": [],
+        "nativeCheck": {
+          "state": "checked",
+          "exact": true,
+          "sourceUnchanged": true,
+          "ownedCopyBytes": 0,
+          "timedSamples": 0
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 0,
+          "completedOperations": 1,
+          "ownedCopyBytes": 0
+        },
+        "boundary": "Complete resident-font operation: copy caller-supplied original757076-byte DejaVuSans2.37 Regular data, initialize/validate an independently owned face, consume glyph count and dispose result/copy. Include public managed admission/cancellation/context disposal. Native FreeType2.13.2 memory-face wrapper owns copy/face; initialization/parsing policies differ. Library/input setup, I/O, ownership/metric verification and IPC excluded equally. OneCPU, warm SIMD. Tooling-only baseline exception required before timing; no general parser-equivalence claim."
+      },
+      "candidate": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "name": "WarmFontLoad",
+        "caseId": "FontLoadRegular",
+        "runId": "fec1204-paired-screen-candidate",
+        "mode": "check",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "inputBytes": 757076,
+        "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "sourceUnchanged": true,
+        "metricsExact": true,
+        "independentRetainedFaces": true,
+        "finalOwnedCopiesReleased": true,
+        "cpu": 0,
+        "managedAffinityCount": 1,
+        "processorCount": 1,
+        "serverGc": false,
+        "gcConfiguration": {
+          "ServerGC": false,
+          "ConcurrentGC": false,
+          "RetainVM": false,
+          "NoAffinitize": false,
+          "GCCpuGroup": false,
+          "GCLargePages": false,
+          "LOHThreshold": 85000,
+          "HeapCount": 1,
+          "MaxHeapCount": 0,
+          "GCHeapAffinitizeMask": 0,
+          "GCHeapAffinitizeRanges": "",
+          "GCHighMemPercent": 90,
+          "GCGen0MaxBudget": 134217728,
+          "GCHeapHardLimit": 0,
+          "GCHeapHardLimitPercent": 0,
+          "GCRegionRange": 33532829696,
+          "GCRegionSize": 0,
+          "UOHWaitBGCSizeIncPercent": 200,
+          "GCHeapHardLimitSOH": 0,
+          "GCHeapHardLimitLOH": 0,
+          "GCHeapHardLimitPOH": 0,
+          "GCHeapHardLimitSOHPercent": 0,
+          "GCHeapHardLimitLOHPercent": 0,
+          "GCHeapHardLimitPOHPercent": 0,
+          "GCConserveMem": 0,
+          "GCName": "",
+          "GCPath": "",
+          "GCDynamicAdaptationMode": 1,
+          "GCDTargetTCP": 0,
+          "GCDGen0GrowthPercent": 0,
+          "GCDGen0GrowthMinFactor": 0,
+          "GCDGen0GrowthMaxFactor": 0
+        },
+        "runtime": ".NET 10.0.8",
+        "platform": "linux-x64",
+        "librarySha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+        "harnessSha256": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+          "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+          "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+          "libraryVersion": "2.13.2",
+          "headerHashes": {
+            "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+            "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+          },
+          "flags": [
+            "-O2",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "performanceBaselineApproved": false
+        },
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "font-load",
+          "reference": "FreeType2.13.2",
+          "cpu": 0,
+          "affinityCount": 1,
+          "workerThreads": 1,
+          "inputBytes": 757076,
+          "glyphCount": 6253,
+          "unitsPerEm": 2048,
+          "initialCompletedOperations": 1,
+          "timedSamples": 0,
+          "inputCopyTimed": true,
+          "faceOpenTimed": true,
+          "faceAndCopyDisposalTimed": true,
+          "librarySetupTimed": false,
+          "inputSetupTimed": false,
+          "ioTimed": false,
+          "ownedCopyBytes": 0,
+          "ownershipAndMetricsExact": true
+        },
+        "nativeBefore": [],
+        "nativeAfter": [],
+        "nativeCheck": {
+          "state": "checked",
+          "exact": true,
+          "sourceUnchanged": true,
+          "ownedCopyBytes": 0,
+          "timedSamples": 0
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 0,
+          "completedOperations": 1,
+          "ownedCopyBytes": 0
+        },
+        "boundary": "Complete resident-font operation: copy caller-supplied original757076-byte DejaVuSans2.37 Regular data, initialize/validate an independently owned face, consume glyph count and dispose result/copy. Include public managed admission/cancellation/context disposal. Native FreeType2.13.2 memory-face wrapper owns copy/face; initialization/parsing policies differ. Library/input setup, I/O, ownership/metric verification and IPC excluded equally. OneCPU, warm SIMD. Tooling-only baseline exception required before timing; no general parser-equivalence claim."
+      }
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 265092847,
+          "allocatedBytes": 2883584,
+          "observed": 204898304,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 262940027,
+          "allocatedBytes": 2883584,
+          "observed": 204898304,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 1,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 264087394,
+          "allocatedBytes": 2883584,
+          "observed": 307347456,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 265389336,
+          "allocatedBytes": 2883584,
+          "observed": 307347456,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 2,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 265031455,
+          "allocatedBytes": 2883584,
+          "observed": 409796608,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 263681390,
+          "allocatedBytes": 2883584,
+          "observed": 409796608,
+          "clockReadsPerBatch": 2
+        }
+      }
+    ],
+    "subjects": {
+      "baseline": {
+        "mean": 16.18476639811198,
+        "lower": 15.971665238827747,
+        "upper": 16.39786755739621,
+        "values": [
+          16.179983337402344,
+          16.19807958984375,
+          16.176236267089845
+        ]
+      },
+      "candidate": {
+        "mean": 16.087011942545573,
+        "lower": 15.439178789018662,
+        "upper": 16.734845096072483,
+        "values": [
+          16.04858563232422,
+          16.11861535644531,
+          16.09383483886719
+        ]
+      }
+    },
+    "allocations": {
+      "baseline": [
+        176.0
+      ],
+      "candidate": [
+        176.0
+      ]
+    },
+    "ratio": 0.9939586522742376,
+    "lower": 0.9615617033841586,
+    "upper": 1.0274471195699402,
+    "critical": 31.599054576443834,
+    "allPairsRetained": true,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "allBuilds": 0,
+    "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the proof-based endpoint structural classification through original complete public load;never a replacement standalone FreeType gate."
+  },
+  "independentConfirmation": {
+    "project": "Lokad.Image",
+    "stage": "FEC1204",
+    "mode": "confirm",
+    "actuals": 12,
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "pairedManagedDllDiagnosticOnly": true,
+    "standaloneReferencePerformance": false,
+    "commands": {
+      "baseline": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/fec1204-baseline-runtime/FontLoadDriver.deps.json",
+        "--runtimeconfig",
+        "tmp/fec1204-baseline-runtime/FontLoadDriver.runtimeconfig.json",
+        "tmp/fec1204-baseline-runtime/flb1146-FontManagedWorker.dll",
+        "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427"
+      ],
+      "candidate": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/fec1204-candidate-runtime/FontLoadDriver.deps.json",
+        "--runtimeconfig",
+        "tmp/fec1204-candidate-runtime/FontLoadDriver.runtimeconfig.json",
+        "tmp/fec1204-candidate-runtime/flb1146-FontManagedWorker.dll",
+        "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      ]
+    },
+    "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+    "ready": {
+      "baseline": {
+        "state": "ready",
+        "librarySha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "warmups": 16384,
+        "operations": 16384
+      },
+      "candidate": {
+        "state": "ready",
+        "librarySha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+        "warmups": 16384,
+        "operations": 16384
+      }
+    },
+    "stopped": {
+      "baseline": {
+        "state": "stopped",
+        "originalChecksAndCleanupPassed": true
+      },
+      "candidate": {
+        "state": "stopped",
+        "originalChecksAndCleanupPassed": true
+      }
+    },
+    "validations": {
+      "baseline": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "name": "WarmFontLoad",
+        "caseId": "FontLoadRegular",
+        "runId": "fec1204-paired-confirm-baseline",
+        "mode": "check",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "inputBytes": 757076,
+        "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "sourceUnchanged": true,
+        "metricsExact": true,
+        "independentRetainedFaces": true,
+        "finalOwnedCopiesReleased": true,
+        "cpu": 0,
+        "managedAffinityCount": 1,
+        "processorCount": 1,
+        "serverGc": false,
+        "gcConfiguration": {
+          "ServerGC": false,
+          "ConcurrentGC": false,
+          "RetainVM": false,
+          "NoAffinitize": false,
+          "GCCpuGroup": false,
+          "GCLargePages": false,
+          "LOHThreshold": 85000,
+          "HeapCount": 1,
+          "MaxHeapCount": 0,
+          "GCHeapAffinitizeMask": 0,
+          "GCHeapAffinitizeRanges": "",
+          "GCHighMemPercent": 90,
+          "GCGen0MaxBudget": 134217728,
+          "GCHeapHardLimit": 0,
+          "GCHeapHardLimitPercent": 0,
+          "GCRegionRange": 33532829696,
+          "GCRegionSize": 0,
+          "UOHWaitBGCSizeIncPercent": 200,
+          "GCHeapHardLimitSOH": 0,
+          "GCHeapHardLimitLOH": 0,
+          "GCHeapHardLimitPOH": 0,
+          "GCHeapHardLimitSOHPercent": 0,
+          "GCHeapHardLimitLOHPercent": 0,
+          "GCHeapHardLimitPOHPercent": 0,
+          "GCConserveMem": 0,
+          "GCName": "",
+          "GCPath": "",
+          "GCDynamicAdaptationMode": 1,
+          "GCDTargetTCP": 0,
+          "GCDGen0GrowthPercent": 0,
+          "GCDGen0GrowthMinFactor": 0,
+          "GCDGen0GrowthMaxFactor": 0
+        },
+        "runtime": ".NET 10.0.8",
+        "platform": "linux-x64",
+        "librarySha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "harnessSha256": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+          "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+          "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+          "libraryVersion": "2.13.2",
+          "headerHashes": {
+            "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+            "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+          },
+          "flags": [
+            "-O2",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "performanceBaselineApproved": false
+        },
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "font-load",
+          "reference": "FreeType2.13.2",
+          "cpu": 0,
+          "affinityCount": 1,
+          "workerThreads": 1,
+          "inputBytes": 757076,
+          "glyphCount": 6253,
+          "unitsPerEm": 2048,
+          "initialCompletedOperations": 1,
+          "timedSamples": 0,
+          "inputCopyTimed": true,
+          "faceOpenTimed": true,
+          "faceAndCopyDisposalTimed": true,
+          "librarySetupTimed": false,
+          "inputSetupTimed": false,
+          "ioTimed": false,
+          "ownedCopyBytes": 0,
+          "ownershipAndMetricsExact": true
+        },
+        "nativeBefore": [],
+        "nativeAfter": [],
+        "nativeCheck": {
+          "state": "checked",
+          "exact": true,
+          "sourceUnchanged": true,
+          "ownedCopyBytes": 0,
+          "timedSamples": 0
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 0,
+          "completedOperations": 1,
+          "ownedCopyBytes": 0
+        },
+        "boundary": "Complete resident-font operation: copy caller-supplied original757076-byte DejaVuSans2.37 Regular data, initialize/validate an independently owned face, consume glyph count and dispose result/copy. Include public managed admission/cancellation/context disposal. Native FreeType2.13.2 memory-face wrapper owns copy/face; initialization/parsing policies differ. Library/input setup, I/O, ownership/metric verification and IPC excluded equally. OneCPU, warm SIMD. Tooling-only baseline exception required before timing; no general parser-equivalence claim."
+      },
+      "candidate": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "name": "WarmFontLoad",
+        "caseId": "FontLoadRegular",
+        "runId": "fec1204-paired-confirm-candidate",
+        "mode": "check",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "inputBytes": 757076,
+        "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "sourceUnchanged": true,
+        "metricsExact": true,
+        "independentRetainedFaces": true,
+        "finalOwnedCopiesReleased": true,
+        "cpu": 0,
+        "managedAffinityCount": 1,
+        "processorCount": 1,
+        "serverGc": false,
+        "gcConfiguration": {
+          "ServerGC": false,
+          "ConcurrentGC": false,
+          "RetainVM": false,
+          "NoAffinitize": false,
+          "GCCpuGroup": false,
+          "GCLargePages": false,
+          "LOHThreshold": 85000,
+          "HeapCount": 1,
+          "MaxHeapCount": 0,
+          "GCHeapAffinitizeMask": 0,
+          "GCHeapAffinitizeRanges": "",
+          "GCHighMemPercent": 90,
+          "GCGen0MaxBudget": 134217728,
+          "GCHeapHardLimit": 0,
+          "GCHeapHardLimitPercent": 0,
+          "GCRegionRange": 33532829696,
+          "GCRegionSize": 0,
+          "UOHWaitBGCSizeIncPercent": 200,
+          "GCHeapHardLimitSOH": 0,
+          "GCHeapHardLimitLOH": 0,
+          "GCHeapHardLimitPOH": 0,
+          "GCHeapHardLimitSOHPercent": 0,
+          "GCHeapHardLimitLOHPercent": 0,
+          "GCHeapHardLimitPOHPercent": 0,
+          "GCConserveMem": 0,
+          "GCName": "",
+          "GCPath": "",
+          "GCDynamicAdaptationMode": 1,
+          "GCDTargetTCP": 0,
+          "GCDGen0GrowthPercent": 0,
+          "GCDGen0GrowthMinFactor": 0,
+          "GCDGen0GrowthMaxFactor": 0
+        },
+        "runtime": ".NET 10.0.8",
+        "platform": "linux-x64",
+        "librarySha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673",
+        "harnessSha256": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+          "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+          "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+          "libraryVersion": "2.13.2",
+          "headerHashes": {
+            "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+            "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+          },
+          "flags": [
+            "-O2",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "performanceBaselineApproved": false
+        },
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "font-load",
+          "reference": "FreeType2.13.2",
+          "cpu": 0,
+          "affinityCount": 1,
+          "workerThreads": 1,
+          "inputBytes": 757076,
+          "glyphCount": 6253,
+          "unitsPerEm": 2048,
+          "initialCompletedOperations": 1,
+          "timedSamples": 0,
+          "inputCopyTimed": true,
+          "faceOpenTimed": true,
+          "faceAndCopyDisposalTimed": true,
+          "librarySetupTimed": false,
+          "inputSetupTimed": false,
+          "ioTimed": false,
+          "ownedCopyBytes": 0,
+          "ownershipAndMetricsExact": true
+        },
+        "nativeBefore": [],
+        "nativeAfter": [],
+        "nativeCheck": {
+          "state": "checked",
+          "exact": true,
+          "sourceUnchanged": true,
+          "ownedCopyBytes": 0,
+          "timedSamples": 0
+        },
+        "nativeStopped": {
+          "state": "stopped",
+          "timedSamples": 0,
+          "completedOperations": 1,
+          "ownedCopyBytes": 0
+        },
+        "boundary": "Complete resident-font operation: copy caller-supplied original757076-byte DejaVuSans2.37 Regular data, initialize/validate an independently owned face, consume glyph count and dispose result/copy. Include public managed admission/cancellation/context disposal. Native FreeType2.13.2 memory-face wrapper owns copy/face; initialization/parsing policies differ. Library/input setup, I/O, ownership/metric verification and IPC excluded equally. OneCPU, warm SIMD. Tooling-only baseline exception required before timing; no general parser-equivalence claim."
+      }
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 269504378,
+          "allocatedBytes": 2883584,
+          "observed": 204898304,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 266082390,
+          "allocatedBytes": 2883584,
+          "observed": 204898304,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 1,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 267193293,
+          "allocatedBytes": 2883584,
+          "observed": 307347456,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 268759103,
+          "allocatedBytes": 2883584,
+          "observed": 307347456,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 2,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 267998942,
+          "allocatedBytes": 2883584,
+          "observed": 409796608,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 258029926,
+          "allocatedBytes": 2883584,
+          "observed": 409796608,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 3,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 246968907,
+          "allocatedBytes": 2883584,
+          "observed": 512245760,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 248628891,
+          "allocatedBytes": 2883584,
+          "observed": 512245760,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 4,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 249747775,
+          "allocatedBytes": 2883584,
+          "observed": 614694912,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 248035131,
+          "allocatedBytes": 2883584,
+          "observed": 614694912,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 5,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 244932974,
+          "allocatedBytes": 2883584,
+          "observed": 717144064,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 247141258,
+          "allocatedBytes": 2883584,
+          "observed": 717144064,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 6,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 247326399,
+          "allocatedBytes": 2883584,
+          "observed": 819593216,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 245221902,
+          "allocatedBytes": 2883584,
+          "observed": 819593216,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 7,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 245003271,
+          "allocatedBytes": 2883584,
+          "observed": 922042368,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 247275752,
+          "allocatedBytes": 2883584,
+          "observed": 922042368,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 8,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 247089539,
+          "allocatedBytes": 2883584,
+          "observed": 1024491520,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 244845641,
+          "allocatedBytes": 2883584,
+          "observed": 1024491520,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 9,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 246664266,
+          "allocatedBytes": 2883584,
+          "observed": 1126940672,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 248652887,
+          "allocatedBytes": 2883584,
+          "observed": 1126940672,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 10,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 248116725,
+          "allocatedBytes": 2883584,
+          "observed": 1229389824,
+          "clockReadsPerBatch": 2
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 246159862,
+          "allocatedBytes": 2883584,
+          "observed": 1229389824,
+          "clockReadsPerBatch": 2
+        }
+      },
+      {
+        "pair": 11,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 244908117,
+          "allocatedBytes": 2883584,
+          "observed": 1331838976,
+          "clockReadsPerBatch": 2
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 246681823,
+          "allocatedBytes": 2883584,
+          "observed": 1331838976,
+          "clockReadsPerBatch": 2
+        }
+      }
+    ],
+    "subjects": {
+      "baseline": {
+        "mean": 15.446591552734375,
+        "lower": 14.70411842212716,
+        "upper": 16.18906468334159,
+        "values": [
+          16.449241821289064,
+          16.403753845214844,
+          16.357357299804686,
+          15.175103210449219,
+          15.243394470214843,
+          15.084305297851563,
+          15.095605407714844,
+          15.09251416015625,
+          15.081148620605468,
+          15.176567810058593,
+          15.143843078613282,
+          15.056263610839844
+        ]
+      },
+      "candidate": {
+        "mean": 15.279366455078126,
+        "lower": 14.620108589793107,
+        "upper": 15.938624320363145,
+        "values": [
+          16.24038024902344,
+          16.30818438720703,
+          15.748896850585938,
+          15.07378582763672,
+          15.138862976074218,
+          14.949522338867187,
+          14.967157104492188,
+          14.953812927246094,
+          14.944191955566406,
+          15.055192016601563,
+          15.024405639648437,
+          14.948005187988281
+        ]
+      }
+    },
+    "allocations": {
+      "baseline": [
+        176.0
+      ],
+      "candidate": [
+        176.0
+      ]
+    },
+    "ratio": 0.9892952427906552,
+    "lower": 0.9782972372255135,
+    "upper": 1.0004168877997288,
+    "critical": 4.436979337146836,
+    "allPairsRetained": true,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "allBuilds": 0,
+    "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the proof-based endpoint structural classification through original complete public load;never a replacement standalone FreeType gate."
+  },
+  "qualification": {
+    "windows": {
+      "stage": "FEC1204",
+      "counts": {
+        "internal/normal": 292,
+        "internal/avx2-off": 292,
+        "internal/scalar": 292,
+        "public/normal": 222,
+        "public/scalar": 222
+      },
+      "canonicalUnchanged": true
+    },
+    "windowsOrderedOracles": {
+      "normal": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      },
+      "avx2-off": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      },
+      "scalar": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      }
+    },
+    "linuxInternal": {
+      "normal": 292,
+      "avx2-off": 292,
+      "scalar": 292
+    },
+    "linuxPublic": {
+      "normal": 222,
+      "scalar": 222
+    },
+    "linuxOrderedOracles": {
+      "normal": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      },
+      "avx2-off": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      },
+      "scalar": {
+        "project": "Lokad.Image",
+        "stage": "FNC1156",
+        "validatorCases": 16384,
+        "rootChargeAfter": 0,
+        "rootBorrowed": true,
+        "subsequentOperationPassed": true,
+        "productionSha256": "2c1243794e74c412f6fbd23f089dbae28adb2ce4f687d683760217f4c7069673"
+      }
+    },
+    "codegen": {
+      "methodCodeBytes": [
+        1744
+      ],
+      "hasYmm": true,
+      "hasByteShuffle": true,
+      "sha256": "7f85e083ab9581882084ec1909563ed0d8d25bbf283e26ee06e635dc58771b53",
+      "originalFontWorkerPassed": true
+    },
+    "reusedAcceptedEvidence": "benchmarks/text-conditional-polygon-scratch-evidence.json",
+    "fullChecksEachOs": 6803,
+    "sameActualPackageConsumerEachOs": true,
+    "allThreeExamplesEachOs": true,
+    "acceptedCiRun": 44059446410,
+    "acceptedCiAllThreeJobsGreen": true,
+    "productionBuildsOrPackageProofRepeats": 0
+  },
+  "builds": {
+    "isolatedWindowsCore": 1,
+    "isolatedEmbedded": 1,
+    "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+  },
+  "decision": "Preserve the correct implementation as an inconclusive lead;do not promote or treat it as a demonstrated failure/gain. All12actuals and phase movement remain,no trimming/significance-policy switch/favorable replay. No finalartifact or standalone costs,broad qualification,package rebuild or passing-path retiming. A materially revised design may be considered from new evidence;no permanent family ban.",
+  "next": "Continue independent remaining copy gaps/uncertainties using source-valid boundaries and existing attribution. Nanosecond probe tuning stays deferred;current font loading and all qualified passing paths retain their actual source-valid evidence.",
+  "raw": {
+    "file": "font-endpoint-classification-trial.tar.xz",
+    "sha256": "3769622725c12486d0a3159432ec1c5fa99aba5026e1f054f4f1615335ff7c1e",
+    "bytes": 1994436,
+    "members": 68,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-conditional-polygon-scratch-qualified.tar.xz",
+        "sha256": "2fb0f7e5372e4261eb7d046ba9602daf47b53c14d1fb5163ccdbf8c10a73c0f8"
+      },
+      {
+        "file": "font-vector-header-trials.tar.xz",
+        "sha256": "710f15b7d28fb50ccaca5427b96e63e2f8a25d6c6cba4ff08b34d8c20f3cd396"
+      },
+      {
+        "file": "font-header-normalization-qualified.tar.xz",
+        "sha256": "64aa1ab63fcb1fb889d2846cc02e7cb512b5aaefb06168853ad53056e0548e95"
+      }
+    ]
+  }
+}

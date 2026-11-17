@@ -75,6 +75,10 @@ package for one diagnostic trace. The required owned copy and eager header scan
 remain dominant locations, not phase costs. Unchanged font-loading costs remain identified; current text costs use the
 conditional-polygon-scratch package. No neighboring rejected implementation is replayed.
 
+[Endpoint classification](FONT-ENDPOINT-CLASSIFICATION-TRIAL.md) preserves ordered
+validation and ownership but its independent confirmation remains inconclusive.
+It is not promoted; current font costs and passing integrations stay unchanged.
+
 [Certified crossing-order trials](TEXT-CERTIFIED-ORDER-TRIALS.md) retain two
 unpromoted stages: local descriptors are slower; prepared-range reuse is
 unpromising with an inconclusive interval and higher allocation/lifetime.
