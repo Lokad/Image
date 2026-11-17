@@ -79,6 +79,12 @@ conditional-polygon-scratch package. No neighboring rejected implementation is r
 validation and ownership but its independent confirmation remains inconclusive.
 It is not promoted; current font costs and passing integrations stay unchanged.
 
+[Destination-aligned copy trials](COPY-DESTINATION-ALIGNMENT-TRIALS.md) retain two
+correct, unpromoted implementations with adverse means and inconclusive screens.
+Preparation reuse establishes no gain; a scoped hint diagnostic does not justify
+more per-image state. Current copy costs remain unchanged; resolve the separate-word
+uncertainty before selecting its kernel work.
+
 [Certified crossing-order trials](TEXT-CERTIFIED-ORDER-TRIALS.md) retain two
 unpromoted stages: local descriptors are slower; prepared-range reuse is
 unpromising with an inconclusive interval and higher allocation/lifetime.

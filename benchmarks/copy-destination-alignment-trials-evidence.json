@@ -1,0 +1,1025 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "DCA1206",
+    "DCP1207",
+    "PAC1208"
+  ],
+  "status": "inconclusive-adverse-means",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "sourceReview": {
+    "stage": "CQA1205",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newMeasurementsOrProfiles": 0,
+    "newRequiredPaths": 0,
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": "a716bd273093454390ea2f2f1dee36e3cbcf5976ab5102a4f1f5a2c2d6ab3111",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "2a0ca68f2eb025d10d5db3ceee4777ea6e9e548b605c2c88fb71f1eea5c5a2df",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+      "tools/WarmReference/ffmpeg-copy-region-word-overlap-warm.c": "f67a82a632514a3787628890b3b191ea2157cc671e47891ae29e83fc516356c4",
+      "external/ffmpeg/libavutil/imgutils.c": "52c61e7880f7b55418c9fdeb5b13f50463791e8f32b5ae61cb48b2aead095509"
+    },
+    "geometry": {
+      "OriginalWordOverlap": {
+        "rowBytes": 2056,
+        "rowsPerOperation": 258,
+        "bulkBytes": 2048,
+        "vectorTailBytes": 64,
+        "tailOffset": 1992,
+        "duplicateBytesPerRow": 56,
+        "duplicateBytesPerOperation": 14448
+      },
+      "DrawingCopy8": {
+        "rowBytes": 1024,
+        "rowsPerOperation": 129,
+        "bulkBytes": 768,
+        "vectorTailBytes": 256,
+        "tailOffset": 768,
+        "duplicateBytesPerRow": 0,
+        "duplicateBytesPerOperation": 0
+      },
+      "OriginalClippedCopy8": {
+        "rowBytes": 1016,
+        "rowsPerOperation": 129,
+        "bulkBytes": 768,
+        "vectorTailBytes": 256,
+        "tailOffset": 760,
+        "duplicateBytesPerRow": 8,
+        "duplicateBytesPerOperation": 1032
+      },
+      "DrawingCopyOverlap8": {
+        "rowBytes": 1024,
+        "rowsPerOperation": 258,
+        "bulkBytes": 768,
+        "vectorTailBytes": 256,
+        "tailOffset": 768,
+        "duplicateBytesPerRow": 0,
+        "duplicateBytesPerOperation": 0
+      }
+    },
+    "nativeEvidence": {
+      "provider": "benchmarks/copy-attribution-nearest-guard-evidence.json",
+      "actualReferenceSha256": "a34962a9ca990017220b790972fed0f4f41d26f0d6c19994a4c53eb64cb832b9",
+      "libc": {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a"
+      },
+      "alignmentStrategyAlreadyEstablished": true,
+      "noNewNativeProfileNeeded": true
+    },
+    "findings": [
+      "Currentwordgap is .547009us per complete forward/reverse pair;every129-row move uses disjoint2056-byte rows.",
+      "Native258 AVImageCopyPlane calls andlibc aligned bulk/unalignedends are already observed;leaf locations are not time/stall attribution.",
+      "Currentwhole-row helper covers2056 bytes with2112 bytes ofvectortransfers,56 repeatedbytes/row. This isnot new proofthat scalar-tail replayhelps;the prior packed-tail trial is inconclusive andhasadifferent BCL-tail predecessor.",
+      "Separate-word remains the distinct runtime-copy fallback anduncertain;it isnot evidenceofanotherkernel gap. Qualifiedbyteoverlap andotherpasses stop.",
+      "ImageBuffer ownsbyte[] storage. Bounded destination-aligned bulk can use a currentalignment hint without raw pointerdereference oraligned-only loads/stores;all accesses remainordinary boundedSpan operations."
+    ],
+    "hypothesis": "Investigate safe destination-aligned bulk for word self-copy: obtain only backing-address modulo64 through a short-lived managed pinned handle,release it before copy,and use unaligned boundedVector512 accesses. A later GC move may invalidate alignment but cannot affect correctness. No source/pixeldata address escapes,no unsafe/nativebinding orlong-lived pin. Prototype only;this isnot an acceptedproductiondesign.",
+    "intendedEndState": "Retain snapshot/cancellation/publicgeometry andexistingportable/byte/separate-word paths. Share originalfour-load/four-store bulk;onlyword helper prepares a boundedfirstvector/alignedbulk/originalend perrow. For2056-byte rows,57of64 possiblealignmentphases transfer2112bytes,matchingcurrent;sevenuse2176bytes. Every8-byte-alignedphaseuses2112bytes. This isgeometry,notanassumedruntimeaddress guarantee;all64correct/stalehints muststayexact.",
+    "alignedWordGeometry": [
+      {
+        "phase": 0,
+        "prefixBytes": 0,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 1,
+        "prefixBytes": 63,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 2,
+        "prefixBytes": 62,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 3,
+        "prefixBytes": 61,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 4,
+        "prefixBytes": 60,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 5,
+        "prefixBytes": 59,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 6,
+        "prefixBytes": 58,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 7,
+        "prefixBytes": 57,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 8,
+        "prefixBytes": 56,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 9,
+        "prefixBytes": 55,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 10,
+        "prefixBytes": 54,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 11,
+        "prefixBytes": 53,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 12,
+        "prefixBytes": 52,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 13,
+        "prefixBytes": 51,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 14,
+        "prefixBytes": 50,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 15,
+        "prefixBytes": 49,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 16,
+        "prefixBytes": 48,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 17,
+        "prefixBytes": 47,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 18,
+        "prefixBytes": 46,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 19,
+        "prefixBytes": 45,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 20,
+        "prefixBytes": 44,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 21,
+        "prefixBytes": 43,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 22,
+        "prefixBytes": 42,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 23,
+        "prefixBytes": 41,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 24,
+        "prefixBytes": 40,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 25,
+        "prefixBytes": 39,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 26,
+        "prefixBytes": 38,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 27,
+        "prefixBytes": 37,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 28,
+        "prefixBytes": 36,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 29,
+        "prefixBytes": 35,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 30,
+        "prefixBytes": 34,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 31,
+        "prefixBytes": 33,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 32,
+        "prefixBytes": 32,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 33,
+        "prefixBytes": 31,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 34,
+        "prefixBytes": 30,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 35,
+        "prefixBytes": 29,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 36,
+        "prefixBytes": 28,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 37,
+        "prefixBytes": 27,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 38,
+        "prefixBytes": 26,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 39,
+        "prefixBytes": 25,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 40,
+        "prefixBytes": 24,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 41,
+        "prefixBytes": 23,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 42,
+        "prefixBytes": 22,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 43,
+        "prefixBytes": 21,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 44,
+        "prefixBytes": 20,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 45,
+        "prefixBytes": 19,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 46,
+        "prefixBytes": 18,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 47,
+        "prefixBytes": 17,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 48,
+        "prefixBytes": 16,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 49,
+        "prefixBytes": 15,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 50,
+        "prefixBytes": 14,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 51,
+        "prefixBytes": 13,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 52,
+        "prefixBytes": 12,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 53,
+        "prefixBytes": 11,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 54,
+        "prefixBytes": 10,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 55,
+        "prefixBytes": 9,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 56,
+        "prefixBytes": 8,
+        "bulkBytes": 1792,
+        "tailBytes": 256,
+        "transferredBytes": 2112
+      },
+      {
+        "phase": 57,
+        "prefixBytes": 7,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 58,
+        "prefixBytes": 6,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 59,
+        "prefixBytes": 5,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 60,
+        "prefixBytes": 4,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 61,
+        "prefixBytes": 3,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 62,
+        "prefixBytes": 2,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      },
+      {
+        "phase": 63,
+        "prefixBytes": 1,
+        "bulkBytes": 2048,
+        "tailBytes": 64,
+        "transferredBytes": 2176
+      }
+    ],
+    "risks": "Pin-handle overhead,per-rowgeometry andJITspills may outweigh alignedstore benefits. Runtime handle isminor storage,notnewpixelcapacity;free in finally. No CPUgain inferred fromsource geometry. Do not introducea pool/cache/publicplan/addresscontract orassume a stablefixturealignment.",
+    "next": "DCA1206:one isolatedsafe prototype withall64 correct/stale alignmenthints,existingrow-boundary/snapshot/cancel/admission/owner gates,thenonecompleteoriginalword screen only if safe codegen realizesdesign. Keepcurrent c98 qualifiedDLL/package immutable. A usefullead must resolve actualstandaloneboundaries andaffectedcosts beforecoherentqualification. No blindoldtail/view/addressingtrial replay."
+  },
+  "experiments": {
+    "dca1206": {
+      "prototypeSha256": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+      "candidateSourcePins": {
+        "tmp/dca1206-src/Lokad.Image/ImageBuffer.cs": "cd74cfebb1f67ad25eb217bae3c7936a9bdf867fced7561827a306ff34286f19",
+        "tmp/dca1206-src/Lokad.Image/ImageDrawing.cs": "7a4db862e1c7d89d46f198435cf3b235cf0ada86a351913cc5b0e762fb4b026e",
+        "tmp/dca1206-src/Lokad.Image/Internal/IndependentRowCopy.cs": "9ee39eacbb0dd7bc44bdd54808276c9bd514bc8e11d7d41d17c6d98acd3d5fb7"
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "DCA1206",
+        "allActualsRetained": true,
+        "pairs": 3,
+        "operationsPerSubject": 16384,
+        "baselineSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "candidateSha256": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+        "baseline": {
+          "mean": 5265.339619954427,
+          "lower": 5091.154279030372,
+          "upper": 5439.524960878482,
+          "values": [
+            5258.7423095703125,
+            5260.98876953125,
+            5276.287780761719
+          ]
+        },
+        "candidate": {
+          "mean": 5537.694986979167,
+          "lower": 5391.1429069543365,
+          "upper": 5684.2470670039975,
+          "values": [
+            5539.7525634765625,
+            5544.499084472656,
+            5528.833312988281
+          ]
+        },
+        "ratio": 1.0517260778378998,
+        "ratioLower": 0.9922045729247981,
+        "ratioUpper": 1.1148191046919573,
+        "elapsedReduction": -0.05172607783789984,
+        "savedUs": -0.27235536702474017,
+        "allocatedBytes": 0,
+        "quietGuardsPassed": true,
+        "fullWordSnapshotChecksPassed": true,
+        "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+      },
+      "qualification": {
+        "windows": {
+          "stage": "DCA1206",
+          "counts": {
+            "internal/normal": 7,
+            "internal/avx512-off": 7,
+            "internal/scalar": 7,
+            "public/normal": 190,
+            "public/avx512-off": 190,
+            "public/scalar": 190
+          },
+          "canonicalUnchanged": true
+        },
+        "linuxInternal": {
+          "normal": 7,
+          "avx512-off": 7,
+          "scalar": 7
+        },
+        "linuxPublic": {
+          "normal": 190,
+          "avx512-off": 190,
+          "scalar": 190
+        },
+        "originalWorkerChecks": {
+          "baseline/normal": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "baseline/avx512-off": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "baseline/scalar": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/normal": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/avx512-off": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/scalar": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          }
+        }
+      },
+      "sourceProof": {
+        "allExistingCopyKernelsVerbatim": true,
+        "onlyWordSelfCopySelectsNewHelper": true,
+        "noUnalignedSpanSafetyAssumptionRemoved": true,
+        "noPinSurvivesHintPreparation": true,
+        "noPixelCapacityCacheOrApiAdded": true,
+        "oldPublicValidationAndRowPollsPreserved": true
+      }
+    },
+    "dcp1207": {
+      "prototypeSha256": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+      "candidateSourcePins": {
+        "tmp/dcp1207-src/Lokad.Image/ImageBuffer.cs": "cd74cfebb1f67ad25eb217bae3c7936a9bdf867fced7561827a306ff34286f19",
+        "tmp/dcp1207-src/Lokad.Image/ImageDrawing.cs": "7a4db862e1c7d89d46f198435cf3b235cf0ada86a351913cc5b0e762fb4b026e",
+        "tmp/dcp1207-src/Lokad.Image/Internal/IndependentRowCopy.cs": "9e77f5856e2a8ae9f02641924bcc4c25563933ecd88cf1c785b8cb361f17a61d"
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "DCP1207",
+        "allActualsRetained": true,
+        "pairs": 3,
+        "operationsPerSubject": 16384,
+        "baselineSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+        "candidateSha256": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+        "baseline": {
+          "mean": 5352.443908691406,
+          "lower": 4560.417639390273,
+          "upper": 6144.47017799254,
+          "values": [
+            5344.0333251953125,
+            5313.8509521484375,
+            5399.447448730469
+          ]
+        },
+        "candidate": {
+          "mean": 5658.1868082682295,
+          "lower": 3049.4851950251355,
+          "upper": 8266.888421511323,
+          "values": [
+            5613.079650878906,
+            5543.188049316406,
+            5818.292724609375
+          ]
+        },
+        "ratio": 1.05712211184135,
+        "ratioLower": 0.773598473052124,
+        "ratioUpper": 1.4440096280215733,
+        "elapsedReduction": -0.057122111841350076,
+        "savedUs": -0.3057428995768232,
+        "allocatedBytes": 0,
+        "quietGuardsPassed": true,
+        "fullWordSnapshotChecksPassed": true,
+        "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+      },
+      "qualification": {
+        "windows": {
+          "stage": "DCP1207",
+          "counts": {
+            "internal/normal": 7,
+            "internal/avx512-off": 7,
+            "internal/scalar": 7,
+            "public/normal": 190,
+            "public/avx512-off": 190,
+            "public/scalar": 190
+          },
+          "canonicalUnchanged": true
+        },
+        "linuxInternal": {
+          "normal": 7,
+          "avx512-off": 7,
+          "scalar": 7
+        },
+        "linuxPublic": {
+          "normal": 190,
+          "avx512-off": 190,
+          "scalar": 190
+        },
+        "originalWorkerChecks": {
+          "baseline/normal": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "baseline/avx512-off": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "baseline/scalar": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/normal": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/avx512-off": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          },
+          "candidate/scalar": {
+            "state": "checked",
+            "exact": true,
+            "libraryHash": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+            "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+            "fullWordSnapshotExact": true,
+            "cancellationAndRefusalRecovery": true
+          }
+        }
+      },
+      "sourceProof": {
+        "allExistingCopyKernelsVerbatim": true,
+        "onlyWordSelfCopySelectsNewHelper": true,
+        "noUnalignedSpanSafetyAssumptionRemoved": true,
+        "noPinSurvivesHintPreparation": true,
+        "noPixelCapacityCacheOrApiAdded": true,
+        "oldPublicValidationAndRowPollsPreserved": true
+      },
+      "architecturalRevision": {
+        "parentStage": "DCA1206",
+        "parentScreen": {
+          "project": "Lokad.Image",
+          "stage": "DCA1206",
+          "allActualsRetained": true,
+          "pairs": 3,
+          "operationsPerSubject": 16384,
+          "baselineSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+          "candidateSha256": "b8e219993918a960a89309c7616f6d5345f75a82231080d4a836512ec6cf994d",
+          "baseline": {
+            "mean": 5265.339619954427,
+            "lower": 5091.154279030372,
+            "upper": 5439.524960878482,
+            "values": [
+              5258.7423095703125,
+              5260.98876953125,
+              5276.287780761719
+            ]
+          },
+          "candidate": {
+            "mean": 5537.694986979167,
+            "lower": 5391.1429069543365,
+            "upper": 5684.2470670039975,
+            "values": [
+              5539.7525634765625,
+              5544.499084472656,
+              5528.833312988281
+            ]
+          },
+          "ratio": 1.0517260778378998,
+          "ratioLower": 0.9922045729247981,
+          "ratioUpper": 1.1148191046919573,
+          "elapsedReduction": -0.05172607783789984,
+          "savedUs": -0.27235536702474017,
+          "allocatedBytes": 0,
+          "quietGuardsPassed": true,
+          "fullWordSnapshotChecksPassed": true,
+          "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+        },
+        "removedWork": "Two per-row signed divisions/bias sequences and repeated end geometry become two12B value plans prepared once. No array/cache/table/new capacity;each row selects its plan by one prefix threshold.",
+        "proofCases": 2080832,
+        "proofScope": "Every256..32768-byte chunk length/all64 prefixes;private publicselection admits atmost4096word pixels. Originalperrow source arithmetic is the oracle;actualcopy tests independently compare complete bytes.",
+        "risks": "Selected-plan loads andvalue-local spills may cost morethan recomputation;transienthandle andheadcopy still stayinsidecomplete publicclock. No gaininferred frompreparation orcodebytes."
+      }
+    }
+  },
+  "codegen": {
+    "dca1206": {
+      "methods": [
+        {
+          "method": "Lokad.Image.ImageDrawing:CopyRegion",
+          "codeBytes": 1563,
+          "unalignedWideStores": 4,
+          "alignedStackLocalAccesses": [],
+          "alignedOnlyPixelAccesses": []
+        },
+        {
+          "method": "Lokad.Image.ImageBuffer:PixelAlignmentModulo64",
+          "codeBytes": 368,
+          "unalignedWideStores": 0,
+          "alignedStackLocalAccesses": [],
+          "alignedOnlyPixelAccesses": []
+        },
+        {
+          "method": "Lokad.Image.Internal.IndependentRowCopy:CopyAlignedWordRows",
+          "codeBytes": 530,
+          "unalignedWideStores": 6,
+          "alignedStackLocalAccesses": [],
+          "alignedOnlyPixelAccesses": []
+        }
+      ],
+      "unalignedSafetyVerified": true,
+      "noCpuGainInferred": true,
+      "noPhysicalStackPeakClaim": true
+    },
+    "dcp1207": {
+      "methods": [
+        {
+          "method": "Lokad.Image.ImageDrawing:CopyRegion",
+          "codeBytes": 1563,
+          "unalignedWideStores": 4,
+          "alignedStackLocalAccesses": [],
+          "alignedOnlyPixelAccesses": []
+        },
+        {
+          "method": "Lokad.Image.ImageBuffer:PixelAlignmentModulo64",
+          "codeBytes": 368,
+          "unalignedWideStores": 0,
+          "alignedStackLocalAccesses": [],
+          "alignedOnlyPixelAccesses": []
+        },
+        {
+          "method": "Lokad.Image.Internal.IndependentRowCopy:CopyAlignedWordRows",
+          "codeBytes": 644,
+          "unalignedWideStores": 6,
+          "alignedStackLocalAccesses": [
+            "vmovdqa  xmmword ptr [rbp-0x40], xmm8"
+          ],
+          "alignedOnlyPixelAccesses": []
+        }
+      ],
+      "unalignedSafetyVerified": true,
+      "noCpuGainInferred": true,
+      "noPhysicalStackPeakClaim": true
+    }
+  },
+  "hintPreparationDiagnostic": {
+    "project": "Lokad.Image",
+    "stage": "PAC1208",
+    "diagnosticOnly": true,
+    "completeCopyPerformance": false,
+    "librarySha256": "2840bcbb647a4a1761cd96795228c585e1c604ecc0984ec0d7bfbac4bfb5287d",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "cpuCount": 1,
+    "samples": [
+      {
+        "name": "Hint",
+        "sample": 0,
+        "operations": 262144,
+        "elapsedNanoseconds": 6237526,
+        "allocatedBytes": 0
+      },
+      {
+        "name": "Hint",
+        "sample": 1,
+        "operations": 262144,
+        "elapsedNanoseconds": 6230625,
+        "allocatedBytes": 0
+      },
+      {
+        "name": "Hint",
+        "sample": 2,
+        "operations": 262144,
+        "elapsedNanoseconds": 6231487,
+        "allocatedBytes": 0
+      },
+      {
+        "name": "GetterControl",
+        "sample": 0,
+        "operations": 262144,
+        "elapsedNanoseconds": 521550,
+        "allocatedBytes": 0
+      },
+      {
+        "name": "GetterControl",
+        "sample": 1,
+        "operations": 262144,
+        "elapsedNanoseconds": 527799,
+        "allocatedBytes": 0
+      },
+      {
+        "name": "GetterControl",
+        "sample": 2,
+        "operations": 262144,
+        "elapsedNanoseconds": 522811,
+        "allocatedBytes": 0
+      }
+    ],
+    "observed": 0,
+    "pixelsUnchanged": true,
+    "reflectionBindingOutsideClock": true,
+    "noReferencePerformanceClaim": true,
+    "runtimeNativeHandleStorageMeasured": false
+  },
+  "memory": {
+    "managedAllocatedBytesPerCompletePair": 0,
+    "newPixelOrHeapWorkspaceCapacityBytes": 0,
+    "firstPrototypeValuePlanBytes": 0,
+    "secondPrototypeValuePlanBytes": 24,
+    "temporaryPinnedHandleCountPerPublicMove": 1,
+    "pinReleasedBeforeCopy": true,
+    "staleHintCorrectnessIndependentOfGc": true,
+    "runtimeHandlePoolAndPhysicalNativeJitPeaksMeasured": false,
+    "standingBorrowedCanvasPayloadBytes": 1062936,
+    "aggregateRuntimeStorageIsNotClaimedZero": true
+  },
+  "qualificationReuse": {
+    "evidence": "benchmarks/text-conditional-polygon-scratch-evidence.json",
+    "producers": {
+      "windowsSha256": "10666033a629e5995fd6a2238fa987b3d19163cc1a97401cb9a0bacce2ea02bc",
+      "linuxSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+      "timedArtifactSha256": "d8b1c066f06bc7eea8d8aeea6a6e5648527a8e1c99c189aeb26967eab39d5427",
+      "packageSha256": "2b1a89ce71e413061c7e4d2b78f330d8aabe3ca8ffbb2e7c4f184ccbf9878b55",
+      "symbolsSha256": "755783c9bba66a606a41451af291c66cfb77e5dbe01d63de5ac5bea6caf9be87"
+    },
+    "fullChecksEachOs": 6803,
+    "sameActualReleaseConsumerEachOs": true,
+    "allThreeExamplesEachOs": true,
+    "unchangedProductionCiRun": 44061612275,
+    "allThreeCiJobsGreen": true,
+    "candidateBroadOrPackageQualificationRepeated": false
+  },
+  "builds": {
+    "isolatedWindowsCores": 2,
+    "successfulEmbeddedBuilds": 2,
+    "failedEmbeddedBuildAttempts": 1,
+    "smallDiagnosticProbe": 1,
+    "vmCanonicalPublicHarnessNativeFixturePackage": 0
+  },
+  "toolingCorrections": [
+    "The first private embedded build lacks the budget-helper namespace import;only that test input is fixed and its embedded assembly rebuilt. The already built prototype core is unchanged. Initial failure and correction are retained.",
+    "Postcapture codegen classifier initially mistakes a fixedABI stack-local clearing instruction for aligned pixel access. It is corrected to retain that instruction separately;all actual pixel accesses remain unaligned-safe. No check or benchmark operation is replayed."
+  ],
+  "decision": "Neither correct implementation establishes a useful complete-operation gain. Do not promote,confirm,retime standalone references or broaden qualification. Hint preparation isabout24ns per call in a scoped diagnostic,notan end-to-end subtraction orspeed claim;newper-image caches orlifetime machinery are notjustifiedbythese results. Preserve bothadverse captures andthe reviseddesign as leads,without a permanent alignment-familyban.",
+  "next": "Resolve current separate-word-copy uncertainty onthe existingfrozen262144-operation boundary before considering a kernel change;reuse current immutablePCS package andall source-valid passing paths. No newfonts/images/settings ornanosecond probes. Full289scope andfinal165comparison package refresh remainopen;publication postponed.",
+  "raw": {
+    "file": "copy-destination-alignment-trials.tar.xz",
+    "sha256": "ffe3f45eccab2f7c3b2839e670cbf19c1faa9acc01a931b019eac18741018de6",
+    "bytes": 5909732,
+    "members": 145,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-conditional-polygon-scratch-qualified.tar.xz",
+        "sha256": "2fb0f7e5372e4261eb7d046ba9602daf47b53c14d1fb5163ccdbf8c10a73c0f8"
+      },
+      {
+        "file": "rectangle-copy-prepared-rows-qualified.tar.xz",
+        "sha256": "11477dfaad5fb561773ed7dd057ab15f92f3938da790386d669ab3f8adc7df02"
+      },
+      {
+        "file": "copy-attribution-nearest-guard.tar.xz",
+        "sha256": "42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+      },
+      {
+        "file": "copy-row-view-trial.tar.xz",
+        "sha256": "9ecf74139d2777f6e689f5930fe1d625b43cb8ee757b6ffd8625200cb93fc311"
+      }
+    ]
+  }
+}
