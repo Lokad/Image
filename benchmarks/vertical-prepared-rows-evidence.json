@@ -1,0 +1,553 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VPR1228",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "allAffectedPerformanceReconciled": true,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+    "linuxSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+    "timedArtifactSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+    "packageSha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+    "symbolsSha256": "f80af3ab93e9ee984c554bf2222e4230a7b13ef6862def71704b51db7e7624e1"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+    "tests/Lokad.Image.Tests/VerticalPreparedRowsTests.cs": "a940ad66fccc989a39eca0ecb75a3f27450e7ff346f8f1d6969b194a520ec152"
+  },
+  "sourceProof": {
+    "onlyVerticalCopyDispatchChanges": true,
+    "existingPreparedRowHelperVerbatim": true,
+    "wideSmallPortableBodyVerbatim": true,
+    "oneOriginalCheckpointPerRowForSelectedWidths": true,
+    "oppositeRowStepsPreserveFullSampleBytes": true,
+    "ownedAdmissionFailureCancellationAndDisposalUnchanged": true,
+    "noAddedWorkspacePoolCachePinOrApi": true
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "VPR1228",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "baselineCommit": "25c6944cc206f1e05a7e34452af76173abcadece",
+    "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "prototypePath": "tmp/vpr1228-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "57a02090df95e8d77c50033cd6b0ff261051df6f80c2f7c4e400bed1435155d4",
+    "sourcePins": {
+      "src/Lokad.Image/Internal/VerticalFlip.cs": "4cab43032d39549cb36d944397725231d3273ad487c206baeaef6730b198e7e6",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "fbb94756a61e09f23c325f6d5c7e88f1b5f226541b3ea76f277272ddbcf1706a"
+    },
+    "candidateSourcePins": {
+      "tmp/vpr1228-src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8"
+    },
+    "focusedInternalFilter": "FullyQualifiedName~RectangleBulkRowTests|FullyQualifiedName~SelfRowStorageTests|FullyQualifiedName~VerticalPreparedRowsTests",
+    "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+    "sourceProof": {
+      "onlyVerticalCopyDispatchChanges": true,
+      "existingPreparedRowHelperVerbatim": true,
+      "wideSmallPortableBodyVerbatim": true,
+      "oneOriginalCheckpointPerRowForSelectedWidths": true,
+      "oppositeRowStepsPreserveFullSampleBytes": true,
+      "ownedAdmissionFailureCancellationAndDisposalUnchanged": true,
+      "noAddedWorkspacePoolCachePinOrApi": true
+    },
+    "hypothesis": "Reuse existing qualified rectangleCopyRows on Vector512 width<=1024 flips,preparing bulk/tail once across rows and removing perrow pixel getter/rowchunk/remainder setup. Keep opposite rowsteps,all exactsamples andone checkpoint per existing chunk. Unlike oldgetterhoist/flatrow/cursor/runtimecopy trials,this shares an existing prepared execution helper,not just relocating perrow work or adding a newkernel.",
+    "intendedEndState": "Verticalflip borrows existing packed spans once and calls the alreadyqualified disjoint-row helper when one original cancellationchunk covers a row. Existing general fallback is intact;no newkernel orworkingstorage.",
+    "actor": {
+      "path": "tmp/vpr1228-actor/bin/Release/net10.0/FlipActor.dll",
+      "sha256": "2bc628e139d876b49735a5aa3335df4b3cfa8e05b72bd9d52191a9c8efba8c9f",
+      "sourceSha256": "4a8cd70405275c632b3082eb94c8195d937cffa3c347b87699122078d1a62421",
+      "operationsPerActual": 16384
+    },
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbedded": 1,
+      "smallActor": 1,
+      "canonicalVmPublicHarnessNativeFixturePackage": 0
+    }
+  },
+  "cases": {
+    "WarmVerticalFlip8": {
+      "managedUs": 8.915507654825845,
+      "nativeUs": 9.146290074666341,
+      "ratio": 0.974767646996051,
+      "lower": 0.959086378074276,
+      "upper": 0.9882398011093563,
+      "status": "pass",
+      "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "allocatedBytes": 56,
+      "operationsPerSubject": 16384,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "referenceGroupsInterleaved": true,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "observation": "tmp/vpr1228-final-reference-WarmVerticalFlip8.json",
+      "receipt": "tmp/vpr1228-final-reference-WarmVerticalFlip8-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "1f96cb2b14bf5afbaf65b9a767299288e49b56a1eb4b6d8a18e735193e087524",
+      "benchmarkAssemblySha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "bace5a3f15856499a4f80ac4deebfe36c93f330b5771900a6c2a66d74a16d7a0",
+        "buildScriptSha256": "dd124c8312734634377b3972e790f3a3f6171a121084f2667a6aff198a002b18",
+        "workerSha256": "aa16c6f9305ed6fd9721ed4b29d13a6ee66c5390917ec28afd5e6a6653c0308e",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "vflip",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "negativeStrideView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 2080,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      }
+    },
+    "WarmVerticalFlip16": {
+      "managedUs": 18.76298533630371,
+      "nativeUs": 19.31114404296875,
+      "ratio": 0.9716143846555468,
+      "lower": 0.9647962193941731,
+      "upper": 0.975845931939903,
+      "status": "pass",
+      "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "allocatedBytes": 56,
+      "operationsPerSubject": 16384,
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "referenceGroupsInterleaved": true,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "observation": "tmp/vpr1228-final-reference-WarmVerticalFlip16.json",
+      "receipt": "tmp/vpr1228-final-reference-WarmVerticalFlip16-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "53dceac856f43ae4373292335fee7967298fc3d5f15907a8e3a0c1f5ed701741",
+      "benchmarkAssemblySha256": "5747b5bc0f8d40aa8f2c6dca45db899e8243bbc9b792e2d52026b9c9c0e3372d",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm FFmpeg worker",
+        "sourceSha256": "bace5a3f15856499a4f80ac4deebfe36c93f330b5771900a6c2a66d74a16d7a0",
+        "buildScriptSha256": "dd124c8312734634377b3972e790f3a3f6171a121084f2667a6aff198a002b18",
+        "workerSha256": "aa16c6f9305ed6fd9721ed4b29d13a6ee66c5390917ec28afd5e6a6653c0308e",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "vflip",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 513,
+        "outputHeight": 259,
+        "negativeStrideView": true,
+        "independentLiveOutputs": true,
+        "ownedCopyTimed": true,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      }
+    }
+  },
+  "pairedEffects": {
+    "WarmVerticalFlip8": {
+      "baselineUs": 8.94578973388672,
+      "candidateUs": 8.70511274210612,
+      "savedUs": 0.24067699178059954,
+      "gainPercent": 2.690394017075015,
+      "ratio": 0.9730956650041435,
+      "lower": 0.9704002237949492,
+      "upper": 0.975798593230688,
+      "raw": "tmp/vpr1228-final-paired-confirm-WarmVerticalFlip8.json"
+    },
+    "WarmVerticalFlip16": {
+      "baselineUs": 18.09095192972819,
+      "candidateUs": 17.117227564493817,
+      "savedUs": 0.973724365234375,
+      "gainPercent": 5.3823832433841705,
+      "ratio": 0.94617605129091,
+      "lower": 0.9447729214694345,
+      "upper": 0.9475812649711108,
+      "raw": "tmp/vpr1228-final-paired-confirm-WarmVerticalFlip16.json"
+    }
+  },
+  "privateScreens": {
+    "WarmVerticalFlip8": {
+      "baseline": {
+        "mean": 8.558895345052083,
+        "lower": 8.3435459655517,
+        "upper": 8.774244724552466,
+        "values": [
+          8.554447875976562,
+          8.572277038574219,
+          8.549961120605468
+        ]
+      },
+      "candidate": {
+        "mean": 8.035202494303386,
+        "lower": 7.984609682503164,
+        "upper": 8.085795306103607,
+        "values": [
+          8.038178833007812,
+          8.0347373046875,
+          8.032691345214843
+        ]
+      }
+    },
+    "WarmVerticalFlip16": {
+      "baseline": {
+        "mean": 18.878759358723958,
+        "lower": 14.500487041185487,
+        "upper": 23.25703167626243,
+        "values": [
+          18.647664123535158,
+          18.86186669921875,
+          19.126747253417967
+        ]
+      },
+      "candidate": {
+        "mean": 18.166153055826822,
+        "lower": 12.313679784198218,
+        "upper": 24.018626327455426,
+        "values": [
+          17.89576708984375,
+          18.082080810546874,
+          18.520611267089844
+        ]
+      }
+    }
+  },
+  "privateConfirmations": {
+    "WarmVerticalFlip8": {
+      "subjects": {
+        "baseline": {
+          "mean": 8.914877736409505,
+          "lower": 8.902086797961317,
+          "upper": 8.927668674857692,
+          "values": [
+            8.934663818359375,
+            8.900606689453125,
+            8.909056396484376,
+            8.90986083984375,
+            8.921049682617188,
+            8.917377746582032,
+            8.913673400878906,
+            8.916609375,
+            8.915655151367188,
+            8.898553955078125,
+            8.926136169433594,
+            8.915289611816407
+          ]
+        },
+        "candidate": {
+          "mean": 8.530208491007487,
+          "lower": 8.492213229393101,
+          "upper": 8.568203752621873,
+          "values": [
+            8.504450561523438,
+            8.498477783203125,
+            8.510631896972656,
+            8.498012634277345,
+            8.568938110351562,
+            8.51529345703125,
+            8.559043395996094,
+            8.521301696777345,
+            8.55242138671875,
+            8.511496215820312,
+            8.585605895996094,
+            8.536828857421876
+          ]
+        }
+      },
+      "ratio": 0.9568461205241748,
+      "lower": 0.9529453336280963,
+      "upper": 0.9607628749032471
+    },
+    "WarmVerticalFlip16": {
+      "subjects": {
+        "baseline": {
+          "mean": 18.365901524861656,
+          "lower": 18.152141844823756,
+          "upper": 18.579661204899555,
+          "values": [
+            18.37297381591797,
+            18.50284149169922,
+            18.49884490966797,
+            18.327247802734377,
+            18.681439514160157,
+            18.233159057617186,
+            17.97875866699219,
+            18.356370361328125,
+            18.342674072265623,
+            18.365483947753905,
+            18.346706604003906,
+            18.38431805419922
+          ]
+        },
+        "candidate": {
+          "mean": 18.204167048136394,
+          "lower": 18.118251889660527,
+          "upper": 18.29008220661226,
+          "values": [
+            18.22059912109375,
+            18.23260040283203,
+            18.255064880371094,
+            18.13616857910156,
+            18.248853637695312,
+            18.194342224121094,
+            18.052952087402343,
+            18.18761932373047,
+            18.13586053466797,
+            18.23408020019531,
+            18.268671325683595,
+            18.283192260742187
+          ]
+        }
+      },
+      "ratio": 0.9912252071811307,
+      "lower": 0.9825017331999922,
+      "upper": 1.0000261354768298
+    }
+  },
+  "qualification": {
+    "windows": {
+      "stage": "VPR1228",
+      "platform": "windows",
+      "productionSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+      "full": [
+        3363,
+        2512,
+        948
+      ],
+      "total": 6823,
+      "fullLivePassed": true,
+      "coreModifiedTimeNs": 1794935787930251400,
+      "productionBuildsAfterMeasurement": 0,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "test.ps1",
+        "-Differential",
+        "-NoBuild"
+      ],
+      "focused": {
+        "internal/normal": 10,
+        "public/normal": 190,
+        "internal/avx512-off": 10,
+        "public/avx512-off": 190,
+        "internal/scalar": 10,
+        "public/scalar": 190
+      }
+    },
+    "linux": {
+      "stage": "VPR1228",
+      "platform": "linux",
+      "productionSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "full": [
+        3363,
+        2512,
+        948
+      ],
+      "total": 6823,
+      "fullLivePassed": true,
+      "coreModifiedTimeNs": 1794935788591348774,
+      "productionBuildsAfterMeasurement": 0,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "test.ps1",
+        "-Differential",
+        "-NoBuild"
+      ],
+      "focused": {
+        "internal/normal": 10,
+        "public/normal": 190,
+        "internal/avx512-off": 10,
+        "public/avx512-off": 190,
+        "internal/scalar": 10,
+        "public/scalar": 190
+      },
+      "actualPackage": {
+        "path": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+        "sha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+        "bytes": 471164,
+        "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+        "symbolsSha256": "f80af3ab93e9ee984c554bf2222e4230a7b13ef6862def71704b51db7e7624e1",
+        "actualConsumerPassed": true,
+        "usageExamples": 3
+      },
+      "packageBuilds": 1,
+      "timedArtifactNotRebuilt": true
+    },
+    "fullChecksEachOs": 6823,
+    "package": {
+      "path": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+      "bytes": 471164,
+      "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "symbolsSha256": "f80af3ab93e9ee984c554bf2222e4230a7b13ef6862def71704b51db7e7624e1",
+      "actualConsumerPassed": true,
+      "usageExamples": 3
+    },
+    "windowsPackage": {
+      "stage": "VPR1228",
+      "platform": "windows",
+      "sameActualPackageSha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+      "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "actualConsumerPassed": true,
+      "usageExamples": 3,
+      "published020Unchanged": true,
+      "coreUnchanged": true,
+      "productionBuildsAfterMeasurement": 0
+    },
+    "focusedEachMode": {
+      "internal": 10,
+      "public": 190
+    },
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "allAffectedPerformanceReconciledBeforeBroad": true,
+    "acceptedArtifactRebuildsAfterTiming": 0
+  },
+  "memory": {
+    "managedGcBytesPerOperation": 56,
+    "newWorkspaceCapacityBytes": 0,
+    "newRetainedOperationScratchBytes": 0,
+    "sourceResultPayloadBytesByDepth": {
+      "8": 531468,
+      "16": 1062936
+    },
+    "sharedIdleSlots": 4,
+    "sharedIdleCeilingBytes": 4194304,
+    "governedResultOwnsActualCapacityUntilDisposal": true,
+    "physicalNativeJitPeaksUnmeasured": true
+  },
+  "combinedOwnedEditStatusCounts": {
+    "pass": 20,
+    "gap": 0,
+    "uncertain": 0,
+    "total": 20
+  },
+  "currentImageOwnerViewStatuses": {
+    "passCount": 191,
+    "gaps": 0,
+    "uncertain": 1,
+    "total": 192
+  },
+  "invalidation": "Only VerticalFlip.Apply dispatch changes. Existing CopyRows helper/body, public checks/allocation/pool/other kernels are unchanged. Original PNG pipelines AutoOrient Normal;no changed vertical branch. Preserve other identified sourcevalid codec/resize/font/text/drawing costs. New full165comparison package refresh remains finalmilestone,not this bounded2case update.",
+  "decision": "Accept existing prepared-row helper reuse:both final paired gains and currentstandalone pass. Stopbothflips. Preserve privateworduncertainty/historicalactuals,no transfer/summedgain claim. Other copy/font/text gaps andbilinear diagnostic stayopen;finalfullimmutablepackage165comparison refresh stillrequired.",
+  "builds": {
+    "privateCore": 1,
+    "privateEmbedded": 1,
+    "smallActor": 1,
+    "finalCoreEachOs": 1,
+    "finalEmbeddedEachOs": 1,
+    "publicHarnessNativeFixture": 0,
+    "noBuildReleasePack": 1,
+    "acceptedTimedDllRebuilds": 0
+  },
+  "raw": {
+    "file": "vertical-prepared-rows-qualified.tar.xz",
+    "sha256": "a6b2dba621c42eb4eaafaaee9490728bb72966e268a010f5d74da475e6692ca8",
+    "bytes": 3668888,
+    "members": 167,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "owned-flip-interleaved-reference.tar.xz SHA25618a32f758b5193b8bcb37802436cdda3aa073d3051eed34a70ca9d1e627db66f",
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e",
+      "rectangle-copy-prepared-rows-qualified.tar.xz SHA25611477dfaad5fb561773ed7dd057ab15f92f3938da790386d669ab3f8adc7df02"
+    ]
+  }
+}

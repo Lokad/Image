@@ -25,7 +25,8 @@
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
   Rectangle copies prepare bulk execution once and use bounded vector ends;
-  word self-copies share backing and row-step state.
+  word self-copies share backing and row-step state. Vertical flips reuse the
+  same prepared row execution when a row fits one cancellation chunk.
   Text construction uses bounded initial edge storage to reduce temporary allocations,
   and prepares polygon scratch only for general clipping.
 - Speed up supplied-font loading with exact batched glyph-bound checks and shared

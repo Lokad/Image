@@ -299,46 +299,26 @@ def original_word_composite_stage(copy_stage):
     return stage
 
 
-def owned_flip_confidence():
-    stage = json.loads((ROOT / 'benchmarks/owned-flip-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    q = stage['qualification']
-    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
-    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == 6721 and q['newBroadOrPackageChecks'] == 0
-    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs'] and q['sourceIdenticalQualificationReused']
-    assert q['packageSha256'] == stage['producers']['packageSha256']
-    assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16'}
-    for c in stage['cases'].values():
-        assert c['librarySha256'] == q['librarySha256'] == stage['producers']['timedArtifactSha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 16384
-        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
-        assert c['allocatedBytes'] == 56
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    return stage
-
-
 def owned_flip_reference_stage():
-    stage = json.loads((ROOT / 'benchmarks/owned-flip-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
-    qualified = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
-    q = qualified['qualification']
-    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    stage = json.loads((ROOT / 'benchmarks/vertical-prepared-rows-evidence.json').read_text(encoding='utf-8'))
+    q = stage['qualification']
+    assert stage['productionAccepted'] and stage['productionChanged'] and stage['allAffectedPerformanceReconciled']
     assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
     assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
-    assert stage['producers'] == qualified['producers'] and qualified['productionAccepted'] and qualified['allAffectedPerformanceReconciled']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == stage['qualificationReused']['fullLiveEachOs'] == 6819
-    assert q['linux']['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
-    assert q['linux']['actualPackage']['librarySha256'] == stage['producers']['timedArtifactSha256']
-    assert all(p['actualConsumerPassed'] and p['usageExamples'] == 3 for p in (q['linux']['actualPackage'], q['windowsPackage']))
-    assert stage['qualificationReused']['newBroadPackageChecks'] == stage['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == 0
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6823
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
+    assert q['package']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
+    assert all(p['actualConsumerPassed'] and p['usageExamples'] == 3 for p in (q['package'], q['windowsPackage']))
+    assert q['focusedEachMode'] == {'internal': 10, 'public': 190} and q['modes'] == ['normal', 'avx512-off', 'scalar']
+    assert q['allAffectedPerformanceReconciledBeforeBroad'] and q['acceptedArtifactRebuildsAfterTiming'] == 0
+    assert stage['builds']['acceptedTimedDllRebuilds'] == 0 and stage['builds']['noBuildReleasePack'] == 1
     assert set(stage['cases']) == {'WarmVerticalFlip8', 'WarmVerticalFlip16'}
-    for c in stage['cases'].values():
+    for name, c in stage['cases'].items():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['operationsPerSubject'] == 16384
         assert c['referenceGroupsInterleaved'] and c['allocatedBytes'] == 56
         assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert c['status'] == 'pass' and c['upper'] < 1 and stage['pairedEffects'][name]['upper'] < 1
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     return stage
 
@@ -351,19 +331,18 @@ def owned_edit_costs(png):
         stage = json.loads((ROOT / ('benchmarks/' + name)).read_text(encoding='utf-8'))
         selected.update((key, (case, stage)) for key, case in stage['cases'].items())
     prior_counts = {**stage['combinedOwnedEditStatusCounts']}
-    flips = owned_flip_confidence()
-    storage = composition_storage()
-    selected.update((key, (storage['cases'][key], storage)) for key in flips['cases'])
+    flips = owned_flip_reference_stage()
+    selected.update((key, (case, flips)) for key, case in flips['cases'].items())
     nearest = nearest_row_reuse()
     for name in ('PngCropFit8', 'PngCropFit16'):
         selected[name] = (nearest['cases'][name], nearest)
     assert len(selected) == 20
     for name, (case, owner) in selected.items():
         q = owner['qualification']
-        assert owner['requiredMaterialPaths'] == 289 and owner['newMaterialPaths'] == 0
+        assert owner['requiredMaterialPaths'] == 289 and owner.get('newMaterialPaths', owner.get('newRequiredPaths')) == 0
         assert owner['raw']['mirrored'] and owner['raw']['allMembersVerified']
         assert case['librarySha256'] == owner['producers']['linuxSha256']
-        if owner is not storage:  # Current storage qualification is checked above.
+        if owner is not flips:  # Current flip qualification is checked above.
             assert owner['productionAccepted'] and owner['allAffectedPerformanceReconciled']
             package = q.get('actualPackage', q.get('package'))
             windows = q.get('samePackageWindows', q.get('windowsPackage'))
@@ -379,15 +358,14 @@ def owned_edit_costs(png):
         if name.startswith('PngCropFit'):
             assert all(case['metadata'][key] for key in ('allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput'))
         else:
-            if owner is not storage:
+            if owner is not flips:
                 assert all(case[key] for key in ('managedExact', 'sourceUnchanged', 'independentOwnedOutput'))
             assert case['allocatedBytes'] == 56
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
         assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
     cases = {name: case for name, (case, _) in selected.items()}
-    cases.update(owned_flip_reference_stage()['cases'])
     counts = {state: sum(case['status'] == state for case in cases.values()) for state in ('pass', 'gap', 'uncertain')}
-    assert counts == {'pass': 18, 'gap': 0, 'uncertain': 2} and len(cases) == 20
+    assert counts == {'pass': 20, 'gap': 0, 'uncertain': 0} and len(cases) == 20
     return {'cases': cases, 'statusCounts': counts, 'priorStatusCounts': prior_counts,
             'currentImageOwnerViewStatuses': flips['currentImageOwnerViewStatuses']}
 
@@ -410,24 +388,6 @@ def png_scan_stage():
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    return current
-
-
-def composition_storage():
-    current = json.loads((ROOT / 'benchmarks/composition-storage-reuse-evidence.json').read_text(encoding='utf-8'))
-    q = current['qualification']
-    assert current['productionAccepted'] and current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == 6760
-    assert q['linux']['actualPackage']['sha256'] == q['windowsPackage']['sameActualPackageSha256']
-    assert q['linux']['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-    assert q['windowsPackage']['actualConsumerPassed'] and q['linux']['actualPackage']['actualConsumerPassed']
-    assert q['windowsPackage']['usageExamples'] == q['linux']['actualPackage']['usageExamples'] == 3
-    for c in current['cases'].values():
-        assert c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['librarySha256'] == current['producers']['timedArtifactSha256']
-        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
     return current
 
 
@@ -2131,7 +2091,6 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    storage_reuse = composition_storage()
     text_storage = text_polygon_scratch_stage()
     ordinary_text = ordinary_text_checks()
     font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
@@ -3181,22 +3140,29 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
                         ('WarmCounterclockwise16', 'Counterclockwise quarter turn RGBA16 † → 259×513'),
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
-                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (uncertain) †')]:
+                        ('WarmVerticalFlip8', 'Vertical flip RGBA8 (parity confirmed) †')]:
         c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
     byte_flip, word_flip = (owned_copy['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
-    owned_copy_note = f"""[Current owned-flip checks](../benchmarks/OWNED-FLIP-INTERLEAVED-REFERENCE.md)
-retain uncertainty at **{byte_flip['managedUs']:.3f} / FFmpeg {byte_flip['nativeUs']:.3f} µs,
+    flip_gains = owned_flip_reference_stage()['pairedEffects']
+    owned_copy_note = f"""[Prepared vertical rows](../benchmarks/VERTICAL-PREPARED-ROWS.md)
+close both original owned-flip controls: **{byte_flip['managedUs']:.3f} / FFmpeg {byte_flip['nativeUs']:.3f} µs,
 upper {byte_flip['upper']:.6f}** for RGBA8 and **{word_flip['managedUs']:.3f} /
 {word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** for RGBA16, **56 B/op** each.
-The same complete public calls, independent outputs, original full samples and all
-12 actuals/three native groups remain, now interleaved across the run with unchanged
-counts, complete warmups and conservative statistics. The current immutable package
-DLL reuses 6,819 checks per OS/SAME package/all three examples. Neither is a current passing claim.
-[Earlier copy/flip evidence](../benchmarks/OWNED-FLIP-CURRENT-CONFIDENCE.md) stays
-linked, including useful kernel gains; its old storage costs do not qualify the
-changed shared pool. Borrowed rectangle copies do not call that pool and reuse
-their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
+Both pass/stop. Reuse the existing bounded-row helper with opposite steps,
+preparing bulk/tail geometry once; no new kernel, workspace, pool, pin or API.
+Final-DLL controlled pairs save **{flip_gains['WarmVerticalFlip8']['savedUs']:.3f} µs /
+{flip_gains['WarmVerticalFlip8']['gainPercent']:.2f}%** and **{flip_gains['WarmVerticalFlip16']['savedUs']:.3f} µs /
+{flip_gains['WarmVerticalFlip16']['gainPercent']:.2f}%**. Private/historical effects are not added.
+Complete public validation/admission, independent output materialization and disposal
+stay timed; FFmpeg retains graph/source/frame wrappers. Every original full sample,
+owner and guard passes, with all12actuals/three interleaved native groups retained.
+Windows/Linux each pass **6,823 full/live checks**, focused normal/AVX-512-disabled/
+scalar checks and the **SAME actual package/all three examples**. The timed DLL is
+never rebuilt. Actual result ownership, unchanged four-array/4 MiB idle storage,
+zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
+Other copy, font/text, codec and resizing paths retain identified source-valid
+costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)

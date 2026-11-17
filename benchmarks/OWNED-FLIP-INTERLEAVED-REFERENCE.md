@@ -1,5 +1,9 @@
 # Owned-flip reference reconciliation
 
+Superseded by [prepared vertical-row execution](VERTICAL-PREPARED-ROWS.md),
+which closes both controls on its final timed/package artifact. The scheduling
+correction and original observations below remain reproducible history.
+
 Both original owned flips remain **uncertain**. Their means are close; the full
 conservative confidence gate does not establish parity. Production is unchanged,
 and no identical favorable retry follows.

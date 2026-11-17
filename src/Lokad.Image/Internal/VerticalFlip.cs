@@ -10,6 +10,17 @@ internal static class VerticalFlip
         {
             var stride = source.Stride;
             var pixelBytes = source.BitDepth / 8 * 4;
+            // One existing chunk per row: reuse prepared disjoint-row execution
+            // with opposite row steps, including its original row checkpoints.
+            if (source.Width <= 1024 && stride >= 256
+                && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
+            {
+                IndependentRowCopy.CopyRows(source.Pixels, result.Pixels,
+                    (source.Height - 1) * stride, 0, stride, source.Height,
+                    -stride, stride, cancellationToken);
+                result.Orientation = source.Orientation;
+                return result;
+            }
             for (var y = 0; y < source.Height; y++)
             {
                 var input = source.Pixels.Slice((source.Height - 1 - y) * stride, stride);
