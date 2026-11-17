@@ -579,9 +579,9 @@
       ],
       "bdnGc": {
         "managed": {
-          "allocatedBytes": 50184,
+          "allocatedBytes": 44872,
           "operations": 1,
-          "bytesPerOperation": 50184.0
+          "bytesPerOperation": 44872.0
         },
         "reference-before": {
           "allocatedBytes": 417912,
@@ -1503,7 +1503,8 @@
           "extraStatsRecorded": true
         }
       },
-      "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960"
+      "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "bdnManagedScaffoldingBytes": 736
     },
     "Render16": {
       "originalRequiredControl": "TextRender/Rgba16Clipped",
@@ -1537,9 +1538,9 @@
       ],
       "bdnGc": {
         "managed": {
-          "allocatedBytes": 50184,
+          "allocatedBytes": 44872,
           "operations": 1,
-          "bytesPerOperation": 50184.0
+          "bytesPerOperation": 44872.0
         },
         "reference-before": {
           "allocatedBytes": 417912,
@@ -2482,7 +2483,8 @@
           "extraStatsRecorded": true
         }
       },
-      "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960"
+      "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "bdnManagedScaffoldingBytes": 736
     }
   },
   "pipelineCases": {
@@ -5535,5 +5537,6 @@
         "sha256": "319213ffbf9981e8939ee3d63f261ad94a199ff7b8482e592e320dc4afe76b0d"
       }
     ]
-  }
+  },
+  "postprocessingCorrection": "Clipped-control raw BDN GC and reference allocation samples are taken from current retained final-stage records;replaces copied original-control metadata. Public allocation values,timings,gates and packages unchanged;no measurement repeated."
 }

@@ -30,6 +30,9 @@ per side/bracket and owned cleanup. Stock ordinary
 references remain ImageSharp3.1.12/Drawing2.1.7/Fonts2.1.3. No FFmpeg/font-engine
 equivalence claim follows. See [reference corrections](AUTHORED-FONT-COMPARISONS.md)
 and [symmetric sampling](ORDINARY-DRAW-SYMMETRIC-CHECKS.md).
+The authored managed BDN raw GC includes 736 B of scaffolding; the table reports
+separate public-operation allocation diagnostics. Current raw counters and
+reference allocation samples are reconciled from the retained final-stage logs.
 
 Complete one-shot is **1130.556 /
 6205.590 µs**, upper

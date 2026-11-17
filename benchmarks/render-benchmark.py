@@ -822,6 +822,9 @@ def text_scan_band_stage():
         assert c['actuals'] == 12 and c['operationsPerActual'] == 16384 and c['everyReferenceDrawChecked']
         assert c['referenceAllocatedBytes'] == 48576 and len(c['referenceAllocationSamples']) == 36
     assert set(stage['authoredCases']) == {'Render8', 'Render16'}
+    for c in stage['authoredCases'].values():
+        assert c['bdnGc']['managed']['bytesPerOperation'] == c['allocatedBytes'] + c['bdnManagedScaffoldingBytes']
+        assert c['bdnManagedScaffoldingBytes'] == 736
     assert stage['memory']['ordinaryPublicAllocatedBytes'] == 83008
     assert stage['memory']['governedCompleteFitPeakBytes'] == 748984
     assert stage['memory']['retainedPlanCapacityBytes'] == 4160
