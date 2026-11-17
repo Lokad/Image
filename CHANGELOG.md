@@ -24,7 +24,8 @@
   output-row execution without additional workspace.
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
-- Speed up supplied-font loading with exact batched glyph-bound checks.
+- Speed up supplied-font loading with exact batched glyph-bound checks and shared
+  header normalization.
 - Reuse completed nearest-neighbor output rows during enlargement.
 
 Declared exact encoder packets and managed pixel contracts remain unchanged.

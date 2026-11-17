@@ -2044,19 +2044,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
 """
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-packed-bounds-evidence.json').read_text(encoding='utf-8'))
-    assert font_load['productionAccepted'] and font_load['allAffectedPerformanceReconciled']
-    assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
-    fq = font_load['qualification']
-    assert fq['windows']['total'] == fq['linux']['total'] == fq['fullChecksEachOs'] > 0
-    assert all(sum(fq[platform]['full']) == fq['fullChecksEachOs'] for platform in ('windows', 'linux'))
-    assert fq['actualPackage']['sha256'] == fq['samePackageWindows']['sha256']
-    assert fq['actualPackage']['actualConsumerPassed'] and fq['samePackageWindows']['actualConsumerPassed']
-    assert fq['actualPackage']['librarySha256'] == font_load['producers']['timedArtifactSha256']
-    assert font_load['sourceProof']['originalSourceReconstructed']
-    assert font_load['memory']['addedOwnedCapacityBytes'] == font_load['memory']['addedRetainedCapacityBytes'] == 0
     storage_reuse = composition_storage()
-    font_current = json.loads((ROOT / 'benchmarks/fused-font-header-validation-evidence.json').read_text(encoding='utf-8'))
+    font_current = json.loads((ROOT / 'benchmarks/font-header-normalization-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
     assert font_current['raw']['mirrored'] and font_current['raw']['allMembersVerified']
@@ -2091,23 +2080,6 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert memory['completeGovernedPeakBytes'] == 822460 and memory['completeFitRetainedCapacityBytes'] == 4160
     assert memory['latinRetainedCapacityBytes'] == 2112
     assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
-    assert font_load['baselineSources']['src/Lokad.Image/TrueTypeFont.cs'] == text_coverage['unchangedSources']['src/Lokad.Image/TrueTypeFont.cs']
-    assert all(font_load['unchangedSources'][name] == text_coverage['sources'][name]
-               for name in ('src/Lokad.Image/Internal/TextRasterizer.cs', 'src/Lokad.Image/TextRenderPlan.cs'))
-    assert fq['fullChecksEachOs'] == 6731 and fq['focusedInternalEachModeEachOs'] == 267 and fq['focusedPublicEachModeEachOs'] == 163
-    assert fq['modes'] == ['normal', 'avx-off', 'scalar'] and fq['legacySse2EncodingPassed']
-    assert fq['acceptedTimedLinuxArtifactRebuildsAfterMeasurement'] == 0
-    text_drawing = json.loads((ROOT / 'benchmarks/text-glyph-row-bounds-evidence.json').read_text(encoding='utf-8'))
-    tfq = text_drawing['qualification']
-    assert text_drawing['productionAccepted'] and text_drawing['allAffectedPerformanceReconciled'] and all(text_drawing['sourceProof'].values())
-    assert text_drawing['raw']['mirrored'] and text_drawing['raw']['allMembersVerified']
-    assert tfq['windows']['total'] == tfq['linux']['total'] == tfq['fullChecksEachOs'] == 6745
-    assert tfq['package']['sha256'] == tfq['windowsPackage']['sameActualPackageSha256'] == text_drawing['producers']['packageSha256']
-    assert tfq['package']['librarySha256'] == text_drawing['producers']['timedArtifactSha256']
-    assert all(tfq[k]['actualConsumerPassed'] and tfq[k]['usageExamples'] == 3 for k in ('package', 'windowsPackage'))
-    assert tfq['focusedEachMode'] == {'internal': 268, 'public': 165} and tfq['allEightFrozenFramesBothOs'] and tfq['newSparseCanvasComparisons'] == 48
-    assert text_drawing['pairedEffect']['upper'] < 1 and text_drawing['pairedEffect']['allActualMeanIntervalsSeparated']
-    assert text_drawing['reuse']['preparedTimedPathsVerbatim'] and not text_drawing['arabicGeneralization']['regressionConfirmed']
     text_dispatch = json.loads((ROOT / 'benchmarks/ordinary-word-text-dispatch-evidence.json').read_text(encoding='utf-8'))
     tdq = text_dispatch['qualification']
     assert text_dispatch['productionAccepted'] and text_dispatch['allAffectedPerformanceReconciled'] and all(text_dispatch['sourceProof'].values())
@@ -3325,7 +3297,7 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; current font/text costs use the fused-validation package.
+completed-row package; current font/text costs use the header-normalization package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3597,7 +3569,7 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 the five authored controls explicitly label their scoped source corrections above.
 They are
 never FFmpeg or a bare shaping engine. Current complete font/text costs use the
-[fused glyph-header validation](../benchmarks/FUSED-FONT-HEADER-VALIDATION.md)
+[shared glyph-header normalization](../benchmarks/FONT-HEADER-NORMALIZATION.md)
 immutable timed/package DLL. One-shot and preparation-plus-eight-draw controls
 pass, including every layout call, all 30 fitting trials, fresh owned explicitly
 cleared canvases, independent outputs and disposal. The reference retains
@@ -3616,8 +3588,8 @@ unmeasured physical/native/JIT peaks. Font loading allocates **176 B/op**.
 
 Font loading uses explicitly labeled **FreeType 2.13.2 owned copy/open/retain/dispose**,
 with eager/lazy validation differences. Its current upper **{font_cost['upper']:.3f}**
-retains a scoped gap. Fused structural classification/header gathering independently
-saves **{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%**
+retains a scoped gap. Exact coordinate-byte permutation and contour-zero checks
+save **{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%**
 in final-DLL controlled loads, at unchanged owned/retained capacity. Ordered eager
 errors, every cancelable glyph checkpoint and portable paths remain. This is not
 general parser equivalence or a pipeline speedup claim. Earlier experiments and
@@ -3625,7 +3597,7 @@ separate stage gains are linked in the report.
 
 Windows/Linux each pass **6,790 full/live checks**, **283 internal/166 public**
 normal/AVX2-disabled/scalar checks, and the SAME actual timed package/all three
-examples. Fourteen new public-operation cases cover batch/tail boundaries,
+examples. Existing public-operation cases cover batch/tail boundaries,
 ordered errors, ownership and recovery. This scoped development update does not
 replace the pending complete final-package timing refresh.
 

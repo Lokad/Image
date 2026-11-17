@@ -238,7 +238,9 @@ public sealed partial class TrueTypeFont : IDisposable
         // Four little-endian loads contain big-endian signed coordinate words.
         // Swap within each word, then compare xmin/ymin with xmax/ymax.
         var raw = Vector256.Create(x0, x1, x2, x3).AsUInt16();
-        var words = Avx2.Or(Avx2.ShiftLeftLogical(raw, 8), Avx2.ShiftRightLogical(raw, 8));
+        var words = Avx2.Shuffle(raw.AsByte(), Vector256.Create(
+            (byte)1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12, 15, 14,
+            1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12, 15, 14)).AsUInt16();
         var maxima = Avx2.ShiftRightLogical128BitLane(words.AsByte(), 4).AsInt16();
         if ((Avx2.MoveMask(Avx2.CompareGreaterThan(words.AsInt16(), maxima).AsByte()) & 0x0F0F0F0F) != 0)
             return false;
@@ -299,6 +301,8 @@ public sealed partial class TrueTypeFont : IDisposable
         return true;
     }
 
+    // These gathers only test whether the contour word is zero. Byte order and
+    // sign cannot change that predicate; keep coordinate decoding separate.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong ProvenHeaderBounds(ReadOnlySpan<byte> glyphs, uint first, uint last)
     {
@@ -306,7 +310,7 @@ public sealed partial class TrueTypeFont : IDisposable
         // The structural pass proves this record has at least ten bytes. Keep
         // the ordinary bounded span slice; no unchecked reference or widened read.
         var header = glyphs.Slice((int)first, 10);
-        return I16(header) == 0 ? 0 : BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
+        return MemoryMarshal.Read<ushort>(header) == 0 ? 0 : BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -317,7 +321,7 @@ public sealed partial class TrueTypeFont : IDisposable
         if (last == first) return true;
         if (last - first < 10) return false;
         var header = glyphs.Slice((int)first, 10);
-        if (I16(header) != 0) bounds = BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
+        if (MemoryMarshal.Read<ushort>(header) != 0) bounds = BinaryPrimitives.ReadUInt64LittleEndian(header.Slice(2, 8));
         return true;
     }
 
