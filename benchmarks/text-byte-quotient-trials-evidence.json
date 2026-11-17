@@ -1,0 +1,455 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "TQR1229",
+    "SQR1230"
+  ],
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "TQR1229",
+    "productionChanged": false,
+    "prototypeBuilt": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "divisors": 164,
+    "counts": {
+      "samples": 251576,
+      "estimateLow": 6578,
+      "estimateHigh": 19723,
+      "exactEstimate": 225275
+    },
+    "bound": {
+      "minimumDivisor": 16711425,
+      "maximumDivisor": 71772833461370625,
+      "maximumRoundedNumerator": 18337958949380194687,
+      "maximumFloatingAbsoluteQuotientError": 2.269295862333821e-13,
+      "certifiedErrorLessThan": 9.094947017729282e-13,
+      "maximumCandidate": 255
+    },
+    "proof": "For valid bytecanvas blending,sa>0,da<=255,M=65535. D=M*(255*sa+da*(M^2-sa)) liesin stated positive normalrange;rounded channelN<=255*D+floor(D/2)<2^64. Binary64 conversions/reciprocal/product have conservative absolute quotienterror<2^-40. Truncation thus differs from integerfloor byatmost1,and candidate<=255. candidate*D fitsUInt64. Compare exact product withN;decrement iflarger,otherwiseincrement iff N-product>=D. Result equalsoriginal integerdivision,including every rounding tie. Floatingestimate isnot published as a pixel.",
+    "scope": "Finite adversarial arithmetic model only,not exhaustiveC# production testing or CPU evidence. Current font/text paths unchanged since recordedattribution. No fixture/image/settings/reference grid. Next a compiled implementation and BigInteger/originalinteger oracle plusrealrender/ownership/cancellation tests are needed beforetiming.",
+    "sources": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+      "src/Lokad.Image/ImageDrawing.Text.cs": "715a41b2706ef753263c12ca19e1f642cd844c1f657fa427e72bd4a68a434188"
+    }
+  },
+  "experiments": {
+    "tqr1229": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "TQR1229",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newRequiredPaths": 0,
+        "baselineCommit": "bc859cb7618189ad6cc5adb0d802abb07cb50d74",
+        "baselineWindowsSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+        "baselineLinuxSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+        "prototypePath": "tmp/tqr1229-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "83db0aa27cd819e7de92d873b57c2a295992c2b518d3faec1a541dd94adc108a",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+          "src/Lokad.Image/ImageDrawing.Text.cs": "715a41b2706ef753263c12ca19e1f642cd844c1f657fa427e72bd4a68a434188"
+        },
+        "candidateSourceSha256": "e071e30da1d37da6f2a1cbd286eed55cf7e957e4e3091b69f28d4c726e4aaff3",
+        "focusedInternalFilter": "FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "sourceProof": {
+          "onlyByteChannelDivisionChanges": true,
+          "sharedOneReciprocalForThreeChannels": true,
+          "exactIntegerProductCorrection": true,
+          "alphaAndAllWordBodiesVerbatim": true,
+          "geometryPreparationAndRasterizationVerbatim": true,
+          "noAllocationOwnershipAdmissionCancellationOrApiChange": true
+        },
+        "hypothesis": "Share one denominator reciprocal across three RGB UInt64 channelquotients,then repair each estimate with exact integer product/remainder comparisons. No numerical relaxation:final samples equal original integerfloor. Remove two hardware integerdivides percoveredbyte pixel withoutgeometry/storage changes.",
+        "acceptance": "Compiled adversarial quotient/originalBigInteger composition/render andowner gates bothOS first;reuse existing4096-op complete ordinary8 screen. If useful,independentconfirmation at established full16384-op cadence before adoption;all affected byte prepared/clipped/ordinary costs reconcile on finalimmutableDLL before coherent qualification. No passingword/codec/resize retiming.",
+        "builds": {
+          "isolatedSuccessfulCore": 1,
+          "isolatedSuccessfulEmbedded": 1,
+          "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+        }
+      },
+      "focusedWindows": {
+        "stage": "TQR1229",
+        "counts": {
+          "internal/normal": 252,
+          "internal/avx2-off": 252,
+          "internal/scalar": 252,
+          "public/normal": 177,
+          "public/scalar": 177
+        },
+        "canonicalUnchanged": true
+      },
+      "focusedLinux": {
+        "counts": {
+          "internal/normal": 252,
+          "internal/avx2-off": 252,
+          "internal/scalar": 252,
+          "public/normal": 177,
+          "public/scalar": 177
+        },
+        "allFocusedGatesPassed": true,
+        "preflights": 4,
+        "allVmBuilds": 0
+      },
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 46.537900472005205,
+            "lower": 44.043946162239,
+            "upper": 49.03185478177141,
+            "values": [
+              46.53362841796875,
+              46.40338452148438,
+              46.6766884765625
+            ]
+          },
+          "candidate": {
+            "mean": 47.53606420898438,
+            "lower": 43.89056510376733,
+            "upper": 51.181563314201426,
+            "values": [
+              47.76496826171875,
+              47.4467333984375,
+              47.396490966796875
+            ]
+          }
+        },
+        "ratio": 1.0214453352135238,
+        "lower": 0.9242953077201241,
+        "upper": 1.128806523321001,
+        "allocations": {
+          "baseline": [
+            75864.0
+          ],
+          "candidate": [
+            75864.0
+          ]
+        },
+        "allPairsRetained": true,
+        "quietGuardsPassed": true,
+        "originalInputsFramesLayoutVisualQualityAndOwnershipPassed": true
+      },
+      "codegen": {
+        "stage": "TQR1229",
+        "productionChanged": false,
+        "allBuilds": 0,
+        "quietGuardsPassed": true,
+        "results": {
+          "baseline": {
+            "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+            "methods": {
+              "Lokad.Image.Internal.TextRasterizer:Rasterize(Lokad.Image.ImageBuffer,Lokad.Image.TextRenderPlan,double,double,Lokad.Image.RgbaColor,int,int,int,int,System.Threading.CancellationToken):this (FullOpts)": {
+                "bytes": 2596,
+                "unsignedDivInstructions": 0,
+                "floatingDivideInstructions": 0,
+                "floatConversions": 10,
+                "calls": [
+                  "[System.SpanHelpers:ClearWithoutReferences(byref,nuint)]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.TextRenderPlan:CaptureCoverageRow(System.ReadOnlySpan`1[double],int,int,System.Threading.CancellationToken):this]",
+                  "[System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong)]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendWordForDrawing(System.Span`1[ushort],Lokad.Image.RgbaColor,ulong)]",
+                  "[System.Math:ThrowMinMaxException[double](double,double)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.InvalidOperationException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.ThrowHelper:ThrowObjectDisposedException(System.Object)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              },
+              "Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong) (FullOpts)": {
+                "bytes": 223,
+                "unsignedDivInstructions": 3,
+                "floatingDivideInstructions": 0,
+                "floatConversions": 0,
+                "calls": [
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              }
+            },
+            "correctnessPassed": true,
+            "managedTimedSampleCommands": 0,
+            "allInstrumentedClocksDiscarded": true
+          },
+          "candidate": {
+            "librarySha256": "83db0aa27cd819e7de92d873b57c2a295992c2b518d3faec1a541dd94adc108a",
+            "methods": {
+              "Lokad.Image.Internal.TextRasterizer:Rasterize(Lokad.Image.ImageBuffer,Lokad.Image.TextRenderPlan,double,double,Lokad.Image.RgbaColor,int,int,int,int,System.Threading.CancellationToken):this (FullOpts)": {
+                "bytes": 2596,
+                "unsignedDivInstructions": 0,
+                "floatingDivideInstructions": 0,
+                "floatConversions": 10,
+                "calls": [
+                  "[System.SpanHelpers:ClearWithoutReferences(byref,nuint)]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.TextRenderPlan:CaptureCoverageRow(System.ReadOnlySpan`1[double],int,int,System.Threading.CancellationToken):this]",
+                  "[System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong)]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendWordForDrawing(System.Span`1[ushort],Lokad.Image.RgbaColor,ulong)]",
+                  "[System.Math:ThrowMinMaxException[double](double,double)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.InvalidOperationException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.ThrowHelper:ThrowObjectDisposedException(System.Object)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              },
+              "Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong) (FullOpts)": {
+                "bytes": 410,
+                "unsignedDivInstructions": 0,
+                "floatingDivideInstructions": 1,
+                "floatConversions": 7,
+                "calls": [
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              }
+            },
+            "correctnessPassed": true,
+            "managedTimedSampleCommands": 0,
+            "allInstrumentedClocksDiscarded": true
+          }
+        },
+        "interpretation": "Generated instructions only;not phase costs or causal CPU savings. Zero managed sample commands;all4096instrumentedwarmup/reset/frame clocks discarded. No new fixture/harness/reference/production/package builds."
+      }
+    },
+    "sqr1230": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "SQR1230",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newRequiredPaths": 0,
+        "baselineCommit": "bc859cb7618189ad6cc5adb0d802abb07cb50d74",
+        "baselineWindowsSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+        "baselineLinuxSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+        "prototypePath": "tmp/sqr1230-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "d7243a154a38c039bbe2c9f65e268903db04d73c61d9017a72e26db213bccec8",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+          "src/Lokad.Image/ImageDrawing.Text.cs": "715a41b2706ef753263c12ca19e1f642cd844c1f657fa427e72bd4a68a434188"
+        },
+        "candidateSourceSha256": "468dfe0e67e9e8dfc6d2bbc08bca8063795b3f4db3af618ff16f89ceca77473f",
+        "focusedInternalFilter": "FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "sourceProof": {
+          "onlyByteChannelDivisionChanges": true,
+          "sharedOneReciprocalForThreeChannels": true,
+          "exactIntegerProductCorrection": true,
+          "alphaAndAllWordBodiesVerbatim": true,
+          "geometryPreparationAndRasterizationVerbatim": true,
+          "noAllocationOwnershipAdmissionCancellationOrApiChange": true,
+          "originalPortableDivisionBodyVerbatim": true,
+          "simdNumeratorsPreserveUInt64Bound": true,
+          "allRgbEstimateAndCorrectionLanesShared": true
+        },
+        "hypothesis": "Coherent vector revision of shared RGB denominator preparation. Scalar TQR removes3integerdivides but emits7scalarconversions/repairbranches,410B versus223B,and completepointisadverse. Compute all3numerators,quotientestimates andexactcorrections together with guardedAVX512DQ/VL+AVX2. Keep originalportable integerdivisionbody,full16bitcolor/coverage,alpha andallwordpaths. No gain inferred fromcode counts.",
+        "acceptance": "Compiled adversarial quotient/originalBigInteger composition/render andowner gates bothOS first;reuse existing4096-op complete ordinary8 screen. If useful,independentconfirmation at established full16384-op cadence before adoption;all affected byte prepared/clipped/ordinary costs reconcile on finalimmutableDLL before coherent qualification. No passingword/codec/resize retiming.",
+        "builds": {
+          "isolatedSuccessfulCore": 1,
+          "isolatedSuccessfulEmbedded": 1,
+          "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+        },
+        "compiledProofScope": "Direct vectorboundary oracle only when required ISA enabled;existing fullprecision BigInteger byte/word composition andallpublic render/owner tests run allmodes. SIMD-mask correction excludes unsigned underflow for high estimates."
+      },
+      "focusedWindows": {
+        "stage": "SQR1230",
+        "counts": {
+          "internal/normal": 252,
+          "internal/avx2-off": 252,
+          "internal/scalar": 252,
+          "public/normal": 177,
+          "public/scalar": 177
+        },
+        "canonicalUnchanged": true
+      },
+      "focusedLinux": {
+        "counts": {
+          "internal/normal": 252,
+          "internal/avx2-off": 252,
+          "internal/scalar": 252,
+          "public/normal": 177,
+          "public/scalar": 177
+        },
+        "allFocusedGatesPassed": true,
+        "preflights": 4,
+        "allVmBuilds": 0
+      },
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 46.470450113932294,
+            "lower": 35.00841591177573,
+            "upper": 57.93248431608886,
+            "values": [
+              47.182799072265624,
+              46.23321215820312,
+              45.99533911132813
+            ]
+          },
+          "candidate": {
+            "mean": 46.73897534179687,
+            "lower": 40.006780777322305,
+            "upper": 53.47116990627144,
+            "values": [
+              47.09181298828125,
+              46.355673095703125,
+              46.76943994140625
+            ]
+          }
+        },
+        "ratio": 1.005818514584328,
+        "lower": 0.8426373387533601,
+        "upper": 1.200600587884392,
+        "allocations": {
+          "baseline": [
+            75864.0
+          ],
+          "candidate": [
+            75864.0
+          ]
+        },
+        "allPairsRetained": true,
+        "quietGuardsPassed": true,
+        "originalInputsFramesLayoutVisualQualityAndOwnershipPassed": true
+      },
+      "codegen": {
+        "stage": "SQR1230",
+        "productionChanged": false,
+        "allBuilds": 0,
+        "quietGuardsPassed": true,
+        "results": {
+          "candidate": {
+            "librarySha256": "d7243a154a38c039bbe2c9f65e268903db04d73c61d9017a72e26db213bccec8",
+            "methods": {
+              "Lokad.Image.Internal.TextRasterizer:Rasterize(Lokad.Image.ImageBuffer,Lokad.Image.TextRenderPlan,double,double,Lokad.Image.RgbaColor,int,int,int,int,System.Threading.CancellationToken):this (FullOpts)": {
+                "bytes": 2596,
+                "unsignedDivInstructions": 0,
+                "floatingDivideInstructions": 0,
+                "floatConversions": 10,
+                "calls": [
+                  "[System.SpanHelpers:ClearWithoutReferences(byref,nuint)]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.Internal.TextRasterizer:Band(Lokad.Image.Internal.TextRasterizer+RasterShape,double,double,double,double,int,int,byref,byref,System.Threading.CancellationToken):this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Pixels():System.Span`1[byte]:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.ImageBuffer:get_Stride():int:this]",
+                  "[Lokad.Image.TextRenderPlan:CaptureCoverageRow(System.ReadOnlySpan`1[double],int,int,System.Threading.CancellationToken):this]",
+                  "[System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong)]",
+                  "[Lokad.Image.Internal.TextRasterizer:BlendWordForDrawing(System.Span`1[ushort],Lokad.Image.RgbaColor,ulong)]",
+                  "[System.Math:ThrowMinMaxException[double](double,double)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.InvalidOperationException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.ThrowHelper:ThrowObjectDisposedException(System.Object)]",
+                  "CORINFO_HELP_NEWSFAST",
+                  "[CORINFO_HELP_STRCNS]",
+                  "[System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+                  "CORINFO_HELP_THROW",
+                  "[System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              },
+              "Lokad.Image.Internal.TextRasterizer:BlendByte(System.Span`1[byte],Lokad.Image.RgbaColor,ulong) (FullOpts)": {
+                "bytes": 388,
+                "unsignedDivInstructions": 0,
+                "floatingDivideInstructions": 1,
+                "floatConversions": 3,
+                "calls": [
+                  "CORINFO_HELP_RNGCHKFAIL"
+                ]
+              }
+            },
+            "correctnessPassed": true,
+            "managedTimedSampleCommands": 0,
+            "allInstrumentedClocksDiscarded": true
+          }
+        },
+        "interpretation": "Generated instructions only;not phase costs or causal CPU savings. Zero managed sample commands;all4096instrumentedwarmup/reset/frame clocks discarded. No new fixture/harness/reference/production/package builds."
+      }
+    }
+  },
+  "transportRecovery": {
+    "completedCaptureRecovered": true,
+    "allInstrumentedClocksDiscarded": true,
+    "additionalWorkerOrCollectorRuns": 0,
+    "originalFetchExpectedIntentionallyOmittedBaseline": true,
+    "baselineReuse": "tmp/tqr1229-codegen-baseline-jit.txt",
+    "actualFiles": {
+      "tmp\\sqr1230-codegen.json": "f190a044bb1bf7231f149799927dbef6a34c10abbfc68e39cb0afc55cd89bd97",
+      "tmp\\sqr1230-codegen-candidate-jit.txt": "04d12fd746f6bb68be4a9403783bd3c3cfae85bbd610447b82f37f174848f558"
+    }
+  },
+  "decision": "Neither complete ordinary8 screen establishes usefulgain. Keep both implementations private;no independentconfirmation,standalone-reference,promotedsource or broad/package campaign. Preserve exactcorrectedquotient proof as scoped arithmetic evidence,not CPUgain or automaticfuturemerge. No third nearbyvariant or favorabletiming retry. Current qualifiedC620/packagef034 unchanged.",
+  "baselineQualificationOnly": {
+    "fullLiveEachOs": 6823,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0,
+    "prototypesBroadlyQualified": false
+  },
+  "next": "Audit remaining large bilinear16 uncertainty andexisting nativegroup distributions before assumingoptimization orretiming. Reuse sourcevalidordinary/font/copy evidence;stopqualifiedpassingpaths,keeponeCPU/allpixels/owners/guards andfinite289scope.",
+  "raw": {
+    "file": "text-byte-quotient-trials.tar.xz",
+    "sha256": "bcc859c3f834c21094011ab7fac2d19eb2d9fd112a82ea7d459dda33d9073140",
+    "bytes": 3712388,
+    "members": 124,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "vertical-prepared-rows-qualified.tar.xz SHA256a6b2dba621c42eb4eaafaaee9490728bb72966e268a010f5d74da475e6692ca8",
+      "ordinary-draw-symmetric-checks.tar.xz SHA2567000420c7dc16c94d40be69af82f6bdefc8bd982a652b73934155b2557adce87",
+      "text-event-ordering-trials.tar.xz SHA25694832250a2dfb4472d88a3db7d7726c71d6ed6c2d647998283a0079fe373ee7c"
+    ]
+  }
+}

@@ -75,6 +75,12 @@ explicit symmetric-check sampling correction; meaningful loading work remains qu
 distinct attribution before another implementation trial; rejected variants
 are not replayed solely because their family remains open.
 
+[Byte-channel quotient trials](TEXT-BYTE-QUOTIENT-TRIALS.md) retain exact corrected
+scalar/SIMD arithmetic but establish no useful complete ordinary8 gain. Both stay
+private; no confirmation, current-cost change, passing-path retiming or broad/package
+repeat. The large bilinear16 uncertainty is next reviewed for reference-group
+sampling limitations before assuming an optimization is needed.
+
 [Post-fusion font attribution](FONT-POST-FUSION-ATTRIBUTION.md) reuses the current
 package for one diagnostic trace. The required owned copy and eager header scan
 remain dominant locations, not phase costs. Unchanged font-loading costs remain identified; current text costs use the
