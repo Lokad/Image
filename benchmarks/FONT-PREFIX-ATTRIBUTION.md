@@ -34,3 +34,22 @@ leaf parsing, manifest correction and qualification reuse. Mirrored/member-verif
 `font-prefix-attribution.tar.xz`: **54,752 B /26 members**,
 SHA256 `299f48515a2c2f09457af0098f7d6ad5015bf33d3dcd06627c71799f24163383`. Archived `ppa1213-*` recipes and the
 identified [prefix package/runtime](FONT-RETAINED-PREFIX.md) reproduce it.
+
+## Directory-reuse review
+
+The current source remains `9eb17e74…`. Its two directory scans straddle admission
+and the owned copy: borrowed classification selects capacity; private validation
+checks the bytes actually copied. Removing the latter without a directory-equality
+proof would trust an earlier input state across caller callbacks. A bounded saved
+directory could prove reuse for unchanged, noncancelable input, but adds copying,
+comparison, fallback and stack lifetime; malformed/order/cancellation/refusal
+behavior must remain. This is distinct from simply deleting duplicate work.
+
+Reuse the retained trace: the entire constructor has12/1,992 leaves, retained
+classification10 and directory lookup16, versus707 in glyph validation and1,141
+in libc. Counts neither measure a directory phase nor establish an elapsed bound.
+They provide little support for selecting this additional mechanism now. No
+prototype, cache, fresh profile, timing, build or qualification repeat follows.
+Keep the source-valid loading gap open; this review is not an impossibility claim
+or a permanent ban. Independent uncertain comparisons can proceed without
+reopening passing text paths.

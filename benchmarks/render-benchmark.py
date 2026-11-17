@@ -3175,9 +3175,7 @@ costs. The complete final-package refresh remains outstanding."""
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
     opaque_live = reader_current['cases']['OpaqueCancelable8']
-    image_view_counts = streaming_current['currentImageOwnerViewStatuses']
-    assert sum(image_view_counts[k] for k in ('passCount', 'gaps', 'uncertain')) == image_view_counts['total'] == 191
-    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-current-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
+    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
     assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
     assert bilinear_word_current['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == bilinear_word_current['qualificationReused']['newBroadPackageChecks'] == 0
@@ -3185,15 +3183,20 @@ costs. The complete final-package refresh remains outstanding."""
     assert all(bilinear_word_current['sourceProof'].values())
     assert bilinear_word_current['producers'] == owned_flip_reference_stage()['producers']
     assert bilinear_word_current['measurement']['referenceGroupsInterleaved'] and bilinear_word_current['measurement']['operationsPerSubject'] == 256
+    bm = bilinear_word_current['measurement']
+    assert bm['statisticalUnitsPerGroup'] == bm['actualPairs'] == 12
+    assert bm['segmentsPerUnit'] * bm['operationsPerSegment'] == bm['operationsPerSubject']
+    assert bm['allSubdivisionCountsAndAggregationVerified'] and all(s['N'] == 12 for s in [bm['managedStatistics'], *bm['nativeStatistics']])
     assert bilinear_word_current['raw']['mirrored'] and bilinear_word_current['raw']['allMembersVerified']
     assert bilinear_word_case['librarySha256'] == bilinear_word_current['producers']['linuxSha256']
     assert bilinear_word_case['allActualsRetained'] and bilinear_word_case['allOriginalGatesPassed'] and bilinear_word_case['quietGuardsPassed']
     assert bilinear_word_case['managedRationalReferenceExact'] and bilinear_word_case['sourceUnchanged'] and bilinear_word_case['independentOwnedOutput']
-    assert bilinear_word_case['lower'] <= 1 < bilinear_word_case['upper'] and bilinear_word_case['status'] == 'uncertain'
+    assert bilinear_word_case['upper'] <= 1 and bilinear_word_case['status'] == 'pass'
+    assert math.isclose(bilinear_word_case['ratio'], bilinear_word_case['managedUs'] / bilinear_word_case['nativeUs'], rel_tol=1e-12)
     assert bilinear_word_case['metadata']['nativeRgbMaximum'] <= 1 and bilinear_word_case['metadata']['nativeAlphaMaximum'] <= 1
     assert bilinear_word_case['metadata']['nativeRgbRmse'] <= .25 and bilinear_word_case['metadata']['nativeAlphaRmse'] <= .25
     anchor = next(line for line in editing.splitlines() if line.startswith('| Bilinear upscale RGBA8'))
-    bilinear_word_row = (f'| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (uncertain) † → 1027×519 | '
+    bilinear_word_row = (f'| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | '
                          f'{bilinear_word_case["managedUs"]:,.2f} | {bilinear_word_case["nativeUs"]:,.2f} | '
                          f'{bilinear_word_case["ratio"]:.3f} / {bilinear_word_case["upper"]:.6f} | {bilinear_word_case["allocatedBytes"]:,} |')
     editing = editing.replace(anchor, anchor + '\n' + bilinear_word_row)
@@ -3215,13 +3218,6 @@ costs. The complete final-package refresh remains outstanding."""
                  f'{bilinear_fresh_case["managedUs"]:,.2f} | {bilinear_fresh_case["nativeUs"]:,.2f} | '
                  f'{bilinear_fresh_case["ratio"]:.3f} / {bilinear_fresh_case["upper"]:.3f} | {bilinear_fresh_case["allocatedBytes"]:,} |')
     editing = editing.replace(bilinear_word_row, bilinear_word_row + '\n' + fresh_row)
-    image_view_counts = {**image_view_counts, 'passCount': image_view_counts['passCount'] + 1, 'total': image_view_counts['total'] + 1}
-    assert image_view_counts == bilinear_one_shot['currentImageOwnerViewStatuses']
-    # Replace the owned-edit family as a whole instead of replaying old flip,
-    # composition and confidence-round status transitions.
-    for label, field in (('pass', 'passCount'), ('gap', 'gaps'), ('uncertain', 'uncertain')):
-        image_view_counts[field] += owned_copy['statusCounts'][label] - owned_copy['priorStatusCounts'][label]
-    assert image_view_counts == owned_copy['currentImageOwnerViewStatuses']
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
     header_reference = jpeg_markers
     hq = header_reference['qualification']
@@ -3445,32 +3441,31 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 
 {owned_copy_note}
 
-The [family reports](../benchmarks/WARM-COVERAGE.md) retain a historical reconciliation
-of **{image_view_counts['total']} image views: {image_view_counts['passCount']} pass,
-{image_view_counts['gaps']} gaps, {image_view_counts['uncertain']} uncertain**.
-This is not a current shared-storage status count; affected costs await refresh.
-Unchanged borrowed operations retain source-valid evidence; remaining uncertainty,
-drawing and inspection gaps keep whole-library parity open.
+The [family reports](../benchmarks/WARM-COVERAGE.md) identify source-valid passing
+paths and remaining font/copy/inspection gaps. Historical image-view aggregates
+stay in their original reports; the complete final-package refresh remains open.
 {bicubic_adjacent_note}
-[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-CURRENT-INTERLEAVED-REFERENCE.md)
-remains uncertain: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
-upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**. Current
-qualified package costs use all twelve fixed256-operation pairs and three interleaved
-native groups, with unchanged warmups and conservative statistics. Reuse6,823checks
-per OS/SAME actual package/all three examples; no production/harness/native/package
-build or broad repeat. Frozen reference assets are restored by hash before samples;
-completed results survive a recorder-schema correction without replay. This is not
-a pass or a production speedup. Necessary managed preparation and the native
-prepared-graph boundary stay explicit; no identical favorable retry follows.
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
+passes/stops: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
+upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**.
+Finer interleaving partitions each256-operation actual into16subdivisions while
+retaining twelve statistical units per group, every operation and the unchanged
+warmups/conservative gate. Extra clock reads stay measured; more frequent native
+IPC/client work stays outside. Reuse6,823checks per OS/SAME actual C620/f034 package/
+all3examples; one small driver build, zero production/harness/native/package builds
+or broad repeats. The frozen manifest is restored as an independent file before
+timing, preserving current metadata. Old uncertainty remains history; no production
+speedup or host cause is claimed. Fresh managed preparation and retained native
+graph/geometry stay timed as declared, distinct from the equivalent view below.
 [Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
 **{bilinear_fresh_case['managedUs']:,.2f} / FFmpeg {bilinear_fresh_case['nativeUs']:,.2f} µs, upper {bilinear_fresh_case['upper']:.3f}**,
 **{bilinear_fresh_case['allocatedBytes']:,} B/op**. Fresh graph/context/geometry, lazy first use,
 result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
 source rasters. Exact managed/full-word/native/ownership gates remain; the existing
 qualified package is reused with no production rebuild. This qualifies the complete
-bilinear boundary; the eight earlier equivalent views cover bicubic. No production
-speedup or historical phase-cost subtraction is claimed; the asymmetric view above
-stays uncertain. No material path or settings grid is added.
+bilinear boundary; the eight earlier equivalent views cover bicubic. Both bilinear
+views pass/stop without a production speedup or historical phase-cost subtraction.
+No material path or settings grid is added.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **{png_gray8['managedUs']:,.2f} / FFmpeg {png_gray8['nativeUs']:,.2f}µs,
 upper {png_gray8['upper']:.6f}**, **{png_gray8['allocatedBytes']:,} B/op**. All 17

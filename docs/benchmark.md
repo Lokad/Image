@@ -170,32 +170,31 @@ zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
 Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding.
 
-The [family reports](../benchmarks/WARM-COVERAGE.md) retain a historical reconciliation
-of **192 image views: 191 pass,
-0 gaps, 1 uncertain**.
-This is not a current shared-storage status count; affected costs await refresh.
-Unchanged borrowed operations retain source-valid evidence; remaining uncertainty,
-drawing and inspection gaps keep whole-library parity open.
+The [family reports](../benchmarks/WARM-COVERAGE.md) identify source-valid passing
+paths and remaining font/copy/inspection gaps. Historical image-view aggregates
+stay in their original reports; the complete final-package refresh remains open.
 [Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
-[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-CURRENT-INTERLEAVED-REFERENCE.md)
-remains uncertain: **1,826.19 / FFmpeg 2,013.58µs,
-upper 1.009894**, **4,498,558 B/op**. Current
-qualified package costs use all twelve fixed256-operation pairs and three interleaved
-native groups, with unchanged warmups and conservative statistics. Reuse6,823checks
-per OS/SAME actual package/all three examples; no production/harness/native/package
-build or broad repeat. Frozen reference assets are restored by hash before samples;
-completed results survive a recorder-schema correction without replay. This is not
-a pass or a production speedup. Necessary managed preparation and the native
-prepared-graph boundary stay explicit; no identical favorable retry follows.
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
+passes/stops: **1,847.74 / FFmpeg 2,024.23µs,
+upper 0.944044**, **4,498,558 B/op**.
+Finer interleaving partitions each256-operation actual into16subdivisions while
+retaining twelve statistical units per group, every operation and the unchanged
+warmups/conservative gate. Extra clock reads stay measured; more frequent native
+IPC/client work stays outside. Reuse6,823checks per OS/SAME actual C620/f034 package/
+all3examples; one small driver build, zero production/harness/native/package builds
+or broad repeats. The frozen manifest is restored as an independent file before
+timing, preserving current metadata. Old uncertainty remains history; no production
+speedup or host cause is claimed. Fresh managed preparation and retained native
+graph/geometry stay timed as declared, distinct from the equivalent view below.
 [Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
 **1,973.05 / FFmpeg 5,139.83 µs, upper 0.434**,
 **4,498,574 B/op**. Fresh graph/context/geometry, lazy first use,
 result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
 source rasters. Exact managed/full-word/native/ownership gates remain; the existing
 qualified package is reused with no production rebuild. This qualifies the complete
-bilinear boundary; the eight earlier equivalent views cover bicubic. No production
-speedup or historical phase-cost subtraction is claimed; the asymmetric view above
-stays uncertain. No material path or settings grid is added.
+bilinear boundary; the eight earlier equivalent views cover bicubic. Both bilinear
+views pass/stop without a production speedup or historical phase-cost subtraction.
+No material path or settings grid is added.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **1,964.07 / FFmpeg 1,978.51µs,
 upper 0.999681**, **546,523 B/op**. All 17
@@ -514,7 +513,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
-| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (uncertain) † → 1027×519 | 1,826.19 | 2,013.58 | 0.907 / 1.009894 | 4,498,558 |
+| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | 1,847.74 | 2,024.23 | 0.913 / 0.944044 | 4,498,558 |
 | Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
 | Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |

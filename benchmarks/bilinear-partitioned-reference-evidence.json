@@ -1,0 +1,581 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BPT1240",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producers": {
+    "windowsSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+    "linuxSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+    "timedArtifactSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+    "packageSha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+    "symbolsSha256": "f80af3ab93e9ee984c554bf2222e4230a7b13ef6862def71704b51db7e7624e1"
+  },
+  "canonicalProducersUnchanged": {
+    "windowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+    "linuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "timedArtifactSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "packageSha256": "539cbe19a9a9ed060cef9d10eb2b600d60c1e4ab9d897455224572c6b1840ff6",
+    "symbolsSha256": "d4488a292f1f2115eae53697269ab14d1806f8de24d3b0be6c027f3dc80462ed"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/BilinearUpsample16.cs": "7063edb8f03f9adba30bb4889d90c0e54cb5f79f3ce225c7632e1b1f5a33584b",
+    "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+    "src/Lokad.Image/Internal/PreparedResize.cs": "6a77972d0ac3e650241403a8aab08cdc343c200b3d85a28022ca742231a1b5dc",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/PixelStoragePool.cs": "fbb94756a61e09f23c325f6d5c7e88f1b5f226541b3ea76f277272ddbcf1706a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0"
+  },
+  "sourceProof": {
+    "completePublicManagedMethodAndNativeWorkerUnchanged": true,
+    "conservativeStatisticsVerbatim": true,
+    "actualOperationsAndWarmupCountsUnchanged": true,
+    "subdivisionsNotIndependentStatisticalUnits": true,
+    "sourceAndReferencePinsUnchanged": true
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "BPT1240",
+    "productionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "producers": {
+      "windowsSha256": "595780bd50615718ff6e90031f51280fd84254c2e0ad60e954d35cc3935cea0d",
+      "linuxSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "timedArtifactSha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+      "packageSha256": "f034257af4f2878c3a311c3fd49edac990b9f02626c414f2413867afc6095727",
+      "symbolsSha256": "f80af3ab93e9ee984c554bf2222e4230a7b13ef6862def71704b51db7e7624e1"
+    },
+    "canonicalProducersUnchanged": {
+      "windowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+      "linuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "timedArtifactSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+      "packageSha256": "539cbe19a9a9ed060cef9d10eb2b600d60c1e4ab9d897455224572c6b1840ff6",
+      "symbolsSha256": "d4488a292f1f2115eae53697269ab14d1806f8de24d3b0be6c027f3dc80462ed"
+    },
+    "sourcePins": {
+      "src/Lokad.Image/Internal/BilinearUpsample16.cs": "7063edb8f03f9adba30bb4889d90c0e54cb5f79f3ce225c7632e1b1f5a33584b",
+      "src/Lokad.Image/ImageTransforms.cs": "cf5c1ee3c2527ae841d3db31565df99cc1d713e36d1053c213a3f7d0ff96f1c5",
+      "src/Lokad.Image/Internal/PreparedResize.cs": "6a77972d0ac3e650241403a8aab08cdc343c200b3d85a28022ca742231a1b5dc",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "fbb94756a61e09f23c325f6d5c7e88f1b5f226541b3ea76f277272ddbcf1706a",
+      "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+      "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0"
+    },
+    "driverPath": "tmp/bpt1240-driver/bin/Release/net10.0/BilinearPartitioned.dll",
+    "driverSha256": "d0c5cc6c19dde60008dd8eadad4b35f6d72800f831a793d2346cc66ff7335a4b",
+    "driverSourceSha256": "16b4e3de56a7481257363852fed7919e8f814e15887a6125d63d275d2963ae8e",
+    "priorDriverSourceSha256": "074add86fd13ac4b213323b6e0286d77c88cc9126c078a67b60de92a96b3e172",
+    "hypothesis": "Current original bilinear16 native actuals range1.866-2.218ms while most managed actuals stay1.811-1.817ms;group interleaving alone leavesconservativeupper1.009894 despitepairedpass. Partition each256-operation actual into16subdivisions of16completeoperations, withsamebefore/paired/after alternation. Average every subdivision into the original12units/group. No causalclockclaim,filtering,confidenceformula/fixture/baseline changes or extra statistical units. One bounded capture;retain originaluncertainty. No assumptionoptimization isneeded.",
+    "sourceProof": {
+      "completePublicManagedMethodAndNativeWorkerUnchanged": true,
+      "conservativeStatisticsVerbatim": true,
+      "actualOperationsAndWarmupCountsUnchanged": true,
+      "subdivisionsNotIndependentStatisticalUnits": true,
+      "sourceAndReferencePinsUnchanged": true
+    },
+    "actuals": 12,
+    "operationsPerActual": 256,
+    "segmentsPerActual": 16,
+    "operationsPerSegment": 16,
+    "nativeGroups": 3,
+    "warmupsEachSide": 4,
+    "warmupOperations": 256,
+    "acceptance": "Original fullpixel/nativeapprovedbounds/input/output/owner checks,versionedguards,exactsource/binary identities and conservative allactual/outlierdiagnostic/pairedgate allrequired. Report alloc/storage separately. One capture only;no favorable repeats. Reuse source-validC620/f034 qualification andcurrentC5/539 canonical untouched;no productiongainclaim.",
+    "builds": {
+      "driver": 1,
+      "productionEmbeddedPublicHarnessNativeFixturePackage": 0
+    },
+    "toolReferencePins": {
+      "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da"
+    }
+  },
+  "case": {
+    "caseId": "Up16",
+    "managedUs": 1847.7382278645832,
+    "nativeUs": 2024.227755859375,
+    "ratio": 0.9128114277240191,
+    "lower": 0.8777608109463134,
+    "upper": 0.9440435646380553,
+    "status": "pass",
+    "allocatedBytes": 4498558,
+    "directAllocatedMeanBytes": 4498558.0,
+    "librarySha256": "c62041e25f89e08f4bcfe9c630eae885be59a1b7341368dfc433ca9333a81af1",
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerSubject": 256,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedRationalReferenceExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "metadata": {
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+      "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.04627403278265037,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04239492329328568
+    },
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x519 bilinear output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packed/planar conversion, zscale widened triangle kernel with straight-alpha metadata and internal encoded-space premultiplication/unpremultiplication, final RGBA conversion and output pixel acquisition/release. Graph/source/frame wrappers and geometry contexts are reused; each call filters the full input. Native padded output rows exposed directly. Managed exact rational-reference pixels; native RGB maximum1/RMSE0.25 existing filtered comparison bound, Down8 alpha exact; approved RGBA16/Up8 native-only alpha maximum1/RMSE0.25; Up8 writable output acquisition and zero-alpha RGB normalization are timed; zero-alpha RGBzero; native CLI/deterministic output exact. No output cache or expression evaluator. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this selected geometry and depth are measured.",
+    "sourceEvidence": {
+      "receipt": "tmp/bpt1240-Up16-receipt.json",
+      "observation": "tmp/bpt1240-Up16.json"
+    },
+    "pairedRatioConfidence": [
+      0.8817163062341664,
+      0.9380124551792306
+    ],
+    "nativeBracketMeansUs": [
+      2024.227755859375,
+      2032.2872360026042,
+      2033.6294619140624
+    ],
+    "referenceGroupsInterleaved": true,
+    "referenceActualsPartitioned": true
+  },
+  "measurement": {
+    "operationsPerSubject": 256,
+    "actualPairs": 12,
+    "nativeGroups": 3,
+    "referenceGroupsInterleaved": true,
+    "statisticalUnitsPerGroup": 12,
+    "segmentsPerUnit": 16,
+    "operationsPerSegment": 16,
+    "allSubdivisionCountsAndAggregationVerified": true,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "managedStatistics": {
+      "OriginalValues": [
+        1847555.4921875,
+        1851484.6484375,
+        1846544.484375,
+        1852094.34375,
+        1848668.27734375,
+        1849823.51171875,
+        1852202.3203125,
+        1847812.77734375,
+        1845015.13671875,
+        1844394.13671875,
+        1845290.68359375,
+        1841972.921875
+      ],
+      "N": 12,
+      "Min": 1841972.921875,
+      "LowerFence": 1837696.2983398438,
+      "Q1": 1845221.796875,
+      "Median": 1847684.134765625,
+      "Mean": 1847738.2278645833,
+      "Q3": 1850238.7958984375,
+      "UpperFence": 1857764.2944335938,
+      "Max": 1852202.3203125,
+      "InterquartileRange": 5016.9990234375,
+      "LowerOutliers": [],
+      "UpperOutliers": [],
+      "AllOutliers": [],
+      "StandardError": 943.2547835732446,
+      "Variance": 10676755.040805701,
+      "StandardDeviation": 3267.5304192624894,
+      "Skewness": -0.0752730460387212,
+      "Kurtosis": 1.6789334585817655,
+      "ConfidenceInterval": {
+        "N": 12,
+        "Mean": 1847738.2278645833,
+        "StandardError": 943.2547835732446,
+        "Level": 12,
+        "Margin": 4185.201984379397,
+        "Lower": 1843553.0258802038,
+        "Upper": 1851923.4298489627
+      },
+      "Percentiles": {
+        "P0": 1841972.921875,
+        "P25": 1845221.796875,
+        "P50": 1847684.134765625,
+        "P67": 1849095.7140624998,
+        "P80": 1851152.42109375,
+        "P85": 1851698.0417968752,
+        "P90": 1852033.37421875,
+        "P95": 1852142.933203125,
+        "P100": 1852202.3203125
+      }
+    },
+    "nativeStatistics": [
+      {
+        "OriginalValues": [
+          1892727.32421875,
+          1976094.55859375,
+          2005951.875,
+          2056301.640625,
+          2055353.98046875,
+          2051457.33984375,
+          2053546.8359375,
+          2052400.078125,
+          2046162.58203125,
+          2005989.79296875,
+          2047543.859375,
+          2047203.203125
+        ],
+        "N": 12,
+        "Min": 1892727.32421875,
+        "LowerFence": 1935920.6323242188,
+        "Q1": 2005980.3134765625,
+        "Median": 2047373.53125,
+        "Mean": 2024227.755859375,
+        "Q3": 2052686.767578125,
+        "UpperFence": 2122746.4487304688,
+        "Max": 2056301.640625,
+        "InterquartileRange": 46706.4541015625,
+        "LowerOutliers": [
+          1892727.32421875
+        ],
+        "UpperOutliers": [],
+        "AllOutliers": [
+          1892727.32421875
+        ],
+        "StandardError": 14094.046173797271,
+        "Variance": 2383705650.589554,
+        "StandardDeviation": 48823.20811447722,
+        "Skewness": -1.5977650972564839,
+        "Kurtosis": 4.536753359474164,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2024227.755859375,
+          "StandardError": 14094.046173797271,
+          "Level": 12,
+          "Margin": 62534.991649931915,
+          "Lower": 1961692.764209443,
+          "Upper": 2086762.747509307
+        },
+        "Percentiles": {
+          "P0": 1892727.32421875,
+          "P25": 2005980.3134765625,
+          "P50": 2047373.53125,
+          "P67": 2051806.1530078126,
+          "P80": 2053317.484375,
+          "P85": 2054179.3365234374,
+          "P90": 2055173.266015625,
+          "P95": 2055780.4275390622,
+          "P100": 2056301.640625
+        }
+      },
+      {
+        "OriginalValues": [
+          1913605.5,
+          1970907.2109375,
+          2022239.71875,
+          2051976.21484375,
+          2075208.78515625,
+          2051234.66015625,
+          2070971.8515625,
+          2050708.1796875,
+          2063975.0859375,
+          2003985.5859375,
+          2063254.6171875,
+          2049379.421875
+        ],
+        "N": 12,
+        "Min": 1913605.5,
+        "LowerFence": 1949038.3623046875,
+        "Q1": 2017676.185546875,
+        "Median": 2050971.419921875,
+        "Mean": 2032287.2360026042,
+        "Q3": 2063434.734375,
+        "UpperFence": 2132072.5576171875,
+        "Max": 2075208.78515625,
+        "InterquartileRange": 45758.548828125,
+        "LowerOutliers": [
+          1913605.5
+        ],
+        "UpperOutliers": [],
+        "AllOutliers": [
+          1913605.5
+        ],
+        "StandardError": 13881.20325013628,
+        "Variance": 2312253644.059128,
+        "StandardDeviation": 48085.89859885253,
+        "Skewness": -1.275967612190174,
+        "Kurtosis": 3.449037850356308,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2032287.2360026042,
+          "StandardError": 13881.20325013628,
+          "Level": 12,
+          "Margin": 61590.611995590174,
+          "Lower": 1970696.624007014,
+          "Upper": 2093877.8479981944
+        },
+        "Percentiles": {
+          "P0": 1913605.5,
+          "P25": 2017676.185546875,
+          "P50": 2050971.419921875,
+          "P67": 2056149.2237109374,
+          "P80": 2063830.9921875,
+          "P85": 2066423.95390625,
+          "P90": 2070272.175,
+          "P95": 2072878.4716796875,
+          "P100": 2075208.78515625
+        }
+      },
+      {
+        "OriginalValues": [
+          1890023.51171875,
+          1997604.6328125,
+          2005104.63671875,
+          2077061.015625,
+          2056256.6953125,
+          2070496.55859375,
+          2054450.390625,
+          2070520.0078125,
+          2046447.8046875,
+          2022110.76171875,
+          2048246.41015625,
+          2065231.1171875
+        ],
+        "N": 12,
+        "Min": 1890023.51171875,
+        "LowerFence": 1944826.8598632812,
+        "Q1": 2017859.23046875,
+        "Median": 2051348.400390625,
+        "Mean": 2033629.4619140625,
+        "Q3": 2066547.4775390625,
+        "UpperFence": 2139579.8481445312,
+        "Max": 2077061.015625,
+        "InterquartileRange": 48688.2470703125,
+        "LowerOutliers": [
+          1890023.51171875
+        ],
+        "UpperOutliers": [],
+        "AllOutliers": [
+          1890023.51171875
+        ],
+        "StandardError": 15024.054164999516,
+        "Variance": 2708666442.6340714,
+        "StandardDeviation": 52044.85029889193,
+        "Skewness": -1.6512659975894355,
+        "Kurtosis": 4.957106875235826,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2033629.4619140625,
+          "StandardError": 15024.054164999516,
+          "Level": 12,
+          "Margin": 66661.4178902777,
+          "Lower": 1966968.0440237848,
+          "Upper": 2100290.87980434
+        },
+        "Percentiles": {
+          "P0": 1890023.51171875,
+          "P25": 2017859.23046875,
+          "P50": 2051348.400390625,
+          "P67": 2059577.23140625,
+          "P80": 2069443.4703125001,
+          "P85": 2070504.7658203125,
+          "P90": 2070517.662890625,
+          "P95": 2073463.461328125,
+          "P100": 2077061.015625
+        }
+      }
+    ],
+    "pairedRatioConfidence": [
+      0.8817163062341664,
+      0.9380124551792306
+    ],
+    "confidenceViews": [
+      {
+        "view": "allActual",
+        "statistics": {
+          "OriginalValues": [
+            1847555.4921875,
+            1851484.6484375,
+            1846544.484375,
+            1852094.34375,
+            1848668.27734375,
+            1849823.51171875,
+            1852202.3203125,
+            1847812.77734375,
+            1845015.13671875,
+            1844394.13671875,
+            1845290.68359375,
+            1841972.921875
+          ],
+          "N": 12,
+          "Min": 1841972.921875,
+          "LowerFence": 1837696.2983398438,
+          "Q1": 1845221.796875,
+          "Median": 1847684.134765625,
+          "Mean": 1847738.2278645833,
+          "Q3": 1850238.7958984375,
+          "UpperFence": 1857764.2944335938,
+          "Max": 1852202.3203125,
+          "InterquartileRange": 5016.9990234375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 943.2547835732446,
+          "Variance": 10676755.040805701,
+          "StandardDeviation": 3267.5304192624894,
+          "Skewness": -0.0752730460387212,
+          "Kurtosis": 1.6789334585817655,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1847738.2278645833,
+            "StandardError": 943.2547835732446,
+            "Level": 12,
+            "Margin": 4185.201984379397,
+            "Lower": 1843553.0258802038,
+            "Upper": 1851923.4298489627
+          },
+          "Percentiles": {
+            "P0": 1841972.921875,
+            "P25": 1845221.796875,
+            "P50": 1847684.134765625,
+            "P67": 1849095.7140624998,
+            "P80": 1851152.42109375,
+            "P85": 1851698.0417968752,
+            "P90": 1852033.37421875,
+            "P95": 1852142.933203125,
+            "P100": 1852202.3203125
+          }
+        },
+        "nativeConfidenceLower": 1961692.764209443,
+        "nativeConfidenceUpper": 2100290.87980434,
+        "ratioLower": 0.8777608109463134,
+        "ratioUpper": 0.9440435646380553
+      },
+      {
+        "view": "upperOutlierDiagnostic",
+        "statistics": {
+          "OriginalValues": [
+            1847555.4921875,
+            1851484.6484375,
+            1846544.484375,
+            1852094.34375,
+            1848668.27734375,
+            1849823.51171875,
+            1852202.3203125,
+            1847812.77734375,
+            1845015.13671875,
+            1844394.13671875,
+            1845290.68359375,
+            1841972.921875
+          ],
+          "N": 12,
+          "Min": 1841972.921875,
+          "LowerFence": 1837696.2983398438,
+          "Q1": 1845221.796875,
+          "Median": 1847684.134765625,
+          "Mean": 1847738.2278645833,
+          "Q3": 1850238.7958984375,
+          "UpperFence": 1857764.2944335938,
+          "Max": 1852202.3203125,
+          "InterquartileRange": 5016.9990234375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 943.2547835732446,
+          "Variance": 10676755.040805701,
+          "StandardDeviation": 3267.5304192624894,
+          "Skewness": -0.0752730460387212,
+          "Kurtosis": 1.6789334585817655,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1847738.2278645833,
+            "StandardError": 943.2547835732446,
+            "Level": 12,
+            "Margin": 4185.201984379397,
+            "Lower": 1843553.0258802038,
+            "Upper": 1851923.4298489627
+          },
+          "Percentiles": {
+            "P0": 1841972.921875,
+            "P25": 1845221.796875,
+            "P50": 1847684.134765625,
+            "P67": 1849095.7140624998,
+            "P80": 1851152.42109375,
+            "P85": 1851698.0417968752,
+            "P90": 1852033.37421875,
+            "P95": 1852142.933203125,
+            "P100": 1852202.3203125
+          }
+        },
+        "nativeConfidenceLower": 1961692.764209443,
+        "nativeConfidenceUpper": 2100290.87980434,
+        "ratioLower": 0.8777608109463134,
+        "ratioUpper": 0.9440435646380553
+      }
+    ]
+  },
+  "referenceManifestCorrection": {
+    "stage": "BPT1240",
+    "failureBeforeWorkersWarmupsOrActuals": true,
+    "hardlinkedFrozenManifestChangedByLaterCanonicalUpdates": true,
+    "priorSha256": "9353063bf94203172dd9dc7a3a52e40e68b26ce1acfb79bee245c97170f18164",
+    "restoredSha256": "7122cb41e615f1717825e10075911303ffde460c57b9f848477f5939093b6793",
+    "fromMember": "tmp/bir1231-frozen-root/tmp/benchmark-source.json",
+    "archiveSha256": "26635fbb6a4a5b78ecd0857baedae4b207b0b2c880c4b104eb59179d5036832a",
+    "restoredAsIndependentFile": true,
+    "canonicalManifestUnchanged": true,
+    "referenceBinaryAndCodeUnchanged": true,
+    "allBuilds": 0,
+    "completedMeasurementsRepeated": 0
+  },
+  "qualificationReused": {
+    "fullLiveEachOs": 6823,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0,
+    "provider": "benchmarks/vertical-prepared-rows-evidence.json",
+    "currentCanonicalProvider": "benchmarks/text-scan-band-coordinates-evidence.json",
+    "currentCanonicalFullLiveEachOs": 6824,
+    "ciRun": 44176710099,
+    "allThreeCiJobsPassed": true
+  },
+  "builds": {
+    "driver": 1,
+    "productionEmbeddedPublicHarnessNativeFixturePackage": 0
+  },
+  "storage": {
+    "borrowedSourceBytes": 1062936,
+    "independentOutputBytes": 4264104,
+    "geometryCapacityBytes": 102892,
+    "rowCacheBytes": 131520,
+    "retainedOperationScratchBytes": 0,
+    "defaultIdleCeilingBytes": 4194304,
+    "resultExceedsIdleCeiling": true,
+    "poolPolicyUnchanged": true,
+    "callerRootBypassesIdleStorage": true,
+    "physicalNativeJitPeaksUnmeasured": true
+  },
+  "decision": "Original asymmetricbilinear16 passes/stops with finer interleaving on the same source-validC620/f034 actualpackage artifact. All original samples/uncertainty remainhistory. No productiongain/regression/causalclockclaim,additionalstatisticalunits,filteredactuals or relaxedgate. Equivalentone-shot andother passingpaths neverretimed. Reuseunchanged qualification;finalfullpackage refresh remainsopen.",
+  "raw": {
+    "file": "bilinear-partitioned-reference.tar.xz",
+    "sha256": "246a60c19a22b1a0f5acc61ccea1d3fa0c7e2b3462c2099c833bc053ec5e2029",
+    "bytes": 287976,
+    "members": 28,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "bilinear-current-interleaved-reference.tar.xz",
+        "sha256": "26635fbb6a4a5b78ecd0857baedae4b207b0b2c880c4b104eb59179d5036832a"
+      },
+      {
+        "file": "vertical-prepared-rows-qualified.tar.xz",
+        "sha256": "a6b2dba621c42eb4eaafaaee9490728bb72966e268a010f5d74da475e6692ca8"
+      }
+    ]
+  }
+}
