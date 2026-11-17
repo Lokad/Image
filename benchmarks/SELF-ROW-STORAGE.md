@@ -1,5 +1,8 @@
 # Shared self-row execution state
 
+Separate-word costs now use [interleaved reference groups](WARM-CADENCE-AND-BRACKETS.md)
+on this same immutable artifact; the original samples and accepted self-row gain remain.
+
 The original RGBA16 overlap gap closes on the final timed/package DLL:
 **5.186 /FFmpeg 5.602 µs**, upper **0.930762**, **pass**.
 Controlled complete forward/reverse pairs save **1.110 µs /20.26%**:
@@ -12,7 +15,7 @@ This scopes the final-artifact effect; private/historical gains are never summed
 | Original RGBA16 overlap + reverse, 257×129 | 5.186 /5.602 | 0.930762 /pass | 0 |
 | Separate RGBA8, 256×129 | 2.172 /2.080 | 1.059073 /gap | 0 |
 | Clipped RGBA8, 254×129 effective | 2.145 /2.091 | 1.034826 /gap | 0 |
-| Separate RGBA16, 256×129 | 4.029 /3.898 | 1.061029 /uncertain | 0 |
+| Separate RGBA16, 256×129 | 3.903 /3.902 | 1.091016 /uncertain | 0 |
 | RGBA8 overlap + reverse | 3.885 /4.183 | 0.938291 /pass | 0 |
 
 Known self-copies pass one bounded packed span and one row step instead of two

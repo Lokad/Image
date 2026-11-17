@@ -1,7 +1,7 @@
 # Separate-word copy: current package confirmation
 
-Accepted-stage/measurement history. [Shared self-row state](SELF-ROW-STORAGE.md)
-owns current copy costs; the original evidence below remains.
+Measurement history. [Interleaved reference groups](WARM-CADENCE-AND-BRACKETS.md)
+own current separate-word costs; the original evidence below remains.
 
 
 The existing 256×129 RGBA16 copy remains **uncertain** on the current immutable

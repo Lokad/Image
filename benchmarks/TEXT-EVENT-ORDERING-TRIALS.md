@@ -4,6 +4,10 @@ The residual-endpoint revision is a **confirmed private lead**, not a promoted
 production change or an external-reference parity pass. The qualified E1 library
 and package remain unchanged.
 
+The [longer-cadence follow-up](WARM-CADENCE-AND-BRACKETS.md) is near-neutral and
+does not establish transfer. The candidate remains unpromoted; no further text
+timing or broad/package qualification follows from this lead.
+
 | Complete ordinary RGBA8 draw | Baseline →candidate µs | Paired ratio interval | Measured GC B/op |
 | --- | ---: | ---: | ---: |
 | Full upper-endpoint merge, three-pair screen | 46.156 →48.991 | 0.969471–1.162154 /unpromising | 75,864 →75,864 |
@@ -63,10 +67,10 @@ one-shot and preparation-plus-eight-draw integrations pass at **1,138.480 /6,200
 and **1,259.497 /6,924.312 µs**, upper **0.207966 /0.203702**. Preparation and
 prepared-draw diagnostics remain separate; stages are never summed.
 
-Before promotion, diagnose whether the confirmed short-batch effect transfers to
-the existing 16,384-operation ordinary boundary. Reuse immutable DLLs and all
-original checks; no identical standalone recapture for favorable results. Resolve
-affected performance before broad Windows/Linux/package qualification. Unchanged
+The completed 16,384-operation transfer diagnosis preserves immutable DLLs and all
+original checks, without an identical standalone recapture for favorable results.
+Any future materially revised design must resolve affected performance before
+broad Windows/Linux/package qualification. Unchanged
 qualified RGBA16/other passing paths remain stopped on the production baseline;
 these prototype observations do not replace them. Independent copy work need not
 wait on measurement uncertainty.

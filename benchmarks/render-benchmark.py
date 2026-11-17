@@ -248,6 +248,14 @@ def borrowed_copy_stage():
     assert q['modes'] == ['normal', 'avx512-off', 'scalar'] and q['focusedInternalEachMode'] == 6 and q['focusedPublicEachMode'] == 190
     assert all(stage['sourceProof'].values()) and stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
     assert stage['memory']['managedAllocatedBytesPerOperation'] == stage['memory']['newAdmittedCapacityBytes'] == stage['memory']['newRetainedCapacityBytes'] == 0
+    word = json.loads((ROOT / 'benchmarks/copy-word-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
+    assert word['measurementAccepted'] and not word['productionChanged'] and not word['productionSpeedupClaim']
+    assert word['requiredMaterialPaths'] == 289 and word['newRequiredPaths'] == 0
+    assert word['raw']['mirrored'] and word['raw']['allMembersVerified'] and all(word['sourceProof'].values())
+    assert word['allOriginalGatesPassed'] and word['quietGuardsPassed'] and word['allActualsRetained']
+    assert word['producers'] == stage['producers'] and word['qualificationReused']['newBroadPackageChecks'] == 0
+    assert word['case']['referenceBracketsInterleaved'] and word['case']['operationsPerSubject'] == 262144
+    stage['cases']['DrawingCopy16'] = word['case']
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
     for c in stage['cases'].values():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
@@ -2058,6 +2066,8 @@ historical clocks and prototype effects are not added.
 Separate byte copy is **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper
 **{b8['upper']:.3f}**, a gap. Separate word copy **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**,
 upper **{bw['upper']:.6f}**, remains uncertain on the frozen 262,144-operation cadence.
+Its [reference groups now interleave](../benchmarks/WARM-CADENCE-AND-BRACKETS.md)
+around each pair, with unchanged counts, operation bodies and confidence gate.
 All actuals and three native brackets stay, without an assumed gap, causal
 regression claim or favorable replay. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
 upper **{bo['upper']:.6f}**, passes/stops. Clipped byte copy retains a small gap.

@@ -1,0 +1,409 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CPA1223",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producers": {
+    "windowsSha256": "368a0fc89f2dc69c43bb3c0e06e0f8cd9bd7b3c7bc2860c95aa86e48afe62a57",
+    "linuxSha256": "0707fa235fc9f4762022244df801ad6c63b2dc15ba3d900f49ba1e578442e1f6",
+    "timedArtifactSha256": "0707fa235fc9f4762022244df801ad6c63b2dc15ba3d900f49ba1e578442e1f6",
+    "packageSha256": "d7cce2261d06652cd441ccdc793b8d3844b2bc81f516e88d139daeffdd9ddcb7",
+    "symbolsSha256": "eb819ecb94a414c42311c4b0392f647fc405c7c32e790ede1620ab499bf7f777"
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "CPA1223",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "oldProducer": "0707fa235fc9f4762022244df801ad6c63b2dc15ba3d900f49ba1e578442e1f6",
+    "oldObservation": {
+      "managedMeanUs": 4.0287682272593175,
+      "managedStandardErrorNs": 13.216755692902126,
+      "referenceGroups": [
+        {
+          "meanUs": 4.031037568728129,
+          "standardErrorNs": 19.73877649680111
+        },
+        {
+          "meanUs": 3.9184338912963868,
+          "standardErrorNs": 10.4456300738949
+        },
+        {
+          "meanUs": 3.8975906397501627,
+          "standardErrorNs": 10.205408634224357
+        }
+      ],
+      "lower": 0.9639460729801861,
+      "upper": 1.0610286503610218,
+      "pairedRatioConfidence": [
+        1.0117063209130046,
+        1.0448352762937567
+      ]
+    },
+    "sourcePins": {
+      "tmp/dwc1177-driver/Program.cs": "f0dab0661857dab40ffa852cb671cac9ba27fbfeddf8b075b49da09b8be1a0a0",
+      "benchmarks/Lokad.Image.Benchmarks/WarmCopyRegion.cs": "f4728f5c03a9af04f65ea85c3e5326b7ad16a364ffe3bd04d4b7414b517139b8",
+      "benchmarks/Lokad.Image.Benchmarks/NativeWarmReference.CopyRegion.cs": "be19949ba4422b7531ebca64b1260035be922577a3b8b32d64a831324ad1a2e0"
+    },
+    "findings": [
+      "Existing driver already warms BOTH sides with four262144-op batches before actuals; no cold-start correction is justified.",
+      "All12 reference-before batches precede every adjacent pair; all12 after batches follow every pair. Their groups can observe different temporal phases. This is a sampling-boundary observation, not a proven host/cpu cause or reference defect.",
+      "All12 managed/native pairs,all36 native actuals,262144ops,three reference distributions and the conservative all-actual/outlier-diagnostic/paired-log confidence formula remain required. No pixel/input/ownership/validation/native setting changes."
+    ],
+    "hypothesis": "Interleave the same before/paired/after reference counts around each actual pair so allthree distributions span the same run. Change ordering only; preserve timed operation bodies,warmup,12pairs,262144ops,reference identity,all gates and conservative statistics byte-for-byte. One bounded capture; no favorable replay if still uncertain.",
+    "precondition": "Verify the actual copied old driver source/assembly and original fixture/reference identities,then use the immutable qualified SRS0707 artifact. No production/harness/native/fixture/package rebuild.",
+    "driverPath": "tmp/cpa1223-driver/bin/Release/net10.0/CopyInterleaved.dll",
+    "driverSha256": "9337b7ae8d345c0b99c7e682becc9dfe9f5cffb7dc8be02627d01b378b6075ec",
+    "driverSourceSha256": "f03efebe9f6759db2d4b6eb86f688d91893106ef702593f0451a563b6908fc5b",
+    "sourceProof": {
+      "managedTimedBodyVerbatim": true,
+      "conservativeStatisticsVerbatim": true,
+      "operationWarmupValidationAndOwnershipUnchanged": true,
+      "onlyReferenceGroupScheduleChanged": true
+    },
+    "builds": {
+      "driver": 1,
+      "productionEmbeddedPublicHarnessNativeFixturesPackage": 0
+    },
+    "preTimingCorrection": "Portable descriptor path separators corrected before guard/worker/samples; same driver binary and partially prepared immutable runtime reused after hashes match. No build or sample replay."
+  },
+  "sourceProof": {
+    "managedTimedBodyVerbatim": true,
+    "conservativeStatisticsVerbatim": true,
+    "operationWarmupValidationAndOwnershipUnchanged": true,
+    "onlyReferenceGroupScheduleChanged": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "tests/Lokad.Image.Tests/SelfRowStorageTests.cs": "6bcc5b851bfeb6d0f28c16bf24b7c19e7ce8a9fa09e39708dc1665614de0108d"
+  },
+  "case": {
+    "caseId": "DrawingCopy16",
+    "managedUs": 3.902789952278137,
+    "nativeUs": 3.902372498512268,
+    "ratio": 1.000106974351123,
+    "lower": 0.915150746986135,
+    "upper": 1.0910155280895333,
+    "status": "uncertain",
+    "allocatedBytes": 0,
+    "librarySha256": "0707fa235fc9f4762022244df801ad6c63b2dc15ba3d900f49ba1e578442e1f6",
+    "harnessSha256": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+    "boundary": "One complete public CopyRegion from the resident original 513x259 RGBA16 raster: source x127,y65,w256,h129 to x17,y19 in a separate caller-owned 513x259 canvas at the same depth. Admission, validation, cooperative cancellation checkpoints and operation-scope cleanup are included. Native public FFmpeg av_image_copy_plane mutates the equivalent borrowed canvas. Source/canvas preparation, reset, IPC, startup, I/O and verification excluded equally; identical overwrites are idempotent, with no reset between operations. No output allocation or full-frame copy on either subject. Exact full canvas, alpha, hidden RGB, untouched pixels and unchanged source. One CPU, normal SIMD; only this rectangle is measured.",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "34517087519531193c1d196f3c58f335a9fad0a2f40ea8bb8e9b9f2c93055f9a",
+      "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+      "workerSha256": "f0bcf912fdf23bf9ccaa4c1eb283d2a11b8317dd6a8bb88a95b0ae96d1bc76f2",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+      },
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "copy-region",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "affinityCount": 1,
+      "workerThreads": 1,
+      "outputWidth": 513,
+      "outputHeight": 259,
+      "sourceX": 127,
+      "sourceY": 65,
+      "copyWidth": 256,
+      "copyHeight": 129,
+      "destinationX": 17,
+      "destinationY": 19,
+      "borrowedSource": true,
+      "borrowedCanvas": true,
+      "canvasMutationTimed": true,
+      "sourcePreparationTimed": false,
+      "canvasPreparationTimed": false,
+      "outputAllocationTimed": false,
+      "initialCompletedOperations": 1,
+      "inputStride": 4104,
+      "ffmpegVersion": "n8.1",
+      "avutilVersion": 3938916
+    },
+    "actualIterations": 12,
+    "operationsPerSubject": 262144,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "managedExact": true,
+    "borrowedCanvas": true,
+    "sourceAliasesCanvas": false,
+    "observation": "tmp/cpa1223-separate-word.json",
+    "nativeSamplesEachBracket": 12,
+    "sourceUnchanged": true,
+    "receipt": "tmp/cpa1223-separate-word-receipt.json",
+    "referenceBracketsInterleaved": true,
+    "productionChanged": false
+  },
+  "managedStatistics": {
+    "OriginalValues": [
+      3783.4147300720215,
+      3799.9282608032227,
+      4033.966423034668,
+      4064.7913551330566,
+      4086.086753845215,
+      4054.7348709106445,
+      4049.6375312805176,
+      3783.4361419677734,
+      3782.5032386779785,
+      3782.3100776672363,
+      3829.9088401794434,
+      3782.761203765869
+    ],
+    "N": 12,
+    "Min": 3782.3100776672363,
+    "LowerFence": 3381.7605719566345,
+    "Q1": 3783.2513484954834,
+    "Median": 3814.918550491333,
+    "Mean": 3902.789952278137,
+    "Q3": 4050.9118661880493,
+    "UpperFence": 4452.402642726898,
+    "Max": 4086.086753845215,
+    "InterquartileRange": 267.6605176925659,
+    "LowerOutliers": [],
+    "UpperOutliers": [],
+    "AllOutliers": [],
+    "StandardError": 39.83679414465447,
+    "Variance": 19043.642012682918,
+    "StandardDeviation": 137.99870293840777,
+    "Skewness": 0.29320541326202326,
+    "Kurtosis": 0.9847312394619698,
+    "ConfidenceInterval": {
+      "N": 12,
+      "Mean": 3902.789952278137,
+      "StandardError": 39.83679414465447,
+      "Level": 12,
+      "Margin": 176.75503247800393,
+      "Lower": 3726.034919800133,
+      "Upper": 4079.5449847561413
+    },
+    "Percentiles": {
+      "P0": 3782.3100776672363,
+      "P25": 3783.2513484954834,
+      "P50": 3814.918550491333,
+      "P67": 4039.7647330856325,
+      "P80": 4053.7154029846192,
+      "P85": 4058.254640388489,
+      "P90": 4063.7857067108152,
+      "P95": 4074.3742845535276,
+      "P100": 4086.086753845215
+    }
+  },
+  "nativeStatistics": [
+    {
+      "OriginalValues": [
+        3774.9023933410645,
+        3837.2859268188477,
+        3854.084819793701,
+        4056.0524978637695,
+        4071.0821228027344,
+        4075.262752532959,
+        4057.1962928771973,
+        3929.6114921569824,
+        3784.191719055176,
+        3780.995216369629,
+        3825.0048828125,
+        3782.7998657226562
+      ],
+      "N": 12,
+      "Min": 3774.9023933410645,
+      "LowerFence": 3375.101719379425,
+      "Q1": 3783.843755722046,
+      "Median": 3845.6853733062744,
+      "Mean": 3902.372498512268,
+      "Q3": 4056.3384466171265,
+      "UpperFence": 4465.080482959747,
+      "Max": 4075.262752532959,
+      "InterquartileRange": 272.49469089508057,
+      "LowerOutliers": [],
+      "UpperOutliers": [],
+      "AllOutliers": [],
+      "StandardError": 36.771508106109316,
+      "Variance": 16225.72570077196,
+      "StandardDeviation": 127.38024062142432,
+      "Skewness": 0.3733470189679113,
+      "Kurtosis": 1.1952993652467008,
+      "ConfidenceInterval": {
+        "N": 12,
+        "Mean": 3902.372498512268,
+        "StandardError": 36.771508106109316,
+        "Level": 12,
+        "Margin": 163.15442166253442,
+        "Lower": 3739.2180768497337,
+        "Upper": 4065.5269201748024
+      },
+      "Percentiles": {
+        "P0": 3774.9023933410645,
+        "P25": 3783.843755722046,
+        "P50": 3845.6853733062744,
+        "P67": 3976.3946642684937,
+        "P80": 4056.9675338745114,
+        "P85": 4062.0563333511354,
+        "P90": 4069.693539810181,
+        "P95": 4072.9634061813354,
+        "P100": 4075.262752532959
+      }
+    },
+    {
+      "OriginalValues": [
+        3827.3640670776367,
+        3812.328170776367,
+        4056.1514587402344,
+        4065.195369720459,
+        4074.5462226867676,
+        4059.246440887451,
+        3951.2140617370605,
+        3824.07564163208,
+        3885.3558235168457,
+        3783.31795501709,
+        3924.9039459228516,
+        3775.5194816589355
+      ],
+      "N": 12,
+      "Min": 3775.5194816589355,
+      "LowerFence": 3467.459128379822,
+      "Q1": 3821.138773918152,
+      "Median": 3905.1298847198486,
+      "Mean": 3919.9348866144815,
+      "Q3": 4056.9252042770386,
+      "UpperFence": 4410.604849815369,
+      "Max": 4074.5462226867676,
+      "InterquartileRange": 235.78643035888672,
+      "LowerOutliers": [],
+      "UpperOutliers": [],
+      "AllOutliers": [],
+      "StandardError": 34.15919490888861,
+      "Variance": 14002.207161881297,
+      "StandardDeviation": 118.33092225568639,
+      "Skewness": 0.17601908246613168,
+      "Kurtosis": 1.1965903088329524,
+      "ConfidenceInterval": {
+        "N": 12,
+        "Mean": 3919.9348866144815,
+        "StandardError": 34.15919490888861,
+        "Level": 12,
+        "Margin": 151.56364198431015,
+        "Lower": 3768.3712446301715,
+        "Upper": 4071.4985285987914
+      },
+      "Percentiles": {
+        "P0": 3775.5194816589355,
+        "P25": 3821.138773918152,
+        "P50": 3905.1298847198486,
+        "P67": 3990.040898628235,
+        "P80": 4058.6274444580076,
+        "P85": 4061.328565979004,
+        "P90": 4064.600476837158,
+        "P95": 4069.403253555298,
+        "P100": 4074.5462226867676
+      }
+    },
+    {
+      "OriginalValues": [
+        3917.6752967834473,
+        3800.608917236328,
+        4044.1345024108887,
+        4069.8523483276367,
+        4071.7974967956543,
+        4046.029281616211,
+        3964.022228240967,
+        3781.063545227051,
+        3920.5418128967285,
+        3785.5235595703125,
+        3830.896728515625,
+        3781.0044708251953
+      ],
+      "N": 12,
+      "Min": 3781.0044708251953,
+      "LowerFence": 3425.1816487312317,
+      "Q1": 3796.837577819824,
+      "Median": 3919.108554840088,
+      "Mean": 3917.762515703837,
+      "Q3": 4044.6081972122192,
+      "UpperFence": 4416.264126300812,
+      "Max": 4071.7974967956543,
+      "InterquartileRange": 247.77061939239502,
+      "LowerOutliers": [],
+      "UpperOutliers": [],
+      "AllOutliers": [],
+      "StandardError": 34.55070620017679,
+      "Variance": 14325.015587171218,
+      "StandardDeviation": 119.68715715218245,
+      "Skewness": 0.08321956834659852,
+      "Kurtosis": 1.1689099502633473,
+      "ConfidenceInterval": {
+        "N": 12,
+        "Mean": 3917.762515703837,
+        "StandardError": 34.55070620017679,
+        "Level": 12,
+        "Margin": 153.3007694940155,
+        "Lower": 3764.4617462098213,
+        "Upper": 4071.0632851978526
+      },
+      "Percentiles": {
+        "P0": 3781.0044708251953,
+        "P25": 3796.837577819824,
+        "P50": 3919.108554840088,
+        "P67": 3993.663769683838,
+        "P80": 4045.6503257751465,
+        "P85": 4054.36735496521,
+        "P90": 4067.4700416564942,
+        "P95": 4070.7276651382444,
+        "P100": 4071.7974967956543
+      }
+    }
+  ],
+  "pairedRatioConfidence": [
+    0.9785147589215185,
+    1.0127273693712913
+  ],
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "allActualsRetained": true,
+  "qualificationReused": {
+    "fullLiveEachOs": 6805,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0
+  },
+  "decision": "Interleave unchanged36native samples around12actualpairs. Same262144ops,warmup,timed public boundaries and conservative statistics. Original result retained;new current separateword remains uncertain,no optimization inferred or further identical capture. Other copy passes/gaps unchanged.",
+  "raw": {
+    "file": "warm-cadence-and-brackets.tar.xz",
+    "sha256": "136fb7b9f032db924f654ca05f1dcd7b9421281af30444c7b8eba1e898e9c7e8",
+    "bytes": 65420,
+    "members": 45,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "text-event-ordering-trials.tar.xz SHA25694832250a2dfb4472d88a3db7d7726c71d6ed6c2d647998283a0079fe373ee7c",
+      "self-row-storage-qualified.tar.xz SHA25632a9632881c333c26d4f44af679d869f0377832c687cbdd1571cc92baf464ea9"
+    ]
+  }
+}

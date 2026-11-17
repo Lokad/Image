@@ -30,8 +30,10 @@ cost **5.186 / FFmpeg 5.602 µs**, upper
 historical clocks and prototype effects are not added.
 
 Separate byte copy is **2.172 / 2.080 µs**, upper
-**1.059**, a gap. Separate word copy **4.029 / 3.898 µs**,
-upper **1.061029**, remains uncertain on the frozen 262,144-operation cadence.
+**1.059**, a gap. Separate word copy **3.903 / 3.902 µs**,
+upper **1.091016**, remains uncertain on the frozen 262,144-operation cadence.
+Its [reference groups now interleave](../benchmarks/WARM-CADENCE-AND-BRACKETS.md)
+around each pair, with unchanged counts, operation bodies and confidence gate.
 All actuals and three native brackets stay, without an assumed gap, causal
 regression claim or favorable replay. Byte overlap **3.885 / 4.183 µs**,
 upper **0.938291**, passes/stops. Clipped byte copy retains a small gap.
@@ -474,7 +476,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.17 | 2.08 | 1.044 / 1.059 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.03 | 3.90 | 1.034 / 1.061 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.90 | 3.90 | 1.000 / 1.091 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.88 | 4.18 | 0.929 / 0.938 | 0 |

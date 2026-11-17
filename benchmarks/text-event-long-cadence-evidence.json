@@ -1,0 +1,228 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LCT1222",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "design": {
+    "stage": "LCT1222",
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "allProductionBuilds": 0,
+    "workerBuilds": 1,
+    "originalWorkerSourceSha256": "81d4033e75909a7a3f8016a04dbc1e0321fefc7c255d5be57b93d18741a9b2dd",
+    "workerSourceSha256": "3d0cfd2043f09bdfe08d0546809aca4e226f773b4973b7bd5acd580fcf1c3e9b",
+    "workerSha256": "cacafc6986a4c1897d1b79d1b0c40ad38382e2420f1e064aede9b358cf3c4f33",
+    "hypothesis": "The private EPR gain is independently confirmed at4096 ops but its16384-op standalone boundary remains uncertain. One paired16384-op comparison isolates transfer of the same complete operation between the same immutable E1/815 modules. Natural GC counts stay outside timestamps. No new native baseline, fixture, numerical gate or favorable standalone repeat.",
+    "changes": "Only operations4096->16384 and before/after naturalGC counters outside the timing loop; public operation/reset/full-frame checks/ownership/clock placement verbatim."
+  },
+  "cases": {
+    "ready": {
+      "baseline": {
+        "state": "ready",
+        "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "operations": 16384,
+        "warmups": 16384
+      },
+      "candidate": {
+        "state": "ready",
+        "librarySha256": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+        "operations": 16384,
+        "warmups": 16384
+      }
+    },
+    "subjects": {
+      "baseline": {
+        "mean": 46.72022994486491,
+        "lower": 46.48850853481145,
+        "upper": 46.95195135491837,
+        "values": [
+          46.977488220214845,
+          46.284598754882815,
+          46.79660662841797,
+          46.809196228027346,
+          46.76810192871094,
+          46.77551123046875,
+          46.96055480957031,
+          46.69534539794922,
+          46.64967486572266,
+          46.59626000976562,
+          46.671224487304684,
+          46.65819677734375
+        ]
+      },
+      "candidate": {
+        "mean": 46.633373245239255,
+        "lower": 46.40217319455451,
+        "upper": 46.864573295924004,
+        "values": [
+          46.580036315917965,
+          46.637662780761715,
+          46.534212036132814,
+          46.53515460205078,
+          46.63806109619141,
+          46.57734619140625,
+          46.636386657714844,
+          47.19189093017578,
+          46.60786157226563,
+          46.54123828125,
+          46.58414331054688,
+          46.536485168457034
+        ]
+      }
+    },
+    "ratio": 0.9981409848906321,
+    "lower": 0.9909285358846878,
+    "upper": 1.00540592952949,
+    "allocations": {
+      "baseline": [
+        75864.0
+      ],
+      "candidate": [
+        75864.0
+      ]
+    },
+    "allPairsRetained": true,
+    "quietGuardsPassed": true
+  },
+  "naturalGcCounts": {
+    "baseline": [
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 1
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 75,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      }
+    ],
+    "candidate": [
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 1
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 75,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 10,
+        "gen2Collections": 0
+      },
+      {
+        "gen0Collections": 74,
+        "gen1Collections": 9,
+        "gen2Collections": 0
+      }
+    ]
+  },
+  "decision": "Long16384-operation cadence does not establish transferred gain:near-neutral/inconclusive. No promotion,broad/package qualification or further text timing;retain original4096-op gain as scoped evidence,not an automatic acceptance or permanent family ban. Continue independent demonstrated byte-copy work;separate-word uncertainty remains measurement work.",
+  "raw": {
+    "file": "warm-cadence-and-brackets.tar.xz",
+    "sha256": "136fb7b9f032db924f654ca05f1dcd7b9421281af30444c7b8eba1e898e9c7e8",
+    "bytes": 65420,
+    "members": 45,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "text-event-ordering-trials.tar.xz SHA25694832250a2dfb4472d88a3db7d7726c71d6ed6c2d647998283a0079fe373ee7c",
+      "self-row-storage-qualified.tar.xz SHA25632a9632881c333c26d4f44af679d869f0377832c687cbdd1571cc92baf464ea9"
+    ]
+  }
+}
