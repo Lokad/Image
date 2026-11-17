@@ -2110,13 +2110,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     text_band = text_scan_band_stage()
     word_interleaving = ordinary_word_interleaving(text_band)
     ordinary_text = {**text_band, 'cases': {**text_band['cases'], 'Ordinary16': word_interleaving['case']}}
-    font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
+    font_current = json.loads((ROOT / 'benchmarks/font-mapping-group-validation-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
     assert font_current['raw']['mirrored'] and font_current['raw']['allMembersVerified']
     hq = font_current['qualification']
-    assert hq['windows']['total'] == hq['linux']['total'] == hq['fullChecksEachOs'] == 6819
-    assert hq['focusedEachMode'] == {'internal': 306, 'public': 222}
+    assert hq['windows']['total'] == hq['linux']['total'] == hq['fullChecksEachOs'] == 6839
+    assert hq['focusedEachMode'] == {'internal': 322, 'public': 222}
     assert hq['allAffectedPerformanceReconciledBeforeBroad'] and hq['productionRebuildsAfterTiming'] == 0
     assert hq['linux']['actualPackage']['sha256'] == hq['windowsPackage']['sameActualPackageSha256'] == font_current['producers']['packageSha256']
     assert hq['linux']['actualPackage']['librarySha256'] == font_current['producers']['timedArtifactSha256']
@@ -2149,13 +2149,13 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert memory['caseCapacities']['NarrowLongWord']['newRetainedCapacity'] > memory['caseCapacities']['NarrowLongWord']['oldRetainedCapacity']
     for case, label in [('OneShot', 'Complete text one-shot / ImageSharp public integration'),
                         ('PrepareDraw8', 'Complete text preparation + eight draws / ImageSharp public integration')]:
-        cost = text_band['pipelineCases'][case]
+        cost = font_current['pipelineCases'][case]
         assert cost['status'] == 'pass' and len(cost['pairs']) == len(cost['referenceBefore']) == len(cost['referenceAfter']) == 12
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['referenceUs'], rel_tol=1e-12)
         rows.append(('editing', f'| {label} (pass) † | {cost["managedUs"]:,.2f} | {cost["referenceUs"]:,.2f} | '
                      f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["managedAllocatedBytes"]:,.0f} |'))
-    font_preparation = text_band['pipelineCases']['Preparation']
-    font_batch = text_band['pipelineCases']['PrepareDraw8']
+    font_preparation = font_current['pipelineCases']['Preparation']
+    font_batch = font_current['pipelineCases']['PrepareDraw8']
     assert math.isclose(font_batch['amortizedManagedUs'], font_batch['managedUs'] / 8, rel_tol=1e-12)
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
@@ -3351,8 +3351,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading retains the source-valid retained-prefix package; ordinary/clipped
-drawing and complete text integrations use the scan-band-coordinate package.
+font loading and complete text integrations use the mapping-validation package;
+ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3457,7 +3457,7 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 {owned_copy_note}
 
 The [family reports](../benchmarks/WARM-COVERAGE.md) identify source-valid passing
-paths and remaining font/copy/inspection gaps. Historical image-view aggregates
+paths and remaining copy/inspection gaps. Historical image-view aggregates
 stay in their original reports; the complete final-package refresh remains open.
 {bicubic_adjacent_note}
 [RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
@@ -3657,19 +3657,19 @@ allocations are **9,256,953 /9,494,633 B**. Latin/fit retained plans remain
 temporary crossings. Total allocations, peak admitted capacity, retained state
 and unmeasured physical/native/JIT peaks are separate.
 
-[Font loading](../benchmarks/FONT-RETAINED-PREFIX.md) saves
+[Batched font mapping validation](../benchmarks/FONT-MAPPING-GROUP-VALIDATION.md) saves
 **{font_current['pairedEffect']['savedUs']:.3f} µs / {font_current['pairedEffect']['gainPercent']:.2f}%** in controlled
 complete final-DLL pairs. Current **{font_cost['managedUs']:.3f} / {font_cost['nativeUs']:.3f} µs**,
-upper **{font_cost['upper']:.6f}**, remains a scoped **FreeType 2.13.2
-copy/open/retain/dispose** gap at **176 B/op**. The original borrowed face is
+upper **{font_cost['upper']:.6f}**, passes/stops against the scoped **FreeType 2.13.2
+copy/open/retain/dispose** reference at **176 B/op**. The original borrowed face is
 757,076 B; managed owned backing is 678,016 B, native owned input stays 757,076 B.
 Managed live admission is 678,272 B; default idle storage is separate. Original
 directory/input limits remain; owned tables retain exact offsets/bytes. Eager/lazy
 validation differs, not general parser equivalence or an overall text slowdown. Unchanged [prepared ordinary drawing](../benchmarks/TEXT-PREPARED-COVERAGE.md)
 passes/stops at **56 B/op** with its distinct retained-state boundary.
 
-Windows/Linux each pass **6,824 full/live checks**, focused **307 internal/177 public**
-normal/AVX-disabled/scalar checks and the SAME actual scan-band package/all three
+Windows/Linux each pass **6,839 full/live checks**, focused **322 internal/222 public**
+normal/AVX2-disabled/scalar checks and the SAME actual mapping-validation package/all three
 examples. Affected performance reconciles before qualification; no timed DLL
 rebuild occurs. Other families retain identified unchanged-path evidence. The
 complete final-package refresh remains pending.

@@ -1,3 +1,7 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image;
@@ -38,6 +42,11 @@ public sealed partial class TrueTypeFont
         {
             var count = U32(bytes[12..]); Items(count, context);
             if (U16(bytes[2..]) != 0 || 16L + count * 12L > bytes.Length) throw new ImageDataException("Invalid Unicode group table.");
+            // The preceding byte extent proves count fits a managed index.
+            // A noncancelable scan can classify private, immutable groups in
+            // batches. Any failure returns to the original ordered validator.
+            if (!context.Cancellation.CanBeCanceled && Avx2.IsSupported
+                && TryValidateGroups12(bytes[16..], (int)count, GlyphCount)) return;
             long previous = -1;
             for (var i = 0; i < count; i++)
             {
@@ -70,6 +79,63 @@ public sealed partial class TrueTypeFont
             }
             if (previous != 0xFFFF) throw new ImageDataException("Unicode segment table has no terminal segment.");
         }
+    }
+
+    private static bool TryValidateGroups12(ReadOnlySpan<byte> groups, int count, int glyphCount)
+    {
+        if (count < 8 || count > groups.Length / 12) return false;
+        var swap = Vector256.Create((byte)3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12,
+            3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12);
+        var unicodeLimit = Vector256.Create(0x110000); var glyphLimit = Vector256.Create(glyphCount);
+        var minusOne = Vector256.Create(-1); var previous = -1; var i = 0;
+        for (; i <= count - 8; i += 8)
+        {
+            // Exactly eight 12-byte records; no expanded read or decoded table.
+            var blocks = MemoryMarshal.Cast<byte, Vector256<byte>>(groups.Slice(i * 12, 96));
+            var a = Avx2.Shuffle(blocks[0], swap).AsInt32();
+            var b = Avx2.Shuffle(blocks[1], swap).AsInt32();
+            var c = Avx2.Shuffle(blocks[2], swap).AsInt32();
+            TransposeGroups12(a, b, c, out var first, out var last, out var glyph);
+            var preceding = Avx2.PermuteVar8x32(last, Vector256.Create(0, 0, 1, 2, 3, 4, 5, 6)).WithElement(0, previous);
+            // Signed order from previous=-1/a valid end, together with last>=first,
+            // inductively establishes nonnegative starts/ends in every lane.
+            var valid = Avx2.And(Avx2.CompareGreaterThan(first, preceding),
+                Avx2.AndNot(Avx2.CompareGreaterThan(first, last), Avx2.CompareGreaterThan(unicodeLimit, last)));
+            valid = Avx2.And(valid, Avx2.And(Avx2.CompareGreaterThan(glyph, minusOne), Avx2.CompareGreaterThan(glyphLimit, glyph)));
+            // On accepted structural/glyph lanes, delta<=0x10ffff and glyph<65536,
+            // so this addition fits Int32. Other wrapped lanes cannot pass valid.
+            var finalGlyph = Avx2.Add(glyph, Avx2.Subtract(last, first));
+            valid = Avx2.And(valid, Avx2.CompareGreaterThan(glyphLimit, finalGlyph));
+            if (Avx2.MoveMask(valid.AsByte()) != -1) return false;
+            previous = last.GetElement(7);
+        }
+        for (; i < count; i++)
+        {
+            var group = groups.Slice(i * 12, 12);
+            var first = U32(group); var last = U32(group[4..]); var glyph = U32(group[8..]);
+            if (last < first || first <= previous || last > 0x10FFFF || glyph + (ulong)last - first >= (ulong)glyphCount)
+                return false;
+            previous = (int)last;
+        }
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void TransposeGroups12(Vector256<int> a, Vector256<int> b, Vector256<int> c,
+        out Vector256<int> first, out Vector256<int> last, out Vector256<int> glyph)
+    {
+        first = Avx2.Blend(Avx2.Blend(
+            Avx2.PermuteVar8x32(a, Vector256.Create(0, 3, 6, 0, 0, 0, 0, 0)),
+            Avx2.PermuteVar8x32(b, Vector256.Create(0, 0, 0, 1, 4, 7, 0, 0)), 0x38),
+            Avx2.PermuteVar8x32(c, Vector256.Create(0, 0, 0, 0, 0, 0, 2, 5)), 0xc0);
+        last = Avx2.Blend(Avx2.Blend(
+            Avx2.PermuteVar8x32(a, Vector256.Create(1, 4, 7, 0, 0, 0, 0, 0)),
+            Avx2.PermuteVar8x32(b, Vector256.Create(0, 0, 0, 2, 5, 0, 0, 0)), 0x18),
+            Avx2.PermuteVar8x32(c, Vector256.Create(0, 0, 0, 0, 0, 0, 3, 6)), 0xe0);
+        glyph = Avx2.Blend(Avx2.Blend(
+            Avx2.PermuteVar8x32(a, Vector256.Create(2, 5, 0, 0, 0, 0, 0, 0)),
+            Avx2.PermuteVar8x32(b, Vector256.Create(0, 0, 0, 3, 6, 0, 0, 0)), 0x1c),
+            Avx2.PermuteVar8x32(c, Vector256.Create(0, 0, 0, 0, 0, 1, 4, 7)), 0xe0);
     }
 
     private int Map(int scalar, OperationContext context)
