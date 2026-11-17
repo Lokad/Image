@@ -1,0 +1,450 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SVA1214/GSC1215/GSO1216",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineProducers": {
+    "windowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "linuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "timedArtifactSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "packageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+    "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5"
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "SVA1214",
+    "auditOnly": true,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newRequiredPaths": 0,
+    "sources": {
+      "src/Lokad.Image/TrueTypeFont.cs": "9eb17e74df87a0cdd4258063457967a4a3d1dfb139fae46141d569d774a25bbf"
+    },
+    "callBoundary": [
+      "LoadCore has one private constructor call; no font escapes until construction and storage-owner assignment succeed.",
+      "The operation context admits the actual owned array before allocation; failed construction disposes it and never caches the array.",
+      "Public font APIs expose metrics/decoded layouts, not its data array. Only successful Dispose returns storage to the private pool.",
+      "Constructor metadata, required-range and glyph validation precede cmap validation; preserve that ordered error boundary."
+    ],
+    "initializedReadProof": [
+      "The shared eight-record classifier proves each offset is monotonic, nonnegative, within the complete glyph table and either empty or at least10B.",
+      "Copying through the classified eighth endpoint initializes every possible ten-byte header in that group before gathering.",
+      "A classification/header failure completes copying before invoking the unchanged ordered validator.",
+      "Complete copying before four-record/scalar tails and before mapping/publication, including unreferenced trailing glyph bytes.",
+      "Header/loca metadata overlap uses complete copying. Revalidate copied directory ranges before metadata reads to cover changed borrowed input.",
+      "Cancelable/short-location/portable/small-table paths retain complete copying; no new admission failure fallback."
+    ],
+    "frozenGeometry": {
+      "fontBytes": 757076,
+      "glyphCount": 6253,
+      "glyphBytes": 556004,
+      "metadata": {
+        "head": {
+          "offset": 611512,
+          "length": 54,
+          "disjoint": true
+        },
+        "hhea": {
+          "offset": 611568,
+          "length": 36,
+          "disjoint": true
+        },
+        "maxp": {
+          "offset": 677984,
+          "length": 32,
+          "disjoint": true
+        },
+        "loca": {
+          "offset": 652968,
+          "length": 25016,
+          "disjoint": true
+        }
+      },
+      "copyIntervals": [
+        [
+          0,
+          131072
+        ],
+        [
+          131072,
+          262144
+        ],
+        [
+          262144,
+          393216
+        ],
+        [
+          393216,
+          524288
+        ],
+        [
+          524288,
+          556004
+        ]
+      ],
+      "nonGlyphPrefixBytes": 122012,
+      "modeledBandBytes": 131072,
+      "copyIntervalsOnlyNotTiming": true
+    },
+    "remaining": "Actual private implementation still needs focused tests and complete-operation screen; geometry and source proof alone establish no performance gain."
+  },
+  "prefixModel": {
+    "project": "Lokad.Image",
+    "stage": "SVA1214-PREFIX",
+    "modelOnly": true,
+    "productionChanged": false,
+    "newBenchmarksOrFixtures": 0,
+    "seed": 4628,
+    "cases": 8192,
+    "results": {
+      "success": 1378,
+      "initial": 189,
+      "location": 3610,
+      "short-header": 749,
+      "bounds": 2266
+    },
+    "corruptionModes": {
+      "0": 1024,
+      "1": 1024,
+      "2": 1024,
+      "3": 1024,
+      "4": 1024,
+      "5": 1024,
+      "6": 1024,
+      "7": 1024
+    },
+    "sourceSha256": "3f6f6a280181fa5c3c9aa74af1f57814ee283c1704e6265452a04c7fb367b268",
+    "guarantees": [
+      "Every modeled header read lies within initialized data.",
+      "Untrusted monotonic-prefix nomination cannot bypass whole selected-record extent/order checks.",
+      "A failed partial classifier completes copying and restarts the original ordered validator.",
+      "First error category and global glyph/location index match the original scalar order in all modeled cases."
+    ],
+    "limitations": "Finite abstract model,not production tests or a proof of CPU gains. Actual implementation still requires real-constructor/scalar/platform checks and complete operation timing."
+  },
+  "rounds": {
+    "GSC1215": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "GSC1215",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newRequiredPaths": 0,
+        "baselineCommit": "642404ce0ce6145c8e86bf31e39c6bc2c5023eed",
+        "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+        "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "prototypePath": "tmp/gsc1215-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "50226e969a874be2e2166b41ae8c087ea6ec9e9890ccb30dc62d26cd11f0c90c",
+        "sourcePins": {
+          "src/Lokad.Image/TrueTypeFont.cs": "9eb17e74df87a0cdd4258063457967a4a3d1dfb139fae46141d569d774a25bbf",
+          "tests/Lokad.Image.Tests/FontInputAdmissionTests.cs": "b7fc24f0cdabe36cd683fd16a2c5d6bf1290de5668858f0cc8ecbad8948f37cd",
+          "tests/Lokad.Image.Tests/FontHeaderValidationTests.cs": "d476de969504f4668af66034a0ee313e0d10f1a55736fb198a8f24e2791a8293",
+          "tests/Lokad.Image.Tests/FontStorageTests.cs": "64dca928189ef14678df54e269da7885cd7324bd086131894f1fb972b77a51af",
+          "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "96a7a1edd12401b730427ff8b7e21b8f80da9ac10056fa80c981dbb801bf218d",
+          "tests/Lokad.Image.Tests/FontPrefixStorageTests.cs": "35e5ef8b5e837052ee3c6645ff38ccac1cbec264c70b101254550cd57cc45b31"
+        },
+        "candidateSourceSha256": "534e51fae882047d327f1fd5e3951f03d682719f810efdecbe4059150aac38ed",
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~GlyphCopyScheduling",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "sourceProof": {
+          "sharedLongClassifierAndHeaderArithmeticVerbatimExceptCopyCheckpoints": true,
+          "allFollowingHeaderAndPublicMethodsVerbatim": true,
+          "oneOwnedArraySameAdmission": true,
+          "privateFailureStateNotPublishedOrCached": true,
+          "expandedDirectoryCannotReadDeferredUninitializedBytes": true
+        },
+        "hypothesis": "Interleave 128KiB-ahead glyph copying with the existing eight-record header validator after structural classification, using one operation-private stack state. Metadata copies and all necessary initialization stay timed. Complete on any classified fallback and before four/scalar tails. Restore full copying for overlapping metadata, short locations, cancelable tokens and portable paths.",
+        "temporaryCosts": "Extra planner ranges and constructor lookups; one conditional per8glyphs and ref state may increase register pressure. Private screen decides; no gain is inferred from profile counts.",
+        "memory": {
+          "frozenOwnedPayloadBytes": 678016,
+          "frozenOwnedChargeBytes": 678272,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedCapacityBytes": 0,
+          "operationState": "40-byte ref struct, no heap array or persistent field"
+        },
+        "builds": {
+          "privateCore": 2,
+          "privateEmbedded": 3,
+          "canonicalVmPublicHarnessReferenceFixturePackage": 0
+        },
+        "initialUnmeasuredPrototypeSha256": "2413b157c1572f9729a9573101d7373e60061a3972e8df9f9336c37fc0bc652f",
+        "preTimingCorrections": "Test-only moved-head fixture alignment, then a constructor-preparation guard completing an expanded copied directory before any entry read. This production correction requires core/embedded rebuild before first statistical capture; canonical production stays unchanged."
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "GSC1215",
+        "mode": "screen",
+        "actuals": 3,
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "pairedManagedDllDiagnosticOnly": true,
+        "standaloneReferencePerformance": false,
+        "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+        "subjects": {
+          "baseline": {
+            "mean": 13.815232381184895,
+            "lower": 13.320601475207287,
+            "upper": 14.309863287162504,
+            "values": [
+              13.801251220703126,
+              13.797964416503905,
+              13.846481506347656
+            ]
+          },
+          "candidate": {
+            "mean": 14.679145528157552,
+            "lower": 14.274039588984637,
+            "upper": 15.084251467330466,
+            "values": [
+              14.70462908935547,
+              14.668855895996094,
+              14.663951599121093
+            ]
+          }
+        },
+        "allocations": {
+          "baseline": [
+            176.0
+          ],
+          "candidate": [
+            176.0
+          ]
+        },
+        "ratio": 1.0625339309380701,
+        "lower": 1.0048754557820199,
+        "upper": 1.1235007760400595,
+        "critical": 31.599054576443834,
+        "allPairsRetained": true,
+        "quietGuardsPassed": true,
+        "allOriginalGatesPassed": true,
+        "allBuilds": 0,
+        "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the copy andglyph-header validation scheduling through original complete public load;never a replacement standalone FreeType gate."
+      },
+      "windows": {
+        "stage": "GSC1215",
+        "counts": {
+          "internal/normal": 318,
+          "internal/avx2-off": 318,
+          "internal/scalar": 318,
+          "public/normal": 222,
+          "public/scalar": 222
+        },
+        "canonicalUnchanged": true
+      },
+      "linux": {
+        "counts": {
+          "internal/normal": 318,
+          "internal/avx2-off": 318,
+          "internal/scalar": 318,
+          "public/normal": 222,
+          "public/scalar": 222
+        },
+        "baseline": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "candidate": "50226e969a874be2e2166b41ae8c087ea6ec9e9890ccb30dc62d26cd11f0c90c",
+        "canonical": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "coreModifiedTimeNs": 1794918244866850910,
+        "allFocusedGatesPassed": true,
+        "allVmBuilds": 0
+      }
+    },
+    "GSO1216": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "GSO1216",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newRequiredPaths": 0,
+        "baselineCommit": "642404ce0ce6145c8e86bf31e39c6bc2c5023eed",
+        "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+        "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "prototypePath": "tmp/gso1216-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "417cedbae9a4035549e7e14869618dc0162c70e93fbd35f725375d0787ea9767",
+        "sourcePins": {
+          "src/Lokad.Image/TrueTypeFont.cs": "9eb17e74df87a0cdd4258063457967a4a3d1dfb139fae46141d569d774a25bbf",
+          "tests/Lokad.Image.Tests/FontInputAdmissionTests.cs": "b7fc24f0cdabe36cd683fd16a2c5d6bf1290de5668858f0cc8ecbad8948f37cd",
+          "tests/Lokad.Image.Tests/FontHeaderValidationTests.cs": "d476de969504f4668af66034a0ee313e0d10f1a55736fb198a8f24e2791a8293",
+          "tests/Lokad.Image.Tests/FontStorageTests.cs": "64dca928189ef14678df54e269da7885cd7324bd086131894f1fb972b77a51af",
+          "tests/Lokad.Image.PublicApi.Tests/TrueTypeFontTests.cs": "96a7a1edd12401b730427ff8b7e21b8f80da9ac10056fa80c981dbb801bf218d",
+          "tests/Lokad.Image.Tests/FontPrefixStorageTests.cs": "35e5ef8b5e837052ee3c6645ff38ccac1cbec264c70b101254550cd57cc45b31"
+        },
+        "candidateSourceSha256": "3f6f6a280181fa5c3c9aa74af1f57814ee283c1704e6265452a04c7fb367b268",
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~GlyphCopyScheduling",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "sourceProof": {
+          "sharedLongClassifierAndHeaderArithmeticVerbatimExceptCopyCheckpoints": true,
+          "allFollowingHeaderAndPublicMethodsVerbatim": true,
+          "oneOwnedArraySameAdmission": true,
+          "privateFailureStateNotPublishedOrCached": true,
+          "expandedDirectoryCannotReadDeferredUninitializedBytes": true,
+          "wholeNumericValidatorAndFollowingPublicMethodsVerbatim": true,
+          "copyCallsAndStateChecksRemovedFromNumericLoop": true,
+          "partialPrefixBoundsGuardEveryGather": true
+        },
+        "hypothesis": "Outer band scheduler nominates ready groups with bounded binary search, then original unchanged numeric kernel verifies all offsets against initialized prefix. Copy calls/live state leave the per8-record loop. Any suspect classification completes copying and invokes original whole ordered validator. Same128KiB bands/input/onearray/refusal/ownership; no fixture or quality change.",
+        "temporaryCosts": "Prefix nominations add log-count probes perband and a few kernel entries. Monotonic search is never trusted: every selected record still passes existing initialized-prefix extent/order checks. Completed stage must earn useful complete-operation gain; disassembly alone is no CPU proof.",
+        "memory": {
+          "frozenOwnedPayloadBytes": 678016,
+          "frozenOwnedChargeBytes": 678272,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedCapacityBytes": 0,
+          "operationState": "40-byte ref struct, no heap array or persistent field"
+        },
+        "builds": {
+          "privateCore": 1,
+          "privateEmbedded": 1,
+          "canonicalVmPublicHarnessReferenceFixturePackage": 0
+        },
+        "preTimingCorrections": "Inherited expanded-directory guard and all12 real-constructor regressions from corrected GSC1215."
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "stage": "GSO1216",
+        "mode": "screen",
+        "actuals": 3,
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "pairedManagedDllDiagnosticOnly": true,
+        "standaloneReferencePerformance": false,
+        "helperSha256": "dd61fb519c237094e6c96f13bca3525d418120bd196ebcd9a5fa54b7f8415f2b",
+        "subjects": {
+          "baseline": {
+            "mean": 13.852645182291667,
+            "lower": 13.326499862421262,
+            "upper": 14.378790502162072,
+            "values": [
+              13.885738708496094,
+              13.832881591796875,
+              13.83931524658203
+            ]
+          },
+          "candidate": {
+            "mean": 13.89791190592448,
+            "lower": 13.64280396413406,
+            "upper": 14.153019847714898,
+            "values": [
+              13.912155090332032,
+              13.88420379638672,
+              13.897376831054688
+            ]
+          }
+        },
+        "allocations": {
+          "baseline": [
+            176.0
+          ],
+          "candidate": [
+            176.0
+          ]
+        },
+        "ratio": 1.003268841261883,
+        "lower": 0.9814575652632037,
+        "upper": 1.0255648369036,
+        "critical": 31.599054576443834,
+        "allPairsRetained": true,
+        "quietGuardsPassed": true,
+        "allOriginalGatesPassed": true,
+        "allBuilds": 0,
+        "boundary": "Original compiled public WarmFontLoad.Managed operation,includingcopy/admission/eagerchecks/glyphcount/dispose. Each persistent process warms16384operations;Three-screen/twelve-confirm alternating16384operation pairs,reverse order everypair,two clockreadsperbatch. One CPU0operation at a time,natural nonconcurrent GC,no forcedGC. Inputsetup/original native correctness-only checks/IPC/allocationreads excluded. Tests only the copy andglyph-header validation scheduling through original complete public load;never a replacement standalone FreeType gate."
+      },
+      "windows": {
+        "stage": "GSO1216",
+        "counts": {
+          "internal/normal": 318,
+          "internal/avx2-off": 318,
+          "internal/scalar": 318,
+          "public/normal": 222,
+          "public/scalar": 222
+        },
+        "canonicalUnchanged": true
+      },
+      "linux": {
+        "counts": {
+          "internal/normal": 318,
+          "internal/avx2-off": 318,
+          "internal/scalar": 318,
+          "public/normal": 222,
+          "public/scalar": 222
+        },
+        "baseline": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "candidate": "417cedbae9a4035549e7e14869618dc0162c70e93fbd35f725375d0787ea9767",
+        "canonical": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "coreModifiedTimeNs": 1794918244866850910,
+        "allFocusedGatesPassed": true,
+        "allVmBuilds": 0
+      }
+    }
+  },
+  "codegen": {
+    "gsc": {
+      "project": "Lokad.Image",
+      "stage": "GSC1215",
+      "allInstrumentedClocksDiscarded": true,
+      "allBuilds": 0,
+      "subjects": {
+        "baseline": {
+          "sha256": "eaf7964c77f60825bcd40b372e562e677cef1748174aa9f7cf9c85b10142877e",
+          "codeBytes": [
+            1731
+          ],
+          "originalChecksPassed": true
+        },
+        "candidate": {
+          "sha256": "1b2dc52cc412338bec648d46a33620b429774df83d2430a02fa7aa81069ed64d",
+          "codeBytes": [
+            1842,
+            107
+          ],
+          "originalChecksPassed": true
+        }
+      }
+    },
+    "gso": {
+      "project": "Lokad.Image",
+      "stage": "GSO1216",
+      "allInstrumentedClocksDiscarded": true,
+      "allBuilds": 0,
+      "subjects": {
+        "candidate": {
+          "sha256": "43674a1ff2de994abac20d3f229c7d0458487a3f11b45e10f1af2bee39fa3a63",
+          "codeBytes": [
+            511,
+            100,
+            1731
+          ],
+          "originalChecksPassed": true
+        }
+      }
+    },
+    "gsoNumericKernelRestoredBytes": 1731
+  },
+  "decision": "No promotion or timing confirmation. First implementation is slower; outer-scheduled revision is inconclusive/near-neutral. No owned/allocation/retention saving compensates for extra production complexity. Keep canonical implementation and passing evidence unchanged; revised ideas require new attributable work, not blind replay or a permanent family ban.",
+  "interpretation": "Private paired complete-load screens only; not standalone FreeType/FFmpeg performance. Code size/register/spill observations do not assign causal phase costs or establish CPU gains. All three pairs and original frozen inputs/gates remain.",
+  "qualificationReused": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "builds": {
+    "gscPrivateCore": 2,
+    "gscPrivateEmbedded": 3,
+    "gsoPrivateCore": 1,
+    "gsoPrivateEmbedded": 1,
+    "canonicalVmPublicHarnessNativeFixturePackage": 0
+  },
+  "raw": {
+    "file": "font-copy-validation-trials.tar.xz",
+    "sha256": "5e7a66f4215a82c5ed210505a7c6c10d1f246621fa1b86fe152c356cfcaeb593",
+    "bytes": 5617916,
+    "members": 143,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e"
+    ]
+  }
+}
