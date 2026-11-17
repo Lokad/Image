@@ -1,0 +1,202 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CER1179/CRR1180",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Neither implementation promoted. Localdescriptor stage demonstrates slowdown;preparedrange revision has adverse point/inconclusive interval andhigherallocation/lifetime. Stop without confirmation,standalone reference refresh or broad/package repeat. This is not a permanent algorithm-family ban.",
+  "rounds": {
+    "cer1179": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "CER1179",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newMaterialPaths": 0,
+        "baselineCommit": "aa10ffacd34701cfeecbf359efc42a7179bdabfe",
+        "baselineWindowsSha256": "926707b9526b73a35b338366d258b60cd97e507aa1771e0c6aecffed0cff06ae",
+        "baselineLinuxSha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+        "prototypePath": "tmp/cer1179-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "2b220eef3a56ac7723490994ba0a9c958f5282db336f194e81773df0e907ada0",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+        },
+        "candidateSourceSha256": "afd92236c507c7891d4c61d5d46410e8067d4ee15105e7e05f025dbdae204f8b",
+        "sourceAudit": {
+          "project": "Lokad.Image",
+          "stage": "CER1179",
+          "productionChanged": false,
+          "accepted": false,
+          "allBuilds": 0,
+          "sourcePins": {
+            "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+            "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+            "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+          },
+          "hypothesis": "Band eagerly computes every active Edge.X(middle) solely for Crossings sorting;downstream winding/integration consume only Index/Order andretain original Endpoints. Strict disjoint certified computed-X hulls can determine exactlythe same order without these midpoint divisions. Ambiguous/touching/unbounded hulls require original full-bit X(middle),Double.CompareTo andordinal tie. This applies existing range certificate at a new use boundary;not a replayofcompactedges/float-hulls/endpointSIMD/capacityhints.",
+          "intendedEndState": "One localized bounded <=16active-crossing comparison path with full existing sort fallbackforlargersets. Reuse coarse4096B reserved raster integration/sort frame for <=512B bounded local descriptors;verify actual stack/codegen before anyclaim. No new heaparray,cache,pool,retained state orAPI. Keep old56B Edge,all event generation,all clipping/area/endpoint/blend arithmetic unchanged.",
+          "correctnessBoundary": "OnlyactiveYinsideoriginalvalidatedextent qualifies. Existing EdgeRange.Create returns unboundedfornonfinite/degeneratecases;strict bound ordering implies exact original X order by existing certificate. Equality/overlap preserveexact comparator. Independent same-production Edge oracles must compare complete permutations at allcounts0..16 andoriginalfallback>16 includingempty/ties/reversed/nearparallel/extremes/nonfinite/canceled;allfrozenframes/root/refusal/cancel/recovery bothOSnormal/scalar before timing.",
+          "memory": "No totalallocation/peak/retention gain claimed. Existing bounded frame admission mustcoveractualnew simultaneous stack storage;do not silently exceed it. Avoid extending fullrange-array lifetime merely tosupportsmall active sorting. Stack clearing/getter/conditional costs mayoffsetdivision saving.",
+          "affectedCompleteWorkloads": "Ordinary8/16,authored8/16 complete layout+draw,retained-plan creation,complete owningone-shot/preparation+eight. Prepared plan Draw/layout/fontload/nontext kernels remain unchanged;reconcile actual standalone boundaries before coherent qualificationif accepted.",
+          "continuation": "One representative completeordinary8 screenonlyafterexactorderandpixel gates. Larger/nonfinite/ambiguoussets retain productionfallback. Judge completeCPU/storage/simplicity;abandonifadditionalcertificate/sortcost outweighsremoveddivisions. No favorable replay or assumedparity."
+        },
+        "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CertifiedCrossingOrder",
+        "builds": {
+          "isolatedWindowsCore": 1,
+          "isolatedEmbeddedTests": 1,
+          "allCanonicalPublicHarnessReferenceFixturePackageBuilds": 0
+        }
+      },
+      "screen": {
+        "baselineUs": 47.047814453125,
+        "candidateUs": 52.38142041015625,
+        "ratio": 1.1133716030268623,
+        "lower": 1.0644255601302024,
+        "upper": 1.1645683576735752,
+        "allocationsIncluding24ByteAdapter": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            83240.0
+          ]
+        },
+        "pairsRetained": 3,
+        "quietGuardsAndAllOriginalGatesPassed": true
+      },
+      "checksEachOs": {
+        "internalEachNormalScalar": 285,
+        "publicEachNormalScalar": 166,
+        "completePermutationCasesPerMode": 13200,
+        "originalFullByteAndWordFramesBothModes": true
+      }
+    },
+    "crr1180": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "CRR1180",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newMaterialPaths": 0,
+        "baselineCommit": "aa10ffacd34701cfeecbf359efc42a7179bdabfe",
+        "baselineWindowsSha256": "926707b9526b73a35b338366d258b60cd97e507aa1771e0c6aecffed0cff06ae",
+        "baselineLinuxSha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+        "prototypePath": "tmp/crr1180-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "2c755decd2bd73240d5ea75e5232c5253ed219d48ff44b9210abb22cf9359724",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+        },
+        "candidateSourceSha256": "b5ee5bdd993a3e7138d949537f7291ffe572d770333e51c31bd9297c5f63bfce",
+        "sourceAudit": {
+          "project": "Lokad.Image",
+          "stage": "CER1179",
+          "productionChanged": false,
+          "accepted": false,
+          "allBuilds": 0,
+          "sourcePins": {
+            "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+            "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+            "tests/Lokad.Image.Tests/TextEdgeBoundsTests.cs": "5061215de48f40f0a3ac076c90fde15658d376257d0dedee5afb43c39df2e87f"
+          },
+          "hypothesis": "Band eagerly computes every active Edge.X(middle) solely for Crossings sorting;downstream winding/integration consume only Index/Order andretain original Endpoints. Strict disjoint certified computed-X hulls can determine exactlythe same order without these midpoint divisions. Ambiguous/touching/unbounded hulls require original full-bit X(middle),Double.CompareTo andordinal tie. This applies existing range certificate at a new use boundary;not a replayofcompactedges/float-hulls/endpointSIMD/capacityhints.",
+          "intendedEndState": "One localized bounded <=16active-crossing comparison path with full existing sort fallbackforlargersets. Reuse coarse4096B reserved raster integration/sort frame for <=512B bounded local descriptors;verify actual stack/codegen before anyclaim. No new heaparray,cache,pool,retained state orAPI. Keep old56B Edge,all event generation,all clipping/area/endpoint/blend arithmetic unchanged.",
+          "correctnessBoundary": "OnlyactiveYinsideoriginalvalidatedextent qualifies. Existing EdgeRange.Create returns unboundedfornonfinite/degeneratecases;strict bound ordering implies exact original X order by existing certificate. Equality/overlap preserveexact comparator. Independent same-production Edge oracles must compare complete permutations at allcounts0..16 andoriginalfallback>16 includingempty/ties/reversed/nearparallel/extremes/nonfinite/canceled;allfrozenframes/root/refusal/cancel/recovery bothOSnormal/scalar before timing.",
+          "memory": "No totalallocation/peak/retention gain claimed. Existing bounded frame admission mustcoveractualnew simultaneous stack storage;do not silently exceed it. Avoid extending fullrange-array lifetime merely tosupportsmall active sorting. Stack clearing/getter/conditional costs mayoffsetdivision saving.",
+          "affectedCompleteWorkloads": "Ordinary8/16,authored8/16 complete layout+draw,retained-plan creation,complete owningone-shot/preparation+eight. Prepared plan Draw/layout/fontload/nontext kernels remain unchanged;reconcile actual standalone boundaries before coherent qualificationif accepted.",
+          "continuation": "One representative completeordinary8 screenonlyafterexactorderandpixel gates. Larger/nonfinite/ambiguoussets retain productionfallback. Judge completeCPU/storage/simplicity;abandonifadditionalcertificate/sortcost outweighsremoveddivisions. No favorable replay or assumedparity."
+        },
+        "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CertifiedCrossingOrder",
+        "builds": {
+          "isolatedWindowsCore": 1,
+          "isolatedEmbeddedTests": 2,
+          "allCanonicalPublicHarnessReferenceFixturePackageBuilds": 0
+        },
+        "architecturalRevision": "CER1179 is11.3percent slower. Remove repeated certificate creation/localdescriptor copies by retaining a single already-required range workspace for sum(uniqueEdgeCounts) instead ofmax,thenreusepreparedcertificates andsortexistingcrossingsinplace. Preserve exactfloatingfallback andlargesetfallback. No globalcache/pool ornewarraycount.",
+        "memory": "Admit aggregate range capacity beforeallocation;retaincharge until all rasterusers finish. Permuterangesalongedges. New RangeOffset within coarse512B shapeallowance. Totalallocation andlifetime/planoverlap mayincrease;measure separately,do notclaimmemorygain.",
+        "priorScreen": "tmp/cer1179-screen-ordinary8.json",
+        "preCheckCorrection": "Before tests,correct retained-charge formula:rectangle has2active edges,not8capacityslots;32+2*16=64B retained workspace. Original1328 remaining becomes1264. Core notrebuilt;no failed qualification/samples."
+      },
+      "screen": {
+        "baselineUs": 47.98022355143229,
+        "candidateUs": 49.17642366536458,
+        "ratio": 1.0249427347407127,
+        "lower": 0.9516384620669729,
+        "upper": 1.103893601795006,
+        "allocationsIncluding24ByteAdapter": {
+          "baseline": [
+            83240.0
+          ],
+          "candidate": [
+            83512.0
+          ]
+        },
+        "pairsRetained": 3,
+        "quietGuardsAndAllOriginalGatesPassed": true
+      },
+      "checksEachOs": {
+        "internalEachNormalScalar": 285,
+        "publicEachNormalScalar": 166,
+        "completePermutationCasesPerMode": 13200,
+        "originalFullByteAndWordFramesBothModes": true
+      }
+    }
+  },
+  "architecturalProgression": "First replace eager midpoint sorting with exact certified envelope comparison plusfullfloatingfallback. Its perbandcertificate/descriptor work regresses. Material revision retains already-required preparedranges,permutes them with edges andsorts existingcrossings inplace. Removes newly repeatedwork but establishes no usefulcomplete-operation benefit. All adverse results retained;no historicalclock subtraction or claimed revision gain.",
+  "memory": {
+    "edgeBytesUnchanged": 56,
+    "publicOrdinaryAllocatedBytes": {
+      "baseline": 83216,
+      "localDescriptor": 83216,
+      "preparedRanges": 83488
+    },
+    "temporaryAdapterBytes": 24,
+    "localDescriptorBoundedPayloadBytes": 512,
+    "localDescriptorActualJitFrameMeasured": false,
+    "preparedRangesArrayCountUnchanged": true,
+    "preparedRangesCapacityChangesFromMaxToSumUniqueEdges": true,
+    "preparedRangesChargedThroughActualUsers": true,
+    "authoredRectangleAdmittedPeakBytesUnchanged": 6744,
+    "authoredRectanglePostPreparationChargeBytes": {
+      "baseline": 5416,
+      "preparedRanges": 5480
+    },
+    "newCrossOperationRetentionBytes": 0,
+    "physicalNativeAndJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "commit": "1f164cb3d00dcbbe001d3d5ebef9e2fc134395d6",
+    "fullLiveEachOs": 6790,
+    "actualPackageSha256": "4a2ae52dca5eed9e78158340e5cabb1c88a18ff3b04118a38719c6b2444abde9",
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "builds": {
+    "isolatedWindowsCore": 2,
+    "isolatedEmbedded": 3,
+    "newActorProbeReferenceFixtureVmCanonicalPublicHarnessPackage": 0
+  },
+  "preCheckCorrection": "Revised rectangle retained-charge formula corrected before tests to32+2activeedges*16=64B,not8capacityslots. One affected embedded rebuild;core unchanged,no failed operation repeated.",
+  "next": "Keep qualified original ordering/storage. Investigate actual-store alignment in remaining CopyRegion gaps,using retained native aligned-store attribution. Any safe managed pin/prefix strategy must include pin/free in complete operations,preserve caller/root ownership andmeasure its cost. No neighboring certifiedsort replay or passingtext retiming.",
+  "raw": {
+    "file": "text-certified-order-trials.tar.xz",
+    "sha256": "0f3405d902806845318785f970bc12ee2d0a86c91eabe82de41da92da260a04c",
+    "bytes": 4358404,
+    "members": 155,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+      "ordinary-byte-dispatch-trial.tar.xz (original actor/harness;full identity in ordinary-byte-dispatch-trial-evidence.json)"
+    ]
+  }
+}

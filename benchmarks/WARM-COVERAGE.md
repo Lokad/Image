@@ -75,6 +75,12 @@ package for one diagnostic trace. The required owned copy and eager header scan
 remain dominant locations, not phase costs. Current font/text comparisons stay
 unchanged; no neighboring rejected implementation is automatically replayed.
 
+[Certified crossing-order trials](TEXT-CERTIFIED-ORDER-TRIALS.md) retain two
+unpromoted stages: local descriptors are slower; prepared-range reuse is
+unpromising with an inconclusive interval and higher allocation/lifetime.
+Current ordering, package and costs remain unchanged. Independent copy work
+continues from concrete alignment attribution rather than another sort variant.
+
 [Exact edge storage](TEXT-EDGE-STORAGE-TRIAL.md) remains unpromoted: ordinary
 allocation falls 8,320 B, but independent complete draws are 0.498 us/1.07% slower.
 Current production/package costs stay unchanged; retain the adverse evidence
