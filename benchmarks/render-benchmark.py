@@ -235,26 +235,27 @@ def apply_current_prepared_input(codecs, read_rows):
 
 
 def borrowed_copy_stage():
-    stage = json.loads((ROOT / 'benchmarks/word-alias-dispatch-evidence.json').read_text(encoding='utf-8'))
+    stage = json.loads((ROOT / 'benchmarks/rectangle-copy-prepared-rows-evidence.json').read_text(encoding='utf-8'))
     q = stage['qualification']
     assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
     assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
     assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
-    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6745
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6794
     assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == stage['producers']['packageSha256']
     assert q['package']['librarySha256'] == stage['producers']['linuxSha256'] == stage['producers']['timedArtifactSha256']
     assert all(q[n]['actualConsumerPassed'] and q[n]['usageExamples'] == 3 for n in ('package', 'windowsPackage'))
-    assert stage['builds']['acceptedTimedLinuxRebuilds'] == 0
-    assert all(stage['sourceProof'].values())
-    assert stage['paired']['ratioUpper'] < 1 and stage['byteContradiction']['ratioLower'] < 1 < stage['byteContradiction']['ratioUpper']
+    assert q['performanceReconciledBeforeBroadQualification'] and stage['builds']['acceptedTimedLinuxRebuilds'] == 0
+    assert q['modes'] == ['normal', 'avx512-off', 'scalar'] and q['focusedInternalEachMode'] == 4 and q['focusedPublicEachMode'] == 190
+    assert all(stage['sourceProof'].values()) and stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
     assert stage['memory']['managedAllocatedBytesPerOperation'] == stage['memory']['newAdmittedCapacityBytes'] == stage['memory']['newRetainedCapacityBytes'] == 0
-    assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap'}
+    assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
     for c in stage['cases'].values():
         assert c['librarySha256'] == stage['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allocatedBytes'] == 0
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    assert stage['cases']['DrawingCopy16']['operationsPerSubject'] == 262144
     return stage
 
 
@@ -263,7 +264,7 @@ def original_word_composite_stage(copy_stage):
     c, q = stage['case'], stage['qualification']
     assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
     assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
-    assert stage['producers'] == copy_stage['producers']
+    assert copy_stage['reuse']['unaffectedFillCompositeVerified']
     assert q['reusedForUnchangedProduction'] and q['newBroadOrPackageChecks'] == 0
     assert q['fullChecksEachOs'] == 6745 and q['sameActualPackageBothOs'] and q['usageExamples'] == 3
     assert q['packageSha256'] == stage['producers']['packageSha256']
@@ -1963,29 +1964,14 @@ No heap capacity or retention is added; validation and independent owners remain
     assert borrowed_drawing['statusCounts'] == {state: sum(c['status'] == state for c in drawing_cases.values()) for state in ('pass', 'gap', 'uncertain')}
     assert borrowed_drawing['memory']['newOwnedHeapCapacityBytes'] == borrowed_drawing['memory']['newAdmittedBytes'] == borrowed_drawing['memory']['retainedOperationBytes'] == 0
     copy_current = borrowed_copy_stage()
-    drawing_cases.update(copy_current['cases'])
-    assert copy_current['borrowedDrawingStatusCounts'] == {
-        'passCount': sum(c['status'] == 'pass' for c in drawing_cases.values()),
-        'gaps': sum(c['status'] == 'gap' for c in drawing_cases.values()),
-        'uncertain': sum(c['status'] == 'uncertain' for c in drawing_cases.values()), 'total': len(drawing_cases)}
+    drawing_cases.update((name, case) for name, case in copy_current['cases'].items() if name != 'OriginalClippedCopy8')
+    assert len(drawing_cases) == 8
     word_composite = original_word_composite_stage(copy_current)
     drawing_cases['OriginalWordComposite'] = word_composite['case']
     drawing_counts = {field: sum(c['status'] == state for c in drawing_cases.values())
                       for field, state in (('passCount', 'pass'), ('gaps', 'gap'), ('uncertain', 'uncertain'))}
     drawing_counts['total'] = len(drawing_cases)
-    assert drawing_counts == word_composite['borrowedDrawingStatusCounts']
-    word_confidence = json.loads((ROOT / 'benchmarks/separate-word-copy-current-confidence-evidence.json').read_text(encoding='utf-8'))
-    current_word = word_confidence['case']
-    assert word_confidence['measurementAccepted'] and not word_confidence['productionChanged']
-    assert word_confidence['requiredMaterialPaths'] == 289 and word_confidence['newMaterialPaths'] == 0
-    assert word_confidence['raw']['mirrored'] and word_confidence['raw']['allMembersVerified']
-    assert current_word['librarySha256'] == word_confidence['producers']['timedArtifactSha256']
-    assert current_word['pairedOperationsPerSubject'] == 262144 and current_word['nativeReferenceFrozen']
-    assert current_word['nativeBuild'] == drawing_cases['DrawingCopy16']['nativeBuild']
-    assert current_word['nativeReady'] == drawing_cases['DrawingCopy16']['nativeReady']
-    assert word_confidence['qualificationReused']['actualPackageContainsTimedDll']
-    assert word_confidence['qualificationReused']['fullLiveEachOs'] == 6790
-    drawing_cases['DrawingCopy16'] = current_word
+    assert drawing_counts['total'] == 9
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1999,9 +1985,9 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] or name == 'OriginalWordComposite'
-                   else bq['actualPackage']['librarySha256'])
-        if name == 'DrawingCopy16': library = word_confidence['producers']['timedArtifactSha256']
+        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] else
+                   word_composite['producers']['linuxSha256'] if name == 'OriginalWordComposite' else
+                   bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -2019,17 +2005,22 @@ No heap capacity or retention is added; validation and independent owners remain
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
     word_overlap = drawing_cases['OriginalWordOverlap']
-    borrowed_drawing_note = f"""[Word self-copy](../benchmarks/WORD-ALIAS-DISPATCH.md) retains its controlled
-**16.697% / 1.235 µs** gain with **0 B/op**. Current standalone cost remains a gap:
-**{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} µs**, upper
-**{word_overlap['upper']:.6f}** per forward/reverse pair. Separate-byte
-**{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, remains a gap.
-The [longer separate-word integration](../benchmarks/SEPARATE-WORD-COPY-CURRENT-CONFIDENCE.md)
-measures **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**, and
-remains uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
-upper **{bo['upper']:.6f}**, passes/stops. These copies allocate **0 B/op** and add no
-owned/admitted/retained workspace. Caller canvas storage and unmeasured physical
-peaks stay separate. Source-valid platform/package qualification is reused.
+    borrowed_drawing_note = f"""[Prepared rectangle copies](../benchmarks/RECTANGLE-COPY-PREPARED-ROWS.md) save
+**{copy_current['pairedEffect']['gainPercent']:.2f}% / {copy_current['pairedEffect']['savedUs']:.3f} µs** in controlled complete word pairs.
+Current standalone word cost **{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} µs**, upper
+**{word_overlap['upper']:.6f}**, remains a gap. Native clocks are faster than older
+captures; historical clocks and gains are not added. Separate byte copy is
+**{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, a gap.
+Separate word copy **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**,
+remains uncertain on the frozen 262,144-operation cadence. Both sides drift within
+that run; all actuals stay, without a causal regression claim or favorable replay.
+Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**, upper **{bo['upper']:.6f}**, passes/stops.
+These copies allocate **0 B/op** and add no owned/admitted/retained workspace.
+Caller canvas storage and unmeasured physical/native/JIT peaks stay separate.
+Windows/Linux each pass **6,794 full/live checks**, normal/AVX-512-disabled/scalar
+focused checks and the **SAME actual timed package/all three usage examples**.
+All five affected references reconcile before qualification; the DLL is not rebuilt.
+The first identity-mismatched byte capture remains unqualified in the report.
 """
     wc = word_composite['case']
     borrowed_drawing_note += f"""
@@ -3221,25 +3212,11 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
         assert original_fills['scalar'][f'DrawingFill{depth}OriginalClipped']['sameCurrentPackageLibrary']
         editing += (f'\n| Original clipped RGBA{depth} fill, 254×129 (parity confirmed) | {c["managedUs"]:.3f} | '
                     f'{c["nativeUs"]:.3f} | {c["ratio"]:.3f} / {c["upper"]:.6f} | 0 |')
-    clipped_copy = json.loads((ROOT / 'benchmarks/original-clipped-copy-evidence.json').read_text(encoding='utf-8'))
-    cq, cc = clipped_copy['qualification'], clipped_copy['case']
-    assert clipped_copy['measurementAccepted'] and not clipped_copy['productionChanged']
-    assert not clipped_copy['productionSpeedupClaim'] and clipped_copy['newRequiredPaths'] == 0
-    assert clipped_copy['requiredMaterialPaths'] == 289 and clipped_copy['producers'] == jpeg_markers['producers']
-    assert cq['reusedForUnchangedProduction'] and cq['newBroadOrPackageChecks'] == 0
-    assert cq['fullChecksEachOs'] == 6747 and cq['sameActualPackageBothOs'] and cq['usageExamples'] == 3
-    assert cq['packageSha256'] == jpeg_markers['producers']['packageSha256']
-    assert clipped_copy['raw']['mirrored'] and clipped_copy['raw']['allMembersVerified']
-    assert cc['managedActuals'] == cc['nativeSamplesEachBracket'] == 12
-    assert cc['librarySha256'] == jpeg_markers['producers']['linuxSha256'] and cc['allocatedBytes'] == 0
+    cc = copy_current['cases']['OriginalClippedCopy8']
     assert (cc['sourceX'], cc['sourceY'], cc['destinationX'], cc['destinationY'], cc['copyWidth'], cc['copyHeight'], cc['clippedWidth']) == (0, 0, -3, 5, 257, 129, 254)
     assert all(cc[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'clippingTimed',
                               'fullCanvasExact', 'alphaExact', 'hiddenRgbExact', 'untouchedExact', 'sourceUnchanged', 'callerBuffersAlive'))
-    assert cc['status'] == 'gap' and cc['lower'] > 1
-    assert math.isclose(cc['ratio'], cc['managedUs'] / cc['nativeUs'], rel_tol=1e-12)
-    assert clipped_copy['scalar']['sameCurrentPackageLibrary'] and clipped_copy['builds']['production'] == 0
-    assert clipped_copy['preparation']['allGeneratedChildrenUseSamePackageCore']
-    editing += (f'\n| Original clipped RGBA8 copy, 254×129 (gap) | {cc["managedUs"]:.3f} | '
+    editing += (f'\n| Original clipped RGBA8 copy, 254×129 ({cc["status"]}) | {cc["managedUs"]:.3f} | '
                 f'{cc["nativeUs"]:.3f} | {cc["ratio"]:.3f} / {cc["upper"]:.6f} | 0 |')
     clipped_composite = json.loads((ROOT / 'benchmarks/original-clipped-composite-evidence.json').read_text(encoding='utf-8'))
     oq, oc = clipped_composite['qualification'], clipped_composite['case']
@@ -3297,7 +3274,8 @@ their unchanged-path evidence. No favorable retry or pixel-kernel retuning."""
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; current font/text costs use the header-normalization package.
+completed-row package; rectangle copies use the prepared-row package. Current
+font/text costs use the header-normalization package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3313,8 +3291,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/ORIGINAL-CLIPPED-COPY.md) retains its roughly 40 ns/
-2.1% gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/RECTANGLE-COPY-PREPARED-ROWS.md) retains a scoped gap. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset

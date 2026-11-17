@@ -1,5 +1,8 @@
 # Current separate-word copy confidence
 
+Historical evidence: [prepared rectangle rows](RECTANGLE-COPY-PREPARED-ROWS.md)
+own the latest affected copy costs.
+
 The existing RGBA16 separate-buffer copy remains **uncertain**:
 **3.777152 / FFmpeg 3.785687 µs**, conservative interval
 **0.993513–1.001075**, **0 B/op**. No production change or speedup is claimed.

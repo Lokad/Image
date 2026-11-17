@@ -1,5 +1,8 @@
 # Original clipped byte-copy boundary
 
+Historical evidence: [prepared rectangle rows](RECTANGLE-COPY-PREPARED-ROWS.md)
+own the latest affected copy costs.
+
 The original `CopyRegion/Rgba8Independent` now has independent current evidence:
 **1.941619 / FFmpeg1.901433µs**, ratio **1.021134**, interval **1.017439–1.026874**,
 **0B/op**. It remains a small demonstrated gap; no production change or speedup

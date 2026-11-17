@@ -89,6 +89,14 @@ public static partial class ImageDrawing
         var canvasRowOffset = (region.DestinationY + firstRow) * canvasStride + region.DestinationX * pixelBytes;
         var sourceRowStep = backwardsY ? -sourceStride : sourceStride;
         var canvasRowStep = backwardsY ? -canvasStride : canvasStride;
+        var rowBytes = region.Width * pixelBytes;
+        if (independentRows && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated
+            && region.Width <= 4096 && rowBytes >= 256)
+        {
+            IndependentRowCopy.CopyRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
+                rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
+            return;
+        }
         var rowsRemaining = region.Height;
         while (true)
         {

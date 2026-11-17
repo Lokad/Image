@@ -1,5 +1,8 @@
 # Reuse the row kernel for word self-copy
 
+Historical evidence: [prepared rectangle rows](RECTANGLE-COPY-PREPARED-ROWS.md)
+own the latest affected copy costs.
+
 The existing safe grouped row-copy kernel now handles RGBA16 self-copies between
 different packed rows. Those slices are disjoint; existing reverse traversal
 preserves snapshot semantics. Byte decisions, separate-word runtime copying,
