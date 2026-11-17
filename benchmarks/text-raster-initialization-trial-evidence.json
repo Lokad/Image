@@ -1,0 +1,275 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RGU1189",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "43080f4df2629ca3a0c70ccf46002d47a6aa931d",
+  "producers": {
+    "windowsSha256": "4cad09015d4347ad8a1d98251b220fb65da312fde6e90ef1f94723e5309ec235",
+    "linuxSha256": "483954d4ccef690e8edf423176e3844a1e48e0be6707e842421b892c7eb9d0bd",
+    "timedArtifactSha256": "483954d4ccef690e8edf423176e3844a1e48e0be6707e842421b892c7eb9d0bd",
+    "packageSha256": "4a792b4aa57b07d0057c191123097a16453f6f1a58a1d385af626ea7f26dfb5e",
+    "symbolsSha256": "27d0a81bc85cd0c73c42b72f1ead3b1e862751e147be579c207b8054c17fd62c"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+    "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e"
+  },
+  "prototypeSha256": "4531f632343a4b558a3a7525bf9b43d4962cddb2be8f084263f8c1ce6ab3ab5b",
+  "candidateSourceSha256": "6b20cdc1a12736e7ab83f32a79306c396b68769efd339cf2ac5f040cf1f1c861",
+  "sourceProof": {
+    "onlyUnmanagedConstraintAndAllocationPolicyChange": true,
+    "writeCompleteRecordBeforeCountAdvance": true,
+    "onlyInitializedCountCopiedOrConsumed": true,
+    "spareCapacityNotPublished": true,
+    "allAdmissionRefusalCancellationReplacementAndCleanupVerbatim": true,
+    "allNumericalAndPixelKernelsVerbatim": true,
+    "noNewArrayCapacityOwnerCachePoolOrApi": true
+  },
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "RGI1188",
+    "reviewOnly": true,
+    "allBuilds": 0,
+    "productionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f",
+      "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e"
+    },
+    "historyReviewed": [
+      "TEXT-EDGE-CAPACITY-TRIALS.md",
+      "TEXT-EDGE-STORAGE-TRIAL.md",
+      "TEXT-CERTIFIED-ORDER-TRIALS.md",
+      "TEXT-SHARED-BOUNDARY-TRIAL.md",
+      "TEXT-SIMD-SHOELACE-TRIAL.md",
+      "TEXT-ORDINARY-CURRENT-CLIPPING-ATTRIBUTION.md"
+    ],
+    "findings": [
+      "Unique shapes are already deduplicated perdraw;no duplicate-shape preparation to remove.",
+      "Active edges and geometry naturalruns already avoid full rescans/general repeated sorting. Existing certificates,capacity hints,compact edges and sharedboundaryscratch do not establish a useful current gain.",
+      "Grow<T> is instantiated only for Edge anddouble. Everycapacity is reserved before newarray;onlycount oldvalues copied. Add/Event writes new logicalelement before incrementingCount/EventCount. Count-only preparation/sorting/raster consumers never read sparecapacity."
+    ],
+    "nextHypothesis": "Replace only Grow<T> zero-initialized allocation with safeGC.AllocateUninitializedArray<T>(capacity),constrainT:unmanaged. Avoid redundant payload initialization before the existing count-limited copy andfullrecordwrites. Not a new capacity hint,layout cache,pool,edge format,sorter or numerical policy.",
+    "intendedEndState": "Same operation-private edge/event arrays,growth/capacity/admission/owner lifetimes andcount-only consumers;one allocation-policy choice. Crossing/range/row arrays stayverbatim,so no row-zero/range assumption changes.",
+    "proofObligations": [
+      "Every Add assigns complete Edge before Count increments;Event writes complete double before EventCount increments.",
+      "Growth copies only previously initialized count;all edge/event consumers use that count. Sparecapacity isnever published or read.",
+      "Reserve/cancellation/allocationfailure/old-new overlap/release order remainsverbatim. Admissionrefusal terminal;no fallback/wait.",
+      "No allocation/retention reduction claim from fewer initialwrites. Record elapsed/GC andcodegen realization separately."
+    ],
+    "completeWorkloads": "OriginalordinaryRGBA8 screen then independent confirmation onlyifpromising;actual standalone8/16 plusaffected owning/authored integrations reconciledbeforeacceptedstage qualification. Same stockreferences/frozen inputs/reset/publicDrawText/ownerandframe gates. PreparedDraw/fontload/codecs/resizing unchanged.",
+    "developmentChecks": "Existing public font/text/drawing/sharedadmission normal/scalar bothOS,original exact8/16frames andcleanup gates. No newfixturegrid;usefocusedchecks,thenactualfinal Windows/Linux/embedded/full/package onlyifaccepted. Reuseunchangedbuilds.",
+    "uncertainty": "GC may already obtain zeroedpages or initialization may be cheap;uninitializedallocationhelper overhead/cacheeffects can lose. Current83160B rasterconstruction allocation is supporting lifetimeevidence,notzeroingphase time orpredictedgain. No newprofile/timing fromthisreview."
+  },
+  "hypothesis": "Avoid redundant zero-initialization of private edge/event payloads whose logicalprefix is always initialized before consumption. Same exact counts/capacities/growth/arrayownership;no allocation/retention reduction claim. GC/allocator overhead may eliminate orreverse elapsed gain.",
+  "intendedEndState": "One safe uninitialized allocation policy at existing genericGrow boundary,constrainedunmanaged. Row/crossing/range storage andallnumerical execution untouched.",
+  "subjects": {
+    "baseline": {
+      "mean": 48.185898274739586,
+      "lower": 42.68694447169888,
+      "upper": 53.68485207778029,
+      "values": [
+        48.49290869140625,
+        48.17437963867187,
+        47.89040649414063
+      ]
+    },
+    "candidate": {
+      "mean": 48.658468831380205,
+      "lower": 44.58570579453563,
+      "upper": 52.73123186822478,
+      "values": [
+        48.890122802734375,
+        48.44471704101562,
+        48.640566650390625
+      ]
+    }
+  },
+  "ratio": 1.0098133228730053,
+  "lower": 0.9190125094272668,
+  "upper": 1.1095854915917487,
+  "pairs": [
+    {
+      "pair": 0,
+      "baseline": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 198626954,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      },
+      "candidate": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 200253943,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      }
+    },
+    {
+      "pair": 1,
+      "candidate": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 198429561,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      },
+      "baseline": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 197322259,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      }
+    },
+    {
+      "pair": 2,
+      "baseline": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 196159105,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      },
+      "candidate": {
+        "state": "sample",
+        "operations": 4096,
+        "elapsedNanoseconds": 199231761,
+        "allocatedBytes": 340951040,
+        "observed": 0,
+        "resetExcluded": true,
+        "validationExcluded": true,
+        "clockReadsPerOperation": 2
+      }
+    }
+  ],
+  "outcome": "Inconclusive;adverse point,no demonstrated useful gain. No promotion or independent repetition.",
+  "qualification": {
+    "internalEachModeEachOs": 283,
+    "publicEachModeEachOs": 222,
+    "modes": [
+      "normal",
+      "scalar"
+    ],
+    "originalByteWordFramesBothDllsEachMode": true,
+    "originalActorReferenceOwnerCleanupGatesPassed": true,
+    "newBroadOrPackageChecks": 0,
+    "reusedFullLiveEachOs": 6790,
+    "reusedSameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3
+  },
+  "memory": {
+    "publicAllocatedBytes": 83216,
+    "timedAdapterAllocatedBytes": 24,
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "allAdmittedCapacitiesAndReplacementPeaksUnchanged": true,
+    "physicalNativeAndJitPeaksMeasured": false
+  },
+  "scope": "Original frozen DejaVu ordinaryRGBA8 publicDrawText;resident font/layout/canvas reused equally. Allgeometry/events/rasterization/composition/cleanup remain timed;peroperation reset/fullframechecks excluded. Three reversed4096operationpairs,CPU0,natural nonconcurrentGC,idle-v2guards,allactuals. ManagedDLLincremental diagnostic,not ImageSharp/FFmpeg performance.",
+  "interpretation": "Safe uninitialized allocation request doesnot prove pages were previously zeroed or actual clear time removed. No elapsed orretention gain from allocation counts. Pixel/edge/event arithmetic staysverbatim. Do not expand initialization policies to untouched workspace fromthisnullscreen.",
+  "builds": {
+    "isolatedWindowsCore": 1,
+    "isolatedEmbeddedTests": 1,
+    "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+  },
+  "next": "Remaining original overlapping-word and byte copy gaps;reuse actualnative/codegen evidence before choosing a materially distinct complete-copy design. Passing paths stay stopped.",
+  "raw": {
+    "file": "text-raster-initialization-trial.tar.xz",
+    "sha256": "c39bea405ab907263741bc27ab17ec369dc3e65c7a1a74400668d2c1ae7a5989",
+    "bytes": 2181884,
+    "members": 64,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "font-header-normalization-qualified.tar.xz",
+        "sha256": "64aa1ab63fcb1fb889d2846cc02e7cb512b5aaefb06168853ad53056e0548e95",
+        "bytes": 2712044,
+        "members": 211,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "fused-font-header-validation-qualified.tar.xz",
+            "sha256": "96ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+            "bytes": 2203304,
+            "members": 200,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "nearest-row-reuse-qualified.tar.xz",
+                "sha256": "a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+                "bytes": 5278740,
+                "members": 275,
+                "allMembersVerified": true,
+                "mirrored": true,
+                "dependencies": [
+                  "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+                  "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+                  "copy-attribution-nearest-guard.tar.xz SHA256 42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+                ]
+              },
+              {
+                "file": "font-header-batching-qualified.tar.xz",
+                "sha256": "e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+                "bytes": 28082844,
+                "members": 321,
+                "allMembersVerified": true,
+                "mirrored": true,
+                "dependencies": [
+                  "font-noncancelable-dispatch-trial.tar.xz SHA256 7f8292eea3ea450b5d452bdd2ed0d285c29dc6653c5f26f703c7a439f6e93496",
+                  "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117"
+                ]
+              }
+            ]
+          },
+          {
+            "file": "font-post-fusion-attribution.tar.xz",
+            "sha256": "8085178408b598a03b56d1acc7a0010e537cacc82236815d790784926ce1f832",
+            "bytes": 51396,
+            "members": 19,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "text-certified-order-trials.tar.xz",
+        "sha256": "0f3405d902806845318785f970bc12ee2d0a86c91eabe82de41da92da260a04c",
+        "bytes": 4358404,
+        "members": 155,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+          "ordinary-byte-dispatch-trial.tar.xz (original actor/harness;full identity in ordinary-byte-dispatch-trial-evidence.json)"
+        ]
+      }
+    ]
+  }
+}
