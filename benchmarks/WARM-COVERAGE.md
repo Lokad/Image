@@ -70,6 +70,11 @@ resolved and meaningful loading work is qualified. Remaining copy gaps require
 distinct attribution before another implementation trial; rejected variants
 are not replayed solely because their family remains open.
 
+[Exact edge storage](TEXT-EDGE-STORAGE-TRIAL.md) remains unpromoted: ordinary
+allocation falls 8,320 B, but independent complete draws are 0.498 us/1.07% slower.
+Current production/package costs stay unchanged; retain the adverse evidence
+without adding a renderer dependency or another neighboring layout trial.
+
 Earlier [copy preparation](VERTICAL-COPY-PREPARATION-SCREEN.md),
 [block-value copying](VECTOR-BLOCK-VALUE-COPY-SCREEN.md) and
 [compact VP8L reuse](WEBP-COMPACT-PAIR-REUSE-TRIALS.md) remain unaccepted historical

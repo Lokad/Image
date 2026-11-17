@@ -1,0 +1,150 @@
+{
+  "project": "Lokad.Image",
+  "stage": "EGS1176",
+  "productionAccepted": false,
+  "canonicalProductionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "outcome": "Independent confirmation is1.0712percent/0.497942us slower despite8320B/op less allocation. Unpromoted;stop this implementation without standalone reference refresh or broad/package repeat.",
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "EGS1176",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newMaterialPaths": 0,
+    "baselineCommit": "1f164cb3d00dcbbe001d3d5ebef9e2fc134395d6",
+    "baselineWindowsSha256": "926707b9526b73a35b338366d258b60cd97e507aa1771e0c6aecffed0cff06ae",
+    "baselineLinuxSha256": "2f833ea554c3934cc83fc791e1b464bfcb9320331c9e725f9df015cb0288b37e",
+    "prototypePath": "tmp/egs1176-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "7aabb1b9dad997db1f51c28e22b962a29071b826c176f52fcfbe7015f2cec39a",
+    "sourcePins": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "b2ddb7d549565209b5ebf9cc73373cf4aac2a37fc671683605fe9bcb540e4b9f"
+    },
+    "candidateSourceSha256": "6adc0409c0ff4f83fda3bad65afbe538b7335c90b759c1871cf6386e9b788859",
+    "hypothesis": "Compact Edge56->48B by retaining original endpointY/rounded deltaY and3-state direction instead of redundant MinY/MaxY. Getter branches may regress CPU;complete drawing decides.",
+    "sourceProof": {
+      "interpolationAndAreaArithmeticUnchanged": true,
+      "fullDoublePrecision": true,
+      "ordinalAndWindingPreserved": true,
+      "boundsEqualAndUnorderedFallback": true,
+      "noNewBufferCachePoolOrApi": true,
+      "reservationBeforeGrowthWithReplacementOverlap": true
+    },
+    "invalidation": "If accepted, ordinary8/16,authored8/16 complete layout+draw,prepared-plan creation and owning text integrations share edge preparation. Existing prepared draw,layout,font load and nontext paths unchanged.",
+    "focusedPublicFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemoryTests",
+    "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic",
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbeddedTests": 1,
+      "newProbes": 0,
+      "allCanonicalPublicHarnessReferenceFixturePackageBuilds": 0
+    },
+    "qualification": "Full-bit private geometry diagnostic baseline/candidate normal/scalar bothOS,existing exact events/raster arithmetic and frozen frames/public ownership gates. One3pair complete ordinary8 screen;confirm only if credible combined benefit,no neighboring-layout campaign."
+  },
+  "screen": {
+    "baselineUs": 46.86083797200521,
+    "candidateUs": 47.248541259765624,
+    "ratio": 1.0082738923164163,
+    "lower": 0.9378348520553992,
+    "upper": 1.0840034785429828,
+    "allocatedBytesIncluding24ByteAdapter": {
+      "baseline": [
+        83240.0
+      ],
+      "candidate": [
+        74920.0
+      ]
+    },
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "confirmation": {
+    "baselineUs": 46.5260473836263,
+    "candidateUs": 47.02398905436198,
+    "ratio": 1.0107121234744623,
+    "lower": 1.0026761913495226,
+    "upper": 1.0188124594474972,
+    "allocatedBytesIncluding24ByteAdapter": {
+      "baseline": [
+        83240.0
+      ],
+      "candidate": [
+        74920.0
+      ]
+    },
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "focusedChecks": {
+    "windowsInternalNormal": {
+      "initialPassed": 281,
+      "initialFailedOldCapacityAssertions": 2,
+      "revisedCapacityPassed": 2,
+      "totalDistinctPassing": 283
+    },
+    "windowsInternalScalar": 283,
+    "linuxInternalNormal": 283,
+    "linuxInternalScalar": 283,
+    "publicEachOsEachNormalScalar": 166,
+    "privateEndpointPairsPerMode": 256,
+    "fullBitsBaselineEqualsCandidateNormalScalarBothOs": true,
+    "originalFrozenDraw8And16NormalScalarBothOs": true
+  },
+  "memory": {
+    "managedEdgeBytes": {
+      "baseline": 56,
+      "candidate": 48
+    },
+    "publicDrawAllocatedBytes": {
+      "baseline": 83216,
+      "candidate": 74896,
+      "reduction": 8320
+    },
+    "timedAdapterBytes": 24,
+    "rectangleLogicalAdmissionPeakBytes": {
+      "baseline": 6744,
+      "candidate": 6680
+    },
+    "rectanglePeakMinusOneRefusedAndCleanupRecovered": true,
+    "operationOwnedNoNewRetention": true,
+    "physicalOrNativePeaksMeasured": false,
+    "note": "8320B is total allocation reduction,not peak live reduction. One authored rectangle exact admitted peak changes64B;no general full-draw peak/retention percentage claimed."
+  },
+  "preparationRecoveries": [
+    "Isolated embedded build referenced removed private ascending field;only isolated assertion uses actual Winding. Core not rebuilt.",
+    "Two existing embedded assertions expect56B edge/6744B rectangle admission;isolated expectations update to48B/6680B after actual geometry size verification. Initial281 passing normal checks reused,onlytwo failures rerun;scalar entire283.",
+    "Linux dotnet test DLL rejected unsupported MSBuild terminal-logger argument before executing tests;pending DLL tests use vstest. Previously completed166public eachmode reused.",
+    "Paired source-hash check referenced a nonexistent renamed actor before workers/guard/samples;reused original TDB1168 actor path and resumed. Zero completed samples repeated."
+  ],
+  "qualificationReused": {
+    "commit": "1f164cb3d00dcbbe001d3d5ebef9e2fc134395d6",
+    "fullLiveEachOs": 6790,
+    "actualPackageSha256": "4a2ae52dca5eed9e78158340e5cabb1c88a18ff3b04118a38719c6b2444abde9",
+    "sameActualPackageConsumersBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadOrPackageChecks": 0
+  },
+  "builds": {
+    "isolatedWindowsCore": 1,
+    "isolatedEmbeddedSuccessfulBuilds": 2,
+    "isolatedEmbeddedInitialFailedBuilds": 1,
+    "newProbeActorReferenceFixtureBuilds": 0,
+    "allVmCanonicalPublicHarnessPackageBuilds": 0
+  },
+  "next": "Keep original56B Edge and current costs. No neighboring representation/float-bounds variant selected from this result. Continue distinct remaining copy/ownership uncertainties;submicrosecond probes stay deferred. Final immutable-package refresh remains after unresolved paths.",
+  "raw": {
+    "file": "text-edge-storage-trial.tar.xz",
+    "sha256": "94e5fd0276bd29fcaedd3f78c7bafb44dc4111a45876fb65e3dffe2fc5ad6001",
+    "bytes": 3375776,
+    "members": 119,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+      "ordinary-byte-dispatch-trial.tar.xz SHA2564d91bf0a(see ordinary-byte-dispatch-trial-evidence.json for full identity)"
+    ]
+  }
+}
