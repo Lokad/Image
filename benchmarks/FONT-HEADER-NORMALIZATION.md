@@ -70,3 +70,6 @@ their header-instruction profiles describe the previous implementation. Unchange
 borrowed text/drawing and codec/resize/copy paths reuse identified evidence.
 The finite 289-path objective and final-package refresh remain open. Publication
 stays postponed.
+
+[Subsequent coordinate-reduction trials](FONT-COORDINATE-REDUCTION-TRIALS.md)
+are inconclusive and leave this accepted implementation unchanged.

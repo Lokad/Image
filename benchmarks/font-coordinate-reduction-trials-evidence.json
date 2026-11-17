@@ -1,0 +1,539 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "NFA1185",
+    "EHR1186",
+    "DHR1187"
+  ],
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "3f40580559dd4cc7d59ab24f333dffc406ad4647",
+  "sources": {
+    "src/Lokad.Image/TrueTypeFont.cs": "e090eb01943d25b4a459c4d5bb8b9a831073adf65121ef362357dc799e408ef6"
+  },
+  "producers": {
+    "windowsSha256": "4cad09015d4347ad8a1d98251b220fb65da312fde6e90ef1f94723e5309ec235",
+    "linuxSha256": "483954d4ccef690e8edf423176e3844a1e48e0be6707e842421b892c7eb9d0bd",
+    "timedArtifactSha256": "483954d4ccef690e8edf423176e3844a1e48e0be6707e842421b892c7eb9d0bd",
+    "packageSha256": "4a792b4aa57b07d0057c191123097a16453f6f1a58a1d385af626ea7f26dfb5e",
+    "symbolsSha256": "27d0a81bc85cd0c73c42b72f1ead3b1e862751e147be579c207b8054c17fd62c"
+  },
+  "profile": {
+    "totalSamples": 1991,
+    "resolvedManagedSamples": 802,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        700
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::ValidateMapping(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        58
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::.ctor(uint8[],class Lokad.Image.Internal.OperationContext)[Optimized]",
+        11
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Nullable`1<valuetype Lokad.Image.TrueTypeFont/TableRange> [Lokad.Image] Lokad.Image.TrueTypeFont::Find(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        8
+      ],
+      [
+        "instance valuetype Lokad.Image.TrueTypeFont/TableRange [Lokad.Image] Lokad.Image.TrueTypeFont::Required(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        5
+      ],
+      [
+        "instance valuetype Lokad.Image.TrueTypeFont/TableRange [Lokad.Image] Lokad.Image.TrueTypeFont::SelectMapping(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        3
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.TrueTypeFont::Items(int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        3
+      ],
+      [
+        "instance uint8[] [Lokad.Image] Lokad.Image.Internal.PixelStoragePool::Take(int32)[Optimized]",
+        3
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::ReserveBorrowed(int64)[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.TrueTypeFont::Span(valuetype Lokad.Image.TrueTypeFont/TableRange)[Optimized]",
+        2
+      ],
+      [
+        "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Reserve(int64)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::Dispose()[Optimized]",
+        1
+      ],
+      [
+        "class Lokad.Image.Internal.OperationContext [Lokad.Image] Lokad.Image.TrueTypeFont::InputContext(int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1
+      ],
+      [
+        "instance int32 [FontLoadHarness] WarmFontLoad::Managed()[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PixelStoragePool::ReturnLatest(uint8[])[Optimized]",
+        1
+      ]
+    ],
+    "dsoSamples": {
+      "(/memfd:doublemapper (deleted))": 802,
+      "(/usr/lib/x86_64-linux-gnu/libc.so.6)": 1173,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libclrjit.so)": 1,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libcoreclr.so)": 8,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/System.Private.CoreLib.dll)": 5,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/System.Text.Json.dll)": 1,
+      "(/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)": 1
+    },
+    "traceSha256": "49da86facb1dadae150fcaf04aad3d01b07b91110fb7f03a9cf78aeafac5ea30",
+    "traceBytes": 462508
+  },
+  "sameProcessInstructionMap": {
+    "project": "Lokad.Image",
+    "stage": "NFA1185",
+    "offlineOnly": true,
+    "sameProcessCodegenAndPerfMap": true,
+    "methodCodeBytes": 1731,
+    "sampleCount": 700,
+    "mappedSampleCount": 700,
+    "unmatchedOffsets": {},
+    "topInstructionLeads": [
+      {
+        "offset": "0x117",
+        "samples": 39,
+        "instruction": "jne      G_M000_IG47"
+      },
+      {
+        "offset": "0x237",
+        "samples": 39,
+        "instruction": "jne      G_M000_IG47"
+      },
+      {
+        "offset": "0xf4",
+        "samples": 20,
+        "instruction": "vinserti128 ymm3, ymm3, xmm5"
+      },
+      {
+        "offset": "0x10c",
+        "samples": 20,
+        "instruction": "vpmovmskb r9d, ymm3"
+      },
+      {
+        "offset": "0x21a",
+        "samples": 19,
+        "instruction": "vpshufb  ymm3, ymm3, ymmword ptr [reloc @RWD32]"
+      },
+      {
+        "offset": "0xfa",
+        "samples": 18,
+        "instruction": "vpshufb  ymm3, ymm3, ymmword ptr [reloc @RWD32]"
+      },
+      {
+        "offset": "0x22c",
+        "samples": 14,
+        "instruction": "vpmovmskb r9d, ymm3"
+      },
+      {
+        "offset": "0x14c",
+        "samples": 14,
+        "instruction": "ja       G_M000_IG60"
+      },
+      {
+        "offset": "0x1fb",
+        "samples": 14,
+        "instruction": "mov      r11, qword ptr [r9]"
+      },
+      {
+        "offset": "0x1a8",
+        "samples": 13,
+        "instruction": "mov      r13d, ecx"
+      },
+      {
+        "offset": "0x17d",
+        "samples": 13,
+        "instruction": "ja       G_M000_IG60"
+      },
+      {
+        "offset": "0x1ca",
+        "samples": 11,
+        "instruction": "mov      r10, qword ptr [r9]"
+      },
+      {
+        "offset": "0x214",
+        "samples": 11,
+        "instruction": "vinserti128 ymm3, ymm3, xmm4"
+      },
+      {
+        "offset": "0xd1",
+        "samples": 11,
+        "instruction": "jne      SHORT G_M000_IG16"
+      },
+      {
+        "offset": "0x228",
+        "samples": 11,
+        "instruction": "vpcmpgtw ymm3, ymm3, ymm4"
+      },
+      {
+        "offset": "0xe9",
+        "samples": 10,
+        "instruction": "vmovq    xmm5, r11"
+      },
+      {
+        "offset": "0x2f8",
+        "samples": 10,
+        "instruction": "vpextrd  r15d, xmm3, 3"
+      },
+      {
+        "offset": "0x281",
+        "samples": 9,
+        "instruction": "ja       G_M000_IG60"
+      },
+      {
+        "offset": "0x2d6",
+        "samples": 9,
+        "instruction": "vpmovmskb r10d, ymm3"
+      },
+      {
+        "offset": "0xab",
+        "samples": 9,
+        "instruction": "mov      r11, qword ptr [r9]"
+      }
+    ],
+    "interpretation": "Same compilation instance/method extent and instruction-boundary matches identify code locations;sampling skid and memory latency forbid per-instruction or phase elapsed estimates. No statistical timing or speed claim."
+  },
+  "trials": {
+    "ehr1186": {
+      "prototypeSha256": "b883b4a666407a3c31e91aeb2b846429a4a70de04e6b2892b57583f85e483f71",
+      "sourceSha256": "acfa7aba56d9330dc32bfd06e0eb280176ea4b67f54200852c39ed2063397255",
+      "hypothesis": "NFA1185same-process mapping resolves all700headerleaves. Two main-loop coordinate MoveMask/selected-bit-test/failurebranches occur per8headers. Combine both private coordinate predicates once;not a replay of MoveMask-to-VPTEST. Leafcounts are not phase costs.",
+      "intendedEndState": "One shared exact four-header vector comparison;one coordinate reduction per structurally proven8headerbatch. Scalar/four-tail retains old reduction. No alternate copy,allocation,cache or broad abstraction.",
+      "exactPredicate": "For the same selected lanes,MoveMask(A|B)&M ==0 iff both old masked MoveMasks arezero. All eight record extents are proven nonempty>=10or empty before gathers. Zero-contour/empty sentinels and each bounded10byte slice unchanged. Later private gathers cannot throw on structurally validated extents. On either bound failure,the stateless method returnsfalse to original ordered validator;no public state/errors published early.",
+      "sourceProof": {
+        "structuralProofBeforeEveryGatherVerbatim": true,
+        "everyHeaderReadRemainsBoundedAndBitExact": true,
+        "privateFailureReturnsToOriginalOrderedValidator": true,
+        "scalarCancelableAdmissionAndOwnershipVerbatim": true,
+        "noNewOwnedOrRetainedStorage": true
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 15.173185750325521,
+          "lower": 14.893352305081974,
+          "upper": 15.453019195569068,
+          "values": [
+            15.156501770019531,
+            15.176379272460938,
+            15.186676208496094
+          ]
+        },
+        "candidate": {
+          "mean": 15.063912618001302,
+          "lower": 14.214491240022854,
+          "upper": 15.91333399597975,
+          "values": [
+            15.03557763671875,
+            15.117648376464844,
+            15.038511840820313
+          ]
+        }
+      },
+      "ratio": 0.9927954541635565,
+      "lower": 0.9392447414734677,
+      "upper": 1.0493993421369243,
+      "allocatedBytes": 176,
+      "outcome": "Inconclusive;no demonstrated useful gain,no promotion or independent repetition.",
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 248324125,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 246342904,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 247687551,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 248649798,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 248818503,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 246390978,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          }
+        }
+      ],
+      "correctness": {
+        "publicEachOsEachNormalScalar": 166,
+        "orderedOracleCasesEachOsEachNormalAvx2OffScalar": 16384,
+        "originalActorOwnerCleanupAndReferenceChecksPassed": true,
+        "canonicalUnchanged": true
+      },
+      "codegen": {
+        "headerCodeBytes": 1712,
+        "hasCombinedCoordinateReduction": true,
+        "moveMaskSites": 3,
+        "sha256": "728876a775bb7875afe191f9c77d391d92fe0eea54affe1545ae2a00a2fef77e",
+        "originalFontWorkerPassed": true
+      },
+      "toolingRecovery": "First codegen assertion counted all widths,including2XMMtail sites. Correct to3YMMsites vsbaseline4;samecapturedcode/tests,0operations repeated."
+    },
+    "dhr1187": {
+      "prototypeSha256": "c08c297a806839baa65a7ae79b06c97beaea0106703f56e72b700b36c4319cc0",
+      "sourceSha256": "4d7a7ce458c4458cc122f4ec9bdd661f0d41289844506c62c5c0e6990fea84c4",
+      "hypothesis": "EHR1186combines two decisions per8glyphs,screen15.173186->15.063913us,interval.939245-1.049399;inconclusive. Complete transition accumulates private coordinate failures across structurally validated8batches,one reduction before anytail. No independent EHRconfirmation/rebuild/replay.",
+      "intendedEndState": "One exact vector coordinate-failure accumulation across the proven8header loop;one masked reduction before4/scalar tail. Shared4headercomparison and portable/cancelable/orderedfallback remain.",
+      "exactPredicate": "OR reduction is associative and masked extraction distributes overOR. Any structural failure returnsfalse before unproven reads;all earlier coordinate failures are stateless. After last8batch,reduce before4/scalar tail can throw. Anyinvalidcoordinate returnsfalse to original scalar-ordervalidator,so earliestpublicerror remains exact. No public resumable state.",
+      "sourceProof": {
+        "structuralProofBeforeEveryGatherVerbatim": true,
+        "everyHeaderReadRemainsBoundedAndBitExact": true,
+        "privateFailureReturnsToOriginalOrderedValidator": true,
+        "scalarCancelableAdmissionAndOwnershipVerbatim": true,
+        "noNewOwnedOrRetainedStorage": true
+      },
+      "subjects": {
+        "baseline": {
+          "mean": 14.829863789876303,
+          "lower": 14.601476505465001,
+          "upper": 15.058251074287604,
+          "values": [
+            14.844241638183593,
+            14.821380493164062,
+            14.82396923828125
+          ]
+        },
+        "candidate": {
+          "mean": 14.958962056477864,
+          "lower": 14.618198212203982,
+          "upper": 15.299725900751746,
+          "values": [
+            14.979321716308593,
+            14.954946350097655,
+            14.942618103027344
+          ]
+        }
+      },
+      "ratio": 1.008705005542441,
+      "lower": 0.99765513728261,
+      "upper": 1.0198772603705326,
+      "allocatedBytes": 176,
+      "outcome": "Inconclusive;no demonstrated useful gain,no promotion or independent repetition.",
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 243208055,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245421207,
+            "allocatedBytes": 2883584,
+            "observed": 204898304,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 245021841,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 242833498,
+            "allocatedBytes": 2883584,
+            "observed": 307347456,
+            "clockReadsPerBatch": 2
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 242875912,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 16384,
+            "elapsedNanoseconds": 244819855,
+            "allocatedBytes": 2883584,
+            "observed": 409796608,
+            "clockReadsPerBatch": 2
+          }
+        }
+      ],
+      "correctness": {
+        "publicEachOsEachNormalScalar": 166,
+        "orderedOracleCasesEachOsEachNormalAvx2OffScalar": 16384,
+        "originalActorOwnerCleanupAndReferenceChecksPassed": true,
+        "canonicalUnchanged": true
+      },
+      "codegen": {
+        "headerCodeBytes": 1735,
+        "hasCombinedCoordinateReduction": true,
+        "moveMaskSites": 3,
+        "sha256": "761ab8c72292811afc6216303c1f0d443f9876911d9425ce98ff901a2d6a8b7d",
+        "originalFontWorkerPassed": true,
+        "coordinateReductionAfterEightLoop": true,
+        "accumulator": "vpternlogd immFE"
+      },
+      "toolingRecovery": "All correctness/capture steps completed before assert. JIT folds 3inputOR into VPTERNLOGD immFE;recognize equivalent actual realization. No operations repeated."
+    }
+  },
+  "interpretation": "Leaf locations,not phase costs or forecast. All1991samples/0lost retained;libc1173,header700,mapping58. EHR removes one coordinate reduction per8batch;coherent DHR removes all repeated coordinate reductions across8batches but adds accumulator lifetime. Neither establishes useful gain. DHRpoint is adverse,not a statistically demonstrated regression. No historicalclock subtraction or standaloneFreeType claims.",
+  "memory": {
+    "allocatedBytesPerLoad": 176,
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "physicalNativeAndJitPeaksMeasured": false,
+    "prototypeFrameSpills": "No vector stack spill/load observed in captured loop;codegen does not establish actual physical memory peaks or elapsed causality."
+  },
+  "qualificationReused": {
+    "fullLiveEachOs": 6790,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "packageSha256": "4a792b4aa57b07d0057c191123097a16453f6f1a58a1d385af626ea7f26dfb5e",
+    "newBroadOrPackageChecks": 0
+  },
+  "reproduction": {
+    "builds": {
+      "isolatedWindowsCore": 2,
+      "vmCanonicalEmbeddedPublicHarnessReferenceFixturePackage": 0
+    },
+    "timings": "QuietVMCPU0,sequential Release,natural nonconcurrentGC;3reversed16384operationpairs perdistinctartifact. Every originalcompleteownedcopy/admission/eagercheck/retain/dispose boundary preserved.",
+    "tooling": "Codegen assertion initially included XMMtail sites;then DHRJIT folds3inputOR toVPTERNLOGDimmFE. Explicit corrections reuse all completed tests/codegen;no operation or statisticalcapture repeats. Recovery helper quoting corrections happen before remote execution. All first recipes and failures retained where recorded."
+  },
+  "next": "Continue independent ordinary-text geometry/event preparation against its remaining scoped gaps. Current owned-font gap remains explicit;no blind neighboring reduction/shuffle/copy replay. A materially different evidenced design remains eligible. Stop unchanged passing paths;no global block.",
+  "raw": {
+    "file": "font-coordinate-reduction-trials.tar.xz",
+    "sha256": "382147bab5f1e524bdd27b1e4752f814291ade12f67711da76b4890a155a9763",
+    "bytes": 1356704,
+    "members": 109,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "font-header-normalization-qualified.tar.xz",
+        "sha256": "64aa1ab63fcb1fb889d2846cc02e7cb512b5aaefb06168853ad53056e0548e95",
+        "bytes": 2712044,
+        "members": 211,
+        "allMembersVerified": true,
+        "mirrored": true,
+        "dependencies": [
+          {
+            "file": "fused-font-header-validation-qualified.tar.xz",
+            "sha256": "96ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167",
+            "bytes": 2203304,
+            "members": 200,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              {
+                "file": "nearest-row-reuse-qualified.tar.xz",
+                "sha256": "a4cdf889d0c1ecda054e283e9436e9a452cebbb5181923638fcf97d1d6c25496",
+                "bytes": 5278740,
+                "members": 275,
+                "allMembersVerified": true,
+                "mirrored": true,
+                "dependencies": [
+                  "font-header-batching-qualified.tar.xz SHA256 e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+                  "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117",
+                  "copy-attribution-nearest-guard.tar.xz SHA256 42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+                ]
+              },
+              {
+                "file": "font-header-batching-qualified.tar.xz",
+                "sha256": "e51182c8171582f93f41fbb46e70d3b05651ba738e8e053babdf5521fd5e9d2d",
+                "bytes": 28082844,
+                "members": 321,
+                "allMembersVerified": true,
+                "mirrored": true,
+                "dependencies": [
+                  "font-noncancelable-dispatch-trial.tar.xz SHA256 7f8292eea3ea450b5d452bdd2ed0d285c29dc6653c5f26f703c7a439f6e93496",
+                  "composition-storage-reuse-qualified.tar.xz SHA256 fb1fdff9501ec39bac0531af689a88a3299b22b9a9a843572c266fc2db14d117"
+                ]
+              }
+            ]
+          },
+          {
+            "file": "font-post-fusion-attribution.tar.xz",
+            "sha256": "8085178408b598a03b56d1acc7a0010e537cacc82236815d790784926ce1f832",
+            "bytes": 51396,
+            "members": 19,
+            "allMembersVerified": true,
+            "mirrored": true,
+            "dependencies": [
+              "fused-font-header-validation-qualified.tar.xz SHA25696ccf53f147e5458a32ee4dc1931c7c577192031ffc8c4ce0418881c5bb19167"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
