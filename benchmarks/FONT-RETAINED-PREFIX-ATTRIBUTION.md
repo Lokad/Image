@@ -1,11 +1,16 @@
 # Font attribution after retained-prefix ownership
 
+The earlier [post-prefix profile](FONT-PREFIX-ATTRIBUTION.md) already covers these
+unchanged font paths. This later trace was unnecessary repetition and adds no
+new attribution requirement or timing proof. Reuse that evidence and the completed
+[copy/validation scheduling trials](FONT-COPY-VALIDATION-TRIALS.md).
+
 One two-second diagnostic on the current immutable package DLL **c5ae4f5d…**
 retains **1,994 leaf samples**: **1,082** in libc, **780** in fused
 `TryLongGlyphHeaders` and **55** in mapping validation. These are locations,
-not elapsed phase costs, mandatory-cost bounds or a speed forecast. Retained-prefix
-ownership changed the copied capacity since the previous profile, justifying this
-bounded refresh; historical counts are not subtracted.
+not elapsed phase costs, mandatory-cost bounds or a speed forecast. The package's
+intervening text changes do not invalidate the earlier font profile. Historical
+counts are not subtracted.
 
 The original complete public owned-load/dispose actor, frozen DejaVu face,
 FreeType2.13.2 correctness checks, eager validation, input independence and cleanup
