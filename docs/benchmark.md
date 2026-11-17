@@ -24,7 +24,8 @@ No heap capacity or retention is added; validation and independent owners remain
 **5.576 / FFmpeg 5.077 µs**, upper
 **1.104081** per forward/reverse pair. Separate-byte
 **2.056 / 1.883 µs**, upper **1.142**, remains a gap.
-Separate-word **4.103 / 4.124 µs**, upper **1.002100**,
+The [longer separate-word integration](../benchmarks/SEPARATE-WORD-COPY-CURRENT-CONFIDENCE.md)
+measures **3.777 / 3.786 µs**, upper **1.001075**, and
 remains uncertain. Byte overlap **3.624 / 3.867 µs**,
 upper **0.940570**, passes/stops. These copies allocate **0 B/op** and add no
 owned/admitted/retained workspace. Caller canvas storage and unmeasured physical
@@ -464,7 +465,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.06 | 1.88 | 1.092 / 1.142 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.10 | 4.12 | 0.995 / 1.002 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.78 | 3.79 | 0.998 / 1.001 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.62 | 3.87 | 0.937 / 0.941 | 0 |

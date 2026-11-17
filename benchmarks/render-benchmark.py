@@ -1974,6 +1974,18 @@ No heap capacity or retention is added; validation and independent owners remain
                       for field, state in (('passCount', 'pass'), ('gaps', 'gap'), ('uncertain', 'uncertain'))}
     drawing_counts['total'] = len(drawing_cases)
     assert drawing_counts == word_composite['borrowedDrawingStatusCounts']
+    word_confidence = json.loads((ROOT / 'benchmarks/separate-word-copy-current-confidence-evidence.json').read_text(encoding='utf-8'))
+    current_word = word_confidence['case']
+    assert word_confidence['measurementAccepted'] and not word_confidence['productionChanged']
+    assert word_confidence['requiredMaterialPaths'] == 289 and word_confidence['newMaterialPaths'] == 0
+    assert word_confidence['raw']['mirrored'] and word_confidence['raw']['allMembersVerified']
+    assert current_word['librarySha256'] == word_confidence['producers']['timedArtifactSha256']
+    assert current_word['pairedOperationsPerSubject'] == 262144 and current_word['nativeReferenceFrozen']
+    assert current_word['nativeBuild'] == drawing_cases['DrawingCopy16']['nativeBuild']
+    assert current_word['nativeReady'] == drawing_cases['DrawingCopy16']['nativeReady']
+    assert word_confidence['qualificationReused']['actualPackageContainsTimedDll']
+    assert word_confidence['qualificationReused']['fullLiveEachOs'] == 6790
+    drawing_cases['DrawingCopy16'] = current_word
     drawing_labels = {
         'DrawingCopy8': 'Exact rectangle copy into borrowed RGBA8 canvas',
         'DrawingCopy16': 'Exact rectangle copy into borrowed RGBA16 canvas',
@@ -1989,6 +2001,7 @@ No heap capacity or retention is added; validation and independent owners remain
         c = drawing_cases[name]
         library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] or name == 'OriginalWordComposite'
                    else bq['actualPackage']['librarySha256'])
+        if name == 'DrawingCopy16': library = word_confidence['producers']['timedArtifactSha256']
         assert c['librarySha256'] == library
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['allocatedBytes'] == 0 and c['managedExact'] and c['borrowedCanvas'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
@@ -2011,7 +2024,8 @@ No heap capacity or retention is added; validation and independent owners remain
 **{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} µs**, upper
 **{word_overlap['upper']:.6f}** per forward/reverse pair. Separate-byte
 **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.3f}**, remains a gap.
-Separate-word **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**,
+The [longer separate-word integration](../benchmarks/SEPARATE-WORD-COPY-CURRENT-CONFIDENCE.md)
+measures **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, upper **{bw['upper']:.6f}**, and
 remains uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
 upper **{bo['upper']:.6f}**, passes/stops. These copies allocate **0 B/op** and add no
 owned/admitted/retained workspace. Caller canvas storage and unmeasured physical
