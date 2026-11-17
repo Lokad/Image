@@ -1,0 +1,295 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FPA1233",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "allInstrumentedTimingsDiscarded": true,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "summary": {
+    "project": "Lokad.Image",
+    "stage": "FPA1233",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "productionChanged": false,
+    "librarySha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "trueTypeSourceSha256": "9eb17e74df87a0cdd4258063457967a4a3d1dfb139fae46141d569d774a25bbf",
+    "totalSamples": 1994,
+    "resolvedManagedSamples": 896,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        780
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::ValidateMapping(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        55
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Nullable`1<valuetype Lokad.Image.TrueTypeFont/TableRange> [Lokad.Image] Lokad.Image.TrueTypeFont::Find(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        16
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::.ctor(uint8[],int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        8
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.TrueTypeFont::RetainedLength(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        6
+      ],
+      [
+        "instance valuetype Lokad.Image.TrueTypeFont/TableRange [Lokad.Image] Lokad.Image.TrueTypeFont::Required(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        6
+      ],
+      [
+        "instance valuetype Lokad.Image.TrueTypeFont/TableRange [Lokad.Image] Lokad.Image.TrueTypeFont::SelectMapping(class Lokad.Image.Internal.OperationContext)[Optimized]",
+        5
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.TrueTypeFont::Dispose()[Optimized]",
+        5
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.TrueTypeFont::RetainedTable(uint32)[Optimized]",
+        3
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Reserve(int64)[Optimized]",
+        2
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.TrueTypeFont::Items(int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        2
+      ],
+      [
+        "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PixelStoragePool::ReturnLatest(uint8[])[Optimized]",
+        1
+      ],
+      [
+        "void [FontManagedWorker] Program::<Main>$(string[])[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Dispose()[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ]
+    ],
+    "dsoSamples": {
+      "(/usr/lib/x86_64-linux-gnu/libc.so.6)": 1082,
+      "(/memfd:doublemapper (deleted))": 896,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libcoreclr.so)": 10,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libclrjit.so)": 1,
+      "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/System.Private.CoreLib.dll)": 4,
+      "(/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)": 1
+    },
+    "offsets": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x237",
+        "samples": 59
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x117",
+        "samples": 50
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x21a",
+        "samples": 23
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x10c",
+        "samples": 21
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x22c",
+        "samples": 20
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x214",
+        "samples": 18
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x17d",
+        "samples": 17
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0xfa",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x2ad",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0xf4",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x1f0",
+        "samples": 15
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x108",
+        "samples": 13
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x1d0",
+        "samples": 13
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x281",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x25d",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x310",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x80",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x158",
+        "samples": 11
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x123",
+        "samples": 10
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x1ae",
+        "samples": 9
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x1a8",
+        "samples": 9
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x8f",
+        "samples": 9
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0x228",
+        "samples": 9
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.TrueTypeFont::TryLongGlyphHeaders(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,uint32)[Optimized]",
+        "offset": "0xba",
+        "samples": 9
+      }
+    ],
+    "traceSha256": "d33318271f3836c2efe4f7f18ae31dc9f9828c35ddd92a0c0d5631698727130d",
+    "traceBytes": 464388,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/fpa1233-runtime/FontLoadDriver.deps.json",
+      "--runtimeconfig",
+      "tmp/fpa1233-runtime/FontLoadDriver.runtimeconfig.json",
+      "tmp/fpa1233-runtime/flb1146-FontManagedWorker.dll",
+      "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "150025",
+      "-o",
+      "tmp/fpa1233-font-load.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "originalChecksAndCleanupPassed": true,
+    "quietGuardsPassed": true,
+    "scope": "One2second current public owned-font-load/dispose profile; original DejaVu/FreeType tooling/input,CPU0;collectorCPU1. Leaf counts locate work,not elapsed phase costs or a speed forecast. Passing complete text integrations and all other paths not retimed."
+  },
+  "producers": {
+    "windowsSha256": "d34a8c10af7d7c80820ccdea41f78efe1d9a67b55f659dc4b64dc0a76fcc1c29",
+    "linuxSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "timedArtifactSha256": "c5ae4f5d8bac2b2ef608f4bef9498b5b9379eced9181adf181ea727ea24f1960",
+    "packageSha256": "539cbe19a9a9ed060cef9d10eb2b600d60c1e4ab9d897455224572c6b1840ff6",
+    "symbolsSha256": "d4488a292f1f2115eae53697269ab14d1806f8de24d3b0be6c027f3dc80462ed"
+  },
+  "qualificationReused": {
+    "provider": "benchmarks/text-scan-band-coordinates-evidence.json",
+    "fullLiveEachOs": 6824,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0
+  },
+  "currentFontCostsProvider": "benchmarks/font-retained-prefix-evidence.json",
+  "currentFontCostsUnchanged": true,
+  "scope": "Retained-prefix copy workload changed since PFA1178; one current full public owned-font-load/dispose trace. Counts locate work,not phase timing or a speed forecast. No font-parser equivalence or overall text slowdown claim.",
+  "decision": "Required owned copy and eager long-glyph validation remain dominant. No redundant full input copy/table traversal found. Do not replay rejected font copy,header width or extent variants from sample counts alone. Inspect generated selected header path for concrete removable work before another prototype;keep unresolved copy/bilinear/ordinary16 measurements independent.",
+  "raw": {
+    "file": "font-retained-prefix-attribution.tar.xz",
+    "sha256": "ec8e1b765895e8f7d72e348fe22857d195f1022597d1ff8789be4c3d4f52f840",
+    "bytes": 48420,
+    "members": 17,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "text-scan-band-coordinates-qualified.tar.xz",
+        "sha256": "52e461cda54471ba1f935bb7905d5cb8a593f8105a55488bdc8f1ab927fec598"
+      },
+      {
+        "file": "font-retained-prefix-qualified.tar.xz",
+        "sha256": "708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e"
+      }
+    ]
+  }
+}

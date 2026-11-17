@@ -81,10 +81,15 @@ private; no confirmation, current-cost change, passing-path retiming or broad/pa
 repeat. The current-package bilinear16 comparison remains uncertain after explicit
 reference-group interleaving; independent work continues without an assumed gap.
 
-[Post-fusion font attribution](FONT-POST-FUSION-ATTRIBUTION.md) reuses the current
-package for one diagnostic trace. The required owned copy and eager header scan
-remain dominant locations, not phase costs. Unchanged font-loading costs remain identified; current text costs use the
-shared-scan-band package. No neighboring rejected implementation is replayed.
+[Current font attribution](FONT-RETAINED-PREFIX-ATTRIBUTION.md) refreshes the
+changed retained-prefix copy workload on the shared-band package:1,994 leaf
+samples,libc1,082,long-glyph validation780,mapping55. All instrumented clocks
+are discarded. Required copying/eager headers remain locations,not phase costs;
+no redundant copy/table pass is identified. Font costs stay source-valid and
+unchanged. Reuse6,824full/live eachOS/SAMEactualpackage/all3examples,zero builds.
+Inspect selected header instructions for substantial removable work before a
+new prototype;do not replay rejected copy/width variants from counts alone.
+[Earlier post-fusion attribution](FONT-POST-FUSION-ATTRIBUTION.md) retains history.
 
 [Endpoint classification](FONT-ENDPOINT-CLASSIFICATION-TRIAL.md) preserves ordered
 validation and ownership but its independent confirmation remains inconclusive.
