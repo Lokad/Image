@@ -21,8 +21,8 @@ with an easier operation. The following finite list is the inherited 17:
 | `InspectHeaders/WebpLosslessRgba8FreshSeekable` | Complete RIFF and late-metadata framing through EOF. [Current header guard](JPEG-STUFFED-PAIRS.md) passes/stops.142106/AVIO-headeradapter.310231us,upper.471884,552B/op; full RIFF/late metadata/EOF/independent9-fields. Identify/probe remain different. |
 | `FillRectangle/Rgba8Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 1.194663/FFmpegpublicfill1.730184us,upper0.696649,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
 | `FillRectangle/Rgba16Clipped` | [Original clipped fill](ORIGINAL-CLIPPED-FILL.md) passes/stops:request(-3,5,257,129),effective254x129. 2.183548/FFmpegpublicfill4.829109us,upper0.456739,0B/op. Exact current-package normal/scalar/fullcanvas/owner gates;zero production changes. |
-| `CopyRegion/Rgba8Independent` | [Prepared rectangle rows](RECTANGLE-COPY-PREPARED-ROWS.md) refreshes the original clipped control:1.928452/FFmpeg1.849626us,upper1.048348gap,0B. Frozen source(0,0),request257×129,destination(-3,5),effective254×129;peroperation clipping/fullcanvas/source/normal/scalar gates remain. |
-| `CopyRegion/Rgba16Overlapping` | [Prepared rectangle rows](RECTANGLE-COPY-PREPARED-ROWS.md) confirms12.07%/.700us incremental fullpairgain. Current5.004394/FFmpeg4.457385us upper1.133517gap,0B,exact snapshots/cancellation/owner gates. Currentnative clocks andoldercosts remainseparate. |
+| `CopyRegion/Rgba8Independent` | [Current rectangle copies](SELF-ROW-STORAGE.md) refreshes the original clipped control:2.144878/FFmpeg2.090697us,upper1.034826gap,0B. Frozen source(0,0),request257×129,destination(-3,5),effective254×129;peroperation clipping/fullcanvas/source/normal/scalar gates remain. |
+| `CopyRegion/Rgba16Overlapping` | [Shared self-row state](SELF-ROW-STORAGE.md) passes/stops5.186/FFmpeg5.602µs,upper.930762,0B;controlled actual-DLL20.26%/1.110µs gain. Frozen257×129,(1,1),forward/reverse snapshot/checkpoint/ownership boundary unchanged. |
 | `Composite/Rgba8StraightAlpha` | [Original clipped composite](ORIGINAL-CLIPPED-COMPOSITE.md) passes/stops78.567/retained FFmpegoverlay526.201us,upper.159260,0B/publicoperation. Fullsourceat(-3,5),effective510x254;reset excluded before EVERY operation both. Exactmanaged and approved nativeRGB/alpha/untouched/zero-alpha gates. Graph preparation outside,not one-shot. |
 | `Composite/Rgba16Overlapping` | Rational word arithmetic plus alias traversal. [Original self-composite](ORIGINAL-WORD-COMPOSITE.md) now passes/stops649.772/ImageSharp716.960us,upper.976714. Reference includes necessary sourceClone+Rgba64SrcOver+Dispose;0/26800GC B/op. Full-word exact/native/owner gates pass;no production change. |
 | `TextLayout/OriginalUnicode` | [Complete authored layout](AUTHORED-FONT-COMPARISONS.md) passes/stops2.585/117.234µs,upper.023246,5592/367584B;explicitly source-corrected public ImageSharp integration,all nine layout calls/tab adaptation and owned disposal included. |
@@ -42,10 +42,9 @@ contextual program,GDEF regions,signed deltas and default-zero adjustment. Use
 approved public reference pipelines and existing quality/layout/full16-bit gates;
 no private face becomes a fixture and no expanded face/script/settings grid.
 
-All 17 inherited controls are now measured: 15 passes and two gaps.
-The original word-overlap
-copy and clipped byte-copy gaps stay open. Related passes do not
-retire them. Functional checks, shared memory and performance remain separate.
+All 17 inherited controls are now measured: 16 passes and one gap.
+The original clipped byte-copy gap stays open. Related passes do not
+retire it. Functional checks, shared memory and performance remain separate.
 
 [AFP1134](AUTHORED-FONT-REFERENCE-PREFLIGHT.md) retains the superseded reference
 failures. [ATS1142/AFT1143](AUTHORED-FONT-COMPARISONS.md) separates the defects,

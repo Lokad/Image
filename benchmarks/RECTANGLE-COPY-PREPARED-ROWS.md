@@ -1,5 +1,9 @@
 # Prepared rectangle-copy execution
 
+Accepted-stage/measurement history. [Shared self-row state](SELF-ROW-STORAGE.md)
+owns current copy costs; the original evidence below remains.
+
+
 Accepted complete original word-copy pairs improve **5.799 → 5.100 µs**, saving
 **0.700 µs / 12.07%**, with ratio interval **.878361–.880288**, separated raw mean
 intervals and **0 B/op**. All twelve alternating 16,384-operation pairs and quiet

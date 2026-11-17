@@ -3,8 +3,7 @@
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; rectangle copies reuse prepared-row evidence, with a current
-package confirmation for separate-word copying. Current
+completed-row package; rectangle copies use the shared-self-row package. Current
 font loading reuses its header-normalization evidence; affected text costs use
 the conditional-polygon-scratch package.
 Other entries that
@@ -22,24 +21,30 @@ paired confirmations measure **19.21%** for block emission and **17.00%** for bo
 sign arithmetic. These successive effects are not added into a cumulative claim.
 No heap capacity or retention is added; validation and independent owners remain.
 
-[Prepared rectangle copies](../benchmarks/RECTANGLE-COPY-PREPARED-ROWS.md) save
-**12.07% / 0.700 µs** in controlled complete word pairs.
-Current standalone word cost **5.004 / FFmpeg 4.457 µs**, upper
-**1.133517**, remains a gap. Native clocks are faster than older
-captures; historical clocks and gains are not added. Separate byte copy is
-**1.964 / 1.881 µs**, upper **1.050**, a gap.
-Separate word copy **4.064 / 3.830 µs**, upper **1.114918**,
-remains uncertain in its [current-package confirmation](../benchmarks/COPY-WORD-CURRENT-PACKAGE.md)
-on the frozen 262,144-operation cadence. All actuals and three native brackets stay,
-without a causal regression claim, assumed gap or favorable replay.
-Byte overlap **3.497 / 3.766 µs**, upper **0.931853**, passes/stops.
-These copies allocate **0 B/op** and add no owned/admitted/retained workspace.
-Caller canvas storage and unmeasured physical/native/JIT peaks stay separate.
-The four unchanged copy costs retain their **6,794 checks per OS** and actual
-prepared-row package/all three examples. Current separate-word evidence reuses
-**6,803 checks per OS** and the SAME current package/all examples, with zero builds
-or qualification repeats. Each timed DLL remains immutable.
-The first identity-mismatched byte capture remains unqualified in the report.
+[Shared self-row storage](../benchmarks/SELF-ROW-STORAGE.md) saves
+**20.26% / 1.110 µs** in controlled complete word pairs.
+One shared bounded backing and row step replace duplicate execution state; copying,
+snapshot order, cancellation and ownership remain exact. Current original word
+cost **5.186 / FFmpeg 5.602 µs**, upper
+**0.930762**, passes/stops. This is a scoped final-DLL gain;
+historical clocks and prototype effects are not added.
+
+Separate byte copy is **2.172 / 2.080 µs**, upper
+**1.059**, a gap. Separate word copy **4.029 / 3.898 µs**,
+upper **1.061029**, remains uncertain on the frozen 262,144-operation cadence.
+All actuals and three native brackets stay, without an assumed gap, causal
+regression claim or favorable replay. Byte overlap **3.885 / 4.183 µs**,
+upper **0.938291**, passes/stops. Clipped byte copy retains a small gap.
+All five actual-reference costs use the same final timed/package DLL; other
+primitives retain their identified source-valid evidence.
+
+These copies allocate **0 B/op** and add no owned/admitted/retained workspace,
+pin, cache or API. Caller pixels and unmeasured physical/native/JIT peaks stay
+separate. Windows/Linux each pass **6,805 full/live checks**, focused **6 internal /
+190 public** normal/AVX-512-disabled/scalar checks and the SAME actual package/all
+three examples. Performance reconciles before broad qualification; no timed DLL
+rebuild occurs. Earlier [alignment trials](../benchmarks/COPY-DESTINATION-ALIGNMENT-TRIALS.md)
+remain unpromoted history, outside the renderer's measurement dependencies.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
@@ -68,8 +73,8 @@ allocation uses a separate 3×128 normal/scalar diagnostic because its BDN drive
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
-drawing recipes now have measurements: **thirteen borrowed controls, nine passes,
-three gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
+two gaps, one uncertain**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared
@@ -86,7 +91,7 @@ fonts and per-operation canvas reset stay outside both. Managed frames/fixtures 
 all exact/visual gates remain unchanged. Public-operation allocations are listed;
 single-invocation BDN drawing additionally counts 736 B of common scaffolding.
 Independent confirmation retains all actuals/guards and stops all five. All 17
-inherited names now have measurements: **15 passes, two copy gaps**. Broader text
+inherited names now have measurements: **16 passes, one copy gap**. Broader text
 processing and the remaining 289-path objective stay open; no historical stage sums.
 
 [Batched JPEG entropy inspection](../benchmarks/JPEG-BATCHED-ENTROPY.md) saves
@@ -454,12 +459,12 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.96 | 1.88 | 1.044 / 1.050 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.06 | 3.83 | 1.061 / 1.115 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 2.17 | 2.08 | 1.044 / 1.059 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 4.03 | 3.90 | 1.034 / 1.061 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
-| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.50 | 3.77 | 0.929 / 0.932 | 0 |
-| Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair (gap) | 5.00 | 4.46 | 1.123 / 1.134 | 0 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.88 | 4.18 | 0.929 / 0.938 | 0 |
+| Original overlapping RGBA16 copy, 257×129, shift (1,1), per pair (parity confirmed) | 5.19 | 5.60 | 0.926 / 0.931 | 0 |
 | RGBA8 source-over / FFmpeg overlay (parity confirmed) † | 65.01 | 451.06 | 0.144 / 0.150 | 0 |
 | RGBA16 source-over / ImageSharp 3.1.12 (parity confirmed) † | 563.63 | 629.51 | 0.895 / 0.913 | 0 |
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
@@ -500,7 +505,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Vertical flip RGBA8 (uncertain) † | 8.69 | 8.33 | 1.044 / 1.102 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
-| Original clipped RGBA8 copy, 254×129 (gap) | 1.928 | 1.850 | 1.043 / 1.048348 | 0 |
+| Original clipped RGBA8 copy, 254×129 (gap) | 2.145 | 2.091 | 1.026 / 1.034826 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 | Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
 | Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |

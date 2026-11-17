@@ -1,5 +1,9 @@
 # Separate-word copy: current package confirmation
 
+Accepted-stage/measurement history. [Shared self-row state](SELF-ROW-STORAGE.md)
+owns current copy costs; the original evidence below remains.
+
+
 The existing 256×129 RGBA16 copy remains **uncertain** on the current immutable
 actual-package DLL: **4.064211 /FFmpeg3.829634 µs**, conservative ratio interval
 **.961829–1.114918**, **0 B/public operation**. This is neither a pass nor a

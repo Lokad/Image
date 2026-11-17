@@ -93,8 +93,12 @@ public static partial class ImageDrawing
         if (independentRows && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated
             && region.Width <= 4096 && rowBytes >= 256)
         {
-            IndependentRowCopy.CopyRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
-                rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
+            if (sameBuffer && canvas.BitDepth == 16)
+                IndependentRowCopy.CopySelfRows(canvasPixels, sourceRowOffset, canvasRowOffset,
+                    rowBytes, region.Height, canvasRowStep, cancellationToken);
+            else
+                IndependentRowCopy.CopyRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
+                    rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
             return;
         }
         var rowsRemaining = region.Height;
