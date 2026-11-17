@@ -1,0 +1,775 @@
+{
+  "project": "Lokad.Image",
+  "stage": "SOP1219/EOM1220/EPR1221",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineProducers": {
+    "windowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "linuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "timedArtifactSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "packageSha256": "62bcbdd9b8544112d837d1b96e203bce866238bd35ded1ba65b8a2195d5a9096",
+    "symbolsSha256": "1ed48a3620c70c6939605d818a96aa00fc4e66827a84da93b70aaa00ce6877a5"
+  },
+  "rounds": {
+    "EOM1220": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "EOM1220",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newMaterialPaths": 0,
+        "baselineCommit": "fbb7dde065fb15b43e50b911b29a4941fdb38689",
+        "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+        "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "prototypePath": "tmp/eom1220-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "ff2c87a8c899e08ed7fa989e419c7337846fa1550609d98fced5440006f6943b",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7"
+        },
+        "candidateSourceSha256": "10c1079b37fd930aafc57a06c92ec9ae2ef6a6ffc2c5e1f0cacd28e21a34790d",
+        "sourceAudit": {
+          "stage": "SOP1219",
+          "model": {
+            "seed": 1219,
+            "cases": 8192,
+            "eligible": 2490,
+            "fallback": 5702,
+            "mergeSteps": 207719,
+            "maximumRawEvents": 146,
+            "finiteEventBitsExact": true,
+            "unreadIntersectionCanaryPreserved": true
+          },
+          "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes.",
+          "limitation": "Independent finite merge model, not production testing or performance proof. Actual C# constructor, resource/cancellation cases and exact full frames must pass before timing."
+        },
+        "sourceProof": {
+          "outsideEventPreparationVerbatim": true,
+          "allRawEventAppendsAndNumericalPairDiscoveryVerbatim": true,
+          "finalEdgePermutationVerbatim": true,
+          "noNewOwnedCapacity": true,
+          "originalFallbackForSmallNonfiniteMixedZero": true,
+          "intersectionAliasBoundProved": true,
+          "admissionRefusalTerminal": true
+        },
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~EventOrderingTests",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes.",
+        "temporaryCosts": "Raw-event finite/uniform-zero scan plus end sorting and three-stream merge; prove benefit on complete original ordinary8 before confirmation. No speed forecast from sample counts.",
+        "builds": {
+          "isolatedSuccessfulCore": 2,
+          "isolatedSuccessfulEmbedded": 3,
+          "failedCoreCompilerLocalName": 1,
+          "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+        },
+        "initialUntimedPrototypeSha256": "7d62fd1a18250c8f408b13493c9ff7b648fd397a49d9fba67742ee67340ff01b",
+        "preTimingCorrections": "Unused C# local-name collision fixed before first successful compile. Source/model review then preserves raw zero sign when adjacent dedup omitted an opposite-sign endpoint; explicit two opposite-sign authored controls added before timing. Original source/binary/tests/model retained. No fixture changes or timed samples before corrections. The new low-container unit test initially loads a complex g outline before its target; use the existing simple AV owner so the same65-edge target triggers the intended64-event bound. Test-only rebuild; core unchanged, no frozen benchmark fixture change."
+      },
+      "focusedLinuxCounts": {
+        "internal/normal": 313,
+        "internal/avx2-off": 313,
+        "internal/scalar": 313,
+        "public/normal": 177,
+        "public/scalar": 177
+      },
+      "focusedWindowsCounts": {
+        "internal/normal": 313,
+        "internal/avx2-off": 313,
+        "internal/scalar": 313,
+        "public/normal": 177,
+        "public/scalar": 177
+      },
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 46.15553759765625,
+            "lower": 39.3378190538672,
+            "upper": 52.9732561414453,
+            "values": [
+              46.482953857421876,
+              46.235247314453126,
+              45.74841162109375
+            ]
+          },
+          "candidate": {
+            "mean": 48.99147794596354,
+            "lower": 42.764193647211826,
+            "upper": 55.21876224471525,
+            "values": [
+              49.38501000976562,
+              48.813720703125,
+              48.775703125
+            ]
+          }
+        },
+        "ratio": 1.0614492253266699,
+        "lower": 0.9694709838892738,
+        "upper": 1.1621538722351987,
+        "allocations": {
+          "baseline": [
+            75864.0
+          ],
+          "candidate": [
+            75864.0
+          ]
+        },
+        "allPairsRetained": true,
+        "quietGuardsPassed": true
+      },
+      "prototypeSha256": "ff2c87a8c899e08ed7fa989e419c7337846fa1550609d98fced5440006f6943b"
+    },
+    "EPR1221": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "EPR1221",
+        "productionAccepted": false,
+        "canonicalProductionChanged": false,
+        "requiredMaterialPaths": 289,
+        "newMaterialPaths": 0,
+        "baselineCommit": "fbb7dde065fb15b43e50b911b29a4941fdb38689",
+        "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+        "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+        "prototypePath": "tmp/epr1221-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "prototypeSha256": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+        "sourcePins": {
+          "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+          "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+          "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7"
+        },
+        "candidateSourceSha256": "4c977b87f846be0d8671c336777390597d508958b36980281692909d0a7368ed",
+        "sourceAudit": {
+          "stage": "SOP1219",
+          "model": {
+            "seed": 1219,
+            "cases": 8192,
+            "eligible": 2490,
+            "fallback": 5702,
+            "mergeSteps": 207719,
+            "maximumRawEvents": 146,
+            "finiteEventBitsExact": true,
+            "unreadIntersectionCanaryPreserved": true
+          },
+          "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes.",
+          "limitation": "Independent finite merge model, not production testing or performance proof. Actual C# constructor, resource/cancellation cases and exact full frames must pass before timing."
+        },
+        "sourceProof": {
+          "outsideEventPreparationVerbatim": true,
+          "allRawEventAppendsAndNumericalPairDiscoveryVerbatim": true,
+          "finalEdgePermutationVerbatim": true,
+          "noNewOwnedCapacity": true,
+          "originalFallbackForSmallNonfiniteMixedZero": true,
+          "intersectionAliasBoundProved": true,
+          "admissionRefusalTerminal": true,
+          "omittedUpperCoordinatesHaveDirectLowerRepresentatives": true,
+          "finiteGuardFusedIntoResidualPreparation": true,
+          "allEndpointZeroSignsUniformOrOriginalFallback": true
+        },
+        "focusedInternalFilter": "FullyQualifiedName~Font|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~EventOrderingTests",
+        "focusedPublicFilter": "FullyQualifiedName~DrawingTests|FullyQualifiedName~Text|FullyQualifiedName~OpenType|FullyQualifiedName~Arabic|FullyQualifiedName~CooperativeMemory",
+        "hypothesis": "Residual upper endpoints omit only direct equal neighboring lower coordinates already present in sorted starts. Fuse finite/zero checks into residual selection and inspect only intersection suffix separately. Preserve uniform zero bits, use original fallback for mixed endpoints/nonfinite/small shapes. Same raw Event calls/admission/limits, workspace, arithmetic and final edge permutation.",
+        "temporaryCosts": "More predicates per endpoint, but sort/merge only residual ends and remove the separate whole-event eligibility scan. Complete original ordinary8 must establish gain; no tuning sweep or gain inferred from work counts.",
+        "builds": {
+          "isolatedSuccessfulCore": 1,
+          "isolatedSuccessfulEmbedded": 1,
+          "vmCanonicalPublicHarnessReferenceFixturePackage": 0
+        },
+        "preTimingCorrections": "Reuse all corrected EOM actual-constructor/bit/canary/refusal/cancellation tests; no new source correction or fixture change."
+      },
+      "focusedLinuxCounts": {
+        "internal/normal": 313,
+        "internal/avx2-off": 313,
+        "internal/scalar": 313,
+        "public/normal": 177,
+        "public/scalar": 177
+      },
+      "focusedWindowsCounts": {
+        "internal/normal": 313,
+        "internal/avx2-off": 313,
+        "internal/scalar": 313,
+        "public/normal": 177,
+        "public/scalar": 177
+      },
+      "screen": {
+        "subjects": {
+          "baseline": {
+            "mean": 46.483338948567706,
+            "lower": 42.00011868070203,
+            "upper": 50.96655921643338,
+            "values": [
+              46.6561669921875,
+              46.591825439453125,
+              46.2020244140625
+            ]
+          },
+          "candidate": {
+            "mean": 45.802806640625,
+            "lower": 42.15437765142851,
+            "upper": 49.45123562982149,
+            "values": [
+              46.03362158203125,
+              45.69343481445313,
+              45.68136352539062
+            ]
+          }
+        },
+        "ratio": 0.9853625970734299,
+        "lower": 0.9122739701836212,
+        "upper": 1.0643068633382855,
+        "allocations": {
+          "baseline": [
+            75864.0
+          ],
+          "candidate": [
+            75864.0
+          ]
+        },
+        "allPairsRetained": true,
+        "quietGuardsPassed": true
+      },
+      "prototypeSha256": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+      "confirmation": {
+        "subjects": {
+          "baseline": {
+            "mean": 46.45857790120443,
+            "lower": 46.18031347674,
+            "upper": 46.73684232566886,
+            "values": [
+              46.96619921875,
+              46.5552119140625,
+              46.27109619140625,
+              46.53315502929688,
+              46.321990966796875,
+              46.42011743164063,
+              46.23365014648437,
+              46.50576318359375,
+              46.28516064453125,
+              46.41522802734375,
+              46.27021435546875,
+              46.72514770507812
+            ]
+          },
+          "candidate": {
+            "mean": 45.63354005940755,
+            "lower": 45.2669314490785,
+            "upper": 46.0001486697366,
+            "values": [
+              46.17023950195313,
+              45.91309497070313,
+              45.47161694335937,
+              45.243444091796874,
+              45.738310546875,
+              45.632628173828124,
+              45.42067797851563,
+              45.135410400390626,
+              45.81255517578125,
+              45.60711108398438,
+              45.703212890625,
+              45.754178955078125
+            ]
+          }
+        },
+        "ratio": 0.9822335287979299,
+        "lower": 0.9747487775468043,
+        "upper": 0.9897757528077619,
+        "allocations": {
+          "baseline": [
+            75864.0
+          ],
+          "candidate": [
+            75864.0
+          ]
+        },
+        "allPairsRetained": true,
+        "quietGuardsPassed": true
+      },
+      "savedUs": 0.8250378417968776,
+      "gainPercent": 1.7766471202070089,
+      "meanIntervalsSeparated": true
+    }
+  },
+  "models": {
+    "initial": {
+      "project": "Lokad.Image",
+      "stage": "SOP1219",
+      "sourceAndModelOnly": true,
+      "productionChanged": false,
+      "allBuilds": 0,
+      "newRequiredPaths": 0,
+      "model": {
+        "seed": 1219,
+        "cases": 8192,
+        "eligible": 2457,
+        "fallback": 5735,
+        "mergeSteps": 205024,
+        "maximumRawEvents": 146,
+        "finiteEventBitsExact": true,
+        "unreadIntersectionCanaryPreserved": true
+      },
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7"
+      },
+      "ownership": [
+        "BuildEvents is called only from private TextRasterizer construction in production; no owner escapes before it succeeds.",
+        "Range scratch remains charged/allocated until all shape preparations finish. Edge-range users end with intersection discovery; its unmanaged storage can then hold sorted upper endpoints.",
+        "Sorted crossing descriptors remain untouched for the original final edge permutation. Read their X fields directly as the ordered start stream.",
+        "All original Event calls occur before new ordering; their container limits, allocation and replacement peaks remain. Refusal terminates; no admission fallback.",
+        "For finite events, adjacent endpoint omission preserves each distinct coordinate. With uniform zero sign, equal finite coordinates also have identical bits. Keep original final sorting for nonfinite/mixed-zero or small shapes.",
+        "If E is the original endpoint prefix length and C consumed intersections, unique endpoint writes <=E and intersection writes<=C. Each output index is below the next unread intersection, after selecting its source value.",
+        "Cancellation remains direct in every scan/sort/merge, and failure abandons only operation-private state through the existing owner cleanup. No new heap/retained storage or implicit cache."
+      ],
+      "limitation": "Independent finite merge model, not production testing or performance proof. Actual C# constructor, resource/cancellation cases and exact full frames must pass before timing.",
+      "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes."
+    },
+    "corrected": {
+      "project": "Lokad.Image",
+      "stage": "SOP1219",
+      "sourceAndModelOnly": true,
+      "productionChanged": false,
+      "allBuilds": 0,
+      "newRequiredPaths": 0,
+      "model": {
+        "seed": 1219,
+        "cases": 8192,
+        "eligible": 2490,
+        "fallback": 5702,
+        "mergeSteps": 207719,
+        "maximumRawEvents": 146,
+        "finiteEventBitsExact": true,
+        "unreadIntersectionCanaryPreserved": true
+      },
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7"
+      },
+      "ownership": [
+        "BuildEvents is called only from private TextRasterizer construction in production; no owner escapes before it succeeds.",
+        "Range scratch remains charged/allocated until all shape preparations finish. Edge-range users end with intersection discovery; its unmanaged storage can then hold sorted upper endpoints.",
+        "Sorted crossing descriptors remain untouched for the original final edge permutation. Read their X fields directly as the ordered start stream.",
+        "All original Event calls occur before new ordering; their container limits, allocation and replacement peaks remain. Refusal terminates; no admission fallback.",
+        "For finite events, adjacent endpoint omission preserves each distinct coordinate. It may omit an opposite-sign zero, so the merge publishes the uniform RAW event zero bits, not a zero selected from all starts/ends. Keep original final sorting for nonfinite/mixed-raw-zero or small shapes.",
+        "If E is the original endpoint prefix length and C consumed intersections, unique endpoint writes <=E and intersection writes<=C. Each output index is below the next unread intersection, after selecting its source value.",
+        "Cancellation remains direct in every scan/sort/merge, and failure abandons only operation-private state through the existing owner cleanup. No new heap/retained storage or implicit cache."
+      ],
+      "limitation": "Independent finite merge model, not production testing or performance proof. Actual C# constructor, resource/cancellation cases and exact full frames must pass before timing.",
+      "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes."
+    },
+    "residual": {
+      "project": "Lokad.Image",
+      "stage": "EPR1221-MODEL",
+      "sourceAndModelOnly": true,
+      "productionChanged": false,
+      "allBuilds": 0,
+      "newRequiredPaths": 0,
+      "model": {
+        "seed": 1219,
+        "cases": 8192,
+        "eligible": 2328,
+        "fallback": 5864,
+        "mergeSteps": 193785,
+        "maximumRawEvents": 146,
+        "finiteEventBitsExact": true,
+        "unreadIntersectionCanaryPreserved": true
+      },
+      "sourcePins": {
+        "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3",
+        "src/Lokad.Image/Internal/TextRasterSort.cs": "311e0f63d92ba95d6a0a62dcee2a5efb8a9b52a05a6f5bd6972faf3e01da9b2e",
+        "tests/Lokad.Image.Tests/TextEndpointEventsTests.cs": "dd0acded98dc62370d2232ec9c67ef747b185550c4699e36edd96794bf7659d7"
+      },
+      "ownership": [
+        "BuildEvents is called only from private TextRasterizer construction in production; no owner escapes before it succeeds.",
+        "Range scratch remains charged/allocated until all shape preparations finish. Edge-range users end with intersection discovery; its unmanaged storage can then hold sorted upper endpoints.",
+        "Sorted crossing descriptors remain untouched for the original final edge permutation. Read their X fields directly as the ordered start stream.",
+        "All original Event calls occur before new ordering; their container limits, allocation and replacement peaks remain. Refusal terminates; no admission fallback.",
+        "For finite events, adjacent endpoint omission preserves each distinct coordinate. It may omit an opposite-sign zero, so the merge publishes the uniform RAW event zero bits, not a zero selected from all starts/ends. Keep original final sorting for nonfinite/mixed-raw-zero or small shapes.",
+        "If E is the original endpoint prefix length and C consumed intersections, unique endpoint writes <=E and intersection writes<=C. Each output index is below the next unread intersection, after selecting its source value.",
+        "Cancellation remains direct in every scan/sort/merge, and failure abandons only operation-private state through the existing owner cleanup. No new heap/retained storage or implicit cache."
+      ],
+      "limitation": "Independent finite merge model, not production testing or performance proof. Actual C# constructor, resource/cancellation cases and exact full frames must pass before timing.",
+      "hypothesis": "Reuse ordered starts and post-intersection range scratch for sorted ends; sort only the intersection suffix, then unique-merge into original Events. Preserve original edge permutation and all raw Event admission/limits. No arithmetic or pixel-loop changes."
+    }
+  },
+  "standalone": {
+    "stage": "EPR1221-STANDALONE",
+    "productionChanged": false,
+    "critical": 4.436979337146836,
+    "cases": {
+      "DrawText8": {
+        "caseId": "DrawText8",
+        "managedUs": 49.413775365193686,
+        "referenceUs": 48.251318923950194,
+        "lower": 0.9661135999234122,
+        "upper": 1.0775727717870347,
+        "status": "uncertain",
+        "managed": {
+          "mean": 49413.77536519369,
+          "standardError": 209.53855847726666,
+          "lower": 48484.05711089452,
+          "upper": 50343.49361949285,
+          "values": [
+            49873.515686035156,
+            49954.2568359375,
+            49897.73175048828,
+            49727.50897216797,
+            49798.03057861328,
+            49851.025817871094,
+            49262.784240722656,
+            47391.874267578125,
+            48877.67608642578,
+            49061.66961669922,
+            49655.56799316406,
+            49613.662536621094
+          ]
+        },
+        "nativeBrackets": {
+          "nativeBefore": {
+            "mean": 48315.925801595055,
+            "standardError": 203.15735950190577,
+            "lower": 47414.520795295786,
+            "upper": 49217.33080789432,
+            "values": [
+              46126.43640136719,
+              48501.568115234375,
+              48535.64416503906,
+              48474.05627441406,
+              48501.76629638672,
+              48402.465087890625,
+              48225.75866699219,
+              48698.95397949219,
+              48771.75994873047,
+              48526.474853515625,
+              48612.280822753906,
+              48413.94500732422
+            ]
+          },
+          "nativeAfter": {
+            "mean": 48251.318923950195,
+            "standardError": 326.1220326304507,
+            "lower": 46804.32220378056,
+            "upper": 49698.31564411983,
+            "values": [
+              48865.30407714844,
+              48755.82891845703,
+              48853.011291503906,
+              48978.508239746094,
+              49071.25030517578,
+              48992.626953125,
+              48042.798583984375,
+              48719.96350097656,
+              48659.81951904297,
+              48200.305725097656,
+              45654.31268310547,
+              46222.09729003906
+            ]
+          },
+          "paired": {
+            "mean": 48451.989125569664,
+            "standardError": 390.5009305741858,
+            "lower": 46719.34456547539,
+            "upper": 50184.63368566394,
+            "values": [
+              48730.24005126953,
+              49519.935485839844,
+              49074.68542480469,
+              48957.599670410156,
+              49067.62274169922,
+              49132.86492919922,
+              49137.60595703125,
+              45768.46594238281,
+              45423.50939941406,
+              48927.58807373047,
+              48681.23303222656,
+              49002.518798828125
+            ]
+          }
+        },
+        "pairedLogStatistics": {
+          "mean": 0.01992369918369056,
+          "standardError": 0.0054677918421630715,
+          "lower": -0.004336780239807023,
+          "upper": 0.04418417860718814,
+          "values": [
+            0.02319033109329877,
+            0.008732397818564889,
+            0.016632215770885677,
+            0.015603669761168655,
+            0.014776033972748261,
+            0.014510916573151402,
+            0.002544265342161096,
+            0.034855447609449426,
+            0.07329097129157959,
+            0.0027366597076144326,
+            0.019816931943211002,
+            0.012394549320453497
+          ]
+        },
+        "publicAllocatedBytes": 75840,
+        "adapterAllocatedBytes": 24,
+        "referenceAllocatedBytes": 48576.0,
+        "privatePrototype": true,
+        "librarySha256": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+        "allGatesPassed": true,
+        "allActualsRetained": true,
+        "quietGuardsPassed": true,
+        "ratio": 1.0240917029247565
+      },
+      "DrawText16": {
+        "caseId": "DrawText16",
+        "managedUs": 46.56239141337077,
+        "referenceUs": 47.55308736673991,
+        "lower": 0.8781722598842099,
+        "upper": 1.0718718285727926,
+        "status": "uncertain",
+        "managed": {
+          "mean": 46562.391413370766,
+          "standardError": 478.67829095816586,
+          "lower": 44438.50572724862,
+          "upper": 48686.27709949291,
+          "values": [
+            48575.48681640625,
+            48518.59356689453,
+            46057.564025878906,
+            45139.34606933594,
+            48939.54016113281,
+            49020.44787597656,
+            46022.66619873047,
+            45373.4462890625,
+            45306.02966308594,
+            45458.52813720703,
+            45114.246643066406,
+            45222.801513671875
+          ]
+        },
+        "nativeBrackets": {
+          "nativeBefore": {
+            "mean": 49483.00772603353,
+            "standardError": 67.32658341612097,
+            "lower": 49184.28106657551,
+            "upper": 49781.73438549155,
+            "values": [
+              49693.36328125,
+              49630.69317626953,
+              49489.01867675781,
+              49036.4716796875,
+              49234.971252441406,
+              49267.86163330078,
+              49437.34802246094,
+              49495.64733886719,
+              49587.76385498047,
+              49486.359130859375,
+              49493.47998046875,
+              49943.114685058594
+            ]
+          },
+          "nativeAfter": {
+            "mean": 47553.08736673991,
+            "standardError": 480.3613418410244,
+            "lower": 45421.734018627154,
+            "upper": 49684.44071485266,
+            "values": [
+              46585.8564453125,
+              46165.620178222656,
+              46620.96813964844,
+              49560.30206298828,
+              50376.27490234375,
+              50058.887756347656,
+              48810.791442871094,
+              47482.939392089844,
+              46260.3798828125,
+              46205.23718261719,
+              46308.223876953125,
+              46201.567138671875
+            ]
+          },
+          "paired": {
+            "mean": 48227.38912455241,
+            "standardError": 535.5028240075658,
+            "lower": 45851.374159447056,
+            "upper": 50603.40408965776,
+            "values": [
+              50311.10498046875,
+              49893.36486816406,
+              49604.28399658203,
+              46381.277893066406,
+              48449.44696044922,
+              50596.74591064453,
+              50635.51989746094,
+              46620.51727294922,
+              46214.13446044922,
+              46423.18762207031,
+              46773.85888671875,
+              46825.22674560547
+            ]
+          }
+        },
+        "pairedLogStatistics": {
+          "mean": -0.03503198008461842,
+          "standardError": 0.007707185121135545,
+          "lower": -0.06922860121466237,
+          "upper": -0.0008353589545744763,
+          "values": [
+            -0.03510681053101292,
+            -0.027940928354240484,
+            -0.07418519488212988,
+            -0.027141599561090225,
+            0.010064738371817447,
+            -0.031649749504068084,
+            -0.09551928570128708,
+            -0.027113678626514308,
+            -0.019845563223074278,
+            -0.020998626837361357,
+            -0.036126389352182764,
+            -0.034820672814277136
+          ]
+        },
+        "publicAllocatedBytes": 75840,
+        "adapterAllocatedBytes": 24,
+        "referenceAllocatedBytes": 48576.0,
+        "privatePrototype": true,
+        "librarySha256": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+        "allGatesPassed": true,
+        "allActualsRetained": true,
+        "quietGuardsPassed": true,
+        "ratio": 0.9791665271756453
+      }
+    }
+  },
+  "pipeline": {
+    "identities": {
+      "TextPipeline": "ac294992b5f63d127052f41624b8581c8ebb1b9f5afa29ba7e4451e3b5e1a6f9",
+      "Lokad.Image": "8154eb91783761ca380a21161b26cdd2c2678f9bbe865fcce5f68042329348a3",
+      "SixLabors.Fonts": "e661c6ac204861eab86e45eb8736988491170da9a8f5d040d380cf6b9cd395ff",
+      "SixLabors.ImageSharp": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+      "SixLabors.ImageSharp.Drawing": "e9dfe5d8692c7b03b6224795229a941d3b297a35f3455799e13b57af5f265308",
+      "BenchmarkDotNet": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725"
+    },
+    "checks": {
+      "project": "Lokad.Image",
+      "caseId": "ConstrainedFit16",
+      "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "selectedSize": 16.75,
+      "fittingTrials": 30,
+      "fullWordSamplesPreserved": true,
+      "managedSha256": "6712e5ad66cb99a1a35c75ae81324e14b839d17660f79bb3f7b9b122d0d133ab",
+      "historicalDirectDrawTextSha256": "9cf3afc8852807237c02b8b319899f480877c6ff143e302527631f1bd925707f",
+      "referenceOneShotLayoutFillSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+      "referencePreparedSha256": "1d101984c599e9c91e58ace24ec0a38915cf93cd1eedf529c34ef2a8e4a255eb",
+      "managedExactGlyphsClustersLinesPositionsBoundsAndFit": true,
+      "referenceFrozenGlyphsClustersLinesAndFit": true,
+      "referencePositionBoundsTolerance": 0.0001,
+      "managedOwnedPreparedBytes": 4160,
+      "managedGovernedPeakBytes": 742840,
+      "borrowedRootAndInputPreserved": true,
+      "independentSurvivingOwners": true,
+      "oneShotVisual": {
+        "meanAlpha255": 4.010459429550565,
+        "rmseAlpha255": 6.920275025102693,
+        "relativeCoverageError": 0.01542176330079232,
+        "edgeErrorPixels": 0,
+        "passed": true
+      },
+      "preparedVisual": {
+        "meanAlpha255": 4.010459429550565,
+        "rmseAlpha255": 6.920275025102693,
+        "relativeCoverageError": 0.01542176330079232,
+        "edgeErrorPixels": 0,
+        "passed": true
+      },
+      "newFontsImagesOrSettings": 0,
+      "timingClaim": false
+    },
+    "completeWorkloads": [
+      "OneShot",
+      "PrepareDraw8"
+    ],
+    "results": {
+      "OneShot": {
+        "managedUs": 1138.4797578125,
+        "referenceUs": 6200.8444140625,
+        "ratio": 0.18360076173345266,
+        "lower": 0.15942533863438735,
+        "upper": 0.2079657488113964,
+        "managedAllocatedBytes": 298790.0833333333,
+        "referenceAllocatedBytes": 9256953,
+        "status": "pass"
+      },
+      "Preparation": {
+        "managedUs": 1120.0731302083332,
+        "referenceUs": 6125.378088541667,
+        "ratio": 0.18285779490144108,
+        "lower": 0.1618668862227398,
+        "upper": 0.20396254960616791,
+        "managedAllocatedBytes": 307171.1666666667,
+        "referenceAllocatedBytes": 9227176,
+        "status": "pass"
+      },
+      "PreparedDraw": {
+        "managedUs": 15.727877604166666,
+        "referenceUs": 74.49638802083332,
+        "ratio": 0.2111226869115893,
+        "lower": 0.1827785084801506,
+        "upper": 0.2296752739168291,
+        "managedAllocatedBytes": 169,
+        "referenceAllocatedBytes": 33433,
+        "status": "pass"
+      },
+      "PrepareDraw8": {
+        "managedUs": 1259.4973880208333,
+        "referenceUs": 6924.3122265625,
+        "ratio": 0.18189494448116433,
+        "lower": 0.15714288112910563,
+        "upper": 0.20370203564648068,
+        "managedAllocatedBytes": 308512.3333333333,
+        "referenceAllocatedBytes": 9494633,
+        "status": "pass"
+      }
+    }
+  },
+  "decision": "Keep EOM unpromising/inconclusive and unpromoted. Retain EPR as a confirmed incremental private lead, not a production or external-parity pass. Both external ordinary results remain uncertain; complete integrations pass. Targeted long-cadence ordinary8 paired diagnosis and remaining affected-boundary reconciliation must precede any promotion/broad/package campaign. No identical favorable capture retries.",
+  "baselineQualificationOnly": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "prototypeBroadlyQualified": false,
+    "newBroadPackageChecks": 0
+  },
+  "cleanup": {
+    "deleted": [
+      "jpe486-new-inputs.tar",
+      "pwa209-retention-input.tar",
+      "cqw809c-evidence-input.tar",
+      "wir911-retain-input.tar",
+      "txh70-input.tar",
+      "frw67-input.tar",
+      "coh72-input.tar",
+      "cqw809b-evidence-input.tar",
+      "rsp186-retention-input.tar",
+      "jdo36-retention-input.tar",
+      "rwp796-evidence-input.tar",
+      "bmq494-new-inputs.tar"
+    ],
+    "bytes": 581232640,
+    "freeBefore": 3973120,
+    "freeAfter": 585211904,
+    "allRemoteHashesMatchedLocal": true,
+    "releaseAndCompressedRawArchivesUntouched": true
+  },
+  "raw": {
+    "file": "text-event-ordering-trials.tar.xz",
+    "sha256": "94832250a2dfb4472d88a3db7d7726c71d6ed6c2d647998283a0079fe373ee7c",
+    "bytes": 5531856,
+    "members": 162,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "ordinary-draw-symmetric-checks.tar.xz SHA2567000420c7dc16c94d40be69af82f6bdefc8bd982a652b73934155b2557adce87",
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e"
+    ]
+  }
+}
