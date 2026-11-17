@@ -91,6 +91,14 @@ Inspect selected header instructions for substantial removable work before a
 new prototype;do not replay rejected copy/width variants from counts alone.
 [Earlier post-fusion attribution](FONT-POST-FUSION-ATTRIBUTION.md) retains history.
 
+[Decoded location carry](FONT-LOCATION-CARRY-TRIAL.md) removes one overlapping
+load/decode per eight glyphs, but the complete owned-load screen is near-neutral:
+14.831643->14.789937us,interval.950562–1.046099,176B unchanged. Keep it private;
+no confirmation,standalone refresh or broad/package repeat. BothOS308internal/
+222public focused checks and the original ordered oracle pass; the explicitly
+recorded tool assertion correction reflects existing retained-prefix ownership,
+without changing inputs or correctness gates. Current costs remain unchanged.
+
 [Endpoint classification](FONT-ENDPOINT-CLASSIFICATION-TRIAL.md) preserves ordered
 validation and ownership but its independent confirmation remains inconclusive.
 It is not promoted; current font costs and passing integrations stay unchanged.
