@@ -1,0 +1,176 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RSC1226",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "RSC1226",
+    "productionAccepted": false,
+    "canonicalProductionChanged": false,
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "baselineCommit": "15461c2468189dd3df1e8c52fb1762f27aeadb87",
+    "baselineWindowsSha256": "dcee38d1299d83777ade053d99f5981c65448ed713c7bed05728fa863982cdfc",
+    "baselineLinuxSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "prototypePath": "tmp/rsc1226-src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+    "prototypeSha256": "5d52cc7bbc656e2a1ec8b2726531926875dd32423c3c1f081e37f157ac995fd9",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+    },
+    "candidateSourcePins": {
+      "tmp/rsc1226-src/Lokad.Image/ImageDrawing.cs": "c4587db1118cc29164dba532c6b1e65c7fc63b2faf299569fbd4a471a77e72f7",
+      "tmp/rsc1226-src/Lokad.Image/Internal/IndependentRowCopy.cs": "2d6cfb05a386eaf2054d277c26d961b1afd3668cadac3195297a65b65b855b21"
+    },
+    "focusedInternalFilter": "FullyQualifiedName~RectangleBulkRowTests|FullyQualifiedName~SelfRowStorageTests|FullyQualifiedName~RuntimeSeparateRowsTests",
+    "focusedPublicFilter": "FullyQualifiedName~CopyResultOwnership|FullyQualifiedName~TransformAdmission|FullyQualifiedName~TransformTests|FullyQualifiedName~VerticalFlipReference|FullyQualifiedName~NormalOrientationReference|FullyQualifiedName~Clone|FullyQualifiedName~CooperativeMemory|FullyQualifiedName~DrawingTests",
+    "sourceProof": {
+      "boundedSeparateByteUsesRuntimeCopy": true,
+      "qualifiedWordSelfKernelVerbatim": true,
+      "byteSelfUsesSameBackingKernel": true,
+      "wideAndPortableBodiesVerbatim": true,
+      "snapshotDirectionRowPollsAndFinalCursorRulePreserved": true,
+      "noStorageOwnershipLimitOrApiChange": true,
+      "duplicateTwoSpanBulkHelperRemoved": true
+    },
+    "hypothesis": "Reuse runtime memmove for bounded separate byte rows,as existing separateword does;share qualified selfrow bulk at both depths and remove duplicate two-span execution. No customreplacement kernel,ISA knob,fixture-specific shortcut ornewstorage. Older byte helper gain precedes prepared-row/public-overhead changes and is retained,not presumed reversible. Complete private screens decide current direction before any passing-path or broad/package campaign.",
+    "intendedEndState": "One existing selfrow helper for bounded vertically independent selfcopies atbothdepths;runtime bounded separate rows;unchanged wider byte and portable chunk paths. Remove the no-longer-reachable two-span bulk helper,not add a fallback wrapper.",
+    "affectedCases": [
+      "DrawingCopy8",
+      "OriginalClippedCopy8",
+      "DrawingCopyOverlap8",
+      "OriginalWordOverlap",
+      "DrawingCopy16"
+    ],
+    "actor": {
+      "sourceSha256": "d60cf45174b86c3aba3fe331556cae596b49f2ffa0a7c6c85cf2e89e6ae201f8",
+      "sha256": "bd085ee36f5208f505444107fa90da88286ce9b0c817c16eb8e42be1041ccead",
+      "path": "tmp/msr1224-actor/bin/Release/net10.0/CopyActor.dll",
+      "operationsPerActual": 65536,
+      "newPublicOperationOrFixture": false
+    },
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbedded": 2,
+      "canonicalVmPublicHarnessNativeFixtureActorPackage": 0
+    },
+    "testCorrection": "Initial newtest used max instead of sum of two borrowed buffers. Existing local bound correctly refused before mutation on both OSes. Correct only test ceiling to exact sum,keep root0;rebuild only embedded tests. Reuse all three successful Linux public modes. No production/actor/native rebuild or timing replay."
+  },
+  "focusedWindows": {
+    "stage": "RSC1226",
+    "counts": {
+      "internal/normal": 10,
+      "internal/avx512-off": 10,
+      "internal/scalar": 10,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "canonicalUnchanged": true
+  },
+  "focusedLinux": {
+    "focusedInternal": {
+      "normal": 10,
+      "avx512-off": 10,
+      "scalar": 10
+    },
+    "focusedPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "baselineSha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "prototypeSha256": "5d52cc7bbc656e2a1ec8b2726531926875dd32423c3c1f081e37f157ac995fd9",
+    "coreModifiedTimeNs": 1794918244866850910
+  },
+  "screens": {
+    "DrawingCopy8": {
+      "subjects": {
+        "baseline": {
+          "mean": 1.9667041422526041,
+          "lower": 1.9354821640043502,
+          "upper": 1.997926120500858,
+          "values": [
+            1.9661527709960938,
+            1.9686232452392578,
+            1.9653364105224609
+          ]
+        },
+        "candidate": {
+          "mean": 2.0487702077229817,
+          "lower": 1.9554938496398862,
+          "upper": 2.142046565806077,
+          "values": [
+            2.0436726684570314,
+            2.0538981170654296,
+            2.0487398376464845
+          ]
+        }
+      },
+      "ratio": 1.041725813092291,
+      "lower": 1.0051528335917062,
+      "upper": 1.0796295184137155,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "OriginalClippedCopy8": {
+      "subjects": {
+        "baseline": {
+          "mean": 1.9583027598063152,
+          "lower": 1.9406397484108393,
+          "upper": 1.975965771201791,
+          "values": [
+            1.9572820281982422,
+            1.9592080078125,
+            1.9584182434082031
+          ]
+        },
+        "candidate": {
+          "mean": 1.9847723337809244,
+          "lower": 1.9508192841573746,
+          "upper": 2.0187253834044743,
+          "values": [
+            1.9828931579589844,
+            1.986614776611328,
+            1.984809066772461
+          ]
+        }
+      },
+      "ratio": 1.0135163747532432,
+      "lower": 1.0052820459221323,
+      "upper": 1.0218181514927036,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    }
+  },
+  "decision": "Reject this implementation:complete separate/clipped byte screens regress4.17/1.35percent,paired intervals above1. No confirmation,passing-path measurements,promotion or broad/package campaign. Keep qualified two-span/self/portable kernels. This does not prove every future consolidation impossible;do not turn it into neighboring sweeps.",
+  "next": "Resolve current ownedflip source/ownership costs using prepared reference boundaries;reuse unchanged passing paths and no nanoscale probes. No new workload matrix.",
+  "baselineQualificationOnly": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "prototypeBroadlyQualified": false,
+    "newBroadPackageChecks": 0
+  },
+  "raw": {
+    "file": "runtime-self-row-consolidation-trial.tar.xz",
+    "sha256": "cb93f3a96601c2c4eee02afa89d1160dd62d1c7a0527d17146f195aeaad1c504",
+    "bytes": 1909112,
+    "members": 61,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "matched-stride-row-trial.tar.xz SHA2560df094564818f4af1fa704941f8e2e41a7f20f7be72162564948aa739a3b0722",
+      "font-retained-prefix-qualified.tar.xz SHA256708287b5b0670dbbe243fb523217eb9e98fa48ee72ef5bdc93e48b3b0aabd70e",
+      "self-row-storage-qualified.tar.xz SHA25632a9632881c333c26d4f44af679d869f0377832c687cbdd1571cc92baf464ea9"
+    ]
+  }
+}
