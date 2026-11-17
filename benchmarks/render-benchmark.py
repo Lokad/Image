@@ -831,6 +831,25 @@ def text_scan_band_stage():
     return stage
 
 
+def ordinary_word_interleaving(base):
+    stage = json.loads((ROOT / 'benchmarks/ordinary-word-interleaved-reference-evidence.json').read_text(encoding='utf-8'))
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
+    assert stage['producers'] == base['producers'] and all(stage['sourceProof'].values())
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert stage['allOriginalGatesPassed'] and stage['quietGuardsPassed'] and stage['allActualsRetained']
+    assert stage['preflights']['normalScalarAllOriginalFieldsMatch'] and stage['originalHarnessAndReferencesUnchanged']
+    q = stage['qualificationReused']
+    assert q['fullLiveEachOs'] == 6824 and q['sameActualPackageBothOs'] and q['usageExamplesEachOs'] == 3
+    assert q['newBroadPackageChecks'] == q['productionRebuilds'] == 0
+    c = stage['case']
+    assert c['referenceGroupsInterleaved'] and c['actuals'] == 12 and c['operationsPerActual'] == 16384
+    assert c['librarySha256'] == stage['producers']['linuxSha256'] and len(c['referenceAllocationSamples']) == 36
+    assert c['referenceAllocatedBytes'] == 48576 and c['allocatedBytes'] == 83008
+    assert c['status'] == 'pass' and c['upper'] < 1
+    return stage
+
+
 def render():
     # Check current measurement owners; rejected experiments retain their own
     # linked evidence without becoming inputs to every summary update.
@@ -2079,7 +2098,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     text_band = text_scan_band_stage()
-    ordinary_text = text_band
+    word_interleaving = ordinary_word_interleaving(text_band)
+    ordinary_text = {**text_band, 'cases': {**text_band['cases'], 'Ordinary16': word_interleaving['case']}}
     font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
@@ -3599,10 +3619,14 @@ They are public integration workloads, not FFmpeg or bare shaping-engine compari
 [Shared scan-band coordinates](../benchmarks/TEXT-SCAN-BAND-COORDINATES.md)
 save **{text_band['pairedEffect']['savedUs']:.3f} µs / {text_band['pairedEffect']['gainPercent']:.2f}%**
 in controlled complete ordinary-RGBA8 final-DLL pairs. Standalone RGBA8 now passes,
-upper **{ordinary_text['cases']['Ordinary8']['upper']:.6f}**. Affected RGBA16 remains
-**uncertain**, interval **{ordinary_text['cases']['Ordinary16']['lower']:.6f}–{ordinary_text['cases']['Ordinary16']['upper']:.6f}**;
-all samples, including shared managed/reference phase variation, remain retained.
-Do not infer a regression or replay solely for a pass. Original exact frames,
+upper **{ordinary_text['cases']['Ordinary8']['upper']:.6f}**.
+[Interleaved RGBA16 references](../benchmarks/ORDINARY-WORD-INTERLEAVED-REFERENCE.md)
+resolve the affected word comparison as **{ordinary_text['cases']['Ordinary16']['status']}**,
+interval **{ordinary_text['cases']['Ordinary16']['lower']:.6f}–{ordinary_text['cases']['Ordinary16']['upper']:.6f}**.
+The same 36 native actuals now span the same twelve pairs; the earlier grouped
+uncertainty and all samples remain retained. This is a scheduling correction on
+unchanged production, not a historical-clock speedup. Both ordinary depths stop.
+Original exact frames,
 stock reference identities, symmetric per-operation reset/checks, all twelve
 16,384-operation actuals and three reference groups remain unchanged.
 Ordinary public allocations are **83,008 B/draw**, up **7,168 B**, plus 24 B of

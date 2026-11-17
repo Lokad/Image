@@ -344,10 +344,14 @@ They are public integration workloads, not FFmpeg or bare shaping-engine compari
 [Shared scan-band coordinates](../benchmarks/TEXT-SCAN-BAND-COORDINATES.md)
 save **2.555 µs / 5.33%**
 in controlled complete ordinary-RGBA8 final-DLL pairs. Standalone RGBA8 now passes,
-upper **0.983139**. Affected RGBA16 remains
-**uncertain**, interval **0.852923–1.023865**;
-all samples, including shared managed/reference phase variation, remain retained.
-Do not infer a regression or replay solely for a pass. Original exact frames,
+upper **0.983139**.
+[Interleaved RGBA16 references](../benchmarks/ORDINARY-WORD-INTERLEAVED-REFERENCE.md)
+resolve the affected word comparison as **pass**,
+interval **0.915603–0.965760**.
+The same 36 native actuals now span the same twelve pairs; the earlier grouped
+uncertainty and all samples remain retained. This is a scheduling correction on
+unchanged production, not a historical-clock speedup. Both ordinary depths stop.
+Original exact frames,
 stock reference identities, symmetric per-operation reset/checks, all twelve
 16,384-operation actuals and three reference groups remain unchanged.
 Ordinary public allocations are **83,008 B/draw**, up **7,168 B**, plus 24 B of
@@ -501,7 +505,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,130.56 | 6,205.59 | 0.182 / 0.212 | 304,926 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,309.27 | 6,914.69 | 0.189 / 0.220 | 314,656 |
 | Text ordinary draw RGBA8 / ImageSharp.Drawing (pass) † | 43.82 | 44.96 | 0.975 / 0.983 | 83,008 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 44.60 | 46.17 | 0.966 / 1.024 | 83,008 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (pass) † | 47.01 | 49.95 | 0.941 / 0.966 | 83,008 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 14.98 | 14.46 | 1.036 / 1.048 | 176 |

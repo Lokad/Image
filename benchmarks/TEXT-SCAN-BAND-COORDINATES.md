@@ -1,5 +1,9 @@
 # Shared text scan-band coordinates
 
+The later [reference interleaving](ORDINARY-WORD-INTERLEAVED-REFERENCE.md) resolves
+ordinary RGBA16 as passing on this same unchanged package. The grouped uncertain
+capture below remains historical; this stage's controlled gain and other costs stand.
+
 Accepted: prepare top/midpoint/bottom edge coordinates together, retaining exact
 ordered arithmetic, crossing ties, winding and pixel blending. Final-DLL controlled
 ordinary-RGBA8 pairs improve **47.950 ->45.395 µs**,
