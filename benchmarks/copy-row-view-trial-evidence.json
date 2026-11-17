@@ -1,0 +1,777 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "CWA1197",
+    "WVR1198"
+  ],
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "baselineCommit": "a5dc283c7389a20a84b3ab7420bd554a9255ffee",
+  "sources": {
+    "src/Lokad.Image/ImageDrawing.cs": "a716bd273093454390ea2f2f1dee36e3cbcf5976ab5102a4f1f5a2c2d6ab3111",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "2a0ca68f2eb025d10d5db3ceee4777ea6e9e548b605c2c88fb71f1eea5c5a2df"
+  },
+  "producers": {
+    "windowsSha256": "695017bb38d0f8cd3caf8a0739e9aa1464d97712032395d90afac6a029ce14fc",
+    "linuxSha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "timedArtifactSha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "packageSha256": "de899a42bedb28e55b780c0501a69c02f95379f333e6dab16796f7f32a91289b",
+    "symbolsSha256": "339a96c3966fd51e789351e7901bca5a095b6c99975d16647cccb2e4a734ea8f"
+  },
+  "profile": {
+    "project": "Lokad.Image",
+    "stage": "CWA1197",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "allInstrumentedTimingsDiscarded": true,
+    "allBuilds": 0,
+    "productionChanged": false,
+    "librarySha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "sourcePins": {
+      "src/Lokad.Image/ImageDrawing.cs": "a716bd273093454390ea2f2f1dee36e3cbcf5976ab5102a4f1f5a2c2d6ab3111",
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": "2a0ca68f2eb025d10d5db3ceee4777ea6e9e548b605c2c88fb71f1eea5c5a2df"
+    },
+    "totalSamples": 1997,
+    "resolvedManagedSamples": 1997,
+    "methods": [
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1984
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        7
+      ],
+      [
+        "class Lokad.Image.ImageLimits [Lokad.Image] Lokad.Image.ImageDrawing::ValidateInputs(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        2
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.ImageDrawing::ValidateRegion(valuetype Lokad.Image.ImageDrawing/Region,class Lokad.Image.ImageLimits)[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        1
+      ],
+      [
+        "void [WordOverlapWorker] Program::<Main>$(string[])[Optimized]",
+        1
+      ]
+    ],
+    "dsoSamples": {
+      "(/memfd:doublemapper (deleted))": 1997
+    },
+    "offsets": [
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xdd",
+        "samples": 351
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xeb",
+        "samples": 181
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xe4",
+        "samples": 180
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf2",
+        "samples": 175
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x10d",
+        "samples": 136
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x106",
+        "samples": 100
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x7a",
+        "samples": 96
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x65",
+        "samples": 94
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf8",
+        "samples": 94
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x157",
+        "samples": 78
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x173",
+        "samples": 77
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x14b",
+        "samples": 76
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xff",
+        "samples": 73
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x16c",
+        "samples": 37
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x114",
+        "samples": 31
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xd3",
+        "samples": 29
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x5f",
+        "samples": 25
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x68",
+        "samples": 16
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xc1",
+        "samples": 15
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x128",
+        "samples": 12
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x9e",
+        "samples": 11
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xc7",
+        "samples": 10
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x122",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x15a",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x134",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x144",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x89",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x151",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x86",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xa8",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xca",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xab",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x13e",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xc4",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x62",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xb1",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x160",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x179",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x6f",
+        "samples": 2
+      },
+      {
+        "method": "class Lokad.Image.ImageLimits [Lokad.Image] Lokad.Image.ImageDrawing::ValidateInputs(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x34",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::ValidateRegion(valuetype Lokad.Image.ImageDrawing/Region,class Lokad.Image.ImageLimits)[Optimized]",
+        "offset": "0x38",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x11c",
+        "samples": 1
+      },
+      {
+        "method": "class Lokad.Image.ImageLimits [Lokad.Image] Lokad.Image.ImageDrawing::ValidateInputs(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x15",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::ValidateRegion(valuetype Lokad.Image.ImageDrawing/Region,class Lokad.Image.ImageLimits)[Optimized]",
+        "offset": "0xf",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xae",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x219",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x72",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x87",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x118",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1a9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xb4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x83",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x11d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x113",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x23d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xa5",
+        "samples": 1
+      }
+    ],
+    "traceSha256": "5df0e1d18dab5e492d4e81efea83ffbc768ddccc75b7dce5b1d7a8fb019fd7f5",
+    "traceBytes": 448036,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/rvt1192-final-candidate-runtime/WordOverlapWorker.dll",
+      "/home/lokad/image-warm-png-20261009/tmp/owc1125-data/input.rgba",
+      "/dev/shm/lokad-image-cwa1197/cwa1197-word-copy.rgba",
+      "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "4158930",
+      "-o",
+      "/dev/shm/lokad-image-cwa1197/cwa1197-word-copy.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "originalChecksAndCleanupPassed": true,
+    "quietGuardsPassed": true,
+    "scope": "One2second current original public word CopyRegion forward/reverse pair profile,including public geometry/admission/cancellation and borrowed mutation. Sameprocess codegen/map,CPU0,collectorCPU1. No parity timing,phase cost,stall or gain forecast;no other workload retimed."
+  },
+  "sameProcessInstructionMap": {
+    "project": "Lokad.Image",
+    "stage": "CWA1197",
+    "offlineOnly": true,
+    "sameProcessCodegenAndPerfMap": true,
+    "methodCodeBytes": 438,
+    "sampleCount": 1984,
+    "mappedSampleCount": 1984,
+    "unmatchedOffsets": {},
+    "locationGroups": {
+      "bulk grouped loads/stores and loop": 1350,
+      "row advance and cancellation dispatch": 237,
+      "tail views,loads/stores and loop": 326,
+      "bulk view setup and bounds": 70,
+      "other helper locations": 1
+    },
+    "topInstructionLeads": [
+      {
+        "offset": "0xdd",
+        "samples": 351,
+        "instruction": "vmovups  zmm1, zmmword ptr [rdx+0x40]"
+      },
+      {
+        "offset": "0xeb",
+        "samples": 181,
+        "instruction": "vmovups  zmm3, zmmword ptr [rdx+0xC0]"
+      },
+      {
+        "offset": "0xe4",
+        "samples": 180,
+        "instruction": "vmovups  zmm2, zmmword ptr [rdx+0x80]"
+      },
+      {
+        "offset": "0xf2",
+        "samples": 175,
+        "instruction": "vmovups  zmmword ptr [rcx], zmm0"
+      },
+      {
+        "offset": "0x10d",
+        "samples": 136,
+        "instruction": "add      r11, 256"
+      },
+      {
+        "offset": "0x106",
+        "samples": 100,
+        "instruction": "vmovups  zmmword ptr [rcx+0xC0], zmm3"
+      },
+      {
+        "offset": "0x7a",
+        "samples": 96,
+        "instruction": "jne      G_M000_IG13"
+      },
+      {
+        "offset": "0x65",
+        "samples": 94,
+        "instruction": "add      r9d, ecx"
+      },
+      {
+        "offset": "0xf8",
+        "samples": 94,
+        "instruction": "vmovups  zmmword ptr [rcx+0x40], zmm1"
+      },
+      {
+        "offset": "0x157",
+        "samples": 78,
+        "instruction": "add      r10, r11"
+      },
+      {
+        "offset": "0x173",
+        "samples": 77,
+        "instruction": "add      r12, 64"
+      },
+      {
+        "offset": "0x14b",
+        "samples": 76,
+        "instruction": "mov      r12d, r13d"
+      },
+      {
+        "offset": "0xff",
+        "samples": 73,
+        "instruction": "vmovups  zmmword ptr [rcx+0x80], zmm2"
+      },
+      {
+        "offset": "0x16c",
+        "samples": 37,
+        "instruction": "vmovups  zmmword ptr [r10+r12], zmm0"
+      },
+      {
+        "offset": "0x114",
+        "samples": 31,
+        "instruction": "dec      r12d"
+      },
+      {
+        "offset": "0xd3",
+        "samples": 29,
+        "instruction": "lea      rcx, bword ptr [r10+r11]"
+      },
+      {
+        "offset": "0x5f",
+        "samples": 25,
+        "instruction": "add      r8d, r10d"
+      },
+      {
+        "offset": "0x68",
+        "samples": 16,
+        "instruction": "mov      dword ptr [rbp+0x20], r10d"
+      },
+      {
+        "offset": "0xc1",
+        "samples": 15,
+        "instruction": "add      r10, rdx"
+      },
+      {
+        "offset": "0x128",
+        "samples": 12,
+        "instruction": "cmp      rdx, r10"
+      }
+    ],
+    "interpretation": "All1984helperleaves matchsameprocess codeextent/instructionboundaries. Categories locatecode,notcostfractions,stallsor forecasts;sampling skid and memorylatency apply. Wholecurrent1997leaves identify1984helper/7publiccaller/other6. No statisticaltiming orspeedclaim. Existingnativealignedstore evidence remains scoped,not new attribution."
+  },
+  "prototypeSha256": "9fbfe324a2b08d21cce44af2e5298cf7b4682d5fc16ba6c23486100c7c08d58f",
+  "candidateSourcePins": {
+    "src/Lokad.Image/ImageDrawing.cs": "a716bd273093454390ea2f2f1dee36e3cbcf5976ab5102a4f1f5a2c2d6ab3111",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "fac58e9b1c6eb9e3954d92c84bbc07312ad67f2103a55d4ca6cfa4b1893a5c90"
+  },
+  "hypothesis": "Currentactual3ff profile maps1984/1997leaves topreparedrowhelper:1350bulk,326tail,237advance/cancel,70viewsetup,1other;locationsnotphasecosts orspeedforecasts. Publicvalidation isnotselected. One completeboundedrowview shares bulk/remainder addressing and mayremove repeated originalspan setup/spills. This changes execution preparation,not a newwidth/unroll/pin/alignment strategy.",
+  "intendedEndState": "One boundedcomplete rowview per side,sharedbulk/remainder addressing andoriginalchunk/snapshot/cancellation/owner boundary. No public/API/storage/selection/sharedCopy changes.",
+  "repeatedWorkRemoved": "Two whole-row boundedviews replace separately boundedbulk/end views overoriginalspan; JITmayreuse rowlengths/bases andavoid GPspills. Allcomplete256Bblocks runasexisting4loads/4stores;0..3remaining64Bvectors andoneoverlapping final64B onlyifpartial. Alignedrows no longerreserve an extra fulltailblock. No heap workspace.",
+  "exactCoverage": "ForrowBytes>=256,wholeblockcount=floor(rowBytes/256),remainingvectorcount=floor((rowBytes%256)/64),pluslast64 onlyifrowBytes%64!=0. Completeblocks/vectors cover[0,64*floor(rowBytes/64));last64 covers[rowBytes-64,rowBytes),overlap<=63. Everyview boundsinsideonerow;source/destinationrowsdisjoint,originalYsnapshottraversal androwpollpreserved. SharedCopy/publicselection/geometry/admission/owners/fallbacks verbatim.",
+  "sourceProof": {
+    "publicCallerVerbatim": true,
+    "sharedCopyVerbatim": true,
+    "groupedFourLoadsBeforeFourStoresVerbatim": true,
+    "allViewsCheckedAndRowBounded": true,
+    "originalYTraversalCheckpointsPreserved": true,
+    "noOwnedStorageOrRetentionAdded": true
+  },
+  "risk": "More remainderdispatch/rowviews/boundschecks/codesize mayoutweigh reduced repeatedpreparation. Needactualgeneratedcode andoriginalcompleteword screen;no gaininferred fromleafcounts. Do notexpand fixtures/grid orretune passedpaths.",
+  "controlledEffect": {
+    "project": "Lokad.Image",
+    "stage": "WVR1198",
+    "allActualsRetained": true,
+    "pairs": 3,
+    "operationsPerSubject": 16384,
+    "baselineSha256": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+    "candidateSha256": "9fbfe324a2b08d21cce44af2e5298cf7b4682d5fc16ba6c23486100c7c08d58f",
+    "baseline": {
+      "mean": 5527.4404703776045,
+      "lower": 4056.7863155711098,
+      "upper": 6998.0946251841,
+      "values": [
+        5434.400390625,
+        5571.536804199219,
+        5576.384216308594
+      ]
+    },
+    "candidate": {
+      "mean": 6602.129659016927,
+      "lower": 6090.566235015929,
+      "upper": 7113.693083017924,
+      "values": [
+        6569.830139160156,
+        6616.323303222656,
+        6620.235534667969
+      ]
+    },
+    "ratio": 1.1944279987091213,
+    "ratioLower": 0.9880963708783548,
+    "ratioUpper": 1.4440337571080712,
+    "elapsedReduction": -0.1944279987091213,
+    "savedUs": -1.0746891886393224,
+    "allocatedBytes": 0,
+    "quietGuardsPassed": true,
+    "fullWordSnapshotChecksPassed": true,
+    "confidence": "All3alternating pairs;99.9percentStudentt log ratio;two clocks per complete batch;no filtering or forcedGC;one active subject onCPU0"
+  },
+  "allRawActuals": {
+    "pairs": [
+      {
+        "index": 0,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 89037216,
+          "allocatedBytes": 0,
+          "cpu": 0
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 107640097,
+          "allocatedBytes": 0,
+          "cpu": 0
+        }
+      },
+      {
+        "index": 1,
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 108401841,
+          "allocatedBytes": 0,
+          "cpu": 0
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 91284059,
+          "allocatedBytes": 0,
+          "cpu": 0
+        }
+      },
+      {
+        "index": 2,
+        "baseline": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 91363479,
+          "allocatedBytes": 0,
+          "cpu": 0
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 16384,
+          "elapsedNanoseconds": 108465939,
+          "allocatedBytes": 0,
+          "cpu": 0
+        }
+      }
+    ],
+    "ready": {
+      "baseline": {
+        "state": "ready",
+        "libraryHash": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "copyWidth": 257,
+        "copyHeight": 129,
+        "sourceAliasesCanvas": true,
+        "borrowedCanvas": true,
+        "publicMovesPerPair": 2,
+        "cpu": 0,
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true,
+        "forwardHash": "11a0bad090920ab87f19ed4b46715081b485accead94d626b41e7d15ea4ebdc6",
+        "outputHash": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+        "clockReadsPerBatch": 2
+      },
+      "candidate": {
+        "state": "ready",
+        "libraryHash": "9fbfe324a2b08d21cce44af2e5298cf7b4682d5fc16ba6c23486100c7c08d58f",
+        "inputHash": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "copyWidth": 257,
+        "copyHeight": 129,
+        "sourceAliasesCanvas": true,
+        "borrowedCanvas": true,
+        "publicMovesPerPair": 2,
+        "cpu": 0,
+        "fullWordSnapshotExact": true,
+        "cancellationAndRefusalRecovery": true,
+        "forwardHash": "11a0bad090920ab87f19ed4b46715081b485accead94d626b41e7d15ea4ebdc6",
+        "outputHash": "23269b9d17c79d18c5eca21e047ea6e3a6be6984475c633ba48a7ec2212573c7",
+        "clockReadsPerBatch": 2
+      }
+    },
+    "warmups": {
+      "baseline": {
+        "state": "sample",
+        "operations": 16384,
+        "elapsedNanoseconds": 91436620,
+        "allocatedBytes": 0,
+        "cpu": 0
+      },
+      "candidate": {
+        "state": "sample",
+        "operations": 16384,
+        "elapsedNanoseconds": 106628436,
+        "allocatedBytes": 0,
+        "cpu": 0
+      }
+    },
+    "checks": {
+      "baseline": {
+        "state": "checked",
+        "exact": true
+      },
+      "candidate": {
+        "state": "checked",
+        "exact": true
+      }
+    },
+    "stopped": {
+      "baseline": {
+        "state": "stopped",
+        "exact": true,
+        "libraryHash": "3ffce6bcb3747e037dbc9d515e03554183092a04820097f427be4f333a0b5d85",
+        "inputUnchanged": true
+      },
+      "candidate": {
+        "state": "stopped",
+        "exact": true,
+        "libraryHash": "9fbfe324a2b08d21cce44af2e5298cf7b4682d5fc16ba6c23486100c7c08d58f",
+        "inputUnchanged": true
+      }
+    },
+    "operationsPerSubject": 16384
+  },
+  "outcome": "No useful gain: completeoriginalword mean5.527440->6.602130us,+19.4428percent/+1.074689us,CI.988096-1.444034 inconclusive. No claim of demonstrated regression orisolated cause. No promotion,confirmation,generalization,reference refresh orfavorable retry.",
+  "codegen": {
+    "baselineCallerBytes": 1466,
+    "candidateCallerBytes": 1466,
+    "baselineHelperBytes": 438,
+    "candidateHelperBytes": 588,
+    "baselineHelperLocalStackBytes": 24,
+    "candidateHelperLocalStackBytes": 56,
+    "spillsAndExtraChecksRemain": true,
+    "noElapsedCausalClaimFromCodegen": true
+  },
+  "correctness": {
+    "internalEachOsEachNormalAvx512OffScalar": 6,
+    "publicEachOsEachNormalAvx512OffScalar": 190,
+    "newTheoryCases": 2,
+    "privateRowLengths": {
+      "first": 256,
+      "last": 1025,
+      "step": 1,
+      "count": 770
+    },
+    "bothRowDirections": true,
+    "allFiveRowsAndCanaries": true,
+    "sourceUnchanged": true,
+    "originalActorBothDllsThreeModes": 6,
+    "fullWordSnapshotCancellationRefusalRecoveryPassed": true,
+    "allCanonicalModulesUnchanged": true
+  },
+  "memory": {
+    "gcBytesPerOperation": 0,
+    "addedOwnedCapacityBytes": 0,
+    "addedRetainedCapacityBytes": 0,
+    "callerWordCanvasBytes": 1062936,
+    "physicalNativeAndJitPeaksMeasured": false
+  },
+  "qualificationReused": {
+    "fullLiveEachOs": 6794,
+    "sameActualPackageBothOs": true,
+    "examplesEachOs": 3,
+    "packageSha256": "de899a42bedb28e55b780c0501a69c02f95379f333e6dab16796f7f32a91289b",
+    "newBroadOrPackageChecks": 0
+  },
+  "reproduction": {
+    "builds": {
+      "isolatedWindowsCore": 1,
+      "isolatedEmbeddedTests": 1,
+      "otherBuilds": 0
+    },
+    "profile": "One2sCPUclock999Hz originalcompleteactor,currentimmutable3ff,sameprocessmap/JIT,CPU0/collectorCPU1,originalsnapshot/nativeidentity retained. Leafcountsnotphasecosts orstalls;all instrumentedclocksdiscarded.",
+    "screen": "Originalcompletepublicforward/reversewordpair,threealternating16384operationpairs afterequalwarmups,CPU0sequential,naturalnonconcurrentGC,idle-v2 before/after,allactualsretained. No fixturegrid orreference changes.",
+    "tooling": "Offline selector firstmatches caller callsite;then emptysplitprefix. Correctheader-only selector reusescapturedcode/trace. One unmatchedrecipequote failsPythonparse beforeanyoperation;fixedrecipe builds once. Inheriteddesign metadata corrected beforechecks/deploy. Firstrecipes retained;no repeatedcompletedoperation."
+  },
+  "next": "Continue original ordinary8/16 preparation/scanconversion ownership review,using existingattribution andfailedcertificate/sort/initialization evidence. Selectonlyconcretely removablework,not neighboringtails/pins/groups/rowview replays. Keepcurrentfont/copygaps anduncertainties explicit;full289goal andfinalpackage refresh stay open.",
+  "raw": {
+    "file": "copy-row-view-trial.tar.xz",
+    "sha256": "9ecf74139d2777f6e689f5930fe1d625b43cb8ee757b6ffd8625200cb93fc311",
+    "bytes": 2691584,
+    "members": 86,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "rectangle-copy-prepared-rows-qualified.tar.xz",
+        "sha256": "11477dfaad5fb561773ed7dd057ab15f92f3938da790386d669ab3f8adc7df02"
+      }
+    ]
+  }
+}

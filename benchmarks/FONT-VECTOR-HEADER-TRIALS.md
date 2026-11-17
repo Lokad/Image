@@ -18,7 +18,9 @@ No storage, cache, pool or public API is added.
 
 The first generated kernel constructs vector operands and constants repeatedly.
 The coherent revision removes that overhead; its captured code verifies the
-change. Code sizes are 1,731 / 2,281 / 2,215 B for baseline/first/revised.
+change. The retained qualified kernel is 1,731 B on its identified earlier DLL;
+the current candidates are 2,281 / 2,215 B. The earlier size is not a new
+machine-code capture of the current baseline DLL.
 Coverage, fewer scalar branches and smaller code do not establish a CPU gain.
 Both completed screens remain, without confirmation or favorable replay.
 
