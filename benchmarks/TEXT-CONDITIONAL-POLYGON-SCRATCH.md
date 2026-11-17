@@ -1,6 +1,9 @@
 # Conditional polygon scratch
 
-Ordinary/clipped drawing remains source-valid here. Current owned-font loading and complete integrations use [retained prefixes](FONT-RETAINED-PREFIX.md).
+Clipped drawing remains source-valid here. Current ordinary drawing uses
+[symmetric output checks](ORDINARY-DRAW-SYMMETRIC-CHECKS.md); its earlier uncertain
+capture below is retained history. Owned-font loading and complete integrations
+use [retained prefixes](FONT-RETAINED-PREFIX.md).
 
 Complete ordinary RGBA8 drawing saves **0.769 µs /1.65%** on the
 final timed DLL: **46.671672 →45.902237 µs**, paired ratio interval

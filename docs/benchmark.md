@@ -4,8 +4,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading and complete text integrations use the retained-prefix package;
-ordinary/clipped drawing retains the conditional-polygon-scratch evidence.
+font loading, complete text integrations and ordinary drawing use the retained-prefix
+package; clipped drawing retains the conditional-polygon-scratch evidence.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -325,12 +325,19 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
 [Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-owns source-valid ordinary and clipped costs on its identified timed/package DLL. Controlled complete RGBA8 draws save **0.769 µs /
+retains clipped costs and the controlled complete RGBA8 gain **0.769 µs /
 1.65%** with separated intervals. Allocations remain
-**75,840 B/draw** plus 24 B of adapter storage. Current 16,384-operation ordinary
-RGBA8/16 confirmations remain uncertain: upper **1.127899 /
-1.054277**. All actuals, three reference groups, resets
-and exact frames remain; no historical-clock or cumulative gain is claimed.
+**75,840 B/draw** plus 24 B of adapter storage.
+[Symmetric output checks](../benchmarks/ORDINARY-DRAW-SYMMETRIC-CHECKS.md) now own
+ordinary costs on the current immutable package: RGBA8 is a scoped gap, interval
+**1.002961–1.028560**;
+RGBA16 passes/stops, upper **0.997532**.
+Reference allocations are **48,576 B/draw** at both depths. Both sampling sides
+now check the full frozen frame and read allocation counters outside every timer.
+The stock public reference pipeline, per-operation reset, every actual, three
+reference groups and conservative confidence remain; this is a sampling correction,
+not a production or historical-clock gain. Standing preparation and harness oracle
+storage remain separate from production allocations and admitted capacity.
 
 [Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
 one-shot and preparation-plus-eight-draw integrations. Both pass, including
@@ -477,8 +484,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Original self-composite RGBA16 / ImageSharp snapshot + SrcOver (parity confirmed) † | 649.77 | 716.96 | 0.906 / 0.977 | 0 |
 | Complete text one-shot / ImageSharp public integration (pass) † | 1,226.78 | 6,894.19 | 0.178 / 0.200 | 298,786 |
 | Complete text preparation + eight draws / ImageSharp public integration (pass) † | 1,392.80 | 7,695.72 | 0.181 / 0.199 | 308,518 |
-| Text ordinary draw RGBA8 / ImageSharp.Drawing (confidence open) † | 48.13 | 45.27 | 1.063 / 1.128 | 75,840 |
-| Text ordinary draw RGBA16 / ImageSharp.Drawing (confidence open) † | 47.17 | 47.04 | 1.003 / 1.054 | 75,840 |
+| Text ordinary draw RGBA8 / ImageSharp.Drawing (gap) † | 48.36 | 47.50 | 1.018 / 1.029 | 75,840 |
+| Text ordinary draw RGBA16 / ImageSharp.Drawing (pass) † | 47.70 | 48.58 | 0.982 / 0.998 | 75,840 |
 | Text prepared coverage RGBA8 / ImageSharp.Drawing (pass) † | 2.93 | 36.37 | 0.081 / 0.087 | 56 |
 | Text prepared coverage RGBA16 / ImageSharp.Drawing (pass) † | 5.30 | 37.68 | 0.141 / 0.152 | 56 |
 | Font loading / FreeType 2.13.2 (scoped gap) † | 14.98 | 14.46 | 1.036 / 1.048 | 176 |

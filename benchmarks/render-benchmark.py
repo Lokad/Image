@@ -824,6 +824,23 @@ def text_polygon_scratch_stage():
     return stage
 
 
+def ordinary_text_checks():
+    stage = json.loads((ROOT / 'benchmarks/ordinary-draw-symmetric-checks-evidence.json').read_text(encoding='utf-8'))
+    assert not stage['productionChanged'] and stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
+    assert stage['allOriginalGatesPassed'] and stage['allPreflightNormalScalarChecks'] == 4
+    assert not stage['reference']['stockPublicLibraryCodeChanged'] and stage['reference']['samplingToolChanged']
+    q = stage['qualificationReused']
+    assert q['fullLiveEachOs'] == 6819 and q['sameActualPackageBothOs'] and q['usageExamplesEachOs'] == 3
+    assert q['newBroadPackageChecks'] == 0 and stage['builds'] == {'referenceTool': 1, 'productionHarnessVmFixturesPackage': 0}
+    assert set(stage['cases']) == {'Ordinary8', 'Ordinary16'}
+    for case in stage['cases'].values():
+        assert case['librarySha256'] == stage['producers']['linuxSha256']
+        assert case['actuals'] == 12 and case['operationsPerActual'] == 16384 and case['everyReferenceDrawChecked']
+        assert case['referenceAllocatedBytes'] == 48576 and len(case['referenceAllocationSamples']) == 36
+    return stage
+
+
 
 def render():
     # Check current measurement owners; rejected experiments retain their own
@@ -2070,6 +2087,7 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
     storage_reuse = composition_storage()
     text_storage = text_polygon_scratch_stage()
+    ordinary_text = ordinary_text_checks()
     font_current = json.loads((ROOT / 'benchmarks/font-retained-prefix-evidence.json').read_text(encoding='utf-8'))
     assert font_current['productionAccepted'] and font_current['allAffectedPerformanceReconciled']
     assert font_current['requiredMaterialPaths'] == 289 and font_current['newMaterialPaths'] == 0
@@ -2120,8 +2138,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert set(text_coverage['cases']) == {'Ordinary8', 'Ordinary16', 'Prepared8', 'Prepared16'}
     for name, case in text_coverage['cases'].items():
         prepared = name.startswith('Prepared')
-        if not prepared: case = text_storage['cases'][name]
-        assert case['librarySha256'] == (text_coverage if prepared else text_storage)['producers']['linuxSha256']
+        if not prepared: case = ordinary_text['cases'][name]
+        assert case['librarySha256'] == (text_coverage if prepared else ordinary_text)['producers']['linuxSha256']
         assert case['managedExact'] and case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['actuals'] == 12 and case['operationsPerActual'] == (1024 if prepared else 16384)
         assert case['status'] == ('pass' if case['upper'] <= 1 else 'gap' if case['lower'] > 1 else 'uncertain')
@@ -3297,8 +3315,8 @@ Current development version **0.2.1**. Warm single-CPU parity remains open acros
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
-font loading and complete text integrations use the retained-prefix package;
-ordinary/clipped drawing retains the conditional-polygon-scratch evidence.
+font loading, complete text integrations and ordinary drawing use the retained-prefix
+package; clipped drawing retains the conditional-polygon-scratch evidence.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3569,12 +3587,19 @@ Text comparisons use **ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 / ImageSharp 3.1.1
 the five authored controls explicitly label their scoped source corrections above.
 They are public integration workloads, not FFmpeg or bare shaping-engine comparisons.
 [Conditional polygon scratch](../benchmarks/TEXT-CONDITIONAL-POLYGON-SCRATCH.md)
-owns source-valid ordinary and clipped costs on its identified timed/package DLL. Controlled complete RGBA8 draws save **{text_storage['pairedEffect']['savedUs']:.3f} µs /
+retains clipped costs and the controlled complete RGBA8 gain **{text_storage['pairedEffect']['savedUs']:.3f} µs /
 {text_storage['pairedEffect']['gainPercent']:.2f}%** with separated intervals. Allocations remain
-**75,840 B/draw** plus 24 B of adapter storage. Current 16,384-operation ordinary
-RGBA8/16 confirmations remain uncertain: upper **{text_storage['cases']['Ordinary8']['upper']:.6f} /
-{text_storage['cases']['Ordinary16']['upper']:.6f}**. All actuals, three reference groups, resets
-and exact frames remain; no historical-clock or cumulative gain is claimed.
+**75,840 B/draw** plus 24 B of adapter storage.
+[Symmetric output checks](../benchmarks/ORDINARY-DRAW-SYMMETRIC-CHECKS.md) now own
+ordinary costs on the current immutable package: RGBA8 is a scoped gap, interval
+**{ordinary_text['cases']['Ordinary8']['lower']:.6f}–{ordinary_text['cases']['Ordinary8']['upper']:.6f}**;
+RGBA16 passes/stops, upper **{ordinary_text['cases']['Ordinary16']['upper']:.6f}**.
+Reference allocations are **48,576 B/draw** at both depths. Both sampling sides
+now check the full frozen frame and read allocation counters outside every timer.
+The stock public reference pipeline, per-operation reset, every actual, three
+reference groups and conservative confidence remain; this is a sampling correction,
+not a production or historical-clock gain. Standing preparation and harness oracle
+storage remain separate from production allocations and admitted capacity.
 
 [Retained font prefixes](../benchmarks/FONT-RETAINED-PREFIX.md) own current complete
 one-shot and preparation-plus-eight-draw integrations. Both pass, including
