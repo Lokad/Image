@@ -1,0 +1,221 @@
+{
+  "project": "Lokad.Image",
+  "stage": "ORA1218",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producer": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+  "receipt": {
+    "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+    "coreModifiedTimeNs": 1794918244866850910,
+    "quietGuardsPassed": true,
+    "traceSha256": "81790a3d9a88d66d8d84141c4e5a740c75298b7f402511d291f109b9dcfe44b2",
+    "traceBytes": 519720,
+    "sourcePins": {
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "7618e339fde7a7c4c57443324e86cedfab85b864d9bb47f4a4edfd15dd65abc3"
+    },
+    "recovery": "First preparation finds already copied profile runner before guard/worker; reuse verified matching identity. The single actual profile/worker/guards finish; postprocessing initially uses old canonical validation path. Read completed root-specific validation and existing trace/map/log only; zero worker/collector/timing repeats. Original script verifies collector and worker success before that postprocessing failure. All failures retained.",
+    "scope": "One2second current ordinary RGBA8 CPU attribution,CPU0application/CPU1collector. Original retained layout/borrowed canvas,complete public draw; reset/validation/GC included in sampled locations. Instrumented clocks discarded; no phase-cost, removable fraction or performance claim. No new fixture/settings/builds.",
+    "record": {
+      "project": "Lokad.Image",
+      "caseId": "DrawText8",
+      "profilingOnly": true,
+      "timingClaim": false,
+      "productionChanged": false,
+      "exactFrozenCanvasEachOperation": true,
+      "completeManagedReferenceChecksPassed": true,
+      "calls": 36951,
+      "observed": 0,
+      "librarySha256": "e1ae64a3ac48d0c0bfd3565f873df07cd4609f06d450b81a1c1fd2f52dd5055b",
+      "harnessSha256": "21641e694e11d990195c68b061e1a3799745c1126d1b798ec5be1e26c9081700"
+    },
+    "validation": {
+      "correctnessOnly": true,
+      "timingClaim": false,
+      "frozenManagedObservationsExact": true,
+      "nativeTimedSamples": 0
+    }
+  },
+  "summary": {
+    "totalSamples": 1996,
+    "managedSamples": 1610,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Band(class Lokad.Image.Internal.TextRasterizer/RasterShape,float64,float64,float64,float64,int32,int32,int32&,int32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        475
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Area(float64,float64,float64,float64,float64,float64)[Optimized]",
+        185
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEvents(valuetype Lokad.Image.Internal.TextRasterizer/Crossing[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/EdgeRange>)[Optimized]",
+        129
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Add(valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>&)[Optimized]",
+        124
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::MergeBuffered(valuetype [System.Runtime]System.Span`1<!!0>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<!!0>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        116
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::Partition(valuetype [System.Runtime]System.Span`1<!!0>,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        84
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::InteriorRun(float64,float64,float64,float64,float64,float64,float64,float64,int32&,int32&)[Optimized]",
+        71
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::BuildEdges(class Lokad.Image.Internal.FontOutline,float64)[Optimized]",
+        70
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::BlendByte(valuetype [System.Runtime]System.Span`1<uint8>,valuetype Lokad.Image.RgbaColor,uint64)[Optimized]",
+        45
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Rasterize(class Lokad.Image.ImageBuffer,class Lokad.Image.TextRenderPlan,float64,float64,valuetype Lokad.Image.RgbaColor,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        43
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Point>,float64,bool)[Optimized]",
+        42
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.TextRasterSort::TryNatural(valuetype [System.Runtime]System.Span`1<!!0>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        38
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::ReorderEdges(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Crossing>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        31
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::Grow(!!0[]&,int32,int32,int64&)[Optimized]",
+        23
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        21
+      ],
+      [
+        "float64 [Lokad.Image] Lokad.Image.Internal.TextRasterizer::ClippedArea(float64,float64,float64,float64,float64,float64,bool,bool)[Optimized]",
+        21
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        19
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+Edge::.ctor(valuetype Lokad.Image.Internal.TextRasterizer/Point,valuetype Lokad.Image.Internal.TextRasterizer/Point,int32)[Optimized]",
+        19
+      ],
+      [
+        "instance void [TextHarness] WarmText::ValidateCanvas()[Optimized]",
+        13
+      ],
+      [
+        "instance void [TextHarness] WarmText::ResetBeforeOperation()[Optimized]",
+        12
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.FontSegmentEnumerator::Next(valuetype Lokad.Image.Internal.FontSegment&)[Optimized]",
+        7
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.TextRasterSort::Merge(valuetype [System.Runtime]System.Span`1<!!0>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<!!0>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        5
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.TextLayout+Shape::GetHashCode()[Optimized]",
+        3
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Admit(int64)[Optimized]",
+        2
+      ],
+      [
+        "instance valuetype Lokad.Image.Internal.FontSegmentEnumerator [Lokad.Image] Lokad.Image.Internal.FontOutline::Segments()[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer+RasterShape::ResizeEdges(valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.TextRasterizer/Edge>&,int32)[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Release(int64)[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.TextRasterizer::.ctor(class Lokad.Image.TextLayout,class Lokad.Image.Internal.OperationContext,int32)[Optimized]",
+        1
+      ],
+      [
+        "instance valuetype Lokad.Image.TextBounds [Lokad.Image] Lokad.Image.TextBounds::Translate(float64,float64)[Optimized]",
+        1
+      ],
+      [
+        "valuetype [System.Runtime]System.ValueTuple`4<int32,int32,int32,int32> [Lokad.Image] Lokad.Image.Internal.TextRasterizer::Clip(valuetype Lokad.Image.TextBounds,float64,float64,int32,int32)[Optimized]",
+        1
+      ],
+      [
+        "int32 [TextProfileRunner] Program::<<Main>$>g__WorkloadAction|0_0(class [TextHarness]WarmText)[Optimized]",
+        1
+      ],
+      [
+        "stub InitThreadManagerPerfMapData<JIT_CopiedWriteBarriers>",
+        1
+      ],
+      [
+        "instance void [TextProfileRunner] Program+<<Main>$>d__0::MoveNext()[Optimized]",
+        1
+      ]
+    ],
+    "unmapped": [
+      [
+        "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/System.Private.CoreLib.dll)",
+        264
+      ],
+      [
+        "(/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/dotnet/shared/Microsoft.NETCore.App/10.0.8/libcoreclr.so)",
+        62
+      ],
+      [
+        "(/usr/lib/x86_64-linux-gnu/libc.so.6)",
+        56
+      ],
+      [
+        "(/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)",
+        4
+      ]
+    ]
+  },
+  "interpretation": "Current sample locations include complete draw/reset/exact validation/GC/skid and inlining. Not phase costs, removable percentages, a speed forecast or a comparison of profile counts from historical builds. Every instrumented clock discarded.",
+  "nextHypothesis": "Audit shared ordering preparation: crossing descriptors already sort edge starts; Events separately sorts those start coordinates again with ends/intersections. Consider deriving the same event sequence from existing ordered starts and bounded end/intersection storage. Prove limits, equal/signed-zero/nonfinite order, alias-safe merges, exact arithmetic, cancellation and owner peaks first. No implementation or gain accepted; do not automatically replay old sort variants.",
+  "qualificationReused": {
+    "fullLiveEachOs": 6819,
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "newBroadPackageChecks": 0
+  },
+  "raw": {
+    "file": "ordinary-byte-current-attribution.tar.xz",
+    "sha256": "4ad8d478566ad3e9c774399ff26a4525f8b912207e23f4664574a075b9ccac0c",
+    "bytes": 134016,
+    "members": 27,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "ordinary-draw-symmetric-checks.tar.xz SHA2567000420c7dc16c94d40be69af82f6bdefc8bd982a652b73934155b2557adce87"
+    ]
+  }
+}
