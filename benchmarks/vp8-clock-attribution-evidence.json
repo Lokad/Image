@@ -1,0 +1,146 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "newRequiredPaths": 0,
+  "diagnostic": {
+    "stage": "FRP1352",
+    "scored": false,
+    "clockDerivedValuesDiagnosticOnly": true,
+    "shapeCount": 1,
+    "cpu": 0,
+    "observerCpu": 1,
+    "perfIntervalMilliseconds": 125,
+    "alignmentPaddingMs": 125,
+    "minimumObservedTimestampOffsetNs": 3550450521325264,
+    "clockDiagnostics": [
+      {
+        "relativeCounterRatioMin": 1.67411390667307,
+        "relativeCounterRatioMax": 1.7502728180904348,
+        "groups": {
+          "managedUs": {
+            "min": 4625.536171875,
+            "max": 4821.595328125,
+            "cv": 0.011771789280259346,
+            "correlationWithAperfMperf": -0.9960021005886454,
+            "clockAdjustedCv": 0.001451650450572867
+          },
+          "beforeNativeUs": {
+            "min": 4797.7289921875,
+            "max": 4983.7510234375,
+            "cv": 0.010779617218965712,
+            "correlationWithAperfMperf": -0.9938167344063481,
+            "clockAdjustedCv": 0.002320156933659247
+          },
+          "pairedNativeUs": {
+            "min": 4796.2422421875,
+            "max": 4982.0986875,
+            "cv": 0.010615188539531674,
+            "correlationWithAperfMperf": -0.996259951190798,
+            "clockAdjustedCv": 0.002306572446524771
+          },
+          "afterNativeUs": {
+            "min": 4797.3469765625,
+            "max": 5017.7220078125,
+            "cv": 0.012684067769027182,
+            "correlationWithAperfMperf": -0.9969025624674598,
+            "clockAdjustedCv": 0.0010009398802652899
+          }
+        }
+      },
+      {
+        "relativeCounterRatioMin": 1.667484287961339,
+        "relativeCounterRatioMax": 1.7502609910216644,
+        "groups": {
+          "managedUs": {
+            "min": 4625.536171875,
+            "max": 4821.595328125,
+            "cv": 0.011771789280259346,
+            "correlationWithAperfMperf": -0.9964172825639364,
+            "clockAdjustedCv": 0.0023575377836180817
+          },
+          "beforeNativeUs": {
+            "min": 4797.7289921875,
+            "max": 4983.7510234375,
+            "cv": 0.010779617218965712,
+            "correlationWithAperfMperf": -0.9926180055075122,
+            "clockAdjustedCv": 0.003392907015076457
+          },
+          "pairedNativeUs": {
+            "min": 4796.2422421875,
+            "max": 4982.0986875,
+            "cv": 0.010615188539531674,
+            "correlationWithAperfMperf": -0.9961386038099296,
+            "clockAdjustedCv": 0.0033815073659978273
+          },
+          "afterNativeUs": {
+            "min": 4797.3469765625,
+            "max": 5017.7220078125,
+            "cv": 0.012684067769027182,
+            "correlationWithAperfMperf": -0.9965646319879877,
+            "clockAdjustedCv": 0.0016392325939444759
+          }
+        }
+      }
+    ],
+    "largerAlignmentPaddingMs": 250,
+    "runtimeSha256": "654a90fa33ae8721e614a0c6196ffa597e634bdca9de2558cc9d403975449dbc",
+    "toolSha256": "f71fe12c3b46d940682a497d15c116f91996e40bc09615f7db6a7996e66d603f",
+    "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+    "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+    "allOriginalGuardsAndOutputChecksPassed": true
+  },
+  "confirmation": {
+    "stage": "FRP1353",
+    "originalOperationBoundaries": true,
+    "originalConfidenceRuleUnchanged": true,
+    "computationClockAdjusted": false,
+    "warmupsPerSubject": 4,
+    "operationsPerWarmup": 128,
+    "caseId": "OpaqueCancelable8",
+    "allPairsRetained": true,
+    "originalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actuals": 12,
+    "operationsPerSubject": 512,
+    "segmentsPerActual": 64,
+    "operationsPerSegment": 8,
+    "toolSha256": "a0ffb3d4d0083eb2911dbb1bbdfa5fcbbd2b539ec722f0d2d516fe805fe63819",
+    "observation": {
+      "ratio": 0.964834186664613,
+      "lower": 0.8800900500488624,
+      "upper": 1.0573725055173482,
+      "status": "uncertain",
+      "managedUs": 4855.680186523437,
+      "nativeUs": 5032.65768733724,
+      "allocatedBytes": 230880
+    },
+    "pairedInterval": [
+      0.9628518035581888,
+      0.9652905504368264
+    ],
+    "candidateLibrarySha256": "654a90fa33ae8721e614a0c6196ffa597e634bdca9de2558cc9d403975449dbc",
+    "confidenceUpperByView": {
+      "allActual": 1.0573725055173482,
+      "upperOutlierDiagnostic": 1.0573725055173482
+    }
+  },
+  "builds": {
+    "orchestration": 2,
+    "library": 0,
+    "embeddedTests": 0,
+    "harness": 0,
+    "native": 0,
+    "fixtures": 0,
+    "package": 0
+  },
+  "raw": {
+    "file": "vp8-clock-attribution-and-confirmation.tar.xz",
+    "sha256": "72f0f3bba9e8f9b3ea3943b7444e32281db7492aa1edcbab9e9e63e47fcf43ec",
+    "bytes": 488236,
+    "members": 40,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "nextAction": "Retain the scoped managed gain and the standalone uncertainty on its original DLL. No favorable replay and no qualification repeat."
+}

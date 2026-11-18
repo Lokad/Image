@@ -237,3 +237,29 @@ cancellation and independent-owner gates and all actuals for both frozen
 drivers. The narrowed run's archive filename collided after sampling.
 Recovery verifies and archives the completed records without repeating timing.
 [Evidence and mirrored archives](vp8-coefficient-sign-trials-evidence.json)
+
+### CPU frequency diagnostic and longer confirmation
+
+One unscored live-only capture reads CPU 0's APERF and MPERF on 125 ms
+intervals from CPU 1. The original four warmups and twelve 128-operation
+units stay intact. Every complete decode, exact frame and owner check stays
+in place. The whole-unit APERF/MPERF ranges from **1.6741 to 1.7503**.
+Managed and all three FFmpeg group times correlate **−0.997 to −0.994**
+with that ratio. A second alignment margin gives the same result.
+Multiplying each actual's time by its counter ratio reduces the managed
+coefficient of variation from 1.18% to 0.15%. Those adjusted times are
+diagnostic only. This identifies frequency variation in the observed
+capture without establishing its cause or extrapolating to prior captures.
+
+One uninstrumented follow-up extends each actual from 128 to 512 operations
+per subject and keeps four original 128-operation warmups. Twelve actuals,
+all three reference groups, the eight-operation subdivisions and all
+original correctness and quiet guards remain. The same immutable candidate
+measures **4,855.68 / FFmpeg 5,032.66 µs**, at **230,880 B/op**. The adjacent
+paired interval is **0.962852–0.965291** and the full interval is
+**0.880090–1.057373**. The longer cadence does not resolve the uncertainty.
+The candidate remains private and the production evidence stands.
+
+Two orchestration builds, zero library, fixture or reference builds.
+The archive retains all observations, commands, stages and member hashes.
+[Clock and confirmation evidence](vp8-clock-attribution-evidence.json)
