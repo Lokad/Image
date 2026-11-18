@@ -3582,13 +3582,18 @@ costs. The complete final-package refresh remains outstanding."""
     mixed_word = bicubic_package['mixedWord']
     assert mixed_word['producers'] == png_package['producers']
     assert mixed_word['raw']['mirrored'] and mixed_word['raw']['allMembersVerified']
-    bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases']}
+    bounded_wide = bicubic_package['boundedWide']
+    assert bounded_wide['producers'] == png_package['producers']
+    assert bounded_wide['raw']['mirrored'] and bounded_wide['raw']['allMembersVerified']
+    bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases']}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
         ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightDown8'),
         ('Bicubic RGBA8 enlargement, input+output+4 KiB', 'TightUp8'),
         ('Bicubic RGBA16, width up / height down, input+output+4 KiB', 'TightMixed16'),
         ('Bicubic RGBA16, width down / height up / input+output+4 KiB', 'TightCross16'),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightWide8'),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB', 'TightWide16'),
     ):
         c = bicubic_cases[name]
         if name == 'Down8':
@@ -3681,7 +3686,8 @@ and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
 [Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
 the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
-RGBA16 directions.
+RGBA16 directions. With 4 KiB of workspace at 128×64, RGBA16 is a gap and RGBA8
+remains uncertain against the prepared zimg reference.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

@@ -81,3 +81,71 @@ The mirrored `bicubic-mixed-word-current-package-confirmations.tar.xz` contains 
 and 111,552 B, SHA-256 `f5d3673b399303028d2dcd1bb8913a046decf8c3c8581066910b828cef22e457`.
 It includes all samples, matched prior receipts, identity checks and quietness
 guards. [Evidence](bicubic-current-package-evidence.json)
+
+## Tight 128×64 reductions
+
+| Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| RGBA8 | 380.07 | 375.17 | 0.992689–1.024773 | 112 | Confidence open |
+| RGBA16 | 469.55 | 444.85 | 1.012479–1.078234 | 112 | Gap |
+
+The same frozen driver ran twelve alternating 64-call pairs and both
+twelve-sample reference brackets for each case. Both reductions start from
+513×259. The working limits are input and owned output plus 4 KiB. Managed
+preparation, filtering, exact repair, independent output and disposal are
+timed. The zimg 3.0.6 FFmpeg scaler backend retains the graph and scratch.
+Pixel processing, packing, output allocation and release remain timed.
+
+The RGBA16 paired interval is 1.019543–1.050974. Native group means run from
+444.85 to 457.33 µs. Even the conservative interval that includes all
+reference groups shows a gap, with a 24.71 µs point difference against the
+fastest bracket. RGBA8 remains uncertain under the full rule. Earlier passing
+measurements are tied to their original package. The elapsed-time difference
+between package versions has no verified cause.
+
+All original input and output hashes, exact managed pixels, approved native
+bounds and independent output checks pass. The owned output sizes are
+32,768 and 65,536 B. GC allocation is 112 B/op for both, separate from owned
+capacity and retained or physical memory. The driver, 128 non-core runtime
+files and both reference workers were reused without a build. Both guarded
+captures used the current immutable 0.2.1 package.
+
+The mirrored `bicubic-bounded-wide-current-package.tar.xz` contains 15 verified
+members and 24,548 B, SHA-256
+`fa6c8307079760183b675fdc2c5e2ae86698f4ade4c9404c5d44c0897c895a8a`.
+It retains both captures, matched original receipts and guard results,
+driver and reference identities, and the reproducing command.
+
+### RGBA16 gap attribution
+
+Twelve alternating 64-call managed pairs on the same VM compare the earlier
+and current immutable modules under the same public Resize boundary.
+They measure **465.28 and 464.93 µs**, with a current/earlier interval of
+**0.988575–1.010048** and **112 B/op** per side. Pixel and surviving-owner
+checks pass. The matched comparison gives little support for a material
+slowdown from the module change. The standalone prepared-zimg gap stays open.
+
+An independent six-second CPU profile on the current package records 5,951
+samples and zero lost samples. The four-column word executor accounts for
+5,523. Its paired horizontal tap loop accounts for 1,202, including the
+repeated coefficient broadcasts and inserts. A source unpack block accounts
+for 1,008 and the vertical quartet loop for 613. Word quotient/bounds and
+certified packing account for 352 and 168 samples in their two hottest blocks.
+These are block sample counts. The first implementation trial will prepare
+compact paired horizontal coefficients once per eligible strip, reusing the
+existing weight storage and borrowing decoded scratch for rare exact replay.
+The [existing byte preparation](BICUBIC-PAIRED-COEFFICIENT-PREPARATION.md)
+provides a lifetime and tap-order precedent. The earlier [expanded-coefficient
+trial](BICUBIC-EXPANDED-COEFFICIENT-TRIAL.md) retains its adverse evidence.
+
+The first profile finished, but its root-owned output could not be copied out
+of temporary storage. The export was corrected and a valid non-timing profile
+captured. The matched-DLL receipt was recovered from its completed samples
+after correcting the serialized tuple field names. One private diagnostic
+driver was built. Both production modules and the profile driver were reused.
+
+The mirrored `bicubic-word-gap-module-and-profile.tar.xz` contains 31 verified
+members and 104,732 B, SHA-256
+`23160c69b5a1f13a9cd3daa6ed1573dd421b0dfca83ddb9f5e0c1fa9633e00f4`.
+It retains the scoped managed pairs, raw profile, sampled instruction blocks,
+guards, exact output evidence and both tooling corrections.

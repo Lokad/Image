@@ -1,5 +1,9 @@
 # Current bicubic confidence
 
+[Current package measurements](BICUBIC-CURRENT-PACKAGE.md)
+supersede the two bounded wide timing rows below. The original captures and
+their qualification remain part of the evidence.
+
 [Later default Wide8 confidence](BICUBIC-WIDE-CURRENT-CONFIDENCE.md) now passes
 with one longer integration. Current resize scope is 71 passing/two uncertain;
 the four controls below retain their valid measurements and original history.

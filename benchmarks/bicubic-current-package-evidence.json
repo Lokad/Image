@@ -664,5 +664,161 @@
     "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
     "confidence": "Conservative filtered and all-actual bounds against both native brackets.",
     "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention."
+  },
+  "boundedWide": {
+    "producers": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "raw": {
+      "file": "bicubic-bounded-wide-current-package.tar.xz",
+      "bytes": 24548,
+      "sha256": "fa6c8307079760183b675fdc2c5e2ae86698f4ade4c9404c5d44c0897c895a8a",
+      "members": 15,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "nonCoreRuntimeFiles": 128,
+    "allBuilds": 0,
+    "cases": {
+      "TightWide8": {
+        "managedUs": 380.06781770833334,
+        "nativeUs": 375.17247265625,
+        "ratio": 1.0130482522276325,
+        "lower": 0.9926885058672882,
+        "upper": 1.0247732243057408,
+        "status": "uncertain",
+        "allocatedBytes": 112,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "operationsPerSubject": 64,
+        "validationSha256": "884d0865fcec413e80abce1d60c62a71ab9c3e6697a358ea3552d7c625b2e617",
+        "depth": 8,
+        "outputWidth": 128,
+        "outputHeight": 64,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "managedOutputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+        "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "nativeWorkerSha256": "8e92251b7b26f6d8921c595ba3a9fbe732750c4694a60b0137516dd2a90d1fcf",
+        "priorReceiptSha256": "4580f41a93aef6e5e85631e2c653a9e74773b10a8b041c72a9165c4a2433f0d7",
+        "ownedOutputBytes": 32768,
+        "actualOperationCounts": [
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64
+        ],
+        "rawLogSha256": "000f13a8de46fd37b268880db7902681b56c12af269fc189355715300e9bf5f0",
+        "nativeBracketMeansUs": [
+          375.172473,
+          377.194069,
+          376.969258
+        ],
+        "pairedRatioConfidence": [
+          1.0019109238188937,
+          1.0133750141198574
+        ]
+      },
+      "TightWide16": {
+        "managedUs": 469.5537044270833,
+        "nativeUs": 444.84772005208333,
+        "ratio": 1.0555380712575246,
+        "lower": 1.0124794567948312,
+        "upper": 1.07823436373579,
+        "status": "gap",
+        "allocatedBytes": 112,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "operationsPerSubject": 64,
+        "validationSha256": "b1b9f224e7bb5bfd4b99df001b838113adf18ff73cf37fb09fbc67bf8d84fc43",
+        "depth": 16,
+        "outputWidth": 128,
+        "outputHeight": 64,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "managedOutputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+        "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "nativeWorkerSha256": "e64aa8ad0c5211dfcd023529c6c502135af18baebba7c5a33e7a76b692651c3a",
+        "priorReceiptSha256": "c14ed5dfc8dd1f4f0f3db2b85b5fed55b8b342daa59c41b9a5f3ccfe6f7e0080",
+        "ownedOutputBytes": 65536,
+        "actualOperationCounts": [
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64
+        ],
+        "rawLogSha256": "812b67ee5533859306f219542a2940bc0ae2c27d7c8fb74ac2e46ed1f1bf0d93",
+        "nativeBracketMeansUs": [
+          457.333464,
+          453.641091,
+          444.84772
+        ],
+        "pairedRatioConfidence": [
+          1.0195434957011913,
+          1.0509739139038023
+        ]
+      }
+    }
+  },
+  "boundedWideAttribution": {
+    "raw": {
+      "file": "bicubic-word-gap-module-and-profile.tar.xz",
+      "bytes": 104732,
+      "sha256": "23160c69b5a1f13a9cd3daa6ed1573dd421b0dfca83ddb9f5e0c1fa9633e00f4",
+      "members": 31,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "moduleDiagnostic": {
+      "earlierUs": 465.2792213541667,
+      "currentUs": 464.9344674479167,
+      "lower": 0.9885751520924029,
+      "upper": 1.0100475204223978,
+      "caseId": "TightWide16",
+      "earlierLibrarySha256": "243b269466450cf2696d9b9e2835d5e059d627c246789ee34fc4249a996c11e9",
+      "currentLibrarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "actuals": 12,
+      "operationsPerSubject": 64,
+      "quietGuardsPassed": true,
+      "allPairsRetained": true,
+      "exactPixelsAndIndependentOwners": true,
+      "allocatedBytes": 112
+    },
+    "profile": {
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "builds": 0,
+      "sampleCount": 5951,
+      "applyRangeSampleCount": 5523,
+      "noLostSamples": true,
+      "quietGuardsPassed": true,
+      "clocksDiscarded": true,
+      "horizontalPairLoopBlockSamples": 1202,
+      "wordDecodeBlockSamples": 1008,
+      "verticalQuartetBlockSamples": 613,
+      "wordQuotientAndBoundBlockSamples": 352,
+      "wordCertificatePackingBlockSamples": 168
+    }
   }
 }
