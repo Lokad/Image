@@ -3637,6 +3637,12 @@ costs. The complete final-package refresh remains outstanding."""
                and c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
                and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
                for c in extended_cases.values())
+    tight_adjacent = bicubic_package['tightAdjacent']
+    assert tight_adjacent['producers'] == word_qualification
+    assert tight_adjacent['raw']['mirrored'] and tight_adjacent['raw']['allMembersVerified']
+    assert {name: c['nativeAdjacentOperationsEach'] for name, c in tight_adjacent['cases'].items()} == {
+        'TightDown8': 240, 'TightCross16': 120,
+    }
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3669,6 +3675,13 @@ costs. The complete final-package refresh remains outstanding."""
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = compact_word['case']
             assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
+        elif name in tight_adjacent['cases']:
+            current = tight_adjacent['cases'][name]
+            assert all(current[key] == c[key] for key in
+                       ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
+            assert current['librarySha256'] == word_qualification['linuxSha256']
+            assert current['actuals'] == current['nativeSamplesEachBracket'] == 12
+            c = current
         elif name not in extended_cases:
             assert c['librarySha256'] == png_package['producers']['linuxSha256']
         assert len(c['actualOperationCounts']) == 12

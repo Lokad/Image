@@ -340,3 +340,31 @@ as recorded. [Evidence](bicubic-prepared-current-package-evidence.json)
 
 The mirrored `bicubic-prepared-current-package.tar.xz` retains 29 verified members and
 29,684 B, SHA-256 `dd6a6391917096c05cbacee93946f3b6f287ce94a6b45285a60251fafdd7f080`.
+
+## Adjacent sampling for the tight byte reduction and mixed word resize
+
+Both comparisons remain uncertain on the actual package under the full
+conservative rule. The earlier bracket-only comparisons remain in their
+original tables.
+
+| Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Tight RGBA8 reduction to 256×129 | 444.06 | 446.80 | 0.934107–1.050981 | 113 |
+| Tight RGBA16 width down and height up to 256×519 | 825.67 | 820.97 | 0.979831–1.034007 | 121 |
+
+The byte case's two paired upper bounds are 0.994563 and 0.998267.
+Its full bound remains open. The word case's paired uppers are 1.023795
+and 1.020481. Both native brackets and the two adjacent groups remain in
+the conservative interval. Timings do not establish a production regression
+or explain the clock movements.
+
+Each case keeps twelve managed actuals, natural GC and the original generated
+loops. Adjacent native groups use 240 calls per side for byte and 120 per
+side for word. Exact pixels, approved native bounds, source preservation
+and independent outputs pass. Both quiet guards pass per case. One
+tooling build reuses 127 original non-core runtime files with the actual
+package and unchanged native workers. No unchanged repeat follows from
+these outcomes. [Evidence](bicubic-current-package-evidence.json)
+
+The mirrored `bicubic-tight-adjacent-current-package.tar.xz` retains 20 verified members and
+35,664 B, SHA-256 `2194789851b083158d926ae31989564997688434cf380dc4c8b13f80e910834f`.
