@@ -1508,5 +1508,103 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "pinFreeAlignedStoresTrial": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateDllSha256": "834d1ae39bf222e3870ca9db223fdbcece85a752050bf3ccc806363fd962c69a",
+    "productionAccepted": false,
+    "mechanism": "Opportunistic managed-reference alignment hint and checked unaligned-safe transfers",
+    "operationsPerPairSide": 65536,
+    "allocatedBytesPerOp": 0,
+    "windowsFocusedNormal": 125,
+    "windowsFocusedScalar": 125,
+    "geometry": {
+      "widthPhasePairs": 254016,
+      "transfersPerRow": {
+        "1016": [
+          16,
+          17
+        ],
+        "1024": [
+          16,
+          17
+        ]
+      },
+      "checkedAllAccesses": true
+    },
+    "codegen": {
+      "methodBytes": 412,
+      "sampleCommands": 0,
+      "vectorMoves": 14,
+      "stackVectorMoves": [],
+      "codegenSha256": "52713c287be2db8dbc023cedf9806efe7eb25e7e5bff90c3a0e2105969d9b1b3",
+      "initialMinOptsMethodBytes": 809
+    },
+    "screen": {
+      "OriginalClippedCopy8": {
+        "pairs": 3,
+        "baselineUs": 1.9495643666585287,
+        "candidateUs": 1.9378490346272788,
+        "pairedRatioInterval": [
+          0.9461699207988958,
+          1.0442268992090613
+        ]
+      },
+      "DrawingCopy8": {
+        "pairs": 3,
+        "baselineUs": 1.948343251546224,
+        "candidateUs": 1.9567452189127603,
+        "pairedRatioInterval": [
+          0.9815397593045184,
+          1.0276138673968973
+        ]
+      }
+    },
+    "raw": {
+      "file": "un-pinned-aligned-middle-copy-trial.tar.xz",
+      "bytes": 1091944,
+      "sha256": "d250ceb29ea8b172b9004da48c5f9b5757dc0f751549f90dc28454ee709f832d",
+      "members": 68,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "modeledSeparateRgba8SplitStores": {
+      "managedCurrent": [
+        1936,
+        1936,
+        1936,
+        1920
+      ],
+      "managedCandidate": [
+        242,
+        242,
+        242,
+        240
+      ],
+      "nativeForward": 605
+    },
+    "carriedAlignedSourceModel": {
+      "checkedWidthAndPhaseCombinations": 86016,
+      "scoredCaptures": 0,
+      "mismatchedPhaseSplitLoads": [
+        354,
+        355
+      ],
+      "mismatchedPhasePermutes": [
+        1798,
+        1814
+      ],
+      "raw": {
+        "file": "carried-aligned-source-geometry.tar.xz",
+        "bytes": 2420,
+        "sha256": "784a17b35950378a5e553b0fd4379ea453c870a124c82e2809fbe4a61461ff5d",
+        "members": 3,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
   }
 }

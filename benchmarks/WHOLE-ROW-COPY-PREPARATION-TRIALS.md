@@ -897,3 +897,39 @@ instruction split count, or causal explanation of the placement timings.
 Keep the scored comparisons and the existing scope. A future alignment
 trial needs a more specific transfer mechanism than the total footprint.
 [Frozen geometry, allocation records and model evidence](copy-vector-width-trials-evidence.json)
+
+## Aligned stores without pinning
+
+Modeling the recorded placements and the executed vector schedules gives
+**1,920–1,936** cache-line-crossing stores per complete managed RGBA8 copy.
+The frozen FFmpeg worker's forward schedule gives **605** on each control.
+The managed aligned-middle schedule gives **240–242**. It can add split
+source loads when the source and destination phases differ. These counts
+describe the scheduled accesses. They do not estimate stalls.
+
+The trial takes the low six bits of a managed reference difference once
+and uses them as a destination alignment hint. Every transfer stays within
+a checked row and supports unaligned addresses, including after relocation.
+The inlined hint produced an 809-byte MinOpts method on the VM. Computing
+the hint in a separate helper restores the optimized 412-byte row loop
+without vector spills. The initial build stopped at code generation.
+[.NET reference-offset behavior](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.byteoffset?view=net-10.0)
+
+Three quiet-VM pairs of 65,536 complete calls per side give
+**1.949564 → 1.937849 µs** for clipped RGBA8 (interval
+**0.946170–1.044227**) and **1.948343 → 1.956745 µs** for separate RGBA8
+(**0.981540–1.027614**), both at **0 B/op**. Original exactness, source
+and ownership gates pass. Windows passes 125 focused tests per mode with
+intrinsics enabled and disabled. Stop the trial at the screen. The two
+standalone gaps remain open.
+[Transfer model, generated code and comparison evidence](copy-vector-width-trials-evidence.json)
+
+A follow-up geometry model carries a source vector across adjacent
+destination-aligned stores and joins it with the next source vector.
+It verifies **86,016** width and phase combinations with bounded edge
+loads. On the observed mismatched phases it projects **354–355** split
+loads at the cost of about **1,800** vector permutations per operation.
+On the observed matching phase, the aligned vectors need no permutation.
+The model gives a bounded design to check against the actual generated
+loop. It supplies no timing result.
+[Geometry proof](copy-vector-width-trials-evidence.json)
