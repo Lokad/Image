@@ -3580,6 +3580,27 @@ costs. The complete final-package refresh remains outstanding."""
     assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
+    prepared_current = json.loads((ROOT / 'benchmarks/bicubic-prepared-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert prepared_current['producers'] == word_qualification
+    assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in prepared_current['archives'])
+    for family, qualifier, shape, retained in (
+        ('wide', '', '128×64', 198432),
+        ('narrow', ' narrow', '256×129', 199840),
+    ):
+        for depth in (8, 16):
+            c = prepared_current['cases'][f'{family}/Repeated{depth}']
+            assert c['depth'] == depth and c['retainedManagedBytes'] == retained
+            assert f'{c["outputWidth"]}×{c["outputHeight"]}' == shape
+            assert c['librarySha256'] == word_qualification['linuxSha256'] and c['nativeBeforeAndAfterSamples'] == c['actuals'] == 12
+            assert all(c[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedExact'))
+            assert len(c['actualOperationCounts']) == 12 and not c['driverIdentity']['forcedCollectionsBetweenIterations']
+            assert c['driverIdentity']['originalGeneratedDelegatesReused'] and c['driverIdentity']['originalGlobalAndIterationActionsReused']
+            assert c['upper'] <= 1 and c['status'] == 'pass'
+            label = f'Bicubic prepared{qualifier} RGBA{depth} / zimg prepared † → {shape}'
+            old, = (line for line in editing.splitlines() if line.startswith(f'| {label} |'))
+            result = (f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                      f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} |')
+            editing = editing.replace(old, result)
     async_encodes = json.loads((ROOT / 'benchmarks/async-encode-current-package-evidence.json').read_text(encoding='utf-8'))
     assert async_encodes['producers'] == word_qualification
     assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in async_encodes['archives'])
@@ -3745,6 +3766,8 @@ The tight 64×32 RGBA8 reduction remains uncertain at upper
 close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} /
 {compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+The four prepared bicubic operations also pass on that package, with
+**137 B/op** and unchanged retained plan capacity.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.
 [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)

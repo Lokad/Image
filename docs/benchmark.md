@@ -31,6 +31,8 @@ The tight 64×32 RGBA8 reduction remains uncertain at upper
 close the tight 128×64 RGBA16 gap at **405.66 /
 448.29 µs**, upper **0.918803**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+The four prepared bicubic operations also pass on that package, with
+**137 B/op** and unchanged retained plan capacity.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.
 [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
@@ -550,13 +552,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 490.21 | 576.13 | 0.851 / 0.862076 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 350.31 | 990.90 | 0.354 / 0.357 | 198,455 |
-| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.35 | 348.80 | 0.744 / 0.747 | 137 |
+| Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 279.83 | 346.38 | 0.808 / 0.819148 | 137 |
 | Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 395.89 | 599.92 | 0.660 / 0.677 | 198,453 |
-| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 328.80 | 404.94 | 0.812 / 0.822 | 137 |
+| Bicubic prepared RGBA16 / zimg prepared † → 128×64 | 310.36 | 419.12 | 0.740 / 0.744601 | 137 |
 | Bicubic one-shot narrow RGBA8 / zimg one-shot † → 256×129 | 447.86 | 1,038.21 | 0.431 / 0.437 | 199,991 |
-| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 398.55 | 422.93 | 0.942 / 0.952 | 137 |
+| Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 391.85 | 417.84 | 0.938 / 0.952322 | 137 |
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
-| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
+| Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 398.53 | 573.73 | 0.695 / 0.708526 | 137 |
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 611.14 | 2,088.67 | 0.293 / 0.301 | 44,712–44,720 |
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 734.50 | 2,054.59 | 0.357 / 0.363 | 254,672–254,679 |
 | PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | 2,856.94 | 3,301.31 | 0.865 / 0.871 | 338,156–338,160 |

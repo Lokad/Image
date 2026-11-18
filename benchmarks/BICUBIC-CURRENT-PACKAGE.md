@@ -309,3 +309,34 @@ records every shape and sample. No new controls or builds were needed.
 
 The mirrored `bicubic-current-package-extreme-reductions.tar.xz` retains 82 verified members and
 65,052 B, SHA-256 `fe8f8dcc16eea25a0a8d47a0a8e3f47d661d85f31e89f187fc57c518e6e3c028`.
+
+## Prepared plans
+
+The four separately required prepared paths pass on the same actual package.
+The shared pool affects the independently owned result of each plan call.
+The inputs and retained preparation remain those of the original controls.
+[Previous qualification](CACHED-BICUBIC-SHARED-HORIZONTAL-SCHEDULE.md)
+
+| Complete prepared operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Retained plan B |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Wide RGBA8 to 128×64 | 279.83 | 346.38 | 0.798853–0.819148 | 137 | 198,432 |
+| Wide RGBA16 to 128×64 | 310.36 | 419.12 | 0.735033–0.744601 | 137 | 198,432 |
+| Narrow RGBA8 to 256×129 | 391.85 | 417.84 | 0.902302–0.952322 | 137 | 199,840 |
+| Narrow RGBA16 to 256×129 | 398.53 | 573.73 | 0.666640–0.708526 | 137 | 199,840 |
+
+Both sides prepare before timing. Fresh source reads, exact filtering and
+repair, and an independently owned result and disposal stay in each managed
+operation. Native packing, filtering, normalization and output acquisition
+and disposal stay timed. Native scratch is reported separately from total
+retained state. The narrow governed peaks remain 331,936 and 464,032 B for
+byte and word. The wide benchmark receipts report retained capacity.
+
+Two frozen runtimes each reuse 33 non-core files and the original generated
+loops. Twelve managed actuals and both twelve-sample native brackets use
+natural GC, original exact pixel, ownership and reference gates, and both
+quiet guards. One tooling build reuses the original actions. Production,
+package, harnesses, fixtures, reference workers and qualified cases remain
+as recorded. [Evidence](bicubic-prepared-current-package-evidence.json)
+
+The mirrored `bicubic-prepared-current-package.tar.xz` retains 29 verified members and
+29,684 B, SHA-256 `dd6a6391917096c05cbacee93946f3b6f287ce94a6b45285a60251fafdd7f080`.
