@@ -81,6 +81,26 @@ point savings and an interval spanning unchanged performance end this trial.
 The scored FFmpeg result remains uncertain.
 [Screen and confirmation evidence](probe-refill-input-bound-trial-evidence.json)
 
+## Dimension-only classification and pending operation initialization
+
+One private variant skips unused color classification during dimension-only
+JPEG probes. It retains the same reads, validation and published facts,
+including grayscale source metadata. Windows passes 152 focused tests per mode
+in normal and scalar runs. Its three-pair quiet-VM screen gives **0.240809 →
+0.239083 µs**, interval **0.885845–1.112768**.
+
+A separate private variant has each caller initialize the pending operation
+before advancing. The resumed caller still waits for the actual read to
+finish before clearing its state. The Linux JIT removes eight stores at
+`AdvanceJpeg` entry. Windows passes 146 focused tests per mode. The three-pair
+screen gives **0.244417 → 0.240359 µs**, interval **0.676552–1.429353**.
+
+Both screens pass the exact descriptor, independent ownership and idle
+checks at **568 B/op**. The point savings are about 1.7 and 4.1 ns and both
+intervals include unchanged performance. The variants stop at screening.
+The scored asynchronous FFmpeg comparison remains uncertain.
+[Screens, generated code and verification evidence](probe-refill-input-bound-trial-evidence.json)
+
 ## Unchanged operation and gates
 
 Each unit now includes3420160managed and1048576native complete operations,

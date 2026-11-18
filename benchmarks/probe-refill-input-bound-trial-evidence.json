@@ -390,5 +390,149 @@
       "exactDescriptorAndIndependentOwnerPassed": true,
       "quietGuardsPassed": true
     }
+  },
+  "dimensionOnlySourceFacts": {
+    "sources": {
+      "src/Lokad.Image/Internal/ProbeReader.cs": {
+        "original": "03feadd1f45b6ce1ae0995a5f19358ef3036490874ae91b5ec52375dd76bd4b0",
+        "candidate": "8b7ddfbb18502e4a02933ba69e84b5a40f624253ede25458beb4b6fd17d15971"
+      },
+      "src/Lokad.Image/Internal/StreamInspection.cs": {
+        "original": "c67d781472f0c5b5eb4a8e31bc93f689ffcee4c8217150f60cdd48d92773e68d",
+        "candidate": "de3809d91f3843c096330fc56c14cd6148fde9179af8d37de2535cc4c4583191"
+      }
+    },
+    "mechanism": "Skip unexposed JPEG color classification for dimension-only probes while retaining prefix acquisition and fact publication.",
+    "screen": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "screen",
+      "baselineUs": 0.2408090171813965,
+      "candidateUs": 0.23908325322469076,
+      "ratio": 0.9928334745230668,
+      "lower": 0.8858452787134309,
+      "upper": 1.1127677168893104,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/frp1377/baseline-Lokad.Image.dll",
+        "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+        "tmp/frp1377/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "746cb70e51d7ab82303a75c212613f0c6c4f1e619a8a2273b2eeaee9a9d07537",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "screen"
+      ],
+      "actuals": 3,
+      "allActualsRetained": true,
+      "exactDescriptorAndIndependentOwnerPassed": true,
+      "quietGuardsPassed": true
+    },
+    "raw": {
+      "file": "jpeg-dimensions-facts-trial.tar.xz",
+      "bytes": 385672,
+      "sha256": "207a1b809610900121c046f90c2a6cb56e466e25f26a847672970410a53aa844",
+      "members": 16,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 152,
+        "logSha256": "3ea21759255838f4b2fd0c107caf0d7f1b321cf9d5a39ba1984a5be8b2611fa9"
+      },
+      "scalar": {
+        "passed": 152,
+        "logSha256": "c1bccb276445e484f21e8f0af2eba2d9c008d09cc9f2b0680fd1362bb28662ee"
+      }
+    }
+  },
+  "pendingEntryClear": {
+    "mechanism": "The caller initializes the pending operation once, before advancing. Eliminate the second clear inside AdvanceJpeg.",
+    "source": {
+      "file": "src/Lokad.Image/Internal/StreamInspection.cs",
+      "candidateSha256": "499e98571aad4a68f92f165d124b87388ce7995b0d108cb57baedd92dc59612d"
+    },
+    "codegen": {
+      "baseline": {
+        "entryClearStores": 8,
+        "nativeCodeBytes": 7793,
+        "preflightSha256": "b969c3a61d164f25d14185ac1fdb99016ae136b25df46f87a67aabdf9a60c04d",
+        "disassemblySha256": "44ba2f5dae997edddc083247adce417dde0f03b7d4a4eb9546356d67eba8b47e"
+      },
+      "candidate": {
+        "entryClearStores": 0,
+        "nativeCodeBytes": 7759,
+        "preflightSha256": "51cd2d3bf1f7883198fd009a466cc07243b26ec4b06e3c3e5ab569797cac895e",
+        "disassemblySha256": "7d0f2e48e377af413682f35c0b4423c360f8fd7f6f6eae527ea0f28a54295d79"
+      }
+    },
+    "screen": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "screen",
+      "baselineUs": 0.2444167900085449,
+      "candidateUs": 0.24035904184977214,
+      "ratio": 0.9833982429822807,
+      "lower": 0.6765523974178397,
+      "upper": 1.4293533204768796,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/frp1378/baseline-Lokad.Image.dll",
+        "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+        "tmp/frp1378/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "211d01d677d7ca00eaf5449554cff4174b96459ffe4a578ec37f7545a8efb356",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "screen"
+      ],
+      "actuals": 3,
+      "allActualsRetained": true,
+      "exactDescriptorAndIndependentOwnerPassed": true,
+      "quietGuardsPassed": true
+    },
+    "raw": {
+      "file": "jpeg-pending-entry-clear-trial.tar.xz",
+      "bytes": 399300,
+      "sha256": "e874e95d6541b8726d9360de07fea07b26c9a60cb8cc6af9e567fc2513025525",
+      "members": 21,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 146,
+        "logSha256": "b9bde2b2ac9dc2668e781cc605dcd84453d15ed270a0d86c2e6af972a4c535f9"
+      },
+      "scalar": {
+        "passed": 146,
+        "logSha256": "2ef30899b8e3e78a951230370e1fd6a03eab2bc7a9244cb88bb01658fdbe508c"
+      }
+    }
   }
 }

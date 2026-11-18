@@ -235,5 +235,211 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "constantBlockRowTrial": {
+    "mechanism": "Use an inline constant-size disjoint transfer for each checked 256-byte bulk block.",
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "a9f2d551f0d851ca85327c445e844b104b91ce37e05fd008cb1b28a2cb0af9cb"
+      },
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+        "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "candidate": "dd57c06ad89dd464d574ffc26456fc2d8528d09a2d56f98a96133ff714118329"
+      }
+    },
+    "raw": {
+      "file": "constant-block-copy-trial.tar.xz",
+      "bytes": 1036076,
+      "sha256": "d90144e2a5015181fe71e14cbfc4131c68e3db9461b459239020f1156d17619c",
+      "members": 69,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateLibrarySha256": "2f33cab0d49fc65d9bc6b156cf262b2e17621b09c759e1b5f09f7efdb5fe0c3d",
+    "codegen": {
+      "methodBytes": 434,
+      "sampleCommands": 0,
+      "wideLoads": 5,
+      "wideStorePairs": 5,
+      "wideStores": 5,
+      "codegenSha256": "45e592abb6dc9142bf74a1f3e7397f429ff88bef0e1cb2ed116bc0c86ab9158d"
+    },
+    "phases": {
+      "screen": {
+        "OriginalClippedCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 2.0348749033610027,
+              "lower": 1.528153426415956,
+              "upper": 2.5415963803060495,
+              "values": [
+                2.0666221923828125,
+                2.0229432373046876,
+                2.0150592803955076
+              ]
+            },
+            "candidate": {
+              "mean": 2.0162662353515626,
+              "lower": 1.5148410510429273,
+              "upper": 2.517691419660198,
+              "values": [
+                1.9888826904296875,
+                2.0160648193359374,
+                2.0438511962890624
+              ]
+            }
+          },
+          "ratio": 0.9908550033685046,
+          "lower": 0.6083629839764007,
+          "upper": 1.613828690370295,
+          "allocatedBytes": 0
+        },
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 2.158674809773763,
+              "lower": 1.9351955831562222,
+              "upper": 2.382154036391304,
+              "values": [
+                2.1727122344970704,
+                2.1501504516601564,
+                2.1531617431640626
+              ]
+            },
+            "candidate": {
+              "mean": 2.119811955769857,
+              "lower": 2.0370917309874788,
+              "upper": 2.202532180552235,
+              "values": [
+                2.1248336486816406,
+                2.1160182647705077,
+                2.118583953857422
+              ]
+            }
+          },
+          "ratio": 0.9820059152793169,
+          "lower": 0.920028749844625,
+          "upper": 1.048158133978342,
+          "allocatedBytes": 0
+        }
+      },
+      "confirm": {
+        "OriginalClippedCopy8": {
+          "actuals": 12,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 1.970086462656657,
+              "lower": 1.9682717588286018,
+              "upper": 1.9719011664847121,
+              "values": [
+                1.9703235473632812,
+                1.9701511688232423,
+                1.9692464904785156,
+                1.9731355895996094,
+                1.9703179016113281,
+                1.970647979736328,
+                1.9695401916503905,
+                1.9687725830078124,
+                1.968279281616211,
+                1.9720430755615235,
+                1.9684959716796875,
+                1.9700837707519532
+              ]
+            },
+            "candidate": {
+              "mean": 1.9542615331013997,
+              "lower": 1.9524617261746249,
+              "upper": 1.9560613400281746,
+              "values": [
+                1.9529391326904297,
+                1.9529307403564453,
+                1.9519938049316405,
+                1.9524204711914062,
+                1.9542836456298829,
+                1.9540450897216797,
+                1.9563350830078126,
+                1.9547343139648437,
+                1.9552781829833985,
+                1.9557571105957032,
+                1.9553247985839843,
+                1.9550960235595702
+              ]
+            }
+          },
+          "ratio": 0.9919673933565925,
+          "lower": 0.9904950355039114,
+          "upper": 0.9934419398498712,
+          "allocatedBytes": 0
+        },
+        "DrawingCopy8": {
+          "actuals": 12,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 2.1000701993306476,
+              "lower": 2.0886443886245853,
+              "upper": 2.11149601003671,
+              "values": [
+                2.0909135284423828,
+                2.096560806274414,
+                2.0957731781005857,
+                2.0926986083984374,
+                2.0961549224853515,
+                2.0993673248291014,
+                2.087453689575195,
+                2.1027767333984375,
+                2.108052215576172,
+                2.117503158569336,
+                2.1125386657714844,
+                2.101049560546875
+              ]
+            },
+            "candidate": {
+              "mean": 2.1002882080078127,
+              "lower": 2.0871939756363176,
+              "upper": 2.113382440379308,
+              "values": [
+                2.098298065185547,
+                2.095393569946289,
+                2.0939078674316405,
+                2.0934671325683594,
+                2.0991517028808593,
+                2.1015084838867186,
+                2.0829117431640625,
+                2.0891463317871093,
+                2.112647476196289,
+                2.1145320434570314,
+                2.1134589385986327,
+                2.109035140991211
+              ]
+            }
+          },
+          "ratio": 1.0001012086218837,
+          "lower": 0.9965476474898946,
+          "upper": 1.0036674412972262,
+          "allocatedBytes": 0
+        }
+      }
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 215,
+        "logSha256": "bb90e984244c26b41e41a75ec0e0ee0eae5eee84447c59f3662dd87e5ff6c29b"
+      },
+      "scalar": {
+        "passed": 215,
+        "logSha256": "329d33a60e2aae377205ede103efb331142c5104fd84d23b3bac5c20289089ab"
+      }
+    }
   }
 }

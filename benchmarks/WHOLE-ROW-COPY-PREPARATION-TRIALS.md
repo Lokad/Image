@@ -692,3 +692,23 @@ A separate untimed check confirms that constant 128- and 256-byte disjoint
 block copies compile to alternating 64-byte loads and stores on the VM.
 Exact copies and canaries pass. This exposes an instruction schedule to test
 in the row helper. [Timing and generated-code evidence](copy-vector-width-trials-evidence.json)
+
+## Alternating constant-block transfers
+
+The isolated RGBA8 helper uses a constant 256-byte copy within each checked
+row. The Linux JIT emits alternating 64-byte loads and stores inline, with
+no spill or runtime copy call. The route keeps the original row bounds,
+tail and cancellation checkpoints, and is limited to distinct buffers.
+
+Independent confirmation uses twelve quiet-VM pairs of 65,536 complete
+operations per side. Clipped copy improves from **1.970086 to 1.954262 µs**
+(**15.8 ns**, ratio interval **0.990495–0.993442**). Separate copy is flat at
+**2.100070 and 2.100288 µs** (interval **0.996548–1.003667**), despite a
+promising point estimate in the three-pair screen. Both allocate **0 B/op**.
+Original exact-frame, source, hidden RGB, alpha, untouched-pixel and
+ownership checks pass. Windows passes 215 focused tests per mode, normal
+and scalar.
+
+The clipped saving is smaller than the demonstrated gap. The candidate stays
+private, and both complete-operation FFmpeg gaps remain open.
+[Screen, confirmation and generated-code evidence](copy-vector-width-trials-evidence.json)
