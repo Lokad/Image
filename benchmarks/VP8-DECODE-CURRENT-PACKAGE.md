@@ -322,3 +322,40 @@ interval **0.965240–1.015362**. The live-token screen gives
 The mixed results give no basis for confirmation or promotion. Keep the
 rejected-write counts separate from measured speed.
 [Counts and trial evidence](vp8-horizontal-near-gate-trial-evidence.json)
+
+### Opaque luma reuse
+
+The private decoder reserves the same plane capacity before borrowing an
+exact-size luma array from the existing pool. Only ungoverned opaque VP8
+uses the rental. The WebP operation returns it after reconstruction,
+filtering and color publication, including failure and cancellation.
+Both completed outputs remain independently owned. The existing four-slot,
+4 MiB idle cap covers the extra eligible luma size. No shared-root caller
+uses this pool.
+
+Three variants reduce measured allocation from **230,880 to 87,240 B/op**
+on both frozen opaque controls. The luma payload is 143,616 bytes.
+Independent quiet-VM comparisons against the qualified DLL show different
+CPU effects.
+
+| Variant and complete operation | Baseline → candidate µs | Paired interval |
+| --- | ---: | ---: |
+| Cleared, ordinary | 5,126.87 → 4,947.88 | 0.955446–0.974814 |
+| Cleared, live token | 4,764.38 → 4,813.82 | 1.004713–1.016074 |
+| Fully overwritten, ordinary | 5,125.04 → 5,074.61 | 0.981171–0.999234 |
+| Fully overwritten, live token | 5,173.74 → 5,201.80 | 0.994536–1.016422 |
+| Fully overwritten with live sign, ordinary | 4,951.87 → 5,061.88 | 1.013588–1.030929 |
+| Fully overwritten with live sign, live token | 5,104.43 → 4,929.91 | 0.957795–0.973914 |
+
+For full overwrite, an independent model checks 24,100 prediction reads.
+Direct dirty-buffer tests prove exact padded planes on the two tested
+geometries, including with scalar execution. The cleared variant passes
+125 focused public tests per Windows mode. The combined variant passes 54
+focused Windows tests per mode. The first dirty-buffer test build found
+two internal calls using the superseded test signature. Updating those
+calls restores the tests without rebuilding the timed DLL.
+
+The original frame, source, owner and quietness gates pass on every timing.
+No variant demonstrates a sustained CPU benefit across both original
+controls, so the release DLL and current parity statuses remain in place.
+[Allocation and timing evidence](vp8-luma-rental-trial-evidence.json)
