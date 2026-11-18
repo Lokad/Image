@@ -474,3 +474,8 @@ the workers exited, the original validations and both statistical guards passed.
 The [final evidence](bicubic-current-package-evidence.json) pins the
 27-member `bicubic-column-view-qualification.tar.xz` and the two timing
 archives.
+
+[Subsequent tight 128×64 preparation trials](BICUBIC-WIDE-PREPARATION-TRIALS.md)
+retain one adverse short screen and a second candidate with a confirmed paired
+gain. The standalone zimg comparison remains uncertain and the candidate stays
+private. The current package and its three open cases remain unchanged.
