@@ -1395,5 +1395,72 @@
     "sourceRestoredSha256": "d02e6c95bdd0a3676f4416ea0e9709990c45125b15f5b1b7a2c11e4e312284b3",
     "firstCaptureReusedAfterRemoteParserBindingFailure": true,
     "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e"
+  },
+  "tightWordConfirmation": {
+    "project": "Lokad.Image",
+    "stage": "FRP1274",
+    "caseId": "DecodeTight16",
+    "productionChanged": false,
+    "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "originalGeneratedLoopsAndConsumer": true,
+    "forceGcBetweenIterations": false,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "nativeOperationsEach": 32,
+    "managedUs": 2796.0519431818184,
+    "nativeUs": 2904.4519401041666,
+    "ratio": 0.9626779856724156,
+    "lower": 0.9352994596426527,
+    "upper": 0.9797737128241869,
+    "status": "pass",
+    "allocatedBytes": 70293,
+    "pairedConfidence": [
+      {
+        "reference": "beforeEach",
+        "lower": 0.9571561287350522,
+        "upper": 0.9715339854902022
+      },
+      {
+        "reference": "afterEach",
+        "lower": 0.9591320819372945,
+        "upper": 0.9694480482355963
+      }
+    ],
+    "confidenceViews": [
+      {
+        "view": "statistics",
+        "lower": 0.9374139667343958,
+        "upper": 0.9740721024658608
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "lower": 0.9352994596426527,
+        "upper": 0.9797737128241869
+      }
+    ],
+    "nativeBracketMeansUs": {
+      "setup": 2917.6803828125,
+      "beforeEach": 2904.4519401041666,
+      "afterEach": 2904.5437734375,
+      "cleanup": 2927.5331796875
+    },
+    "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+    "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "raw": {
+      "file": "png-tight-word-interleaved-confirmation.tar.xz",
+      "sha256": "66d796a6240d66e526e7a442c9c7f1e8197ccb3ade26e40dc41e6f27f5d323c1",
+      "bytes": 28588,
+      "members": 15,
+      "allMembersVerified": true,
+      "mirrored": true,
+      "dependencies": [
+        "png-decoder-current-package-confirmations.tar.xz",
+        "png-current-package-cost.tar.xz"
+      ]
+    },
+    "decision": "Pass and stop this control. The confirmed bound includes both adjacent paired log-ratio intervals and the original unfiltered and selected combined reference bounds. The prior uncertain capture remains evidence of that run. No cause for the earlier drift is inferred."
   }
 }

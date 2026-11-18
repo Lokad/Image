@@ -10,9 +10,9 @@ font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
 [Resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) passes for
-**46 of 47** original controls on that actual package with natural GC.
-The tight working limit RGBA16 control remains uncertain at **0.905898–1.058694**
-and **70,272 B/op**. The three displayed resident decode rows use these measurements.
+**47 of 47** original controls on that actual package with natural GC.
+The tight working limit RGBA16 confirmation has an upper ratio of **0.979774**
+and **70,293 B/op**. The three displayed resident decode rows use these measurements.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -437,7 +437,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG RGBA8, one-shot stored0 / native0 † | 53.27 | 541.40 | 0.098 / 0.114 | 607,628 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † (pass) | 1,334.01 | 1,395.37 | 0.956 / 0.962890 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † (pass) | 1,240.93 | 1,505.84 | 0.824 / 0.829439 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit † (confidence open) | 2,958.97 | 2,900.14 | 1.020 / 1.058694 | 70,272 | — |
+| PNG RGBA16 decode, tight working limit † (pass) | 2,796.05 | 2,904.45 | 0.963 / 0.979774 | 70,293 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 259,795.57 | 388,008.23 | 0.670 / 0.685 | 2,491,252 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |

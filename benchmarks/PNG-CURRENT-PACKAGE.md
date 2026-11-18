@@ -1,22 +1,35 @@
 # Current-package PNG cost
 
-On the actual 0.2.1 package, 46 of 47 original resident PNG decoder controls pass.
-The tight working limit RGBA16 control remains open.
+All 47 original resident PNG decoder controls pass on the actual 0.2.1 package.
 
 | Control | Lokad.Image µs | FFmpeg µs | Ratio / conservative upper | Managed GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Original 513×259 RGBA8 PNG, resident decode | 1,192.53 | 1,396.53 | 0.854 / 0.862908 | 4,472 | Pass; stop |
 | Original RGBA8, live token | 1,334.01 | 1,395.37 | 0.956 / 0.962890 | 4,472 | Pass |
 | Original RGBA8, tight working limit | 1,240.93 | 1,505.84 | 0.824 / 0.829439 | 68,224 | Pass |
-| Original RGBA16, tight working limit | 2,958.97 | 2,900.14 | 1.020 / 1.058694 | 70,272 | Uncertain |
+| Original RGBA16, tight working limit | 2,796.05 | 2,904.45 | 0.963 / 0.979774 | 70,293 | Pass |
 
 The resumed batch captured 46 controls sequentially using one runtime and the
 same generated loops as the first resident RGBA8 confirmation. All 552 managed
 actuals and both native brackets per control are retained. In the open case,
 the managed batches move from 2.786–2.793 ms for the first two to 2.932–3.031 ms
 for the remaining ten. Native bracket means move from 2.900 to 3.118 ms.
-The conservative ratio interval is 0.905898–1.058694. Interleaved native sampling
-can test the effect of measuring the two sides at different times.
+The first conservative ratio interval is 0.905898–1.058694.
+
+The independent confirmation places a 32-operation FFmpeg sample before and
+after every managed actual, outside the managed clock. Original setup and
+cleanup brackets remain, as do managed warmups, natural GC and generated loops.
+The adjacent bracket means are 2.904452 and 2.904544 ms. The conservative
+0.935299–0.979774 interval includes the two paired log-ratio intervals and the
+filtered and all-actual confidence bounds against all four native brackets.
+The case passes and stops. The first capture remains available, and the cause
+of its drift remains unresolved. Both runs pass the exact working limit, pixel,
+cancellation, ownership and quietness gates.
+
+The mirrored confirmation archive `png-tight-word-interleaved-confirmation.tar.xz`
+contains 15 verified members and 28,588 B, SHA-256
+`66d796a6240d66e526e7a442c9c7f1e8197ccb3ade26e40dc41e6f27f5d323c1`.
+It retains all actuals, native observations and the single temporary driver.
 
 The scored iterations use natural GC. BenchmarkDotNet reports allocation in a
 separate diagnostic pass after the actuals, with its own forced collection.

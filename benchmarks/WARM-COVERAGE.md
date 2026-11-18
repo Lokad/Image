@@ -7,11 +7,11 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
 gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
-On the actual package, 46 of the 47 original resident PNG decoder controls pass
-with natural GC. The tight working limit RGBA16 control has a conservative
-interval of 0.905898–1.058694 and allocates 70,272 B/op. The native bracket shift
-and managed iteration drift motivate an interleaved comparison. All frozen
-inputs, exact pixels, resource and ownership gates passed. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
+All 47 original resident PNG decoder controls pass on the actual package with
+natural GC. Interleaved native samples resolve the tight working limit RGBA16
+control at 2,796.05 / FFmpeg 2,904.45 µs, upper 0.979774 and 70,293 B/op. All
+frozen inputs, exact pixels, resource and ownership gates passed. The earlier
+uncertain capture is retained. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
 
 [Completed nearest rows](NEAREST-ROW-REUSE.md) retains source-valid evidence:
 complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged

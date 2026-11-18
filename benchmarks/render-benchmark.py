@@ -3425,14 +3425,20 @@ costs. The complete final-package refresh remains outstanding."""
     assert png_decoders['measurementAccepted'] and png_decoders['producers'] == png_package['producers']
     assert png_decoders['raw']['mirrored'] and png_decoders['raw']['allMembersVerified']
     assert png_decoders['measuredCases'] == len(png_decoders['cases']) == 46 and not png_decoders['unresolved']
-    png_passes = 1 + png_decoders['statusCounts']['pass']
+    png_tight_word = png_decoders['tightWordConfirmation']
+    assert png_tight_word['raw']['mirrored'] and png_tight_word['raw']['allMembersVerified']
+    assert png_tight_word['status'] == 'pass' and png_tight_word['upper'] <= 1
+    assert png_decoders['cases']['DecodeTight16']['status'] == 'uncertain'
+    assert png_tight_word['inputSha256'] == png_decoders['cases']['DecodeTight16']['inputSha256']
+    assert png_tight_word['outputSha256'] == png_decoders['cases']['DecodeTight16']['outputSha256']
+    png_passes = 2 + png_decoders['statusCounts']['pass']
     png_status = {'pass': 'pass', 'gap': 'gap', 'uncertain': 'confidence open'}
     for label, name in (
         ('PNG RGBA8 decode, live token †', 'DecodeCancelable8'),
         ('PNG RGBA8 decode, tight working limit †', 'DecodeTight8'),
         ('PNG RGBA16 decode, tight working limit †', 'DecodeTight16'),
     ):
-        c = png_decoders['cases'][name]
+        c = png_tight_word if name == 'DecodeTight16' else png_decoders['cases'][name]
         assert c['librarySha256'] == png_package['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
         assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
@@ -3442,7 +3448,6 @@ costs. The complete final-package refresh remains outstanding."""
         result = (f'| {label} ({png_status[c["status"]]}) | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                   f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
         codecs = codecs.replace(old, result)
-    png_tight_word = png_decoders['cases']['DecodeTight16']
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3457,7 +3462,7 @@ ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
 [Resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) passes for
 **{png_passes} of 47** original controls on that actual package with natural GC.
-The tight working limit RGBA16 control remains uncertain at **{png_tight_word['lower']:.6f}–{png_tight_word['upper']:.6f}**
+The tight working limit RGBA16 confirmation has an upper ratio of **{png_tight_word['upper']:.6f}**
 and **{png_tight_word['allocatedBytes']:,} B/op**. The three displayed resident decode rows use these measurements.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
