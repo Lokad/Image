@@ -652,5 +652,159 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "qualifiedMarkerCoalescing": {
+    "requiredMaterialPaths": 289,
+    "newRequiredPaths": 0,
+    "producers": {
+      "baseSourceRevision": "63990308d823a336b619689327df87b626845093",
+      "sourceOverlaySha256": {
+        "src/Lokad.Image/Internal/InspectionReader.cs": "7dfac810ee81bb222837c72b4f38b4ad02b439943728b4bbc27c4ee4a4f13799",
+        "src/Lokad.Image/Internal/StreamInspection.cs": "9b51ca6c496abdd25eeba85046b320ca9739f1b863c9d62fc66d67bc7936c0b8",
+        "tests/Lokad.Image.PublicApi.Tests/ImageProbeTests.cs": "2fa67c0e2f8c45666b52c70e813a4c0efefb0ee61aa7058c656a6fc599029fca"
+      },
+      "packageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332",
+      "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e"
+    },
+    "qualification": {
+      "fullChecksEachOs": 6860,
+      "fullChecks": {
+        "windows": {
+          "internal": 3389,
+          "public": 2523,
+          "liveDifferential": 948
+        },
+        "linux": {
+          "internal": 3389,
+          "public": 2523,
+          "liveDifferential": 948
+        }
+      },
+      "focusedChecksEachOsEachMode": 195,
+      "heldReadCases": 4,
+      "sharedWorkspaceBytes": 512,
+      "retainedBytesAfterCompletion": 0,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "packageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332",
+      "consumerLibrarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+      "broadAfterAffectingComparisons": true,
+      "packageRebuiltAfterTiming": false
+    },
+    "cases": {
+      "ProbeDimensionsJpeg": {
+        "managedUs": 0.19259265277549845,
+        "nativeUs": 0.19715323193868003,
+        "ratio": 0.9768678447807538,
+        "lower": 0.9556374382892318,
+        "upper": 0.9966157622730534,
+        "status": "pass",
+        "allocatedBytes": 568,
+        "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "managedActuals": 12,
+        "nativeSamplesEachBracket": 12,
+        "subdivisionsPerUnit": 16,
+        "managedOperationsPerUnit": 974960,
+        "nativeOperationsEachBracketPerUnit": 262144,
+        "acquisitionBytes": 308,
+        "receipt": "tmp/frp1407/sync-result.json",
+        "rawGroup": "sync"
+      },
+      "ProbeDimensionsJpegAsync": {
+        "managedUs": 0.1975986677036552,
+        "nativeUs": 0.20448798274993896,
+        "ratio": 0.9663094380724149,
+        "lower": 0.9454361319391805,
+        "upper": 0.9875239685157775,
+        "status": "pass",
+        "allocatedBytes": 568,
+        "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "managedActuals": 12,
+        "nativeSamplesEachBracket": 12,
+        "subdivisionsPerUnit": 16,
+        "managedOperationsPerUnit": 3420160,
+        "nativeOperationsEachBracketPerUnit": 1048576,
+        "acquisitionBytes": 308,
+        "receipt": "tmp/frp1407/standalone-result.json",
+        "rawGroup": "standalone"
+      },
+      "JpegHeaders": {
+        "managedUs": 1.9852594655354816,
+        "nativeUs": 2.7835042521158853,
+        "ratio": 0.7132230762810524,
+        "lower": 0.6991763982100295,
+        "upper": 0.7239444436669646,
+        "status": "pass",
+        "allocatedBytes": 8768.0,
+        "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "managedActuals": 12,
+        "nativeSamplesEachBracket": 12,
+        "descriptorExact": true,
+        "eofChecked": true,
+        "independentSurvivingOutputs": true,
+        "inputUnchanged": true,
+        "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "nativeReady": {
+          "freshSeekableStream": true,
+          "inputView": false,
+          "wholeInputCopy": false
+        },
+        "receipt": "tmp/frp1407/headers/JpegHeaders-confirm.json"
+      },
+      "WebpHeaders": {
+        "managedUs": 0.12843332354227702,
+        "nativeUs": 0.28899476687113446,
+        "ratio": 0.4444140111351797,
+        "lower": 0.43145017336000063,
+        "upper": 0.4564975456677321,
+        "status": "pass",
+        "allocatedBytes": 552.0,
+        "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "managedActuals": 12,
+        "nativeSamplesEachBracket": 12,
+        "descriptorExact": true,
+        "eofChecked": true,
+        "independentSurvivingOutputs": true,
+        "inputUnchanged": true,
+        "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+        "nativeReady": {
+          "freshSeekableStream": true,
+          "inputView": false,
+          "wholeInputCopy": false
+        },
+        "receipt": "tmp/frp1407/headers/WebpHeaders-confirm.json"
+      }
+    },
+    "raw": {
+      "file": "jpeg-marker-coalescing-qualification.tar.xz",
+      "bytes": 797140,
+      "sha256": "5f0188f8b152abfa86e88b504f46d7d96044b696f02ea2145855e84bf5a95753",
+      "members": 76,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "reviewedMalformedFragment": {
+      "before": 89,
+      "after": 88,
+      "sameDataError": true,
+      "scope": "Successful prefixes, caps and ownership are contractual. Detection of an invalid marker may consume only the acquired invalid byte."
+    },
+    "unchangedEvidence": {
+      "seekablePngHeaders": "Returns through the original seek branch before the coalescing decision.",
+      "pngAndWebpDimensionProbes": "Stop before any opaque skip on the frozen inputs.",
+      "packetEncodingAndPixelDecoding": "Use separate paths from the bounded header reader."
+    }
   }
 }

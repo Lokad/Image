@@ -426,6 +426,48 @@ public sealed class ImageProbeTests
         await AssertPendingProbeOwnership(data, fail, false, holdAt);
     }
 
+    [Theory]
+    [InlineData(false, 6)] [InlineData(true, 6)]
+    [InlineData(false, 11)] [InlineData(true, 11)]
+    public async Task PendingPayloadAndMarkerReadKeepsAdmissionThroughActualReadCompletion(bool fail, int holdAt)
+    {
+        const int payloadBytes = 17;
+        const int nextMarkerEnd = 2 + 4 + payloadBytes + 2;
+        var original = OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11).Encoded;
+        byte[] data = [.. original.AsSpan(0, 2), 255, 226, 0, payloadBytes + 2, .. new byte[payloadBytes], .. original.AsSpan(2)];
+        using var root = new TestMemoryBudget(Workspace);
+        var options = new ImageProbeOptions { Limits = new() { MemoryBudget = root, MaxWorkingBytes = Workspace } };
+        using var input = new GatedProbeInput(data, fail, false, holdAt);
+        var pending = ImageCodec.ProbeAsync(input, options).AsTask();
+        try
+        {
+            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.Equal(holdAt, input.BytesRead);
+            Assert.Equal(nextMarkerEnd - holdAt, input.PendingRequestBytes);
+            Assert.False(pending.IsCompleted);
+            Assert.Equal(Workspace, root.Bytes);
+
+            using var competing = new MemoryStream(data);
+            var refusal = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.ProbeAsync(competing, options).AsTask());
+            Assert.Equal(ImageLimitScope.SharedBudget, refusal.Scope);
+            Assert.Equal(0, competing.Position);
+            Assert.Equal(Workspace, root.Bytes);
+        }
+        finally { input.Release.TrySetResult(); }
+        if (fail) await Assert.ThrowsAsync<IOException>(() => pending);
+        else
+        {
+            using var expectedInput = new ObservedInput(data, false, false);
+            Assert.Equal(ImageCodec.Probe(expectedInput), await pending);
+        }
+        Assert.Equal(0, root.Bytes);
+        Assert.False(root.IsDisposed);
+        Assert.True(input.CanRead);
+        using var next = new ObservedInput(data, true, false);
+        Assert.Equal(17, (await ImageCodec.ProbeAsync(next, options)).Width);
+        Assert.Equal(0, root.Bytes);
+    }
+
     private static async Task AssertPendingProbeOwnership(byte[] data, bool fail, bool afterFragment, int? holdAt)
     {
         using var root = new TestMemoryBudget(Workspace);
@@ -494,12 +536,14 @@ public sealed class ImageProbeTests
         private int position;
         private bool disposed;
         internal int BytesRead => position;
+        internal int PendingRequestBytes { get; private set; }
         internal readonly TaskCompletionSource Entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal readonly TaskCompletionSource Release = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             if (position == (holdAt ?? (afterFragment ? 1 : 0)))
             {
+                PendingRequestBytes = buffer.Length;
                 Entered.TrySetResult(); await Release.Task.ConfigureAwait(false);
                 if (fail) throw new IOException("Authored pending probe failure.");
             }

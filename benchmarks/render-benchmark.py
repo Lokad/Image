@@ -855,30 +855,27 @@ def jpeg_pending_publication_stage():
     return stage
 
 
-def jpeg_probe_longer_integration_stage(qualified):
-    stage = json.loads((ROOT / 'benchmarks/jpeg-probe-longer-integration-evidence.json').read_text(encoding='utf-8'))
-    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+def jpeg_marker_coalescing_stage():
+    stage = json.loads((ROOT / 'benchmarks/probe-refill-input-bound-trial-evidence.json').read_text(encoding='utf-8'))
+    stage = stage['qualifiedMarkerCoalescing']
     assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
-    assert stage['producers'] == qualified['producers'] and all(stage['sourceProof'].values())
-    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and stage['unchangedCaseCapturesStopped']
-    c, spec, q = stage['case'], stage['integration'], stage['qualification']
-    assert c['librarySha256'] == stage['producers']['timedArtifactSha256']
-    assert c['managedActuals'] == c['nativeSamplesEachBracket'] == c['allActualStatistics']['n'] == 12
-    assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained'] and c['rawOverheadIncluded']
-    assert c['allocatedBytes'] == 568 and c['subdivisionsEachStatisticalUnit'] == 16
-    assert c['managedOperationsPerUnit'] == spec['managedOperationsPerUnit'] == 3420160
-    assert c['nativeOperationsPerUnitEachBracket'] == spec['nativeOperationsEachBracketPerUnit'] == 1048576
-    assert spec['multiplier'] == 4 and spec['originalManagedWarmupOperations'] == 855040
-    assert spec['originalNativeWarmupOperationsEachBracket'] == 262144 and spec['originalWholeWarmups'] == 3
-    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    assert c['upper'] >= c['allActualUpper'] and math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert all(stage['preflights'].values()) and stage['receipt']['allSubdivisionCountsAndAggregationVerified']
-    assert stage['receipt']['originalWarmupCountsRetained'] and stage['receipt']['statisticalUnitsUnchanged']
-    assert q['reusedForUnchangedProduction'] and q['fullChecksEachOs'] == 6844 and q['newBroadOrPackageChecks'] == 0
-    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
-    assert q['packageSha256'] == stage['producers']['packageSha256']
-    assert stage['builds'] == {'smallOrchestrationDriver': 1, 'productionHarnessNativeFixtureOriginalLoopPackage': 0}
-    return stage
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    producer, q = stage['producers'], stage['qualification']
+    assert q['fullChecksEachOs'] == 6860 and q['focusedChecksEachOsEachMode'] == 195
+    assert q['sameActualPackageBothOs'] and q['usageExamplesEachOs'] == 3
+    assert q['packageSha256'] == producer['packageSha256']
+    assert q['consumerLibrarySha256'] == producer['librarySha256']
+    expected_allocations = {'ProbeDimensionsJpeg': 568, 'ProbeDimensionsJpegAsync': 568,
+                            'JpegHeaders': 8768, 'WebpHeaders': 552}
+    assert set(stage['cases']) == set(expected_allocations)
+    for name, case in stage['cases'].items():
+        assert case['librarySha256'] == producer['librarySha256']
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
+        assert case['status'] == 'pass' and case['upper'] <= 1
+        assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
+        assert case['allocatedBytes'] == expected_allocations[name]
+        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+    return stage['cases']
 
 
 def text_scan_band_stage():
@@ -3068,10 +3065,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert jpeg_markers['raw']['mirrored'] and jpeg_markers['raw']['allMembersVerified']
     assert all(jpeg_markers['sourceProof'].values())
     jpeg_pending = jpeg_pending_publication_stage()
-    probe_owner['cases'].update({name: c for name, c in jpeg_pending['cases'].items() if name.startswith('Probe')})
-    probe_integration = jpeg_probe_longer_integration_stage(jpeg_pending)
-    current_async_probe = probe_integration['case']
-    probe_owner['cases']['ProbeDimensionsJpegAsync'] = current_async_probe
+    current_inspection = jpeg_marker_coalescing_stage()
+    probe_owner['cases'].update({name: c for name, c in current_inspection.items() if name.startswith('Probe')})
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         provider = probe_owner
         if case in provider['cases']:
@@ -3366,10 +3361,8 @@ costs. The complete final-package refresh remains outstanding."""
     assert entropy['case']['status'] == 'pass' and entropy['case']['allocatedBytes'] == 8768
     for case, label in [('JpegHeaders', 'Complete JPEG headers, fresh source / FFmpeg AVIO adapter'),
                         ('WebpHeaders', 'Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter')]:
-        c = jpeg_pending['cases'][case] if case == 'JpegHeaders' else header_reference['cases'][case]
-        producer = jpeg_pending if case == 'JpegHeaders' else header_reference
-        assert c['librarySha256'] == producer['producers']['linuxSha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
+        c = current_inspection[case]
+        assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12
         assert all(c[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'descriptorExact', 'eofChecked',
                                  'independentSurvivingOutputs', 'inputUnchanged'))
         assert c['nativeReady']['freshSeekableStream'] and not c['nativeReady']['inputView'] and not c['nativeReady']['wholeInputCopy']
@@ -3864,7 +3857,8 @@ Three separate/clipped copy comparisons use the pending-publication package with
 corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
-JPEG stream probes and complete headers use the pending-publication package.
+JPEG dimension probes and complete JPEG and WebP headers use the qualified
+marker-coalescing package.
 [Resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) passes for
 **{png_passes} of 47** original controls on that actual package with natural GC.
 The tight working limit RGBA16 confirmation has an upper ratio of **{png_tight_word['upper']:.6f}**
@@ -4120,26 +4114,12 @@ suspension construction outside immediate parsing. Final complete async-probe
 pairs save **{jpeg_pending['pairedEffect']['elapsedReduction']:.2%} /
 {jpeg_pending['pairedEffect']['savedUs']*1000:.2f} ns**, without a uniform or cumulative
 gain claim. JPEG sync now passes/stops (upper
-**{jpeg_pending['cases']['ProbeDimensionsJpeg']['upper']:.3f}**). Async remains uncertain after
-[one longer integration](../benchmarks/JPEG-PROBE-LONGER-INTEGRATION.md):
-**{current_async_probe['managedUs']:.3f}/{current_async_probe['nativeUs']:.3f} µs, upper
-{current_async_probe['upper']:.3f}**. Both actual counts increase fourfold; original
-warmups, twelve units/group, sixteen subdivisions and every observation remain.
-Its adverse wider interval is retained; unchanged-case captures stop.
-Complete headers pass; their slower historical point is retained, while the matched
-original-worker guard is neutral/inconclusive. No favorable recapture follows.
-Immediate probes/header calls allocate **568/8,768 B**. Original compiled loops,
-every observation and descriptor/source/owner gates remain.
-The immediate parser frame shrinks **1,080→472 B**; this is not a whole-operation
-physical peak. Admission stays **512/8,448 B**, with no new retained workspace.
-Gated-read diagnostics stay **1,960/9,984 B**, including equal delivery/bridge/batch
-overhead, not standalone production allocation. Each OS passes **6,844 full/live
-checks**, **11 internal/182 public** normal/scalar checks and the SAME actual
-package/three examples, without rebuilding the timed DLL. Unchanged PNG/WebP
-probes/header and other families retain their identified evidence; the final
-complete package refresh remains pending. [Earlier owner work](../benchmarks/PROBE-OWNER-COMPLETION.md)
-and [reference interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
-retain history.
+**{current_inspection['ProbeDimensionsJpeg']['upper']:.3f}** on the current package).
+The [async JPEG confirmation](../benchmarks/JPEG-PROBE-LONGER-INTEGRATION.md#release-package-confirmation)
+passes at **{current_inspection['ProbeDimensionsJpegAsync']['managedUs']:.3f}/{current_inspection['ProbeDimensionsJpegAsync']['nativeUs']:.3f} µs**,
+upper **{current_inspection['ProbeDimensionsJpegAsync']['upper']:.3f}**, with **568 B/op**.
+Coalescing the end of an opaque payload with its next marker removes three reads
+on the frozen forward-only input and retains the exact 308-byte prefix.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **{resident_png['cases']['identify/Png8']['managedUs']:.3f} / FFmpeg adapter
 {resident_png['cases']['identify/Png8']['nativeUs']:.3f} µs**, conservative upper

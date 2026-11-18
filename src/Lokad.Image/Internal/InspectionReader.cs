@@ -146,7 +146,7 @@ internal class InspectionReader : OperationContext, IDisposable
         first += n; return n;
     }
 
-    internal ValueTask SkipAsync(long count)
+    internal ValueTask SkipAsync(long count, bool nextJpegMarker = false)
     {
         if (count < 0) throw new ImageDataException("Invalid image payload length.");
         Context.Cancellation.ThrowIfCancellationRequested();
@@ -164,24 +164,38 @@ internal class InspectionReader : OperationContext, IDisposable
             return ValueTask.CompletedTask;
         }
         bulk = true;
+        // Only this bounded JPEG probe consumes the following marker immediately.
+        // A live token retains the original boundary between the two acquisitions.
+        var mergeMarker = nextJpegMarker && directFields && asynchronous && !Context.Cancellation.CanBeCanceled;
         while (count != 0)
         {
-            var pending = FillAsync((int)Math.Min(count, buffer.Length));
-            if (!pending.IsCompletedSuccessfully) return AwaitSkipForwardAsync(count, pending);
+            var pending = FillAsync(SkipReadSize(count, mergeMarker));
+            if (!pending.IsCompletedSuccessfully) return AwaitSkipForwardAsync(count, pending, mergeMarker);
             if (!pending.Result) throw new ImageDataException("Truncated image payload.");
             var n = (int)Math.Min(count, last); first = n; count -= n;
         }
         return ValueTask.CompletedTask;
     }
 
-    private async ValueTask AwaitSkipForwardAsync(long count, ValueTask<bool> pending)
+    private int SkipReadSize(long count, bool mergeMarker)
+    {
+        if (mergeMarker && count < buffer.Length)
+        {
+            // Match the following marker read and its encoded-input sentinel.
+            var markerBytes = Context.Limits.MaxInputBytes - acquired - count >= 2 ? 2 : 1;
+            if (count + markerBytes <= buffer.Length) return (int)count + markerBytes;
+        }
+        return (int)Math.Min(count, buffer.Length);
+    }
+
+    private async ValueTask AwaitSkipForwardAsync(long count, ValueTask<bool> pending, bool mergeMarker)
     {
         while (true)
         {
             if (!await pending.ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
             var n = (int)Math.Min(count, last); first = n; count -= n;
             if (count == 0) return;
-            pending = FillAsync((int)Math.Min(count, buffer.Length));
+            pending = FillAsync(SkipReadSize(count, mergeMarker));
         }
     }
 

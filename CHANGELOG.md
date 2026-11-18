@@ -10,6 +10,8 @@
   the default, with container, checksum and pixel checks preserved.
 - Read complete stream inputs directly into admitted capacity, removing staging
   copies and sharing acquisition across inspection and decoding.
+- Combine the end of skipped JPEG segments and the following marker read in
+  eligible async dimension probes, with the same bounded workspace.
 - Reuse released image storage with up to four arrays within the existing 4 MiB
   ceiling. Codec-local pools keep two slots; caller budgets retain explicit
   admission and ownership.

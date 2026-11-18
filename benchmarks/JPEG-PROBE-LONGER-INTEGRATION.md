@@ -122,11 +122,45 @@ The 1,006-case read audit preserves successful descriptors and prefix
 lengths, cap failures, and the tested live-token and seekable traces.
 One malformed input delivered in three-byte fragments raises the same
 data error after consuming 88 bytes instead of 89. Both Windows modes
-pass 191 focused tests. The private result supplies a passing comparison
-for the candidate DLL. Production acceptance still requires a gated
-pending-read ownership check, reconciliation of the affected inspection
-paths, and confirmation on the actual Release package.
+pass 191 focused tests. The Release package confirmation below adds the
+pending-read ownership checks and reconciles affected inspection paths.
 [Immutable builds, delivery traces, guards and results](probe-refill-input-bound-trial-evidence.json)
+
+### Release package confirmation
+
+The staged 0.2.1 Release package `d52e53f2` supplied the same DLL `6ac84ac6`
+for all four complete operations on the quiet VM. The original inputs,
+FFmpeg AVIO adapters, descriptor ownership and timing boundaries remain in use.
+
+| Operation | Lokad.Image / reference µs | Conservative upper | Allocated B/op |
+| --- | ---: | ---: | ---: |
+| Synchronous JPEG dimension probe | 0.192593 / 0.197153 | 0.996616 | 568 |
+| Asynchronous JPEG dimension probe | 0.197599 / 0.204488 | 0.987524 | 568 |
+| Complete JPEG headers | 1.985259 / 2.783504 | 0.723944 | 8,768 |
+| Complete WebP headers | 0.128433 / 0.288995 | 0.456498 | 552 |
+
+Each comparison retains 12 managed actuals and every reference bracket.
+All four pass the existing parity gate. The async run preserves the longer
+integration cadence, and the sync run preserves its original cadence. The new
+read applies only to dimension-only, nonseekable asynchronous probing without
+a cancelable token, before JPEG entropy scanning. The seekable skip exits before
+the new branch, including on the previously confirmed complete PNG workload.
+Successful acquisitions match the exact 308-byte prefix and descriptor.
+On the malformed fragmented control, the caller sees the same data error after
+88 bytes. The documented bound covers successful prefixes, actual counts and
+maximum acquisition. It permits earlier rejection of an invalid marker.
+
+Four held-read cases suspend the merged request at the start and after a partial
+delivery. Both completion and fault keep the full 512 B of admitted workspace
+charged while the read is pending, refuse a competing operation before acquisition,
+and release admission when the read finishes. There is no retained probe storage.
+These are cooperative admission and managed allocation figures. Physical and
+native peaks were outside the measurement.
+
+Windows and Linux each pass 6,860 full and live checks, 195 focused checks per
+normal/scalar mode, and the same actual package consumer with all three usage
+examples. The verified package DLL was used for timing and consumer qualification.
+[Package, raw observations and reproduction identities](probe-refill-input-bound-trial-evidence.json)
 
 ## Unchanged operation and gates
 

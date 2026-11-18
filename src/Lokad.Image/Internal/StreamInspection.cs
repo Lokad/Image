@@ -353,7 +353,8 @@ internal static class StreamInspection
         goto Skip;
 
     Skip:
-        if (!CompleteJpegOperation(r.SkipAsync(state.End - r.Position), JpegResume.Start, ref state, ref pending)) return false;
+        if (!CompleteJpegOperation(r.SkipAsync(state.End - r.Position, nextJpegMarker: !state.Scan),
+            JpegResume.Start, ref state, ref pending)) return false;
         goto NextMarker;
 
     End:
