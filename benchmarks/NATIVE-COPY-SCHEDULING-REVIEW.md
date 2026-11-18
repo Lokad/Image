@@ -200,3 +200,22 @@ reproduces the visual, source and disposal checks. The same frozen driver
 uses its check mode for both depths, with zero reference samples or builds.
 The existing timing confirmations still apply to these unchanged text paths.
 [Original receipts and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Authored fonts and default variation package bindings
+
+All five authored controls pass on package `87f1ae4a` with their pinned
+source-corrected public reference. The three layout controls use the
+original layout runtime. The two clipped render controls use the later
+qualified raster runtime and reset both canvases before each draw. Exact
+managed output, frozen reference results, nine public layout calls, two
+tab rounds, and ownership checks remain in place.
+
+Default variation passes separately using its original stock public
+reference. Retained font-prefix charges for layout cases match the encoded
+table extents. Render peaks match the later raster qualification receipts
+at **579,496 / 1,110,964 B** for RGBA8/16. Earlier preparation receipts
+describe the former full-font copies and older raster workspace. Every
+managed layout survives face disposal, and the shared budget returns to
+zero after its final owner is disposed. All twelve checks use original
+check modes, with no timed captures, rebuilt tooling, or new workload.
+[Original and current receipts with member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

@@ -1405,5 +1405,108 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "nativeArrayPlacementDiagnostic": {
+    "originalReferenceSha256": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c",
+    "quietVmL1DataCache": {
+      "size": "48K",
+      "coherency_line_size": "64",
+      "number_of_sets": "64",
+      "ways_of_associativity": "12"
+    },
+    "scoredCaptures": 0,
+    "sampleCommands": 0,
+    "nativeLaunchesPerCase": 3,
+    "exactOriginalReadyAndOutput": true,
+    "observedNativeAddressModels": {
+      "OriginalClippedCopy8": {
+        "sourcePageOffset": 16,
+        "canvasPageOffset": 16,
+        "firstRowBytePhases": [
+          28,
+          36
+        ],
+        "sourceCacheLinesTouched": 2169,
+        "canvasCacheLinesTouched": 2169,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      },
+      "DrawingCopy8": {
+        "sourcePageOffset": 16,
+        "canvasPageOffset": 16,
+        "firstRowBytePhases": [
+          16,
+          32
+        ],
+        "sourceCacheLinesTouched": 2185,
+        "canvasCacheLinesTouched": 2185,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      },
+      "DrawingCopy16": {
+        "sourcePageOffset": 16,
+        "canvasPageOffset": 16,
+        "firstRowBytePhases": [
+          16,
+          48
+        ],
+        "sourceCacheLinesTouched": 4241,
+        "canvasCacheLinesTouched": 4241,
+        "maxLinesInOneL1SetPerSixteenRows": 32
+      }
+    },
+    "separateByteManagedModels": [
+      {
+        "sourcePageOffset": 1640,
+        "canvasPageOffset": 2392,
+        "firstRowBytePhases": [
+          40,
+          40
+        ],
+        "sourceCacheLinesTouched": 2185,
+        "canvasCacheLinesTouched": 2185,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      },
+      {
+        "sourcePageOffset": 1640,
+        "canvasPageOffset": 1928,
+        "firstRowBytePhases": [
+          40,
+          24
+        ],
+        "sourceCacheLinesTouched": 2185,
+        "canvasCacheLinesTouched": 2185,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      },
+      {
+        "sourcePageOffset": 1640,
+        "canvasPageOffset": 976,
+        "firstRowBytePhases": [
+          40,
+          32
+        ],
+        "sourceCacheLinesTouched": 2185,
+        "canvasCacheLinesTouched": 2185,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      },
+      {
+        "sourcePageOffset": 1640,
+        "canvasPageOffset": 24,
+        "firstRowBytePhases": [
+          40,
+          40
+        ],
+        "sourceCacheLinesTouched": 2185,
+        "canvasCacheLinesTouched": 2185,
+        "maxLinesInOneL1SetPerSixteenRows": 16
+      }
+    ],
+    "limitations": "Static line footprint from low address bits and exact original geometry. Allocation instrumentation changes launch conditions. No cache miss, cycle, or causality claim.",
+    "raw": {
+      "file": "copy-allocator-placement-probe.tar.xz",
+      "bytes": 16088,
+      "sha256": "4487e18e04b161ab824f1c09a63883e5448b1d5343f259540795e73263d0621d",
+      "members": 18,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

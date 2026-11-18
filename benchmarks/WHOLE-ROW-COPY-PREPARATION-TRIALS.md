@@ -877,3 +877,23 @@ Both complete managed calls reproduce the frozen results. The shared backings
 are a diagnostic setup. The standalone FFmpeg comparisons keep their existing
 scores. Choose a distinct source of removable work before another copy trial.
 [Paired timings, placement results and verification evidence](copy-vector-width-trials-evidence.json)
+
+## Native array placement and cache-line footprint
+
+Three untimed launches per open copy case use the frozen FFmpeg worker.
+A diagnostic allocator shim delegates to glibc and records only the low
+12 address bits of the original allocations. Both borrowed buffers start
+at byte 16 of a page in all nine launches. The worker output hashes and
+original readiness records match. The worker receives no sample commands.
+
+The clipped RGBA8 copy starts at cache-line offsets 28 and 36 in the
+source and destination. Separate RGBA8 starts at 16 and 32, and separate
+RGBA16 at 16 and 48. The four previously observed managed placements for
+separate RGBA8 have different starting offsets but touch the same
+**2,185 cache lines per buffer** as the native control. A 16-row window
+also reaches the same maximum of **16 addressed lines in one L1 set**.
+This describes the addressed footprint. It gives no cache-miss count,
+instruction split count, or causal explanation of the placement timings.
+Keep the scored comparisons and the existing scope. A future alignment
+trial needs a more specific transfer mechanism than the total footprint.
+[Frozen geometry, allocation records and model evidence](copy-vector-width-trials-evidence.json)
