@@ -3580,6 +3580,28 @@ costs. The complete final-package refresh remains outstanding."""
     assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
+    bilinear_package = json.loads((ROOT / 'benchmarks/bilinear-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear_package['producers'] == word_qualification
+    assert bilinear_package['raw']['mirrored'] and bilinear_package['raw']['allMembersVerified']
+    assert not bilinear_package['productionChanged'] and bilinear_package['newRequiredPaths'] == 0
+    bilinear_cases = bilinear_package['cases']
+    bilinear_labels = {
+        'Up8': 'Bilinear upscale RGBA8 † → 1027×519',
+        'Down8': 'Bilinear resize RGBA8 † → 256×129',
+        'Down16': 'Bilinear resize RGBA16 † → 256×129',
+    }
+    assert bilinear_cases.keys() == bilinear_labels.keys()
+    for name, label in bilinear_labels.items():
+        c = bilinear_cases[name]
+        assert c['librarySha256'] == word_qualification['linuxSha256'] and c['actuals'] == c['nativeSamplesEach'] == 12
+        assert all(c[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                                      'managedExact', 'independentOwnedOutput'))
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        old, = (line for line in editing.splitlines() if line.startswith(f'| {label} |'))
+        status = '' if c['status'] == 'pass' else f' ({png_status[c["status"]]})'
+        result = (f'| {label}{status} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} |')
+        editing = editing.replace(old, result)
     prepared_current = json.loads((ROOT / 'benchmarks/bicubic-prepared-current-package-evidence.json').read_text(encoding='utf-8'))
     assert prepared_current['producers'] == word_qualification
     assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in prepared_current['archives'])
@@ -3791,6 +3813,10 @@ close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} 
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
+[Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
+the RGBA8 enlargement and RGBA16 reduction. The RGBA8 reduction remains
+**{bilinear_cases['Down8']['status']}**, upper **{bilinear_cases['Down8']['upper']:.6f}**.
+All three original comparisons retain the prepared FFmpeg graph boundary.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.
 [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)

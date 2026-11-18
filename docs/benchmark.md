@@ -33,6 +33,10 @@ close the tight 128×64 RGBA16 gap at **405.66 /
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
+[Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
+the RGBA8 enlargement and RGBA16 reduction. The RGBA8 reduction remains
+**uncertain**, upper **1.007839**.
+All three original comparisons retain the prepared FFmpeg graph boundary.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.
 [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
@@ -546,11 +550,11 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Bilinear upscale RGBA8 † → 1027×519 | 1,964.35 | 1,990.85 | 0.987 / 0.992 | 102,891 |
+| Bilinear upscale RGBA8 † → 1027×519 | 1,967.04 | 1,994.67 | 0.986 / 0.993357 | 102,891 |
 | Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | 1,847.74 | 2,024.23 | 0.913 / 0.944044 | 4,498,558 |
 | Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
-| Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
-| Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
+| Bilinear resize RGBA8 † → 256×129 (confidence open) | 384.01 | 387.09 | 0.992 / 1.007839 | 8,473 |
+| Bilinear resize RGBA16 † → 256×129 | 412.89 | 419.04 | 0.985 / 0.991838 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 490.21 | 576.13 | 0.851 / 0.862076 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 350.31 | 990.90 | 0.354 / 0.357 | 198,455 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 279.83 | 346.38 | 0.808 / 0.819148 | 137 |
