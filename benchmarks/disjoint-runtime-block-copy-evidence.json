@@ -1,0 +1,58 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "baselineLibrarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+  "baselinePackageSha256": "d873438fb8c74e3a84fef380ae1d04d09a6f553f95fccbe3726ecb7622401812",
+  "candidateLinuxSha256": "1681986552860c3c4068254ecb13a0adbadef5e18948231eeb78ee63b888c626",
+  "codegen": {
+    "methodBytes": 187,
+    "sampleCommands": 0,
+    "copyInstructions": [
+      "E824F917FF           call     CORINFO_HELP_MEMCPY",
+      "FF151DBA0F01         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF158E07FBFF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]"
+    ],
+    "codegenSha256": "6b3e85ea11dc930bd4cf80c7fc44c8a8545fec9c3388ac86fe489a28c79e41a9"
+  },
+  "cases": {
+    "OriginalClippedCopy8": {
+      "result": {
+        "ratio": 1.0018599782957327,
+        "lower": 0.9386981006662837,
+        "upper": 1.0692718089003137,
+        "allocatedBytes": 0,
+        "actuals": 3,
+        "operationsPerActual": 65536
+      },
+      "baselineUs": 2.1143406778971356,
+      "candidateUs": 2.1182513885498047,
+      "allOriginalGatesPassed": true,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true
+    },
+    "DrawingCopy8": {
+      "result": {
+        "ratio": 1.020766593421285,
+        "lower": 1.0020350075045636,
+        "upper": 1.0398483390712772,
+        "allocatedBytes": 0,
+        "actuals": 3,
+        "operationsPerActual": 65536
+      },
+      "baselineUs": 1.965311787923177,
+      "candidateUs": 2.006125188191732,
+      "allOriginalGatesPassed": true,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true
+    }
+  },
+  "raw": {
+    "file": "disjoint-runtime-block-copy-screen.tar.xz",
+    "sha256": "2caf04f5830fc60cf6dbe7150bc85eee7124a3a69c44ffcedc64dc730a097818",
+    "bytes": 1216056,
+    "members": 35,
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

@@ -490,3 +490,30 @@ qualification in place. No new required cases.
 
 The mirrored `end-anchored-copy-screen.tar.xz` retains 32 verified members and
 1,215,804 B, SHA-256 `7b5912ebcc236b52e9bb548ad26e8ad63f7e7bd8fd83ca631770d25b5268b8a2`.
+
+## Disjoint runtime block-copy screen
+
+The private block-copy variant showed no measurable clipped RGBA8 gain and
+slowed separate RGBA8 in the short screen. Clipped RGBA8 measured **2.114341
+→ 2.118251 µs**, interval **0.938698–1.069272**. Separate RGBA8 measured
+**1.965312 → 2.006125 µs**, interval **1.002035–1.039848**. Both original
+complete operations allocate 0 B/op. Keep the qualified implementation and
+the original reference gaps.
+
+Two checked row slices bound managed references passed to
+`Unsafe.CopyBlockUnaligned`. This replaces the explicit vector schedule for
+the proposed separate-buffer route and leaves one cancellation poll per row.
+The 187-byte helper calls `CORINFO_HELP_MEMCPY` once per row. This differs
+from the earlier full-row Span.CopyTo trial, which invokes SpanHelpers.Memmove.
+There is no new allocation or ownership mechanism.
+
+The dedicated quiet VM uses three alternating 65,536-operation pairs per
+case. The actual package supplies the baseline. The immutable managed
+candidate passes the original exact frame, hidden RGB, alpha, source and
+borrowed-owner checks with the same native worker. All samples and both
+idle guards pass. One private core build and a separate unscored codegen
+run precede the pairs. The prototype stays private.
+[Screen evidence](disjoint-runtime-block-copy-evidence.json)
+
+The mirrored `disjoint-runtime-block-copy-screen.tar.xz` retains 35 verified members and
+1,216,056 B, SHA-256 `2caf04f5830fc60cf6dbe7150bc85eee7124a3a69c44ffcedc64dc730a097818`.
