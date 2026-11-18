@@ -21,7 +21,8 @@
   histogram workspace reuse, SIMD kernels and bounded entropy processing.
 - Share resizing geometry, row scheduling and exact-result certification across
   byte/word, scalar/SIMD and bounded-workspace paths, including shared Lanczos
-  output-row execution without additional workspace.
+  output-row execution without additional workspace. Bounded RGBA16 bicubic reduction
+  reuses compact paired coefficients within its existing workspace.
 - Improve full-precision drawing, rectangle copies, text rasterization and
   transpose operations, preserving clipping, overlap and independent ownership.
   Rectangle copies prepare bulk execution once and use bounded vector ends;

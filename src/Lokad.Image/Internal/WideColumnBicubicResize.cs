@@ -120,7 +120,11 @@ internal static partial class WideColumnBicubicResize
             }
             var sourceCount = offsets[(length - 1) * taps + counts[length - 1] - 1] + 1;
             if (taps == 17)
+            {
                 BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 17, 16, 4, context.Cancellation);
+                if (word)
+                    PrepareWordWeights(weights, offsets, counts[..length], MemoryMarshal.Cast<Vector256<double>, double>(decoded));
+            }
             rowIds.Fill(-1);
             for (var y = typeof(TWidth) == typeof(TailColumns) ? firstTailRow : 0;
                 y < (typeof(TWidth) == typeof(RowLoanColumns) ? firstTailRow : result.Height); y++)
@@ -209,8 +213,9 @@ internal static partial class WideColumnBicubicResize
                         if (columns == 4 && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
                         {
                             var firstPixel = offsets[x * taps + 16] - 1;
-                            var pair = BicubicMath.FilterOverlappingHorizontalPair(
-                                decoded.Slice(firstPixel, 20), weights0, weights1, 16, 4);
+                            var pair = word
+                                ? FilterPreparedWordPair(decoded.Slice(firstPixel, 20), weights.Slice(x * 17, 32))
+                                : BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(firstPixel, 20), weights0, weights1, 16, 4);
                             cache[slot * columns + x] = pair.GetLower();
                             cache[slot * columns + x + 1] = pair.GetUpper();
                             continue;
@@ -266,10 +271,10 @@ internal static partial class WideColumnBicubicResize
                         if (!TryWriteWordPair(sum, n0, n1, destination.Slice((tile + outputX) * 8, 16)))
                         {
                             if (!(n0 >= .5 && n1 >= .5 && sum.GetElement(3) / n0 >= 2 && sum.GetElement(7) / n1 >= 2)
-                                || !OriginalWord(source, result, tile + outputX, y, weights.Slice(outputX * taps, counts[outputX]),
-                                    offsets.Slice(outputX * taps, counts[outputX]), sourceFirst, vertical[..count], first, context)
-                                || !OriginalWord(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * taps, counts[outputX + 1]),
-                                    offsets.Slice((outputX + 1) * taps, counts[outputX + 1]), sourceFirst, vertical[..count], first, context)) return false;
+                                || !TryRepairWordPair(source, result, tile + outputX, y,
+                                    weights.Slice(outputX * taps, 2 * taps), offsets.Slice(outputX * taps, 2 * taps),
+                                    counts.Slice(outputX, 2), taps, sourceFirst, vertical[..count], first,
+                                    MemoryMarshal.Cast<Vector256<double>, double>(decoded), context)) return false;
                         }
                     }
                     else if (typeof(TSamples) == typeof(ByteSamples) && !TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
@@ -305,6 +310,87 @@ internal static partial class WideColumnBicubicResize
             }
         }
         context.Cancellation.ThrowIfCancellationRequested();
+        return true;
+    }
+
+    internal static void PrepareWordWeights(Span<double> weights, ReadOnlySpan<byte> offsets,
+        ReadOnlySpan<int> counts, Span<double> scratch)
+    {
+        scratch = scratch[..32];
+        for (var x = 0; x + 1 < counts.Length; x += 2)
+        {
+            var at = x * 17;
+            if (counts[x] != 16 || counts[x + 1] != 16 || offsets[at + 16] == 0) continue;
+            // One eight-double load supplies four taps from each column.
+            for (var tap = 0; tap < 16; tap += 2)
+            {
+                scratch[tap * 2] = weights[at + tap];
+                scratch[tap * 2 + 1] = weights[at + tap + 1];
+                scratch[tap * 2 + 2] = weights[at + 17 + tap];
+                scratch[tap * 2 + 3] = weights[at + 17 + tap + 1];
+            }
+            scratch.CopyTo(weights.Slice(at, 32));
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector512<double> FilterPreparedWordPair(ReadOnlySpan<Vector256<double>> decoded,
+        ReadOnlySpan<double> weights)
+    {
+        var pairs = MemoryMarshal.Cast<Vector256<double>, Vector512<double>>(decoded[..20]);
+        var groups = MemoryMarshal.Cast<double, Vector512<double>>(weights[..32]);
+        var first = pairs[0];
+        var second = pairs[1];
+        var sum = Vector512<double>.Zero;
+        for (var group = 0; group < 4; group++)
+        {
+            var coefficients = groups[group];
+            var third = pairs[group * 2 + 2];
+            var fourth = pairs[group * 2 + 3];
+            var even = Avx512F.Shuffle4x128(first, third, 0x44);
+            var odd = Avx512F.Shuffle4x128(first, third, 0xee);
+            var evenWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(0L, 0, 0, 0, 2, 2, 2, 2));
+            var oddWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(1L, 1, 1, 1, 3, 3, 3, 3));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
+            even = Avx512F.Shuffle4x128(second, fourth, 0x44);
+            odd = Avx512F.Shuffle4x128(second, fourth, 0xee);
+            evenWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(4L, 4, 4, 4, 6, 6, 6, 6));
+            oddWeights = Avx512F.PermuteVar8x64(coefficients, Vector512.Create(5L, 5, 5, 5, 7, 7, 7, 7));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(even, evenWeights));
+            sum = Avx512F.Add(sum, Avx512F.Multiply(odd, oddWeights));
+            first = third;
+            second = fourth;
+        }
+        return sum;
+    }
+
+    internal static void RestoreWordWeights(ReadOnlySpan<double> prepared, int lane, Span<double> replay)
+    {
+        for (var tap = 0; tap < 16; tap++)
+            replay[tap] = prepared[(tap & ~1) * 2 + lane * 2 + (tap & 1)];
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool TryRepairWordPair(ImageBuffer source, ImageBuffer result, int x, int y,
+        ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, ReadOnlySpan<int> counts, int taps,
+        int sourceFirst, ReadOnlySpan<double> vertical, int firstY, Span<double> scratch, OperationContext context)
+    {
+        var prepared = taps == 17 && counts[0] == 16 && counts[1] == 16 && offsets[16] != 0;
+        for (var lane = 0; lane < 2; lane++)
+        {
+            var count = counts[lane];
+            ReadOnlySpan<double> original = weights.Slice(lane * taps, count);
+            if (prepared)
+            {
+                // All horizontal users have finished for this output row.
+                // A later cache miss overwrites the decoded scratch.
+                RestoreWordWeights(weights, lane, scratch);
+                original = scratch[..16];
+            }
+            if (!OriginalWord(source, result, x + lane, y, original, offsets.Slice(lane * taps, count),
+                sourceFirst, vertical, firstY, context)) return false;
+        }
         return true;
     }
 

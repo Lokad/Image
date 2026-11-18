@@ -3585,6 +3585,12 @@ costs. The complete final-package refresh remains outstanding."""
     bounded_wide = bicubic_package['boundedWide']
     assert bounded_wide['producers'] == png_package['producers']
     assert bounded_wide['raw']['mirrored'] and bounded_wide['raw']['allMembersVerified']
+    compact_word = bicubic_package['boundedWideWordPreparation']
+    assert compact_word['affectedRequiredPaths'] == ['TightWide16'] and compact_word['newRequiredPaths'] == 0
+    assert compact_word['raw']['mirrored'] and compact_word['raw']['allMembersVerified']
+    word_qualification = compact_word['qualification']
+    assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
+    assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases']}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3599,7 +3605,13 @@ costs. The complete final-package refresh remains outstanding."""
         if name == 'Down8':
             assert all(adjacent[key] == c[key] for key in ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256'))
             c = {**c, **adjacent}
-        assert c['librarySha256'] == png_package['producers']['linuxSha256']
+        if name == 'TightWide16':
+            assert all(compact_word['case'][key] == c[key] for key in
+                       ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
+            c = compact_word['case']
+            assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
+        else:
+            assert c['librarySha256'] == png_package['producers']['linuxSha256']
         assert len(c['actualOperationCounts']) == 12
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
@@ -3686,8 +3698,10 @@ and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
 [Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
 the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
-RGBA16 directions. With 4 KiB of workspace at 128×64, RGBA16 is a gap and RGBA8
-remains uncertain against the prepared zimg reference.
+RGBA16 directions. Compact horizontal coefficients close the tight 128×64
+RGBA16 gap on the new actual package at **{compact_word['case']['managedUs']:.2f} /
+{compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**
+and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

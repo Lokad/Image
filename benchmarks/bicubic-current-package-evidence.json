@@ -820,5 +820,101 @@
       "wordQuotientAndBoundBlockSamples": 352,
       "wordCertificatePackingBlockSamples": 168
     }
+  },
+  "boundedWideWordPreparation": {
+    "raw": {
+      "file": "bicubic-compact-word-weights-qualified.tar.xz",
+      "bytes": 1893128,
+      "sha256": "0415a9a2b9ceb5dbeb6df769b214ba9988f89c33d99f64c2d6b713d7409f45b6",
+      "members": 50,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "affectedRequiredPaths": [
+      "TightWide16"
+    ],
+    "newRequiredPaths": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "4715c17720161bc6f4954a4e8a9258b27652f98dce4132c16ecb851461ec4420",
+      "tests/Lokad.Image.Tests/WideWordWeightsTests.cs": "67726f5e0edd7c54dccecb9471e8aa7f3e9a38e0af1e7f5a3a13ea9314523bf2"
+    },
+    "prototypePaired": {
+      "baselineUs": 433.95669921875,
+      "candidateUs": 417.6389817708333,
+      "savedUs": 16.317717447916664,
+      "normalizedLower": 0.9566886210417438,
+      "normalizedUpper": 0.9681844427575542,
+      "actuals": 12,
+      "operationsPerSubject": 64,
+      "exactPixelsAndIndependentOwners": true,
+      "quietGuardsPassed": true
+    },
+    "prototypeNative": {
+      "managedUs": 420.5586666666667,
+      "nativeUs": 444.2984817708333,
+      "ratio": 0.9465678680477431,
+      "lower": 0.9328458861620378,
+      "upper": 0.957915941896235,
+      "status": "pass",
+      "allocatedBytes": 112,
+      "operationsPerSubject": 64,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true
+    },
+    "rejectedIoWait": 0.014028056112224449,
+    "case": {
+      "managedUs": 405.6631041666667,
+      "nativeUs": 448.28688671875,
+      "ratio": 0.9049185157654969,
+      "lower": 0.8912796258955028,
+      "upper": 0.9188033556679625,
+      "status": "pass",
+      "allocatedBytes": 112,
+      "operationsPerSubject": 64,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "caseId": "TightWide16",
+      "librarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "nativeWorkerSha256": "e64aa8ad0c5211dfcd023529c6c502135af18baebba7c5a33e7a76b692651c3a",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "managedOutputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "outputWidth": 128,
+      "outputHeight": 64,
+      "ownedOutputBytes": 65536,
+      "actualOperationCounts": [
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64
+      ],
+      "validationSha256": "eb7afb456626ea9948912b4804b00dd54bdb18646d26a7a00ccf05967ffdd3a4"
+    },
+    "qualification": {
+      "windowsSha256": "b72b12a53b5ff8e2a9badc93aedf0e3e228f539958826a3122a16d70c8699c28",
+      "linuxSha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "packageSha256": "d873438fb8c74e3a84fef380ae1d04d09a6f553f95fccbe3726ecb7622401812",
+      "symbolsSha256": "372154e4bf9e009b4470e753bd76c2b4c1c1fa599a6ff129c781b8b0adb13511",
+      "fullEachOs": [
+        3384,
+        2517,
+        948
+      ],
+      "focusedPerMode": 94,
+      "actualPackageConsumerPassedBothOs": true,
+      "usageExamplesEachOs": 3,
+      "timedDllUsedUnchanged": true,
+      "profileNotRepeated": true
+    }
   }
 }

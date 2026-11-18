@@ -82,7 +82,7 @@ and 111,552 B, SHA-256 `f5d3673b399303028d2dcd1bb8913a046decf8c3c8581066910b828c
 It includes all samples, matched prior receipts, identity checks and quietness
 guards. [Evidence](bicubic-current-package-evidence.json)
 
-## Tight 128×64 reductions
+## Tight 128×64 reductions before compact word preparation
 
 | Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -149,3 +149,49 @@ members and 104,732 B, SHA-256
 `23160c69b5a1f13a9cd3daa6ed1573dd421b0dfca83ddb9f5e0c1fa9633e00f4`.
 It retains the scoped managed pairs, raw profile, sampled instruction blocks,
 guards, exact output evidence and both tooling corrections.
+
+## Compact paired RGBA16 coefficients
+
+The 513×259 to 128×64 resize with 4 KiB of extra workspace passes on the
+actual Release package at **405.66 / prepared zimg 448.29 µs**,
+interval **0.891280–0.918803**, and **112 B/op**.
+The original driver retains twelve alternating 64-call pairs, both native
+brackets, complete managed preparation and disposal, and the prepared reference
+boundary. RGBA8 remains uncertain at its original current-package interval.
+
+Eligible sixteen-tap word pairs pack four taps from each column into one
+eight-double group in their existing coefficient storage. This replaces
+repeated broadcasts and inserts with one grouped load and lane selection.
+The original tap order, separate multiply/add operations and certified
+publication stay intact. During exact repair, one lane's original coefficients
+are reconstructed in decoded scratch after all horizontal users complete.
+Fallbacks retain the original arithmetic and tiny-alpha unwind. The operation
+keeps its 4 KiB workspace and owns a 65,536 B result. There is no added retained
+working storage. Physical and native peaks were unmeasured.
+
+In matched private DLL pairs, the prototype saves **16.32 µs /
+3.76%**, interval **0.956689–0.968184**.
+Both sides allocate 112 B/op. The first standalone capture was unscored after
+CPU0 I/O wait reached 1.40% in the post-run guard. Putting the harness's untimed
+validation and fixture writes in memory preserves the original binaries and
+operation. The valid prototype comparison is 420.56 / 444.30 µs,
+upper 0.957916. The Release-DLL result above establishes parity for
+this case. Cross-capture clock differences do not measure the implementation gain.
+
+Windows and Linux each pass **6,849 checks** including live FFmpeg.
+The 94 focused tests include original ordered SIMD bits, coefficient restoration,
+clipped and odd strip paths, terminal refusal, cancellation and independent
+survivors. Scalar and Linux AVX512-disabled checks pass. Both platforms consume
+the same actual package with all three usage examples. The package contains the
+measured Linux DLL without rebuilding it.
+
+Only the bounded 128×64 RGBA16 comparison reaches the changed path in the
+existing measured bicubic set. Default wide RGBA16 uses its prior full-row
+cache route. The byte stages keep their byte-specific path. Existing results
+for those workloads retain their producer identities.
+
+The mirrored `bicubic-compact-word-weights-qualified.tar.xz` contains 50 verified
+members and 1,893,128 B, SHA-256
+`0415a9a2b9ceb5dbeb6df769b214ba9988f89c33d99f64c2d6b713d7409f45b6`.
+It retains the exact source, immutable private and Release binaries, timings,
+guard failure, builds, qualification logs and actual package.

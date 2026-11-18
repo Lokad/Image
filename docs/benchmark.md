@@ -22,8 +22,10 @@ and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
 [Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
 the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
-RGBA16 directions. With 4 KiB of workspace at 128×64, RGBA16 is a gap and RGBA8
-remains uncertain against the prepared zimg reference.
+RGBA16 directions. Compact horizontal coefficients close the tight 128×64
+RGBA16 gap on the new actual package at **405.66 /
+448.29 µs**, upper **0.918803**
+and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -509,7 +511,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 128×64 | 380.07 | 375.17 | 1.013 / 1.024773 | 112 |
-| Bicubic RGBA16 reduction, input+output+4 KiB (gap) † → 128×64 | 469.55 | 444.85 | 1.056 / 1.078234 | 112 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.66 | 448.29 | 0.905 / 0.918803 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.95 | 1.91 | 1.025 / 1.037 | 0 |
