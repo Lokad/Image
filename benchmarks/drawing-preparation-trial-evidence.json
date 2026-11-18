@@ -1,0 +1,203 @@
+{
+  "project": "Lokad.Image",
+  "stage": "DPP1257",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "662f316c0b430ccdfc7032c2ec6439d813c35daf",
+  "hypothesis": "Coherent public drawing preparation: bypass seven policy-validity checks only for the existing sealed immutable valid Default singleton; inline Clip and ValidateRegion to remove Region return/argument materialization across their two calls. Retain the exact algorithms and per-operation clipping/cancellation/limit/borrowing order. Existing actual code shows both calls, not their elapsed contribution. No global ImageLimits/getter change or new owner/cache/kernel/API.",
+  "endState": "One complete public preparation flow without redundant Default validity checking or Region ABI shuffling; explicit caller policies still fully validate before cancellation and before mutation.",
+  "affectedScope": "Shared FillRectangle/CopyRegion/Composite preparation: all13 existing borrowed drawing controls. Other codecs,probe/text,font,resize,owned transforms and pixel kernels unchanged. Stop other passing paths.",
+  "sourceProof": {
+    "exactWholeSourceReconstruction": true,
+    "onlyDefaultSingletonSkipsValidityChecks": true,
+    "sealedImmutableDefaultValuesAlwaysValid": true,
+    "explicitPolicyValidationBeforeCancellationPreserved": true,
+    "regionAlgorithmAndAllBoundsVerbatim": true,
+    "onlyPrivatePreparationInlining": true,
+    "ownershipBorrowingCancellationAndPixelLoopsVerbatim": true,
+    "noGlobalPolicyAccessorOrPublicApiChange": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1"
+  },
+  "candidateSourcePins": {
+    "tmp/dpp1257-src/Lokad.Image/ImageDrawing.cs": "a5c5f0caff9c0ea8ce752fd8640d097c01d1afb186181181a4cf4659d4d43777"
+  },
+  "producers": {
+    "qualified": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "privateWindowsSha256": "19d88754a754adf78d568722cfa9cf5bebfaa79cb2756761a6dc5362ec3c7ae2"
+  },
+  "screen": {
+    "actuals": 3,
+    "operationsPerActual": 65536,
+    "ratio": 1.0003339485797555,
+    "lower": 0.9753071509425716,
+    "upper": 1.026002944522742,
+    "allocatedBytes": 0,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "subjects": {
+      "baseline": {
+        "mean": 2.1247137196858725,
+        "lower": 1.8308111649111372,
+        "upper": 2.4186162744606077,
+        "values": [
+          2.106172561645508,
+          2.132682586669922,
+          2.1352860107421874
+        ]
+      },
+      "candidate": {
+        "mean": 2.125413121541341,
+        "lower": 1.8704149630388374,
+        "upper": 2.3804112800438446,
+        "values": [
+          2.1096487426757813,
+          2.1302989044189453,
+          2.136291717529297
+        ]
+      }
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "baseline": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 138030125,
+          "allocatedBytes": 0,
+          "checksum": 0
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 138257940,
+          "allocatedBytes": 0,
+          "checksum": 0
+        }
+      },
+      {
+        "pair": 1,
+        "candidate": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 139611269,
+          "allocatedBytes": 0,
+          "checksum": 0
+        },
+        "baseline": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 139767486,
+          "allocatedBytes": 0,
+          "checksum": 0
+        }
+      },
+      {
+        "pair": 2,
+        "baseline": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 139938104,
+          "allocatedBytes": 0,
+          "checksum": 0
+        },
+        "candidate": {
+          "state": "sample",
+          "operations": 65536,
+          "elapsedNanoseconds": 140004014,
+          "allocatedBytes": 0,
+          "checksum": 0
+        }
+      }
+    ],
+    "sourceObservation": "tmp/dpp1257-screen-DrawingCopy8.json"
+  },
+  "focused": {
+    "windows": {
+      "internal/normal": 10,
+      "internal/avx512-off": 10,
+      "internal/scalar": 10,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "linuxPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "linuxInternal": {
+      "normal": 10,
+      "avx512-off": 10,
+      "scalar": 10
+    },
+    "internalEachMode": 10,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ]
+  },
+  "codegen": {
+    "methodCodeBytes": [
+      1694,
+      230
+    ],
+    "sha256": "d9f0d6a591ff18443395389fbf0b713fcc6d81446e5c254717730bbef52d737c",
+    "sharedDrawingPreparationCompiledInOriginalByteControl": true,
+    "allInstrumentedTimingsDiscarded": true,
+    "sampleCommands": 0
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 1,
+    "embedded": 1,
+    "allOthers": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Neutral short point2.124714->2.125413us,interval.975307-1.026003. Intended Default-validation bypass and two private region-helper inlines are realized in actual code but establish no complete-operation gain. Do not confirm,promote,retime passing paths or repeat broad/package checks. Current production/source/modules/package/costs remain unchanged;all actuals/guards/codegen retained. No automatic neighboring inlining/default-policy variant. Native clipping was already timed; no reference correction or gate change.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "drawing-preparation-trial.tar.xz",
+    "sha256": "bbe7a485bd08420c179f2d31df8ef382a7c31c6e61e2f3c19562fdd198efa13f",
+    "bytes": 2207228,
+    "members": 50,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  }
+}

@@ -148,3 +148,39 @@ Mirrored/member-verified `copy-stride-preparation-trial.tar.xz`:2,209,064B,
 Archived `sgr1253-*` recipes retain exact source/modules, codegen, every actual,
 checks and unchanged-source pins. The mapping-validation/prepared-copy reports
 retain reused dependencies. No displayed result or renderer dependency is added.
+
+## Public drawing preparation follow-up
+
+**Private, unpromoted (DPP1257).** Complete separate-byte copying screens neutral:
+**2.124714→2.125413µs**, interval **.975307–1.026003**, **0 B/op**, three reversed
+65,536-operation pairs. There is no confirmation, promotion, passing-path retiming,
+broad/package repetition or neighboring inlining/policy sweep.
+
+The coherent preparation removes redundant validity checks only for the existing
+sealed immutable `ImageLimits.Default` singleton and inlines the unchanged Clip
+and ValidateRegion bodies. Caller-supplied policies still validate before
+cancellation. Every region bound, failure order, checkpoint, borrowed root,
+storage lifetime and pixel loop remains. No global policy/getter, owner, cache,
+buffer or public API changes. The native adapter already times clipping; no
+reference correction, fixture change or relaxed gate is justified.
+
+Actual caller/validator code is1694/230B; both region helper calls disappear and
+the default-policy branch is realized. This proves no elapsed-time contribution
+or gain. All original source/full-frame/alpha/hidden-RGB/untouched/owner/native
+checks and idle-v2 guards pass. Both OSes pass10internal/190public checks per
+normal, AVX512-disabled and scalar mode. One private Windows core/embedded build;
+zero public/driver/native/fixture/package builds. Owned/admitted/retained capacity
+is unchanged; physical peaks remain unmeasured.
+
+Qualified [JSP1255](JPEG-PENDING-PUBLICATION.md) source, DLLs, package and costs
+remain exact. Reuse6844full/live checks each OS, SAMEactualpackage/all3examples
+and greenCI44226067549. Three copy gaps and asynchronous JPEG probe uncertainty
+remain open; the full289-path objective and final165-comparison refresh remain.
+
+[Compact evidence](drawing-preparation-trial-evidence.json) retains the decision,
+identities, original actuals and qualification reuse. Mirrored/member-verified
+`drawing-preparation-trial.tar.xz`: **2,207,228B /50members**, SHA-256
+`bbe7a485bd08420c179f2d31df8ef382a7c31c6e61e2f3c19562fdd198efa13f`.
+Archived `dpp1257-*` recipes retain exact source/modules, all logs/guards, codegen
+and the unchanged original actor dependencies. No current renderer dependency
+is added.
