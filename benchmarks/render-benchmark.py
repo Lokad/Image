@@ -3595,6 +3595,16 @@ costs. The complete final-package refresh remains outstanding."""
     assert bilinear_package['raw']['mirrored'] and bilinear_package['raw']['allMembersVerified']
     assert not bilinear_package['productionChanged'] and bilinear_package['newRequiredPaths'] == 0
     bilinear_cases = bilinear_package['cases']
+    bilinear_down8 = bilinear_package['down8Reconciliation']['standaloneConfirmation']
+    assert bilinear_down8['raw']['mirrored'] and bilinear_down8['raw']['allMembersVerified']
+    assert bilinear_down8['status'] == 'pass' and bilinear_down8['upper'] <= 1
+    assert bilinear_down8['actuals'] == 12 and bilinear_down8['nativeGroups'] == 3
+    assert bilinear_down8['operationsPerSubject'] == 256 and bilinear_down8['segmentsPerUnit'] == 16
+    assert all(bilinear_down8[key] for key in ('allOriginalGatesPassed', 'allActualsRetained',
+                                               'quietGuardsPassed', 'originalOperationAndGatePreserved'))
+    assert all(bilinear_down8[key] == bilinear_cases['Down8'][key]
+               for key in ('librarySha256', 'nativeWorkerSha256', 'inputSha256',
+                           'managedOutputSha256', 'nativeOutputSha256'))
     bilinear_labels = {
         'Up8': 'Bilinear upscale RGBA8 † → 1027×519',
         'Down8': 'Bilinear resize RGBA8 † → 256×129',
@@ -3607,6 +3617,8 @@ costs. The complete final-package refresh remains outstanding."""
         assert all(c[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
                                       'managedExact', 'independentOwnedOutput'))
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        if name == 'Down8':
+            c = bilinear_down8
         old, = (line for line in editing.splitlines() if line.startswith(f'| {label} |'))
         status = '' if c['status'] == 'pass' else f' ({png_status[c["status"]]})'
         result = (f'| {label}{status} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
@@ -3824,8 +3836,8 @@ with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-C
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
-the RGBA8 enlargement and RGBA16 reduction. The RGBA8 reduction remains
-**{bilinear_cases['Down8']['status']}**, upper **{bilinear_cases['Down8']['upper']:.6f}**.
+the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
+passes at upper **{bilinear_down8['upper']:.6f}** and **{bilinear_down8['allocatedBytes']:,} B/op**.
 All three original comparisons retain the prepared FFmpeg graph boundary.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.

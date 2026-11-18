@@ -280,5 +280,109 @@
       "rawLogSha256": "9e0f90639ed027af11a8df99c1223c12153b6312dff4b34067cee46f9118a296"
     }
   },
-  "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e"
+  "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
+  "down8Reconciliation": {
+    "stage": "FRP1318/FRP1319",
+    "caseId": "Down8",
+    "productionChanged": false,
+    "toolingBuilds": 2,
+    "pairedProducerDiagnostic": {
+      "method": "Two separately loaded frozen DLLs with a common adjacent native sample. Alternate managed order in twelve 256-operation units. Both tool contexts are resident. Diagnostic only.",
+      "earlierDllSha256": "66c014e792521ad0304e529602beed1550e31fac228faca86857fae818657e61",
+      "currentDllSha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "statistics": {
+        "earlier": {
+          "mean": 390.69616406250003,
+          "lower": 375.58093353553926,
+          "upper": 405.8113945894608
+        },
+        "current": {
+          "mean": 388.4953636067708,
+          "lower": 376.305866507345,
+          "upper": 400.6848607061966
+        },
+        "oldToCurrentInterval": [
+          0.9705875720511677,
+          1.0190185077894194
+        ],
+        "oldToCurrentRatio": 0.994508270126768,
+        "allocations": {
+          "earlier": [
+            8472.0,
+            8472.96875
+          ],
+          "current": [
+            8472.0,
+            8472.96875
+          ]
+        },
+        "nativeGroupMeansUs": [
+          395.0295159505208,
+          402.11345898437503,
+          388.9945221354167
+        ]
+      },
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "observationsSha256": "8821ed72856481083b25037e9af83c0d6feff78a87349827ded93ecd1752c1a4",
+      "raw": {
+        "file": "bilinear-byte-build-attribution.tar.xz",
+        "sha256": "774ad2eb960da1a6b9f63cbe20113152b3a341aca9b1238f6fe948077a33f41c",
+        "bytes": 37472,
+        "members": 18,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "standaloneConfirmation": {
+      "status": "pass",
+      "lower": 0.9448599953884607,
+      "upper": 0.9971234891911608,
+      "ratio": 0.9726186827341757,
+      "managedUs": 375.6857972005208,
+      "nativeUs": 386.2621640625,
+      "nativeGroupMeansUs": [
+        386.2621640625,
+        387.0914033203125,
+        386.90741015625
+      ],
+      "allocatedBytesMinimum": 8472,
+      "allocatedBytesMaximum": 8472.96875,
+      "pairedInterval": [
+        0.9549852947852395,
+        0.9864581971472508
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "pairs": 12,
+      "operationsPerSubject": 256,
+      "segmentsPerUnit": 16,
+      "caseId": "Down8",
+      "librarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "nativeWorkerSha256": "3a14b8570aa606c352fc1585b63d1b98d763a052cc01dbd32b4216b06686b1da",
+      "harnessSha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputSha256": "7eaf17aa8280f7bbafdc079dd591dfa8533d4fa81f5078a54837c94fcfe581d5",
+      "nativeOutputSha256": "ee66dd653ec30392d5e25c257e5dcd719c436a56a8829717ecabade1988ef453",
+      "toolSha256": "1decc36fd4a4c47d272efd53b02bae09cd9dd9858998ad22f3fde72ed1e12b1d",
+      "validationSha256": "5bb1c4755ff98c26f7d350f8e3e587a2bd88b9080b486e269695f5033a6d8f7d",
+      "priorReceiptSha256": "71b37b805c68e2541395fc17a94cc023e61c99ef84bf300e871c3f408efef98f",
+      "observationsSha256": "8962a4cd48faaa07a715bb1394ff73d1cbae98ad96d662322eecef64fa22e634",
+      "allocatedBytes": 8473,
+      "allActualsRetained": true,
+      "nativeGroups": 3,
+      "actuals": 12,
+      "segmentsPerNativeGroup": 192,
+      "originalOperationAndGatePreserved": true,
+      "raw": {
+        "file": "bilinear-byte-partitioned-current-package.tar.xz",
+        "bytes": 67524,
+        "sha256": "0b2897273c396f73df29b250e228ed3e52faa40e5cbe1165d2e03a77fc068e43",
+        "members": 13,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
+  }
 }

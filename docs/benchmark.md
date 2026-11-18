@@ -34,8 +34,8 @@ with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-C
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
-the RGBA8 enlargement and RGBA16 reduction. The RGBA8 reduction remains
-**uncertain**, upper **1.007839**.
+the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
+passes at upper **0.997123** and **8,473 B/op**.
 All three original comparisons retain the prepared FFmpeg graph boundary.
 Other entries affected by changed storage retain their recorded historical
 artifact costs pending the full release refresh.
@@ -553,7 +553,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bilinear upscale RGBA8 † → 1027×519 | 1,967.04 | 1,994.67 | 0.986 / 0.993357 | 102,891 |
 | Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | 1,847.74 | 2,024.23 | 0.913 / 0.944044 | 4,498,558 |
 | Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
-| Bilinear resize RGBA8 † → 256×129 (confidence open) | 384.01 | 387.09 | 0.992 / 1.007839 | 8,473 |
+| Bilinear resize RGBA8 † → 256×129 | 375.69 | 386.26 | 0.973 / 0.997123 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 412.89 | 419.04 | 0.985 / 0.991838 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 490.21 | 576.13 | 0.851 / 0.862076 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 350.31 | 990.90 | 0.354 / 0.357 | 198,455 |
