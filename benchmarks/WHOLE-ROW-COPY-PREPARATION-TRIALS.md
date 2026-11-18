@@ -380,3 +380,43 @@ renderer dependency. Reconcile retained native small-copy scheduling and prior
 alignment trials before selecting another implementation; no blind row/tail/
 runtime replay or whole-library profile follows. Two byte gaps, word/async
 uncertainty and final289-path/165-comparison qualification remain open.
+
+## Fixed-geometry aligned ends
+
+**Rejected after independent confirmation.** The clipped-byte short improves
+**2.085939→1.970546µs**, interval **.932084–.957449**; the independent twelve-pair
+capture reverses this: **1.954970→2.007816µs**, **1.021708–1.032399**, a2.70%
+regression. Separate byte's short **1.962929→1.957140µs**, **.976829–1.017692**,
+and confirmation **1.950342→1.944141µs**, **.992335–1.001331**, remain uncertain.
+All allocate0B. Keep every observation; no favorable repeat or causal host/
+alignment/code-placement claim follows the contradiction. Stop before word
+generalization, final-DLL transfer, passing-path retiming or broad/package checks.
+
+The revised strategy uses one constant bulk and fixed256Bend for separate rows
+whose original remainder already needs four vectors. An always64Bhead and a
+short-lived released alignment hint replace per-row divisions, plan selection
+and varying ends from the earlier word trials. It transfers64extra bytes per row;
+all accesses stay bounded and unaligned-safe even with stale hints. Actual501B
+kernel/1662Bcaller realize the design with18unaligned vector moves. Code shape
+and the earlier hint diagnostic do not establish an elapsed gain. Existing self,
+vertical, scalar and other-width kernels, public limits, row checkpoints and
+ownership remain. No persistent pin, cache, owner or API is added.
+
+The positive-domain geometry model checks516,160length/phase combinations.
+BothOSes pass13internal/190public checks in each normal/AVX512-off/scalar mode,
+including all64correct/stale hints across11eligible lengths in both directions,
+source/canary exactness and prompt pin/owner release. Original frame/alpha/hidden
+RGB/untouched/source/owner/native/idle-v2 gates pass. Same private source/DLL,
+harness, inputs, references and codegen are used in both captures without rebuilding.
+One private core/embedded build; zero others. Added owned/admitted/retained image
+capacity0; native handle-pool retention and physical/JIT peaks are unmeasured.
+Qualified source/modules/f4package/current CBR costs remain unchanged; reuse
+6,844full/live checks eachOS/SAMEactualpackage/all three examples.
+
+[Evidence](fixed-end-aligned-row-trial-evidence.json) preserves the source model,
+codegen, all actuals and contradiction. Mirrored/member-verified
+`fixed-end-aligned-row-trial.tar.xz`: **2,227,272 B /81 members**, SHA256
+`6c1aec253bb9f2c85fe4b8eaecbf1ef54d2c4ddbd0878cf8a867fb48880a6557`.
+Archived far1268 recipes, actual source/tests and named dependencies reproduce
+it. No renderer dependency or new current-cost claim. No neighboring alignment
+sweep follows; materially different designs require their own evidence.
