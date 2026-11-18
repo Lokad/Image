@@ -190,3 +190,13 @@ ImageSharp.Drawing and SixLabors.Fonts worker reproduces its original public
 layout and result disposal checks. One temporary check-tool build serves
 all four. The reference receives zero sample commands.
 [Invocations, original receipts and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Ordinary drawing package bindings
+
+Prepared-layout ordinary RGBA8 and RGBA16 drawing pass on package
+`87f1ae4a` with intrinsics enabled and disabled. Each of the four checks
+resets and verifies all 16 managed frames. The original stock reference
+reproduces the visual, source and disposal checks. The same frozen driver
+uses its check mode for both depths, with zero reference samples or builds.
+The existing timing confirmations still apply to these unchanged text paths.
+[Original receipts and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
