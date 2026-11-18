@@ -173,6 +173,9 @@ All eight lossless/alpha controls pass and stop. [Word alpha](../benchmarks/WARM
 now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 **98,590 B**; its prespecified longer batch also requires no builds or qualification repeats.
 
+[Current-package owned edits](../benchmarks/OWNED-EDITS-CURRENT-PACKAGE.md)
+refresh eighteen original comparisons affected by the shared storage pool.
+The six displayed transpose, quarter-turn and half-turn rows use those costs.
 [Prepared vertical rows](../benchmarks/VERTICAL-PREPARED-ROWS.md)
 close both original owned-flip controls: **8.916 / FFmpeg 9.146 µs,
 upper 0.988240** for RGBA8 and **18.763 /
@@ -545,12 +548,12 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 611.14 | 2,088.67 | 0.293 / 0.301 | 44,712–44,720 |
 | Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 734.50 | 2,054.59 | 0.357 / 0.363 | 254,672–254,679 |
 | PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | 2,856.94 | 3,301.31 | 0.865 / 0.871 | 338,156–338,160 |
-| Plain transpose RGBA16 † → 259×513 | 34.98 | 43.85 | 0.798 / 0.859 | 56 |
-| Plain transpose RGBA8 † → 259×513 | 26.85 | 37.83 | 0.710 / 0.716 | 56 |
-| Counterclockwise quarter turn RGBA8 † → 259×513 | 28.57 | 37.43 | 0.763 / 0.772 | 56 |
-| Counterclockwise quarter turn RGBA16 † → 259×513 | 38.49 | 44.19 | 0.871 / 0.875 | 56 |
-| Mirrored transpose RGBA8 † → 259×513 | 30.07 | 37.55 | 0.801 / 0.805 | 56 |
-| Half turn RGBA8 † | 7.90 | 11.79 | 0.671 / 0.677 | 56 |
+| Plain transpose RGBA16 † → 259×513 | 42.05 | 47.86 | 0.879 / 0.891 | 56 |
+| Plain transpose RGBA8 † → 259×513 | 29.15 | 41.05 | 0.710 / 0.722 | 56 |
+| Counterclockwise quarter turn RGBA8 † → 259×513 | 28.50 | 38.03 | 0.749 / 0.756 | 56 |
+| Counterclockwise quarter turn RGBA16 † → 259×513 | 35.86 | 44.67 | 0.803 / 0.865 | 56 |
+| Mirrored transpose RGBA8 † → 259×513 | 30.69 | 37.42 | 0.820 / 0.842 | 56 |
+| Half turn RGBA8 † | 8.71 | 10.87 | 0.801 / 0.840 | 56 |
 | Vertical flip RGBA8 (parity confirmed) † | 8.92 | 9.15 | 0.975 / 0.988 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |

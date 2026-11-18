@@ -3232,6 +3232,10 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     editing = apply_mixed_word_cache(editing)
     editing = apply_bounded_wide_quartet(editing)
     owned_copy = owned_edit_costs(resident_png)
+    owned_package = json.loads((ROOT / 'benchmarks/owned-edits-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert owned_package['producers'] == jpeg_pending['producers']
+    assert owned_package['raw']['mirrored'] and owned_package['raw']['allMembersVerified']
+    assert len(owned_package['cases']) == 18 and owned_package['reusedOriginalDriverAndCounts']
     for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
                         ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
                         ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
@@ -3239,11 +3243,23 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
                         ('WarmTransverse8', 'Mirrored transpose RGBA8 † → 259×513'),
                         ('WarmHalfTurn8', 'Half turn RGBA8 †'),
                         ('WarmVerticalFlip8', 'Vertical flip RGBA8 (parity confirmed) †')]:
-        c = owned_copy['cases'][name]
+        if name in owned_package['cases']:
+            c = owned_package['cases'][name]
+            assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+            assert c['actuals'] == 12 and c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
+            if c['status'] != 'pass':
+                status = 'confidence open' if c['status'] == 'uncertain' else 'gap'
+                label = label.replace(' †', f' ({status}) †')
+        else:
+            assert name in owned_package['skippedCurrentVerticalFlips']
+            c = owned_copy['cases'][name]
         editing += f'\n| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'
     byte_flip, word_flip = (owned_copy['cases'][name] for name in ('WarmVerticalFlip8', 'WarmVerticalFlip16'))
     flip_gains = owned_flip_reference_stage()['pairedEffects']
-    owned_copy_note = f"""[Prepared vertical rows](../benchmarks/VERTICAL-PREPARED-ROWS.md)
+    owned_copy_note = f"""[Current-package owned edits](../benchmarks/OWNED-EDITS-CURRENT-PACKAGE.md)
+refresh eighteen original comparisons affected by the shared storage pool.
+The six displayed transpose, quarter-turn and half-turn rows use those costs.
+[Prepared vertical rows](../benchmarks/VERTICAL-PREPARED-ROWS.md)
 close both original owned-flip controls: **{byte_flip['managedUs']:.3f} / FFmpeg {byte_flip['nativeUs']:.3f} µs,
 upper {byte_flip['upper']:.6f}** for RGBA8 and **{word_flip['managedUs']:.3f} /
 {word_flip['nativeUs']:.3f} µs, upper {word_flip['upper']:.6f}** for RGBA16, **56 B/op** each.
