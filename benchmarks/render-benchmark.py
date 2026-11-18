@@ -3431,6 +3431,13 @@ costs. The complete final-package refresh remains outstanding."""
     assert png_decoders['cases']['DecodeTight16']['status'] == 'uncertain'
     assert png_tight_word['inputSha256'] == png_decoders['cases']['DecodeTight16']['inputSha256']
     assert png_tight_word['outputSha256'] == png_decoders['cases']['DecodeTight16']['outputSha256']
+    png_word_stream = png_decoders['wordStream']
+    assert png_word_stream['raw']['mirrored'] and png_word_stream['raw']['allMembersVerified']
+    assert png_word_stream['librarySha256'] == png_package['producers']['linuxSha256']
+    assert png_word_stream['actualPackageSha256'] == png_package['producers']['packageSha256']
+    assert png_word_stream['status'] == 'pass' and png_word_stream['upper'] <= 1
+    assert png_word_stream['actualIterations'] == 12 and png_word_stream['allActualsRetained']
+    assert png_word_stream['allOriginalGatesPassed'] and png_word_stream['quietGuardsPassed']
     png_passes = 2 + png_decoders['statusCounts']['pass']
     png_status = {'pass': 'pass', 'gap': 'gap', 'uncertain': 'confidence open'}
     for label, name in (
@@ -3464,6 +3471,9 @@ JPEG stream probes and complete headers use the pending-publication package.
 **{png_passes} of 47** original controls on that actual package with natural GC.
 The tight working limit RGBA16 confirmation has an upper ratio of **{png_tight_word['upper']:.6f}**
 and **{png_tight_word['allocatedBytes']:,} B/op**. The three displayed resident decode rows use these measurements.
+Fresh seekable RGBA16 PNG decode also passes on the same package at
+**{png_word_stream['managedUs']:,.2f} / FFmpeg {png_word_stream['nativeUs']:,.2f} µs**,
+upper **{png_word_stream['upper']:.6f}**, **{png_word_stream['allocatedBytes']:,} B/op**.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

@@ -13,6 +13,9 @@ JPEG stream probes and complete headers use the pending-publication package.
 **47 of 47** original controls on that actual package with natural GC.
 The tight working limit RGBA16 confirmation has an upper ratio of **0.979774**
 and **70,293 B/op**. The three displayed resident decode rows use these measurements.
+Fresh seekable RGBA16 PNG decode also passes on the same package at
+**2,876.67 / FFmpeg 3,104.71 µs**,
+upper **0.991093**, **8,664 B/op**.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

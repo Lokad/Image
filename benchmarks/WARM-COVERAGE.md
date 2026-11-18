@@ -13,6 +13,12 @@ control at 2,796.05 / FFmpeg 2,904.45 µs, upper 0.979774 and 70,293 B/op. All
 frozen inputs, exact pixels, resource and ownership gates passed. The earlier
 uncertain capture is retained. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
 
+Fresh seekable RGBA16 PNG decode passes on the same package at 2,876.67 /
+FFmpeg 3,104.71 µs, upper 0.991093 and 8,664 B/op. The original interleaved
+driver includes complete stream delivery and independent output ownership.
+Four original PNG storage controls still need current timing.
+[Current-package PNG](PNG-CURRENT-PACKAGE.md)
+
 [Completed nearest rows](NEAREST-ROW-REUSE.md) retains source-valid evidence:
 complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged
 4,264,364 B/op. Current standalone 949.453/FFmpeg981.396 us upper.981828 passes.

@@ -83,3 +83,13 @@ source reconciliation, all gates and immutable identities. Mirrored/member-verif
 Archived `frp1272-*` recipes reuse the frozen runtime and reference dependencies.
 A missing producer receipt stopped preparation before any benchmark; only that
 receipt was supplied, with the failure retained and no capture restarted.
+
+Fresh seekable RGBA16 PNG decode also passes on the same actual package at
+**2,876.67 / FFmpeg 3,104.71 µs**, upper **0.991093**, **8,664 B/op**. The
+existing adjacent driver retains twelve 64-operation pairs and both native
+brackets. Both sides acquire the full packet and release independently owned
+output. Fresh stream creation, read and disposal remain timed, and all exact
+pixel, source, ownership and quietness checks pass. The archived nine members
+retain all observations and commands. The mirrored
+`png-word-stream-current-package.tar.xz` is 48,200 B, SHA-256
+`091e3bda93ffd8abeace20de69d33c98bb1762f90d4a7c909e113f18354614cf`.
