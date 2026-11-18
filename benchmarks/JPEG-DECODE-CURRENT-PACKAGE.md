@@ -1,9 +1,9 @@
 # JPEG decode on the current package
 
-Five original owned-output JPEG cases were measured on the immutable 0.2.1
-package. Horizontal-only Adobe CMYK passes with adjacent native samples.
-The earlier gap remains in the records below. Sparse-2D remains uncertain.
-All three progressive cases pass and stop.
+All 24 original owned-output JPEG cases affected by the shared pool have
+measurements on the immutable 0.2.1 package. Horizontal-only Adobe CMYK passes
+with adjacent native samples. The initial five captures follow, with their
+subsequent confirmation and the remaining nineteen cases below.
 
 | Complete operation | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -74,3 +74,50 @@ and 25,108 B, SHA-256
 `e3f67d8a7b38d1c9d727d13d34190fab1da3c0b524ad40577134a47edc7b07c5`.
 It retains every sample, the generated-loop and runtime identities, original
 and current receipts, and the guard checks.
+
+## Remaining owned JPEG cases
+
+All nineteen pass and stop.
+
+| Complete case | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `Progressive422` | 1,817.00 | 2,246.36 | 0.781415–0.820470 | 315,496 | Pass |
+| `Progressive420` | 1,428.34 | 1,964.55 | 0.708744–0.744485 | 243,676 | Pass |
+| `CmykAdobeGeneral` | 1,310.33 | 3,113.11 | 0.405694–0.433833 | 20,944 | Pass |
+| `StreamDecode420Restart` | 801.57 | 996.79 | 0.776245–0.824624 | 262,914 | Pass |
+| `NativeDecode420Restart` | 850.10 | 1,014.17 | 0.771236–0.855592 | 262,831 | Pass |
+| `Decode8` | 1,430.25 | 1,899.18 | 0.733248–0.763840 | 4,320 | Pass |
+| `NativeDecodeCancelable8` | 1,226.22 | 1,730.12 | 0.688612–0.730370 | 42,936 | Pass |
+| `NativeDecode8` | 1,178.38 | 1,723.57 | 0.669002–0.692571 | 42,936 | Pass |
+| `DirectRgb444` | 1,141.73 | 1,450.62 | 0.780278–0.795493 | 42,936 | Pass |
+| `DirectRgb422` | 874.19 | 1,094.26 | 0.792658–0.804705 | 330,266 | Pass |
+| `NativeDecode422` | 852.37 | 1,352.09 | 0.618348–0.640584 | 330,266 | Pass |
+| `NativeDecode420` | 718.85 | 1,088.64 | 0.641920–0.671216 | 258,456 | Pass |
+| `DirectRgb420` | 637.73 | 815.89 | 0.760107–0.800163 | 258,457 | Pass |
+| `OwnedDecodeGray` | 617.57 | 747.80 | 0.812621–0.839363 | 140,455 | Pass |
+| `Ycck420` | 460.94 | 778.26 | 0.585414–0.600071 | 895,562 | Pass |
+| `Decode411` | 410.15 | 489.45 | 0.823056–0.849040 | 219,551 | Pass |
+| `CmykAdobeAcFresh` | 411.60 | 831.50 | 0.488446–0.498143 | 20,944 | Pass |
+| `Decode410` | 364.25 | 553.58 | 0.645863–0.669676 | 189,090 | Pass |
+| `CmykAdobe` | 294.77 | 406.48 | 0.706025–0.730817 | 4,536 | Pass |
+
+The two verified runtimes reuse the existing natural-GC driver, original
+generated delegates, three warmups, twelve measured actuals and both original
+twelve-sample native brackets. The fresh-seekable restart case includes input
+delivery on both sides. The explicitly labeled fresh CMYK comparison retains
+FFmpeg context creation inside each operation. Other cases retain their
+original reference contexts. All include complete decode, RGBA normalization,
+owned result acquisition and disposal.
+
+Input, managed and native output identities match the original receipts.
+Exact managed checks, case-specific native bounds, opacity, cancellation where
+applicable and independent ownership remain. Both idle guards pass for every
+case. Managed GC figures are separate from retained output capacity and
+unmeasured physical peaks. No build or production change was needed.
+
+The mirrored `jpeg-remaining-owned-decode-current-package.tar.xz` contains 120
+verified members and 93,276 B, SHA-256
+`4a0716ad5a2eb2039954d091fcdb342db631be226e54c018dff152b2585b8c66`.
+It retains the inputs' identities, prior and current receipts, generated-loop
+and native identities, guards and every measured actual. The unchanged
+caller-sample, coding-only and inspection cases keep their own boundaries.
