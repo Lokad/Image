@@ -3440,6 +3440,28 @@ costs. The complete final-package refresh remains outstanding."""
     assert png_word_stream['allOriginalGatesPassed'] and png_word_stream['quietGuardsPassed']
     png_passes = 2 + png_decoders['statusCounts']['pass']
     png_status = {'pass': 'pass', 'gap': 'gap', 'uncertain': 'confidence open'}
+    png_storage = png_decoders['storage']
+    assert png_storage['producers'] == png_package['producers']
+    assert png_storage['raw']['mirrored'] and png_storage['raw']['allMembersVerified']
+    assert png_storage['asyncProofRestoration']['restoredExactly']
+    for c in png_storage['cases'].values():
+        assert c['librarySha256'] == png_package['producers']['linuxSha256']
+        assert len(c['actualOperationCounts']) == 12 and c['upper'] <= 1 and c['status'] == 'pass'
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+    for label, name in (
+        ('PNG RGBA8 async, one-shot Optimal6, nonseekable output †', 'async-encode'),
+        ('PNG8 decode, two retained images / shared caller root †', 'retained'),
+    ):
+        c = png_storage['cases'][name]
+        output = '—'
+        if name == 'async-encode':
+            assert c['managedOutputBytes'] == c['nativeOutputBytes']
+            output = f'{c["managedOutputBytes"]:,} / {c["nativeOutputBytes"]:,}'
+        heading = f'| {label} |'
+        old, = (line for line in codecs.splitlines() if line.startswith(heading))
+        result = (f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | {output} |')
+        codecs = codecs.replace(old, result)
     for label, name in (
         ('PNG RGBA8 decode, live token †', 'DecodeCancelable8'),
         ('PNG RGBA8 decode, tight working limit †', 'DecodeTight8'),
@@ -3474,6 +3496,9 @@ and **{png_tight_word['allocatedBytes']:,} B/op**. The three displayed resident 
 Fresh seekable RGBA16 PNG decode also passes on the same package at
 **{png_word_stream['managedUs']:,.2f} / FFmpeg {png_word_stream['nativeUs']:,.2f} µs**,
 upper **{png_word_stream['upper']:.6f}**, **{png_word_stream['allocatedBytes']:,} B/op**.
+The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
+and caller-budget two-result decode also pass on that package. The encode
+and retained-output rows use the current measurements.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

@@ -93,3 +93,35 @@ pixel, source, ownership and quietness checks pass. The archived nine members
 retain all observations and commands. The mirrored
 `png-word-stream-current-package.tar.xz` is 48,200 B, SHA-256
 `091e3bda93ffd8abeace20de69d33c98bb1762f90d4a7c909e113f18354614cf`.
+
+## Current package storage controls
+
+| Control | Lokad.Image µs | FFmpeg µs | Conservative interval | Managed GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| RGBA8 async nonseekable, one-shot Optimal6 encode | 17,544.42 | 18,428.84 | 0.931125–0.978328 | 877,476 |
+| PNG8 resident decode, two retained outputs | 2,652.54 | 2,849.73 | 0.817536–0.972152 | 1,638,214 |
+| RGBA8 fresh async nonseekable decode | 1,166.55 | 1,419.42 | 0.808696–0.833486 | 4,602 |
+| RGBA8 fresh seekable decode | 1,195.40 | 1,397.69 | 0.796255–0.874818 | 4,578 |
+
+All four pass the conservative upper-ratio gate on the same package and stop.
+Each capture retains twelve managed actuals and both twelve-sample reference
+brackets. The original generated loops, warmups, cleanup and natural GC remain.
+The async encoder retains four operations per batch and produces exact
+210,973-byte packets on both sides. Both streams include fresh input delivery
+through the original complete decode boundaries. The async input proof rechecks
+all 21 original controls, including exact pixels for its two accepted fixtures.
+
+The caller-budget operation retains the first owned result through the second
+complete decode. The shared root admitted peak was 1,766,641 B, including
+218,775 B of caller input. This is separate from GC allocation and gives no
+physical peak or idle retention measurement. Cancellation, refusal, resource
+cleanup and independent output checks all pass. The collector initially searched under the generated PNG class name. The receipt
+uses the memory-budget benchmark name.
+The completed capture was recovered from its original receipt without retiming.
+
+The mirrored `png-storage-current-package-confirmations.tar.xz` has 160 verified members and 65,432 B,
+SHA-256 `cb6d7706ccb396127a8e478225c4b7ba9f08e91fba01f157e3e59722febe7880`. It includes capture and collection
+recipes, all original validation records and quietness guards. The temporary
+async proof was removed and the original bytes restored. No production,
+package, reference, fixture or generated benchmark rebuild was needed.
+[Evidence](png-decoder-current-package-evidence.json)

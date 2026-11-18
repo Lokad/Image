@@ -16,6 +16,9 @@ and **70,293 B/op**. The three displayed resident decode rows use these measurem
 Fresh seekable RGBA16 PNG decode also passes on the same package at
 **2,876.67 / FFmpeg 3,104.71 µs**,
 upper **0.991093**, **8,664 B/op**.
+The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
+and caller-budget two-result decode also pass on that package. The encode
+and retained-output rows use the current measurements.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -445,7 +448,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 17,196.47 | 18,607.32 | 0.924 / 0.929 | 2,432,956 | 968,216 / 968,216 |
-| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,720.65 | 17,676.67 | 0.946 / 0.961 | 877,476 | 210,973 / 210,973 |
+| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 17,544.42 | 18,428.84 | 0.952 / 0.978328 | 877,476 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode † | 665.65 | 1,009.30 | 0.660 / 0.670 | 258,454 | — |
 | JPEG DC-only, caller CMYK decode † | 322.49 | 331.83 | 0.972 / 0.994 | 1,085,981 | — |
 | VP8L RGBA8, resident decode † | 2,709.07 | 3,019.90 | 0.897 / 0.902 | 152,728 | — |
@@ -459,7 +462,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,422.33 | 1,626.70 | 0.874 / 0.878 | 309,523 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,106.93 | 3,858.03 | 0.805 / 0.810 | 820,502 | 133,039 / 133,041 |
-| PNG8 decode, two retained images / shared caller root † | 2,575.83 | 2,846.82 | 0.905 / 0.909 | 1,638,214 | — |
+| PNG8 decode, two retained images / shared caller root † | 2,652.54 | 2,849.73 | 0.931 / 0.972152 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 410.41 | 418.11 | 0.982 / 0.988 | 20,944 | — |
