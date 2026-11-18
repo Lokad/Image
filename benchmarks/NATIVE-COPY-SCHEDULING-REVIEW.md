@@ -127,3 +127,24 @@ clocks are discarded.
 
 These checks establish package bindings for the eventual refresh.
 [Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Drawing package bindings
+
+Four frozen drawing comparisons pass their original correctness checks on
+development package `87f1ae4a`. The clipped RGBA8 and RGBA16 fills share
+one verified runtime and use their original generated calls. They
+reproduce the entire canvas, including hidden RGB, alpha and untouched
+pixels, with the original FFmpeg fill worker.
+
+The clipped RGBA8 composite uses its original generated single call after
+a canvas reset and validates the result before cleanup. Its pinned FFmpeg
+overlay worker preserves the bounded reference result and releases the
+outputs. The overlapping RGBA16 composite reproduces the exact managed
+oracle in normal and scalar modes. ImageSharp 3.1.12 uses the original
+source snapshot, with maximum channel error 1 and RGB/alpha RMSE below
+0.043. Untouched and zero-source-alpha pixels are exact.
+
+One temporary check-tool build serves the fills and byte composite. The
+word composite reuses its frozen worker. Original inputs and harnesses
+remain pinned. The package bindings supply no new performance result.
+[Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

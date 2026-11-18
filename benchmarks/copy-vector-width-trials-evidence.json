@@ -707,5 +707,89 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "alignedMiddleTrial": {
+    "mechanism": "Align middle stores using one released destination hint and at most one bounded store at each edge.",
+    "sources": {
+      "src/Lokad.Image/ImageBuffer.cs": {
+        "original": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+        "candidate": "d3aa58eeca18cb49c4ca430b22fa03407bcdaacaf0d1f094fabbde5550465914"
+      },
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "dce854dfa74c58caf366a3e7507dae4abfa688c854b0fcd8c853578a20fe72f6"
+      },
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+        "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "candidate": "fc6e75c6a07ed2bfde52e559471bc348d4d04a07d070b9246e94f20e4b9de55b"
+      }
+    },
+    "coverage": {
+      "widthPhasePairs": 254016,
+      "transfersPerRow": {
+        "1016": [
+          16,
+          17
+        ],
+        "1024": [
+          16,
+          17
+        ]
+      },
+      "checkedAllAccesses": true
+    },
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "codegen": {
+      "methodBytes": 401,
+      "sampleCommands": 0,
+      "vectorMoves": 14,
+      "stackVectorMoves": [],
+      "codegenSha256": "dfe08d294abe93248039bad452daa99655cf204394024a4371950e47f7ea645a"
+    },
+    "screen": {
+      "OriginalClippedCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9829171989309632,
+        "lower": 0.5274488852291702,
+        "upper": 1.8316963918399798,
+        "allocatedBytes": 0,
+        "baselineMeanUs": 2.022647755940755,
+        "candidateMeanUs": 1.987316401163737
+      },
+      "DrawingCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 1.0022675207388572,
+        "lower": 0.9616641526380277,
+        "upper": 1.0445852435825653,
+        "allocatedBytes": 0,
+        "baselineMeanUs": 2.1138487447102863,
+        "candidateMeanUs": 2.118632364908854
+      }
+    },
+    "candidateLibrarySha256": "4cdfa5d03a432dd858f6a6162fed27a88adb0a20a94f7821f5a33ffcdaac5765",
+    "windowsFocused": {
+      "normal": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      },
+      "scalar": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      }
+    },
+    "allOriginalGatesPassed": true,
+    "raw": {
+      "file": "aligned-middle-row-copy-trial.tar.xz",
+      "bytes": 1038364,
+      "sha256": "a7ab460cdeaba9974a03c073a0445bf01f76d3f178b25b58eed66a2e930b6cda",
+      "members": 57,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

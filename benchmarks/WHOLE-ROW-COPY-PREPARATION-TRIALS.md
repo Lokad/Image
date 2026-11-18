@@ -767,3 +767,24 @@ The three-pair screen gives **1.969525 → 1.947051 µs** for clipped
 roughly 22 ns point savings on each control are in the range of the
 simpler staging trial and below both FFmpeg gaps. The follow-up ends at
 screening, with both trials retained.
+
+## Aligned middle with bounded row edges
+
+This variant revisits the native aligned-store strategy with fewer redundant
+transfers than the earlier [fixed-end trial](#fixed-geometry-aligned-ends).
+One temporary destination alignment hint drives the middle stores, with one
+bounded vector at each edge when needed. The pin is released before copying
+and all accesses remain valid if the array moves. The checked schedule uses
+16 or 17 vectors for each of the original row lengths. A model verifies
+coverage across 254,016 width and alignment combinations.
+
+Three quiet-VM pairs per case give **2.022648 → 1.987316 µs** for clipped RGBA8
+(interval **0.527449–1.831696**) and **2.113849 → 2.118632 µs** for separate
+RGBA8 (interval **0.961664–1.044585**). Both allocate **0 B/op** and preserve
+the original pixels, checks and borrow lifetimes. All 353 focused Windows
+tests pass in each mode, normal and scalar.
+
+The clipped point difference varies substantially across pairs. The separate
+point is slightly adverse. This variant stops at screening, with both
+complete-operation gaps still open.
+[Screen, generated code and verification evidence](copy-vector-width-trials-evidence.json)
