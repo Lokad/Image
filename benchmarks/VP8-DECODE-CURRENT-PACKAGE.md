@@ -1,5 +1,8 @@
 # VP8 decode on the current package
 
+The [six-byte refill qualification](VP8-SIX-BYTE-REFILLS.md) supersedes the
+timing and confidence statuses below. All six affected VP8 read comparisons pass.
+
 The first five owned-output VP8 captures were uncertain on the preceding 0.2.1
 package. Partitioned sampling confirms both transparent cases. The same schedule
 confirms simple-filter opaque decoding on the latest package. Ordinary opaque

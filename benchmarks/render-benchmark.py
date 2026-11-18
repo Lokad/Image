@@ -534,42 +534,13 @@ def apply_current_png_scan(codecs, reads, current):
     return codecs, reads
 
 
-def apply_current_vp8_fixed_code(codecs, reads, current):
-    q = current['qualification']
-    assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
-    assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
-    assert current['raw']['mirrored'] and current['raw']['allMembersVerified']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 6692
-    assert q['sameActualPackageBothOS'] and q['allThreeExamplesBothOS']
-    assert q['actualPackage']['sha256'] == q['samePackageWindows']['sameActualPackageSha256']
-    assert q['actualPackage']['librarySha256'] == current['producers']['timedArtifactSha256']
-    assert current['comparison']['pairedLive']['scopedManagedDllEffectOnly'] and current['comparison']['pairedLive']['upper'] < 1
-    assert current['comparison']['standalone']['allSixPass'] and current['comparison']['standalone']['liveGapClosed']
-    assert not current['comparison']['standalone']['historicalClockSpeedupClaim']
-    assert current['implementation']['sourceProof']['entireOriginalBlockSourceReconstructsByteExact']
-    assert current['storage']['newOwnedHeapCapacityBytes'] == current['storage']['newRetainedStateBytes'] == 0
-    assert set(current['cases']) == {'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8', 'Native8', 'StreamNative8', 'ValidateVp8Alpha'}
-    for name, c in current['cases'].items():
-        assert c['librarySha256'] == current['producers']['timedArtifactSha256']
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-        assert c['status'] == 'pass'
-        v = c['metadata']
-        assert v['sourceUnchanged'] and v['independentOwnedOutput']
-        if name == 'ValidateVp8Alpha':
-            assert v['descriptorExact'] and v['prefixAndCodingScopesVerified']
-        else:
-            assert v['managedOutputSha256'] == v['nativeOutputSha256']
-            assert v['decoderMaximum'] == v['decoderRmse'] == 0 and v['alphaExact'] and v['nativeCliPixelsExact']
-            if name in {'OpaqueCancelable8', 'SimpleOpaque8', 'StreamNative8'}:
-                assert v['scalarCliPixelsExact']
-    c = current['cases']['StreamNative8']
+def apply_current_vp8_reading(codecs, reads, cases):
+    c = cases['StreamNative8']
     prefix = '| WebP VP8 + alpha, fresh seekable Stream'
     found = [line for line in codecs.splitlines() if line.startswith(prefix)]
     assert len(found) == 1
-    codecs = codecs.replace(found[0], f'{prefix} (parity confirmed) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | — |')
-    c = current['cases']['ValidateVp8Alpha']
+    codecs = codecs.replace(found[0], f'{prefix} (parity confirmed) † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
+    c = cases['ValidateVp8Alpha']
     prefix = '| Validate VP8+alpha, span'
     found = [line for line in reads.splitlines() if line.startswith(prefix)]
     assert len(found) == 1
@@ -965,15 +936,18 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    reader_current = json.loads((ROOT / 'benchmarks/vp8-fixed-code-evidence.json').read_text(encoding='utf-8'))
+    reader_current = json.loads((ROOT / 'benchmarks/vp8-six-byte-refill-evidence.json').read_text(encoding='utf-8'))
     assert reader_current['productionAccepted'] and reader_current['requiredMaterialPaths'] == 289
     assert reader_current['raw']['mirrored'] and reader_current['raw']['allMembersVerified']
     assert reader_current['allAffectedPerformanceReconciled'] and not reader_current['materialPassToGapContradictions']
+    reader_qualification = reader_current['qualification']
+    assert reader_qualification['sameActualPackageBothOs'] and reader_qualification['usageExamplesEachOs'] == 3
+    assert reader_qualification['packageLibrarySha256'] == reader_current['producers']['timedArtifactSha256']
     assert set(reader_current['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
     vp8_costs = {('Vp8Stream' if name == 'StreamNative8' else name): {**cost['metadata'], **cost}
                  for name, cost in reader_current['cases'].items()}
     for cost in vp8_costs.values():
-        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12 and cost['allActualsRetained']
         assert cost['librarySha256'] == reader_current['producers']['timedArtifactSha256']
         assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
         assert cost['sourceUnchanged'] and cost['independentOwnedOutput']
@@ -981,8 +955,9 @@ def render():
             assert cost['descriptorExact'] and cost['prefixAndCodingScopesVerified']
         else:
             assert cost['managedOutputSha256'] == cost['nativeOutputSha256'] and cost['alphaExact']
-            assert cost['decoderMaximum'] == 0 and cost['managedOutputBytes'] == 531468
-        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
+            assert cost['decoderMaximum'] == cost['decoderRmse'] == 0 and cost['managedOutputBytes'] == 531468
+            assert cost['nativeCliPixelsExact']
+        assert cost['status'] == 'pass' and cost['upper'] <= 1
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
@@ -3303,47 +3278,12 @@ Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note(png_composition_one_shot, crop_costs['PngCropFit8'])
-    codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
+    vp8_cases = reader_current['cases']
+    vp8_stream = vp8_cases['StreamNative8']
+    opaque_resident = vp8_cases['Opaque8']
+    opaque_live = vp8_cases['OpaqueCancelable8']
+    codecs, read_table = apply_current_vp8_reading(codecs, read_table, vp8_cases)
     editing = apply_current_bicubic_adjacent_confidence(editing)
-    vp8_package = json.loads((ROOT / 'benchmarks/vp8-decode-current-package-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_package['producers'] == jpeg_pending['producers']
-    assert vp8_package['raw']['mirrored'] and vp8_package['raw']['allMembersVerified']
-    assert set(vp8_package['cases']) | {'ValidateVp8Alpha'} == set(reader_current['cases'])
-    for name, c in vp8_package['cases'].items():
-        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
-        assert c['actuals'] == 12 and c['operationsPerSubject'] == 128
-        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
-        assert c['outputSha256'] == reader_current['cases'][name]['metadata']['managedOutputSha256']
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    vp8_partitioned = vp8_package['partitioned']
-    assert vp8_partitioned['producers'] == vp8_package['producers']
-    assert vp8_partitioned['raw']['mirrored'] and vp8_partitioned['raw']['allMembersVerified']
-    assert set(vp8_partitioned['cases']) == {'OpaqueCancelable8', 'StreamNative8', 'Native8'}
-    for name, c in vp8_partitioned['cases'].items():
-        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
-        assert c['actuals'] == 12 and c['operationsPerSubject'] == c['segmentsPerActual'] * c['operationsPerSegment'] == 128
-        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
-        assert all(c[k] == vp8_package['cases'][name][k] for k in ('inputSha256', 'outputSha256', 'nativeWorkerSha256'))
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    opaque_live = vp8_partitioned['cases']['OpaqueCancelable8']
-    vp8_stream = vp8_partitioned['cases']['StreamNative8']
-    opaque_current = vp8_package['opaquePartitioned']
-    assert opaque_current['raw']['mirrored'] and opaque_current['raw']['allMembersVerified']
-    assert set(opaque_current['cases']) == {'Opaque8', 'SimpleOpaque8'}
-    for name, c in opaque_current['cases'].items():
-        assert c['librarySha256'] == opaque_current['producers']['linuxSha256']
-        assert c['actuals'] == 12 and c['operationsPerSubject'] == c['segmentsPerActual'] * c['operationsPerSegment'] == 128
-        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
-        assert all(c[k] == vp8_package['cases'][name][k] for k in ('inputSha256', 'outputSha256', 'nativeWorkerSha256'))
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    opaque_resident = opaque_current['cases']['Opaque8']
-    opaque_simple = opaque_current['cases']['SimpleOpaque8']
-    vp8_status = {'pass': 'parity confirmed', 'gap': 'gap', 'uncertain': 'confidence open'}
-    prefix = '| WebP VP8 + alpha, fresh seekable Stream'
-    old, = (line for line in codecs.splitlines() if line.startswith(prefix))
-    codecs = codecs.replace(old, f'{prefix} ({vp8_status[vp8_stream["status"]]}) † | {vp8_stream["managedUs"]:,.2f} | '
-                            f'{vp8_stream["nativeUs"]:,.2f} | {vp8_stream["ratio"]:.3f} / {vp8_stream["upper"]:.6f} | '
-                            f'{vp8_stream["allocatedBytes"]:,} | — |')
     vp8l_package = json.loads((ROOT / 'benchmarks/vp8l-decode-current-package-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_package['producers'] == jpeg_pending['producers']
     assert vp8l_package['raw']['mirrored'] and vp8l_package['raw']['allMembersVerified']
@@ -3625,7 +3565,6 @@ costs. The complete final-package refresh remains outstanding."""
     assert compact_word['raw']['mirrored'] and compact_word['raw']['allMembersVerified']
     word_qualification = compact_word['qualification']
     assert png_composition_one_shot['producers'] == word_qualification
-    assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
     bilinear_package = json.loads((ROOT / 'benchmarks/bilinear-current-package-evidence.json').read_text(encoding='utf-8'))
@@ -4056,20 +3995,18 @@ stream captures remain linked beside their current confirmations.
 
 {png_stream_word_note}
 
-[Current-package VP8 decode](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md) measures
-the fresh stream at **{vp8_stream['managedUs']:,.2f} / FFmpeg {vp8_stream['nativeUs']:,.2f} µs**,
-upper **{vp8_stream['upper']:.6f}**, **{vp8_stream['allocatedBytes']:,} B/op**
-({vp8_status[vp8_stream['status']]}). The complete operation includes fresh stream
-acquisition, decoding, independent output ownership and disposal. The partitioned
-schedule also confirms the transparent resident case.
-On the latest package the same schedule confirms simple-filter opaque decode at
-**{opaque_simple['managedUs']:,.2f} / FFmpeg {opaque_simple['nativeUs']:,.2f} µs**,
-upper **{opaque_simple['upper']:.6f}**, **{opaque_simple['allocatedBytes']:,} B/op**.
-Ordinary opaque decode remains uncertain at upper **{opaque_resident['upper']:.6f}**.
+[Six-byte VP8 refills](../benchmarks/VP8-SIX-BYTE-REFILLS.md) confirm all six
+affected operations. Fresh stream decode takes
+**{vp8_stream['managedUs']:,.2f} / FFmpeg {vp8_stream['nativeUs']:,.2f} µs**,
+upper **{vp8_stream['upper']:.6f}**, **{vp8_stream['allocatedBytes']:,} B/op**.
+It includes stream acquisition, decoding, independently owned output and disposal.
+Ordinary and live-token opaque decoding pass at upper **{opaque_resident['upper']:.6f}**
+and **{opaque_live['upper']:.6f}**, both at **230,880 B/op**. The original
+FFmpeg boundaries, exact pixels and cancellation checks apply.
 
-All five affected [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
-pass on the same package. The resident, fresh-stream and indexed rows show their
-current costs including complete public decoding and owned outputs.
+The five [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
+retain passing evidence on their recorded producer. The resident, fresh-stream
+and indexed rows include complete public decoding and owned outputs.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
 **67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
@@ -4123,15 +4060,6 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Unchanged
 encoder paths reuse this source-valid evidence on the current qualified package.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Fixed-position VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) keeps the code
-byte at a fixed UInt64 position, preserving scalar cursors, every cancellation
-check and input-refill addresses. Independent live-token pairs save **41.53µs/.86%**
-in their scoped ALC comparison. The [current-package live-token comparison](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md)
-is **{opaque_live['managedUs']:,.2f} / FFmpeg {opaque_live['nativeUs']:,.2f} µs**,
-upper **{opaque_live['upper']:.6f}**, **{opaque_live['allocatedBytes']:,} B/op**
-({vp8_status[opaque_live['status']]}). All five owned-output comparisons keep their
-exact pixels and reference boundaries. Coding-only validation retains its
-source-valid evidence.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
 zero-only coefficient storage and size working rows from actual taps.
 [Current-package measurements](../benchmarks/LANCZOS-CURRENT-PACKAGE.md) confirm

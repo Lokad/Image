@@ -1,0 +1,640 @@
+{
+  "project": "Lokad.Image",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "allAffectedPerformanceReconciled": true,
+  "materialPassToGapContradictions": [],
+  "producers": {
+    "timedArtifactSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+  },
+  "cases": {
+    "Opaque8": {
+      "caseId": "Opaque8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "operationsPerSubject": 128,
+      "ratio": 0.9698135819080119,
+      "lower": 0.9642547496755441,
+      "upper": 0.9747667112345811,
+      "status": "pass",
+      "managedUs": 5055.246126302083,
+      "nativeUs": 5212.595720052083,
+      "allocatedBytes": 230880,
+      "metadata": {
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "inputBytes": 72380,
+        "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "managedOutputBytes": 531468,
+        "decoderMaximum": 0,
+        "decoderRmse": 0,
+        "alphaExact": true,
+        "nativeCliPixelsExact": true,
+        "scalarCliPixelsExact": false,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Original development-only warm VP8 decode FFmpeg worker",
+          "sourceSha256": "2a1dd91ad98fece75a4cab07a1bf31d49bb70214bb15d51b202fe940c1465b26",
+          "buildScriptSha256": "ff660e331ee0694ffafb9557cd1df6952d37c697c8dc19d62f6eeb4e756aac74",
+          "workerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality."
+      }
+    },
+    "OpaqueCancelable8": {
+      "caseId": "OpaqueCancelable8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "operationsPerSubject": 128,
+      "ratio": 0.983598241969693,
+      "lower": 0.976698504618861,
+      "upper": 0.9897041435753171,
+      "status": "pass",
+      "managedUs": 5145.230363932292,
+      "nativeUs": 5231.028426432292,
+      "allocatedBytes": 230880,
+      "metadata": {
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "inputBytes": 72380,
+        "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "managedOutputBytes": 531468,
+        "decoderMaximum": 0,
+        "decoderRmse": 0,
+        "alphaExact": true,
+        "nativeCliPixelsExact": true,
+        "scalarCliPixelsExact": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Original development-only warm VP8 decode FFmpeg worker",
+          "sourceSha256": "2a1dd91ad98fece75a4cab07a1bf31d49bb70214bb15d51b202fe940c1465b26",
+          "buildScriptSha256": "ff660e331ee0694ffafb9557cd1df6952d37c697c8dc19d62f6eeb4e756aac74",
+          "workerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality."
+      }
+    },
+    "SimpleOpaque8": {
+      "caseId": "SimpleOpaque8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "operationsPerSubject": 128,
+      "ratio": 0.9749464526838828,
+      "lower": 0.9675255097404006,
+      "upper": 0.9812856846937957,
+      "status": "pass",
+      "managedUs": 5191.327207682292,
+      "nativeUs": 5324.73059765625,
+      "allocatedBytes": 230880,
+      "metadata": {
+        "inputSha256": "ef21a8b737cb3ffbef80939df713024482e53f102475aa4bdb0bcdda8df19319",
+        "inputBytes": 76128,
+        "managedOutputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+        "nativeOutputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+        "managedOutputBytes": 531468,
+        "decoderMaximum": 0,
+        "decoderRmse": 0,
+        "alphaExact": true,
+        "nativeCliPixelsExact": true,
+        "scalarCliPixelsExact": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Original development-only warm VP8 decode FFmpeg worker",
+          "sourceSha256": "2a1dd91ad98fece75a4cab07a1bf31d49bb70214bb15d51b202fe940c1465b26",
+          "buildScriptSha256": "ff660e331ee0694ffafb9557cd1df6952d37c697c8dc19d62f6eeb4e756aac74",
+          "workerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality."
+      }
+    },
+    "Native8": {
+      "caseId": "Native8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "operationsPerSubject": 128,
+      "ratio": 0.9506573811353166,
+      "lower": 0.9434390752924258,
+      "upper": 0.9575869571384653,
+      "status": "pass",
+      "managedUs": 6163.771862630208,
+      "nativeUs": 6483.6943203125,
+      "allocatedBytes": 240400,
+      "metadata": {
+        "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "inputBytes": 98590,
+        "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "managedOutputBytes": 531468,
+        "decoderMaximum": 0,
+        "decoderRmse": 0,
+        "alphaExact": true,
+        "nativeCliPixelsExact": true,
+        "scalarCliPixelsExact": false,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Original development-only warm VP8 decode FFmpeg worker",
+          "sourceSha256": "2a1dd91ad98fece75a4cab07a1bf31d49bb70214bb15d51b202fe940c1465b26",
+          "buildScriptSha256": "ff660e331ee0694ffafb9557cd1df6952d37c697c8dc19d62f6eeb4e756aac74",
+          "workerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Identical resident frozen VP8/ALPH input to independent owned RGBA8. Complete public managed Decode and disposal; native software webp decode, state reset, centered bilinear chroma expansion, limited BT.601 conversion through RGBA16, RGBA8 reduction, exact alpha merge and scratch/output allocation/release. One codec/conversion thread, normal SIMD. Native contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded output rows exposed without a packing copy. Startup, I/O, IPC, hashing, validation and encoding excluded. One existing raster/input; no regeneration or quality enumeration. Decode does not require a matched encoder quality. Only this native keyframe/alpha profile is measured."
+      }
+    },
+    "StreamNative8": {
+      "caseId": "StreamNative8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "operationsPerSubject": 128,
+      "ratio": 0.9353187624333408,
+      "lower": 0.9296031693478921,
+      "upper": 0.9409999766948177,
+      "status": "pass",
+      "managedUs": 6072.81948046875,
+      "nativeUs": 6492.7805625,
+      "allocatedBytes": 240496,
+      "metadata": {
+        "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "inputBytes": 98590,
+        "managedOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "managedOutputBytes": 531468,
+        "decoderMaximum": 0,
+        "decoderRmse": 0,
+        "alphaExact": true,
+        "nativeCliPixelsExact": true,
+        "scalarCliPixelsExact": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Original development-only warm VP8 fresh Stream decode FFmpeg worker",
+          "sourceSha256": "d6a9e620136c474cd3e8f26fe7a9ba245cde97765b74eacdc2cd63cef2867532",
+          "buildScriptSha256": "543f38a4e14daac19682c0c45e671d6dd3f5735ca86fb3796c05822f70fb62d4",
+          "workerSha256": "85fa3a2878065329ae8c2284c893f58edcef48d35c11a2afcd83761928f00c08",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavformat -lm -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Fresh non-exposed seekable VP8/ALPH Stream to independent owned RGBA8. Complete default managed input buffering/copies and EOF reading, full public Decode/disposal. Native fresh AVIO/owned packet acquisition, complete reading/EOF, software webp state reset/decode, centered chroma expansion, limited BT601 through RGBA16/no-dither reduction, exact alpha merge and all input/scratch/output acquisition/release timed. Decoder/conversion/frame/packet wrappers reused; every call reacquires input and decodes/converts all pixels. No demux, exposed input-buffer shortcut, output cache or redundant packing. One CPU/codec/conversion thread, normal SIMD. Startup/I/O/IPC/generation/hashing/validation excluded. Existing frozen input and exact per-decoder pixel anchors reused; no encoding or quality search."
+      }
+    },
+    "ValidateVp8Alpha": {
+      "caseId": "ValidateVp8Alpha",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "managedUs": 4570.0227968750005,
+      "nativeUs": 5882.986171875,
+      "ratio": 0.7768202513755804,
+      "lower": 0.7580653668029474,
+      "upper": 0.7868538317135771,
+      "status": "pass",
+      "allocatedBytes": 15600,
+      "metadata": {
+        "inputSha256": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+        "inputBytes": 115542,
+        "descriptorSha256": "eec73486a786152f1f3d0067a8023bfc632fbf38aaa7fbb9d608e75aaebaf9c6",
+        "descriptorExact": true,
+        "prefixAndCodingScopesVerified": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "FFmpeg native-frame validation or AVIO prefix probing with original bounded source-metadata adapter",
+          "sourceSha256": "c8d92290cd55ab8ff2ba1c245c0392bac325e05bd9de94f00bf74eed3cc08482",
+          "buildScriptSha256": "1591488aa8508a55d1b7e7749cdcbaccd53e57784d8297cc8e5760cdcc817fae",
+          "workerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavformat -lm -lavcodec -lm -lwebp -lsharpyuv -lavutil -lm -lz -latomic -pthread"
+        },
+        "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+        "managedOutputBytes": 36,
+        "nativeOutputBytes": 36
+      }
+    }
+  },
+  "paired": {
+    "Opaque8": {
+      "12": {
+        "baseline": {
+          "mean": 5136.319671875,
+          "lower": 5099.965751276082,
+          "upper": 5172.673592473917
+        },
+        "candidate": {
+          "mean": 5071.038359375,
+          "lower": 5036.123643088679,
+          "upper": 5105.953075661321
+        },
+        "candidateToBaselineInterval": [
+          0.9827945128778937,
+          0.991807993169801
+        ],
+        "candidateToBaselineRatio": 0.9872909669979341,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          5223.311401041667,
+          5244.81715625,
+          5234.554036458333
+        ]
+      },
+      "3": {
+        "baseline": {
+          "mean": 5103.282375,
+          "lower": 4282.53317056611,
+          "upper": 5924.031579433889
+        },
+        "candidate": {
+          "mean": 5006.720145833334,
+          "lower": 4180.478371111435,
+          "upper": 5832.961920555233
+        },
+        "candidateToBaselineInterval": [
+          0.841868308843443,
+          1.1433053004814595
+        ],
+        "candidateToBaselineRatio": 0.981077213988823,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          5189.233375,
+          5158.563166666667,
+          5176.683083333333
+        ]
+      }
+    },
+    "OpaqueCancelable8": {
+      "12": {
+        "baseline": {
+          "mean": 5156.6813125,
+          "lower": 5117.581729627736,
+          "upper": 5195.780895372263
+        },
+        "candidate": {
+          "mean": 5099.760822916666,
+          "lower": 5058.266787664114,
+          "upper": 5141.254858169218
+        },
+        "candidateToBaselineInterval": [
+          0.9816901247515697,
+          0.996282459436287
+        ],
+        "candidateToBaselineRatio": 0.988959378281944,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          5192.470088541667,
+          5192.066604166666,
+          5196.802
+        ]
+      },
+      "3": {
+        "baseline": {
+          "mean": 5199.906229166667,
+          "lower": 4906.493917030503,
+          "upper": 5493.31854130283
+        },
+        "candidate": {
+          "mean": 5148.1614375,
+          "lower": 4941.672607072048,
+          "upper": 5354.650267927952
+        },
+        "candidateToBaselineInterval": [
+          0.9575535946817082,
+          1.0236501944170835
+        ],
+        "candidateToBaselineRatio": 0.9900504650575686,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          5219.755041666666,
+          5229.653166666667,
+          5215.0996875
+        ]
+      }
+    }
+  },
+  "partitionProof": {
+    "mode": {
+      "guard": 272,
+      "maximumReadEnd": 109,
+      "publishStates": 53824
+    },
+    "block": {
+      "guard": 272,
+      "maximumReadEnd": 271,
+      "publishStates": 135808
+    },
+    "macroblock24": {
+      "guard": 6528,
+      "maximumReadEnd": 6385,
+      "publishStates": 3268224
+    },
+    "macroblock25": {
+      "guard": 6800,
+      "maximumReadEnd": 6655,
+      "publishStates": 3404416
+    }
+  },
+  "sourcePath": "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs",
+  "candidateSourceSha256": "7e3c969b7c7d69b711be878ec686a246a6ee6fa94fe7fefaac5892f80b984503",
+  "raw": {
+    "file": "vp8-six-byte-refill-reference.tar.xz",
+    "sha256": "db698ee4ed64775dc201c76e8badab844505d5e672bf476ef69f9304b17b66c9",
+    "bytes": 487284,
+    "members": 56,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "pairedRawArchives": {
+    "Opaque8-12-archive.json": {
+      "file": "vp8-decoder-six-byte-refill-Opaque8-12.tar.xz",
+      "sha256": "e18a5ad5bb1d799ca57b7b7e623fa1e8bb7ca8385732872320fe8cea10b611b3",
+      "bytes": 399292,
+      "members": 23,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "Opaque8-3-archive.json": {
+      "file": "vp8-decoder-six-byte-refill-Opaque8-3.tar.xz",
+      "sha256": "f627521d4664f9bb055bd60ce1a5348b1715480dbe2b88fb462d18af75b21dd1",
+      "bytes": 398016,
+      "members": 23,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "OpaqueCancelable8-12-archive.json": {
+      "file": "vp8-decoder-six-byte-refill-OpaqueCancelable8-12.tar.xz",
+      "sha256": "24340eca8e0ff8c0400bfda70921daa050ea21b49fb20526adb458a02deff188",
+      "bytes": 399368,
+      "members": 23,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "OpaqueCancelable8-3-archive.json": {
+      "file": "vp8-decoder-six-byte-refill-OpaqueCancelable8-3.tar.xz",
+      "sha256": "c32ee1ba4d1ad9d655e8071c683953f142ee2b7ecdd6bd46f69517d48738ec9c",
+      "bytes": 398104,
+      "members": 23,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "qualification": {
+    "packageLibrarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+    "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+    "symbolsSha256": "ce1d407cbd5bba51e980428e167e3ab378df207446ac89c4e1b36cdbf307ca96",
+    "sameActualPackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "windows": {
+      "full": [
+        3389,
+        2519,
+        948
+      ],
+      "focused": {
+        "normal": [
+          1042,
+          402
+        ],
+        "scalar": [
+          1042,
+          402
+        ]
+      },
+      "dllSha256": "689ee5ee68dd78f90e2e2bc99d3ac9025c6c2977f43de9a473d7e8f171930af9",
+      "consumerLogSha256": "5bd2885d0a380bada604636110d5011453e4d2a2b1582e4910af4327fe8c70c2"
+    },
+    "linux": {
+      "full": [
+        3389,
+        2519,
+        948
+      ],
+      "focused": {
+        "normal": [
+          1042,
+          402
+        ],
+        "scalar": [
+          1042,
+          402
+        ]
+      },
+      "dllSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "consumerLogSha256": "e054749f82b9e857b694bc62673ceceb67a02bcff296b0f8cab6bdcf2d4647d7"
+    }
+  },
+  "productionAccepted": true,
+  "productionChanged": true,
+  "publicationPostponed": true,
+  "qualificationRaw": {
+    "file": "vp8-six-byte-refill-qualification.tar.xz",
+    "sha256": "87ddf921fd3b1e07a578f56cf61433610ef77afad5cdf62f3995c2cc8305e7bc",
+    "bytes": 1331460,
+    "members": 25,
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

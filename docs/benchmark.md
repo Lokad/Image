@@ -188,20 +188,18 @@ stream captures remain linked beside their current confirmations.
 
 [Completed nearest rows](../benchmarks/NEAREST-ROW-REUSE.md) qualify the current complete PNG16 pipeline at **2,772.04 / FFmpeg 2,937.90 µs, upper 0.951202**, **8,888.16 B/op**. [PNG8 after crop reuse](../benchmarks/CROP-ROW-REUSE.md) passes at **1,307.85 / 1,621.76 µs, upper 0.813655**, **4,792.08 B/op**. Native contexts remain retained; managed stream delivery, decode, orientation, crop, nearest fit, every intermediate and independent output/disposal stay timed. All four original direct-nearest controls pass and stop. RGBA16 enlargement is **949.45 / FFmpeg 981.40 µs, upper 0.981828**, **4,264,364 B/op**; the other three allocate112B/op. Independent final-DLL pairs save **110.756 µs / 10.35%**, with unchanged allocation and owned/retained capacity. Copies retain exact complete samples and1024-pixel cancellation checkpoints; no pool-cap or numerical change. The original I/O-guard failures remain: bounded tmpfs holds only untimed temporary images, with original inputs/settings, complete-operation boundaries and idle-v2 thresholds unchanged. A dual-context screen stays diagnostic; accepted gain uses one default-loader process per DLL. Windows/Linux each pass6776full/live checks,534internal/204public normal/scalar and the SAME actual package/all three examples. Earlier [shared storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) independently establishes97.4%lessallocation, not a summed CPU gain. The [fresh-state one-shot composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) passes on the current package at **2,999.60 / 3,980.11 µs**, upper **0.806590** and **8,888 B/op**, with fresh FFmpeg decoder and graph preparation included.
 
-[Current-package VP8 decode](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md) measures
-the fresh stream at **6,082.74 / FFmpeg 6,494.10 µs**,
-upper **0.947445**, **240,496 B/op**
-(parity confirmed). The complete operation includes fresh stream
-acquisition, decoding, independent output ownership and disposal. The partitioned
-schedule also confirms the transparent resident case.
-On the latest package the same schedule confirms simple-filter opaque decode at
-**4,711.56 / FFmpeg 4,900.74 µs**,
-upper **0.964514**, **230,880 B/op**.
-Ordinary opaque decode remains uncertain at upper **1.052237**.
+[Six-byte VP8 refills](../benchmarks/VP8-SIX-BYTE-REFILLS.md) confirm all six
+affected operations. Fresh stream decode takes
+**6,072.82 / FFmpeg 6,492.78 µs**,
+upper **0.941000**, **240,496 B/op**.
+It includes stream acquisition, decoding, independently owned output and disposal.
+Ordinary and live-token opaque decoding pass at upper **0.974767**
+and **0.989704**, both at **230,880 B/op**. The original
+FFmpeg boundaries, exact pixels and cancellation checks apply.
 
-All five affected [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
-pass on the same package. The resident, fresh-stream and indexed rows show their
-current costs including complete public decoding and owned outputs.
+The five [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
+retain passing evidence on their recorded producer. The resident, fresh-stream
+and indexed rows include complete public decoding and owned outputs.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
 **67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
@@ -282,15 +280,6 @@ and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
 The longer trellis integration retains its original uncertain capture. Unchanged
 encoder paths reuse this source-valid evidence on the current qualified package.
 This scoped refresh does not establish whole-library parity; publication is postponed.
-[Fixed-position VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) keeps the code
-byte at a fixed UInt64 position, preserving scalar cursors, every cancellation
-check and input-refill addresses. Independent live-token pairs save **41.53µs/.86%**
-in their scoped ALC comparison. The [current-package live-token comparison](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md)
-is **5,198.14 / FFmpeg 5,194.48 µs**,
-upper **1.016033**, **230,880 B/op**
-(confidence open). All five owned-output comparisons keep their
-exact pixels and reference boundaries. Coding-only validation retains its
-source-valid evidence.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
 zero-only coefficient storage and size working rows from actual taps.
 [Current-package measurements](../benchmarks/LANCZOS-CURRENT-PACKAGE.md) confirm
@@ -459,7 +448,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 6,082.74 | 6,494.10 | 0.937 / 0.947445 | 240,496 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 6,072.82 | 6,492.78 | 0.935 / 0.941000 | 240,496 | — |
 | JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,083.86 | 3,772.61 | 0.817 / 0.825 | 820,120 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples (parity confirmed) † | 1,431.80 | 1,578.72 | 0.907 / 0.912 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,525.81 | 1,841.57 | 0.829 / 0.832 | 819,475 | 52,115 / 52,117 |
@@ -623,7 +612,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
+| Validate VP8+alpha, span † | 4,570.023 | 5,882.986 | 0.777 / 0.787 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 3,007.609 | 3,922.893 | 0.767 / 0.778735 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.291 | 0.580 | 0.501 / 0.509 | 568 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 6.733 | 13.068 | 0.515 / 0.520 | 96 | Confirmed pass |

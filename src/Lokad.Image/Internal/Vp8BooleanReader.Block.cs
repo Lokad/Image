@@ -31,7 +31,7 @@ internal partial struct Vp8BooleanReader
 
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
-    // The initial normalized range and32bit refills need at most269bytes,
+    // The initial normalized range and 48-bit refills need at most 271 bytes,
     // within the unchanged272byte partition guard, including all lookahead.
     // Short inputs retain the bit-at-a-time reader. Cancelable blocks use the
     // separate polling wrapper and preserve its exact canceled prefix.
@@ -78,11 +78,17 @@ internal partial struct Vp8BooleanReader
 
         internal BlockReader(ReadOnlySpan<byte> data, int position, int shift, int range, int value)
         {
-            this.data = data; Position = position + 1; Bits = shift + 1; Range = range;
-            // Keep the code byte at a fixed position; future input follows it.
-            Value = ((ulong)value << 56)
-                | ((ulong)((uint)data[position] & ((1u << Bits) - 1)) << (56 - Bits));
-            Fill(in data, ref Position, ref Bits, ref Value);
+            this.data = data;
+            var phase = shift + 1;
+            // One byte supplies the scalar tail and six more supply the
+            // cached future bits. The eighth byte is within the window
+            // bound and does not enter the reservoir.
+            var seed = BinaryPrimitives.ReadUInt64BigEndian(data.Slice(position, 8)) >> 8;
+            var future = seed & ((1UL << (48 + phase)) - 1);
+            Value = ((ulong)value << 56) | (future << (8 - phase));
+            Position = position + 7;
+            Bits = phase + 48;
+            Range = range;
         }
 
         internal bool ReadCoefficients<TMode>(ReadOnlySpan<CoefficientModelRow> model, scoped Span<short> values,
@@ -186,12 +192,14 @@ internal partial struct Vp8BooleanReader
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Fill(in ReadOnlySpan<byte> data, ref int position, ref int bits, ref ulong value)
         {
-            // With1..7 future bits, insert32 below the code and known input.
-            // The low insertion space is zero;33..39 future bits then remain.
-            // Refill positions and the original272B lookahead stay unchanged.
+            // Six new bytes fit below the 1..7 known bits. Load the
+            // final two already cached bytes with them and discard those
+            // bytes. The seed guarantees this lookbehind stays in-window.
             if (bits >= 8) return;
-            value |= (ulong)BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4)) << (24 - bits);
-            position += 4; bits += 32;
+            var next = BinaryPrimitives.ReadUInt64BigEndian(data.Slice(position - 2, 8));
+            value |= (next & 0x0000_ffff_ffff_ffffUL) << (8 - bits);
+            position += 6;
+            bits += 48;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
