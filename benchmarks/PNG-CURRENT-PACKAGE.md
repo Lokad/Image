@@ -125,3 +125,25 @@ recipes, all original validation records and quietness guards. The temporary
 async proof was removed and the original bytes restored. No production,
 package, reference, fixture or generated benchmark rebuild was needed.
 [Evidence](png-decoder-current-package-evidence.json)
+
+## Pixel-coding validation
+
+All four original validators pass on the same package and stop. The conservative
+upper ratios for PNG8 span, PNG16 span, indexed Adam7 span and PNG16 async
+nonseekable are **0.845441**, **0.910041**, **0.474500** and **0.778735**.
+Allocations are 240, 240, 792 and 360 B/op. The corresponding rows in the
+[benchmark summary](../docs/benchmark.md) use these current costs.
+
+The cost includes complete coding validation and an independently owned
+descriptor. Async validation includes fresh input acquisition, EOF and cleanup.
+Both sides use the frozen packets and descriptor checks. The original generated
+delegates run with natural GC and twelve actuals per case. The 12 original
+read preparation controls, including descriptor, source, ownership and
+malformed-coding checks, pass in a private runtime. Their proof matches the
+original apart from package identity. The original fixtures and proof remain
+unchanged. No production, package, harness, fixture or reference rebuild.
+
+The mirrored `png-validators-current-package-confirmations.tar.xz` contains 31 verified members and
+58,392 B, SHA-256 `4bd3a301cfe8dd0bd444ce933c066162038f3dfcaa905992044619e11cecfaca`. It retains the original and current
+proof identities, all actuals, native brackets, quietness guards and the
+temporary driver. [Evidence](png-decoder-current-package-evidence.json)

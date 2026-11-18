@@ -19,8 +19,9 @@ driver includes complete stream delivery and independent output ownership.
 Four more original storage controls pass on that package. The RGBA8 async
 nonseekable encode and two-retained-result decode have uppers of 0.978328 and
 0.972152. The fresh seekable and async nonseekable RGBA8 decodes also pass.
-The four original PNG coding validators still need current costs because their
-validation paths use the changed workspace pools. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
+All four original PNG coding validators also pass on the current package,
+with conservative upper ratios from 0.474500 to 0.910041. Their validation
+paths use the changed workspace pools. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
 
 [Completed nearest rows](NEAREST-ROW-REUSE.md) retains source-valid evidence:
 complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged
@@ -68,7 +69,7 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
-| PNG decoding | [Current package](PNG-CURRENT-PACKAGE.md) passes all 47 resident decode controls and the caller-root two-retained-result decode. Four affected validators await current costs. [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) retains their original qualification, including exact samples, cancellation and admission. |
+| PNG decoding | [Current package](PNG-CURRENT-PACKAGE.md) passes all 47 resident decode controls and the caller-root two-retained-result decode. The four coding validators also pass. [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) retains the original qualification, including exact samples, cancellation and admission. |
 | Stream decode/composition | [Current completed-row package](NEAREST-ROW-REUSE.md): original retained-native PNG16/8 pipelines pass at 2772.041/2937.903 us and 1185.369/1475.389 us, upper .951202/.807373, 8888.16/4792.08 B/op. All four original direct-nearest controls pass/stop; Up16 is 949.453/981.396 us upper .981828, 4264364 B/op. Independent controlled complete Up16 gain 10.35%/110.756 us; exact cells/hidden RGB, 1024-pixel polls, no new capacity or pool-cap change. Shared-storage allocation gains remain separately attributed. Every public pipeline call/intermediate/output/disposal and original pixel/source/stream/owner gate remains. Earlier fresh-native one-shot and other historical pool-dependent costs still need the final complete package refresh. |
 | JPEG reading | All 24 RGBA/fresh and four caller-buffer views pass and stop. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) saves 4.03% / 16.92 µs in controlled complete-decode pairs, unchanged 20,944 B/op. Current horizontal410.41/FFmpeg418.11µs upper.988; fresh372.15/753.22µs upper.498; sparse414.93/433.23µs upper.970. RGB444's adverse standalone point is uncertain; one favorable controlled pair resolves the suspected contradiction without a standalone repeat. Two coding-only validators reuse unchanged proof. Earlier compact-output, row-product and raw-row studies retain adversity/inconclusive results separately. |
 | JPEG encoding | All 18 declared comparisons pass/stop. [Direct block emission](JPEG-DIRECT-BLOCK-EMISSION.md) closes restart33: 1,339.28 / FFmpeg 1,609.15 µs, upper .841, 151,180 B/op, exact 58,010 / 58,012 B packets with the strict 2 B attribution exception. Separate complete paired steps save 19.21% and 17.00%; no summed gain. The 17 [adaptive replay controls](JPEG-LOCAL-ENTROPY-REPLAY.md) reuse unchanged paths/artifact identities. SIMD libjpeg-turbo grayscale stays explicitly labeled. Native contexts/table preparation remain retained; managed preparation stays timed. No added storage or broader content/settings claim. |

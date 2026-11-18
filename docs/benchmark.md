@@ -18,7 +18,8 @@ Fresh seekable RGBA16 PNG decode also passes on the same package at
 upper **0.991093**, **8,664 B/op**.
 The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
-and retained-output rows use the current measurements.
+and retained-output rows use the current measurements, as do all four PNG
+pixel-coding validation rows.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -568,14 +569,14 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Probe JPEG dimensions, seekable | 0.184 | 0.194 | 0.949 / 0.962 | 568 | Confirmed pass |
 | Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
 | Probe JPEG dimensions, async nonseekable | 0.219 | 0.210 | 1.045 / 1.121 | 568 | Confidence open |
-| Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
-| Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
-| Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |
+| Validate PNG8, span † | 1,259.842 | 1,507.479 | 0.836 / 0.845441 | 240 | Confirmed pass |
+| Validate PNG16, span † | 2,931.938 | 3,250.048 | 0.902 / 0.910041 | 240 | Confirmed pass |
+| Validate indexed Adam7 19×17, span † | 1.986 | 4.310 | 0.461 / 0.474500 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,331.362 | 5,454.375 | 0.794 / 0.797 | 15,600 | Confirmed pass |
-| Validate PNG16, async nonseekable † | 2,753.691 | 3,613.167 | 0.762 / 0.766 | 360 | Confirmed pass |
+| Validate PNG16, async nonseekable † | 3,007.609 | 3,922.893 | 0.767 / 0.778735 | 360 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.291 | 0.580 | 0.501 / 0.509 | 568 | Confirmed pass |
 | Identify PNG8 complete container, resident, adapter reference | 6.733 | 13.068 | 0.515 / 0.520 | 96 | Confirmed pass |
 | Identify JPEG420, resident, canonical adapter | 0.497 | 1.181 | 0.421 / 0.431 | 96 | Confirmed pass |

@@ -3462,6 +3462,25 @@ costs. The complete final-package refresh remains outstanding."""
         result = (f'| {label} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                   f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | {output} |')
         codecs = codecs.replace(old, result)
+    png_validators = png_decoders['validators']
+    assert png_validators['producers'] == png_package['producers']
+    assert png_validators['raw']['mirrored'] and png_validators['raw']['allMembersVerified']
+    assert png_validators['preparation']['exactPreparationExceptPackage']
+    for label, name in (
+        ('Validate PNG8, span †', 'ValidatePng8'),
+        ('Validate PNG16, span †', 'ValidatePng16'),
+        ('Validate indexed Adam7 19×17, span †', 'ValidateIndexedAdam7'),
+        ('Validate PNG16, async nonseekable †', 'ValidatePng16Async'),
+    ):
+        c = png_validators['cases'][name]
+        assert c['librarySha256'] == png_package['producers']['linuxSha256']
+        assert len(c['actualOperationCounts']) == 12 and c['upper'] <= 1 and c['status'] == 'pass'
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+        heading = f'| {label} |'
+        old, = (line for line in read_table.splitlines() if line.startswith(heading))
+        result = (f'| {label} | {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | Confirmed pass |')
+        read_table = read_table.replace(old, result)
     for label, name in (
         ('PNG RGBA8 decode, live token †', 'DecodeCancelable8'),
         ('PNG RGBA8 decode, tight working limit †', 'DecodeTight8'),
@@ -3498,7 +3517,8 @@ Fresh seekable RGBA16 PNG decode also passes on the same package at
 upper **{png_word_stream['upper']:.6f}**, **{png_word_stream['allocatedBytes']:,} B/op**.
 The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
-and retained-output rows use the current measurements.
+and retained-output rows use the current measurements, as do all four PNG
+pixel-coding validation rows.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

@@ -1786,5 +1786,316 @@
     "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
     "confidence": "Conservative filtered and all-actual bounds against both native brackets.",
     "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention."
+  },
+  "validators": {
+    "project": "Lokad.Image",
+    "producers": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "raw": {
+      "file": "png-validators-current-package-confirmations.tar.xz",
+      "bytes": 58392,
+      "sha256": "4bd3a301cfe8dd0bd444ce933c066162038f3dfcaa905992044619e11cecfaca",
+      "members": 31,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "cases": {
+      "ValidatePng8": {
+        "caseId": "ValidatePng8",
+        "managedUs": 1259.8415041666667,
+        "nativeUs": 1507.4792161458333,
+        "ratio": 0.8357272794696957,
+        "lower": 0.8222537294860837,
+        "upper": 0.8454413595662635,
+        "status": "pass",
+        "allocatedBytes": 240,
+        "exactAllocatedBytesPerOperation": 240.0,
+        "actualOperationCounts": [
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160,
+          160
+        ],
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "originalGeneratedLoopsAndConsumer": true,
+        "forceGcBetweenIterations": false,
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+        "inputSha256": "f222f46cd50138623a14862e7a54c795d35ff6acef5daea1b5cef9331e99bd7e",
+        "nativeBrackets": [
+          {
+            "side": "nativeBefore",
+            "mean": 1507479.2161458333,
+            "standardError": 1606.4879918219926
+          },
+          {
+            "side": "nativeAfter",
+            "mean": 1513807.7916666667,
+            "standardError": 1779.5235313168794
+          }
+        ],
+        "confidenceViews": [
+          {
+            "view": "statistics",
+            "samples": 12,
+            "lower": 0.8222537294860837,
+            "upper": 0.8454397724379288
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "samples": 12,
+            "lower": 0.8222552943441515,
+            "upper": 0.8454413595662635
+          }
+        ],
+        "rawLog": "tmp/frp1277-ValidatePng8.log",
+        "rawLogSha256": "e04f2ea10cec54152c307c7f1f5de53186d43a12d54b39ff4c6def50f2a4388a",
+        "validationPath": "tmp/frp1277-validator-root/artifacts/benchmark-validation/WarmImageRead-frp1277-ValidatePng8-ValidatePng8.json",
+        "validationSha256": "81c0754c03a47c63a752b3c2700d71253e702bd1f080b522ac9b7ab62acd1a3e",
+        "descriptorSha256": "e96cfcba81194472b5f76f6a4b36998ecda4c0348f4c0d0ccd346ccc8a51eb65"
+      },
+      "ValidatePng16": {
+        "caseId": "ValidatePng16",
+        "managedUs": 2931.9381135416666,
+        "nativeUs": 3250.047734375,
+        "ratio": 0.9021215542563386,
+        "lower": 0.8942795393551943,
+        "upper": 0.9100405208858299,
+        "status": "pass",
+        "allocatedBytes": 240,
+        "exactAllocatedBytesPerOperation": 240.0,
+        "actualOperationCounts": [
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80
+        ],
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "originalGeneratedLoopsAndConsumer": true,
+        "forceGcBetweenIterations": false,
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+        "inputSha256": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+        "nativeBrackets": [
+          {
+            "side": "nativeBefore",
+            "mean": 3250047.734375,
+            "standardError": 3538.791976809724
+          },
+          {
+            "side": "nativeAfter",
+            "mean": 3250123.453125,
+            "standardError": 2194.130952285934
+          }
+        ],
+        "confidenceViews": [
+          {
+            "view": "statistics",
+            "samples": 12,
+            "lower": 0.8942795393551943,
+            "upper": 0.910039709284397
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "samples": 12,
+            "lower": 0.894280343152355,
+            "upper": 0.9100405208858299
+          }
+        ],
+        "rawLog": "tmp/frp1277-ValidatePng16.log",
+        "rawLogSha256": "f4e059b1390dffba26b7e534ff6f80a6367a05cf779efd337403c3104fa93ce2",
+        "validationPath": "tmp/frp1277-validator-root/artifacts/benchmark-validation/WarmImageRead-frp1277-ValidatePng16-ValidatePng16.json",
+        "validationSha256": "71815e93d7e39231cf9aadf668451f9856f6e400b88618e4701aa19d5451d7a7",
+        "descriptorSha256": "51b41557da643d4c5fd7276589ff09bb3272ba705e0daf176daacc2acf2dcece"
+      },
+      "ValidateIndexedAdam7": {
+        "caseId": "ValidateIndexedAdam7",
+        "managedUs": 1.9858796574599245,
+        "nativeUs": 4.309516342163086,
+        "ratio": 0.4608126526939093,
+        "lower": 0.4473427028405947,
+        "upper": 0.4744997245042206,
+        "status": "pass",
+        "allocatedBytes": 792,
+        "exactAllocatedBytesPerOperation": 792.0,
+        "actualOperationCounts": [
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144,
+          100144
+        ],
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "originalGeneratedLoopsAndConsumer": true,
+        "forceGcBetweenIterations": false,
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+        "inputSha256": "bce719540c91f90470f49dca60aa33071266cdf918d6bce215d6fa3b4bd0c2f3",
+        "nativeBrackets": [
+          {
+            "side": "nativeBefore",
+            "mean": 4311.764612833659,
+            "standardError": 6.888812748229619
+          },
+          {
+            "side": "nativeAfter",
+            "mean": 4309.516342163086,
+            "standardError": 3.376475471158769
+          }
+        ],
+        "confidenceViews": [
+          {
+            "view": "statistics",
+            "samples": 12,
+            "lower": 0.4473427028405947,
+            "upper": 0.47399094801825536
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "samples": 12,
+            "lower": 0.44784431680446174,
+            "upper": 0.4744997245042206
+          }
+        ],
+        "rawLog": "tmp/frp1277-ValidateIndexedAdam7.log",
+        "rawLogSha256": "1786f0a4f024e06428bee93dc937a7a406f1fd08368d3a7def325780ed1df470",
+        "validationPath": "tmp/frp1277-validator-root/artifacts/benchmark-validation/WarmImageRead-frp1277-ValidateIndexedAdam7-ValidateIndexedAdam7.json",
+        "validationSha256": "43b167172508fc7815fd96a316576f7072cd3e6621deb6e05b45ec05c8d43f76",
+        "descriptorSha256": "43e3398c2faf53e2caa3cde77e26461bf7e1e28ab3acc171d765285841d168dd"
+      },
+      "ValidatePng16Async": {
+        "caseId": "ValidatePng16Async",
+        "managedUs": 3007.609289772727,
+        "nativeUs": 3922.8928385416666,
+        "ratio": 0.7666814806215314,
+        "lower": 0.7551218865738256,
+        "upper": 0.778734942518901,
+        "status": "pass",
+        "allocatedBytes": 360,
+        "exactAllocatedBytesPerOperation": 360.0,
+        "actualOperationCounts": [
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80
+        ],
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "originalGeneratedLoopsAndConsumer": true,
+        "forceGcBetweenIterations": false,
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+        "inputSha256": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+        "nativeBrackets": [
+          {
+            "side": "nativeBefore",
+            "mean": 3922892.8385416665,
+            "standardError": 7585.094734154114
+          },
+          {
+            "side": "nativeAfter",
+            "mean": 3933425.9895833335,
+            "standardError": 6688.118351960728
+          }
+        ],
+        "confidenceViews": [
+          {
+            "view": "statistics",
+            "samples": 11,
+            "lower": 0.7552973174408696,
+            "upper": 0.7770224717708142
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "samples": 12,
+            "lower": 0.7551218865738256,
+            "upper": 0.778734942518901
+          }
+        ],
+        "rawLog": "tmp/frp1277-ValidatePng16Async.log",
+        "rawLogSha256": "53d9ccc0c9f010440f62b53bde88e847d2648b150aa547b9579aff79a0ab80b5",
+        "validationPath": "tmp/frp1277-validator-root/artifacts/benchmark-validation/WarmImageRead-frp1277-ValidatePng16Async-ValidatePng16Async.json",
+        "validationSha256": "6714a82a815b5c1c9ed337d6ce9567d4c871b2a0c35a03342ad795f62f7aed36",
+        "descriptorSha256": "51b41557da643d4c5fd7276589ff09bb3272ba705e0daf176daacc2acf2dcece"
+      }
+    },
+    "preparation": {
+      "producers": {
+        "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+        "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+        "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+      },
+      "sourceProofSha256": "bc9c163011eafa5e5efe68a381f9e6ebbcd952d6fd52b057d80499b76347595b",
+      "privateProofSha256": "463d250ed14e6fe7687a7d4296ef502b3de221685383b17887c58e9296b48206",
+      "originalProofSha256": "a7357dffeca335828c4017f670e0a16dd253b14aaa044b64bcb6ea98e4e80e66",
+      "frozenPackets": {
+        "vp8l.bin": "db796bb9ad5d480eb273db8ae966d4fa1a8f5995bceaa724475c09d6201dbfb7",
+        "indexed.bin": "bce719540c91f90470f49dca60aa33071266cdf918d6bce215d6fa3b4bd0c2f3",
+        "progressive420.bin": "1783bc6c4ab705fbd5b3e4db2d94707df0f438f6118563fbc688ab4f1d475af5",
+        "png16.bin": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+        "png8.bin": "f222f46cd50138623a14862e7a54c795d35ff6acef5daea1b5cef9331e99bd7e",
+        "vp8.bin": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+        "jpeg420.bin": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c"
+      },
+      "requiredCases": [
+        "ValidatePng8",
+        "ValidatePng16",
+        "ValidateIndexedAdam7",
+        "ValidatePng16Async"
+      ],
+      "exactPreparationExceptPackage": true,
+      "originalProofAndInputsUntouched": true,
+      "runtimeFileCount": 38
+    },
+    "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
+    "confidence": "Conservative filtered and all-actual bounds against both native brackets.",
+    "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention."
   }
 }
