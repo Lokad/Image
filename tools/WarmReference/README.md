@@ -172,12 +172,15 @@ Exact rectangle-copy controls use build-copy-region-linux.sh and
 verify-copy-region-linux.py. The warm family CopyRegion selects DrawingCopy8 or
 DrawingCopy16 on the existing original rasters. Both subjects mutate a borrowed
 existing canvas; resident preparation and reset are excluded equally. See
-[current evidence](../../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) for frozen
+[current evidence](../../benchmarks/COPY-OPERATION-BOUNDARY.md) for frozen
 geometry, ownership, exact-pixel checks and immutable-driver reproduction.
 `DrawingCopy8OriginalClipped` selects the original257×129 request at(-3,5), with
 source origin frozen at(0,0), yielding254×129. Native optional `original-clipped`
-performs clipping inside every operation; defaults retain their earlier geometry.
-See [the separate current comparison](../../benchmarks/ORIGINAL-CLIPPED-COPY.md).
+keeps the original clipped geometry. All three separate/clipped controls use an
+explicit non-inlined, non-cloned operation wrapper: dynamic clipping and address
+preparation run on every operation. Native pointer/capacity validity remains
+prevalidated; managed public checks stay timed. Earlier fixed/prepared native
+figures remain scoped diagnostics, not current complete-boundary comparisons.
 For preparation, the existing `LOKAD_IMAGE_WARM_PROJECT` hook can select a harness
 with a direct reference to the immutable package DLL, avoiding production dependency
 builds. Reuse the prepared jobs and verify their actual DLL identities before timing.

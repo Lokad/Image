@@ -1,0 +1,138 @@
+{
+  "project": "Lokad.Image",
+  "stage": "NSR1266/FRP1267",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "allBenchmarkOperations": 0,
+  "newTimingClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "review": {
+    "project": "Lokad.Image",
+    "stage": "NSR1266",
+    "readOnly": true,
+    "allBuilds": 0,
+    "allBenchmarkOperations": 0,
+    "productionChanged": false,
+    "newTimingClaim": false,
+    "productionSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "reference": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "f2d1a375cb072911cb352e50a8184eec33e3dcc35defc2b14f9d02f67d8f2696",
+      "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+      "workerSha256": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+      },
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "symbols": [
+      "0000000000008e10 0000000000000012 T av_image_copy_plane",
+      "00000000000080b0 00000000000000c7 t image_copy_plane"
+    ],
+    "assembly": {
+      "image_copy_plane": {
+        "sha256": "3bb212e48b4ae18c7b4cea6c777dba118d37376c7d1498355c518006854f6889",
+        "bytes": 3573
+      },
+      "av_image_copy_plane": {
+        "sha256": "1c927e6d2a1c583060824dab0954e44313bd0a7d52acea7e1ef6afbe2a6e07b8",
+        "bytes": 538
+      }
+    },
+    "libc": {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a",
+      "sameAsRch1138AndCpa1158": true,
+      "retainedFunctionFileOffset": "0x1a1640",
+      "retainedCodeSha256": "3c87561d58db38c3b674d6659b028596525d811906f6d9bf115e22df7a3b3445",
+      "retained2048BytesMatch": true
+    },
+    "findings": {
+      "actualFfmpegPlaneBodyCallsLibcMemcpy": true,
+      "retainedLibcBytesReusableForStaticInsight": true,
+      "noNewNativeProfileOrIfuncProbe": true,
+      "smallCopy512ThresholdAndAlignedBulkAreRetainedInsights": true,
+      "actualByteInvocationIfuncTargetNotNewlyObserved": true
+    },
+    "interpretation": "Exact current worker calls memcpy throughPLT; currentlibc and retained2048byte function body match. Retained wordworker mappedtarget supports staticstrategy insight,but doesnot newlyprove currentbyte invocation target or branch timing. 1016/1024byte lengths exceed retainedfunction512byte straightline threshold and statically reach its alignedbulk sizing logic absent a separatelychosen runtime branch;no elapsedclaim. Old DCA/DCP implementations had adverse wordself points and costlyhint/plan setup;no automatic byteport or blindalignment replay."
+  },
+  "priorAlignmentReview": {
+    "sourceEvidence": "benchmarks/copy-destination-alignment-trials-evidence.json",
+    "perRowPlannerHadAdverseWordPoint": true,
+    "twoPlansRevisionHadAdverseWordPoint": true,
+    "hintPreparationDiagnosticNs": [
+      23.77,
+      23.79
+    ],
+    "noAutomaticBytePortOrRetainedStateMachinery": true
+  },
+  "refreshPreparation": {
+    "preparationOnly": true,
+    "inventoryPath": "tmp/frp1267-preparation-inventory.json",
+    "inventorySha256": "f3664da7fbde1a1a5c5313d5fe7608a9f860a52586b35c51ad3d55a7632aae3a",
+    "displayedRows": 165,
+    "codecRows": 62,
+    "editingRows": 82,
+    "inspectionRows": 21,
+    "allDisplayedProvidersLocated": true,
+    "fourReusedAliasesChosenFromActualRendererOwners": true,
+    "existingCaseAndSettingsScopeUnchanged": true,
+    "productionAndPackageUnchanged": true,
+    "newTimingOrQualificationClaim": false,
+    "readyToMeasure": false,
+    "remaining": "Map frozen executable commands/runtime/reference identities; reconcile affected nondisplayed paths. Full165 displayed refresh doesnot alone establish all289 material paths. No historical clock is current-package proof.",
+    "evidenceInputDigestEncoding": "SHA256 of the UTF8 universal-newline text consumed by the renderer; archive, package, DLL, renderer and summary identities use actual bytes."
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Retained libc and mapped code match currenthost; current FFmpeg plane calls memcpy. Static insight only,not newlyobserved currentbyteIFUNC target ortiming. Do not replay DCA/DCP planning or start a general cache/pin scheme. Current strict timing acceptance and all165costs remainunchanged. Finalrefresh preparation proceeds independently; no readiness/whole-library parity/publication claim.",
+  "raw": {
+    "file": "native-scheduling-refresh-preparation.tar.xz",
+    "sha256": "31bf4f44f809bc58ea8bbce2d7e3fd0032c83ff5ca4c9766475a8b333660286d",
+    "bytes": 43852,
+    "members": 10,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "copy-operation-boundary.tar.xz",
+        "sha256": "74ac5f858e5ce39b7c081b2e493b822d9595d9f33512ccae4a1295984a115dd1"
+      },
+      {
+        "file": "copy-direct-addressing-trial.tar.xz",
+        "sha256": "01294b8228312aad35ee67b2c417d9431a4ff46cd9b55250d5ba02a2b6a66c28"
+      },
+      {
+        "file": "copy-attribution-nearest-guard.tar.xz",
+        "sha256": "42f0019b3fceed6bc4e1359b6beed4438761c04dec0fc41831134e9012709984"
+      },
+      {
+        "file": "copy-destination-alignment-trials.tar.xz",
+        "sha256": "ffe3f45eccab2f7c3b2839e670cbf19c1faa9acc01a931b019eac18741018de6"
+      },
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  },
+  "publicationPostponed": true
+}
