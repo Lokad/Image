@@ -82,4 +82,51 @@ public sealed class CrossWordIdentityResizeTests
         Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
+
+    [Theory]
+    [InlineData(65, 43, 32, 97)]
+    [InlineData(65, 43, 33, 113)]
+    public void SharedBudgetReductionWithEnlargedHeightPreservesSmallAlphaAndOddTails(
+        int sourceWidth, int sourceHeight, int width, int height)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 16);
+        for (var y = 0; y < sourceHeight; y++)
+        for (var x = 0; x < sourceWidth; x++)
+            source.GetRow16(y)[x * 4 + 3] = (ushort)(x < sourceWidth / 2 ? 1 + (x + y) % 3 : ushort.MaxValue);
+
+        var input = OriginalPixels.Bytes(source);
+        var expected = ExactResizeReference.Resize(input, sourceWidth, sourceHeight, 16, width, height, ResizeFilter.Bicubic);
+        var resultBytes = width * height * 8;
+        using var budget = new TestMemoryBudget(resultBytes + 4096);
+        using (var resized = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new() { MaxWorkingBytes = input.Length + resultBytes + 4096, MemoryBudget = budget }))
+        {
+            Assert.Equal(expected, OriginalPixels.Bytes(resized));
+            Assert.Equal(resultBytes, budget.Bytes);
+        }
+        Assert.Equal(0, budget.Bytes);
+        Assert.Equal(0, budget.Refusals);
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Fact]
+    public void ThreePixelSourceDoesNotNeedAWeightPairScratch()
+    {
+        if (!Avx512F.IsSupported) return;
+        using var source = OriginalPixels.Buffer(3, 5, 16);
+        for (var y = 0; y < source.Height; y++)
+        for (var x = 0; x < source.Width; x++)
+            source.GetRow16(y)[x * 4 + 3] = ushort.MaxValue;
+        var input = OriginalPixels.Bytes(source);
+        var expected = ExactResizeReference.Resize(input, 3, 5, 16, 2, 113, ResizeFilter.Bicubic);
+        using var actual = ImageBuffer.Create(2, 113, 16);
+        actual.Pixels.Fill(0xa5);
+        using var root = new TestMemoryBudget(4096);
+        using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, default);
+        Assert.True(CrossWordColumnBicubicResize.TryApply(source, actual, 1.5, 1, 7, 5, context));
+        Assert.Equal(expected, OriginalPixels.Bytes(actual));
+        Assert.Equal(4096, root.Peak);
+        Assert.Equal(0, root.Bytes);
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
 }

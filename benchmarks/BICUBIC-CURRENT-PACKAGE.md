@@ -1,14 +1,14 @@
 # Bicubic storage on the current package
 
-Of the 61 original bicubic controls, 59 have valid passing evidence and two
-remain uncertain. The actual 0.2.1 package covers all 59 pool-affected
+Of the 61 original bicubic controls, 60 have valid passing evidence.
+The tight RGBA8 128×64 reduction remains uncertain. The actual 0.2.1 package covers all 59 pool-affected
 controls. The two 4,264,104-byte RGBA16 full enlargement outputs exceed the
 unchanged 4 MiB pool cap and retain their source-valid passes.
 [Full word enlargement evidence](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 
-The open cases are tight RGBA8 128×64 reduction and tight RGBA16 width
-reduction with height enlargement. The default RGBA8 reduction now passes
-on the [qualified output row loan](BICUBIC-DEFAULT-ROW-LOAN.md).
+[Packed horizontal weights](BICUBIC-CROSS16-PACKED-PREFIX.md) qualify the
+tight RGBA16 width reduction and height enlargement. The default RGBA8
+reduction passes on the [qualified output row loan](BICUBIC-DEFAULT-ROW-LOAN.md).
 
 ## Original package comparison
 

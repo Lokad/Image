@@ -3770,6 +3770,17 @@ costs. The complete final-package refresh remains outstanding."""
         assert cost['status'] == 'pass' and cost['upper'] <= 1 and cost['allocatedBytes'] == 112
         assert cost['actualOperationCounts'] == [operations] * 12
         assert cost['raw']['mirrored'] and cost['raw']['allMembersVerified']
+    packed_prefix = json.loads((ROOT / 'benchmarks/bicubic-cross16-packed-prefix-evidence.json').read_text(encoding='utf-8'))
+    packed_cases = packed_prefix['cases']
+    packed_package = packed_prefix['qualification']
+    assert packed_prefix['productionAccepted'] and set(packed_cases) == {'TightCross16', 'TightHorizontal16'}
+    assert packed_prefix['raw']['mirrored'] and packed_prefix['raw']['allMembersVerified']
+    assert packed_package['timedDllUsedUnchanged'] and packed_package['actualPackageConsumerPassedBothOs']
+    assert packed_package['fullEachOs'] == [3388, 2519, 948] and packed_package['usageExamplesEachOs'] == 3
+    for cost in packed_cases.values():
+        assert cost['librarySha256'] == packed_package['linuxSha256'] and cost['status'] == 'pass' and cost['upper'] <= 1
+        assert cost['raw']['mirrored'] and cost['raw']['allMembersVerified']
+        assert all(cost[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3806,6 +3817,11 @@ costs. The complete final-package refresh remains outstanding."""
             before = column_cases['TightDown8'] if name == 'TightDown8' else c
             current = row_loan_cases[name] if name in row_loan_cases else column_cases[name]
             assert all(current[key] == before[key] for key in
+                       ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
+            c = current
+        elif name == 'TightCross16':
+            current = packed_cases[name]
+            assert all(current[key] == c[key] for key in
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = current
         elif name in tight_adjacent['cases']:
@@ -3932,6 +3948,11 @@ upper **{row_loan_cases['TightDown8']['upper']:.6f}**, both **112 B/op**.
 The qualified tight RGBA16 reduction retains upper **{column_cases['TightDown16']['upper']:.6f}**,
 **113 B/op**. All keep the same complete prepared-zimg reference boundary.
 The four prepared bicubic operations retain their passes and **137 B/op**.
+[Packed horizontal weights](../benchmarks/BICUBIC-CROSS16-PACKED-PREFIX.md) close
+the tight RGBA16 width reduction and height enlargement at
+**{packed_cases['TightCross16']['managedUs']:.2f} / {packed_cases['TightCross16']['nativeUs']:.2f} µs**,
+upper **{packed_cases['TightCross16']['upper']:.6f}**, **{packed_cases['TightCross16']['allocatedBytes']} B/op**.
+The shared identity-height executor also passes.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **{bilinear_down8['upper']:.6f}** and **{bilinear_down8['allocatedBytes']:,} B/op**.

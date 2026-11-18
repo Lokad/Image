@@ -213,6 +213,9 @@ internal static class CrossWordColumnBicubicResize
             normalizers[x] = normalizer;
         }
         BicubicMath.PrepareOverlappingPairs(offsets, counts, width, source.Width, 10, 8, 2, context.Cancellation);
+        if (!identity)
+            PackPrefixWeights(weights, offsets, counts, MemoryMarshal.Cast<Vector256<double>, double>(decoded),
+                context.Cancellation);
         Span<int> rowIds = stackalloc int[cacheRows]; rowIds.Fill(-1);
         Span<int> rows = stackalloc int[cacheRows];
         Span<double> vertical = stackalloc double[cacheRows];
@@ -257,8 +260,12 @@ internal static class CrossWordColumnBicubicResize
                     if ((x & 127) == 0) context.Cancellation.ThrowIfCancellationRequested();
                     if (x + 1 < width && counts[x] == 8 && counts[x + 1] == 8 && offsets[x * 10 + 9] != 0)
                     {
-                        var pair = BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(offsets[x * 10 + 9] - 1, 10),
-                            weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2);
+                        var pixels = decoded.Slice(offsets[x * 10 + 9] - 1, 10);
+                        // The shared eight-tap filter receives binary64 input at either sample depth.
+                        var pair = identity
+                            ? BicubicMath.FilterOverlappingHorizontalPair(pixels,
+                                weights.Slice(x * 10, 8), weights.Slice((x + 1) * 10, 8), 8, 2)
+                            : ColumnBicubicResize.FilterPreparedBytePair(pixels, weights.Slice(x * 10, 16));
                         filtered[x] = pair.GetLower(); filtered[x + 1] = pair.GetUpper();
                         x++;
                         continue;
@@ -287,10 +294,9 @@ internal static class CrossWordColumnBicubicResize
                 if (!BicubicMath.TryWriteWordPair(sum, n0, n1, destination.Slice(outputX * 8, 16)))
                 {
                     if (!(n0 >= .5 && n1 >= .5)
-                        || !OriginalWord(source, result, outputX, y, weights.Slice(outputX * 10, counts[outputX]),
-                            offsets.Slice(outputX * 10, counts[outputX]), 0, vertical[..count], first, context)
-                        || !OriginalWord(source, result, outputX + 1, y, weights.Slice((outputX + 1) * 10, counts[outputX + 1]),
-                            offsets.Slice((outputX + 1) * 10, counts[outputX + 1]), 0, vertical[..count], first, context)) return false;
+                        || !RepairPrefixPair(source, result, outputX, y, weights.Slice(outputX * 10, 20),
+                            offsets.Slice(outputX * 10, 20), counts.Slice(outputX, 2), vertical[..count], first,
+                            !identity, MemoryMarshal.Cast<Vector256<double>, double>(decoded), context)) return false;
                 }
             }
             if (outputX < width)
@@ -304,6 +310,52 @@ internal static class CrossWordColumnBicubicResize
                         || !OriginalWord(source, result, outputX, y, weights.Slice(outputX * 10, counts[outputX]),
                             offsets.Slice(outputX * 10, counts[outputX]), 0, vertical[..count], first, context))) return false;
             }
+        }
+        return true;
+    }
+
+    private static void PackPrefixWeights(Span<double> weights, ReadOnlySpan<int> offsets,
+        ReadOnlySpan<int> counts, Span<double> scratch, CancellationToken cancellation)
+    {
+        // A packed pair needs ten source pixels. Tiny prefixes can have a shorter decoded row.
+        if (scratch.Length < 16) return;
+        scratch = scratch[..16];
+        for (var x = 0; x + 1 < counts.Length; x += 2)
+        {
+            if ((x & 127) == 0) cancellation.ThrowIfCancellationRequested();
+            var start = x * 10;
+            if (counts[x] != 8 || counts[x + 1] != 8 || offsets[start + 9] == 0) continue;
+            for (var tap = 0; tap < 8; tap += 2)
+            {
+                var packed = tap * 2;
+                scratch[packed] = weights[start + tap];
+                scratch[packed + 1] = weights[start + tap + 1];
+                scratch[packed + 2] = weights[start + 10 + tap];
+                scratch[packed + 3] = weights[start + 10 + tap + 1];
+            }
+            scratch.CopyTo(weights.Slice(start, 16));
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool RepairPrefixPair(ImageBuffer source, ImageBuffer result, int x, int y,
+        ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
+        ReadOnlySpan<double> vertical, int firstY, bool packedWeights, Span<double> scratch, OperationContext context)
+    {
+        var prepared = packedWeights && counts[0] == 8 && counts[1] == 8 && offsets[9] != 0;
+        for (var lane = 0; lane < 2; lane++)
+        {
+            var count = counts[lane];
+            ReadOnlySpan<double> original = weights.Slice(lane * 10, count);
+            if (prepared)
+            {
+                // Every horizontal user has retired. The next cache miss fills decoded scratch again.
+                for (var tap = 0; tap < 8; tap++)
+                    scratch[tap] = weights[(tap & ~1) * 2 + lane * 2 + (tap & 1)];
+                original = scratch[..8];
+            }
+            if (!OriginalWord(source, result, x + lane, y, original, offsets.Slice(lane * 10, count),
+                0, vertical, firstY, context)) return false;
         }
         return true;
     }

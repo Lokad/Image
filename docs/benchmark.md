@@ -41,6 +41,11 @@ upper **0.959079**, both **112 B/op**.
 The qualified tight RGBA16 reduction retains upper **0.834755**,
 **113 B/op**. All keep the same complete prepared-zimg reference boundary.
 The four prepared bicubic operations retain their passes and **137 B/op**.
+[Packed horizontal weights](../benchmarks/BICUBIC-CROSS16-PACKED-PREFIX.md) close
+the tight RGBA16 width reduction and height enlargement at
+**810.34 / 820.55 µs**,
+upper **0.991723**, **113 B/op**.
+The shared identity-height executor also passes.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **0.997123** and **8,473 B/op**.
@@ -528,7 +533,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic resize RGBA8 † → 256×129 | 431.10 | 454.16 | 0.949 / 0.956893 | 112 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.04 | 840.84 | 0.897 / 0.913422 | 113 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 825.67 | 820.97 | 1.006 / 1.034007 | 121 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 810.34 | 820.55 | 0.988 / 0.991723 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 435.03 | 442.74 | 0.983 / 0.991529 | 113 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 506.79 | 1,153.21 | 0.439 / 0.448250 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
