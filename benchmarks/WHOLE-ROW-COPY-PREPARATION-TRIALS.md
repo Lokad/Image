@@ -666,3 +666,29 @@ mode, including seven alternate-pitch and edge cases.
 The two-row trial ends at the screen. The point savings are smaller than the
 retained gaps and both intervals include unchanged performance.
 [Timing and verification evidence](paired-row-copy-trial-evidence.json)
+
+## Narrower vector transfers for separate rows
+
+The first private variant retains each 64-byte load and writes its two
+32-byte halves. The second uses 32-byte transfers on both sides and removes
+the vector extractions. Both keep the original 256-byte bulk groups, checked
+row spans and live-token checkpoints. Overlapping and portable routes keep
+their original implementations. Generated Linux code confirms the intended
+loads and stores with no vector spills.
+
+| Complete RGBA8 copy | Baseline → candidate µs | Paired interval |
+| --- | ---: | ---: |
+| Split stores, clipped | 1.965854 → 1.960526 | 0.975943–1.019104 |
+| Split stores, separate | 1.949804 → 1.963899 | 0.854232–1.187534 |
+| 32-byte loads and stores, clipped | 1.968877 → 2.033832 | 0.884298–1.206750 |
+| 32-byte loads and stores, separate | 1.959309 → 1.955032 | 0.962757–1.034151 |
+
+Each screen retains three quiet-VM pairs of 65,536 complete calls per side,
+at 0 B/op. Original pixel, source, ownership and idle guards pass. Windows
+passes 215 focused public tests per mode for each variant. Both variants stop
+at the screen. The original complete-operation costs retain the two gaps.
+
+A separate untimed check confirms that constant 128- and 256-byte disjoint
+block copies compile to alternating 64-byte loads and stores on the VM.
+Exact copies and canaries pass. This exposes an instruction schedule to test
+in the row helper. [Timing and generated-code evidence](copy-vector-width-trials-evidence.json)

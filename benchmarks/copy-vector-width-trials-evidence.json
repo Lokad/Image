@@ -1,0 +1,239 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "baseline": {
+    "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+    "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+  },
+  "variants": {
+    "frp1372": {
+      "mechanism": "Keep each bounded 512-bit load and split its destination transfer into two 256-bit stores.",
+      "sources": {
+        "src/Lokad.Image/ImageDrawing.cs": {
+          "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+          "candidate": "704145b886d5ef2bd33581b39452642b8b622e042550f456ffa166d9f8db2273"
+        },
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+          "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+          "candidate": "e33c050edb9f5699886835253aa76a1d2beeb4a77012cac4471bab8c56c11ca6"
+        }
+      },
+      "raw": {
+        "file": "narrow-store-copy-trial.tar.xz",
+        "bytes": 1034068,
+        "sha256": "ff79451096e2b0cc9a251b4ca593400edfd2ce0fed3ccbbb0e9c72a9c1513a66",
+        "members": 52,
+        "allMembersVerified": true,
+        "mirrored": true
+      },
+      "candidateLibrarySha256": "01135b39399d3c72cb587934b3d150ffdc5fa86b99b4cc907c531832854d1da6",
+      "codegen": {
+        "methodBytes": 551,
+        "sampleCommands": 0,
+        "wideLoads": 5,
+        "narrowStores": 10,
+        "wideStores": 0,
+        "codegenSha256": "54f0042edea0dff4a89cd04f65f546c56713a2eb6758fb58e5062ed34160f542"
+      },
+      "cases": {
+        "OriginalClippedCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 1.9658543752034505,
+              "lower": 1.9366450773811128,
+              "upper": 1.9950636730257882,
+              "values": [
+                1.9640956268310548,
+                1.9662402954101563,
+                1.9672272033691407
+              ]
+            },
+            "candidate": {
+              "mean": 1.9605264333089192,
+              "lower": 1.9373305244449759,
+              "upper": 1.9837223421728625,
+              "values": [
+                1.9613833923339843,
+                1.9590655822753906,
+                1.9611303253173828
+              ]
+            }
+          },
+          "ratio": 0.9972898382881572,
+          "lower": 0.975942504004497,
+          "upper": 1.0191041147114912,
+          "allocatedBytes": 0
+        },
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 1.9498039652506511,
+              "lower": 1.8723816274188252,
+              "upper": 2.027226303082477,
+              "values": [
+                1.948225601196289,
+                1.9465755310058594,
+                1.9546107635498047
+              ]
+            },
+            "candidate": {
+              "mean": 1.9638989664713542,
+              "lower": 1.5625111891978716,
+              "upper": 2.365286743744837,
+              "values": [
+                1.9518740234375,
+                1.9505307006835937,
+                1.9892921752929686
+              ]
+            }
+          },
+          "ratio": 1.007188563368212,
+          "lower": 0.8542315658755623,
+          "upper": 1.1875337352348518,
+          "allocatedBytes": 0
+        }
+      },
+      "windowsFocused": {
+        "normal": {
+          "passed": 215,
+          "logSha256": "f9c736e62e7630324e02ea6e9cb0d7aef17bc6e43ba8f6f7bca0560509bbbcbf"
+        },
+        "scalar": {
+          "passed": 215,
+          "logSha256": "1910c3816b01cca4bc2fc2ed6bd7f7f317aaed2cc88f8fe8ba97fadbe56320d0"
+        }
+      }
+    },
+    "frp1374": {
+      "mechanism": "Read and write in 256-bit vectors across the same bounded 256-byte bulk groups.",
+      "sources": {
+        "src/Lokad.Image/ImageDrawing.cs": {
+          "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+          "candidate": "3875b06d2adc3b9ffa9b826cffd52872a0070716694e6bbb8fd85cb3bbcbcb01"
+        },
+        "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+          "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+          "candidate": "97307978bbfd3308c9c836c98bfc57f5104ca4bb14c92d83b3f75139854fa0a7"
+        }
+      },
+      "raw": {
+        "file": "full-width-256-copy-trial.tar.xz",
+        "bytes": 1033304,
+        "sha256": "31f99c784117eb2f02a4ffac9f9235d1fc7f88dbaa3069abdf807d7baf51318a",
+        "members": 52,
+        "allMembersVerified": true,
+        "mirrored": true
+      },
+      "candidateLibrarySha256": "acf45ca9b6447340291dee6f8ed4db74cd5df4dcd04bbffa69598b09d27c7ede",
+      "codegen": {
+        "methodBytes": 479,
+        "sampleCommands": 0,
+        "narrowLoads": 9,
+        "narrowStores": 9,
+        "wideStores": 0,
+        "codegenSha256": "a88c8a883730cd3720eaa92e8d937d020a4d4c5d46e9dd57dd5daba01861c6bc"
+      },
+      "cases": {
+        "OriginalClippedCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 1.9688768361409505,
+              "lower": 1.6495006402883854,
+              "upper": 2.2882530319935155,
+              "values": [
+                1.9674894409179688,
+                1.952105728149414,
+                1.9870353393554687
+              ]
+            },
+            "candidate": {
+              "mean": 2.033831756591797,
+              "lower": 2.019690539244419,
+              "upper": 2.0479729739391748,
+              "values": [
+                2.033534881591797,
+                2.0332489471435546,
+                2.034711441040039
+              ]
+            }
+          },
+          "ratio": 1.0330180041687393,
+          "lower": 0.8842976565451531,
+          "upper": 1.206749999887936,
+          "allocatedBytes": 0
+        },
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "subjects": {
+            "baseline": {
+              "mean": 1.9593086496988932,
+              "lower": 1.9476777632970228,
+              "upper": 1.9709395361007636,
+              "values": [
+                1.9590874633789062,
+                1.960027313232422,
+                1.9588111724853516
+              ]
+            },
+            "candidate": {
+              "mean": 1.9550315399169922,
+              "lower": 1.8832461759698582,
+              "upper": 2.026816903864126,
+              "values": [
+                1.9589141693115235,
+                1.9551338806152343,
+                1.9510465698242188
+              ]
+            }
+          },
+          "ratio": 0.9978157189639888,
+          "lower": 0.9627574716490008,
+          "upper": 1.0341505917438445,
+          "allocatedBytes": 0
+        }
+      },
+      "windowsFocused": {
+        "normal": {
+          "passed": 215,
+          "logSha256": "96610da3c5a634a61a92f79620fdd8149ff4129f348e6170761f5affa70eef2b"
+        },
+        "scalar": {
+          "passed": 215,
+          "logSha256": "2cfe58b2f7fa262917faf159b76229c2ad83b59c9299486e258e31f05e13d3d5"
+        }
+      }
+    }
+  },
+  "constantBlockDiagnostic": {
+    "unscored": true,
+    "blocks": {
+      "256": {
+        "vectorBytes": 64,
+        "moves": 8,
+        "methodBytes": 58
+      },
+      "128": {
+        "vectorBytes": 64,
+        "moves": 4,
+        "methodBytes": 30
+      }
+    },
+    "canariesExact": true,
+    "raw": {
+      "file": "constant-block-codegen.tar.xz",
+      "sha256": "66b2bf23ea15ccd42435f385ecd74a9127d2e1cdbe4a2fd466ac10af16ed1caf",
+      "bytes": 3480,
+      "members": 6,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  }
+}

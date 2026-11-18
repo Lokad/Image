@@ -290,5 +290,105 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "directFieldCompletion": {
+    "source": "src/Lokad.Image/Internal/InspectionReader.cs",
+    "candidateSourceSha256": "18a60ee414a2cda1fb75897719af796597751c018cd1ac0fd67d74c28f1b0249",
+    "baselineSourceSha256": "fa93f98d21f13f0a76e81b97864a9d400fe282c6bdd28b5d9a8a400673b5aad7",
+    "baselinePackageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+    "mechanism": "Return an already complete direct field after the validated fill, preserving partial and pending paths.",
+    "fieldAssemblyCases": 5984,
+    "raw": {
+      "file": "direct-field-read-trial.tar.xz",
+      "bytes": 383884,
+      "sha256": "cbd140c717f89bcb46411eab014238d6134b6bb5b4b180b68bdf38de173ec083",
+      "members": 18,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 146,
+        "logSha256": "009a0df95fd2b6d6d6bd4848a1eceb52754597afb58b687785508ce44beeac18"
+      },
+      "scalar": {
+        "passed": 146,
+        "logSha256": "cac30e8e264799ee90016f5ce6ab4b97b87aaebb8115c38f66c82fdf68c9c56c"
+      }
+    },
+    "screen": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "screen",
+      "baselineUs": 0.21337687047322593,
+      "candidateUs": 0.20665719985961914,
+      "ratio": 0.9685079709028258,
+      "lower": 0.5350371412710363,
+      "upper": 1.7542253320710135,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/frp1373/baseline-Lokad.Image.dll",
+        "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+        "tmp/frp1373/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "fd64c4766f8000c08d629a8677ec3b5026740971d9fae69a9653f258f3cb77bb",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "screen"
+      ],
+      "actuals": 3,
+      "allActualsRetained": true,
+      "exactDescriptorAndIndependentOwnerPassed": true,
+      "quietGuardsPassed": true
+    },
+    "confirm": {
+      "caseId": "ProbeDimensionsJpegAsync",
+      "phase": "confirm",
+      "baselineUs": 0.21381247679392495,
+      "candidateUs": 0.20976192124684653,
+      "ratio": 0.9810555697786412,
+      "lower": 0.947178205139221,
+      "upper": 1.0168005826343063,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+        "tmp/frp1373/baseline-Lokad.Image.dll",
+        "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+        "tmp/frp1373/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "fd64c4766f8000c08d629a8677ec3b5026740971d9fae69a9653f258f3cb77bb",
+        "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+        "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+        "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+        "ProbeDimensionsJpegAsync",
+        "confirm"
+      ],
+      "actuals": 12,
+      "allActualsRetained": true,
+      "exactDescriptorAndIndependentOwnerPassed": true,
+      "quietGuardsPassed": true
+    }
   }
 }

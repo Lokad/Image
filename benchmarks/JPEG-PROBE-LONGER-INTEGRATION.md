@@ -66,6 +66,21 @@ pause time per call. This bounds the observed effects in this run. The eight
 instrumented units are diagnostic and supply no parity result.
 [Raw capture and analysis](probe-refill-input-bound-trial-evidence.json)
 
+## Completion of an already assembled direct field
+
+An isolated reader returns immediately when a validated fill completes the
+direct field already present in `Header`. The field model checks 5,984
+offset/read combinations through the 32-byte limit. Partial fills and pending
+reads retain the existing path. Windows passes 146 focused normal and scalar
+tests per mode. Both quiet-VM captures retain exact descriptors, independent
+owners, all actuals and 568 B/op.
+
+The three-pair screen averages **0.213377 → 0.206657 µs**. Independent pairs
+give **0.213812 → 0.209762 µs**, interval **0.947178–1.016801**. About 4 ns of
+point savings and an interval spanning unchanged performance end this trial.
+The scored FFmpeg result remains uncertain.
+[Screen and confirmation evidence](probe-refill-input-bound-trial-evidence.json)
+
 ## Unchanged operation and gates
 
 Each unit now includes3420160managed and1048576native complete operations,
