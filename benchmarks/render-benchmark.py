@@ -248,34 +248,38 @@ def borrowed_copy_stage():
     assert q['modes'] == ['normal', 'avx512-off', 'scalar'] and q['focusedInternalEachMode'] == 6 and q['focusedPublicEachMode'] == 190
     assert all(stage['sourceProof'].values()) and stage['pairedEffect']['upper'] < 1 and stage['pairedEffect']['allActualMeanIntervalsSeparated']
     assert stage['memory']['managedAllocatedBytesPerOperation'] == stage['memory']['newAdmittedCapacityBytes'] == stage['memory']['newRetainedCapacityBytes'] == 0
-    byte = json.loads((ROOT / 'benchmarks/byte-copy-reference-reconciliation-evidence.json').read_text(encoding='utf-8'))
-    assert byte['measurementAccepted'] and not byte['productionChanged'] and not byte['productionSpeedupClaim']
-    assert byte['requiredMaterialPaths'] == 289 and byte['newRequiredPaths'] == 0
-    assert byte['raw']['mirrored'] and byte['raw']['allMembersVerified'] and all(byte['sourceProof'].values())
-    assert byte['allOriginalGatesPassed'] and byte['quietGuardsPassed'] and byte['allActualsRetained']
-    assert byte['producers'] == stage['producers'] and byte['qualificationReused']['newBroadPackageChecks'] == byte['allBuilds'] == 0
-    assert set(byte['cases']) == {'DrawingCopy8', 'OriginalClippedCopy8'}
-    assert all(c['referenceBracketsInterleaved'] and c['operationsPerSubject'] == 65536 for c in byte['cases'].values())
-    stage['cases']['DrawingCopy8'] = byte['cases']['DrawingCopy8']
-    current = json.loads((ROOT / 'benchmarks/copy-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
+    # Only current displayed providers participate. Superseded native boundaries
+    # remain reproducible diagnostics in their own reports and raw archives.
+    current = json.loads((ROOT / 'benchmarks/copy-operation-boundary-evidence.json').read_text(encoding='utf-8'))
     assert current['measurementAccepted'] and not current['productionChanged'] and not current['productionSpeedupClaim']
+    assert current['referenceToolingCorrected'] and all(current['referenceFindings'].values())
     assert current['requiredMaterialPaths'] == 289 and current['newRequiredPaths'] == 0
-    assert current['producers'] == stage['producers'] and current['qualificationReused']['fullLiveEachOs'] == 6805
     assert current['raw']['mirrored'] and current['raw']['allMembersVerified'] and all(current['sourceProof'].values())
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['allActualsRetained']
-    assert current['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == current['qualificationReused']['newBroadPackageChecks'] == 0
-    assert set(current['cases']) == {'OriginalClippedCopy8', 'DrawingCopy16'}
+    cq = current['qualification']
+    assert cq['reusedForUnchangedProduction'] and cq['fullChecksEachOs'] == 6844
+    assert cq['sameActualPackageBothOs'] and cq['allThreeUsageExamplesBothOs']
+    assert cq['packageSha256'] == current['producers']['packageSha256']
+    assert current['builds']['correctedAuthoredNativeWorker'] == 1
+    assert current['builds']['productionEmbeddedPublicHarnessDriverNativeArchiveFixturePackage'] == cq['newBroadOrPackageChecks'] == 0
+    assert all(current['preflights'].values()) and all(current['repairs'].values())
+    assert set(current['cases']) == {'DrawingCopy8', 'OriginalClippedCopy8', 'DrawingCopy16'}
+    stage['caseProducerSha256'] = {name: stage['producers']['linuxSha256'] for name in stage['cases']}
     for name, c in current['cases'].items():
         m = current['measurements'][name]
-        assert m['actualPairs'] == m['statisticalUnitsPerGroup'] == 12 and m['nativeGroups'] == 3
-        assert m['segmentsPerUnit'] * m['operationsPerSegment'] == m['operationsPerSubject'] == c['operationsPerSubject']
+        assert m['originalPairs'] == 12 and len(m['nativeStatistics']) == 3
+        assert m['operationsPerSubject'] == c['operationsPerSubject'] == (262144 if name == 'DrawingCopy16' else 65536)
+        assert m['subdivisionsPerUnit'] == c['subdivisionsPerUnit'] == (1 if name == 'DrawingCopy8' else 16)
         assert m['allSubdivisionCountsAndAggregationVerified'] and all(s['N'] == 12 for s in [m['managedStatistics'], *m['nativeStatistics']])
-        assert c['lower'] > 1 and c['status'] == 'gap'
+        assert c['referenceGeometryPreparedPerOperation'] and c['clippingTimed']
+        assert c['librarySha256'] == current['producers']['linuxSha256']
+        assert c['nativeBuild'] == current['referenceBuild']['identity']
+        stage['caseProducerSha256'][name] = current['producers']['linuxSha256']
     stage['cases'].update(current['cases'])
     stage['currentBorrowedDrawingCounts'] = current['currentBorrowedDrawingCounts']
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
-    for c in stage['cases'].values():
-        assert c['librarySha256'] == stage['producers']['linuxSha256']
+    assert current['currentCopyCounts'] == {'pass': 2, 'gap': 2, 'uncertain': 1}
+    for name, c in stage['cases'].items():
+        assert c['librarySha256'] == stage['caseProducerSha256'][name]
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
         assert c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allocatedBytes'] == 0
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
@@ -2106,7 +2110,7 @@ No heap capacity or retention is added; validation and independent owners remain
     }
     for name, label in drawing_labels.items():
         c = drawing_cases[name]
-        library = (copy_current['producers']['linuxSha256'] if name in copy_current['cases'] else
+        library = (copy_current['caseProducerSha256'][name] if name in copy_current['cases'] else
                    word_composite['producers']['linuxSha256'] if name == 'OriginalWordComposite' else
                    bq['actualPackage']['librarySha256'])
         assert c['librarySha256'] == library
@@ -2134,28 +2138,31 @@ cost **{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} �
 **{word_overlap['upper']:.6f}**, passes/stops. This is a scoped final-DLL gain;
 historical clocks and prototype effects are not added.
 
-Separate byte copy is **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper
-**{b8['upper']:.3f}**, a gap. Separate word copy **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**,
-upper **{bw['upper']:.6f}**, is also a demonstrated gap. Finer
-[reference interleaving](../benchmarks/COPY-PARTITIONED-REFERENCE.md) resolves both
-copy uncertainties, preserving frozen 262,144/65,536-operation actuals, twelve statistical units/group,
-three groups, original warmups and conservative gate. All subdivisions stay raw;
-more timer reads remain included and native client work outside. No production
-speedup, host cause, extra confidence samples or favorable replay. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
-upper **{bo['upper']:.6f}**, passes/stops. The
-[existing separate-byte capture](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
-remains valid at 65,536 operations per actual and is not repeated.
-Clipped byte copy is a demonstrated gap. Both self-copy passes stay stopped.
-All five actual-reference costs use the same final timed/package DLL; other
-primitives retain their identified source-valid evidence.
+[Complete copy-operation boundaries](../benchmarks/COPY-OPERATION-BOUNDARY.md)
+now include native dynamic clipping and address preparation every operation.
+The old fixed adapter prevalidated geometry; compiler versioning hoisted
+preparation in the extended clipped adapter. The explicit authored-wrapper
+correction preserves FFmpeg, inputs, settings and exact output. Old figures
+remain prepared-native diagnostics, without a production speedup claim.
 
-These copies allocate **0 B/op** and add no owned/admitted/retained workspace,
-pin, cache or API. Caller pixels and unmeasured physical/native/JIT peaks stay
-separate. Windows/Linux each pass **6,805 full/live checks**, focused **6 internal /
-190 public** normal/AVX-512-disabled/scalar checks and the SAME actual package/all
-three examples. Performance reconciles before broad qualification; no timed DLL
-rebuild occurs. Earlier [alignment trials](../benchmarks/COPY-DESTINATION-ALIGNMENT-TRIALS.md)
-remain unpromoted history, outside the renderer's measurement dependencies.
+Separate byte is **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper
+**{b8['upper']:.6f}**, a gap; clipped byte also remains a gap. Separate word is
+**{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, interval
+**{bw['lower']:.6f}–{bw['upper']:.6f}**, uncertain. All twelve units/group, original
+65,536/262,144 operations, case-specific drivers, subdivisions, warmups and
+conservative gates stay. No favorable replay or assumed word optimization need.
+Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**, upper
+**{bo['upper']:.6f}**, passes/stops. Both self-copy passes retain identified
+source-valid shared-self-row evidence; the three corrected comparisons use the
+actual pending-publication package. Other primitives keep their own producers.
+
+Copies allocate **0 B/op**, with no new owned/admitted/retained workspace.
+Caller storage and unmeasured physical/native/JIT peaks stay separate. All three
+corrected normal/scalar preflights and original full-frame/source/owner gates
+pass. One authored native-worker build; zero production/harness/driver/archive/
+fixture/package builds. Unchanged production reuses **6,844 full/live checks each
+OS**, the SAME actual package and all three examples. Superseded/rejected
+experiments remain linked history, outside current renderer dependencies.
 """
     wc = word_composite['case']
     borrowed_drawing_note += f"""
@@ -3406,7 +3413,9 @@ costs. The complete final-package refresh remains outstanding."""
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **{displayed_count} comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; rectangle copies use the shared-self-row package. Current
+completed-row package; self copies retain the source-valid shared-self-row package.
+Three separate/clipped copy comparisons use the pending-publication package with
+corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
@@ -3425,7 +3434,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/COPY-PARTITIONED-REFERENCE.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/COPY-OPERATION-BOUNDARY.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -3438,7 +3447,7 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-three gaps, no uncertainties**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+two gaps, one uncertainty**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared

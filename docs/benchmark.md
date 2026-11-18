@@ -3,7 +3,9 @@
 Current development version **0.2.1**. Warm single-CPU parity remains open across
 **289 named material paths**; these **165 comparisons** summarize that scope.
 This is an incremental update. Nearest resizing and PNG composition use the
-completed-row package; rectangle copies use the shared-self-row package. Current
+completed-row package; self copies retain the source-valid shared-self-row package.
+Three separate/clipped copy comparisons use the pending-publication package with
+corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
@@ -30,28 +32,31 @@ cost **5.186 / FFmpeg 5.602 µs**, upper
 **0.930762**, passes/stops. This is a scoped final-DLL gain;
 historical clocks and prototype effects are not added.
 
-Separate byte copy is **1.987 / 1.915 µs**, upper
-**1.044**, a gap. Separate word copy **3.817 / 3.768 µs**,
-upper **1.022959**, is also a demonstrated gap. Finer
-[reference interleaving](../benchmarks/COPY-PARTITIONED-REFERENCE.md) resolves both
-copy uncertainties, preserving frozen 262,144/65,536-operation actuals, twelve statistical units/group,
-three groups, original warmups and conservative gate. All subdivisions stay raw;
-more timer reads remain included and native client work outside. No production
-speedup, host cause, extra confidence samples or favorable replay. Byte overlap **3.885 / 4.183 µs**,
-upper **0.938291**, passes/stops. The
-[existing separate-byte capture](../benchmarks/BYTE-COPY-REFERENCE-RECONCILIATION.md)
-remains valid at 65,536 operations per actual and is not repeated.
-Clipped byte copy is a demonstrated gap. Both self-copy passes stay stopped.
-All five actual-reference costs use the same final timed/package DLL; other
-primitives retain their identified source-valid evidence.
+[Complete copy-operation boundaries](../benchmarks/COPY-OPERATION-BOUNDARY.md)
+now include native dynamic clipping and address preparation every operation.
+The old fixed adapter prevalidated geometry; compiler versioning hoisted
+preparation in the extended clipped adapter. The explicit authored-wrapper
+correction preserves FFmpeg, inputs, settings and exact output. Old figures
+remain prepared-native diagnostics, without a production speedup claim.
 
-These copies allocate **0 B/op** and add no owned/admitted/retained workspace,
-pin, cache or API. Caller pixels and unmeasured physical/native/JIT peaks stay
-separate. Windows/Linux each pass **6,805 full/live checks**, focused **6 internal /
-190 public** normal/AVX-512-disabled/scalar checks and the SAME actual package/all
-three examples. Performance reconciles before broad qualification; no timed DLL
-rebuild occurs. Earlier [alignment trials](../benchmarks/COPY-DESTINATION-ALIGNMENT-TRIALS.md)
-remain unpromoted history, outside the renderer's measurement dependencies.
+Separate byte is **1.953 / 1.906 µs**, upper
+**1.037472**, a gap; clipped byte also remains a gap. Separate word is
+**3.827 / 3.817 µs**, interval
+**0.991834–1.011718**, uncertain. All twelve units/group, original
+65,536/262,144 operations, case-specific drivers, subdivisions, warmups and
+conservative gates stay. No favorable replay or assumed word optimization need.
+Byte overlap **3.885 / 4.183 µs**, upper
+**0.938291**, passes/stops. Both self-copy passes retain identified
+source-valid shared-self-row evidence; the three corrected comparisons use the
+actual pending-publication package. Other primitives keep their own producers.
+
+Copies allocate **0 B/op**, with no new owned/admitted/retained workspace.
+Caller storage and unmeasured physical/native/JIT peaks stay separate. All three
+corrected normal/scalar preflights and original full-frame/source/owner gates
+pass. One authored native-worker build; zero production/harness/driver/archive/
+fixture/package builds. Unchanged production reuses **6,844 full/live checks each
+OS**, the SAME actual package and all three examples. Superseded/rejected
+experiments remain linked history, outside current renderer dependencies.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
@@ -68,7 +73,7 @@ retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
 [Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/COPY-PARTITIONED-REFERENCE.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[clipped byte copy](../benchmarks/COPY-OPERATION-BOUNDARY.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **78.567 / 526.201 µs**, upper **0.159260**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -81,7 +86,7 @@ emits no GC line. Added owned capacity per operation is zero; standing caller pi
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
 drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-three gaps, no uncertainties**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+two gaps, one uncertainty**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared
@@ -490,8 +495,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 398.16 | 405.63 | 0.982 / 0.991 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.99 | 1.91 | 1.038 / 1.044 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (gap) | 3.82 | 3.77 | 1.013 / 1.023 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.95 | 1.91 | 1.025 / 1.037 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.82 | 1.003 / 1.012 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.88 | 4.18 | 0.929 / 0.938 | 0 |
@@ -536,7 +541,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Vertical flip RGBA8 (parity confirmed) † | 8.92 | 9.15 | 0.975 / 0.988 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
-| Original clipped RGBA8 copy, 254×129 (gap) | 1.957 | 1.910 | 1.025 / 1.028517 | 0 |
+| Original clipped RGBA8 copy, 254×129 (gap) | 1.983 | 1.914 | 1.036 / 1.049530 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 | Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
 | Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |

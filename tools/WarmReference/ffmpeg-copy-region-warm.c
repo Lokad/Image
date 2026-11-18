@@ -42,7 +42,9 @@ typedef struct {
     uint64_t completed, observed;
 } Work;
 
-static void apply(Work *work)
+/* Keep clipping/address preparation inside every complete operation. Inlining
+ * this wrapper let the fixed resident geometry move outside the sample loop. */
+static __attribute__((noinline, noclone)) void apply(Work *work)
 {
     int left = work->dx < 0 ? -work->dx : 0, top = work->dy < 0 ? -work->dy : 0;
     int right = work->width < 513 - work->dx ? work->width : 513 - work->dx;
