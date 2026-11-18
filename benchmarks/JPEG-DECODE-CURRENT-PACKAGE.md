@@ -1,9 +1,9 @@
 # JPEG decode on the current package
 
 Five original owned-output JPEG cases were measured on the immutable 0.2.1
-package. The horizontal-only Adobe CMYK case shows a 49.25 µs gap in the
-complete resident comparison. Sparse-2D remains uncertain. All three
-progressive cases pass and stop.
+package. Horizontal-only Adobe CMYK passes with adjacent native samples.
+The earlier gap remains in the records below. Sparse-2D remains uncertain.
+All three progressive cases pass and stop.
 
 | Complete operation | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -25,8 +25,7 @@ Horizontal CMYK remains a gap in both the filtered and all-actual analyses.
 Managed actuals range from 460.89 to 467.94 µs, and native bracket means are
 420.10 and 416.14 µs. Its earlier passing cost and the scoped 16.92 µs
 paired improvement remain tied to the prior producer. The new comparison
-does not attribute a slowdown to the pool or any kernel. The gap warrants
-targeted attribution on the current package.
+does not attribute a slowdown to the pool or any kernel. The adjacent confirmation below tests the timing boundary directly.
 
 One temporary orchestration build supplies the natural-GC driver. The
 production package, harness, fixture and reference binaries are reused.
@@ -45,10 +44,33 @@ alternating 128-call pairs measure **380.67 / 383.64 µs**, current/earlier
 interval **0.997905–1.017712**. Exact pixels, independent output lifetimes and
 both quietness guards pass. This scoped assembly-load-context comparison
 does not establish a material module slowdown. The complete generated
-workload's FFmpeg gap remains open. The next attribution step is to bring
-native sampling closer to that managed workload while preserving the
-conservative bounds and whole public operation.
+workload's earlier FFmpeg gap remains in the records. The adjacent
+confirmation uses that same generated managed workload.
 
 The mirrored `jpeg-horizontal-cmyk-current-pair.tar.xz` contains 8 verified members
 and 17,196 B, SHA-256 `e36ea1b3254fcc3b0f59f626f2b87f1960329dfe1ebc56790577c60277e47830`.
 All pairs, the reused driver identity, original receipts and guards are retained.
+
+## Adjacent reference confirmation
+
+Horizontal-only CMYK passes the original complete resident boundary at
+**412.52 / 425.40 µs**, conservative interval **0.957482–0.980020** and
+**20,948 managed B/op**. Two native samples of 216 operations surround every
+managed actual outside its clock. The original twelve measured actuals,
+three warmups and 200 ms pilot rule remain. The pilot selects 480 managed
+operations per actual. Both original native brackets and both sets of
+adjacent samples enter the full conservative rule. Native group means span
+425.40–426.79 µs. The two paired upper bounds are 0.972499 and 0.970162.
+
+Input, pixel, ownership, reference identity and quietness checks pass.
+The prior 465.39 / 416.14 µs capture and the matched module diagnostic remain
+available. The change in elapsed time has no verified cause. This pass
+qualifies the declared adjacent schedule and establishes no production
+speedup. The allocation counter is separate from owned capacity and idle
+retention. The horizontal case stops here.
+
+The mirrored `jpeg-horizontal-current-interleaved-confirmation.tar.xz` contains 13 verified members
+and 25,108 B, SHA-256
+`e3f67d8a7b38d1c9d727d13d34190fab1da3c0b524ad40577134a47edc7b07c5`.
+It retains every sample, the generated-loop and runtime identities, original
+and current receipts, and the guard checks.

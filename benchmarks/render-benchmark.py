@@ -3608,6 +3608,12 @@ costs. The complete final-package refresh remains outstanding."""
     jpeg_owned_package = json.loads((ROOT / 'benchmarks/jpeg-decode-current-package-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_owned_package['producers'] == jpeg_pending['producers']
     assert jpeg_owned_package['raw']['mirrored'] and jpeg_owned_package['raw']['allMembersVerified']
+    horizontal_adjacent = jpeg_owned_package['horizontalAdjacent']
+    assert horizontal_adjacent['raw']['mirrored'] and horizontal_adjacent['raw']['allMembersVerified']
+    assert horizontal_adjacent['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+    assert horizontal_adjacent['actualIterations'] == horizontal_adjacent['nativeSamplesEachBracket'] == 12
+    assert horizontal_adjacent['status'] == 'pass' and horizontal_adjacent['upper'] <= 1
+    assert all(horizontal_adjacent[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
     for name, label in (('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
                         ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
                         ('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -3617,6 +3623,11 @@ costs. The complete final-package refresh remains outstanding."""
         assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
         assert c['actuals'] == 12 and c['originalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        if name == 'CmykAdobeAc':
+            assert horizontal_adjacent['inputSha256'] == c['inputSha256']
+            assert horizontal_adjacent['managedOutputSha256'] == c['outputSha256']
+            assert horizontal_adjacent['nativeOutputSha256'] == c['referenceOutputSha256']
+            c = horizontal_adjacent
         heading = f'| {label} † |'
         old, = (line for line in codecs.splitlines() if line.startswith(heading))
         status = f' ({png_status[c["status"]]})' if c['status'] != 'pass' else ''
@@ -3834,8 +3845,9 @@ survivors. Allocation, retained admission and physical peaks stay distinct.
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
 The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
 cover two CMYK and three progressive controls affected by the shared output pool.
-All five displayed rows use their current timings and allocations. Other JPEG
-views retain their identified producer and operation boundaries.
+Adjacent native sampling confirms horizontal CMYK. The earlier adverse capture
+remains in the evidence. All five displayed rows use their current timings and
+allocations.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,

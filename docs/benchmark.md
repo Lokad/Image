@@ -277,8 +277,9 @@ survivors. Allocation, retained admission and physical peaks stay distinct.
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
 The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
 cover two CMYK and three progressive controls affected by the shared output pool.
-All five displayed rows use their current timings and allocations. Other JPEG
-views retain their identified producer and operation boundaries.
+Adjacent native sampling confirms horizontal CMYK. The earlier adverse capture
+remains in the evidence. All five displayed rows use their current timings and
+allocations.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -469,7 +470,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG8 decode, two retained images / shared caller root † | 2,652.54 | 2,849.73 | 0.931 / 0.972152 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
-| JPEG horizontal-only CMYK, resident decode (gap) † | 465.39 | 416.14 | 1.118 / 1.133023 | 20,944 | — |
+| JPEG horizontal-only CMYK, resident decode † | 412.52 | 425.40 | 0.970 / 0.980020 | 20,948 | — |
 | JPEG YCCK420, caller RGB24 decode † | 438.99 | 604.73 | 0.726 / 0.742 | 762,720 | — |
 | JPEG progressive grayscale, resident decode † | 1,714.69 | 1,845.30 | 0.929 / 0.935937 | 151,432 | — |
 | JPEG progressive420, resident decode † | 1,412.35 | 1,949.00 | 0.725 / 0.729 | 243,676 | — |
