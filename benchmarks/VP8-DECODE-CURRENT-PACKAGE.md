@@ -133,3 +133,29 @@ measurement or production hypothesis.
 The mirrored `vp8-scheduler-diagnostic.tar.xz` contains 14 verified members
 and 48,068 B, SHA-256
 `88cff927d8cc5f209b5273d3701644e23102d78c6c5c54a182c69f9b9e8d90cd`.
+
+## Fixed subblock geometry trial
+
+The live-token candidate computes the 4×4 luma and 2×2 chroma coordinates
+with fixed shifts and masks and selects the token partition once per
+macroblock row. A geometry check covers all 24 subblocks and 4,096 supported
+row/partition combinations. Entropy order, model state, reconstruction,
+cancellation and memory ownership retain their original boundaries.
+
+Full optimized JIT output for `ReadPlanes` on the current DLL shows seven
+integer divide instructions. The candidate has zero. Three alternating
+16-operation pairs measure **5,172.89 → 5,168.59 µs** at **230,880 B/op**
+on both DLLs. The paired interval **0.953284–1.047272** gives no useful
+gain to confirm. The candidate and the ordinary/live parity uncertainties
+remain separate. No independent or broader candidate timing follows.
+
+Both guards and frozen pixels, source, live-token cancellation and
+independent-owner checks pass. The collector expected optional output
+dimensions after timing. The scored wire and guard records survived, and
+the corrected collector replays validation only with its clocks discarded.
+The prior attempt, original samples, both JIT outputs and recovery commands
+are retained. One private library and one actor build reuse the existing
+reference, fixtures and package. The mirrored archive has 28 verified
+members and SHA-256
+`5d3cb342c482be94fff5973fe8e250a74afbd468de73e621778a0520aaa48c4a`.
+[Trial evidence](vp8-decoder-fixed-geometry-trial-evidence.json)

@@ -479,3 +479,29 @@ archives.
 retain one adverse short screen and a second candidate with a confirmed paired
 gain. The standalone zimg comparison remains uncertain and the candidate stays
 private. The current package and its three open cases remain unchanged.
+
+## Shared geometry for the tight mixed-axis word tail
+
+The private `TightCross16` candidate shares the existing exact byte-tail
+geometry helper. Once the full-row prefix has returned, it prepares the
+45 remaining rows in their unpublished final columns. The first 31 of
+32 strips reuse the entries. The last strip rebuilds the original geometry
+as it overwrites those columns. This reduces source-level tail geometry
+builds from 1,440 to 90 on the frozen control. The 4 KiB workspace, pixel
+arithmetic, safe alias lifetime and independently owned output stay intact.
+
+The short screen moves from 881.99 to 873.93 µs. Twelve independent pairs on
+the same DLL confirm **825.91 → 814.23 µs**, interval **0.973222–0.998714**,
+**112 B/op** on both. Against prepared zimg in the original standalone
+256-call generated workload, the candidate measures **830.69 / 823.66 µs**,
+interval **0.965544–1.052384**, **113 B/op**. Keep the candidate private.
+There is a scoped incremental gain and the strict standalone gate remains
+open. The three original package uncertainties remain in force.
+
+Exact RGBA16 pixels, approved native bounds, source, surviving owners and
+both quiet guards pass in all three captures. Two preflight corrections
+restore the frozen word fixture suffix and 64-operation native bracket.
+Both happened before sampling. A single private core build and one actor
+build reuse the original inputs, worker and standalone driver.
+[Trial evidence](bicubic-cross16-tail-geometry-evidence.json) pins the three
+mirrored archives and all 50 members, including commands and raw observations.

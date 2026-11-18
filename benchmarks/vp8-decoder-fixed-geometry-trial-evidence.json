@@ -1,0 +1,99 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1334",
+  "sourceCommit": "601659a6",
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "originalCase": "OpaqueCancelable8",
+  "baselineDllSha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+  "baselinePackageSha256": "6fed564e002264ff6ec115d43d5e3e6be3c7ad0d33e0e9fdd9c479b3665f4fed",
+  "candidateDllSha256": "8d9c658ec78588975c401548d21e7b56ce3a7da666ca7f31cd7a6cb91eb35e31",
+  "privateCoreBuilds": 1,
+  "driverBuilds": 1,
+  "referenceBuilds": 0,
+  "newOwnedCapacityBytes": 0,
+  "newRetainedCapacityBytes": 0,
+  "statisticalUnits": 3,
+  "operationsPerSubject": 16,
+  "generatedCode": {
+    "clocksDiscarded": true,
+    "divides": {
+      "baseline": 7,
+      "candidate": 0
+    }
+  },
+  "scoredRecovery": {
+    "scoredSamplesFromOriginalWire": true,
+    "replayClocksDiscarded": true,
+    "cause": "The collector keyed absent output dimensions after the scored run and both guard checks."
+  },
+  "metrics": {
+    "baseline": {
+      "mean": 5172.8948125,
+      "lower": 4582.625796274938,
+      "upper": 5763.163828725062
+    },
+    "candidate": {
+      "mean": 5168.5874791666665,
+      "lower": 4753.3182666031025,
+      "upper": 5583.8566917302305
+    },
+    "candidateToBaselineInterval": [
+      0.9532843901266864,
+      1.0472724806272407
+    ],
+    "candidateToBaselineRatio": 0.9991739127855577,
+    "allocations": {
+      "baseline": [
+        230880.0
+      ],
+      "candidate": [
+        230880.0
+      ]
+    },
+    "nativeGroupMeansUs": [
+      5195.7878125,
+      5186.710958333333,
+      5189.493312500001
+    ]
+  },
+  "raw": {
+    "file": "vp8-decoder-fixed-geometry-OpaqueCancelable8-3.tar.xz",
+    "sha256": "5d3cb342c482be94fff5973fe8e250a74afbd468de73e621778a0520aaa48c4a",
+    "bytes": 398020,
+    "members": 28,
+    "allMembersVerified": true,
+    "memberHashes": {
+      "tmp/frp1285-OpaqueCancelable8-receipt.json": "d7d6080ea98ba65f9b4d0e89576032b1b7a0788baf040ebb9523988673924c90",
+      "tmp/frp1334/OpaqueCancelable8-3/wire.jsonl": "5aae978c448e978e2170cb8ac9cb855da30288abcba059ec2265c0fd1032ade9",
+      "tmp/frp1334/OpaqueCancelable8-3/baseline-jit.txt": "e04f94bb1c70a14a7559d9707b75ef409c8d33e4573847ef95211657eb3b723c",
+      "tmp/frp1334/actor/Program.cs": "f05817c6c85e2d18b4cc0453177f683f06b6ed9d9461ce9719ab2eb814f26fb5",
+      "tmp/frp1334/OpaqueCancelable8-3/after.json": "a242657f74ea52609eb350ebb2aa01c70ab337df51614da18ee0c10ce353f301",
+      "tmp/frp1334/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "8d9c658ec78588975c401548d21e7b56ce3a7da666ca7f31cd7a6cb91eb35e31",
+      "tmp/frp1334/OpaqueCancelable8-3/preparation.json": "a698aecd7fa628b179aae0d7e5040e961443bd7933e942b80abcd6d28c3cc43f",
+      "tmp/frp1334/actor/Vp8Actor.dll": "c93d845418870eea33a95fc04417e1ed3a099e72415011d0a92e643029677fc3",
+      "tmp/frp1334/OpaqueCancelable8-3/candidate-jit-wire.txt": "1c6d8669d9d90619d4f5f56161f5ef432515a352d22308cc10e7bd8174eeb005",
+      "tmp/frp1334/geometry.json": "35cba295c3a4443fdec40eeda2d31b5426b46bdaf25533f698602a2b01dce8ca",
+      "tmp/frp1334/screen-vm.py": "89de3ce44090392d852be5d28c8bd93d3265d83ca6c4cb1e6ee01068b38e5334",
+      "tmp/frp1334/OpaqueCancelable8-3/statistics.json": "0d5deebff349e9c9b2e4767374e7a09d599c125c2e01fd5ae1d91b60255927a9",
+      "tmp/frp1334/OpaqueCancelable8-3/candidate-validation.json": "055297ebf4bfcfa300fc0e0a831bb58b864b25318a6dc6257f0381c9983cac3a",
+      "tmp/frp1334/OpaqueCancelable8-3/candidate-recovery.log": "1c6d8669d9d90619d4f5f56161f5ef432515a352d22308cc10e7bd8174eeb005",
+      "tmp/frp1334/src/Lokad.Image/Internal/Vp8Decoder.cs": "7463663acdae8d6a21260cb3dbe754822896f55e4e80cb57129e404314c04444",
+      "tmp/frp1334/OpaqueCancelable8-3/before.json": "afb042c553c2bc4bbfc53158619670c93045e6132e8b038108f13753c3ed3b43",
+      "tmp/frp1334/actor/Vp8Actor.csproj": "524eb1cfc937078a0340f7e90a64f50497946fe6618dc29e4b9695e18c28e74d",
+      "tmp/frp1334/initial-screen-vm.py": "bd7236390439c24d4c09539263c3a4639b8f934ca8f2493c7b314145d4593806",
+      "tmp/frp1334/OpaqueCancelable8-3/recovered.json": "3ff754b7fa968e7352985b19824da819bfebf0d7c7d1c884e0f5d555e58b3349",
+      "tmp/frp1334/OpaqueCancelable8-3/baseline-jit-wire.txt": "5990d61923902c7ef600087ee8910b25032c74856242d0119ee34545a833ceb6",
+      "tmp/frp1334/OpaqueCancelable8-3/division-counts.json": "66a0f0b3caa2cbd324cee84b9728cba3a8e7710ea1099fc55103f52b84f663b9",
+      "tmp/frp1334/OpaqueCancelable8-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/frp1334/OpaqueCancelable8-3/baseline-recovery.log": "5990d61923902c7ef600087ee8910b25032c74856242d0119ee34545a833ceb6",
+      "tmp/frp1334/OpaqueCancelable8-3/observations.json": "7adf94ea8276a60e2418492ddf12436bd1a31a7cc80c0a10cd221d1086f73b81",
+      "tmp/frp1334/OpaqueCancelable8-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/frp1334/OpaqueCancelable8-3/baseline-validation.json": "851b18d15f7c2c7a6f2ce8183c868ef950656db0599618fbf266490bed145fba",
+      "tmp/frp1334/OpaqueCancelable8-3/candidate-jit.txt": "4f2fb551bdde317a570fb4f5bb024318274028561183826862bf22c26c8e1f5d",
+      "tmp/frp1285-vp8-preparation.json": "75936bdbd1f1e21d8275779c34a8b33925f33e79460389b65513140504b7a495"
+    },
+    "mirrored": true
+  }
+}
