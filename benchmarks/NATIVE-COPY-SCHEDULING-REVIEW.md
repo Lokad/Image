@@ -237,3 +237,13 @@ comparisons to run on the final immutable package.
 [WebP bindings](webp-package-bindings-required-scope-evidence.json)
 [JPEG header evidence](jpeg-pending-publication-evidence.json)
 [JPEG restart binding](jpeg-direct-block-emission-evidence.json)
+
+## Current summary providers
+
+Rerunning the existing provider audit against the marker-coalescing package
+resolves all 165 displayed comparisons. Of those, 76 use a newer evidence
+provider than the earlier inventory, including three PNG decoder labels that
+now include their pass status. The two stored PNG encoder aliases and the PNG
+header alias still use their previously verified providers. The audit covers
+the evidence used by the summary. Final timing still requires the original
+operation boundaries on the final immutable package.

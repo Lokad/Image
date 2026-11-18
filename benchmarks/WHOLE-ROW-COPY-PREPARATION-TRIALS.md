@@ -1053,3 +1053,31 @@ The original standalone copy scores still apply.
 
 The 37-member archive retains the model, source, assembly, actuals, guard
 records and commands. [Verified evidence](copy-vector-width-trials-evidence.json)
+
+## RGBA16 backing roles
+
+The original separate RGBA16 workload runs through package `d52e53f2` and
+the frozen FFmpeg plane-copy adapter on four shared backing pairs. Each pair
+is measured in both source/canvas assignments. Both buffers receive the same
+original pixels before warmup, and both timed loops observe the same destination
+byte on every call. Each assignment has two 65,536-call pairs in opposite
+managed/native order. Exact canvas, source and ownership checks pass at 0 B/op.
+
+Swapping roles increases the managed-minus-native difference by **41.9, 22.3,
+14.5 and 48.8 ns**, respectively. The native side improves by **15.5–43.6 ns**
+in all four pairs. The managed side changes by **−4.5 to +26.4 ns**. These
+observations depend on which array supplies each address. Swapping roles also
+changes address phase, so the capture leaves physical placement, alignment and
+memory direction unresolved as individual causes. Both quiet guards pass.
+
+Keep the original standalone RGBA16 status uncertain. A revised confirmation
+can preselect independent placements and balance both roles while preserving
+the full copy, fixed workload and existing confidence gate. Keep the native
+and managed observations for every placement in the result.
+
+An untimed check on the separate RGBA8 path uses the same package. Default,
+disabled and enabled JIT loop alignment all emit the same 438-byte copy body,
+with matching instruction text and block offsets. The default records two
+zero-byte alignment slots. There is no useful runtime-switch timing comparison
+for this body. The archive retains all layouts, observations, build logs, hashes
+and verification commands. [Verified evidence](copy-vector-width-trials-evidence.json)
