@@ -306,5 +306,135 @@
         "untimedIoPreparationCorrected": true
       }
     }
+  },
+  "opaquePartitioned": {
+    "producers": {
+      "windowsSha256": "b72b12a53b5ff8e2a9badc93aedf0e3e228f539958826a3122a16d70c8699c28",
+      "linuxSha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "packageSha256": "d873438fb8c74e3a84fef380ae1d04d09a6f553f95fccbe3726ecb7622401812",
+      "symbolsSha256": "372154e4bf9e009b4470e753bd76c2b4c1c1fa599a6ff129c781b8b0adb13511",
+      "fullEachOs": [
+        3384,
+        2517,
+        948
+      ],
+      "focusedPerMode": 94,
+      "actualPackageConsumerPassedBothOs": true,
+      "usageExamplesEachOs": 3,
+      "timedDllUsedUnchanged": true,
+      "profileNotRepeated": true
+    },
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "driverBuilds": 1,
+    "productionAndReferenceBuilds": 0,
+    "raw": {
+      "file": "vp8-opaque-partitioned-current-package.tar.xz",
+      "bytes": 65572,
+      "sha256": "4137aa08c5b882e031335125a00c57bbe984aff14a6e00f0e1696c52df6b48cf",
+      "members": 17,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "cases": {
+      "Opaque8": {
+        "ratio": 0.9818445294497254,
+        "lower": 0.9139106484108604,
+        "upper": 1.0522374987398777,
+        "status": "uncertain",
+        "managedUs": 4791.365655598958,
+        "nativeUs": 4879.963692708333,
+        "allocatedBytes": 230880,
+        "caseId": "Opaque8",
+        "librarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+        "operationsPerSubject": 128,
+        "actuals": 12,
+        "segmentsPerActual": 16,
+        "operationsPerSegment": 8,
+        "originalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "nativeWorkerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+        "validationSha256": "4d466e5bc06e344574e8807b5c4e5b3931e19ad143d5b7704388c7bcf58ed0cf",
+        "nativeGroupMeansUs": [
+          4879.963692708333,
+          4889.790455729167,
+          4889.710979166667
+        ],
+        "pairedRatioConfidence": [
+          0.9765604375751842,
+          0.983253375987167
+        ],
+        "firstAndLastSixPairs": [
+          {
+            "managedUs": 4720.44876953125,
+            "pairedNativeUs": 4813.073345052084,
+            "pairedRatio": 0.980762384332749
+          },
+          {
+            "managedUs": 4862.2825416666665,
+            "pairedNativeUs": 4966.50756640625,
+            "pairedRatio": 0.9790463849439961
+          }
+        ],
+        "twoSlowestManagedPairs": [
+          {
+            "managedUs": 5101.599984375,
+            "pairedNativeUs": 5205.83446875,
+            "pairedRatio": 0.9799773725037346
+          },
+          {
+            "managedUs": 4990.884734375,
+            "pairedNativeUs": 5117.566296875,
+            "pairedRatio": 0.9752457408168104
+          }
+        ]
+      },
+      "SimpleOpaque8": {
+        "ratio": 0.9613972586368211,
+        "lower": 0.9553110908311261,
+        "upper": 0.964513764330353,
+        "status": "pass",
+        "managedUs": 4711.5613411458335,
+        "nativeUs": 4900.743473958333,
+        "allocatedBytes": 230880,
+        "caseId": "SimpleOpaque8",
+        "librarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+        "operationsPerSubject": 128,
+        "actuals": 12,
+        "segmentsPerActual": 16,
+        "operationsPerSegment": 8,
+        "originalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "inputSha256": "ef21a8b737cb3ffbef80939df713024482e53f102475aa4bdb0bcdda8df19319",
+        "outputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+        "nativeWorkerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+        "validationSha256": "df53c0cfc5d0a22efa98a4550f9992aff824a3b3b8970ef03da1abcf95c6ac4b",
+        "nativeGroupMeansUs": [
+          4900.743473958333,
+          4907.8900078125,
+          4905.1454453125
+        ],
+        "pairedRatioConfidence": [
+          0.9566520470451916,
+          0.9633596282207971
+        ],
+        "firstAndLastSixPairs": [
+          {
+            "managedUs": 4709.990104166667,
+            "pairedNativeUs": 4906.989368489583,
+            "pairedRatio": 0.959859712446227
+          },
+          {
+            "managedUs": 4713.132578125,
+            "pairedNativeUs": 4908.790647135416,
+            "pairedRatio": 0.9601467897980268
+          }
+        ]
+      }
+    }
   }
 }

@@ -1,8 +1,9 @@
 # VP8 decode on the current package
 
-The first five owned-output VP8 captures were uncertain on the current 0.2.1
-package. Partitioned sampling confirms the two transparent cases below. All
-exact-pixel, source ownership and reference checks pass.
+The first five owned-output VP8 captures were uncertain on the preceding 0.2.1
+package. Partitioned sampling confirms both transparent cases. The same schedule
+confirms simple-filter opaque decoding on the latest package. Ordinary opaque
+and live-token decoding retain open timing confidence.
 
 | Complete operation | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op |
 | --- | ---: | ---: | ---: | ---: |
@@ -72,3 +73,31 @@ The mirrored `vp8-partitioned-current-package-confirmations.tar.xz` has 35 verif
 and 102,940 B, SHA-256 `2b2174384ebc090ae57bf7a18f8e3428ef8db55691fbb87a0907156ba608dd14`. It retains
 the rejected capture, all accepted subdivisions, identities, gates and
 reproduction commands.
+
+## Opaque resident confirmation
+
+| Complete operation | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Opaque, resident | 4,791.37 | 4,879.96 | 0.913911–1.052237 | 230,880 | Confidence open |
+| Opaque with simple filter | 4,711.56 | 4,900.74 | 0.955311–0.964514 | 230,880 | Pass |
+
+Both cases use the same original 128-call units, twelve actuals, four warmups,
+sixteen eight-call subdivisions and all three interleaved reference groups.
+The immutable package supplies the tested DLL. One tooling build changes only
+the selected case allowlist and its diagnostic text. Fifty non-core runtime
+files, the prepared reference, the original packets and alpha, exact output
+and independent-owner checks all match. Untimed files stay in memory and both
+idle guards pass.
+
+The ordinary opaque paired interval is **0.976560–0.983253**. First-six to
+last-six managed means move from 4,720.45 to 4,862.28 µs. The paired native
+means move from 4,813.07 to 4,966.51 µs. The drift's cause remains unverified.
+The conservative gate includes every actual and every native group. Ordinary
+opaque remains uncertain under that rule. Simple-filter passes and stops.
+The live-token case keeps its earlier partitioned evidence.
+
+The mirrored `vp8-opaque-partitioned-current-package.tar.xz` contains
+17 verified members and 65,572 B, SHA-256
+`4137aa08c5b882e031335125a00c57bbe984aff14a6e00f0e1696c52df6b48cf`.
+It retains the original receipts, tool and reference identities, idle checks,
+exact-output evidence and all subdivisions.

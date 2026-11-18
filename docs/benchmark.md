@@ -174,6 +174,10 @@ upper **0.947445**, **240,496 B/op**
 (parity confirmed). The complete operation includes fresh stream
 acquisition, decoding, independent output ownership and disposal. The partitioned
 schedule also confirms the transparent resident case.
+On the latest package the same schedule confirms simple-filter opaque decode at
+**4,711.56 / FFmpeg 4,900.74 µs**,
+upper **0.964514**, **230,880 B/op**.
+Ordinary opaque decode remains uncertain at upper **1.052237**.
 
 All five affected [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
 pass on the same package. The resident, fresh-stream and indexed rows show their

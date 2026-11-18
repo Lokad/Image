@@ -3280,6 +3280,17 @@ costs. The complete final-package refresh remains outstanding."""
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
     opaque_live = vp8_partitioned['cases']['OpaqueCancelable8']
     vp8_stream = vp8_partitioned['cases']['StreamNative8']
+    opaque_current = vp8_package['opaquePartitioned']
+    assert opaque_current['raw']['mirrored'] and opaque_current['raw']['allMembersVerified']
+    assert set(opaque_current['cases']) == {'Opaque8', 'SimpleOpaque8'}
+    for name, c in opaque_current['cases'].items():
+        assert c['librarySha256'] == opaque_current['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['operationsPerSubject'] == c['segmentsPerActual'] * c['operationsPerSegment'] == 128
+        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
+        assert all(c[k] == vp8_package['cases'][name][k] for k in ('inputSha256', 'outputSha256', 'nativeWorkerSha256'))
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    opaque_resident = opaque_current['cases']['Opaque8']
+    opaque_simple = opaque_current['cases']['SimpleOpaque8']
     vp8_status = {'pass': 'parity confirmed', 'gap': 'gap', 'uncertain': 'confidence open'}
     prefix = '| WebP VP8 + alpha, fresh seekable Stream'
     old, = (line for line in codecs.splitlines() if line.startswith(prefix))
@@ -3566,6 +3577,7 @@ costs. The complete final-package refresh remains outstanding."""
     assert compact_word['affectedRequiredPaths'] == ['TightWide16'] and compact_word['newRequiredPaths'] == 0
     assert compact_word['raw']['mirrored'] and compact_word['raw']['allMembersVerified']
     word_qualification = compact_word['qualification']
+    assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
     extended_bicubic = bicubic_package['extendedCases']
@@ -3794,6 +3806,10 @@ upper **{vp8_stream['upper']:.6f}**, **{vp8_stream['allocatedBytes']:,} B/op**
 ({vp8_status[vp8_stream['status']]}). The complete operation includes fresh stream
 acquisition, decoding, independent output ownership and disposal. The partitioned
 schedule also confirms the transparent resident case.
+On the latest package the same schedule confirms simple-filter opaque decode at
+**{opaque_simple['managedUs']:,.2f} / FFmpeg {opaque_simple['nativeUs']:,.2f} µs**,
+upper **{opaque_simple['upper']:.6f}**, **{opaque_simple['allocatedBytes']:,} B/op**.
+Ordinary opaque decode remains uncertain at upper **{opaque_resident['upper']:.6f}**.
 
 All five affected [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
 pass on the same package. The resident, fresh-stream and indexed rows show their
