@@ -3700,6 +3700,16 @@ costs. The complete final-package refresh remains outstanding."""
     assert {name: c['nativeAdjacentOperationsEach'] for name, c in tight_adjacent['cases'].items()} == {
         'TightDown8': 240, 'TightCross16': 120,
     }
+    tight_down8_stage = bicubic_package['tightDown8Partitioned']
+    tight_down8 = tight_down8_stage['case']
+    assert tight_down8_stage['producers'] == word_qualification
+    assert tight_down8_stage['raw']['mirrored'] and tight_down8_stage['raw']['allMembersVerified']
+    assert tight_down8_stage['originalGeneratedOperationsReused'] and tight_down8_stage['originalOperationBoundariesPreserved']
+    assert all(tight_down8[key] == tight_adjacent['cases']['TightDown8'][key]
+               for key in ('librarySha256', 'inputSha256', 'managedOutputSha256',
+                           'nativeOutputSha256', 'nativeWorkerSha256'))
+    assert tight_down8['actualOperationCounts'] == [448] * 12 and tight_down8['nativeGroups'] == 3
+    assert tight_down8['nativeOperationsPerSubject'] == 128 and tight_down8['segmentsPerUnit'] == 16
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3732,6 +3742,8 @@ costs. The complete final-package refresh remains outstanding."""
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = compact_word['case']
             assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
+        elif name == 'TightDown8':
+            c = tight_down8
         elif name in tight_adjacent['cases']:
             current = tight_adjacent['cases'][name]
             assert all(current[key] == c[key] for key in

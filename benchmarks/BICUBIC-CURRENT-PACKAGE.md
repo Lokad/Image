@@ -392,3 +392,55 @@ The mirrored `tight64x32-bicubic-partitioned-current-package.tar.xz` has
 `6d977b7b57513844709c370b65d69f2f659fc377f0d1a00504b8a0fd8dc89259`.
 The [current evidence](bicubic-current-package-evidence.json) pins this
 archive, all actuals, the frozen runtime and the prior receipt.
+
+## Interleaved timing for tight 256×129 RGBA8 reduction
+
+The current package measures **458.97 µs / prepared zimg 460.68 µs**,
+**112 B/op**. The paired interval is **0.992053–0.997669**, and the full
+conservative interval is **0.986948–1.002833**. The case remains uncertain.
+Native group means of 460.68, 461.34 and 461.59 µs differ by about 0.2% in
+this capture. Both earlier adjacent paired passes and the wider 1.050981
+upper remain in the evidence.
+
+With the same library, worker and 127 pinned runtime files, the twelve units
+each contain 448 complete managed operations and 128 per native group.
+Sixteen subdivisions interleave 28 original generated managed calls with
+three eight-call native samples. All exact input, pixel, native output,
+ownership and quiet checks pass. One tooling build was needed. The measured
+variation is small enough to defer further sampling with this code and
+schedule while pursuing a concrete source improvement.
+
+The mirrored `tight256x129-bicubic-partitioned-current-package.tar.xz` has
+14 verified members, 143,648 B and SHA-256
+`3614ad2fe356a335d415b07ea5ae257629ed6266c3a3c0aa9c63a1df9e58c951`.
+The [current evidence](bicubic-current-package-evidence.json) retains both
+confidence views, all subdivisions, runtime hashes and replay.
+
+## Deferred fallback views candidate
+
+The narrow-column prototype moves checked offset and coefficient slices to
+the branches that consume them. The common byte pair uses its original compact
+coefficient slice. The word pair keeps its ordered weights. The remaining
+counts, arithmetic, exact repair, result row loan, 4 KiB working limit and
+cancellation checkpoints are unchanged.
+
+| Complete tight RGBA8 256×129 resize | Baseline or Lokad.Image µs | Candidate or zimg µs | Conservative ratio interval | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Three managed-DLL pairs | 448.77 | 435.61 | 0.915574–1.029092 | 112 |
+| Twelve managed-DLL pairs | 461.37 | 419.35 | 0.905344–0.912507 | 112 |
+| Standalone private DLL / prepared zimg | 395.94 | 418.47 | 0.939953–0.950535 | 112 |
+
+The independent paired reduction is about **42.02 µs / 9.1%**. The standalone
+prototype passes its complete parity boundary with the same 448 managed and
+128 native operations per unit, the original generated loops, and twelve
+units. All original frames, native bounds, ownership checks and quiet guards
+pass. Windows passes 701 focused public resize tests.
+
+The result qualifies this private build for further work. The current package
+row retains its own uncertain result. Reconcile the affected bounded RGBA16
+path and prove the other dispatch boundaries before transferring to the final
+DLL and qualifying Windows, Linux, scalar paths and the actual package.
+
+[Candidate evidence](bicubic-column-view-candidate-evidence.json) retains
+the three mirrored, member-verified archives, candidate source and module
+hashes, all observations, checks and replay commands.

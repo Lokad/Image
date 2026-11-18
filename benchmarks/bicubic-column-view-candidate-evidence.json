@@ -1,0 +1,161 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1322",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "workingLimitBytes": 667660,
+  "addedOwnerStorageBytes": 0,
+  "temporaryBuilds": {
+    "core": 1,
+    "driver": 1
+  },
+  "baselinePackageProducer": {
+    "windowsSha256": "b72b12a53b5ff8e2a9badc93aedf0e3e228f539958826a3122a16d70c8699c28",
+    "linuxSha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+    "packageSha256": "d873438fb8c74e3a84fef380ae1d04d09a6f553f95fccbe3726ecb7622401812",
+    "symbolsSha256": "372154e4bf9e009b4470e753bd76c2b4c1c1fa599a6ff129c781b8b0adb13511",
+    "fullEachOs": [
+      3384,
+      2517,
+      948
+    ],
+    "focusedPerMode": 94,
+    "actualPackageConsumerPassedBothOs": true,
+    "usageExamplesEachOs": 3,
+    "timedDllUsedUnchanged": true,
+    "profileNotRepeated": true
+  },
+  "hypothesis": "Build fallback weight and index views only for the consumers that use them.",
+  "windowsFocusedPublic": {
+    "passed": 701,
+    "logSha256": "0c110ebd9f710018df202cf13cdb7588dd040e30e9137a06848c3775b4ed784b"
+  },
+  "next": "Reconcile bounded RGBA16 and prove affected dispatch before final DLL and package qualification.",
+  "screen": {
+    "baseline": {
+      "mean": 448.7728169642857,
+      "lower": 439.64321557363826,
+      "upper": 457.90241835493316
+    },
+    "candidate": {
+      "mean": 435.61316592261903,
+      "lower": 416.3749591461538,
+      "upper": 454.85137269908427
+    },
+    "candidateToBaselineInterval": [
+      0.9155738865768093,
+      1.0290919357989563
+    ],
+    "candidateToBaselineRatio": 0.9706748700282205,
+    "allocations": {
+      "baseline": [
+        112.0
+      ],
+      "candidate": [
+        112.0
+      ]
+    },
+    "nativeGroupMeansUs": [
+      453.77398177083336,
+      455.00123177083333,
+      457.494953125
+    ],
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allActualsRetained": true,
+    "operationsPerSubject": 448,
+    "pairs": 3,
+    "raw": {
+      "file": "bicubic-column-view-screen.tar.xz",
+      "sha256": "3f48f7d36a206a7c450b4bde2cf726326a28547ba3f18d9b31d1f8291a04f03f",
+      "bytes": 463112,
+      "members": 18,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "observationsSha256": "aea7e831d7c84ef414a4a5c06d3d605358f21912fa41a2fecccb5bd9fc4c75ce"
+  },
+  "confirm": {
+    "baseline": {
+      "mean": 461.3691850818452,
+      "lower": 459.4075151325553,
+      "upper": 463.3308550311351
+    },
+    "candidate": {
+      "mean": 419.3456333705357,
+      "lower": 418.3522356656243,
+      "upper": 420.33903107544717
+    },
+    "candidateToBaselineInterval": [
+      0.9053444987923648,
+      0.9125070497295136
+    ],
+    "candidateToBaselineRatio": 0.9089187189082784,
+    "allocations": {
+      "baseline": [
+        112.0
+      ],
+      "candidate": [
+        112.0
+      ]
+    },
+    "nativeGroupMeansUs": [
+      456.3706126302083,
+      456.6811595052083,
+      453.93686067708336
+    ],
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allActualsRetained": true,
+    "operationsPerSubject": 448,
+    "pairs": 12,
+    "raw": {
+      "file": "bicubic-column-view-confirmation.tar.xz",
+      "sha256": "ba3095012157f093eaa29cb539b3011c99545ea1afdf70395576d9e7c81a3cdb",
+      "bytes": 464432,
+      "members": 18,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "observationsSha256": "1c109e209a0b1199a14c2b79c2fae18724e83c33727736f5fdfa31035a16b8b5"
+  },
+  "standalone": {
+    "status": "pass",
+    "lower": 0.9399528262433848,
+    "upper": 0.9505346815163249,
+    "ratio": 0.9461792022789942,
+    "managedUs": 395.94468415178574,
+    "nativeUs": 418.4669069010417,
+    "nativeGroupMeansUs": [
+      418.4669069010417,
+      418.6112037760417,
+      418.8903268229167
+    ],
+    "allocatedBytesMinimum": 112,
+    "allocatedBytesMaximum": 112,
+    "pairedInterval": [
+      0.9439349839484138,
+      0.9477776248514806
+    ],
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "pairs": 12,
+    "operationsPerSubject": 448,
+    "nativeOperationsPerSubject": 128,
+    "segmentsPerUnit": 16,
+    "allActualsRetained": true,
+    "raw": {
+      "file": "bicubic-column-view-standalone.tar.xz",
+      "bytes": 503992,
+      "sha256": "3dd7337c8ec1705749383b94aca28a8df34f1f0cbb2837b376184384c30a9d00",
+      "members": 16,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "observationsSha256": "70c9a0b33b490205366ecb5760d89f728b6ea29a479a918dd3bcef544d031a85"
+  },
+  "candidateDllSha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+  "candidateSourceSha256": "426c5d955038d3c711e04b4607392ae2699791d847de8ee6f52ad7da57402f6d"
+}

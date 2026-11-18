@@ -520,7 +520,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 444.06 | 446.80 | 0.994 / 1.050981 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 458.97 | 460.68 | 0.996 / 1.002833 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 495.34 | 569.89 | 0.869 / 0.873750 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 371.44 | 381.07 | 0.975 / 0.987210 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |
