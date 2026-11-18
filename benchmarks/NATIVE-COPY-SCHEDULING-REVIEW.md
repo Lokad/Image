@@ -68,3 +68,42 @@ Mirrored/member-verified `benchmark-refresh-runtime-preparation.tar.xz`:
 `d95ced41a470a91f393b3004aa983b3240d268a5038269a3d8f79085af218be5`.
 Named dependencies retain unchanged runtimes, reference identities and packages.
 The rejected-copy record `effb376b` passes all three CI jobs (run44256244286).
+
+## WebP bindings and finite scope
+
+Six additional untimed WebP bindings use the actual immutable package DLL.
+All 497 non-core runtime files match their receipts. Frozen complete packets are
+exact against the explicitly labeled libwebp exact=1 reference (FFmpeg encoder backend): photograph 160,032 B,
+diagram 7,234 B, opaque 121,896 B and RGBA8/normalized RGBA16/async 183,812 B each.
+Inputs, settings, source/owner checks and native identities remain unchanged.
+The recovered async receipt omitted its selection flag; the pinned original
+runner explicitly supplies `LOKAD_IMAGE_WEBP_ASYNC_NONSEEKABLE=1`. Recovering that
+flag preserves the intended public boundary. Its managed preparation proof is
+regenerated on the actual package, including admission refusal, cancellation,
+sink failure, retained outputs and independent lifetimes. Exact packet identity
+allows reuse of unchanged native/scalar/CLI proof. Original proof/runtime files
+are restored or remain unchanged; native worker hashes and mtimes are unchanged.
+All clocks are discarded. Two temporary check-tool builds; zero production,
+harness, reference, fixture or package builds. No performance status changes.
+
+The ignored reconciliation list now names all 289 existing required slots from
+the coverage document and its pinned inventories: 240 numeric + 17 planned, minus
+the four already retired controls, plus 30 named additions and six prepared public
+boundaries. The rejected native packed-transparency view remains an unscored
+diagnostic alongside its approved controls. Git LF and historical Windows CRLF
+fingerprints both verify. This is scope recovery, not current timing proof or
+a new workload grid. Apply existing case owners, explicit alias proofs and the
+recorded storage invalidations before determining refresh obligations. Frozen
+source recipes for the remaining special controls are retained without executing
+old build/global-manifest orchestration. The two byte-copy gaps and word/async
+probe uncertainties remain open; passing paths stay stopped.
+
+[Evidence](webp-package-bindings-required-scope-evidence.json) pins the recovered
+flag, exact packets, refreshed proof, identities and the private289-name list.
+Mirrored/member-verified `webp-package-bindings-required-scope.tar.xz`:
+**1,318,020 B / 105 members**, SHA256
+`d91cbe02a13b7fc9283cbe7d73c551cf7055fd283cc8646c16e86a6f84dbcc88`.
+Named dependencies retain source recipes, original runtimes and reference proof.
+Production and its 6,844 full/live checks per OS, the same actual package and all
+three usage examples remain unchanged. Preceding `c1408165` passes all three CI jobs
+(run 44258207467). The final actual-package refresh and 289-path objective remain open.
