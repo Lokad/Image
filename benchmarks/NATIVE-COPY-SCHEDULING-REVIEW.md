@@ -178,3 +178,15 @@ metric, independent-face and release checks on the same frozen
 DejaVu Sans font. The scoped eager/lazy validation distinction remains.
 Both harnesses use their original check modes and frozen runtimes.
 [Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Layout and fitting package bindings
+
+The logical wrapped layout, OpenType Latin, OpenType Arabic and constrained
+fitting operations pass their original checks on development package
+`87f1ae4a`. Each check runs one invocation through the frozen generated
+operation. The original harness verifies exact managed glyph selection, source
+offsets, positions, line spacing, bounds and selected size. The pinned
+ImageSharp.Drawing and SixLabors.Fonts worker reproduces its original public
+layout and result disposal checks. One temporary check-tool build serves
+all four. The reference receives zero sample commands.
+[Invocations, original receipts and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

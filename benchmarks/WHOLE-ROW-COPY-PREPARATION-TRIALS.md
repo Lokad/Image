@@ -850,3 +850,30 @@ Both captures retain exact pixels, source and ownership checks, quiet
 guards and **0 B/op** within the measured copy. These diagnostics add
 no scored result. The standalone FFmpeg statuses remain open.
 [Raw clocks, layout offsets and verification evidence](copy-vector-width-trials-evidence.json)
+
+## Two complete row snapshots
+
+For eligible separate buffers with no live cancellation token, this trial
+loads two full rows before writing either. The bounds-checked helper covers
+961–1024 row bytes, uses the original copy for an odd final row, and leaves
+the portable and same-buffer routes in place. The optimized Linux method is
+701 bytes. It emits 32 vector loads followed by 32 stores without spills.
+Exact pixels, input and ownership checks pass, as do 353 focused Windows tests
+in each of normal and scalar modes.
+
+Three quiet-VM pairs per case initially favor the new schedule by **74 ns**
+for clipped RGBA8 and **44 ns** for separate RGBA8, with wide intervals.
+Twelve independent pairs per case give **2.015887 → 2.023235 µs** for
+clipped (candidate/baseline interval **0.987156–1.020501**) and
+**2.124117 → 2.125917 µs** for separate (**0.997514–1.004192**).
+All subjects allocate **0 B/op**. The confirmatory pairs give no reason to
+adopt the schedule.
+
+A diagnostic then runs both DLLs on exactly the same backings, with four
+ordinary source/canvas allocations and two opposite-order pairs per
+placement. The separate case is **5–57 ns slower** across the four
+placements. The clipped effects range from **42 ns slower to 10 ns faster**.
+Both complete managed calls reproduce the frozen results. The shared backings
+are a diagnostic setup. The standalone FFmpeg comparisons keep their existing
+scores. Choose a distinct source of removable work before another copy trial.
+[Paired timings, placement results and verification evidence](copy-vector-width-trials-evidence.json)

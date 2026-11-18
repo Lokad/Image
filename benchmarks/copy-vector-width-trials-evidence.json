@@ -1233,5 +1233,177 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "twoCompleteRowSnapshotsTrial": {
+    "design": "Two complete independent rows loaded before either store, with original odd-final-row and ineligible routes",
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateDllSha256": "859504a8bb58f8014bdbca4e5082b9624c2b0e473c19427aefd0f56b756c247b",
+    "productionAccepted": false,
+    "exactnessAndOwnershipPassed": true,
+    "windowsFocusedNormal": 353,
+    "windowsFocusedScalar": 353,
+    "linuxCodegen": {
+      "methodBytes": 701,
+      "sampleCommands": 0,
+      "vectorMoves": 64,
+      "stackVectorMoves": [],
+      "codegenSha256": "b0c6580c5fd09ae6a69c09e8086a77c4d09849d097028f824bded4276aefa6fe",
+      "vectorLoadsBeforeFirstVectorStore": 32,
+      "vectorStores": 32
+    },
+    "operationsPerPairSide": 65536,
+    "allocatedBytesPerOp": 0,
+    "comparisons": {
+      "screen": {
+        "OriginalClippedCopy8": {
+          "pairs": 3,
+          "baselineUs": 2.118669692993164,
+          "candidateUs": 2.0448326517740885,
+          "candidateToBaselineInterval": [
+            0.646927824298664,
+            1.4401773841214367
+          ]
+        },
+        "DrawingCopy8": {
+          "pairs": 3,
+          "baselineUs": 2.090938629150391,
+          "candidateUs": 2.0469015502929686,
+          "candidateToBaselineInterval": [
+            0.5686657363767555,
+            1.6840271184144897
+          ]
+        }
+      },
+      "confirm": {
+        "OriginalClippedCopy8": {
+          "pairs": 12,
+          "baselineUs": 2.015887112935384,
+          "candidateUs": 2.023235106150309,
+          "candidateToBaselineInterval": [
+            0.9871557818450654,
+            1.0205010798319718
+          ]
+        },
+        "DrawingCopy8": {
+          "pairs": 12,
+          "baselineUs": 2.1241172790527343,
+          "candidateUs": 2.125917157491048,
+          "candidateToBaselineInterval": [
+            0.9975136643681929,
+            1.0041915678417348
+          ]
+        }
+      }
+    },
+    "matchedBackingDiagnostic": {
+      "physicalBackingSharedBetweenSubjects": true,
+      "pairsPerPlacement": 2,
+      "scoredCaptures": 0,
+      "cases": {
+        "OriginalClippedCopy8": [
+          {
+            "placement": 0,
+            "sourcePageOffset": 1808,
+            "canvasPageOffset": 856,
+            "meanSavingNs": -18.44689178466797,
+            "allPairedSavingsNs": [
+              0.1760406494140625,
+              -37.06982421875
+            ]
+          },
+          {
+            "placement": 1,
+            "sourcePageOffset": 3232,
+            "canvasPageOffset": 2280,
+            "meanSavingNs": -5.5450286865234375,
+            "allPairedSavingsNs": [
+              3.4320526123046875,
+              -14.522109985351562
+            ]
+          },
+          {
+            "placement": 2,
+            "sourcePageOffset": 1328,
+            "canvasPageOffset": 4000,
+            "meanSavingNs": -42.27264404296875,
+            "allPairedSavingsNs": [
+              -89.14485168457031,
+              4.5995635986328125
+            ]
+          },
+          {
+            "placement": 3,
+            "sourcePageOffset": 3048,
+            "canvasPageOffset": 2096,
+            "meanSavingNs": 10.465065002441406,
+            "allPairedSavingsNs": [
+              27.517410278320312,
+              -6.5872802734375
+            ]
+          }
+        ],
+        "DrawingCopy8": [
+          {
+            "placement": 0,
+            "sourcePageOffset": 1808,
+            "canvasPageOffset": 856,
+            "meanSavingNs": -23.952903747558594,
+            "allPairedSavingsNs": [
+              -39.78102111816406,
+              -8.124786376953125
+            ]
+          },
+          {
+            "placement": 1,
+            "sourcePageOffset": 3232,
+            "canvasPageOffset": 2280,
+            "meanSavingNs": -16.148880004882812,
+            "allPairedSavingsNs": [
+              -15.473556518554688,
+              -16.824203491210938
+            ]
+          },
+          {
+            "placement": 2,
+            "sourcePageOffset": 1328,
+            "canvasPageOffset": 4000,
+            "meanSavingNs": -5.032264709472656,
+            "allPairedSavingsNs": [
+              -5.3498992919921875,
+              -4.714630126953125
+            ]
+          },
+          {
+            "placement": 3,
+            "sourcePageOffset": 3048,
+            "canvasPageOffset": 2096,
+            "meanSavingNs": -57.092987060546875,
+            "allPairedSavingsNs": [
+              -9.788070678710938,
+              -104.39790344238281
+            ]
+          }
+        ]
+      },
+      "raw": {
+        "file": "two-row-matched-backing-diagnostic.tar.xz",
+        "bytes": 18584,
+        "sha256": "083f0d25d0575e6588f1bc45ae12c430653e7b3dbade6be1ad8000383a607062",
+        "members": 11,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "raw": {
+      "file": "two-complete-row-snapshots.tar.xz",
+      "bytes": 1039020,
+      "sha256": "38c16b5254b4be0ed4c19427dcdc8a296b73d020159cfb1618a220827c301be8",
+      "members": 71,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }
