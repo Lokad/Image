@@ -73,6 +73,10 @@ reconciliation. Five useful prefix/lifetime tests remain; both OS pass182focused
 public checks in normal/scalar modes. Qualified production/package and current
 costs remain unchanged; no new broad/package repetition or renderer dependency.
 
+The [prepared-row eight-vector follow-up](EIGHT-VECTOR-COPY-GROUP-TRIAL.md#prepared-row-follow-up)
+is near-neutral/unpromoted, retaining all exact checks and current costs. This
+revised prepared-state trial does not justify confirmation or another group sweep.
+
 [Direct copy addressing](COPY-DIRECT-ADDRESSING-TRIAL.md) is inconclusive and
 unaccepted;production/package/current costs remain unchanged. The bounded trial
 retains one prototype,profile/codegen and all actuals,without confirmation or broad
