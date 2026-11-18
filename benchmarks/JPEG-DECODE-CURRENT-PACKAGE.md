@@ -36,3 +36,19 @@ verified members and 44,028 B, SHA-256
 `a0ddcefd684842b0ba9cb56e809a4864ee4bf8751c3d810876ed0a8c31019f86`. It retains all samples,
 reference identities, guards and original receipts.
 [Evidence](jpeg-decode-current-package-evidence.json)
+
+## Matched module diagnostic
+
+The original direct public Decode pair driver compares the earlier timed Linux
+module with the current package module on the same frozen packet. Twelve
+alternating 128-call pairs measure **380.67 / 383.64 µs**, current/earlier
+interval **0.997905–1.017712**. Exact pixels, independent output lifetimes and
+both quietness guards pass. This scoped assembly-load-context comparison
+does not establish a material module slowdown. The complete generated
+workload's FFmpeg gap remains open. The next attribution step is to bring
+native sampling closer to that managed workload while preserving the
+conservative bounds and whole public operation.
+
+The mirrored `jpeg-horizontal-cmyk-current-pair.tar.xz` contains 8 verified members
+and 17,196 B, SHA-256 `e36ea1b3254fcc3b0f59f626f2b87f1960329dfe1ebc56790577c60277e47830`.
+All pairs, the reused driver identity, original receipts and guards are retained.
