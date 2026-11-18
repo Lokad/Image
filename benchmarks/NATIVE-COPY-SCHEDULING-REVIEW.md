@@ -148,3 +148,19 @@ One temporary check-tool build serves the fills and byte composite. The
 word composite reuses its frozen worker. Original inputs and harnesses
 remain pinned. The package bindings supply no new performance result.
 [Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Resize package bindings
+
+Four resize checks pass on development package `87f1ae4a`. The two
+one-axis RGBA16 Lanczos3 controls reproduce the exact managed frames,
+independent surviving outputs and released caller-root charges. Their
+original fresh zimg workers reproduce the bounded native results. The
+workers receive no sample commands.
+
+Prepared RGBA16 Lanczos3 enlargement and one-shot RGBA16 bilinear
+enlargement reproduce their frozen harness and reference identities,
+managed output, native quality and ownership checks. Prepared Lanczos3
+keeps the original retained geometry. The bilinear reference still
+creates its graph per call. One temporary check-tool build serves both
+cases and all preflight clocks are discarded.
+[Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

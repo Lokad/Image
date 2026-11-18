@@ -788,3 +788,37 @@ The clipped point difference varies substantially across pairs. The separate
 point is slightly adverse. This variant stops at screening, with both
 complete-operation gaps still open.
 [Screen, generated code and verification evidence](copy-vector-width-trials-evidence.json)
+
+## Shared block offsets across four rows
+
+This separate-buffer variant checks a strip of up to four rows at a time.
+It computes each 256-byte block offset once and applies that offset across
+the strip. The portable, overlapping and live-token routes preserve their
+original traversal. A model checks 16,144 geometries, including partial
+final strips and alternate row pitches. The 342-byte Linux helper emits
+four vector loads and four stores in the inner loop, without spills.
+
+Three quiet-VM pairs per case, at 65,536 complete operations per side, give
+**1.955832 → 1.948444 µs** for clipped RGBA8 (interval **0.985906–1.006647**)
+and **1.968387 → 1.951524 µs** for separate RGBA8 (interval
+**0.984343–0.998574**). Both allocate **0 B/op**. Exact pixels, input and
+ownership checks pass. Windows passes 353 focused tests in each of normal
+and scalar modes.
+
+The separate point gain is about 17 ns and the clipped interval includes
+unchanged performance. The trial stops at the screen, with both gaps open.
+[Screen, generated code and verification evidence](copy-vector-width-trials-evidence.json)
+
+## Variation between baseline sessions
+
+Eight retained paired sessions per case use the same baseline DLL, managed
+driver, case harness, native worker, inputs, outputs and .NET executable.
+All use 65,536 operations per statistical unit and pass the quiet-VM guards.
+The unchanged clipped baseline means span **1.956–2.035 µs** (79 ns).
+Separate baseline means span **1.961–2.159 µs** (197 ns).
+
+Those ranges exceed the recorded gaps of 69 ns and 47 ns. Keep comparisons
+within their matched sessions. The saved data establish variation across
+sessions, with no new samples. They give no cause for the variation and
+leave the original standalone FFmpeg statuses open.
+[Archived session identities and means](copy-vector-width-trials-evidence.json)

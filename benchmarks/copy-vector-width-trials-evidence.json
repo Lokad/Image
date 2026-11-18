@@ -791,5 +791,211 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "stripTraversalTrial": {
+    "source": {
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "5ae9bc54ecdda1e0216e8cc496d3250d2b1726b17db63d4efb37472d03f29ac8"
+      },
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+        "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "candidate": "8175ea7871b4391dfd224df5fc9b7ab4aa649645fa0d9607413bda4f89c96479"
+      }
+    },
+    "mechanism": "Check four-row strips and reuse horizontal copy-block offsets across each strip.",
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateSha256": "226d4f8c2966ffc5c5049f1249c33f89175d0aac6dc7b24557c9273372433220",
+    "geometry": {
+      "geometries": 16144,
+      "verifiedBoundedAndComplete": true
+    },
+    "codegen": {
+      "methodBytes": 342,
+      "sampleCommands": 0,
+      "vectorMoves": 8,
+      "stackVectorMoves": [],
+      "codegenSha256": "7b9cfc6bbcc59c8aeca42f9246db197fd485eacbda15591bfa110222591c761d"
+    },
+    "screen": {
+      "OriginalClippedCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "allocatedBytes": 0,
+        "ratio": 0.9962222283160905,
+        "lower": 0.9859058533852437,
+        "upper": 1.0066465522882666,
+        "baselineMeanUs": 1.9558321126302083,
+        "candidateMeanUs": 1.9484436747233072
+      },
+      "DrawingCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "allocatedBytes": 0,
+        "ratio": 0.9914328798795987,
+        "lower": 0.9843432464783364,
+        "upper": 0.9985735756536097,
+        "baselineMeanUs": 1.968387217203776,
+        "candidateMeanUs": 1.9515240580240885
+      }
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 353,
+        "sha256": "46a379db8afdc87649004b074adc095573b6e57209fcf45ea9d54010ab4981e5"
+      },
+      "scalar": {
+        "passed": 353,
+        "sha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      }
+    },
+    "allOriginalGatesPassed": true,
+    "raw": {
+      "file": "block-column-strips-copy-trial.tar.xz",
+      "bytes": 1034352,
+      "sha256": "d4c23425ac48f8da948c1de029ff04e6a5781a4d5da657ace5572ecda929021a",
+      "members": 56,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "baselineSessionVariation": {
+    "existingArchivesReadOnly": true,
+    "newSampleCommands": 0,
+    "dotnet": {
+      "sha256": "594657cba5f6f34b80e927951f144881ff875df269b6fb5eba1c595730267753",
+      "identity": "10.0.204"
+    },
+    "cases": {
+      "OriginalClippedCopy8": {
+        "unchangedIdentities": {
+          "library": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+          "actor": "4b746cac6707e33add34195b9e409a9d5d471dba3b3635702d7f033f93ed0ba6",
+          "harness": "4fdfc5c797debf2d4c9b0cc6480e95166a18d86821cdbbfcc8f83ccf5cf0cf76",
+          "input": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "output": "636e42e409137df49fb66f18a2938b57332a36145b68facb32e565675238443d",
+          "native": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c"
+        },
+        "minMeanUs": 1.9558321126302083,
+        "maxMeanUs": 2.0348749033610027,
+        "rangeNs": 79.04279073079445,
+        "sessions": [
+          {
+            "archive": "constant-block-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 2.0348749033610027,
+            "actuals": 3
+          },
+          {
+            "archive": "constant-block-copy-trial.tar.xz",
+            "phase": "confirm",
+            "meanUs": 1.970086462656657,
+            "actuals": 12
+          },
+          {
+            "archive": "reverse-independent-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.965179692586263,
+            "actuals": 3
+          },
+          {
+            "archive": "staged-next-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.990978251139323,
+            "actuals": 3
+          },
+          {
+            "archive": "staged-next-row-copy-trial.tar.xz",
+            "phase": "confirm",
+            "meanUs": 1.9753730862935384,
+            "actuals": 12
+          },
+          {
+            "archive": "staged-whole-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.9695254770914714,
+            "actuals": 3
+          },
+          {
+            "archive": "aligned-middle-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 2.022647755940755,
+            "actuals": 3
+          },
+          {
+            "archive": "block-column-strips-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.9558321126302083,
+            "actuals": 3
+          }
+        ]
+      },
+      "DrawingCopy8": {
+        "unchangedIdentities": {
+          "library": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+          "actor": "4b746cac6707e33add34195b9e409a9d5d471dba3b3635702d7f033f93ed0ba6",
+          "harness": "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+          "input": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "output": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+          "native": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c"
+        },
+        "minMeanUs": 1.9614123840332032,
+        "maxMeanUs": 2.158674809773763,
+        "rangeNs": 197.26242574055996,
+        "sessions": [
+          {
+            "archive": "constant-block-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 2.158674809773763,
+            "actuals": 3
+          },
+          {
+            "archive": "constant-block-copy-trial.tar.xz",
+            "phase": "confirm",
+            "meanUs": 2.1000701993306476,
+            "actuals": 12
+          },
+          {
+            "archive": "reverse-independent-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 2.1248738149007163,
+            "actuals": 3
+          },
+          {
+            "archive": "staged-next-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.9614123840332032,
+            "actuals": 3
+          },
+          {
+            "archive": "staged-next-row-copy-trial.tar.xz",
+            "phase": "confirm",
+            "meanUs": 1.968961363474528,
+            "actuals": 12
+          },
+          {
+            "archive": "staged-whole-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.9633415832519532,
+            "actuals": 3
+          },
+          {
+            "archive": "aligned-middle-row-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 2.1138487447102863,
+            "actuals": 3
+          },
+          {
+            "archive": "block-column-strips-copy-trial.tar.xz",
+            "phase": "screen",
+            "meanUs": 1.968387217203776,
+            "actuals": 3
+          }
+        ]
+      }
+    }
   }
 }
