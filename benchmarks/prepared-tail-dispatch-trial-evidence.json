@@ -1,0 +1,307 @@
+{
+  "project": "Lokad.Image",
+  "stage": "STD1263",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "24d5ebb306c4deb7aec79c7855025df9de103bde",
+  "hypothesis": "Move one-to-four-vector tail dispatch from every row into one complete-operation preparation. A single source row schedule has four value-type specializations with compile-time tail counts. Unlike CVU1237, no dynamic tail-length branch or loop remains per row. Extra dispatch/call/code retention may offset savings; complete byte operations decide.",
+  "endState": "One general source row schedule with bounded compile-time tail specialization, existing measured self-word/single-row/portable paths unchanged. No per-pixel generic dispatch; actual JIT must erase static count decisions.",
+  "affectedScope": "Separate-byte,original clipped-byte,byte-overlap and both owned vertical flips. Separate-word fallback,self-word kernel,font/text,codecs,resizing,inspection,fill/composite unchanged.",
+  "sourceProof": {
+    "originalBulkAndRowSchedulingReconstructedExactly": true,
+    "allPerRowCancellationRetained": true,
+    "identicalOrderedOneToFourTailAccesses": true,
+    "onlyGeneralPreparedRowsChanged": true,
+    "selfWordKernelAndSingleRowPortablePathsVerbatim": true,
+    "noNewStorageCacheOwnerUnsafePublicApiOrNumericalPolicy": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+  },
+  "candidateSourcePins": {
+    "tmp/std1263-src/Lokad.Image/Internal/IndependentRowCopy.cs": "f96398104763efe8c8ce87bcdecdee96bd729b0c8f27376921e9a1c8dbbddbce"
+  },
+  "candidateTestSourcePins": {
+    "tmp/std1263-tests/PreparedTailDispatchTests.cs": "26a56b6a5f43a41d11dd336296997bd39860f4cce264ef93c3f3021e035c85c6"
+  },
+  "producers": {
+    "qualified": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "privateWindowsSha256": "c8d36ef7c2943443a6a97e56271ad0dd9e470cdec64a84cf8a4ea7e304c2dd8f"
+  },
+  "screens": {
+    "OriginalClippedCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 0.9986583537574157,
+      "lower": 0.97917472731328,
+      "upper": 1.0185296655541505,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9591371002197266,
+          "lower": 1.9393759325008535,
+          "upper": 1.9788982679385998,
+          "values": [
+            1.9600895690917968,
+            1.9579588165283204,
+            1.9593629150390626
+          ]
+        },
+        "candidate": {
+          "mean": 1.956508753458659,
+          "lower": 1.931447032909904,
+          "upper": 1.9815704740074138,
+          "values": [
+            1.9550314025878905,
+            1.9567472534179688,
+            1.9577476043701172
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128456430,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128124938,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128237388,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128316789,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128408808,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128302947,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/std1263-screen-OriginalClippedCopy8.json"
+    },
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 1.0046851416529088,
+      "lower": 0.9896503118300914,
+      "upper": 1.0199483815566397,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9452147267659505,
+          "lower": 1.9252250247471439,
+          "upper": 1.9652044287847572,
+          "values": [
+            1.94615625,
+            1.9440120391845703,
+            1.9454758911132812
+          ]
+        },
+        "candidate": {
+          "mean": 1.9543282165527345,
+          "lower": 1.9410787418434488,
+          "upper": 1.9675776912620202,
+          "values": [
+            1.954459228515625,
+            1.9549800415039063,
+            1.953545379638672
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127543296,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128087440,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128121572,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127402773,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127498708,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128027550,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/std1263-screen-DrawingCopy8.json"
+    }
+  },
+  "focused": {
+    "windows": {
+      "internal/normal": 15,
+      "internal/avx512-off": 15,
+      "internal/scalar": 15,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "linuxPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "linuxInternal": {
+      "normal": 15,
+      "avx512-off": 15,
+      "scalar": 15
+    },
+    "internalEachMode": 15,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "independentOracleRowLengths": 775,
+    "existingAliasOraclePreserved": true,
+    "existingAliasAndParallelOracleReused": true,
+    "unusedSingleRowStepPreserved": true
+  },
+  "codegen": {
+    "DrawingCopy8": {
+      "wrapperCodeBytes": 269,
+      "tailFourKernelCodeBytes": 414,
+      "constantFourOrderedTailLoadsStores": true,
+      "tailIterationAndCountBranchesAbsent": true,
+      "bulkLoopAndEveryRowPollRetained": true,
+      "allInstrumentedClocksDiscarded": true,
+      "sampleCommands": 0,
+      "assemblySha256": "c611cb73da9862ae88276b0bce747cac2ce8263d611528b7589cbb565d4f30ce"
+    },
+    "OriginalClippedCopy8": {
+      "wrapperCodeBytes": 269,
+      "tailFourKernelCodeBytes": 414,
+      "constantFourOrderedTailLoadsStores": true,
+      "tailIterationAndCountBranchesAbsent": true,
+      "bulkLoopAndEveryRowPollRetained": true,
+      "allInstrumentedClocksDiscarded": true,
+      "sampleCommands": 0,
+      "assemblySha256": "c906191595ac29f99a15d13abd0182faf0f98ba0c40c371f5d937a357cc05f81"
+    }
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 1,
+    "embedded": 1,
+    "allOthers": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Unpromoted. Once-per-operation static tail dispatch realizes branch-free exact ends but complete clippedbyte1.959137->1.956509us interval.979175-1.018530 is near-neutral;separatebyte1.945215->1.954328us interval.989650-1.019948 has adverse point. Both0B. Stop before confirmation,actual transfer,passing-path reconciliation,broad/package work. Extra269B dispatch and414B tail-four specialized kernel do not establish useful elapsed gains or physical/JIT peak. Preserve qualified JSP source/modules/package/current CBR costs and all actuals. No neighboring generic-tail sweep.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "prepared-tail-dispatch-trial.tar.xz",
+    "sha256": "76e138c49ee49b633f63da77e9a9bb6e610399a84494f7fba0862da9d4c80237",
+    "bytes": 2222520,
+    "members": 67,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  }
+}

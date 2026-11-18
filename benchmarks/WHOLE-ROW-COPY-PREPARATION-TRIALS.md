@@ -1,5 +1,9 @@
 # Whole-row copy preparation trials
 
+Current copy-reference boundaries and status are in
+[complete operations](COPY-OPERATION-BOUNDARY.md). The rejected implementations
+below retain their original scoped measurements.
+
 **Not promoted.** Both complete separate-RGBA16 copy screens have adverse means;
 the revision's interval is inconclusive. No useful gain is demonstrated. Stop
 this design without confirmation, production/reference refresh or broad/package
@@ -272,3 +276,39 @@ verified `pixel-getter-cold-path-trials.tar.xz`:3,624,412B/116members; SHA-256
 `0870bc3508418cee64da13f70a284e4bd8767e68c2dd253c6c1b451359aaa4a9`.
 Archived `gco1260-*`, `gce1261-*` and `gct1261-record.py` preserve exact source,
 modules/symbols, codegen, original actors/reference dependencies and recipes.
+
+## Once-per-operation tail dispatch
+
+**Unpromoted.** Moving the one-to-four-vector end decision out of every row
+realizes the intended constant-tail kernel, but shows no useful complete gain.
+Clipped byte is **1.959137→1.956509 µs**, interval **.979175–1.018530**; separate
+byte is **1.945215→1.954328 µs**, **.989650–1.019948**, both **0 B/op**. All three
+reversed 65,536-operation pairs stay. Stop without confirmation, actual-DLL
+transfer, affected passing-path retiming or broad/package repetition.
+
+One general source schedule has four value-type tail specializations; actual
+Tail4 emits four exact ordered loads/stores without tail iteration/count branches.
+The wrapper is269B and selected kernel414B. The original bulk, per-row polls,
+final cursor rule and bounded addresses remain. Measured self-word, single-row,
+portable paths and all public validation/ownership stay verbatim. Extra dispatch
+and code retention may offset saved decisions; the elapsed cause is unproved.
+This differs from the earlier per-row conditional tail unrolling, but neither
+implementation establishes a useful final gain. No neighboring generic-tail sweep.
+
+Both OSes pass **15 internal/190 public checks per normal/AVX512-off/scalar mode**,
+including reused775-length alias/separate snapshots, default/live/canceled tokens,
+canaries and the unused single-row step. Original full-frame/source/alpha/hidden
+RGB/untouched/owner/native/idle-v2 checks pass. The corrected native worker is
+used on both sides; instrumented clocks are discarded. One private Windows core
+and embedded build, all other builds0. Added owned/admitted/retained capacity0;
+physical/JIT peaks are unmeasured. Qualified source, modules, f4package and current
+costs remain unchanged; reuse6,844full/live checks eachOS/SAMEactualpackage/all
+three examples. CI44239936401 passes all three jobs.
+
+[Evidence](prepared-tail-dispatch-trial-evidence.json) retains the bounded design,
+source reconstruction, codegen and every actual. Mirrored/member-verified
+`prepared-tail-dispatch-trial.tar.xz`: **2,222,520 B /67 members**, SHA256
+`76e138c49ee49b633f63da77e9a9bb6e610399a84494f7fba0862da9d4c80237`.
+Archived std1263 recipes and pinned actor/reference/qualified dependencies reproduce
+it. No displayed result or renderer dependency changes. Two byte gaps, word/async
+uncertainty and the final full-scope package refresh remain open.
