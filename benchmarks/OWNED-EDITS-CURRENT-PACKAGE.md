@@ -39,3 +39,8 @@ The mirrored `owned-edits-current-package-confirmations.tar.xz` contains 134 ver
 and 111,384 B, SHA-256 `1188a31f97b54404694ad51d88bbbf3a447625b566cf493c2d9500384948854e`.
 It retains all measured samples, guards, validation records and source recipes.
 [Evidence](owned-edits-current-package-evidence.json)
+
+[Crop row reuse](CROP-ROW-REUSE.md) confirms a private RGBA8 gain and standalone
+pass. The RGBA16 screen reverses on independent confirmation. Current package
+costs remain as above while the RGBA8-only candidate awaits Release transfer
+and its affected PNG8 stream composition check.

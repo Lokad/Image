@@ -1,0 +1,322 @@
+{
+  "project": "Lokad.Image",
+  "sourceCommit": "c95a11c7",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "productionChanged": false,
+  "privateCoreBuilds": 2,
+  "actorBuilds": 1,
+  "benchmarkHarnessBuilds": 0,
+  "nativeBuilds": 0,
+  "packageRebuilds": 0,
+  "baselinePackageSha256": "1699cfb1b42432e0b31dc32869c4e6a59b5adcf284cd70716c4bd7504ac262ce",
+  "baselineDllSha256": "bb3d063de699fd01e0ee635ffae1e4bbe0882618503127c23289e79f0169528f",
+  "windowsFocusedByteCandidate": {
+    "normal": 126,
+    "avx512Disabled": 126,
+    "scalar": 126
+  },
+  "addedOwnedCapacityBytes": 0,
+  "addedRetainedCapacityBytes": 0,
+  "trials": {
+    "Fixed8-3": {
+      "stage": "frp1328",
+      "statisticalUnits": 3,
+      "operationsPerSubject": 4096,
+      "metrics": {
+        "baseline": {
+          "mean": 2.58543603515625,
+          "lower": 2.3357328024955177,
+          "upper": 2.8351392678169822
+        },
+        "candidate": {
+          "mean": 2.1575091959635415,
+          "lower": 2.0951963115736953,
+          "upper": 2.2198220803533877
+        },
+        "candidateToBaselineInterval": [
+          0.7618703865136062,
+          0.9140375265929565
+        ],
+        "candidateToBaselineRatio": 0.834492734344234,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          2.493605387369792,
+          2.5174842936197916,
+          2.5169137369791668
+        ]
+      },
+      "candidateDllSha256": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+      "raw": {
+        "file": "crop-row-reuse-Fixed8-3.tar.xz",
+        "sha256": "8ddde90d8c857989da0857fd435f7fb7ce562f2b7d3f64d22558db1456aa1f73",
+        "bytes": 384952,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1328/screen-vm.py": "341c7f5b5e84b14724c28d5a49226dc55504f4916e857462ab24b00205362930",
+          "tmp/frp1328/Fixed8-3/wire.jsonl": "83b8e40f32039288a3f94189b3c2d44de9209b5a1bd1c334cf3ffc49c07f17dd",
+          "tmp/frp1328/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+          "tmp/frp1328/Fixed8-3/statistics.json": "2b646c25a614030500c2f51a99a2000daf90812f8f3e1d5f50ac9c924ef43199",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1328/src/Lokad.Image/Internal/CropCopy.cs": "5bb1aa1cc4b5f3e1f7197203611ce9cc5d3a19cfcb53416713c45424aedb8d4d",
+          "tmp/frp1328/Fixed8-3/observations.json": "1b782db6d1e5842227db48544f77dc22d98b6174ae0a2b1b536d0fc2d2546782",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1328/Fixed8-3/before.json": "0df8aaa5485574c7228e5e25547104578b3185af2b2e65d353ac6cbd236edd03",
+          "tmp/frp1328/Fixed8-3/baseline-validation.json": "1b038e9df8e341cf2c8466d01abb1971c638bc3e355f20c81838eb8836fe0c30",
+          "tmp/frp1328/Fixed8-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/Fixed8-3/after.json": "2af6babf6621ee60e76d498525a0a55f35003cbe5647f8d2921dba67d39ea4d2",
+          "tmp/frp1284-WarmCrop8-receipt.json": "5757d95cb8e3b82f169f9f5b48ef9a2f33b52518d025fa9332dc1b8b5c8d6fe6",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1328/Fixed8-3/candidate-validation.json": "be13d4986081fac7a8d2d54664994e3f707d01fe053c0979d025fb53d1bb473e",
+          "tmp/frp1328/Fixed8-3/preparation.json": "dc4077e167da370cdfb34d64ca7aa2962920c33b9880496c0fc97a0d8e949b1a",
+          "tmp/frp1328/Fixed8-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mirrored": true
+      }
+    },
+    "Fixed16-3": {
+      "stage": "frp1328",
+      "statisticalUnits": 3,
+      "operationsPerSubject": 4096,
+      "metrics": {
+        "baseline": {
+          "mean": 4.240582926432292,
+          "lower": 4.157085209218667,
+          "upper": 4.3240806436459165
+        },
+        "candidate": {
+          "mean": 3.8753388671874998,
+          "lower": 3.8106014655958225,
+          "upper": 3.940076268779177
+        },
+        "candidateToBaselineInterval": [
+          0.8829907874832785,
+          0.9458280057272053
+        ],
+        "candidateToBaselineRatio": 0.913869474050208,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4.117878987630208,
+          4.126376302083333,
+          4.12102001953125
+        ]
+      },
+      "candidateDllSha256": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+      "raw": {
+        "file": "crop-row-reuse-Fixed16-3.tar.xz",
+        "sha256": "41a98435ec43b715d4c7a4c5282ad9443429e941d6cdb62be19615fdf017329c",
+        "bytes": 385016,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1328/Fixed16-3/before.json": "b888b646466fc3af5ab8017d66cc184f284224531de4e81f2b4112e2404a96b3",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1328/Fixed16-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/src/Lokad.Image/Internal/CropCopy.cs": "5bb1aa1cc4b5f3e1f7197203611ce9cc5d3a19cfcb53416713c45424aedb8d4d",
+          "tmp/frp1328/screen-vm.py": "341c7f5b5e84b14724c28d5a49226dc55504f4916e857462ab24b00205362930",
+          "tmp/frp1328/Fixed16-3/baseline-validation.json": "d27fd7cae618439f16477426eb65764f1d9a63be5159b73743e0ddd8568aea86",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1328/Fixed16-3/preparation.json": "e947ed3aba8be458a39f7de2a32ad076f5dfdeef2328881bff63e102a95c0bf4",
+          "tmp/frp1328/Fixed16-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/Fixed16-3/observations.json": "c0fd277ad282f29a5a44d74db349558b460b5dd505492a0868572391a4b9cf6e",
+          "tmp/frp1328/Fixed16-3/after.json": "9a6b4b28a017ed04edfc053c103a86cda18368e9c32e864891800bf34632315c",
+          "tmp/frp1328/Fixed16-3/statistics.json": "1451b92fd96dc79e257daad6938342a3c3fe2529436c6368748c6415d4bc33ee",
+          "tmp/frp1328/Fixed16-3/candidate-validation.json": "19c61b1ad8c181504118635a3b34e18c51bd4fe63bf4cf92e86249634190cade",
+          "tmp/frp1328/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+          "tmp/frp1284-WarmCrop16-receipt.json": "1415900698cb69bc7435e22b93e34a568663904a3f988a52028a503dabf8c7c5",
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1328/Fixed16-3/wire.jsonl": "d538809722cb54db292bea76fb05f3441e4c69df2e5f820f99689ffeeccec1b1"
+        },
+        "mirrored": true
+      }
+    },
+    "Fixed8-12": {
+      "stage": "frp1328",
+      "statisticalUnits": 12,
+      "operationsPerSubject": 4096,
+      "metrics": {
+        "baseline": {
+          "mean": 2.3680790201822917,
+          "lower": 2.3615871719687296,
+          "upper": 2.3745708683958537
+        },
+        "candidate": {
+          "mean": 1.9758956909179688,
+          "lower": 1.9700740373977732,
+          "upper": 1.9817173444381644
+        },
+        "candidateToBaselineInterval": [
+          0.8318350723608009,
+          0.8369473472622838
+        ],
+        "candidateToBaselineRatio": 0.8343872944694821,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          2.2696590983072915,
+          2.2760595703125,
+          2.268842488606771
+        ]
+      },
+      "candidateDllSha256": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+      "raw": {
+        "file": "crop-row-reuse-Fixed8-12.tar.xz",
+        "sha256": "74580ce80f90e4d8b231c0af013bdb12be73c2c2b46d500665788bed15f76b93",
+        "bytes": 386396,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1328/screen-vm.py": "341c7f5b5e84b14724c28d5a49226dc55504f4916e857462ab24b00205362930",
+          "tmp/frp1328/Fixed8-12/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/Fixed8-12/baseline-validation.json": "af7adb09860a9922bebafaab85c0c06eae28cd34f3ac1e3e5444ea2833a831ea",
+          "tmp/frp1328/Fixed8-12/candidate-validation.json": "62bbba7c99c9adb8eca84c1208a6b8c40592d81db3bc82228d92215411ac79d1",
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1284-WarmCrop8-receipt.json": "5757d95cb8e3b82f169f9f5b48ef9a2f33b52518d025fa9332dc1b8b5c8d6fe6",
+          "tmp/frp1328/Fixed8-12/statistics.json": "4b65c55b9cdfa46b17c8380c288028ae01576a5558f6e910dcf39062bd9483b0",
+          "tmp/frp1328/Fixed8-12/wire.jsonl": "dab8cde2d72399b323af94732cd2b4ea1954da995ae254372cc229d49abe85bd",
+          "tmp/frp1328/Fixed8-12/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+          "tmp/frp1328/src/Lokad.Image/Internal/CropCopy.cs": "5bb1aa1cc4b5f3e1f7197203611ce9cc5d3a19cfcb53416713c45424aedb8d4d",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1328/Fixed8-12/preparation.json": "3c4c7f86e6de37707448b751a0b8da26b0144dce2a393d9c3c5125561d6b5f4c",
+          "tmp/frp1328/Fixed8-12/after.json": "e8807cbb4cfcf4f2dbfac804677efd652ab1bee24f692f2dfe412060ed5a351d",
+          "tmp/frp1328/Fixed8-12/observations.json": "63070704bfb65e1262c618790ac78a7059dca491a055cc5b64f51cf7aff2ca73",
+          "tmp/frp1328/Fixed8-12/before.json": "f66b66048197710a7d40a5eb50693451cb5e2cdd8c81b5b839663c8180ee38f5"
+        },
+        "mirrored": true
+      }
+    },
+    "Fixed16-12": {
+      "stage": "frp1328",
+      "statisticalUnits": 12,
+      "operationsPerSubject": 4096,
+      "metrics": {
+        "baseline": {
+          "mean": 4.055007710774739,
+          "lower": 4.047491670539627,
+          "upper": 4.062523751009851
+        },
+        "candidate": {
+          "mean": 4.198007853190104,
+          "lower": 4.191272971670503,
+          "upper": 4.204742734709705
+        },
+        "candidateToBaselineInterval": [
+          1.0328806800905457,
+          1.0376554691907465
+        ],
+        "candidateToBaselineRatio": 1.0352653218945433,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4.163559427897136,
+          4.167756205240885,
+          4.19405185953776
+        ]
+      },
+      "candidateDllSha256": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+      "raw": {
+        "file": "crop-row-reuse-Fixed16-12.tar.xz",
+        "sha256": "6a48aa9679a04f0775f499d4bac4e4d511d50f336a9007b5250b92a92002de7a",
+        "bytes": 386304,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1328/Fixed16-12/observations.json": "43275017faf6fb1992a0254651ad7e83bd1f27f3a1dbcb6e3fe67643cc73a928",
+          "tmp/frp1328/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "7d65a62aa3b491c52453fabcc8d1e5785b5f9e115ce45a6ec2574046a32777fe",
+          "tmp/frp1284-WarmCrop16-receipt.json": "1415900698cb69bc7435e22b93e34a568663904a3f988a52028a503dabf8c7c5",
+          "tmp/frp1328/Fixed16-12/wire.jsonl": "af7fb2e53547f1beb0a3075113231e61292dd99a029c98aeb6afe5f9cb72ece7",
+          "tmp/frp1328/Fixed16-12/before.json": "82aa3b4544c990bdf06cd115db3cecf7a6fd1abc198e4fb43e764f8aab23d138",
+          "tmp/frp1328/Fixed16-12/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/Fixed16-12/statistics.json": "98773ef257baa939145da947d683460b9f37e6df5461359fcd15d46f5a4f28f6",
+          "tmp/frp1328/Fixed16-12/candidate-validation.json": "1c56e33b3cf3ec56501380643be9716c2a48f0bb096ea06ce284d409a77ba93d",
+          "tmp/frp1328/Fixed16-12/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/Fixed16-12/after.json": "d56cc65afb6f90253cc6de021b52d19713837817b1d0eab11d369f7bd22d51c0",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1328/screen-vm.py": "341c7f5b5e84b14724c28d5a49226dc55504f4916e857462ab24b00205362930",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1328/src/Lokad.Image/Internal/CropCopy.cs": "5bb1aa1cc4b5f3e1f7197203611ce9cc5d3a19cfcb53416713c45424aedb8d4d",
+          "tmp/frp1328/Fixed16-12/preparation.json": "86577088667ad06049c961eda1c8b02a428fb6ee848ecec0d31680aeaa12446a",
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1328/Fixed16-12/baseline-validation.json": "3018a73b0de513d36347b8188874a42cc8775e740153c66349561dd7da1921a4"
+        },
+        "mirrored": true
+      }
+    },
+    "standalone": {
+      "stage": "frp1329",
+      "statisticalUnits": 12,
+      "operationsPerSubject": 4096,
+      "metrics": {
+        "ratio": 0.8671134354223538,
+        "lower": 0.8515938054614813,
+        "upper": 0.879180636665409,
+        "status": "pass",
+        "managedUs": 2.1649716796875,
+        "nativeUs": 2.4967571614583335,
+        "nativeGroupMeansUs": [
+          2.5021441650390623,
+          2.4967571614583335,
+          2.4971308390299476
+        ],
+        "allocatedBytes": 56
+      },
+      "candidateDllSha256": "75c4f09bd708c3107faa9d34bf2429e5bef533c375bda15a9290519cfd8ff170",
+      "raw": {
+        "file": "crop-row-reuse-byte-standalone.tar.xz",
+        "sha256": "24164f54bdf9e07ee6766514d7bda9d0d10290a6331a9386c7bc87e51e4ef679",
+        "bytes": 392340,
+        "members": 13,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1329/standalone/before.json": "d1dcaace66c8a0d64e680263f1cd840cb15f3b7554425718e5756fb475f2710e",
+          "tmp/frp1329/src/Lokad.Image/Internal/CropCopy.cs": "98e286b3d505d33b500f3c65d1bb1083fea16545ddcefcdc55f00321ce01b1e2",
+          "tmp/frp1283-edit-runtime-1aedbdc2/AdjacentManagedNative.dll": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+          "tmp/frp1329/standalone/observations.json": "33048d1d971834ac819f1f422a7a85c93edd3ea936750327b0c617cbd22d77d9",
+          "tmp/frp1329/standalone/validation.json": "bfd77a1d6e8c4c9af2bda85f5472ce6eb0a2739ac699ad0d5fd3c74389423db9",
+          "tmp/frp1329/standalone/run.log": "3a24d3b6856b44151fb41dc5ee7c624214586fc8c9a2baf80c53f159bcd3913c",
+          "tmp/frp1284-WarmCrop8-receipt.json": "5757d95cb8e3b82f169f9f5b48ef9a2f33b52518d025fa9332dc1b8b5c8d6fe6",
+          "tmp/frp1329/standalone-vm.py": "67bee5fbbd5e5e2e96d3cfd2722aca47b602530658b36e37d4a266121fbbd7e9",
+          "tmp/frp1329/standalone/preparation.json": "d63d680543bcd540d5481ba221ed59c99b832f1bb6d35c6a60b1e09f366f8fb1",
+          "tmp/frp1329/standalone/after.json": "949f4c2bbbbfe69fd12ae5a4022d73a7ce70e8a8c5146b0fbefe2f23ce2011c7",
+          "tmp/frp1329/standalone/metrics.json": "914ee16736cb2ab10f5b3e8501fdfe00ed51b6a8766db146873f033b1f8cd2c3",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1329/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "75c4f09bd708c3107faa9d34bf2429e5bef533c375bda15a9290519cfd8ff170"
+        },
+        "mirrored": true
+      }
+    }
+  }
+}
