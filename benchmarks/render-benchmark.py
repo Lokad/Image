@@ -3580,6 +3580,33 @@ costs. The complete final-package refresh remains outstanding."""
     assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
+    async_encodes = json.loads((ROOT / 'benchmarks/async-encode-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert async_encodes['producers'] == word_qualification
+    assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in async_encodes['archives'])
+    for name, label, status_label, sizes in (
+        ('WebpLossless8AsyncNonSeekable', 'VP8L async, fresh nonseekable output / libwebp exact=1',
+         '', (183812, 183812)),
+        ('JpegRgb420AsyncSamples', 'JPEG caller RGB24 async nonseekable, 420',
+         ' (parity confirmed)', (52091, 52093)),
+        ('Jpeg8AsyncNonSeekable', 'JPEG RGBA8 async nonseekable, 444',
+         ' (parity confirmed)', (133039, 133041)),
+    ):
+        c = async_encodes['cases'][name]
+        assert c['librarySha256'] == word_qualification['linuxSha256'] and c['nativeSamplesEach'] == c['actuals'] == 12
+        assert all(c[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+        assert len(c['actualOperationCounts']) == 12 and not c['naturalDriver']['forcedCollectionsBetweenIterations']
+        assert c['naturalDriver']['originalGeneratedDelegatesReused'] and c['naturalDriver']['originalGlobalAndIterationActionsReused']
+        assert (c['managedOutputBytes'], c['nativeOutputBytes']) == sizes
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        if sizes[0] == sizes[1]:
+            assert c['managedOutputSha256'] == c['nativeOutputSha256']
+        else:
+            assert c['qualifiedPacketWithApprovedCommentDifference']
+        old, = (line for line in codecs.splitlines() if line.startswith(f'| {label}{status_label} † |'))
+        status = status_label if c['status'] == 'pass' else f' ({png_status[c["status"]]})'
+        result = (f'| {label}{status} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | {sizes[0]:,} / {sizes[1]:,} |')
+        codecs = codecs.replace(old, result)
     extended_bicubic = bicubic_package['extendedCases']
     assert extended_bicubic['producers'] == word_qualification and extended_bicubic['builds'] == 0
     assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in extended_bicubic['archives'])
@@ -3707,6 +3734,9 @@ The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
+The original nonseekable lossless WebP and both JPEG encodes pass on the
+current package with their packet and delivery contracts.
+[Async encode measurements](../benchmarks/ASYNC-ENCODE-CURRENT-PACKAGE.md)
 All original pool-affected bicubic controls have current timing evidence.
 Of the {len(extended_cases)} additional cases,
 **{sum(case['status'] == 'pass' for case in extended_cases.values())} pass**.

@@ -20,6 +20,9 @@ The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
+The original nonseekable lossless WebP and both JPEG encodes pass on the
+current package with their packet and delivery contracts.
+[Async encode measurements](../benchmarks/ASYNC-ENCODE-CURRENT-PACKAGE.md)
 All original pool-affected bicubic controls have current timing evidence.
 Of the 50 additional cases,
 **49 pass**.
@@ -474,9 +477,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | JPEG 4:1:1, resident decode † | 410.15 | 489.45 | 0.838 / 0.849040 | 219,551 | — |
 | JPEG 4:1:0, resident decode † | 364.25 | 553.58 | 0.658 / 0.669676 | 189,090 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 114,600.56 | 131,281.45 | 0.873 / 0.887 | 5,948,664 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 112,507.39 | 131,039.53 | 0.859 / 0.869 | 5,949,048 | 183,812 / 183,812 |
-| JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,422.33 | 1,626.70 | 0.874 / 0.878 | 309,523 | 52,091 / 52,093 |
-| JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,106.93 | 3,858.03 | 0.805 / 0.810 | 820,502 | 133,039 / 133,041 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 113,899.00 | 129,908.55 | 0.877 / 0.889992 | 5,949,048 | 183,812 / 183,812 |
+| JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,469.27 | 1,628.99 | 0.902 / 0.921474 | 309,523 | 52,091 / 52,093 |
+| JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,173.59 | 3,998.09 | 0.794 / 0.829650 | 820,502 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,652.54 | 2,849.73 | 0.931 / 0.972152 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,310.33 | 3,113.11 | 0.421 / 0.433833 | 20,944 | — |

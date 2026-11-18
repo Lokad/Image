@@ -23,6 +23,13 @@ All four original PNG coding validators also pass on the current package,
 with conservative upper ratios from 0.474500 to 0.910041. Their validation
 paths use the changed workspace pools. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
 
+The remaining original fresh nonseekable encodes pass on the actual package.
+The conservative upper ratios are 0.889992 for exact lossless WebP, 0.921474
+for caller RGB420 JPEG, and 0.829650 for RGBA8 444 JPEG. The async
+encoded-output storage change is covered across all four original controls.
+Reuse these passes and the original packet, stream and ownership evidence.
+[Current-package async encodes](ASYNC-ENCODE-CURRENT-PACKAGE.md)
+
 [Completed nearest rows](NEAREST-ROW-REUSE.md) retains source-valid evidence:
 complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged
 4,264,364 B/op. Current standalone 949.453/FFmpeg981.396 us upper.981828 passes.
