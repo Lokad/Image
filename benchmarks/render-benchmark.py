@@ -449,15 +449,37 @@ def nearest_row_reuse():
     return stage
 
 
-def current_png_stream_word_note(one_shot):
+def current_crop_costs(owned_package):
+    stage = json.loads((ROOT / 'benchmarks/crop-current-package-evidence.json').read_text(encoding='utf-8'))
+    qualification = stage['qualification']
+    assert stage['productionAccepted'] and stage['requiredMaterialPaths'] == 289
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified']
+    assert qualification['actualPackageConsumerPassedBothOs'] and qualification['usageExamplesEachOs'] == 3
+    assert qualification['timedDllUsedUnchanged'] and qualification['fullEachOs'] == [3384, 2519, 948]
+    cases = stage['cases']
+    assert set(cases) == {'WarmCrop8', 'PngCropFit8'}
+    crop = cases['WarmCrop8']
+    assert all(crop[key] == owned_package['cases']['WarmCrop8'][key] for key in ('inputSha256', 'outputSha256'))
+    for name, count in (('WarmCrop8', 4096), ('PngCropFit8', 256)):
+        case = cases[name]
+        assert case['librarySha256'] == qualification['linuxSha256']
+        assert case['actuals'] == 12 and case['status'] == 'pass' and case['upper'] <= 1
+        assert case['operationsPerSubject'] == count
+        assert all(case[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+    assert crop['allocatedBytes'] == 56
+    return cases
+
+
+def current_png_stream_word_note(one_shot, byte):
     stage = nearest_row_reuse()
-    word, byte, up = (stage['cases'][name] for name in ('PngCropFit16', 'PngCropFit8', 'Up16'))
+    word, up = (stage['cases'][name] for name in ('PngCropFit16', 'Up16'))
     gain = stage['pairedEffect']
     fresh = one_shot['case']
     return ('[Completed nearest rows](../benchmarks/NEAREST-ROW-REUSE.md) qualify the current complete '
             f'PNG16 pipeline at **{word["managedUs"]:,.2f} / FFmpeg {word["nativeUs"]:,.2f} µs, '
             f'upper {word["upper"]:.6f}**, **{word["allocatedBytes"]:,.2f} B/op**. '
-            f'PNG8 passes at **{byte["managedUs"]:,.2f} / {byte["nativeUs"]:,.2f} µs, upper {byte["upper"]:.6f}**, '
+            f'[PNG8 after crop reuse](../benchmarks/CROP-ROW-REUSE.md) passes at '
+            f'**{byte["managedUs"]:,.2f} / {byte["nativeUs"]:,.2f} µs, upper {byte["upper"]:.6f}**, '
             f'**{byte["allocatedBytes"]:,.2f} B/op**. Native contexts remain retained; managed stream delivery, '
             'decode, orientation, crop, nearest fit, every intermediate and independent output/disposal stay timed. '
             f'All four original direct-nearest controls pass and stop. RGBA16 enlargement is **{up["managedUs"]:,.2f} / '
@@ -3222,6 +3244,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert owned_package['producers'] == jpeg_pending['producers']
     assert owned_package['raw']['mirrored'] and owned_package['raw']['allMembersVerified']
     assert len(owned_package['cases']) == 18 and owned_package['reusedOriginalDriverAndCounts']
+    crop_costs = current_crop_costs(owned_package)
+    byte_crop = crop_costs['WarmCrop8']
     for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
                         ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
                         ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
@@ -3261,10 +3285,14 @@ Windows/Linux each pass **6,823 full/live checks**, focused normal/AVX-512-disab
 scalar checks and the **SAME actual package/all three examples**. The timed DLL is
 never rebuilt. Actual result ownership, unchanged four-array/4 MiB idle storage,
 zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
+The [qualified RGBA8 crop](../benchmarks/CROP-ROW-REUSE.md) passes at
+**{byte_crop['managedUs']:.3f} / FFmpeg {byte_crop['nativeUs']:.3f} µs,
+upper {byte_crop['upper']:.6f}**, **{byte_crop['allocatedBytes']} B/op**.
+The original RGBA16 crop remains uncertain.
 Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
-    png_stream_word_note = current_png_stream_word_note(png_composition_one_shot)
+    png_stream_word_note = current_png_stream_word_note(png_composition_one_shot, crop_costs['PngCropFit8'])
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing = apply_current_bicubic_adjacent_confidence(editing)
     vp8_package = json.loads((ROOT / 'benchmarks/vp8-decode-current-package-evidence.json').read_text(encoding='utf-8'))

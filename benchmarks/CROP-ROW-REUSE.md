@@ -33,13 +33,36 @@ capacity and retained storage are unaffected by the dispatch, and physical
 peak was unmeasured. Two private core builds and one actor build cover
 the trial. The native worker, benchmark harness and package are reused.
 
-The RGBA8-only candidate is private pending final Release-module cost and
-package qualification. The existing PNG8 stream decode/orient/crop/fit
-control also calls this route, so its complete boundary needs confirmation
-on the transfer DLL. The RGBA16 copy loop stays outside the fast path and
-its crop performance remains uncertain.
-[Current package owned-edit results](OWNED-EDITS-CURRENT-PACKAGE.md)
-
 [Evidence and replay manifests](crop-row-reuse-evidence.json) pin the five
 mirrored archives and all 85 members. They retain both sources and compiled
 candidates, actuals, guards, checks and commands.
+
+## Qualified Release build
+
+| Original complete operation | Lokad.Image µs | FFmpeg µs | Conservative ratio upper | Managed GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| RGBA8 crop | 2.165 | 2.521 | 0.877018 | 56 |
+| PNG8 stream decode/orient/crop/fit | 1,307.85 | 1,621.76 | 0.813655 | 4,792.08 |
+
+The final Linux Release DLL `cc095d1a` contains the exact byte-only source
+and passes both affected controls. The prepared FFmpeg boundaries,
+original loops, 4,096/256 calls per unit and twelve actuals stay in place.
+Both keep all native brackets, exact pixels, source, lifetime and quiet
+checks. The first PNG8 attempt stops before timing because the overlay
+expected an extra core metadata file. All 143 non-core inputs match the
+original receipt. The corrected overlay reuses every verified input and
+the same staged DLL. The direct crop capture runs once.
+
+Two placement/admission tests exercise one-row-chunk boundaries at 64 and
+1,024 pixels. Each OS passes 6,851 full/live tests plus 128 focused tests
+per normal, AVX-512-disabled and scalar mode. The actual dependency-free
+development package `6fed564e` contains the timed DLL byte for byte.
+The package consumer and all three examples pass on both OSes.
+The [Release evidence](crop-current-package-evidence.json) retains the
+source, timings, guards, package and checks.
+
+The word crop still uses the existing copy loop and
+[retains its open measurement](OWNED-EDITS-CURRENT-PACKAGE.md). The PNG16
+composition and one-shot cases use that route. The borrowed copy kernels
+are independent callers of the same shared helper and retain their existing
+results. Publication stays separate.

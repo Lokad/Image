@@ -1,0 +1,184 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1330",
+  "sourceCommit": "b396332e3bfee60a3eb6bd63f8d0f35c04b9a1a3",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "affectedRequiredPaths": [
+    "WarmCrop8",
+    "PngCropFit8"
+  ],
+  "originalWordCropRouteRetained": true,
+  "publicationPostponed": true,
+  "stageManifestSha256": "f578b36a7f2822dbca709c67f98ada42f2316dbe0c28fa762c690d27aeb4dc5f",
+  "sourceSha256": "98e286b3d505d33b500f3c65d1bb1083fea16545ddcefcdc55f00321ce01b1e2",
+  "testSourceSha256": "9bc3626157f77267306786757bb546172da5ef0ac551a1287468c9b5a6498d6a",
+  "cases": {
+    "WarmCrop8": {
+      "ratio": 0.8587622215221331,
+      "lower": 0.8320177794152888,
+      "upper": 0.8770178404053858,
+      "status": "pass",
+      "caseId": "WarmCrop8",
+      "librarySha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+      "sourceSha256": "98e286b3d505d33b500f3c65d1bb1083fea16545ddcefcdc55f00321ce01b1e2",
+      "operationsPerSubject": 4096,
+      "actuals": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "driverSha256": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "54d1c8f3094b1b74da109d0b09ee81d90ba400dffa7274c6645e02ded8b11410",
+      "managedUs": 2.164867228190104,
+      "nativeUs": 2.520915771484375,
+      "nativeGroupMeansUs": [
+        2.5364046630859374,
+        2.5380135904947916,
+        2.520915771484375
+      ],
+      "allocatedBytes": 56,
+      "validationSha256": "9c1c2f2843063a6bf8e564a02dfeef0c3c9209eba2c962b01858b9cef3f7817a",
+      "nativeWorkerSha256": "8efa62424dcc6b67a5741520af82b07561b4b8f255fee40227eaf679de1e3aba"
+    },
+    "PngCropFit8": {
+      "ratio": 0.8064406160669821,
+      "lower": 0.7884677536826992,
+      "upper": 0.8136551961338264,
+      "status": "pass",
+      "caseId": "PngCropFit8",
+      "librarySha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+      "sourceSha256": "98e286b3d505d33b500f3c65d1bb1083fea16545ddcefcdc55f00321ce01b1e2",
+      "operationsPerSubject": 256,
+      "actuals": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "driverSha256": "c594e13a98d62f39ab4cc561ea30411299cec739b695402f92b6d90fb95a64bb",
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputSha256": "37e74deb6c0cbf5bb5fee349e1102b0a63371785201cdd22d2309b8f2fbd4dd2",
+      "managedUs": 1307.8521246744792,
+      "nativeUs": 1621.7587490234375,
+      "nativeGroupMeansUs": [
+        1630.2318369140626,
+        1621.7587490234375,
+        1641.0059208984376
+      ],
+      "allocatedBytes": 4792.080729166667,
+      "validationSha256": "1d2362637b46d05e6f6be3be9b3a6198959f66c3728dfab019f8bfb6d6de3e64",
+      "nativeWorkerSha256": "b6c71b44c0b0512794bb7ab4e2221d6892d36d66e842050280655245a7364c3a"
+    }
+  },
+  "qualification": {
+    "windowsSha256": "96e15aedc7ec885360c16b53b394a002e4d69239fc775a6bac27616f6e8eb651",
+    "linuxSha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+    "packageSha256": "6fed564e002264ff6ec115d43d5e3e6be3c7ad0d33e0e9fdd9c479b3665f4fed",
+    "symbolsSha256": "8232597ddf5f29a9c6a8daf666ab3323f3584b7b0a2115ae3da373a34083ba3c",
+    "fullEachOs": [
+      3384,
+      2519,
+      948
+    ],
+    "focusedPerMode": 128,
+    "platforms": [
+      {
+        "platform": "windows",
+        "checks": [
+          3384,
+          2519,
+          948
+        ],
+        "testedModes": {
+          "normal": [
+            128
+          ],
+          "avx512-off": [
+            128
+          ],
+          "scalar": [
+            128
+          ]
+        },
+        "testDllSha256": "96e15aedc7ec885360c16b53b394a002e4d69239fc775a6bac27616f6e8eb651",
+        "consumerLogSha256": "d03e3b33a0c39d6df1909bb8786771149506b871ccac0ece5fb5acd61d37c702"
+      },
+      {
+        "platform": "linux",
+        "checks": [
+          3384,
+          2519,
+          948
+        ],
+        "testedModes": {
+          "normal": [
+            128
+          ],
+          "avx512-off": [
+            128
+          ],
+          "scalar": [
+            128
+          ]
+        },
+        "testDllSha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+        "consumerLogSha256": "ccc446ecb2f11219d8dbfc6e5873b4287124fc3f1161afc8811425f23c7ba60f"
+      }
+    ],
+    "actualPackageConsumerPassedBothOs": true,
+    "usageExamplesEachOs": 3,
+    "timedDllUsedUnchanged": true,
+    "timedDllRebuilds": 0,
+    "productionBuildsPerOs": 1,
+    "workCompletedBeforePlatformAndPackageConsumerChecks": true
+  },
+  "raw": {
+    "file": "crop-row-reuse-qualification.tar.xz",
+    "bytes": 1610192,
+    "sha256": "627e6241908ccc4387d8fd3e0e87887b73ad9809511830e78064e0d28a898333",
+    "members": 39,
+    "memberHashes": {
+      "tmp/frp1330-costs/PngCropFit8/after.json": "41dcb28dd0ef009a419dbec3674a9476bae9031081a191149933b1b275735050",
+      "tmp/frp1330-costs/PngCropFit8/before.json": "080176e76d5cb0c1bb9b8f47102749eb9e4c76ca25bd150382e4776269e37d09",
+      "tmp/frp1330-costs/PngCropFit8/metrics.json": "0b384e3ad9ce44a3c4f9006ea8795ea2c07194018beec9754bd8fa92f7b7c80e",
+      "tmp/frp1330-costs/PngCropFit8/observations.json": "2fef0b621742922207b0484ba5fcbdadbbe5d0359750bfd4d19be1ba52c76a67",
+      "tmp/frp1330-costs/PngCropFit8/preparation.json": "0aa74afe341ecf707fc80a0358c0bb063995413b86edbc779cf6aca8ed5a2a51",
+      "tmp/frp1330-costs/PngCropFit8/run.log": "d0582858963cd2613b3380d477f8629ab4cd537acfc59aca16a87c89f5a421a1",
+      "tmp/frp1330-costs/PngCropFit8/validation.json": "1d2362637b46d05e6f6be3be9b3a6198959f66c3728dfab019f8bfb6d6de3e64",
+      "tmp/frp1330-costs/WarmCrop8/after.json": "90fe76d74bc80303a1d4e6f2a0785868a70eec593f6404ef608389d9364b9349",
+      "tmp/frp1330-costs/WarmCrop8/before.json": "05fdf69f13d84584640fb4b34457193a56299acaf8fd87ea03290b56f1bbd85b",
+      "tmp/frp1330-costs/WarmCrop8/metrics.json": "4a73a9e75d6a7639c0819c4061ab4886c3fa7cef98f4087abd02ed945df78b30",
+      "tmp/frp1330-costs/WarmCrop8/observations.json": "7c34612431858e9a25d7a085bb77f7f4d3fb76611a97c1b7e50692a3c20ba25b",
+      "tmp/frp1330-costs/WarmCrop8/preparation.json": "cfadca1360e372c1cd719c2e3aabf135e4d04cb47d3e0157a4993d5a95eeaca1",
+      "tmp/frp1330-costs/WarmCrop8/run.log": "86aa2c7b31b9645764365dbf5876e26e5f7e308ce1f9d348722707bc71545e4e",
+      "tmp/frp1330-costs/WarmCrop8/validation.json": "9c1c2f2843063a6bf8e564a02dfeef0c3c9209eba2c962b01858b9cef3f7817a",
+      "tmp/frp1330-final-cost-initial.py": "3cd46f3bbd143b4def0a75fbaca1e2f8beb54a20553f441b0256395960309232",
+      "tmp/frp1330-final-cost-vm.py": "fcd0cd3b518e90bf064ce3afcddd7219324825d5a0871f328a1d1da5a5790bdc",
+      "tmp/frp1330-linux-build.log": "2ff358693d9c0f6403c90bb27cb3ad33dc808e84695e6eb2bd349b89311fe49c",
+      "tmp/frp1330-linux-consumer.log": "ccc446ecb2f11219d8dbfc6e5873b4287124fc3f1161afc8811425f23c7ba60f",
+      "tmp/frp1330-linux-qualification/avx512-off.log": "2f181a9b1e125e99e0914efb070c9be6513a0278e2baab24aa52e75e477f05d4",
+      "tmp/frp1330-linux-qualification/full.log": "ee4a61cb4df710b54467b76171d8f6bfeb2de781f61193eaf08268d8d2c8f697",
+      "tmp/frp1330-linux-qualification/normal.log": "2f181a9b1e125e99e0914efb070c9be6513a0278e2baab24aa52e75e477f05d4",
+      "tmp/frp1330-linux-qualification/release-dll-sha.txt": "6939394a8476f81f61e03977dd6eced3e679ca3d689ff90a216fbff205127581",
+      "tmp/frp1330-linux-qualification/scalar.log": "86291f7ab5373d5cda0bd1540be9aa37bb0d4240f6b9f2ff039d2251e9cf1c49",
+      "tmp/frp1330-pack.log": "ea2dab662fa05e8dc865c0391f403d90340b8e406ac59b90b45efa3a8cc4cc6d",
+      "tmp/frp1330-preflight-note.txt": "2522c9f88b4c437f14b10f556c71a7e6e731d6a4231609ec7a6146fa99df5c59",
+      "tmp/frp1330-qual-evidence.py": "f2c8df0189c78ad7f3430640f0e752a7241921b7253afc522e4fdd69e1b14ed8",
+      "tmp/frp1330-qualify.ps1": "666e5f07e16bd42d7cdb934ec6b648a185186d4863e71e0970281efdb52dc114",
+      "tmp/frp1330-release/artifacts/nugets/Lokad.Image.0.2.1.nupkg": "6fed564e002264ff6ec115d43d5e3e6be3c7ad0d33e0e9fdd9c479b3665f4fed",
+      "tmp/frp1330-release/artifacts/nugets/Lokad.Image.0.2.1.snupkg": "8232597ddf5f29a9c6a8daf666ab3323f3584b7b0a2115ae3da373a34083ba3c",
+      "tmp/frp1330-release/src/Lokad.Image/Internal/CropCopy.cs": "98e286b3d505d33b500f3c65d1bb1083fea16545ddcefcdc55f00321ce01b1e2",
+      "tmp/frp1330-release/stage-inputs.json": "f578b36a7f2822dbca709c67f98ada42f2316dbe0c28fa762c690d27aeb4dc5f",
+      "tmp/frp1330-release/tests/Lokad.Image.PublicApi.Tests/CropReferenceTests.cs": "9bc3626157f77267306786757bb546172da5ef0ac551a1287468c9b5a6498d6a",
+      "tmp/frp1330-windows-build.log": "62e6f716a56a70725260a9c9bd1bcb74e4be27cc5e79a2424599798e3ca6b369",
+      "tmp/frp1330-windows-consumer.log": "d03e3b33a0c39d6df1909bb8786771149506b871ccac0ece5fb5acd61d37c702",
+      "tmp/frp1330-windows-qualification/avx512-off.log": "4822ff1c93f9c9a2cc61e44a4db0e9e5342efa093149c0f6f87f14a386cc89c2",
+      "tmp/frp1330-windows-qualification/full.log": "7eb97b7eb3cdec4b66c7ea7c0e05c8485d0f3ec60d25a865184c3342cc39eac6",
+      "tmp/frp1330-windows-qualification/normal.log": "4822ff1c93f9c9a2cc61e44a4db0e9e5342efa093149c0f6f87f14a386cc89c2",
+      "tmp/frp1330-windows-qualification/release-dll-sha.txt": "fff5fbf8d212d6615ab921d9ba0f1774e8f2648d92981571ffc8e066e1660146",
+      "tmp/frp1330-windows-qualification/scalar.log": "ab4250d103457068ade767e7c3f7e394880099d3de009877ec8561921230baf6"
+    },
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

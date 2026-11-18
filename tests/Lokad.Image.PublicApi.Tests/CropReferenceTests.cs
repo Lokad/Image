@@ -29,6 +29,8 @@ public sealed class CropReferenceTests
     [Theory]
     [InlineData(8, 4103, 3, 1, 1, 4101, 2)]
     [InlineData(16, 4103, 3, 1, 1, 4101, 2)]
+    [InlineData(8, 72, 3, 7, 1, 64, 2)]
+    [InlineData(8, 1027, 4, 3, 1, 1024, 3)]
     [InlineData(8, 1025, 2, 0, 0, 1025, 2)]
     [InlineData(16, 1025, 2, 0, 0, 1025, 2)]
     [InlineData(8, 7, 5, 6, 4, 1, 1)]
