@@ -101,3 +101,35 @@ The mirrored `vp8-opaque-partitioned-current-package.tar.xz` contains
 `4137aa08c5b882e031335125a00c57bbe984aff14a6e00f0e1696c52df6b48cf`.
 It retains the original receipts, tool and reference identities, idle checks,
 exact-output evidence and all subdivisions.
+
+## Opaque timing diagnostic
+
+Across the twelve retained ordinary opaque actuals, managed time correlates
+0.998, 0.996 and 0.995 with the before, paired and after native groups.
+The largest individual-group spread is 8.64%, while adjacent point ratios
+range from 0.97525 to 0.98440. The live-token trace also moves together,
+with paired correlation 0.916 and point ratios from 0.99550 to 1.00369.
+The full conservative bounds still apply to both cases.
+
+One instrumented ordinary opaque capture keeps the same immutable package,
+fixture, reference, 128-operation units, eight-operation subdivisions and
+guards. It records Linux main-thread scheduled runtime and run delay
+outside the individual operation clocks, plus CPU0 counters for each whole
+actual. The original 8.64% swing did not recur. The new managed and native
+wall-time spreads are at most 2.57%. Native wall and scheduled time
+correlate 0.9994 or higher in all three groups. CPU0 reports zero I/O-wait
+and steal ticks over those actuals. The counters therefore describe only
+the smaller movement in this diagnostic. They do not identify the cause
+of the previous swing. The managed wall/scheduled difference also
+includes runtime threads and measurement boundaries.
+
+All packet, exact pixel, source and owner checks pass. One tooling build
+adds counters. Production and the reference worker are unchanged. Every
+clock in this capture is diagnostic. Both earlier uncertain comparisons
+stay open under the same parity gate. A repeat needs a concrete new
+measurement or production hypothesis.
+[Scheduler evidence](vp8-scheduler-diagnostic-evidence.json)
+
+The mirrored `vp8-scheduler-diagnostic.tar.xz` contains 14 verified members
+and 48,068 B, SHA-256
+`88cff927d8cc5f209b5273d3701644e23102d78c6c5c54a182c69f9b9e8d90cd`.
