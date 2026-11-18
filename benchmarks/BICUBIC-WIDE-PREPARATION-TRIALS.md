@@ -44,5 +44,30 @@ scalar and actual-package qualification remain unchanged.
 [Evidence and archive manifests](bicubic-wide-preparation-trials-evidence.json)
 pin the four mirrored archives and all 68 members. They retain both candidates,
 exact replay commands, all actuals, guards and validation reports. The
-[current package comparison](BICUBIC-CURRENT-PACKAGE.md) retains the three
-original bicubic uncertainties.
+[current package comparison](BICUBIC-CURRENT-PACKAGE.md) tracks the remaining
+bicubic uncertainties.
+
+## Ring slots from the first source row
+
+The private trial changes how the byte row-loan and tail paths select cache
+slots. It computes the first clamped source row's slot,
+adds each later tap's clamped row distance and subtracts 17 if needed. Clamping
+is monotonic and the distance is at most 16. A 897,651-case check covers wrapped
+windows, short images and clamped edges. Filtering order, cache keys, admission,
+cancellation and ownership stay intact.
+
+| Complete TightWide8 resize | Baseline µs | Candidate µs | Paired ratio interval | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Three alternating pairs | 382.55 | 370.23 | 0.800840–1.169492 | 112 on each |
+| Twelve independent pairs | 338.29 | 349.74 | 1.013421–1.054495 | 112 on each |
+
+The independent result reverses the short screen and establishes a **3.38%
+paired regression**. Stop the variant and keep TightWide8 open. Both captures
+reuse the same private build, original actor, 64 complete calls per subject
+and frozen prepared-zimg reference. All exact pixels, native bounds, source,
+ownership and quiet-VM guards pass. The Windows focused run passes 38 tests,
+including the named resize-storage suites. Production, the development
+package and current reference costs stay unchanged.
+
+[Trial evidence](bicubic-wide-ring-slot-trial-evidence.json) retains the exact
+recipe and both mirrored archives with 22 verified members each.
