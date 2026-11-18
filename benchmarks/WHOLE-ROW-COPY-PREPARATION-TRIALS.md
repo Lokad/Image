@@ -459,3 +459,34 @@ actual JIT, focused checks and all observations. Mirrored/member-verified
 Archived rfb1269 recipes and named dependencies reproduce it. No renderer
 dependency or new current-cost claim. Do not repeat neighboring bounds/view
 variants without a materially different, evidence-backed mechanism.
+
+## End-anchored blocks for separate RGBA8 copies
+
+**Screen complete, unpromoted.** Clipped RGBA8 measures **2.125345 →
+2.108777 µs**, paired interval **0.901802–1.091632**. Separate RGBA8 measures
+**1.947860 → 1.952657 µs**, interval **0.990424–1.014647**. Both allocate
+0 B/op. The clipped point improvement is about 17 ns against a demonstrated
+69 ns gap. The two results give no basis for independent confirmation or
+standalone reference timing. The originally measured gaps remain open.
+[Current operation boundary](COPY-OPERATION-BOUNDARY.md)
+
+A single loop walks fixed 256-byte groups from the end of a checked row and
+clamps the final head offset to zero. This replaces the distinct bulk and
+tail loops for separate RGBA8 rows whose original tail requires four vectors.
+It moves the same number of bytes with up to 63 bytes of overlap within the
+row. One row poll, both span bounds, and four loads before four stores remain.
+No pin or new storage. The current self-copy and portable paths stay outside
+the trial. Geometry checks cover 4,033 eligible byte lengths. Nine Windows
+checks cover pitches, eligible residues, canaries, exact copies and
+cancellation. The Linux JIT emits a 268-byte vector helper.
+
+The short screen retains three alternating pairs of 65,536 complete calls
+per case with the actual package as its baseline and the original CBR1262
+worker for exact frame checks. Both idle guards, source preservation, caller
+ownership, hidden RGB, alpha and untouched pixels pass. A private Release
+build per OS and one embedded Windows build leave the current package and
+qualification in place. No new required cases.
+[Screen evidence](end-anchored-copy-screen-evidence.json)
+
+The mirrored `end-anchored-copy-screen.tar.xz` retains 32 verified members and
+1,215,804 B, SHA-256 `7b5912ebcc236b52e9bb548ad26e8ad63f7e7bd8fd83ca631770d25b5268b8a2`.
