@@ -3605,6 +3605,24 @@ costs. The complete final-package refresh remains outstanding."""
         result = (f'| {label}{status} † → {size} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                   f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} |')
         editing = editing.replace(old, result)
+    jpeg_owned_package = json.loads((ROOT / 'benchmarks/jpeg-decode-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_owned_package['producers'] == jpeg_pending['producers']
+    assert jpeg_owned_package['raw']['mirrored'] and jpeg_owned_package['raw']['allMembersVerified']
+    for name, label in (('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
+                        ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
+                        ('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
+                        ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode'),
+                        ('Progressive444', 'JPEG ordinary progressive444, resident decode')):
+        c = jpeg_owned_package['cases'][name]
+        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['originalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        heading = f'| {label} † |'
+        old, = (line for line in codecs.splitlines() if line.startswith(heading))
+        status = f' ({png_status[c["status"]]})' if c['status'] != 'pass' else ''
+        result = (f'| {label}{status} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
+        codecs = codecs.replace(old, result)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3814,11 +3832,10 @@ the SAME actual package/all three examples, including one-axis asynchronous
 survivors. Allocation, retained admission and physical peaks stay distinct.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
-the affected stream view refreshes and passes in the prepared-input round. The
-horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
-confidence is reconciled before acceptance; historical clock shifts are not gains.
-Adverse and uncertain captures stay linked; copy/turn confidence remains open.
+The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
+cover two CMYK and three progressive controls affected by the shared output pool.
+All five displayed rows use their current timings and allocations. Other JPEG
+views retain their identified producer and operation boundaries.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,

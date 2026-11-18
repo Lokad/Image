@@ -1,0 +1,365 @@
+{
+  "project": "Lokad.Image",
+  "producers": {
+    "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+    "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+  },
+  "productionChanged": false,
+  "newRequiredPaths": 0,
+  "raw": {
+    "file": "jpeg-owned-decode-current-package-confirmations.tar.xz",
+    "bytes": 44028,
+    "sha256": "a0ddcefd684842b0ba9cb56e809a4864ee4bf8751c3d810876ed0a8c31019f86",
+    "members": 39,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "cases": {
+    "CmykAdobeAc": {
+      "caseId": "CmykAdobeAc",
+      "actuals": 12,
+      "originalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "inputSha256": "37a14bcd1e03fd87204d5454f91fb1744e50cfc239d96bec3f24c4212bc0c062",
+      "outputSha256": "714dc2fa01f42f34c03a18c4637acb095925594e4397b3da188dc6eec97a64be",
+      "referenceOutputSha256": "714dc2fa01f42f34c03a18c4637acb095925594e4397b3da188dc6eec97a64be",
+      "nativeWorkerSha256": "f082624d3e454d661b381b086e27477741592ae5c759ae47d4e48a093d3fe068",
+      "validationSha256": "91d3db918f4f88ec60460df0b4ffc4b545c2bcc6167585ea3941b1ad1cbe27a5",
+      "priorReceiptSha256": "40b610f8c5bba7e69a45e124f12f03a24e31bc2a953b8ba7b718af17f75d13b7",
+      "managedUs": 465.39195698302456,
+      "nativeUs": 416.143537109375,
+      "ratio": 1.1183447908761,
+      "lower": 1.0833949257149933,
+      "upper": 1.133022627765277,
+      "status": "gap",
+      "allocatedBytes": 20944,
+      "exactAllocatedBytesPerOperation": 20944.0,
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 420104.5592447917,
+          "standardError": 1552.9411793797299
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 416143.537109375,
+          "standardError": 248.47577626552533
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 12,
+          "lower": 1.0833949257149933,
+          "upper": 1.1330195970977897
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 1.083397858571417,
+          "upper": 1.133022627765277
+        }
+      ],
+      "method": "generated",
+      "actualOperationCounts": [
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432
+      ],
+      "rawLogSha256": "a523f1e488c7879b6547b2685f6ae0fb01b01568596acd83cf6dccc9e20b1510"
+    },
+    "CmykAdobeSparse2D": {
+      "caseId": "CmykAdobeSparse2D",
+      "actuals": 12,
+      "originalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+      "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+      "referenceOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+      "nativeWorkerSha256": "f082624d3e454d661b381b086e27477741592ae5c759ae47d4e48a093d3fe068",
+      "validationSha256": "7bf544a40950996829b8416e4bb08720116ea3a49c1be121472621b025b06441",
+      "priorReceiptSha256": "b38224b7e783dbca7f65b4799c00960019106fb233dc9f17a3cf4a014fba4f3e",
+      "managedUs": 459.7928805941358,
+      "nativeUs": 465.7061796875,
+      "ratio": 0.9873025110009659,
+      "lower": 0.9728624232370698,
+      "upper": 1.001968881471051,
+      "status": "uncertain",
+      "allocatedBytes": 20944,
+      "exactAllocatedBytesPerOperation": 20944.0,
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 466639.8287760417,
+          "standardError": 276.80325007074686
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 465706.1796875,
+          "standardError": 806.296320839118
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 12,
+          "lower": 0.9728624232370698,
+          "upper": 1.0019661715875825
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9728650918036861,
+          "upper": 1.001968881471051
+        }
+      ],
+      "method": "generated",
+      "actualOperationCounts": [
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432
+      ],
+      "rawLogSha256": "45ac67f1d84f3a5bea38c10ceee26a56894fca4a9139695d90d9db68fb3fd9c3"
+    },
+    "ProgressiveGray": {
+      "caseId": "ProgressiveGray",
+      "actuals": 12,
+      "originalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "inputSha256": "0f435ff53a28cca61a05c553ee11bd56fac658f432966aef2f5dc2fe96a6dab0",
+      "outputSha256": "b1069feb5a3ed55bce9a2d647686dbe6a1527865d4d22e86b9e14ebe241950ff",
+      "referenceOutputSha256": "b1069feb5a3ed55bce9a2d647686dbe6a1527865d4d22e86b9e14ebe241950ff",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "validationSha256": "7ee4e345211f155c064d8314f061a70cff8ea20cab07e7ddaa8309ff11addaf8",
+      "priorReceiptSha256": "46649ba895ef1a13e9272384278583b5e72e82bc9a43f293595825769a7fbdd5",
+      "managedUs": 1714.689921875,
+      "nativeUs": 1845.2990989583332,
+      "ratio": 0.9292205923922784,
+      "lower": 0.92256146886916,
+      "upper": 0.9359369440775411,
+      "status": "pass",
+      "allocatedBytes": 151432,
+      "exactAllocatedBytesPerOperation": 151432.0,
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 1849087.671875,
+          "standardError": 675.9836169947995
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 1845299.0989583333,
+          "standardError": 1755.7305382095933
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 12,
+          "lower": 0.92256146886916,
+          "upper": 0.93593617877515
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9225622277370927,
+          "upper": 0.9359369440775411
+        }
+      ],
+      "method": "generated",
+      "actualOperationCounts": [
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "rawLogSha256": "d0a1f369638169e7da5ac45a738b8e33fc7bdb60d7d38b248adcddc5a29fb06d"
+    },
+    "ProgressiveCancelable444": {
+      "caseId": "ProgressiveCancelable444",
+      "actuals": 12,
+      "originalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+      "outputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "referenceOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "validationSha256": "805b8c2ae9883bd90337ee27c6e7d342d7d80130f38cb1188972e05b5b4c1984",
+      "priorReceiptSha256": "7a8d98f7bc05be37ebaa0c30c26b531d68ca6093598b0a7ed2f06cc3ad941a56",
+      "managedUs": 3276.9649635416663,
+      "nativeUs": 3644.6636770833334,
+      "ratio": 0.8991131291883918,
+      "lower": 0.8908728528787582,
+      "upper": 0.9053224789377147,
+      "status": "pass",
+      "allocatedBytes": 169664,
+      "exactAllocatedBytesPerOperation": 169664.0,
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 3644663.6770833335,
+          "standardError": 1822.9765847971908
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 3653425.0729166665,
+          "standardError": 1750.9658437386702
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 12,
+          "lower": 0.8908728528787582,
+          "upper": 0.9053220041606455
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.890873324463292,
+          "upper": 0.9053224789377147
+        }
+      ],
+      "method": "generated",
+      "actualOperationCounts": [
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64
+      ],
+      "rawLogSha256": "0e1d7ec3c43f9142a97172f6b9c3faf755440e55b5e9e92c6aa33d576fc72f62"
+    },
+    "Progressive444": {
+      "caseId": "Progressive444",
+      "actuals": 12,
+      "originalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+      "outputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "referenceOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "validationSha256": "29c8ea6ab54d86d520b8800e37522c32289b1bf73a9ee8766c101833143d4548",
+      "priorReceiptSha256": "45146cdba1c766662d5b4323672169d74a51935860a521854e27ea5bd5f1aa10",
+      "managedUs": 2896.3070708333335,
+      "nativeUs": 3361.2586822916664,
+      "ratio": 0.861673362449648,
+      "lower": 0.853382888385891,
+      "upper": 0.8686525787472257,
+      "status": "pass",
+      "allocatedBytes": 169664,
+      "exactAllocatedBytesPerOperation": 169664.0,
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 3364439.1302083335,
+          "standardError": 1489.3879395407616
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 3361258.6822916665,
+          "standardError": 1023.4682414842401
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 12,
+          "lower": 0.853382888385891,
+          "upper": 0.8686521318821063
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.8533833333514378,
+          "upper": 0.8686525787472257
+        }
+      ],
+      "method": "generated",
+      "actualOperationCounts": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "rawLogSha256": "bd364ad236d5ab22932856a2b927c9ec87a4c60c1c52e05c02aaae92f649e372"
+    }
+  },
+  "preparation": {
+    "producers": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "existingSelectionOnly": true,
+    "productionHarnessFixturePackageBuilds": 0,
+    "orchestrationBuilds": 1,
+    "runtimeGroups": 1,
+    "priorReceiptHashes": {
+      "CmykAdobeAc": "40b610f8c5bba7e69a45e124f12f03a24e31bc2a953b8ba7b718af17f75d13b7",
+      "CmykAdobeSparse2D": "b38224b7e783dbca7f65b4799c00960019106fb233dc9f17a3cf4a014fba4f3e",
+      "ProgressiveGray": "46649ba895ef1a13e9272384278583b5e72e82bc9a43f293595825769a7fbdd5",
+      "ProgressiveCancelable444": "7a8d98f7bc05be37ebaa0c30c26b531d68ca6093598b0a7ed2f06cc3ad941a56",
+      "Progressive444": "45146cdba1c766662d5b4323672169d74a51935860a521854e27ea5bd5f1aa10"
+    }
+  },
+  "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
+  "confidence": "Filtered and all-actual bounds against both native brackets.",
+  "allocationPolicy": "Separate post-actual GC diagnostic, distinct from physical peaks and idle retention."
+}

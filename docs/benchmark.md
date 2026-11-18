@@ -275,11 +275,10 @@ the SAME actual package/all three examples, including one-axis asynchronous
 survivors. Allocation, retained admission and physical peaks stay distinct.
 [Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-The 27 unchanged RGBA/fresh/caller-buffer read views retain passing evidence;
-the affected stream view refreshes and passes in the prepared-input round. The
-horizontal-CMYK cost is **410.41 / FFmpeg 418.11 µs, upper .988**. Companion
-confidence is reconciled before acceptance; historical clock shifts are not gains.
-Adverse and uncertain captures stay linked; copy/turn confidence remains open.
+The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
+cover two CMYK and three progressive controls affected by the shared output pool.
+All five displayed rows use their current timings and allocations. Other JPEG
+views retain their identified producer and operation boundaries.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -459,7 +458,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L RGBA8, resident decode † | 2,951.16 | 3,269.16 | 0.903 / 0.907616 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 2,942.95 | 3,283.26 | 0.896 / 0.902094 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode † | 408.78 | 544.44 | 0.751 / 0.761869 | 288,464 | — |
-| JPEG CMYK sparse-2D, resident decode † | 414.93 | 433.23 | 0.958 / 0.970 | 20,944 | — |
+| JPEG CMYK sparse-2D, resident decode (confidence open) † | 459.79 | 465.71 | 0.987 / 1.001969 | 20,944 | — |
 | JPEG YCCK420, resident decode † | 417.49 | 708.60 | 0.589 / 0.593 | 895,563 | — |
 | JPEG 4:1:1, resident decode † | 374.05 | 448.00 | 0.835 / 0.841 | 219,552 | — |
 | JPEG 4:1:0, resident decode † | 339.24 | 507.96 | 0.668 / 0.680 | 189,090 | — |
@@ -470,13 +469,13 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG8 decode, two retained images / shared caller root † | 2,652.54 | 2,849.73 | 0.931 / 0.972152 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
 | JPEG dense CMYK, resident decode † | 1,280.01 | 3,113.05 | 0.411 / 0.413 | 20,944 | — |
-| JPEG horizontal-only CMYK, resident decode † | 410.41 | 418.11 | 0.982 / 0.988 | 20,944 | — |
+| JPEG horizontal-only CMYK, resident decode (gap) † | 465.39 | 416.14 | 1.118 / 1.133023 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode † | 438.99 | 604.73 | 0.726 / 0.742 | 762,720 | — |
-| JPEG progressive grayscale, resident decode † | 1,588.74 | 1,711.21 | 0.928 / 0.933 | 151,432 | — |
+| JPEG progressive grayscale, resident decode † | 1,714.69 | 1,845.30 | 0.929 / 0.935937 | 151,432 | — |
 | JPEG progressive420, resident decode † | 1,412.35 | 1,949.00 | 0.725 / 0.729 | 243,676 | — |
 | JPEG progressive422, resident decode † | 1,777.18 | 2,247.92 | 0.791 / 0.802 | 315,496 | — |
-| JPEG ordinary progressive444, resident decode † | 2,840.13 | 3,368.87 | 0.843 / 0.855 | 169,664 | — |
-| JPEG progressive444, live-token resident decode † | 3,039.33 | 3,356.43 | 0.906 / 0.915 | 169,664 | — |
+| JPEG ordinary progressive444, resident decode † | 2,896.31 | 3,361.26 | 0.862 / 0.868653 | 169,664 | — |
+| JPEG progressive444, live-token resident decode † | 3,276.96 | 3,644.66 | 0.899 / 0.905322 | 169,664 | — |
 
 **Editing**
 
