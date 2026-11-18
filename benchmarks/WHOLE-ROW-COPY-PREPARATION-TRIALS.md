@@ -88,3 +88,34 @@ SHA256 `f19111f067dadf8b584252cf0bd1000feb357c9441d8800c2df84186b2a82a2b`. Archi
 source/DLLs, codegen, gates, all actuals and cleanup proof, using the named
 mapping-validation baseline and original prepared-word actor. This supplies no
 displayed result or renderer prerequisite.
+
+## Capacity getter follow-up
+
+**Private, unpromoted:** direct null-checked backing-array length replaces a pixel
+span constructed solely to read its length. Complete separate-byte copying screens
+**1.971874→1.963101µs**, interval**.975628–1.015881**,0B/op on three reversed
+65,536-operation pairs. The small uncertain8.77ns point does not justify a shared
+setup getter change across codec, resize, text and copy boundaries. No independent
+confirmation, promotion, affected-passing retiming or broad/package campaign.
+
+The source change preserves the single backing-reference observation, actual
+retained array capacity, identical disposed-object name/failure and operand order.
+No fields, out-span ABI, cached geometry, owner, admission, public API or pixel
+kernel changes. Existing per-operation borrowing/lifetimes/cancellation remain.
+Actual code is1531Bcaller/217Bvalidator/75Bcapacity getter; the latter remains a
+call boundary. This is not proof of removable time or a general inlining proposal.
+
+Each OS passes41internal/190public checks per normal/AVX-512-disabled/scalar mode,
+with full ownership/transform scope selected on the first attempt. All frozen
+source/canvas/sample/alpha/hidden-RGB/untouched/owner/native checks and quiet guards
+pass. One private Windows core/embedded build, zero other builds or new fixtures.
+Both canonical DLLs, the package and current costs remain byte-identical; reuse
+6,839full/live checks and SAMEactualpackage/threeexamples each OS. Added GC,
+admitted and retained capacity remain zero; physical/native/JIT peaks unmeasured.
+
+Mirrored/member-verified `image-capacity-getter-trial.tar.xz`:2,205,424B,50members,
+SHA256`7d50ae839f1fbe8310ad37df5369bec1ec544c4cc3f4c8c022b856126e00224b`.
+Archived `blc1252-*` recipes retain exact source/modules, codegen, every actual,
+focused checks and unchanged-source pins. The mapping-validation and prepared-copy
+reports retain reused qualified/runtime dependencies. No displayed result or
+renderer dependency is added; three copy gaps remain open.

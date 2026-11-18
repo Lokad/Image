@@ -77,6 +77,10 @@ The [prepared-row eight-vector follow-up](EIGHT-VECTOR-COPY-GROUP-TRIAL.md#prepa
 is near-neutral/unpromoted, retaining all exact checks and current costs. This
 revised prepared-state trial does not justify confirmation or another group sweep.
 
+The [capacity-getter follow-up](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#capacity-getter-follow-up)
+retains a small uncertain8.77ns point without promotion or cross-family retiming;
+its global setup scope is explicit and qualified production stays unchanged.
+
 [Direct copy addressing](COPY-DIRECT-ADDRESSING-TRIAL.md) is inconclusive and
 unaccepted;production/package/current costs remain unchanged. The bounded trial
 retains one prototype,profile/codegen and all actuals,without confirmation or broad
