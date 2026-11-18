@@ -1814,5 +1814,132 @@
         "mirrored": true
       }
     }
+  },
+  "alignedSourceLoadTrial": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateDllSha256": "c508120b1b6c0efa1f2b3ec719f8e97cffe7ee16e132860b82accb00f76db802",
+    "productionAccepted": false,
+    "scoredParityCaptures": 0,
+    "windowsFocusedNormal": 125,
+    "windowsFocusedScalar": 125,
+    "managedAllocationBytesPerOp": 0,
+    "quietVmPairs": 3,
+    "operationsPerSide": 65536,
+    "screen": {
+      "OriginalClippedCopy8": {
+        "baselineUs": 1.951290756225586,
+        "candidateUs": 1.9453921356201171,
+        "pairedInterval": [
+          0.9132568630722893,
+          1.0883597606430446
+        ]
+      },
+      "DrawingCopy8": {
+        "baselineUs": 1.9558766123453775,
+        "candidateUs": 1.952488754272461,
+        "pairedInterval": [
+          0.8596830296157117,
+          1.1591457226088087
+        ]
+      }
+    },
+    "generatedCode": {
+      "methodBytes": 412,
+      "sampleCommands": 0,
+      "vectorMoves": 14,
+      "stackVectorMoves": [],
+      "codegenSha256": "d4301cafbd86411efc2f08ca0e613d9bfe6520252296f2cf188d725581b6ed08"
+    },
+    "geometry": {
+      "widthPhasePairs": 254016,
+      "transfersPerRow": {
+        "1016": [
+          16,
+          17
+        ],
+        "1024": [
+          16,
+          17
+        ]
+      },
+      "checkedAllAccesses": true
+    },
+    "modeledSplitLoadsBefore": [
+      1920,
+      1936
+    ],
+    "modeledSplitLoadsAfter": [
+      240,
+      242
+    ],
+    "modeledSplitStoresAfter": [
+      2153,
+      2169
+    ],
+    "raw": {
+      "file": "aligned-source-load-copy-trial.tar.xz",
+      "bytes": 1035688,
+      "sha256": "18626a9a173fd3b0402d6021a9cf26054a395238d3ad0b3c386f3e1cc01665e8",
+      "members": 57,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "separateWordCopyConfidenceReview": {
+    "productionChanged": false,
+    "scoredCaptures": 0,
+    "sourceArchiveSha256": "74ac5f858e5ce39b7c081b2e493b822d9595d9f33512ccae4a1295984a115dd1",
+    "comparisonMember": "tmp/cbr1262-DrawingCopy16-complete.json",
+    "comparisonSha256": "6195332993ac05c187f8e434bdacdcbbe478a0ed2abce3e0eb87b9aa71c54d65",
+    "currentPairedInterval": [
+      0.998521350192389,
+      1.0049407218852364
+    ],
+    "currentConservativeInterval": [
+      0.9918335608384379,
+      1.0117175709080912
+    ],
+    "managedMeanNs": 3827.2934757868447,
+    "groups": {
+      "before": {
+        "nativeMeanNs": 3816.7830406824746,
+        "managedMinusNativeNs": 10.510435104370117,
+        "managedSlowerUnits": 10,
+        "correlation": 0.7229905808650297
+      },
+      "paired": {
+        "nativeMeanNs": 3820.700820287069,
+        "managedMinusNativeNs": 6.592655499776204,
+        "managedSlowerUnits": 8,
+        "correlation": 0.7912152795752173
+      },
+      "after": {
+        "nativeMeanNs": 3820.898765563965,
+        "managedMinusNativeNs": 6.394710222880046,
+        "managedSlowerUnits": 10,
+        "correlation": 0.7139053604604572
+      }
+    },
+    "uniformManagedShiftForPassingAllActualBoundNs": 44.54392642068751,
+    "sharedStoragePlacementDifferencesNs": [
+      -14.231597900390625,
+      66.6911849975586,
+      -11.700836181640625,
+      -25.735008239746094
+    ],
+    "sharedStorageMeanDifferenceNs": 3.7559356689453125,
+    "relativePageOffset": 2128,
+    "conclusion": "All three original mean differences are adverse, so additional precision alone cannot turn those effect estimates into parity. A shift magnitude derived at fixed spread and reference clocks is a sensitivity diagnostic. Shared-storage effects are in-process and remain unscored.",
+    "raw": {
+      "file": "word-copy-confidence-review.tar.xz",
+      "bytes": 2200,
+      "sha256": "e9b51714638070c2377d6e59be9eb8a107d7a1ac43628e66d0e97fc6b8756f10",
+      "members": 2,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

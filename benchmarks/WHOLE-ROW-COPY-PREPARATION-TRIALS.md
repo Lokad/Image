@@ -985,3 +985,39 @@ The shared-clock experiment retains the distinct managed and native
 result consumers. Use the original complete standalone comparisons for
 parity. The word case remains uncertain.
 [Placement, operation and code verification evidence](copy-vector-width-trials-evidence.json)
+
+## Aligned source loads without pinning
+
+The complementary alignment trial takes the source address phase and
+row step as hints. Checked row slices and unaligned-safe edge transfers
+preserve exact copies even if the hint goes stale. The geometry proof
+covers 254,016 width and phase combinations. At the four observed
+backings, the model projects **240–242** split loads per copy in place of
+**1,920–1,936**. It also projects **2,153–2,169** split stores.
+The optimized Linux helper is 412 bytes and spills no vectors.
+
+Three quiet-VM pairs of 65,536 complete calls per side give
+**1.951291 → 1.945392 µs** for clipped RGBA8 (paired interval
+**0.913257–1.088360**) and **1.955877 → 1.952489 µs** for separate
+RGBA8 (**0.859683–1.159146**). Both allocate **0 B/op**. Exact pixels,
+source, ownership, and quiet guards pass, along with 125 focused Windows
+tests in each of normal and scalar modes. Stop at screening. This result
+gives little reason for another alignment-only trial.
+[Transfer model, tested build and paired timings](copy-vector-width-trials-evidence.json)
+
+## Separate RGBA16 confidence review
+
+The original complete word copy averages **6.4–10.5 ns slower** than each
+of its three native brackets. Increasing precision while holding these
+point estimates fixed would leave its mean above parity. Holding the
+native bound and managed spread fixed, the existing all-actual interval
+would need a uniform **44.5 ns** reduction per managed call to reach
+the gate. This is a sensitivity calculation on the retained capture.
+
+The shared-storage diagnostic averages **3.8 ns slower** across its four
+placements, with differences on both sides of parity. It supplies a
+reason to account for placement in a future confirmation. Keep the
+original standalone result uncertain. A new scored run needs a concrete
+reason to expect different timing or better control of a measured
+source of variance.
+[Reproducible review of the retained samples](copy-vector-width-trials-evidence.json)
