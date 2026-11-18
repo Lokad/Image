@@ -3281,7 +3281,24 @@ costs. The complete final-package refresh remains outstanding."""
     png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
-    opaque_live = reader_current['cases']['OpaqueCancelable8']
+    vp8_package = json.loads((ROOT / 'benchmarks/vp8-decode-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_package['producers'] == jpeg_pending['producers']
+    assert vp8_package['raw']['mirrored'] and vp8_package['raw']['allMembersVerified']
+    assert set(vp8_package['cases']) | {'ValidateVp8Alpha'} == set(reader_current['cases'])
+    for name, c in vp8_package['cases'].items():
+        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['operationsPerSubject'] == 128
+        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
+        assert c['outputSha256'] == reader_current['cases'][name]['metadata']['managedOutputSha256']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    opaque_live = vp8_package['cases']['OpaqueCancelable8']
+    vp8_stream = vp8_package['cases']['StreamNative8']
+    vp8_status = {'pass': 'parity confirmed', 'gap': 'gap', 'uncertain': 'confidence open'}
+    prefix = '| WebP VP8 + alpha, fresh seekable Stream'
+    old, = (line for line in codecs.splitlines() if line.startswith(prefix))
+    codecs = codecs.replace(old, f'{prefix} ({vp8_status[vp8_stream["status"]]}) † | {vp8_stream["managedUs"]:,.2f} | '
+                            f'{vp8_stream["nativeUs"]:,.2f} | {vp8_stream["ratio"]:.3f} / {vp8_stream["upper"]:.6f} | '
+                            f'{vp8_stream["allocatedBytes"]:,} | — |')
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
     assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
@@ -3675,11 +3692,11 @@ stream captures remain linked beside their current confirmations.
 
 {png_stream_word_note}
 
-[Current VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) retains the
-stream pass: **{reader_current['cases']['StreamNative8']['managedUs']:,.2f} / FFmpeg
-{reader_current['cases']['StreamNative8']['nativeUs']:,.2f}µs, upper
-{reader_current['cases']['StreamNative8']['upper']:.3f}**, **240,496 B/op**. This complete
-operation includes fresh stream acquisition, decoding, owned output and disposal.
+[Current-package VP8 decode](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md) measures
+the fresh stream at **{vp8_stream['managedUs']:,.2f} / FFmpeg {vp8_stream['nativeUs']:,.2f} µs**,
+upper **{vp8_stream['upper']:.6f}**, **{vp8_stream['allocatedBytes']:,} B/op**
+({vp8_status[vp8_stream['status']]}). The complete operation includes fresh stream
+acquisition, decoding, independent output ownership and disposal.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
 **67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
@@ -3734,18 +3751,12 @@ This scoped refresh does not establish whole-library parity; publication is post
 [Fixed-position VP8 arithmetic](../benchmarks/VP8-FIXED-CODE.md) keeps the code
 byte at a fixed UInt64 position, preserving scalar cursors, every cancellation
 check and input-refill addresses. Independent live-token pairs save **41.53µs/.86%**
-in their scoped ALC comparison. The actual standalone live comparison now passes:
-**{opaque_live['managedUs']:,.2f} / FFmpeg {opaque_live['nativeUs']:,.2f}µs**, ratio
-**{opaque_live['ratio']:.4f}**, upper **{opaque_live['upper']:.6f}**,
-**{opaque_live['allocatedBytes']:,} B/op**. All pixels remain exact; original
-uncertainties remain in history. All six affected costs refresh on the timed,
-immutable actual package; **all twelve WebP reads pass/stop**. Separate ordinary,
-stream and coding-validation points are higher than the preceding round; current
-costs stay visible and no uniform speedup or historical-clock gain is claimed.
-Allocations, capacity and retention are unchanged. Both OSes pass **6,692 full/live** checks,
-focused normal/scalar checks and the **same actual package/all three examples**.
-[Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
-remain separate history; none of their coefficient state-bridge changes survives.
+in their scoped ALC comparison. The [current-package live-token comparison](../benchmarks/VP8-DECODE-CURRENT-PACKAGE.md)
+is **{opaque_live['managedUs']:,.2f} / FFmpeg {opaque_live['nativeUs']:,.2f} µs**,
+upper **{opaque_live['upper']:.6f}**, **{opaque_live['allocatedBytes']:,} B/op**
+({vp8_status[opaque_live['status']]}). All five owned-output comparisons keep their
+exact pixels and reference boundaries. Coding-only validation retains its
+source-valid evidence.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
 zero-only coefficient storage and size working rows from actual taps.
 [Current-package measurements](../benchmarks/LANCZOS-CURRENT-PACKAGE.md) confirm
