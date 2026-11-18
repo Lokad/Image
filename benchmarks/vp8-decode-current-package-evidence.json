@@ -179,5 +179,132 @@
         1.0338655218057948
       ]
     }
+  },
+  "partitioned": {
+    "project": "Lokad.Image",
+    "producers": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "productionChanged": false,
+    "newRequiredPaths": 0,
+    "quietGuardRejected": {
+      "caseId": "StreamNative8",
+      "allSamplesRetained": true,
+      "scored": false,
+      "aggregateIoWait": 0.010484273589615577,
+      "cpu0IoWait": 0.042,
+      "threshold": 0.01,
+      "noOverlappingJobs": true
+    },
+    "raw": {
+      "file": "vp8-partitioned-current-package-confirmations.tar.xz",
+      "bytes": 102940,
+      "sha256": "2b2174384ebc090ae57bf7a18f8e3428ef8db55691fbb87a0907156ba608dd14",
+      "members": 35,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "cases": {
+      "OpaqueCancelable8": {
+        "ratio": 1.0007050137398577,
+        "lower": 0.9846220630565924,
+        "upper": 1.0160329942692978,
+        "status": "uncertain",
+        "managedUs": 5198.143908854167,
+        "nativeUs": 5194.481727864583,
+        "allocatedBytes": 230880,
+        "caseId": "OpaqueCancelable8",
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "operationsPerSubject": 128,
+        "actuals": 12,
+        "segmentsPerActual": 16,
+        "operationsPerSegment": 8,
+        "originalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "nativeWorkerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+        "validationSha256": "dab7f41f4a36a1fc36bc52ebede770cfd2bea3857eb11ed0154b0cb759680931",
+        "nativeGroupMeansUs": [
+          5194.481727864583,
+          5195.942676432292,
+          5196.631470703125
+        ],
+        "pairedRatioConfidence": [
+          0.9972260632443645,
+          1.0036277862238352
+        ],
+        "untimedIoPreparationCorrected": false
+      },
+      "StreamNative8": {
+        "ratio": 0.936656545136026,
+        "lower": 0.9248817107566334,
+        "upper": 0.9474454991093338,
+        "status": "pass",
+        "managedUs": 6082.738866536458,
+        "nativeUs": 6494.097434244792,
+        "allocatedBytes": 240496,
+        "caseId": "StreamNative8",
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "operationsPerSubject": 128,
+        "actuals": 12,
+        "segmentsPerActual": 16,
+        "operationsPerSegment": 8,
+        "originalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "nativeWorkerSha256": "85fa3a2878065329ae8c2284c893f58edcef48d35c11a2afcd83761928f00c08",
+        "validationSha256": "da9e4ec87117876c028138386bd5c02b40fda67464cca02c5984806e6f67d32d",
+        "nativeGroupMeansUs": [
+          6494.097434244792,
+          6498.004003255208,
+          6499.077533854167
+        ],
+        "pairedRatioConfidence": [
+          0.9328793680786762,
+          0.939321012904289
+        ],
+        "untimedIoPreparationCorrected": true
+      },
+      "Native8": {
+        "ratio": 0.9607305032066656,
+        "lower": 0.947733743483161,
+        "upper": 0.9718956421685678,
+        "status": "pass",
+        "managedUs": 6184.820921223958,
+        "nativeUs": 6437.623142578125,
+        "allocatedBytes": 240400,
+        "caseId": "Native8",
+        "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+        "operationsPerSubject": 128,
+        "actuals": 12,
+        "segmentsPerActual": 16,
+        "operationsPerSegment": 8,
+        "originalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allPairsRetained": true,
+        "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "nativeWorkerSha256": "052db6462007e7ed146725018f49c1e8cc8d7182dce356913163d5d9458c33d9",
+        "validationSha256": "e27028cde44a9573b14983184b7a8df67024892637bd567d8e91175ffb4a8e17",
+        "nativeGroupMeansUs": [
+          6437.623142578125,
+          6446.920391927083,
+          6447.186089192708
+        ],
+        "pairedRatioConfidence": [
+          0.9570718665590288,
+          0.9616222451992589
+        ],
+        "untimedIoPreparationCorrected": true
+      }
+    }
   }
 }

@@ -3291,14 +3291,40 @@ costs. The complete final-package refresh remains outstanding."""
         assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
         assert c['outputSha256'] == reader_current['cases'][name]['metadata']['managedOutputSha256']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    opaque_live = vp8_package['cases']['OpaqueCancelable8']
-    vp8_stream = vp8_package['cases']['StreamNative8']
+    vp8_partitioned = vp8_package['partitioned']
+    assert vp8_partitioned['producers'] == vp8_package['producers']
+    assert vp8_partitioned['raw']['mirrored'] and vp8_partitioned['raw']['allMembersVerified']
+    assert set(vp8_partitioned['cases']) == {'OpaqueCancelable8', 'StreamNative8', 'Native8'}
+    for name, c in vp8_partitioned['cases'].items():
+        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['operationsPerSubject'] == c['segmentsPerActual'] * c['operationsPerSegment'] == 128
+        assert c['allPairsRetained'] and c['originalGatesPassed'] and c['quietGuardsPassed']
+        assert all(c[k] == vp8_package['cases'][name][k] for k in ('inputSha256', 'outputSha256', 'nativeWorkerSha256'))
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    opaque_live = vp8_partitioned['cases']['OpaqueCancelable8']
+    vp8_stream = vp8_partitioned['cases']['StreamNative8']
     vp8_status = {'pass': 'parity confirmed', 'gap': 'gap', 'uncertain': 'confidence open'}
     prefix = '| WebP VP8 + alpha, fresh seekable Stream'
     old, = (line for line in codecs.splitlines() if line.startswith(prefix))
     codecs = codecs.replace(old, f'{prefix} ({vp8_status[vp8_stream["status"]]}) † | {vp8_stream["managedUs"]:,.2f} | '
                             f'{vp8_stream["nativeUs"]:,.2f} | {vp8_stream["ratio"]:.3f} / {vp8_stream["upper"]:.6f} | '
                             f'{vp8_stream["allocatedBytes"]:,} | — |')
+    vp8l_package = json.loads((ROOT / 'benchmarks/vp8l-decode-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert vp8l_package['producers'] == jpeg_pending['producers']
+    assert vp8l_package['raw']['mirrored'] and vp8l_package['raw']['allMembersVerified']
+    assert len(vp8l_package['cases']) == 5
+    for c in vp8l_package['cases'].values():
+        assert c['librarySha256'] == jpeg_pending['producers']['linuxSha256']
+        assert c['actuals'] == 12 and c['originalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained']
+        assert c['status'] == 'pass' and c['upper'] <= 1 and c['outputSha256'] == c['referenceOutputSha256']
+    for name, label in (('WebpResident', 'VP8L RGBA8, resident decode'),
+                        ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode'),
+                        ('IndexedNative16Colors8', 'VP8L palette16 RGBA8, resident decode')):
+        c = vp8l_package['cases'][name]
+        heading = f'| {label} † |'
+        old, = (line for line in codecs.splitlines() if line.startswith(heading))
+        codecs = codecs.replace(old, f'{heading} {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                                f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
     bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
     bilinear_word_case = bilinear_word_current['case']
     assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
@@ -3696,7 +3722,12 @@ stream captures remain linked beside their current confirmations.
 the fresh stream at **{vp8_stream['managedUs']:,.2f} / FFmpeg {vp8_stream['nativeUs']:,.2f} µs**,
 upper **{vp8_stream['upper']:.6f}**, **{vp8_stream['allocatedBytes']:,} B/op**
 ({vp8_status[vp8_stream['status']]}). The complete operation includes fresh stream
-acquisition, decoding, independent output ownership and disposal.
+acquisition, decoding, independent output ownership and disposal. The partitioned
+schedule also confirms the transparent resident case.
+
+All five affected [VP8L decode comparisons](../benchmarks/VP8L-DECODE-CURRENT-PACKAGE.md)
+pass on the same package. The resident, fresh-stream and indexed rows show their
+current costs including complete public decoding and owned outputs.
 
 [Opaque lossless WebP](../benchmarks/WEBP-OPAQUE-CURRENT-CONFIDENCE.md) now passes:
 **67.959 / libwebp 69.457 ms, upper .985**, **4,822,760 B/op**, exact **121,896 B**.
