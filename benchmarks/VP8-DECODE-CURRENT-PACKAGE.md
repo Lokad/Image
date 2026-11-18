@@ -200,3 +200,40 @@ The first preflight inherited an integer-divide assertion from an older
 geometry trial. The assertion stopped before sampling. The corrected
 runner uses the same built DLL and retains the original preflight evidence.
 [Trial evidence](prepared-range-and-vp8-normalization-evidence.json)
+
+## Fixed-probability coefficient signs
+
+The private reader uses the probability-128 split for every nonzero
+coefficient sign. After the original normalization, the left range is
+`ceil(range / 2)`. The right range differs by one only for odd ranges.
+The sign mask selects the new interval and applies the sign before the
+unchanged dequantization. The existing live cancellation check runs before the
+sign decision. Fallbacks, packet traversal, publication and ownership stay
+exact. No new storage is required.
+
+The first variant applies the sign change to both wide readers. In
+independent managed pairs, live-token decode saves **142.35 µs (2.77%)**,
+interval **0.965964–0.978772**. Ordinary opaque saves 11.94 µs, interval
+**0.992979–1.002343**. The live-only follow-up restores the ordinary reader
+and saves **121.00 µs (2.35%)** in independent pairs, interval
+**0.968896–0.984242**. All allocate 230,880 B/op.
+
+| Private DLL / complete FFmpeg comparison | Managed / FFmpeg µs | Conservative upper | Status |
+| --- | ---: | ---: | --- |
+| Both readers, live token | 4,590.79 / 4,812.23 | 0.961712 | Pass |
+| Both readers, ordinary | 4,776.78 / 5,109.27 | 1.003126 | Uncertain |
+| Live reader only, live token | 4,820.17 / 5,000.11 | 1.058311 | Uncertain |
+
+The live-only paired reference interval is **0.960461–0.965690**. The
+all-actual mean confidence against the native bracket controls the result.
+The original thresholds stay in force. Both variants remain private.
+Neither result establishes parity for the unchanged package. Do not repeat
+the same timing to seek a narrower interval.
+
+The proof covers 73,536 normalized interval/code/suffix combinations
+and 4,228 signed magnitudes. Windows passes 52 focused tests in normal and
+scalar modes per variant. The quiet VM retains exact pixel, source,
+cancellation and independent-owner gates and all actuals for both frozen
+drivers. The narrowed run's archive filename collided after sampling.
+Recovery verifies and archives the completed records without repeating timing.
+[Evidence and mirrored archives](vp8-coefficient-sign-trials-evidence.json)
