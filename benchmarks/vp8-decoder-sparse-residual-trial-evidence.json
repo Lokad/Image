@@ -1,0 +1,129 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1341",
+  "caseId": "OpaqueCancelable8",
+  "casesAdded": 0,
+  "productionChanged": false,
+  "assessment": "The short screen establishes no useful speed gain",
+  "coreBuilds": 1,
+  "actorBuilds": 0,
+  "baselinePackageSha256": "641ef7b9ae40f93b5b62029134d8ebe718568c10cc7e56f6bda1050a347b1ed4",
+  "baselineDllSha256": "85c00a70a1c5f0426fcb23cebe7e70206283ea2461376d8d0bb8ceb632312269",
+  "candidateDllSha256": "571c1193833dbb6ab0e137a3b70a05cbefb3f72a5abe8165c2cf9a6eb10c7703",
+  "sourceCommit": "b9bc449175a5f65469a7d46ac1ae95b004943f14",
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": {
+      "originalSha256": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+      "candidateSha256": "b2aea47a9d150776022efb7c6d796d1c75dbaf8c7dfb58410d8047690871e816"
+    },
+    "src/Lokad.Image/Internal/Vp8Decoder.cs": {
+      "originalSha256": "31a93bd950a84c12fc3458b0076c631ea6a055b305916151166f72258a2e5f39",
+      "candidateSha256": "5d73ba226d66a54071ae05e5b9444bd6129daacebac77b737336c972d99f35be"
+    }
+  },
+  "operationsPerSubject": 16,
+  "pairs": 3,
+  "addedOwnedCapacityBytes": 0,
+  "addedRetainedCapacityBytes": 0,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "windowsFocused": {
+    "normal": {
+      "passed": 39,
+      "sha256": "430d127b750c60e2783b395a848857a935519757ada97500c2e29688e4bc1326"
+    },
+    "scalar": {
+      "passed": 39,
+      "sha256": "d0c0e0dcfbd83135b5a225cd0e91d08ff18aed50531db7c39293c93129904a2c"
+    }
+  },
+  "allSignedDcCases": 65536,
+  "metrics": {
+    "baseline": {
+      "mean": 4779.608125,
+      "lower": 4228.418808883616,
+      "upper": 5330.797441116383
+    },
+    "candidate": {
+      "mean": 4800.495833333333,
+      "lower": 4491.62521603685,
+      "upper": 5109.366450629816
+    },
+    "candidateToBaselineInterval": [
+      0.9498692583211942,
+      1.062017712434999
+    ],
+    "candidateToBaselineRatio": 1.0043793988501575,
+    "allocations": {
+      "baseline": [
+        230880.0
+      ],
+      "candidate": [
+        230880.0
+      ]
+    },
+    "nativeGroupMeansUs": [
+      4795.524229166666,
+      4809.393,
+      4799.5673541666665
+    ]
+  },
+  "raw": {
+    "file": "vp8-decoder-sparse-residual-OpaqueCancelable8-3.tar.xz",
+    "sha256": "a709f9237c457c948d59324ce751f3ba748c9b822c0025f54b3d1f5fbba26bc7",
+    "bytes": 412996,
+    "members": 28,
+    "allMembersVerified": true,
+    "memberHashes": {
+      "tmp/frp1334/actor/Program.cs": "f05817c6c85e2d18b4cc0453177f683f06b6ed9d9461ce9719ab2eb814f26fb5",
+      "tmp/frp1285-vp8-preparation.json": "75936bdbd1f1e21d8275779c34a8b33925f33e79460389b65513140504b7a495",
+      "tmp/frp1341/screen-vm.py": "8585e0cb4de996c945c0f65b15e3b968d91bef9bba307af70787811afff3e569",
+      "tmp/frp1341/OpaqueCancelable8-3/after.json": "61f41a89a5676f65aaf48c1c7978f08fbedd947f11bb04235136a561781e20f3",
+      "tmp/frp1334/actor/Vp8Actor.dll": "c93d845418870eea33a95fc04417e1ed3a099e72415011d0a92e643029677fc3",
+      "tmp/frp1341/candidate-sha.txt": "960b667a55a7aa6bfde7d21aa9d2ad73d97554ee98ed0aafd73edc4c2b25d441",
+      "tmp/frp1341/OpaqueCancelable8-3/before.json": "0b64fd863edb5f459dc69d7527fa654fa875bb9c81bb0ea22669defed9d2a1da",
+      "tmp/frp1341/OpaqueCancelable8-3/division-counts.json": "45a51169c18a4b0e1f277f4c8ed435b2c51657a9d4402b44f758684f0fd2baca",
+      "tmp/frp1341/OpaqueCancelable8-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/frp1341/OpaqueCancelable8-3/wire.jsonl": "5c4b1301443397867d8656d363eee27d7b60541051338d10dab46d1382ed493c",
+      "tmp/frp1341/OpaqueCancelable8-3/preparation.json": "f095fd12d077e550d472833d869c359ee93c31c7c79fb8e8313f89f2154cca17",
+      "tmp/frp1341/OpaqueCancelable8-3/candidate-jit.txt": "7cd5e590b0f6a4d59e27f66aaebe25860d271ab166d6065c897054c4a0861539",
+      "tmp/frp1341/OpaqueCancelable8-3/baseline-jit-wire.txt": "306db4d8138d8e01ef388b442b7b8d50a79128dc8fd188c41ef22a6adeabd788",
+      "tmp/frp1341/OpaqueCancelable8-3/statistics.json": "0d146f9b966085d51c93c72b6c0aaf16f9833e4e3a09417794040d86b17a9d68",
+      "tmp/frp1341/OpaqueCancelable8-3/candidate-validation.json": "4a98d0449b762b996af4d3c62cc13cbe6eaaf93ec682b6eeed44c6cd9e2287ea",
+      "tmp/frp1334/actor/Vp8Actor.csproj": "524eb1cfc937078a0340f7e90a64f50497946fe6618dc29e4b9695e18c28e74d",
+      "tmp/frp1341/inputs.json": "ed3a700c03038601f1a45c73372ce583a9cd1d8afe229dcfc56822293309144d",
+      "tmp/frp1341/OpaqueCancelable8-3/observations.json": "4a229da4557cfde6e5d9785fbc718f0b01e023524e16d5da3d2c5847e4494e0c",
+      "tmp/frp1285-OpaqueCancelable8-receipt.json": "d7d6080ea98ba65f9b4d0e89576032b1b7a0788baf040ebb9523988673924c90",
+      "tmp/frp1341-build.log": "fb76e159506a28bd98127f81270dcd879d221e26576876be97957134d6c21c2f",
+      "tmp/frp1341/OpaqueCancelable8-3/candidate-jit-wire.txt": "84750f1da80082fc7dcc372d89a4faddbe3c5f2a6c3c5de34d03fa9e28700321",
+      "tmp/frp1341/OpaqueCancelable8-3/baseline-validation.json": "a392be8433e3ffb685327ada7342b2c56ae5818b4483d2e0e56e869af5430b1a",
+      "tmp/frp1341/src/Lokad.Image/Internal/Vp8Decoder.cs": "5d73ba226d66a54071ae05e5b9444bd6129daacebac77b737336c972d99f35be",
+      "tmp/frp1341/OpaqueCancelable8-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/frp1341/src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "b2aea47a9d150776022efb7c6d796d1c75dbaf8c7dfb58410d8047690871e816",
+      "tmp/frp1341/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "571c1193833dbb6ab0e137a3b70a05cbefb3f72a5abe8165c2cf9a6eb10c7703",
+      "tmp/frp1341-prepare.py": "743ab5bfe68844311bb13a7a39ce6107a51a348a85b9ba3f6d16632158fe7da0",
+      "tmp/frp1341/OpaqueCancelable8-3/baseline-jit.txt": "78736ecd8746638263202aeb9e0048bc3cdc4081cf2ff0be563953e9976b9bb8"
+    },
+    "mirrored": true
+  },
+  "focusedRaw": {
+    "file": "sparse-vp8-and-word-rounding-focused-checks.tar.xz",
+    "sha256": "173fd90195c8c28d28fd5a9b3fa9453609a49e739ccb306a9120959e78b51247",
+    "bytes": 5380,
+    "members": 10,
+    "allMembersVerified": true,
+    "memberHashes": {
+      "tmp/frp1341-windows-normal.log": "430d127b750c60e2783b395a848857a935519757ada97500c2e29688e4bc1326",
+      "tmp/frp1341-windows-scalar.log": "d0c0e0dcfbd83135b5a225cd0e91d08ff18aed50531db7c39293c93129904a2c",
+      "tmp/frp1341/tests/Lokad.Image.Tests/Vp8DcResidualTests.cs": "8edff4086088bd328f679cae378abce25b2390df14f6c81c09141f25520eea71",
+      "tmp/frp1342-windows-normal.log": "be8663c73b19ee10cfbf9fac5a085c30bd9b10be849bdebb1acbd050b93b9ded",
+      "tmp/frp1342-linux-normal.log": "b8812669c2314b2a6b23f45a42c9b8025206689addf256cccb23a912651e23d0",
+      "tmp/frp1342/tests/Lokad.Image.Tests/CrossWordClippedRoundingTests.cs": "82fcaec4ff0b4d01dcb06b8b43668185dae09118d5bc9a579c6ba18dbeef4c41",
+      "tmp/frp1342-score.py": "63e091b91ea742c5a0cb098295a3e82f7ca8f6dbc7b0919c4ff1f122bb0f973d",
+      "tmp/frp1343-score.py": "c437b95ee781fe985d1e14ba1253e55ba37c1d93f2c448570e42d676feaaba27",
+      "tmp/frp1342-standalone-statistics.json": "94df87a48ff1780eadee12622a55eb1bdc211cd27f02f1cd44307e34a095333e",
+      "tmp/frp1343-standalone-statistics.json": "bb37f7b0435ff8930acbe336395f11f2cba5cdae2b5e6714177d613b1e0ee82f"
+    },
+    "mirrored": true
+  }
+}

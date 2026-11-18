@@ -1,0 +1,427 @@
+{
+  "project": "Lokad.Image",
+  "case": "TightCross16",
+  "sourceCommit": "b9bc449175a5f65469a7d46ac1ae95b004943f14",
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "stageBuilds": 2,
+  "actorBuilds": 0,
+  "baselinePackageSha256": "641ef7b9ae40f93b5b62029134d8ebe718568c10cc7e56f6bda1050a347b1ed4",
+  "baselineDllSha256": "85c00a70a1c5f0426fcb23cebe7e70206283ea2461376d8d0bb8ceb632312269",
+  "stages": {
+    "frp1342": {
+      "sources": {
+        "src/Lokad.Image/Internal/BicubicMath.cs": {
+          "originalSha256": "6b08a12de87f1f3317ffc34369223f7436573e56107544282ca455d241521c05",
+          "candidateSha256": "aed8399a6c318b711d4a2738d77253e71228bb4f0e166359b1d6d620363b269e"
+        },
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": {
+          "originalSha256": "e200acf39dc3505c74555c7da644590ec6cd6687a438460864a236c4ab58f645",
+          "candidateSha256": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92"
+        }
+      },
+      "candidateDllSha256": "04c4dce4a399e26ebaadd7c42d3e16219e6898d5fbed73df044da900d1aa7daf",
+      "paired": {
+        "screen": {
+          "statisticalUnits": 3,
+          "operations": 64,
+          "metrics": {
+            "baseline": {
+              "mean": 889.7863072916667,
+              "lower": 818.6474719349968,
+              "upper": 960.9251426483366
+            },
+            "candidate": {
+              "mean": 873.731046875,
+              "lower": 832.261934192555,
+              "upper": 915.2001595574449
+            },
+            "candidateToBaselineInterval": [
+              0.9137453338739071,
+              1.055267416570941
+            ],
+            "candidateToBaselineRatio": 0.9819601203108351,
+            "allocations": {
+              "baseline": [
+                112.0
+              ],
+              "candidate": [
+                112.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              883.1833541666666,
+              889.2295260416666,
+              876.336875
+            ]
+          },
+          "raw": {
+            "file": "bicubic-cross16-clipped-rounding-screen.tar.xz",
+            "sha256": "19090506f8836cd1682e6f6ecbdb4f3fe3be9d5c398626e622d8b28d6f78ed5e",
+            "bytes": 481616,
+            "members": 23,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1282-TightCross16-receipt.json": "dc8a191afbc8c61da3420839ce435230b06a8e0c7d3fd952206cca422d33c8c0",
+              "tmp/frp1342/screen/preparation.json": "deb59c13d5d98d35c648c10c3c76abc3590304f3305494ea6c2470ee253d72e0",
+              "tmp/frp1342/screen/before.json": "c8ad15f409c14c7739aec3c4ae33d411ea62c157a0e3d77e51f036e69f162ac5",
+              "tmp/frp1342/inputs.json": "be08f165394ce48235171203cb68abe0abf9b0dd55320b823b58af49d3a0737b",
+              "tmp/frp1342-prepare.py": "c50558a7ce260dfd50acd335ab314f430db0b77bd58821706838453592d9d63f",
+              "tmp/frp1342/src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92",
+              "tmp/frp1342/screen/wire.jsonl": "d646020c0926e4e4c1cd873dfecbd0084452256b12cdea97b95382e301362886",
+              "tmp/frp1335/actor/BicubicActor.dll": "17467057b32deb9a0399740b5b6d1c9bbb9a4740fad4ea098f2b1355ddf914cd",
+              "tmp/frp1342/screen/observations.json": "6a4a01be07615da64c177c64769e6071050614f4f30c538a9ab68f284fc36569",
+              "tmp/frp1342/src/Lokad.Image/Internal/BicubicMath.cs": "aed8399a6c318b711d4a2738d77253e71228bb4f0e166359b1d6d620363b269e",
+              "tmp/wir911-bicubic-preparation.json": "22175319265ac902280676f4e44b9b350563f8c88117c37cf77304661bc0ef0c",
+              "tmp/frp1342/candidate-sha.txt": "77c339bf8e4ba9e3f7a92d7a04630fcd6edc390828c065e1db2bc191acc992a6",
+              "tmp/frp1342/screen/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1342-build.log": "e4a5255dc1aa08aa2dd7a72fd68e523b4619472fcc2fbe6db14ff07b24872dae",
+              "tmp/frp1342/screen/after.json": "5c5339c67c6a11d52bde4781260749160798d6fe57ce845847f2369dd919bf41",
+              "tmp/frp1335/actor/BicubicActor.csproj": "1ef79bf6b5d284c30575ae675113dfab401ac51d08e67437fcf1120140e4acd3",
+              "tmp/frp1342/screen/statistics.json": "7b9de46d2367f64d191a064e0bb9e40ecda9d41b469916753b4635f25ccabd05",
+              "tmp/frp1342/screen/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1342/screen/candidate-validation.json": "0d468a6512eb22e08068902fe862c20719122625aa411a5c5887a73069fc0c9b",
+              "tmp/frp1342/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "04c4dce4a399e26ebaadd7c42d3e16219e6898d5fbed73df044da900d1aa7daf",
+              "tmp/frp1335/actor/Program.cs": "9e4ff75f2c9289a018addab347ff405838336d7cd6550384fc3dee1a3bdf9b36",
+              "tmp/frp1342/screen-vm.py": "67a1de8fa902b073d264ee4fee636dcd756a8543cd1376bdf6e9301798a04265",
+              "tmp/frp1342/screen/baseline-validation.json": "91b66e30bb7f7f51f9ed17ef37a8de898f96fc234931575879aa5d20c4cb15db"
+            },
+            "mirrored": true
+          }
+        },
+        "confirm": {
+          "statisticalUnits": 12,
+          "operations": 64,
+          "metrics": {
+            "baseline": {
+              "mean": 822.9106627604167,
+              "lower": 821.4825028530548,
+              "upper": 824.3388226677786
+            },
+            "candidate": {
+              "mean": 808.28071875,
+              "lower": 806.8766575789678,
+              "upper": 809.6847799210323
+            },
+            "candidateToBaselineInterval": [
+              0.9794649946949538,
+              0.9849861803689173
+            ],
+            "candidateToBaselineRatio": 0.9822217081339856,
+            "allocations": {
+              "baseline": [
+                112.0
+              ],
+              "candidate": [
+                112.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              826.1654075520834,
+              818.348765625,
+              819.8165299479167
+            ]
+          },
+          "raw": {
+            "file": "bicubic-cross16-clipped-rounding-confirm.tar.xz",
+            "sha256": "5675c3ea4222d748b8dad7d197fda50c4656d3af3cac0b21e90f3519d5469363",
+            "bytes": 482976,
+            "members": 23,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1342/confirm/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1342/confirm/before.json": "786c2857ada843069e2555e87f1b03676c4b65bcbd8080ab6b1598d3e5a06d55",
+              "tmp/frp1342-build.log": "e4a5255dc1aa08aa2dd7a72fd68e523b4619472fcc2fbe6db14ff07b24872dae",
+              "tmp/frp1342/confirm/candidate-validation.json": "f1fd9bcde7c0ad1225ae7e2ef8ec942ee1718beaadcacca0ce601902a98e7d4d",
+              "tmp/frp1342/screen-vm.py": "67a1de8fa902b073d264ee4fee636dcd756a8543cd1376bdf6e9301798a04265",
+              "tmp/frp1335/actor/BicubicActor.dll": "17467057b32deb9a0399740b5b6d1c9bbb9a4740fad4ea098f2b1355ddf914cd",
+              "tmp/wir911-bicubic-preparation.json": "22175319265ac902280676f4e44b9b350563f8c88117c37cf77304661bc0ef0c",
+              "tmp/frp1342-prepare.py": "c50558a7ce260dfd50acd335ab314f430db0b77bd58821706838453592d9d63f",
+              "tmp/frp1282-TightCross16-receipt.json": "dc8a191afbc8c61da3420839ce435230b06a8e0c7d3fd952206cca422d33c8c0",
+              "tmp/frp1342/confirm/after.json": "f0557fcbe0de1840bf9bc00a177ec26c6a2e6395009637ca53f4097dbbb38670",
+              "tmp/frp1342/confirm/baseline-validation.json": "45d4c3e507e14c2d833a197bfdadb40fd39268dbe90b7e884e9348e189f07763",
+              "tmp/frp1335/actor/BicubicActor.csproj": "1ef79bf6b5d284c30575ae675113dfab401ac51d08e67437fcf1120140e4acd3",
+              "tmp/frp1342/confirm/wire.jsonl": "5111216ea3206aa068e9de09cb424f0a9480dfcb6e082c4bc21e8d54674374b9",
+              "tmp/frp1342/candidate-sha.txt": "77c339bf8e4ba9e3f7a92d7a04630fcd6edc390828c065e1db2bc191acc992a6",
+              "tmp/frp1342/src/Lokad.Image/Internal/BicubicMath.cs": "aed8399a6c318b711d4a2738d77253e71228bb4f0e166359b1d6d620363b269e",
+              "tmp/frp1342/inputs.json": "be08f165394ce48235171203cb68abe0abf9b0dd55320b823b58af49d3a0737b",
+              "tmp/frp1342/confirm/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1342/confirm/preparation.json": "1c407a30b3ca37902ecf2fbb8e41cc44810ef9af1f1ff3832daf926df5bdaaad",
+              "tmp/frp1342/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "04c4dce4a399e26ebaadd7c42d3e16219e6898d5fbed73df044da900d1aa7daf",
+              "tmp/frp1342/confirm/observations.json": "d035bb4a8b48b0781d4af7f1c9803493052dc61da4b50a7b36cf433fffa64363",
+              "tmp/frp1335/actor/Program.cs": "9e4ff75f2c9289a018addab347ff405838336d7cd6550384fc3dee1a3bdf9b36",
+              "tmp/frp1342/src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92",
+              "tmp/frp1342/confirm/statistics.json": "bcee6a499135f11fa4b59925cf4db08691f08cd3c214e34121c65774f7e82fde"
+            },
+            "mirrored": true
+          }
+        }
+      },
+      "standalone": {
+        "librarySha256": "04c4dce4a399e26ebaadd7c42d3e16219e6898d5fbed73df044da900d1aa7daf",
+        "managedUs": 811.0413959517045,
+        "nativeUs": 829.1001901041666,
+        "ratio": 0.9782188035077001,
+        "lower": 0.9461554274500189,
+        "upper": 0.9953899740085735,
+        "status": "pass",
+        "allocatedBytes": 113,
+        "actuals": 12,
+        "actualOperationCounts": [
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256
+        ],
+        "quietGuardsPassed": true,
+        "allOriginalGatesPassed": true,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "managedOutputSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+        "nativeOutputSha256": "fb741bb37e310921a0c588ab79c72ec5c6e17ac156c11a686a95eaf8e16afd70",
+        "nativeWorkerSha256": "ff991b1819846cfe07cceb7954f6a16a67e7c44edb0b6e0f13f5ad2c9dd078cd",
+        "nativeGroupMeansUs": [
+          836.5640651041666,
+          829.1001901041666
+        ],
+        "raw": {
+          "file": "bicubic-cross16-clipped-rounding-standalone.tar.xz",
+          "bytes": 401348,
+          "sha256": "2812db1218abc188133bcc08444cd12e3a88646cb693672d4200127eb5fe7a99",
+          "members": 15,
+          "allMembersVerified": true,
+          "memberHashes": {
+            "tmp/frp1342/standalone/run.log": "dd5566a655c49642552d35186f08b91fdea0f9eebb53f623ffb9f1125d0972d1",
+            "tmp/frp1342/candidate-sha.txt": "77c339bf8e4ba9e3f7a92d7a04630fcd6edc390828c065e1db2bc191acc992a6",
+            "tmp/frp1342/standalone/before.json": "cd19fe0a3d2680240ab7b8e2c7306d8696c631be8665946f74a981fe33911755",
+            "tmp/frp1342/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "04c4dce4a399e26ebaadd7c42d3e16219e6898d5fbed73df044da900d1aa7daf",
+            "tmp/frp1342/standalone/observations.json": "b6048bd612790063a84a734f5fdb2fab73929c0c76d2ca7ad3a4c9fb386f435d",
+            "tmp/frp1282-TightCross16-receipt.json": "dc8a191afbc8c61da3420839ce435230b06a8e0c7d3fd952206cca422d33c8c0",
+            "tmp/frp1342/standalone-vm.py": "450b63aa95c13fbf2eca243e773f5d6426281b338fac3c2af50cccb4df41f934",
+            "tmp/frp1342/standalone/preparation.json": "b3b9f1b60cbe30d667229b05a173a9ac383da268d45208d2b5a0ce74c8e0d5e0",
+            "external/warm-reference/bicubic-cross16-identity.json": "5b3268ca25f06a552fa7c3b28159e4a13d847e54fff89d01259f84e791b10c3f",
+            "tmp/frp1342/src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92",
+            "tmp/frp1342/inputs.json": "be08f165394ce48235171203cb68abe0abf9b0dd55320b823b58af49d3a0737b",
+            "tmp/frp1342/standalone/validation.json": "ce8c0fd9e7b0e78975751bc3bdcab9b905af1e27c64f3fe0be7f4b85cad9bff0",
+            "tmp/frp1282-Natural.dll": "c061ecd593b3ba0d7024d945368e8e14a0cc3c430763e6b4c1b9e053248dcad6",
+            "tmp/frp1342/src/Lokad.Image/Internal/BicubicMath.cs": "aed8399a6c318b711d4a2738d77253e71228bb4f0e166359b1d6d620363b269e",
+            "tmp/frp1342/standalone/after.json": "4f6ef83223981a607031da37e433cdd5f78095a8c0c126f379a6f62b90ff026d"
+          },
+          "mirrored": true
+        },
+        "parsedStatisticsSha256": "94df87a48ff1780eadee12622a55eb1bdc211cd27f02f1cd44307e34a095333e"
+      }
+    },
+    "frp1343": {
+      "sources": {
+        "src/Lokad.Image/Internal/BicubicMath.cs": {
+          "originalSha256": "6b08a12de87f1f3317ffc34369223f7436573e56107544282ca455d241521c05",
+          "candidateSha256": "2b1cd5f840addb39f112cf6f8f6c21e9908737632d9546ef9a3649683325f137"
+        },
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": {
+          "originalSha256": "e200acf39dc3505c74555c7da644590ec6cd6687a438460864a236c4ab58f645",
+          "candidateSha256": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92"
+        }
+      },
+      "candidateDllSha256": "5d50004cd30d301df96e2971b8f1d1bc01e4640c706fdecfa1c6fd30442d0bca",
+      "paired": {
+        "confirm": {
+          "statisticalUnits": 12,
+          "operations": 64,
+          "metrics": {
+            "baseline": {
+              "mean": 890.1125846354166,
+              "lower": 885.5864797829059,
+              "upper": 894.6386894879273
+            },
+            "candidate": {
+              "mean": 885.4959895833333,
+              "lower": 876.5234510721004,
+              "upper": 894.4685280945662
+            },
+            "candidateToBaselineInterval": [
+              0.983994327951691,
+              1.005709068081424
+            ],
+            "candidateToBaselineRatio": 0.9947924499923098,
+            "allocations": {
+              "baseline": [
+                112.0
+              ],
+              "candidate": [
+                112.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              894.1329739583333,
+              899.8743541666666,
+              895.2513541666667
+            ]
+          },
+          "raw": {
+            "file": "bicubic-cross16-clipped-rounding-release-confirm.tar.xz",
+            "sha256": "6f93852aad771aa2eada9cf84dd59be7167a4f7ea0e1dc5e554e5406b474816b",
+            "bytes": 483612,
+            "members": 23,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1335/actor/BicubicActor.dll": "17467057b32deb9a0399740b5b6d1c9bbb9a4740fad4ea098f2b1355ddf914cd",
+              "tmp/frp1343-prepare.py": "dd66ade9ac88fa580f9b4d830d659226020db869ed80e648430cc0255d83d4e2",
+              "tmp/frp1343/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "5d50004cd30d301df96e2971b8f1d1bc01e4640c706fdecfa1c6fd30442d0bca",
+              "tmp/frp1343/confirm/statistics.json": "2eda56dfec59f2292763c9c953ffa1a95787e353a49df4b49f664deb94246b06",
+              "tmp/frp1282-TightCross16-receipt.json": "dc8a191afbc8c61da3420839ce435230b06a8e0c7d3fd952206cca422d33c8c0",
+              "tmp/frp1343/src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92",
+              "tmp/frp1343/confirm/after.json": "7d1ee9def38728c48b6ed7e850654026d225f3e04508de6ef8a6fbb2323ba285",
+              "tmp/frp1343/confirm/baseline-validation.json": "63090b18b635d619b9f1f93b839b706ca8e6c4f547a030fa4bd5ab07edf98e59",
+              "tmp/frp1343/confirm/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1343/inputs.json": "5f1f87611e4bef089a50014104f0d1871f9f121ab8b25aabf7347ecd8bb0619c",
+              "tmp/frp1343/confirm/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1343/confirm/wire.jsonl": "f075f26b2d52d9ee1f11fc5d6b04b27f2c6d24929376dad85583ae6494057600",
+              "tmp/frp1335/actor/Program.cs": "9e4ff75f2c9289a018addab347ff405838336d7cd6550384fc3dee1a3bdf9b36",
+              "tmp/frp1343/src/Lokad.Image/Internal/BicubicMath.cs": "2b1cd5f840addb39f112cf6f8f6c21e9908737632d9546ef9a3649683325f137",
+              "tmp/wir911-bicubic-preparation.json": "22175319265ac902280676f4e44b9b350563f8c88117c37cf77304661bc0ef0c",
+              "tmp/frp1343/screen-vm.py": "fee15794843bc14bbba0640c32f5ac36c256e0dea5e8976a3733f6753a985ea0",
+              "tmp/frp1343/confirm/before.json": "0f62a146ec0136119e6723dc6bbde8c8418a47bf3b24d1f813c3615eb8fde43a",
+              "tmp/frp1343/candidate-sha.txt": "b3cad2d040b769a6f0700f1fa95f0252aabc0624ad81094ac75f32fe6d92fcb6",
+              "tmp/frp1343-build.log": "7081f48fb073af969e36d2658b9d8bfd5df0ef887e5176af9c514cda9f36acbe",
+              "tmp/frp1343/confirm/observations.json": "5f0c43900cc3fc2e96a524becde7b9152a437a74a2de200b7280066f53cead8b",
+              "tmp/frp1343/confirm/preparation.json": "bf696e550295be51ef1c55597fb11e02cf21a947635ba2235712686299106ff6",
+              "tmp/frp1335/actor/BicubicActor.csproj": "1ef79bf6b5d284c30575ae675113dfab401ac51d08e67437fcf1120140e4acd3",
+              "tmp/frp1343/confirm/candidate-validation.json": "3458e8dd5d36ea43f5ccd579f29bac7b7f5097af8f484c97c4c9bf98d0398ab1"
+            },
+            "mirrored": true
+          }
+        }
+      },
+      "standalone": {
+        "librarySha256": "5d50004cd30d301df96e2971b8f1d1bc01e4640c706fdecfa1c6fd30442d0bca",
+        "managedUs": 883.7082458333332,
+        "nativeUs": 891.9640911458333,
+        "ratio": 0.9907441954284342,
+        "lower": 0.972929815462038,
+        "upper": 1.0089994149525447,
+        "status": "uncertain",
+        "allocatedBytes": 114,
+        "actuals": 12,
+        "actualOperationCounts": [
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240
+        ],
+        "quietGuardsPassed": true,
+        "allOriginalGatesPassed": true,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "managedOutputSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+        "nativeOutputSha256": "fb741bb37e310921a0c588ab79c72ec5c6e17ac156c11a686a95eaf8e16afd70",
+        "nativeWorkerSha256": "ff991b1819846cfe07cceb7954f6a16a67e7c44edb0b6e0f13f5ad2c9dd078cd",
+        "nativeGroupMeansUs": [
+          891.9640911458333,
+          896.4478020833334
+        ],
+        "raw": {
+          "file": "bicubic-cross16-clipped-rounding-release.tar.xz",
+          "bytes": 404164,
+          "sha256": "0d7bb1498fa1fd8dc261d23b78b261227ce87bc283c0ab305bfdd370e503e40a",
+          "members": 23,
+          "allMembersVerified": true,
+          "memberHashes": {
+            "tmp/frp1343/standalone-reconciled/after.json": "073e0e008caad0faec803383ebf57e2113a93ecba750a82d0fef5d8daaecc386",
+            "tmp/frp1343/standalone-reconciled/validation.json": "a84047f9b332bd76f46b3022bb19338cbea400016bad060d776b33247b56f5ec",
+            "tmp/frp1343/standalone-reconciled-vm.py": "c3c2e2d27d91243b9a105132f86440e697b900dceca53a2fdcf0bf1a8413043d",
+            "tmp/frp1343/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "5d50004cd30d301df96e2971b8f1d1bc01e4640c706fdecfa1c6fd30442d0bca",
+            "tmp/frp1343/inputs.json": "5f1f87611e4bef089a50014104f0d1871f9f121ab8b25aabf7347ecd8bb0619c",
+            "tmp/frp1343/standalone-reconciled/run.log": "314a42534ca4e703d18941221c645d9555f759bff46d720caef80fb91347d4db",
+            "tmp/frp1343/standalone/run.log": "b642736dfdd0b5cefa12aac0bc09bccefa9a5f9666a14d9ebbca394cfc33b21a",
+            "tmp/frp1343/src/Lokad.Image/Internal/BicubicMath.cs": "2b1cd5f840addb39f112cf6f8f6c21e9908737632d9546ef9a3649683325f137",
+            "tmp/frp1282-TightCross16-receipt.json": "dc8a191afbc8c61da3420839ce435230b06a8e0c7d3fd952206cca422d33c8c0",
+            "tmp/frp1343-prepare.py": "dd66ade9ac88fa580f9b4d830d659226020db869ed80e648430cc0255d83d4e2",
+            "external/warm-reference/bicubic-cross16-identity.json": "5b3268ca25f06a552fa7c3b28159e4a13d847e54fff89d01259f84e791b10c3f",
+            "tmp/frp1343/standalone-reconciled/observations.json": "e1873727505164da00778d90dd8bc2464b9a87ea8e55ab70ad9d41e8416a31b8",
+            "tmp/frp1343/src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "903f3c3f3251317cdffbd4ecf5722bbc322f8ba79164a697d9167a74abdfdd92",
+            "tmp/frp1343/standalone-reconciled/before.json": "81602783732920a271d1769830846474db14df13c9102569ede77f87a192e7e6",
+            "tmp/frp1282-Natural.dll": "c061ecd593b3ba0d7024d945368e8e14a0cc3c430763e6b4c1b9e053248dcad6",
+            "tmp/frp1343/standalone-vm.py": "940cc74ca398b0b7e208766666ce5d8932b05bb0ec6b362abb98b5055cb35b0c",
+            "tmp/frp1343/standalone-reconciled/preparation.json": "205e74b91395d95ce904f14388857ab35b95ac18f3fb04a503f76f269e70ba48",
+            "tmp/frp1343/candidate-sha.txt": "b3cad2d040b769a6f0700f1fa95f0252aabc0624ad81094ac75f32fe6d92fcb6",
+            "tmp/frp1343/standalone/after.json": "9a38738615278928fa42925d4763c965bf3b52138bae1cea8af7f5291fb342e3",
+            "tmp/frp1343/standalone-reconciled/WarmBicubicResize-10f3d96ae7f24227b599f1f8b291c916.json.original": "2108e2e82a4f5b8ac8552ff90fbc05a87752c6be344fb57202039f217e3172f3",
+            "tmp/frp1343/standalone/preparation.json": "9b0def0767a510ced1292001c0cedf50546683afc687856e4047537e8d4dc1c4",
+            "tmp/frp1343-build.log": "7081f48fb073af969e36d2658b9d8bfd5df0ef887e5176af9c514cda9f36acbe",
+            "tmp/frp1343/standalone/before.json": "dfb976432f28315366bd8eecbb983dfc0744d39db40ecc84d3a1ca3a26173705"
+          },
+          "mirrored": true
+        },
+        "parsedStatisticsSha256": "bb37f7b0435ff8930acbe336395f11f2cba5cdae2b5e6714177d613b1e0ee82f"
+      },
+      "firstCapture": {
+        "scored": false,
+        "managedOperations": [
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240,
+          240
+        ],
+        "managedActualMeanUs": 895.0715725694444,
+        "bothGuardsPassed": true,
+        "reason": "Collector demanded exactly 256; native temporary receipt retired before export"
+      }
+    }
+  },
+  "privateTests": {
+    "linux": {
+      "count": 32,
+      "sha256": "b8812669c2314b2a6b23f45a42c9b8025206689addf256cccb23a912651e23d0"
+    },
+    "windows": {
+      "count": 32,
+      "sha256": "be8663c73b19ee10cfbf9fac5a085c30bd9b10be849bdebb1acbd050b93b9ded"
+    }
+  },
+  "numericalOracleCases": 3145776,
+  "numericalOracleSha256": "82fcaec4ff0b4d01dcb06b8b43668185dae09118d5bc9a579c6ba18dbeef4c41",
+  "focusedRaw": {
+    "file": "sparse-vp8-and-word-rounding-focused-checks.tar.xz",
+    "sha256": "173fd90195c8c28d28fd5a9b3fa9453609a49e739ccb306a9120959e78b51247",
+    "bytes": 5380,
+    "members": 10,
+    "allMembersVerified": true,
+    "memberHashes": {
+      "tmp/frp1341-windows-normal.log": "430d127b750c60e2783b395a848857a935519757ada97500c2e29688e4bc1326",
+      "tmp/frp1341-windows-scalar.log": "d0c0e0dcfbd83135b5a225cd0e91d08ff18aed50531db7c39293c93129904a2c",
+      "tmp/frp1341/tests/Lokad.Image.Tests/Vp8DcResidualTests.cs": "8edff4086088bd328f679cae378abce25b2390df14f6c81c09141f25520eea71",
+      "tmp/frp1342-windows-normal.log": "be8663c73b19ee10cfbf9fac5a085c30bd9b10be849bdebb1acbd050b93b9ded",
+      "tmp/frp1342-linux-normal.log": "b8812669c2314b2a6b23f45a42c9b8025206689addf256cccb23a912651e23d0",
+      "tmp/frp1342/tests/Lokad.Image.Tests/CrossWordClippedRoundingTests.cs": "82fcaec4ff0b4d01dcb06b8b43668185dae09118d5bc9a579c6ba18dbeef4c41",
+      "tmp/frp1342-score.py": "63e091b91ea742c5a0cb098295a3e82f7ca8f6dbc7b0919c4ff1f122bb0f973d",
+      "tmp/frp1343-score.py": "c437b95ee781fe985d1e14ba1253e55ba37c1d93f2c448570e42d676feaaba27",
+      "tmp/frp1342-standalone-statistics.json": "94df87a48ff1780eadee12622a55eb1bdc211cd27f02f1cd44307e34a095333e",
+      "tmp/frp1343-standalone-statistics.json": "bb37f7b0435ff8930acbe336395f11f2cba5cdae2b5e6714177d613b1e0ee82f"
+    },
+    "mirrored": true
+  }
+}

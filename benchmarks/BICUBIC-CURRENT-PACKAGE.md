@@ -515,3 +515,46 @@ pixels, bounds, ownership and guards pass. The complete three-pair screen is
 The point result is adverse and the interval is inconclusive.
 The candidate stops after one private build with the original actor.
 [Trial evidence](bicubic-cross16-prefix-quartet-evidence.json)
+
+## Single-round word publication trial
+
+The trial clamps each finite quotient to the integer output endpoints, rounds
+once, and uses that result in both the half-step certificate and publication.
+The clipped endpoints are half a sample from an ambiguity, beyond the existing
+quarter-sample margin guard. Near a half-step, the distance computed from the
+nearest integer equals that computed from the floor. The original word
+quotients, margins and exact repair remain. This targets the enlarged-height
+full-row prefix. The strip tail and identity-height route keep the current
+word publisher.
+
+| Complete TightCross16 operation | Baseline or zimg µs | Candidate µs | Ratio interval | GC B/op, candidate |
+| --- | ---: | ---: | ---: | ---: |
+| Private build, three managed pairs | 889.79 | 873.73 | 0.913745–1.055267 | 112 |
+| Private build, twelve independent managed pairs | 822.91 | 808.28 | 0.979465–0.984986 | 112 |
+| Private build, standalone versus prepared zimg | 829.10 | 811.04 | 0.946155–0.995390 | 113 |
+| Scoped Release build, standalone versus prepared zimg | 891.96 | 883.71 | 0.972930–1.008999 | 114 |
+| Scoped Release build, twelve managed pairs | 890.11 | 885.50 | 0.983994–1.005709 | 112 |
+
+The private build confirms a **1.78%** paired gain. The scoped build leaves the
+byte publisher's source intact. Its standalone comparison remains uncertain
+and its matched pairs leave the gain unconfirmed. Absolute clocks move on both
+sides. These results establish no cause for the transfer difference. Keep the
+qualified package and TightCross16 costs.
+
+The first scoped-build collector expected 256 operations per actual. The
+scoped build completed twelve actuals of 240 under the driver's adaptive
+calibration. The guard records and managed log survive, but the temporary
+native receipt was retired before export. The single corrected capture keeps
+the original generated delegates and accepts their consistent actual count.
+All retained scored runs pass exact managed pixels, native bounds, source,
+ownership and quiet-VM guards.
+
+The private variant agrees with the current certificate on **3,145,776**
+inputs spanning word half-steps, boundary margins, clipped endpoints and
+accepted/refused writes on the AVX-512 VM. Windows and Linux each pass 32
+focused tests, including the named storage suites. Two private core builds
+reuse the same actor, worker, fixtures and complete operation.
+
+[Trial evidence](bicubic-cross16-clipped-rounding-evidence.json) retains both
+producer identities, all archived runs, the lost-receipt diagnosis and
+reproducible focused checks.

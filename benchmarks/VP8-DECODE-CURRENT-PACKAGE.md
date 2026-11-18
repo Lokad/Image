@@ -159,3 +159,25 @@ reference, fixtures and package. The mirrored archive has 28 verified
 members and SHA-256
 `5d3cb342c482be94fff5973fe8e250a74afbd468de73e621778a0520aaa48c4a`.
 [Trial evidence](vp8-decoder-fixed-geometry-trial-evidence.json)
+
+## Sparse residual reconstruction trial
+
+The private decoder keeps the existing nonzero flag from each token block
+and the macroblock's Y2 block. Zero residuals leave prediction intact. A
+luma block with no coded residual can still get DC from Y2. The trial writes
+that constant residual with the original signed rounding and saturated add.
+Prediction and loop-filter decisions, token order, cancellation and admission
+are preserved. No scan of the coefficient block or new retained storage is
+needed.
+
+Three alternating 16-operation pairs on the original live-token opaque control
+measure **4,779.61 → 4,800.50 µs**, ratio interval **0.949869–1.062018**,
+with **230,880 B/op** for both modules. This gives no basis for confirmation.
+Exact pixels, source, independent ownership, live-token checks and both quiet
+guards pass. The full signed DC range matches the general inverse, with **39
+focused Windows tests** passing in each normal and scalar mode. One private
+core build reuses the existing actor and FFmpeg worker. Both original opacity
+comparisons remain open on the qualified package.
+
+[Trial evidence](vp8-decoder-sparse-residual-trial-evidence.json) retains the
+source, runner and 28 verified members of the mirrored raw archive.
