@@ -1,0 +1,320 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PPV1259",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "9bf77f593892454b97befdff89d733fa05b09ef5",
+  "hypothesis": "Prepare two equal bounded row envelopes once,sharing one relative cursor/stride across distinct or aliased backings. Remove two absolute row offsets and duplicate stride from execution ABI and one per-row cursor update. Inline preparation dispatch; keep exact old different-step kernel. Replace CopySelfRows with the shared parallel kernel rather than add a third pixel loop. Eligible separate-word rows join only when packed strides match;small/wide/scalar/different-stride fallback stays unchanged.",
+  "endState": "Two prepared execution kernels: shared parallel views/one cursor for equal row steps; original independent two-cursor kernel for different steps. No dedicated self-word implementation,extra generic pixel abstraction,cache,pin,owner or public API.",
+  "affectedScope": "All five existing CopyRegion comparisons and both owned vertical flips. Fonts,text,codec,inspection,resizing,other transforms,fill/composite and shared single-row Copy remain unchanged.",
+  "sourceProof": {
+    "exactOriginalCoreSourceReconstruction": true,
+    "originalDifferentStepKernelBodyVerbatim": true,
+    "bulkSnapshotAndBoundedTailVerbatim": true,
+    "oneRelativeCursorOverEqualBoundedViews": true,
+    "negativeTraversalAndFinalCursorRulePreserved": true,
+    "validPublicArraySizedRangesBoundCheckedPreparation": true,
+    "unusedSingleRowStepNotObserved": true,
+    "allRowCancellationChecksRetained": true,
+    "scalarWideSmallDifferentWordFallbackVerbatim": true,
+    "obsoleteSelfKernelRemovedWithoutWrapper": true,
+    "allExistingPublicValidationAndOwnershipVerbatim": true,
+    "noNewHeapAdmissionRetentionUnsafeOrPublicApi": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+    "src/Lokad.Image/Internal/StreamInspection.cs": "c67d781472f0c5b5eb4a8e31bc93f689ffcee4c8217150f60cdd48d92773e68d",
+    "tests/Lokad.Image.Tests/SelfRowStorageTests.cs": "6bcc5b851bfeb6d0f28c16bf24b7c19e7ce8a9fa09e39708dc1665614de0108d"
+  },
+  "candidateSourcePins": {
+    "tmp/ppv1259-src/Lokad.Image/Internal/IndependentRowCopy.cs": "c1e99bb0707fee010a8850cf7cf5f1c51f1824113ec37b66de8b21f4abac8485",
+    "tmp/ppv1259-src/Lokad.Image/ImageDrawing.cs": "622ffb3c50aafa70e1f346b835ba0f855d94d8acb65c56f4f3e8149d2689908c"
+  },
+  "candidateTestSourcePins": {
+    "tmp/ppv1259-tests/SelfRowStorageTests.cs": "92ea4042a116096171a1f9e247ae784b7635fc0ccbb4e8ed05d8c7955582d039"
+  },
+  "producers": {
+    "qualified": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "privateWindowsSha256": "b8393e1e392a5d513ba98030a03f3be5cec81a516f4cef6ec0119386c10ce1bf"
+  },
+  "screens": {
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 1.0001937615905565,
+      "lower": 0.9704572830448163,
+      "upper": 1.030841416930732,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9581253967285157,
+          "lower": 1.9199855415805716,
+          "upper": 1.9962652518764599,
+          "values": [
+            1.9603258361816407,
+            1.9578848571777343,
+            1.956165496826172
+          ]
+        },
+        "candidate": {
+          "mean": 1.9585042877197265,
+          "lower": 1.9375027176964126,
+          "upper": 1.9795058577430404,
+          "values": [
+            1.957335174560547,
+            1.9585410614013672,
+            1.9596366271972656
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128471914,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128275918,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128354947,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128311942,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128199262,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128426746,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/ppv1259-screen-DrawingCopy8.json"
+    },
+    "DrawingCopy16": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 1.0343030047672368,
+      "lower": 0.9707004517820711,
+      "upper": 1.1020729450641158,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 3.7754550730387373,
+          "lower": 3.7613891485245903,
+          "upper": 3.7895209975528843,
+          "values": [
+            3.775043426513672,
+            3.774977264404297,
+            3.7763445281982424
+          ]
+        },
+        "candidate": {
+          "mean": 3.904981964111328,
+          "lower": 3.643739813089468,
+          "upper": 4.166224115133188,
+          "values": [
+            3.8921563568115234,
+            3.902357192993164,
+            3.920432342529297
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 247401246,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 255076359,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 255744881,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 247396910,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 247486515,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 256929454,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/ppv1259-screen-DrawingCopy16.json"
+    }
+  },
+  "focused": {
+    "windows": {
+      "internal/normal": 13,
+      "internal/avx512-off": 13,
+      "internal/scalar": 13,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "linuxPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "linuxInternal": {
+      "normal": 13,
+      "avx512-off": 13,
+      "scalar": 13
+    },
+    "internalEachMode": 13,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "independentOracleRowLengths": 775,
+    "existingAliasOraclePreserved": true,
+    "parallelOracleAndUnusedSingleRowStepAdded": true
+  },
+  "codegen": {
+    "DrawingCopy8": {
+      "methodCodeBytes": [
+        1653,
+        403
+      ],
+      "sha256": "a0020821543c56bf03281d7d06f5514b3687e7e8613c25696e002d66f600cdd9",
+      "preparationWrapperInlined": true,
+      "parallelKernelCompiledInOriginalControl": true,
+      "allInstrumentedTimingsDiscarded": true,
+      "sampleCommands": 0
+    },
+    "DrawingCopy16": {
+      "methodCodeBytes": [
+        1653,
+        403
+      ],
+      "sha256": "9b4d6ed898191c777d999c67c585d658571278f3e204bc34275065048f31b8f6",
+      "preparationWrapperInlined": true,
+      "parallelKernelCompiledInOriginalControl": true,
+      "allInstrumentedTimingsDiscarded": true,
+      "sampleCommands": 0
+    }
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 1,
+    "embedded": 1,
+    "allOthers": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Unpromoted. Two coherent whole-plane/single-cursor screens show neutralbyte1.958125->1.958504us interval.970457-1.030841 and adverseword3.775455->3.904982us interval.970700-1.102073,all0B. Intended inlined preparation and403B parallel kernel are realized but prove no complete-operation gain. Stop before confirmation,selfword passing guard,actualtransfer,seven affected native comparisons or broad/package work. Preserve current measured self-copy specialization and qualified JSP source/modules/package/costs unchanged. No neighboring envelope/cursor/stride variant without materially revised evidence.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "parallel-row-views-trial.tar.xz",
+    "sha256": "69a022fa07e6cfc1c6abd14a715d55a839eeb66ed27339cc3635a5943c718092",
+    "bytes": 2225836,
+    "members": 69,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  }
+}

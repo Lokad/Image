@@ -184,3 +184,46 @@ identities, original actuals and qualification reuse. Mirrored/member-verified
 Archived `dpp1257-*` recipes retain exact source/modules, all logs/guards, codegen
 and the unchanged original actor dependencies. No current renderer dependency
 is added.
+
+## Parallel plane views follow-up
+
+**Unpromoted (PPV1259).** Whole borrowed row envelopes share one relative cursor
+and stride. The design replaces the dedicated self-copy kernel, keeping two
+execution kernels overall; different steps retain the original general body.
+Unlike per-row view/tail trials, it prepares the complete parallel geometry once.
+The intended consolidation is realized but supplies no useful complete-copy gain.
+
+| Original complete separate-buffer control, three reversed pairs | Baseline /candidate µs | Ratio interval | GC B/op |
+| --- | --- | --- | --- |
+| RGBA8 | 1.958125 /1.958504 | .970457–1.030841 | 0 /0 |
+| RGBA16 | 3.775455 /3.904982 | .970700–1.102073 | 0 /0 |
+
+Byte copying is neutral; the word point is adverse with an inconclusive interval.
+Stop before confirmation, the passing self-word guard, repository-DLL transfer,
+affected native comparisons or broad/package checks. The existing measured
+self-copy specialization and every qualified source/module/package/cost remain.
+No neighboring envelope/cursor/stride sweep follows.
+
+Actual preparation inlines in both controls; caller1653B/parallel kernel403B
+implements the single cursor. There is no physical-peak or causal speed claim.
+Original four-load snapshots, bounded tails, row checks, Y traversal and final
+cursor rule remain. Equal-stride separate-word rows alone join the prepared
+path; small/wide/scalar/different-stride fallbacks remain. No owner, cache, pin,
+pool, public API or extra heap/admitted/retained storage is added.
+
+Each OS passes13internal/190public checks per normal, AVX512-disabled and scalar
+mode. Existing independent775-length alias snapshots remain; parallel source/
+padding/canary/live-token checks and a single-row unused extreme-step control
+cover the new preparation. All original frozen full-frame/source/alpha/hidden-RGB/
+untouched/owner/native and idle-v2 gates pass. One private Windows core/embedded
+build; zero other builds. Original65536-operation warmups/batches, every actual
+and natural single-CPU GC remain. Reuse JSP1255's6844full/live checks each OS and
+SAMEactualpackage/all3examples; no current-cost renderer dependency is added.
+
+[Compact evidence](parallel-row-views-trial-evidence.json) pins both cases,
+source/modules, checks and qualification reuse. Mirrored/member-verified
+`parallel-row-views-trial.tar.xz`:2,225,836B/69members; SHA-256
+`69a022fa07e6cfc1c6abd14a715d55a839eeb66ed27339cc3635a5943c718092`.
+Archived `ppv1259-*` recipes retain exact prototypes, meaningful private test
+oracles, all actuals/guards and codegen. This is evidence against this
+implementation, not a proof that every materially revised design must fail.
