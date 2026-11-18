@@ -1,0 +1,329 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RFB1269",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "681c29738706be084deb259dc9c2fa78c0884488",
+  "hypothesis": "Validate both complete reachable row-address ranges once,then execute the existing bulk/tail schedule through GC-tracked managed refs. Remove four per-row Slice checks/casts without relying on caller-only safety. No pointers,pinning,unsafe blocks or new storage. Guard cost/code size may offset savings; complete original operations decide.",
+  "endState": "One explicitly range-checked prepared row kernel; strong internal rejection before any invalid memory access,original public contracts. Preserve useful self/single-row/portable kernels; no generic pixel-loop abstraction or address cache.",
+  "affectedScope": "Existing three byte CopyRegion controls and two owned vertical flips. Separateword fallback,selfword specialization,other pixelkernels/codec/font/inspection sources unchanged.",
+  "sourceProof": {
+    "exactOriginalSourceReconstruction": true,
+    "wholeRowRangesValidatedBeforeGetReference": true,
+    "signed64EndpointArithmeticCannotOverflowForInt32Arguments": true,
+    "everyIntermediateRowWithinValidatedEndpoints": true,
+    "allBulkAndTailVectorAccessesInsideValidatedRows": true,
+    "managedRefsRemainGcTrackedNoPointersOrPins": true,
+    "compilerUnsafeBlocksRemainDisabled": true,
+    "fourLoadSnapshotAndOrderedTailVerbatim": true,
+    "originalNumberAndOrderOfRowCancellationPolls": true,
+    "noNewAllocationOwnerAdmissionCacheOrPublicApi": true,
+    "selfSingleRowAndPortableImplementationsVerbatim": true,
+    "publicDrawingAndVerticalSourcesUnchanged": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+  },
+  "candidateSourcePins": {
+    "tmp/rfb1269-src/Lokad.Image/Internal/IndependentRowCopy.cs": "c8f5f022c613793f1c513378e965b8fc9bf02c776ea1e475b222bd162b5d81dc"
+  },
+  "candidateTestSourcePins": {
+    "tmp/rfb1269-tests/RowFootprintTests.cs": "ec94a12e0a7fe239f43c15b81586ecd0d0b1a40ef107f262b814791c0d1f1fa8",
+    "tmp/rfb1269-tests/FootprintRangeTests.cs": "bfbc1ca2a4a08b8597442ddf829cda699e94d42231ab360c1842bc4b7f087fb4"
+  },
+  "producers": {
+    "qualified": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "privateWindowsSha256": "2c1552b8d14d98b7e6ddc79cfe20cdb6102211e2f54363738fa2569fba6af3ef"
+  },
+  "screens": {
+    "OriginalClippedCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 0.9907868339029375,
+      "lower": 0.9738110761129853,
+      "upper": 1.00805851803796,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 2.1379756571451822,
+          "lower": 2.0946354732501646,
+          "upper": 2.1813158410402,
+          "values": [
+            2.136802520751953,
+            2.136414810180664,
+            2.1407096405029296
+          ]
+        },
+        "candidate": {
+          "mean": 2.1182779439290367,
+          "lower": 2.0802744131570003,
+          "upper": 2.156281474701073,
+          "values": [
+            2.1159194793701173,
+            2.1190478515625,
+            2.119866500854492
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140037490,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138668899,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138873920,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140012081,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 140293547,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 138927571,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/rfb1269-screen-OriginalClippedCopy8.json"
+    },
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 1.0038131979590486,
+      "lower": 0.9906028935126409,
+      "upper": 1.0171996700148078,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9489293416341145,
+          "lower": 1.9218048663134737,
+          "upper": 1.9760538169547552,
+          "values": [
+            1.9483727264404296,
+            1.9478011779785156,
+            1.9506141204833984
+          ]
+        },
+        "candidate": {
+          "mean": 1.9563607889811199,
+          "lower": 1.9379583695059543,
+          "upper": 1.9747632084562854,
+          "values": [
+            1.9572134704589843,
+            1.955247299194336,
+            1.9566215972900391
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127688555,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128267942,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128139087,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127651098,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127835447,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 128229153,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/rfb1269-screen-DrawingCopy8.json"
+    }
+  },
+  "focused": {
+    "windows": {
+      "internal/normal": 31,
+      "internal/avx512-off": 31,
+      "internal/scalar": 31,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "linuxPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "linuxInternal": {
+      "normal": 31,
+      "avx512-off": 31,
+      "scalar": 31
+    },
+    "internalEachMode": 31,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "independentOracleRowLengths": 775,
+    "existingAliasOraclePreserved": true,
+    "existingAliasAndParallelOracleReused": true,
+    "unusedSingleRowStepPreserved": true,
+    "oppositePitchesSlicesInvalidOverflowFootprintsAndCancellationPassed": true
+  },
+  "codegen": {
+    "DrawingCopy8": {
+      "callerCodeBytes": 1531,
+      "kernelCodeBytes": 743,
+      "prevalidatedRowScheduleStartsAt": "0xf1",
+      "boundsFailuresOutsideRowSchedule": true,
+      "noPerRowSpanViewOrRangeChecks": true,
+      "gcTrackedManagedRefs": true,
+      "allPixelInstructionsUnalignedSafe": true,
+      "bulkFourLoadSnapshotAndOrderedTailPreserved": true,
+      "allRowCancellationPollsPreserved": true,
+      "codeGrowthIncludesColdExceptionsAndOnceOnlyGuards": true,
+      "allInstrumentedClocksDiscarded": true,
+      "sampleCommands": 0,
+      "sha256": "2daf4f1ba5815d0b5d98b416482d36f49e28c3d83535c13ee80185930bdf0bec"
+    },
+    "OriginalClippedCopy8": {
+      "callerCodeBytes": 1531,
+      "kernelCodeBytes": 743,
+      "prevalidatedRowScheduleStartsAt": "0xf1",
+      "boundsFailuresOutsideRowSchedule": true,
+      "noPerRowSpanViewOrRangeChecks": true,
+      "gcTrackedManagedRefs": true,
+      "allPixelInstructionsUnalignedSafe": true,
+      "bulkFourLoadSnapshotAndOrderedTailPreserved": true,
+      "allRowCancellationPollsPreserved": true,
+      "codeGrowthIncludesColdExceptionsAndOnceOnlyGuards": true,
+      "allInstrumentedClocksDiscarded": true,
+      "sampleCommands": 0,
+      "sha256": "33840e99b4617604da1185eccb932077a90b324a15cf0c1392fbfbe0f7afb97a"
+    }
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 1,
+    "embedded": 1,
+    "allOthers": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Unpromoted. Whole-row endpoint validation removes four per-row checked views while preserving memory safety through explicit Int64 range proofs and GC-tracked managed-ref intrinsics,matching existing production patterns. Actual743B kernel includes cold exception construction/once-only guards;row schedule has no range/view checks andcaller1531B unchanged. Complete clippedbyte2.137976->2.118278us interval.973811-1.008059 has small uncertain0.92percent point;separatebyte1.948929->1.956361us interval.990603-1.017200 has adversepoint. All0B,every original source/pixel/owner/native/idle gate and actual stays. Stop without confirmation,actualtransfer,passingpath retiming,broad/package work. No safety-policy relaxation,pointers,pins or newownership;no useful elapsed/simplification gain established. Qualified JSP source/modules/f4package/currentCBRcosts unchanged. Do not repeat neighboring bounds/view variants;consider materially different mechanisms only with evidence.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "row-footprint-validation-trial.tar.xz",
+    "sha256": "1a6ed44bf8535cfca355ae2cbe505f081a9affe6fb87d0f6f8c0bb90bfe137f7",
+    "bytes": 2226372,
+    "members": 67,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      },
+      {
+        "file": "copy-operation-boundary.tar.xz",
+        "sha256": "74ac5f858e5ce39b7c081b2e493b822d9595d9f33512ccae4a1295984a115dd1"
+      }
+    ]
+  }
+}

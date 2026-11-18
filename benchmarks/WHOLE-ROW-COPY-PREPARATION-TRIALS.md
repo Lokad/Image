@@ -420,3 +420,42 @@ codegen, all actuals and contradiction. Mirrored/member-verified
 Archived far1268 recipes, actual source/tests and named dependencies reproduce
 it. No renderer dependency or new current-cost claim. No neighboring alignment
 sweep follows; materially different designs require their own evidence.
+
+## Complete row-footprint validation
+
+**Unpromoted.** One operation-level check proves each input/output row footprint
+using signed 64-bit endpoints before obtaining GC-tracked managed references.
+The existing four-load bulk snapshot and ordered vector tail then avoid four
+per-row span-view checks. This follows the library's existing bounded
+`Vector512.LoadUnsafe`/`StoreUnsafe` pattern: no unsafe blocks, pointers, pins,
+cache or new owner. The project retains `AllowUnsafeBlocks=false`. The earlier
+one-row managed-reference experiment still prepared and checked each row; it
+did not test this complete-footprint boundary.
+
+Actual code has a743B helper and unchanged1531B public caller. Once-only guards
+and cold exception constructors contribute to growth; the row schedule has no
+range/view checks. Code generation establishes the intended mechanism, not a
+speed gain. Three reversed pairs give clipped byte **2.137976→2.118278µs**,
+interval **.973811–1.008059**, and separate byte **1.948929→1.956361µs**,
+**.990603–1.017200**. Both allocate0B; every actual and original source/frame/
+alpha/hiddenRGB/untouched/owner/native/idle-v2 check is retained. Neither result
+justifies additional proof complexity. Stop without confirmation, transfer,
+passing-path retiming or broader/package checks.
+
+Both OSes pass31internal/190public checks in each normal/AVX512-off/scalar mode.
+The reused775-length actual-helper oracles, four pitch-sign combinations, sliced
+origins/canaries, invalid/overflowing footprints rejected before mutation,
+unused extreme single-row steps and default/live/precanceled tokens pass.
+Cancellation polling order is preserved. Self-copy, single-row and portable
+kernels stay unchanged. One private core/embedded build; zero other builds.
+Added owned/admitted/retained capacity0; physical/JIT peaks are unmeasured.
+Qualified source/modules/f4package/current CBR costs remain unchanged; reuse
+6,844full/live checks eachOS/SAMEactualpackage/all three examples.
+
+[Evidence](row-footprint-validation-trial-evidence.json) retains source proofs,
+actual JIT, focused checks and all observations. Mirrored/member-verified
+`row-footprint-validation-trial.tar.xz`: **2,226,372 B /67 members**, SHA256
+`1a6ed44bf8535cfca355ae2cbe505f081a9affe6fb87d0f6f8c0bb90bfe137f7`.
+Archived rfb1269 recipes and named dependencies reproduce it. No renderer
+dependency or new current-cost claim. Do not repeat neighboring bounds/view
+variants without a materially different, evidence-backed mechanism.
