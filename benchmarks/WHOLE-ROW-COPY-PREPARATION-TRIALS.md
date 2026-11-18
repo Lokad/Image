@@ -956,3 +956,32 @@ samples. A separate-case-only run passed both guards. The clipped
 samples were retained from their original run. Stop at screening. The
 point gains are under 14 ns and the standalone FFmpeg gaps remain open.
 [Both screens, guard records and generated code](copy-vector-width-trials-evidence.json)
+
+## Shared storage and copy preparation
+
+Lokad.Image and FFmpeg ran on the same caller-owned source and canvas
+arrays, with four natural placements per depth and two reversed-order
+pairs per placement. The diagnostic adapter wraps each FFmpeg batch in
+one native call. Its clipping wrapper and FFmpeg copy instructions match
+the scored worker after relocation. Byte placement means put Lokad.Image
+**49–86 ns behind** on clipped RGBA8 and **59–117 ns behind** on separate
+RGBA8. All sixteen individual byte pairs have the same direction.
+Separate RGBA16 placement means range from **26 ns ahead to 67 ns
+behind**. All four RGBA16 placements have the same relative page offset,
+so that offset alone cannot explain the range.
+
+The second diagnostic compares the public call with its actual RGBA8 row
+kernel on the same arrays. Geometry and borrowing precede the kernel
+clock. The kernel means are **2.4–8.1 ns faster** for clipped RGBA8 and
+**2.6–11.6 ns faster** for separate RGBA8 across four placements. The
+different invocation wrappers make these bounds an attribution aid.
+The observed preparation cost is small compared with the byte gaps.
+
+Both diagnostics use the immutable package DLL and batches of
+65,536 operations on CPU 0. Exact frames, source bytes, live owners,
+zero managed allocation and both idle guards pass. Handles are acquired
+and released outside timing and remain live through both sides.
+The shared-clock experiment retains the distinct managed and native
+result consumers. Use the original complete standalone comparisons for
+parity. The word case remains uncertain.
+[Placement, operation and code verification evidence](copy-vector-width-trials-evidence.json)

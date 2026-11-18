@@ -1665,5 +1665,154 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "sharedCopyStorageAndPreparation": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "scoredCaptures": 0,
+    "operationsPerSide": 65536,
+    "managedAllocationBytesPerOp": 0,
+    "placementsPerCase": 4,
+    "pairsPerPlacement": 2,
+    "exactFramesAndOwnershipPassed": true,
+    "sharedNativeAndManaged": {
+      "cases": {
+        "OriginalClippedCopy8": {
+          "managedMinusNativeNsByPlacement": [
+            52.566253662109375,
+            86.26444244384766,
+            84.72119140625,
+            48.90898132324219
+          ],
+          "allPairedDifferencesNs": [
+            [
+              54.60234069824219,
+              50.53016662597656
+            ],
+            [
+              96.17179870605469,
+              76.35708618164062
+            ],
+            [
+              77.51744079589844,
+              91.92494201660156
+            ],
+            [
+              40.956634521484375,
+              56.861328125
+            ]
+          ],
+          "relativePageOffsets": [
+            1256,
+            2840,
+            3144,
+            3144
+          ]
+        },
+        "DrawingCopy8": {
+          "managedMinusNativeNsByPlacement": [
+            59.05998992919922,
+            75.4229736328125,
+            117.39188385009766,
+            82.05036163330078
+          ],
+          "allPairedDifferencesNs": [
+            [
+              31.152496337890625,
+              86.96748352050781
+            ],
+            [
+              100.68804931640625,
+              50.15789794921875
+            ],
+            [
+              159.48817443847656,
+              75.29559326171875
+            ],
+            [
+              75.97671508789062,
+              88.12400817871094
+            ]
+          ],
+          "relativePageOffsets": [
+            1256,
+            2840,
+            3144,
+            3144
+          ]
+        },
+        "DrawingCopy16": {
+          "managedMinusNativeNsByPlacement": [
+            -14.231597900390625,
+            66.6911849975586,
+            -11.700836181640625,
+            -25.735008239746094
+          ],
+          "allPairedDifferencesNs": [
+            [
+              -13.813796997070312,
+              -14.649398803710938
+            ],
+            [
+              72.10687255859375,
+              61.27549743652344
+            ],
+            [
+              -26.384857177734375,
+              2.983184814453125
+            ],
+            [
+              1.2552490234375,
+              -52.72526550292969
+            ]
+          ],
+          "relativePageOffsets": [
+            2128,
+            2128,
+            2128,
+            2128
+          ]
+        }
+      },
+      "nativeAdapterSha256": "c95c70fd443ffb42b72d7130605592e493171b1b62125c145e295c6101450a84",
+      "sameInstructionsAfterRelocation": true,
+      "limitations": "Common GC backing and in-process batch adapter are diagnostic. The native clipping body and FFmpeg archive are unchanged. Observer and language-runtime call boundaries still differ.",
+      "raw": {
+        "file": "native-and-managed-shared-copy-storage.tar.xz",
+        "sha256": "a8055e64f97345aaa5717f094a8f83e2de8ad0ac48ea78005e2ab73a2c1b8aab",
+        "bytes": 123412,
+        "members": 23,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "completeAndPreparedManaged": {
+      "cases": {
+        "OriginalClippedCopy8": [
+          8.083671569824219,
+          2.376495361328125,
+          2.9007415771484375,
+          3.2322845458984375
+        ],
+        "DrawingCopy8": [
+          11.561317443847656,
+          4.239128112792969,
+          2.567138671875,
+          7.959175109863281
+        ]
+      },
+      "driverSha256": "12ea9f45bfdc8a0ea14bc47ff658e6b6f82e2a62cb60a6d3db617fda699d5219",
+      "scope": "Package's exact public call and exact byte-row helper, same backing, complete row copies. Prepared geometry and ownership outside that diagnostic clock. Observer wrappers are parallel but not instruction identical.",
+      "raw": {
+        "file": "rgba8-complete-and-prepared-copy.tar.xz",
+        "bytes": 19580,
+        "sha256": "4ad91739818bdfd89c78d29e5e7e76868ae22530ef24a74f78b0af4191fa17b5",
+        "members": 12,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
   }
 }
