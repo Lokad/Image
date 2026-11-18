@@ -1,0 +1,363 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "disposition": "The two replacement predictors and shared chroma interpolation stop at inconclusive complete-operation screens.",
+  "variants": {
+    "frp1364": {
+      "name": "large-predictor",
+      "cases": {
+        "Opaque8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 5047.595854166667,
+              "lower": 4413.775303823335,
+              "upper": 5681.416404509999
+            },
+            "candidate": {
+              "mean": 5003.7199375,
+              "lower": 4450.230221615608,
+              "upper": 5557.209653384392
+            },
+            "candidateToBaselineInterval": [
+              0.9642479697964652,
+              1.0191336864829048
+            ],
+            "candidateToBaselineRatio": 0.9913110451025592,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              5185.250979166667,
+              5194.1582708333335,
+              5196.896958333334
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-large-predictor-Opaque8-3.tar.xz",
+            "sha256": "16bf79c6784e66b58c36a54456778425313436664e84d0c781af0eb8e25d6b7b",
+            "bytes": 398832,
+            "members": 24,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        },
+        "OpaqueCancelable8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 5184.473416666667,
+              "lower": 4965.302388992196,
+              "upper": 5403.644444341137
+            },
+            "candidate": {
+              "mean": 5144.136708333333,
+              "lower": 4949.971951757834,
+              "upper": 5338.301464908833
+            },
+            "candidateToBaselineInterval": [
+              0.9329459689022598,
+              1.0552601111169257
+            ],
+            "candidateToBaselineRatio": 0.992220069747577,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              5213.5021875,
+              5216.438062499999,
+              5199.798729166667
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-large-predictor-OpaqueCancelable8-3.tar.xz",
+            "sha256": "0524cc8ed6c9d8ca0445a97ae085ce26aeffbf7d0cfca7d43e5f99dd6728d901",
+            "bytes": 398944,
+            "members": 24,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        }
+      },
+      "windowsFocused": {
+        "normal": {
+          "passed": 47,
+          "logSha256": "f08a2a2e6f6b5dacda1128565392abaf13039aab7f0a667fc93e266a7d8d860c"
+        },
+        "scalar": {
+          "passed": 47,
+          "logSha256": "4637f6a03235ac07d4252cb385fbecc2fb753ab2a7cff601b9b56dd2faaf4ece"
+        }
+      },
+      "model": {
+        "equivalentPixels": 327680,
+        "modeOrders": {
+          "decoder": [
+            "dc",
+            "vertical",
+            "horizontal",
+            "trueMotion"
+          ],
+          "prepared": [
+            "dc",
+            "trueMotion",
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "actualDecoderInvocations": 0
+      },
+      "candidateSourceSha256": "432fcd9772d72a886bdd0c4ee59ce31005aa46d3d20a5639dce67adf04c98cb4",
+      "candidateLibrarySha256": "0f287e08986424af6f06470aa0cba21867d7436cd35eec94a334eb6e24244c0c"
+    },
+    "frp1365": {
+      "name": "direct-prediction",
+      "cases": {
+        "Opaque8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 5089.371895833334,
+              "lower": 4433.959042484169,
+              "upper": 5744.784749182499
+            },
+            "candidate": {
+              "mean": 5062.12,
+              "lower": 4690.800775215428,
+              "upper": 5433.439224784572
+            },
+            "candidateToBaselineInterval": [
+              0.925437456014419,
+              1.0690527532795207
+            ],
+            "candidateToBaselineRatio": 0.9946564534251059,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              5172.760270833333,
+              5154.183583333333,
+              5174.798958333334
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-direct-prediction-Opaque8-3.tar.xz",
+            "sha256": "1b26eab8a5b63c33802e055ac0850c50f70bb8b9aacb97d781a281cf8267b818",
+            "bytes": 398860,
+            "members": 24,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        },
+        "OpaqueCancelable8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 5084.1682083333335,
+              "lower": 2827.631640093,
+              "upper": 7340.704776573667
+            },
+            "candidate": {
+              "mean": 5114.52525,
+              "lower": 3735.3728598349726,
+              "upper": 6493.677640165027
+            },
+            "candidateToBaselineInterval": [
+              0.7667995410073075,
+              1.3200657811303225
+            ],
+            "candidateToBaselineRatio": 1.0060943470023993,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              5227.4866875,
+              5158.9120416666665,
+              5250.913416666666
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-direct-prediction-OpaqueCancelable8-3.tar.xz",
+            "sha256": "17436f5a7f23772559ac4afd11037c40c6cab4f4ceb2c5eeacc35c98522b4633",
+            "bytes": 398936,
+            "members": 24,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        }
+      },
+      "windowsFocused": {
+        "normal": {
+          "passed": 47,
+          "logSha256": "d4e8542960a4ac19b1786cac04270010f2da8265f8efa2742f8e770c7a69205d"
+        },
+        "scalar": {
+          "passed": 47,
+          "logSha256": "b4e8d44391c63d585337c951af639ac2bf664cf311d90171d01c47ca75fea66b"
+        }
+      },
+      "model": {
+        "equivalentPixels": 327680,
+        "modeOrders": {
+          "decoder": [
+            "dc",
+            "vertical",
+            "horizontal",
+            "trueMotion"
+          ],
+          "prepared": [
+            "dc",
+            "trueMotion",
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "actualDecoderInvocations": 0
+      },
+      "candidateSourceSha256": "41a5485b1a04f3eba9bfe43772e8b639951023b5e33ffae1b046a559898ffedf",
+      "candidateLibrarySha256": "f0a161c919071ecb15fc4c623720ff34434ebe476141e92d5afa35939da87c1f"
+    },
+    "frp1366": {
+      "name": "shared chroma interpolation",
+      "cases": {
+        "Opaque8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 4735.678583333333,
+              "lower": 4218.637090532113,
+              "upper": 5252.720076134554
+            },
+            "candidate": {
+              "mean": 4719.057354166667,
+              "lower": 4100.6438069659325,
+              "upper": 5337.470901367402
+            },
+            "candidateToBaselineInterval": [
+              0.9714074037115487,
+              1.0222099746586955
+            ],
+            "candidateToBaselineRatio": 0.9964849911219191,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              4795.832375,
+              4793.114083333334,
+              4794.1423125
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-shared-chroma-pairs-Opaque8-3.tar.xz",
+            "sha256": "a260f3f2f78c2b1d171d547cd981ef2c938c3b0f14eeb4a52514bcaf2bec05bb",
+            "bytes": 397416,
+            "members": 22,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        },
+        "OpaqueCancelable8": {
+          "pairs": 3,
+          "operationsPerSide": 16,
+          "statistics": {
+            "baseline": {
+              "mean": 4763.8332083333335,
+              "lower": 4157.695371238566,
+              "upper": 5369.971045428101
+            },
+            "candidate": {
+              "mean": 4747.911416666667,
+              "lower": 4392.095534832714,
+              "upper": 5103.727298500619
+            },
+            "candidateToBaselineInterval": [
+              0.8902946857663825,
+              1.115751662102907
+            ],
+            "candidateToBaselineRatio": 0.9966683377158254,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              4792.621229166666,
+              4791.185270833334,
+              4792.857
+            ]
+          },
+          "managedOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exactPixelsSourceOwnershipAndQuietnessPassed": true,
+          "raw": {
+            "file": "vp8-decoder-shared-chroma-pairs-OpaqueCancelable8-3.tar.xz",
+            "sha256": "d6ac738d909f7bcfdf8afc48b49cfebe03886e37c22262a477432a60a914c4b4",
+            "bytes": 397496,
+            "members": 22,
+            "allMembersVerified": true,
+            "mirrored": true
+          }
+        }
+      },
+      "windowsFocused": {
+        "normal": {
+          "passed": 32,
+          "logSha256": "868d2066a3510185c89239b28dbe377a8be5fde7af3ddf7e48be05ec60d265dc"
+        },
+        "scalar": {
+          "passed": 32,
+          "logSha256": "1c04bb8c438a4a508664e0e0cd6624cd599e12e7871d74da7173caee718f9352"
+        }
+      },
+      "candidateSourceSha256": "888a9d74e822c27f1899924efaadf69b04f61cff4916b932648ff665c12ed06d",
+      "candidateLibrarySha256": "45bded37e752508a082a510f32f1172d3da677442b5a62d42e9a848582079608"
+    }
+  },
+  "baseline": {
+    "linuxSha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+    "packageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1"
+  }
+}

@@ -359,3 +359,45 @@ The original frame, source, owner and quietness gates pass on every timing.
 No variant demonstrates a sustained CPU benefit across both original
 controls, so the release DLL and current parity statuses remain in place.
 [Allocation and timing evidence](vp8-luma-rental-trial-evidence.json)
+
+### Large-block prediction
+
+The first private variant shares the existing block predictor for 8×8 and
+16×16 blocks, translating the decoder's mode numbering and copying the compact
+prediction into the padded plane. A separate model matches 327,680 samples
+across directional, DC and true-motion modes and all border-presence cases.
+The second variant writes DC and directional output directly into the plane
+and uses the compact predictor only for true motion with both neighbors.
+
+Both variants pass 47 focused Windows tests in each of normal and scalar
+modes, including the 164 frozen frames. The existing exact pixel and independent
+output checks pass on the VM. Each screen is three alternating pairs of 16
+complete decodes per side, with 230,880 managed B/op on both sides.
+
+| Variant and complete operation | Baseline → candidate µs | Paired interval |
+| --- | ---: | ---: |
+| Compact, ordinary | 5,047.60 → 5,003.72 | 0.964248–1.019134 |
+| Compact, live token | 5,184.47 → 5,144.14 | 0.932946–1.055260 |
+| Direct, ordinary | 5,089.37 → 5,062.12 | 0.925437–1.069053 |
+| Direct, live token | 5,084.17 → 5,114.53 | 0.766800–1.320066 |
+
+The direct variant removes most intermediate writes and shows no consistent
+gain. Both implementations stop at the screen. The qualified package and
+opaque reference uncertainties remain current.
+
+### Shared chroma interpolation
+
+The private AVX2 path loads five samples from each chroma row and shares their
+vertical interpolants across four horizontal pairs. Its signed 16-bit
+intermediates preserve the original rounding and centering. The normalized
+integer color matrix, scalar edges and tails, alpha, row cancellation and
+output ownership are unchanged. Windows passes 32 focused tests per mode
+with intrinsics enabled and disabled. Both quiet-VM screens pass the original
+exact frame, source and owner checks at **230,880 B/op** on both sides.
+
+Three alternating pairs of 16 complete decodes give **4,735.68 → 4,719.06 µs**
+for ordinary opaque, interval **0.971407–1.022210**, and
+**4,763.83 → 4,747.91 µs** for live-token opaque, interval
+**0.890295–1.115752**. Both intervals include unchanged performance. The trial
+ends at the screen, so the qualified package keeps its existing reference
+evidence. [Timing and verification evidence](vp8-decoder-output-trials-evidence.json)
