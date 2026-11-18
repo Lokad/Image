@@ -487,7 +487,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,333.69 | 4,090.78 | 0.815 / 0.831 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,080.93 | 5,074.41 | 0.804 / 0.808 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
-| Bicubic resize RGBA8 (confidence open) † → 256×129 | 416.73 | 417.10 | 0.999 / 1.039399 | 199,984 |
+| Bicubic resize RGBA8 (confidence open) † → 256×129 | 414.12 | 416.74 | 0.994 / 1.024193 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 804.84 | 818.22 | 0.984 / 0.990 | 113 |

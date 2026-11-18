@@ -3517,12 +3517,18 @@ costs. The complete final-package refresh remains outstanding."""
     bicubic_package = json.loads((ROOT / 'benchmarks/bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
     assert bicubic_package['producers'] == png_package['producers']
     assert bicubic_package['raw']['mirrored'] and bicubic_package['raw']['allMembersVerified']
+    adjacent = bicubic_package['defaultReductionAdjacent']
+    assert adjacent['raw']['mirrored'] and adjacent['raw']['allMembersVerified']
+    assert adjacent['nativeAdjacentOperationsEach'] == 240 and adjacent['nativeSamplesEachBracket'] == 12
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
         ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightDown8'),
         ('Bicubic RGBA8 enlargement, input+output+4 KiB', 'TightUp8'),
     ):
         c = bicubic_package['cases'][name]
+        if name == 'Down8':
+            assert all(adjacent[key] == c[key] for key in ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256'))
+            c = {**c, **adjacent}
         assert c['librarySha256'] == png_package['producers']['linuxSha256']
         assert len(c['actualOperationCounts']) == 12
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')

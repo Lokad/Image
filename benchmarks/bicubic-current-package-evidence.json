@@ -311,5 +311,82 @@
   },
   "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
   "confidence": "Conservative filtered and all-actual bounds against both native brackets.",
-  "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention."
+  "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention.",
+  "defaultReductionAdjacent": {
+    "project": "Lokad.Image",
+    "stage": "FRP1281",
+    "caseId": "Down8",
+    "productionChanged": false,
+    "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "originalGeneratedLoopsAndConsumer": true,
+    "forceGcBetweenIterations": false,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "nativeAdjacentOperationsEach": 240,
+    "actualOperationCounts": [
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496,
+      496
+    ],
+    "managedUs": 414.11654325513206,
+    "nativeUs": 416.7423001302083,
+    "ratio": 0.9936993271999126,
+    "lower": 0.8954843887779096,
+    "upper": 1.0241934585363461,
+    "status": "uncertain",
+    "allocatedBytes": 199985,
+    "pairedConfidence": [
+      {
+        "reference": "beforeEach",
+        "lower": 0.973927225982756,
+        "upper": 0.9953246707236723
+      },
+      {
+        "reference": "afterEach",
+        "lower": 0.9062718636612932,
+        "upper": 1.0103178577149199
+      }
+    ],
+    "confidenceViews": [
+      {
+        "view": "statistics",
+        "lower": 0.8959934923089841,
+        "upper": 1.021008201739036
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "lower": 0.8954843887779096,
+        "upper": 1.0241934585363461
+      }
+    ],
+    "nativeBracketMeansUs": {
+      "setup": 416.7423001302083,
+      "beforeEach": 421.23304270833336,
+      "afterEach": 433.80986631944444,
+      "cleanup": 420.0871829427083
+    },
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "managedOutputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+    "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+    "raw": {
+      "file": "bicubic-default-byte-interleaved-confirmation.tar.xz",
+      "sha256": "e7c5a136f1940309ecbb731b6f24e8c6ff00cadc6cab678969f5243f1133e160",
+      "bytes": 23980,
+      "members": 17,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  }
 }
