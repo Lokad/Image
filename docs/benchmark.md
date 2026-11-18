@@ -21,7 +21,8 @@ and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
 [Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
-the default and tight RGBA8 reductions and the tight RGBA8 enlargement.
+the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
+RGBA16 directions.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -490,7 +491,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic resize RGBA8 (confidence open) † → 256×129 | 414.12 | 416.74 | 0.994 / 1.024193 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 804.84 | 818.22 | 0.984 / 0.990 | 113 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 820.10 | 825.87 | 0.993 / 1.007289 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 403.27 | 413.28 | 0.976 / 0.982 | 113 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 451.05 | 1,046.58 | 0.431 / 0.433 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
@@ -500,7 +501,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 503.81 | 576.25 | 0.874 / 0.886 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 337.24 | 349.38 | 0.965 / 0.971 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 830.84 | 864.78 | 0.961 / 0.967 | 113 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 820.00 | 846.10 | 0.969 / 0.978 | 113 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 872.48 | 907.53 | 0.961 / 0.974925 | 114 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 340.70 | 347.49 | 0.980 / 0.984 | 112 |

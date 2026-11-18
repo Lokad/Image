@@ -3520,12 +3520,18 @@ costs. The complete final-package refresh remains outstanding."""
     adjacent = bicubic_package['defaultReductionAdjacent']
     assert adjacent['raw']['mirrored'] and adjacent['raw']['allMembersVerified']
     assert adjacent['nativeAdjacentOperationsEach'] == 240 and adjacent['nativeSamplesEachBracket'] == 12
+    mixed_word = bicubic_package['mixedWord']
+    assert mixed_word['producers'] == png_package['producers']
+    assert mixed_word['raw']['mirrored'] and mixed_word['raw']['allMembersVerified']
+    bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases']}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
         ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightDown8'),
         ('Bicubic RGBA8 enlargement, input+output+4 KiB', 'TightUp8'),
+        ('Bicubic RGBA16, width up / height down, input+output+4 KiB', 'TightMixed16'),
+        ('Bicubic RGBA16, width down / height up / input+output+4 KiB', 'TightCross16'),
     ):
-        c = bicubic_package['cases'][name]
+        c = bicubic_cases[name]
         if name == 'Down8':
             assert all(adjacent[key] == c[key] for key in ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256'))
             c = {**c, **adjacent}
@@ -3564,7 +3570,8 @@ and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
 [Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
-the default and tight RGBA8 reductions and the tight RGBA8 enlargement.
+the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
+RGBA16 directions.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

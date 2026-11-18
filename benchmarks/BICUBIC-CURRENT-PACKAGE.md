@@ -54,3 +54,30 @@ input and checks. The mirrored archive retains both attempts, all valid samples,
 guard and validation records. `bicubic-default-byte-interleaved-confirmation.tar.xz` has 17 verified
 members and 23,980 B, SHA-256
 `e7c5a136f1940309ecbb731b6f24e8c6ff00cadc6cab678969f5243f1133e160`.
+
+## Mixed-axis RGBA16
+
+| Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Tight width up, height down | 872.48 | 907.53 | 0.927146–0.974925 | 114 | Pass |
+| Default width up, height down | 804.55 | 847.89 | 0.845794–0.999391 | 114 | Pass |
+| Tight width down, height up | 820.10 | 825.87 | 0.964968–1.007289 | 113 | Uncertain |
+
+All three results fit into the changed idle pool. The local 4 KiB workspace
+limit still allows that pool. Each frozen case matches its latest passing
+receipt on the input, managed and native output, operation and reference
+identities. One existing runtime with 127 verified non-core files serves all
+three. The original complete workload loops, twelve actuals, natural GC
+and both native brackets and quietness guards remain. Exact managed pixels,
+approved reference bounds and surviving ownership checks pass.
+
+Both width-enlarging cases pass and stop. The default case's two native bracket
+means differ, at 926.34 and 847.89 µs. The conservative interval uses the
+faster bracket and all managed actuals. The tight width-reducing case stays
+uncertain, including its filtered comparison. These clocks establish current
+costs. They give no causal estimate of a storage change.
+
+The mirrored `bicubic-mixed-word-current-package-confirmations.tar.xz` contains 26 verified members
+and 111,552 B, SHA-256 `f5d3673b399303028d2dcd1bb8913a046decf8c3c8581066910b828cef22e457`.
+It includes all samples, matched prior receipts, identity checks and quietness
+guards. [Evidence](bicubic-current-package-evidence.json)
