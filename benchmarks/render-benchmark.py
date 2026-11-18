@@ -3699,6 +3699,15 @@ costs. The complete final-package refresh remains outstanding."""
     assert horizontal_adjacent['actualIterations'] == horizontal_adjacent['nativeSamplesEachBracket'] == 12
     assert horizontal_adjacent['status'] == 'pass' and horizontal_adjacent['upper'] <= 1
     assert all(horizontal_adjacent[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+    sparse_adjacent = jpeg_owned_package['sparse2DAdjacent']
+    assert sparse_adjacent['raw']['mirrored'] and sparse_adjacent['raw']['allMembersVerified']
+    assert sparse_adjacent['librarySha256'] == word_qualification['linuxSha256']
+    assert sparse_adjacent['actualIterations'] == sparse_adjacent['nativeSamplesEachBracket'] == 12
+    assert sparse_adjacent['nativeAdjacentOperationsEach'] == 216 and sparse_adjacent['status'] == 'pass'
+    assert sparse_adjacent['upper'] <= 1 and all(sparse_adjacent[key] for key in
+        ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'originalGeneratedLoopsAndConsumer'))
+    assert not sparse_adjacent['forceGcBetweenIterations']
+    jpeg_overrides = {'CmykAdobeAc': horizontal_adjacent, 'CmykAdobeSparse2D': sparse_adjacent}
     for name, label in (('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
                         ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
                         ('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -3712,11 +3721,12 @@ costs. The complete final-package refresh remains outstanding."""
                         ('Progressive420', 'JPEG progressive420, resident decode'),
                         ('Progressive422', 'JPEG progressive422, resident decode')):
         c = jpeg_cases[name]
-        if name == 'CmykAdobeAc':
-            assert horizontal_adjacent['inputSha256'] == c['inputSha256']
-            assert horizontal_adjacent['managedOutputSha256'] == c['outputSha256']
-            assert horizontal_adjacent['nativeOutputSha256'] == c['referenceOutputSha256']
-            c = horizontal_adjacent
+        if name in jpeg_overrides:
+            current = jpeg_overrides[name]
+            assert current['inputSha256'] == c['inputSha256']
+            assert current['managedOutputSha256'] == c['outputSha256']
+            assert current['nativeOutputSha256'] == c['referenceOutputSha256']
+            c = current
         heading = f'| {label} † |'
         old, = (line for line in codecs.splitlines() if line.startswith(heading))
         status = f' ({png_status[c["status"]]})' if c['status'] != 'pass' else ''
@@ -3731,7 +3741,7 @@ costs. The complete final-package refresh remains outstanding."""
               f'{fresh_cmyk["ratio"]:.3f} / {fresh_cmyk["upper"]:.6f} | '
               f'{fresh_cmyk["allocatedBytes"]:,} | {fresh_status[fresh_cmyk["status"]]} |')
     read_table = read_table.replace(old, result)
-    jpeg_passes = 1 + sum(c['status'] == 'pass' for name, c in jpeg_cases.items() if name != 'CmykAdobeAc')
+    jpeg_passes = sum(c['status'] == 'pass' for c in (jpeg_cases | jpeg_overrides).values())
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3958,7 +3968,8 @@ survivors. Allocation, retained admission and physical peaks stay distinct.
 The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
 cover all **{len(jpeg_cases)}** original owned-output cases affected by the shared
 output pool. **{jpeg_passes}** pass the conservative gate. Adjacent native sampling
-confirms horizontal CMYK, with the earlier adverse capture retained.
+confirms horizontal and sparse-2D CMYK. Their earlier adverse and uncertain
+captures remain available.
 The 13 displayed comparisons use these timings and allocations. Caller-buffer
 and coding-only paths keep their source-valid evidence.
 

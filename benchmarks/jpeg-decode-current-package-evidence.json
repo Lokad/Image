@@ -929,5 +929,82 @@
         "status": "pass"
       }
     }
+  },
+  "sparse2DAdjacent": {
+    "project": "Lokad.Image",
+    "stage": "FRP1311",
+    "caseId": "CmykAdobeSparse2D",
+    "productionChanged": false,
+    "librarySha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+    "originalGeneratedLoopsAndConsumer": true,
+    "forceGcBetweenIterations": false,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "nativeAdjacentOperationsEach": 216,
+    "actualOperationCounts": [
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432,
+      432
+    ],
+    "managedUs": 460.7338436447812,
+    "nativeUs": 471.83558984375,
+    "ratio": 0.97647115555093,
+    "lower": 0.9577001725163721,
+    "upper": 0.987804665439512,
+    "status": "pass",
+    "allocatedBytes": 20944,
+    "pairedConfidence": [
+      {
+        "reference": "beforeEach",
+        "lower": 0.9720714435457641,
+        "upper": 0.980806167319607
+      },
+      {
+        "reference": "afterEach",
+        "lower": 0.9710905926032344,
+        "upper": 0.9810182083655249
+      }
+    ],
+    "confidenceViews": [
+      {
+        "view": "statistics",
+        "lower": 0.9578674453509075,
+        "upper": 0.9857466764629207
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "lower": 0.9577001725163721,
+        "upper": 0.987804665439512
+      }
+    ],
+    "nativeBracketMeansUs": {
+      "setup": 474.169240234375,
+      "beforeEach": 472.3094313271605,
+      "afterEach": 472.49625,
+      "cleanup": 471.83558984375
+    },
+    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "managedOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "nativeOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "raw": {
+      "file": "jpeg-sparse2d-current-adjacent.tar.xz",
+      "sha256": "455bfb35b9ffb715cba8c64523aa983beca7c504ca573da47ecca18e392c0136",
+      "bytes": 29020,
+      "members": 16,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

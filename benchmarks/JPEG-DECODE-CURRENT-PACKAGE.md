@@ -1,9 +1,9 @@
 # JPEG decode on the current package
 
 All 24 original owned-output JPEG cases affected by the shared pool have
-measurements on the immutable 0.2.1 package. Horizontal-only Adobe CMYK passes
-with adjacent native samples. The initial five captures follow, with their
-subsequent confirmation and the remaining nineteen cases below.
+passing evidence on immutable 0.2.1 packages. Both horizontal and sparse-2D
+Adobe CMYK pass with adjacent native samples. The initial five captures
+below retain their earlier producer and timing outcomes.
 
 | Complete operation | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -121,3 +121,30 @@ verified members and 93,276 B, SHA-256
 It retains the inputs' identities, prior and current receipts, generated-loop
 and native identities, guards and every measured actual. The unchanged
 caller-sample, coding-only and inspection cases keep their own boundaries.
+
+## Sparse-2D adjacent native confirmation
+
+Sparse-2D Adobe CMYK passes on the latest actual package at **460.73 /
+FFmpeg 471.84 µs**, with a conservative interval of **0.957700–0.987805**
+and **20,944 B/op**. Both paired intervals and the all-actual and filtered
+bounds pass. This closes the remaining owned-output JPEG case. The earlier
+upper of 1.001969 stays with its original bracketed capture.
+
+The original 432-call managed actuals, generated loops, natural GC and
+both native brackets stay in place. A 216-call native sample directly
+precedes and follows each of the twelve actuals. Packet, analytical
+managed pixels, native CLI and scalar bounds, exact opacity, source and
+independent output checks pass. The observed clocks establish confidence
+under this schedule. The production decode path is unchanged.
+
+The first wrapper failed before starting the timed operation. A corrected
+wrapper completed a capture but failed to save its combined timing log.
+Its validation and both quiet guards are retained without a performance
+score. The next run used the same verified DLL and worker and wrote the
+combined timing log directly to memory-backed storage. No additional
+build or repeated qualification was needed.
+
+The mirrored `jpeg-sparse2d-current-adjacent.tar.xz` contains 16 verified
+members and 29,020 B, SHA-256
+`455bfb35b9ffb715cba8c64523aa983beca7c504ca573da47ecca18e392c0136`.
+[Evidence](jpeg-decode-current-package-evidence.json)

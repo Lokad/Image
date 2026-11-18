@@ -291,8 +291,9 @@ survivors. Allocation, retained admission and physical peaks stay distinct.
 **4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
 The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
 cover all **24** original owned-output cases affected by the shared
-output pool. **23** pass the conservative gate. Adjacent native sampling
-confirms horizontal CMYK, with the earlier adverse capture retained.
+output pool. **24** pass the conservative gate. Adjacent native sampling
+confirms horizontal and sparse-2D CMYK. Their earlier adverse and uncertain
+captures remain available.
 The 13 displayed comparisons use these timings and allocations. Caller-buffer
 and coding-only paths keep their source-valid evidence.
 
@@ -474,7 +475,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8L RGBA8, resident decode † | 2,951.16 | 3,269.16 | 0.903 / 0.907616 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 2,942.95 | 3,283.26 | 0.896 / 0.902094 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode † | 408.78 | 544.44 | 0.751 / 0.761869 | 288,464 | — |
-| JPEG CMYK sparse-2D, resident decode (confidence open) † | 459.79 | 465.71 | 0.987 / 1.001969 | 20,944 | — |
+| JPEG CMYK sparse-2D, resident decode † | 460.73 | 471.84 | 0.976 / 0.987805 | 20,944 | — |
 | JPEG YCCK420, resident decode † | 460.94 | 778.26 | 0.592 / 0.600071 | 895,562 | — |
 | JPEG 4:1:1, resident decode † | 410.15 | 489.45 | 0.838 / 0.849040 | 219,551 | — |
 | JPEG 4:1:0, resident decode † | 364.25 | 553.58 | 0.658 / 0.669676 | 189,090 | — |
