@@ -348,3 +348,35 @@ Archived rpr1264 recipes and corrected-worker/qualified dependencies reproduce
 it. The preceding tail trial now also explicitly declares that already retained
 corrected-worker archive dependency; its raw data is unchanged. Neither rejected
 trial supplies a displayed result or renderer dependency.
+
+## Current separate-byte attribution
+
+One two-second profile of the unmodified actual package places **1,955/1,998
+leaves** in the438B row helper; all1,998 resolve, with no lost records in raw perf
+decoding. All1,955 helper offsets match exact same-process instruction starts:
+bulk loop1,164, tail loop508, row advance101, tail views82, bulk views75, row poll22,
+entry3. Public caller12, validator6, stride getter5, input validation4 and pixel
+getter3 locations provide little support for another public-entry/getter campaign.
+These are sampled instruction locations, not phase times, stall diagnoses or
+removable-time estimates. Sampling skid and memory effects remain unresolved.
+
+Retained word-self profiles use different row geometry/traversal; the old byte
+capture includes startup and predates this prepared helper. Neither was replayed.
+The current separate-byte control keeps original513×259 input,256×129 rectangle,
+65,536-operation actor, actual7b/f4package and corrected911f reference. CPU0 runs
+alone; CPU1 collects999Hz software samples. All twenty instrumented batch clocks
+are discarded. Full source/canvas/alpha/hiddenRGB/untouched/owner/native checks
+and both idle-v2 guards pass. Zero builds, fixture/settings/gate/production changes
+or passing-path retiming. Current costs remain unchanged; reuse6,844full/live
+checks eachOS/SAMEactualpackage/all three examples.
+
+[Evidence](separate-byte-copy-attribution-evidence.json) retains every leaf,
+method map, exact JIT and instruction reconciliation. Mirrored/member-verified
+`separate-byte-copy-attribution.tar.xz`: **63,680 B /24 members**, SHA256
+`e5656dffb3028e95fa738cd1244c8e313b50e52893a177fce087cbf8f06a4b2e`.
+Archived bcp1265 recipes and named dependencies reproduce it; the loss-record
+check is read-only raw decoding. This diagnostic supplies no displayed cost or
+renderer dependency. Reconcile retained native small-copy scheduling and prior
+alignment trials before selecting another implementation; no blind row/tail/
+runtime replay or whole-library profile follows. Two byte gaps, word/async
+uncertainty and final289-path/165-comparison qualification remain open.

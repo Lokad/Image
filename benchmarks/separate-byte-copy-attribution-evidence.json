@@ -1,0 +1,483 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BCP1265",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "newTimingOrSpeedupClaim": false,
+  "allInstrumentedTimingsDiscarded": true,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "producers": {
+    "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+    "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+  },
+  "scope": "One2second current separatebyte complete publicCopyRegion profile; original513x259input/256x129rectangle/65536opactor/native911f reference;CPU0collectorCPU1. All20instrumentedbatchclocks discarded. Leaf locations are not phase timings,stall causes or a savingsforecast. Older retained profiles use wordself/differentrowlength/oldcaller orpartialstartup captures. No passingpathretiming,build,fixture/reference/gate or productionchange.",
+  "retainedProfileReview": {
+    "wordSelfProfiles": "COPY-ROW-VIEW-TRIAL.md and COPY-DIRECT-ADDRESSING-TRIAL.md use different word-row geometry/traversal and earlier caller.",
+    "partialByteProfile": "VECTOR-EXTENT-COPY-SCREEN.md includes startup/old public loop,not current prepared CopyRows.",
+    "nativeProfile": "COPY-ATTRIBUTION-NEAREST-GUARD.md profiles native wordself,not managed separatebyte.",
+    "noPriorMatchingCurrentByteProfileFound": true
+  },
+  "totalLeaves": 1998,
+  "resolvedManagedLeaves": 1998,
+  "lostSamples": 0,
+  "methodLeaves": [
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.IndependentRowCopy::CopyRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      1955
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.ImageDrawing::CopyRegion(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      12
+    ],
+    [
+      "instance int32 [Lokad.Image.Benchmarks] WarmCopyRegion::Managed()[Optimized]",
+      10
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.ImageDrawing::ValidateRegion(valuetype Lokad.Image.ImageDrawing/Region,class Lokad.Image.ImageLimits)[Optimized]",
+      6
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      5
+    ],
+    [
+      "class Lokad.Image.ImageLimits [Lokad.Image] Lokad.Image.ImageDrawing::ValidateInputs(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,class Lokad.Image.ImageLimits,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      4
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      3
+    ],
+    [
+      "valuetype Lokad.Image.ImageDrawing/Region [Lokad.Image] Lokad.Image.ImageDrawing::Clip(class Lokad.Image.ImageBuffer,int32,int32,int32,int32,int32,int32)[Optimized]",
+      2
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.ImageDrawing::Extent(int32,int32)[Optimized]",
+      1
+    ]
+  ],
+  "instructionLocations": {
+    "stage": "BCP1265",
+    "allHelperOffsetsMatchActualInstructionBoundaries": true,
+    "helperCodeBytes": 438,
+    "totalLeaves": 1998,
+    "helperLeaves": 1955,
+    "regionLeaves": {
+      "tailLoop": 508,
+      "bulkLoop": 1164,
+      "rowAdvance": 101,
+      "tailViews": 82,
+      "rowPoll": 22,
+      "bulkViews": 75,
+      "entry": 3
+    },
+    "instructionCategoryLeaves": {
+      "vectorStore": 695,
+      "vectorLoad": 756,
+      "other": 504
+    },
+    "locations": [
+      {
+        "offset": "0x16c",
+        "samples": 387,
+        "instruction": "vmovups  zmmword ptr [r10+r12], zmm0",
+        "region": "tailLoop"
+      },
+      {
+        "offset": "0xdd",
+        "samples": 359,
+        "instruction": "vmovups  zmm1, zmmword ptr [rdx+0x40]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0xf2",
+        "samples": 200,
+        "instruction": "vmovups  zmmword ptr [rcx], zmm0",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0xe4",
+        "samples": 198,
+        "instruction": "vmovups  zmm2, zmmword ptr [rdx+0x80]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0xeb",
+        "samples": 192,
+        "instruction": "vmovups  zmm3, zmmword ptr [rdx+0xC0]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x173",
+        "samples": 83,
+        "instruction": "add      r12, 64",
+        "region": "tailLoop"
+      },
+      {
+        "offset": "0x10d",
+        "samples": 63,
+        "instruction": "add      r11, 256",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0xf8",
+        "samples": 42,
+        "instruction": "vmovups  zmmword ptr [rcx+0x40], zmm1",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x5f",
+        "samples": 39,
+        "instruction": "add      r8d, r10d",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0xff",
+        "samples": 38,
+        "instruction": "vmovups  zmmword ptr [rcx+0x80], zmm2",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x179",
+        "samples": 31,
+        "instruction": "jne      SHORT G_M000_IG10",
+        "region": "tailLoop"
+      },
+      {
+        "offset": "0x65",
+        "samples": 28,
+        "instruction": "add      r9d, ecx",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0x106",
+        "samples": 28,
+        "instruction": "vmovups  zmmword ptr [rcx+0xC0], zmm3",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x114",
+        "samples": 27,
+        "instruction": "dec      r12d",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x14b",
+        "samples": 22,
+        "instruction": "mov      r12d, r13d",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x7a",
+        "samples": 22,
+        "instruction": "jne      G_M000_IG13",
+        "region": "rowPoll"
+      },
+      {
+        "offset": "0x89",
+        "samples": 21,
+        "instruction": "mov      r12d, esi",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x68",
+        "samples": 20,
+        "instruction": "mov      dword ptr [rbp+0x20], r10d",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0xca",
+        "samples": 16,
+        "instruction": "jle      SHORT G_M000_IG08",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0xab",
+        "samples": 13,
+        "instruction": "mov      dword ptr [rbp-0x2C], ecx",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x128",
+        "samples": 11,
+        "instruction": "cmp      rdx, r10",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x151",
+        "samples": 9,
+        "instruction": "ja       SHORT G_M000_IG15",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x72",
+        "samples": 8,
+        "instruction": "mov      rdx, r11",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0xc4",
+        "samples": 8,
+        "instruction": "mov      r11d, r12d",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0xd3",
+        "samples": 8,
+        "instruction": "lea      rcx, bword ptr [r10+r11]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0xd7",
+        "samples": 7,
+        "instruction": "vmovups  zmm0, zmmword ptr [rdx]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x177",
+        "samples": 7,
+        "instruction": "dec      edx",
+        "region": "tailLoop"
+      },
+      {
+        "offset": "0x134",
+        "samples": 7,
+        "instruction": "mov      edx, r14d",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x144",
+        "samples": 7,
+        "instruction": "add      r11, r13",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x157",
+        "samples": 6,
+        "instruction": "add      r10, r11",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x98",
+        "samples": 6,
+        "instruction": "add      r13, rdi",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x122",
+        "samples": 6,
+        "instruction": "add      rdx, r10",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x160",
+        "samples": 5,
+        "instruction": "jle      SHORT G_M000_IG11",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x11d",
+        "samples": 4,
+        "instruction": "mov      edx, ecx",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0x62",
+        "samples": 4,
+        "instruction": "mov      ecx, dword ptr [rbp+0x28]",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0xa5",
+        "samples": 4,
+        "instruction": "mov      r10d, r15d",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x13e",
+        "samples": 3,
+        "instruction": "mov      r11d, r10d",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0xcf",
+        "samples": 2,
+        "instruction": "lea      rdx, bword ptr [r11+r13]",
+        "region": "bulkLoop"
+      },
+      {
+        "offset": "0x0",
+        "samples": 2,
+        "instruction": "push     rbp",
+        "region": "entry"
+      },
+      {
+        "offset": "0x15a",
+        "samples": 2,
+        "instruction": "mov      r12d, edx",
+        "region": "tailViews"
+      },
+      {
+        "offset": "0xc1",
+        "samples": 2,
+        "instruction": "add      r10, rdx",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x6c",
+        "samples": 2,
+        "instruction": "mov      dword ptr [rbp+0x28], ecx",
+        "region": "rowAdvance"
+      },
+      {
+        "offset": "0x59",
+        "samples": 1,
+        "instruction": "jmp      SHORT G_M000_IG04",
+        "region": "entry"
+      },
+      {
+        "offset": "0xb4",
+        "samples": 1,
+        "instruction": "ja       G_M000_IG15",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0xae",
+        "samples": 1,
+        "instruction": "mov      r11d, ecx",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0xa8",
+        "samples": 1,
+        "instruction": "add      r10, r11",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x8c",
+        "samples": 1,
+        "instruction": "cmp      r13, r12",
+        "region": "bulkViews"
+      },
+      {
+        "offset": "0x83",
+        "samples": 1,
+        "instruction": "mov      r12d, r15d",
+        "region": "bulkViews"
+      }
+    ],
+    "allInstrumentedClocksDiscarded": true,
+    "interpretation": "Leaf locations only; software-sampling skid,cache/stores and scheduling are not isolated. Counts are not phase times or a forecast of removable work. Publicentry/getter tuning and another generic/runtime tail variation are not selected by this capture."
+  },
+  "sourceAndOutputChecks": {
+    "allOriginalPassed": true,
+    "source": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "output": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "copy-region",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "affinityCount": 1,
+      "workerThreads": 1,
+      "outputWidth": 513,
+      "outputHeight": 259,
+      "sourceX": 127,
+      "sourceY": 65,
+      "copyWidth": 256,
+      "copyHeight": 129,
+      "destinationX": 17,
+      "destinationY": 19,
+      "clippedWidth": 256,
+      "clippingTimed": true,
+      "borrowedSource": true,
+      "borrowedCanvas": true,
+      "canvasMutationTimed": true,
+      "sourcePreparationTimed": false,
+      "canvasPreparationTimed": false,
+      "outputAllocationTimed": false,
+      "initialCompletedOperations": 1,
+      "inputStride": 2052,
+      "ffmpegVersion": "n8.1",
+      "avutilVersion": 3938916
+    },
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm FFmpeg worker",
+      "sourceSha256": "f2d1a375cb072911cb352e50a8184eec33e3dcc35defc2b14f9d02f67d8f2696",
+      "buildScriptSha256": "c324b12f28d13312d879267a3f4a263b16205c9093ff7a5e2669c208d80b90d3",
+      "workerSha256": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+      },
+      "libraries": "-L/home/lokad/image-representative-54834b34ab6c-20261009-1108/external/linux-x64/native/lib -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+    }
+  },
+  "quietGuardsPassed": true,
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "memory": {
+    "instrumentedBatchesAllocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalNativeJitPeaksMeasured": false
+  },
+  "decision": "Retain one scoped current profile. 1955/1998 leaves are in438B rowhelper,including1164 bulk-loop and508 tail-loop locations. All1955 helper PCs map to exact same-process instruction starts. This does not isolate stalls,phase durations or removable time. Publicentry/getter/policy tuning is not selected. Reuse exact current standalone costs and adverse managed trials;no wholelibraryprofile or repetition. Before another implementation,reconcile actual reference small-copy scheduling using retained mappedlibc/version/codegen;do not blindly replay old tail/grouping/row/runtime variants. Two bytegaps/word+asyncuncertainty/final289scope165refresh remain open.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "separate-byte-copy-attribution.tar.xz",
+    "sha256": "e5656dffb3028e95fa738cd1244c8e313b50e52893a177fce087cbf8f06a4b2e",
+    "bytes": 63680,
+    "members": 24,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "copy-operation-boundary.tar.xz",
+        "sha256": "74ac5f858e5ce39b7c081b2e493b822d9595d9f33512ccae4a1295984a115dd1"
+      },
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  },
+  "lostRecordCheck": {
+    "command": [
+      "perf",
+      "script",
+      "-D",
+      "-i",
+      "tmp/bcp1265-separate-byte.perf.data"
+    ],
+    "lostRecords": 0,
+    "decodedBytes": 9202632,
+    "readOnlyAfterCapture": true,
+    "noProfileOrTimingRepeated": true
+  }
+}
