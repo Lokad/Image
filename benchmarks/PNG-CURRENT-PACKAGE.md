@@ -1,11 +1,38 @@
 # Current-package PNG cost
 
-The original resident RGBA8 PNG decode passes on the unchanged actual 0.2.1
-package. This is one required path outside the 165 displayed comparisons.
+On the actual 0.2.1 package, 46 of 47 original resident PNG decoder controls pass.
+The tight working limit RGBA16 control remains open.
 
 | Control | Lokad.Image µs | FFmpeg µs | Ratio / conservative upper | Managed GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Original 513×259 RGBA8 PNG, resident decode | 1,192.53 | 1,396.53 | 0.854 / 0.862908 | 4,472 | Pass; stop |
+| Original RGBA8, live token | 1,334.01 | 1,395.37 | 0.956 / 0.962890 | 4,472 | Pass |
+| Original RGBA8, tight working limit | 1,240.93 | 1,505.84 | 0.824 / 0.829439 | 68,224 | Pass |
+| Original RGBA16, tight working limit | 2,958.97 | 2,900.14 | 1.020 / 1.058694 | 70,272 | Uncertain |
+
+The resumed batch captured 46 controls sequentially using one runtime and the
+same generated loops as the first resident RGBA8 confirmation. All 552 managed
+actuals and both native brackets per control are retained. In the open case,
+the managed batches move from 2.786–2.793 ms for the first two to 2.932–3.031 ms
+for the remaining ten. Native bracket means move from 2.900 to 3.118 ms.
+The conservative ratio interval is 0.905898–1.058694. Interleaved native sampling
+can test the effect of measuring the two sides at different times.
+
+The scored iterations use natural GC. BenchmarkDotNet reports allocation in a
+separate diagnostic pass after the actuals, with its own forced collection.
+The VM source guard initially rejected the run because a prior archive step
+had overwritten the pinned log parser source. Restoring the exact manifest
+version resolved the rejection before timing began. The VM parser then failed
+to load a dependency after the first capture. The local parser scored that
+capture and the rest of the batch from their retained logs.
+
+The batch evidence includes every case and the 26 verified input origins for the
+other original PNG controls. All cases retain their individual public boundaries.
+[Batch evidence](png-decoder-current-package-evidence.json) and the mirrored,
+member-verified `png-decoder-current-package-confirmations.tar.xz` preserve
+commands, actuals, validation and the failed setup and parser logs. The archive
+contains 395 members and 423,200 B, SHA-256
+`6e0bb4e060760f1c42b870b6e9f984623ad50dc195266fc6296aed4ac01464c3`.
 
 The original generated BenchmarkDotNet delegates, consumer, unroll/remainder
 loops, setup/cleanup, three warmups, twelve actuals and 200 ms target are reused.
@@ -33,8 +60,8 @@ are unchanged.
 The original renderer reproduces all 240 numeric rows from 75 pinned Git data
 files. All 47 original PNG decoder controls match later records by case, encoded
 input hash, output hash, dimensions and depth. This establishes scope provenance.
-The other 46 decoder costs remain historical after the shared-storage change;
-no passing kernel is retuned. The full 289-path objective stays open.
+The batch refresh above supplies the current costs after the shared-storage
+change. The full 289-path objective stays open.
 
 [Evidence](png-current-package-cost-evidence.json) retains the measurement,
 source reconciliation, all gates and immutable identities. Mirrored/member-verified

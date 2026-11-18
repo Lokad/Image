@@ -9,10 +9,10 @@ corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
-[Original resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) also passes on
-that actual package: **1,192.53 / FFmpeg 1,396.53 µs,
-upper 0.862908**, **4,472 B/op**, natural GC.
-This nondisplayed required path stops; the other 46 original decoder costs await refresh.
+[Resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) passes for
+**46 of 47** original controls on that actual package with natural GC.
+The tight working limit RGBA16 control remains uncertain at **0.905898–1.058694**
+and **70,272 B/op**. The three displayed resident decode rows use these measurements.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -435,9 +435,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,602.49 | 5,408.55 | 0.851 / 0.867 | 818,004 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,892.73 | 10,500.84 | 0.942 / 0.952 | 1,356,164 | 506,887 / 506,887 |
 | PNG RGBA8, one-shot stored0 / native0 † | 53.27 | 541.40 | 0.098 / 0.114 | 607,628 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † | 1,378.18 | 1,395.98 | 0.987 / 0.996 | 4,472 | — |
-| PNG RGBA8 decode, tight working limit † | 1,161.50 | 1,394.24 | 0.833 / 0.840 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit † | 2,797.18 | 2,898.56 | 0.965 / 0.975 | 70,272 | — |
+| PNG RGBA8 decode, live token † (pass) | 1,334.01 | 1,395.37 | 0.956 / 0.962890 | 4,472 | — |
+| PNG RGBA8 decode, tight working limit † (pass) | 1,240.93 | 1,505.84 | 0.824 / 0.829439 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit † (confidence open) | 2,958.97 | 2,900.14 | 1.020 / 1.058694 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 259,795.57 | 388,008.23 | 0.670 / 0.685 | 2,491,252 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,266.79 | 18,600.99 | 0.928 / 0.934 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |

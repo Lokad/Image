@@ -7,13 +7,11 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion requires valid passing evidence for every named path. Missing evidence,
 gaps and uncertainty stay open. No image, shape, depth, filter or quality grid is added.
 
-[Current-package PNG](PNG-CURRENT-PACKAGE.md) qualifies the original resident
-RGBA8 decode outside the 165-row summary: 1,192.53 / FFmpeg 1,396.53 µs,
-upper 0.862908, 4,472 B/op. It passes and stops on the unchanged actual package.
-Original generated loops and full operation boundaries remain, with explicit
-natural-GC iterations and all twelve actuals retained. All 47 original decoder
-inputs/outputs/dimensions/depths reconcile; the other 46 costs remain historical
-after the storage change. This adds no case or whole-library claim.
+On the actual package, 46 of the 47 original resident PNG decoder controls pass
+with natural GC. The tight working limit RGBA16 control has a conservative
+interval of 0.905898–1.058694 and allocates 70,272 B/op. The native bracket shift
+and managed iteration drift motivate an interleaved comparison. All frozen
+inputs, exact pixels, resource and ownership gates passed. [Current-package PNG](PNG-CURRENT-PACKAGE.md)
 
 [Completed nearest rows](NEAREST-ROW-REUSE.md) retains source-valid evidence:
 complete controlled RGBA16 enlargement saves 10.35% / 110.756 us with unchanged
