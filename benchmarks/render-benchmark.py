@@ -3582,11 +3582,9 @@ costs. The complete final-package refresh remains outstanding."""
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
     extended_bicubic = bicubic_package['extendedCases']
     assert extended_bicubic['producers'] == word_qualification and extended_bicubic['builds'] == 0
-    assert extended_bicubic['raw']['mirrored'] and extended_bicubic['raw']['allMembersVerified']
-    axial_raw = extended_bicubic['axialAndWordRaw']
-    assert axial_raw['mirrored'] and axial_raw['allMembersVerified']
+    assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in extended_bicubic['archives'])
     extended_cases = extended_bicubic['cases']
-    assert len(extended_cases) == 14
+    assert len(extended_cases) == 23
     assert all(c['librarySha256'] == word_qualification['linuxSha256'] and c['actuals'] == 12
                and c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
                and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
@@ -3604,6 +3602,10 @@ costs. The complete final-package refresh remains outstanding."""
         ('Bicubic RGBA8 height enlargement, input+output+4 KiB', 'TightVerticalUp8'),
         ('Bicubic RGBA8, width up / height down, input+output+4 KiB', 'TightMixed8'),
         ('Bicubic RGBA8, width down / height up, default workspace', 'Cross8'),
+        ('Bicubic RGBA16, width down / height up, default workspace', 'Cross16'),
+        ('Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB', 'TightCross8'),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB', 'TightDown16'),
+        ('Bicubic RGBA8, width reduction / same height, input+output+4 KiB', 'TightHorizontal8'),
         ('Bicubic RGBA16 reduction, input+output+4 KiB', 'Tight32x16_16'),
     ):
         c = bicubic_cases[name]

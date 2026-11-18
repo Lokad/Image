@@ -508,7 +508,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
 | Bicubic resize RGBA8 (confidence open) † → 256×129 | 414.12 | 416.74 | 0.994 / 1.024193 | 199,985 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
-| Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |
+| Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.04 | 840.84 | 0.897 / 0.913422 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 820.10 | 825.87 | 0.993 / 1.007289 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 435.03 | 442.74 | 0.983 / 0.991529 | 113 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 451.05 | 1,046.58 | 0.431 / 0.433 | 113 |
@@ -516,7 +516,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 414.38 | 419.26 | 0.988 / 1.003866 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 503.81 | 576.25 | 0.874 / 0.886 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 495.34 | 569.89 | 0.869 / 0.873750 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 337.24 | 349.38 | 0.965 / 0.971 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 872.48 | 907.53 | 0.961 / 0.974925 | 114 |
@@ -525,7 +525,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 128×64 | 380.07 | 375.17 | 1.013 / 1.024773 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.66 | 448.29 | 0.905 / 0.918803 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.11 | 902.40 | 0.898 / 0.906412 | 199,938 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 732.70 | 825.62 | 0.887 / 0.898772 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.95 | 1.91 | 1.025 / 1.037 | 0 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.82 | 1.003 / 1.012 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
@@ -551,7 +551,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
 | Bilinear resize RGBA8 † → 256×129 | 373.69 | 384.94 | 0.971 / 0.979 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 388.37 | 418.68 | 0.928 / 0.937 | 8,473 |
-| Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 500.42 | 574.64 | 0.871 / 0.875 | 113 |
+| Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 490.21 | 576.13 | 0.851 / 0.862076 | 113 |
 | Bicubic one-shot RGBA8 / zimg one-shot † → 128×64 | 350.31 | 990.90 | 0.354 / 0.357 | 198,455 |
 | Bicubic prepared RGBA8 / zimg prepared † → 128×64 | 259.35 | 348.80 | 0.744 / 0.747 | 137 |
 | Bicubic one-shot RGBA16 / zimg one-shot † → 128×64 | 395.89 | 599.92 | 0.660 / 0.677 | 198,453 |

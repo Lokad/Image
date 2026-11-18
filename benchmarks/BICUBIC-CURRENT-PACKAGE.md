@@ -198,7 +198,7 @@ guard failure, builds, qualification logs and actual package.
 
 ## Additional current-package cases
 
-Thirteen of fourteen additional cases pass on the same actual package. The tight 64×32
+Twenty-two of twenty-three additional cases pass on the same actual package. The tight 64×32
 RGBA8 reduction remains uncertain.
 
 | Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
@@ -217,6 +217,15 @@ RGBA8 reduction remains uncertain.
 | Default RGBA16 height enlargement | 1,389.73 | 1,825.94 | 0.746134–0.775474 | 114 | Pass |
 | Tight RGBA16 height enlargement | 1,380.69 | 1,822.25 | 0.748878–0.765398 | 114 | Pass |
 | Default RGBA16 reduction to 256×129 | 408.45 | 575.33 | 0.693044–0.723866 | 199,958 | Pass |
+| Default RGBA16 width down, height up | 732.70 | 825.62 | 0.865501–0.898772 | 199,898 | Pass |
+| Tight RGBA8 width down, height up | 754.04 | 840.84 | 0.878112–0.913422 | 113 | Pass |
+| Tight RGBA16 reduction to 256×129 | 495.34 | 569.89 | 0.863185–0.873750 | 113 | Pass |
+| Default RGBA8 width reduction | 407.09 | 573.55 | 0.697881–0.718390 | 199,980 | Pass |
+| Default RGBA16 width reduction | 499.47 | 580.50 | 0.846519–0.867729 | 199,929 | Pass |
+| Tight RGBA8 width reduction | 490.21 | 576.13 | 0.839039–0.862076 | 113 | Pass |
+| Tight RGBA16 width reduction | 445.73 | 578.89 | 0.758921–0.782179 | 113 | Pass |
+| Default RGBA8 height reduction | 495.71 | 631.51 | 0.766276–0.804162 | 367,676 | Pass |
+| Default RGBA16 height reduction | 471.14 | 623.43 | 0.731037–0.781547 | 367,596 | Pass |
 
 The 16×8 word case retains its original twelve alternating 256-call pairs
 and twelve native samples in each outer bracket. The earlier uncertain
@@ -224,7 +233,7 @@ capture and the later streaming-column pass remain in the evidence.
 The new result confirms the current package. The compact-weight change
 does not execute on this shape. [Streaming-column results](STREAMING-COLUMN-REUSE.md)
 
-The other thirteen cases use two sequential batches with the same 127 verified
+The other twenty-two cases use three sequential batches with the same 127 verified
 non-core runtime files and original generated delegates. Each retains three warmups, twelve measured
 actuals with natural GC and twelve samples per native bracket. The conservative
 interval includes both the filtered and all-actual views. The 64×32 byte
@@ -234,8 +243,7 @@ Every case preserves the original input and output hashes, exact managed
 pixels, native bounds, source and independent output checks. The reference
 retains zimg preparation. Both idle guards pass with untimed files in memory.
 No new build or production change was needed. Allocations are reported
-separately from owned capacity and idle retention. Five existing summary
-rows use the refreshed measurements.
+separately from owned capacity and idle retention. Nine existing summary rows use the refreshed measurements.
 
 The mirrored `bicubic-current-package-extended-cases.tar.xz` contains 55 verified
 members and 54,932 B, SHA-256
@@ -250,3 +258,9 @@ The axial enlargements and default word reduction are retained in the mirrored
 members and 36,916 B, SHA-256
 `c3c263816b7139098ab1852053802d44fb5e5d6db7b1fc0b2a878f48af282944`.
 Both word height enlargements retain their approved low-alpha native limits.
+
+The nine further mixed-axis and axial reductions are retained in the mirrored
+`bicubic-current-package-axial-reduction-cross.tar.xz` with 58 verified
+members and 52,388 B, SHA-256
+`02e428f80a128445710f996ef6ac01275a12240be520c1420706f295c4245614`.
+The exact certified sample-half results and existing native bounds remain.
