@@ -997,5 +997,241 @@
         ]
       }
     }
+  },
+  "samePackageClockDiagnostic": {
+    "case": "DrawingCopy8",
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "fixtureSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "originalGatesPassed": true,
+    "allObservationsRetained": true,
+    "quietGuardsPassed": true,
+    "diagnosticOnly": true,
+    "scoredCaptures": 0,
+    "toolingBuilds": 0,
+    "productionBuilds": 0,
+    "sessions": [
+      {
+        "session": 0,
+        "managed": {
+          "wallNsPerOp": 1952.8467445373535,
+          "cpuRuntimeNsPerOp": 1956.6092147827148,
+          "transactionMinusRuntimeNsPerOp": 1.7806282043457031,
+          "schedulerWaitNsPerOp": 1.2990951538085938,
+          "aperfMperf": 1.7465270888090247
+        },
+        "native": {
+          "wallNsPerOp": 1892.8712272644043,
+          "cpuRuntimeNsPerOp": 1891.7978401184082,
+          "transactionMinusRuntimeNsPerOp": 2.0216217041015625,
+          "schedulerWaitNsPerOp": 1.2504806518554688,
+          "aperfMperf": 1.7377399269305998
+        }
+      },
+      {
+        "session": 1,
+        "managed": {
+          "wallNsPerOp": 1952.7385025024414,
+          "cpuRuntimeNsPerOp": 1956.9619026184082,
+          "transactionMinusRuntimeNsPerOp": 1.9008331298828125,
+          "schedulerWaitNsPerOp": 1.3169059753417969,
+          "aperfMperf": 1.7453451939011606
+        },
+        "native": {
+          "wallNsPerOp": 1939.8685874938965,
+          "cpuRuntimeNsPerOp": 1938.6722450256348,
+          "transactionMinusRuntimeNsPerOp": 2.1624298095703125,
+          "schedulerWaitNsPerOp": 1.363250732421875,
+          "aperfMperf": 1.7464520958903407
+        }
+      },
+      {
+        "session": 2,
+        "managed": {
+          "wallNsPerOp": 1974.4820518493652,
+          "cpuRuntimeNsPerOp": 1978.771900177002,
+          "transactionMinusRuntimeNsPerOp": 1.7873954772949219,
+          "schedulerWaitNsPerOp": 1.2673149108886719,
+          "aperfMperf": 1.7467917298736961
+        },
+        "native": {
+          "wallNsPerOp": 1906.8698654174805,
+          "cpuRuntimeNsPerOp": 1905.5606536865234,
+          "transactionMinusRuntimeNsPerOp": 2.1578598022460938,
+          "schedulerWaitNsPerOp": 1.4906806945800781,
+          "aperfMperf": 1.7469411585821155
+        }
+      },
+      {
+        "session": 3,
+        "managed": {
+          "wallNsPerOp": 1956.9249076843262,
+          "cpuRuntimeNsPerOp": 1960.4016456604004,
+          "transactionMinusRuntimeNsPerOp": 1.8288116455078125,
+          "schedulerWaitNsPerOp": 1.3474273681640625,
+          "aperfMperf": 1.7470034026929127
+        },
+        "native": {
+          "wallNsPerOp": 1915.3049621582031,
+          "cpuRuntimeNsPerOp": 1914.2234268188477,
+          "transactionMinusRuntimeNsPerOp": 1.9685287475585938,
+          "schedulerWaitNsPerOp": 1.2403831481933594,
+          "aperfMperf": 1.7409121412845976
+        }
+      }
+    ],
+    "subjects": {
+      "managed": {
+        "wallNsPerOpRange": [
+          1951.574935913086,
+          1975.1682434082031
+        ],
+        "aperfMperfRange": [
+          1.7444262478334132,
+          1.7479148137166223
+        ],
+        "transactionMinusRuntimeNsPerOpRange": [
+          1.608734130859375,
+          2.191986083984375
+        ],
+        "schedulerWaitNsPerOpRange": [
+          1.044403076171875,
+          1.5788421630859375
+        ],
+        "clockTimeCorrelation": 0.3016397557532982
+      },
+      "native": {
+        "wallNsPerOpRange": [
+          1879.7002410888672,
+          1954.8478698730469
+        ],
+        "aperfMperfRange": [
+          1.7121140690589747,
+          1.7481876090967299
+        ],
+        "transactionMinusRuntimeNsPerOpRange": [
+          1.5750274658203125,
+          2.991790771484375
+        ],
+        "schedulerWaitNsPerOpRange": [
+          0.8793792724609375,
+          2.2534027099609375
+        ],
+        "clockTimeCorrelation": -0.24533581724874204
+      }
+    },
+    "paired": {
+      "wallDifferenceNsRange": [
+        -1.613311767578125,
+        74.80184936523438
+      ],
+      "wallRatioRange": [
+        0.9991747123689564,
+        1.0393797495883401
+      ],
+      "adjustedRatioRange": [
+        0.9982868391308056,
+        1.0396569101449904
+      ],
+      "meanDifferenceNs": 45.51939105987549
+    },
+    "subjectUnits": 32,
+    "raw": {
+      "file": "copy-clock-diagnostic.tar.xz",
+      "bytes": 33380,
+      "sha256": "3db8081d93cc689905e499d8c2ed147d8ec061f987ba44c7b400c1dfbd65020c",
+      "members": 24,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "sameProcessPlacementDiagnostic": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "originalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "validationSha256": "25dea9dd081db3feb532491a6c9d4db1fd80215ff03c39a450955693ebb1eb40",
+    "driverBuilds": 1,
+    "productionBuilds": 0,
+    "scoredCaptures": 0,
+    "allStablePagePhases": true,
+    "distinctDestinationBackings": 4,
+    "meanSpreadNs": 29.69152069091797,
+    "layouts": [
+      {
+        "index": 0,
+        "sourcePageOffset": 1640,
+        "destinationPageOffset": 2392,
+        "firstSourceCopyPageOffset": 360,
+        "firstDestinationCopyPageOffset": 488,
+        "destinationLineOffset": 40,
+        "relativePageOffset": 128,
+        "nsPerOp": 1961.567024230957,
+        "aperfMperf": 1.7441915758787743,
+        "nsPerOpRange": [
+          1956.1636810302734,
+          1974.6837005615234
+        ]
+      },
+      {
+        "index": 1,
+        "sourcePageOffset": 1640,
+        "destinationPageOffset": 1928,
+        "firstSourceCopyPageOffset": 360,
+        "firstDestinationCopyPageOffset": 24,
+        "destinationLineOffset": 24,
+        "relativePageOffset": 3760,
+        "nsPerOp": 1991.258544921875,
+        "aperfMperf": 1.748037763223,
+        "nsPerOpRange": [
+          1989.5545349121094,
+          1992.7498321533203
+        ]
+      },
+      {
+        "index": 2,
+        "sourcePageOffset": 1640,
+        "destinationPageOffset": 976,
+        "firstSourceCopyPageOffset": 360,
+        "firstDestinationCopyPageOffset": 3168,
+        "destinationLineOffset": 32,
+        "relativePageOffset": 2808,
+        "nsPerOp": 1966.2161750793457,
+        "aperfMperf": 1.7485804484456384,
+        "nsPerOpRange": [
+          1963.6862182617188,
+          1969.9071807861328
+        ]
+      },
+      {
+        "index": 3,
+        "sourcePageOffset": 1640,
+        "destinationPageOffset": 24,
+        "firstSourceCopyPageOffset": 360,
+        "firstDestinationCopyPageOffset": 2216,
+        "destinationLineOffset": 40,
+        "relativePageOffset": 1856,
+        "nsPerOp": 1979.366226196289,
+        "aperfMperf": 1.7475980941528635,
+        "nsPerOpRange": [
+          1976.8248443603516,
+          1983.2110137939453
+        ]
+      }
+    ],
+    "allObservationsRetained": true,
+    "observations": 16,
+    "raw": {
+      "file": "copy-placement-diagnostic.tar.xz",
+      "bytes": 27124,
+      "sha256": "18d7064a2f4f5651c1b91039c884bade233f6c4cdc02b919d897a675712f0266",
+      "members": 17,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

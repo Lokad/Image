@@ -164,3 +164,17 @@ keeps the original retained geometry. The bilinear reference still
 creates its graph per call. One temporary check-tool build serves both
 cases and all preflight clocks are discarded.
 [Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Text integration and font-loading package bindings
+
+The original one-shot and prepare-once/eight-draw text checks pass on
+development package `87f1ae4a` with the pinned ImageSharp.Drawing and
+SixLabors.Fonts assemblies. All 30 fitting trials, exact managed
+glyphs and full-word pixels, the reference layout and visual gates,
+and surviving output and memory-owner checks reproduce their receipts.
+
+Owned font loading passes the original FreeType 2.13.2 worker's
+metric, independent-face and release checks on the same frozen
+DejaVu Sans font. The scoped eager/lazy validation distinction remains.
+Both harnesses use their original check modes and frozen runtimes.
+[Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

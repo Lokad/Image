@@ -822,3 +822,31 @@ within their matched sessions. The saved data establish variation across
 sessions, with no new samples. They give no cause for the variation and
 leave the original standalone FFmpeg statuses open.
 [Archived session identities and means](copy-vector-width-trials-evidence.json)
+
+## Clock and storage-placement diagnostics
+
+Four fresh launches alternate the original separate RGBA8 workload and
+its frozen FFmpeg worker. The diagnostic retains all 16 pairs of 65,536
+calls per side. CPU 1 observes CPU 0's APERF and MPERF, and the driver
+reads scheduler counters outside the operation clocks. Managed launch
+means span **1.953–1.974 µs**. Observed managed scheduler wait is
+**1.04–1.58 ns/op**, and the managed APERF/MPERF ratio spans
+**1.7444–1.7479**. The paired mean difference is **45.5 ns**. Clock
+adjustment leaves essentially the same spread in paired ratios.
+This run did not reproduce the earlier 197 ns baseline spread.
+
+A separate run uses the same package, source, compiled copy method and
+four byte-identical destination canvases. The 16 batches rotate each
+canvas through every position. Allocation and brief pins to read address
+offsets are outside the clocks. All observed address offsets stay stable.
+The four means span **1.962–1.991 µs**, a **29.7 ns** difference. Two
+destinations with the same offset within a cache line differ by
+**17.8 ns**. Average APERF/MPERF for each destination spans
+**1.7442–1.7486**. The timing follows the destination backing in this
+capture. The diagnostic cannot isolate virtual offset from physical
+placement or explain the whole historical spread.
+
+Both captures retain exact pixels, source and ownership checks, quiet
+guards and **0 B/op** within the measured copy. These diagnostics add
+no scored result. The standalone FFmpeg statuses remain open.
+[Raw clocks, layout offsets and verification evidence](copy-vector-width-trials-evidence.json)
