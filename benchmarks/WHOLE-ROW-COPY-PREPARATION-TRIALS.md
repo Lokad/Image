@@ -646,3 +646,23 @@ The clipped point savings of about 10 ns fall short of the 69 ns measured gap.
 Both intervals include unchanged performance. The trial ends at the screen and
 the qualified package keeps its existing costs and statuses.
 [Timing, generated code and verification evidence](uncancelable-row-copy-trial-evidence.json)
+
+## Interleaved blocks from two separate rows
+
+The isolated AVX-512 path loads a 512-byte block from each of two separate
+RGBA8 rows before storing either. Both footprints are checked. An end block
+overlaps the previous block by at most 64 bytes, and the original helper
+handles an odd final row. Live-token, overlapping and portable calls retain
+the original traversal. The Linux JIT emits all 16 loads before all 16 stores
+with no vector spills. An independent model checks 528 eligible row lengths.
+
+Three quiet-VM pairs of 65,536 complete calls per side give
+**2.059332 → 2.037190 µs** for clipped copy, interval **0.803406–1.218235**,
+and **1.963476 → 1.958535 µs** for separate copy, interval **0.985298–1.009820**.
+Both allocate **0 B/op** and pass the original full-canvas, source, pixel,
+ownership and idle guards. Windows passes 215 focused public tests in each
+mode, including seven alternate-pitch and edge cases.
+
+The two-row trial ends at the screen. The point savings are smaller than the
+retained gaps and both intervals include unchanged performance.
+[Timing and verification evidence](paired-row-copy-trial-evidence.json)

@@ -1,0 +1,294 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "source": "src/Lokad.Image/Internal/InspectionReader.cs",
+  "candidateSourceSha256": "4d0d53b1e2948b8140f514d2766d3a6175aff23b3054fcc75cf3ddb4990b4e84",
+  "baselineSourceSha256": "fa93f98d21f13f0a76e81b97864a9d400fe282c6bdd28b5d9a8a400673b5aad7",
+  "baselinePackageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+  "mechanism": "Reuse the remaining encoded-input bound across an immediate read and recompute it after a pending read.",
+  "screen": {
+    "caseId": "ProbeDimensionsJpegAsync",
+    "phase": "screen",
+    "baselineUs": 0.20937724939982094,
+    "candidateUs": 0.20724461873372396,
+    "ratio": 0.9898144107241348,
+    "lower": 0.8724721506332519,
+    "upper": 1.1229339385815882,
+    "allocatedBytes": {
+      "baseline": [
+        568
+      ],
+      "candidate": [
+        568
+      ]
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/roi1030-warm-paired/bin/Release/net10.0/JpegPair.dll",
+      "tmp/frp1370/baseline-Lokad.Image.dll",
+      "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "tmp/frp1370/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "9c34fa55a4eff9f3a5b638cdbee39341b4768a83a3c5cbba1a8448c241d81669",
+      "artifacts/warm-reference/read-boundaries/jpeg420.bin",
+      "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "{\"Format\": 1, \"Width\": 513, \"Height\": 259, \"BitDepth\": 8, \"HasAlpha\": false, \"Orientation\": 1, \"SourceColor\": 0, \"SourceAlpha\": 1, \"SourceComponentCount\": 3, \"OrientedWidth\": 513, \"OrientedHeight\": 259}",
+      "ProbeDimensionsJpegAsync",
+      "screen"
+    ],
+    "actuals": 3,
+    "allActualsRetained": true,
+    "exactDescriptorAndIndependentOwnerPassed": true,
+    "quietGuardsPassed": true
+  },
+  "windowsFocused": {
+    "normal": {
+      "passed": 146,
+      "logSha256": "04460b2695cbd27e7b04651f10fc69adbbb2d3034e6b59eabb438e0b15634086"
+    },
+    "scalar": {
+      "passed": 146,
+      "logSha256": "ddfd82955c53de9b87f86301435a462b3f6cde8e157634c5869a624bf0bc875a"
+    }
+  },
+  "matchedUnitDiagnostic": {
+    "jsp1255-final-ProbeDimensionsJpegAsync-confirm": {
+      "captureSha256": "61eaf40de55947195e1f622d5d5418c2b9dbba93b53d0ee07dd3439466c58090",
+      "managedOperationsPerUnit": 855040,
+      "nativeOperationsPerUnit": 262144,
+      "allActualsRetained": true,
+      "diagnosticOnly": true,
+      "groups": {
+        "before": {
+          "correlation": -0.3255467708984266,
+          "managedSlowerUnits": 9,
+          "pairedInterval": [
+            0.9887399589853565,
+            1.0247353444156015
+          ]
+        },
+        "after": {
+          "correlation": -0.3054732350207758,
+          "managedSlowerUnits": 9,
+          "pairedInterval": [
+            0.9872321948861044,
+            1.0235561035714382
+          ]
+        }
+      }
+    },
+    "jli1258-confirm": {
+      "captureSha256": "e36d20dbef66de1b0105e738de300b3db12a5038d412bc7fba590f701525fd93",
+      "managedOperationsPerUnit": 3420160,
+      "nativeOperationsPerUnit": 1048576,
+      "allActualsRetained": true,
+      "diagnosticOnly": true,
+      "groups": {
+        "before": {
+          "correlation": 0.9787668663218814,
+          "managedSlowerUnits": 12,
+          "pairedInterval": [
+            1.0375354768778715,
+            1.0533014380955215
+          ]
+        },
+        "after": {
+          "correlation": 0.9719781746709089,
+          "managedSlowerUnits": 12,
+          "pairedInterval": [
+            1.0331224164774797,
+            1.0508104378618657
+          ]
+        }
+      }
+    }
+  },
+  "raw": {
+    "file": "probe-refill-input-bound-trial.tar.xz",
+    "bytes": 381384,
+    "sha256": "1ec984847487c15aea9fd8d8e9073a2494aa2b3ef96b708fa108d3d8847ff80c",
+    "members": 14,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "cadenceDiagnostic": {
+    "unscored": true,
+    "unitCount": 8,
+    "alignedUnitCount": 8,
+    "units": [
+      {
+        "index": 0,
+        "cadence": 1,
+        "managedNs": 237.71386484842813,
+        "nativeNs": [
+          220.2706184387207,
+          220.13133239746094
+        ],
+        "matchedMeanRatio": 1.0798729206763753,
+        "collectedPauseNsPerOperation": 2.501637350299401,
+        "clockIntervals": 1,
+        "aperfMperf": 1.6211013113778556,
+        "gen0": 29,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 1,
+        "cadence": 4,
+        "managedNs": 237.99667091598053,
+        "nativeNs": [
+          221.39975452423096,
+          221.78820991516113
+        ],
+        "matchedMeanRatio": 1.0749635717863144,
+        "collectedPauseNsPerOperation": 2.1779682821856285,
+        "clockIntervals": 9,
+        "aperfMperf": 1.617442258175435,
+        "gen0": 116,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 2,
+        "cadence": 4,
+        "managedNs": 234.10667249485405,
+        "nativeNs": [
+          220.22222423553467,
+          221.97218894958496
+        ],
+        "matchedMeanRatio": 1.0630474435880255,
+        "collectedPauseNsPerOperation": 2.2311821669161676,
+        "clockIntervals": 8,
+        "aperfMperf": 1.619500974226749,
+        "gen0": 116,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 3,
+        "cadence": 1,
+        "managedNs": 234.31061119947606,
+        "nativeNs": [
+          223.77724838256836,
+          224.06746673583984
+        ],
+        "matchedMeanRatio": 1.0470707495647633,
+        "collectedPauseNsPerOperation": 2.5683008982035926,
+        "clockIntervals": 1,
+        "aperfMperf": 1.6253963735448964,
+        "gen0": 29,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 4,
+        "cadence": 1,
+        "managedNs": 232.1556020770958,
+        "nativeNs": [
+          220.51112747192383,
+          221.82414627075195
+        ],
+        "matchedMeanRatio": 1.052806743762419,
+        "collectedPauseNsPerOperation": 2.245508982035928,
+        "clockIntervals": 1,
+        "aperfMperf": 1.6310218699174674,
+        "gen0": 29,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 5,
+        "cadence": 4,
+        "managedNs": 234.29038787659056,
+        "nativeNs": [
+          219.68389129638672,
+          219.80075931549072
+        ],
+        "matchedMeanRatio": 1.066488701078667,
+        "collectedPauseNsPerOperation": 2.026805763473054,
+        "clockIntervals": 8,
+        "aperfMperf": 1.6402336626905316,
+        "gen0": 116,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 6,
+        "cadence": 4,
+        "managedNs": 236.27595638800523,
+        "nativeNs": [
+          220.29377460479736,
+          220.4711570739746
+        ],
+        "matchedMeanRatio": 1.07254940277763,
+        "collectedPauseNsPerOperation": 2.2630520209580838,
+        "clockIntervals": 8,
+        "aperfMperf": 1.6227391672795013,
+        "gen0": 116,
+        "gen1": 0,
+        "gen2": 0
+      },
+      {
+        "index": 7,
+        "cadence": 1,
+        "managedNs": 233.92253344872753,
+        "nativeNs": [
+          220.7647247314453,
+          221.084228515625
+        ],
+        "matchedMeanRatio": 1.0596010469212795,
+        "collectedPauseNsPerOperation": 2.9144835329341316,
+        "clockIntervals": 1,
+        "aperfMperf": 1.6220434552252203,
+        "gen0": 29,
+        "gen1": 0,
+        "gen2": 0
+      }
+    ],
+    "summary": {
+      "1": {
+        "managedNs": 234.52565289343187,
+        "matchedMeanRatio": 1.0598378652312093,
+        "collectedPauseNsPerOperation": 2.5574826908682633,
+        "gen0": 29,
+        "gen1": 0,
+        "gen2": 0,
+        "nativeNs": [
+          221.33092975616455,
+          221.77679347991943
+        ]
+      },
+      "4": {
+        "managedNs": 235.6674219188576,
+        "matchedMeanRatio": 1.0692622798076592,
+        "collectedPauseNsPerOperation": 2.1747520583832336,
+        "gen0": 116,
+        "gen1": 0,
+        "gen2": 0,
+        "nativeNs": [
+          220.39991116523743,
+          221.00807881355286
+        ]
+      }
+    },
+    "frequencyCorrelation": {
+      "managedNs": -0.5324189291385647,
+      "matchedMeanRatio": -0.3120908396303293,
+      "nativeBefore": -0.23517451422206898,
+      "nativeAfter": -0.2675779304346344
+    },
+    "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+    "originalChecksAndQuietGuardsPassed": true,
+    "raw": {
+      "file": "jpeg-probe-cadence-diagnostic.tar.xz",
+      "bytes": 40616,
+      "members": 16,
+      "sha256": "b1eac2cfebdfca4d82c22fa4b7956d6a9f054fca48dda3d2d8b30dc32b1c3837",
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  }
+}

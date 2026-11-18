@@ -1,0 +1,109 @@
+{
+  "project": "Lokad.Image",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "cases": {
+    "OriginalClippedCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "subjects": {
+        "baseline": {
+          "mean": 2.059331563313802,
+          "lower": 1.5140856518509365,
+          "upper": 2.6045774747766677,
+          "values": [
+            2.087586685180664,
+            2.0280443115234377,
+            2.062363693237305
+          ]
+        },
+        "candidate": {
+          "mean": 2.037190139770508,
+          "lower": 1.8811713367292895,
+          "upper": 2.1932089428117263,
+          "values": [
+            2.040329620361328,
+            2.027512191772461,
+            2.0437286071777345
+          ]
+        }
+      },
+      "ratio": 0.9893119919559786,
+      "lower": 0.8034064814320498,
+      "upper": 1.2182354014412884,
+      "allocatedBytes": 0
+    },
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9634764760335286,
+          "lower": 1.9163414111399861,
+          "upper": 2.010611540927071,
+          "values": [
+            1.9652564697265624,
+            1.9646598510742188,
+            1.9605131072998048
+          ]
+        },
+        "candidate": {
+          "mean": 1.9585348663330078,
+          "lower": 1.935579318985888,
+          "upper": 1.9814904136801275,
+          "values": [
+            1.9593995208740234,
+            1.959113739013672,
+            1.957091339111328
+          ]
+        }
+      },
+      "ratio": 0.9974836732821302,
+      "lower": 0.9852979233274849,
+      "upper": 1.009820131462624,
+      "allocatedBytes": 0
+    }
+  },
+  "windowsFocused": {
+    "normal": {
+      "passed": 215,
+      "logSha256": "12ef595317c832ddd3b18851d8790fddfa769339d0d90e339854dde2e6555050"
+    },
+    "scalar": {
+      "passed": 215,
+      "logSha256": "8ade90ff444d5cf05f47be2164fc36252fea73913a8c494473cdaa8e8f7be0b5"
+    }
+  },
+  "baseline": {
+    "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+    "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+  },
+  "candidateLibrarySha256": "36f80571df298b903218627de21960e9b8433d20acf41ac96210de98c8825ea2",
+  "geometryWidths": 528,
+  "mechanism": "Copy matching 512-byte blocks from two disjoint rows with sixteen loads before their stores.",
+  "sources": {
+    "src/Lokad.Image/ImageDrawing.cs": {
+      "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "candidate": "9cde83d67a12b7c43e9cb5839891e852a7a867c14839e6a2ae52a4ee55191535"
+    },
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+      "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "candidate": "516f1c016d50953d80691adf437de08eaa73abc25d4d915d1809609056162f34"
+    }
+  },
+  "codegen": {
+    "methodBytes": 620,
+    "sampleCommands": 0,
+    "vectorMoves": 32,
+    "pairedLoadsBeforeStores": true,
+    "codegenSha256": "82c6356c0623157abb7b4ffc754a85ed219d952abc60ed8f78f9f7ce82d0838f"
+  },
+  "raw": {
+    "file": "paired-row-copy-trial.tar.xz",
+    "bytes": 1036184,
+    "sha256": "0f634c0e9b6b72a8968bbeecc6138af12ebddf8db373ab1efb262f01ff3972a3",
+    "members": 52,
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

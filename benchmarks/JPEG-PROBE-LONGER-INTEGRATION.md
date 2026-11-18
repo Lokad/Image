@@ -21,6 +21,51 @@ all twelve units remain. Native wall/CPU correlation is.999992, with standard
 deviations5.850/5.827ns. Their cause is unproved. The short-integration explanation
 is unconfirmed; there is no sample removal, favorable retry or further count sweep.
 
+## Matched-unit diagnostic
+
+In the longer capture, managed time correlates 0.979 and 0.972 with the
+before and after reference groups. The per-unit managed mean is higher
+than both reference means in all twelve units. Using the twelve log ratios
+and the existing critical multiplier gives diagnostic intervals of
+**1.037535–1.053301** against the before group and **1.033122–1.050810**
+against the after group. These intervals show the direction within this
+capture and leave the original conservative result uncertain. In the shorter
+capture, the corresponding intervals are **0.988740–1.024735** and
+**0.987232–1.023556**. The roughly 10 ns difference in the longer capture is a
+target for attribution. Its relationship to cadence and GC remains open.
+
+## Remaining input bound reused during refill
+
+An isolated reader reuses the remaining encoded-input bound across an
+immediately completed stream read. A pending read recomputes it after the
+actual user returns. Read sizes, sentinel handling, failure precedence,
+admission and cancellation stay the same. The three-pair screen measures
+**0.209377 → 0.207245 µs**, interval **0.872472–1.122934**, at **568 B/op**.
+The original descriptor, independent owner and idle guards pass, and Windows
+passes 146 focused public tests in each normal and scalar mode.
+
+The point savings are about 2 ns and the interval includes unchanged
+performance. The trial ends at the screen. The complete FFmpeg comparison
+remains uncertain. [Screen and diagnostic evidence](probe-refill-input-bound-trial-evidence.json)
+
+## Cadence and collection diagnostic
+
+One instrumented run alternates four units at each original cadence on the
+qualified package. The generated workload loop, exact descriptor and reference
+checks, 16 subdivisions and original warmups are retained. Collection counters
+are read outside managed spans. CPU 1 observes CPU 0's APERF and MPERF at 125 ms
+intervals. All exactness, ownership and idle guards pass.
+
+Short and long units average **234.5/235.7 ns** managed and **221.3/220.4 ns**
+in the faster native groups. Gen0 counts scale from 29 to 116 per unit, with
+zero Gen1 or Gen2. Observed managed pauses average **2.56/2.17 ns/op**.
+APERF/MPERF ranges from **1.617 to 1.640** across the matched windows, with
+one clock sample per short unit and eight or nine per long unit. The managed
+difference appears at both cadences despite modest clock movement and similar
+pause time per call. This bounds the observed effects in this run. The eight
+instrumented units are diagnostic and supply no parity result.
+[Raw capture and analysis](probe-refill-input-bound-trial-evidence.json)
+
 ## Unchanged operation and gates
 
 Each unit now includes3420160managed and1048576native complete operations,
