@@ -1,0 +1,300 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1316/FRP1317",
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "productionChanged": false,
+  "productionAccepted": false,
+  "statisticalTimingFromNativeProfile": false,
+  "allInstrumentedNativeClocksExcluded": true,
+  "prototypeCoreBuilds": 1,
+  "fixtureReferenceOrHarnessBuilds": 0,
+  "nativeProfile": {
+    "commandAndFullLeafLocationsRetained": true,
+    "intervalMs": 2000,
+    "frequencyHz": 999,
+    "workerCpu": 0,
+    "collectorCpu": 1,
+    "managedProfileReused": "separate-byte-copy-attribution-evidence.json",
+    "raw": {
+      "file": "native-rgba8-copy-attribution.tar.xz",
+      "sha256": "2e80d420a7f0975fbcca4a9387b055a4e2125c09870b71a02a513d4a844df511",
+      "bytes": 52140,
+      "members": 25,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "screen": {
+    "raw": {
+      "file": "four-group-rgba8-copy-screen.tar.xz",
+      "bytes": 390912,
+      "sha256": "57aa7dd52fe4f7b1c21024c9236325bbdf1ee5c9ebb9b75056d343b76e1d628c",
+      "members": 34,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "privateCandidateSha256": "9b53951aa71e36664bfae949cb1f905958044bc12623829c16f669096ebb2f2b",
+    "baseline": {
+      "windowsSha256": "b72b12a53b5ff8e2a9badc93aedf0e3e228f539958826a3122a16d70c8699c28",
+      "linuxSha256": "dc8c9a943c2ab0912867f7e7d98d683d73130a5d467cda595fb2a569a4f29257",
+      "packageSha256": "d873438fb8c74e3a84fef380ae1d04d09a6f553f95fccbe3726ecb7622401812",
+      "symbolsSha256": "372154e4bf9e009b4470e753bd76c2b4c1c1fa599a6ff129c781b8b0adb13511",
+      "fullEachOs": [
+        3384,
+        2517,
+        948
+      ],
+      "focusedPerMode": 94,
+      "actualPackageConsumerPassedBothOs": true,
+      "usageExamplesEachOs": 3,
+      "timedDllUsedUnchanged": true,
+      "profileNotRepeated": true
+    },
+    "codegenMethodBytes": 435,
+    "codegenVectorMoves": 32,
+    "exactGeometryCases": 64,
+    "windowsExistingFocusedTestsPassed": 190,
+    "promotion": "Both paired intervals cross no effect and point savings fall below the measured gaps."
+  },
+  "cases": {
+    "OriginalClippedCopy8": {
+      "nativeTrace": {
+        "leaves": 1999,
+        "lostRecords": 0,
+        "byModule": {
+          "/usr/lib/x86_64-linux-gnu/libc.so.6": 1965,
+          "/home/lokad/image-warm-png-20261009/tmp/cbr1262-root/external/warm-reference/ffmpeg-copy-region-warm": 34
+        },
+        "hotLocations": [
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1653",
+            "leaves": 334
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a180e",
+            "leaves": 277
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a184d",
+            "leaves": 228
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1846",
+            "leaves": 208
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1854",
+            "leaves": 200
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a185b",
+            "leaves": 187
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a182d",
+            "leaves": 143
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1825",
+            "leaves": 49
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1816",
+            "leaves": 44
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a187d",
+            "leaves": 29
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a186f",
+            "leaves": 29
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1876",
+            "leaves": 26
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1868",
+            "leaves": 23
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1884",
+            "leaves": 22
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a17ec",
+            "leaves": 18
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1819",
+            "leaves": 14
+          }
+        ],
+        "workerSha256": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c",
+        "libcSha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a",
+        "perfSha256": "89d4a6890d2621cbcedd585d96bbed759a3694f8c29a61aa54e726b2d360e0d2",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "636e42e409137df49fb66f18a2938b57332a36145b68facb32e565675238443d",
+        "originalReceiptSha256": "b3c40120b1257a45ed75a810e8a9d6b351337d5420de36c434ca2bb5087e3514",
+        "exactOutputAndSource": true,
+        "workerExited": true,
+        "quietGuardsPassed": true,
+        "forwardAlignedLoopLeaves": 963,
+        "forwardAlignedStoreInstructionLeaves": 89,
+        "backwardAlignedLoopLeaves": 0,
+        "repMovsbInstructionLeaves": 0
+      },
+      "screen": {
+        "ratio": 0.9954390985735079,
+        "lower": 0.976491991836988,
+        "upper": 1.0147538405355967,
+        "allocatedBytes": 0,
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "baselineUs": 2.12268137105306,
+        "candidateUs": 2.1130018005371096,
+        "pointSavingNs": 9.679570515950253
+      }
+    },
+    "DrawingCopy8": {
+      "nativeTrace": {
+        "leaves": 1997,
+        "lostRecords": 0,
+        "byModule": {
+          "/usr/lib/x86_64-linux-gnu/libc.so.6": 1966,
+          "/home/lokad/image-warm-png-20261009/tmp/cbr1262-root/external/warm-reference/ffmpeg-copy-region-warm": 31
+        },
+        "hotLocations": [
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1653",
+            "leaves": 386
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a180e",
+            "leaves": 308
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a184d",
+            "leaves": 206
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a185b",
+            "leaves": 197
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1846",
+            "leaves": 195
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1854",
+            "leaves": 191
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a182d",
+            "leaves": 128
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1825",
+            "leaves": 46
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1816",
+            "leaves": 33
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a187d",
+            "leaves": 29
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1876",
+            "leaves": 24
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1868",
+            "leaves": 22
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a17ec",
+            "leaves": 22
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1884",
+            "leaves": 21
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a186f",
+            "leaves": 19
+          },
+          {
+            "module": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "offset": "0x1a1644",
+            "leaves": 17
+          }
+        ],
+        "workerSha256": "911f19465dc53230054c01f9e21035c49183e16a38d5e682b519b605755c020c",
+        "libcSha256": "755a371e86cc9f564ab54f66140747700fb0a103f698f659f2060f707897e09a",
+        "perfSha256": "4d2e47d8e3c9cb802fb22434d0390ecfdba2846330c124ff1c237596dc979a60",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+        "originalReceiptSha256": "55f626471224ec6d03223475c451ed9fef214d5ff0411e6d2d129bc9bc22f66e",
+        "exactOutputAndSource": true,
+        "workerExited": true,
+        "quietGuardsPassed": true,
+        "forwardAlignedLoopLeaves": 916,
+        "forwardAlignedStoreInstructionLeaves": 77,
+        "backwardAlignedLoopLeaves": 0,
+        "repMovsbInstructionLeaves": 0
+      },
+      "screen": {
+        "ratio": 0.9937448023125262,
+        "lower": 0.897643602931947,
+        "upper": 1.100134539919435,
+        "allocatedBytes": 0,
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "allActualsRetained": true,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "baselineUs": 2.1237386474609377,
+        "candidateUs": 2.1104405822753907,
+        "pointSavingNs": 13.298065185546992
+      }
+    }
+  }
+}

@@ -517,3 +517,41 @@ run precede the pairs. The prototype stays private.
 
 The mirrored `disjoint-runtime-block-copy-screen.tar.xz` retains 35 verified members and
 1,216,056 B, SHA-256 `2caf04f5830fc60cf6dbe7150bc85eee7124a3a69c44ffcedc64dc730a097818`.
+
+## Native byte-copy attribution and direct vector scheduling
+
+Both original separate-buffer RGBA8 workloads reach libc’s forward aligned
+256-byte store loop through the frozen FFmpeg worker. The clipped profile has
+**963 of 1,999** leaves in that loop and the separate profile has **916 of
+1,997**. Neither samples the backward loop or the `rep movsb` instructions.
+The samples locate executed code. They do not measure stalls or attribute the
+time difference to alignment. Earlier [destination-alignment trials](COPY-DESTINATION-ALIGNMENT-TRIALS.md)
+and [fixed-geometry aligned ends](#fixed-geometry-aligned-ends) already tested
+managed alignment hints without establishing a usable gain.
+
+The private candidate schedules the same sixteen vectors directly for rows of
+961–1,024 bytes. Three leading groups and one end group preserve the original
+sample coverage. Checked row slices bound both buffers, the row cancellation
+poll stays in place, and no pin or storage is added. The 435-byte JIT helper
+contains 32 vector moves. The original three alternating 65,536-operation pairs
+per case give these scoped managed-DLL results.
+
+| Complete RGBA8 copy | Current → candidate µs | Paired ratio interval | GC B/op |
+| --- | ---: | ---: | ---: |
+| Clipped | 2.122681 → 2.113002 | 0.976492–1.014754 | 0 |
+| Separate | 2.123739 → 2.110441 | 0.897644–1.100135 | 0 |
+
+Both intervals cross no change. The point savings of about 10 ns and 13 ns
+fall short of the demonstrated 69 ns and 47 ns gaps. The candidate stays private
+and the [qualified reference costs](COPY-OPERATION-BOUNDARY.md) remain in use.
+The geometry check covers all 64 applicable byte lengths, and 190 existing
+focused Windows tests pass with the candidate. The quiet-VM runs retain all
+observations and exact frames, hidden RGB, alpha, untouched pixels, source and
+caller ownership. Both two-second native profiles retain all leaf samples,
+zero lost records and successful idle guards. Their clocks are unscored.
+
+[Evidence](native-rgba8-copy-scheduling-evidence.json) retains source, reference,
+JIT and package identities, raw captures and replay commands. Both archives
+were mirrored and member-verified: `native-rgba8-copy-attribution.tar.xz`
+(52,140 B, 25 members) and `four-group-rgba8-copy-screen.tar.xz`
+(390,912 B, 34 members).
