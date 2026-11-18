@@ -1,0 +1,542 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GCT1261",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "c9779d613a1a1aa8f74e1f44eb658cf7dc422e94",
+  "producers": {
+    "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+    "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+  },
+  "sourcePins": {
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+    "src/Lokad.Image/Internal/OperationContext.cs": "e3c02e990d67cb953842101a2c1b960c1e0f06be6da8b4e29b64f7c3580d5e22",
+    "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0",
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1"
+  },
+  "implementations": {
+    "gco1260": {
+      "prototypeSha256": "51eb65a2bd7afb7797ce889063dc96171adf8fdde0488a4e19e4540b4e118a35",
+      "sourceProof": {
+        "exactWholeSourceReconstruction": true,
+        "identicalDisposedExceptionExpressionAndObjectName": true,
+        "singleBackingObservationAndArraySpanConversionUnchanged": true,
+        "noNewCachedFieldsOwnersAdmissionOrPublicApi": true,
+        "byteLengthAndPublicRowsPoolDisposeBodiesVerbatim": true,
+        "allPolicyCancellationBorrowingAndInputOrderVerbatim": true,
+        "onlyGetterHotColdBoundaryChanges": true
+      },
+      "candidateSourcePins": {
+        "tmp/gco1260-src/Lokad.Image/ImageBuffer.cs": "15ac2dfbfd842b18a70e1efab73fbf5b8b052dd60ca9275f9956f32e527b90e5"
+      },
+      "screens": {
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 0.9958231548920743,
+          "lower": 0.8993704696608777,
+          "upper": 1.1026198760930268,
+          "allocatedBytes": 0,
+          "allActualsRetained": true,
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "subjects": {
+            "baseline": {
+              "mean": 1.964849141438802,
+              "lower": 1.7640453237334945,
+              "upper": 2.1656529591441096,
+              "values": [
+                1.9774487762451172,
+                1.9571053314208984,
+                1.9599933166503907
+              ]
+            },
+            "candidate": {
+              "mean": 1.956621861775716,
+              "lower": 1.9508447730877627,
+              "upper": 1.9623989504636694,
+              "values": [
+                1.956600112915039,
+                1.956316635131836,
+                1.9569488372802735
+              ]
+            }
+          },
+          "pairs": [
+            {
+              "pair": 0,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 129594083,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128227745,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 1,
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128209167,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128260855,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 2,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128450122,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128250599,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            }
+          ],
+          "sourceObservation": "tmp/gco1260-screen-DrawingCopy8.json"
+        },
+        "DrawingCopy16": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 1.0004503636485276,
+          "lower": 0.980864239281703,
+          "upper": 1.0204275882842269,
+          "allocatedBytes": 0,
+          "allActualsRetained": true,
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "subjects": {
+            "baseline": {
+              "mean": 3.774168233235677,
+              "lower": 3.730236836993227,
+              "upper": 3.818099629478127,
+              "values": [
+                3.7769420013427735,
+                3.772949447631836,
+                3.7726132507324217
+              ]
+            },
+            "candidate": {
+              "mean": 3.775871109008789,
+              "lower": 3.658690994311782,
+              "upper": 3.8930512237057964,
+              "values": [
+                3.7832195281982424,
+                3.771327438354492,
+                3.7730663604736328
+              ]
+            }
+          },
+          "pairs": [
+            {
+              "pair": 0,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247525671,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247937075,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 1,
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247157715,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247264015,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 2,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247241982,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 247271677,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            }
+          ],
+          "sourceObservation": "tmp/gco1260-screen-DrawingCopy16.json"
+        }
+      },
+      "focused": {
+        "windows": {
+          "internal/normal": 41,
+          "internal/avx512-off": 41,
+          "internal/scalar": 41,
+          "public/normal": 190,
+          "public/avx512-off": 190,
+          "public/scalar": 190
+        },
+        "linuxPublic": {
+          "normal": 190,
+          "avx512-off": 190,
+          "scalar": 190
+        },
+        "linuxInternal": {
+          "normal": 41,
+          "avx512-off": 41,
+          "scalar": 41
+        }
+      },
+      "codegen": {
+        "DrawingCopy8": {
+          "methodCodeBytes": [
+            1644,
+            254
+          ],
+          "sha256": "faf5a5a234af0982e34692528b594692fc4568cde0d1935a1c14f069f083195d",
+          "pixelGetterInlined": true,
+          "getterCallsRemovedInOriginalControl": true,
+          "allInstrumentedTimingsDiscarded": true,
+          "sampleCommands": 0
+        },
+        "DrawingCopy16": {
+          "methodCodeBytes": [
+            1644,
+            254
+          ],
+          "sha256": "c2e825ec7cf4cb1ace780b9265df40e1938847025e21d78cfda6aaef4e4a4a45",
+          "pixelGetterInlined": true,
+          "getterCallsRemovedInOriginalControl": true,
+          "allInstrumentedTimingsDiscarded": true,
+          "sampleCommands": 0
+        }
+      }
+    },
+    "gce1261": {
+      "prototypeSha256": "570bbdab83af8dbe861a28a6ad78ed327f1bfdfdef286f353bc0cf2706545a34",
+      "sourceProof": {
+        "exactWholeSourceReconstruction": true,
+        "identicalDisposedExceptionExpressionAndObjectName": true,
+        "singleBackingObservationAndArraySpanConversionUnchanged": true,
+        "noNewCachedFieldsOwnersAdmissionOrPublicApi": true,
+        "byteLengthAndPublicRowsPoolDisposeBodiesVerbatim": true,
+        "allPolicyCancellationBorrowingAndInputOrderVerbatim": true,
+        "onlyGetterHotColdBoundaryChanges": true
+      },
+      "candidateSourcePins": {
+        "tmp/gce1261-src/Lokad.Image/ImageBuffer.cs": "53353275347a85b22be40509af70e059bdd0b6252b659eac9e12469175a89442"
+      },
+      "screens": {
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 1.0779381389739384,
+          "lower": 1.0528856463966798,
+          "upper": 1.103586733688672,
+          "allocatedBytes": 0,
+          "allActualsRetained": true,
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "subjects": {
+            "baseline": {
+              "mean": 1.9570446116129558,
+              "lower": 1.9346543261137563,
+              "upper": 1.9794348971121554,
+              "values": [
+                1.9581561126708984,
+                1.957250213623047,
+                1.955727508544922
+              ]
+            },
+            "candidate": {
+              "mean": 2.109573099772135,
+              "lower": 2.0824247333716985,
+              "upper": 2.1367214661725717,
+              "values": [
+                2.108922439575195,
+                2.1085211486816404,
+                2.1112757110595703
+              ]
+            }
+          },
+          "pairs": [
+            {
+              "pair": 0,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128329719,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 138210341,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 1,
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 138184042,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128270350,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 2,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 128170558,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 138364565,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            }
+          ],
+          "sourceObservation": "tmp/gce1261-screen-DrawingCopy8.json"
+        },
+        "DrawingCopy16": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 0.9966280147585743,
+          "lower": 0.989406622226603,
+          "upper": 1.0039021141442592,
+          "allocatedBytes": 0,
+          "allActualsRetained": true,
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "subjects": {
+            "baseline": {
+              "mean": 3.8131561228434245,
+              "lower": 3.80475363749938,
+              "upper": 3.8215586081874693,
+              "values": [
+                3.81319677734375,
+                3.8135950164794923,
+                3.812676574707031
+              ]
+            },
+            "candidate": {
+              "mean": 3.800298314412435,
+              "lower": 3.779299252403128,
+              "upper": 3.8212973764217417,
+              "values": [
+                3.8011474304199218,
+                3.798988250732422,
+                3.800759262084961
+              ]
+            }
+          },
+          "pairs": [
+            {
+              "pair": 0,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 249901664,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 249111998,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 1,
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 248970494,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 249927763,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            },
+            {
+              "pair": 2,
+              "baseline": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 249867572,
+                "allocatedBytes": 0,
+                "checksum": 0
+              },
+              "candidate": {
+                "state": "sample",
+                "operations": 65536,
+                "elapsedNanoseconds": 249086559,
+                "allocatedBytes": 0,
+                "checksum": 0
+              }
+            }
+          ],
+          "sourceObservation": "tmp/gce1261-screen-DrawingCopy16.json"
+        }
+      },
+      "focused": {
+        "windows": {
+          "internal/normal": 41,
+          "internal/avx512-off": 41,
+          "internal/scalar": 41,
+          "public/normal": 190,
+          "public/avx512-off": 190,
+          "public/scalar": 190
+        },
+        "linuxPublic": {
+          "normal": 190,
+          "avx512-off": 190,
+          "scalar": 190
+        },
+        "linuxInternal": {
+          "normal": 41,
+          "avx512-off": 41,
+          "scalar": 41
+        }
+      },
+      "codegen": {
+        "DrawingCopy8": {
+          "methodCodeBytes": [
+            1609,
+            227
+          ],
+          "sha256": "5dc3827d5f6c642586af240ad4149446556dcd1d94470d53cc70492f4c2cd0ea",
+          "pixelGetterInlined": true,
+          "getterCallsRemovedInOriginalControl": true,
+          "allInstrumentedTimingsDiscarded": true,
+          "sampleCommands": 0
+        },
+        "DrawingCopy16": {
+          "methodCodeBytes": [
+            1609,
+            227
+          ],
+          "sha256": "b3a43d565d76cc84ab03a1c09d498f06b2ea1714229d858d854691c5842d2eca",
+          "pixelGetterInlined": true,
+          "getterCallsRemovedInOriginalControl": true,
+          "allInstrumentedTimingsDiscarded": true,
+          "sampleCommands": 0
+        }
+      }
+    }
+  },
+  "focused": {
+    "internalEachMode": 41,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "bothOsEachImplementation": true
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 2,
+    "privateWindowsEmbedded": 2,
+    "allOtherProductionHarnessDriverNativeFixturePackageBuilds": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Both private implementations unpromoted. GCO call elimination leaves duplicate nullable-array guards; screens byte .42percent uncertain,word neutral. Material GCE revision keeps throw in getter and outlines only exception construction;actual code has single guard but byte1.957045->2.109573us interval1.052886-1.103587 regresses;word3.813156->3.800298us interval.989407-1.003902 inconclusive. Code shape doesnot explain elapsed cause. Stop with no confirmation,actualtransfer,shared-path retiming or broad/package campaign. Preserve all raw and qualified source/modules/package/costs unchanged;no neighboring getter/attribute/exception-path sweep.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "pixel-getter-cold-path-trials.tar.xz",
+    "sha256": "0870bc3508418cee64da13f70a284e4bd8767e68c2dd253c6c1b451359aaa4a9",
+    "bytes": 3624412,
+    "members": 116,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  }
+}

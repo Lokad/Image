@@ -227,3 +227,48 @@ source/modules, checks and qualification reuse. Mirrored/member-verified
 Archived `ppv1259-*` recipes retain exact prototypes, meaningful private test
 oracles, all actuals/guards and codegen. This is evidence against this
 implementation, not a proof that every materially revised design must fail.
+
+## Pixel getter cold construction
+
+**Both private implementations unpromoted (GCO1260/GCE1261).** Outlining rare
+disposed-exception construction removes four pixel-getter calls, but supplies
+no acceptable complete-copy improvement. A source-guided correction removes
+the first implementation's duplicate null tests; its byte screen regresses.
+
+| Original complete copy, three reversed pairs | Baseline /candidate µs | Ratio interval | GC B/op |
+| --- | --- | --- | --- |
+| Array-returning throw helper, RGBA8 | 1.964849 /1.956622 | .899370–1.102620 | 0 /0 |
+| Array-returning throw helper, RGBA16 | 3.774168 /3.775871 | .980864–1.020428 | 0 /0 |
+| Exception construction only, RGBA8 | 1.957045 /2.109573 | 1.052886–1.103587 | 0 /0 |
+| Exception construction only, RGBA16 | 3.813156 /3.800298 | .989407–1.003902 | 0 /0 |
+
+The initial helper returns an opaque array after its nonreturning throw; actual
+inlined code tests that array twice. The coherent revision keeps explicit throw
+in the getter and returns only the constructed exception from a cold helper.
+Actual code now has one backing guard, with caller/validator1609/227B versus
+1644/254B initially. Those observations explain the revision, not the elapsed
+cause. The revised byte point is7.79% slower with a separated interval; word
+results remain inconclusive. No confirmation, actual transfer, passing-family
+retiming, package/broad campaign or adjacent getter/attribute sweep follows.
+
+Both preserve one backing observation, actual retained capacity, identical
+`ObjectDisposedException(nameof(ImageBuffer))`, failure order and ordinary Span
+conversion. ByteLength, rows, policies, ownership, pool/dispose, cancellation
+and pixel kernels remain. No new field, reservation, owner, cache, unsafe access
+or public API is introduced. Each implementation passes41internal/190public
+checks per normal, AVX512-disabled and scalar mode on both OSes, with original
+full-frame/source/alpha/hidden-RGB/untouched/owner/native and idle-v2 gates.
+All65536-operation warmups, three reversed pairs and every actual remain.
+
+Two private Windows core/embedded builds; all other builds0. Current qualified
+source/modules/package/costs remain exact. Reuse6844full/live checks per OS and
+SAMEactualpackage/all3examples from JSP1255. Allocation/new owned/admitted/retained
+capacity remain0; physical peaks are unmeasured. Three copy gaps and asynchronous
+probe uncertainty remain; no current renderer dependency is added.
+
+[Compact evidence](pixel-getter-cold-path-trials-evidence.json) retains both
+implementations, all actuals, checks and qualification reuse. Mirrored/member-
+verified `pixel-getter-cold-path-trials.tar.xz`:3,624,412B/116members; SHA-256
+`0870bc3508418cee64da13f70a284e4bd8767e68c2dd253c6c1b451359aaa4a9`.
+Archived `gco1260-*`, `gce1261-*` and `gct1261-record.py` preserve exact source,
+modules/symbols, codegen, original actors/reference dependencies and recipes.
