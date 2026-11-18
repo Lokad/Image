@@ -501,5 +501,64 @@
     ]
   },
   "previousEvidence": "jpeg-local-entropy-replay-evidence.json",
-  "next": "Keep all17adaptive passes stopped. All18declaredJPEGencode controls now pass/stop, with exact packets. Continue with a bounded audit of the existing VP8L opaque-RGBA8 confidence evidence before any revised measurement or optimization; its material uncertainty is not a demonstrated gap. Keep native preparation boundaries explicit and all289paths required; no session or new workload grid."
+  "next": "Keep all17adaptive passes stopped. All18declaredJPEGencode controls now pass/stop, with exact packets. Continue with a bounded audit of the existing VP8L opaque-RGBA8 confidence evidence before any revised measurement or optimization; its material uncertainty is not a demonstrated gap. Keep native preparation boundaries explicit and all289paths required; no session or new workload grid.",
+  "restartPackageBinding": {
+    "case": "Encode420Restart8",
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "verifiedNonCoreFiles": 128,
+    "originalManifestSha256": "016ba8241ab77e33b48eb11a2fb19db53943a568b60fe3e93919e2f86c48b69d",
+    "matchInputs": {
+      "artifacts/warm-reference/jpeg420-restart33-adaptive-match.json": "72531f76430fc36818f90eb6c3828a29dd92c6a4db0971ce25ce9fe5a2f8c4e5",
+      "artifacts/warm-reference/jpeg420-adaptive-match.json": "308ede7001c2319295036e283b99463c165b5d3d1a6c6ef11d00146c0004c3e7",
+      "artifacts/warm-reference/jpeg-match-c24fa6609f914f9c8f1b448eb95cac80/native.jpg": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622",
+      "artifacts/warm-reference/jpeg-match-c24fa6609f914f9c8f1b448eb95cac80/managed.jpg": "68f646f5264a92cca439630e99330f458152e7d42efa10d5aebd4b50d28097d3"
+    },
+    "check": {
+      "mode": "untimed-jpeg-binding-check",
+      "caseId": "Encode420Restart8",
+      "librarySha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "harnessSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "explicitGeneratedSingleOperationCalls": 1,
+      "generatedEntryPointInvoked": false,
+      "originalSetupAndCleanupInvoked": true,
+      "scoredCaptures": 0,
+      "allClocksDiscarded": true
+    },
+    "toolSha256": "b88a9bc52a01605662eeec1c7d3a474889a6c3d426fda4fe8d45ce55d4365144",
+    "validationSha256": "ec153bc77054178577c5e011601d3e74ec2d18f24090f7de38d97c015e1edec2",
+    "allOriginalGatesPassed": true,
+    "productionBuilds": 0,
+    "scoredCaptures": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "/home/lokad/image-warm-png-20261009/tmp/frp1379/restart-jpeg/Inspect.dll",
+      "check-jpeg",
+      "/home/lokad/image-warm-png-20261009/tmp/frp1379/restart-jpeg/runtime/Jvc34Encode420Restart8.dll",
+      "Encode420Restart8",
+      "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e",
+      "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2"
+    ],
+    "packets": {
+      "managedOutputBytes": 58010,
+      "nativeOutputBytes": 58012,
+      "managedEncodedSha256": "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4",
+      "nativeOutputSha256": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622",
+      "completePacketExact": true,
+      "serialRestartFramingValidated": true
+    },
+    "raw": {
+      "file": "restart-jpeg-package-binding.tar.xz",
+      "bytes": 233668,
+      "sha256": "4ed39139587b5bbf3888a2a345a19cf359fa4e0dcd27907f8a05aaa0d4dd1d5b",
+      "members": 9,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  }
 }

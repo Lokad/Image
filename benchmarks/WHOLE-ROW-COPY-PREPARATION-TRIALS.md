@@ -712,3 +712,23 @@ and scalar.
 The clipped saving is smaller than the demonstrated gap. The candidate stays
 private, and both complete-operation FFmpeg gaps remain open.
 [Screen, confirmation and generated-code evidence](copy-vector-width-trials-evidence.json)
+
+## Bottom-up traversal for separate RGBA8 rows
+
+An isolated variant starts at the last clipped row and passes negative strides
+to the existing SIMD helper. This tests the effect of changing the order of
+memory accesses. It applies to distinct buffers with a noncancelable token.
+Self-overlap and live-token calls keep their original mutation order and
+checkpoints. The Linux JIT passes both negated strides to the shared helper.
+
+Three quiet-VM pairs of 65,536 complete operations per side give **1.965180 →
+2.012467 µs** for clipped copy (interval **0.963879–1.087999**) and **2.124874 →
+2.149211 µs** for separate copy (interval **0.965271–1.059836**). All six
+candidate units are slower than their matches. Both cases allocate **0 B/op**
+and pass the original exact-frame, source and ownership checks. Windows
+passes 353 focused tests in each of normal and scalar modes.
+
+The trial ends at the screen. The quiet guard first caught the build server
+before any samples. Shutting it down restored the required idle conditions.
+The production copy gaps remain open.
+[Screen, generated code and verification evidence](copy-vector-width-trials-evidence.json)

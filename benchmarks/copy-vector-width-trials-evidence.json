@@ -441,5 +441,110 @@
         "logSha256": "329d33a60e2aae377205ede103efb331142c5104fd84d23b3bac5c20289089ab"
       }
     }
+  },
+  "reverseIndependentRowsTrial": {
+    "mechanism": "Reverse the order of independent, noncancelable SIMD RGBA8 rows with the existing signed-stride helper.",
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "4917614f38c33a60b8d085bcac1b587d7647d7a3a080e6d4033a23d800755b52"
+      }
+    },
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateLibrarySha256": "b124909261ad08bf736e29599682ac0f6f3a34d5f739ecd64a705d933084c2e3",
+    "codegen": {
+      "methodBytes": 1604,
+      "sampleCommands": 0,
+      "strideNegations": 2,
+      "codegenSha256": "9bcfe5028fcd4351d53c8a7c78b8f7f90ea107ac146494575594985c276c939a"
+    },
+    "screen": {
+      "OriginalClippedCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "subjects": {
+          "baseline": {
+            "mean": 1.965179692586263,
+            "lower": 1.908848232021658,
+            "upper": 2.0215111531508683,
+            "values": [
+              1.9641508483886718,
+              1.9627377471923828,
+              1.9686504821777344
+            ]
+          },
+          "candidate": {
+            "mean": 2.0124672851562497,
+            "lower": 1.8968328252676543,
+            "upper": 2.128101745044845,
+            "values": [
+              2.0052337341308593,
+              2.0170489654541015,
+              2.015119155883789
+            ]
+          }
+        },
+        "ratio": 1.0240601847053319,
+        "lower": 0.9638787679732245,
+        "upper": 1.0879991309527945,
+        "allocatedBytes": 0,
+        "windowsIndependentOfTiming": true
+      },
+      "DrawingCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "subjects": {
+          "baseline": {
+            "mean": 2.1248738149007163,
+            "lower": 2.062267628078222,
+            "upper": 2.1874800017232103,
+            "values": [
+              2.1273384399414064,
+              2.120954406738281,
+              2.126328598022461
+            ]
+          },
+          "candidate": {
+            "mean": 2.1492113545735676,
+            "lower": 1.9951235711296649,
+            "upper": 2.3032991380174703,
+            "values": [
+              2.15146875,
+              2.139865951538086,
+              2.156299362182617
+            ]
+          }
+        },
+        "ratio": 1.0114493078606859,
+        "lower": 0.9652713029421527,
+        "upper": 1.059836441064455,
+        "allocatedBytes": 0,
+        "windowsIndependentOfTiming": true
+      }
+    },
+    "allOriginalGatesPassed": true,
+    "allScoredIdleGuardsPassed": true,
+    "preflightIdleRefusedBeforeSamples": "An idle VBCSCompiler process from our build remained active. Shut down the build server and rerun the guard before the first worker starts.",
+    "windowsFocused": {
+      "normal": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      },
+      "scalar": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      }
+    },
+    "raw": {
+      "file": "reverse-independent-copy-trial.tar.xz",
+      "bytes": 1036420,
+      "sha256": "a8456ed48903c5ebfa9abbb0c1e7085422472c2eba150a4b55f9cf469e5e7308",
+      "members": 58,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

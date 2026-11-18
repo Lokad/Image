@@ -77,3 +77,14 @@ current costs, integer/source proofs, all actuals and qualification. Raw
 `jpeg-bounded-block-emission-qualified.tar.xz`: 8,569,520 B / 256 members,
 SHA256 `1f818a00b99bcabf97b14fe440165b18c1f485fa9c9d396f8a8ce29b617b3573`, mirrored and member-verified.
 Dependencies retain the first step, attribution and original tools/fixtures.
+
+## Repeatable package binding
+
+The frozen restart-33 harness was bound to the current development package in
+an isolated runtime with 128 non-core files verified. Its original setup, one
+generated public operation and cleanup pass the source, ownership, quality,
+exact packet and restart checks. Complete packets remain **58,010 B managed**
+and **58,012 B FFmpeg**, with the approved attribution exception. Include the
+original no-restart 4:2:0 anchor receipt when reproducing the pixel check.
+The run supplies no new performance result.
+[Package and binding evidence](jpeg-direct-block-emission-evidence.json#L505)
