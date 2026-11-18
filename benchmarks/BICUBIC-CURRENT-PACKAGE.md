@@ -1,14 +1,14 @@
 # Bicubic storage on the current package
 
-Of the 61 original bicubic controls, 58 have valid passing evidence and three
+Of the 61 original bicubic controls, 59 have valid passing evidence and two
 remain uncertain. The actual 0.2.1 package covers all 59 pool-affected
 controls. The two 4,264,104-byte RGBA16 full enlargement outputs exceed the
 unchanged 4 MiB pool cap and retain their source-valid passes.
 [Full word enlargement evidence](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 
-The open cases are the default RGBA8 256×129 reduction, tight RGBA8 128×64
-reduction, and tight RGBA16 width reduction with height enlargement. Keep
-the conservative confidence rule for all three.
+The open cases are tight RGBA8 128×64 reduction and tight RGBA16 width
+reduction with height enlargement. The default RGBA8 reduction now passes
+on the [qualified output row loan](BICUBIC-DEFAULT-ROW-LOAN.md).
 
 ## Original package comparison
 
@@ -505,3 +505,13 @@ Both happened before sampling. A single private core build and one actor
 build reuse the original inputs, worker and standalone driver.
 [Trial evidence](bicubic-cross16-tail-geometry-evidence.json) pins the three
 mirrored archives and all 50 members, including commands and raw observations.
+
+A separate trial reused the existing four-pixel vertical filter in the
+word full-row prefix. Each quartet shares the weight broadcasts while its
+pairs retain their multiply/add order, rounding, repair and publication.
+A schedule model checks pair and single tails for widths 1–4,096. Exact
+pixels, bounds, ownership and guards pass. The complete three-pair screen is
+**891.07 → 902.47 µs** at **112 B/op**, interval **0.919240–1.115862**.
+The point result is adverse and the interval is inconclusive.
+The candidate stops after one private build with the original actor.
+[Trial evidence](bicubic-cross16-prefix-quartet-evidence.json)

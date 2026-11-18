@@ -144,14 +144,20 @@ public static class ImageTransforms
                 result.Orientation = source.Orientation;
                 return result;
             }
-            if (filter == ResizeFilter.Bicubic && CachedBicubicResize.TryApply(source, result, scaleX, scaleY,
-                tapsX, tapsY, context))
+            // A narrow byte reduction can borrow its unpublished output rows.
+            // Try that route before reserving a separate cached workspace.
+            var preferRowLoan = filter == ResizeFilter.Bicubic && source.BitDepth == 8
+                && width < source.Width && height < source.Height && tapsX <= 10 && tapsY <= 10
+                && ColumnBicubicResize.TryLocateRowLoan(result, scaleY < 2.25 ? 9 : 10, out _, out _);
+            if (filter == ResizeFilter.Bicubic
+                && (preferRowLoan && ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || CachedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)))
             {
                 result.Orientation = source.Orientation;
                 return result;
             }
             if (filter == ResizeFilter.Bicubic && (source.BitDepth == 8
-                ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                ? (!preferRowLoan && ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context))
                     || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)

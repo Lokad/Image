@@ -3757,6 +3757,19 @@ costs. The complete final-package refresh remains outstanding."""
     assert column_package['fullEachOs'] == [3384, 2517, 948] and column_package['usageExamplesEachOs'] == 3
     assert all(c['librarySha256'] == column_package['linuxSha256'] and c['status'] == 'pass' and c['upper'] <= 1
                and c['raw']['mirrored'] and c['raw']['allMembersVerified'] for c in column_cases.values())
+    row_loan = json.loads((ROOT / 'benchmarks/bicubic-default-row-loan-evidence.json').read_text(encoding='utf-8'))
+    row_loan_cases = row_loan['cases']
+    loan_package = row_loan['qualification']
+    assert row_loan['productionAccepted'] and set(row_loan_cases) == {'Down8', 'TightDown8'}
+    assert row_loan['raw']['mirrored'] and row_loan['raw']['allMembersVerified']
+    assert loan_package['timedDllUsedUnchanged'] and loan_package['actualPackageConsumerPassedBothOs']
+    assert loan_package['fullEachOs'] == [3385, 2519, 948] and loan_package['usageExamplesEachOs'] == 3
+    for name, operations in (('Down8', 496), ('TightDown8', 448)):
+        cost = row_loan_cases[name]
+        assert cost['librarySha256'] == loan_package['linuxSha256']
+        assert cost['status'] == 'pass' and cost['upper'] <= 1 and cost['allocatedBytes'] == 112
+        assert cost['actualOperationCounts'] == [operations] * 12
+        assert cost['raw']['mirrored'] and cost['raw']['allMembersVerified']
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3789,9 +3802,9 @@ costs. The complete final-package refresh remains outstanding."""
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = compact_word['case']
             assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
-        elif name in column_cases:
-            before = tight_down8 if name == 'TightDown8' else c
-            current = column_cases[name]
+        elif name in row_loan_cases or name in column_cases:
+            before = column_cases['TightDown8'] if name == 'TightDown8' else c
+            current = row_loan_cases[name] if name in row_loan_cases else column_cases[name]
             assert all(current[key] == before[key] for key in
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = current
@@ -3910,14 +3923,15 @@ Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} /
 {compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
-Deferred fallback views close the tight 256×129 RGBA8 reduction on the newly
-qualified package at **{column_cases['TightDown8']['managedUs']:.2f} /
-{column_cases['TightDown8']['nativeUs']:.2f} µs**, upper
-**{column_cases['TightDown8']['upper']:.6f}**, **112 B/op**. The affected RGBA16
-reduction also passes at upper **{column_cases['TightDown16']['upper']:.6f}**,
-**113 B/op**. Both keep the same complete prepared-zimg reference boundary.
-The four prepared bicubic operations also pass on that package, with
-**137 B/op** and unchanged retained plan capacity.
+[Output-backed row loans](../benchmarks/BICUBIC-DEFAULT-ROW-LOAN.md) pass for both
+RGBA8 256×129 reductions on the actual package. Default is
+**{row_loan_cases['Down8']['managedUs']:.2f} / {row_loan_cases['Down8']['nativeUs']:.2f} µs**,
+upper **{row_loan_cases['Down8']['upper']:.6f}**. Tight is
+**{row_loan_cases['TightDown8']['managedUs']:.2f} / {row_loan_cases['TightDown8']['nativeUs']:.2f} µs**,
+upper **{row_loan_cases['TightDown8']['upper']:.6f}**, both **112 B/op**.
+The qualified tight RGBA16 reduction retains upper **{column_cases['TightDown16']['upper']:.6f}**,
+**113 B/op**. All keep the same complete prepared-zimg reference boundary.
+The four prepared bicubic operations retain their passes and **137 B/op**.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **{bilinear_down8['upper']:.6f}** and **{bilinear_down8['allocatedBytes']:,} B/op**.

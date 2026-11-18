@@ -32,14 +32,15 @@ Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **405.66 /
 448.29 µs**, upper **0.918803**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
-Deferred fallback views close the tight 256×129 RGBA8 reduction on the newly
-qualified package at **422.56 /
-450.23 µs**, upper
-**0.947041**, **112 B/op**. The affected RGBA16
-reduction also passes at upper **0.834755**,
-**113 B/op**. Both keep the same complete prepared-zimg reference boundary.
-The four prepared bicubic operations also pass on that package, with
-**137 B/op** and unchanged retained plan capacity.
+[Output-backed row loans](../benchmarks/BICUBIC-DEFAULT-ROW-LOAN.md) pass for both
+RGBA8 256×129 reductions on the actual package. Default is
+**431.10 / 454.16 µs**,
+upper **0.956893**. Tight is
+**397.89 / 419.63 µs**,
+upper **0.959079**, both **112 B/op**.
+The qualified tight RGBA16 reduction retains upper **0.834755**,
+**113 B/op**. All keep the same complete prepared-zimg reference boundary.
+The four prepared bicubic operations retain their passes and **137 B/op**.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **0.997123** and **8,473 B/op**.
@@ -524,7 +525,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,333.69 | 4,090.78 | 0.815 / 0.831 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,080.93 | 5,074.41 | 0.804 / 0.808 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
-| Bicubic resize RGBA8 (confidence open) † → 256×129 | 414.12 | 416.74 | 0.994 / 1.024193 | 199,985 |
+| Bicubic resize RGBA8 † → 256×129 | 431.10 | 454.16 | 0.949 / 0.956893 | 112 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.04 | 840.84 | 0.897 / 0.913422 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 825.67 | 820.97 | 1.006 / 1.034007 | 121 |
@@ -533,7 +534,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 422.56 | 450.23 | 0.939 / 0.947041 | 112 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 397.89 | 419.63 | 0.948 / 0.959079 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 512.36 | 618.28 | 0.829 / 0.834755 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 371.44 | 381.07 | 0.975 / 0.987210 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |

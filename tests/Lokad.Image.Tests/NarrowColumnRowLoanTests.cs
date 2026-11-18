@@ -41,6 +41,37 @@ namespace Lokad.Image.Tests
         public void ActualRowLoanRetiresBeforePoisonedTailAndCancellation(int width, int height, int outputWidth, int outputHeight)
             => ColumnBicubicResize.VerifyRowLoanPhases(width, height, outputWidth, outputHeight);
 
+        [Fact]
+        public void DefaultReductionUsesBoundedRowLoanBeforeSharedCacheAdmission()
+        {
+            if (!Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported) return;
+            const int width = 256, height = 129, bytes = width * height * 4;
+            using var source = OriginalPixels.Buffer(513, 259, 8);
+            for (var y = 0; y < source.Height; y++)
+                for (var x = 0; x < source.Width; x++)
+                    source.GetRow8(y)[x * 4 + 3] = 255;
+
+            using var oracle = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+                new() { MaxWorkingBytes = source.ByteLength + bytes });
+            using var root = new TestMemoryBudget(bytes + 4096);
+            using (var result = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+                new() { MemoryBudget = root }))
+            {
+                Assert.Equal(OriginalPixels.Bytes(oracle), OriginalPixels.Bytes(result));
+                Assert.Equal(bytes, root.Bytes);
+                Assert.Equal(bytes + 4096, root.Peak);
+            }
+            Assert.Equal(0, root.Bytes);
+            Assert.Equal(0, root.Refusals);
+
+            using var insufficient = new TestMemoryBudget(bytes + 4095);
+            var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height,
+                ResizeFilter.Bicubic, new() { MemoryBudget = insufficient }));
+            Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+            Assert.Equal(1, insufficient.Refusals);
+            Assert.Equal(0, insufficient.Bytes);
+        }
+
         [Theory]
         [InlineData(false)] [InlineData(true)]
         public void LowAlphaAndMixedPixelsPreserveAdmissionFailureCleanupAndSurvivors(bool mixed)
