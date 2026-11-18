@@ -566,9 +566,6 @@ def apply_current_bicubic_adjacent_confidence(editing):
         found = [line for line in editing.splitlines() if line.startswith(prefix) and '128×64' in line]
         assert len(found) == 1
         editing = editing.replace(found[0], f'{prefix} † → 128×64 | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |')
-    c = current['cases']['TightWide8']
-    word = current['cases']['TightWide16']
-    mixed = current['cases']['Mixed16']
     wide_current = json.loads((ROOT / 'benchmarks/bicubic-wide-current-confidence-evidence.json').read_text(encoding='utf-8'))
     streaming = json.loads((ROOT / 'benchmarks/streaming-column-reuse-evidence.json').read_text(encoding='utf-8'))
     for scoped in (wide_current,):
@@ -609,27 +606,7 @@ def apply_current_bicubic_adjacent_confidence(editing):
     found = [line for line in editing.splitlines() if line.startswith(prefix) and '128×64' in line]
     assert len(found) == 1
     editing = editing.replace(found[0], f'{prefix} † → 128×64 | {wide["managedUs"]:,.2f} | {wide["nativeUs"]:,.2f} | {wide["ratio"]:.3f} / {wide["upper"]:.3f} | {wide["allocatedBytes"]:,} |')
-    c = current['cases']['TightWide8']
-    note = (f'[Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) '
-            f'resolves default mixed-word resize (**{mixed["managedUs"]:,.2f} / zimg {mixed["nativeUs"]:,.2f} µs, '
-            f'upper {mixed["upper"]:.3f}**) and bounded byte-wide resize (**{c["managedUs"]:,.2f} / '
-            f'{c["nativeUs"]:,.2f} µs, upper {c["upper"]:.3f}**). Bounded word-wide also passes '
-            f'(**{word["managedUs"]:,.2f} / {word["nativeUs"]:,.2f} µs, upper {word["upper"]:.3f}**). '
-            'All three stop, **112 B/op**, zero builds. '
-            f'[Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) '
-            f'also passes/stops: **{wide["managedUs"]:,.2f} / zimg {wide["nativeUs"]:,.2f}µs, upper {wide["upper"]:.6f}**, '
-            '**198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; '
-            'zero builds/qualification repeats, no production speedup. '
-            f'[Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the '
-            f'bounded 16×8 word uncertainty: **{bounded["managedUs"]:,.2f} / zimg '
-            f'{bounded["nativeUs"]:,.2f}µs, upper {bounded["upper"]:.6f}**, **112 B/op**. '
-            'Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. '
-            'All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, '
-            'with no retained operation workspace. Both OSes pass **6,702 full/live** checks, '
-            'focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. '
-            'The adverse first implementation and earlier uncertainty remain history. '
-            'Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.')
-    return editing, note, streaming
+    return editing
 
 
 def apply_released_image_storage(codecs, editing, read_rows):
@@ -3280,7 +3257,7 @@ costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
-    editing, bicubic_adjacent_note, streaming_current = apply_current_bicubic_adjacent_confidence(editing)
+    editing = apply_current_bicubic_adjacent_confidence(editing)
     vp8_package = json.loads((ROOT / 'benchmarks/vp8-decode-current-package-evidence.json').read_text(encoding='utf-8'))
     assert vp8_package['producers'] == jpeg_pending['producers']
     assert vp8_package['raw']['mirrored'] and vp8_package['raw']['allMembersVerified']
@@ -3591,7 +3568,18 @@ costs. The complete final-package refresh remains outstanding."""
     word_qualification = compact_word['qualification']
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3
-    bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases']}
+    extended_bicubic = bicubic_package['extendedCases']
+    assert extended_bicubic['producers'] == word_qualification and extended_bicubic['builds'] == 0
+    assert extended_bicubic['raw']['mirrored'] and extended_bicubic['raw']['allMembersVerified']
+    axial_raw = extended_bicubic['axialAndWordRaw']
+    assert axial_raw['mirrored'] and axial_raw['allMembersVerified']
+    extended_cases = extended_bicubic['cases']
+    assert len(extended_cases) == 14
+    assert all(c['librarySha256'] == word_qualification['linuxSha256'] and c['actuals'] == 12
+               and c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
+               and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+               for c in extended_cases.values())
+    bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
         ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightDown8'),
@@ -3600,6 +3588,11 @@ costs. The complete final-package refresh remains outstanding."""
         ('Bicubic RGBA16, width down / height up / input+output+4 KiB', 'TightCross16'),
         ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightWide8'),
         ('Bicubic RGBA16 reduction, input+output+4 KiB', 'TightWide16'),
+        ('Bicubic RGBA8 width enlargement, input+output+4 KiB', 'TightHorizontalUp8'),
+        ('Bicubic RGBA8 height enlargement, input+output+4 KiB', 'TightVerticalUp8'),
+        ('Bicubic RGBA8, width up / height down, input+output+4 KiB', 'TightMixed8'),
+        ('Bicubic RGBA8, width down / height up, default workspace', 'Cross8'),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB', 'Tight32x16_16'),
     ):
         c = bicubic_cases[name]
         if name == 'Down8':
@@ -3610,7 +3603,7 @@ costs. The complete final-package refresh remains outstanding."""
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = compact_word['case']
             assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
-        else:
+        elif name not in extended_cases:
             assert c['librarySha256'] == png_package['producers']['linuxSha256']
         assert len(c['actualOperationCounts']) == 12
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
@@ -3702,6 +3695,12 @@ RGBA16 directions. Compact horizontal coefficients close the tight 128×64
 RGBA16 gap on the new actual package at **{compact_word['case']['managedUs']:.2f} /
 {compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**
 and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
+The tight 16×8 RGBA16 reduction passes on the same package at
+**{extended_cases['Tight16x8_16']['managedUs']:.2f} /
+{extended_cases['Tight16x8_16']['nativeUs']:.2f} µs**, upper
+**{extended_cases['Tight16x8_16']['upper']:.6f}** and **112 B/op**.
+The 4 KiB 64×32 RGBA8 reduction remains uncertain at upper
+**{extended_cases['Tight64x32_8']['upper']:.6f}**.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3813,7 +3812,9 @@ now also passes on the actual package, upper .979, **6,241,792 B/op**, exact
 The [family reports](../benchmarks/WARM-COVERAGE.md) identify source-valid passing
 paths and remaining copy/inspection gaps. Historical image-view aggregates
 stay in their original reports; the complete final-package refresh remains open.
-{bicubic_adjacent_note}
+[Earlier bicubic comparisons](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md)
+and [streaming-column qualification](../benchmarks/STREAMING-COLUMN-REUSE.md)
+retain their original producer evidence.
 [RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
 passes/stops: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
 upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**.

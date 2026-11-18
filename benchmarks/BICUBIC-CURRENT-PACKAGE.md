@@ -195,3 +195,58 @@ members and 1,893,128 B, SHA-256
 `0415a9a2b9ceb5dbeb6df769b214ba9988f89c33d99f64c2d6b713d7409f45b6`.
 It retains the exact source, immutable private and Release binaries, timings,
 guard failure, builds, qualification logs and actual package.
+
+## Additional current-package cases
+
+Thirteen of fourteen additional cases pass on the same actual package. The tight 64×32
+RGBA8 reduction remains uncertain.
+
+| Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Tight RGBA16 reduction to 16×8 | 362.74 | 534.04 | 0.670029–0.683124 | 112 | Pass |
+| Tight RGBA8 width enlargement | 1,427.16 | 1,534.77 | 0.911409–0.946599 | 114 | Pass |
+| Default RGBA8 enlargement | 3,007.79 | 3,271.89 | 0.883457–0.932694 | 116 | Pass |
+| Tight RGBA8 width up, height down | 921.58 | 944.33 | 0.968241–0.984461 | 114 | Pass |
+| Default RGBA8 width up, height down | 921.08 | 939.58 | 0.961704–0.988217 | 114 | Pass |
+| Default RGBA8 width down, height up | 810.11 | 902.40 | 0.886220–0.906412 | 199,938 | Pass |
+| Tight RGBA8 reduction to 64×32 | 384.37 | 384.07 | 0.950588–1.014632 | 113 | Confidence open |
+| Tight RGBA16 reduction to 32×16 | 435.03 | 442.74 | 0.962730–0.991529 | 113 | Pass |
+| Tight RGBA16 width enlargement | 1,433.74 | 1,548.01 | 0.908726–0.931626 | 114 | Pass |
+| Default RGBA8 height enlargement | 1,473.84 | 1,840.39 | 0.780064–0.812049 | 114 | Pass |
+| Tight RGBA8 height enlargement | 1,562.10 | 1,830.43 | 0.818744–0.864226 | 126 | Pass |
+| Default RGBA16 height enlargement | 1,389.73 | 1,825.94 | 0.746134–0.775474 | 114 | Pass |
+| Tight RGBA16 height enlargement | 1,380.69 | 1,822.25 | 0.748878–0.765398 | 114 | Pass |
+| Default RGBA16 reduction to 256×129 | 408.45 | 575.33 | 0.693044–0.723866 | 199,958 | Pass |
+
+The 16×8 word case retains its original twelve alternating 256-call pairs
+and twelve native samples in each outer bracket. The earlier uncertain
+capture and the later streaming-column pass remain in the evidence.
+The new result confirms the current package. The compact-weight change
+does not execute on this shape. [Streaming-column results](STREAMING-COLUMN-REUSE.md)
+
+The other thirteen cases use two sequential batches with the same 127 verified
+non-core runtime files and original generated delegates. Each retains three warmups, twelve measured
+actuals with natural GC and twelve samples per native bracket. The conservative
+interval includes both the filtered and all-actual views. The 64×32 byte
+interval spans parity. Its point difference is 0.30 µs.
+
+Every case preserves the original input and output hashes, exact managed
+pixels, native bounds, source and independent output checks. The reference
+retains zimg preparation. Both idle guards pass with untimed files in memory.
+No new build or production change was needed. Allocations are reported
+separately from owned capacity and idle retention. Five existing summary
+rows use the refreshed measurements.
+
+The mirrored `bicubic-current-package-extended-cases.tar.xz` contains 55 verified
+members and 54,932 B, SHA-256
+`2c474d5cc4e48535dd41ebe08a23493bd6ca602a799f34143f449d2bd2aae70d`.
+It retains the original and current receipts, complete timing records and
+reproduction commands. Validation of the 16×8 bracket counts uses the
+adjacent driver's log, where all twelve original pairs and both twelve-sample
+brackets are retained.
+
+The axial enlargements and default word reduction are retained in the mirrored
+`bicubic-current-package-axial-and-word.tar.xz` with 40 verified
+members and 36,916 B, SHA-256
+`c3c263816b7139098ab1852053802d44fb5e5d6db7b1fc0b2a878f48af282944`.
+Both word height enlargements retain their approved low-alpha native limits.

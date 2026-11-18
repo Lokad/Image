@@ -26,6 +26,12 @@ RGBA16 directions. Compact horizontal coefficients close the tight 128×64
 RGBA16 gap on the new actual package at **405.66 /
 448.29 µs**, upper **0.918803**
 and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
+The tight 16×8 RGBA16 reduction passes on the same package at
+**362.74 /
+534.04 µs**, upper
+**0.683124** and **112 B/op**.
+The 4 KiB 64×32 RGBA8 reduction remains uncertain at upper
+**1.014632**.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -206,7 +212,9 @@ costs. The complete final-package refresh remains outstanding.
 The [family reports](../benchmarks/WARM-COVERAGE.md) identify source-valid passing
 paths and remaining copy/inspection gaps. Historical image-view aggregates
 stay in their original reports; the complete final-package refresh remains open.
-[Current bicubic confidence](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md) resolves default mixed-word resize (**789.05 / zimg 837.28 µs, upper 0.946**) and bounded byte-wide resize (**340.70 / 347.49 µs, upper 0.984**). Bounded word-wide also passes (**398.16 / 405.63 µs, upper 0.991**). All three stop, **112 B/op**, zero builds. [Default byte-wide longer integration](../benchmarks/BICUBIC-WIDE-CURRENT-CONFIDENCE.md) also passes/stops: **337.24 / zimg 349.38µs, upper 0.970941**, **198,350 B/op**. One 64→256 integration retains all actuals and the original uncertain capture; zero builds/qualification repeats, no production speedup. [Streaming column reuse](../benchmarks/STREAMING-COLUMN-REUSE.md) closes the bounded 16×8 word uncertainty: **336.93 / zimg 495.11µs, upper 0.685485**, **112 B/op**. Adjacent columns share pixel conversion and vertical preparation, preserving exact ordered sums. All six affected streaming controls pass/stop; workspace admission remains **4 KiB**, with no retained operation workspace. Both OSes pass **6,702 full/live** checks, focused normal/scalar/AVX512-disabled checks and the **SAME actual package/all three examples**. The adverse first implementation and earlier uncertainty remain history. Fresh managed/prepared native boundaries remain explicit; equivalent prepared/one-shot passes are reused.
+[Earlier bicubic comparisons](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md)
+and [streaming-column qualification](../benchmarks/STREAMING-COLUMN-REUSE.md)
+retain their original producer evidence.
 [RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
 passes/stops: **1,847.74 / FFmpeg 2,024.23µs,
 upper 0.944044**, **4,498,558 B/op**.
@@ -498,21 +506,21 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.23 | 838.25 | 0.900 / 0.907 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 820.10 | 825.87 | 0.993 / 1.007289 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 403.27 | 413.28 | 0.976 / 0.982 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 435.03 | 442.74 | 0.983 / 0.991529 | 113 |
 | Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 451.05 | 1,046.58 | 0.431 / 0.433 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,418.23 | 1,515.14 | 0.936 / 0.943 | 114 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,397.56 | 1,747.50 | 0.800 / 0.805 | 114 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 414.38 | 419.26 | 0.988 / 1.003866 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 503.81 | 576.25 | 0.874 / 0.886 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 337.24 | 349.38 | 0.965 / 0.971 | 198,350 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 830.84 | 864.78 | 0.961 / 0.967 | 113 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 872.48 | 907.53 | 0.961 / 0.974925 | 114 |
 | Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 128×64 | 380.07 | 375.17 | 1.013 / 1.024773 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.66 | 448.29 | 0.905 / 0.918803 | 112 |
-| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 771.67 | 844.28 | 0.914 / 0.926 | 199,947 |
+| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.11 | 902.40 | 0.898 / 0.906412 | 199,938 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 752.15 | 827.29 | 0.909 / 0.926 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.95 | 1.91 | 1.025 / 1.037 | 0 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.82 | 1.003 / 1.012 | 0 |
