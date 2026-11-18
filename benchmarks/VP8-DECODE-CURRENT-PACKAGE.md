@@ -298,3 +298,27 @@ Both allocate **230,880 B/op**. The exact frame, source, owner and quiet
 guards pass. These mixed results give no basis to keep the specialized
 kernel or repeat standalone timing. The production uncertainties remain.
 [Filter trial evidence](vp8-horizontal-edge16-trial-evidence.json)
+
+### Early rejection of horizontal filter groups
+
+An untimed count on the original live-token opaque packet finds that only
+234 of 6,600 horizontal groups publish anything. The normal interior path
+rewrites 2,944 unchanged bytes per frame. Testing the edge and its two
+nearest gradients would reject 6,010 groups before reading the distant
+neighbors. At the source level, this can remove 24,040 eight-byte reads per
+frame. Both counts use the original whole-frame integrity checks and discard
+all elapsed time.
+
+The private implementation tests the four nearest samples first, reuses
+the nearest gradient maximum and publishes only samples the filter can
+change. The original line bounds, filter order and cancellation remain.
+Independent whole-plane scalar tests and all 35 focused Windows tests pass
+in normal and scalar mode.
+
+The three-pair complete opaque screen gives **4,734.24 → 4,686.80 µs**,
+interval **0.965240–1.015362**. The live-token screen gives
+**4,774.98 → 4,863.85 µs**, interval **0.999181–1.038419**. Both allocate
+**230,880 B/op**. All exact frame, source, owner and quietness gates pass.
+The mixed results give no basis for confirmation or promotion. Keep the
+rejected-write counts separate from measured speed.
+[Counts and trial evidence](vp8-horizontal-near-gate-trial-evidence.json)

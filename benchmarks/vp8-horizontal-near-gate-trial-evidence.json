@@ -1,0 +1,203 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1360",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "cases": {
+    "Opaque8": {
+      "statistics": {
+        "baseline": {
+          "mean": 4734.2443125,
+          "lower": 4049.292954069152,
+          "upper": 5419.195670930848
+        },
+        "candidate": {
+          "mean": 4686.803520833333,
+          "lower": 4093.389268514741,
+          "upper": 5280.217773151925
+        },
+        "candidateToBaselineInterval": [
+          0.9652402643305489,
+          1.0153621585131734
+        ],
+        "candidateToBaselineRatio": 0.9899840596062606,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4796.9636666666665,
+          4795.8223333333335,
+          4800.861229166667
+        ]
+      },
+      "actuals": 3,
+      "operationsPerSubject": 16,
+      "allOriginalGatesAndGuardsPassed": true,
+      "raw": {
+        "file": "vp8-decoder-horizontal-near-gate-Opaque8-3.tar.xz",
+        "sha256": "8d446dc48981c5146ef4bdda20966b0d871df608d313350e8d7b1166b4f46d89",
+        "bytes": 397520,
+        "members": 22,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "OpaqueCancelable8": {
+      "statistics": {
+        "baseline": {
+          "mean": 4774.98325,
+          "lower": 4420.436949882405,
+          "upper": 5129.529550117595
+        },
+        "candidate": {
+          "mean": 4863.8545,
+          "lower": 4470.360006565848,
+          "upper": 5257.348993434152
+        },
+        "candidateToBaselineInterval": [
+          0.9991806566062538,
+          1.0384187821619446
+        ],
+        "candidateToBaselineRatio": 1.0186107993698272,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4797.433958333333,
+          4799.998604166667,
+          4800.952791666667
+        ]
+      },
+      "actuals": 3,
+      "operationsPerSubject": 16,
+      "allOriginalGatesAndGuardsPassed": true,
+      "raw": {
+        "file": "vp8-decoder-horizontal-near-gate-OpaqueCancelable8-3.tar.xz",
+        "sha256": "1e702221fa50ff97a352dea6ee0d672b8da75dcb3b1e0c05d5ab1e6c7a9e9aa9",
+        "bytes": 397620,
+        "members": 22,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
+  },
+  "diagnostic": {
+    "raw": {
+      "file": "vp8-filter-group-counts.tar.xz",
+      "sha256": "13ee47b6125db2df13fb9d0b124765d59a764b70023709d549a6fa430950be93",
+      "bytes": 434508,
+      "members": 34,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "rawSummaries": {
+      "frp1358": {
+        "caseId": "OpaqueCancelable8",
+        "scored": false,
+        "frameCount": 8,
+        "width": 513,
+        "height": 259,
+        "level": 8,
+        "simple": false,
+        "originalPerGroup": 6,
+        "groups": {
+          "horizontalMacroblock": 2112,
+          "horizontalInterior": 4488,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 2176,
+          "verticalInterior": 4488,
+          "verticalSimple": 0
+        },
+        "published": {
+          "horizontalMacroblock": 50,
+          "horizontalInterior": 184,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 79,
+          "verticalInterior": 219,
+          "verticalSimple": 0
+        },
+        "currentHorizontalBytes": 11232,
+        "normalInteriorRewriteBytes": 2944,
+        "simpleRewriteBytes": 0
+      },
+      "frp1359": {
+        "caseId": "OpaqueCancelable8",
+        "scored": false,
+        "frameCount": 8,
+        "width": 513,
+        "height": 259,
+        "level": 8,
+        "simple": false,
+        "originalPerGroup": 6,
+        "groups": {
+          "horizontalMacroblock": 2112,
+          "horizontalInterior": 4488,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 2176,
+          "verticalInterior": 4488,
+          "verticalSimple": 0
+        },
+        "published": {
+          "horizontalMacroblock": 50,
+          "horizontalInterior": 184,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 79,
+          "verticalInterior": 219,
+          "verticalSimple": 0
+        },
+        "edgeRejected": {
+          "horizontalMacroblock": 1018,
+          "horizontalInterior": 2742,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 1014,
+          "verticalInterior": 2853,
+          "verticalSimple": 0
+        },
+        "nearRejected": {
+          "horizontalMacroblock": 1936,
+          "horizontalInterior": 4074,
+          "horizontalSimple": 0,
+          "verticalMacroblock": 1954,
+          "verticalInterior": 4129,
+          "verticalSimple": 0
+        },
+        "currentHorizontalBytes": 11232,
+        "normalInteriorRewriteBytes": 2944,
+        "simpleRewriteBytes": 0
+      }
+    },
+    "horizontalGroups": 6600,
+    "nearRejectedGroups": 6010,
+    "projectedRemovedEightByteReads": 24040,
+    "scored": false
+  },
+  "baselinePackageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+  "baselineLibrarySha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "privateLibrarySha256": "d1909e1ab1847cfc7712b3dadbbcfed99297c31bd1aa88ce88bcce0e133cff9f",
+  "sourcePath": "src/Lokad.Image/Internal/Vp8LoopFilter.cs",
+  "sourceOriginalSha256": "b892f7b0397be3e5b5fc06df2cdf19162f2a4bdc3de94cecdb2de54775d992fb",
+  "candidateSourceSha256": "0b4290103bd64bc762c4dd370fc481984635190fa5e4e49587ad32513ba28690",
+  "mechanism": "Horizontal groups test closest four samples before loading distant neighbors. Reuse the nearest gradient maximum and publish only touched samples.",
+  "windowsFocusedPerMode": 35,
+  "windowsLogs": {
+    "normal": {
+      "file": "frp1360-windows-normal.log",
+      "sha256": "9a85f9c38a8f1686bda765b0b14220582c9f32eb174fd7de831d6ec40bb81ed1"
+    },
+    "scalar": {
+      "file": "frp1360-windows-scalar.log",
+      "sha256": "7af54120498a092d5125d1ca95c083c4574be44ea72ce383ec627ae2831f4da4"
+    }
+  },
+  "disposition": "Keep the current filter. The two paired screens do not justify confirmation or standalone remeasurement."
+}
