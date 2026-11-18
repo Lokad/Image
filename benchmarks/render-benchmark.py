@@ -76,6 +76,11 @@ def apply_current_resize_weights(rows, evidence, case_owners, bilinear_metadata)
 
 def apply_current_lanczos(editing):
     current = json.loads((ROOT / 'benchmarks/lanczos-identity-axis-evidence.json').read_text(encoding='utf-8'))
+    storage = json.loads((ROOT / 'benchmarks/lanczos-current-package-evidence.json').read_text(encoding='utf-8'))
+    package = json.loads((ROOT / 'benchmarks/jpeg-pending-publication-evidence.json').read_text(encoding='utf-8'))
+    assert storage['producers'] == storage['oneAxis']['producers'] == package['producers']
+    assert all(group['raw']['mirrored'] and group['raw']['allMembersVerified']
+               for group in (storage, storage['oneAxis']))
     q = current['qualification']
     assert current['productionAccepted'] and current['allAffectedPerformanceReconciled']
     assert current['requiredMaterialPaths'] == 289 and current['newMaterialPaths'] == 0
@@ -99,6 +104,8 @@ def apply_current_lanczos(editing):
                    ('OneShotEnlarge8', False, 8, '1027×519'), ('RepeatedEnlarge8', True, 8, '1027×519'),
                    ('OneShotEnlarge16', False, 16, '1027×519'), ('RepeatedEnlarge16', True, 16, '1027×519')]}
     rows, seen = [], set()
+    refresh = storage['cases']
+    assert set(refresh) == set(current['cases']) - {'OneShotEnlarge16', 'RepeatedEnlarge16'}
     for line in editing.splitlines():
         cells = [part.strip() for part in line.strip('|').split('|')]
         label = re.sub(r' \((?:gap|uncertain)\)', '', cells[0])
@@ -108,6 +115,11 @@ def apply_current_lanczos(editing):
             assert c['allActualsRetained'] and c['managedExact'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
             assert c['reusedUnchangedPath'] or c['librarySha256'] == current['producers']['timedArtifactSha256']
             assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+            if case in refresh:
+                c = refresh[case]
+                assert c['librarySha256'] == storage['producers']['linuxSha256']
+                assert len(c['actualOperationCounts']) == 12 and c['upper'] <= 1 and c['status'] == 'pass'
+                assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
             cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
                          f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
             line = '| ' + ' | '.join(cells) + ' |'
@@ -120,14 +132,20 @@ def apply_current_lanczos(editing):
     assert one_axis['qualification']['sameImmutablePackageAndCoreVerifiedBothOs'] and one_axis['qualification']['broadOrPackageRepeats'] == 0
     assert one_axis['measurement']['quietGuardsPassed'] and one_axis['measurement']['independentConfirmationActuals'] == 12
     assert set(one_axis['cases']) == {'Horizontal16', 'Vertical16'}
-    for case in one_axis['cases'].values():
+    axis_storage = storage['oneAxis']
+    assert axis_storage['actuals'] == 12 and axis_storage['operationsPerActual'] == 32
+    assert axis_storage['allOriginalGatesPassed'] and axis_storage['quietGuardsPassed']
+    for name, case in one_axis['cases'].items():
         assert case['status'] == 'pass' and case['upper'] <= 1 and case['allActualsRetained'] and case['managedExactContractPreserved']
         assert case['actuals'] == 12 and case['operationsPerActual'] == 32 and case['sourceUnchanged'] and case['independentOwnedOutputs']
         for quality in (case['quality'], case['scalarQuality']):
             assert quality['matched'] and quality['sourceUnchanged'] and quality['rgbMaximum'] <= 1 and quality['alphaMaximum'] <= 1
             assert quality['rgbMeanSquared'] <= .0625 and quality['alphaMeanSquared'] <= .0625
-        allocated = f"{case['allocatedBytesMinimum']:,.0f}–{case['allocatedBytesMaximum']:,.0f}"
-        rows.append(f"| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → {case['width']}×{case['height']} | {case['managedUs']:,.2f} | {case['nativeUs']:,.2f} | {case['ratio']:.3f} / {case['upper']:.3f} | {allocated} |")
+        measured = axis_storage['cases'][name]
+        assert measured['status'] == 'pass' and measured['upper'] <= 1 and measured['allActualsRetained']
+        assert measured['outputSha256'] == case['outputSha256'] and measured['quality'] == case['quality']
+        allocated = f"{min(measured['allocatedBytes']):,.0f}–{max(measured['allocatedBytes']):,.0f}"
+        rows.append(f"| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → {case['width']}×{case['height']} | {measured['managedUs']:,.2f} | {measured['nativeUs']:,.2f} | {measured['ratio']:.3f} / {measured['upper']:.3f} | {allocated} |")
     return '\n'.join(rows)
 
 
@@ -3678,10 +3696,10 @@ focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
-zero-only coefficient storage and size working rows from actual taps. Four affected
-one-shot reference comparisons refresh on the immutable timed/package DLL; four
-unchanged prepared nonidentity paths reuse qualified evidence. **All eight declared
-Lanczos comparisons pass/stop**; equivalent bicubic controls are unchanged.
+zero-only coefficient storage and size working rows from actual taps.
+[Current-package measurements](../benchmarks/LANCZOS-CURRENT-PACKAGE.md) confirm
+all six affected two-axis comparisons and both one-axis controls. Both RGBA16
+enlargements exceed the pool's unchanged 4 MiB cap and keep valid passing evidence.
 
 Two additional complete managed-DLL diagnostics use the existing full-word input:
 513×259→513×129 independently improves **{lanczos_current['identityAxisDiagnostics']['Vertical16']['rawSavedFraction']:.2%} /
@@ -3691,10 +3709,9 @@ Two additional complete managed-DLL diagnostics use the existing full-word input
 Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
 about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
 **798,780→786,516 B**. Ranges and raw observations remain in the report.
-Those diagnostics establish only scoped prior/candidate effects. Two subsequent
-[equivalent one-shot comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md)
-on the same immutable package now pass: horizontal **608.60 / 2,105.19µs,
-upper0.294**, vertical **735.96 / 2,061.40µs, upper0.362**.
+Those diagnostics establish scoped prior/candidate effects. Both [one-axis
+comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md) retain their
+complete one-shot boundaries and original quality checks.
 Managed GC ranges **44,712–44,720 / 254,672–254,679B/op** remain separate from
 retained plans and governed peaks. All ten Lanczos views pass/stop; no stage-cost
 sum or broader grid is implied. The full289-path objective stays open.

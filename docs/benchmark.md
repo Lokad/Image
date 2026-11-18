@@ -245,10 +245,10 @@ focused normal/scalar checks and the **same actual package/all three examples**.
 [Earlier unaccepted arithmetic-window trials](../benchmarks/VP8-LIVE-WINDOW-TRIALS.md)
 remain separate history; none of their coefficient state-bridge changes survives.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
-zero-only coefficient storage and size working rows from actual taps. Four affected
-one-shot reference comparisons refresh on the immutable timed/package DLL; four
-unchanged prepared nonidentity paths reuse qualified evidence. **All eight declared
-Lanczos comparisons pass/stop**; equivalent bicubic controls are unchanged.
+zero-only coefficient storage and size working rows from actual taps.
+[Current-package measurements](../benchmarks/LANCZOS-CURRENT-PACKAGE.md) confirm
+all six affected two-axis comparisons and both one-axis controls. Both RGBA16
+enlargements exceed the pool's unchanged 4 MiB cap and keep valid passing evidence.
 
 Two additional complete managed-DLL diagnostics use the existing full-word input:
 513×259→513×129 independently improves **34.22% /
@@ -258,10 +258,9 @@ Two additional complete managed-DLL diagnostics use the existing full-word input
 Its governed one-shot peak falls **632,432→577,088 B**. Vertical allocation falls
 about **267,016→254,672 B/op**, retained **269,364→257,100 B**, and peak
 **798,780→786,516 B**. Ranges and raw observations remain in the report.
-Those diagnostics establish only scoped prior/candidate effects. Two subsequent
-[equivalent one-shot comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md)
-on the same immutable package now pass: horizontal **608.60 / 2,105.19µs,
-upper0.294**, vertical **735.96 / 2,061.40µs, upper0.362**.
+Those diagnostics establish scoped prior/candidate effects. Both [one-axis
+comparisons](../benchmarks/LANCZOS-IDENTITY-AXIS-REFERENCE.md) retain their
+complete one-shot boundaries and original quality checks.
 Managed GC ranges **44,712–44,720 / 254,672–254,679B/op** remain separate from
 retained plans and governed peaks. All ten Lanczos views pass/stop; no stage-cost
 sum or broader grid is implied. The full289-path objective stays open.
@@ -478,12 +477,12 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 588.87 | 1,568.56 | 0.375 / 0.378 | 138,650 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 462.40 | 488.52 | 0.947 / 0.953 | 138 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 623.14 | 1,806.50 | 0.345 / 0.350 | 155,075 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 485.36 | 512.07 | 0.948 / 0.958 | 138 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,768.25 | 5,225.86 | 0.721 / 0.726 | 319,224 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,554.71 | 4,074.82 | 0.872 / 0.882 | 148 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 591.66 | 1,574.50 | 0.376 / 0.390 | 138,650 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 459.28 | 488.52 | 0.940 / 0.947 | 138 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 632.28 | 1,823.31 | 0.347 / 0.355 | 155,078 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 497.44 | 512.29 | 0.971 / 0.984 | 141 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,779.99 | 5,260.25 | 0.719 / 0.723 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,333.69 | 4,090.78 | 0.815 / 0.831 | 148 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,080.93 | 5,074.41 | 0.804 / 0.808 | 4,592,818 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
 | Bicubic resize RGBA8 † → 256×129 | 415.34 | 419.25 | 0.991 / 0.997 | 199,985 |
@@ -540,8 +539,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic prepared narrow RGBA8 / zimg prepared † → 256×129 | 398.55 | 422.93 | 0.942 / 0.952 | 137 |
 | Bicubic one-shot narrow RGBA16 / zimg one-shot † → 256×129 | 446.16 | 715.28 | 0.624 / 0.628 | 199,983 |
 | Bicubic prepared narrow RGBA16 / zimg prepared † → 256×129 | 373.53 | 570.51 | 0.655 / 0.662 | 137 |
-| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 608.60 | 2,105.19 | 0.289 / 0.294 | 44,712–44,720 |
-| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 735.96 | 2,061.40 | 0.357 / 0.362 | 254,672–254,679 |
+| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 256×259 | 611.14 | 2,088.67 | 0.293 / 0.301 | 44,712–44,720 |
+| Lanczos3 one-axis one-shot RGBA16 / zimg one-shot † → 513×129 | 734.50 | 2,054.59 | 0.357 / 0.363 | 254,672–254,679 |
 | PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | 2,856.94 | 3,301.31 | 0.865 / 0.871 | 338,156–338,160 |
 | Plain transpose RGBA16 † → 259×513 | 34.98 | 43.85 | 0.798 / 0.859 | 56 |
 | Plain transpose RGBA8 † → 259×513 | 26.85 | 37.83 | 0.710 / 0.716 | 56 |
