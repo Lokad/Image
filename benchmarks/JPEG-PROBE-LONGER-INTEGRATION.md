@@ -101,6 +101,33 @@ intervals include unchanged performance. The variants stop at screening.
 The scored asynchronous FFmpeg comparison remains uncertain.
 [Screens, generated code and verification evidence](probe-refill-input-bound-trial-evidence.json)
 
+## Acquiring the next marker with an opaque payload
+
+The private candidate combines the end of a skipped JPEG segment with
+the following marker request. It applies to asynchronous, forward-only
+dimension probes without a live cancellation token. The JPEG grammar
+still validates the marker, and both caps still limit the read. The
+frozen input drops from **14 to 11 read callbacks**, consuming the same
+**308-byte prefix** and stopping before pixel data.
+
+The short screen gives **0.219484 → 0.201194 µs**. Independent twelve-pair
+confirmation gives **0.232484 → 0.211988 µs**, a **20.5 ns** saving with
+an interval of **0.864021–0.961622**. Against the frozen FFmpeg AVIO
+adapter, the standalone private build measures **0.202327 / 0.206028 µs**,
+interval **0.962987–0.998826**. It keeps the original generated workload,
+12 statistical units, 16 subdivisions and complete input and ownership
+boundary. All runs allocate **568 B/op**.
+
+The 1,006-case read audit preserves successful descriptors and prefix
+lengths, cap failures, and the tested live-token and seekable traces.
+One malformed input delivered in three-byte fragments raises the same
+data error after consuming 88 bytes instead of 89. Both Windows modes
+pass 191 focused tests. The private result supplies a passing comparison
+for the candidate DLL. Production acceptance still requires a gated
+pending-read ownership check, reconciliation of the affected inspection
+paths, and confirmation on the actual Release package.
+[Immutable builds, delivery traces, guards and results](probe-refill-input-bound-trial-evidence.json)
+
 ## Unchanged operation and gates
 
 Each unit now includes3420160managed and1048576native complete operations,

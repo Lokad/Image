@@ -534,5 +534,123 @@
         "logSha256": "2ef30899b8e3e78a951230370e1fd6a03eab2bc7a9244cb88bb01658fdbe508c"
       }
     }
+  },
+  "nextJpegMarkerCoalescingTrial": {
+    "productionChanged": false,
+    "productionAccepted": false,
+    "mechanism": "Coalesce the end of an opaque JPEG segment with its following marker request for bounded noncancelable async dimension probes.",
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateDllSha256": "539994ab112ae2d6e8021fb8680d0487892e8282dd5f8258ca31d46d0d1e6373",
+    "screen": {
+      "baselineUs": 0.21948440170288086,
+      "candidateUs": 0.20119377772013344,
+      "lower": 0.9147342682956998,
+      "upper": 0.9185969337257142,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "actuals": 3,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true
+    },
+    "independentConfirmation": {
+      "baselineUs": 0.23248425801595052,
+      "candidateUs": 0.21198760541280112,
+      "lower": 0.8640210059807588,
+      "upper": 0.9616224820058766,
+      "allocatedBytes": {
+        "baseline": [
+          568
+        ],
+        "candidate": [
+          568
+        ]
+      },
+      "actuals": 12,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true
+    },
+    "standalone": {
+      "managedUs": 0.20232693753118766,
+      "nativeUs": 0.2060280850728353,
+      "ratio": 0.9820357135274097,
+      "lower": 0.9629869580308437,
+      "upper": 0.9988258033436989,
+      "status": "pass",
+      "allocatedBytes": 568,
+      "allActualsRetained": true,
+      "quietGuardsPassed": true
+    },
+    "publicFocusedTests": {
+      "windowsNormal": 191,
+      "windowsScalar": 191
+    },
+    "readTrace": {
+      "cases": 1006,
+      "frozenInputBytesRead": [
+        308,
+        308
+      ],
+      "originalFrozenCallbacks": [
+        2,
+        2,
+        2,
+        12,
+        2,
+        2,
+        65,
+        2,
+        2,
+        198,
+        2,
+        2,
+        6,
+        9
+      ],
+      "candidateFrozenCallbacks": [
+        2,
+        2,
+        2,
+        14,
+        2,
+        67,
+        2,
+        200,
+        2,
+        6,
+        9
+      ],
+      "mismatches": {
+        "invalid-marker-87-3": {
+          "Position": [
+            89,
+            88
+          ],
+          "BytesRead": [
+            89,
+            88
+          ]
+        }
+      },
+      "identicalLiveAndSeekable": true
+    },
+    "originalStandaloneBoundariesPreserved": true,
+    "actualPackageQualificationPending": true,
+    "raw": {
+      "file": "jpeg-next-marker-acquisition-trial.tar.xz",
+      "bytes": 504936,
+      "sha256": "df8351d9972cceade203b2a479f462864b393c94b3991b38bebfceb6d720827e",
+      "members": 49,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }
