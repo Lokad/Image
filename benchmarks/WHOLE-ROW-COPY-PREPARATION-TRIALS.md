@@ -933,3 +933,26 @@ On the observed matching phase, the aligned vectors need no permutation.
 The model gives a bounded design to check against the actual generated
 loop. It supplies no timing result.
 [Geometry proof](copy-vector-width-trials-evidence.json)
+
+## Carried source vectors
+
+The candidate uses two source vectors to assemble each destination
+vector in the aligned middle of a checked row. It carries the last
+source vector across iterations and uses ordinary bounded transfers at
+the edges. Equal row-step residues make the relative phase constant.
+Equal phases and unsupported hardware use the existing copy path.
+The 674-byte Linux helper issues four new source loads, four byte
+permutations and four stores per bulk iteration, with no vector spills.
+
+Three quiet-VM pairs per case, at 65,536 complete calls per side, give
+**2.125504 → 2.119812 µs** for clipped RGBA8 (paired interval
+**0.977058–1.018006**) and **2.098118 → 2.084585 µs** for separate
+RGBA8 (**0.929409–1.062111**). Both allocate **0 B/op**. Exact image,
+source and ownership checks pass, as do 125 focused Windows tests per
+mode with intrinsics enabled and disabled.
+
+The separate case's initial guard rejected CPU0 I/O wait before any
+samples. A separate-case-only run passed both guards. The clipped
+samples were retained from their original run. Stop at screening. The
+point gains are under 14 ns and the standalone FFmpeg gaps remain open.
+[Both screens, guard records and generated code](copy-vector-width-trials-evidence.json)

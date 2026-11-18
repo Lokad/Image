@@ -1606,5 +1606,64 @@
         "mirrored": true
       }
     }
+  },
+  "carriedSourceVectorTrial": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateDllSha256": "632200f93ece4b81ffa85e4c1cd1ac984a0bc9986e6ba21f29524c452ec3d5c4",
+    "productionAccepted": false,
+    "scoredParityCaptures": 0,
+    "windowsFocusedNormal": 125,
+    "windowsFocusedScalar": 125,
+    "managedAllocationBytesPerOp": 0,
+    "quietVmPairedScreen": {
+      "pairsEach": 3,
+      "operationsPerSide": 65536,
+      "cases": {
+        "OriginalClippedCopy8": {
+          "baselineUs": 2.125503814697266,
+          "candidateUs": 2.1198116556803384,
+          "pairedRatioInterval": [
+            0.9770584509572764,
+            1.0180058815685444
+          ]
+        },
+        "DrawingCopy8": {
+          "baselineUs": 2.098118453979492,
+          "candidateUs": 2.0845850830078123,
+          "pairedRatioInterval": [
+            0.9294094173523783,
+            1.0621112917840607
+          ]
+        }
+      }
+    },
+    "generatedCode": {
+      "methodBytes": 674,
+      "sampleCommands": 0,
+      "vectorMoves": 19,
+      "bytePermutes": 5,
+      "stackVectorMoves": [],
+      "codegenSha256": "484a19e37feba89c97d4f11a53e0ad3ae52031a51a6ca075f8ff01890bb45cc9",
+      "bulkLoads": 4,
+      "bulkPermutes": 4,
+      "bulkStores": 4
+    },
+    "separateCaseInitialGuard": {
+      "failed": true,
+      "aggregateIoWaitFraction": 0.014,
+      "cpu0IoWaitFraction": 0.012024048096192385,
+      "sampleCommands": 0
+    },
+    "raw": {
+      "file": "carried-aligned-source-copy-trial.tar.xz",
+      "bytes": 1036464,
+      "sha256": "e9295826c305b558122a43e53b6905fb26c801913be2174a9d4a28e1328bcdaf",
+      "members": 60,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

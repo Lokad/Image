@@ -219,3 +219,21 @@ managed layout survives face disposal, and the shared budget returns to
 zero after its final owner is disposed. All twelve checks use original
 check modes, with no timed captures, rebuilt tooling, or new workload.
 [Original and current receipts with member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Special comparison readiness
+
+All 30 recovered special comparisons have an identified executable recipe
+and correctness evidence. Twenty-seven use current package `87f1ae4a`
+bindings. The photograph and opaque lossless WebP encoders and complete
+JPEG header inspection reuse their earlier verified boundaries. The
+production diff since that earlier package touches only resizing, cropping
+and VP8 decoding, outside these three paths. The bilinear `Up16` binding
+is the one-shot `Up16OneShot` comparison from the recovered list.
+
+This reconciliation used the existing evidence and verified the current
+package DLL hash. The final refresh still requires all 165 displayed
+comparisons to run on the final immutable package.
+[Current bindings](benchmark-refresh-runtime-preparation-evidence.json)
+[WebP bindings](webp-package-bindings-required-scope-evidence.json)
+[JPEG header evidence](jpeg-pending-publication-evidence.json)
+[JPEG restart binding](jpeg-direct-block-emission-evidence.json)
