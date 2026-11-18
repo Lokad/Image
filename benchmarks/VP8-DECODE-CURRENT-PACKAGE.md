@@ -181,3 +181,22 @@ comparisons remain open on the qualified package.
 
 [Trial evidence](vp8-decoder-sparse-residual-trial-evidence.json) retains the
 source, runner and 28 verified members of the mirrored raw archive.
+
+## Already normalized range trial
+
+The private wide reader skips its normalization step when the arithmetic
+range is already at least 128. Window construction and each shifted
+normalization leave at least eight input bits buffered, so this branch
+skips a zero shift and a no-op refill. Every live-token poll remains.
+
+Three alternating 16-operation pairs on the original opaque live-token
+control measure **5,030.37 → 5,288.06 µs**, interval **0.914629–1.208248**,
+at **230,880 B/op** for both modules. The adverse point and inconclusive
+interval give no basis for confirmation. Exact pixels, source, ownership,
+and quiet guards pass. Windows passes 52 focused cursor, fixture and
+validation tests in each normal and scalar mode.
+
+The first preflight inherited an integer-divide assertion from an older
+geometry trial. The assertion stopped before sampling. The corrected
+runner uses the same built DLL and retains the original preflight evidence.
+[Trial evidence](prepared-range-and-vp8-normalization-evidence.json)

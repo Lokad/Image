@@ -122,7 +122,7 @@ internal static partial class WideColumnBicubicResize
             if (taps == 17)
             {
                 BicubicMath.PrepareOverlappingPairs(offsets, counts, length, sourceCount, 17, 16, 4, context.Cancellation);
-                if (word)
+                if (word || typeof(TWidth) == typeof(TailColumns))
                     PrepareWordWeights(weights, offsets, counts[..length], MemoryMarshal.Cast<Vector256<double>, double>(decoded));
             }
             rowIds.Fill(-1);
@@ -213,7 +213,7 @@ internal static partial class WideColumnBicubicResize
                         if (columns == 4 && count0 == 16 && count1 == 16 && offsets[x * taps + 16] != 0)
                         {
                             var firstPixel = offsets[x * taps + 16] - 1;
-                            var pair = word
+                            var pair = word || typeof(TWidth) == typeof(TailColumns)
                                 ? FilterPreparedWordPair(decoded.Slice(firstPixel, 20), weights.Slice(x * 17, 32))
                                 : BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(firstPixel, 20), weights0, weights1, 16, 4);
                             cache[slot * columns + x] = pair.GetLower();
@@ -280,10 +280,22 @@ internal static partial class WideColumnBicubicResize
                     else if (typeof(TSamples) == typeof(ByteSamples) && !TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
                         destination.Slice((tile + outputX) * 4, 8)))
                     {
+                        var packed = typeof(TWidth) == typeof(TailColumns)
+                            && counts[outputX] == 16 && counts[outputX + 1] == 16 && offsets[outputX * taps + 16] != 0;
                         for (var repair = outputX; repair < outputX + 2; repair++)
+                        {
+                            ReadOnlySpan<double> original = weights.Slice(repair * taps, counts[repair]);
+                            if (packed)
+                            {
+                                // No horizontal reader uses decoded storage during output repair.
+                                var replay = MemoryMarshal.Cast<Vector256<double>, double>(decoded)[..16];
+                                RestoreWordWeights(weights.Slice(outputX * taps, 32), repair - outputX, replay);
+                                original = replay;
+                            }
                             if (!BicubicMath.TryWriteOriginalByte(source, result, tile + repair, y,
-                                weights.Slice(repair * taps, counts[repair]), offsets.Slice(repair * taps, counts[repair]),
+                                original, offsets.Slice(repair * taps, counts[repair]),
                                 sourceFirst, vertical[..count], first, context)) return false;
+                        }
                     }
                 }
                 for (var x = outputX; x < length; x++)

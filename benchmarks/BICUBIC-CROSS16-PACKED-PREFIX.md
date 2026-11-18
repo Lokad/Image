@@ -32,8 +32,8 @@ its prepared zimg graph and scratch.
 
 The original 61-case inventory has two controls that use the changed
 executor. The default versions choose the cache first. The two tight cases
-are refreshed above and now stop. TightWide8 is the remaining uncertain
-direct bicubic case.
+are refreshed above and now stop. [Packed tail weights](BICUBIC-WIDE-TAIL-PACKED.md)
+subsequently qualify TightWide8.
 
 ## Qualification
 

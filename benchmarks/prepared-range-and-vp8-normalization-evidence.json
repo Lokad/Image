@@ -1,0 +1,274 @@
+{
+  "project": "Lokad.Image",
+  "baselinePackageSha256": "48321e5bbbe08342c0a46c4579d9294835f8256edb0a0ff96e465ea11dd8fcf5",
+  "baselineDllSha256": "d966b4f333393efbf01f9576428c82ef7a7d1b3691a2c11a44d9cf1d599ca359",
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "stages": {
+    "frp1346": {
+      "case": "TightWide8",
+      "candidateDllSha256": "afa18a1969c4ba94ba65bd52eb0ee9568b580565126a3e3dce7c5c7c7a057abb",
+      "trials": {
+        "screen": {
+          "operations": 64,
+          "units": 3,
+          "metrics": {
+            "baseline": {
+              "mean": 371.9652864583333,
+              "lower": 317.0071999876195,
+              "upper": 426.9233729290471
+            },
+            "candidate": {
+              "mean": 368.0600416666667,
+              "lower": 350.06154118484267,
+              "upper": 386.0585421484907
+            },
+            "candidateToBaselineInterval": [
+              0.8255527426644715,
+              1.1860542446369116
+            ],
+            "candidateToBaselineRatio": 0.9895202547744237,
+            "allocations": {
+              "baseline": [
+                112.0
+              ],
+              "candidate": [
+                112.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              363.3130625,
+              366.02300520833336,
+              366.58823958333335
+            ]
+          },
+          "raw": {
+            "file": "bicubic-wide-prepared-range-screen.tar.xz",
+            "sha256": "c2026ebac1e15aab8071b95d414e9d8075e99146b11eb83e9fb17917202999ce",
+            "bytes": 478392,
+            "members": 23,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1346/screen/candidate-validation.json": "c85d64910c6000a1fbb1663d4a5591e7795ff8c30a670a00bce86fae2e527831",
+              "tmp/frp1346/screen/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1346-build.log": "80c1915b433e894019b561bd5b8f3730106b31cac793ddd6304394a3e7c0d89f",
+              "tmp/frp1346/screen/baseline-validation.json": "76c304a1eb255394df4725f08ef0491bb0ebcf3c1c8f2f9bb765d52e25f4ce09",
+              "tmp/frp1346/screen-vm.py": "ba9c35016d5856f86aefb6690ed597c37e517118813645dd2673dcdc24f1a5b3",
+              "tmp/frp1346/screen/preparation.json": "70d050a93e4ae80d37045865f367bb5219791b8c391752a5d6241ccca09f1c50",
+              "tmp/frp1346/screen/statistics.json": "461bc4b52eb2fd7687426ca445a27aa8b0b3348d1671455a5ddb7052df19c398",
+              "tmp/frp1346/inputs.json": "a427875ab75763d63e69888457d81eb6556a5411441f81548bedb4b877df3543",
+              "tmp/frp1326/actor/BicubicActor.csproj": "1ef79bf6b5d284c30575ae675113dfab401ac51d08e67437fcf1120140e4acd3",
+              "tmp/frp1346/screen/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1326/actor/Program.cs": "9bc72c26b6f6653a412ac8d5b0c04f2e8f9c649e0218cffa56475d758c72a1b1",
+              "tmp/frp1346/screen/before.json": "11928a487e2ceb8b7cf5dc87838efac70f6dc411784b2d09302bea17912a7f7b",
+              "tmp/frp1346/src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "9a2abf9e97e77ca97c43382e7b4e6fa2076467b1e934bbc55d2bef7a681c3583",
+              "tmp/frp1326/actor/BicubicActor.dll": "22bbf9b27300fffbd60e61f088a27fbc3f8854cc8dc9b3f1f17a60da889ee86c",
+              "tmp/frp1346/screen/wire.jsonl": "10ef2b40e4c206fb05f6ee7b7d2726c996b16801c7bc61ff35b0db6aa4f32163",
+              "tmp/wir911-bicubic-preparation.json": "22175319265ac902280676f4e44b9b350563f8c88117c37cf77304661bc0ef0c",
+              "tmp/frp1346/candidate-sha.txt": "f3c396fa43c218a589a9d375c65de7a64e9df7a7ea86119adf38bd7592974914",
+              "tmp/frp1294-TightWide8-receipt.json": "0269d6c21c2e8c6d8586b708c791edcaea53ae49f2558e2544368e0218def06c",
+              "tmp/frp1346/src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "a0364cdf5bc541d301a636751f5f7c6da12e177197c36079df2764ae151703ed",
+              "tmp/frp1346/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "afa18a1969c4ba94ba65bd52eb0ee9568b580565126a3e3dce7c5c7c7a057abb",
+              "tmp/frp1346/screen/observations.json": "0da01ce8b7ceaa980deb6d01db59589cd3980b3b61a0bb956b9dbc22f702fff8",
+              "tmp/frp1346-prepare.py": "b135117691e295eb58215e44677696c92a285265f984cc5649135dc02c746e34",
+              "tmp/frp1346/screen/after.json": "1ec68fd76886b96736ad618fe46df5005dddd453a63c88fc49cc190fc9f38250"
+            },
+            "mirrored": true
+          }
+        },
+        "confirm": {
+          "operations": 64,
+          "units": 12,
+          "metrics": {
+            "baseline": {
+              "mean": 362.726671875,
+              "lower": 359.549354421558,
+              "upper": 365.90398932844204
+            },
+            "candidate": {
+              "mean": 365.01238671875,
+              "lower": 362.08317849784294,
+              "upper": 367.9415949396571
+            },
+            "candidateToBaselineInterval": [
+              1.0008835521049326,
+              1.0117558756647924
+            ],
+            "candidateToBaselineRatio": 1.0063050306434993,
+            "allocations": {
+              "baseline": [
+                112.0
+              ],
+              "candidate": [
+                112.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              369.7018580729167,
+              366.73066927083335,
+              366.56370572916666
+            ]
+          },
+          "raw": {
+            "file": "bicubic-wide-prepared-range-confirmation.tar.xz",
+            "sha256": "5e044cf2a6b803a4cbfd02dbc7aca4a537635de37ec8f1a307721ad904e78d79",
+            "bytes": 480020,
+            "members": 23,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1346/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "afa18a1969c4ba94ba65bd52eb0ee9568b580565126a3e3dce7c5c7c7a057abb",
+              "tmp/frp1346/inputs.json": "a427875ab75763d63e69888457d81eb6556a5411441f81548bedb4b877df3543",
+              "tmp/frp1346/confirm/after.json": "f38edb9b4c7f1dc7718932b1d3cb01c306a05790979b7d2d6c40ae938590bd51",
+              "tmp/frp1346/confirm/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1346/confirm/statistics.json": "9d81812e3cb4a3e04fad4216ea3a03f323deab883efdf686a8a0f30a7ed433c2",
+              "tmp/frp1346/src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "9a2abf9e97e77ca97c43382e7b4e6fa2076467b1e934bbc55d2bef7a681c3583",
+              "tmp/frp1346/confirm/candidate-validation.json": "17b44b4cafb11aedd46ce7439e3bd3a16a25432bf3b8d5a07943868b80d0ccf8",
+              "tmp/frp1326/actor/Program.cs": "9bc72c26b6f6653a412ac8d5b0c04f2e8f9c649e0218cffa56475d758c72a1b1",
+              "tmp/frp1346/confirm/preparation.json": "2c91ab69855612372bc0076edba14dfba7969b1f92e18d36b117f1e97f85fc32",
+              "tmp/frp1346/confirm/baseline-validation.json": "4cd0abca7ce538426d05ac61ec4ecc4210c3747e5d69e5d9b31bc7bcde7acc6a",
+              "tmp/frp1346-prepare.py": "b135117691e295eb58215e44677696c92a285265f984cc5649135dc02c746e34",
+              "tmp/frp1294-TightWide8-receipt.json": "0269d6c21c2e8c6d8586b708c791edcaea53ae49f2558e2544368e0218def06c",
+              "tmp/frp1326/actor/BicubicActor.csproj": "1ef79bf6b5d284c30575ae675113dfab401ac51d08e67437fcf1120140e4acd3",
+              "tmp/frp1346/src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "a0364cdf5bc541d301a636751f5f7c6da12e177197c36079df2764ae151703ed",
+              "tmp/frp1346-build.log": "80c1915b433e894019b561bd5b8f3730106b31cac793ddd6304394a3e7c0d89f",
+              "tmp/frp1326/actor/BicubicActor.dll": "22bbf9b27300fffbd60e61f088a27fbc3f8854cc8dc9b3f1f17a60da889ee86c",
+              "tmp/frp1346/confirm/observations.json": "b20bb896de4f4ec7be575f204df3f063ebd8fbccd38257e2ba58ebe81c74341b",
+              "tmp/frp1346/confirm-vm.py": "5a74d29a909034fb70dd6b4e2badc6860954cbc517bfe41dc013887576215b39",
+              "tmp/frp1346/candidate-sha.txt": "f3c396fa43c218a589a9d375c65de7a64e9df7a7ea86119adf38bd7592974914",
+              "tmp/frp1346/confirm/before.json": "5fb0666a8d5b751f1d33e419db6d6eaa88521c3a7a0510ef77982c366168c5bc",
+              "tmp/frp1346/confirm/wire.jsonl": "49b403a257d30579c4c133915b12ab7fff6e4200cabcadc427848c9b08b7c7b5",
+              "tmp/wir911-bicubic-preparation.json": "22175319265ac902280676f4e44b9b350563f8c88117c37cf77304661bc0ef0c",
+              "tmp/frp1346/confirm/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "mirrored": true
+          }
+        }
+      },
+      "source": {
+        "sourceSha256": "9a2abf9e97e77ca97c43382e7b4e6fa2076467b1e934bbc55d2bef7a681c3583",
+        "sourceCommit": "c3e6ec75a83c8db5c80ac77546ee2fa324be4d18",
+        "changed": {
+          "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": {
+            "original": "0fe68df2254aaced67941ebf33b2ff1ab691dfcbc776e72d34cf1982f81e02e7",
+            "candidate": "a0364cdf5bc541d301a636751f5f7c6da12e177197c36079df2764ae151703ed"
+          },
+          "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": {
+            "original": "4715c17720161bc6f4954a4e8a9258b27652f98dce4132c16ecb851461ec4420",
+            "candidate": "9a2abf9e97e77ca97c43382e7b4e6fa2076467b1e934bbc55d2bef7a681c3583"
+          }
+        },
+        "plan": {
+          "prefixRows": 42,
+          "retiredRows": 22,
+          "removedWeightEvaluations": 356,
+          "workspaceDeltaBytes": 0
+        }
+      },
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "productionChanged": false,
+      "disposition": "Small regression on independent comparison"
+    },
+    "frp1347": {
+      "case": "OpaqueCancelable8",
+      "candidateDllSha256": "f9b354defd9f72048dd55a753493369402deea42ff5e9c71567094ee2126953c",
+      "trials": {
+        "OpaqueCancelable8-3": {
+          "operations": 16,
+          "units": 3,
+          "metrics": {
+            "baseline": {
+              "mean": 5030.374583333333,
+              "lower": 4386.751375266227,
+              "upper": 5673.997791400439
+            },
+            "candidate": {
+              "mean": 5288.062104166666,
+              "lower": 4858.623731243571,
+              "upper": 5717.500477089762
+            },
+            "candidateToBaselineInterval": [
+              0.9146285831508932,
+              1.2082483588237134
+            ],
+            "candidateToBaselineRatio": 1.0512366453493356,
+            "allocations": {
+              "baseline": [
+                230880.0
+              ],
+              "candidate": [
+                230880.0
+              ]
+            },
+            "nativeGroupMeansUs": [
+              5072.545291666666,
+              5082.1214375,
+              5083.028229166666
+            ]
+          },
+          "raw": {
+            "file": "vp8-decoder-normalized-range-OpaqueCancelable8-3.tar.xz",
+            "sha256": "8ec11b4b26c2d95824d8face099bef84920d99fae30398a2e6c971a8b7282d28",
+            "bytes": 406084,
+            "members": 29,
+            "allMembersVerified": true,
+            "memberHashes": {
+              "tmp/frp1334/actor/Vp8Actor.csproj": "524eb1cfc937078a0340f7e90a64f50497946fe6618dc29e4b9695e18c28e74d",
+              "tmp/frp1334/actor/Vp8Actor.dll": "c93d845418870eea33a95fc04417e1ed3a099e72415011d0a92e643029677fc3",
+              "tmp/frp1347/OpaqueCancelable8-3/statistics.json": "6af9722b3eaa19c8470d397da954fd0bec3df19291649079b76771ac721690f1",
+              "tmp/frp1285-vp8-preparation.json": "75936bdbd1f1e21d8275779c34a8b33925f33e79460389b65513140504b7a495",
+              "tmp/frp1285-OpaqueCancelable8-receipt.json": "d7d6080ea98ba65f9b4d0e89576032b1b7a0788baf040ebb9523988673924c90",
+              "tmp/frp1347/inputs.json": "8b6668de1967e4dd38e9e3013f43a2994ab2f371c2011b3689678fe208113d1f",
+              "tmp/frp1347/preflight/baseline-jit-wire.txt": "72445c53cecd9f371f41e4150d69ee48081067a6de4b9d6aba8c11a4ed20d23f",
+              "tmp/frp1347/preflight/candidate-jit.txt": "4499b8d9cc2fee84d388dc49615e9b302cd935867ae67e42b3fa1a496d3aea76",
+              "tmp/frp1347/OpaqueCancelable8-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1347/OpaqueCancelable8-3/observations.json": "def1324c423f0b3752eb9a0eef862efe0a454fa1f39bbf01c1783988fc591796",
+              "tmp/frp1347/OpaqueCancelable8-3/wire.jsonl": "c4716786b74c193b54fcda2187188613b127ecc45e59a96a7107db8783937f3b",
+              "tmp/frp1347/OpaqueCancelable8-3/after.json": "557f6a37768adc5cd9cd4f2ebb9aba0e973d1c99e3181ee4e6eed886f331aedd",
+              "tmp/frp1334/actor/Program.cs": "f05817c6c85e2d18b4cc0453177f683f06b6ed9d9461ce9719ab2eb814f26fb5",
+              "tmp/frp1347/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "f9b354defd9f72048dd55a753493369402deea42ff5e9c71567094ee2126953c",
+              "tmp/frp1347/OpaqueCancelable8-3/candidate-validation.json": "6c76cf9c3a81a95ac9f2c7f5cf10af4193557aac7936a9f25fdeabf0d55deebf",
+              "tmp/frp1347/candidate-sha.txt": "83a22d5c1a01b2d5392848a27011079a36695ab781b42f83c5dd4ffc704401f0",
+              "tmp/frp1347/initial-screen-vm.py": "b85a23d577fac4ac643e2b4d10712008915d41a370c34c3ebd3a06051331c839",
+              "tmp/frp1347/OpaqueCancelable8-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tmp/frp1347/OpaqueCancelable8-3/before.json": "84aed1d10ed1b223cd04500ad674d79735f895003c048a29818ae8ff23126c2e",
+              "tmp/frp1347-prepare.py": "c3a012b869ce521a5a040d97ae90c4d6c69e761e88e7a8364460e33ebf0413a7",
+              "tmp/frp1347/src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "bf1ff69c3ef9ec5f3537aa6a0d0883253264846864c59e5a5f4f15482508559f",
+              "tmp/frp1347/preflight/preparation.json": "1da98a59651e8e033dfca5b619dbaa94d7df2dfc20871d19657bbbadd55eaa4b",
+              "tmp/frp1347/preflight/candidate-jit-wire.txt": "8bca3e531a1dd60763d7801ee7b1109d9fa1c0b4b54b1c07327ceb618af9adaf",
+              "tmp/frp1347/screen-vm.py": "3e8c69166fd4eecf846b71500ae09a02ee9f6a83c283a1c9e63a2809ffc6cbc8",
+              "tmp/frp1347-build.log": "3a080b7823b0641f692be034467fdd639f21a3f2fe834f944a619b50237e3925",
+              "tmp/frp1347/preflight/baseline-jit.txt": "594e54d34dc0a9f1006e987538fb40b3b55ee30ecb3933491e5b4044443d4639",
+              "tmp/frp1347/OpaqueCancelable8-3/preparation.json": "b4b2bac6358f0ee868666f46894b8b168f990e9af3fe09662676b33c881bd8c6",
+              "tmp/frp1347/OpaqueCancelable8-3/baseline-validation.json": "a79eacb5ba7b23dd448642983b79f27dcd033d6f53efdde8cabd53d3a89037a3",
+              "tmp/frp1347/preflight/division-counts.json": "fd8f5154e195ef2f953e020ea933fe5d260a96c99166aae355d8a93d4d8167c3"
+            },
+            "mirrored": true
+          }
+        }
+      },
+      "source": {
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": {
+          "originalSha256": "79a74011f07033f135c7798e47827b164d66b52af63781e5735e9c1a0fedc587",
+          "candidateSha256": "bf1ff69c3ef9ec5f3537aa6a0d0883253264846864c59e5a5f4f15482508559f"
+        }
+      },
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "productionChanged": false,
+      "disposition": "Adverse screen, interval inconclusive",
+      "preflight": "Inherited integer divide reduction assertion removed before scored sampling",
+      "windowsFocused": {
+        "normal": {
+          "passed": 52,
+          "sha256": "e2168b13b33998aefd701a8539741891e013c2912ea8039b127cead3a50e33f5"
+        },
+        "scalar": {
+          "passed": 52,
+          "sha256": "18ed96ee76c641c1ad93d6641b39cf679b9751416a3a5085073d3255add3f23d"
+        }
+      }
+    }
+  }
+}

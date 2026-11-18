@@ -1,5 +1,8 @@
 # Tight RGBA8 bicubic preparation trials
 
+[Packed tail weights](BICUBIC-WIDE-TAIL-PACKED.md) qualify TightWide8.
+This report retains the earlier private trials.
+
 Both trials use the original 513×259 to 128×64 tight RGBA8 control and the
 actual 0.2.1 package `1699cfb1` with Linux DLL `bb3d063d` as the managed baseline.
 The complete public resize includes geometry, filtering, exact repair,
@@ -71,3 +74,19 @@ package and current reference costs stay unchanged.
 
 [Trial evidence](bicubic-wide-ring-slot-trial-evidence.json) retains the exact
 recipe and both mirrored archives with 22 verified members each.
+
+## Restricting preparation to the prefix rows
+
+The private prefix writes vertical geometry for rows 0–41. The tail still
+prepares rows 42–63 after the loan retires. The geometry keeps the full image
+height for coordinate calculations. This removes 22 duplicate entries and
+356 weight evaluations from the original TightWide8 operation.
+
+| Complete TightWide8 resize | Baseline µs | Candidate µs | Paired ratio interval | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Three alternating pairs | 371.97 | 368.06 | 0.825553–1.186054 | 112 on each |
+| Twelve independent pairs | 362.73 | 365.01 | 1.000884–1.011756 | 112 on each |
+
+The independent comparison shows a **0.63% regression**. Exact pixels,
+reference bounds, ownership, and quiet guards pass. The isolated change
+stays private. [Trial evidence](prepared-range-and-vp8-normalization-evidence.json)

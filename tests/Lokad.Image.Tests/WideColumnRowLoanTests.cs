@@ -65,6 +65,36 @@ namespace Lokad.Image.Tests
             Assert.Equal(0, view.PrefixColumns); Assert.Equal(-1, narrow.Pixels.IndexOfAnyExcept((byte)0xa5));
         }
 
+        [Fact]
+        public void PackedTailRepairsExactHalfTies()
+        {
+            if (!Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported) return;
+            using var source = ImageBuffer.Create(512, 256, 8);
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+            {
+                var pixel = source.GetRow8(y).Slice(x * 4, 4);
+                pixel[0] = (byte)(x & 1);
+                pixel[1] = (byte)(y & 1);
+                pixel[2] = (byte)((x + y) & 1);
+                pixel[3] = byte.MaxValue;
+            }
+            var input = OriginalPixels.Bytes(source);
+            using var expected = ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic,
+                new() { MaxWorkingBytes = source.ByteLength + 128 * 64 * 4 });
+            using var result = ImageBuffer.Create(128, 64, 8);
+            result.Pixels.Fill(0xa5);
+            Assert.True(WideColumnBicubicResize.TryLocateRowLoan(result, out var firstTailRow, out _));
+            Assert.Equal(42, firstTailRow);
+            using var budget = new TestMemoryBudget(4096);
+            using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = budget }, default);
+            Assert.True(WideColumnBicubicResize.TryApply(source, result, 4, 4, 17, 17, context));
+            Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
+            Assert.Equal(input, OriginalPixels.Bytes(source));
+            Assert.Equal(4096, budget.Peak);
+            Assert.Equal(0, budget.Bytes);
+        }
+
         [Theory]
         [InlineData(513, 259, 128, 64)]
         [InlineData(528, 264, 128, 64)]
