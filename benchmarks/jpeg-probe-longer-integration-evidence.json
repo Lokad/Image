@@ -1,0 +1,477 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JLI1258",
+  "measurementAccepted": true,
+  "productionChanged": false,
+  "productionSpeedupClaim": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "df7042340639fd365b97c9b2033ef05b942b5271",
+  "producers": {
+    "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+    "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+  },
+  "sourceProof": {
+    "exactWholeOriginalSourceReconstruction": true,
+    "originalManagedDelegateConsumerAndGeneratedLoopUnchanged": true,
+    "originalNativeCallAndStatisticsVerbatim": true,
+    "originalWarmupsAndCorrectnessVerbatim": true,
+    "onlyIntegrationCountersAndReportingChange": true,
+    "noNewImagesSettingsReferenceOrProductionCode": true
+  },
+  "sourcePins": {
+    "tmp/jsm1250-driver/Program.cs": "c128d7a06dc8a3156443f6f8d00b4368970ed881635d8c9bf5edab8f121fa295",
+    "tmp/jsm1250-driver/ProbeInterleaved.csproj": "c6d9818a395142ad524122b42344d273054b5d6654f2b85e9529d932869f716c",
+    "tmp/jli1258-driver/Program.cs": "364ee5d53421874e5b7fc85c801c66b82b1b29f77f92ef53f36bb3d39d7c642c",
+    "tmp/jli1258-driver/ProbeInterleaved.csproj": "c6d9818a395142ad524122b42344d273054b5d6654f2b85e9529d932869f716c",
+    "tmp/jli1258-driver.patch": "367129597922ad0fdb3d1e78b9d482a76b7bd802f913748fd50064e735695d75"
+  },
+  "productionSourcePins": {
+    "src/Lokad.Image/Internal/StreamInspection.cs": "c67d781472f0c5b5eb4a8e31bc93f689ffcee4c8217150f60cdd48d92773e68d"
+  },
+  "case": {
+    "managedUs": 0.2190428669029129,
+    "nativeUs": 0.20954099678993224,
+    "ratio": 1.0453461148822654,
+    "lower": 0.9721226876373631,
+    "upper": 1.120760707264988,
+    "status": "uncertain",
+    "allocatedBytes": 568,
+    "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "benchmarkAssemblySha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+    "driverSha256": "55b8975b86bf788682a1119e7cc85cf7971d3ed20aba0a1d5c774969f7af7bb3",
+    "originalGeneratedLoopSha256": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+    "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+    "inputBytes": 65163,
+    "descriptorSha256": "cbd78a9113ec8a569f6eefcbce9c5c2438aa06907ef33d2c0f4414974b2aca03",
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "managedOperationsPerUnit": 3420160,
+    "nativeOperationsPerUnitEachBracket": 1048576,
+    "subdivisionsEachStatisticalUnit": 16,
+    "allActualsRetained": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "rawOverheadIncluded": true,
+    "allActualStatistics": {
+      "originalValues": [
+        218.16050214025074,
+        217.80715609796033,
+        215.44079487509356,
+        215.42183786723427,
+        217.01893858766837,
+        217.3953847188436,
+        216.30963609889596,
+        215.85304576394086,
+        216.13005853527326,
+        217.3344641771145,
+        227.38690733766842,
+        234.2556766350112
+      ],
+      "n": 12,
+      "min": 215.42183786723427,
+      "lowerFence": 213.308774443301,
+      "q1": 216.06080534244015,
+      "median": 217.17670138239146,
+      "mean": 219.04286690291292,
+      "q3": 217.89549260853292,
+      "upperFence": 220.64752350767208,
+      "max": 234.2556766350112,
+      "interquartileRange": 1.8346872660927716,
+      "lowerOutliers": [],
+      "upperOutliers": [
+        227.38690733766842,
+        234.2556766350112
+      ],
+      "allOutliers": [
+        227.38690733766842,
+        234.2556766350112
+      ],
+      "standardError": 1.6635668120113773,
+      "variance": 33.20945445630836,
+      "standardDeviation": 5.762764480378177,
+      "skewness": 1.702346522866079,
+      "kurtosis": 4.4591478879239945,
+      "confidenceInterval": {
+        "n": 12,
+        "mean": 219.04286690291292,
+        "standardError": 1.6635668120113773,
+        "level": 12,
+        "margin": 7.381211570857716,
+        "lower": 211.6616553320552,
+        "upper": 226.42407847377063
+      },
+      "percentiles": {
+        "p0": 215.42183786723427,
+        "p25": 216.06080534244015,
+        "p50": 217.17670138239146,
+        "p67": 217.5477401291168,
+        "p80": 218.08983293179267,
+        "p85": 221.38974395934696,
+        "p90": 226.46426681792667,
+        "p95": 230.47785352147267,
+        "p100": 234.2556766350112
+      }
+    },
+    "referenceStatistics": [
+      {
+        "originalValues": [
+          207.23357009887695,
+          209.97350406646729,
+          207.59119129180908,
+          206.9794578552246,
+          208.68538761138916,
+          207.5942029953003,
+          205.7000560760498,
+          206.3626184463501,
+          205.2201442718506,
+          206.2672996520996,
+          218.23033809661865,
+          224.65419101715088
+        ],
+        "n": 12,
+        "min": 205.2201442718506,
+        "lowerFence": 202.33584678173065,
+        "q1": 206.33878874778748,
+        "median": 207.41238069534302,
+        "mean": 209.54099678993225,
+        "q3": 209.0074167251587,
+        "upperFence": 213.01035869121552,
+        "max": 224.65419101715088,
+        "interquartileRange": 2.668627977371216,
+        "lowerOutliers": [],
+        "upperOutliers": [
+          218.23033809661865,
+          224.65419101715088
+        ],
+        "allOutliers": [
+          218.23033809661865,
+          224.65419101715088
+        ],
+        "standardError": 1.693462569949216,
+        "variance": 34.41378570982804,
+        "standardDeviation": 5.866326423736412,
+        "skewness": 1.5929702512564656,
+        "kurtosis": 4.13429404252845,
+        "confidenceInterval": {
+          "n": 12,
+          "mean": 209.54099678993225,
+          "standardError": 1.693462569949216,
+          "level": 12,
+          "margin": 7.51385843109625,
+          "lower": 202.027138358836,
+          "upper": 217.0548552210285
+        },
+        "percentiles": {
+          "p0": 205.2201442718506,
+          "p25": 206.33878874778748,
+          "p50": 207.41238069534302,
+          "p67": 207.99794130325319,
+          "p80": 209.71588077545164,
+          "p85": 212.86339597702028,
+          "p90": 217.40465469360353,
+          "p95": 221.12107191085815,
+          "p100": 224.65419101715088
+        }
+      },
+      {
+        "originalValues": [
+          207.78573608398438,
+          209.77344036102295,
+          208.19322395324707,
+          208.16418170928955,
+          209.48452186584473,
+          207.6214895248413,
+          206.0467472076416,
+          208.34238815307617,
+          205.69000816345215,
+          207.13429355621338,
+          219.8296356201172,
+          224.76692390441895
+        ],
+        "n": 12,
+        "min": 205.69000816345215,
+        "lowerFence": 204.4140990972519,
+        "q1": 207.49969053268433,
+        "median": 208.1787028312683,
+        "mean": 210.23604917526245,
+        "q3": 209.55675148963928,
+        "upperFence": 212.64234292507172,
+        "max": 224.76692390441895,
+        "interquartileRange": 2.057060956954956,
+        "lowerOutliers": [],
+        "upperOutliers": [
+          219.8296356201172,
+          224.76692390441895
+        ],
+        "allOutliers": [
+          219.8296356201172,
+          224.76692390441895
+        ],
+        "standardError": 1.6892963557139062,
+        "variance": 34.24466612913941,
+        "standardDeviation": 5.851894234274865,
+        "skewness": 1.5371516618789254,
+        "kurtosis": 3.838237333414883,
+        "confidenceInterval": {
+          "n": 12,
+          "mean": 210.23604917526245,
+          "standardError": 1.6892963557139062,
+          "level": 12,
+          "margin": 7.495373024620053,
+          "lower": 202.7406761506424,
+          "upper": 217.7314221998825
+        },
+        "percentiles": {
+          "p0": 205.69000816345215,
+          "p25": 207.49969053268433,
+          "p50": 208.1787028312683,
+          "p67": 208.76497762680054,
+          "p80": 209.71565666198728,
+          "p85": 213.29310870170593,
+          "p90": 218.82401609420776,
+          "p95": 222.05141534805296,
+          "p100": 224.76692390441895
+        }
+      }
+    ],
+    "allActualUpper": 1.120760707264988,
+    "diagnosticResultCount": 10,
+    "sourceEvidence": {
+      "observation": "tmp/jli1258-confirm.json",
+      "receipt": "tmp/jli1258-confirm-receipt.json"
+    }
+  },
+  "integration": {
+    "multiplier": 4,
+    "managedOperationsPerUnit": 3420160,
+    "nativeOperationsEachBracketPerUnit": 1048576,
+    "statisticalUnitsEachGroup": 12,
+    "subdivisionsEachUnit": 16,
+    "originalManagedWarmupOperations": 855040,
+    "originalNativeWarmupOperationsEachBracket": 262144,
+    "originalWholeWarmups": 3
+  },
+  "before": {
+    "managedNs": 216.71870087949102,
+    "referenceNs": 215.31187534332275,
+    "managedConfidence": {
+      "n": 12,
+      "mean": 216.71870087949102,
+      "standardError": 0.3495916150284767,
+      "level": 12,
+      "margin": 1.5511307723211423,
+      "lower": 215.1675701071699,
+      "upper": 218.26983165181215
+    },
+    "nativeWallUnitMeans": [
+      215.1526927947998,
+      212.92708206176758,
+      214.66505241394043,
+      217.50946807861328,
+      219.19268989562988,
+      220.61256408691406,
+      215.667329788208,
+      213.55739402770996,
+      214.76146507263184,
+      214.05046463012695,
+      214.25262832641602,
+      213.12773895263672
+    ],
+    "nativeCpuUnitMeans": [
+      214.75,
+      212.46876525878906,
+      214.1559066772461,
+      216.94085121154785,
+      218.5874481201172,
+      220.0893154144287,
+      215.14551544189453,
+      212.97855949401855,
+      214.19806480407715,
+      213.47874641418457,
+      213.7612762451172,
+      212.64434432983398
+    ],
+    "nativeWallStandardDeviationNs": 2.428222872409444,
+    "nativeCpuStandardDeviationNs": 2.4085968476212707,
+    "nativeWallCpuCorrelation": 0.9997423488661619,
+    "nativeSubunitMilliseconds": {
+      "min": 3.421661,
+      "median": 3.513,
+      "max": 3.787156
+    }
+  },
+  "currentUnitMeans": [
+    {
+      "index": 0,
+      "managedNanoseconds": 218.16050214025074,
+      "beforeNanoseconds": 207.23357009887695,
+      "afterNanoseconds": 207.78573608398438,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 1,
+      "managedNanoseconds": 217.80715609796033,
+      "beforeNanoseconds": 209.97350406646729,
+      "afterNanoseconds": 209.77344036102295,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 2,
+      "managedNanoseconds": 215.44079487509356,
+      "beforeNanoseconds": 207.59119129180908,
+      "afterNanoseconds": 208.19322395324707,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 3,
+      "managedNanoseconds": 215.42183786723427,
+      "beforeNanoseconds": 206.9794578552246,
+      "afterNanoseconds": 208.16418170928955,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 4,
+      "managedNanoseconds": 217.01893858766837,
+      "beforeNanoseconds": 208.68538761138916,
+      "afterNanoseconds": 209.48452186584473,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 5,
+      "managedNanoseconds": 217.3953847188436,
+      "beforeNanoseconds": 207.5942029953003,
+      "afterNanoseconds": 207.6214895248413,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 6,
+      "managedNanoseconds": 216.30963609889596,
+      "beforeNanoseconds": 205.7000560760498,
+      "afterNanoseconds": 206.0467472076416,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 7,
+      "managedNanoseconds": 215.85304576394086,
+      "beforeNanoseconds": 206.3626184463501,
+      "afterNanoseconds": 208.34238815307617,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 8,
+      "managedNanoseconds": 216.13005853527326,
+      "beforeNanoseconds": 205.2201442718506,
+      "afterNanoseconds": 205.69000816345215,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 9,
+      "managedNanoseconds": 217.3344641771145,
+      "beforeNanoseconds": 206.2672996520996,
+      "afterNanoseconds": 207.13429355621338,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 10,
+      "managedNanoseconds": 227.38690733766842,
+      "beforeNanoseconds": 218.23033809661865,
+      "afterNanoseconds": 219.8296356201172,
+      "managedAllocatedBytes": 568
+    },
+    {
+      "index": 11,
+      "managedNanoseconds": 234.2556766350112,
+      "beforeNanoseconds": 224.65419101715088,
+      "afterNanoseconds": 224.76692390441895,
+      "managedAllocatedBytes": 568
+    }
+  ],
+  "nativeCpuWallDiagnostic": {
+    "correlation": 0.9999915710258278,
+    "wallStandardDeviationNs": 5.850311244357535,
+    "cpuStandardDeviationNs": 5.82676265341182,
+    "meanWallMinusCpuNs": 0.46384509404500324,
+    "causeEstablished": false
+  },
+  "preflights": {
+    "normalScalar": true,
+    "original16AndRemainderInvocationAllocationChecksPassed": true,
+    "descriptorsMatchOriginal": true
+  },
+  "receipt": {
+    "stage": "JLI1258",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/jli1258-root/runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/jli1258-root/runtime/ReadConfirmDriver.runtimeconfig.json",
+      "tmp/jli1258-root/runtime/ProbeInterleaved.dll",
+      "confirm",
+      "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+      "ProbeDimensionsJpegAsync"
+    ],
+    "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "harnessSha256": "2748a2627f4acbd6f45643e352823f9b162a45b7c266a2d5a47640b8524bd62d",
+    "driverSha256": "55b8975b86bf788682a1119e7cc85cf7971d3ed20aba0a1d5c774969f7af7bb3",
+    "originalLoopSha256": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "allOriginalGatesPassed": true,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "allSubdivisionCountsAndAggregationVerified": true,
+    "originalWarmupCountsRetained": true,
+    "statisticalUnitsUnchanged": true,
+    "allBuilds": 0,
+    "canonicalProductionAndPackageUnchanged": true,
+    "rawActuals": {
+      "path": "tmp/jli1258-root/tmp/jli1258-confirm-actuals.json",
+      "sha256": "1ac901d35ae166d9e1a5455c2819022c7713482ed08139efcb51ea31321eb2aa"
+    }
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "memory": {
+    "allocatedBytes": 568,
+    "admissionBytes": 512,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "smallOrchestrationDriver": 1,
+    "productionHarnessNativeFixtureOriginalLoopPackage": 0
+  },
+  "decision": "ONE predeclared4x integration completes; .219043/.209541us interval.972123-1.120761 remains uncertain and less precise. Lasttwo units slow in both subjects; preserve every sample,do not infer their cause or discard them. Short-integration noise hypothesis not confirmed. Stop unchanged-case confidence captures and do not assume a CPU gap or claim production gain. Current async cost supersedes prior presentation; passing sync/header/other paths unchanged. Three copy gaps and full289scope/final165refresh remain open.",
+  "unchangedCaseCapturesStopped": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "jpeg-probe-longer-integration.tar.xz",
+    "sha256": "513b3bbc7de35fcdb7fcd9db9369799bcb2f452e7baa4dab77f17d8d73e9926d",
+    "bytes": 76496,
+    "members": 31,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      }
+    ]
+  }
+}

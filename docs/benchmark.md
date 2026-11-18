@@ -287,12 +287,16 @@ suspension construction outside immediate parsing. Final complete async-probe
 pairs save **2.56% /
 5.57 ns**, without a uniform or cumulative
 gain claim. JPEG sync now passes/stops (upper
-**0.962**); async remains uncertain
-(upper **1.028**).
+**0.962**). Async remains uncertain after
+[one longer integration](../benchmarks/JPEG-PROBE-LONGER-INTEGRATION.md):
+**0.219/0.210 µs, upper
+1.121**. Both actual counts increase fourfold; original
+warmups, twelve units/group, sixteen subdivisions and every observation remain.
+Its adverse wider interval is retained; unchanged-case captures stop.
 Complete headers pass; their slower historical point is retained, while the matched
 original-worker guard is neutral/inconclusive. No favorable recapture follows.
-Immediate probes/header calls allocate **568/8,768 B**. The exact original generated
-loop, unit counts, every observation and descriptor/source/owner gates remain.
+Immediate probes/header calls allocate **568/8,768 B**. Original compiled loops,
+every observation and descriptor/source/owner gates remain.
 The immediate parser frame shrinks **1,080→472 B**; this is not a whole-operation
 physical peak. Admission stays **512/8,448 B**, with no new retained workspace.
 Gated-read diagnostics stay **1,960/9,984 B**, including equal delivery/bridge/batch
@@ -548,7 +552,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Probe PNG dimensions, seekable | 0.109 | 0.122 | 0.888 / 0.922 | 568 | Confirmed pass |
 | Probe JPEG dimensions, seekable | 0.184 | 0.194 | 0.949 / 0.962 | 568 | Confirmed pass |
 | Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
-| Probe JPEG dimensions, async nonseekable | 0.217 | 0.215 | 1.007 / 1.028 | 568 | Confidence open |
+| Probe JPEG dimensions, async nonseekable | 0.219 | 0.210 | 1.045 / 1.121 | 568 | Confidence open |
 | Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |

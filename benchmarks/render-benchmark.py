@@ -848,6 +848,32 @@ def jpeg_pending_publication_stage():
     return stage
 
 
+def jpeg_probe_longer_integration_stage(qualified):
+    stage = json.loads((ROOT / 'benchmarks/jpeg-probe-longer-integration-evidence.json').read_text(encoding='utf-8'))
+    assert stage['measurementAccepted'] and not stage['productionChanged'] and not stage['productionSpeedupClaim']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newRequiredPaths'] == 0
+    assert stage['producers'] == qualified['producers'] and all(stage['sourceProof'].values())
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and stage['unchangedCaseCapturesStopped']
+    c, spec, q = stage['case'], stage['integration'], stage['qualification']
+    assert c['librarySha256'] == stage['producers']['timedArtifactSha256']
+    assert c['managedActuals'] == c['nativeSamplesEachBracket'] == c['allActualStatistics']['n'] == 12
+    assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['allActualsRetained'] and c['rawOverheadIncluded']
+    assert c['allocatedBytes'] == 568 and c['subdivisionsEachStatisticalUnit'] == 16
+    assert c['managedOperationsPerUnit'] == spec['managedOperationsPerUnit'] == 3420160
+    assert c['nativeOperationsPerUnitEachBracket'] == spec['nativeOperationsEachBracketPerUnit'] == 1048576
+    assert spec['multiplier'] == 4 and spec['originalManagedWarmupOperations'] == 855040
+    assert spec['originalNativeWarmupOperationsEachBracket'] == 262144 and spec['originalWholeWarmups'] == 3
+    assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert c['upper'] >= c['allActualUpper'] and math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+    assert all(stage['preflights'].values()) and stage['receipt']['allSubdivisionCountsAndAggregationVerified']
+    assert stage['receipt']['originalWarmupCountsRetained'] and stage['receipt']['statisticalUnitsUnchanged']
+    assert q['reusedForUnchangedProduction'] and q['fullChecksEachOs'] == 6844 and q['newBroadOrPackageChecks'] == 0
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
+    assert q['packageSha256'] == stage['producers']['packageSha256']
+    assert stage['builds'] == {'smallOrchestrationDriver': 1, 'productionHarnessNativeFixtureOriginalLoopPackage': 0}
+    return stage
+
+
 def text_scan_band_stage():
     stage = json.loads((ROOT / 'benchmarks/text-scan-band-coordinates-evidence.json').read_text(encoding='utf-8'))
     assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
@@ -3029,6 +3055,9 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert all(jpeg_markers['sourceProof'].values())
     jpeg_pending = jpeg_pending_publication_stage()
     probe_owner['cases'].update({name: c for name, c in jpeg_pending['cases'].items() if name.startswith('Probe')})
+    probe_integration = jpeg_probe_longer_integration_stage(jpeg_pending)
+    current_async_probe = probe_integration['case']
+    probe_owner['cases']['ProbeDimensionsJpegAsync'] = current_async_probe
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         provider = probe_owner
         if case in provider['cases']:
@@ -3598,12 +3627,16 @@ suspension construction outside immediate parsing. Final complete async-probe
 pairs save **{jpeg_pending['pairedEffect']['elapsedReduction']:.2%} /
 {jpeg_pending['pairedEffect']['savedUs']*1000:.2f} ns**, without a uniform or cumulative
 gain claim. JPEG sync now passes/stops (upper
-**{jpeg_pending['cases']['ProbeDimensionsJpeg']['upper']:.3f}**); async remains uncertain
-(upper **{jpeg_pending['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**).
+**{jpeg_pending['cases']['ProbeDimensionsJpeg']['upper']:.3f}**). Async remains uncertain after
+[one longer integration](../benchmarks/JPEG-PROBE-LONGER-INTEGRATION.md):
+**{current_async_probe['managedUs']:.3f}/{current_async_probe['nativeUs']:.3f} µs, upper
+{current_async_probe['upper']:.3f}**. Both actual counts increase fourfold; original
+warmups, twelve units/group, sixteen subdivisions and every observation remain.
+Its adverse wider interval is retained; unchanged-case captures stop.
 Complete headers pass; their slower historical point is retained, while the matched
 original-worker guard is neutral/inconclusive. No favorable recapture follows.
-Immediate probes/header calls allocate **568/8,768 B**. The exact original generated
-loop, unit counts, every observation and descriptor/source/owner gates remain.
+Immediate probes/header calls allocate **568/8,768 B**. Original compiled loops,
+every observation and descriptor/source/owner gates remain.
 The immediate parser frame shrinks **1,080→472 B**; this is not a whole-operation
 physical peak. Admission stays **512/8,448 B**, with no new retained workspace.
 Gated-read diagnostics stay **1,960/9,984 B**, including equal delivery/bridge/batch
