@@ -1,0 +1,317 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RPR1264",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 289,
+  "newRequiredPaths": 0,
+  "baselineCommit": "e13d69e32b222a95e155499e6ad935bb183a752a",
+  "hypothesis": "Use one safe runtime CopyTo per complete separate-buffer row,with geometry prepared once. Avoid custom per-row bulk/tail loops and repeated word chunk selection. FFmpeg delegates complete rows to its copy primitive. RBP1191 still custom-copied bulk and called Memmove only for a remainder;VRP1058 regressed a different owned vertical boundary. Neither measures this complete separate-byte strategy. Those adverse results remain caution,not gain evidence.",
+  "endState": "One small runtime row schedule shared across separate8/16bit buffers. Useful measured self/vertical custom kernels and every portable path stay. If useful,remove superseded separate-only branch machinery rather than maintain variants.",
+  "affectedScope": "Separatebyte,original clippedbyte and separateword complete public CopyRegion. Same-buffer word/byte,verticalflips,other drawing,fonts/text,codecs,resizing andinspection sources and dispatch remain unchanged;actual caller code changes can require targeted passing self guards at acceptance.",
+  "sourceProof": {
+    "originalSourceReconstructedExactly": true,
+    "allExistingKernelsAndVerticalFlipVerbatim": true,
+    "onlySeparateBufferSelectedRowsUseRuntime": true,
+    "allPerRowCancellationAndFinalCursorRulesRetained": true,
+    "allPublicValidationClippingAdmissionOwnershipVerbatim": true,
+    "smallWideScalarAndSameRowFallbackVerbatim": true,
+    "noNewStorageCacheOwnerUnsafePublicApiOrNumericalPolicy": true
+  },
+  "sourcePins": {
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "src/Lokad.Image/ImageDrawing.cs": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+    "src/Lokad.Image/Internal/VerticalFlip.cs": "660c42f0fcc17ec342daf490468fbecb2d1f40df31106efdddcd7e8b612a88e8",
+    "src/Lokad.Image/ImageBuffer.cs": "508dc2bf7c9475ea75ddf32deee9ac7843fbbacd38ffe71ddb9b539cfe24e95e"
+  },
+  "candidateSourcePins": {
+    "tmp/rpr1264-src/Lokad.Image/Internal/IndependentRowCopy.cs": "c7a80cc612507c500a1e6794a25fb514a185fedcb39df0408ed709be348039ea",
+    "tmp/rpr1264-src/Lokad.Image/ImageDrawing.cs": "004321f66d2c83dc27881eb519d6052e87b4a7ff41a98c3fa5e862aa48d6581c"
+  },
+  "candidateTestSourcePins": {
+    "tmp/rpr1264-tests/RuntimeRowPreparationTests.cs": "fc0d673fec7630207c9d62f6f7907eef46cbd1adcde2cc627fdcdc0cdcdde2ed"
+  },
+  "producers": {
+    "qualified": {
+      "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+      "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+      "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+    },
+    "privateWindowsSha256": "100721f1a5677329b942d02ba474eb1476ecdd3dc031a4b0b162e8965141d838"
+  },
+  "screens": {
+    "OriginalClippedCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 0.9822291616805982,
+      "lower": 0.8650892529386816,
+      "upper": 1.115230738075248,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.993785654703776,
+          "lower": 1.970261459569054,
+          "upper": 2.0173098498384983,
+          "values": [
+            1.9926699829101562,
+            1.9934896087646485,
+            1.9951973724365235
+          ]
+        },
+        "candidate": {
+          "mean": 1.9583812204996744,
+          "lower": 1.7279809365504495,
+          "upper": 2.1887815044488996,
+          "values": [
+            1.9729304656982423,
+            1.9519619750976562,
+            1.950251220703125
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130591620,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 129297971,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127923780,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130645335,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 130757255,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127811664,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/rpr1264-screen-OriginalClippedCopy8.json"
+    },
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "ratio": 1.0447591412549189,
+      "lower": 1.030001666215024,
+      "upper": 1.0597280558261237,
+      "allocatedBytes": 0,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "subjects": {
+        "baseline": {
+          "mean": 1.9491805572509766,
+          "lower": 1.9200341202867923,
+          "upper": 1.978326994215161,
+          "values": [
+            1.948996353149414,
+            1.9476830291748046,
+            1.9508622894287109
+          ]
+        },
+        "candidate": {
+          "mean": 2.0364240264892577,
+          "lower": 2.0126786454395105,
+          "upper": 2.060169407539005,
+          "values": [
+            2.035021697998047,
+            2.0366570281982423,
+            2.0375933532714843
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "pair": 0,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127729425,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 133367182,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 1,
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 133474355,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127643355,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        },
+        {
+          "pair": 2,
+          "baseline": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 127851711,
+            "allocatedBytes": 0,
+            "checksum": 0
+          },
+          "candidate": {
+            "state": "sample",
+            "operations": 65536,
+            "elapsedNanoseconds": 133535718,
+            "allocatedBytes": 0,
+            "checksum": 0
+          }
+        }
+      ],
+      "sourceObservation": "tmp/rpr1264-screen-DrawingCopy8.json"
+    }
+  },
+  "focused": {
+    "windows": {
+      "internal/normal": 15,
+      "internal/avx512-off": 15,
+      "internal/scalar": 15,
+      "public/normal": 190,
+      "public/avx512-off": 190,
+      "public/scalar": 190
+    },
+    "linuxPublic": {
+      "normal": 190,
+      "avx512-off": 190,
+      "scalar": 190
+    },
+    "linuxInternal": {
+      "normal": 15,
+      "avx512-off": 15,
+      "scalar": 15
+    },
+    "internalEachMode": 15,
+    "publicEachMode": 190,
+    "modes": [
+      "normal",
+      "avx512-off",
+      "scalar"
+    ],
+    "independentOracleRowLengths": 775,
+    "existingAliasOraclePreserved": true,
+    "existingAliasAndParallelOracleReused": true,
+    "unusedSingleRowStepPreserved": true
+  },
+  "codegen": {
+    "DrawingCopy8": {
+      "callerCodeBytes": 1599,
+      "runtimeRowsCodeBytes": 180,
+      "oneCompleteRuntimeMovePerRow": true,
+      "noCustomBulkOrTailInsideRuntimeRowKernel": true,
+      "allRowPollsAndFinalCursorRetained": true,
+      "initialExpectedRuntimeSymbolCorrected": "System.Buffer:Memmove -> actual .NET10 System.SpanHelpers:Memmove",
+      "firstCompletedCodegenReusedWithoutRepeatingChecks": true,
+      "sampleCommandsBeforeRepair": 0,
+      "allInstrumentedClocksDiscarded": true,
+      "assemblySha256": "50fdb6b9725e35418eb7433639243c608fbce0869eaa768d0e17ac7771f51c2a"
+    },
+    "OriginalClippedCopy8": {
+      "callerCodeBytes": 1599,
+      "runtimeRowsCodeBytes": 180,
+      "oneCompleteRuntimeMovePerRow": true,
+      "noCustomBulkOrTailInsideRuntimeRowKernel": true,
+      "allRowPollsAndFinalCursorRetained": true,
+      "initialExpectedRuntimeSymbolCorrected": "System.Buffer:Memmove -> actual .NET10 System.SpanHelpers:Memmove",
+      "firstCompletedCodegenReusedWithoutRepeatingChecks": true,
+      "sampleCommandsBeforeRepair": 0,
+      "allInstrumentedClocksDiscarded": true,
+      "assemblySha256": "b78d84d4598d003c912854d79e19b099859705b7e06383aee6900e7cfa375b4e"
+    }
+  },
+  "memory": {
+    "allocatedBytes": 0,
+    "newOwnedAdmittedRetainedCapacity": 0,
+    "physicalPeakMeasured": false
+  },
+  "builds": {
+    "privateWindowsCore": 1,
+    "embedded": 1,
+    "allOthers": 0
+  },
+  "qualification": {
+    "reusedForUnchangedProduction": true,
+    "fullChecksEachOs": 6844,
+    "sameActualPackageBothOs": true,
+    "allThreeUsageExamplesBothOs": true,
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "newBroadOrPackageChecks": 0,
+    "sourceEvidence": "benchmarks/jpeg-pending-publication-evidence.json"
+  },
+  "decision": "Unpromoted. Complete prepared runtime rows regress separatebyte1.949181->2.036424us interval1.030002-1.059728. Clippedbyte1.993786->1.958381us interval.865089-1.115231 is uncertain,not a verified gain. All0B. Stop before word generalization,confirmation,actualtransfer,passing-path retiming,broad/package work. Actual1599B caller/180B row kernel reaches one System.SpanHelpers.Memmove per complete row;initial stale expected System.Buffer symbol is corrected after actual assembly inspection,reusing completed codegen/tests without samples or rebuild. Existing measured alias/vertical/custom kernels preserved. No neighboring shape/alignment dispatch sweep;current qualified JSP source/modules/f4 package/CBR costs remain unchanged.",
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "raw": {
+    "file": "prepared-runtime-rows-trial.tar.xz",
+    "sha256": "0b5ae99be11f0863f136f62983717653013472a3d9bdadb59d6dcb2f684f9172",
+    "bytes": 2221320,
+    "members": 70,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      {
+        "file": "jpeg-pending-publication.tar.xz",
+        "sha256": "e878a9b7d86b022ac131f6ec0f60c8f515e7a85c835492f1077614758f3e4250"
+      },
+      {
+        "file": "copy-operation-boundary.tar.xz",
+        "sha256": "74ac5f858e5ce39b7c081b2e493b822d9595d9f33512ccae4a1295984a115dd1"
+      }
+    ]
+  }
+}

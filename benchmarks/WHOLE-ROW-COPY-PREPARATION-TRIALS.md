@@ -312,3 +312,39 @@ source reconstruction, codegen and every actual. Mirrored/member-verified
 Archived std1263 recipes and pinned actor/reference/qualified dependencies reproduce
 it. No displayed result or renderer dependency changes. Two byte gaps, word/async
 uncertainty and the final full-scope package refresh remain open.
+
+## Prepared complete runtime rows
+
+**Unpromoted.** One safe runtime CopyTo per complete separate-buffer row
+regresses separate byte **1.949181→2.036424 µs**, interval **1.030002–1.059728**.
+Clipped byte **1.993786→1.958381 µs**, **.865089–1.115231**, is uncertain. Both
+allocate0B. All three reversed65,536-operation pairs remain. Stop without word
+generalization, confirmation, actual-DLL transfer, passing-path retiming or broad/
+package repetition. No alignment/shape dispatch variant follows these results.
+
+The small prepared row schedule replaces custom bulk/tail execution only for
+eligible separate buffers, sharing8/16-bit byte copying and row geometry. Actual
+1599B caller/180B kernel makes one System.SpanHelpers.Memmove call per row.
+The initial assertion expected the older System.Buffer symbol; actual assembly
+corrects that tooling expectation, reusing completed checks/codegen without
+scored samples or rebuilds. All original custom/alias/vertical kernels, small/
+wide/scalar fallbacks, clipping, public validation, row checkpoints, bounds and
+ownership remain. RBP1191 custom bulk/remainder and adverse VRP1058 owned flips
+are distinct earlier scopes; none establishes a general runtime-copy advantage.
+
+Both OSes pass15internal/190public checks in each normal/AVX512-off/scalar mode,
+including the reused775-length actual-helper alias/separate oracles. All original
+frames/source/alpha/hiddenRGB/untouched/owners/native/idle-v2 gates pass. One
+private core/embedded build, zero other builds. Added owned/admitted/retained
+capacity0; physical/JIT peaks unmeasured. Qualified source/modules/f4package and
+current CBR costs remain unchanged; reuse6,844full/live checks eachOS/SAMEactual
+package/all three examples. Preceding e13d69e3 CI44240809521 passes all three jobs.
+
+[Evidence](prepared-runtime-rows-trial-evidence.json) pins the source, actual code,
+checks and every observation. Mirrored/member-verified
+`prepared-runtime-rows-trial.tar.xz`: **2,221,320 B /70 members**, SHA256
+`0b5ae99be11f0863f136f62983717653013472a3d9bdadb59d6dcb2f684f9172`.
+Archived rpr1264 recipes and corrected-worker/qualified dependencies reproduce
+it. The preceding tail trial now also explicitly declares that already retained
+corrected-worker archive dependency; its raw data is unchanged. Neither rejected
+trial supplies a displayed result or renderer dependency.
